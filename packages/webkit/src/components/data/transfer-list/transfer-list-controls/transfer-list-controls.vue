@@ -3,23 +3,23 @@
 
   import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
-  import { pickListContextKey } from '../injection-key'
+  import { transferListContextKey } from '../injection-key'
 
   defineOptions({
-    name: 'PickListControls',
+    name: 'TransferListControls',
     inheritAttrs: false
   })
 
-  const ctx = inject(pickListContextKey)
+  const ctx = inject(transferListContextKey)
   if (!ctx) {
-    throw new Error('PickListControls must be used inside <PickList>.')
+    throw new Error('TransferListControls must be used inside <TransferList>.')
   }
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ pickList: en.pickList })
+  const { t } = useTranslate({ transferList: en.transferList })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'pick-list-controls'
+    () => (attrs['data-testid'] as string | undefined) ?? 'transfer-list-controls'
   )
 </script>
 
@@ -32,7 +32,7 @@
     <button
       type="button"
       :disabled="ctx.disabled.value || ctx.anyLoading.value || !ctx.hasSelection('source')"
-      :aria-label="t('pickList.moveSelectedToTarget')"
+      :aria-label="t('transferList.moveSelectedToTarget')"
       :data-testid="`${testId}__move-to-target`"
       class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @click="ctx.move('to-target')"
@@ -54,7 +54,7 @@
     <button
       type="button"
       :disabled="ctx.disabled.value || ctx.anyLoading.value || ctx.count('source') === 0"
-      :aria-label="t('pickList.moveAllToTarget')"
+      :aria-label="t('transferList.moveAllToTarget')"
       :data-testid="`${testId}__move-all-to-target`"
       class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @click="ctx.moveAll('to-target')"
@@ -77,7 +77,7 @@
     <button
       type="button"
       :disabled="ctx.disabled.value || ctx.anyLoading.value || !ctx.hasSelection('target')"
-      :aria-label="t('pickList.moveSelectedToSource')"
+      :aria-label="t('transferList.moveSelectedToSource')"
       :data-testid="`${testId}__move-to-source`"
       class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @click="ctx.move('to-source')"
@@ -99,7 +99,7 @@
     <button
       type="button"
       :disabled="ctx.disabled.value || ctx.anyLoading.value || ctx.count('target') === 0"
-      :aria-label="t('pickList.moveAllToSource')"
+      :aria-label="t('transferList.moveAllToSource')"
       :data-testid="`${testId}__move-all-to-source`"
       class="inline-flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
       @click="ctx.moveAll('to-source')"

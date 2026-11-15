@@ -1,6 +1,6 @@
 {
-  "component": "pick-list",
-  "title": "Components/Primitives/Data/PickList",
+  "component": "transfer-list",
+  "title": "Components/Primitives/Data/TransferList",
   "examples": [
     {
       "name": "Default",

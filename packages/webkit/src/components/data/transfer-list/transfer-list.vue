@@ -3,25 +3,20 @@
 
   import {
     type MoveDirection,
-    pickListContextKey,
-    type PickListItems,
-    type PickListSide,
-    type PickListValue
+    transferListContextKey,
+    type TransferListItems,
+    type TransferListSide,
+    type TransferListValue
   } from './injection-key'
 
   defineOptions({
-    name: 'PickList',
+    name: 'TransferList',
     inheritAttrs: false
   })
 
   interface Props {
     /** Item field that uniquely identifies a record (the same name as Cards); keys the selection and the rows. */
     trackBy?: string
-    /**
-     * Item field that uniquely identifies a record.
-     * @deprecated since 6.0 — use `trackBy`. Removed in 7.0.
-     */
-    dataKey?: string
     /** Disables all selection and move controls and applies disabled tokens. */
     disabled?: boolean
     /** When true (default), double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. */
@@ -30,28 +25,27 @@
 
   const props = withDefaults(defineProps<Props>(), {
     trackBy: '',
-    dataKey: '',
     disabled: false,
     moveOnDoubleClick: true
   })
 
   const emit = defineEmits<{
-    move: [payload: { direction: MoveDirection; items: PickListItems }]
+    move: [payload: { direction: MoveDirection; items: TransferListItems }]
     'item-double-click': [
       event: MouseEvent,
-      payload: { list: PickListSide; item: unknown; index: number }
+      payload: { list: TransferListSide; item: unknown; index: number }
     ]
   }>()
 
   /** Bound pair of lists as [sourceItems, targetItems] (v-model). */
-  const model = defineModel<PickListValue>({ default: () => [[], []] })
+  const model = defineModel<TransferListValue>({ default: () => [[], []] })
 
   defineSlots<{
     default(props: {
       move: (direction: MoveDirection) => void
       moveAll: (direction: MoveDirection) => void
-      hasSelection: (side: PickListSide) => boolean
-      count: (side: PickListSide) => number
+      hasSelection: (side: TransferListSide) => boolean
+      count: (side: TransferListSide) => number
       disabled: boolean
       loading: boolean
     }): unknown
@@ -60,30 +54,31 @@
   const attrs = useAttrs()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-pick-list'
+    () => (attrs['data-testid'] as string | undefined) ?? 'data-transfer-list'
   )
 
-  const sourceItems = computed<PickListItems>(() => model.value?.[0] ?? [])
-  const targetItems = computed<PickListItems>(() => model.value?.[1] ?? [])
+  const sourceItems = computed<TransferListItems>(() => model.value?.[0] ?? [])
+  const targetItems = computed<TransferListItems>(() => model.value?.[1] ?? [])
 
-  const items = (side: PickListSide): PickListItems =>
+  const items = (side: TransferListSide): TransferListItems =>
     side === 'source' ? sourceItems.value : targetItems.value
 
   const sourceLoading = ref(false)
   const targetLoading = ref(false)
   const anyLoading = computed(() => sourceLoading.value || targetLoading.value)
-  const isLoading = (side: PickListSide): boolean =>
+  const isLoading = (side: TransferListSide): boolean =>
     side === 'source' ? sourceLoading.value : targetLoading.value
-  const setLoading = (side: PickListSide, value: boolean): void => {
+  const setLoading = (side: TransferListSide, value: boolean): void => {
     if (side === 'source') sourceLoading.value = value
     else targetLoading.value = value
   }
 
   const selectedSource = ref<Set<string | number>>(new Set())
   const selectedTarget = ref<Set<string | number>>(new Set())
-  const selectionFor = (side: PickListSide) => (side === 'source' ? selectedSource : selectedTarget)
+  const selectionFor = (side: TransferListSide) =>
+    side === 'source' ? selectedSource : selectedTarget
 
-  const keyField = computed<string>(() => props.trackBy || props.dataKey)
+  const keyField = computed<string>(() => props.trackBy)
 
   const itemKey = (item: unknown, index: number): string | number => {
     if (keyField.value && item && typeof item === 'object') {
@@ -93,22 +88,22 @@
     return index
   }
 
-  const keyAt = (side: PickListSide, index: number): string | number =>
+  const keyAt = (side: TransferListSide, index: number): string | number =>
     itemKey(items(side)[index], index)
 
-  const isSelected = (side: PickListSide, index: number): boolean =>
+  const isSelected = (side: TransferListSide, index: number): boolean =>
     selectionFor(side).value.has(keyAt(side, index))
 
-  const hasSelection = (side: PickListSide): boolean => selectionFor(side).value.size > 0
+  const hasSelection = (side: TransferListSide): boolean => selectionFor(side).value.size > 0
 
-  const count = (side: PickListSide): number => items(side).length
+  const count = (side: TransferListSide): number => items(side).length
 
-  const toggleSelection = (side: PickListSide, index: number): void => {
+  const toggleSelection = (side: TransferListSide, index: number): void => {
     if (props.disabled || isLoading(side)) return
     setSelected(side, index, !isSelected(side, index))
   }
 
-  const setSelected = (side: PickListSide, index: number, value: boolean): void => {
+  const setSelected = (side: TransferListSide, index: number, value: boolean): void => {
     if (props.disabled || isLoading(side)) return
     const selection = selectionFor(side)
     const key = keyAt(side, index)
@@ -119,18 +114,18 @@
     selection.value = next
   }
 
-  const emitModel = (next: PickListValue): void => {
+  const emitModel = (next: TransferListValue): void => {
     model.value = next
   }
 
-  const pickSelectedIndexes = (side: PickListSide): number[] =>
+  const pickSelectedIndexes = (side: TransferListSide): number[] =>
     items(side)
       .map((_, index) => index)
       .filter((index) => isSelected(side, index))
 
   const move = (direction: MoveDirection): void => {
     if (props.disabled || anyLoading.value) return
-    const fromSide: PickListSide = direction === 'to-target' ? 'source' : 'target'
+    const fromSide: TransferListSide = direction === 'to-target' ? 'source' : 'target'
     const indexes = pickSelectedIndexes(fromSide)
     if (indexes.length === 0) return
 
@@ -153,7 +148,7 @@
 
   const moveAll = (direction: MoveDirection): void => {
     if (props.disabled || anyLoading.value) return
-    const fromSide: PickListSide = direction === 'to-target' ? 'source' : 'target'
+    const fromSide: TransferListSide = direction === 'to-target' ? 'source' : 'target'
     const from = direction === 'to-target' ? [...sourceItems.value] : [...targetItems.value]
     if (from.length === 0) return
     const to = direction === 'to-target' ? [...targetItems.value] : [...sourceItems.value]
@@ -166,7 +161,7 @@
     emit('move', { direction, items: from })
   }
 
-  const moveItem = (fromSide: PickListSide, index: number): void => {
+  const moveItem = (fromSide: TransferListSide, index: number): void => {
     if (props.disabled || anyLoading.value) return
     const fromItems = fromSide === 'source' ? [...sourceItems.value] : [...targetItems.value]
     if (index < 0 || index >= fromItems.length) return
@@ -186,7 +181,7 @@
     })
   }
 
-  const itemDoubleClick = (event: MouseEvent, side: PickListSide, index: number): void => {
+  const itemDoubleClick = (event: MouseEvent, side: TransferListSide, index: number): void => {
     if (props.disabled || anyLoading.value) return
     const item = items(side)[index]
     emit('item-double-click', event, { list: side, item, index })
@@ -194,8 +189,8 @@
     moveItem(side, index)
   }
 
-  provide(pickListContextKey, {
-    dataKey: keyField,
+  provide(transferListContextKey, {
+    trackBy: keyField,
     disabled: computed(() => props.disabled),
     anyLoading,
     items,

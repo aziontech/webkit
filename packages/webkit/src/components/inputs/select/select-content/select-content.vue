@@ -103,7 +103,6 @@
         v-bind="$attrs"
         :data-testid="testId"
         :data-state="ctx.open.value ? 'open' : 'closed'"
-        :data-mode="ctx.multiple.value ? 'multiple' : 'single'"
         :class="attrs.class"
         :style="panelStyle"
         :data-kind="ctx.kind.value"
@@ -120,7 +119,6 @@
         <ScrollArea
           :id="ctx.contentId"
           role="listbox"
-          :aria-multiselectable="ctx.multiple.value || undefined"
           :aria-label="listLabel"
           :aria-labelledby="listLabelledby"
           class="group/options flex max-h-60 flex-col items-stretch px-(--spacing-xxs) py-(--spacing-xs)"

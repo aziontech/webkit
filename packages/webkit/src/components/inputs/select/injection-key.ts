@@ -7,7 +7,7 @@ export type SelectSize = 'small' | 'medium' | 'large'
 /** Trigger look: the bordered field, or no border or fill until hover for a switcher inside a line of text. */
 export type SelectKind = 'outlined' | 'transparent'
 
-export type SelectValue = string | number | unknown[] | undefined
+export type SelectValue = string | number | undefined
 
 /** One entry of an options list a consumer renders as Select.Option rows: the value, the label text and the option's own props. */
 export interface SelectOptionItem<TValue = string> {
@@ -33,8 +33,6 @@ export interface SelectContext {
   modelValue: Ref<SelectValue>
   toggleValue: (value: unknown) => void
   isSelected: (value: unknown) => boolean
-  /** Computed selection mode. */
-  multiple: ComputedRef<boolean>
   /** Static state flags. */
   size: ComputedRef<SelectSize>
   /** Trigger look. */

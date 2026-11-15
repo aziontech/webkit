@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="TValue extends SelectValue = SelectValue">
-  import { computed, provide, type Ref, ref, shallowReactive, useAttrs, useId, watch } from 'vue'
+  import { computed, provide, type Ref, ref, shallowReactive, useAttrs, useId } from 'vue'
 
   import { useFieldControl } from '../../../composables/use-field-control'
   import type { ListboxFocusIntent } from '../../../composables/use-listbox'
@@ -19,8 +19,6 @@
 
   const props = withDefaults(
     defineProps<{
-      /** @deprecated since 6.0 — use MultiSelect for several values. Removed in 7.0. */
-      multiple?: boolean
       /** Initial open state when uncontrolled. */
       defaultOpen?: boolean
       /** Trigger placeholder shown when no option is selected. */
@@ -43,7 +41,6 @@
       name?: string
     }>(),
     {
-      multiple: false,
       defaultOpen: false,
       placeholder: '',
       size: 'medium',
@@ -57,7 +54,7 @@
     }
   )
 
-  /** Two-way bound selection. Scalar in single mode; array in multi mode. Its type flows to displayValue and update:modelValue. */
+  /** Two-way bound selection: the one picked value. Its type flows to displayValue and update:modelValue. */
   const model = defineModel<TValue>({ default: undefined as never })
 
   /** Controlled open state for the dropdown. Use with v-model:open; while unbound the dropdown is uncontrolled and seeded by defaultOpen. */
@@ -98,42 +95,16 @@
     openModel.value = value
   }
 
-  watch(
-    () => props.multiple,
-    () => {
-      const current = model.value
-      if (props.multiple && !Array.isArray(current) && current !== undefined) {
-        model.value = (current === '' ? [] : [current]) as TValue
-      } else if (!props.multiple && Array.isArray(current)) {
-        model.value = current[0] as TValue
-      }
-    }
-  )
-
-  const selectedSet = computed<Set<unknown> | null>(() =>
-    Array.isArray(model.value) ? new Set(model.value) : null
-  )
-
-  const isSelected = (value: unknown): boolean =>
-    selectedSet.value ? selectedSet.value.has(value) : model.value === value
+  const isSelected = (value: unknown): boolean => model.value === value
 
   const toggleValue = (value: unknown) => {
     if (isDisabled.value || props.readonly) return
-    if (props.multiple) {
-      const current = Array.isArray(model.value) ? [...model.value] : []
-      const index = current.indexOf(value)
-      if (index === -1) current.push(value)
-      else current.splice(index, 1)
-      model.value = current as TValue
-      return
-    }
     model.value = value as TValue
     setOpen(false)
   }
 
   const filled = computed(() => {
     const current = model.value
-    if (Array.isArray(current)) return current.length > 0
     return current !== undefined && current !== '' && current !== null
   })
 
@@ -143,7 +114,6 @@
   }
   const selectedValues = (): unknown[] => {
     const current = model.value
-    if (Array.isArray(current)) return current
     return current === undefined || current === null || current === '' ? [] : [current]
   }
   const labelsPending = computed(
@@ -166,7 +136,6 @@
     modelValue: model as Ref<SelectValue>,
     toggleValue,
     isSelected,
-    multiple: computed(() => props.multiple),
     size: computed(() => props.size),
     kind: computed(() => props.kind),
     disabled: isDisabled,
@@ -196,7 +165,6 @@
     v-bind="rootAttrs"
     :data-testid="testId"
     :data-state="openState ? 'open' : 'closed'"
-    :data-mode="multiple ? 'multiple' : 'single'"
     :data-size="size"
     :data-kind="kind"
     :data-disabled="isDisabled || null"

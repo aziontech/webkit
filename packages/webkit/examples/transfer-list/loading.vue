@@ -1,5 +1,5 @@
 <script setup>
-  import PickList from '@aziontech/webkit/pick-list'
+  import TransferList from '@aziontech/webkit/transfer-list'
   import { ref } from 'vue'
 
   const model = ref([
@@ -13,18 +13,21 @@
 </script>
 
 <template>
-  <PickList
+  <TransferList
     v-model="model"
     track-by="id"
   >
-    <PickList.Source title="Available">
+    <TransferList.Source
+      title="Available"
+      loading
+    >
       <template #item="{ item }">{{ item.label }}</template>
-    </PickList.Source>
+    </TransferList.Source>
 
-    <PickList.Controls />
+    <TransferList.Controls />
 
-    <PickList.Target title="Selected">
+    <TransferList.Target title="Selected">
       <template #item="{ item }">{{ item.label }}</template>
-    </PickList.Target>
-  </PickList>
+    </TransferList.Target>
+  </TransferList>
 </template>

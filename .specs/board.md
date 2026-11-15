@@ -3,9 +3,9 @@ name: board
 category: layout
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 008b15930b93418a84f754d30d9f49a6669ade2f7dd91e49dec6d6ac164e4993
+checksum: 6903f132977936d4ebe12aafef49427af5185e32c94b99b66a750f3ee97eb97e
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -32,7 +32,7 @@ item, on top of the existing `ChartCard` handles.
 
 - A fixed dashboard whose layout the product decides → a plain CSS grid of `chart-card`s (see the `platform/dashboard/analytics-dashboard` block).
 - Two or three panes whose boundary the reader drags → use `resizable`.
-- Reordering the rows of a list or a table → use the table's reorderable rows or `pick-list`.
+- Reordering the rows of a list or a table → use the table's reorderable rows or `transfer-list`.
 - A grid of resources the reader selects, not arranges → use `cards`.
 
 ## Related

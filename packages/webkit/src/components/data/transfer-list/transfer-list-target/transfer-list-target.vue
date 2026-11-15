@@ -5,12 +5,12 @@
   import * as en from '../../../../i18n/messages/en'
   import EmptyState from '../../../feedback/empty-state/empty-state.vue'
   import Spinner from '../../../utils/spinner/spinner.vue'
-  import { usePickListSide } from '../composables/use-pick-list-side'
-  import { pickListContextKey, type PickListSide } from '../injection-key'
-  import { getItemTransitionStyle, pickListItemTransitionClasses } from '../presets/transitions'
+  import { useTransferListSide } from '../composables/use-transfer-list-side'
+  import { transferListContextKey, type TransferListSide } from '../injection-key'
+  import { getItemTransitionStyle, transferListItemTransitionClasses } from '../presets/transitions'
 
   defineOptions({
-    name: 'PickListSource',
+    name: 'TransferListTarget',
     inheritAttrs: false
   })
 
@@ -27,30 +27,30 @@
   })
 
   defineSlots<{
-    item(props: { item: unknown; index: number; list: PickListSide }): unknown
+    item(props: { item: unknown; index: number; list: TransferListSide }): unknown
     title(): unknown
   }>()
 
-  const side: PickListSide = 'source'
+  const side: TransferListSide = 'target'
 
-  const ctx = inject(pickListContextKey)
+  const ctx = inject(transferListContextKey)
   if (!ctx) {
-    throw new Error('PickListSource must be used inside <PickList>.')
+    throw new Error('TransferListTarget must be used inside <TransferList>.')
   }
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ pickList: en.pickList })
+  const { t } = useTranslate({ transferList: en.transferList })
   const listRef = ref<HTMLElement | null>(null)
-  const { tabindexFor, onFocus, onKeydown } = usePickListSide(side, ctx, listRef)
+  const { tabindexFor, onFocus, onKeydown } = useTransferListSide(side, ctx, listRef)
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'pick-list-source'
+    () => (attrs['data-testid'] as string | undefined) ?? 'transfer-list-target'
   )
 
   const visibleItems = computed(() => (props.loading ? [] : ctx.items(side)))
 
   const itemTransitionStyle = getItemTransitionStyle()
-  const itemTransitionActive = pickListItemTransitionClasses.join(' ')
+  const itemTransitionActive = transferListItemTransitionClasses.join(' ')
 
   watch(
     () => props.loading,
@@ -99,7 +99,7 @@
       >
         <li
           v-if="loading"
-          key="__pick-list-loading"
+          key="__transfer-list-loading"
           role="presentation"
           :data-testid="`${testId}__loading`"
           :style="itemTransitionStyle"
@@ -138,7 +138,7 @@
       >
         <EmptyState
           size="small"
-          :title="t('pickList.empty')"
+          :title="t('transferList.empty')"
         />
       </div>
     </div>

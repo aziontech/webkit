@@ -1,12 +1,12 @@
 import { curve, duration } from '@aziontech/theme/animations'
 
-export const pickListItemMotion = {
+export const transferListItemMotion = {
   duration: duration['moderate-01'],
   curve: curve['productive-entrance']
 } as const
 
 export const getItemTransitionStyle = (): { transition: string } => ({
-  transition: `opacity ${pickListItemMotion.duration} ${pickListItemMotion.curve}`
+  transition: `opacity ${transferListItemMotion.duration} ${transferListItemMotion.curve}`
 })
 
-export const pickListItemTransitionClasses = ['motion-reduce:transition-none'] as const
+export const transferListItemTransitionClasses = ['motion-reduce:transition-none'] as const

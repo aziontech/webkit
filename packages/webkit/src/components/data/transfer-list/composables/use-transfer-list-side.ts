@@ -1,19 +1,19 @@
 import { computed, nextTick, readonly, type Ref, ref, watch } from 'vue'
 
-import type { PickListContext, PickListSide } from '../injection-key'
+import type { TransferListContext, TransferListSide } from '../injection-key'
 
-export interface UsePickListSideReturn {
+export interface UseTransferListSideReturn {
   activeIndex: Readonly<Ref<number>>
   tabindexFor: (index: number) => number
   onFocus: (index: number) => void
   onKeydown: (index: number, event: globalThis.KeyboardEvent) => void
 }
 
-export function usePickListSide(
-  side: PickListSide,
-  ctx: PickListContext,
+export function useTransferListSide(
+  side: TransferListSide,
+  ctx: TransferListContext,
   list: Ref<HTMLElement | null>
-): UsePickListSideReturn {
+): UseTransferListSideReturn {
   const activeIndex = ref<number>(0)
   const total = computed<number>(() => ctx.items(side).length)
 

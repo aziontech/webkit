@@ -2,9 +2,9 @@ import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
-import Default from '../../../../examples/pick-list/default.vue'
+import Default from '../../../../examples/transfer-list/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import PickList, { PickListControls, PickListSource, PickListTarget } from './index'
+import TransferList, { TransferListControls, TransferListSource, TransferListTarget } from './index'
 
 // A small, stable dataset: three available (source), one selected (target).
 const makeModel = () => [
@@ -22,7 +22,7 @@ const makeModel = () => [
 // Controls / Target compose by hand; #item renders the label).
 const Harness = (opts: { disabled?: boolean; moveOnDoubleClick?: boolean } = {}) =>
   defineComponent({
-    components: { PickList, PickListSource, PickListTarget, PickListControls },
+    components: { TransferList, TransferListSource, TransferListTarget, TransferListControls },
     setup() {
       const model = ref(makeModel())
       return {
@@ -32,44 +32,44 @@ const Harness = (opts: { disabled?: boolean; moveOnDoubleClick?: boolean } = {})
       }
     },
     template: `
-      <PickList
+      <TransferList
         v-model="model"
         data-key="id"
         :disabled="disabled"
         :move-on-double-click="moveOnDoubleClick"
       >
-        <PickListSource title="Available">
+        <TransferListSource title="Available">
           <template #item="{ item }">{{ item.label }}</template>
-        </PickListSource>
-        <PickListControls />
-        <PickListTarget title="Selected">
+        </TransferListSource>
+        <TransferListControls />
+        <TransferListTarget title="Selected">
           <template #item="{ item }">{{ item.label }}</template>
-        </PickListTarget>
-      </PickList>
+        </TransferListTarget>
+      </TransferList>
     `
   })
 
-describe('PickList (composition compound)', () => {
+describe('TransferList (composition compound)', () => {
   describe('compound API (Object.assign dot-notation)', () => {
     it('attaches every public sub-component to the root compound', () => {
-      // Grounded in index.ts: Object.assign(PickList, { Source, Target, Controls }).
-      expect(PickList.Source).toBe(PickListSource)
-      expect(PickList.Target).toBe(PickListTarget)
-      expect(PickList.Controls).toBe(PickListControls)
+      // Grounded in index.ts: Object.assign(TransferList, { Source, Target, Controls }).
+      expect(TransferList.Source).toBe(TransferListSource)
+      expect(TransferList.Target).toBe(TransferListTarget)
+      expect(TransferList.Controls).toBe(TransferListControls)
     })
   })
 
   describe('root render + testids', () => {
     it('renders the root grid with the default data-testid', () => {
       const { getByTestId } = render(Harness())
-      const root = getByTestId('data-pick-list')
+      const root = getByTestId('data-transfer-list')
       expect(root.tagName).toBe('DIV')
     })
 
     it('renders each list with its default testid and semantic listbox role', () => {
       const { getByTestId, getAllByRole } = render(Harness())
-      const source = getByTestId('pick-list-source')
-      const target = getByTestId('pick-list-target')
+      const source = getByTestId('transfer-list-source')
+      const target = getByTestId('transfer-list-target')
       expect(source.tagName).toBe('SECTION')
       expect(target.tagName).toBe('SECTION')
       // Each list's TransitionGroup renders a role=listbox ul.
@@ -80,17 +80,17 @@ describe('PickList (composition compound)', () => {
 
     it('renders the headers as the accessible names of the lists', () => {
       const { getByTestId } = render(Harness())
-      expect(getByTestId('pick-list-source__header').textContent).toContain('Available')
-      expect(getByTestId('pick-list-target__header').textContent).toContain('Selected')
+      expect(getByTestId('transfer-list-source__header').textContent).toContain('Available')
+      expect(getByTestId('transfer-list-target__header').textContent).toContain('Selected')
       // header text is also mirrored onto the listbox aria-label.
-      expect(getByTestId('pick-list-source__list').getAttribute('aria-label')).toBe('Available')
-      expect(getByTestId('pick-list-target__list').getAttribute('aria-label')).toBe('Selected')
+      expect(getByTestId('transfer-list-source__list').getAttribute('aria-label')).toBe('Available')
+      expect(getByTestId('transfer-list-target__list').getAttribute('aria-label')).toBe('Selected')
     })
 
     it('renders the initial items through the #item slot', () => {
       const { getByTestId } = render(Harness())
-      const sourceOptions = within(getByTestId('pick-list-source__list')).getAllByRole('option')
-      const targetOptions = within(getByTestId('pick-list-target__list')).getAllByRole('option')
+      const sourceOptions = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
+      const targetOptions = within(getByTestId('transfer-list-target__list')).getAllByRole('option')
       expect(sourceOptions).toHaveLength(3)
       expect(targetOptions).toHaveLength(1)
       expect(sourceOptions.map((o) => o.textContent?.trim())).toEqual([
@@ -105,7 +105,7 @@ describe('PickList (composition compound)', () => {
   describe('selection via injected context', () => {
     it('toggles aria-selected / data-selected on click through the shared context', async () => {
       const { getByTestId } = render(Harness())
-      const [firstOption] = within(getByTestId('pick-list-source__list')).getAllByRole('option')
+      const [firstOption] = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
       expect(firstOption.getAttribute('aria-selected')).toBe('false')
       expect(firstOption.hasAttribute('data-selected')).toBe(false)
 
@@ -121,7 +121,7 @@ describe('PickList (composition compound)', () => {
 
     it('toggles selection with Enter and Space keydown on a focused option', async () => {
       const { getByTestId } = render(Harness())
-      const options = within(getByTestId('pick-list-source__list')).getAllByRole('option')
+      const options = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
 
       await fireEvent.keyDown(options[0], { key: 'Enter' })
       expect(options[0].getAttribute('aria-selected')).toBe('true')
@@ -136,40 +136,42 @@ describe('PickList (composition compound)', () => {
       const { getByTestId } = render(Harness())
       // No selection anywhere -> the two "move selected" buttons are disabled.
       expect(
-        (getByTestId('pick-list-controls__move-to-target') as HTMLButtonElement).disabled
+        (getByTestId('transfer-list-controls__move-to-target') as HTMLButtonElement).disabled
       ).toBe(true)
       expect(
-        (getByTestId('pick-list-controls__move-to-source') as HTMLButtonElement).disabled
+        (getByTestId('transfer-list-controls__move-to-source') as HTMLButtonElement).disabled
       ).toBe(true)
       // Source has items -> move-all-to-target enabled; target has items -> move-all-to-source enabled.
       expect(
-        (getByTestId('pick-list-controls__move-all-to-target') as HTMLButtonElement).disabled
+        (getByTestId('transfer-list-controls__move-all-to-target') as HTMLButtonElement).disabled
       ).toBe(false)
       expect(
-        (getByTestId('pick-list-controls__move-all-to-source') as HTMLButtonElement).disabled
+        (getByTestId('transfer-list-controls__move-all-to-source') as HTMLButtonElement).disabled
       ).toBe(false)
     })
 
     it('enables move-to-target once a source option is selected (hasSelection via inject)', async () => {
       const { getByTestId } = render(Harness())
-      const moveSelected = getByTestId('pick-list-controls__move-to-target') as HTMLButtonElement
+      const moveSelected = getByTestId(
+        'transfer-list-controls__move-to-target'
+      ) as HTMLButtonElement
       expect(moveSelected.disabled).toBe(true)
 
-      const [firstOption] = within(getByTestId('pick-list-source__list')).getAllByRole('option')
+      const [firstOption] = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
       await fireEvent.click(firstOption)
       expect(moveSelected.disabled).toBe(false)
     })
 
     it('moves the selected source item to the target and emits move + updates v-model', async () => {
       const { getByTestId } = render(Harness())
-      const [firstOption] = within(getByTestId('pick-list-source__list')).getAllByRole('option')
+      const [firstOption] = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
       await fireEvent.click(firstOption)
 
-      await fireEvent.click(getByTestId('pick-list-controls__move-to-target'))
+      await fireEvent.click(getByTestId('transfer-list-controls__move-to-target'))
 
       // Source lost one, target gained one (v-model round-trip observed in the DOM).
-      const sourceOptions = within(getByTestId('pick-list-source__list')).getAllByRole('option')
-      const targetOptions = within(getByTestId('pick-list-target__list')).getAllByRole('option')
+      const sourceOptions = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
+      const targetOptions = within(getByTestId('transfer-list-target__list')).getAllByRole('option')
       expect(sourceOptions).toHaveLength(2)
       expect(targetOptions).toHaveLength(2)
       expect(sourceOptions.map((o) => o.textContent?.trim())).toEqual(['WAF', 'Image Processor'])
@@ -177,20 +179,24 @@ describe('PickList (composition compound)', () => {
     })
 
     it('moves within local state and still emits update:modelValue when no v-model is bound', async () => {
-      const { getByTestId, emitted } = render(PickList, {
-        props: { modelValue: makeModel(), dataKey: 'id' },
+      const { getByTestId, emitted } = render(TransferList, {
+        props: { modelValue: makeModel(), trackBy: 'id' },
         slots: {
           default: () => [
-            h(PickListSource, { title: 'Available' }),
-            h(PickListControls),
-            h(PickListTarget, { title: 'Selected' })
+            h(TransferListSource, { title: 'Available' }),
+            h(TransferListControls),
+            h(TransferListTarget, { title: 'Selected' })
           ]
         }
       })
-      await fireEvent.click(getByTestId('pick-list-controls__move-all-to-target'))
+      await fireEvent.click(getByTestId('transfer-list-controls__move-all-to-target'))
 
-      expect(within(getByTestId('pick-list-source__list')).queryAllByRole('option')).toHaveLength(0)
-      expect(within(getByTestId('pick-list-target__list')).getAllByRole('option')).toHaveLength(4)
+      expect(
+        within(getByTestId('transfer-list-source__list')).queryAllByRole('option')
+      ).toHaveLength(0)
+      expect(within(getByTestId('transfer-list-target__list')).getAllByRole('option')).toHaveLength(
+        4
+      )
       const updates = emitted()['update:modelValue'] as unknown[][]
       expect(updates).toHaveLength(1)
       expect(updates[0][0]).toEqual([[], [...makeModel()[1], ...makeModel()[0]]])
@@ -198,7 +204,7 @@ describe('PickList (composition compound)', () => {
 
     it('keeps the parent pair when a controlled v-model refuses the update', async () => {
       const Controlled = defineComponent({
-        components: { PickList, PickListSource, PickListTarget, PickListControls },
+        components: { TransferList, TransferListSource, TransferListTarget, TransferListControls },
         setup() {
           const model = ref(makeModel())
           const refused = ref(0)
@@ -206,43 +212,51 @@ describe('PickList (composition compound)', () => {
         },
         template: `
           <div>
-            <PickList :model-value="model" data-key="id" @update:model-value="refused++">
-              <PickListSource title="Available" />
-              <PickListControls />
-              <PickListTarget title="Selected" />
-            </PickList>
+            <TransferList :model-value="model" data-key="id" @update:model-value="refused++">
+              <TransferListSource title="Available" />
+              <TransferListControls />
+              <TransferListTarget title="Selected" />
+            </TransferList>
             <output data-testid="refused">{{ refused }}</output>
           </div>
         `
       })
       const { getByTestId } = render(Controlled)
-      await fireEvent.click(getByTestId('pick-list-controls__move-all-to-target'))
+      await fireEvent.click(getByTestId('transfer-list-controls__move-all-to-target'))
 
       expect(getByTestId('refused').textContent).toBe('1')
-      expect(within(getByTestId('pick-list-source__list')).getAllByRole('option')).toHaveLength(3)
-      expect(within(getByTestId('pick-list-target__list')).getAllByRole('option')).toHaveLength(1)
+      expect(within(getByTestId('transfer-list-source__list')).getAllByRole('option')).toHaveLength(
+        3
+      )
+      expect(within(getByTestId('transfer-list-target__list')).getAllByRole('option')).toHaveLength(
+        1
+      )
     })
 
     it('move-all-to-target empties the source and fills the target', async () => {
       const { getByTestId } = render(Harness())
-      await fireEvent.click(getByTestId('pick-list-controls__move-all-to-target'))
+      await fireEvent.click(getByTestId('transfer-list-controls__move-all-to-target'))
 
-      const sourceOptions = within(getByTestId('pick-list-source__list')).queryAllByRole('option')
-      const targetOptions = within(getByTestId('pick-list-target__list')).getAllByRole('option')
+      const sourceOptions = within(getByTestId('transfer-list-source__list')).queryAllByRole(
+        'option'
+      )
+      const targetOptions = within(getByTestId('transfer-list-target__list')).getAllByRole('option')
       expect(sourceOptions).toHaveLength(0)
       expect(targetOptions).toHaveLength(4)
       // After emptying the source, move-all-to-target locks (count('source') === 0).
       expect(
-        (getByTestId('pick-list-controls__move-all-to-target') as HTMLButtonElement).disabled
+        (getByTestId('transfer-list-controls__move-all-to-target') as HTMLButtonElement).disabled
       ).toBe(true)
     })
 
     it('move-all-to-source pulls every target item back', async () => {
       const { getByTestId } = render(Harness())
-      await fireEvent.click(getByTestId('pick-list-controls__move-all-to-source'))
+      await fireEvent.click(getByTestId('transfer-list-controls__move-all-to-source'))
 
-      const sourceOptions = within(getByTestId('pick-list-source__list')).getAllByRole('option')
-      const targetOptions = within(getByTestId('pick-list-target__list')).queryAllByRole('option')
+      const sourceOptions = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
+      const targetOptions = within(getByTestId('transfer-list-target__list')).queryAllByRole(
+        'option'
+      )
       expect(sourceOptions).toHaveLength(4)
       expect(targetOptions).toHaveLength(0)
     })
@@ -252,7 +266,7 @@ describe('PickList (composition compound)', () => {
     it('fires move with { direction, items } after a selected move', async () => {
       let payload: { direction: string; items: unknown[] } | undefined
       const Tree = defineComponent({
-        components: { PickList, PickListSource, PickListControls, PickListTarget },
+        components: { TransferList, TransferListSource, TransferListControls, TransferListTarget },
         setup() {
           const model = ref(makeModel())
           const onMove = (p: { direction: string; items: unknown[] }) => {
@@ -261,21 +275,21 @@ describe('PickList (composition compound)', () => {
           return { model, onMove }
         },
         template: `
-          <PickList v-model="model" data-key="id" @move="onMove">
-            <PickListSource title="Available">
+          <TransferList v-model="model" data-key="id" @move="onMove">
+            <TransferListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
-            </PickListSource>
-            <PickListControls />
-            <PickListTarget title="Selected">
+            </TransferListSource>
+            <TransferListControls />
+            <TransferListTarget title="Selected">
               <template #item="{ item }">{{ item.label }}</template>
-            </PickListTarget>
-          </PickList>
+            </TransferListTarget>
+          </TransferList>
         `
       })
       const { getByTestId } = render(Tree)
-      const [firstOption] = within(getByTestId('pick-list-source__list')).getAllByRole('option')
+      const [firstOption] = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
       await fireEvent.click(firstOption)
-      await fireEvent.click(getByTestId('pick-list-controls__move-to-target'))
+      await fireEvent.click(getByTestId('transfer-list-controls__move-to-target'))
 
       expect(payload).toBeDefined()
       expect(payload?.direction).toBe('to-target')
@@ -286,7 +300,7 @@ describe('PickList (composition compound)', () => {
       let dbl: { list: string; item: unknown; index: number } | undefined
       let dblEvent: unknown
       const Tree = defineComponent({
-        components: { PickList, PickListSource, PickListControls, PickListTarget },
+        components: { TransferList, TransferListSource, TransferListControls, TransferListTarget },
         setup() {
           const model = ref(makeModel())
           const onDouble = (event: unknown, p: { list: string; item: unknown; index: number }) => {
@@ -296,26 +310,28 @@ describe('PickList (composition compound)', () => {
           return { model, onDouble }
         },
         template: `
-          <PickList v-model="model" data-key="id" @item-double-click="onDouble">
-            <PickListSource title="Available">
+          <TransferList v-model="model" data-key="id" @item-double-click="onDouble">
+            <TransferListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
-            </PickListSource>
-            <PickListControls />
-            <PickListTarget title="Selected">
+            </TransferListSource>
+            <TransferListControls />
+            <TransferListTarget title="Selected">
               <template #item="{ item }">{{ item.label }}</template>
-            </PickListTarget>
-          </PickList>
+            </TransferListTarget>
+          </TransferList>
         `
       })
       const { getByTestId } = render(Tree)
-      const options = within(getByTestId('pick-list-source__list')).getAllByRole('option')
+      const options = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
       await fireEvent.dblClick(options[1]) // WAF (index 1)
 
       expect(dblEvent).toBeInstanceOf(MouseEvent)
       expect(dbl).toEqual({ list: 'source', item: { id: 2, label: 'WAF' }, index: 1 })
       // Default moveOnDoubleClick=true: WAF moves to the target.
-      expect(within(getByTestId('pick-list-source__list')).getAllByRole('option')).toHaveLength(2)
-      const targetLabels = within(getByTestId('pick-list-target__list'))
+      expect(within(getByTestId('transfer-list-source__list')).getAllByRole('option')).toHaveLength(
+        2
+      )
+      const targetLabels = within(getByTestId('transfer-list-target__list'))
         .getAllByRole('option')
         .map((o) => o.textContent?.trim())
       expect(targetLabels).toContain('WAF')
@@ -324,7 +340,7 @@ describe('PickList (composition compound)', () => {
     it('fires item-double-click but does NOT move when moveOnDoubleClick is false', async () => {
       let dbl: { list: string; item: unknown; index: number } | undefined
       const Tree = defineComponent({
-        components: { PickList, PickListSource, PickListControls, PickListTarget },
+        components: { TransferList, TransferListSource, TransferListControls, TransferListTarget },
         setup() {
           const model = ref(makeModel())
           const onDouble = (_event: unknown, p: { list: string; item: unknown; index: number }) => {
@@ -333,25 +349,29 @@ describe('PickList (composition compound)', () => {
           return { model, onDouble }
         },
         template: `
-          <PickList v-model="model" data-key="id" :move-on-double-click="false" @item-double-click="onDouble">
-            <PickListSource title="Available">
+          <TransferList v-model="model" data-key="id" :move-on-double-click="false" @item-double-click="onDouble">
+            <TransferListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
-            </PickListSource>
-            <PickListControls />
-            <PickListTarget title="Selected">
+            </TransferListSource>
+            <TransferListControls />
+            <TransferListTarget title="Selected">
               <template #item="{ item }">{{ item.label }}</template>
-            </PickListTarget>
-          </PickList>
+            </TransferListTarget>
+          </TransferList>
         `
       })
       const { getByTestId } = render(Tree)
-      const options = within(getByTestId('pick-list-source__list')).getAllByRole('option')
+      const options = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
       await fireEvent.dblClick(options[0])
 
       expect(dbl).toEqual({ list: 'source', item: { id: 1, label: 'Edge Functions' }, index: 0 })
       // No move: source keeps all three.
-      expect(within(getByTestId('pick-list-source__list')).getAllByRole('option')).toHaveLength(3)
-      expect(within(getByTestId('pick-list-target__list')).getAllByRole('option')).toHaveLength(1)
+      expect(within(getByTestId('transfer-list-source__list')).getAllByRole('option')).toHaveLength(
+        3
+      )
+      expect(within(getByTestId('transfer-list-target__list')).getAllByRole('option')).toHaveLength(
+        1
+      )
     })
   })
 
@@ -359,20 +379,20 @@ describe('PickList (composition compound)', () => {
     it('locks all move controls and marks lists aria-disabled when disabled', async () => {
       const { getByTestId } = render(Harness({ disabled: true }))
       for (const id of [
-        'pick-list-controls__move-to-target',
-        'pick-list-controls__move-all-to-target',
-        'pick-list-controls__move-to-source',
-        'pick-list-controls__move-all-to-source'
+        'transfer-list-controls__move-to-target',
+        'transfer-list-controls__move-all-to-target',
+        'transfer-list-controls__move-to-source',
+        'transfer-list-controls__move-all-to-source'
       ]) {
         expect((getByTestId(id) as HTMLButtonElement).disabled).toBe(true)
       }
-      expect(getByTestId('pick-list-source__list').getAttribute('aria-disabled')).toBe('true')
-      expect(getByTestId('data-pick-list').getAttribute('data-disabled')).toBe('true')
+      expect(getByTestId('transfer-list-source__list').getAttribute('aria-disabled')).toBe('true')
+      expect(getByTestId('data-transfer-list').getAttribute('data-disabled')).toBe('true')
     })
 
     it('does not toggle selection on click when disabled', async () => {
       const { getByTestId } = render(Harness({ disabled: true }))
-      const [firstOption] = within(getByTestId('pick-list-source__list')).getAllByRole('option')
+      const [firstOption] = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
       await fireEvent.click(firstOption)
       expect(firstOption.getAttribute('aria-selected')).toBe('false')
     })
@@ -381,31 +401,33 @@ describe('PickList (composition compound)', () => {
   describe('loading state', () => {
     it('shows a spinner placeholder and busy list on the loading side, and locks all moves', () => {
       const Tree = defineComponent({
-        components: { PickList, PickListSource, PickListControls, PickListTarget },
+        components: { TransferList, TransferListSource, TransferListControls, TransferListTarget },
         setup: () => ({ model: ref(makeModel()) }),
         template: `
-          <PickList v-model="model" data-key="id">
-            <PickListSource title="Available" :loading="true">
+          <TransferList v-model="model" data-key="id">
+            <TransferListSource title="Available" :loading="true">
               <template #item="{ item }">{{ item.label }}</template>
-            </PickListSource>
-            <PickListControls />
-            <PickListTarget title="Selected">
+            </TransferListSource>
+            <TransferListControls />
+            <TransferListTarget title="Selected">
               <template #item="{ item }">{{ item.label }}</template>
-            </PickListTarget>
-          </PickList>
+            </TransferListTarget>
+          </TransferList>
         `
       })
       const { getByTestId, queryAllByRole } = render(Tree)
       // Loading list renders the loading placeholder (not options) and aria-busy.
-      expect(getByTestId('pick-list-source__loading')).toBeTruthy()
-      expect(within(getByTestId('pick-list-source__list')).queryAllByRole('option')).toHaveLength(0)
-      expect(getByTestId('pick-list-source__list').getAttribute('aria-busy')).toBe('true')
+      expect(getByTestId('transfer-list-source__loading')).toBeTruthy()
+      expect(
+        within(getByTestId('transfer-list-source__list')).queryAllByRole('option')
+      ).toHaveLength(0)
+      expect(getByTestId('transfer-list-source__list').getAttribute('aria-busy')).toBe('true')
       // setLoading reported to the root -> anyLoading -> every move control locked.
       for (const id of [
-        'pick-list-controls__move-to-target',
-        'pick-list-controls__move-all-to-target',
-        'pick-list-controls__move-to-source',
-        'pick-list-controls__move-all-to-source'
+        'transfer-list-controls__move-to-target',
+        'transfer-list-controls__move-all-to-target',
+        'transfer-list-controls__move-to-source',
+        'transfer-list-controls__move-all-to-source'
       ]) {
         expect((getByTestId(id) as HTMLButtonElement).disabled).toBe(true)
       }
@@ -417,17 +439,17 @@ describe('PickList (composition compound)', () => {
   describe('default slot render-props on the root', () => {
     it('exposes move / hasSelection / count / disabled / loading to the default slot', async () => {
       const Tree = defineComponent({
-        components: { PickList, PickListSource, PickListControls, PickListTarget },
+        components: { TransferList, TransferListSource, TransferListControls, TransferListTarget },
         setup: () => ({ model: ref(makeModel()) }),
         template: `
-          <PickList v-model="model" data-key="id" v-slot="{ move, hasSelection, count, disabled, loading }">
-            <PickListSource title="Available">
+          <TransferList v-model="model" data-key="id" v-slot="{ move, hasSelection, count, disabled, loading }">
+            <TransferListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
-            </PickListSource>
-            <PickListControls />
-            <PickListTarget title="Selected">
+            </TransferListSource>
+            <TransferListControls />
+            <TransferListTarget title="Selected">
               <template #item="{ item }">{{ item.label }}</template>
-            </PickListTarget>
+            </TransferListTarget>
             <button
               data-testid="slot-move"
               :data-has-source="String(hasSelection('source'))"
@@ -436,7 +458,7 @@ describe('PickList (composition compound)', () => {
               :data-loading="String(loading)"
               @click="move('to-target')"
             >custom</button>
-          </PickList>
+          </TransferList>
         `
       })
       const { getByTestId } = render(Tree)
@@ -448,12 +470,14 @@ describe('PickList (composition compound)', () => {
       expect(slotBtn.getAttribute('data-loading')).toBe('false')
 
       // Select a source item, then invoke the slot-provided move('to-target').
-      const [firstOption] = within(getByTestId('pick-list-source__list')).getAllByRole('option')
+      const [firstOption] = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
       await fireEvent.click(firstOption)
       expect(slotBtn.getAttribute('data-has-source')).toBe('true')
 
       await fireEvent.click(slotBtn)
-      expect(within(getByTestId('pick-list-target__list')).getAllByRole('option')).toHaveLength(2)
+      expect(within(getByTestId('transfer-list-target__list')).getAllByRole('option')).toHaveLength(
+        2
+      )
     })
   })
 
@@ -465,9 +489,9 @@ describe('PickList (composition compound)', () => {
 
     it('has no axe violations after moving an item', async () => {
       const { container, getByTestId } = render(Harness())
-      const [firstOption] = within(getByTestId('pick-list-source__list')).getAllByRole('option')
+      const [firstOption] = within(getByTestId('transfer-list-source__list')).getAllByRole('option')
       await fireEvent.click(firstOption)
-      await fireEvent.click(getByTestId('pick-list-controls__move-to-target'))
+      await fireEvent.click(getByTestId('transfer-list-controls__move-to-target'))
       await expectNoA11yViolations(container)
     })
   })
@@ -475,37 +499,37 @@ describe('PickList (composition compound)', () => {
   describe('story fixture', () => {
     it('renders the composed Default story fixture through the sub-components', () => {
       const { getByTestId, getByText } = render(Default)
-      expect(getByTestId('data-pick-list')).toBeTruthy()
-      expect(getByTestId('pick-list-source__header').textContent).toContain('Available')
-      expect(getByTestId('pick-list-target__header').textContent).toContain('Selected')
+      expect(getByTestId('data-transfer-list')).toBeTruthy()
+      expect(getByTestId('transfer-list-source__header').textContent).toContain('Available')
+      expect(getByTestId('transfer-list-target__header').textContent).toContain('Selected')
       expect(getByText('Edge Functions')).toBeTruthy()
       expect(getByText('Cache')).toBeTruthy()
     })
   })
 })
 
-describe('PickList keyboard, identity and empty lists', () => {
+describe('TransferList keyboard, identity and empty lists', () => {
   const Keyed = (trackBy: string) =>
     defineComponent({
-      components: { PickList, PickListSource, PickListTarget, PickListControls },
+      components: { TransferList, TransferListSource, TransferListTarget, TransferListControls },
       setup: () => ({ model: ref(makeModel()), trackBy }),
       template: `
-        <PickList v-model="model" :track-by="trackBy">
-          <PickListSource title="Available">
+        <TransferList v-model="model" :track-by="trackBy">
+          <TransferListSource title="Available">
             <template #item="{ item }">{{ item.label }}</template>
-          </PickListSource>
-          <PickListControls />
-          <PickListTarget title="Selected">
+          </TransferListSource>
+          <TransferListControls />
+          <TransferListTarget title="Selected">
             <template #item="{ item }">{{ item.label }}</template>
-          </PickListTarget>
-        </PickList>
+          </TransferListTarget>
+        </TransferList>
       `
     })
 
   const sourceOptions = (container: HTMLElement) =>
     Array.from(
       container.querySelectorAll<HTMLElement>(
-        '[data-testid="pick-list-source__list"] [role="option"]'
+        '[data-testid="transfer-list-source__list"] [role="option"]'
       )
     )
 
@@ -543,18 +567,18 @@ describe('PickList keyboard, identity and empty lists', () => {
     const model = ref(makeModel())
     const view = render(
       defineComponent({
-        components: { PickList, PickListSource, PickListTarget, PickListControls },
+        components: { TransferList, TransferListSource, TransferListTarget, TransferListControls },
         setup: () => ({ model }),
         template: `
-          <PickList v-model="model" track-by="id">
-            <PickListSource title="Available">
+          <TransferList v-model="model" track-by="id">
+            <TransferListSource title="Available">
               <template #item="{ item }">{{ item.label }}</template>
-            </PickListSource>
-            <PickListControls />
-            <PickListTarget title="Selected">
+            </TransferListSource>
+            <TransferListControls />
+            <TransferListTarget title="Selected">
               <template #item="{ item }">{{ item.label }}</template>
-            </PickListTarget>
-          </PickList>
+            </TransferListTarget>
+          </TransferList>
         `
       })
     )
@@ -567,9 +591,10 @@ describe('PickList keyboard, identity and empty lists', () => {
     expect(selected.map((option) => option.textContent?.trim())).toEqual(['WAF'])
   })
 
-  it('still keys rows by the deprecated dataKey', async () => {
-    const view = render(Keyed(''))
+  it('has no dataKey prop: a data-key attribute stays an attribute', () => {
+    const view = render(Keyed(''), { attrs: { 'data-key': 'id' } })
     expect(sourceOptions(view.container)).toHaveLength(3)
+    expect(view.getByTestId('data-transfer-list').getAttribute('data-key')).toBe('id')
   })
 
   it('shows an empty state in a list with no items', async () => {
@@ -577,7 +602,7 @@ describe('PickList keyboard, identity and empty lists', () => {
     await fireEvent.click(
       within(view.container).getByRole('button', { name: 'Move all to target' })
     )
-    const empty = view.getByTestId('pick-list-source__empty')
+    const empty = view.getByTestId('transfer-list-source__empty')
     expect(empty.textContent).toContain('No items')
     await expectNoA11yViolations(view.container)
   })

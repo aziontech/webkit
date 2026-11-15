@@ -19,13 +19,8 @@
     },
     {
       "name": "Single",
-      "summary": "Single-select mode, the default: each option shows a radio-style indicator, choosing one closes the panel, and `modelValue` is one value. Pair it with Multiple to compare the two modes.",
+      "summary": "Each option shows a radio-style indicator, choosing one closes the panel, and `modelValue` is one value. To pick several values use MultiSelect.",
       "file": "single.vue"
-    },
-    {
-      "name": "Multiple",
-      "summary": "Multi-select mode: options toggle on click and `modelValue` is an array.",
-      "file": "multiple.vue"
     },
     {
       "name": "WithGroups",
