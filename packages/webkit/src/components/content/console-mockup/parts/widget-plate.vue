@@ -55,12 +55,15 @@
     :active="values['active'] !== false"
     :width="468"
     :mobile-width="428"
-    style="--console-mockup-fade-start: 80%"
+    :style="{ '--console-mockup-fade-start': '80%' }"
   >
     <div
       :data-testid="`${testId}__frame-body`"
       class="h-full w-full px-(--spacing-lg) pt-(--spacing-lg)"
-      style="--console-mockup-fade-color: var(--bg-canvas); --console-mockup-fade-start: initial"
+      :style="{
+        '--console-mockup-fade-color': 'var(--bg-canvas)',
+        '--console-mockup-fade-start': 'initial'
+      }"
     >
       <component
         :is="widget"
