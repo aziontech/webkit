@@ -62,8 +62,7 @@ export const FOUNDATIONS: FoundationPage[] = [
   {
     slug: 'icons',
     title: 'Icons',
-    summary:
-      'Every class of @aziontech/icons: Azion, colored and PrimeIcons. Select one to copy it.',
+    summary: 'Every class of @aziontech/icons: Azion and colored. Select one to copy it.',
     view: 'icons'
   },
   {

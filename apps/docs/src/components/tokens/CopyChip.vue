@@ -12,7 +12,7 @@
   >
     <span class="min-w-0 truncate">{{ value }}</span>
     <i
-      class="pi pi-copy shrink-0 text-(--text-muted) opacity-0 transition-opacity duration-fast-02 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
+      class="ai ai-copy shrink-0 text-(--text-muted) opacity-0 transition-opacity duration-fast-02 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
       aria-hidden="true"
     />
   </button>

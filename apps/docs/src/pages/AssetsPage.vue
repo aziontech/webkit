@@ -105,7 +105,7 @@
           :label="t.viewMarkdown"
           kind="transparent"
           size="medium"
-          icon="pi pi-file"
+          icon="ai ai-file"
           :href="llms('illustrations')"
           target="_blank"
         />
@@ -150,7 +150,7 @@
           :label="t.viewMarkdown"
           kind="transparent"
           size="medium"
-          icon="pi pi-file"
+          icon="ai ai-file"
           :href="llms('line-figures')"
           target="_blank"
         />
@@ -193,7 +193,7 @@
         kind="secondary"
         size="medium"
         href="/foundations/icons"
-        icon="pi pi-arrow-right"
+        icon="ai ai-arrow-right"
         icon-position="trailing"
       />
     </section>

@@ -24,8 +24,7 @@
   const sets = computed(() =>
     [
       { id: 'azionicons', title: t.value.iconsAzion, lead: t.value.iconsAzionLead, prefix: 'ai-' },
-      { id: 'color', title: t.value.iconsColor, lead: t.value.iconsColorLead, prefix: 'ai-' },
-      { id: 'primeicons', title: t.value.iconsPrime, lead: t.value.iconsPrimeLead, prefix: 'pi-' }
+      { id: 'color', title: t.value.iconsColor, lead: t.value.iconsColorLead, prefix: 'ai-' }
     ].map((set) => ({
       ...set,
       total: assets.icons.filter((icon) => icon.set === set.id).length,
@@ -46,7 +45,7 @@
         >
           <template #prefix>
             <i
-              class="pi pi-search text-(--text-muted)"
+              class="ai ai-search text-(--text-muted)"
               aria-hidden="true"
             />
           </template>
@@ -121,7 +120,7 @@
               }}</span>
               <span class="sr-only">{{ icon.class }}</span>
               <i
-                class="pi pi-copy absolute end-(--spacing-xs) top-(--spacing-xs) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
+                class="ai ai-copy absolute end-(--spacing-xs) top-(--spacing-xs) text-(--text-muted) opacity-0 transition-opacity duration-fast-02 group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
                 aria-hidden="true"
               />
             </button>
@@ -134,7 +133,7 @@
       v-if="!filtered.length"
       :title="t.iconsEmpty"
       :description="t.iconsEmptyLead"
-      icon="pi pi-search"
+      icon="ai ai-search"
       bordered
     />
   </div>
