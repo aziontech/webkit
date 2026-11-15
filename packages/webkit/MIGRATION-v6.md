@@ -20,7 +20,8 @@ It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `d
   same paths in any other string (`vi.mock('@aziontech/webkit/…')`, `import('…')`);
 - component bindings, in PascalCase and in kebab-case tags (comments keep their words);
 - renamed props and prop values on those components (`v-model:value` → `v-model`, `border` →
-  `bordered`, `kind="text"` → `kind="transparent"`, …);
+  `bordered`, `kind="outlined"` → `variant="outline"`, `<Table.Cell kind="checkbox">` →
+  `<Table.Cell type="checkbox">`, …), dot-notation parts included;
 - renamed exported types where you import them (`AccordionArrowPosition` → `AccordionIconPosition`,
   `DocCardGroupMobileCols` → `DocCardGroupMobileColumns`, `SegmentedButtonOption` →
   `ToggleGroupOption`, …; the `types` map of `src/cli/migrations/v6.json`);
@@ -102,8 +103,8 @@ Client logo files spell the brand one word per word, and the codemod rewrites th
 | `alert`                | `severity="error"`            | `severity="danger"`       |
 | `attribute-editor`     | `empty`                       | `emptyTitle`              |
 | `badge`                | `severity=default`            | `severity=neutral`        |
-| `banner-art`           | `art`                         | `kind`                    |
-| `button`               | `kind="text"`                 | `kind="transparent"`      |
+| `banner-art`           | `art`, `kind`                 | `variant`                 |
+| `button`               | `kind="text"`                 | `variant="ghost"`         |
 | `card-pricing`         | `planTitle`                   | `title`                   |
 | `checkbox`             | `inputId`                     | `id`                      |
 | `code-block`           | `border`                      | `bordered`                |
@@ -117,7 +118,7 @@ Client logo files spell the brand one word per word, and the codemod rewrites th
 | `doc-card-group`       | `mobileCols`                  | `mobileColumns`           |
 | `doc-heading`          | `id`                          | `anchor`                  |
 | `file-token-group`     | `alignment`                   | `orientation`             |
-| `item`                 | `kind="outline"`              | `kind="outlined"`         |
+| `item`                 | `kind="outline"`              | `variant="outline"`       |
 | `log-view`             | `border`                      | `bordered`                |
 | `log-view`             | `showCopy`                    | `copyable`                |
 | `media-tabs`           | `autoPlayInterval`            | `autoplayInterval`        |
@@ -127,19 +128,57 @@ Client logo files spell the brand one word per word, and the codemod rewrites th
 | `overline`             | `showCursor`                  | `cursor`                  |
 | `payment-brand`        | `label`                       | `ariaLabel`               |
 | `popover`              | `width`                       | `size`                    |
-| `progress`             | `shape`                       | `kind`                    |
+| `progress`             | `shape`, `kind`               | `variant`                 |
 | `qr-code`              | `label`                       | `ariaLabel`               |
 | `quote-tabs`           | `autoPlayInterval`            | `autoplayInterval`        |
 | `quote-tabs`           | `autoPlay`                    | `autoplay`                |
 | `response-branches`    | `label`                       | `ariaLabel`               |
 | `severity-tag`         | `level`                       | `severity`                |
-| `skeleton`             | `kind="shape"`                | `kind="rectangle"`        |
+| `skeleton`             | `kind="shape"`                | `variant="rectangle"`     |
 | `split-button`         | `model`                       | `items`                   |
 | `table`                | `border`                      | `bordered`                |
 | `tabs`                 | `value`                       | `modelValue`              |
 | `textarea`             | `resizable`                   | `resize`                  |
 | `theme-switcher`       | `value`                       | `modelValue`              |
 | `wizard`               | `v-model:activeStep`          | `v-model`                 |
+
+### The look is `variant`, the sort of part is `type`
+
+Every `kind` prop is gone. Where it picked the look it is `variant` (`<Button variant="outline">`,
+`ButtonVariant`, `data-variant`); where it picked which sort of part a child is, it is `type`
+(`<Table.Cell type="checkbox">`, `<Pagination.Button type="next">`, `<Chart.Axis type="x">`,
+`<DonutChart type="pie">`, `PaginationButtonType`, `data-type`). The look values follow the shadcn
+and Supabase words, and each component keeps only the ones it draws:
+
+| v5 / 6.0-beta value                      | v6        |
+| ---------------------------------------- | --------- |
+| `outlined`                               | `outline` |
+| `transparent`, `text`                    | `ghost`   |
+| `primary`, `secondary`, `danger`, `link` | unchanged |
+
+`type` takes over from `kind` on `pagination-button`, `table-cell`, `table-head-cell`,
+`table-filter`, `dropdown-menu-option`, `chart-axis`, `chart-bar`, `field-legend`, `helper-text`,
+`donut-chart`, `spark-chart`, `code-block`, `doc-code-group`, `artifact-canvas`,
+`sidebar-menu-sub-trigger` and `item-media`; every other `kind` becomes `variant`. Section props
+follow suit: `titleKind` → `titleVariant` (`capability-grid`, `console-panel`, `process-scroll`,
+`feature-widgets`), `quoteKind` → `quoteVariant` (`logo-wall-quote`), `rowKind` → `rowVariant`
+(`article-index`). The codemod rewrites the attributes, their static values and the string
+literals inside a bound `:kind="…"`, and every `*Kind` type you import (`ButtonKind` →
+`ButtonVariant`, `TableCellKind` → `TableCellType`).
+
+The codemod cannot see data objects, so rename the field by hand where you build one:
+
+| Data                                                                  | v5 / 6.0-beta                     | v6                                   |
+| --------------------------------------------------------------------- | --------------------------------- | ------------------------------------ |
+| `DataTable` / `useCollection` column                                  | `kind: 'action'`                  | `type: 'action'`                     |
+| `SidebarMenu` / `ConsoleLayout` / `DocLayout` navigation node         | `kind: 'drill'`                   | `type: 'drill'`                      |
+| `FilterMenu` field                                                    | `kind: 'multiple'`                | `type: 'multiple'`                   |
+| `HeroForm` / `JobPosting` field                                       | `kind: 'email'`                   | `type: 'email'`                      |
+| `Diagram` node / group                                                | `kind: 'pill'` / `kind: 'dashed'` | `type: 'pill'` / `variant: 'dashed'` |
+| section action (`primaryAction`, `secondaryAction`, audience actions) | `kind: 'outlined'`                | `variant: 'outline'`                 |
+| `SiteLayout` `footer`                                                 | `kind: 'site'`                    | `variant: 'site'`                    |
+| `ConfirmDialog` options of `useUnsavedChanges`                        | `kind: 'danger'`                  | `variant: 'danger'`                  |
+| `SitePage` section `props`                                            | `kind: 'title-band'`              | `variant: 'title-band'`              |
 
 ### Renamed types
 
@@ -300,7 +339,7 @@ before the rename keeps rendering. Write the new name in code:
 | `table-sort-button`                                                     | `direction`                                                                      | `sort-direction`                                                                                                                                                                                                             |
 | `table-sort-button`                                                     | `visible`                                                                        | removed: `class="invisible"` hides it and keeps its space                                                                                                                                                                    |
 | `use-collection`                                                        | `selection: { mode: 'multi' }`                                                   | `selection: { mode: 'multiple' }` (manual; `cardListProps` binds `itemKey`, `tableProps` binds `selectable`)                                                                                                                 |
-| `filter-menu`                                                           | field `kind: 'multi'`                                                            | field `kind: 'multiple'` (manual)                                                                                                                                                                                            |
+| `filter-menu`                                                           | field `kind: 'multi'`                                                            | field `type: 'multiple'` (manual)                                                                                                                                                                                            |
 | `tag`                                                                   | `severity="primary"`, `"accent"`, `"contrast"`, `"highlight"`                    | `variant="primary"` (and `accent`, `contrast`, `highlight`); `severity` now takes only `neutral`, `info`, `success`, `warning`, `danger` and wins over `variant`                                                             |
 | `tag`                                                                   | a bound `:severity` that can hold `primary`, `accent`, `contrast` or `highlight` | MANUAL: split the data into a `variant` field (brand look) and a `severity` field (status) and bind both (`:variant="x.variant" :severity="x.severity"`); `TagSeverity` is now only the status scale, `TagVariant` the looks |
 | `badge`                                                                 | a bound `:severity` that can hold `primary` or `secondary`                       | MANUAL: same split as `Tag`                                                                                                                                                                                                  |
@@ -308,7 +347,7 @@ before the rename keeps rendering. Write the new name in code:
 | `sidebar-menu-item`                                                     | `tag-severity="primary"`, `tag-severity="accent"`                                | `tag-variant="primary"`, `tag-variant="accent"`; `tagSeverity` takes the status scale and wins; with neither the tag is `info`                                                                                               |
 | `architecture-tabs`                                                     | `position="left" \| "right"`                                                     | `tabs-side="start" \| "end"`                                                                                                                                                                                                 |
 | `article-body`                                                          | `trail[].current`                                                                | `trail[].active`                                                                                                                                                                                                             |
-| `article-cards`                                                         | `kind="left" \| "centered"`                                                      | `kind="start" \| "center"`                                                                                                                                                                                                   |
+| `article-cards`                                                         | `kind="left" \| "centered"`                                                      | `variant="start" \| "center"`                                                                                                                                                                                                |
 | `article-cards`                                                         | `items[].key`, `items[].external`                                                | `items[].id`, `items[].target="_blank"`                                                                                                                                                                                      |
 | `article-index`                                                         | `categoryLabel`                                                                  | `categoryAriaLabel`                                                                                                                                                                                                          |
 | `article-index`                                                         | `search="{ placeholder, label }"`                                                | `searchPlaceholder`, `searchAriaLabel`                                                                                                                                                                                       |
@@ -322,7 +361,7 @@ before the rename keeps rendering. Write the new name in code:
 | `conversation`                                                          | `alignment`                                                                      | `layout`                                                                                                                                                                                                                     |
 | `hero`                                                                  | `align="top" \| "bottom"`                                                        | `align="start" \| "end"`                                                                                                                                                                                                     |
 | `hero-band`                                                             | `highlight`                                                                      | `titleHighlight`                                                                                                                                                                                                             |
-| `hero-band`                                                             | `kind="centered" \| "centered-band"`                                             | `kind="center" \| "center-band"`                                                                                                                                                                                             |
+| `hero-band`                                                             | `kind="centered" \| "centered-band"`                                             | `variant="center" \| "center-band"`                                                                                                                                                                                          |
 | `hero-form`                                                             | `highlight`                                                                      | `titleHighlight`                                                                                                                                                                                                             |
 | `hero-form`                                                             | `error` (boolean)                                                                | `failed`                                                                                                                                                                                                                     |
 | `hero-title`                                                            | `highlight`                                                                      | `titleHighlight`                                                                                                                                                                                                             |
@@ -337,8 +376,8 @@ before the rename keeps rendering. Write the new name in code:
 | `media-split`                                                           | `align="top"`                                                                    | `align="start"`                                                                                                                                                                                                              |
 | `media-tabs`                                                            | `position="left" \| "right"`                                                     | `tabs-side="start" \| "end"`                                                                                                                                                                                                 |
 | `network-section`                                                       | `lead`                                                                           | `claimsEyebrow`                                                                                                                                                                                                              |
-| `section-module`                                                        | `kind="centered" \| "left" \| "horizontal"`                                      | `kind="center" \| "start" \| "split"`                                                                                                                                                                                        |
-| `section-title`                                                         | `kind="centered" \| "left" \| "horizontal"`                                      | `kind="center" \| "start" \| "split"`                                                                                                                                                                                        |
+| `section-module`                                                        | `kind="centered" \| "left" \| "horizontal"`                                      | `variant="center" \| "start" \| "split"`                                                                                                                                                                                     |
+| `section-title`                                                         | `kind="centered" \| "left" \| "horizontal"`                                      | `variant="center" \| "start" \| "split"`                                                                                                                                                                                     |
 | `site-footer`                                                           | `columns[].links[].external`                                                     | `columns[].links[].target="_blank"`                                                                                                                                                                                          |
 | `story-library`                                                         | `search="{ placeholder, shortPlaceholder, label }"`                              | `searchPlaceholder`, `searchShortPlaceholder`, `searchAriaLabel`                                                                                                                                                             |
 | `story-library`                                                         | `empty="{ title, action }"`                                                      | `emptyTitle`, `emptyActionLabel`                                                                                                                                                                                             |
@@ -673,7 +712,7 @@ state on its own.
 | `@aziontech/webkit/field-radio`          | RadioGroup v-model with a RadioGroup.Item per option (description on the item)                             |
 | `@aziontech/webkit/field-switch`         | Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)                       |
 | `@aziontech/webkit/field-checkbox-block` | FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription) |
-| `@aziontech/webkit/field-radio-block`    | RadioGroup kind="card" with a RadioGroup.Item per option (description on the item)                         |
+| `@aziontech/webkit/field-radio-block`    | RadioGroup variant="card" with a RadioGroup.Item per option (description on the item)                      |
 | `@aziontech/webkit/field-switch-block`   | FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)   |
 
 New pieces that came out of the old wrappers: `PhoneInput` (`@aziontech/webkit/phone-input`),
@@ -688,7 +727,7 @@ These shipped only in the 6.0 previews (`feat/webkit-ai-ready`), never in 5.x; t
   `primary-label` / `primary-href` become `:primary-action="{ label, href }"`, `secondary-label` /
   `secondary-href` become `:secondary-action="{ label, href }"`. The codemod lists the import as `MANUAL`.
 - `CapabilityGrid` and `ConsolePanel`: `actions` → `primaryAction` and `secondaryAction` (one object
-  each, same `{ label, href, trailing?, target?, kind? }` shape). The codemod lists it as `MANUAL`.
+  each, same `{ label, href, trailing?, target?, variant? }` shape). The codemod lists it as `MANUAL`.
 - `UploadProgress`: `v-model:collapsed` → `v-model:open`, inverted (`open = !collapsed`).
 - `ConsoleLayout`: `v-model:navigation-expanded` → `v-model:navigation-open` (same value);
   `Wizard`: `v-model:activeStep` → `v-model`; the codemod rewrites both.
@@ -768,16 +807,16 @@ A table filters with one of two components, picked by the shape of the data, and
 columns in one place:
 
 - `Table.Filter` is only the toolbar slot that hosts them, wired to the DataTable's `filters`:
-  `kind="menu"` (the default) renders `FilterMenu` (facets picked from known values) and
-  `kind="property"` renders `PropertyFilter` (typed conditions with operators, combined with AND).
+  `type="menu"` (the default) renders `FilterMenu` (facets picked from known values) and
+  `type="property"` renders `PropertyFilter` (typed conditions with operators, combined with AND).
   The field / operator / value builder (`kind="builder"`, the old default) is removed with its
   `count` prop, its `default` and `trigger` slots and its `clear` event. A `<Table.Filter>` with no
-  `kind` now opens the menu: write `kind="property"` to keep operator conditions (the codemod
+  `type` now opens the menu: write `type="property"` to keep operator conditions (the codemod
   rewrites `kind="builder"`). For a query language of your own, bind `PropertyFilter` in `query`
   mode.
 - `Table.AppliedFilters` (`./table-applied-filters`) is removed. Put `<FilterMenu.Chips />` with no
   `fields` in the DataTable `filters` slot: it reads the table's filter fields and filters, and its
-  chips reopen the menu or remove the filter (`filter-remove`). The property kind shows its own
+  chips reopen the menu or remove the filter (`filter-remove`). The property type shows its own
   tokens and needs no chips.
 - `Table.ColumnSelector` (`./table-column-selector`) is removed. Put `<CollectionPreferences
 :sections="['columns']" />` with no `columns` in the DataTable toolbar: it lists the table's
@@ -881,7 +920,7 @@ rewrite this, because the replacement depends on whether the child was a link or
 <Item href="https://example.com/docs">
   <Item.Content><Item.Title>Docs</Item.Title></Item.Content>
 </Item>
-<Item clickable kind="option" :aria-pressed="picked" @click="pick">
+<Item clickable variant="option" :aria-pressed="picked" @click="pick">
   <Item.Content><Item.Title>workload_01</Item.Title></Item.Content>
 </Item>
 ```
@@ -897,8 +936,8 @@ hand edit.
 | ----------------- | ------------------------------------------------------- | ------------------------------------------------------------- |
 | `toast-item`      | `type` (and the value `error`)                          | `severity` (`danger`)                                         |
 | `toast`           | `ToastType`, store entry `type`, `data-type`            | `ToastSeverity`, entry `severity`, `data-severity`            |
-| `progress`        | `shape`, `ProgressShape`, `data-shape`                  | `kind`, `ProgressKind`, `data-kind`                           |
-| `skeleton`        | `kind="shape"`                                          | `kind="rectangle"`                                            |
+| `progress`        | `shape`, `ProgressShape`, `data-shape`                  | `variant`, `ProgressVariant`, `data-variant`                  |
+| `skeleton`        | `kind="shape"`                                          | `variant="rectangle"`                                         |
 | `badge`           | `severity="default"`                                    | `severity="neutral"`                                          |
 | `overline`        | `showCursor`                                            | `cursor`                                                      |
 | `card-pricing`    | `planTitle` (and its built-in `Pro`)                    | `title`, set on every card                                    |
@@ -1162,19 +1201,19 @@ lists it as manual work); page JSON that still names the old `_id` keeps renderi
 
 | Removed                               | Use                                                                                       |
 | ------------------------------------- | ----------------------------------------------------------------------------------------- |
-| `hero-copy-on-top-art`                | `hero-band` with `kind="copy-on-top-art"` and the same `levels`                           |
+| `hero-copy-on-top-art`                | `hero-band` with `variant="copy-on-top-art"` and the same `levels`                        |
 | `hero-with-opening`                   | `hero-band` with `size="large"` and the same `items`                                      |
-| `closing-call-to-action-agents`       | `closing-call-to-action` with `kind="primary"` and `audiences`                            |
+| `closing-call-to-action-agents`       | `closing-call-to-action` with `variant="primary"` and `audiences`                         |
 | `closing-call-to-action-templates`    | `template-gallery` with `closing`                                                         |
-| `banner`                              | `call-to-action` with `kind="announcement"`; the `aside` slot is the default slot         |
+| `banner`                              | `call-to-action` with `variant="announcement"`; the `aside` slot is the default slot      |
 | `customer-spotlight`                  | `client-mosaic-columns` with `reveal="hover"`; `items` → `cells`, `description` → `story` |
-| `sticky-carousel`                     | `process-scroll` with `pinned` and `title-kind="centered"`; `items` → `steps`             |
+| `sticky-carousel`                     | `process-scroll` with `pinned` and `title-variant="centered"`; `items` → `steps`          |
 | `quote-carousel`                      | `client-quotes`, or `Quote` cards in a `CardCarousel`                                     |
 | `compare-support-tiers`               | `compare-plans`; `tiers` → `plans`                                                        |
 | `article-index-blog`                  | `article-index` (`filters="category-search"`, the default)                                |
 | `article-index-resource-hub`          | `article-index` with `filters="facets"`                                                   |
-| `use-case-links`                      | `capability-grid` with `title-kind="left"`; items keep `href`                             |
-| `resource-grid`                       | `capability-grid` with `title-kind="horizontal"`; items keep `href`                       |
+| `use-case-links`                      | `capability-grid` with `title-variant="left"`; items keep `href`                          |
+| `resource-grid`                       | `capability-grid` with `title-variant="horizontal"`; items keep `href`                    |
 | `content-columns`                     | `capability-grid`; `columns` is `3` or `4`                                                |
 | `code-split`                          | `media-split-band` with the same `codeTabs`, `defaultFile` and actions                    |
 | `sticky-scroll-code`                  | `feature-scroll`; each item keeps its `code`                                              |
@@ -1390,7 +1429,7 @@ The codemod rewrites the renamed paths and bindings and prints `MANUAL` for a re
 - `Breadcrumb.Item` moved into the breadcrumb folder; its import `@aziontech/webkit/breadcrumb-item`
   is unchanged.
 - `MiniButton` is removed. A text link that navigates → `<Link label href icon>` (it takes the
-  link colour); a text action with no `href` → `<Button kind="link">`.
+  link colour); a text action with no `href` → `<Button variant="link">`.
 
 ### Input controls: one name per job
 
@@ -1419,9 +1458,9 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
 - **Radios are one `RadioGroup`.** `RadioButton` and `RadioCards` are removed. Every radio is a
   `RadioGroup.Item` (`@aziontech/webkit/radio-group-item`) inside a `RadioGroup` that holds the
   `v-model`: `<RadioGroup v-model="plan"><RadioGroup.Item value="pro">Pro</RadioGroup.Item></RadioGroup>`.
-  A hand-built `Field.Label` choice card with a radio becomes `kind="card"` with `description` on
+  A hand-built `Field.Label` choice card with a radio becomes `variant="card"` with `description` on
   the item. `<RadioCards v-model :items>` becomes
-  `<RadioGroup v-model kind="card" orientation="horizontal" :options>` (the codemod renames
+  `<RadioGroup v-model variant="card" orientation="horizontal" :options>` (the codemod renames
   `items`); its `#default="{ item }"` slot is `#option="{ option }"` and `#tag="{ item }"` is
   `#tag="{ option }"`. `RadioCardsItem` → `RadioGroupOption`.
 - **`PickList` → `TransferList`.** `@aziontech/webkit/pick-list` and its parts become
@@ -1460,7 +1499,7 @@ The old ids are gone, so a config or `eslint-disable` comment that names one rep
 
 A CSS variable a component reads is named `--<component>-<part>-<property>`. The one you may set
 yourself changed: a sticky bar above a `Hero` declares its height as `--hero-banner-offset`
-(was `--banner-offset`), so a `kind="screen"` band still measures one screen beneath it.
+(was `--banner-offset`), so a `variant="screen"` band still measures one screen beneath it.
 
 ## 5. Field report: Azion Console
 
@@ -1481,7 +1520,7 @@ What it rewrote: the native v3 components on category paths (`actions/button` in
 `actions/segmented-button` → `toggle-group` in 6, `content/card-box` → `card` in 4,
 `content/currency`, `content/item`, `content/card-pricing`, `feedback/message` → `alert`,
 `feedback/status-indicator`, `inputs/box-grid-selection` → `radio-cards`, `actions/icon-button`),
-their bindings and tags, `kind="text"` → `kind="transparent"` on the native button, and the matching
+their bindings and tags, `kind="text"` → `variant="ghost"` on the native button, and the matching
 `vi.mock` paths in tests.
 
 `MANUAL` items by category:

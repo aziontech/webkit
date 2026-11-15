@@ -52,9 +52,11 @@
   },
   "button": {
     "kind": {
-      "to": "kind",
+      "to": "variant",
       "values": {
-        "text": "transparent"
+        "outlined": "outline",
+        "transparent": "ghost",
+        "text": "ghost"
       }
     },
     "#prefix": "leading"
@@ -62,11 +64,18 @@
   "card-pricing": {
     "planTitle": "title",
     "slotPosition": "actionsPosition",
-    "aligned": "equalHeight"
+    "aligned": "equalHeight",
+    "kind": {
+      "to": "variant",
+      "values": {
+        "transparent": "ghost"
+      }
+    }
   },
   "code-block": {
     "border": "bordered",
-    "value": "modelValue"
+    "value": "modelValue",
+    "kind": "type"
   },
   "doc-card": {
     "overline": "eyebrow",
@@ -89,19 +98,14 @@
         "top": "start",
         "bottom": "end"
       }
-    }
+    },
+    "kind": "variant"
   },
   "hero-band": {
     "carouselMarks": "tickerMarks",
     "carouselLabel": "tickerLabel",
     "highlight": "titleHighlight",
-    "kind": {
-      "to": "kind",
-      "values": {
-        "centered": "center",
-        "centered-band": "center-band"
-      }
-    }
+    "kind": "variant"
   },
   "hero-form": {
     "carouselMarks": "tickerMarks",
@@ -111,9 +115,10 @@
   },
   "item": {
     "kind": {
-      "to": "kind",
+      "to": "variant",
       "values": {
-        "outline": "outlined"
+        "outlined": "outline",
+        "transparent": "ghost"
       }
     },
     "asChild": {
@@ -122,9 +127,10 @@
   },
   "item-root": {
     "kind": {
-      "to": "kind",
+      "to": "variant",
       "values": {
-        "outline": "outlined"
+        "outlined": "outline",
+        "transparent": "ghost"
       }
     },
     "asChild": {
@@ -184,7 +190,8 @@
     "width": "size"
   },
   "progress": {
-    "shape": "kind"
+    "shape": "variant",
+    "kind": "variant"
   },
   "quote-tabs": {
     "autoPlay": "autoplay",
@@ -213,7 +220,7 @@
   },
   "skeleton": {
     "kind": {
-      "to": "kind",
+      "to": "variant",
       "values": {
         "shape": "rectangle"
       }
@@ -472,7 +479,14 @@
     }
   },
   "split-button": {
-    "model": "items"
+    "model": "items",
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    }
   },
   "textarea": {
     "resizable": "resize"
@@ -555,7 +569,7 @@
   },
   "table-filter": {
     "kind": {
-      "to": "kind",
+      "to": "type",
       "values": {
         "builder": "property"
       }
@@ -619,7 +633,8 @@
     }
   },
   "radio-group": {
-    "items": "options"
+    "items": "options",
+    "kind": "variant"
   },
   "resizable-pane": {
     "collapsed": {
@@ -630,17 +645,32 @@
   "select": {
     "multiple": {
       "removed": "use MultiSelect (same options, same array v-model)"
+    },
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
     }
   },
   "select-root": {
     "multiple": {
       "removed": "use MultiSelect (same options, same array v-model)"
+    },
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
     }
   },
   "switch": {
     "focused": {
       "removed": "use autofocus to focus it on mount"
-    }
+    },
+    "kind": "variant"
   },
   "transfer-list": {
     "dataKey": "itemKey",
@@ -654,10 +684,12 @@
     "empty": "emptyTitle"
   },
   "multi-select": {
-    "emptyText": "emptyTitle"
+    "emptyText": "emptyTitle",
+    "kind": "variant"
   },
   "multi-select-root": {
-    "emptyText": "emptyTitle"
+    "emptyText": "emptyTitle",
+    "kind": "variant"
   },
   "sidebar-root": {
     "collapsed": {
@@ -667,13 +699,15 @@
   "hero-root": {
     "carousel": "ticker",
     "carouselMarks": "tickerMarks",
-    "carouselLabel": "tickerLabel"
+    "carouselLabel": "tickerLabel",
+    "kind": "variant"
   },
   "popover-root": {
     "width": "size"
   },
   "banner-art": {
-    "art": "kind"
+    "art": "variant",
+    "kind": "variant"
   },
   "combobox": {
     "emptyText": "emptyTitle"
@@ -718,13 +752,17 @@
   },
   "capability-grid": {
     "actions": {
-      "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, kind? } shape); a third action has no slot, put it in the page instead"
-    }
+      "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, variant? } shape); a third action has no slot, put it in the page instead"
+    },
+    "kind": "variant",
+    "titleKind": "titleVariant"
   },
   "console-panel": {
     "actions": {
-      "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, kind? } shape); a third action has no slot, put it in the page instead"
-    }
+      "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, variant? } shape); a third action has no slot, put it in the page instead"
+    },
+    "kind": "variant",
+    "titleKind": "titleVariant"
   },
   "chat-message": {
     "state": {
@@ -743,7 +781,8 @@
     }
   },
   "tool-approval": {
-    "state": "status"
+    "state": "status",
+    "kind": "variant"
   },
   "tool-call": {
     "state": "status"
@@ -770,7 +809,8 @@
   },
   "product-widget": {
     "hover": "hovered",
-    "interval": "autoplayInterval"
+    "interval": "autoplayInterval",
+    "kind": "variant"
   },
   "breadcrumb": {
     "current": "active"
@@ -805,7 +845,8 @@
     "selected": "active"
   },
   "pagination-button": {
-    "selected": "active"
+    "selected": "active",
+    "kind": "type"
   },
   "navigation-menu-list": {
     "highlight": "showHighlight"
@@ -865,7 +906,8 @@
     "@meta-action": "action-click"
   },
   "setting-row": {
-    "level": "depth"
+    "level": "depth",
+    "kind": "variant"
   },
   "dropdown-menu": {
     "#top": "header",
@@ -928,14 +970,16 @@
   "card": {
     "#header-action": "header-actions",
     "#action": "actions",
-    "#content": "default"
+    "#content": "default",
+    "kind": "variant"
   },
   "code-editor": {
     "lineNumbers": "showLineNumbers",
     "@validate": "markers-change"
   },
   "chart-bar": {
-    "labeled": "showLabels"
+    "labeled": "showLabels",
+    "kind": "type"
   },
   "tree": {
     "selectedIds": "selectedKeys",
@@ -999,25 +1043,23 @@
       "values": {
         "top": "start"
       }
-    }
+    },
+    "kind": "variant"
   },
   "network-section": {
-    "lead": "claimsEyebrow"
+    "lead": "claimsEyebrow",
+    "kind": "variant"
   },
   "article-index": {
     "categoryLabel": "categoryAriaLabel",
-    "rowKind": {
-      "to": "rowKind",
-      "values": {
-        "centered": "center"
-      }
-    },
+    "rowKind": "rowVariant",
     "search": {
       "removed": "split into searchPlaceholder and searchAriaLabel"
     },
     "empty": {
       "removed": "split into emptyTitle, emptyDescription and emptyActionLabel"
-    }
+    },
+    "kind": "variant"
   },
   "listing-browser": {
     "rows": "data",
@@ -1032,43 +1074,17 @@
     "rows": "data"
   },
   "section-title": {
-    "kind": {
-      "to": "kind",
-      "values": {
-        "centered": "center",
-        "left": "start",
-        "horizontal": "split"
-      }
-    }
+    "kind": "variant"
   },
   "section-module": {
-    "kind": {
-      "to": "kind",
-      "values": {
-        "centered": "center",
-        "left": "start",
-        "horizontal": "split"
-      }
-    }
+    "kind": "variant"
   },
   "article-cards": {
-    "kind": {
-      "to": "kind",
-      "values": {
-        "left": "start",
-        "centered": "center"
-      }
-    }
+    "kind": "variant"
   },
   "feature-widgets": {
-    "titleKind": {
-      "to": "titleKind",
-      "values": {
-        "centered": "center",
-        "left": "start",
-        "horizontal": "split"
-      }
-    }
+    "titleKind": "titleVariant",
+    "kind": "variant"
   },
   "sticky-stack": {
     "@index-change": "active-index-change"
@@ -1080,5 +1096,196 @@
     "empty": {
       "removed": "split into emptyTitle and emptyActionLabel (was action)"
     }
+  },
+  "icon-button": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    }
+  },
+  "copy-button": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    }
+  },
+  "button-group": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    }
+  },
+  "chip": {
+    "kind": {
+      "to": "variant",
+      "values": {
+        "outlined": "outline",
+        "transparent": "ghost"
+      }
+    }
+  },
+  "avatar": {
+    "kind": "variant"
+  },
+  "brand": {
+    "kind": "variant"
+  },
+  "logo": {
+    "kind": "variant"
+  },
+  "kbd": {
+    "kind": "variant"
+  },
+  "key-value-pairs": {
+    "kind": "variant"
+  },
+  "key-value-pairs-root": {
+    "kind": "variant"
+  },
+  "navigation-menu-popup": {
+    "kind": "variant"
+  },
+  "footer": {
+    "kind": "variant"
+  },
+  "footer-root": {
+    "kind": "variant"
+  },
+  "global-header": {
+    "kind": "variant"
+  },
+  "global-header-root": {
+    "kind": "variant"
+  },
+  "save-bar": {
+    "kind": "variant"
+  },
+  "doc-callout": {
+    "kind": "variant"
+  },
+  "doc-prompt": {
+    "kind": "variant"
+  },
+  "quote": {
+    "kind": "variant"
+  },
+  "call-to-action": {
+    "kind": "variant"
+  },
+  "ticker": {
+    "kind": "variant"
+  },
+  "carousel": {
+    "kind": "variant"
+  },
+  "carousel-root": {
+    "kind": "variant"
+  },
+  "texture-material": {
+    "kind": "variant"
+  },
+  "logo-wall": {
+    "kind": "variant"
+  },
+  "media-tile": {
+    "kind": "variant"
+  },
+  "card-grid": {
+    "kind": "variant"
+  },
+  "card-grid-root": {
+    "kind": "variant"
+  },
+  "card-grid-cell": {
+    "kind": "variant"
+  },
+  "bento-grid-cell": {
+    "kind": "variant"
+  },
+  "file-dropzone": {
+    "kind": "variant"
+  },
+  "radio-group-root": {
+    "kind": "variant"
+  },
+  "confirm-dialog": {
+    "kind": "variant"
+  },
+  "stat-tile": {
+    "kind": "variant"
+  },
+  "ai-loading": {
+    "kind": "variant"
+  },
+  "closing-call-to-action": {
+    "kind": "variant"
+  },
+  "feature-tiles": {
+    "kind": "variant"
+  },
+  "logo-wall-quote": {
+    "kind": "variant",
+    "quoteKind": "quoteVariant"
+  },
+  "media-split-stack": {
+    "kind": "variant"
+  },
+  "site-footer": {
+    "kind": "variant"
+  },
+  "process-scroll": {
+    "kind": "variant",
+    "titleKind": "titleVariant"
+  },
+  "table-cell": {
+    "kind": "type"
+  },
+  "table-head-cell": {
+    "kind": "type"
+  },
+  "dropdown-menu-option": {
+    "kind": "type"
+  },
+  "dropdown-menu-item": {
+    "kind": "type"
+  },
+  "context-menu-item": {
+    "kind": "type"
+  },
+  "chart-axis": {
+    "kind": "type"
+  },
+  "field-legend": {
+    "kind": "type"
+  },
+  "helper-text": {
+    "kind": "type"
+  },
+  "donut-chart": {
+    "kind": "type"
+  },
+  "spark-chart": {
+    "kind": "type"
+  },
+  "doc-code-group": {
+    "kind": "type"
+  },
+  "artifact-canvas": {
+    "kind": "type"
+  },
+  "sidebar-menu-sub-trigger": {
+    "kind": "type"
+  },
+  "item-media": {
+    "kind": "type"
   }
 }
