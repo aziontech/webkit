@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "One anchored band: the h2 with its Hint guidance and a gutter copy-link, over a flush Card of SettingRow rows.",
+      "summary": "One anchored band: the h2 with its Hint guidance and a gutter copy-link, over a flush Card of SettingsRow rows.",
       "file": "default.vue"
     },
     {

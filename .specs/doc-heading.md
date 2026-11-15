@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 8aeb799c4d37f15638324f176b63917bd7433063fb2174d004939f18acaa60a4
+checksum: af9d0329d26f38b609d3a00d1764230f44f40d6c0e7e4cca4dedb5b9ef4d640c
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNav`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.
+A documentation section heading that is also the link to itself. The whole text links to its own `anchor` (the heading's `id`), so a reader can copy the URL to the section; a rule under the text and a chain glyph after it appear on hover and keyboard focus without taking layout. The click goes through `useHeadingNavigation`, so the page decides how to scroll; with no page it falls back to the native hash jump. MDX renderers and hand-composed pages both render headings through it, so the two authoring paths cannot drift.
 
 ## When to use
 
@@ -30,7 +30,7 @@ A documentation section heading that is also the link to itself. The whole text 
 ## Related
 
 - `DocOnThisPage` — the rail that points at the ids.
-- `useHeadingNav` — the page-provided scroll handler.
+- `useHeadingNavigation` — the page-provided scroll handler.
 - `DocProse` — skips `[data-doc-anchor]` in its link rules.
 
 ## Best practices

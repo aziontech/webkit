@@ -79,12 +79,12 @@ test('scanVue reports deprecated members, props, models and slots', () => {
 
 test('scanVue stays silent on the replacement names', () => {
   const source = `<script setup>
-  import GlobalHeader from '@aziontech/webkit/global-header'
+  import AppHeader from '@aziontech/webkit/app-header'
   import Sidebar from '@aziontech/webkit/sidebar'
 </script>
 
 <template>
-  <GlobalHeader><GlobalHeader.Start /><GlobalHeader.Center /><GlobalHeader.End /></GlobalHeader>
+  <AppHeader><AppHeader.Start /><AppHeader.Center /><AppHeader.End /></AppHeader>
   <Sidebar v-model:open="open" />
 </template>
 `
@@ -93,7 +93,7 @@ test('scanVue stays silent on the replacement names', () => {
 
 test('scanMarkdown reads fenced snippets and indented ones, and stays silent on current members', () => {
   const source = [
-    'Put the trigger first in `GlobalHeader.End`.',
+    'Put the trigger first in `AppHeader.End`.',
     '',
     '1. A list item:',
     '   ```vue',

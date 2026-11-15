@@ -20,7 +20,7 @@ The page a first-level resource is created on one step at a time. It is the `Wiz
 
 ## Building blocks
 
-### A. Creation header — `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 
 The `top-bar/creation-bar` header, with no sidebar: a back `IconButton` to the module, the `Brand` linking home, a `Breadcrumb` of the module and the create label, and the account `Avatar`. The breadcrumb's last item repeats the create button's label exactly.
 
@@ -32,25 +32,25 @@ The `top-bar/creation-bar` header, with no sidebar: a back `IconButton` to the m
 
 One `Wizard` labelled with the create label, `v-model` bound to the step index, `submit-label` set to the create label and `loading` bound to the create request. Each step is a `Wizard.Step` with a short noun title and a one-sentence description; the Wizard draws the rail (completed steps reachable, later ones locked), the step heading (`h2`), the "Step 2 of 4" line on a narrow box, and the footer: Cancel on the start side, Previous and Next on the end side, Next becoming the create action on the last step. A conditional step is a `Wizard.Step` with `v-if`; the Wizard numbers steps in the order they render. Validation runs in the `next` handler, which calls `preventDefault()` to keep the user on a failed step.
 
-### D. Where it runs — `Input`, `Item`, `Tag`, `HelperText`, `Button` (required)
+### D. Where it runs — `Input`, `Item`, `Tag`, `FieldError`, `Button` (required)
 
-The first step: a large search `Input` and up to six host rows. Each row is a small `clickable` `Item` (a native `button`) with `aria-pressed`, which fills the chosen row; a host missing the module the resource needs carries a small warning `Tag`. Picking a row answers the step and moves on. A chosen host past the first six is kept visible. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one. Next with no answer stays and shows a `HelperText` asking for one.
+The first step: a large search `Input` and up to six host rows. Each row is a small `clickable` `Item` (a native `button`) with `aria-pressed`, which fills the chosen row; a host missing the module the resource needs carries a small warning `Tag`. Picking a row answers the step and moves on. A chosen host past the first six is kept visible. A count line tells how many more match, a no-match line replaces the rows, and two transparent small `Button`s offer to create a host or continue without one. Next with no answer stays and shows a `FieldDescription` asking for one.
 
 ### E. Module step — `Card`, `Alert`, `Field`, `Switch` (conditional)
 
 Inserted only when the chosen host has the needed module off. A flush `Card` holds a small warning `Alert` that states the consequence, a horizontal `Field` choice card whose `Switch` turns the module on when the resource is created, and one muted line on what leaving it off means. Leaving it off is allowed.
 
-### F. Field steps — `Card`, `Item`, `SettingRow`, `Input`, `HelperText` (required)
+### F. Field steps — `Card`, `Item`, `SettingsRow`, `Input`, `FieldError` (required)
 
-Each step's fields are `SettingRow`s in an `Item.List` inside a flush `Card`, the same anatomy as a single page create. A large `Input` takes an `aria-label` matching the row title. Next validates only the current step: an empty required field gets `:required` and a `HelperText` with the message, cleared as soon as the field is edited.
+Each step's fields are `SettingsRow`s in an `Item.List` inside a flush `Card`, the same anatomy as a single page create. A large `Input` takes an `aria-label` matching the row title. Next validates only the current step: an empty required field gets `:required` and a `FieldError` with the message, cleared as soon as the field is edited.
 
 ### G. Choice cards — `RadioGroup` (optional)
 
-A choice that changes what follows, such as the list type, is a `SettingRow variant="stacked"` holding a `RadioGroup` with `variant="card"`, each option a `RadioGroup.Item` with its label and `description`. Use it for three to five options that need a sentence each.
+A choice that changes what follows, such as the list type, is a `SettingsRow variant="stacked"` holding a `RadioGroup` with `variant="card"`, each option a `RadioGroup.Item` with its label and `description`. Use it for three to five options that need a sentence each.
 
-### H. Long entry — `Textarea`, `HelperText` (optional)
+### H. Long entry — `Textarea`, `FieldDescription` (optional)
 
-A stacked row with a five-row `Textarea` whose label, placeholder and guidance follow the choice above it. Its required message is a `HelperText` tied by `aria-describedby`.
+A stacked row with a five-row `Textarea` whose label, placeholder and guidance follow the choice above it. Its required message is a `FieldError` tied by `aria-describedby`.
 
 ### I. Review — `SectionHeader`, `Alert`, `Card`, `Item`, `Tag`, `Button` (required)
 
@@ -60,7 +60,7 @@ The last step, read-only: three bands under small `SectionHeader`s (Where it run
 
 Two steps, Project then Domain and deployment, with the last action reading "Create and deploy".
 
-- **Project.** The `create/resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingRow` whose `Switch` opens a `RadioGroup variant="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
+- **Project.** The `create/resource-picker` band, copied from that block (the source of truth for the paged picker; change it there first): a flush `Card` titled Project, a lead sentence, a large fluid `ToggleGroup` of Existing project and New project, then either a searchable `Item` list paged five at a time with `Skeleton` rows and a Load more `Button`, or a Name `Field`. In New mode the project is configured in place: a Cache Settings `Card` whose policy `Switch`es open their fields, and an Add an origin `SettingsRow` whose `Switch` opens a `RadioGroup variant="card"` of origin types and the type's fields. Each opened field is required only while its switch is on.
 - **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup variant="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsSection` titled Advanced holding only fields that have defaults.
 - **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `detail/deployment-logs` (InCreateFlow) and ends on `create/deploy-success`.
 

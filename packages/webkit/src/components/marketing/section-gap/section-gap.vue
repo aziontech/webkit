@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import TextureMaterial from '../texture-material/texture-material.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import Texture from '../texture/texture.vue'
 
   defineOptions({
     name: 'SectionGap',
@@ -32,7 +32,7 @@
 </script>
 
 <template>
-  <FrameBox
+  <RegistrationFrame
     v-bind="$attrs"
     flush
     borders="y"
@@ -42,10 +42,10 @@
     :data-hatch="hatch || null"
     class="h-[calc(var(--spacing-2xl)*2)] data-[size=small]:h-(--spacing-2xl) data-[size=large]:h-[calc(var(--spacing-2xl)*3)]"
   >
-    <TextureMaterial
+    <Texture
       v-if="hatch"
       variant="lines"
       :data-testid="`${testId}__hatch`"
     />
-  </FrameBox>
+  </RegistrationFrame>
 </template>

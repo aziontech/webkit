@@ -7,14 +7,14 @@ status: implemented
 spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: d59b90d8cdfc72c349472025168ff2c1aebe80e2139f4317a25585a329883a9f
+checksum: 395115da93eb4c22b09e031f073807a86deefe5a0a5a821108c244fd7e26286c
 ---
 
 # NetworkSection — Component Spec
 
 ## Purpose
 
-The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small start-aligned title, a claims eyebrow and a row of claim chips, closed by a floor of client outcomes (a quote with its highlights and, when given, the client's mark), benefits (a topic each) or stats (headline figures). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `network-map`, `section-title`, `card-grid`, `quote`, `topic` and `big-numbers`. `variant` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on up to three columns, balanced so every row is full; `stats` renders the figures as a `big-numbers` row. The band above is the same.
+The infrastructure band of a marketing page: a tall framed panel with the world network map drawn behind a small start-aligned title, a claims eyebrow and a row of claim chips, closed by a floor of client outcomes (a quote with its highlights and, when given, the client's mark), benefits (a topic each) or stats (headline figures). It is a page section — the site places it from a `{ _id: 'network-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `network-map`, `section-title`, `card-grid`, `quote`, `feature-item` and `stats`. `variant` picks the floor only: `outcomes` renders the quotes on one column per entry — two at least, four at most; `benefits` renders the topics on up to three columns, balanced so every row is full; `stats` renders the figures as a `stats` row. The band above is the same.
 
 ## When to use
 
@@ -22,14 +22,14 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 
 ## When NOT to use
 
-- For figures alone, without the map band → use `stats-band`.
-- For a logo wall with one quote → use `logo-wall-quote`.
+- For figures alone, without the map band → use `stats-section`.
+- For a logo wall with one quote → use `logo-wall-section`.
 
 ## Related
 
 - `network-map` — the animated map behind the copy.
-- `quote` / `topic` — the cell types of the `outcomes` and `benefits` floors.
-- `big-numbers` — the row the `stats` floor renders.
+- `quote` / `feature-item` — the cell types of the `outcomes` and `benefits` floors.
+- `stats` — the row the `stats` floor renders.
 
 ## Best practices
 
@@ -86,13 +86,13 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 | --------------- | ----------------------------------- | ------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `variant`       | `NetworkSectionVariant`             | `'outcomes'` | false    | Which floor closes the band: `outcomes` renders the client quotes, `benefits` the benefit topics on up to three columns, `stats` the headline figures.                                                                                                                                                                                                                                             |
 | `anchor`        | `string`                            | `''`         | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                                                     |
-| `eyebrow`       | `string`                            | `''`         | false    | Overline above the headline.                                                                                                                                                                                                                                                                                                                                                                       |
+| `eyebrow`       | `string`                            | `''`         | false    | Eyebrow above the headline.                                                                                                                                                                                                                                                                                                                                                                        |
 | `title`         | `string`                            | `''`         | false    | Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty.                                                                                                                                                                                                                                                                                        |
-| `claimsEyebrow` | `string`                            | `''`         | false    | Overline-set line above the claims.                                                                                                                                                                                                                                                                                                                                                                |
+| `claimsEyebrow` | `string`                            | `''`         | false    | Eyebrow-set line above the claims.                                                                                                                                                                                                                                                                                                                                                                 |
 | `claims`        | `(string \| NetworkSectionClaim)[]` | `[]`         | false    | Short figures rendered as chips under the claims eyebrow, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint.                                                                                                                                                                                                                    |
 | `outcomes`      | `NetworkSectionOutcome[]`           | `[]`         | false    | Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'` (`LogoTreatment` without `knockout`), and `highlights` are the phrases of `text` set in the accent. |
 | `benefits`      | `NetworkSectionBenefit[]`           | `[]`         | false    | Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon? }`, rendered as a topic whose title is an `h3`.                                                                                                                                                                                                              |
-| `stats`         | `NetworkSectionStat[]`              | `[]`         | false    | Figures for the `stats` floor, in order, rendered by `big-numbers`; each is `{ value, label, prefix?, suffix? }`.                                                                                                                                                                                                                                                                                  |
+| `stats`         | `NetworkSectionStat[]`              | `[]`         | false    | Figures for the `stats` floor, in order, rendered by `stats`; each is `{ value, label, prefix?, suffix? }`.                                                                                                                                                                                                                                                                                        |
 
 ## Events
 
@@ -108,8 +108,8 @@ The infrastructure band of a marketing page: a tall framed panel with the world 
 - `data-variant` mirrors the `variant` prop and selects the floor (`outcomes`, `benefits` or `stats`)
 - Empty: when `title` is empty the band renders nothing; when the selected floor's array is empty the band renders without a floor
 - An outcome without `logo` renders its quote with no mark row
-- The `benefits` floor is `card-grid`'s `balanced` layout with `columns: 3`, so three benefits fill one row and four split 2 × 2; every benefit is a `topic` with an `h3`, led by its glyph when it has an `icon`
-- The `stats` floor is a `big-numbers` row under a rule; `big-numbers` picks its own column count so no cell is left empty
+- The `benefits` floor is `card-grid`'s `balanced` layout with `columns: 3`, so three benefits fill one row and four split 2 × 2; every benefit is a `feature-item` with an `h3`, led by its glyph when it has an `icon`
+- The `stats` floor is a `stats` row under a rule; `stats` picks its own column count so no cell is left empty
 - Claims: a chip is `h-6` with `text-label-sm` below the small breakpoint and `h-7` with `text-label-md` from it; a claim with `mobile: false` carries `data-mobile="hidden"` and is hidden below the medium breakpoint
 - Anchor: the root carries `id` = `anchor` when set, with a scroll margin so a `#hash` jump clears a sticky header
 - The map renders twice: a faded top-right world from the medium breakpoint up, a centered masked world below it, framed close on the network (`scale` 3.3); both are `network-map`'s own animation
@@ -148,7 +148,7 @@ _none_
 
 - Visible focus: nothing in the band is interactive.
 - Keyboard map: none.
-- ARIA: the band is a `<section>` named by its title (`aria-label`); the headline is the section title's `h2`; the claims are a real list; the maps are decorative and hidden from assistive technology by `network-map`; each outcome's mark carries the client name as `alt`; benefit topics are `h3`s; the `stats` floor is `big-numbers`, one `figure` per stat with its label as the caption. A claim hidden below the medium breakpoint is `display: none` there, so assistive technology skips it too.
+- ARIA: the band is a `<section>` named by its title (`aria-label`); the headline is the section title's `h2`; the claims are a real list; the maps are decorative and hidden from assistive technology by `network-map`; each outcome's mark carries the client name as `alt`; benefit topics are `h3`s; the `stats` floor is `stats`, one `figure` per stat with its label as the caption. A claim hidden below the medium breakpoint is `display: none` there, so assistive technology skips it too.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): claims eyebrow `var(--text-muted)`, claims `var(--text-default)` on a tinted canvas; the map sits at low opacity behind the copy and never under the text column on large screens.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the map animation belongs to `network-map`, which carries its own reduced-motion fallback; this band adds no motion.
 - Touch target ≥40×40 px — not applicable, nothing is interactive.
@@ -166,7 +166,7 @@ _none_
 ## Responsive
 
 - Below medium the map is drawn as a strip under the copy (the full-height map column is hidden); from medium the map sits behind the copy, its fade widened between medium and large.
-- The floor follows `card-grid`: outcomes take one column per entry, benefits up to three, stats the `big-numbers` row.
+- The floor follows `card-grid`: outcomes take one column per entry, benefits up to three, stats the `stats` row.
 - No horizontal scroll at 320 px.
 
 ## Performance

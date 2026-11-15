@@ -11,7 +11,7 @@ enforced_by: [no-invention, imports, composables]
 
 ## Purpose
 
-Before scaffolding, prove whatever logic the new component needs does not already exist somewhere. Duplicating `useToast`, `Spinner`, or `Currency` causes drift; this skill catches that.
+Before scaffolding, prove whatever logic the new component needs does not already exist somewhere. Duplicating `useToast`, `Spinner`, or `CurrencyAmount` causes drift; this skill catches that.
 
 ## When to invoke
 
@@ -33,7 +33,7 @@ Before scaffolding, prove whatever logic the new component needs does not alread
    - `loading` / `spinner` → `webkit/utils/spinner`
    - `toast` / `notification` → `composables/use-toast`
    - `dialog` open/close → `composables/use-dialog`
-   - `currency` / `price` → `webkit/content/currency`
+   - `currency-amount` / `price` → `webkit/content/currency-amount`
    - `tag` → `webkit/content/tag`
    - and so on.
 3. **Emit suggestions** as a JSON array:
@@ -42,7 +42,7 @@ Before scaffolding, prove whatever logic the new component needs does not alread
      {
        "spec_needs": "loading state",
        "reuse": "@aziontech/webkit/utils/spinner",
-       "rationale": "Existing utility used in button.vue and card-pricing.vue"
+       "rationale": "Existing utility used in button.vue and pricing-card.vue"
      }
    ]
    ```

@@ -39,7 +39,7 @@
     ]"
     deploy-label="Deploy now"
     templates-aria-label="Templates you can deploy"
-    ticker-label="Compatible with Your Stack"
-    :ticker-marks="['nextjs', 'astro', 'react', 'vue', 'angular', 'nuxt']"
+    marquee-label="Compatible with Your Stack"
+    :marquee-marks="['nextjs', 'astro', 'react', 'vue', 'angular', 'nuxt']"
   />
 </template>

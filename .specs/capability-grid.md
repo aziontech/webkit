@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 3fbbdc31c08a5b750e4b309555e1704e9fc0e6106086fc2a83f2a001e7f56887
+checksum: be94fb506133f352243dcfa51b9fd2b518df847f5b406ded25cf34fd099869ea
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-A framed grid of claims or links under an optional section title: each cell is a `Topic` (optional glyph, heading, sentence) with optional bullet points, three or four to a row, and an item with an `href` turns its whole cell into a link to that page. It is the one marketing grid of claims or links: it replaces `'use-case-links'`, `'resource-grid'` and `'content-columns'`. From the design sample's site `CapabilityGrid`.
+A framed grid of claims or links under an optional section title: each cell is a `FeatureItem` (optional glyph, heading, sentence) with optional bullet points, three or four to a row, and an item with an `href` turns its whole cell into a link to that page. It is the one marketing grid of claims or links: it replaces `'use-case-links'`, `'resource-grid'` and `'content-columns'`. From the design sample's site `CapabilityGrid`.
 
 Use CapabilityGrid for any grid of claims or links on a marketing page; icons and per-item links are optional.
 
@@ -27,12 +27,12 @@ Use CapabilityGrid for any grid of claims or links on a marketing page; icons an
 ## When NOT to use
 
 - For capabilities with art — use `FeatureTiles` or `BentoGrid`.
-- For use cases whose band title sits in the first grid cell with one action — use `UseCases`.
+- For use cases whose band title sits in the first grid cell with one action — use `CustomerUseCases`.
 - For cells that each carry their own action or copy button — use `FeatureWidgets`.
 
 ## Related
 
-- `Topic`, `CardGrid`, `FrameBox`, `SectionTitle` — the parts.
+- `FeatureItem`, `CardGrid`, `RegistrationFrame`, `SectionTitle` — the parts.
 - `FeatureTiles` — tiles with illustrations.
 
 ## Best practices
@@ -71,17 +71,17 @@ Use CapabilityGrid for any grid of claims or links on a marketing page; icons an
 
 ## Props
 
-| Prop              | Type                    | Default      | Required | JSDoc                                                                                                                                                                            |
-| ----------------- | ----------------------- | ------------ | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `eyebrow`         | `string`                | `''`         | false    | Overline above the title.                                                                                                                                                        |
-| `title`           | `string`                | `''`         | false    | Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`.                                                           |
-| `description`     | `string`                | `''`         | false    | One or two sentences under the title.                                                                                                                                            |
-| `items`           | `CapabilityGridItem[]`  | `[]`         | false    | The capabilities, in order; each is `{ title, description, icon?, points?, href? }`; an item with `href` links its whole cell to that page. The band renders nothing when empty. |
-| `columns`         | `CapabilityGridColumns` | `3`          | false    | Capabilities per row from the large breakpoint up.                                                                                                                               |
-| `primaryAction`   | `CapabilityGridAction`  | `undefined`  | false    | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                    |
-| `secondaryAction` | `CapabilityGridAction`  | `undefined`  | false    | Second button under the section title, `outline`; same shape. Shown only with a label and a link.                                                                               |
-| `anchor`          | `string`                | `''`         | false    | In-page id set on the band so a hash link can target it.                                                                                                                         |
-| `titleVariant`       | `SectionTitleVariant`      | `'center'` | false    | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns.            |
+| Prop              | Type                    | Default     | Required | JSDoc                                                                                                                                                                            |
+| ----------------- | ----------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `eyebrow`         | `string`                | `''`        | false    | Eyebrow above the title.                                                                                                                                                         |
+| `title`           | `string`                | `''`        | false    | Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`.                                                           |
+| `description`     | `string`                | `''`        | false    | One or two sentences under the title.                                                                                                                                            |
+| `items`           | `CapabilityGridItem[]`  | `[]`        | false    | The capabilities, in order; each is `{ title, description, icon?, points?, href? }`; an item with `href` links its whole cell to that page. The band renders nothing when empty. |
+| `columns`         | `CapabilityGridColumns` | `3`         | false    | Capabilities per row from the large breakpoint up.                                                                                                                               |
+| `primaryAction`   | `CapabilityGridAction`  | `undefined` | false    | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                    |
+| `secondaryAction` | `CapabilityGridAction`  | `undefined` | false    | Second button under the section title, `outline`; same shape. Shown only with a label and a link.                                                                                |
+| `anchor`          | `string`                | `''`        | false    | In-page id set on the band so a hash link can target it.                                                                                                                         |
+| `titleVariant`    | `SectionTitleVariant`   | `'center'`  | false    | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns.                  |
 
 ## Events
 
@@ -104,12 +104,12 @@ _none_
 
 ## Tokens
 
-| Region  | Token (DESIGN.md)                                             |
-| ------- | ------------------------------------------------------------- |
-| frame   | From `FrameBox` and `CardGrid` (`var(--border-default)`)      |
-| cell    | `var(--bg-canvas)` (`CardGridCell variant="canvas"`)             |
-| points  | `.text-body-md`, `var(--text-muted)`                          |
-| spacing | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-md)` |
+| Region  | Token (DESIGN.md)                                                 |
+| ------- | ----------------------------------------------------------------- |
+| frame   | From `RegistrationFrame` and `CardGrid` (`var(--border-default)`) |
+| cell    | `var(--bg-canvas)` (`CardGridCell variant="canvas"`)              |
+| points  | `.text-body-md`, `var(--text-muted)`                              |
+| spacing | `var(--spacing-sm)`, `var(--spacing-xs)`, `var(--spacing-md)`     |
 
 ## Theme gaps
 
@@ -121,8 +121,8 @@ _none_
 
 - A `section` named by its title; headings nest under it.
 - Points are a real list.
-- Glyphs are decorative (from `Topic`).
-- A linked cell is one link named by its heading (from `Topic`), with a visible focus ring.
+- Glyphs are decorative (from `FeatureItem`).
+- A linked cell is one link named by its heading (from `FeatureItem`), with a visible focus ring.
 
 ## Internationalization
 

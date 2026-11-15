@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({
     name: 'MediaTile',
@@ -73,11 +73,11 @@
     class="m-0 flex h-full flex-col gap-(--spacing-lg) data-[variant=plain]:bg-(--bg-canvas)"
   >
     <component
-      :is="variant === 'frame' ? FrameBox : 'div'"
+      :is="variant === 'frame' ? RegistrationFrame : 'div'"
       :data-testid="`${testId}__frame`"
       :data-variant="variant"
       :data-padded="padded || null"
-      class="overflow-hidden data-[variant=frame]:min-h-64 data-[variant=plain]:min-h-32 [--product-widget-fill:var(--bg-canvas)] data-[variant=frame]:bg-(--bg-canvas) data-[variant=frame]:data-[padded]:p-(--spacing-xl) data-[variant=plain]:data-[padded]:px-(--spacing-lg) data-[variant=plain]:data-[padded]:pt-(--spacing-lg)"
+      class="overflow-hidden data-[variant=frame]:min-h-64 data-[variant=plain]:min-h-32 [--console-mockup-fill:var(--bg-canvas)] data-[variant=frame]:bg-(--bg-canvas) data-[variant=frame]:data-[padded]:p-(--spacing-xl) data-[variant=plain]:data-[padded]:px-(--spacing-lg) data-[variant=plain]:data-[padded]:pt-(--spacing-lg)"
     >
       <div
         :data-testid="`${testId}__media`"

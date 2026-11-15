@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
@@ -8,16 +9,16 @@
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import FeatureList, { type FeatureListItem } from '@aziontech/webkit/feature-list'
   import Field from '@aziontech/webkit/field'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
+  import PlanFeatureList, { type PlanFeatureListItem } from '@aziontech/webkit/plan-feature-list'
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Separator from '@aziontech/webkit/separator'
@@ -311,7 +312,7 @@
   const address = reactive({ useAccountInformation: true, ...accountAddress })
 
   const upgrade = computed(() => upgrades[pendingPlanId.value])
-  const upgradeFeatures = computed<FeatureListItem[]>(() =>
+  const upgradeFeatures = computed<PlanFeatureListItem[]>(() =>
     (upgrade.value?.features ?? []).map((feature) => ({
       label: feature.title,
       description: feature.detail
@@ -427,11 +428,11 @@
 
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <GlobalHeader
+    <AppHeader
       aria-label="Console"
       class="shrink-0"
     >
-      <GlobalHeader.Brand>
+      <AppHeader.Brand>
         <a
           href="/"
           aria-label="Azion home"
@@ -442,9 +443,9 @@
             size="small"
           />
         </a>
-      </GlobalHeader.Brand>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Brand>
+      <AppHeader.Center />
+      <AppHeader.End>
         <Button
           label="Documentation"
           variant="outline"
@@ -452,8 +453,8 @@
           icon="ai ai-book"
           href="https://example.com/docs"
         />
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div
@@ -544,9 +545,10 @@
                                 </span>
                               </template>
                             </RadioGroup>
-                            <HelperText
-                              label="Generated from the organization's name. Select its color."
-                            />
+                            <FieldDescription
+                              >Generated from the organization's name. Select its
+                              color.</FieldDescription
+                            >
                           </fieldset>
                         </div>
                       </div>
@@ -597,11 +599,9 @@
                             </template>
                           </RadioGroup>
 
-                          <HelperText
-                            v-if="planSubmitted && !plan"
-                            type="required"
-                            label="Select a plan to continue."
-                          />
+                          <FieldError v-if="planSubmitted && !plan"
+                            >Select a plan to continue.</FieldError
+                          >
 
                           <Drawer
                             :open="upgradeOpen"
@@ -636,7 +636,7 @@
                                         </h3>
 
                                         <div class="px-(--spacing-xs)">
-                                          <FeatureList :items="upgradeFeatures" />
+                                          <PlanFeatureList :items="upgradeFeatures" />
                                         </div>
                                       </div>
 
@@ -1077,11 +1077,9 @@
                               :options="usageOptions"
                               aria-label="How are you planning to use the platform?"
                             />
-                            <HelperText
-                              v-if="profileSubmitted && !usage"
-                              type="required"
-                              label="Select one to continue."
-                            />
+                            <FieldError v-if="profileSubmitted && !usage"
+                              >Select one to continue.</FieldError
+                            >
                           </fieldset>
 
                           <fieldset
@@ -1095,11 +1093,9 @@
                               :options="roleOptions"
                               aria-label="What best describes your role?"
                             />
-                            <HelperText
-                              v-if="profileSubmitted && !role"
-                              type="required"
-                              label="Select one to continue."
-                            />
+                            <FieldError v-if="profileSubmitted && !role"
+                              >Select one to continue.</FieldError
+                            >
                           </fieldset>
 
                           <Field.Label>

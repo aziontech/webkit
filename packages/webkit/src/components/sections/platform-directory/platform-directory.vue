@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import type { ColumnNavigationColumns } from '../../marketing/column-navigation/column-navigation.vue'
-  import ColumnNavigation from '../../marketing/column-navigation/column-navigation.vue'
-  import ColumnNavigationColumn from '../../marketing/column-navigation/column-navigation-column/column-navigation-column.vue'
-  import ColumnNavigationItem from '../../marketing/column-navigation/column-navigation-item/column-navigation-item.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import type { LinkDirectoryColumns } from '../../marketing/link-directory/link-directory.vue'
+  import LinkDirectory from '../../marketing/link-directory/link-directory.vue'
+  import LinkDirectoryColumn from '../../marketing/link-directory/link-directory-column/link-directory-column.vue'
+  import LinkDirectoryItem from '../../marketing/link-directory/link-directory-item/link-directory-item.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
 
@@ -28,7 +28,7 @@
 
   /** One column of the directory, a product group under its overline heading. */
   export type PlatformDirectoryGroup = {
-    /** Overline heading of the column. */
+    /** Eyebrow heading of the column. */
     title: string
     /** The products of the group, in order. */
     items: PlatformDirectoryItem[]
@@ -75,7 +75,7 @@
 
   const hasColumns = computed(() => columns.value.length > 0)
 
-  const trackCount = computed<ColumnNavigationColumns>(() => {
+  const trackCount = computed<LinkDirectoryColumns>(() => {
     const count = columns.value.length
     if (count >= 4) return 4
     return count === 3 ? 3 : 2
@@ -117,24 +117,24 @@
         />
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="all"
       >
-        <ColumnNavigation
+        <LinkDirectory
           :columns="trackCount"
           :mobile-columns="1"
           :aria-label="navigationLabel"
         >
-          <ColumnNavigationColumn
+          <LinkDirectoryColumn
             v-for="(group, index) in columns"
             :key="`${group.title}-${index}`"
             :title="group.title"
             :data-span="spanOf(index)"
             class="data-[span=full]:col-span-full data-[span=pair]:sm:col-span-2 data-[span=pair]:lg:col-span-1"
           >
-            <ColumnNavigationItem
+            <LinkDirectoryItem
               v-for="item in group.items"
               :key="item.href"
               :icon="item.icon ?? ''"
@@ -142,9 +142,9 @@
               :description="item.description ?? ''"
               :href="item.href"
             />
-          </ColumnNavigationColumn>
-        </ColumnNavigation>
-      </FrameBox>
+          </LinkDirectoryColumn>
+        </LinkDirectory>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

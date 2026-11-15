@@ -3,15 +3,15 @@
 
   import type { LogoTreatment } from '../../content/logo/logo.vue'
   import NetworkMap from '../../content/network-map/network-map.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import BigNumbers from '../../marketing/big-numbers/big-numbers.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import type { CardGridColumns } from '../../marketing/card-grid/card-grid.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
+  import FeatureItem from '../../marketing/feature-item/feature-item.vue'
   import Quote from '../../marketing/quote/quote.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
-  import Topic from '../../marketing/topic/topic.vue'
+  import Stats from '../../marketing/stats/stats.vue'
 
   defineOptions({
     name: 'NetworkSection',
@@ -72,11 +72,11 @@
     variant?: NetworkSectionVariant
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
-    /** Overline above the headline. */
+    /** Eyebrow above the headline. */
     eyebrow?: string
     /** Headline of the band, rendered by the small section title as its `h2`; the band renders nothing when empty. */
     title?: string
-    /** Overline-set line above the claims. */
+    /** Eyebrow-set line above the claims. */
     claimsEyebrow?: string
     /** Short figures rendered as chips under the claims eyebrow, in order; each is a string or `{ label, mobile? }`, where `mobile: false` hides the chip below the medium breakpoint. */
     claims?: (string | NetworkSectionClaim)[]
@@ -84,7 +84,7 @@
     outcomes?: NetworkSectionOutcome[]
     /** Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon? }`, rendered as a topic whose title is an `h3`. */
     benefits?: NetworkSectionBenefit[]
-    /** Figures for the `stats` floor, in order, rendered by `big-numbers`; each is `{ value, label, prefix?, suffix? }`. */
+    /** Figures for the `stats` floor, in order, rendered by `stats`; each is `{ value, label, prefix?, suffix? }`. */
     stats?: NetworkSectionStat[]
   }
 
@@ -133,7 +133,7 @@
       :divided="false"
       :padded="false"
     >
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="all"
@@ -251,7 +251,7 @@
               :key="benefit.title"
               variant="canvas"
             >
-              <Topic
+              <FeatureItem
                 :heading-level="3"
                 :icon="benefit.icon ?? ''"
                 :title="benefit.title"
@@ -260,14 +260,14 @@
             </CardGridCell>
           </CardGrid>
 
-          <BigNumbers
+          <Stats
             v-else-if="variant === 'stats' && stats.length"
-            key="big-numbers"
+            key="stats"
             :items="stats"
             class="border-t border-(--border-default)"
           />
         </div>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

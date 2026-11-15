@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 6abfac854fe1afbf34d29401121ebf38c04e8eb4d7585a4524038185ddb602d0
+checksum: c200e0af2c4526f5dcb4e390b0817695b3a6c2f655bb136a81e9110969e11625
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -19,7 +19,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 ## When to use
 
 - Every documentation page (guide, reference, legal, changelog): put one `DocLayout` in the app's root (around `RouterView`) and render each page's article as its default slot.
-- A docs site that needs the navigation rail, the outline and the search palette without hand-composing `GlobalHeader`, `Sidebar`, `SidebarMenu`, `DocOnThisPage`, `Drawer` and `Command`.
+- A docs site that needs the navigation rail, the outline and the search palette without hand-composing `AppHeader`, `Sidebar`, `SidebarMenu`, `DocOnThisPage`, `Drawer` and `Command`.
 
 ## When NOT to use
 
@@ -144,7 +144,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Landmarks: the header is `GlobalHeader` (`<header>` named by the catalog `Documentation sections` on its section links); the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the article is inside the single `<main>`; the end rail is an `<aside>` holding the `DocOnThisPage` navigation landmarks. A page must not render a second `<main>`.
+- Landmarks: the header is `AppHeader` (`<header>` named by the catalog `Documentation sections` on its section links); the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the article is inside the single `<main>`; the end rail is an `<aside>` holding the `DocOnThisPage` navigation landmarks. A page must not render a second `<main>`.
 - Keyboard map: `Tab` runs header → rail → article → end rail → footer; the rail's resize handle is a focusable `separator` (`Resize navigation`) moved with `ArrowLeft` / `ArrowRight`, its collapse button (`Collapse navigation`) folds the rail and the edge affordance's button (`Expand navigation`) brings it back, all owned by `Sidebar`; `⌘K` / `Ctrl K` opens the palette (`Command`); the compact menu button opens the drawer, `Escape` closes it and returns focus. Choosing an outline entry moves focus to its heading (made focusable with `tabindex="-1"`).
 - Names: the mark link (`Azion Docs home`), the compact menu button (`Open documentation navigation`) and the search (`Search docs`) come from the locale catalog.
 - Visible focus: composed controls own their rings; the mark link uses `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
@@ -185,7 +185,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 ## Performance
 
-- Bundle budget: 65 KB gzip for `./doc-layout` in `.size-limit.json` (63.6 KB measured; it pulls `GlobalHeader`, `NavigationMenu`, `Sidebar`, `SidebarMenu`, `Drawer`, `DocOnThisPage` and `Command`).
+- Bundle budget: 65 KB gzip for `./doc-layout` in `.size-limit.json` (63.6 KB measured; it pulls `AppHeader`, `NavigationMenu`, `Sidebar`, `SidebarMenu`, `Drawer`, `DocOnThisPage` and `Command`).
 - Runtime budget: the rail's pointer listeners exist only while dragging (owned by `Sidebar`); one passive `scroll` listener (throttled to one read per animation frame) while `outline` is not empty; one `popstate` listener without a router.
 - Heavy parts: none beyond the composed components.
 

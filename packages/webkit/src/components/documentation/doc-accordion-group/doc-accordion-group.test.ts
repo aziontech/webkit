@@ -6,11 +6,11 @@ import { defineComponent } from 'vue'
 import Default from '../../../../examples/doc-accordion-group/default.vue'
 import Multiple from '../../../../examples/doc-accordion-group/multiple.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import DocAccordionItem from '../doc-accordion-item/doc-accordion-item.vue'
+import DocAccordion from '../doc-accordion/doc-accordion.vue'
 import DocAccordionGroup from './doc-accordion-group.vue'
 
 const host = (template: string) =>
-  defineComponent({ components: { DocAccordionGroup, DocAccordionItem }, template })
+  defineComponent({ components: { DocAccordionGroup, DocAccordion }, template })
 
 describe('DocAccordionGroup', () => {
   it('renders the group under its testid and lets a consumer testid win', () => {
@@ -19,7 +19,7 @@ describe('DocAccordionGroup', () => {
     unmount()
     const custom = render(
       host(
-        `<DocAccordionGroup data-testid="faq"><DocAccordionItem title="A">a</DocAccordionItem></DocAccordionGroup>`
+        `<DocAccordionGroup data-testid="faq"><DocAccordion title="A">a</DocAccordion></DocAccordionGroup>`
       )
     )
     expect(custom.getByTestId('faq')).toBeInTheDocument()
@@ -59,7 +59,7 @@ describe('DocAccordionGroup', () => {
   it('renders under rtl', () => {
     const { getByTestId } = render(
       host(
-        `<div dir="rtl"><DocAccordionGroup><DocAccordionItem title="A">a</DocAccordionItem></DocAccordionGroup></div>`
+        `<div dir="rtl"><DocAccordionGroup><DocAccordion title="A">a</DocAccordion></DocAccordionGroup></div>`
       )
     )
     expect(getByTestId('documentation-doc-accordion-group').closest('[dir="rtl"]')).not.toBeNull()

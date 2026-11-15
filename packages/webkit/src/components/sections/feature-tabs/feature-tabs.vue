@@ -5,7 +5,7 @@
   import Button from '../../actions/button/button.vue'
   import CodeBlock, { type CodeBlockTab } from '../../code/code-block/code-block.vue'
   import Illustration from '../../content/illustration/illustration.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
@@ -44,7 +44,7 @@
   export interface FeatureTabsProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
-    /** Overline above the section title. */
+    /** Eyebrow above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. */
     title?: string
@@ -138,7 +138,7 @@
         </SectionTitle>
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="bottom"
@@ -197,7 +197,7 @@
             :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
           />
         </div>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

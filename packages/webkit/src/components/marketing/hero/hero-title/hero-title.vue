@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Overline from '../../../content/overline/overline.vue'
+  import Eyebrow from '../../../content/eyebrow/eyebrow.vue'
 
   defineOptions({
     name: 'HeroTitle',
@@ -79,12 +79,12 @@
     :data-sticky="sticky || null"
     class="group flex w-full max-w-(--container-4xl) flex-col items-start gap-(--spacing-md) data-[width=lg]:max-w-(--container-lg) data-[width=xl]:max-w-(--container-xl) data-[width=2xl]:max-w-(--container-2xl) data-[width=3xl]:max-w-(--container-3xl) lg:data-[sticky]:sticky lg:data-[sticky]:self-start lg:data-[sticky]:top-[calc(var(--hero-banner-offset,0rem)+var(--spacing-xl))] data-[align=center]:mx-auto data-[align=center]:items-center data-[align=center]:text-center max-md:data-[mobile-align=center]:mx-auto max-md:data-[mobile-align=center]:items-center max-md:data-[mobile-align=center]:text-center max-md:data-[mobile-align=start]:mx-0 max-md:data-[mobile-align=start]:items-start max-md:data-[mobile-align=start]:text-start"
   >
-    <Overline
+    <Eyebrow
       v-if="eyebrow"
       :prefix="eyebrowPrefix"
       :single-line="false"
       cursor
-      >{{ eyebrow }}</Overline
+      >{{ eyebrow }}</Eyebrow
     >
     <h1
       :data-size="size"

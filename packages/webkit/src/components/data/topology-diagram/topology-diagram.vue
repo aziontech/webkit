@@ -6,7 +6,7 @@
   import * as en from '../../../locales/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { useFlowConnectors } from '../flow/connectors'
+  import { useFlowDiagramConnectors } from '../flow-diagram/connectors'
   import TopologyDiagramNode from './parts/topology-node.vue'
   import type { TopologyDiagramLevel, TopologyDiagramNodeData } from './types'
 
@@ -86,7 +86,7 @@
   const scrollEl = ref<HTMLElement | null>(null)
   const containerEl = ref<HTMLElement | null>(null)
   const scrollable = ref<boolean>(false)
-  const { paths, viewBox } = useFlowConnectors(containerEl)
+  const { paths, viewBox } = useFlowDiagramConnectors(containerEl)
 
   useResizeObserver(
     () => scrollEl.value,
@@ -167,7 +167,7 @@
           <li
             v-for="level in shown"
             :key="level.id"
-            data-slot="flow-parallel"
+            data-slot="flow-diagram-parallel"
             :data-testid="`${testId}__level`"
             class="flex min-w-(--size-56) flex-1 flex-col items-start gap-(--spacing-md)"
           >
@@ -179,13 +179,13 @@
             <div
               v-for="node in level.nodes"
               :key="node.id"
-              data-slot="flow-node"
+              data-slot="flow-diagram-node"
               :data-flow-terminal="node.terminal ? 'true' : null"
               class="relative z-1 w-full"
             >
               <div
                 v-if="loading"
-                data-slot="flow-anchor"
+                data-slot="flow-diagram-anchor"
                 class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-solid border-(--border-muted) bg-(--bg-surface) p-(--spacing-md)"
               >
                 <Skeleton

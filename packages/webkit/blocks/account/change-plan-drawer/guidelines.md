@@ -47,9 +47,9 @@ Says why the user is here before the cards: `Compare what each tier includes bef
 
 `Monthly` or `Yearly`, `aria-label="Billing period"`, defaulting to Yearly. In the plan drawer it reprices the cards; in the upgrade drawer it sits in the Charged card's header and switches the charge rows.
 
-### I. Plan — `CardPricing` (required)
+### I. Plan — `PricingCard` (required)
 
-One per tier, `variant="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a `FeatureList` headed by what it builds on (`All Free features, plus:`).
+One per tier, `variant="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a `PlanFeatureList` headed by what it builds on (`All Free features, plus:`).
 
 ### J. Divider — `Separator` (required)
 
@@ -91,9 +91,9 @@ Cancel and Upgrade, side by side from `md`, full width below.
 
 The plate before the card on file in the Payment method section, named after the brand.
 
-### T. Included features — `FeatureList` (required)
+### T. Included features — `PlanFeatureList` (required)
 
-What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards use the same `FeatureList` in their slot, so every feature list in the flow reads the same.
+What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards use the same `PlanFeatureList` in their slot, so every feature list in the flow reads the same.
 
 ### Toasts — through `toast`
 

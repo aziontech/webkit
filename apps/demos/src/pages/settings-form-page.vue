@@ -1,13 +1,13 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { computed, nextTick, reactive, ref } from 'vue'
 
@@ -88,7 +88,7 @@
           <Card :padded="false">
             <template #default>
               <Item.List>
-                <SettingRow
+                <SettingsRow
                   title="Full name"
                   description="The name shown across your account."
                 >
@@ -104,16 +104,15 @@
                         :required="submitted && nameEmpty"
                         :aria-describedby="submitted && nameEmpty ? 'full-name-error' : undefined"
                       />
-                      <HelperText
+                      <FieldError
                         v-if="submitted && nameEmpty"
                         id="full-name-error"
-                        type="required"
-                        label="This field is required."
-                      />
+                        >This field is required.</FieldError
+                      >
                     </div>
                   </div>
-                </SettingRow>
-                <SettingRow
+                </SettingsRow>
+                <SettingsRow
                   title="Email"
                   description="Used for sign-in and notifications."
                 >
@@ -131,17 +130,16 @@
                         :invalid="submitted && !emailEmpty && emailInvalid"
                         :aria-describedby="submitted && emailInvalid ? 'email-error' : undefined"
                       />
-                      <HelperText
+                      <FieldError
                         v-if="submitted && emailInvalid"
                         id="email-error"
-                        :type="emailEmpty ? 'required' : 'invalid'"
-                        :label="
+                        >{{
                           emailEmpty ? 'This field is required.' : 'Enter a valid email address.'
-                        "
-                      />
+                        }}</FieldError
+                      >
                     </div>
                   </div>
-                </SettingRow>
+                </SettingsRow>
               </Item.List>
             </template>
           </Card>
@@ -152,7 +150,7 @@
           <Card :padded="false">
             <template #default>
               <Item.List>
-                <SettingRow
+                <SettingsRow
                   title="Timezone"
                   description="Times across the app are shown in this zone."
                 >
@@ -179,8 +177,8 @@
                       </Select.Content>
                     </Select>
                   </div>
-                </SettingRow>
-                <SettingRow
+                </SettingsRow>
+                <SettingsRow
                   title="Language"
                   description="The interface language."
                 >
@@ -207,7 +205,7 @@
                       </Select.Content>
                     </Select>
                   </div>
-                </SettingRow>
+                </SettingsRow>
               </Item.List>
             </template>
           </Card>
@@ -218,7 +216,7 @@
           <Card :padded="false">
             <template #default>
               <Item.List>
-                <SettingRow
+                <SettingsRow
                   title="Product updates"
                   description="Occasional emails about new features and changes."
                   variant="compact"
@@ -228,7 +226,7 @@
                     aria-label="Product updates"
                     :disabled="submitting"
                   />
-                </SettingRow>
+                </SettingsRow>
               </Item.List>
             </template>
           </Card>

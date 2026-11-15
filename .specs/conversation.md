@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 42a8b2be80fd18b57ac19aaa7f396f6a7c0d9f2e6606fccb057f26c077bcf8ed
+checksum: 6839b65ca68bd6741e490697bd5f90d8bd05974e95f2000cebe6a88f7b9013ce
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -32,7 +32,7 @@ It also sets where messages sit for the whole thread (`layout`): `split` for a f
 ## When NOT to use
 
 - A one-shot generated block on a page (a summary card, an explanation beside a chart) → render `StreamingResponse` in place.
-- A log of system events with timestamps and filtering → use `log-view`.
+- A log of system events with timestamps and filtering → use `log-viewer`.
 - A list of past conversations → a `table` or `item` list; this is one thread.
 
 ## Related
@@ -41,7 +41,7 @@ It also sets where messages sit for the whole thread (`layout`): `split` for a f
 - `prompt-input` — the composer pinned under the log (outside it; only the log scrolls).
 - `suggestion-group` — follow-up questions after the last response, or support prompts in the empty state.
 - `empty-state` — what the panel shows before the first message (the block renders it instead of the log).
-- `log-view` — machine logs, not conversations.
+- `log-viewer` — machine logs, not conversations.
 
 ## Best practices
 
@@ -80,9 +80,9 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
 
 ## Props
 
-| Prop        | Type                 | Default   | Required | JSDoc                                                                                                                                           |
-| ----------- | -------------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ariaLabel` | `string`             | `''`      | false    | Accessible name of the message log. Empty uses the locale catalog (`Conversation`).                                                             |
+| Prop        | Type                 | Default   | Required | JSDoc                                                                                                                                            |
+| ----------- | -------------------- | --------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `ariaLabel` | `string`             | `''`      | false    | Accessible name of the message log. Empty uses the locale catalog (`Conversation`).                                                              |
 | `layout`    | `'split' \| 'start'` | `'split'` | false    | `split` puts the user's messages at the inline end (a full chat page); `start` keeps every message at the inline start (a side panel or drawer). |
 
 ## Events
@@ -91,8 +91,8 @@ _No events. `scrollToBottom()` is exposed for owners that need to jump to the en
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                                                         |
-| --------- | ----- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Slot      | Scope | Notes                                                                                                                                 |
+| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------- |
 | `default` | —     | The thread: `ChatMessage` items in order, oldest first, plus anything that follows the last response (suggestions, an approval card). |
 
 ## States
@@ -103,20 +103,20 @@ _No events. `scrollToBottom()` is exposed for owners that need to jump to the en
 
 ## Motion & Animations
 
-| Trigger                 | Animation / Transition         | Token     | Reduced-motion fallback                         |
-| ----------------------- | ------------------------------ | --------- | ----------------------------------------------- |
-| Scroll to latest button | `scrollTo({ behavior: 'smooth' })` | browser   | `prefers-reduced-motion: reduce` jumps (`auto`) |
-| New content while pinned | instant jump to the end        | none      | same                                            |
+| Trigger                  | Animation / Transition             | Token   | Reduced-motion fallback                         |
+| ------------------------ | ---------------------------------- | ------- | ----------------------------------------------- |
+| Scroll to latest button  | `scrollTo({ behavior: 'smooth' })` | browser | `prefers-reduced-motion: reduce` jumps (`auto`) |
+| New content while pinned | instant jump to the end            | none    | same                                            |
 
 ## Tokens
 
-| Region                      | Token                     |
-| --------------------------- | ------------------------- |
-| gap between messages        | `var(--spacing-lg)`       |
-| padding of the thread       | `var(--spacing-md)`       |
-| reading width               | `var(--layout-measure-content)` |
-| scroll button surface       | `var(--bg-surface)`, `var(--shadow-sm)` |
-| focus ring of the log       | `var(--ring-color)`       |
+| Region                | Token                                   |
+| --------------------- | --------------------------------------- |
+| gap between messages  | `var(--spacing-lg)`                     |
+| padding of the thread | `var(--spacing-md)`                     |
+| reading width         | `var(--layout-measure-content)`         |
+| scroll button surface | `var(--bg-surface)`, `var(--shadow-sm)` |
+| focus ring of the log | `var(--ring-color)`                     |
 
 ## Theme gaps
 
@@ -133,11 +133,11 @@ _None._
 
 ## Internationalization
 
-| Key                          | English source                   | Override prop |
-| ---------------------------- | -------------------------------- | ------------- |
-| `conversation.label`         | `Conversation`                   | `ariaLabel`   |
-| `conversation.scrollToLatest`| `Scroll to the latest message`   | —             |
-| `conversation.announcement`  | `{author}: {text}`               | —             |
+| Key                           | English source                 | Override prop |
+| ----------------------------- | ------------------------------ | ------------- |
+| `conversation.label`          | `Conversation`                 | `ariaLabel`   |
+| `conversation.scrollToLatest` | `Scroll to the latest message` | —             |
+| `conversation.announcement`   | `{author}: {text}`             | —             |
 
 - Formatting: none.
 

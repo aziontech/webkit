@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import MarqueeLoop from '../../marketing/marquee/marquee-loop.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
-  import TickerLoop from '../../marketing/ticker/ticker-loop.vue'
 
   defineOptions({
     name: 'PhotoMarquee',
@@ -91,12 +91,12 @@
         />
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="bottom"
       >
-        <TickerLoop
+        <MarqueeLoop
           v-slot="{ copy, duplicate }"
           :duration="loopDuration"
           :aria-label="ariaLabel"
@@ -123,8 +123,8 @@
               />
             </li>
           </ul>
-        </TickerLoop>
-      </FrameBox>
+        </MarqueeLoop>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

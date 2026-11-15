@@ -9,7 +9,7 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -365,16 +365,12 @@
                       </Select.Item>
                     </Select.Content>
                   </Select>
-                  <HelperText
-                    id="instance-function-helper"
-                    :type="errors.functionId ? 'required' : 'helper'"
-                    >{{
-                      errors.functionId ||
-                      (selected
-                        ? `${selected.runtime}. Changing the function clears the arguments.`
-                        : 'Its arguments appear below once a function is chosen.')
-                    }}</HelperText
-                  >
+                  <FieldError id="instance-function-helper">{{
+                    errors.functionId ||
+                    (selected
+                      ? `${selected.runtime}. Changing the function clears the arguments.`
+                      : 'Its arguments appear below once a function is chosen.')
+                  }}</FieldError>
                 </Field>
                 <Field :required="!!errors.name">
                   <Field.Label>Name</Field.Label>
@@ -440,14 +436,11 @@
                     aria-label="Arguments JSON"
                     @update:model-value="onJson"
                   />
-                  <HelperText
-                    :type="jsonMarkers.length ? 'invalid' : 'helper'"
-                    :label="
-                      jsonMarkers.length
-                        ? 'Fix the JSON to keep these arguments. The fields keep the last valid value.'
-                        : 'Edits here update the fields.'
-                    "
-                  />
+                  <FieldError>{{
+                    jsonMarkers.length
+                      ? 'Fix the JSON to keep these arguments. The fields keep the last valid value.'
+                      : 'Edits here update the fields.'
+                  }}</FieldError>
                 </div>
               </div>
             </SettingsSection>

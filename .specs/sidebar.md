@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 6478433c7f876e7737f307eefc0ea2df95f637664f79c2ec763de80cd4519f08
+checksum: 223b3b8e01105838a827d28f3e0154b243f733ac402477116c6462a4be637f6b
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -50,7 +50,7 @@ always has, with the host owning the width — every existing consumer is unaffe
 
 - `sidebar-menu` — the navigation rows, groups and drill levels that go in the sidebar's default slot.
 - `resizable` — draggable splits between content regions; the sidebar's rail gesture is for navigation only.
-- `global-header` — the top bar that usually sits above the sidebar in an app shell.
+- `app-header` — the top bar that usually sits above the sidebar in an app shell.
 - `console-layout` — the console layout template that composes the header, the sidebar and the page.
 
 ## Best practices

@@ -123,7 +123,7 @@ test('llms-full.txt cuts repeats and detail, the per-page files keep them', () =
 
   const auth = entry('blocks/auth/sign-in.md')
   assert.match(files['blocks/auth/sign-in.md'], /^### A\. Signed-out bar/m)
-  assert.match(auth, /^- A\. Signed-out bar — `GlobalHeader` \(required\)$/m)
+  assert.match(auth, /^- A\. Signed-out bar — `AppHeader` \(required\)$/m)
   assert.doesNotMatch(auth, /^### /m)
   assert.doesNotMatch(auth, /```vue/)
   assert.match(files['blocks/auth/sign-in.md'], /## Code \(`Login`\)/)
@@ -149,9 +149,12 @@ test('every asset kind has a foundation page, linked from llms.txt, that lists e
     const page = files[path]
     assert.ok(page, path)
     assert.match(files['llms.txt'], new RegExp(`\\(${path.replace('.', '\\.')}\\)`), path)
-    const { items } = JSON.parse(readFileSync(new URL(`../../${meta.file}`, import.meta.url), 'utf-8'))
+    const { items } = JSON.parse(
+      readFileSync(new URL(`../../${meta.file}`, import.meta.url), 'utf-8')
+    )
     assert.equal(items.length, meta.count, kind)
-    for (const item of items) assert.ok(page.includes(`\`${item.class ?? item.name}\``), `${kind} ${item.name}`)
+    for (const item of items)
+      assert.ok(page.includes(`\`${item.class ?? item.name}\``), `${kind} ${item.name}`)
   }
   assert.match(files['foundations/illustrations.md'], /`ddos-protection`/)
   assert.match(files['foundations/icons.md'], /`ai-color ai-react`/)
@@ -164,7 +167,10 @@ test('a component that draws a registry asset links its asset page', () => {
       assert.ok(page.includes('## Assets'), `${name}: ${kind}`)
       assert.ok(page.includes(`../${assetPagePath(kind)}`), `${name}: ${kind}`)
       const api = JSON.parse(files[`components/${name}.json`])
-      assert.ok(api.assets.some((a) => a.kind === kind), `${name}.json: ${kind}`)
+      assert.ok(
+        api.assets.some((a) => a.kind === kind),
+        `${name}.json: ${kind}`
+      )
     }
   }
 })

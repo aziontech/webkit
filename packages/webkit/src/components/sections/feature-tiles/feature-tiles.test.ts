@@ -192,7 +192,7 @@ describe('FeatureTiles', () => {
     expect(getByTestId(TESTID)).toBeInTheDocument()
     expect(queryByRole('heading', { level: 2 })).toBeNull()
     expect(queryAllByTestId(TILE_TESTID)).toHaveLength(0)
-    expect(queryByTestId('layout-frame-box')).toBeNull()
+    expect(queryByTestId('layout-registration-frame')).toBeNull()
   })
 
   it('renders only the section when tiles is omitted', () => {

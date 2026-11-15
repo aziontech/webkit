@@ -28,7 +28,7 @@ export const VALUE_DEPRECATIONS = [
 export const DOCUMENTED_DEPRECATIONS = [
   { file: 'packages/webkit/examples/select/multiple.vue', message: 'prop multiple' },
   {
-    file: 'packages/webkit/src/components/content/product-widget/widgets/edge-dns-dnssec-fragment.vue',
+    file: 'packages/webkit/src/components/content/console-mockup/widgets/edge-dns-dnssec-fragment.vue',
     message: 'prop focused'
   }
 ]

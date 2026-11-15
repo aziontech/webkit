@@ -9,15 +9,15 @@
   import DocItem from '@aziontech/webkit/doc-item'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocPrevNext from '@aziontech/webkit/doc-prev-next'
+  import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocPrompt from '@aziontech/webkit/doc-prompt'
   import DocProse from '@aziontech/webkit/doc-prose'
   import DocStep from '@aziontech/webkit/doc-step'
   import DocSteps from '@aziontech/webkit/doc-steps'
   import Footer from '@aziontech/webkit/footer'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import IconButton from '@aziontech/webkit/icon-button'
   import ItemList from '@aziontech/webkit/item-list'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
@@ -301,7 +301,7 @@
           :level="2"
           >Related resources</DocHeading
         >
-        <FrameBox class="w-full bg-(--bg-surface)">
+        <RegistrationFrame class="w-full bg-(--bg-surface)">
           <ItemList>
             <DocItem
               v-for="item in related"
@@ -312,9 +312,9 @@
               >{{ item.text }}</DocItem
             >
           </ItemList>
-        </FrameBox>
+        </RegistrationFrame>
       </DocProse>
-      <DocPrevNext
+      <DocPreviousNext
         :previous="{ label: 'Create an account', href: '/docs/get-started/create-an-account' }"
         :next="{ label: 'Migrate to Azion', href: '/docs/get-started/migrate-to-azion' }"
       />

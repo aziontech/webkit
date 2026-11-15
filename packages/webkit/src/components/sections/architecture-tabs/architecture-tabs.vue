@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Diagram, { type DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaTabs from '../../marketing/media-tabs/media-tabs.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -36,7 +36,7 @@
   export interface ArchitectureTabsProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
-    /** Overline above the section title. */
+    /** Eyebrow above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. */
     title?: string
@@ -123,7 +123,7 @@
         </SectionTitle>
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="top"
         marks="none"
@@ -145,7 +145,7 @@
             />
           </template>
         </MediaTabs>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: ef5a1c91d42583eef08f202796137c4e2600e2bdb175e5dff9ea2cc0370cb0e5
+checksum: 11976209a005a46ec8c3024b65b7dd9ffb8243ae4830eaf6ba73cca469114772
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -30,14 +30,14 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 ## When NOT to use
 
 - A transient confirmation of an action → use `toast`.
-- Validation feedback under one form field → use `helper-text`.
+- Validation feedback under one form field → use `field-error`.
 - An admonition inside documentation prose → use `doc-callout`.
 - A promotional band between page sections → use `call-to-action` with `variant="announcement"`.
 
 ## Related
 
 - `toast` — overlay stack raised imperatively, auto-dismissing and not anchored to content.
-- `helper-text` — field-level guidance and errors below an input.
+- `field-error` — field-level guidance and errors below an input.
 - `doc-callout` — docs admonition rendered on the `Alert` surface.
 - `empty-state` — a full zero-data block, not a status banner.
 

@@ -14,7 +14,7 @@
   import Resizable from '@aziontech/webkit/resizable'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import SplitButton from '@aziontech/webkit/split-button'
   import Switch from '@aziontech/webkit/switch'
@@ -687,7 +687,7 @@
                             <Card :padded="false">
                               <template #default>
                                 <Item.List>
-                                  <SettingRow
+                                  <SettingsRow
                                     title="Name"
                                     description="A unique and descriptive name to identify the resource."
                                   >
@@ -697,8 +697,8 @@
                                       class="w-full"
                                       aria-label="Name"
                                     />
-                                  </SettingRow>
-                                  <SettingRow
+                                  </SettingsRow>
+                                  <SettingsRow
                                     title="Active"
                                     description="When disabled, the resource stops serving traffic."
                                     variant="compact"
@@ -707,7 +707,7 @@
                                       v-model="settings.active"
                                       aria-label="Active"
                                     />
-                                  </SettingRow>
+                                  </SettingsRow>
                                 </Item.List>
                               </template>
                             </Card>
@@ -721,7 +721,7 @@
                             <Card :padded="false">
                               <template #default>
                                 <Item.List>
-                                  <SettingRow
+                                  <SettingsRow
                                     v-for="mod in defaultModules"
                                     :key="mod.key"
                                     :title="mod.title"
@@ -732,7 +732,7 @@
                                       v-model="settings.modules[mod.key]"
                                       :aria-label="mod.title"
                                     />
-                                  </SettingRow>
+                                  </SettingsRow>
                                 </Item.List>
                               </template>
                             </Card>
@@ -746,7 +746,7 @@
                             <Card :padded="false">
                               <template #default>
                                 <Item.List>
-                                  <SettingRow
+                                  <SettingsRow
                                     title="WebSocket Proxy"
                                     variant="compact"
                                   >
@@ -773,7 +773,7 @@
                                         aria-label="WebSocket Proxy"
                                       />
                                     </Tooltip>
-                                  </SettingRow>
+                                  </SettingsRow>
                                 </Item.List>
                               </template>
                             </Card>

@@ -2,11 +2,11 @@
   import { computed, defineAsyncComponent, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CallToAction from '../../marketing/call-to-action/call-to-action.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
-  import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
+  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({
     name: 'ClosingCallToAction',
@@ -106,9 +106,7 @@
     lineAriaLabel: ''
   })
 
-  const SectionCommand = defineAsyncComponent(
-    () => import('../section-command/section-command.vue')
-  )
+  const CopyCommand = defineAsyncComponent(() => import('../copy-command/copy-command.vue'))
 
   const ClosingCallToActionAudiences = defineAsyncComponent(
     () => import('./parts/closing-call-to-action-audiences.vue')
@@ -165,7 +163,7 @@
             v-if="isPrimary"
             #background
           >
-            <TextureMaterial
+            <Texture
               variant="pixelate"
               size="small"
               fade="bottom"
@@ -185,7 +183,7 @@
               :line-aria-label="lineAriaLabel"
             />
             <template v-else>
-              <SectionCommand
+              <CopyCommand
                 v-if="command"
                 :value="command"
               />
@@ -229,14 +227,14 @@
         </CallToAction>
       </SectionModule>
     </template>
-    <FrameBox
+    <RegistrationFrame
       v-if="isFrame || (title && hatch)"
       borders="none"
       marks="all"
       data-hatch="true"
       class="h-[calc(var(--spacing-2xl)*2)] group-data-[variant=panel]:h-(--spacing-2xl)"
     >
-      <TextureMaterial variant="lines" />
-    </FrameBox>
+      <Texture variant="lines" />
+    </RegistrationFrame>
   </div>
 </template>

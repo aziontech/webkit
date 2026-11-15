@@ -1,10 +1,10 @@
 # FeatureScroll
 
-A list of features with the media that shows each one. The band pins under the site header while the page scrolls; as the reader scrolls, the open feature moves on and the media beside it changes to match. The media is a live console scene (an item `scene` naming a `ProductWidget`), a one-file code sample (an item `code`) or an `Illustration`.
+A list of features with the media that shows each one. The band pins under the site header while the page scrolls; as the reader scrolls, the open feature moves on and the media beside it changes to match. The media is a live console scene (an item `scene` naming a `ConsoleMockup`), a one-file code sample (an item `code`) or an `Illustration`.
 
 Below `lg` it turns into a FeatureTiles grid: each feature becomes a tile, its media over the title and description.
 
-The band is the `FeatureScroll` component from `@aziontech/webkit/feature-scroll`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `StickyStack`, `TextureMaterial`, `Button`, `CardGrid`, `MediaTile`, `CodeBlock` and `Illustration`.
+The band is the `FeatureScroll` component from `@aziontech/webkit/feature-scroll`; it composes `SectionModule`, `SectionTitle`, `RegistrationFrame`, `StickyStack`, `Texture`, `Button`, `CardGrid`, `MediaTile`, `CodeBlock` and `Illustration`.
 
 ## Examples
 

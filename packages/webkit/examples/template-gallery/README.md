@@ -1,10 +1,10 @@
 # TemplateGallery
 
-The templates band of a solution page. Copy on one side invites the reader to start from a template; on the other, a scrolling wall of deployable templates. A ticker of the frameworks and clouds it works with closes the band.
+The templates band of a solution page. Copy on one side invites the reader to start from a template; on the other, a scrolling wall of deployable templates. A marquee of the frameworks and clouds it works with closes the band.
 
 Each template card is a mark, a title, one line and a `Deploy now` action. Retail, Web Apps, AI Workloads, Security, Performance and Streaming use it.
 
-The band is the `TemplateGallery` component from `@aziontech/webkit/template-gallery`; it composes `SectionModule`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `FrameBox` and `Ticker` (and `TextureMaterial` on the closing frame with `closing`).
+The band is the `TemplateGallery` component from `@aziontech/webkit/template-gallery`; it composes `SectionModule`, `MediaSplit`, `ScrollArea`, `CardGrid`, `Button`, `RegistrationFrame` and `Marquee` (and `Texture` on the closing frame with `closing`).
 
 ## Examples
 
@@ -24,7 +24,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `templates[]` fill the wall: `title`, `description`, `icon` and the `href` the whole card and its deploy button link to. Turn on `invertInDark` for a mark that ships in dark ink only. A template without a title is skipped.
 - `deployLabel` is the label of the button on each card; a card without an `href` shows no button.
 - `templatesAriaLabel` names the wall for screen readers.
-- `tickerLabel` and `tickerMarks` fill the row of marks. An unknown name renders as a wordmark.
+- `marqueeLabel` and `marqueeMarks` fill the row of marks. An unknown name renders as a wordmark.
 
 Example:
 

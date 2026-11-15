@@ -2,15 +2,15 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
+  import Marquee from '../../marketing/marquee/marquee.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
-  import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
-  import Ticker from '../../marketing/ticker/ticker.vue'
+  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({
     name: 'TemplateGallery',
@@ -36,7 +36,7 @@
   export interface TemplateGalleryProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
-    /** Overline above the headline. */
+    /** Eyebrow above the headline. */
     eyebrow?: string
     /** Headline of the band, rendered by the media split as its `h2` and naming its region. */
     title?: string
@@ -52,10 +52,10 @@
     deployLabel?: string
     /** Accessible name of the scrolling wall of templates. */
     templatesAriaLabel?: string
-    /** Overline above the row of marks. */
-    tickerLabel?: string
-    /** Registry names of the frameworks and clouds in the row of marks, in order; the ticker is omitted when empty. */
-    tickerMarks?: string[]
+    /** Eyebrow above the row of marks. */
+    marqueeLabel?: string
+    /** Registry names of the frameworks and clouds in the row of marks, in order; the marquee is omitted when empty. */
+    marqueeMarks?: string[]
     /** Makes the band the page's closing band: the hatched closing frame follows it, as the closing call to action draws it. */
     closing?: boolean
     /** Draws the hatched closing frame under a `closing` band; turn it off when another closing band stacks directly below and draws the shared frame. Ignored without `closing`. */
@@ -72,8 +72,8 @@
     templates: () => [],
     deployLabel: '',
     templatesAriaLabel: '',
-    tickerLabel: '',
-    tickerMarks: () => [],
+    marqueeLabel: '',
+    marqueeMarks: () => [],
     closing: false,
     hatch: true
   })
@@ -222,29 +222,29 @@
         </template>
       </MediaSplit>
 
-      <FrameBox
-        v-if="tickerMarks.length > 0"
+      <RegistrationFrame
+        v-if="marqueeMarks.length > 0"
         flush
         borders="y"
         marks="all"
       >
         <SectionModule :divided="false">
-          <Ticker
+          <Marquee
             size="small"
-            :label="tickerLabel"
-            :marks="tickerMarks"
+            :label="marqueeLabel"
+            :marks="marqueeMarks"
           />
         </SectionModule>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
-    <FrameBox
+    <RegistrationFrame
       v-if="hasCards && closing && hatch"
       borders="none"
       marks="all"
       data-hatch="true"
       class="h-[calc(var(--spacing-2xl)*2)]"
     >
-      <TextureMaterial variant="lines" />
-    </FrameBox>
+      <Texture variant="lines" />
+    </RegistrationFrame>
   </div>
 </template>

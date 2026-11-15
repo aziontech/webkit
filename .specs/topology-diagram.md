@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 1026ebe7624795095f66bf528bd4367fb3dfe3a1d37ea5ba18435d3cc5abcaf1
+checksum: 8cb7be4f76cf61ff4527a5528d16766c2946c48291a8f08177aceb6728581529
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `Flow`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
+The deployment topology of a resource as a left-to-right diagram: each column is a depth (domains, project, policy, service, cache rules, integration, storage), each node a collapsible card with the resource kind, its status tag, its name and, when opened, a message and labelled fields; dashed connectors join every node of a column to the next. A node without a name is an unbound slot (dashed, Not bound) and a `bindable` node carries the bind control (bind an existing resource, change it, create one, remove it). Taken from the design sample's workload topology (`TopologyDiagramNodeData`, `TopologyNodeCard`, `TopologyBindNode`, `TopologyBindControl`, the empty node). It reuses `FlowDiagram`'s connector engine and anchors and draws its own list semantics, with no node-graph dependency.
 
 ## When to use
 
@@ -23,13 +23,13 @@ The deployment topology of a resource as a left-to-right diagram: each column is
 
 ## When NOT to use
 
-- A sequence of steps or a pipeline without data cards → use `flow`.
+- A sequence of steps or a pipeline without data cards → use `flow-diagram`.
 - A nested list of items with no flow between them → use `tree`.
 - A marketing architecture picture → use `diagram`.
 
 ## Related
 
-- `flow` — the connector engine and anchors this component reuses.
+- `flow-diagram` — the connector engine and anchors this component reuses.
 - `tree` — hierarchical data without connectors.
 - `dropdown-menu` — the bind control's menu.
 - `detail/resource-detail` — the page whose topology tab holds it.

@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 12
 template: 2
-checksum: 1ac454fddbcfb4b9522737e3891d55b3becbe5dac1ecde233a4759bd35e09247
+checksum: 487bb6eced47f8503ea20fe2905238555d8c8cffcbc383be9c6f2aadfcd80816
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -20,7 +20,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 - Use ConsoleLayout once at the app root of the Azion console; every page is its body.
 - Every signed-in console page: put one `ConsoleLayout` in the app's root (around `RouterView`) and render each page block as its default slot.
-- A product area that needs the console navigation, breadcrumbs, the ⌘K palette and the account menu without hand-composing `AppLayout`, `Sidebar`, `SidebarMenu`, `GlobalHeader`, `SearchTrigger` and `Command`.
+- A product area that needs the console navigation, breadcrumbs, the ⌘K palette and the account menu without hand-composing `AppLayout`, `Sidebar`, `SidebarMenu`, `AppHeader`, `SearchTrigger` and `Command`.
 
 ## When NOT to use
 
@@ -179,7 +179,7 @@ packages/webkit/src/components/layout/console-layout/
 | `actions`        | `{ compact: boolean, toggleTools: () => void }` | The app's header actions, between the search trigger and the avatar; render them icon-only while `compact`; `toggleTools` opens and closes the tools region (a notifications bell).                                                                                                                                            |
 | `header-leading` | `{ compact: boolean }`                          | Content at the start of the header, before the breadcrumbs (an account or organization switcher).                                                                                                                                                                                                                              |
 | `sidebar-header` | `{ compact: boolean }`                          | Content in the rail under the wordmark, above the navigation (a full-width account or organization switcher); `compact` is true when the rail is the compact drawer (render nothing there to keep the switcher in `header-leading`). Rendered only when given; a region whose slot renders nothing (a false `v-if`) is hidden. |
-| `breadcrumbs`    | —                                               | An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumb` replaces both; hidden while compact.                                                                                                                                                                           |
+| `breadcrumbs`    | —                                               | An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumb` replaces both; hidden while compact.                                                                                                                                                                            |
 | `notifications`  | —                                               | Flash messages (`Alert`) above the page, kept in view while the page scrolls.                                                                                                                                                                                                                                                  |
 | `tools`          | —                                               | The tools region's body (a `HelpPanel` or the notifications list), opened with `v-model:tools-open`.                                                                                                                                                                                                                           |
 | `search`         | `{ query: string }`                             | Extra `Command.Group`s (recent resources, commands) listed before the navigation pages in the palette.                                                                                                                                                                                                                         |
@@ -223,7 +223,7 @@ packages/webkit/src/components/layout/console-layout/
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Landmarks: the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the header is `GlobalHeader` (`<header>`); the page body is inside the layout's single `<main>`. A page body must not render a second `<main>`.
+- Landmarks: the rail is the `Sidebar` `<nav>` named by `ariaLabel`; the header is `AppHeader` (`<header>`); the page body is inside the layout's single `<main>`. A page body must not render a second `<main>`.
 - Keyboard map: `Tab` runs rail (wordmark, `sidebar-header`, navigation) → header → page; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); on wide layouts `⌘B` / `Ctrl B` toggles the rail and writes `v-model:navigation-open` (the Sidebar's `shortcut`, off while compact and while typing in a field); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The rail keyboard map is `SidebarMenu`'s; the compact drawer closes on `Escape` and returns focus to the hamburger (`AppLayout`).
 - Names: the compact hamburger (`Open navigation`), the brand link (`Azion home`), the rail account trigger (`Account menu`, an icon button) come from the locale catalog; the avatar carries the account name. The header avatar trigger shows the initials, so its name starts with them (`JD, account menu`, `consoleLayout.accountMenuFor`) to meet WCAG 2.5.3 Label in Name (a speech user says what they see); with an account image it has no visible text and is named `Account menu`.
 - Account menu: choosing an option by pointer or keyboard emits `account-select`; the keyboard map inside the menu is `DropdownMenu`'s.
@@ -264,7 +264,7 @@ packages/webkit/src/components/layout/console-layout/
 
 ## Performance
 
-- Bundle budget: 66.5 KB gzip for the root `.vue` (`console-layout` in `.size-limit.json`; 66.0 KB measured, up from 65.0 KB for the `sidebar-header` region and the `Avatar` marble pattern it carries; it pulls `AppLayout`, `Sidebar`, `SidebarMenu`, `GlobalHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`) and 1 KB for `./console-layout-breadcrumb` (0.42 KB measured).
+- Bundle budget: 66.5 KB gzip for the root `.vue` (`console-layout` in `.size-limit.json`; 66.0 KB measured, up from 65.0 KB for the `sidebar-header` region and the `Avatar` marble pattern it carries; it pulls `AppLayout`, `Sidebar`, `SidebarMenu`, `AppHeader`, `Breadcrumb`, `SearchTrigger`, `Command`, `DropdownMenu`, `Avatar`, `Tooltip`) and 1 KB for `./console-layout-breadcrumb` (0.42 KB measured).
 - Runtime budget: one `popstate` listener when no router is installed; one watcher on the route path that bumps the main's key; the active row is a computed match over the navigation leaves, and one post-flush watcher on it and on the rail element scrolls the row into view (one layout read per change); the page trail is a short list of registrations.
 - Development warning: in development only, one `MutationObserver` on the `<main>` and a scan of its `SidebarMenu` links against the navigation tree; it is removed from production builds (0.02 KB measured in the root budget for the `<main>` ref).
 - Heavy parts: none beyond the composed components; the palette content renders only while open (`Command`).

@@ -3,11 +3,11 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import BandStack from '../band-stack/band-stack.vue'
+import SectionStack from '../section-stack/section-stack.vue'
 import MediaSplit from './media-split.vue'
 
 const TESTID = 'marketing-media-split'
-const GROUND = 'marketing-texture-material'
+const GROUND = 'marketing-texture'
 
 const TITLE = 'See every request as it happens.'
 const DESCRIPTION = 'Logs stream from every edge location in real time, with no agent to install.'
@@ -289,13 +289,13 @@ describe('MediaSplit', () => {
   it('draws no frame of its own by default', () => {
     const { queryByTestId } = render(MediaSplit, { props: { title: TITLE } })
 
-    expect(queryByTestId('layout-frame-box')).toBeNull()
+    expect(queryByTestId('layout-registration-frame')).toBeNull()
   })
 
   it('draws its own registration frame when framed', () => {
     const { getByTestId } = render(MediaSplit, { props: { title: TITLE, framed: true } })
 
-    expect(getByTestId('layout-frame-box')).toBeInTheDocument()
+    expect(getByTestId('layout-registration-frame')).toBeInTheDocument()
   })
 
   it('leaves its cells unmarked by default', () => {
@@ -309,8 +309,8 @@ describe('MediaSplit', () => {
       props: { title: TITLE, src: SRC, alt: ALT, framed: true }
     })
 
-    expect(getByTestId('layout-frame-box').getAttribute('data-borders')).toBe('bottom')
-    expect(getByTestId('layout-frame-box').getAttribute('data-marks')).toBe('none')
+    expect(getByTestId('layout-registration-frame').getAttribute('data-borders')).toBe('bottom')
+    expect(getByTestId('layout-registration-frame').getAttribute('data-marks')).toBe('none')
     for (const cell of CELLS) {
       expect(getByTestId(cell).getAttribute('data-marks')).toBe(EVERY_CORNER)
       expect(getByTestId(cell).getAttribute('data-borders')).toBe('none')
@@ -327,11 +327,11 @@ describe('MediaSplit', () => {
   })
 
   it('frames its two cells inside a band stack without drawing rules of its own', () => {
-    const { getByTestId, queryByTestId } = render(BandStack, {
+    const { getByTestId, queryByTestId } = render(SectionStack, {
       slots: { default: () => h(MediaSplit, { title: TITLE, src: SRC, alt: ALT }) }
     })
 
-    expect(queryByTestId('layout-frame-box')).toBeNull()
+    expect(queryByTestId('layout-registration-frame')).toBeNull()
     for (const cell of CELLS) {
       expect(getByTestId(cell).getAttribute('data-marks')).toBe(EVERY_CORNER)
       expect(getByTestId(cell).getAttribute('data-borders')).toBe('none')

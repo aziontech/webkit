@@ -250,9 +250,9 @@ test('validateUsage does NOT flag a sibling package as an invalid webkit import'
 })
 
 test('getUsageExample binds an empty literal for a required array prop (never prop="text")', () => {
-  const res = getUsageExample(catalog, 'site-nav', { fromStory: false })
+  const res = getUsageExample(catalog, 'site-header', { fromStory: false })
   assert.equal(res.found, true)
-  // menus: SiteNavMenu[] is required and non-scalar → :menus="[]", not menus="text"
+  // menus: SiteHeaderMenu[] is required and non-scalar → :menus="[]", not menus="text"
   assert.match(res.sfc, /:menus="\[\]"/)
   assert.doesNotMatch(res.sfc, /menus="text"/)
 })
@@ -279,7 +279,7 @@ test('getComponent tells which classes may go on the tag (shared layout list)', 
   const button = getComponent(catalog, 'button')
   assert.equal(button.allowedClasses.any, false)
   assert.deepEqual(button.allowedClasses.families, [...LAYOUT_CLASS_FAMILIES])
-  assert.equal(getComponent(catalog, 'frame-box').allowedClasses.any, true)
+  assert.equal(getComponent(catalog, 'registration-frame').allowedClasses.any, true)
 })
 
 test('validateUsage with a component flags classes outside the layout utilities', () => {
@@ -514,8 +514,8 @@ test('list_assets indexes every kind with its count and the components that use 
     assert.ok(kinds[kind]?.count > 0, kind)
   }
   assert.ok(kinds.illustrations.usedBy.includes('illustration'))
-  assert.ok(kinds.illustrations.usedBy.includes('media-split-stack'))
-  assert.ok(kinds.brandMarks.usedBy.includes('ticker'))
+  assert.ok(kinds.illustrations.usedBy.includes('media-split-stack-section'))
+  assert.ok(kinds.brandMarks.usedBy.includes('marquee'))
   assert.ok(kinds.brandMarks.usedBy.includes('client-quotes'))
   assert.ok(kinds.diagrams.usedBy.includes('diagram'))
   assert.ok(kinds.lineFigures.usedBy.includes('line-figure'))
@@ -614,7 +614,7 @@ test('get_component points a consuming component at its asset list', () => {
     getComponent(catalog, 'illustration').assets.map((a) => a.kind),
     ['illustrations']
   )
-  assert.ok(getComponent(catalog, 'ticker').assets.some((a) => a.kind === 'brandMarks'))
+  assert.ok(getComponent(catalog, 'marquee').assets.some((a) => a.kind === 'brandMarks'))
   assert.deepEqual(getComponent(catalog, 'divider').assets, [])
 })
 
@@ -646,8 +646,7 @@ test('every block carries one surface of catalog.surfaces', () => {
   const raw = JSON.parse(readFileSync(new URL('../../catalog.json', import.meta.url), 'utf8'))
   const surfaces = Object.keys(raw.surfaces)
   assert.deepEqual(surfaces, ['app', 'site', 'docs'])
-  for (const [id, p] of Object.entries(catalog.blocks))
-    assert.ok(surfaces.includes(p.surface), id)
+  for (const [id, p] of Object.entries(catalog.blocks)) assert.ok(surfaces.includes(p.surface), id)
   assert.equal(catalog.block('shell/site').surface, 'site')
   assert.equal(catalog.block('shell/docs').surface, 'docs')
 })

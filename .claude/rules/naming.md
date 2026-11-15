@@ -40,23 +40,23 @@ The kebab name is the single source. Six surfaces must agree:
   `stats-section`, `media-split-section`); the primitive keeps the bare name (`hero`, `stats`).
   `-band`, `-stack` and the other wrapper words are not used.
 - **No synonym of an existing export.** One overlay is `dialog` (never `modal`), the side panel
-  is `drawer` (never `sheet`), the moving strip is `marquee` (never `ticker`).
+  is `drawer` (never `sheet`), the moving strip is `marquee` (never `marquee`).
 
-| ✅               | ❌                                       |
-| ---------------- | ---------------------------------------- |
-| `pricing-card`   | `card-pricing` (noun first)              |
-| `site-header`    | `site-nav` (abbreviation)                |
-| `eyebrow`        | `overline` (banned word)                 |
-| `marquee`        | `ticker` (synonym of an existing family) |
-| `key-value-list` | `key-value-pairs` (plural root)          |
-| `hero-section`   | `hero-band` (sections end in `-section`) |
+| ✅               | ❌                                          |
+| ---------------- | ------------------------------------------- |
+| `pricing-card`   | `pricing-card` (noun first)                 |
+| `site-header`    | `site-header` (abbreviation)                |
+| `eyebrow`        | `overline` (banned word)                    |
+| `marquee`        | `marquee` (synonym of an existing family)   |
+| `key-value-list` | `key-value-pairs` (plural root)             |
+| `hero-section`   | `hero-section` (sections end in `-section`) |
 
 Near-duplicate words the check knows (`ABBREVIATIONS` and `SYNONYMS` in the engine):
 abbreviations `btn`→`button`, `img`/`pic`→`image`, `nav`→`navigation`, `cols`/`col`→`columns`,
 `desc`→`description`, `msg`→`message`, `prev`→`previous`, `num`→`number`, `txt`→`text`,
 `dlg`→`dialog`, `ctx`→`context`, `attr(s)`→`attribute(s)`, `sel`→`select`, `util`/`utils`→`lib`,
 `regen`, `genai`, `ds`; synonyms `modal`→`dialog`, `sheet`→`drawer`, `popup`→`popover`,
-`snackbar`/`notification`→`toast`, `loader`→`spinner`, `ticker`→`marquee`, `overline`→`eyebrow`,
+`snackbar`/`notification`→`toast`, `loader`→`spinner`, `marquee`→`marquee`, `overline`→`eyebrow`,
 `helper`→`description`; and an export that is the plural of another export (`chips` next to
 `chip`; `tabs`, `settings`, `stats` are the allowed plural roots). The whole-name market aliases
 (`modal`, `sheet`, `callout`, `kebab`…) are `MARKET_ALIASES` in `scripts/lib/naming.mjs`.
@@ -147,7 +147,7 @@ Banned file names: `types`, `kinds`, `basic`, `overview`, `playground`, `demo`, 
 `transparent`, `prefix`, `suffix`, `left`, `right`, `current`, `expanded`, `failed`. The one
 exception is a prop the component really has: `types.vue` shows a `type` prop (the sort of part:
 `donut-chart`, `spark-chart`, `sidebar-menu`), `levels.vue` a `level` prop (`doc-heading`,
-`log-view`).
+`log-viewer`).
 
 | ✅                     | ❌                                        |
 | ---------------------- | ----------------------------------------- |
@@ -338,11 +338,11 @@ see [`composables.md`](./composables.md).
 
 A component's own custom property is **`--<component>-<part>-<property>`**, whole words.
 
-| ✅                       | ❌                 |
-| ------------------------ | ------------------ |
-| `--texture-material-row` | `--row`            |
-| `--card-grid-columns`    | `--card-grid-cols` |
-| `--trace-tick-at`        | `--tick-at`        |
+| ✅                    | ❌                 |
+| --------------------- | ------------------ |
+| `--texture-row`       | `--row`            |
+| `--card-grid-columns` | `--card-grid-cols` |
+| `--trace-tick-at`     | `--tick-at`        |
 
 ## 16. Tokens and utilities
 

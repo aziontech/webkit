@@ -63,17 +63,17 @@ Compound components (`structure: composition`, see [`compound-api.md`](./compoun
 
 ```ts
 // injection-key.ts
-export const LogViewInjectionKey: InjectionKey<LogViewContext> = Symbol('LogView')
+export const LogViewerInjectionKey: InjectionKey<LogViewerContext> = Symbol('LogViewer')
 
-// composables/use-log-view-context.ts
-export function useLogViewContext(): LogViewContext {
-  const ctx = inject(LogViewInjectionKey, null)
-  if (!ctx) throw new Error('useLogViewContext must be used within <LogView>.')
+// composables/use-log-viewer-context.ts
+export function useLogViewerContext(): LogViewerContext {
+  const ctx = inject(LogViewerInjectionKey, null)
+  if (!ctx) throw new Error('useLogViewerContext must be used within <LogViewer>.')
   return ctx
 }
 ```
 
-- A **typed `InjectionKey<T>`** lives in `injection-key.ts` next to the root, named **`<Component>[<Part>]InjectionKey`** (`LogViewInjectionKey`, `TableRowGroupInjectionKey`); its `Symbol()` description is the same PascalCase name without the suffix (`Symbol('LogView')`, `Symbol('TableRowGroup')`) — never `…Context`, `…Key`, `xContextKey` or `SCREAMING_CASE` (see [`imports.md`](./imports.md) for why `injection-key.ts` is imported as source).
+- A **typed `InjectionKey<T>`** lives in `injection-key.ts` next to the root, named **`<Component>[<Part>]InjectionKey`** (`LogViewerInjectionKey`, `TableRowGroupInjectionKey`); its `Symbol()` description is the same PascalCase name without the suffix (`Symbol('LogViewer')`, `Symbol('TableRowGroup')`) — never `…Context`, `…Key`, `xContextKey` or `SCREAMING_CASE` (see [`imports.md`](./imports.md) for why `injection-key.ts` is imported as source).
 - The context composable is **`composables/use-<component>[-<part>]-context.ts`** exporting **`use<Component>[<Part>]Context`** (and `provide<Component>[<Part>]Context` when the root wraps the `provide`), with the full component name (`useTutorialPanelContext`, not `useTutorialContext`).
 - `useXxxContext()` does the `inject` and **throws a clear error when used outside its provider** — a leaf rendered loose fails loudly, not silently with `undefined`.
 - The root `provide`s the context; only the root. Leaves only `inject` via this composable.
@@ -107,4 +107,4 @@ Both rules apply to a `use-*.ts` / `use-*.js` file (tests excluded) and ship in 
 
 ## Why this rule exists
 
-The package already had ~22 composables that had **converged** on good patterns (`use-log-view-context` throws outside its provider; `use-dialog-motion-state` cleans up; `use-controllable` is pure) — but by habit, not by contract. Half were `.js`, they sat in two different folder conventions, and nothing guaranteed a new one would wrap its state in `readonly()`, resolve args with `toValue()`, or tear down its listeners. Writing the contract down — and enforcing the parts a signature reveals — makes the next composable correct by construction instead of by whoever wrote it remembering the last one.
+The package already had ~22 composables that had **converged** on good patterns (`use-log-viewer-context` throws outside its provider; `use-dialog-motion-state` cleans up; `use-controllable` is pure) — but by habit, not by contract. Half were `.js`, they sat in two different folder conventions, and nothing guaranteed a new one would wrap its state in `readonly()`, resolve args with `toValue()`, or tear down its listeners. Writing the contract down — and enforcing the parts a signature reveals — makes the next composable correct by construction instead of by whoever wrote it remembering the last one.

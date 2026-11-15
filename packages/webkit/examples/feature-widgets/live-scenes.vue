@@ -8,21 +8,21 @@
       title: 'Cache settings you reuse.',
       description:
         'Set the CDN TTL, stale cache and large file optimization once, then reuse the setting wherever the application needs it.',
-      scene: { component: 'ProductWidget', props: { name: 'application-cache' } },
+      scene: { component: 'ConsoleMockup', props: { name: 'application-cache' } },
       action: { label: 'Docs', href: docs }
     },
     {
       title: 'Rules that decide what is cached.',
       description:
         'Match a path, a method or a header, and attach a cache setting to just that traffic.',
-      scene: { component: 'ProductWidget', props: { name: 'application-rule' } },
+      scene: { component: 'ConsoleMockup', props: { name: 'application-rule' } },
       action: { label: 'Docs', href: docs }
     },
     {
       title: 'Functions for the cases rules miss.',
       description:
         'Rewrite cache headers on the response in a few lines of JavaScript, running in every data center before the response leaves.',
-      scene: { component: 'ProductWidget', props: { name: 'application-function' } },
+      scene: { component: 'ConsoleMockup', props: { name: 'application-function' } },
       action: { label: 'Docs', href: docs },
       copy: {
         label: 'Copy prompt',

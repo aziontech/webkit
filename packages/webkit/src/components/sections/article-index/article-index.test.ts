@@ -506,7 +506,7 @@ describe('ArticleIndex', () => {
         expect(screen.queryByRole('textbox', { name: 'Search content type' })).toBeNull()
         await userEvent.keyboard('{Escape}')
 
-        await userEvent.click(screen.getByRole('combobox', { name: 'Topic' }))
+        await userEvent.click(screen.getByRole('combobox', { name: 'FeatureItem' }))
         expect(await screen.findByRole('textbox', { name: 'Search topic' })).toBeInTheDocument()
       })
 
@@ -558,7 +558,7 @@ describe('ArticleIndex', () => {
 
       expect(getByRole('list', { name: LIST }).getAttribute('data-filters')).toBe('category-search')
       expect(getByRole('radiogroup', { name: 'Category' })).toBeInTheDocument()
-      expect(queryByRole('combobox', { name: 'Topic' })).toBeNull()
+      expect(queryByRole('combobox', { name: 'FeatureItem' })).toBeNull()
     })
 
     it('draws only the facet dropdowns with filters="facets", in the centered layout', () => {
@@ -567,7 +567,7 @@ describe('ArticleIndex', () => {
       const list = getByRole('list', { name: LIST })
       expect(list.getAttribute('data-filters')).toBe('facets')
       expect(list.getAttribute('data-variant')).toBe('center')
-      expect(getByRole('combobox', { name: 'Topic' })).toBeInTheDocument()
+      expect(getByRole('combobox', { name: 'FeatureItem' })).toBeInTheDocument()
       expect(queryByRole('radiogroup', { name: 'Category' })).toBeNull()
       expect(queryByRole('textbox', { name: SEARCH.searchAriaLabel })).toBeNull()
     })

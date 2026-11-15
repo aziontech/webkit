@@ -33,7 +33,7 @@
   const open = defineModel<boolean>('open', { default: false })
 
   defineSlots<{
-    /** The band body, usually a flush Card of SettingRow rows. */
+    /** The band body, usually a flush Card of SettingsRow rows. */
     default(): unknown
     /** Rich title content; replaces the title prop text inside the h2. */
     title(): unknown

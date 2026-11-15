@@ -49,9 +49,9 @@ Choice cards: a `RadioGroup` with `variant="card"`, one item per option with a t
 
 A `Field` with its label and an `InputGroup` whose addon shows the free platform suffix while the free option is chosen. The field is `required` from the start (the Required marker shows on the label); after an empty submit the `Field` turns `invalid` and a `Field.Error` (`role="alert"`) says so. Every variant renders field errors the same way: `Field.Error` under the control, never a `Field.Description` swapped to an error.
 
-### H. Certificate — `Field`, `Select`, `HelperText` (optional)
+### H. Certificate — `Field`, `Select`, `FieldDescription` (optional)
 
-Shown only for Bring my own domain. The `Select` preselects a certificate that already covers the address and the `HelperText` says so; once the user picks one, it stops following the address.
+Shown only for Bring my own domain. The `Select` preselects a certificate that already covers the address and the `FieldDescription` says so; once the user picks one, it stops following the address.
 
 ### I. Context alert — `Alert` (optional)
 

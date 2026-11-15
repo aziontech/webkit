@@ -129,9 +129,9 @@ describe('PlatformDirectory', () => {
       }))
       const { getByTestId, getAllByTestId } = band({ groups: many })
 
-      expect(getByTestId('marketing-column-navigation')).toHaveAttribute('data-columns', tracks)
+      expect(getByTestId('marketing-link-directory')).toHaveAttribute('data-columns', tracks)
       expect(
-        getAllByTestId('marketing-column-navigation-column').map((column) =>
+        getAllByTestId('marketing-link-directory-column').map((column) =>
           column.getAttribute('data-span')
         )
       ).toEqual(spans)

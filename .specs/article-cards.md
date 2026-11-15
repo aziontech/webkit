@@ -7,13 +7,14 @@ spec_version: 4
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: c503bc092498b6cf1bd2d84de4178ea0126e709891d4cccd8989408b2a379e09
+checksum: cac510e7316d90d7276f6d0e701237ba7c33c50515f66ad74d80959f2846f635
 ---
+
 # ArticleCards — Component Spec
 
 ## Purpose
 
-A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `card-grid`. `variant` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
+A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame` and `card-grid`. `variant` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
 
 ## When to use
 
@@ -40,7 +41,7 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 
 ```vue
 <script setup>
-import ArticleCards from '@aziontech/webkit/article-cards'
+  import ArticleCards from '@aziontech/webkit/article-cards'
 </script>
 
 <template>
@@ -64,14 +65,14 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `variant` | `ArticleCardsVariant` | `'start'` | false | Placement of the heading: `start` sets it at the start, `center` centres it over the cards. |
-| `anchor` | `string` | `''` | false | Id set on the band so an in-page `#hash` link can target it. |
-| `eyebrow` | `string` | `''` | false | Overline above the heading. |
-| `title` | `string` | `''` | false | Headline of the band; the band renders no header when empty. |
-| `items` | `ArticleCardsItem[]` | `[]` | false | The cards, in order; each is `{ id, href, title, description, meta, image?, mark?, target? }`; a card whose `target` is `_blank` opens in a new tab. |
-| `ariaLabel` | `string` | `''` | false | Accessible name of the card grid. |
+| Prop        | Type                  | Default   | Required | JSDoc                                                                                                                                                |
+| ----------- | --------------------- | --------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`   | `ArticleCardsVariant` | `'start'` | false    | Placement of the heading: `start` sets it at the start, `center` centres it over the cards.                                                          |
+| `anchor`    | `string`              | `''`      | false    | Id set on the band so an in-page `#hash` link can target it.                                                                                         |
+| `eyebrow`   | `string`              | `''`      | false    | Eyebrow above the heading.                                                                                                                           |
+| `title`     | `string`              | `''`      | false    | Headline of the band; the band renders no header when empty.                                                                                         |
+| `items`     | `ArticleCardsItem[]`  | `[]`      | false    | The cards, in order; each is `{ id, href, title, description, meta, image?, mark?, target? }`; a card whose `target` is `_blank` opens in a new tab. |
+| `ariaLabel` | `string`              | `''`      | false    | Accessible name of the card grid.                                                                                                                    |
 
 ## Events
 
@@ -91,26 +92,26 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| hover fill change on a card | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
-| hover scale of the media | `transition-[scale] duration-moderate-02 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                     | Animation / Transition                                             | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| --------------------------- | ------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
+| hover fill change on a card | `transition-colors duration-fast-02 ease-productive-entrance`      | inline (matches catalog)                          | `motion-reduce:transition-none` |
+| hover scale of the media    | `transition-[scale] duration-moderate-02 ease-productive-entrance` | inline (matches catalog)                          | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| card fill | `var(--bg-canvas)`, hover `var(--bg-surface-raised)` |
-| media cell | `var(--bg-surface)`, rule `var(--border-default)` |
-| headline | `text-heading-sm`, `var(--text-default)` |
+| Region            | Token (DESIGN.md)                                        |
+| ----------------- | -------------------------------------------------------- |
+| card fill         | `var(--bg-canvas)`, hover `var(--bg-surface-raised)`     |
+| media cell        | `var(--bg-surface)`, rule `var(--border-default)`        |
+| headline          | `text-heading-sm`, `var(--text-default)`                 |
 | deck and overline | `text-body-sm` / `text-overline-sm`, `var(--text-muted)` |
-| focus ring | `var(--ring-color)` |
+| focus ring        | `var(--ring-color)`                                      |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -123,9 +124,9 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 
 ## Internationalization
 
-| Key | English source | Override prop |
-|---|---|---|
-| `articleCards.opensInNewTab` | `(opens in a new tab)` | — |
+| Key                          | English source         | Override prop |
+| ---------------------------- | ---------------------- | ------------- |
+| `articleCards.opensInNewTab` | `(opens in a new tab)` | —             |
 
 - Formatting: none. Every other string is editorial copy that arrives through props.
 

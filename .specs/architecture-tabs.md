@@ -6,14 +6,14 @@ status: implemented
 spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: ee9fa86e29d2495f2c4cca0ec410fb9694ec1f4dcd8ad951f51a499c082c6c17
+checksum: 13f075788a3764389dfc62fbf0392047fd903d53a3550ad16ba8d59b6979119b
 ---
 
 # ArchitectureTabs — Component Spec
 
 ## Purpose
 
-The architecture band of a product page: a horizontal section title with one large button, over a row of up to five tabs whose active tab draws its named diagram the full width of the frame. It is a page section — the site places it from a `{ _id: 'architecture-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `media-tabs` and `diagram`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
+The architecture band of a product page: a horizontal section title with one large button, over a row of up to five tabs whose active tab draws its named diagram the full width of the frame. It is a page section — the site places it from a `{ _id: 'architecture-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `registration-frame`, `media-tabs` and `diagram`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
 
 ## When to use
 
@@ -72,7 +72,7 @@ The architecture band of a product page: a horizontal section title with one lar
 | Prop               | Type                    | Default     | Required | JSDoc                                                                                                                                                                                                                                         |
 | ------------------ | ----------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `anchor`           | `string`                | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                |
-| `eyebrow`          | `string`                | `''`        | false    | Overline above the section title.                                                                                                                                                                                                             |
+| `eyebrow`          | `string`                | `''`        | false    | Eyebrow above the section title.                                                                                                                                                                                                              |
 | `title`            | `string`                | `''`        | false    | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty.                                                                                                                            |
 | `description`      | `string`                | `''`        | false    | Supporting sentence beside the headline.                                                                                                                                                                                                      |
 | `tabsSide`         | `ArchitectureTabsSide`  | `'top'`     | false    | Side of the diagram the tabs sit on: `top`, `bottom`, `start` or `end`; start and end hold up to three tabs.                                                                                                                                  |

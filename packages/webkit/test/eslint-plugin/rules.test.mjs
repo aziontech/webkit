@@ -430,10 +430,10 @@ test('no-physical-direction (template + script + fix)', () => {
 test('no-gap-after-closing-section', () => {
   const imports = `<script setup>
 import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
-import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
+import NewsletterSection from '@aziontech/webkit/newsletter-section'
 import SectionGap from '@aziontech/webkit/section-gap'
-import FrameBox from '@aziontech/webkit/frame-box'
-import TextureMaterial from '@aziontech/webkit/texture-material'
+import RegistrationFrame from '@aziontech/webkit/registration-frame'
+import Texture from '@aziontech/webkit/texture'
 import FaqSection from '@aziontech/webkit/faq-section'
 import TemplateGallery from '@aziontech/webkit/template-gallery'
 </script>`
@@ -443,13 +443,13 @@ import TemplateGallery from '@aziontech/webkit/template-gallery'
       { code: sfc('<SectionGap hatch /><ClosingCallToAction title="Go" />'), filename: 'a.vue' },
       {
         code: sfc(
-          '<FaqSection /><SectionGap hatch /><FrameBox borders="none"><TextureMaterial kind="lines" /></FrameBox>'
+          '<FaqSection /><SectionGap hatch /><RegistrationFrame borders="none"><Texture kind="lines" /></RegistrationFrame>'
         ),
         filename: 'b.vue'
       },
       {
         code: sfc(
-          '<ClosingCallToAction title="Go" /><FrameBox borders="y"><FaqSection /></FrameBox>'
+          '<ClosingCallToAction title="Go" /><RegistrationFrame borders="y"><FaqSection /></RegistrationFrame>'
         ),
         filename: 'c.vue'
       },
@@ -476,13 +476,13 @@ import TemplateGallery from '@aziontech/webkit/template-gallery'
         errors: [{ messageId: 'doubled' }]
       },
       {
-        code: sfc('<closing-call-to-action-newsletter /><!-- end --><section-gap hatch />'),
+        code: sfc('<newsletter-section /><!-- end --><section-gap hatch />'),
         filename: 'f.vue',
         errors: [{ messageId: 'doubled' }]
       },
       {
         code: sfc(
-          '<ClosingCallToAction title="Go" /><FrameBox borders="none" marks="all"><TextureMaterial kind="lines" /></FrameBox>'
+          '<ClosingCallToAction title="Go" /><RegistrationFrame borders="none" marks="all"><Texture kind="lines" /></RegistrationFrame>'
         ),
         filename: 'g.vue',
         errors: [{ messageId: 'doubled' }]
@@ -519,9 +519,9 @@ test('no-wrapped-page-chrome', () => {
       { code: sfc('<div class="flex flex-col"><main /><SiteFooter /></div>'), filename: 'a.vue' },
       {
         code: sfc(
-          '<div class="sticky top-0 z-40"><SiteNav /></div>',
-          '@aziontech/webkit/site-nav',
-          'SiteNav'
+          '<div class="sticky top-0 z-40"><SiteHeader /></div>',
+          '@aziontech/webkit/site-header',
+          'SiteHeader'
         ),
         filename: 'b.vue'
       },
@@ -544,9 +544,9 @@ test('no-wrapped-page-chrome', () => {
       },
       {
         code: sfc(
-          '<header class="border-b"><SiteNav /></header>',
-          '@aziontech/webkit/site-nav',
-          'SiteNav'
+          '<header class="border-b"><SiteHeader /></header>',
+          '@aziontech/webkit/site-header',
+          'SiteHeader'
         ),
         filename: 'g.vue',
         errors: [{ messageId: 'wrapped' }]
@@ -620,17 +620,17 @@ test('require-container-width', () => {
 
 test('require-header-search', () => {
   const header = (right, extra = '') =>
-    `<template><div class="@container"><GlobalHeader><NavigationMenu />` +
-    `<GlobalHeader.End>${right}</GlobalHeader.End></GlobalHeader></div>${extra}</template>`
+    `<template><div class="@container"><AppHeader><NavigationMenu />` +
+    `<AppHeader.End>${right}</AppHeader.End></AppHeader></div>${extra}</template>`
   vue.run('require-header-search', requireHeaderSearch, {
     valid: [
       { code: header('<SearchTrigger collapsible />'), filename: 'a.vue' },
       {
-        code: '<template><GlobalHeader><GlobalHeader.End><Avatar /></GlobalHeader.End></GlobalHeader></template>',
+        code: '<template><AppHeader><AppHeader.End><Avatar /></AppHeader.End></AppHeader></template>',
         filename: 'focused.vue'
       },
       {
-        code: '<template><global-header><navigation-menu /></global-header><search-trigger /></template>',
+        code: '<template><app-header><navigation-menu /></app-header><search-trigger /></template>',
         filename: 'kebab.vue'
       },
       {
@@ -643,7 +643,7 @@ test('require-header-search', () => {
     invalid: [
       { code: header('<Avatar />'), filename: 'c.vue', errors: [{ messageId: 'missing' }] },
       {
-        code: '<template><Sidebar /><GlobalHeader><GlobalHeader.End /></GlobalHeader></template>',
+        code: '<template><Sidebar /><AppHeader><AppHeader.End /></AppHeader></template>',
         filename: 'd.vue',
         errors: [{ messageId: 'missing' }]
       },
@@ -1103,15 +1103,15 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
       },
       {
         code: sfc(
-          "import Overline from './overline.vue'; const PREFIX = '//' as const",
-          '<div><a href="https://www.azion.com">x</a><Overline :prefix="PREFIX">Run</Overline></div>'
+          "import Eyebrow from './eyebrow.vue'; const PREFIX = '//' as const",
+          '<div><a href="https://www.azion.com">x</a><Eyebrow :prefix="PREFIX">Run</Eyebrow></div>'
         ),
         filename: '/repo/packages/webkit/src/components/content/x/x.vue'
       },
       {
         code: sfc(
-          "import Overline from './overline.vue'",
-          '<div><Overline prefix="//">Run</Overline></div>'
+          "import Eyebrow from './eyebrow.vue'",
+          '<div><Eyebrow prefix="//">Run</Eyebrow></div>'
         ),
         filename: '/app/src/pages/page.vue'
       }
@@ -1119,8 +1119,8 @@ test('authoring-standards (shared engine: hook + ratchet + consumer lint)', () =
     invalid: [
       {
         code: sfc(
-          "import Overline from './overline.vue'; import Link from './link.vue'",
-          '<ul><li v-for="item in [1]" :key="item"><Overline v-if="item" prefix="//">Run</Overline><link-item href="https://www.azion.com/">Docs</link-item></li></ul>'
+          "import Eyebrow from './eyebrow.vue'; import Link from './link.vue'",
+          '<ul><li v-for="item in [1]" :key="item"><Eyebrow v-if="item" prefix="//">Run</Eyebrow><link-item href="https://www.azion.com/">Docs</link-item></li></ul>'
         ),
         filename: '/repo/packages/webkit/src/components/content/x/x.vue',
         errors: [

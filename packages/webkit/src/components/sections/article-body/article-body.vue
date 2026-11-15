@@ -11,7 +11,7 @@
   import DocOnThisPage from '../../documentation/doc-on-this-page/doc-on-this-page.vue'
   import DocProse from '../../documentation/doc-prose/doc-prose.vue'
   import { toast } from '../../feedback/toast/composables/use-toast-store'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Separator from '../../layout/separator/separator.vue'
   import HeroTitle from '../../marketing/hero/hero-title/hero-title.vue'
   import SectionContainer from '../../marketing/section-container/section-container.vue'
@@ -114,7 +114,7 @@
     | { kind: 'code'; text: string; lang?: string }
 
   export interface ArticleBodyProps {
-    /** Overline above the headline. */
+    /** Eyebrow above the headline. */
     eyebrow?: string
     /** The piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`. */
     article: ArticleBodyArticle
@@ -365,7 +365,7 @@
         :divided="false"
         :padded="false"
       >
-        <FrameBox
+        <RegistrationFrame
           v-if="banner"
           flush
           borders="y"
@@ -383,8 +383,8 @@
               />
             </div>
           </div>
-        </FrameBox>
-        <FrameBox
+        </RegistrationFrame>
+        <RegistrationFrame
           flush
           borders="y"
           marks="all"
@@ -637,7 +637,7 @@
               </div>
             </aside>
           </div>
-        </FrameBox>
+        </RegistrationFrame>
       </SectionModule>
     </SectionContainer>
   </div>

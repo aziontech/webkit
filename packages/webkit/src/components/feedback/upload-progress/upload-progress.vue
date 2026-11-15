@@ -6,7 +6,7 @@
   import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
-  import OutcomeMark from '../outcome-mark/outcome-mark.vue'
+  import OutcomeIcon from '../outcome-icon/outcome-icon.vue'
   import Progress from '../progress/progress.vue'
 
   export type UploadProgressOperation = 'upload' | 'move' | 'delete'
@@ -165,7 +165,7 @@
       >{{ heading }}</span
     >
     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-      <OutcomeMark
+      <OutcomeIcon
         v-if="status !== 'running'"
         :severity="status === 'success' ? 'success' : 'danger'"
         size="medium"

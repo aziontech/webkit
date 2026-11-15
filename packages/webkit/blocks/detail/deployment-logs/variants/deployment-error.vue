@@ -7,14 +7,17 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import IconButton from '@aziontech/webkit/icon-button'
-  import LogView, { type LogViewStep, type LogViewStepsView } from '@aziontech/webkit/log-view'
+  import LogViewer, {
+    type LogViewerStep,
+    type LogViewerStepsView
+  } from '@aziontech/webkit/log-viewer'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
 
-  type DeployStep = LogViewStep & { tag?: { label: string; severity: TagSeverity } }
+  type DeployStep = LogViewerStep & { tag?: { label: string; severity: TagSeverity } }
 
   const steps: DeployStep[] = [
     {
@@ -281,7 +284,7 @@
 
   const stepTag = (key: string) => steps.find((step) => step.id === key)?.tag
 
-  const logView = ref<LogViewStepsView>('phased')
+  const logViewer = ref<LogViewerStepsView>('phased')
   const openStep = ref('rules')
 </script>
 
@@ -642,7 +645,7 @@
               label="Error"
             />
             <ToggleGroup
-              v-model="logView"
+              v-model="logViewer"
               :options="logViews"
               size="medium"
               aria-label="Log view"
@@ -651,8 +654,8 @@
         </template>
 
         <template #default>
-          <LogView.Steps
-            v-model:view="logView"
+          <LogViewer.Steps
+            v-model:view="logViewer"
             v-model:open-step="openStep"
             :steps="steps"
             :view-switch="false"
@@ -671,7 +674,7 @@
                   : 'No log lines yet.'
               }}
             </template>
-          </LogView.Steps>
+          </LogViewer.Steps>
         </template>
       </Card>
     </section>

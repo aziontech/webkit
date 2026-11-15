@@ -48,7 +48,7 @@ Prop vocabulary ([`rules/prop-vocabulary.md`](../rules/prop-vocabulary.md)):
 - `Button` variants are `primary`, `secondary`, `outline`, `ghost` and `danger` (`variant="ghost"`, never `variant="ghost"`); `Item` uses `variant="outline"`;
 - severities are `info`, `success`, `warning` and `danger` (`severity="danger"`, never `error`); `SeverityTag` takes `severity`, not `level`.
 
-Page fragments are components, not copied markup: `PageHeader`, `SectionHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar` and `ConfirmDialog`. Use them instead of hand-building the h1 row, a section heading, the tab strip under a resource header, a settings band or row, the save / discard bar or a confirm dialog.
+Page fragments are components, not copied markup: `PageHeader`, `SectionHeader`, `PageTabs`, `SettingsSection`, `SettingsRow`, `SaveBar` and `ConfirmDialog`. Use them instead of hand-building the h1 row, a section heading, the tab strip under a resource header, a settings band or row, the save / discard bar or a confirm dialog.
 
 ---
 
@@ -584,7 +584,7 @@ Some components may require Vue Router for navigation or routing features.
 
 ## Webkit Layer Pattern (in-depth)
 
-This section describes the canonical pattern enforced for components living under `packages/webkit/src/components/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../../packages/webkit/src/components/actions/button/button.vue), [icon-button.vue](../../packages/webkit/src/components/actions/icon-button/icon-button.vue), [card-pricing.vue](../../packages/webkit/src/components/content/card-pricing/card-pricing.vue).
+This section describes the canonical pattern enforced for components living under `packages/webkit/src/components/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../../packages/webkit/src/components/actions/button/button.vue), [icon-button.vue](../../packages/webkit/src/components/actions/icon-button/icon-button.vue), [pricing-card.vue](../../packages/webkit/src/components/content/pricing-card/pricing-card.vue).
 
 > **No hallucination — only reference things that exist.** Before importing any module, calling any function, mentioning any file path, or referencing any package/export in generated code, verify it exists: `@aziontech/webkit/<subpath>` must appear in [`package.json#exports`](../../packages/webkit/package.json); relative imports must resolve on disk; npm packages must be installed; workspaces must have a `package.json`. If a needed module is missing, install it, create the file, or annotate the gap as a pending item in the report — never invent imports. The `validate-references.mjs` hook physically blocks Writes whose new imports do not resolve. Sub-sections marked `— pending` below describe patterns that depend on dependencies not yet installed; do not emulate them with phantom paths.
 
@@ -784,15 +784,15 @@ Conventions:
 ### 3. Composition Pattern — só quando faz sentido
 
 - **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogPortal` + `DialogOverlay` + `DialogContent` + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `Tabs.List` + `Tabs.Trigger` + `Tabs.Content`; Accordion; DropdownMenu; Sheet/Drawer; Form fields. Ship the complete anatomy (see § 2.9). **Each sub-component lives in its own folder** under the root component (`<root>/<root>-<part>/<root>-<part>.vue`); the shared `InjectionKey<T>` is a sibling of the root `.vue` (`./injection-key`, imported as `../injection-key` from each sub-component); each public sub-component has its own entry in `packages/webkit/package.json#exports`.
-- **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [card-pricing.vue](../../packages/webkit/src/components/content/card-pricing/card-pricing.vue) — props `slotPosition`/`cardStyle`/`showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
-- **Atomic** (Button, IconButton, Tag, Spinner, Badge, Currency) — always monolithic, no slots.
+- **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [pricing-card.vue](../../packages/webkit/src/components/content/pricing-card/pricing-card.vue) — props `slotPosition`/`cardStyle`/`showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
+- **Atomic** (Button, IconButton, Tag, Spinner, Badge, CurrencyAmount) — always monolithic, no slots.
 - **Decision rule:** "does the consumer need to change the ORDER or OMIT parts exposed by the root?" If yes, use Composition Pattern. If no, stay monolithic. When in doubt, **start monolithic** and refactor only when a real use case appears.
 
 ### 3.1. `data-testid` hierárquico (BEM-style)
 
-Convention established by [card-pricing.vue](../../packages/webkit/src/components/content/card-pricing/card-pricing.vue):
+Convention established by [pricing-card.vue](../../packages/webkit/src/components/content/pricing-card/pricing-card.vue):
 
-- **Root:** fallback derived from the component name — `const testId = computed(() => attrs['data-testid'] ?? '<category>-<name>')`. Examples: `'action-button'`, `'content-card-pricing'`, `'overlay-dialog'`.
+- **Root:** fallback derived from the component name — `const testId = computed(() => attrs['data-testid'] ?? '<category>-<name>')`. Examples: `'action-button'`, `'content-pricing-card'`, `'overlay-dialog'`.
 - **Children:** `${testId}__<part>` with **two underscores**. Common parts: `__header`, `__title`, `__description`, `__content`, `__footer`, `__actions`, `__action`, `__close`, `__loading`, `__icon`, `__panel`, `__backdrop`, `__error-message`.
 - The consumer can override the root via `data-testid="custom-id"`; all children inherit the new prefix automatically.
 - Composition Pattern sub-components inject the parent's `testId` through the context.
@@ -807,7 +807,7 @@ For interactive components with variants (button-like), follow [button.vue](../.
 - `disabledClasses` (string) overriding interactive state.
 - `rootClasses` computed merges all of the above with `attrs.class`.
 
-For monolithic components with variable layout (card-like), inline class arrays in the template are acceptable when the conditional is short and local — see [card-pricing.vue](../../packages/webkit/src/components/content/card-pricing/card-pricing.vue). The root element still uses a computed `rootClass` that includes `attrs.class`.
+For monolithic components with variable layout (card-like), inline class arrays in the template are acceptable when the conditional is short and local — see [pricing-card.vue](../../packages/webkit/src/components/content/pricing-card/pricing-card.vue). The root element still uses a computed `rootClass` that includes `attrs.class`.
 
 ### 5. Estados via pseudo-elements `before:`
 

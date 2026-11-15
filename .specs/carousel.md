@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 4
 template: 2
-checksum: 532fa4a690e5e44a7383bda5dc6c8734680a3205b77490cc319ede403a89fe25
+checksum: 12dab73077f7bc9d04b9cdda18c5d0a4f954875544f15f013b1520b9155fdf3f
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-15
 
 A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own.
 
-The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote` or a `topic`. Two layouts, set on the root with `variant`: `strip` (the default) sets the cards edge to edge with no gutter — each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip; `cards` separates them with a gutter and rounds each one, so the row reads as a set of standalone cards. Each card takes its width from its own `size`, never from a class. The track fades at whichever end still has cards past it.
+The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote` or a `feature-item`. Two layouts, set on the root with `variant`: `strip` (the default) sets the cards edge to edge with no gutter — each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip; `cards` separates them with a gutter and rounds each one, so the row reads as a set of standalone cards. Each card takes its width from its own `size`, never from a class. The track fades at whichever end still has cards past it.
 
 An optional `header` slot shares the row the step controls sit in: the band's title goes at the start and the controls move to the end, so a titled carousel needs no hand-built row around it.
 
@@ -32,13 +32,13 @@ An optional `header` slot shares the row the step controls sit in: the band's ti
 - For content the reader must see → lay it out as a grid; anything past the first slide can be missed.
 - For a vertical list → use `item` with `ItemGroup`.
 - For a framed grid of unequal cells → use `bento-grid`.
-- For a set of figures that fits the row → use `big-numbers` or `logo-wall`, which wrap instead of scrolling.
+- For a set of figures that fits the row → use `stats` or `logo-wall`, which wrap instead of scrolling.
 
 ## Related
 
 - `bento-grid` — the framed grid, when everything should be visible at once.
 - `logo-wall` — a wrapping grid of marks; reach for the carousel only when the wall is too long.
-- `topic` — the usual slide content.
+- `feature-item` — the usual slide content.
 - `scroll-area` — the console's styled scroll container; this one owns snap points and step controls.
 
 ## Best practices

@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The Azion Runtime's globals as a field of pills in the `HeroBand` `#bottom` slot: a few pills hand their highlight on, and the rows drift apart as the page scrolls.",
+      "summary": "The Azion Runtime's globals as a field of pills in the `HeroSection` `#bottom` slot: a few pills hand their highlight on, and the rows drift apart as the page scrolls.",
       "file": "default.vue"
     }
   ]

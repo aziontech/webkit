@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The Retail page's band: the storefront pitch beside a scrolling wall of eight deploy templates, closed by a ticker of compatible frameworks and clouds. Marks flagged `invertInDark` invert under the dark theme. Edit the props in the Controls panel — a band with no templates renders nothing at all. Every card with an `href` links as a whole: a click anywhere on it follows the template, while its deploy button stays the one tab stop. The band carries an `anchor`.",
+      "summary": "The Retail page's band: the storefront pitch beside a scrolling wall of eight deploy templates, closed by a marquee of compatible frameworks and clouds. Marks flagged `invertInDark` invert under the dark theme. Edit the props in the Controls panel — a band with no templates renders nothing at all. Every card with an `href` links as a whole: a click anywhere on it follows the template, while its deploy button stays the one tab stop. The band carries an `anchor`.",
       "file": "default.vue"
     },
     {

@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=479-881
   node_id: 479:881
-checksum: 4fc52bf24319cda45a7129d3c030b4393197650bbb4d585d6de3d1a7db80b7e3
+checksum: 436ea6fea3085a5f90df1e5f3852d49a1693e038ea6a630d427394b150bef1a2
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Use Skeleton when a region with a known shape (text, table rows, cards, avatars) is still loading — the default answer to 'show a loading state'. For an inline busy mark use Spinner, for work with a measurable amount use Progress, and for a generative AI answer use AiLoading.
+Use Skeleton when a region with a known shape (text, table rows, cards, avatars) is still loading — the default answer to 'show a loading state'. For an inline busy mark use Spinner, for work with a measurable amount use Progress, and for a generative AI answer use ResponseLoading.
 
 A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).
 
@@ -68,12 +68,12 @@ A loading placeholder that reserves the space of content while it loads, gently 
 
 ## Props
 
-| Prop       | Type                  | Default   | Required | JSDoc                                                        |
-| ---------- | --------------------- | --------- | -------- | ------------------------------------------------------------ |
-| `variant`     | `'rectangle' \| 'circle'` | `'rectangle'` | false    | Geometry: a rounded rectangular block (`rectangle`) or a circle. |
-| `width`    | `string`              | `'100%'`  | false    | CSS width (any length).                                      |
-| `height`   | `string`              | `'1rem'`  | false    | CSS height (any length); for a circle, set equal to `width`. |
-| `animated` | `boolean`             | `true`    | false    | Shimmer while loading; suppressed under reduced motion.      |
+| Prop       | Type                      | Default       | Required | JSDoc                                                            |
+| ---------- | ------------------------- | ------------- | -------- | ---------------------------------------------------------------- |
+| `variant`  | `'rectangle' \| 'circle'` | `'rectangle'` | false    | Geometry: a rounded rectangular block (`rectangle`) or a circle. |
+| `width`    | `string`                  | `'100%'`      | false    | CSS width (any length).                                          |
+| `height`   | `string`                  | `'1rem'`      | false    | CSS height (any length); for a circle, set equal to `width`.     |
+| `animated` | `boolean`                 | `true`        | false    | Shimmer while loading; suppressed under reduced motion.          |
 
 ## Events
 
@@ -97,11 +97,11 @@ A loading placeholder that reserves the space of content while it loads, gently 
 
 ## Tokens
 
-| Region                 | Token (DESIGN.md)                 |
-| ---------------------- | --------------------------------- |
-| fill                   | `var(--bg-placeholder)`           |
-| shimmer sweep          | `var(--bg-placeholder-highlight)` |
-| shape radius (`rectangle`) | `var(--shape-control)`           |
+| Region                     | Token (DESIGN.md)                 |
+| -------------------------- | --------------------------------- |
+| fill                       | `var(--bg-placeholder)`           |
+| shimmer sweep              | `var(--bg-placeholder-highlight)` |
+| shape radius (`rectangle`) | `var(--shape-control)`            |
 
 `--bg-placeholder` and `--bg-placeholder-highlight` are **translucent** (alpha) by design: the fill composites over whatever surface the placeholder sits on (`--bg-canvas`, `--bg-surface`, `--bg-surface-raised`, `--bg-surface-overlay`), so a single value per mode keeps the contrast correct everywhere. The sweep is a white alpha in both modes — it lightens the fill rather than replacing it, so the animated and static states share the same base tone.
 

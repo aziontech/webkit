@@ -3,11 +3,11 @@
 
   import Button from '../../actions/button/button.vue'
   import CodeBlock from '../../code/code-block/code-block.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
-  import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
+  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({
     name: 'CliTerminal',
@@ -22,7 +22,7 @@
   export interface CliTerminalProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
-    /** Overline above the section title. */
+    /** Eyebrow above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. */
     title?: string
@@ -49,8 +49,8 @@
     primaryAction: undefined
   })
 
-  const ProductWidget = defineAsyncComponent(
-    () => import('../../content/product-widget/product-widget.vue')
+  const ConsoleMockup = defineAsyncComponent(
+    () => import('../../content/console-mockup/console-mockup.vue')
   )
 
   const attrs = useAttrs()
@@ -146,7 +146,7 @@
         </div>
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="all"
@@ -154,7 +154,7 @@
         <div
           class="relative w-full overflow-hidden px-(--spacing-xl) pt-(--spacing-16) md:pt-(--spacing-32) [--texture-wave-gain:1.8] [--texture-wave-pace:5] [--texture-pool-a:50%_100%] [--texture-pool-b:50%_0%]"
         >
-          <TextureMaterial
+          <Texture
             variant="pixelate"
             size="small"
             fade="none"
@@ -165,7 +165,7 @@
             :data-entered="entered || null"
             class="relative z-10 mx-auto -mb-(--spacing-xs) h-(--size-72) w-full max-w-(--container-4xl) translate-y-(--spacing-xl) scale-95 rounded-(--shape-control) opacity-0 shadow-(--shadow-2xl) transition-[translate,scale,opacity] duration-slow-02 ease-expressive-entrance data-entered:translate-y-0 data-entered:scale-100 data-entered:opacity-100 md:h-(--size-96) motion-reduce:translate-y-0 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none"
           >
-            <ProductWidget :name="widget" />
+            <ConsoleMockup :name="widget" />
           </div>
           <div
             v-else
@@ -179,7 +179,7 @@
             />
           </div>
         </div>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

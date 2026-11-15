@@ -7,7 +7,7 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: b9ed88cab37399fb93d78014113fdbff8a7603513de483f12f3af5af9ee3ca5b
+checksum: bff15405fe236f3c7c572fb2c321f0bcb8b5d00d1071b2e2a1c3581fe9569e0f
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -28,13 +28,13 @@ Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. 
 ## When NOT to use
 
 - The rows live in a data-driven `table` → set `paginated` on the table; it renders this pagination in its footer and wires it for you.
-- It is the previous / next pair at the end of a documentation page → use `doc-prev-next`.
+- It is the previous / next pair at the end of a documentation page → use `doc-previous-next`.
 - The content loads more as the reader scrolls or clicks "Load more" → use a `button` at the end of the list.
 
 ## Related
 
 - `table` — renders a wired pagination in its footer when `paginated` is set.
-- `doc-prev-next` — previous / next links between documentation pages, not numbered pages of a list.
+- `doc-previous-next` — previous / next links between documentation pages, not numbered pages of a list.
 
 ## Best practices
 

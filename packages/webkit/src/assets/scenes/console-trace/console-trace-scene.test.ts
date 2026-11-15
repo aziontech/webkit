@@ -50,7 +50,7 @@ describe('ConsoleTraceScene', () => {
   it('draws the run logs on the logs tab', () => {
     const { getByTestId, queryByTestId } = render(host({ tab: 'logs', animated: false }))
 
-    expect(getByTestId('code-log-view')).toHaveTextContent('Invocation completed · 200')
+    expect(getByTestId('code-log-viewer')).toHaveTextContent('Invocation completed · 200')
     expect(queryByTestId('code-trace')).toBeNull()
   })
 
@@ -58,7 +58,7 @@ describe('ConsoleTraceScene', () => {
     const { getByTestId } = render(host({ tab: 'path', animated: false }))
     const flow = getByTestId('data-flow')
 
-    expect(flow.querySelectorAll('[data-slot="flow-node"]')).toHaveLength(4)
+    expect(flow.querySelectorAll('[data-slot="flow-diagram-node"]')).toHaveLength(4)
     for (const hop of ['storefront-prod', 'storefront', 'image-optimizer', 'origin-assets']) {
       expect(flow).toHaveTextContent(hop)
     }

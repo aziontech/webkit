@@ -11,7 +11,7 @@ const BY_COMPONENT_FOLDER = {
 }
 
 const BY_COMPONENT = {
-  'layout/frame-box': 'site',
+  'layout/registration-frame': 'site',
   'layout/site-layout': 'site'
 }
 

@@ -1,0 +1,295 @@
+<script setup lang="ts">
+  import { computed, onScopeDispose, ref, watch } from 'vue'
+
+  import { useMediaQuery } from '../../../../composables/use-media-query'
+  import Button from '../../../actions/button/button.vue'
+  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import Input from '../../../inputs/input/input.vue'
+  import Badge from '../../badge/badge.vue'
+  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
+  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import MockupCursor from '../parts/mockup-cursor.vue'
+
+  defineOptions({ name: 'RealTimeEventsFilterFragment' })
+
+  interface Props {
+    /** Whether this fragment is the one showing. */
+    active?: boolean
+    /** Whether the pointer is over the fragment's card; the Source filter is opened and WAF picked from it while it is, and taken back out after. */
+    hovered?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
+
+  const canHover = useMediaQuery('(hover: hover)', true)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+
+  const FIELDS = [
+    { id: 'period', label: 'Period' },
+    { id: 'source', label: 'Source' },
+    { id: 'level', label: 'Level' }
+  ]
+
+  const SOURCES = [
+    { id: 'http', label: 'HTTP Requests' },
+    { id: 'waf', label: 'WAF' },
+    { id: 'functions', label: 'Functions' },
+    { id: 'firewall', label: 'Firewall' }
+  ]
+
+  interface Frame {
+    cursor: MockupCursorTarget
+    press: boolean
+    level: 'fields' | 'values'
+    hovered: string
+    picked: boolean
+    forward: number
+    back: number
+  }
+
+  const IDLE: MockupCursorTarget = { key: 'row-source', x: 1.12, y: 2.2 }
+  const SOURCE: MockupCursorTarget = { key: 'row-source', x: 0.4, y: 0.55 }
+  const WAF: MockupCursorTarget = { key: 'row-waf', x: 0.4, y: 0.55 }
+
+  const REST = {
+    cursor: IDLE,
+    press: false,
+    level: 'fields' as const,
+    hovered: '',
+    picked: false
+  }
+
+  const VALUES = { ...REST, level: 'values' as const }
+
+  const FRAMES: Frame[] = [
+    { ...REST, forward: 0, back: 0 },
+    { ...REST, cursor: SOURCE, hovered: 'source', forward: 160, back: 420 },
+    { ...REST, cursor: SOURCE, hovered: 'source', press: true, forward: 460, back: 120 },
+    { ...VALUES, cursor: SOURCE, press: true, forward: 140, back: 260 },
+    { ...VALUES, cursor: WAF, hovered: 'waf', forward: 420, back: 420 },
+    { ...VALUES, cursor: WAF, hovered: 'waf', press: true, forward: 460, back: 120 },
+    { ...VALUES, cursor: WAF, hovered: 'waf', press: true, picked: true, forward: 120, back: 220 },
+    { ...VALUES, cursor: WAF, hovered: 'waf', picked: true, forward: 160, back: 160 }
+  ]
+
+  const LAST = FRAMES.length - 1
+
+  const wanted = () => props.active && (props.hovered || !canHover.value)
+
+  const step = ref(0)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
+
+  const frame = computed(() => FRAMES[step.value])
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
+
+  const appliedCount = computed(() => (frame.value.picked ? 2 : 1))
+
+  const summary = (id: string) => {
+    if (id === 'period') return 'Last 24 hours'
+    if (id === 'source' && frame.value.picked) return 'WAF'
+    return ''
+  }
+
+  const picked = (id: string) => id === 'waf' && frame.value.picked
+
+  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
+
+  const halt = () => {
+    if (timer) globalThis.clearTimeout(timer)
+    timer = null
+  }
+
+  const advance = () => {
+    halt()
+    const target = wanted() ? LAST : 0
+    if (step.value === target) return
+    if (reduced.value || !canHover.value) {
+      step.value = target
+      return
+    }
+    const forward = target > step.value
+    const next = step.value + (forward ? 1 : -1)
+    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
+    timer = globalThis.setTimeout(() => {
+      step.value = next
+      advance()
+    }, delay)
+  }
+
+  watch(wanted, advance, { immediate: true })
+
+  onScopeDispose(halt)
+</script>
+
+<template>
+  <ConsoleMockupShell
+    variant="bare"
+    fade="bottom"
+    class="[--mockup-fade-start:80%]"
+    :chrome="false"
+    :active="active"
+    :width="420"
+    :mobile-width="380"
+  >
+    <div
+      ref="stage"
+      class="relative flex flex-col gap-(--spacing-2xs) py-(--spacing-xs)"
+    >
+      <ConsoleMockupShellItem :order="0">
+        <div class="flex items-center gap-(--spacing-xs)">
+          <span class="relative shrink-0">
+            <Button
+              label="Filter"
+              variant="outline"
+              size="medium"
+              icon="ai ai-filter"
+            />
+            <Badge
+              :label="String(appliedCount)"
+              variant="primary"
+              size="small"
+              aria-hidden="true"
+              class="pointer-events-none absolute -top-2 -end-2 min-w-5"
+            />
+          </span>
+          <Input
+            model-value=""
+            size="medium"
+            placeholder="Search events, hosts, paths or addresses"
+            aria-label="Search events"
+            class="min-w-0 grow"
+          >
+            <template #leading>
+              <i
+                class="ai ai-search"
+                aria-hidden="true"
+              />
+            </template>
+          </Input>
+        </div>
+      </ConsoleMockupShellItem>
+
+      <ConsoleMockupShellItem :order="1">
+        <div
+          class="grid w-fit min-w-(--container-3xs) max-w-(--container-xs) overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm)"
+        >
+          <div
+            :data-active="frame.level === 'fields' || null"
+            :aria-hidden="frame.level !== 'fields'"
+            class="flex -translate-x-[12%] flex-col opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance [grid-area:1/1] data-active:translate-x-0 data-active:opacity-100 motion-reduce:transition-none"
+          >
+            <div class="border-b border-(--border-default) p-(--spacing-xs)">
+              <Input
+                model-value=""
+                size="medium"
+                class="w-full"
+                placeholder="Filter by…"
+                aria-label="Search filter fields"
+              >
+                <template #leading>
+                  <i
+                    class="ai ai-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Input>
+            </div>
+            <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-2xs)">
+              <span
+                v-for="field in FIELDS"
+                :key="field.id"
+                :data-cursor="`row-${field.id}`"
+                :data-hovered="(frame.level === 'fields' && frame.hovered === field.id) || null"
+                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-hovered:bg-(--bg-hover) motion-reduce:transition-none"
+              >
+                <span class="grow truncate">{{ field.label }}</span>
+                <span
+                  v-if="summary(field.id)"
+                  class="truncate text-(--text-muted)"
+                >
+                  {{ summary(field.id) }}
+                </span>
+                <i
+                  class="ai ai-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                  aria-hidden="true"
+                />
+              </span>
+            </div>
+          </div>
+
+          <div
+            :data-active="frame.level === 'values' || null"
+            :aria-hidden="frame.level !== 'values'"
+            class="flex translate-x-[12%] flex-col opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance [grid-area:1/1] data-active:translate-x-0 data-active:opacity-100 motion-reduce:transition-none"
+          >
+            <div
+              class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
+            >
+              <IconButton
+                icon="ai ai-chevron-left"
+                variant="outline"
+                size="small"
+                ariaLabel="Back to all filters"
+              />
+              <span class="truncate text-label-sm text-(--text-default)">Source</span>
+            </div>
+            <div class="border-b border-(--border-default) p-(--spacing-xs)">
+              <Input
+                model-value=""
+                size="medium"
+                class="w-full"
+                placeholder="Filter source…"
+                aria-label="Search Source values"
+              >
+                <template #leading>
+                  <i
+                    class="ai ai-search"
+                    aria-hidden="true"
+                  />
+                </template>
+              </Input>
+            </div>
+            <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-2xs)">
+              <span
+                v-for="source in SOURCES"
+                :key="source.id"
+                :data-cursor="`row-${source.id}`"
+                :data-hovered="(frame.level === 'values' && frame.hovered === source.id) || null"
+                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-hovered:bg-(--bg-hover) motion-reduce:transition-none"
+              >
+                <span class="grow truncate">{{ source.label }}</span>
+                <i
+                  :data-selected="picked(source.id) || null"
+                  class="ai ai-check shrink-0 text-(--text-default) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-selected:opacity-100 motion-reduce:transition-none"
+                  aria-hidden="true"
+                />
+              </span>
+            </div>
+            <div
+              :data-state="frame.picked ? 'open' : 'closed'"
+              class="border-t border-(--border-default) p-(--spacing-2xs) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
+            >
+              <span
+                class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"
+              >
+                <i
+                  class="ai ai-filter-off text-(--text-muted)"
+                  aria-hidden="true"
+                />
+                Clear Source
+              </span>
+            </div>
+          </div>
+        </div>
+      </ConsoleMockupShellItem>
+
+      <MockupCursor
+        name="Jane"
+        :x="position.x"
+        :y="position.y"
+        :pressed="frame.press"
+      />
+    </div>
+  </ConsoleMockupShell>
+</template>

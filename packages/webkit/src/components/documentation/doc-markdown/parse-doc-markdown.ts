@@ -1,5 +1,5 @@
 import { type MarkdownInline, parseInline, plainText } from '../../ai/lib/parse-markdown'
-import { slugify } from '../doc-update/slugify'
+import { slugify } from '../doc-changelog-entry/slugify'
 
 /** An attribute value an MDX tag may carry. */
 export type DocMarkdownValue = string | number | boolean | string[]

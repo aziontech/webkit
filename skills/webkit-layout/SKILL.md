@@ -52,10 +52,10 @@ component, composed once in `App.vue` around `RouterView`:
 - **Console:** `ConsoleLayout` — rail, header, breadcrumbs, ⌘K palette, account. It renders the
   `<main>` and pads nothing: the page body carries its own boundary and measure
   (`layout-boundary` + `layout-column` on a list or form; a detail page opens flush on `PageTabs`).
-- **Site:** `SiteLayout` — `SiteNav`, the page's sections in its `<main>`, `SiteFooter` last.
+- **Site:** `SiteLayout` — `SiteHeader`, the page's sections in its `<main>`, `SiteFooter` last.
 - **Docs:** `DocLayout` — sticky header and rails around the article; the document scrolls.
 
-A page never renders `AppLayout`, `Sidebar`, `GlobalHeader`, `SiteNav`, `SiteFooter`, a `Command`
+A page never renders `AppLayout`, `Sidebar`, `AppHeader`, `SiteHeader`, `SiteFooter`, a `Command`
 palette or a second `<main>`. A copied block that still inlines a shell gives you its `<main>`'s
 content and nothing else.
 
@@ -267,8 +267,8 @@ allowed outside the frame, and it says so in a token of its own — which is wha
 reviewable in both directions. Nobody widens the bar by retuning the page, and nobody widens the page
 by retuning the bar.
 
-The bar is **`--layout-header-height`** tall (56px, the `GlobalHeader` height). A band that fills the
-first screen under it takes that token out of the screen: `HeroBand` does by default (`headerOffset`),
+The bar is **`--layout-header-height`** tall (56px, the `AppHeader` height). A band that fills the
+first screen under it takes that token out of the screen: `HeroSection` does by default (`headerOffset`),
 and a bare `Hero variant="screen"` takes `offset="var(--layout-header-height)"`. Never a literal.
 
 **A grid of cards fills its rows.** A framed or divided card grid (`CardGrid`, and every section
@@ -336,7 +336,7 @@ ask the window. Two scales (both in `@aziontech/theme`, "Breakpoints and contain
 
 The components that live in panels already do this, so a page gets it for free: `Table` (the grid
 scrolls sideways inside its own viewport; `stackable` opts a short list into label/value cards),
-`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingRow` (keeps its
+`PageHeader` and `SectionHeader` (actions drop under the title, full width), `SettingsRow` (keeps its
 two columns, the description clamped; `stackable` moves a field under its copy), `SettingsSection`, `SaveBar` (actions stack full width, Save on top),
 `Card` (its content is `@container/card`), `Alert` (the action takes its own line), `EmptyState`,
 `Pagination` (the strip and page-size control wrap under the info text; the page list stays whole), `Wizard` (the rail hides when the
@@ -395,7 +395,7 @@ truncating text `min-w-0`.
 - **NEVER** hand-roll a fixed `grid-cols-3` / `grid-cols-4` of cards whose count varies, pad a list
   to fill the last row, or pick `columns` from the item count — compose `CardGrid` and let its
   default balanced layout fill the rows.
-- **NEVER** wrap `SiteFooter` or `SiteNav` in a bordered or padded `div`; they draw their own rules.
+- **NEVER** wrap `SiteFooter` or `SiteHeader` in a bordered or padded `div`; they draw their own rules.
 - **NEVER** compose the chrome in a page: one `ConsoleLayout` / `SiteLayout` / `DocLayout` in
   `App.vue`, and every page is only the body of its default slot.
 - **NEVER** cap the app layout — `ConsoleLayout`'s rail, its header and its content region stay

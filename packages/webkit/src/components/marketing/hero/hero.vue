@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import { computed, defineAsyncComponent, useAttrs } from 'vue'
 
-  import TextureMaterial, {
-    type TextureMaterialFade,
-    type TextureMaterialSize,
-    type TextureMaterialVariant
-  } from '../texture-material/texture-material.vue'
+  import Texture, {
+    type TextureFade,
+    type TextureSize,
+    type TextureVariant
+  } from '../texture/texture.vue'
 
-  const Ticker = defineAsyncComponent(() => import('../ticker/ticker.vue'))
+  const Marquee = defineAsyncComponent(() => import('../marquee/marquee.vue'))
 
   defineOptions({
     name: 'Hero',
@@ -41,15 +41,15 @@
     /** Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with. */
     size?: HeroSize
     /** Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot. */
-    texture?: TextureMaterialVariant
+    texture?: TextureVariant
     /** Pitch of the tiling the `texture` prop paints — how far apart its cells sit. */
-    textureSize?: TextureMaterialSize
+    textureSize?: TextureSize
     /** Fade applied to the layer the `texture` prop paints. */
-    textureFade?: TextureMaterialFade
+    textureFade?: TextureFade
     /** Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip. */
-    floorTexture?: TextureMaterialVariant
+    floorTexture?: TextureVariant
     /** Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit. */
-    floorTextureSize?: TextureMaterialSize
+    floorTextureSize?: TextureSize
     /** Where the content column sits vertically when the band fills a screen. */
     align?: HeroAlign
     /** Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. */
@@ -58,12 +58,12 @@
     offset?: string
     /** Height of the window under the content, where the brand strip and the floor texture stand; any CSS length. */
     bottomHeight?: string
-    /** Stand the brand ticker on the band's floor, under the `bottom` window. */
-    ticker?: boolean
-    /** Registry names of the marks the ticker shows, in order. */
-    tickerMarks?: string[]
-    /** Overline above the brand ticker, stating the claim the marks make. */
-    tickerLabel?: string
+    /** Stand the brand marquee on the band's floor, under the `bottom` window. */
+    marquee?: boolean
+    /** Registry names of the marks the marquee shows, in order. */
+    marqueeMarks?: string[]
+    /** Eyebrow above the brand marquee, stating the claim the marks make. */
+    marqueeLabel?: string
   }
 
   const props = withDefaults(defineProps<HeroProps>(), {
@@ -81,9 +81,9 @@
     mediaAlign: 'center',
     offset: '',
     bottomHeight: '',
-    ticker: false,
-    tickerMarks: () => [],
-    tickerLabel: ''
+    marquee: false,
+    marqueeMarks: () => [],
+    marqueeLabel: ''
   })
 
   const slots = defineSlots<{
@@ -133,7 +133,7 @@
       <div
         class="absolute inset-0 [--texture-fade-lead:transparent] [translate:var(--banner-background-x,0)_var(--banner-background-y,0)]"
       >
-        <TextureMaterial
+        <Texture
           v-if="texture !== 'none'"
           :variant="texture"
           :size="textureSize"
@@ -182,7 +182,7 @@
     </div>
 
     <div
-      v-if="slots.bottom || hasFloorTexture || ticker"
+      v-if="slots.bottom || hasFloorTexture || marquee"
       class="relative w-full shrink-0 [background-color:var(--banner-floor-bg,transparent)] [z-index:var(--banner-z-bottom,1)]"
     >
       <div
@@ -190,7 +190,7 @@
         :data-floor="hasFloorTexture || null"
         class="relative w-full overflow-hidden [height:var(--banner-bottom-height,auto)] data-[floor]:[height:var(--banner-bottom-height,clamp(9rem,30dvh,34rem))]"
       >
-        <TextureMaterial
+        <Texture
           v-if="hasFloorTexture"
           :variant="floorTexture"
           :size="floorTextureSize"
@@ -206,13 +206,13 @@
       </div>
 
       <div
-        v-if="ticker"
+        v-if="marquee"
         class="w-full [background-color:var(--banner-floor-bg,var(--bg-canvas))]"
       >
-        <Ticker
+        <Marquee
           :data-width="maxWidth"
-          :marks="tickerMarks"
-          :label="tickerLabel"
+          :marks="marqueeMarks"
+          :label="marqueeLabel"
           size="small"
           class="mx-auto w-full px-(--layout-boundary-inline) py-(--spacing-xl) data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none"
         />

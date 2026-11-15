@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SectionHeader from '@aziontech/webkit/section-header'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, reactive, type Ref, ref } from 'vue'
@@ -70,7 +70,7 @@
           >
             <legend class="sr-only">General</legend>
             <Item.List>
-              <SettingRow
+              <SettingsRow
                 title="Full name"
                 description="The name shown across your account."
               >
@@ -88,17 +88,16 @@
                         generalSubmitted && nameEmpty ? 'group-full-name-error' : undefined
                       "
                     />
-                    <HelperText
+                    <FieldError
                       v-if="generalSubmitted && nameEmpty"
                       id="group-full-name-error"
-                      type="required"
-                      label="This field is required."
-                    />
+                      >This field is required.</FieldError
+                    >
                   </div>
                 </div>
-              </SettingRow>
+              </SettingsRow>
 
-              <SettingRow
+              <SettingsRow
                 title="Language"
                 description="The interface language."
               >
@@ -125,7 +124,7 @@
                     </Select.Content>
                   </Select>
                 </div>
-              </SettingRow>
+              </SettingsRow>
             </Item.List>
           </fieldset>
         </template>
@@ -156,7 +155,7 @@
           >
             <legend class="sr-only">Notifications</legend>
             <Item.List>
-              <SettingRow
+              <SettingsRow
                 title="Product updates"
                 description="Occasional emails about new features and changes."
                 variant="compact"
@@ -166,9 +165,9 @@
                   aria-label="Product updates"
                   :disabled="savingNotifications"
                 />
-              </SettingRow>
+              </SettingsRow>
 
-              <SettingRow
+              <SettingsRow
                 title="Security alerts"
                 description="Emails when a sign-in or key change is detected."
                 variant="compact"
@@ -178,7 +177,7 @@
                   aria-label="Security alerts"
                   :disabled="savingNotifications"
                 />
-              </SettingRow>
+              </SettingsRow>
             </Item.List>
           </fieldset>
         </template>

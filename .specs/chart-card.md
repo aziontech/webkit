@@ -3,7 +3,7 @@ name: chart-card
 category: chart
 structure: composition
 status: implemented
-checksum: 33b9b11a277eb6b0688ec85b7253893a048445910750eafbeab52f9dcb9dc841
+checksum: 6e3d4b0997acdeb5cb893192c98d2cd7dbcb1f899be597a11753c37ea138948a
 spec_version: 6
 created: 2026-10-20
 last_updated: 2026-11-15
@@ -27,7 +27,7 @@ The box a dashboard chart lives in: a header with the title, the description and
 - A KPI figure → use `stat-tile`, which is its own surface.
 - A general content card with no chart → use `card`.
 - A chart inline in a page section with its own heading → render `chart` alone.
-- A table, a log or a form panel on a dashboard that is not a chart → use `card` (composed in a `board` item for span and height); a grid of draggable, resizable cards → let `board` / `board-item` own the span, the height and their bounds.
+- A table, a log or a form panel on a dashboard that is not a chart → use `card` (composed in a `dashboard-grid` item for span and height); a grid of draggable, resizable cards → let `dashboard-grid` / `dashboard-grid-item` own the span, the height and their bounds.
 
 ## Related
 

@@ -83,7 +83,7 @@ export const CATEGORIES = [
   'code',
   'content',
   'data',
-  'documentation',
+  'docs',
   'feedback',
   'input',
   'layout',
@@ -102,7 +102,7 @@ export const CATEGORY_RENAMES = {
   overlays: 'overlay',
   utils: 'feedback (spinner) or provider (webkit-provider)',
   templates: '(no such category)',
-  docs: 'documentation'
+  documentation: 'docs'
 }
 
 export const BLOCK_GROUPS = [
@@ -186,19 +186,20 @@ export const DOMAIN_PARTS = {
   ],
   'chart-card': ['action', 'controls', 'handle'],
   'chat-message': ['actions', 'feedback'],
-  'column-navigation': ['column'],
+  'link-directory': ['column'],
   'console-layout': ['breadcrumb'],
+  'console-mockup': ['shell'],
   'context-menu': ['sub'],
   command: ['empty', 'input', 'page'],
   'data-table': ['cell', 'row', 'column', 'toolbar', 'search', 'filter', 'export', 'button'],
   'date-picker': ['clear'],
   'dropdown-menu': ['sub'],
   field: ['error', 'legend', 'set'],
-  flow: ['anchor', 'node', 'parallel'],
+  'flow-diagram': ['anchor', 'node', 'parallel'],
   footer: ['column', 'link'],
   'input-group': ['addon', 'input'],
   item: ['actions', 'media'],
-  'log-view': ['steps'],
+  'log-viewer': ['steps'],
   pagination: ['button', 'size'],
   resizable: ['handle', 'pane'],
   'sidebar-menu': ['back', 'sub'],
@@ -285,7 +286,7 @@ export const SYNONYMS = {
 
 export const NAME_WORD_EXEMPT = new Set(['template-gallery', 'deploy-template', 'template-browser'])
 
-export const PLURAL_ROOTS_ALLOWED = new Set(['tabs', 'settings', 'stats', 'news'])
+export const PLURAL_ROOTS_ALLOWED = new Set(['tabs', 'steps', 'settings', 'stats', 'news'])
 
 export const EXAMPLE_RENAMES = {
   types: 'variants',
@@ -1043,7 +1044,11 @@ export function checkI18n(rel, text, ctx) {
     )
   ]
   const known = ctx?.componentNames ? new Set(owners.map(kebabToCamel)) : null
-  const locale = rel.split('/').pop().replace(/\.ts$|-/g, '').toLowerCase()
+  const locale = rel
+    .split('/')
+    .pop()
+    .replace(/\.ts$|-/g, '')
+    .toLowerCase()
   for (const m of text.matchAll(/export\s+const\s+(\w+)\s*=/g)) {
     const ns = m[1]
     const line = lineOf(text, m.index)
@@ -1564,6 +1569,17 @@ export function checkExportKeys(rel, text) {
     if (segs.length !== 1) continue
     for (const problem of nameWordProblems(key))
       out.push(v('near-duplicate', rel, line, `export "./${key}" uses ${problem} (${RULE_DOC}).`))
+    const target = pkg.exports[`./${key}`]
+    const file = typeof target === 'string' ? target : (target?.default ?? '')
+    if (key.startsWith('use-') && !file.includes('/composables/'))
+      out.push(
+        v(
+          'near-duplicate',
+          rel,
+          line,
+          `export "./${key}" starts with "use-", which is reserved for composables (${RULE_DOC}).`
+        )
+      )
     if (
       key.endsWith('s') &&
       !PLURAL_ROOTS_ALLOWED.has(key.split('-').pop()) &&

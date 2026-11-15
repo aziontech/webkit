@@ -1,11 +1,11 @@
 <script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -13,7 +13,7 @@
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -110,7 +110,11 @@
     companySize: '',
     industry: ''
   })
-  const errors = reactive<{ name: string; nameKind: HelperTextType; workspace: string }>({
+  const errors = reactive<{
+    name: string
+    nameKind: 'helper' | 'invalid' | 'required'
+    workspace: string
+  }>({
     name: '',
     nameKind: 'required',
     workspace: ''
@@ -183,15 +187,15 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Console">
-      <GlobalHeader.Start>
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to console"
           variant="outline"
           size="small"
         />
-        <GlobalHeader.Brand>
+        <AppHeader.Brand>
           <a
             href="/home"
             aria-label="Azion home"
@@ -202,11 +206,11 @@
               size="small"
             />
           </a>
-        </GlobalHeader.Brand>
+        </AppHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Start>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -219,8 +223,8 @@
             variant="square"
           />
         </button>
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
       <form
@@ -253,7 +257,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="Usually your company's name. Everyone you invite sees it."
                       >
@@ -272,14 +276,13 @@
                           "
                           @update:model-value="errors.name = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.name"
                           id="create-organization-name-message"
-                          :type="errors.nameKind"
-                          :label="errors.name"
-                        />
-                      </SettingRow>
-                      <SettingRow
+                          >{{ errors.name }}</FieldError
+                        >
+                      </SettingsRow>
+                      <SettingsRow
                         title="Mark"
                         description="How the organization is identified in the header and the switcher."
                         variant="stacked"
@@ -334,7 +337,7 @@
                             </span>
                           </div>
                         </div>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -386,7 +389,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="Where the organization's first workloads and resources live. You can add more workspaces once the organization exists."
                       >
@@ -404,13 +407,12 @@
                           "
                           @update:model-value="errors.workspace = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.workspace"
                           id="create-organization-workspace-message"
-                          type="required"
-                          :label="errors.workspace"
-                        />
-                      </SettingRow>
+                          >{{ errors.workspace }}</FieldError
+                        >
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -426,7 +428,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         v-for="question in EXTRA"
                         :key="question.key"
                         :title="question.label"
@@ -452,7 +454,7 @@
                             </Select.Item>
                           </Select.Content>
                         </Select>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

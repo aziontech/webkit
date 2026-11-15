@@ -65,7 +65,7 @@ packages/webkit/src/components/actions/button/
 - The canonical files for cross-reference (read-only):
   - `packages/webkit/src/components/actions/button/button.vue`
   - `packages/webkit/src/components/actions/icon-button/icon-button.vue`
-  - `packages/webkit/src/components/content/card-pricing/card-pricing.vue`
+  - `packages/webkit/src/components/content/pricing-card/pricing-card.vue`
 
 ## Workflow
 
@@ -143,16 +143,14 @@ packages/webkit/src/components/actions/button/
    <template>
      <div
        :data-testid="testId"
-       :class="
-         cn('rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-4)', attrs.class)
-       "
+       :class="cn('rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-4)', attrs.class)"
      />
    </template>
    ```
 
    Never write a `<style>` block. Never declare a `.css`/`.scss` file inside the component directory. Never declare any JavaScript variable that holds a class string (`const variantClasses = {...}`, `const sharedClasses = [...]`, etc.). Variants are HTML data-attributes, not JS dictionaries.
 
-   **Never use backtick template literals inside `<template> :class="cn(\`...\`)"`** — the Vue HTML parser throws `Element is missing end tag` and Vite fails to load the component. Put the flat class string in `<script setup>` as `const ROOT_CLASS = '...'` and bind `:class="cn(ROOT_CLASS, attrs.class)"`, or use a plain multiline `class="..."` on the root. See [`.claude/rules/styling.md`](../../rules/styling.md) § "Vue SFC pitfall".
+   **Never use backtick template literals inside `<template> :class="cn(\`...\`)"`** — the Vue HTML parser throws `Element is missing end tag`and Vite fails to load the component. Put the flat class string in`<script setup>`as`const ROOT_CLASS = '...'`and bind`:class="cn(ROOT_CLASS, attrs.class)"`, or use a plain multiline `class="..."` on the root. See [`.claude/rules/styling.md`](../../rules/styling.md) § "Vue SFC pitfall".
 
    **Never put HTML-like tags in script JSDoc** (e.g. `` `<a>` ``, `<template>`) — a build that runs `@vitejs/plugin-vue` twice re-parses compiled JS and fails with the same error. Use plain language ("anchor link") instead.
 
@@ -185,19 +183,19 @@ packages/webkit/src/components/actions/button/
 
 4b. **(Composition only) Write the compound `index.ts`** at the root level (sibling of `<name>.vue`). The root is the default export with every public sub-component attached via `Object.assign`. Member names mirror the spec's Sub-components section — strip the `<name>-` prefix and PascalCase (`dialog-trigger` → `Trigger`). Use a generic name only when the spec does (`SortButton`, not `Trigger`, when the part opens no `Content`). See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
 
-   ```ts
-   // index.ts — one source of truth; vue-tsc derives index.d.ts from it.
-   import Dialog from './dialog.vue'
-   import DialogTrigger from './dialog-trigger/dialog-trigger.vue'
-   import DialogContent from './dialog-content/dialog-content.vue'
+```ts
+// index.ts — one source of truth; vue-tsc derives index.d.ts from it.
+import Dialog from './dialog.vue'
+import DialogTrigger from './dialog-trigger/dialog-trigger.vue'
+import DialogContent from './dialog-content/dialog-content.vue'
 
-   export default Object.assign(Dialog, {
-     Trigger: DialogTrigger,
-     Content: DialogContent
-   })
-   ```
+export default Object.assign(Dialog, {
+  Trigger: DialogTrigger,
+  Content: DialogContent
+})
+```
 
-   **The index is `.ts`, not `.js`** — `vue-tsc` cannot derive declarations from a plain `.js` (no `allowJs`), so `<Dialog.Trigger>` would be untyped. **Do not hand-write `index.d.ts`** — it is gitignored and generated at publish time (by the publish workflow), not in dev. The package is consumed as source (the exports map points at `./src/...`, and `.vue` files already import `.ts` like `injection-key.ts`), so the consumer transpiles `index.ts` the same way.
+**The index is `.ts`, not `.js`** — `vue-tsc` cannot derive declarations from a plain `.js` (no `allowJs`), so `<Dialog.Trigger>` would be untyped. **Do not hand-write `index.d.ts`** — it is gitignored and generated at publish time (by the publish workflow), not in dev. The package is consumed as source (the exports map points at `./src/...`, and `.vue` files already import `.ts` like `injection-key.ts`), so the consumer transpiles `index.ts` the same way.
 
 5. **Update `packages/webkit/package.json#exports`** — add one entry per public component (the compound root, the standalone root, and each public sub-component) preserving alphabetical order inside the category. The **public export path stays flat** (`./<name>-<part>`) so consumers don't see the folder nesting; only the right-hand side changes.
 
@@ -266,7 +264,7 @@ packages/webkit/src/components/actions/button/
 
 - Every prop, event, slot, and sub-component MUST come from the spec — no inventions. (`validate-spec-compliance.mjs` enforces this on Write; it will reject the run if you stray.)
 - (Composition only) Emit the compound `index.ts` (vue-tsc generates `index.d.ts` at publish; never hand-write it) and point the root export → `index.ts`; **also add the standalone `./<name>-root` export → root `.vue`** for tree-shaking. Member names mirror the component's anatomy. Never invent overlay part names (`Trigger`/`Content`) on a component with no open/closed state. See [`.claude/rules/compound-api.md`](../../rules/compound-api.md).
-- Use the canonicals (`button.vue`, `card-pricing.vue`) as the **shape** reference — but substitute spec content, never copy spec content from a canonical.
+- Use the canonicals (`button.vue`, `pricing-card.vue`) as the **shape** reference — but substitute spec content, never copy spec content from a canonical.
 - `withDefaults` mirrors the spec's Default column **exactly**. An optional string prop that holds renderable text defaults to `''` (`value: ''`, `label: ''`) — never `value: undefined`, never the literal `'undefined'`. Reserve `undefined` (unquoted) for props where absence ≠ empty: controlled state (`open`, `modelValue`) or an optional resource whose presence toggles rendering (`src`). When the spec's Default cell is wrong on this point, stop with `BLOCKED: prop <name> defaults to 'undefined' — should be '' (empty string)`; do not silently copy it.
 - All visual tokens come from [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md). No HEX, no Tailwind palette, no raw typography.
 - A zero length carries **no unit**: `0`, never `0px` / `0rem` / `0em` — in arbitrary values (`p-[0px]`), inline `style`, or any emitted value. Units that mean something at zero (`0%`, `0s`, `0deg`, `0fr`) are fine, and inside `calc()`/`min()`/`max()`/`clamp()` — where CSS requires a unit — the zero is `0rem`. See [`.claude/rules/styling.md`](../../rules/styling.md).

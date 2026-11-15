@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 9cff8b1734fa38cda063d1f211ef557764222aadfcf63549739230b68210cf1d
+checksum: 99de103c6d79253a501f51eaf780ff1bbc23017a88f85c8cbb03bc1c3336a27d
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-15
@@ -28,14 +28,14 @@ The framed content column: a centered, width-capped block carrying only its two 
 - For the full-bleed band at the top of a page → use `hero`, which is the hero rule.
 - For one band inside the column → use `section-module`, the brick this container stacks.
 - For a hairline grid of cells → use `card-grid`, which draws its rules as gaps.
-- For a bordered box around arbitrary content → use `frame-box`.
+- For a bordered box around arbitrary content → use `registration-frame`.
 
 ## Related
 
 - `hero` — the full-bleed opening band above this column; its `border-b` is this column's top edge.
 - `section-module` — the brick stacked inside this column.
 - `card-grid` — the hairline cell grid a module's body holds.
-- `frame-box` — the registration frame a module wraps its body in.
+- `registration-frame` — the registration frame a module wraps its body in.
 
 ## Best practices
 
@@ -47,13 +47,17 @@ The framed content column: a centered, width-capped block carrying only its two 
 
 ```vue
 <script setup>
-import SectionContainer from '@aziontech/webkit/section-container'
-import SectionModule from '@aziontech/webkit/section-module'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionModule from '@aziontech/webkit/section-module'
 </script>
 
 <template>
   <SectionContainer max-width="site">
-    <SectionModule :divided="false" title="What it does">…</SectionModule>
+    <SectionModule
+      :divided="false"
+      title="What it does"
+      >…</SectionModule
+    >
     <SectionModule title="How it works">…</SectionModule>
   </SectionContainer>
 </template>
@@ -61,11 +65,11 @@ import SectionModule from '@aziontech/webkit/section-module'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `maxWidth` | `SectionContainerWidth` | `'7xl'` | false | Width the column is capped at; `site` is the marketing measure every band of that page frame shares. |
-| `bordered` | `boolean` | `true` | false | Draw the column's two vertical rules. |
-| `padded` | `boolean` | `false` | false | Pad the column itself. Leave off for a stack of modules that own their padding. |
+| Prop       | Type                    | Default | Required | JSDoc                                                                                                |
+| ---------- | ----------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------- |
+| `maxWidth` | `SectionContainerWidth` | `'7xl'` | false    | Width the column is capped at; `site` is the marketing measure every band of that page frame shares. |
+| `bordered` | `boolean`               | `true`  | false    | Draw the column's two vertical rules.                                                                |
+| `padded`   | `boolean`               | `false` | false    | Pad the column itself. Leave off for a stack of modules that own their padding.                      |
 
 ## Events
 
@@ -73,9 +77,9 @@ import SectionModule from '@aziontech/webkit/section-module'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The bands stacked inside the column, in reading order. |
+| Slot      | Scope | Notes                                                  |
+| --------- | ----- | ------------------------------------------------------ |
+| `default` | —     | The bands stacked inside the column, in reading order. |
 
 ## States
 
@@ -90,18 +94,18 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| column rule | `var(--border-default)` |
-| column inset | `var(--layout-boundary-inline)` |
-| column rhythm | `var(--spacing-2xl)` |
-| width cap | `var(--container-3xl)` … `var(--container-7xl)` |
+| Region        | Token (DESIGN.md)                               |
+| ------------- | ----------------------------------------------- |
+| column rule   | `var(--border-default)`                         |
+| column inset  | `var(--layout-boundary-inline)`                 |
+| column rhythm | `var(--spacing-2xl)`                            |
+| width cap     | `var(--container-3xl)` … `var(--container-7xl)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

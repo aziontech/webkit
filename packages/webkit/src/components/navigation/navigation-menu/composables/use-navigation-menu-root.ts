@@ -18,7 +18,7 @@ import {
 } from '../lib/change-event-details'
 import { waitForCloseTransition, waitForOpenTransition } from '../presets/animations'
 import {
-  type NavigationMenuPopupSize,
+  type NavigationMenuPopoverSize,
   useNavigationMenuViewportSize
 } from './use-navigation-menu-viewport-size'
 import { type TransitionStatus, useTransitionStatus } from './use-transition-status'
@@ -54,7 +54,7 @@ export interface UseNavigationMenuRootReturn {
   currentContentEl: Readonly<Ref<HTMLElement | null>>
   popupMounted: Readonly<Ref<boolean>>
   popupTransitionStatus: Readonly<Ref<TransitionStatus>>
-  popupSize: Readonly<Ref<NavigationMenuPopupSize | null>>
+  popupSize: Readonly<Ref<NavigationMenuPopoverSize | null>>
   instant: Readonly<Ref<boolean>>
   setViewportTargetEl: (element: HTMLElement | null) => void
   setPopupEl: (element: HTMLElement | null) => void

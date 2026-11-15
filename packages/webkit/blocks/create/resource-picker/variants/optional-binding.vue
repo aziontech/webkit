@@ -2,10 +2,10 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
@@ -165,7 +165,7 @@
     <Card :padded="false">
       <template #default>
         <Item.List>
-          <SettingRow
+          <SettingsRow
             title="Protect with a firewall"
             description="Filters requests before they reach your code. Off by default. Turn it on to bind an existing firewall, or create one with the project."
             variant="compact"
@@ -174,7 +174,7 @@
               v-model="enabled"
               aria-label="Protect with a firewall"
             />
-          </SettingRow>
+          </SettingsRow>
         </Item.List>
 
         <div
@@ -243,11 +243,9 @@
                     </template>
                   </Input>
 
-                  <HelperText
-                    v-if="firewallPicker.message"
-                    type="required"
-                    >{{ firewallPicker.message }}</HelperText
-                  >
+                  <FieldError v-if="firewallPicker.message">{{
+                    firewallPicker.message
+                  }}</FieldError>
                 </div>
 
                 <div class="border-t border-(--border-default)">
@@ -354,7 +352,7 @@
                   Firewall modules
                 </h3>
                 <Item.List>
-                  <SettingRow
+                  <SettingsRow
                     v-for="module in firewallModules"
                     :key="module.key"
                     :title="module.title"
@@ -374,7 +372,7 @@
                       v-model="modules[module.key]"
                       :aria-label="module.title"
                     />
-                  </SettingRow>
+                  </SettingsRow>
                 </Item.List>
               </div>
             </div>

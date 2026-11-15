@@ -7,7 +7,7 @@
   import type { TableColumn } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -18,7 +18,7 @@
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
   import type { SelectOptionItem } from '@aziontech/webkit/select-root'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
@@ -390,7 +390,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="A unique and descriptive name to identify the resource."
                       >
@@ -405,15 +405,14 @@
                             :required="nameError"
                             :aria-describedby="nameError ? 'resource-name-message' : undefined"
                           />
-                          <HelperText
+                          <FieldError
                             v-if="nameError"
                             id="resource-name-message"
-                            type="required"
-                            label="This field is required."
-                          />
+                            >This field is required.</FieldError
+                          >
                         </div>
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Active"
                         description="When disabled, the resource stops answering and traffic to its domains is refused. Its deployments are kept."
                         variant="compact"
@@ -423,7 +422,7 @@
                           aria-label="Active"
                           :disabled="saving"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -557,7 +556,7 @@
                       <Card :padded="false">
                         <template #default>
                           <Item.List>
-                            <SettingRow
+                            <SettingsRow
                               v-for="environment in linkedEnvironments"
                               :key="environment.name"
                               :title="environment.name"
@@ -611,7 +610,7 @@
                                   </Select.Item>
                                 </Select.Content>
                               </Select>
-                            </SettingRow>
+                            </SettingsRow>
                           </Item.List>
                         </template>
                       </Card>
@@ -626,7 +625,7 @@
                     <Card :padded="false">
                       <template #default>
                         <Item.List>
-                          <SettingRow
+                          <SettingsRow
                             title="HTTP ports"
                             description="The ports this resource answers plain HTTP on."
                           >
@@ -649,14 +648,13 @@
                                 </MultiSelect.Item>
                               </MultiSelect.Content>
                             </MultiSelect>
-                            <HelperText
+                            <FieldError
                               v-if="!form.protocols.httpPorts.length"
                               id="http-ports-message"
-                              :type="'required'"
-                              :label="'Select at least one HTTP port.'"
-                            />
-                          </SettingRow>
-                          <SettingRow
+                              >{{ 'Select at least one HTTP port.' }}</FieldError
+                            >
+                          </SettingsRow>
+                          <SettingsRow
                             title="HTTPS support"
                             description="Answer on both HTTP and HTTPS. Required by HTTP/3 and by mutual authentication."
                             variant="compact"
@@ -667,8 +665,8 @@
                               :disabled="saving"
                               @update:model-value="setHttps"
                             />
-                          </SettingRow>
-                          <SettingRow
+                          </SettingsRow>
+                          <SettingsRow
                             v-if="form.protocols.useHttps"
                             key="https-ports"
                             title="HTTPS ports"
@@ -693,14 +691,13 @@
                                 </MultiSelect.Item>
                               </MultiSelect.Content>
                             </MultiSelect>
-                            <HelperText
+                            <FieldError
                               v-if="!form.protocols.httpsPorts.length"
                               id="https-ports-message"
-                              :type="'required'"
-                              :label="'Select at least one HTTPS port.'"
-                            />
-                          </SettingRow>
-                          <SettingRow
+                              >{{ 'Select at least one HTTPS port.' }}</FieldError
+                            >
+                          </SettingsRow>
+                          <SettingsRow
                             title="HTTP/3 support"
                             description="Serve over HTTP/3 (QUIC) where the client supports it. Turns HTTPS support on with it."
                             variant="compact"
@@ -711,8 +708,8 @@
                               :disabled="saving"
                               @update:model-value="setHttp3"
                             />
-                          </SettingRow>
-                          <SettingRow
+                          </SettingsRow>
+                          <SettingsRow
                             v-if="form.protocols.useHttp3"
                             key="http3-ports"
                             title="HTTP/3 ports"
@@ -737,14 +734,13 @@
                                 </MultiSelect.Item>
                               </MultiSelect.Content>
                             </MultiSelect>
-                            <HelperText
+                            <FieldError
                               v-if="!form.protocols.http3Ports.length"
                               id="http3-ports-message"
-                              :type="'required'"
-                              :label="'Select at least one HTTP/3 port.'"
-                            />
-                          </SettingRow>
-                          <SettingRow
+                              >{{ 'Select at least one HTTP/3 port.' }}</FieldError
+                            >
+                          </SettingsRow>
+                          <SettingsRow
                             v-if="secure"
                             key="tls-version"
                             title="Minimum TLS version"
@@ -771,8 +767,8 @@
                                 </Select.Item>
                               </Select.Content>
                             </Select>
-                          </SettingRow>
-                          <SettingRow
+                          </SettingsRow>
+                          <SettingsRow
                             v-if="secure"
                             key="cipher-suite"
                             title="Cipher suite"
@@ -799,7 +795,7 @@
                                 </Select.Item>
                               </Select.Content>
                             </Select>
-                          </SettingRow>
+                          </SettingsRow>
                         </Item.List>
                       </template>
                     </Card>
@@ -813,7 +809,7 @@
                     <Card :padded="false">
                       <template #default>
                         <Item.List>
-                          <SettingRow
+                          <SettingsRow
                             title="Mutual authentication"
                             description="Require the client to present a certificate the resource can verify, as well as presenting its own."
                             variant="compact"
@@ -823,8 +819,8 @@
                               aria-label="Mutual authentication"
                               :disabled="saving || !form.protocols.useHttps"
                             />
-                          </SettingRow>
-                          <SettingRow
+                          </SettingsRow>
+                          <SettingsRow
                             v-if="armed"
                             key="mtls-mode"
                             title="Mode"
@@ -846,8 +842,8 @@
                                 >{{ option.label }}</RadioGroup.Item
                               >
                             </RadioGroup>
-                          </SettingRow>
-                          <SettingRow
+                          </SettingsRow>
+                          <SettingsRow
                             v-if="armed"
                             key="mtls-certificate"
                             title="Trusted CA certificate"
@@ -875,14 +871,15 @@
                                 </Select.Item>
                               </Select.Content>
                             </Select>
-                            <HelperText
+                            <FieldError
                               v-if="!form.mtls.certificate"
                               id="mtls-certificate-message"
-                              :type="'required'"
-                              :label="'Mutual authentication requires a Trusted CA certificate.'"
-                            />
-                          </SettingRow>
-                          <SettingRow
+                              >{{
+                                'Mutual authentication requires a Trusted CA certificate.'
+                              }}</FieldError
+                            >
+                          </SettingsRow>
+                          <SettingsRow
                             v-if="armed"
                             key="mtls-crl"
                             title="Certificate revocation list"
@@ -907,7 +904,7 @@
                                 </MultiSelect.Item>
                               </MultiSelect.Content>
                             </MultiSelect>
-                          </SettingRow>
+                          </SettingsRow>
                         </Item.List>
                       </template>
                     </Card>
@@ -923,7 +920,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Delete this resource"
                         description="Once deleted, the resource and its deployments cannot be recovered."
                         variant="compact"
@@ -980,7 +977,7 @@
                             />
                           </template>
                         </ConfirmDialog>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

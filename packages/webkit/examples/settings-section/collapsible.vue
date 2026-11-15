@@ -1,7 +1,7 @@
 <script setup>
   import Card from '@aziontech/webkit/card'
   import Item from '@aziontech/webkit/item'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { ref } from 'vue'
@@ -21,7 +21,7 @@
       <Card :padded="false">
         <template #default>
           <Item.List>
-            <SettingRow
+            <SettingsRow
               title="Active"
               description="Inactive teams keep their permissions but can't be assigned."
               variant="compact"
@@ -30,7 +30,7 @@
                 v-model="active"
                 aria-label="Active"
               />
-            </SettingRow>
+            </SettingsRow>
           </Item.List>
         </template>
       </Card>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import Card from '@aziontech/webkit/card'
-  import LogView, { type LogViewStep } from '@aziontech/webkit/log-view'
+  import LogViewer, { type LogViewerStep } from '@aziontech/webkit/log-viewer'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
@@ -34,7 +34,7 @@
     return { label: 'Idle', severity: 'neutral' }
   })
 
-  type DeployStep = LogViewStep & { tag?: StatusTag }
+  type DeployStep = LogViewerStep & { tag?: StatusTag }
 
   const steps: DeployStep[] = [
     {
@@ -200,7 +200,7 @@
           </template>
 
           <template #default>
-            <LogView.Steps
+            <LogViewer.Steps
               v-model:open-step="openStep"
               :steps="steps"
               :copyable="false"
@@ -216,7 +216,7 @@
                   >
                 </div>
               </template>
-            </LogView.Steps>
+            </LogViewer.Steps>
           </template>
         </Card>
       </div>

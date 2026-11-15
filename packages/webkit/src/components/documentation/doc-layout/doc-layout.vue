@@ -11,16 +11,19 @@
     toMenuGroups,
     useAppNavigation
   } from '../../../composables/use-app-navigation'
-  import { type HeadingNavItem, provideHeadingNav } from '../../../composables/use-heading-nav'
+  import {
+    type HeadingNavigationItem,
+    provideHeadingNavigation
+  } from '../../../composables/use-heading-navigation'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import SearchTrigger from '../../actions/search-trigger/search-trigger.vue'
   import Brand from '../../content/brand/brand.vue'
-  import GlobalHeader from '../../layout/global-header/global-header.vue'
-  import GlobalHeaderBrand from '../../layout/global-header/global-header-brand.vue'
-  import GlobalHeaderEnd from '../../layout/global-header/global-header-end.vue'
-  import GlobalHeaderStart from '../../layout/global-header/global-header-start.vue'
+  import AppHeader from '../../layout/app-header/app-header.vue'
+  import AppHeaderBrand from '../../layout/app-header/app-header-brand.vue'
+  import AppHeaderEnd from '../../layout/app-header/app-header-end.vue'
+  import AppHeaderStart from '../../layout/app-header/app-header-start.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import Sidebar from '../../layout/sidebar/sidebar.vue'
   import NavigationMenu from '../../navigation/navigation-menu/navigation-menu.vue'
@@ -231,7 +234,7 @@
     if (frame) globalThis.cancelAnimationFrame(frame)
   })
 
-  const jumpTo = (event: globalThis.MouseEvent, item: HeadingNavItem) => {
+  const jumpTo = (event: globalThis.MouseEvent, item: HeadingNavigationItem) => {
     const el = globalThis.document?.getElementById(item.id)
     if (!el) return
     event.preventDefault()
@@ -244,7 +247,7 @@
     headingId.value = item.id
   }
 
-  provideHeadingNav(jumpTo)
+  provideHeadingNavigation(jumpTo)
 
   const activate = (
     event: globalThis.MouseEvent | globalThis.KeyboardEvent,
@@ -297,8 +300,8 @@
       ref="headerEl"
       class="@container sticky top-0 z-30 w-full"
     >
-      <GlobalHeader :data-testid="`${testId}__header`">
-        <GlobalHeaderStart>
+      <AppHeader :data-testid="`${testId}__header`">
+        <AppHeaderStart>
           <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
             <IconButton
               v-if="navigation.length"
@@ -309,7 +312,7 @@
               class="shrink-0 lg:hidden"
               @click="drawerOpen = true"
             />
-            <GlobalHeaderBrand>
+            <AppHeaderBrand>
               <a
                 :href="home"
                 :aria-label="t('docLayout.home')"
@@ -325,7 +328,7 @@
                   >{{ t('docLayout.badge') }}</span
                 >
               </a>
-            </GlobalHeaderBrand>
+            </AppHeaderBrand>
             <NavigationMenu
               v-if="sectionLinks.length"
               :aria-label="t('docLayout.sections')"
@@ -345,8 +348,8 @@
               </NavigationMenuList>
             </NavigationMenu>
           </div>
-        </GlobalHeaderStart>
-        <GlobalHeaderEnd>
+        </AppHeaderStart>
+        <AppHeaderEnd>
           <SearchTrigger
             collapsible
             :label="t('docLayout.search')"
@@ -354,8 +357,8 @@
             @open="openSearch"
           />
           <slot name="actions" />
-        </GlobalHeaderEnd>
-      </GlobalHeader>
+        </AppHeaderEnd>
+      </AppHeader>
     </div>
 
     <div class="flex min-w-0 flex-1">

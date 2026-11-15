@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-10-20
 last_updated: 2026-11-15
-checksum: 418b20db58801cb9cbb2879fbd131c1bbba9c2bfb933cdd2b895ff8e4e2c7f30
+checksum: dcdd0037732045b657577414b1f60b64e99bcd95e3e97f090191a6d6d1ec026e
 ---
 
 # BrowserFrame — Component Spec
@@ -29,13 +29,13 @@ A browser window that renders live webkit components inside a viewport of its ow
 - For third-party content loaded from another origin → use `embed`.
 - For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.
 - For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.
-- For a framed page section or grid cell → use `frame-box`.
+- For a framed page section or grid cell → use `registration-frame`.
 
 ## Related
 
 - `doc-frame` — the documentation figure frame for stills and clips; no live viewport.
 - `embed` — a titled `iframe` for another origin's document; `browser-frame` renders our own components.
-- `frame-box` — the page's registration frame (hairlines + corner marks), not a window.
+- `registration-frame` — the page's registration frame (hairlines + corner marks), not a window.
 - `copy-button` — the clipboard control the address bar composes; reach for it directly to copy any other value.
 
 ## Best practices

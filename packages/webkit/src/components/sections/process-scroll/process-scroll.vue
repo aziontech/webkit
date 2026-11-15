@@ -2,14 +2,14 @@
   import { computed, ref, useAttrs } from 'vue'
 
   import { usePinnedRow } from '../../../composables/use-pinned-row'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type {
     SectionTitleDescriptionWidth,
     SectionTitleVariant
   } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
-  import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
+  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({ name: 'ProcessScroll', inheritAttrs: false })
 
@@ -24,7 +24,7 @@
   export interface ProcessScrollProps {
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
-    /** Overline above the title. */
+    /** Eyebrow above the title. */
     eyebrow?: string
     /** Alignment of the section title over the card row. */
     titleVariant?: SectionTitleVariant
@@ -40,7 +40,7 @@
     ariaLabel?: string
     /** From the large breakpoint, pins the band under the site header while the page scrolls and slides the card row sideways until its last card is in view; below it, or under reduced motion, the row scrolls sideways on its own. */
     pinned?: boolean
-    /** Height of the sticky site header a pinned band sticks under; defaults to the SiteNav bar's token, any CSS length. */
+    /** Height of the sticky site header a pinned band sticks under; defaults to the SiteHeader bar's token, any CSS length. */
     headerOffset?: string
   }
 
@@ -116,7 +116,7 @@
       </SectionModule>
 
       <div class="grid flex-1 grid-cols-1">
-        <FrameBox
+        <RegistrationFrame
           flush
           borders="y"
           marks="bottom"
@@ -140,7 +140,7 @@
                 :style="TEXTURE"
                 class="relative row-span-3 grid min-w-0 snap-start grid-rows-subgrid gap-y-(--spacing-sm) overflow-hidden border-(--border-default) bg-(--bg-surface) p-(--spacing-xl) not-last:border-e lg:p-(--spacing-lg)"
               >
-                <TextureMaterial
+                <Texture
                   variant="pixelate"
                   size="small"
                 />
@@ -163,7 +163,7 @@
               </li>
             </ol>
           </div>
-        </FrameBox>
+        </RegistrationFrame>
       </div>
     </div>
   </div>

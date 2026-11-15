@@ -1,6 +1,6 @@
 <script setup>
   import ConsoleTraceScene from '@aziontech/webkit/assets/console-trace-scene'
-  import ConsolePanel from '@aziontech/webkit/console-panel'
+  import ConsoleShowcase from '@aziontech/webkit/console-showcase'
 
   const tabs = [
     { value: 'trace', title: 'Trace' },
@@ -10,7 +10,7 @@
 </script>
 
 <template>
-  <ConsolePanel
+  <ConsoleShowcase
     eyebrow="Observability"
     title="Inspect every run end to end"
     description="Spans, logs and the path the request took, traced on the platform itself."
@@ -22,5 +22,5 @@
         :width="1200"
       />
     </template>
-  </ConsolePanel>
+  </ConsoleShowcase>
 </template>

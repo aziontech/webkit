@@ -27,13 +27,13 @@ A full-bleed `PageTabs` with Code and Settings as `Tabs.Trigger`s. Each tab keep
 
 A thin bar above the editor with a `ToggleGroup` labeled Editor document that switches between the Code and Arguments documents, and a muted line describing the active one, e.g. the runtime for Code. In TestRun a secondary medium Run test `Button` with a play icon sits at the inline end; it shows its loading state while the run is in flight and reopens the Test run pane if the user collapsed it.
 
-### C. Code document — `CodeEditor`, `HelperText` (required)
+### C. Code document — `CodeEditor`, `FieldError` (required)
 
-A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded line numbers (01, 02…), Tab indents, and Escape then Tab leaves it. It passes `:loader="loadMonaco"`, the loader from the `code-editor` spec: it sets `MonacoEnvironment.getWorker` with the editor, JSON and TypeScript workers (`monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|typescript>/<name>.worker?worker`) and returns `import('monaco-editor')`, so Monaco is code-split, themed from the tokens and has its language services; the plain editor stays the server and no-JavaScript fallback. In TypeScript the loader returns `Promise<CodeEditorMonacoModule>` (exported by `@aziontech/webkit/code-editor`) and casts the imported module to it, because `CodeEditorMonacoModule` does not yet accept the module type of monaco-editor 0.57; the `?worker` imports type-check through the Vite client types that create-vue's `env.d.ts` references. The app installs `monaco-editor` (0.56 or later). An empty document on Save shows an invalid `HelperText` under the editor, cleared on the next keystroke.
+A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded line numbers (01, 02…), Tab indents, and Escape then Tab leaves it. It passes `:loader="loadMonaco"`, the loader from the `code-editor` spec: it sets `MonacoEnvironment.getWorker` with the editor, JSON and TypeScript workers (`monaco-editor/editor/editor.worker?worker` and `monaco-editor/languages/features/<json|typescript>/<name>.worker?worker`) and returns `import('monaco-editor')`, so Monaco is code-split, themed from the tokens and has its language services; the plain editor stays the server and no-JavaScript fallback. In TypeScript the loader returns `Promise<CodeEditorMonacoModule>` (exported by `@aziontech/webkit/code-editor`) and casts the imported module to it, because `CodeEditorMonacoModule` does not yet accept the module type of monaco-editor 0.57; the `?worker` imports type-check through the Vite client types that create-vue's `env.d.ts` references. The app installs `monaco-editor` (0.56 or later). An empty document on Save shows an invalid `FieldError` under the editor, cleared on the next keystroke.
 
 ### D. Test run — `ResizableRoot`, `ResizablePane`, `ResizableHandle` (optional)
 
-Variant TestRun only; it adds `StatusIndicator`, `CopyButton`, `KeyValueList`, `Trace`, `LogView` and `LogViewContent` to the page.
+Variant TestRun only; it adds `StatusIndicator`, `CopyButton`, `KeyValueList`, `Trace`, `LogViewer` and `LogViewerContent` to the page.
 
 In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is the flexible pane, and the Test run pane under it has a `basis`, a minimum and a maximum height and collapses past its minimum, so the editor can take the whole height back. The pane scrolls on its own and reads top to bottom like the invocation page of the design sample:
 
@@ -41,7 +41,7 @@ In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is t
 2. The request that triggered the run and one line on its outcome (the status code and what happened).
 3. A four-column `KeyValueList` of Started, Duration, Edge location and Memory, in skeletons while the run is in flight.
 4. Trace: one sentence on how to read it, then the `Trace` waterfall bound with `v-model:selected`, so the selected span's details (service, start, duration, share, attributes) open under it. While running, a status line says the trace appears when the run finishes.
-5. Logs: a `LogView` with `LogViewContent` on the same clock as the trace, `copyable`, and its loading state while running.
+5. Logs: a `LogViewer` with `LogViewerContent` on the same clock as the trace, `copyable`, and its loading state while running.
 
 ### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `CodeEditor`, `Button` (required)
 
@@ -55,11 +55,11 @@ When the form has no fields, the right pane shows an `EmptyState` with one sente
 
 A flush `Card` with one small `Item` per field: a Move up and a Move down `IconButton` (transparent, small, disabled at the ends of the list), the field name and type, small `Tag`s for Required and Needs a name, and `IconButton`s to duplicate, remove and expand the field, each named by a `Tooltip`. Only the expanded field shows its settings. A move keeps focus on the button that moved the field (or its sibling once the field reaches an end) and is announced in a polite live region ("quality moved to position 1 of 2.").
 
-### H. Field settings — `SettingRow`, `Input`, `Select`, `Switch`, `Textarea`, `HelperText` (required)
+### H. Field settings — `SettingsRow`, `Input`, `Select`, `Switch`, `Textarea`, `FieldError` (required)
 
-Inside an expanded field, `SettingRow`s for Name, Type, Label, Description, Required and Default, then the rows that follow the type: minimum and maximum length and a pattern for text, minimum and maximum for numbers, Choices as a `Textarea` with one value per line, List of for lists. A name error shows as `HelperText` once the field was touched.
+Inside an expanded field, `SettingsRow`s for Name, Type, Label, Description, Required and Default, then the rows that follow the type: minimum and maximum length and a pattern for text, minimum and maximum for numbers, Choices as a `Textarea` with one value per line, List of for lists. A name error shows as `FieldError` once the field was touched.
 
-### I. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `RadioGroup`, `Switch`, `HelperText` (required)
+### I. Settings tab — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `RadioGroup`, `Switch`, `FieldError` (required)
 
 The form column with four `SettingsSection`s: General (Name, required on Save), Runtime (a read-only `Input` with a lock glyph, because it cannot change after creation), Execution environment (On request or At the gateway as `RadioGroup` choice cards (`variant="card"`)) and Status (Active as a `Switch`). See `skills/webkit-form`.
 

@@ -1,16 +1,16 @@
 <script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
-  import GlobalHeader from '@aziontech/webkit/global-header'
 </script>
 
 <template>
   <div class="w-full bg-(--bg-canvas)">
-    <GlobalHeader
+    <AppHeader
       aria-label="Console"
       class="shrink-0"
     >
-      <GlobalHeader.Brand>
+      <AppHeader.Brand>
         <a
           href="/home"
           aria-label="Azion home"
@@ -21,9 +21,9 @@
             size="small"
           />
         </a>
-      </GlobalHeader.Brand>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Brand>
+      <AppHeader.Center />
+      <AppHeader.End>
         <Button
           label="Documentation"
           variant="outline"
@@ -31,7 +31,7 @@
           icon="ai ai-book"
           href="/docs"
         />
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
   </div>
 </template>

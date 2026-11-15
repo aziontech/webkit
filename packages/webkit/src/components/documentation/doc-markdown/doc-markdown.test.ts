@@ -95,7 +95,7 @@ describe('DocMarkdown', () => {
     expect(getByText('Domains')).toBeTruthy()
     expect(await findByText('Store relational data.')).toBeTruthy()
     expect(await findByText('Is there a free tier?')).toBeTruthy()
-    expect(getByTestId('documentation-doc-update').id).toBe('march-2-2026')
+    expect(getByTestId('documentation-doc-changelog-entry').id).toBe('march-2-2026')
     expect(getByText('CLI')).toBeTruthy()
   })
 

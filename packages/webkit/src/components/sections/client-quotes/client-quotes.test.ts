@@ -123,7 +123,7 @@ describe('ClientQuotes', () => {
 
     expect(getByTestId(TESTID)).toBeInTheDocument()
     expect(queryAllByRole('tab')).toHaveLength(0)
-    expect(queryByTestId('layout-frame-box')).toBeNull()
+    expect(queryByTestId('layout-registration-frame')).toBeNull()
   })
 
   it('has no a11y violations with a full band', async () => {

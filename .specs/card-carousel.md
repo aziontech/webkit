@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 76685ae3fd19e733300e1de79362a427fcb7c35b78c0a9927266089fea70e8cb
+checksum: 7b0f44b70f4ec74d468e1a0e3938b254221d478d9393e56492bf9290fe2bb95f
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-15
 
 The titled card-carousel band of a product or solution page: a section title on the start of the row with the previous/next controls at its end, over a horizontally scrolling track of standalone cards. Each card is an optional overline (the category), a heading, a sentence and, when it links somewhere, a mono link label closed by an arrow ("See example", "See solution"). The band answers "see how to use", "industries", "orchestration with control" on azion.com product pages, where the cases outnumber the row.
 
-It is a page section — the site places it from a `{ _id: 'card-carousel', props }` entry and binds `props` straight onto it — so its whole API is the props below. It composes `carousel` (`variant="cards"`, its `header` slot, `size="medium"` items and its step controls), `section-title` and `overline`, and owns only the card's inner layout.
+It is a page section — the site places it from a `{ _id: 'card-carousel', props }` entry and binds `props` straight onto it — so its whole API is the props below. It composes `carousel` (`variant="cards"`, its `header` slot, `size="medium"` items and its step controls), `section-title` and `eyebrow`, and owns only the card's inner layout.
 
 ## When to use
 
@@ -26,7 +26,7 @@ It is a page section — the site places it from a `{ _id: 'card-carousel', prop
 
 ## When NOT to use
 
-- When every case must be visible, or there are three or six of equal weight → use `capability-grid` (linked grid) or `use-cases` (grid with one action).
+- When every case must be visible, or there are three or six of equal weight → use `capability-grid` (linked grid) or `customer-use-cases` (grid with one action).
 - For a quote or testimonial row → use `client-quotes`.
 - For numbered principles pinned while the page scrolls → use `process-scroll` with `pinned`.
 - For articles with images → use `article-cards`.
@@ -80,7 +80,7 @@ It is a page section — the site places it from a `{ _id: 'card-carousel', prop
 | Prop          | Type                 | Default | Required | JSDoc                                                                                                                           |
 | ------------- | -------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------- |
 | `anchor`      | `string`             | `''`    | false    | In-page id set on the band so a hash link can target it.                                                                        |
-| `eyebrow`     | `string`             | `''`    | false    | Overline above the band title.                                                                                                  |
+| `eyebrow`     | `string`             | `''`    | false    | Eyebrow above the band title.                                                                                                   |
 | `title`       | `string`             | `''`    | false    | Headline of the band, rendered as its `h2` at the start of the row the step controls end; the band renders no title when empty. |
 | `description` | `string`             | `''`    | false    | Supporting sentence under the headline.                                                                                         |
 | `items`       | `CardCarouselItem[]` | `[]`    | false    | The cards, in order; each is `{ eyebrow?, title, description, href?, linkLabel? }`, and a card with `href` links to it.         |
@@ -126,7 +126,7 @@ It is a page section — the site places it from a `{ _id: 'card-carousel', prop
 | link label                          | `.text-overline-sm`, `var(--text-muted)` → `var(--text-default)` on hover |
 | link arrow                          | `var(--text-primary)`                                                     |
 | focus ring                          | `var(--ring-color)`                                                       |
-| card overline                       | owned by `overline`                                                       |
+| card overline                       | owned by `eyebrow`                                                        |
 
 ## Theme gaps
 

@@ -54,7 +54,7 @@
     type TableCellSlots,
     type TableColumn,
     type TableDensity,
-    type TableExportScope,
+    type TableExportButtonScope,
     type TableExposed,
     type TableFilterField,
     type TableFilterOperator,
@@ -636,7 +636,7 @@
   const instance = getCurrentInstance()
   const hasExportListener = (): boolean =>
     Boolean((instance?.vnode.props as Record<string, unknown> | null | undefined)?.['onExport'])
-  const resolveExportRows = (scope: TableExportScope): RowRecord[] => {
+  const resolveExportRows = (scope: TableExportButtonScope): RowRecord[] => {
     if (leanRows.value) return records()
     if (scope === 'all') return table.getCoreRowModel().rows.map((row) => row.original)
     if (scope === 'page') return rows.value.map((row) => row.original)
@@ -657,7 +657,7 @@
   const exportCsv = (
     options?: {
       filename?: string
-      scope?: TableExportScope
+      scope?: TableExportButtonScope
       rows?: RowRecord[]
     },
     event: Event = new Event('export')
@@ -1657,7 +1657,7 @@
     TableCellSlots,
     TableColumn,
     TableDensity,
-    TableExportScope,
+    TableExportButtonScope,
     TableExposed,
     TableHeaderSlotProps,
     TableHeaderSlots,

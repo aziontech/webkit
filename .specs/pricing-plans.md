@@ -7,14 +7,14 @@ status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: c13ac3a393e7d721805a87952d92ab39005aefc7ae74cd19fd616695915994e7
+checksum: cf53451ea8e06346c0adcc284efd0fa0eb9301e1342b4099b6093139885c2cc1
 ---
 
 # PricingPlans — Component Spec
 
 ## Purpose
 
-The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `frame-box`, `toggle-group`, `card-grid`, `card-pricing` and `button`; the picked period is local state. The band runs full bleed (the page's inline inset only, closed by a bottom rule) and centres its frame at the site measure, with rules on its sides.
+The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `registration-frame`, `toggle-group`, `card-grid`, `pricing-card` and `button`; the picked period is local state. The band runs full bleed (the page's inline inset only, closed by a bottom rule) and centres its frame at the site measure, with rules on its sides.
 
 ## When to use
 
@@ -22,13 +22,13 @@ The plan cards at the top of Pricing: a billing-period toggle over a framed row 
 
 ## When NOT to use
 
-- To compare plans or support tiers feature by feature → use `compare-plans`.
-- To compare Azion with one competitor → use `comparison-table`.
+- To compare plans or support tiers feature by feature → use `plan-comparison`.
+- To compare Azion with one competitor → use `competitor-comparison`.
 
 ## Related
 
-- `card-pricing` — the card each plan renders with.
-- `compare-plans` — the matrix that sits under these cards.
+- `pricing-card` — the card each plan renders with.
+- `plan-comparison` — the matrix that sits under these cards.
 
 ## Best practices
 
@@ -99,7 +99,7 @@ The plan cards at the top of Pricing: a billing-period toggle over a framed row 
 - The picked period selects each plan's price; a plan with no price for it falls back to its period-less price
 - Price change: every card is `animated`, so a period switch fades the old price out and the new one in (the card's reduced-motion fallback swaps it in place)
 - Terms: the line under the price is the price's `details`, else the plan's `description`, else empty
-- Layout: a full-width band (`__band`) on `var(--bg-canvas)` with the page's inline inset `var(--layout-boundary-inline)` and a bottom rule, and inside it a `frame-box` with side rules and bottom marks capped at `var(--layout-measure-site)` and centred
+- Layout: a full-width band (`__band`) on `var(--bg-canvas)` with the page's inline inset `var(--layout-boundary-inline)` and a bottom rule, and inside it a `registration-frame` with side rules and bottom marks capped at `var(--layout-measure-site)` and centred
 - The highlighted plan sits on `var(--bg-surface)`, shows its tag and carries the secondary button; the others sit on `var(--bg-canvas)` with an outlined button
 - Empty: when no plan has a name the band renders nothing but its root
 
@@ -132,9 +132,9 @@ _none_
 
 - Visible focus: owned by the composed `toggle-group` and `button`.
 - Keyboard map: `Tab` reaches the toggle and each card's button; the toggle's arrow-key map is `toggle-group`'s.
-- ARIA: the toggle is named by `periodsAriaLabel`; each plan is a `card-pricing` article with its name as `h3`; the features are a list and their glyphs are `aria-hidden`.
+- ARIA: the toggle is named by `periodsAriaLabel`; each plan is a `pricing-card` article with its name as `h3`; the features are a list and their glyphs are `aria-hidden`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text colours are the tokens above.
-- `motion-reduce:transition-none motion-reduce:transform-none` — the toggle indicator belongs to `toggle-group` and the price fade to `card-pricing`, each with its own reduced-motion fallback; this band adds no motion of its own.
+- `motion-reduce:transition-none motion-reduce:transform-none` — the toggle indicator belongs to `toggle-group` and the price fade to `pricing-card`, each with its own reduced-motion fallback; this band adds no motion of its own.
 - Touch target ≥40×40 px — the toggle and the buttons are `large`.
 
 ## Internationalization

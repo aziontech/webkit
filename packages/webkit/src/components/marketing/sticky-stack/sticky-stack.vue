@@ -2,7 +2,7 @@
   import { useEventListener } from '@vueuse/core'
   import { computed, onMounted, onScopeDispose, ref, useAttrs, watch } from 'vue'
 
-  import TextureMaterial from '../texture-material/texture-material.vue'
+  import Texture from '../texture/texture.vue'
 
   defineOptions({
     name: 'StickyStack',
@@ -172,7 +172,7 @@
         aria-hidden="true"
         class="relative hidden lg:block lg:min-h-0 lg:flex-1"
       >
-        <TextureMaterial variant="lines" />
+        <Texture variant="lines" />
       </div>
       <div
         class="grid w-full grid-cols-1 lg:shrink-0 lg:h-[var(--sticky-stack-height,100%)] lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:border-y-[length:var(--sticky-stack-frame-border,0)] lg:border-solid lg:border-(--border-default)"
@@ -291,7 +291,7 @@
         aria-hidden="true"
         class="relative hidden lg:block lg:min-h-0 lg:flex-1"
       >
-        <TextureMaterial variant="lines" />
+        <Texture variant="lines" />
       </div>
     </div>
   </div>

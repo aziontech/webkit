@@ -423,7 +423,7 @@ trigger.**
 | --------------- | ------------------- | --------------------------------------------------- |
 | `disabled`      | prop                | `data-disabled` + disabled tokens; not focusable    |
 | `loading`       | prop                | `data-loading` + `Skeleton`; interaction suppressed |
-| `invalid`       | validation          | `data-invalid` + error tokens + `HelperText`        |
+| `invalid`       | validation          | `data-invalid` + error tokens + `FieldError`        |
 | `readonly`      | prop                | `data-readonly`; visible, not editable              |
 | `empty`         | no data             | the `EmptyState` component — never an ad-hoc string |
 | `error`         | load/action failure | an error slot/message                               |

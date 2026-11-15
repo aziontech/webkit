@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import Alert, { type AlertSeverity } from '@aziontech/webkit/alert'
+  import AppHeader from '@aziontech/webkit/app-header'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
   import PasswordInput from '@aziontech/webkit/password-input'
@@ -79,11 +79,11 @@
 
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <GlobalHeader
+    <AppHeader
       aria-label="Console"
       class="shrink-0"
     >
-      <GlobalHeader.Brand>
+      <AppHeader.Brand>
         <a
           href="/home"
           aria-label="Azion home"
@@ -94,9 +94,9 @@
             size="small"
           />
         </a>
-      </GlobalHeader.Brand>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Brand>
+      <AppHeader.Center />
+      <AppHeader.End>
         <Button
           label="Documentation"
           variant="outline"
@@ -104,8 +104,8 @@
           icon="ai ai-book"
           href="/docs"
         />
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">
@@ -197,12 +197,11 @@
                         :aria-describedby="errors.email ? 'signup-email-error' : undefined"
                         @update:model-value="onEmailInput"
                       />
-                      <HelperText
+                      <FieldError
                         v-if="errors.email"
                         id="signup-email-error"
-                        :type="email.trim() ? 'invalid' : 'required'"
-                        :label="errors.email"
-                      />
+                        >{{ errors.email }}</FieldError
+                      >
                     </Field>
 
                     <Field

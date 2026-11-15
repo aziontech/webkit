@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
 
   /**
    * The grid a DocCard set sits in. Each cell paints a 1px ring just outside its
@@ -38,7 +38,7 @@
 </script>
 
 <template>
-  <FrameBox
+  <RegistrationFrame
     v-bind="$attrs"
     :data-testid="testId"
     data-doc-block
@@ -52,5 +52,5 @@
     >
       <slot />
     </div>
-  </FrameBox>
+  </RegistrationFrame>
 </template>

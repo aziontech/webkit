@@ -284,7 +284,7 @@ function assetUsage(kind) {
     )
   if (kind === 'brandMarks')
     return code(
-      "<script setup>\n  import Ticker from '@aziontech/webkit/ticker'\n</script>\n\n<template>\n  <Ticker :marks=\"['itau', 'magalu', 'netshoes']\" />\n</template>"
+      "<script setup>\n  import Marquee from '@aziontech/webkit/marquee'\n</script>\n\n<template>\n  <Marquee :marks=\"['itau', 'magalu', 'netshoes']\" />\n</template>"
     )
   if (kind === 'icons')
     return code(

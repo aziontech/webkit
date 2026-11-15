@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: a31fb4cd2aaaea8ccdbd25e9ab22884777eb27284533eaf882ccb7467147c793
+checksum: ae0fdb852c8bd0bc2190197279fa2d30158ab42f722fe5e999543710e56dcce1
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -26,7 +26,7 @@ One card split into cells, one `StatTile` per cell: the KPI strip at the top of 
 ## When NOT to use
 
 - Figures that stand alone or carry their own sparkline history at different periods → separate `StatTile`s in a grid.
-- Marketing figures on a site band → use `big-numbers`.
+- Marketing figures on a site band → use `stats`.
 - Label/value details of one resource → use `key-value-list`.
 
 ## Related

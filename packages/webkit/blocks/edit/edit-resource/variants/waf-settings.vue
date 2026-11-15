@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
@@ -196,7 +196,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="A unique and descriptive name to identify the rule set."
                       >
@@ -212,14 +212,13 @@
                             :required="nameError"
                             :aria-describedby="nameError ? 'waf-name-message' : undefined"
                           />
-                          <HelperText
+                          <FieldError
                             v-if="nameError"
                             id="waf-name-message"
-                            type="required"
-                            label="This field is required."
-                          />
+                            >This field is required.</FieldError
+                          >
                         </div>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -232,7 +231,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Active"
                         description="When off, the rule set stops inspecting requests entirely."
                         variant="compact"
@@ -242,8 +241,8 @@
                           aria-label="Active"
                           :disabled="saving"
                         />
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Mode"
                         description="Blocking rejects a matched request. Learning lets it through and records the match on the Tuning tab."
                       >
@@ -266,7 +265,7 @@
                             </Select.Item>
                           </Select.Content>
                         </Select>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -281,7 +280,7 @@
                     <Item.List
                       :aria-label="`Threats, ${enabledCount} of ${form.threats.length} on`"
                     >
-                      <SettingRow
+                      <SettingsRow
                         v-for="item in form.threats"
                         :key="item.id"
                         :title="item.label"
@@ -315,7 +314,7 @@
                             :disabled="saving"
                           />
                         </div>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

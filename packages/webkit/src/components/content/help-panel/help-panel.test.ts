@@ -5,7 +5,7 @@ import { defineComponent } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import HelpPanel, { HelpPanelFooter, HelpPanelGroup, HelpPanelHeader } from './index'
 
-const Topic = defineComponent({
+const FeatureItem = defineComponent({
   components: {
     HelpPanel,
     HelpPanelHeader,
@@ -62,7 +62,7 @@ describe('HelpPanel', () => {
     })
 
     it('renders a complementary landmark named by ariaLabel', () => {
-      const view = render(Topic)
+      const view = render(FeatureItem)
       expect(view.getByRole('complementary', { name: 'Help: Workloads' })).toBeTruthy()
     })
 
@@ -74,7 +74,7 @@ describe('HelpPanel', () => {
 
   describe('loading', () => {
     it('replaces the content with hidden skeleton lines and sets aria-busy', () => {
-      const view = render(Topic, { props: { loading: true } })
+      const view = render(FeatureItem, { props: { loading: true } })
       const root = view.getByTestId('content-help-panel')
       expect(root.getAttribute('aria-busy')).toBe('true')
       expect(root.hasAttribute('data-loading')).toBe(true)
@@ -85,7 +85,7 @@ describe('HelpPanel', () => {
     })
 
     it('renders the content and no aria-busy when not loading', () => {
-      const view = render(Topic)
+      const view = render(FeatureItem)
       const root = view.getByTestId('content-help-panel')
       expect(root.hasAttribute('aria-busy')).toBe(false)
       expect(root.hasAttribute('data-loading')).toBe(false)
@@ -95,7 +95,7 @@ describe('HelpPanel', () => {
 
   describe('topic', () => {
     it('renders the header heading and description', () => {
-      const view = render(Topic)
+      const view = render(FeatureItem)
       expect(view.getByRole('heading', { level: 2, name: 'Workloads' })).toBeTruthy()
       expect(
         view.getByText('Where your domains meet the applications that answer them.')
@@ -103,14 +103,14 @@ describe('HelpPanel', () => {
     })
 
     it('labels each section by its heading', () => {
-      const view = render(Topic)
+      const view = render(FeatureItem)
       expect(view.getByRole('region', { name: 'What is a workload?' })).toBeTruthy()
       expect(view.getByRole('region', { name: 'Who can edit it?' })).toBeTruthy()
       expect(view.getAllByTestId('content-help-panel-group')).toHaveLength(2)
     })
 
     it('renders the links under a Learn more heading', () => {
-      const view = render(Topic)
+      const view = render(FeatureItem)
       const links = view.getByRole('region', { name: 'Learn more' })
       expect(links.getAttribute('data-testid')).toBe('content-help-panel-footer')
       expect(links.querySelectorAll('a')).toHaveLength(2)
@@ -127,12 +127,12 @@ describe('HelpPanel', () => {
 
   describe('a11y', () => {
     it('has no axe violations on a help topic', async () => {
-      const { container } = render(Topic)
+      const { container } = render(FeatureItem)
       await expectNoA11yViolations(container)
     })
 
     it('has no axe violations while loading', async () => {
-      const { container } = render(Topic, { props: { loading: true } })
+      const { container } = render(FeatureItem, { props: { loading: true } })
       await expectNoA11yViolations(container)
     })
   })

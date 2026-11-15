@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import MarqueeLoop from '../../marketing/marquee/marquee-loop.vue'
   import Quote from '../../marketing/quote/quote.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
-  import TickerLoop from '../../marketing/ticker/ticker-loop.vue'
 
   defineOptions({
     name: 'RecognitionMarquee',
@@ -29,7 +29,7 @@
   }
 
   export interface RecognitionMarqueeProps {
-    /** Overline above the section title. */
+    /** Eyebrow above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty. */
     title?: string
@@ -86,12 +86,12 @@
         />
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="all"
       >
-        <TickerLoop
+        <MarqueeLoop
           v-slot="{ duplicate }"
           :duration="loopDuration"
           :aria-label="ariaLabel"
@@ -106,7 +106,7 @@
               :key="index"
               class="flex w-[85vw] max-w-(--container-md) shrink-0 sm:w-(--container-md)"
             >
-              <FrameBox
+              <RegistrationFrame
                 borders="right"
                 marks="all"
                 class="w-full bg-(--bg-surface)"
@@ -142,11 +142,11 @@
                     />
                   </template>
                 </Quote>
-              </FrameBox>
+              </RegistrationFrame>
             </li>
           </ul>
-        </TickerLoop>
-      </FrameBox>
+        </MarqueeLoop>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

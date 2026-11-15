@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 089395587fc1c1518fb6d8a39981b2872fc22c734f115845caf387eac56ab2e2
+checksum: 0a156281bbfc7e1de125324cd7a309b77858478a3386592d612669588e21f8d3
 created: 2026-09-25
 last_updated: 2026-11-15
 ---
@@ -25,18 +25,18 @@ One cell of a media band: a scene above, and under it a run-in caption whose lea
 
 ## When NOT to use
 
-- When the claim deserves a heading and a place in the document outline → use `topic`, which leads with a real `h2`/`h3`.
-- When the tile is a padded surface card with a glyph and a link → use `topic` in a `CardGrid.Cell`.
+- When the claim deserves a heading and a place in the document outline → use `feature-item`, which leads with a real `h2`/`h3`.
+- When the tile is a padded surface card with a glyph and a link → use `feature-item` in a `CardGrid.Cell`.
 - For one scene beside a block of copy across the full band → use `media-split`.
 - For a mosaic whose cells claim different numbers of columns → use `bento-grid`.
-- For the grid that lays the tiles out, or a framed cell that wraps media *and* copy together → use `card-grid`.
+- For the grid that lays the tiles out, or a framed cell that wraps media _and_ copy together → use `card-grid`.
 
 ## Related
 
 - `card-grid` — the grid that lays a row of tiles out; use its `gap` register, whose gutters keep every tile's frame its own.
-- `topic` — the heading-led claim, for a band whose items belong in the outline.
+- `feature-item` — the heading-led claim, for a band whose items belong in the outline.
 - `media-split` — one scene beside one block of copy, across the whole band.
-- `frame-box` — the frame this tile draws around its media.
+- `registration-frame` — the frame this tile draws around its media.
 - `illustration` — the scene the frame usually holds; unnamed, it renders the placeholder that reserves a tile's space.
 
 ## Best practices
@@ -55,9 +55,9 @@ One cell of a media band: a scene above, and under it a run-in caption whose lea
 
 ```vue
 <script setup>
-import CardGrid from '@aziontech/webkit/card-grid'
-import Illustration from '@aziontech/webkit/illustration'
-import MediaTile from '@aziontech/webkit/media-tile'
+  import CardGrid from '@aziontech/webkit/card-grid'
+  import Illustration from '@aziontech/webkit/illustration'
+  import MediaTile from '@aziontech/webkit/media-tile'
 </script>
 
 <template>
@@ -88,16 +88,16 @@ import MediaTile from '@aziontech/webkit/media-tile'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `variant` | `MediaTileVariant` | `'frame'` | false | Register of the tile: `frame` draws the page's frame around the media alone, `plain` draws no rules and makes the tile itself the cell a `divider` grid separates. |
-| `title` | `string` | `—` | true | The caption's run-in lead, naming what the panel above it shows. |
-| `description` | `string` | `''` | false | The sentence continuing the caption after the lead; overridden by the default slot. |
-| `src` | `string` | `''` | false | URL of the tile's media image; ignored when the `media` slot is filled. |
-| `alt` | `string` | `''` | false | Alternative text describing what the image shows; empty keeps it decorative. |
-| `padded` | `boolean` | `true` | false | Inset the media — inside the frame in the `frame` register, from the cell's edges in `plain`. Turn it off for an asset that should run to the cell's edges; the caption keeps its own inset either way. |
-| `fluid` | `boolean` | `false` | false | Stretch the media to the frame's full width with its aspect ratio locked, so it grows and shrinks with the tile; off, slotted media keeps its own size, centred. |
-| `mediaScale` | `number` | `1` | false | Scale of the media inside its frame, around its centre. The frame keeps its size and clips whatever grows past it, so a scene drawn small on its canvas can be fitted to the tile without changing the band's rhythm. |
+| Prop          | Type               | Default   | Required | JSDoc                                                                                                                                                                                                                 |
+| ------------- | ------------------ | --------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`     | `MediaTileVariant` | `'frame'` | false    | Register of the tile: `frame` draws the page's frame around the media alone, `plain` draws no rules and makes the tile itself the cell a `divider` grid separates.                                                    |
+| `title`       | `string`           | `—`       | true     | The caption's run-in lead, naming what the panel above it shows.                                                                                                                                                      |
+| `description` | `string`           | `''`      | false    | The sentence continuing the caption after the lead; overridden by the default slot.                                                                                                                                   |
+| `src`         | `string`           | `''`      | false    | URL of the tile's media image; ignored when the `media` slot is filled.                                                                                                                                               |
+| `alt`         | `string`           | `''`      | false    | Alternative text describing what the image shows; empty keeps it decorative.                                                                                                                                          |
+| `padded`      | `boolean`          | `true`    | false    | Inset the media — inside the frame in the `frame` register, from the cell's edges in `plain`. Turn it off for an asset that should run to the cell's edges; the caption keeps its own inset either way.               |
+| `fluid`       | `boolean`          | `false`   | false    | Stretch the media to the frame's full width with its aspect ratio locked, so it grows and shrinks with the tile; off, slotted media keeps its own size, centred.                                                      |
+| `mediaScale`  | `number`           | `1`       | false    | Scale of the media inside its frame, around its centre. The frame keeps its size and clips whatever grows past it, so a scene drawn small on its canvas can be fitted to the tile without changing the band's rhythm. |
 
 ## Events
 
@@ -105,10 +105,10 @@ import MediaTile from '@aziontech/webkit/media-tile'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The caption body after the lead; replaces the `description` prop. |
-| `media` | — | The scene the frame holds; replaces the `src` image. |
+| Slot      | Scope | Notes                                                             |
+| --------- | ----- | ----------------------------------------------------------------- |
+| `default` | —     | The caption body after the lead; replaces the `description` prop. |
+| `media`   | —     | The scene the frame holds; replaces the `src` image.              |
 
 ## States
 
@@ -127,22 +127,22 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| frame rule | `var(--border-default)` |
-| frame fill | `var(--bg-canvas)` |
-| media inset (`padded`, `frame`) | `var(--spacing-xl)` |
-| cell inset (`padded`, `plain`) | `var(--spacing-lg)` |
-| gap, frame to caption | `var(--spacing-lg)` |
-| caption typography | `.text-body-md` |
-| caption lead ink | `var(--text-default)` |
-| caption body ink | `var(--text-muted)` |
+| Region                          | Token (DESIGN.md)       |
+| ------------------------------- | ----------------------- |
+| frame rule                      | `var(--border-default)` |
+| frame fill                      | `var(--bg-canvas)`      |
+| media inset (`padded`, `frame`) | `var(--spacing-xl)`     |
+| cell inset (`padded`, `plain`)  | `var(--spacing-lg)`     |
+| gap, frame to caption           | `var(--spacing-lg)`     |
+| caption typography              | `.text-body-md`         |
+| caption lead ink                | `var(--text-default)`   |
+| caption body ink                | `var(--text-muted)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

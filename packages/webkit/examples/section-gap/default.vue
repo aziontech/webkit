@@ -1,20 +1,20 @@
 <script setup>
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionGap from '@aziontech/webkit/section-gap'
 </script>
 
 <template>
   <div>
-    <FrameBox borders="y">
+    <RegistrationFrame borders="y">
       <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Section above</div>
-    </FrameBox>
+    </RegistrationFrame>
     <SectionGap size="medium" />
-    <FrameBox
+    <RegistrationFrame
       flush
       marks="bottom"
       borders="y"
     >
       <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Section below</div>
-    </FrameBox>
+    </RegistrationFrame>
   </div>
 </template>

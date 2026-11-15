@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Overline from '../../content/overline/overline.vue'
+  import Eyebrow from '../../content/eyebrow/eyebrow.vue'
   import Carousel from '../../marketing/carousel/carousel.vue'
   import CarouselItem from '../../marketing/carousel/carousel-item/carousel-item.vue'
   import CarouselNext from '../../marketing/carousel/carousel-next/carousel-next.vue'
@@ -15,7 +15,7 @@
 
   /** One card of the row. */
   export type CardCarouselItem = {
-    /** Overline above the card heading, usually its category. */
+    /** Eyebrow above the card heading, usually its category. */
     eyebrow?: string
     /** Heading of the card, rendered as its h3. */
     title: string
@@ -30,7 +30,7 @@
   export interface CardCarouselProps {
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
-    /** Overline above the band title. */
+    /** Eyebrow above the band title. */
     eyebrow?: string
     /** Headline of the band, rendered as its `h2` at the start of the row the step controls end; the band renders no title when empty. */
     title?: string
@@ -96,7 +96,7 @@
         class="group/card relative"
       >
         <div class="flex h-full flex-col gap-(--spacing-sm)">
-          <Overline v-if="item.eyebrow">{{ item.eyebrow }}</Overline>
+          <Eyebrow v-if="item.eyebrow">{{ item.eyebrow }}</Eyebrow>
           <h3 class="m-0 text-heading-sm text-balance text-(--text-default)">
             <a
               v-if="item.href"

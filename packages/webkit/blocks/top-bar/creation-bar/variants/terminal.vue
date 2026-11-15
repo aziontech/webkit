@@ -1,17 +1,17 @@
 <script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import GlobalHeader from '@aziontech/webkit/global-header'
 
   const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
 </script>
 
 <template>
   <div class="w-full bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Console">
-      <GlobalHeader.Start>
-        <GlobalHeader.Brand>
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
+        <AppHeader.Brand>
           <a
             href="/home"
             aria-label="Azion home"
@@ -22,10 +22,10 @@
               size="small"
             />
           </a>
-        </GlobalHeader.Brand>
-      </GlobalHeader.Start>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+        </AppHeader.Brand>
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
         <DropdownMenu placement="bottom-end">
           <DropdownMenu.Trigger>
             <button
@@ -84,7 +84,7 @@
             </DropdownMenu.Item>
           </DropdownMenu.Group>
         </DropdownMenu>
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
   </div>
 </template>

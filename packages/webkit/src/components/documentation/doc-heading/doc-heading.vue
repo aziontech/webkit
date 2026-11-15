@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useHeadingNav } from '../../../composables/use-heading-nav'
+  import { useHeadingNavigation } from '../../../composables/use-heading-navigation'
 
   defineOptions({ name: 'DocHeading', inheritAttrs: false })
 
@@ -26,7 +26,7 @@
   }>()
 
   const attrs = useAttrs()
-  const nav = useHeadingNav()
+  const nav = useHeadingNavigation()
 
   const target = computed(() => props.anchor)
 

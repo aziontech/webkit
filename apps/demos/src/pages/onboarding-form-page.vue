@@ -4,8 +4,8 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import AppHeader from '@aziontech/webkit/app-header'
+  import FieldDescription from '@aziontech/webkit/field-description'
   import Input from '@aziontech/webkit/input'
   import Progress from '@aziontech/webkit/progress'
   import RadioGroup from '@aziontech/webkit/radio-group'
@@ -86,11 +86,11 @@
 
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <GlobalHeader
+    <AppHeader
       aria-label="Console"
       class="shrink-0"
     >
-      <GlobalHeader.Brand>
+      <AppHeader.Brand>
         <a
           href="/"
           aria-label="Azion home"
@@ -101,9 +101,9 @@
             size="small"
           />
         </a>
-      </GlobalHeader.Brand>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Brand>
+      <AppHeader.Center />
+      <AppHeader.End>
         <Button
           label="Documentation"
           variant="outline"
@@ -111,8 +111,8 @@
           icon="ai ai-book"
           href="https://example.com/docs"
         />
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div
@@ -221,9 +221,10 @@
                               </span>
                             </template>
                           </RadioGroup>
-                          <HelperText
-                            label="Generated from the organization's name. Select its color."
-                          />
+                          <FieldDescription
+                            >Generated from the organization's name. Select its
+                            color.</FieldDescription
+                          >
                         </fieldset>
                       </div>
                     </div>

@@ -1,6 +1,6 @@
 ---
 name: webkit-ai-surfaces
-description: Generative AI surfaces on @aziontech/webkit — a chat page or drawer, a streamed response, thinking and loading states, citations, feedback, follow-up questions, generated artifacts and actions the assistant may only run after the reader approves. Picks the right AI component for each moment (Conversation, ChatMessage, PromptInput, StreamingResponse, Reasoning, Sources, Citation, SuggestionGroup, ToolCall, ToolApproval, ArtifactPreview, AiLoading), wires the message lifecycle (pending → streaming → success or error) and holds the safety line — model output is never rendered as HTML and nothing with side effects runs without an explicit approval. Use when building or reviewing anything where a person talks with an AI assistant or reads its output.
+description: Generative AI surfaces on @aziontech/webkit — a chat page or drawer, a streamed response, thinking and loading states, citations, feedback, follow-up questions, generated artifacts and actions the assistant may only run after the reader approves. Picks the right AI component for each moment (Conversation, ChatMessage, PromptInput, StreamingResponse, Reasoning, Sources, Citation, SuggestionGroup, ToolCall, ToolApproval, ArtifactPreview, ResponseLoading), wires the message lifecycle (pending → streaming → success or error) and holds the safety line — model output is never rendered as HTML and nothing with side effects runs without an explicit approval. Use when building or reviewing anything where a person talks with an AI assistant or reads its output.
 status: active
 last_updated: 2026-11-15
 scope: general
@@ -53,8 +53,8 @@ expired and irreversible for approval) as variants. Adapt the words and the data
 | One prompt or response, its author, lifecycle and actions               | `ChatMessage` + `ChatMessage.Actions`                                           |
 | Thumbs up / down on a response                                          | `ChatMessage.Feedback`                                                          |
 | The composer                                                            | `PromptInput`                                                                   |
-| Waiting for the first token                                             | `ChatMessage status="pending"` (renders `AiLoading`)                            |
-| A table or code block about to appear while text streams                | `AiLoading variant="bar"`                                                       |
+| Waiting for the first token                                             | `ChatMessage status="pending"` (renders `ResponseLoading`)                      |
+| A table or code block about to appear while text streams                | `ResponseLoading variant="bar"`                                                 |
 | The model's Markdown, streamed or finished                              | `StreamingResponse`                                                             |
 | The model reasoning before it answers                                   | `Reasoning`                                                                     |
 | Where a statement comes from                                            | `[n]` in the Markdown → `Citation`; the list → `Sources` with the same `anchor` |
@@ -69,7 +69,7 @@ expired and irreversible for approval) as variants. Adapt the words and the data
 Drive `ChatMessage` from your request, never from timers in the view:
 
 1. Submit → push the user's message and an assistant message with `status="pending"`; set the
-   composer's `status="pending"`. `AiLoading` shows only after one second, so fast responses never
+   composer's `status="pending"`. `ResponseLoading` shows only after one second, so fast responses never
    flicker.
 2. Reasoning tokens → `Reasoning :streaming="true"` inside the message (collapsed). Thinking ends →
    `streaming=false` and, if the server reports it, `duration`.

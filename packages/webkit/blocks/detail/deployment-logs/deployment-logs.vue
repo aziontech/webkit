@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import LogView, { type LogViewStep } from '@aziontech/webkit/log-view'
+  import LogViewer, { type LogViewerStep } from '@aziontech/webkit/log-viewer'
   import { computed, ref } from 'vue'
 
-  const steps: LogViewStep[] = [
+  const steps: LogViewerStep[] = [
     {
       id: 'token',
       title: 'Access token',
@@ -170,7 +170,7 @@
 </script>
 
 <template>
-  <LogView.Steps
+  <LogViewer.Steps
     :steps="steps"
     v-model:open-step="openStep"
     :copyable="false"
@@ -189,5 +189,5 @@
         <span class="truncate text-label-sm text-(--text-muted)">{{ currentStep }}</span>
       </div>
     </template>
-  </LogView.Steps>
+  </LogViewer.Steps>
 </template>

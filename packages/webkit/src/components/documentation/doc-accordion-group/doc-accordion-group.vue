@@ -20,7 +20,7 @@
   const props = withDefaults(defineProps<DocAccordionGroupProps>(), { type: 'single' })
 
   const slots = defineSlots<{
-    /** The `DocAccordionItem` children, in order. */
+    /** The `DocAccordion` children, in order. */
     default(): unknown
   }>()
 

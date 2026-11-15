@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
   import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import HighlightButton from '@aziontech/webkit/highlight-button'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageTabs from '@aziontech/webkit/page-tabs'
@@ -269,7 +269,7 @@
           size="medium"
           icon="ai ai-circle-plus"
         />
-        <ButtonHighlight
+        <HighlightButton
           label="Agent"
           size="medium"
           icon="ai ai-ask-azion"

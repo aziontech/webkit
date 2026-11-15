@@ -1,0 +1,256 @@
+import { render } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
+
+import ProductMedia from '../../../../examples/media-split-stack-section/product-media.vue'
+import { expectNoA11yViolations } from '../../../test/axe'
+import MediaSplitStackSection from './media-split-stack-section.vue'
+
+const TESTID = 'sections-media-split-stack-section'
+const BAND_TESTID = 'marketing-media-split'
+const EYEBROW = 'Managed Infrastructure'
+const TITLE = 'Stop managing regions and capacity by hand'
+
+const bands = [
+  {
+    image: '/illustrations/quick-start-with-templates.svg',
+    imageAlt: 'A project started from a template',
+    title: 'Modern applications',
+    description: 'Build static sites, run serverless applications.',
+    action: { label: 'Learn more about apps', href: '/solutions/web-apps/' }
+  },
+  {
+    illustration: 'ai-applications',
+    illustrationLabel: 'An AI agent served close to users',
+    title: 'AI applications',
+    description: 'Build and deploy AI agents.',
+    action: { label: 'Learn more about AI', href: '/solutions/ai/' }
+  },
+  {
+    illustration: 'automate-threat-mitigation',
+    title: 'Protected applications and APIs',
+    description: 'Protect web applications and APIs.'
+  }
+]
+
+const run = (props: Record<string, unknown> = {}) =>
+  render(MediaSplitStackSection, { props: { bands, ...props } })
+
+const bandSides = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`)).map((band) =>
+    band.getAttribute('data-variant')
+  )
+
+describe('MediaSplitStackSection', () => {
+  it('renders the run under the default testid', () => {
+    const { getByTestId } = run()
+
+    expect(getByTestId(TESTID)).toBeInTheDocument()
+  })
+
+  it('lets a consumer data-testid win over the fallback', () => {
+    const { getByTestId, queryByTestId } = run({ 'data-testid': 'solutions' })
+
+    expect(getByTestId('solutions')).toBeInTheDocument()
+    expect(queryByTestId(TESTID)).toBeNull()
+  })
+
+  it.each(['media-end', 'alternating'] as const)(
+    'mirrors variant=%s on data-variant',
+    (variant) => {
+      const { getByTestId } = run({ variant })
+
+      expect(getByTestId(TESTID).getAttribute('data-variant')).toBe(variant)
+    }
+  )
+
+  it('defaults to the media-end variant with every picture at the closing end', () => {
+    const { container, getByTestId } = run()
+
+    expect(getByTestId(TESTID).getAttribute('data-variant')).toBe('media-end')
+    expect(bandSides(container)).toEqual(['media-end', 'media-end', 'media-end'])
+  })
+
+  it('alternates the media side band by band, starting at the opening end', () => {
+    const { container } = run({ variant: 'alternating' })
+
+    expect(bandSides(container)).toEqual(['media-start', 'media-end', 'media-start'])
+  })
+
+  it('renders one band per entry, in order, each named by its title', () => {
+    const { getAllByTestId, getByRole } = run()
+
+    expect(getAllByTestId(BAND_TESTID)).toHaveLength(bands.length)
+    bands.forEach((band) => {
+      expect(getByRole('region', { name: band.title })).toBeInTheDocument()
+      expect(getByRole('heading', { level: 2, name: band.title })).toBeInTheDocument()
+    })
+  })
+
+  it('renders the image of a band with its alt text', () => {
+    const { getByAltText } = run()
+
+    expect(getByAltText('A project started from a template').getAttribute('src')).toBe(
+      bands[0]?.image
+    )
+  })
+
+  it('renders each band action as a link to its href', () => {
+    const { getAllByRole } = run()
+
+    bands
+      .filter((band) => band.action)
+      .forEach((band) => {
+        const links = getAllByRole('link', { name: band.action?.label })
+        expect(links.length).toBeGreaterThanOrEqual(1)
+        links.forEach((link) => expect(link).toHaveAttribute('href', band.action?.href))
+      })
+  })
+
+  it('renders no link for a band without an action', () => {
+    const { queryByRole } = run({ bands: [bands[2]] })
+
+    expect(queryByRole('link')).toBeNull()
+  })
+
+  it('renders the header and names the run by its title', () => {
+    const { getByRole, getByTestId, getByText } = run({ eyebrow: EYEBROW, title: TITLE })
+
+    expect(getByTestId(TESTID).getAttribute('aria-label')).toBe(TITLE)
+    expect(getByRole('heading', { level: 2, name: TITLE })).toBeInTheDocument()
+    expect(getByText(EYEBROW)).toBeInTheDocument()
+  })
+
+  it('drops the band headlines to h3 under a section title', () => {
+    const { getByRole, queryAllByRole } = run({ title: TITLE })
+
+    expect(queryAllByRole('heading', { level: 2 })).toHaveLength(1)
+    bands.forEach((band) => {
+      expect(getByRole('heading', { level: 3, name: band.title })).toBeInTheDocument()
+    })
+  })
+
+  it('renders the description under the section title', () => {
+    const { getByText } = run({ title: TITLE, description: 'Ship without picking a region.' })
+
+    expect(getByText('Ship without picking a region.')).toBeInTheDocument()
+  })
+
+  it('renders a band eyebrow above its headline', () => {
+    const { getByText } = run({ bands: [{ ...bands[1], eyebrow: 'AI Inference' }] })
+
+    expect(getByText('AI Inference')).toBeInTheDocument()
+  })
+
+  it('links the whole band to its href, ahead of its action', () => {
+    const { getAllByRole, getByTestId } = run({
+      bands: [{ ...bands[0], href: '/solutions/overview/' }]
+    })
+
+    expect(getByTestId(BAND_TESTID).hasAttribute('data-media-href')).toBe(true)
+    const hrefs = getAllByRole('link').map((link) => link.getAttribute('href'))
+    expect(hrefs).toContain('/solutions/overview/')
+    expect(hrefs).toContain(bands[0]?.action?.href)
+  })
+
+  it('links a band with an href and no action', () => {
+    const { getByTestId } = run({ bands: [{ ...bands[2], href: '/solutions/security/' }] })
+
+    expect(getByTestId(BAND_TESTID).hasAttribute('data-media-href')).toBe(true)
+  })
+
+  it('draws a band scene ahead of its other media', async () => {
+    const { findByTestId } = run({
+      bands: [
+        {
+          ...bands[1],
+          scene: { component: 'ConsoleMockup', props: { name: 'kv-store-key' } }
+        }
+      ]
+    })
+
+    expect(await findByTestId('content-console-mockup')).toHaveAttribute(
+      'data-name',
+      'kv-store-key'
+    )
+  })
+
+  it('sets the anchor as the run id', () => {
+    const { getByTestId } = run({ anchor: 'solutions' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'solutions')
+  })
+
+  it('renders no header and leaves the run unnamed when no title is set', () => {
+    const { getByTestId, queryByText } = run({ eyebrow: EYEBROW })
+
+    expect(getByTestId(TESTID).hasAttribute('aria-label')).toBe(false)
+    expect(queryByText(EYEBROW)).toBeNull()
+  })
+
+  it('renders only the section when bands is empty', () => {
+    const { getByTestId, queryAllByTestId, queryByRole } = run({ bands: [], title: TITLE })
+
+    expect(getByTestId(TESTID)).toBeInTheDocument()
+    expect(queryByRole('heading')).toBeNull()
+    expect(queryAllByTestId(BAND_TESTID)).toHaveLength(0)
+  })
+
+  it('has no a11y violations with the media-end variant', async () => {
+    const { container } = run()
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('has no a11y violations with the alternating variant and a header', async () => {
+    const { container } = run({ variant: 'alternating', eyebrow: EYEBROW, title: TITLE })
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('draws a widget, a diagram and a framed image, each inset from the cell', async () => {
+    const { container, findByTestId, getByRole } = render(ProductMedia)
+
+    const widget = await findByTestId('content-console-mockup', {}, { timeout: 5000 })
+    expect(widget.getAttribute('data-name')).toBe('data-stream-source')
+    const diagram = await findByTestId('marketing-diagram', {}, { timeout: 5000 })
+    expect(diagram.getAttribute('data-name')).toBe('load-balancer')
+    expect(getByRole('img', { name: 'G2' })).toBeInTheDocument()
+    await expect.poll(() => widget.textContent).toContain('Data Source')
+    expect(widget.textContent).not.toContain('Priya')
+    const splits = Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`))
+    expect(splits.map((split) => split.hasAttribute('data-media-padded'))).toEqual([
+      true,
+      true,
+      true
+    ])
+  })
+
+  it('runs an illustration and a plain image flush', () => {
+    const { container } = run()
+
+    const splits = Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`))
+    expect(splits.map((split) => split.hasAttribute('data-media-padded'))).toEqual([
+      false,
+      false,
+      false
+    ])
+  })
+
+  it('prefers a widget over the illustration and the image of the same band', async () => {
+    const { container, findByTestId } = run({
+      bands: [{ ...bands[0], illustration: 'ai-applications', widget: 'kv-store-key' }]
+    })
+
+    await findByTestId('content-console-mockup', {}, { timeout: 5000 })
+    expect(container.querySelector(`img[src="${bands[0].image}"]`)).toBeNull()
+    expect(container.querySelector('[data-testid="content-illustration"]')).toBeNull()
+  })
+
+  it('has no a11y violations with product media', async () => {
+    const { container, findByTestId } = render(ProductMedia)
+
+    await findByTestId('content-console-mockup', {}, { timeout: 5000 })
+    await findByTestId('marketing-diagram', {}, { timeout: 5000 })
+    await expectNoA11yViolations(container)
+  })
+})

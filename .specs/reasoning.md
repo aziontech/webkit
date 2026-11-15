@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: ee6e8522b3ae813342933c5b46874a4a6d1cc53bfc57802831485bc9c829f53d
+checksum: d93abe2fd3542372764cfd241080308e8e5eec96d3a36c334c6b637920b3e1b2
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -27,13 +27,13 @@ for the response now.
 
 ## When NOT to use
 
-- Ordinary loading with no reasoning → `ai-loading`.
+- Ordinary loading with no reasoning → `response-loading`.
 - Agent actions with side effects (calls, commands) → `tool-call` and `tool-approval`.
 - Progressive steps of a long task → a `stepper` or a list of `tool-call`s.
 
 ## Related
 
-- `ai-loading` — loading without a trace.
+- `response-loading` — loading without a trace.
 - `tool-call` — what the agent did, rather than what it thought.
 - `streaming-response` — renders a Markdown trace inside the slot.
 

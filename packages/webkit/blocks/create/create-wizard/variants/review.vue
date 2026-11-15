@@ -1,20 +1,20 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SectionHeader from '@aziontech/webkit/section-header'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
@@ -38,8 +38,8 @@
     helper: string
   }
 
-  interface FieldError {
-    type: HelperTextType
+  interface FieldProblem {
+    type: 'helper' | 'invalid' | 'required'
     message: string
   }
 
@@ -144,7 +144,7 @@
     type: 'asn',
     items: '13335\n53331\n64512\n64513\n65001\n65002\n65010'
   })
-  const errors = reactive<Partial<Record<FieldName, FieldError>>>({})
+  const errors = reactive<Partial<Record<FieldName, FieldProblem>>>({})
   const answered = ref(choice.value !== '')
   const whereMissing = ref(false)
 
@@ -318,15 +318,15 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Console">
-      <GlobalHeader.Start>
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Access Lists"
           variant="outline"
           size="small"
         />
-        <GlobalHeader.Brand>
+        <AppHeader.Brand>
           <a
             href="/home"
             aria-label="Azion home"
@@ -337,11 +337,11 @@
               size="small"
             />
           </a>
-        </GlobalHeader.Brand>
+        </AppHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Start>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -353,8 +353,8 @@
             variant="square"
           />
         </button>
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
       <div
@@ -436,11 +436,9 @@
                     No policy matches “{{ query.trim() }}”.
                   </p>
                 </div>
-                <HelperText
-                  v-if="whereMissing"
-                  type="required"
-                  label="Select a policy, or continue without one."
-                />
+                <FieldError v-if="whereMissing"
+                  >Select a policy, or continue without one.</FieldError
+                >
               </div>
 
               <div class="flex flex-col items-center gap-(--spacing-2xs)">
@@ -513,7 +511,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="Give a unique and descriptive name to identify the access list."
                       >
@@ -530,13 +528,12 @@
                           "
                           @update:model-value="delete errors.name"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.name"
                           id="create-access-list-name-message"
-                          :type="errors.name.type"
-                          :label="errors.name.message"
-                        />
-                      </SettingRow>
+                          >{{ errors.name.message }}</FieldError
+                        >
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -554,7 +551,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Type"
                         variant="stacked"
                       >
@@ -573,8 +570,8 @@
                             >{{ option.label }}</RadioGroup.Item
                           >
                         </RadioGroup>
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         :title="listField.label"
                         :description="listField.helper"
                         variant="stacked"
@@ -591,13 +588,12 @@
                           "
                           @update:model-value="delete errors.items"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.items"
                           id="create-access-list-items-message"
-                          :type="errors.items.type"
-                          :label="errors.items.message"
-                        />
-                      </SettingRow>
+                          >{{ errors.items.message }}</FieldError
+                        >
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

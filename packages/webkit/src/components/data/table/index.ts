@@ -8,7 +8,7 @@ import TableCellLink from './table-cell-link/table-cell-link.vue'
 import TableCellStatus from './table-cell-status/table-cell-status.vue'
 import TableCellTags from './table-cell-tags/table-cell-tags.vue'
 import TableCellTime from './table-cell-time/table-cell-time.vue'
-import TableExport from './table-export/table-export.vue'
+import TableExportButton from './table-export-button/table-export-button.vue'
 import TableFilter from './table-filter/table-filter.vue'
 import TableFooter from './table-footer/table-footer.vue'
 import TableHeadCell from './table-head-cell/table-head-cell.vue'
@@ -38,7 +38,7 @@ type CompoundTable = typeof Table & {
   Toolbar: typeof TableToolbar
   Search: typeof TableSearch
   Filter: typeof TableFilter
-  Export: typeof TableExport
+  Export: typeof TableExportButton
   RefreshButton: typeof TableRefreshButton
   LiveButton: typeof TableLiveButton
 }
@@ -61,7 +61,7 @@ const TableRoot = Object.assign(Table, {
   Toolbar: TableToolbar,
   Search: TableSearch,
   Filter: TableFilter,
-  Export: TableExport,
+  Export: TableExportButton,
   RefreshButton: TableRefreshButton,
   LiveButton: TableLiveButton
 }) as CompoundTable
@@ -74,7 +74,7 @@ export type {
   TableCellSlots,
   TableColumn,
   TableDensity,
-  TableExportScope,
+  TableExportButtonScope,
   TableExposed,
   TableFilterField,
   TableFilterType,
@@ -96,7 +96,7 @@ export type { TableCellIdProps } from './table-cell-id/table-cell-id.vue'
 export type { TableCellLinkProps } from './table-cell-link/table-cell-link.vue'
 export type { TableCellStatusProps } from './table-cell-status/table-cell-status.vue'
 export type { TableCellTimeProps } from './table-cell-time/table-cell-time.vue'
-export type { TableExportProps } from './table-export/table-export.vue'
+export type { TableExportButtonProps } from './table-export-button/table-export-button.vue'
 export type { TableFilterProps } from './table-filter/table-filter.vue'
 export type {
   TableHeadCellAlign,

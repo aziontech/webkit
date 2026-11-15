@@ -3,11 +3,11 @@
   import Card from '@aziontech/webkit/card'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Flow from '@aziontech/webkit/flow'
+  import FlowDiagram from '@aziontech/webkit/flow-diagram'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
-  import LogViewContent from '@aziontech/webkit/log-view-content'
-  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view-root'
+  import LogViewerContent from '@aziontech/webkit/log-viewer-content'
+  import LogViewer, { type LogViewerLine } from '@aziontech/webkit/log-viewer-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import SectionHeader from '@aziontech/webkit/section-header'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
@@ -355,7 +355,7 @@
     ]
   })
 
-  const lines = computed<LogViewLine[]>(() =>
+  const lines = computed<LogViewerLine[]>(() =>
     run.value.logs.map((entry, index) => ({
       id: `${run.value.id}-${index}`,
       time: `+${formatDuration(entry.at)}`,
@@ -586,11 +586,11 @@
           <div
             class="overflow-x-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
           >
-            <Flow
+            <FlowDiagram
               align="start"
               class="min-w-max"
             >
-              <Flow.Node
+              <FlowDiagram.Node
                 v-for="node in path"
                 :key="node.key"
                 unstyled
@@ -600,7 +600,7 @@
                 <div
                   class="flex w-full min-w-0 flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none"
                 >
-                  <Flow.Anchor>
+                  <FlowDiagram.Anchor>
                     <div
                       class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
                     >
@@ -620,7 +620,7 @@
                         />
                       </span>
                     </div>
-                  </Flow.Anchor>
+                  </FlowDiagram.Anchor>
                   <div
                     class="flex min-h-8 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)"
                   >
@@ -657,8 +657,8 @@
                     </div>
                   </dl>
                 </div>
-              </Flow.Node>
-            </Flow>
+              </FlowDiagram.Node>
+            </FlowDiagram>
           </div>
         </section>
 
@@ -700,16 +700,16 @@
               />
             </template>
           </SectionHeader>
-          <LogView
+          <LogViewer
             :lines="lines"
             :loading="running && !lines.length"
             loading-label="Waiting for the function to finish…"
             copyable
           >
-            <LogViewContent>
+            <LogViewerContent>
               <template #empty>No log lines yet.</template>
-            </LogViewContent>
-          </LogView>
+            </LogViewerContent>
+          </LogViewer>
         </section>
       </div>
     </div>

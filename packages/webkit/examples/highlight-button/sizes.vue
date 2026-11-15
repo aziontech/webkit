@@ -1,0 +1,23 @@
+<script setup>
+  import HighlightButton from '@aziontech/webkit/highlight-button'
+</script>
+
+<template>
+  <div class="flex flex-wrap items-center gap-4">
+    <HighlightButton
+      size="small"
+      label="Ask Azion"
+      icon="ai ai-sparkles"
+    />
+    <HighlightButton
+      size="medium"
+      label="Ask Azion"
+      icon="ai ai-sparkles"
+    />
+    <HighlightButton
+      size="large"
+      label="Ask Azion"
+      icon="ai ai-sparkles"
+    />
+  </div>
+</template>

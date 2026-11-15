@@ -13,7 +13,7 @@
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
   import SelectItem from '../../inputs/select/select-item/select-item.vue'
   import SelectTrigger from '../../inputs/select/select-trigger/select-trigger.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
 
   defineOptions({
@@ -44,7 +44,7 @@
     image?: string
     /** Client mark drawn in the cover cell when there is no cover. */
     mark?: LogoMark
-    /** Overline, usually the category or the content type and the date. */
+    /** Eyebrow, usually the category or the content type and the date. */
     meta: string
     /** Headline of the entry, naming the row link. */
     title: string
@@ -276,7 +276,7 @@
       :divided="false"
       :padded="false"
     >
-      <FrameBox
+      <RegistrationFrame
         key="toolbar"
         v-if="title || showCategories || showSearch || showFacets"
         flush
@@ -381,10 +381,10 @@
             </Select>
           </div>
         </div>
-      </FrameBox>
+      </RegistrationFrame>
 
       <template v-if="visible.length > 0">
-        <FrameBox
+        <RegistrationFrame
           key="rows"
           flush
           borders="y"
@@ -488,9 +488,9 @@
               </article>
             </li>
           </ul>
-        </FrameBox>
+        </RegistrationFrame>
 
-        <FrameBox
+        <RegistrationFrame
           v-if="hasMore"
           flush
           borders="y"
@@ -504,10 +504,10 @@
               @click="pages += 1"
             />
           </div>
-        </FrameBox>
+        </RegistrationFrame>
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         v-else-if="emptyTitle"
         key="empty"
         flush
@@ -532,7 +532,7 @@
             />
           </template>
         </EmptyState>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

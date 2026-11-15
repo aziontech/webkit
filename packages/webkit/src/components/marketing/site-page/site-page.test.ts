@@ -12,7 +12,10 @@ const FAQ_TITLE = 'Frequently asked questions'
 const USES_TITLE = 'What teams use it for'
 
 const hero: SitePageSection[] = [
-  { _id: 'hero-band', props: { variant: 'title-band', title: HEADLINE, description: 'From data.' } }
+  {
+    _id: 'hero-section',
+    props: { variant: 'title-band', title: HEADLINE, description: 'From data.' }
+  }
 ]
 
 const faq: SitePageSection = {
@@ -24,7 +27,7 @@ const faq: SitePageSection = {
 }
 
 const uses: SitePageSection = {
-  _id: 'use-cases',
+  _id: 'customer-use-cases',
   props: {
     title: USES_TITLE,
     items: [{ icon: 'ai ai-bolt', title: 'Fast pages', description: 'Served close to the reader.' }]
@@ -172,7 +175,7 @@ describe('SitePage', () => {
       hero: [],
       sections: [
         {
-          _id: 'console-panel',
+          _id: 'console-showcase',
           props: { variant: 'diagram', title: 'Requests take the shortest path' },
           scenes: {
             scene: {
@@ -200,7 +203,7 @@ describe('SitePage', () => {
       hero: [],
       sections: [
         {
-          _id: 'console-panel',
+          _id: 'console-showcase',
           props: { variant: 'diagram', title: 'Requests take the shortest path' },
           scenes: { scene: { component, props: { animated: false } } }
         }
@@ -216,7 +219,7 @@ describe('SitePage', () => {
       hero: [],
       sections: [
         {
-          _id: 'console-panel',
+          _id: 'console-showcase',
           props: { variant: 'diagram', title: 'Requests take the shortest path' },
           scenes: { scene: { component: 'NotASceneForTheTest' } }
         }
@@ -232,7 +235,7 @@ describe('SitePage', () => {
 
   it('emits submit with the event first, then the entry and the values of its form', async () => {
     const newsletter: SitePageSection = {
-      _id: 'closing-call-to-action-newsletter',
+      _id: 'newsletter-section',
       props: { title: 'Subscribe to our newsletter', form: newsletterForm },
       submission: { endpoint: '/subscribe' }
     }
@@ -254,7 +257,7 @@ describe('SitePage', () => {
       hero: [],
       sections: [
         {
-          _id: 'closing-call-to-action-newsletter',
+          _id: 'newsletter-section',
           props: { title: 'Subscribe to our newsletter', form: newsletterForm }
         }
       ]
@@ -269,7 +272,7 @@ describe('SitePage', () => {
     const folders = Object.keys(import.meta.glob('../../sections/*/*.vue'))
       .map((path) => path.split('/')[3])
       .filter((name, index, all) => all.indexOf(name) === index)
-      .filter((name) => name !== 'site-nav' && name !== 'site-footer')
+      .filter((name) => name !== 'site-header' && name !== 'site-footer')
       .sort()
 
     expect(Object.keys(sitePageSections).sort()).toEqual(folders)
@@ -283,8 +286,8 @@ describe('SitePage', () => {
   })
 
   it.each([
-    ['hero-copy-on-top-art', { title: 'T' }, 'hero-band', { variant: 'copy-on-top-art' }],
-    ['hero-with-opening', { title: 'T' }, 'hero-band', { variant: 'title-band', size: 'large' }],
+    ['hero-copy-on-top-art', { title: 'T' }, 'hero-section', { variant: 'copy-on-top-art' }],
+    ['hero-with-opening', { title: 'T' }, 'hero-section', { variant: 'title-band', size: 'large' }],
     [
       'closing-call-to-action-agents',
       { title: 'T' },
@@ -302,7 +305,7 @@ describe('SitePage', () => {
     [
       'compare-support-tiers',
       { tiers: [{ name: 'Pro' }] },
-      'compare-plans',
+      'plan-comparison',
       { plans: [{ name: 'Pro' }] }
     ],
     ['article-index-blog', {}, 'article-index', { filters: 'category-search' }],
@@ -317,13 +320,13 @@ describe('SitePage', () => {
     [
       'code-split',
       { primaryAction: { label: 'Go' } },
-      'media-split-band',
+      'media-split-section',
       { primaryAction: { variant: 'secondary', label: 'Go' } }
     ],
     [
       'customer-spotlight',
       { items: [{ name: 'Acme', description: 'Story' }] },
-      'client-mosaic-columns',
+      'client-story-columns',
       { reveal: 'hover', cells: [{ name: 'Acme', story: 'Story' }] }
     ]
   ])('renders the retired _id %s with its successor', (id, props, target, expected) => {
@@ -345,7 +348,7 @@ describe('SitePage', () => {
       sections: [uses]
     })
 
-    const band = await findByTestId('sections-hero-band')
+    const band = await findByTestId('sections-hero-section')
     expect(band.getAttribute('data-variant')).toBe('copy-on-top-art')
     expect(warn).not.toHaveBeenCalled()
   })

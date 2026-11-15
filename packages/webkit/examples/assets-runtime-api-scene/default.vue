@@ -1,10 +1,10 @@
 <script setup>
   import RuntimeApiScene from '@aziontech/webkit/assets/runtime-api-scene'
-  import HeroBand from '@aziontech/webkit/hero-band'
+  import HeroSection from '@aziontech/webkit/hero-section'
 </script>
 
 <template>
-  <HeroBand
+  <HeroSection
     variant="center-band"
     eyebrow="Functions"
     title="Run JavaScript on every request"
@@ -14,5 +14,5 @@
     <template #bottom>
       <RuntimeApiScene class="max-w-(--container-2xl)" />
     </template>
-  </HeroBand>
+  </HeroSection>
 </template>

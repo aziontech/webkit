@@ -14,7 +14,7 @@
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocPrevNext from '@aziontech/webkit/doc-prev-next'
+  import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocProse from '@aziontech/webkit/doc-prose'
   import DocTab from '@aziontech/webkit/doc-tab'
   import DocTabs from '@aziontech/webkit/doc-tabs'
@@ -537,7 +537,7 @@
           />
         </DocCardGroup>
       </DocProse>
-      <DocPrevNext
+      <DocPreviousNext
         :previous="{ label: 'MCP server', href: '/docs/dev-tools/mcp' }"
         :next="{ label: 'Claude Code', href: '/docs/agent-setup/claude-code' }"
       />

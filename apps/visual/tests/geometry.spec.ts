@@ -245,7 +245,7 @@ for (const theme of THEMES) {
     const mode: Mode = { theme, width }
     test(`geometry diagram flow centred connectors ${label(mode)}`, async ({ page }) => {
       await prepare(page, mode)
-      const preview = await openExample(page, 'diagram/flow', mode)
+      const preview = await openExample(page, 'diagram/flow-diagram', mode)
       const canvas = preview.locator('[data-testid="marketing-diagram__canvas"]')
       await canvas.locator('path').nth(3).waitFor({ state: 'attached' })
       const report = await canvas.evaluate((el) => {

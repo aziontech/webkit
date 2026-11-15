@@ -48,7 +48,7 @@ Never guess an import path — files move. Resolve every primitive the same way:
 - Or read **`node_modules/@aziontech/webkit/catalog.json`** — every key under `imports` is a real
   published subpath. If a subpath is not a key there, it does not exist.
 
-The surfaces this skill uses — `message`, `toast`, `field` (with its `Field.Description` / `Field.Error`), `helper-text` — all resolve
+The surfaces this skill uses — `message`, `toast`, `field` (with its `Field.Description` / `Field.Error`), `field-error` — all resolve
 this way. Use **@aziontech/theme tokens** for spacing and color, never raw px or hex.
 
 ## The one question
@@ -79,8 +79,8 @@ states distinct:
 - **red `invalid`** — the value is present and wrong.
 
 Mechanics (the `Field` triad, `aria-describedby`, submit-time validation, the locked scope) live in
-**`/webkit-form`**. In a settings row (`SettingRow`, `@aziontech/webkit/setting-row`) the message is a
-`HelperText` placed in the row's default slot right after the control, so it sits under the control
+**`/webkit-form`**. In a settings row (`SettingsRow`, `@aziontech/webkit/settings-row`) the message is a
+`FieldDescription` placed in the row's default slot right after the control, so it sits under the control
 inside the row's control column. The only rule this skill adds: **client-side validation is the one thing that does
 not go in a `Alert`.** The `Alert` is for what the **server** said.
 
@@ -319,7 +319,7 @@ End with: `errors placed correctly` or `N gaps — fix before polish`.
 - **Surfaces** (resolve each via the MCP / catalog — see "How to find the components"):
   `@aziontech/webkit/alert` (inline notice: `severity`, `size`, `#actions` slot, default slot for
   copy with links), `@aziontech/webkit/toast` (`toast.error` / `.success` / `.loading`, `duration`,
-  `closable`, `action`), the `@aziontech/webkit/field` compound + `/helper-text` (the field's own
+  `closable`, `action`), the `@aziontech/webkit/field` compound + `/field-description` (the field's own
   required / invalid state).
 - **Blocks:** `state/form-validation` (rows 1 and 3 on a short form; row 2, the section `Alert` with
   its recovery action, in SectionRejected), `auth/sign-in` (row 4),

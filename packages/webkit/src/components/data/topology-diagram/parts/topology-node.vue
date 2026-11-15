@@ -11,7 +11,7 @@
   import DropdownMenuItem from '../../../navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue'
   import DropdownMenuTrigger from '../../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
-  import FlowAnchor from '../../flow/flow-anchor/flow-anchor.vue'
+  import FlowDiagramAnchor from '../../flow-diagram/flow-diagram-anchor/flow-diagram-anchor.vue'
   import type { TopologyDiagramNodeData } from '../types'
 
   defineOptions({
@@ -75,7 +75,7 @@
     :data-dashed="node.dashed || unbound || null"
     class="w-full rounded-(--shape-card) border border-solid border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) data-[dashed]:border-dashed motion-reduce:transition-none"
   >
-    <FlowAnchor>
+    <FlowDiagramAnchor>
       <button
         :id="triggerId"
         type="button"
@@ -106,7 +106,7 @@
           aria-hidden="true"
         />
       </button>
-    </FlowAnchor>
+    </FlowDiagramAnchor>
 
     <div
       class="flex min-h-9 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)"

@@ -12,7 +12,7 @@ import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
 import { useWizardContext } from './composables/use-wizard-context'
 import Wizard, { WizardStep } from './index'
 
-const Flow = defineComponent({
+const FlowDiagram = defineComponent({
   components: { Wizard, WizardStep },
   props: {
     start: { type: Number, default: 0 },
@@ -63,7 +63,7 @@ beforeAll(async () => {
 })
 
 const mount = async (props: Record<string, unknown> = {}) => {
-  const view = render(Flow, { props })
+  const view = render(FlowDiagram, { props })
   await nextTick()
   await nextTick()
   return view
@@ -495,9 +495,9 @@ describe('Wizard', () => {
   describe('on devices', () => {
     const inBox = (width: number, locale = 'en') =>
       defineComponent({
-        components: { Flow, WebkitProvider },
+        components: { FlowDiagram, WebkitProvider },
         setup: () => ({ width: `${width}px`, locale, catalogs: LOCALES }),
-        template: `<WebkitProvider :locale="locale" :catalogs="catalogs"><div :style="{ width }"><Flow /></div></WebkitProvider>`
+        template: `<WebkitProvider :locale="locale" :catalogs="catalogs"><div :style="{ width }"><FlowDiagram /></div></WebkitProvider>`
       })
 
     const progressOf = (view: ReturnType<typeof render>) =>

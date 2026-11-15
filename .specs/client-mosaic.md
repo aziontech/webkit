@@ -7,14 +7,14 @@ spec_version: 3
 template: 2
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: b998cddd52418044c336d7c0a50ab2148a121fe804b3e73269d911b404458dc5
+checksum: 93b1c649caa1b8d5de17409bd4adde8c62d3ac90e4ab9e0af60412e2ae127483
 ---
 
 # ClientMosaic — Component Spec
 
 ## Purpose
 
-The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a "read the case study" link, and a mark cell carries only the client's linked logo on a chosen fill. With `stories` and `logos` the layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. With `cells` the page places story and mark cells in one ordered list, each with its own column and row span, so stories and marks interleave as on the home page. It is a page section — the site places it from a `{ _id: 'client-mosaic', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `bento-grid`, `logo` and `link`.
+The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a "read the case study" link, and a mark cell carries only the client's linked logo on a chosen fill. With `stories` and `logos` the layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. With `cells` the page places story and mark cells in one ordered list, each with its own column and row span, so stories and marks interleave as on the home page. It is a page section — the site places it from a `{ _id: 'client-mosaic', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `bento-grid`, `logo` and `link`.
 
 ## When to use
 
@@ -22,13 +22,13 @@ The client mosaic: a framed bento grid of customer cells where a story cell carr
 
 ## When NOT to use
 
-- For three equal story columns → use `client-mosaic-columns`.
-- For a plain wall with one quote → use `logo-wall-quote`.
+- For three equal story columns → use `client-story-columns`.
+- For a plain wall with one quote → use `logo-wall-section`.
 
 ## Related
 
 - `bento-grid` — the grid the cells are laid in.
-- `client-mosaic-columns` — the three-column sibling with brand-coloured faces.
+- `client-story-columns` — the three-column sibling with brand-coloured faces.
 - `logo` — draws every client mark in the ink its fill needs.
 
 ## Best practices

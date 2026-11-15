@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: b913ad820df2c381429df7c2c68eed2a2a6fe37ab6fd0f4387ab517aee86150b
+checksum: 39f9254c6bfe33f1b98006c3de6656165d0c5fe8486b98a0c508ab8c0fddecde
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -32,8 +32,8 @@ A bordered surface that groups related content under a title, with a header, a b
 ## When NOT to use
 
 - The surface sits above the page as a modal or a side sheet → use `dialog` or `drawer`.
-- It is one tier of a pricing comparison → use `card-pricing`.
-- It is a framed cell or band of a marketing page → use `frame-box` or `card-grid`.
+- It is one tier of a pricing comparison → use `pricing-card`.
+- It is a framed cell or band of a marketing page → use `registration-frame` or `card-grid`.
 - It is a single row of title, description, media and actions → use `item`.
 - It is one record of a resource list shown as cards, with selection and fields → use `card-list` (with `useCollection`).
 - It is a template tile in a gallery with no vendor, badge or install state → keep `variant="default"` with the default slot (see `view/template-browser`).
@@ -41,7 +41,7 @@ A bordered surface that groups related content under a title, with a header, a b
 ## Related
 
 - `item` — rows inside the card; with `padded` set to false, an `Item` list runs its dividers to the card edges.
-- `card-pricing` — pricing tier card with its own price hierarchy and action.
+- `pricing-card` — pricing tier card with its own price hierarchy and action.
 - `card-grid` — responsive grid of cells for marketing pages.
 - `panel` — the layered shell behind overlays, not an in-page card.
 - `empty-state` — goes in the default slot when the card has no data yet.
@@ -119,33 +119,33 @@ A bordered surface that groups related content under a title, with a header, a b
 
 ## Props
 
-| Prop          | Type                         | Default     | Required | JSDoc                                                                                                                                                                           |
-| ------------- | ---------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `title`       | `string`                     | `''`        | false    | Heading rendered in the header when the `header` slot is empty; with `variant="integration"`, the item name.                                                                       |
-| `padded`      | `boolean`                    | `true`      | false    | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers.                                                            |
-| `variant`        | `'default' \| 'integration'` | `'default'` | false    | `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot.                                  |
-| `logo`        | `string`                     | `''`        | false    | Integration variant: icon class for the logo mark. The `logo` slot takes an image instead.                                                                                         |
-| `vendor`      | `string`                     | `''`        | false    | Integration variant: who publishes the item, shown as "by {vendor}".                                                                                                               |
-| `description` | `string`                     | `''`        | false    | Integration variant: one or two sentences on what the item does.                                                                                                                   |
+| Prop          | Type                         | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                 |
+| ------------- | ---------------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`       | `string`                     | `''`        | false    | Heading rendered in the header when the `header` slot is empty; with `variant="integration"`, the item name.                                                                                                                                                                                          |
+| `padded`      | `boolean`                    | `true`      | false    | Pads the content region. Set `false` for flush, edge-to-edge content such as an `ItemList` with full-width dividers.                                                                                                                                                                                  |
+| `variant`     | `'default' \| 'integration'` | `'default'` | false    | `integration` lays the card out as a catalog tile from `title`, `logo`, `vendor`, `description`, `badges`, `installed` and the `actions` slot.                                                                                                                                                        |
+| `logo`        | `string`                     | `''`        | false    | Integration variant: icon class for the logo mark. The `logo` slot takes an image instead.                                                                                                                                                                                                            |
+| `vendor`      | `string`                     | `''`        | false    | Integration variant: who publishes the item, shown as "by {vendor}".                                                                                                                                                                                                                                  |
+| `description` | `string`                     | `''`        | false    | Integration variant: one or two sentences on what the item does.                                                                                                                                                                                                                                      |
 | `badges`      | `CardBadge[]`                | `[]`        | false    | Integration variant: small tags such as the category or the context (`{ label, variant?, severity? }`, `variant` a `TagVariant` and `severity` a `TagSeverity` (`CardBadgeVariant` and `CardBadgeSeverity`); a badge with neither is `info`, a featured badge with neither is the `primary` variant). |
-| `installed`   | `boolean`                    | `false`     | false    | Integration variant: shows the Installed tag.                                                                                                                                      |
-| `href`        | `string`                     | `''`        | false    | Integration variant: the title links here; without it the title is a button that emits `select`.                                                                                   |
-| `featured`    | `boolean`                    | `false`     | false    | Integration variant: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner.                                         |
+| `installed`   | `boolean`                    | `false`     | false    | Integration variant: shows the Installed tag.                                                                                                                                                                                                                                                         |
+| `href`        | `string`                     | `''`        | false    | Integration variant: the title links here; without it the title is a button that emits `select`.                                                                                                                                                                                                      |
+| `featured`    | `boolean`                    | `false`     | false    | Integration variant: the featured layout, centred on a raised surface with a primary glow at the top and the badges in the top end corner.                                                                                                                                                            |
 
 ## Events
 
-| Event    | Payload             | Notes                                                                      |
-| -------- | ------------------- | -------------------------------------------------------------------------- |
+| Event    | Payload             | Notes                                                                         |
+| -------- | ------------------- | ----------------------------------------------------------------------------- |
 | `select` | `event: MouseEvent` | Integration variant without `href`: the title (the whole tile) was activated. |
 
 ## Slots
 
-| Slot             | Scope | Notes                                                                                                            |
-| ---------------- | ----- | ---------------------------------------------------------------------------------------------------------------- |
-| `header`         | —     | Replaces the default header layout (title + header-actions).                                                     |
-| `header-actions` | —     | Actions aligned to the end of the default header; visible on header hover.                                       |
+| Slot             | Scope | Notes                                                                                                               |
+| ---------------- | ----- | ------------------------------------------------------------------------------------------------------------------- |
+| `header`         | —     | Replaces the default header layout (title + header-actions).                                                        |
+| `header-actions` | —     | Actions aligned to the end of the default header; visible on header hover.                                          |
 | `default`        | —     | Main card body: children passed without a slot name. With `variant="integration"` it renders under the description. |
-| `footer`         | —     | Footer actions or metadata; omitted when empty.                                                                  |
+| `footer`         | —     | Footer actions or metadata; omitted when empty.                                                                     |
 | `logo`           | —     | Integration variant: replaces the logo mark, for an `img` with an empty `alt`.                                      |
 | `actions`        | —     | Integration variant: one action at the end of the tile, above the stretched title target.                           |
 

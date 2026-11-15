@@ -1,12 +1,12 @@
 <script setup>
   import Hero from '@aziontech/webkit/hero'
-  import TextureMaterial from '@aziontech/webkit/texture-material'
+  import Texture from '@aziontech/webkit/texture'
 </script>
 
 <template>
   <Hero max-width="site">
     <template #background>
-      <TextureMaterial
+      <Texture
         variant="dots"
         size="medium"
       />

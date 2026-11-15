@@ -4,7 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -16,7 +16,7 @@
   import ResizableRoot from '@aziontech/webkit/resizable-root'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
@@ -401,10 +401,7 @@ export async function handleRequest(request, args = {}) {
                       v-if="codeError"
                       class="px-(--spacing-sm) py-(--spacing-xs)"
                     >
-                      <HelperText
-                        type="invalid"
-                        :label="codeError"
-                      />
+                      <FieldError>{{ codeError }}</FieldError>
                     </div>
                   </div>
                 </div>
@@ -630,7 +627,7 @@ export async function handleRequest(request, args = {}) {
                                                 class="mt-(--spacing-xs) border-t border-(--border-muted)"
                                               >
                                                 <Item.List>
-                                                  <SettingRow
+                                                  <SettingsRow
                                                     title="Name"
                                                     description="The key in the arguments object, and what the service reads."
                                                   >
@@ -653,14 +650,13 @@ export async function handleRequest(request, args = {}) {
                                                         @blur="touch(field.id)"
                                                       />
                                                     </div>
-                                                    <HelperText
+                                                    <FieldError
                                                       v-if="keyError(field)"
                                                       :id="formId + '-message-' + field.id"
-                                                      type="required"
-                                                      :label="keyError(field)"
-                                                    />
-                                                  </SettingRow>
-                                                  <SettingRow
+                                                      >{{ keyError(field) }}</FieldError
+                                                    >
+                                                  </SettingsRow>
+                                                  <SettingsRow
                                                     title="Type"
                                                     description="What the field accepts, and the control the form renders."
                                                   >
@@ -682,8 +678,8 @@ export async function handleRequest(request, args = {}) {
                                                         </Select.Item>
                                                       </Select.Content>
                                                     </Select>
-                                                  </SettingRow>
-                                                  <SettingRow
+                                                  </SettingsRow>
+                                                  <SettingsRow
                                                     title="Label"
                                                     description="How the field is named in the form. Falls back to the key."
                                                   >
@@ -697,8 +693,8 @@ export async function handleRequest(request, args = {}) {
                                                       class="w-full"
                                                       aria-label="Label"
                                                     />
-                                                  </SettingRow>
-                                                  <SettingRow
+                                                  </SettingsRow>
+                                                  <SettingsRow
                                                     title="Description"
                                                     description="The guidance under the field."
                                                   >
@@ -710,8 +706,8 @@ export async function handleRequest(request, args = {}) {
                                                       class="w-full"
                                                       aria-label="Description"
                                                     />
-                                                  </SettingRow>
-                                                  <SettingRow
+                                                  </SettingsRow>
+                                                  <SettingsRow
                                                     title="Required"
                                                     description="The form refuses to save without it."
                                                     variant="compact"
@@ -720,7 +716,7 @@ export async function handleRequest(request, args = {}) {
                                                       v-model="field.required"
                                                       aria-label="Required"
                                                     />
-                                                  </SettingRow>
+                                                  </SettingsRow>
                                                   <Item size="small">
                                                     <div
                                                       class="flex w-full gap-(--spacing-sm)"
@@ -820,7 +816,7 @@ export async function handleRequest(request, args = {}) {
                                                       </div>
                                                     </div>
                                                   </Item>
-                                                  <SettingRow
+                                                  <SettingsRow
                                                     v-if="field.type === 'string'"
                                                     title="Minimum length"
                                                   >
@@ -832,9 +828,9 @@ export async function handleRequest(request, args = {}) {
                                                       class="w-full"
                                                       aria-label="Minimum length"
                                                     />
-                                                  </SettingRow>
-                                                  <SettingRow
-                                                    key="setting-row-2"
+                                                  </SettingsRow>
+                                                  <SettingsRow
+                                                    key="settings-row-2"
                                                     v-if="field.type === 'string'"
                                                     title="Maximum length"
                                                   >
@@ -846,9 +842,9 @@ export async function handleRequest(request, args = {}) {
                                                       class="w-full"
                                                       aria-label="Maximum length"
                                                     />
-                                                  </SettingRow>
-                                                  <SettingRow
-                                                    key="setting-row-3"
+                                                  </SettingsRow>
+                                                  <SettingsRow
+                                                    key="settings-row-3"
                                                     v-if="field.type === 'string'"
                                                     title="Pattern"
                                                     description="A regular expression the value has to match."
@@ -865,9 +861,9 @@ export async function handleRequest(request, args = {}) {
                                                         aria-label="Pattern"
                                                       />
                                                     </div>
-                                                  </SettingRow>
-                                                  <SettingRow
-                                                    key="setting-row-4"
+                                                  </SettingsRow>
+                                                  <SettingsRow
+                                                    key="settings-row-4"
                                                     v-if="
                                                       field.type === 'integer' ||
                                                       field.type === 'number'
@@ -882,9 +878,9 @@ export async function handleRequest(request, args = {}) {
                                                       class="w-full"
                                                       aria-label="Minimum"
                                                     />
-                                                  </SettingRow>
-                                                  <SettingRow
-                                                    key="setting-row-5"
+                                                  </SettingsRow>
+                                                  <SettingsRow
+                                                    key="settings-row-5"
                                                     v-if="
                                                       field.type === 'integer' ||
                                                       field.type === 'number'
@@ -899,9 +895,9 @@ export async function handleRequest(request, args = {}) {
                                                       class="w-full"
                                                       aria-label="Maximum"
                                                     />
-                                                  </SettingRow>
-                                                  <SettingRow
-                                                    key="setting-row-6"
+                                                  </SettingsRow>
+                                                  <SettingsRow
+                                                    key="settings-row-6"
                                                     v-if="field.type === 'select'"
                                                     title="Choices"
                                                     description="One per line. These are the values the form offers."
@@ -919,9 +915,9 @@ export async function handleRequest(request, args = {}) {
                                                         "
                                                       />
                                                     </div>
-                                                  </SettingRow>
-                                                  <SettingRow
-                                                    key="setting-row-7"
+                                                  </SettingsRow>
+                                                  <SettingsRow
+                                                    key="settings-row-7"
                                                     v-if="field.type === 'array'"
                                                     title="List of"
                                                     description="The type of every value in the list."
@@ -943,7 +939,7 @@ export async function handleRequest(request, args = {}) {
                                                         </Select.Item>
                                                       </Select.Content>
                                                     </Select>
-                                                  </SettingRow>
+                                                  </SettingsRow>
                                                 </Item.List>
                                               </div>
                                             </div>
@@ -976,7 +972,7 @@ export async function handleRequest(request, args = {}) {
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="Give a unique and descriptive name to identify your service."
                       >
@@ -991,13 +987,12 @@ export async function handleRequest(request, args = {}) {
                           :aria-describedby="nameError ? nameMessageId : undefined"
                           @update:model-value="nameError = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="nameError"
                           :id="nameMessageId"
-                          type="required"
-                          :label="nameError"
-                        />
-                      </SettingRow>
+                          >{{ nameError }}</FieldError
+                        >
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -1007,7 +1002,7 @@ export async function handleRequest(request, args = {}) {
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Runtime"
                         description="The runtime isn't editable after the service is created."
                       >
@@ -1026,7 +1021,7 @@ export async function handleRequest(request, args = {}) {
                             />
                           </template>
                         </Input>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -1039,7 +1034,7 @@ export async function handleRequest(request, args = {}) {
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Runs on"
                         variant="stacked"
                       >
@@ -1060,7 +1055,7 @@ export async function handleRequest(request, args = {}) {
                             >At the gateway</RadioGroup.Item
                           >
                         </RadioGroup>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -1070,7 +1065,7 @@ export async function handleRequest(request, args = {}) {
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Active"
                         description="An inactive service keeps its code and stops running."
                         variant="compact"
@@ -1079,7 +1074,7 @@ export async function handleRequest(request, args = {}) {
                           v-model="form.active"
                           aria-label="Active"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

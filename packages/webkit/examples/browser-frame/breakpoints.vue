@@ -3,12 +3,12 @@
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
   import CardGrid from '@aziontech/webkit/card-grid'
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import FeatureItem from '@aziontech/webkit/feature-item'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import Topic from '@aziontech/webkit/topic'
 </script>
 
 <template>
@@ -45,7 +45,7 @@
                   </template>
                 </SectionTitle>
               </template>
-              <FrameBox
+              <RegistrationFrame
                 flush
                 borders="y"
                 marks="all"
@@ -57,7 +57,7 @@
                   :mobile-columns="1"
                 >
                   <CardGrid.Cell variant="canvas">
-                    <Topic
+                    <FeatureItem
                       :heading-level="3"
                       icon="ai ai-edge-application"
                       title="Applications"
@@ -65,7 +65,7 @@
                     />
                   </CardGrid.Cell>
                   <CardGrid.Cell variant="canvas">
-                    <Topic
+                    <FeatureItem
                       :heading-level="3"
                       icon="ai ai-edge-firewall"
                       title="Firewall"
@@ -73,7 +73,7 @@
                     />
                   </CardGrid.Cell>
                   <CardGrid.Cell variant="canvas">
-                    <Topic
+                    <FeatureItem
                       :heading-level="3"
                       icon="ai ai-tiered-cache"
                       title="Tiered Cache"
@@ -81,7 +81,7 @@
                     />
                   </CardGrid.Cell>
                 </CardGrid>
-              </FrameBox>
+              </RegistrationFrame>
             </SectionModule>
             <SectionGap
               size="small"
@@ -151,7 +151,7 @@
                   </template>
                 </SectionTitle>
               </template>
-              <FrameBox
+              <RegistrationFrame
                 flush
                 borders="y"
                 marks="all"
@@ -163,7 +163,7 @@
                   :mobile-columns="1"
                 >
                   <CardGrid.Cell variant="canvas">
-                    <Topic
+                    <FeatureItem
                       :heading-level="3"
                       icon="ai ai-edge-application"
                       title="Applications"
@@ -171,7 +171,7 @@
                     />
                   </CardGrid.Cell>
                   <CardGrid.Cell variant="canvas">
-                    <Topic
+                    <FeatureItem
                       :heading-level="3"
                       icon="ai ai-edge-firewall"
                       title="Firewall"
@@ -179,7 +179,7 @@
                     />
                   </CardGrid.Cell>
                   <CardGrid.Cell variant="canvas">
-                    <Topic
+                    <FeatureItem
                       :heading-level="3"
                       icon="ai ai-tiered-cache"
                       title="Tiered Cache"
@@ -187,7 +187,7 @@
                     />
                   </CardGrid.Cell>
                 </CardGrid>
-              </FrameBox>
+              </RegistrationFrame>
             </SectionModule>
             <SectionGap
               size="small"
@@ -257,7 +257,7 @@
               </template>
             </SectionTitle>
           </template>
-          <FrameBox
+          <RegistrationFrame
             flush
             borders="y"
             marks="all"
@@ -269,7 +269,7 @@
               :mobile-columns="1"
             >
               <CardGrid.Cell variant="canvas">
-                <Topic
+                <FeatureItem
                   :heading-level="3"
                   icon="ai ai-edge-application"
                   title="Applications"
@@ -277,7 +277,7 @@
                 />
               </CardGrid.Cell>
               <CardGrid.Cell variant="canvas">
-                <Topic
+                <FeatureItem
                   :heading-level="3"
                   icon="ai ai-edge-firewall"
                   title="Firewall"
@@ -285,7 +285,7 @@
                 />
               </CardGrid.Cell>
               <CardGrid.Cell variant="canvas">
-                <Topic
+                <FeatureItem
                   :heading-level="3"
                   icon="ai ai-tiered-cache"
                   title="Tiered Cache"
@@ -293,7 +293,7 @@
                 />
               </CardGrid.Cell>
             </CardGrid>
-          </FrameBox>
+          </RegistrationFrame>
         </SectionModule>
         <SectionGap
           size="small"

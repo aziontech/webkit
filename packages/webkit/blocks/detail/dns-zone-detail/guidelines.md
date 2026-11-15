@@ -21,9 +21,9 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 
 A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/webkit-navigation`.
 
-### B. Settings sections — `SettingsSection`, `Card`, `ItemList`, `SettingRow`, `Input`, `HelperText` (required)
+### B. Settings sections — `SettingsSection`, `Card`, `ItemList`, `SettingsRow`, `Input`, `FieldError` (required)
 
-Main settings is a form in the form column with four `SettingsSection` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `HelperText` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/webkit-form`.
+Main settings is a form in the form column with four `SettingsSection` bands: General, Configure your nameserver, DNSSEC and Status. Each band wraps a flush `Card :padded="false"` around an `ItemList` of `SettingsRow`s, each with a title and a one-sentence description. Name and Domain Name are large `Input`s; their required `FieldError` appears only after Save is pressed with them empty and clears as soon as the user types. See `skills/webkit-form`.
 
 ### C. Copyable values — `InputGroupRoot`, `Input`, `CopyButton` (required)
 
@@ -31,7 +31,7 @@ Values the user copies elsewhere (the three nameservers, and the key tag, algori
 
 ### D. Toggles — `Switch` (required)
 
-Enable DNSSEC and Active are compact `SettingRow`s whose control is a `Switch`. The DNSSEC key rows appear only while DNSSEC is on.
+Enable DNSSEC and Active are compact `SettingsRow`s whose control is a `Switch`. The DNSSEC key rows appear only while DNSSEC is on.
 
 ### E. Save bar — `SaveBar`, `Button` (required)
 
@@ -90,7 +90,7 @@ The table's `#empty` slot tells the two cases apart through `useCollection`'s `s
 ## Accessibility
 
 - The form is labeled "Zone settings" and its fieldset has a visually hidden legend with the same words.
-- Each `Input` has an `aria-label` matching its row title; an `Input` with an error points to its `HelperText` through `aria-describedby`.
+- Each `Input` has an `aria-label` matching its row title; an `Input` with an error points to its `FieldError` through `aria-describedby`.
 - Every icon-only control has an `aria-label` and a `Tooltip` with the same words; decorative icons carry `aria-hidden="true"`.
 - The property filter has an `aria-label` that matches its placeholder, "Filter records".
 - Focus order follows reading order: tabs, form fields, save bar; or heading actions, the property filter, toolbar, table, pagination.
@@ -100,7 +100,7 @@ The table's `#empty` slot tells the two cases apart through `useCollection`'s `s
 
 - MainSettings: the Main settings tab with General, nameservers, DNSSEC and Status; the save bar appears on the first edit.
 - Records: the Records tab with the zone's one A record, the ID column hidden by default.
-- ImportZoneFile: Import zone file, beside Add Record, opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `HelperText` under it) or is pasted into a `Textarea`. Every line is previewed in a `DataTable` paginated at ten lines: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
+- ImportZoneFile: Import zone file, beside Add Record, opens a large `Drawer`. The file comes from a `FileDropzone` (one `.zone`, `.txt` or `.db` file; a rejected or empty file shows an invalid `FieldError` under it) or is pasted into a `Textarea`. Every line is previewed in a `DataTable` paginated at ten lines: line number, name relative to the origin, type, value and a Ready, Skipped or Error `Tag`, with the reason under the value. The counts sit in a polite status line, errors add a danger `Alert` above the preview, and Import N records (disabled at zero) adds only the ready lines, then a toast says how many were imported and how many lines were left out.
 
 ## Importing a zone file
 

@@ -115,7 +115,7 @@ describe('DocFrame', () => {
 
     it('renders a clip source as a labelled player with controls, and no zoom trigger', () => {
       const { container, queryByTestId } = render(DocFrame, {
-        props: { src: '/media/flow.webm', alt: 'The flow' }
+        props: { src: '/media/flow-diagram.webm', alt: 'The flow' }
       })
       const video = container.querySelector('video')
       expect(video).not.toBeNull()

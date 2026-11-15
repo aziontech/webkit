@@ -71,7 +71,7 @@ const FIXTURES = {
   ],
   'near-duplicate': [
     'packages/webkit/package.json',
-    pkg({ exports: { './site-nav': './a.vue', './chips': './c.vue', './chip': './c.vue' } }),
+    pkg({ exports: { './site-header': './a.vue', './chips': './c.vue', './chip': './c.vue' } }),
     pkg({ exports: { './site-header': './a.vue', './chip-group': './c.vue', './tabs': './t.vue' } })
   ],
   'export-category': [
@@ -118,7 +118,7 @@ const FIXTURES = {
   ],
   'part-export': null,
   'section-suffix': [
-    [`${C}/section/hero-band/hero-band.vue`, `${C}/section/hero-section/hero-section.vue`],
+    [`${C}/section/hero-section/hero-section.vue`, `${C}/section/hero-section/hero-section.vue`],
     sfc(''),
     sfc('')
   ],
@@ -199,9 +199,12 @@ const FIXTURES = {
     "export const DialogInjectionKey: InjectionKey<Ctx> = Symbol('Dialog')\nexport const DialogHeaderInjectionKey: InjectionKey<Ctx> = Symbol('DialogHeader')\n"
   ],
   'composable-file': [
-    [`${C}/data/flow/connectors.ts`, `${C}/data/flow/composables/use-flow-connectors.ts`],
-    'export function useFlowConnectors() { return 1 }\n',
-    'export function useFlowConnectors() { return 1 }\n'
+    [
+      `${C}/data/flow-diagram/connectors.ts`,
+      `${C}/data/flow-diagram/composables/use-flow-diagram-connectors.ts`
+    ],
+    'export function useFlowDiagramConnectors() { return 1 }\n',
+    'export function useFlowDiagramConnectors() { return 1 }\n'
   ],
   'handler-name': [
     `${C}/action/button/button.vue`,

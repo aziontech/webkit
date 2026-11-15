@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import HeroBand from '@aziontech/webkit/hero-band'
+  import HeroSection from '@aziontech/webkit/hero-section'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SiteLayout, {
@@ -84,7 +84,7 @@
     :navigation="navigation"
     :footer="footer"
   >
-    <HeroBand
+    <HeroSection
       variant="center"
       eyebrow="Functions"
       title="Run code where your users are"

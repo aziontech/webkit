@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import BentoGrid from '../../marketing/bento-grid/bento-grid.vue'
   import BentoGridCell from '../../marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -25,7 +25,7 @@
   }
 
   export interface InvestorMarksProps {
-    /** Overline above the section title. */
+    /** Eyebrow above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. */
     title?: string
@@ -80,7 +80,7 @@
         />
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="bottom"
@@ -136,7 +136,7 @@
             </a>
           </BentoGridCell>
         </BentoGrid>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

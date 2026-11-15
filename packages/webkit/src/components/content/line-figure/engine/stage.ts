@@ -39,10 +39,10 @@ export const place = (el: SVGElement, q: Vec2) => {
 export type Tick = (dt: number, now: number) => boolean | void
 export type Loop = { wake(): void; unregister(): void }
 
-type Board = { stage: Element; tick: Tick; vis: boolean; awake: boolean }
+type DashboardGrid = { stage: Element; tick: Tick; vis: boolean; awake: boolean }
 
-let boards: Board[] = []
-const byStage = new Map<Element, Set<Board>>()
+let boards: DashboardGrid[] = []
+const byStage = new Map<Element, Set<DashboardGrid>>()
 let raf = 0
 let last = 0
 let io: IntersectionObserver | null = null
@@ -67,7 +67,7 @@ function frame(now: number) {
   raf = any ? requestAnimationFrame(frame) : 0
 }
 
-function wakeBoard(b: Board) {
+function wakeBoard(b: DashboardGrid) {
   b.awake = true
   if (!raf) {
     last = performance.now()
@@ -111,7 +111,7 @@ function stop() {
 
 export function register(stage: Element, tick: Tick): Loop {
   start()
-  const b: Board = { stage, tick, vis: false, awake: true }
+  const b: DashboardGrid = { stage, tick, vis: false, awake: true }
   boards.push(b)
   const peers = byStage.get(stage)
   if (peers) {

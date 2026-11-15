@@ -224,12 +224,12 @@ describe('FeatureWidgets', () => {
       items: [
         {
           ...consoleItem,
-          scene: { component: 'ProductWidget', props: { name: 'kv-store-key' } }
+          scene: { component: 'ConsoleMockup', props: { name: 'kv-store-key' } }
         }
       ]
     })
 
-    expect(await findByTestId('content-product-widget')).toHaveAttribute(
+    expect(await findByTestId('content-console-mockup')).toHaveAttribute(
       'data-name',
       'kv-store-key'
     )
@@ -254,7 +254,7 @@ describe('FeatureWidgets', () => {
     expect(getByTestId(TESTID)).toBeInTheDocument()
     expect(queryByRole('heading', { level: 2 })).toBeNull()
     expect(queryByRole('link')).toBeNull()
-    expect(queryByTestId('layout-frame-box')).toBeNull()
+    expect(queryByTestId('layout-registration-frame')).toBeNull()
     expect(queryByTestId('marketing-bento-grid')).toBeNull()
   })
 

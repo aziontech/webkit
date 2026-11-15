@@ -24,19 +24,19 @@ The place the user goes to change how an account or a project behaves. They scan
 
 A `PageHeader` at `size="small"` opens the form column (`layout-column-form`) with the page name and one sentence of purpose. Its `title-id` names the `form` through `aria-labelledby`. No actions in the heading: saving lives at the bottom.
 
-### B. Topic sections — `SectionHeader`, `Card`, `Item` (required)
+### B. FeatureItem sections — `SectionHeader`, `Card`, `Item` (required)
 
 Each topic is a section with a `SectionHeader` at `size="small"` (so every topic is an `h2` under the page `h1`) over a flush `Card :padded="false"` whose content is an `Item.List`. Sections stack at the section step; the heading and its card sit at the group gap. In SaveAll the sections share one `fieldset` with a visually hidden `legend`; in SavePerGroup and SavePerCard each card holds its own `fieldset`.
 
-### C. Setting rows — `SettingRow`, `Input`, `HelperText`, `Select`, `Switch` (required)
+### C. Setting rows — `SettingsRow`, `Input`, `FieldError`, `Select`, `Switch` (required)
 
-One `SettingRow` per setting, with a `title` and a one-sentence `description`. Text and choices take a large full-width `Input` or `Select`; a yes-or-no setting is a `Switch` in a `variant="compact"` row. Each control has an `aria-label` matching the row title. Required fields flag only after Save is pressed: the control turns `required` or `invalid` and a `HelperText` with an id tied through `aria-describedby` says what to fix. SavePerCard uses stacked `Field`s (a `Field.Label` over its control) under an info `Alert` instead of rows.
+One `SettingsRow` per setting, with a `title` and a one-sentence `description`. Text and choices take a large full-width `Input` or `Select`; a yes-or-no setting is a `Switch` in a `variant="compact"` row. Each control has an `aria-label` matching the row title. Required fields flag only after Save is pressed: the control turns `required` or `invalid` and a `FieldError` with an id tied through `aria-describedby` says what to fix. SavePerCard uses stacked `Field`s (a `Field.Label` over its control) under an info `Alert` instead of rows.
 
 ### D. Save — `SaveBar`, `Button` (required)
 
 SaveAll ends with one full-bleed sticky `SaveBar variant="plain"` holding an outlined Discard and the primary Save, both medium. While saving, the `fieldset` and Discard are disabled and Save takes `:loading`. Discard and Save stay disabled until the form differs from what was saved (`useUnsavedChanges` tracks the baseline and `commit()` moves it on a successful save). Discard puts back the last saved values and clears the errors. A successful save shows a `Profile saved.` success toast; a rejected one shows an error toast (`The profile wasn't saved.`, the changes kept) with Retry, and leaves the form dirty. In SavePerGroup and SavePerCard there is no `SaveBar`: each `Card` footer carries a secondary Save for that card only, confirmed by a toast naming the card, and SavePerCard puts an optional docs `Link` on the footer's start.
 
-### E. Profile sections — `SettingRow`, `Card`, `Item`, `Input`, `Select`, `Switch`, `Button` (Profile only)
+### E. Profile sections — `SettingsRow`, `Card`, `Item`, `Input`, `Select`, `Switch`, `Button` (Profile only)
 
 The Profile variant adds `SettingsSection`, `Textarea`, `Tag`, `ConfirmDialog`, `Skeleton` and `Alert` to these parts.
 
@@ -54,7 +54,7 @@ The Profile variant stacks one `SettingsSection` per group (General, Company inf
 
 ## Don't
 
-- Don't render a `Sidebar`, `GlobalHeader`, `Command` palette or `<main>` in the page; `ConsoleLayout` owns them.
+- Don't render a `Sidebar`, `AppHeader`, `Command` palette or `<main>` in the page; `ConsoleLayout` owns them.
 - Don't mix a page-level `SaveBar` with per-card Save buttons on the same page.
 - Don't put Save in the page heading or float it beside a single field.
 - Don't flag empty required fields before the user presses Save.
@@ -103,4 +103,4 @@ The Profile variant stacks one `SettingsSection` per group (General, Company inf
 - `state/form-validation` — every outcome of a submit.
 - `state/async-submit` — a save that runs long and reports back later.
 - `edit/delete-dialog` — the delete row a settings page can end with.
-- `SettingRow` — the row this form is made of; see `skills/webkit-form` for the ItemGroup settings and Card with independent saves types.
+- `SettingsRow` — the row this form is made of; see `skills/webkit-form` for the ItemGroup settings and Card with independent saves types.

@@ -13,7 +13,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import ItemList from '../../content/item/item-list.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import Link from '../../navigation/link/link.vue'
   import HoverCard from '../../overlay/hover-card/hover-card.vue'
   import HoverCardContent from '../../overlay/hover-card/hover-card-content/hover-card-content.vue'
@@ -21,11 +21,11 @@
   import DocCallout from '../doc-callout/doc-callout.vue'
   import DocCard from '../doc-card/doc-card.vue'
   import DocCardGroup from '../doc-card-group/doc-card-group.vue'
+  import DocChangelogEntry from '../doc-changelog-entry/doc-changelog-entry.vue'
   import type { DocCodeGroupSample } from '../doc-code-group/doc-code-group.vue'
   import DocHeading from '../doc-heading/doc-heading.vue'
   import DocStep from '../doc-step/doc-step.vue'
   import DocSteps from '../doc-steps/doc-steps.vue'
-  import DocUpdate from '../doc-update/doc-update.vue'
   import {
     type DocMarkdownAttributes,
     type DocMarkdownInline,
@@ -60,9 +60,7 @@
   const DocAccordionGroup = defineAsyncComponent(
     () => import('../doc-accordion-group/doc-accordion-group.vue')
   )
-  const DocAccordionItem = defineAsyncComponent(
-    () => import('../doc-accordion-item/doc-accordion-item.vue')
-  )
+  const DocAccordion = defineAsyncComponent(() => import('../doc-accordion/doc-accordion.vue'))
   const DocCodeGroup = defineAsyncComponent(() => import('../doc-code-group/doc-code-group.vue'))
   const DocFrame = defineAsyncComponent(() => import('../doc-frame/doc-frame.vue'))
   const DocItem = defineAsyncComponent(() => import('../doc-item/doc-item.vue'))
@@ -93,12 +91,12 @@
     Card: DocCard,
     Item: DocItem,
     AccordionGroup: DocAccordionGroup,
-    Accordion: DocAccordionItem,
+    Accordion: DocAccordion,
     Tabs: DocTabs,
     Tab: DocTab,
     Frame: DocFrame,
     Prompt: DocPrompt,
-    Update: DocUpdate
+    Update: DocChangelogEntry
   }
 
   const INLINE_BODY = new Set<Component>([DocCallout, DocItem, DocPrompt])
@@ -212,7 +210,7 @@
     }
     if (!override && node.name === 'ItemGroup') {
       return h(
-        FrameBox,
+        RegistrationFrame,
         { key, 'data-doc-block': '', 'data-doc-chrome': '', class: 'w-full bg-(--bg-surface)' },
         { default: () => h(ItemList, null, { default: () => renderNodes(node.children, false) }) }
       )

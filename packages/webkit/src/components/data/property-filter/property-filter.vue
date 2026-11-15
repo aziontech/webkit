@@ -20,7 +20,7 @@
   import Button from '../../actions/button/button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
   import Chip from '../../inputs/chip/chip.vue'
-  import HelperText from '../../inputs/helper-text/helper-text.vue'
+  import FieldError from '../../inputs/field/field-error/field-error.vue'
   import Input from '../../inputs/input/input.vue'
   import Spinner from '../../utils/spinner/spinner.vue'
   import {
@@ -858,13 +858,12 @@
         aria-live="polite"
         class="min-w-0 flex-1"
       >
-        <HelperText
+        <FieldError
           v-if="showError"
           :id="errorId"
-          :label="queryError"
           :data-testid="`${testId}__error`"
-          type="invalid"
-        />
+          >{{ queryError }}</FieldError
+        >
       </div>
       <span
         v-if="totalCount !== undefined"

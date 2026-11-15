@@ -263,7 +263,7 @@ describe('WebkitProvider', () => {
       expect(l.formatFileSize(1536)).toBe('1,5 kB')
       expect(l.plural(1, { one: '{count} item', other: '{count} itens' })).toBe('1 item')
       expect(l.plural(3, { one: '{count} item', other: '{count} itens' })).toBe('3 itens')
-      expect(l.t('logView.lines', { count: 2 })).toBe('2 linhas')
+      expect(l.t('logViewer.lines', { count: 2 })).toBe('2 linhas')
     })
   })
 

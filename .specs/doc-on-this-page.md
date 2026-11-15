@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 4a56c1a669e6ff74b65a8764622bf6a4e3002f6f9eb6b2363897bef58f04e64d
+checksum: 7fff6264d64e30dfb7303e1108a3b3b1cea5a5a2100abb1c395e4e8f45b14331
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -23,14 +23,14 @@ The "On this page" rail: the page's own headings, the active one lit, nested hea
 ## When NOT to use
 
 - Expecting it to track scroll. It is presentation only: `activeId` is a prop, because the page owns the scroll container and therefore owns which heading is active.
-- For navigation _between_ pages — that is `DocPrevNext` at the foot, or the sidebar.
+- For navigation _between_ pages — that is `DocPreviousNext` at the foot, or the sidebar.
 - For an outline deeper than a couple of levels; the indent is legible for two, not for five.
 
 ## Related
 
 - `DocPageHeader` — the masthead above the body, whose `h1` is chrome, so the outline starts at `h2`.
-- `DocPrevNext` — navigation between documents, where this is navigation within one.
-- `use-heading-nav` — the composable a page uses to receive a rail activation and scroll its own container.
+- `DocPreviousNext` — navigation between documents, where this is navigation within one.
+- `use-heading-navigation` — the composable a page uses to receive a rail activation and scroll its own container.
 
 ## Best practices
 

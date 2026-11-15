@@ -1,0 +1,69 @@
+{
+  "component": "hero-form-section",
+  "title": "Components/Marketing/Sections/HeroFormSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The Contact page. Submit with a required field empty or a malformed email to see the field messages; a valid form fires the `submit` action with the values and nothing is sent.",
+      "file": "default.vue"
+    },
+    {
+      "name": "UnderAttack",
+      "summary": "The same block with the incident `fields` and `items`: no role and no message, a website instead.",
+      "file": "under-attack.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While the site sends the values: the button spins and a submit is ignored.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Submitted",
+      "summary": "The site reported the values as sent: the form gives way to `messages.success`.",
+      "file": "submitted.vue"
+    },
+    {
+      "name": "Error",
+      "summary": "The site could not send the values: `messages.error` shows under the button and the form stays editable.",
+      "file": "error.vue"
+    },
+    {
+      "name": "Contact line",
+      "summary": "The copy carries a phone line inline (`descriptionLink` + `descriptionAfter`) and two actions under it; with no highlights the copy stays in view while the form scrolls past.",
+      "file": "contact-line.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "ContactSplit",
+      "summary": "The Contact page. A valid form fires the `submit` action and sends nothing; toggle `loading`, `submitted` and `failed` to see what the site sets back.",
+      "file": "site-contact-split.vue",
+      "json": "site-contact-split.json"
+    },
+    {
+      "name": "UnderAttack",
+      "summary": "The incident field set, for a team under attack: the same block with other `fields`, no role and no message, a website instead. The highlights under the description carry the attack figures.",
+      "file": "site-under-attack.vue",
+      "json": "site-under-attack.json"
+    },
+    {
+      "name": "ScaleUp",
+      "summary": "The Scale Up landing page: no highlights and no client strip, a short headline that breaks over two lines, and a phone field labelled by its placeholder (`visuallyHiddenLabel` keeps \"Phone\" as its accessible name without drawing it).",
+      "file": "site-scale-up.vue",
+      "json": "site-scale-up.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Heroes/HeroFormSection",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": [
+    "ContactSplit",
+    "ContactSplitJson",
+    "UnderAttack",
+    "UnderAttackJson",
+    "ScaleUp",
+    "ScaleUpJson"
+  ]
+}

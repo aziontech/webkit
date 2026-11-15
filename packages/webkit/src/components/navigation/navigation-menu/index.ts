@@ -34,7 +34,7 @@ export type { NavigationMenuLinkProps } from './navigation-menu-link.vue'
 export type { NavigationMenuListProps } from './navigation-menu-list.vue'
 export type { NavigationMenuTriggerProps } from './navigation-menu-trigger.vue'
 export type { NavigationMenuViewportProps } from './navigation-menu-viewport.vue'
-export type { NavigationMenuPopupVariant } from './parts/navigation-menu-popup.vue'
+export type { NavigationMenuPopoverVariant } from './parts/navigation-menu-popover.vue'
 export type {
   NavigationMenuAlign,
   NavigationMenuCollisionPadding,

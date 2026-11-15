@@ -24,7 +24,7 @@
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
@@ -66,7 +66,7 @@
     environments: Environment[]
   }
 
-  type SettingRowData = DeploymentSetting & {
+  type SettingsRowData = DeploymentSetting & {
     type: string
     reach: Reach
     services: string[]
@@ -280,7 +280,7 @@
     toast.success(title, { description: 'It reaches this service only.' })
   }
 
-  const rows = computed<SettingRowData[]>(() =>
+  const rows = computed<SettingsRowData[]>(() =>
     settings.value.map((setting) => {
       const bound = boundTo(setting.id).map((service) => service.name)
       return {
@@ -337,7 +337,7 @@
       }
     })
 
-  const settingsTableEl = ref<TableExposed<SettingRowData> | null>(null)
+  const settingsTableEl = ref<TableExposed<SettingsRowData> | null>(null)
   const exportCsv = () => settingsTableEl.value?.exportCsv({ filename: 'deployment-settings.csv' })
 
   const refreshing = ref(false)
@@ -429,7 +429,7 @@
     }, 600)
   }
 
-  const pending = ref<SettingRowData | null>(null)
+  const pending = ref<SettingsRowData | null>(null)
   const deleteOpen = ref(false)
   const deleteDescription = computed(() => {
     const count = pending.value?.services.length ?? 0
@@ -454,7 +454,7 @@
     toast.success(`${row.name} deleted.`)
   }
 
-  const onAction = (value: DropdownMenuItemValue, row: SettingRowData) => {
+  const onAction = (value: DropdownMenuItemValue, row: SettingsRowData) => {
     if (value === 'edit') {
       openEdit(row)
       return
@@ -529,7 +529,7 @@
             <Card :padded="false">
               <template #default>
                 <Item.List>
-                  <SettingRow
+                  <SettingsRow
                     title="Binding policy"
                     description="Whether a version locks the resource IDs it shipped with. Changing it does not touch the settings that already exist."
                   >
@@ -556,8 +556,8 @@
                         </Select.Item>
                       </Select.Content>
                     </Select>
-                  </SettingRow>
-                  <SettingRow
+                  </SettingsRow>
+                  <SettingsRow
                     title="Deployment policy"
                     description="Single serves one version and a deploy replaces it; Versioned gives each version its own URL. An environment can only use a setting that matches its own."
                   >
@@ -584,8 +584,8 @@
                         </Select.Item>
                       </Select.Content>
                     </Select>
-                  </SettingRow>
-                  <SettingRow
+                  </SettingsRow>
+                  <SettingsRow
                     title="Apply to existing Deployment Settings"
                     description="Give every setting this account already holds the binding policy above when you save. Default is never changed."
                     variant="compact"
@@ -595,7 +595,7 @@
                       :disabled="saving || loading"
                       aria-label="Apply to existing Deployment Settings"
                     />
-                  </SettingRow>
+                  </SettingsRow>
                 </Item.List>
               </template>
             </Card>

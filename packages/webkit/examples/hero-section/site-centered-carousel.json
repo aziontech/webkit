@@ -1,0 +1,32 @@
+{
+  "_id": "hero-section",
+  "props": {
+    "variant": "center",
+    "titleHighlight": "Build and run applications",
+    "title": "globally, with no ops",
+    "description": "Run code, AI, data, and security on 100+ data centers worldwide, with no cold starts and instant scale. One platform, from first commit to production traffic.",
+    "primaryAction": {
+      "label": "Start for free",
+      "href": "https://console.azion.com/signup/"
+    },
+    "secondaryAction": {
+      "label": "Talk to a specialist",
+      "href": "https://www.azion.com/en/contact/",
+      "trailing": true
+    },
+    "marqueeLabel": "Trusted by teams running critical workloads",
+    "marqueeMarks": [
+      "global-fashion-group",
+      "herospark",
+      "itau",
+      "nzn",
+      "netshoes",
+      "caixa",
+      "agibank",
+      "prime-video",
+      "america-movil",
+      "gpa",
+      "fourbank"
+    ]
+  }
+}

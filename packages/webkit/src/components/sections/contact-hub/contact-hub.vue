@@ -3,12 +3,12 @@
 
   import Button from '../../actions/button/button.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
+  import FeatureItem from '../../marketing/feature-item/feature-item.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
-  import Topic from '../../marketing/topic/topic.vue'
 
   defineOptions({
     name: 'ContactHub',
@@ -95,7 +95,7 @@
       :divided="false"
       :padded="false"
     >
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="bottom"
@@ -185,7 +185,7 @@
             :key="channel.title"
             variant="canvas"
           >
-            <Topic
+            <FeatureItem
               :heading-level="2"
               :icon="channel.icon"
               :title="channel.title"
@@ -196,7 +196,7 @@
             />
           </CardGridCell>
         </CardGrid>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

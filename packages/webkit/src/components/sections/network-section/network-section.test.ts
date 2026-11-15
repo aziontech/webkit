@@ -211,7 +211,7 @@ describe('NetworkSection', () => {
     ]
     const { container, getByTestId } = band({ variant: 'stats', stats })
 
-    expect(getByTestId('marketing-big-numbers')).toBeInTheDocument()
+    expect(getByTestId('marketing-stats')).toBeInTheDocument()
     const figures = Array.from(container.querySelectorAll('figure'))
     expect(figures).toHaveLength(stats.length)
     figures.forEach((figure, index) => expect(figure).toHaveTextContent(stats[index]!.label))
@@ -221,7 +221,7 @@ describe('NetworkSection', () => {
   it('renders no stats floor without stats', () => {
     const { queryByTestId } = band({ variant: 'stats', stats: [] })
 
-    expect(queryByTestId('marketing-big-numbers')).toBeNull()
+    expect(queryByTestId('marketing-stats')).toBeNull()
   })
 
   it('marks a claim that sits out the narrow band, and keeps string claims on it', () => {

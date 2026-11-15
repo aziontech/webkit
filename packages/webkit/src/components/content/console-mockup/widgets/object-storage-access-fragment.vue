@@ -1,0 +1,161 @@
+<script setup lang="ts">
+  import { computed, onScopeDispose, ref, watch } from 'vue'
+
+  import { useMediaQuery } from '../../../../composables/use-media-query'
+  import FieldDescription from '../../../inputs/field/field-description/field-description.vue'
+  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
+  import RadioGroup from '../../../inputs/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../../inputs/radio-group/radio-group-item/radio-group-item.vue'
+  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
+  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import MockupCursor from '../parts/mockup-cursor.vue'
+
+  defineOptions({ name: 'ObjectStorageAccessFragment' })
+
+  interface Props {
+    /** Whether this fragment is the one showing. */
+    active?: boolean
+    /** Whether the pointer is over the fragment's card; read and write access is picked while it is, and set back after. */
+    hovered?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
+
+  const canHover = useMediaQuery('(hover: hover)', true)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+
+  const OPTIONS = [
+    {
+      value: 'read_write',
+      label: 'Read and write',
+      description:
+        'Workloads can serve objects and write new ones, such as uploads from a function.'
+    },
+    {
+      value: 'read_only',
+      label: 'Read only',
+      description: 'Workloads can serve objects and cannot change them.'
+    },
+    {
+      value: 'restricted',
+      label: 'Restricted',
+      description: 'No workload reaches the bucket. Access is through the API only.'
+    }
+  ]
+
+  interface Frame {
+    cursor: MockupCursorTarget
+    press: boolean
+    access: string
+    forward: number
+    back: number
+  }
+
+  const IDLE: MockupCursorTarget = { key: 'option-read_only', x: 0.9, y: 0.62 }
+  const PICK: MockupCursorTarget = { key: 'option-read_write', x: 0.42, y: 0.5 }
+
+  const REST = { cursor: IDLE, press: false, access: 'read_only' }
+
+  const FRAMES: Frame[] = [
+    { ...REST, forward: 0, back: 0 },
+    { ...REST, cursor: PICK, forward: 160, back: 420 },
+    { ...REST, cursor: PICK, press: true, forward: 620, back: 160 },
+    { ...REST, cursor: PICK, press: true, access: 'read_write', forward: 140, back: 220 },
+    { ...REST, cursor: PICK, access: 'read_write', forward: 180, back: 260 }
+  ]
+
+  const LAST = FRAMES.length - 1
+
+  const wanted = () => props.active && (props.hovered || !canHover.value)
+
+  const step = ref(0)
+  const frame = computed(() => FRAMES[step.value])
+
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
+
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
+
+  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
+
+  const halt = () => {
+    if (timer) globalThis.clearTimeout(timer)
+    timer = null
+  }
+
+  const advance = () => {
+    halt()
+    const target = wanted() ? LAST : 0
+    if (step.value === target) return
+    if (reduced.value || !canHover.value) {
+      step.value = target
+      return
+    }
+    const forward = target > step.value
+    const next = step.value + (forward ? 1 : -1)
+    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
+    timer = globalThis.setTimeout(() => {
+      step.value = next
+      advance()
+    }, delay)
+  }
+
+  watch(wanted, advance, { immediate: true })
+
+  onScopeDispose(halt)
+</script>
+
+<template>
+  <ConsoleMockupShell
+    variant="bare"
+    fade="bottom"
+    class="[--mockup-fade-start:80%]"
+    :chrome="false"
+    :active="active"
+    :width="420"
+    :mobile-width="380"
+  >
+    <div
+      ref="stageEl"
+      class="relative"
+    >
+      <div class="flex flex-col gap-(--spacing-sm) py-(--spacing-xs)">
+        <ConsoleMockupShellItem :order="0">
+          <div class="flex flex-col gap-(--spacing-2xs)">
+            <FieldLabel>Workloads access</FieldLabel>
+            <FieldDescription
+              >The access level workloads have to the objects in this bucket.</FieldDescription
+            >
+          </div>
+        </ConsoleMockupShellItem>
+
+        <ConsoleMockupShellItem
+          v-for="(option, index) in OPTIONS"
+          :key="option.value"
+          :order="index + 1"
+        >
+          <div :data-cursor="`option-${option.value}`">
+            <RadioGroup
+              :model-value="frame.access"
+              variant="card"
+              name="object-storage-workloads-access"
+            >
+              <RadioGroupItem
+                :value="option.value"
+                :description="option.description"
+                >{{ option.label }}</RadioGroupItem
+              >
+            </RadioGroup>
+          </div>
+        </ConsoleMockupShellItem>
+      </div>
+
+      <MockupCursor
+        name="Alex"
+        :x="position.x"
+        :y="position.y"
+        :pressed="frame.press"
+      />
+    </div>
+  </ConsoleMockupShell>
+</template>

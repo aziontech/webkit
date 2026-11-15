@@ -4,7 +4,7 @@ The last ask at the end of a landing page, after a hatched gap. A closing frame 
 
 Almost every page ends with the split form, and only its copy changes per page. Careers ends with the single-action panel. The primary form is the loud close, for a page that ends on its one ask.
 
-The split, panel and primary forms are the `ClosingCallToAction` component from `@aziontech/webkit/closing-call-to-action`; it composes `SectionModule`, `CallToAction`, `Button` and `FrameBox`, with `TextureMaterial` on the closing frame (and behind the copy in `primary`), and `variant` picks the form (`split`, `panel` or `primary`). The newsletter form is its own component, `ClosingCallToActionNewsletter` from `@aziontech/webkit/closing-call-to-action-newsletter`, since its ask is a subscribe form. The agents form is the `primary` form with `audiences`: a switch between ways in (a person or an agent), each with its own copyable line and actions, and a typed line under them; it loads `ToggleGroup`, `InputGroup` and `CopyButton` only when `audiences` is set. The templates close is `TemplateGallery` from `@aziontech/webkit/template-gallery` with `closing` set, which draws the closing frame under its scrolling grid of deployable templates.
+The split, panel and primary forms are the `ClosingCallToAction` component from `@aziontech/webkit/closing-call-to-action`; it composes `SectionModule`, `CallToAction`, `Button` and `RegistrationFrame`, with `Texture` on the closing frame (and behind the copy in `primary`), and `variant` picks the form (`split`, `panel` or `primary`). The newsletter form is its own component, `NewsletterSection` from `@aziontech/webkit/newsletter-section`, since its ask is a subscribe form. The agents form is the `primary` form with `audiences`: a switch between ways in (a person or an agent), each with its own copyable line and actions, and a typed line under them; it loads `ToggleGroup`, `InputGroup` and `CopyButton` only when `audiences` is set. The templates close is `TemplateGallery` from `@aziontech/webkit/template-gallery` with `closing` set, which draws the closing frame under its scrolling grid of deployable templates.
 
 ## Examples
 
@@ -64,7 +64,7 @@ Site JSON: [`site-panel.json`](./site-panel.json)
 
 ### Primary
 
-The loud close. One centred ask on the canvas, under a pixelated `TextureMaterial` whose two waves keep travelling across it. The closing frame follows. The waves stop under reduced motion.
+The loud close. One centred ask on the canvas, under a pixelated `Texture` whose two waves keep travelling across it. The closing frame follows. The waves stop under reduced motion.
 
 Example: [`site-primary.vue`](./site-primary.vue)
 

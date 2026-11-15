@@ -18,14 +18,14 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement
 describe('change-plan-drawer', () => {
-  it('lists each tier with FeatureList', async () => {
+  it('lists each tier with PlanFeatureList', async () => {
     const view = render(ChangePlanDrawer)
     await fireEvent.click(view.getByRole('button', { name: 'Change plan' }))
     const panel = await waitFor(() => {
       expect(dialog()).not.toBeNull()
       return dialog() as HTMLElement
     })
-    expect(panel.querySelectorAll('[data-testid="content-feature-list"]').length).toBe(3)
+    expect(panel.querySelectorAll('[data-testid="content-plan-feature-list"]').length).toBe(3)
   })
 })
 

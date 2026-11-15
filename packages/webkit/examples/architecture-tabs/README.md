@@ -4,7 +4,7 @@ A band that plots several architectures of one product, one at a time. Up to fiv
 
 The tabs advance on a timer. It pauses under the pointer or keyboard focus, and never runs under reduced motion.
 
-The band is the `ArchitectureTabs` component from `@aziontech/webkit/architecture-tabs`; it composes `SectionModule`, `SectionTitle`, `Button`, `FrameBox`, `MediaTabs` and `Diagram`.
+The band is the `ArchitectureTabs` component from `@aziontech/webkit/architecture-tabs`; it composes `SectionModule`, `SectionTitle`, `Button`, `RegistrationFrame`, `MediaTabs` and `Diagram`.
 
 ## Examples
 

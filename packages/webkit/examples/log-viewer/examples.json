@@ -1,0 +1,56 @@
+{
+  "component": "log-viewer",
+  "title": "Components/Primitives/Code/LogViewer",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "`LogViewer.Header` + `LogViewer.Content` over a realistic deploy log. Search filters lines and highlights matches in the body.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Borderless",
+      "summary": "With `:bordered=\"false\"` the shell drops its own outline and corner radius so it sits flush inside a surface that already frames it — an accordion panel, a drawer, a card. Internal dividers (the header and footer edges) are unaffected. Left on, the two frames would nest and read as a box inside a box.",
+      "file": "borderless.vue"
+    },
+    {
+      "name": "Loading",
+      "summary": "While `loading` is set, `LogViewer.Content` replaces the log body with a centered spinner and the `loadingLabel` text.",
+      "file": "loading.vue"
+    },
+    {
+      "name": "Levels",
+      "summary": "A function's test-run log: each line has a `level` and its run offset in `time`, and `levels` on the root puts one toggle per level in the header with the count of lines at that level. Pressing a toggle filters the log to that level (`v-model:level`), pressing it again shows every level; `warn` and `error` rows are tinted and keep the level in text.",
+      "file": "levels.vue"
+    },
+    {
+      "name": "Empty",
+      "summary": "A log with no lines shows the package empty state (\"No log lines yet.\"). A search that matches nothing shows \"No line matches …\" with a Clear search action instead.",
+      "file": "empty.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "`disabled` keeps the lines readable but locks the search, the level toggles and the copy control.",
+      "file": "disabled.vue"
+    },
+    {
+      "name": "WithFooter",
+      "summary": "`LogViewer.Footer` closes the shell with a summary line and an action, below the scrolling body.",
+      "file": "with-footer.vue"
+    },
+    {
+      "name": "Steps",
+      "summary": "`LogViewer.Steps` over a finished deploy: each step's own log in the Phased view, every line in one log in Complete. The `header` slot holds the title, the outcome and the time; `open-step` opens Build.",
+      "file": "steps.vue"
+    },
+    {
+      "name": "StepsRunning",
+      "summary": "`LogViewer.Steps` mid-run: done steps, the running step with its spinner and shimmering description, pending steps waiting to start, and `progress` drawing the flush bar valued by the share of steps done. `:view-switch=\"false\"` keeps the switch out until the run settles.",
+      "file": "steps-running.vue"
+    },
+    {
+      "name": "StepsError",
+      "summary": "`LogViewer.Steps` after a failure: the failed step opens on its own with the reason in danger text, the step after it is skipped, `#step-meta` adds a Skipped `Tag` and `#step-empty` says why it never ran.",
+      "file": "steps-error.vue"
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # Website
 
-The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView` with the `SiteNav` and `SiteFooter` data; each page is only its sections, in the layout's slot.
+The marketing shell: one continuous frame — the site bar, a hero band that states the offer and the two next steps, every section stacked inside one framed container separated by hatched gaps, and the site footer closing the frame. The chrome is `SiteLayout`, composed once in the app around `RouterView` with the `SiteHeader` and `SiteFooter` data; each page is only its sections, in the layout's slot.
 
 ## When to use
 
@@ -15,7 +15,7 @@ The marketing shell: one continuous frame — the site bar, a hero band that sta
 
 ### A. Site chrome — `SiteLayout` (required)
 
-Composed once in the app's root around `RouterView`. `navigation` is the `SiteNav` data (menus, Pricing link, Contact, Login, Start for free) with an `href` on every item, so each one is also a palette destination; `footer` is the `SiteFooter` data with `variant: 'site'` (columns, socials, status line, languages). It owns the bar, the single `<main>`, the footer, the ⌘K / Ctrl K search palette and the canvas paint.
+Composed once in the app's root around `RouterView`. `navigation` is the `SiteHeader` data (menus, Pricing link, Contact, Login, Start for free) with an `href` on every item, so each one is also a palette destination; `footer` is the `SiteFooter` data with `variant: 'site'` (columns, socials, status line, languages). It owns the bar, the single `<main>`, the footer, the ⌘K / Ctrl K search palette and the canvas paint.
 
 ### B. Opening band — `Hero` (required)
 
@@ -37,15 +37,15 @@ The hero's primary and outlined large buttons, worded like the bar's actions.
 
 One per section; here unpadded and undivided around a framed figure row.
 
-### G. Framed area — `FrameBox` (required)
+### G. Framed area — `RegistrationFrame` (required)
 
-Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToAction`, `ClosingCallToActionNewsletter`, or `TemplateGallery` with `closing`), drop both the trailing `SectionGap` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
+Draws borders and corner marks; the closing frame uses `borders="none"` so it draws no rule of its own and hands the corner to the footer. When the page ends on a closing section (`ClosingCallToAction`, `NewsletterSection`, or `TemplateGallery` with `closing`), drop both the trailing `SectionGap` and this closing frame: the section draws its own, and a second one doubles the close (`webkit/no-gap-after-closing-section`).
 
-### H. Figures — `BigNumbers` (optional)
+### H. Figures — `Stats` (optional)
 
-A row of headline figures inside a `FrameBox`.
+A row of headline figures inside a `RegistrationFrame`.
 
-### I. Texture — `TextureMaterial` (optional)
+### I. Texture — `Texture` (optional)
 
 `variant="lines"`, the decorative fill of the closing frame.
 
@@ -60,11 +60,11 @@ A row of headline figures inside a `FrameBox`.
 
 ## Don't
 
-- Never add `SiteNav`, `SiteFooter`, `GlobalHeader` or `Footer` to a page; the layout already renders them.
+- Never add `SiteHeader`, `SiteFooter`, `AppHeader` or `Footer` to a page; the layout already renders them.
 - Never render a second `<main>`; the layout owns the landmark.
 - Don't wrap the layout's slot content in a border, padding or `max-w-*` of its own.
 - Don't nest a second `SectionContainer`.
-- Don't put interactive content inside `TextureMaterial`; it is decoration.
+- Don't put interactive content inside `Texture`; it is decoration.
 
 ## Copy
 

@@ -6,7 +6,7 @@ status: implemented
 spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 27360c5af223b0c9575bfbcaed26fe082a1e6a593bc8ca8eb579ed63951c7915
+checksum: 88e6910b35edc24654cfa3a9a5c2316cf75d1073938d70441126e4a2543b5707
 template: 2
 ---
 
@@ -14,7 +14,7 @@ template: 2
 
 ## Purpose
 
-The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `ticker` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `quote`.
+The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame` and `quote`.
 
 ## When to use
 
@@ -73,7 +73,7 @@ The analyst-recognition band: a section title over a framed strip of signed quot
 
 | Prop        | Type                       | Default | Required | JSDoc                                                                                                                                                                                       |
 | ----------- | -------------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `eyebrow`   | `string`                   | `''`    | false    | Overline above the section title.                                                                                                                                                           |
+| `eyebrow`   | `string`                   | `''`    | false    | Eyebrow above the section title.                                                                                                                                                            |
 | `title`     | `string`                   | `''`    | false    | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty.                                                                                     |
 | `ariaLabel` | `string`                   | `''`    | false    | Accessible name of the scrolling region.                                                                                                                                                    |
 | `duration`  | `number`                   | `0`     | false    | Seconds one loop of the strip takes; `0` paces it at twelve seconds per item.                                                                                                               |
@@ -96,9 +96,9 @@ The analyst-recognition band: a section title over a framed strip of signed quot
 
 ## Motion & Animations
 
-| Trigger                        | Animation / Transition                                         | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                            |
-| ------------------------------ | -------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------ |
-| continuous scroll of the strip | the brand marquee of the internal loop it shares with `ticker` | semantic (brand-marquee)                          | reduced motion stops it (the region becomes a horizontal scroller) |
+| Trigger                        | Animation / Transition                                          | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                            |
+| ------------------------------ | --------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------ |
+| continuous scroll of the strip | the brand marquee of the internal loop it shares with `marquee` | semantic (brand-marquee)                          | reduced motion stops it (the region becomes a horizontal scroller) |
 
 ## Tokens
 

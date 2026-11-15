@@ -9,8 +9,8 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import Field from '@aziontech/webkit/field'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import AppHeader from '@aziontech/webkit/app-header'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -247,11 +247,11 @@
 
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <GlobalHeader
+    <AppHeader
       aria-label="Console"
       class="shrink-0"
     >
-      <GlobalHeader.Brand>
+      <AppHeader.Brand>
         <a
           href="/"
           aria-label="Azion home"
@@ -262,9 +262,9 @@
             size="small"
           />
         </a>
-      </GlobalHeader.Brand>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Brand>
+      <AppHeader.Center />
+      <AppHeader.End>
         <Button
           label="Documentation"
           variant="outline"
@@ -272,8 +272,8 @@
           icon="ai ai-book"
           href="https://example.com/docs"
         />
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div
@@ -361,11 +361,9 @@
                           </template>
                         </RadioGroup>
 
-                        <HelperText
-                          v-if="submitted && !plan"
-                          type="required"
-                          label="Select a plan to continue."
-                        />
+                        <FieldError v-if="submitted && !plan"
+                          >Select a plan to continue.</FieldError
+                        >
 
                         <Drawer
                           :open="upgradeOpen"

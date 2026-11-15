@@ -1,11 +1,11 @@
 <script setup>
   import DocItem from '@aziontech/webkit/doc-item'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import ItemList from '@aziontech/webkit/item-list'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
 </script>
 
 <template>
-  <FrameBox class="w-full bg-(--bg-surface)">
+  <RegistrationFrame class="w-full bg-(--bg-surface)">
     <ItemList>
       <DocItem
         title="Edge Functions"
@@ -31,5 +31,5 @@
         Decide what is cached, for how long, and by which key.
       </DocItem>
     </ItemList>
-  </FrameBox>
+  </RegistrationFrame>
 </template>

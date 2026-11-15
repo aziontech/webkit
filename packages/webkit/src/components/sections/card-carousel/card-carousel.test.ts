@@ -39,9 +39,9 @@ describe('CardCarousel', () => {
   })
 
   it('lets a consumer data-testid win over the fallback', () => {
-    const { getByTestId, queryByTestId } = band({ 'data-testid': 'use-cases' })
+    const { getByTestId, queryByTestId } = band({ 'data-testid': 'customer-use-cases' })
 
-    expect(getByTestId('use-cases')).toBeInTheDocument()
+    expect(getByTestId('customer-use-cases')).toBeInTheDocument()
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
@@ -53,9 +53,9 @@ describe('CardCarousel', () => {
   })
 
   it('sets the anchor as the band id', () => {
-    const { getByTestId } = band({ anchor: 'use-cases' })
+    const { getByTestId } = band({ anchor: 'customer-use-cases' })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('id', 'use-cases')
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'customer-use-cases')
   })
 
   it('puts the title, its eyebrow and description on the row the controls end', () => {

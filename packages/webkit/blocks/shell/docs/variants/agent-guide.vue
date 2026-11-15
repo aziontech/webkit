@@ -6,8 +6,8 @@
   import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
   import Button from '@aziontech/webkit/button'
   import DataTable from '@aziontech/webkit/data-table'
+  import DocAccordion from '@aziontech/webkit/doc-accordion'
   import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
-  import DocAccordionItem from '@aziontech/webkit/doc-accordion-item'
   import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
@@ -18,16 +18,16 @@
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocMarkdown from '@aziontech/webkit/doc-markdown'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocPrevNext from '@aziontech/webkit/doc-prev-next'
+  import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocPrompt from '@aziontech/webkit/doc-prompt'
   import DocProse from '@aziontech/webkit/doc-prose'
   import DocStep from '@aziontech/webkit/doc-step'
   import DocSteps from '@aziontech/webkit/doc-steps'
   import Footer from '@aziontech/webkit/footer'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import IconButton from '@aziontech/webkit/icon-button'
   import ItemList from '@aziontech/webkit/item-list'
   import Logo from '@aziontech/webkit/logo'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
@@ -524,7 +524,7 @@
           >Agent-friendly docs</DocHeading
         >
         <p>Token-efficient references an agent can fetch on its own, with no tool call.</p>
-        <FrameBox
+        <RegistrationFrame
           data-doc-block
           data-doc-chrome
           class="w-full bg-(--bg-surface)"
@@ -539,7 +539,7 @@
               >{{ link.description }}</DocItem
             >
           </ItemList>
-        </FrameBox>
+        </RegistrationFrame>
         <p>No MCP support in the tool you are using? Prime it by hand, once per session:</p>
         <DocPrompt
           title="Any assistant"
@@ -577,7 +577,7 @@
           >FAQ</DocHeading
         >
         <DocAccordionGroup>
-          <DocAccordionItem
+          <DocAccordion
             v-for="entry in faq"
             :key="entry.question"
             :title="entry.question"
@@ -585,7 +585,7 @@
             <div class="[&>*>*:first-child]:pt-0!">
               <DocMarkdown :source="entry.answer" />
             </div>
-          </DocAccordionItem>
+          </DocAccordion>
         </DocAccordionGroup>
 
         <DocHeading
@@ -594,7 +594,7 @@
           >Troubleshooting</DocHeading
         >
         <DocAccordionGroup>
-          <DocAccordionItem
+          <DocAccordion
             v-for="entry in troubleshooting"
             :key="entry.question"
             :title="entry.question"
@@ -602,7 +602,7 @@
             <div class="[&>*>*:first-child]:pt-0!">
               <DocMarkdown :source="entry.answer" />
             </div>
-          </DocAccordionItem>
+          </DocAccordion>
         </DocAccordionGroup>
 
         <DocHeading
@@ -636,7 +636,7 @@
           </DocCard>
         </DocCardGroup>
       </DocProse>
-      <DocPrevNext
+      <DocPreviousNext
         :previous="{ label: 'Agent setup', href: '/docs/agent-setup' }"
         :next="{ label: 'Cursor', href: '/docs/agent-setup/cursor' }"
       />

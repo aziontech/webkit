@@ -67,7 +67,7 @@ export interface TableStateSnapshot {
 }
 
 /** Which rows an export writes. */
-export type TableExportScope = 'page' | 'filtered' | 'all'
+export type TableExportButtonScope = 'page' | 'filtered' | 'all'
 
 /** Body row density. */
 export type TableDensity = 'comfortable' | 'compact'
@@ -84,7 +84,7 @@ export interface TableExposed<TRecord extends object = TableRowRecord> {
   /** Writes the visible, ordered columns of the chosen rows to a CSV download, or emits export when it is bound. */
   exportCsv: (options?: {
     filename?: string
-    scope?: TableExportScope
+    scope?: TableExportButtonScope
     rows?: TRecord[]
   }) => Promise<void>
   /** Deep-cloned snapshot of sorting, pagination, column visibility and order, search and filters. */
@@ -128,7 +128,7 @@ export interface TableContext {
   exportCsv: (
     options?: {
       filename?: string
-      scope?: TableExportScope
+      scope?: TableExportButtonScope
       rows?: Record<string, unknown>[]
     },
     event?: Event

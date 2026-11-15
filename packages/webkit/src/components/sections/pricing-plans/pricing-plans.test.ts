@@ -94,7 +94,7 @@ describe('PricingPlans', () => {
   it('raises and tags only the highlighted plan', () => {
     const { getAllByTestId, getAllByText } = band()
 
-    const cards = getAllByTestId('content-card-pricing')
+    const cards = getAllByTestId('content-pricing-card')
     expect(cards.map((card) => card.hasAttribute('data-highlighted'))).toEqual([false, true, false])
     expect(getAllByText('Popular')).toHaveLength(1)
     expect(within(cards[1]).getByText('Popular')).toBeInTheDocument()
@@ -117,7 +117,7 @@ describe('PricingPlans', () => {
   it('opens on the first period and switches every price on a pick', async () => {
     const { getAllByTestId, getByRole } = band()
 
-    const pro = () => getAllByTestId('content-card-pricing')[1]
+    const pro = () => getAllByTestId('content-pricing-card')[1]
     expect(getByRole('radio', { name: 'Monthly' })).toHaveAttribute('aria-checked', 'true')
     expect(within(pro()).getByText('Billed monthly.')).toBeInTheDocument()
 
@@ -125,12 +125,12 @@ describe('PricingPlans', () => {
 
     expect(within(pro()).getByText('Billed annually.')).toBeInTheDocument()
     await waitFor(() =>
-      expect(within(pro()).getByTestId('content-card-pricing__currency__value')).toHaveTextContent(
+      expect(within(pro()).getByTestId('content-pricing-card__currency__value')).toHaveTextContent(
         '20'
       )
     )
     expect(
-      within(getAllByTestId('content-card-pricing')[0]).getByText('Free forever.')
+      within(getAllByTestId('content-pricing-card')[0]).getByText('Free forever.')
     ).toBeInTheDocument()
   })
 
@@ -138,7 +138,7 @@ describe('PricingPlans', () => {
     const { getAllByTestId } = band()
 
     expect(
-      getAllByTestId('content-card-pricing').every((card) => card.hasAttribute('data-animated'))
+      getAllByTestId('content-pricing-card').every((card) => card.hasAttribute('data-animated'))
     ).toBe(true)
   })
 
@@ -154,7 +154,7 @@ describe('PricingPlans', () => {
       ]
     })
 
-    const cards = getAllByTestId('content-card-pricing')
+    const cards = getAllByTestId('content-pricing-card')
     expect(within(cards[0]).getByText('For personal projects.')).toBeInTheDocument()
     expect(within(cards[1]).getByText('Billed annually.')).toBeInTheDocument()
     expect(within(cards[1]).queryByText('For teams.')).toBeNull()
@@ -164,7 +164,7 @@ describe('PricingPlans', () => {
     const { getByTestId } = band()
 
     const strip = within(getByTestId(TESTID)).getByTestId(`${TESTID}__band`)
-    expect(within(strip).getAllByTestId('content-card-pricing')).toHaveLength(plans.length)
+    expect(within(strip).getAllByTestId('content-pricing-card')).toHaveLength(plans.length)
   })
 
   it('names the toggle', () => {

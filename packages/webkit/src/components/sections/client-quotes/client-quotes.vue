@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import QuoteTabs from '../../marketing/quote-tabs/quote-tabs.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
@@ -82,7 +82,7 @@
       :divided="false"
       :padded="false"
     >
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="all"
@@ -107,7 +107,7 @@
             />
           </template>
         </QuoteTabs>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </div>
 </template>

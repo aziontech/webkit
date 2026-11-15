@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 76a52371f524dc167728ae8f24e9decd9f0d7ec3ee0b8136a4a197d8fca383f8
+checksum: e1ca79ae143255614cce5bdd15f47abe61a55c26947d89f6b19e541b67e953ad
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -25,18 +25,18 @@ A responsive `iframe` for third-party content — a demo, a player, a status pag
 ## When NOT to use
 
 - For a screenshot or a clip hosted by us inside documentation → use `doc-frame`, which frames stills and clips and opens them full screen.
-- For an image → use a plain `img` inside `frame-box`; an `iframe` for a picture costs a document load.
+- For an image → use a plain `img` inside `registration-frame`; an `iframe` for a picture costs a document load.
 - For content we own and could render directly — an embed is a last resort, not a layout tool.
 
 ## Related
 
 - `doc-frame` — the documentation frame for stills and clips, not third-party documents.
-- `frame-box` — the frame drawn around the embedded document by whatever assembles the page; the embed draws none of its own.
+- `registration-frame` — the frame drawn around the embedded document by whatever assembles the page; the embed draws none of its own.
 - `media-split` — when the embed is one half of a copy-and-media band.
 
 ## Best practices
 
-- The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
+- The band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
 
 - Always write a `title` that says what the embedded thing is. It is the frame's accessible name, and a screen-reader user meets it before the content.
 - Pick the `ratio` that matches the source. A `video` ratio around a square form leaves bands of empty frame.
@@ -47,7 +47,7 @@ A responsive `iframe` for third-party content — a demo, a player, a status pag
 
 ```vue
 <script setup>
-import Embed from '@aziontech/webkit/embed'
+  import Embed from '@aziontech/webkit/embed'
 </script>
 
 <template>
@@ -61,11 +61,11 @@ import Embed from '@aziontech/webkit/embed'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `src` | `string` | `—` | true | URL of the document to embed. |
-| `title` | `string` | `—` | true | Accessible name for the embedded document, announced before its content. |
-| `ratio` | `'video' \| 'square' \| 'wide'` | `'video'` | false | Aspect ratio the frame holds while it scales. |
+| Prop    | Type                            | Default   | Required | JSDoc                                                                    |
+| ------- | ------------------------------- | --------- | -------- | ------------------------------------------------------------------------ |
+| `src`   | `string`                        | `—`       | true     | URL of the document to embed.                                            |
+| `title` | `string`                        | `—`       | true     | Accessible name for the embedded document, announced before its content. |
+| `ratio` | `'video' \| 'square' \| 'wide'` | `'video'` | false    | Aspect ratio the frame holds while it scales.                            |
 
 ## Events
 
@@ -87,16 +87,16 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
 | frame rules and marks | `var(--border-default)` |
-| frame surface | `var(--bg-surface)` |
+| frame surface         | `var(--bg-surface)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

@@ -9,7 +9,7 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: cd45bd0cb3ddc4598cd4ef99333c1b2a20d54db9258e3139c57ad82aaf9bd9c4
+checksum: 236e88b0989ba72b69c57dd75eb0b2bc277d047ace51db451c3097aee7df1ffa
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -35,7 +35,7 @@ The card surface, typography, and severity icons follow the Figma design (see `f
 
 - The message must stay visible next to the content it concerns → use `alert`.
 - The user must decide something before continuing → use `dialog`.
-- Validation feedback for a single field → use `helper-text`.
+- Validation feedback for a single field → use `field-error`.
 
 ## Related
 
@@ -219,8 +219,8 @@ The imperative API is backed by a small reactive store composable, declared here
 
 ## Slots
 
-| Slot      | Scope                | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| --------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Slot      | Scope                | Notes                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| --------- | -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `default` | `{ toast, dismiss }` | Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, loading?, message, description?, action?, actions?, duration, progress? }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`. |
 
 ## States
@@ -254,28 +254,28 @@ Toast motion reads its **speeds and curves only from the foundation** (`duration
 
 ## Tokens
 
-| Region                      | Token (DESIGN.md)                                                                                    |
-| --------------------------- | ---------------------------------------------------------------------------------------------------- |
-| toast surface               | `var(--bg-surface-raised)`                                                                           |
-| toast border                | `var(--border-default)`                                                                              |
-| border width                | `var(--border-width-default)`                                                                        |
-| elevation                   | `var(--shadow-sm)`                                                                                   |
-| shape                       | `var(--shape-control)`                                                                              |
-| title typography            | `.text-label-md`                                                                                     |
-| description typography      | `.text-body-xs`                                                                                      |
-| title text                  | `var(--text-default)`                                                                                |
-| description text            | `var(--text-muted)`                                                                                  |
+| Region                      | Token (DESIGN.md)                                                                                      |
+| --------------------------- | ------------------------------------------------------------------------------------------------------ |
+| toast surface               | `var(--bg-surface-raised)`                                                                             |
+| toast border                | `var(--border-default)`                                                                                |
+| border width                | `var(--border-width-default)`                                                                          |
+| elevation                   | `var(--shadow-sm)`                                                                                     |
+| shape                       | `var(--shape-control)`                                                                                 |
+| title typography            | `.text-label-md`                                                                                       |
+| description typography      | `.text-body-xs`                                                                                        |
+| title text                  | `var(--text-default)`                                                                                  |
+| description text            | `var(--text-muted)`                                                                                    |
 | progress bar                | `Progress` (`variant="rounded"`, `size="small"`): `var(--bg-placeholder)` track, `var(--primary)` fill |
-| progress percentage         | `.text-body-xs` · `var(--text-muted)` · `tabular-nums`                                               |
-| progress row gap            | `var(--spacing-xs)`; `var(--spacing-2xs)` above                                                      |
+| progress percentage         | `.text-body-xs` · `var(--text-muted)` · `tabular-nums`                                                 |
+| progress row gap            | `var(--spacing-xs)`; `var(--spacing-2xs)` above                                                        |
 | success icon                | `var(--success-foreground)`                                                                            |
 | info icon                   | `var(--info-foreground)`                                                                               |
 | warning icon                | `var(--warning-foreground)`                                                                            |
 | error icon                  | `var(--danger-foreground)`                                                                             |
-| padding                     | `var(--spacing-sm)`                                                                                  |
-| gap                         | `var(--spacing-xs)`                                                                                  |
-| stack inset (viewport edge) | `var(--spacing-md)`                                                                                  |
-| ring                        | `var(--ring-color)`                                                                                  |
+| padding                     | `var(--spacing-sm)`                                                                                    |
+| gap                         | `var(--spacing-xs)`                                                                                    |
+| stack inset (viewport edge) | `var(--spacing-md)`                                                                                    |
+| ring                        | `var(--ring-color)`                                                                                    |
 
 ## Theme gaps
 

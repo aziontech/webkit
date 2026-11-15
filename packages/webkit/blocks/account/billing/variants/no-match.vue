@@ -4,7 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Currency from '@aziontech/webkit/currency'
+  import CurrencyAmount from '@aziontech/webkit/currency-amount'
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -358,7 +358,7 @@
                       <KeyValueList.Item label="Plan start date">Jan 25, 2023</KeyValueList.Item>
                       <KeyValueList.Item label="Next charge date">Dec 1, 2026</KeyValueList.Item>
                       <KeyValueList.Item label="Next charge value">
-                        <Currency
+                        <CurrencyAmount
                           value="184.20"
                           size="small"
                         />
@@ -543,7 +543,7 @@
                     <span class="tabular-nums">{{ formatDate(value) }}</span>
                   </template>
                   <template #cell-amount="{ value }">
-                    <Currency
+                    <CurrencyAmount
                       :value="formatAmount(value)"
                       size="small"
                     />

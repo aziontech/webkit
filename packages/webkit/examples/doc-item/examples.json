@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "Three linked rows in the documented composition — a `FrameBox` holding an `ItemList`. The link wraps the name and stretches over the row, so the whole row is the hit area with one tab stop per entry, and the trailing chevron says it travels.",
+      "summary": "Three linked rows in the documented composition — a `RegistrationFrame` holding an `ItemList`. The link wraps the name and stretches over the row, so the whole row is the hit area with one tab stop per entry, and the trailing chevron says it travels.",
       "file": "default.vue"
     },
     {

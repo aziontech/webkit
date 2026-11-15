@@ -166,7 +166,7 @@ describe('ContactHub', () => {
 
     expect(getByTestId(TESTID)).toBeInTheDocument()
     expect(queryByRole('heading')).toBeNull()
-    expect(queryByTestId('layout-frame-box')).toBeNull()
+    expect(queryByTestId('layout-registration-frame')).toBeNull()
   })
 
   it('renders only the channels when no lane is set', () => {

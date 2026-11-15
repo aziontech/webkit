@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import ButtonHighlight from '@aziontech/webkit/button-highlight'
+  import HighlightButton from '@aziontech/webkit/highlight-button'
   import Command from '@aziontech/webkit/command'
   import ConsoleLayout, { type BreadcrumbItemData } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -104,7 +104,7 @@
             icon="ai ai-circle-plus"
             @click="router.push('/resources/new')"
           />
-          <ButtonHighlight
+          <HighlightButton
             label="Agent"
             size="medium"
             icon="ai ai-ask-azion"

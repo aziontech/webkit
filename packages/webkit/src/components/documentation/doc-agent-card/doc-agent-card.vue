@@ -6,8 +6,8 @@
   import Button from '../../actions/button/button.vue'
   import type { CopyPromptButtonAgent } from '../../actions/copy-prompt-button/copy-prompt-button.vue'
   import CopyPromptButton from '../../actions/copy-prompt-button/copy-prompt-button.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({ name: 'DocAgentCard', inheritAttrs: false })
 
@@ -65,7 +65,7 @@
     :aria-label="title || t('docAgentCard.title')"
     class="@container w-full"
   >
-    <FrameBox class="w-full">
+    <RegistrationFrame class="w-full">
       <div
         class="grid w-full grid-cols-1 bg-(--bg-surface) @3xl:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]"
       >
@@ -98,7 +98,7 @@
             aria-hidden="true"
             class="pointer-events-none absolute inset-y-0 end-0 -z-10 w-3/5"
           >
-            <TextureMaterial
+            <Texture
               variant="dither"
               size="small"
               fade="top"
@@ -119,6 +119,6 @@
           />
         </div>
       </div>
-    </FrameBox>
+    </RegistrationFrame>
   </section>
 </template>

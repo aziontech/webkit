@@ -1,25 +1,25 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref, watch } from 'vue'
 
   interface PurgeError {
-    type: HelperTextType
+    type: 'helper' | 'invalid' | 'required'
     message: string
   }
 
@@ -154,15 +154,15 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Console">
-      <GlobalHeader.Start>
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Cache"
           variant="outline"
           size="small"
         />
-        <GlobalHeader.Brand>
+        <AppHeader.Brand>
           <a
             href="/home"
             aria-label="Azion home"
@@ -173,11 +173,11 @@
               size="small"
             />
           </a>
-        </GlobalHeader.Brand>
+        </AppHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Start>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -189,8 +189,8 @@
             variant="square"
           />
         </button>
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
       <form
@@ -223,7 +223,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Layer"
                         description="The cache layer the objects are evicted from."
                         variant="stacked"
@@ -243,8 +243,8 @@
                             >{{ option.label }}</RadioGroup.Item
                           >
                         </RadioGroup>
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Purge type"
                         description="How the arguments below identify the objects."
                         variant="stacked"
@@ -269,7 +269,7 @@
                             >{{ option.label }}</RadioGroup.Item
                           >
                         </RadioGroup>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -282,7 +282,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="List"
                         :description="selectedType.description"
                         variant="stacked"
@@ -302,12 +302,10 @@
                           autocomplete="off"
                         />
 
-                        <HelperText
-                          id="create-purge-arguments-message"
-                          :type="error.message ? error.type : 'helper'"
-                          :label="guidance"
-                        />
-                      </SettingRow>
+                        <FieldDescription id="create-purge-arguments-message">{{
+                          guidance
+                        }}</FieldDescription>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

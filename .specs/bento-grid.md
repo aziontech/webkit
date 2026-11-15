@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 2
-checksum: aaf2c0aee493b5161781fb4d16d491e540c1596c7d5765d0a70bd7196addf817
+checksum: 5967fc35c4571a7e52a2c90c0d582e37244c1071bdb3352d2f0a4e9b015688f0
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -25,16 +25,16 @@ A mosaic of unequal cells on one set of shared rules: each cell claims a number 
 ## When NOT to use
 
 - When every claim carries the same weight → use `card-grid`.
-- For a row of measured figures → use `big-numbers`, which already draws this grid for numbers.
+- For a row of measured figures → use `stats`, which already draws this grid for numbers.
 - For a single copy-and-media pairing → use `media-split`.
 - For a list of questions → use `faq`.
 
 ## Related
 
 - `card-grid` — the equal-cell grid with no spans, in the gap or divider register.
-- `big-numbers` — the same collapsed-rule grid, specialised for figures.
+- `stats` — the same collapsed-rule grid, specialised for figures.
 - `media-split` — the two-column band when there is one claim, not several.
-- `frame-box` — the frame each cell is drawn with.
+- `registration-frame` — the frame each cell is drawn with.
 
 ## Best practices
 
@@ -49,12 +49,18 @@ A mosaic of unequal cells on one set of shared rules: each cell claims a number 
 
 ```vue
 <script setup>
-import BentoGrid from '@aziontech/webkit/bento-grid'
+  import BentoGrid from '@aziontech/webkit/bento-grid'
 </script>
 
 <template>
-  <BentoGrid columns="4" mobile-columns="2">
-    <BentoGrid.Cell span="2" rows="2">
+  <BentoGrid
+    columns="4"
+    mobile-columns="2"
+  >
+    <BentoGrid.Cell
+      span="2"
+      rows="2"
+    >
       <h3>Everything runs at the edge</h3>
     </BentoGrid.Cell>
     <BentoGrid.Cell variant="canvas">
@@ -83,12 +89,12 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `ariaLabel` | `string` | `''` | false | Accessible name for the grid, when the surrounding section does not already name it. |
-| `columns` | `BentoGridColumns` | `2` | false | How many columns the mosaic lays out from the medium breakpoint up. |
-| `mobileColumns` | `BentoGridMobileColumns` | `1` | false | How many columns the mosaic holds below the medium breakpoint, where every cell claims one of them. |
-| `flush` | `boolean` | `false` | false | The surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge. |
+| Prop            | Type                     | Default | Required | JSDoc                                                                                                                                                                                                     |
+| --------------- | ------------------------ | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ariaLabel`     | `string`                 | `''`    | false    | Accessible name for the grid, when the surrounding section does not already name it.                                                                                                                      |
+| `columns`       | `BentoGridColumns`       | `2`     | false    | How many columns the mosaic lays out from the medium breakpoint up.                                                                                                                                       |
+| `mobileColumns` | `BentoGridMobileColumns` | `1`     | false    | How many columns the mosaic holds below the medium breakpoint, where every cell claims one of them.                                                                                                       |
+| `flush`         | `boolean`                | `false` | false    | The surrounding frame already draws the grid's outer rules: the grid drops its own top and left ones and lays its right and bottom ones onto the frame's, so a framed column keeps one hairline per edge. |
 
 ## Events
 
@@ -96,9 +102,9 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The grid's cells, composed as `BentoGrid.Cell` elements in reading order. |
+| Slot      | Scope | Notes                                                                     |
+| --------- | ----- | ------------------------------------------------------------------------- |
+| `default` | —     | The grid's cells, composed as `BentoGrid.Cell` elements in reading order. |
 
 ## States
 
@@ -116,18 +122,18 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| grid rules and marks | `var(--border-default)` |
-| cell surface (`variant="surface"`) | `var(--bg-surface)` |
-| cell surface (`variant="canvas"`) | `var(--bg-canvas)` |
-| spacing (cell padding) | `var(--spacing-xl)` |
+| Region                             | Token (DESIGN.md)       |
+| ---------------------------------- | ----------------------- |
+| grid rules and marks               | `var(--border-default)` |
+| cell surface (`variant="surface"`) | `var(--bg-surface)`     |
+| cell surface (`variant="canvas"`)  | `var(--bg-canvas)`      |
+| spacing (cell padding)             | `var(--spacing-xl)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

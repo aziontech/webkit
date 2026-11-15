@@ -78,7 +78,7 @@ In the footer's language slot, trigger labelled `Language`.
 - Don't put a `ScrollArea`, an `h-screen` frame or any inner scroll region around the article: the document scrolls, so find in page, scroll restoration and full-page captures work.
 - Don't render a `<main>` in a page; the layout already renders the only one.
 - Don't repeat the header, the search, the navigation rail, the outline or the footer in a page.
-- Don't hand-write the outline, the pager or the masthead; the layout's outline rail, `DocPrevNext` and `DocPageHeader` own their markup and labels.
+- Don't hand-write the outline, the pager or the masthead; the layout's outline rail, `DocPreviousNext` and `DocPageHeader` own their markup and labels.
 - Don't give a `DocHeading` an id the `outline` does not list, or list an id no heading carries.
 - Don't put a `DocHeading` outside `DocProse` (it renders at body size), and don't drop a `Button` row straight into `DocProse`: wrap it in an element with `data-doc-chrome`.
 - Don't measure the viewport in script to place the footer brand; the `lg:` utilities and `signature="compact"` decide it in CSS.

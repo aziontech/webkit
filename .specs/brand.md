@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=587-3946
   node_id: 587:3946
-checksum: d71a3115b3c511a25971e0dce56730d080b9dcf7bc1b8205c2d84ae09bf9d711
+checksum: 666d830dae3076efd680a874dcb56683c853a34e75f78f3e86b342f1f773ec1d
 created: 2026-07-13
 last_updated: 2026-11-15
 ---
@@ -33,7 +33,7 @@ The Azion brand logo, rendered as an inline SVG lockup. A single `variant` prop 
 
 ## Related
 
-- `site-nav` and `site-footer` — compose Brand for the site chrome.
+- `site-header` and `site-footer` — compose Brand for the site chrome.
 - `avatar` — the picture or initials of a user, not the product mark.
 - `logo-wall` — third-party company marks.
 

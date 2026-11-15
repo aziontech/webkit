@@ -1,8 +1,8 @@
 <script setup>
   import Accordion from '@aziontech/webkit/accordion'
-  import LogViewContent from '@aziontech/webkit/log-view-content'
-  import LogViewHeader from '@aziontech/webkit/log-view-header'
-  import LogView from '@aziontech/webkit/log-view-root'
+  import LogViewerContent from '@aziontech/webkit/log-viewer-content'
+  import LogViewerHeader from '@aziontech/webkit/log-viewer-header'
+  import LogViewer from '@aziontech/webkit/log-viewer-root'
   import { ref } from 'vue'
 
   const lines = [
@@ -40,15 +40,15 @@
       <Accordion.Trigger>Deploy #482 — production</Accordion.Trigger>
       <Accordion.Content>
         <div class="h-[420px]">
-          <LogView
+          <LogViewer
             :lines="lines"
             v-model:search="search"
             v-model:level="level"
             class="h-full"
           >
-            <LogViewHeader />
-            <LogViewContent />
-          </LogView>
+            <LogViewerHeader />
+            <LogViewerContent />
+          </LogViewer>
         </div>
       </Accordion.Content>
     </Accordion.Item>

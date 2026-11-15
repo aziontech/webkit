@@ -23,7 +23,7 @@ The band a create flow uses when the resource being created needs another resour
 
 `Card :padded="false"` titled with the bound noun ("Project"), opening with one muted sentence on what the binding does. The card is flush so the list rows run edge to edge; text and controls carry their own padding. It sits in the form column (`layout-column-form`) like any other band.
 
-For an optional binding (OptionalBinding), the card has no title: its first row is a compact `SettingRow` titled with the action ("Protect with a firewall") whose `Switch` opts in, and the rest of the band unfolds under it with a grid-rows transition, `inert` while it is off. New then lists the resource's own modules as compact `SettingRow`s with a `Switch` each under the Name field; a module that cannot be turned off is a disabled, checked `Switch`, and its row description ends with why ("Always on."); a disabled control takes no focus, so a tooltip on it would never reach keyboard or screen-reader users.
+For an optional binding (OptionalBinding), the card has no title: its first row is a compact `SettingsRow` titled with the action ("Protect with a firewall") whose `Switch` opts in, and the rest of the band unfolds under it with a grid-rows transition, `inert` while it is off. New then lists the resource's own modules as compact `SettingsRow`s with a `Switch` each under the Name field; a module that cannot be turned off is a disabled, checked `Switch`, and its row description ends with why ("Always on."); a disabled control takes no focus, so a tooltip on it would never reach keyboard or screen-reader users.
 
 ### B. Existing / New choice — `ToggleGroup` (required when something exists)
 
@@ -33,9 +33,9 @@ A `ToggleGroup` at `size="large"`, `fluid`, with two options, `Existing <noun>` 
 
 New swaps the list for the fields that create the resource, usually one Name `Field` with a large `Input` and a placeholder in the resource's own format. The `Field.Description` carries the allowed characters and becomes the required message once Next is pressed with it empty (`Field :required`). Nothing is judged while the user types.
 
-### D. Search and required message — `Input`, `HelperText` (optional)
+### D. Search and required message — `Input`, `FieldError` (optional)
 
-A large `Input` with a search icon, placeholder and matching `aria-label`, shown only when the list pages (more than one batch). It matches name and description. A `HelperText type="required"` sits under the search and above the rows when Next is pressed with nothing chosen, and the wrapper takes `data-field-invalid`.
+A large `Input` with a search icon, placeholder and matching `aria-label`, shown only when the list pages (more than one batch). It matches name and description. A `FieldError type="required"` sits under the search and above the rows when Next is pressed with nothing chosen, and the wrapper takes `data-field-invalid`.
 
 ### E. Resource list — `Item`, `Skeleton` (required in Existing)
 

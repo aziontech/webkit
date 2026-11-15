@@ -20,9 +20,9 @@ The page a first-level resource is created on when everything it needs fits on o
 
 ## Building blocks
 
-### A. Creation header — `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 
-`GlobalHeader` with no sidebar: a small outlined `IconButton` back to the module ("Back to Domains"), the `Brand` linking home, a `Breadcrumb` of the module and the page title, and the account `Avatar` on the right. The breadcrumb's last item repeats the create button's label exactly.
+`AppHeader` with no sidebar: a small outlined `IconButton` back to the module ("Back to Domains"), the `Brand` linking home, a `Breadcrumb` of the module and the page title, and the account `Avatar` on the right. The breadcrumb's last item repeats the create button's label exactly.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -32,13 +32,13 @@ The page a first-level resource is created on when everything it needs fits on o
 
 Each band is a `SettingsSection` with a title and a `hint` (the glyph that reveals guidance on hover or focus) over a flush `Card :padded="false"` whose content is an `Item.List` of rows. Required fields go in the first band, General. The last band is Advanced: `collapsible`, `icon="ai ai-settings"`, closed by default (`v-model:open`), holding only fields the endpoint does not require, that already carry its default and that are not the point of the form.
 
-### D. Field rows — `SettingRow`, `Input`, `HelperText` (required)
+### D. Field rows — `SettingsRow`, `Input`, `FieldError` (required)
 
-A `SettingRow` per field: its title names the field and its description carries the guidance, so the control takes an `aria-label` instead of a separate label. A large `Input` sits right at the fixed cell width. On submit, an empty required field gets `:required` and a `HelperText type="required"`; a value the endpoint rejects gets `:invalid` and `type="invalid"`, never both. Editing the field clears its own message. A wide control (textarea, radio choice cards) uses `variant="stacked"` so it takes the full measure below the name.
+A `SettingsRow` per field: its title names the field and its description carries the guidance, so the control takes an `aria-label` instead of a separate label. A large `Input` sits right at the fixed cell width. On submit, an empty required field gets `:required` and a `FieldError type="required"`; a value the endpoint rejects gets `:invalid` and `type="invalid"`, never both. Editing the field clears its own message. A wide control (textarea, radio choice cards) uses `variant="stacked"` so it takes the full measure below the name.
 
 ### E. Switch rows — `Switch` (optional)
 
-On/off settings use `SettingRow variant="compact"` with a `Switch` hard right at its natural size, named by an `aria-label` that matches the row title, e.g. "Enable DNSSEC".
+On/off settings use `SettingsRow variant="compact"` with a `Switch` hard right at its natural size, named by an `aria-label` that matches the row title, e.g. "Enable DNSSEC".
 
 ### F. Commit bar — `SaveBar`, `Button` (required)
 
@@ -99,4 +99,4 @@ On/off settings use `SettingRow variant="compact"` with a `Switch` hard right at
 - `settings/settings-form` — the edit page that reuses these sections.
 - `state/form-validation` — required and invalid states on submit.
 - `view/table-view` — the list whose `Create <Object>` button opens this page.
-- `SettingRow` — the field row every section is built from; see `skills/webkit-form`.
+- `SettingsRow` — the field row every section is built from; see `skills/webkit-form`.

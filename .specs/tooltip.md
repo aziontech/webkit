@@ -7,7 +7,7 @@ spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 12c4acf5a61c24fbf2835c93aa1668db328905383177dbb1b881f8e4bc361893
+checksum: 02688a5ccba4edd7aebaeebd70aa7075d77b1b5dcbff2e220287a714ea1e98b7
 created: 2026-06-02
 last_updated: 2026-11-15
 ---
@@ -30,7 +30,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 - The content has links, buttons or more than one line of structure → use `popover`.
 - An info glyph beside a field label or column header → use `hint`.
 - A read-only rich preview (a definition, a glossed term in documentation prose) → use `hover-card`.
-- Guidance or errors the user needs to complete a field → use `helper-text`.
+- Guidance or errors the user needs to complete a field → use `field-error`.
 
 ## Related
 

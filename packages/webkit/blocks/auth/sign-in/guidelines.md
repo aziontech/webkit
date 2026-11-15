@@ -20,7 +20,7 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 
 ## Building blocks
 
-### A. Signed-out bar — `GlobalHeader` (required)
+### A. Signed-out bar — `AppHeader` (required)
 
 The bar above the card, labelled `aria-label="Console"`. Brand on the start side, one Documentation button on the end side, the middle empty. It is the same bar on every step so the user knows they are still in the same flow. Shared anatomy with `top-bar/auth-bar`.
 
@@ -65,7 +65,7 @@ A `Field.Label` over each input, inside the input's `Field`: `Email`, `Password`
 
 `type="email"`, `size="large"`, full width, with a `name`. Sign in uses `autocomplete="username"` so password managers pair it with the password step; the reset step uses `autocomplete="email"`; sign up uses `autocomplete="email"` too. Empty on submit takes `required`, filled but malformed takes `invalid`, and the error clears as the user types.
 
-### I. Field message — `HelperText` (conditional)
+### I. Field message — `FieldDescription` (conditional)
 
 Shows only after the primary action, under the email input, with `type="required"` when the value is empty and `type="invalid"` when it is malformed. It is client-side validation (row 1 of `skills/webkit-errors`); it never goes in the `Alert`. Linked from the input with `aria-describedby`.
 

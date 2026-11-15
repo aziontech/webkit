@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/diagram/default.vue'
-import Flow from '../../../../examples/diagram/flow.vue'
+import FlowDiagram from '../../../../examples/diagram/flow-diagram.vue'
 import Groups from '../../../../examples/diagram/groups.vue'
 import NodeKinds from '../../../../examples/diagram/nodes.vue'
 import Spec from '../../../../examples/diagram/spec.vue'
@@ -123,7 +123,7 @@ describe('Diagram', () => {
       await ready(container)
       expect(container.querySelector('[data-stack]')?.getAttribute('data-stack')).toBe('tree')
 
-      const flow = render(Flow)
+      const flow = render(FlowDiagram)
       await ready(flow.container)
       const rows = [...flow.container.querySelectorAll('[data-stack]')]
       expect(rows.map((row) => row.getAttribute('data-stack'))).toEqual(['centre'])
@@ -265,7 +265,7 @@ describe('Diagram', () => {
       ['Spec', Spec],
       ['NodeKinds', NodeKinds],
       ['Groups', Groups],
-      ['Flow', Flow]
+      ['Flow', FlowDiagram]
     ])('renders the %s story as a named image', async (_name, Story) => {
       const { findByRole } = render(Story)
 

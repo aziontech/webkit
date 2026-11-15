@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, useAttrs, useId } from 'vue'
 
-  import HelperText from '../../helper-text/helper-text.vue'
   import { FieldInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -24,14 +23,15 @@
 </script>
 
 <template>
-  <HelperText
+  <p
     v-bind="$attrs"
     :id="id"
     role="alert"
     data-slot="field-error"
-    type="invalid"
+    data-type="invalid"
     :data-testid="testId"
+    class="inline-flex items-center text-label-sm text-(--danger-foreground)"
   >
-    <slot />
-  </HelperText>
+    <span :data-testid="`${testId}__text`"><slot /></span>
+  </p>
 </template>

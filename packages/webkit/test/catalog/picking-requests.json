@@ -145,12 +145,12 @@
     {
       "tool": "components",
       "query": "top bar",
-      "top1": "global-header"
+      "top1": "app-header"
     },
     {
       "tool": "components",
       "query": "top navigation bar",
-      "top1": "global-header"
+      "top1": "app-header"
     },
     {
       "tool": "components",
@@ -200,12 +200,12 @@
     {
       "tool": "components",
       "query": "show logs",
-      "top1": "log-view"
+      "top1": "log-viewer"
     },
     {
       "tool": "components",
       "query": "logs",
-      "top1": "log-view"
+      "top1": "log-viewer"
     },
     {
       "tool": "components",
@@ -643,7 +643,7 @@
     {
       "tool": "components",
       "query": "plan pricing card",
-      "top1": "card-pricing"
+      "top1": "pricing-card"
     },
     {
       "tool": "components",
@@ -695,7 +695,7 @@
     {
       "tool": "suggest",
       "query": "stats",
-      "top1": "stats-band"
+      "top1": "stats-section"
     },
     {
       "tool": "suggest",
@@ -706,7 +706,7 @@
     {
       "tool": "suggest",
       "query": "marquee",
-      "top1": "ticker"
+      "top1": "marquee"
     },
     {
       "tool": "suggest",
@@ -721,8 +721,8 @@
     {
       "tool": "suggest",
       "query": "comparison",
-      "top1": "compare-plans",
-      "accept": ["compare-plans", "comparison-table"]
+      "top1": "plan-comparison",
+      "accept": ["plan-comparison", "competitor-comparison"]
     },
     {
       "tool": "suggest",
@@ -733,7 +733,7 @@
     {
       "tool": "suggest",
       "query": "newsletter",
-      "top1": "closing-call-to-action-newsletter"
+      "top1": "newsletter-section"
     },
     {
       "tool": "suggest",

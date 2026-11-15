@@ -19,7 +19,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import IconButton from '../../actions/icon-button/icon-button.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CardGrid from '../card-grid/card-grid.vue'
   import CardGridCell from '../card-grid/card-grid-cell/card-grid-cell.vue'
   import type { LogoWallShape } from '../logo-wall/logo-wall.vue'
@@ -91,7 +91,7 @@
   const loaded = new Map<string, Component>()
   const tabElements: Array<globalThis.HTMLButtonElement | null> = []
   let pendingDirection: QuoteTabsDirection | null = null
-  let ticker: ReturnType<typeof globalThis.setInterval> | null = null
+  let marquee: ReturnType<typeof globalThis.setInterval> | null = null
 
   const direction = ref<QuoteTabsDirection>('forward')
   const elapsed = ref(0)
@@ -177,14 +177,14 @@
   }
 
   function stop(): void {
-    if (ticker === null) return
-    globalThis.clearInterval(ticker)
-    ticker = null
+    if (marquee === null) return
+    globalThis.clearInterval(marquee)
+    marquee = null
   }
 
   function start(): void {
     stop()
-    ticker = globalThis.setInterval(tick, PROGRESS_TICK_MS)
+    marquee = globalThis.setInterval(tick, PROGRESS_TICK_MS)
   }
 
   function tick(): void {
@@ -270,7 +270,7 @@
       class="absolute end-(--spacing-xs) top-(--spacing-xs) z-20"
       @click="togglePause"
     />
-    <FrameBox
+    <RegistrationFrame
       :id="panelId"
       borders="bottom"
       marks="all"
@@ -382,7 +382,7 @@
         :style="{ width: `${progress}%` }"
         class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
       />
-    </FrameBox>
+    </RegistrationFrame>
 
     <CardGrid
       variant="frame"

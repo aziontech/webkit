@@ -19,7 +19,7 @@
     },
     {
       "name": "Cards",
-      "summary": "A list of ticker rows: the name, a small area spark, the current value and the signed change. The spark stays decorative because the value beside it carries the number; its color says whether the change is good for that metric, so falling threats and latency read as success.",
+      "summary": "A list of marquee rows: the name, a small area spark, the current value and the signed change. The spark stays decorative because the value beside it carries the number; its color says whether the change is good for that metric, so falling threats and latency read as success.",
       "file": "cards.vue"
     }
   ]

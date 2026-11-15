@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import NavigationMenuArrow from './parts/navigation-menu-arrow.vue'
   import NavigationMenuBackdrop from './parts/navigation-menu-backdrop.vue'
-  import NavigationMenuPopup, {
-    type NavigationMenuPopupVariant
-  } from './parts/navigation-menu-popup.vue'
+  import NavigationMenuPopover, {
+    type NavigationMenuPopoverVariant
+  } from './parts/navigation-menu-popover.vue'
   import NavigationMenuPortal from './parts/navigation-menu-portal.vue'
   import NavigationMenuPositioner, {
     type NavigationMenuAlign,
@@ -32,7 +32,7 @@
     /** Tracks the active trigger as the anchor; false keeps the popup where it first opened. */
     trackAnchor?: boolean
     /** Surface treatment of the popup. */
-    variant?: NavigationMenuPopupVariant
+    variant?: NavigationMenuPopoverVariant
     /** Shows an arrow that points at the active trigger. */
     arrow?: boolean
     /** Dims the page behind the open popup; a click on it closes the menu. */
@@ -76,13 +76,13 @@
       :sticky="props.sticky"
       :track-anchor="props.trackAnchor"
     >
-      <NavigationMenuPopup
+      <NavigationMenuPopover
         v-bind="$attrs"
         :variant="props.variant"
       >
         <NavigationMenuArrow v-if="props.arrow" />
         <NavigationMenuViewportFrame />
-      </NavigationMenuPopup>
+      </NavigationMenuPopover>
     </NavigationMenuPositioner>
   </NavigationMenuPortal>
 </template>

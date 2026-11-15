@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, h } from 'vue'
 
 import Levels from '../../../../examples/doc-heading/levels.vue'
-import { provideHeadingNav } from '../../../composables/use-heading-nav'
+import { provideHeadingNavigation } from '../../../composables/use-heading-navigation'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocHeading from './doc-heading.vue'
 
@@ -41,7 +41,7 @@ describe('DocHeading', () => {
     const navigate = vi.fn((event: MouseEvent) => event.preventDefault())
     const Page = defineComponent({
       setup() {
-        provideHeadingNav(navigate)
+        provideHeadingNavigation(navigate)
         return () => h(DocHeading, { anchor: 'rules', label: 'Rules' })
       }
     })

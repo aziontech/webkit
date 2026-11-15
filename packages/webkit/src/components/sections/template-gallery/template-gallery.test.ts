@@ -39,8 +39,8 @@ const band = (props: Record<string, unknown> = {}) =>
       templates,
       deployLabel: DEPLOY,
       templatesAriaLabel: WALL_LABEL,
-      tickerLabel: 'Compatible with Your Stack',
-      tickerMarks: ['nextjs', 'astro'],
+      marqueeLabel: 'Compatible with Your Stack',
+      marqueeMarks: ['nextjs', 'astro'],
       ...props
     }
   })
@@ -187,12 +187,12 @@ describe('TemplateGallery', () => {
     expect(queryByRole('link', { name: secondaryAction.label })).toBeNull()
   })
 
-  it('renders the ticker label only when there are marks', () => {
+  it('renders the marquee label only when there are marks', () => {
     const withMarks = band()
     expect(withMarks.getByText('Compatible with Your Stack')).toBeInTheDocument()
     withMarks.unmount()
 
-    const withoutMarks = band({ tickerMarks: [] })
+    const withoutMarks = band({ marqueeMarks: [] })
     expect(withoutMarks.queryByText('Compatible with Your Stack')).toBeNull()
   })
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import FrameBox from '../../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../../layout/registration-frame/registration-frame.vue'
   import DiagramNode from '../parts/diagram-node.vue'
   import type { DiagramLayoutItem, DiagramNode as DiagramNodeData } from '../types'
 
@@ -88,7 +88,7 @@
     :data-diagram-node="item.group"
     class="flex flex-col self-stretch @5xl:self-auto"
   >
-    <FrameBox
+    <RegistrationFrame
       borders="none"
       marks="all"
     >
@@ -104,6 +104,6 @@
           :tree="tree"
         />
       </div>
-    </FrameBox>
+    </RegistrationFrame>
   </div>
 </template>

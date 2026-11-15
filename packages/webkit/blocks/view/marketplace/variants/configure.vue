@@ -8,7 +8,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
@@ -107,7 +107,7 @@
         >
           <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
             <Item.List>
-              <SettingRow
+              <SettingsRow
                 title="Queue visitors"
                 description="Off lets every visitor in and keeps the settings below."
                 variant="compact"
@@ -117,7 +117,7 @@
                   aria-label="Queue visitors"
                   :disabled="saving"
                 />
-              </SettingRow>
+              </SettingsRow>
             </Item.List>
             <Field
               required

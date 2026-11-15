@@ -464,14 +464,14 @@ describe('MediaTabs', () => {
     const { container } = render(MediaTabs, {
       props: { items: ITEMS, autoplay: false, texture: 'grid', textureSize: 'small' }
     })
-    const ground = container.querySelector('[data-testid="marketing-texture-material"]')
+    const ground = container.querySelector('[data-testid="marketing-texture"]')
     expect(ground?.getAttribute('data-variant')).toBe('grid')
     expect(ground?.getAttribute('data-size')).toBe('small')
   })
 
   it('leaves the media column bare by default', () => {
     const { container } = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
-    const ground = container.querySelector('[data-testid="marketing-texture-material"]')
+    const ground = container.querySelector('[data-testid="marketing-texture"]')
     expect(ground?.getAttribute('data-variant')).toBe('none')
   })
 })

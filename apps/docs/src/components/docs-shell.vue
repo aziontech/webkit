@@ -3,7 +3,7 @@
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import GlobalHeader from '@aziontech/webkit/global-header'
+  import AppHeader from '@aziontech/webkit/app-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -64,8 +64,8 @@
       >Skip to content</a
     >
     <div class="@container sticky top-0 z-40 w-full">
-      <GlobalHeader :aria-label="t.navigation">
-        <GlobalHeader.Start>
+      <AppHeader :aria-label="t.navigation">
+        <AppHeader.Start>
           <div class="flex min-w-0 items-center gap-(--spacing-xs)">
             <div class="shrink-0 lg:hidden">
               <IconButton
@@ -76,7 +76,7 @@
                 @click="navOpen = true"
               />
             </div>
-            <GlobalHeader.Brand>
+            <AppHeader.Brand>
               <a
                 href="/"
                 :aria-label="t.home"
@@ -92,7 +92,7 @@
                   WebKit
                 </span>
               </a>
-            </GlobalHeader.Brand>
+            </AppHeader.Brand>
             <nav
               :aria-label="t.navigation"
               class="ms-(--spacing-sm) hidden items-center gap-(--spacing-2xs) lg:flex"
@@ -110,9 +110,9 @@
               >
             </nav>
           </div>
-        </GlobalHeader.Start>
-        <GlobalHeader.Center />
-        <GlobalHeader.End>
+        </AppHeader.Start>
+        <AppHeader.Center />
+        <AppHeader.End>
           <SearchTrigger
             collapsible
             :label="t.search"
@@ -169,8 +169,8 @@
             target="_blank"
             class="hidden shrink-0 sm:inline-flex"
           />
-        </GlobalHeader.End>
-      </GlobalHeader>
+        </AppHeader.End>
+      </AppHeader>
     </div>
 
     <div class="relative flex min-h-0 flex-1">

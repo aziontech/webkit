@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 5ec2b6d28bd8bebd443ee84bc0169a378db3f8635b354167ee22f01832151df0
+checksum: e3c5346bb7cf96b7f5623de440036758bcd0ef6cfbdb19703b3f3757b200358b
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -18,7 +18,7 @@ The masthead of a documentation home: a display-size `h1`, a deck capped at a re
 
 ## When to use
 
-- Use DocHero only on the documentation home; marketing page openings use HeroBand.
+- Use DocHero only on the documentation home; marketing page openings use HeroSection.
 - The top of a documentation home or a docs section landing (`shell/docs`, variant `Landing`).
 
 ## When NOT to use
@@ -67,10 +67,10 @@ The masthead of a documentation home: a display-size `h1`, a deck capped at a re
 
 ## Props
 
-| Prop          | Type     | Default | Required | JSDoc                                                                    |
-| ------------- | -------- | ------- | -------- | ------------------------------------------------------------------------ |
-| `title`       | `string` | `''`    | false    | The page title, set at display size as the page's `h1`.                  |
-| `description` | `string` | `''`    | false    | The deck under the title: what the docs cover, in one or two sentences.  |
+| Prop          | Type     | Default | Required | JSDoc                                                                   |
+| ------------- | -------- | ------- | -------- | ----------------------------------------------------------------------- |
+| `title`       | `string` | `''`    | false    | The page title, set at display size as the page's `h1`.                 |
+| `description` | `string` | `''`    | false    | The deck under the title: what the docs cover, in one or two sentences. |
 
 ## Events
 
@@ -78,12 +78,12 @@ _none_
 
 ## Slots
 
-| Slot      | Props | Notes                                                                 |
-| --------- | ----- | --------------------------------------------------------------------- |
-| `title`   | —     | Replaces the title text, for a title that is more than a string.      |
-| `default` | —     | Replaces the description text.                                        |
-| `actions` | —     | The action row: the primary `Button` first, then `CopyPromptButton`.  |
-| `note`    | —     | One muted line under the actions that says what the prompt does.      |
+| Slot      | Props | Notes                                                                |
+| --------- | ----- | -------------------------------------------------------------------- |
+| `title`   | —     | Replaces the title text, for a title that is more than a string.     |
+| `default` | —     | Replaces the description text.                                       |
+| `actions` | —     | The action row: the primary `Button` first, then `CopyPromptButton`. |
+| `note`    | —     | One muted line under the actions that says what the prompt does.     |
 
 ## States
 
@@ -98,12 +98,12 @@ _none_
 
 ## Tokens
 
-| Region   | Token (DESIGN.md)                                                                   |
-| -------- | ----------------------------------------------------------------------------------- |
-| title    | `.text-heading-2xl`, `var(--text-default)`                                          |
-| deck     | `.text-body-lg`, `var(--text-muted)`, capped at `var(--container-xl)`               |
-| note     | `.text-body-sm`, `var(--text-muted)`                                                |
-| rhythm   | `var(--spacing-2xl)` above (from `sm`) and below, `var(--spacing-md)` title to deck, `var(--spacing-xl)` deck to actions, `var(--spacing-lg)` actions to note, `var(--spacing-sm)` between actions |
+| Region | Token (DESIGN.md)                                                                                                                                                                                  |
+| ------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| title  | `.text-heading-2xl`, `var(--text-default)`                                                                                                                                                         |
+| deck   | `.text-body-lg`, `var(--text-muted)`, capped at `var(--container-xl)`                                                                                                                              |
+| note   | `.text-body-sm`, `var(--text-muted)`                                                                                                                                                               |
+| rhythm | `var(--spacing-2xl)` above (from `sm`) and below, `var(--spacing-md)` title to deck, `var(--spacing-xl)` deck to actions, `var(--spacing-lg)` actions to note, `var(--spacing-sm)` between actions |
 
 ## Theme gaps
 

@@ -2,7 +2,7 @@ import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const CHROME = new Map([
   ['site-footer', 'SiteFooter'],
-  ['site-nav', 'SiteNav']
+  ['site-header', 'SiteHeader']
 ])
 
 const WEBKIT_PREFIX = '@aziontech/webkit/'
@@ -40,7 +40,7 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow a bordered or padded wrapper around SiteFooter or SiteNav: they draw their own rules and frame, so the wrapper doubles a rule or pulls the frame off the page column.'
+        'Disallow a bordered or padded wrapper around SiteFooter or SiteHeader: they draw their own rules and frame, so the wrapper doubles a rule or pulls the frame off the page column.'
     },
     schema: [],
     messages: {

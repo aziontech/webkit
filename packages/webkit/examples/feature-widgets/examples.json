@@ -9,7 +9,7 @@
     },
     {
       "name": "Live scenes",
-      "summary": "Each cell draws a `ProductWidget` console fragment as its `scene`, which plays its beat while the pointer is over the cell. The last cell carries a link and a copy button together; the copy button reads Copied for two seconds after a copy.",
+      "summary": "Each cell draws a `ConsoleMockup` console fragment as its `scene`, which plays its beat while the pointer is over the cell. The last cell carries a link and a copy button together; the copy button reads Copied for two seconds after a copy.",
       "file": "live-scenes.vue"
     }
   ],

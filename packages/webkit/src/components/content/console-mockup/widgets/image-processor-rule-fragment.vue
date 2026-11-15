@@ -1,0 +1,233 @@
+<script setup lang="ts">
+  import { computed, onScopeDispose, ref, watch } from 'vue'
+
+  import { useMediaQuery } from '../../../../composables/use-media-query'
+  import Button from '../../../actions/button/button.vue'
+  import Input from '../../../inputs/input/input.vue'
+  import Select from '../../../inputs/select/index'
+  import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
+  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import MockupCursor from '../parts/mockup-cursor.vue'
+  import MockupSelect from '../parts/mockup-select.vue'
+
+  defineOptions({ name: 'ImageProcessorRuleFragment' })
+
+  interface Props {
+    /** Whether this fragment is the one showing. */
+    active?: boolean
+    /** Whether the pointer is over the fragment's card; Optimize Images is picked as the rule's behavior while it is, and Deliver comes back after. */
+    hovered?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
+
+  const canHover = useMediaQuery('(hover: hover)', true)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+
+  const BEHAVIORS = [
+    'Forward Cookies',
+    'No Content (204)',
+    'Optimize Images',
+    'Redirect HTTP to HTTPS'
+  ]
+
+  interface Frame {
+    cursor: MockupCursorTarget
+    press: boolean
+    focused: boolean
+    open: boolean
+    highlight: number
+    behavior: string
+    forward: number
+    back: number
+  }
+
+  const IDLE: MockupCursorTarget = { key: 'behavior', x: 1.5, y: 2.2 }
+  const TRIGGER: MockupCursorTarget = { key: 'behavior', x: 0.4, y: 0.6 }
+  const option = (index: number): MockupCursorTarget => ({ key: `option-${index}`, x: 0.3, y: 0.6 })
+
+  const REST = {
+    cursor: IDLE,
+    press: false,
+    focused: false,
+    open: false,
+    highlight: -1,
+    behavior: 'Deliver'
+  }
+
+  const PICKING = { ...REST, focused: true, open: true }
+
+  const FRAMES: Frame[] = [
+    { ...REST, forward: 0, back: 0 },
+    { ...REST, cursor: TRIGGER, forward: 120, back: 420 },
+    { ...REST, cursor: TRIGGER, press: true, focused: true, forward: 480, back: 160 },
+    { ...PICKING, cursor: option(0), highlight: 0, forward: 160, back: 300 },
+    { ...PICKING, cursor: option(1), highlight: 1, forward: 300, back: 260 },
+    { ...PICKING, cursor: option(2), highlight: 2, forward: 380, back: 260 },
+    { ...PICKING, cursor: option(2), highlight: 2, press: true, forward: 420, back: 120 },
+    {
+      ...PICKING,
+      cursor: option(2),
+      highlight: 2,
+      press: true,
+      behavior: 'Optimize Images',
+      forward: 120,
+      back: 220
+    },
+    {
+      ...REST,
+      cursor: option(2),
+      focused: true,
+      behavior: 'Optimize Images',
+      forward: 200,
+      back: 260
+    }
+  ]
+
+  const LAST = FRAMES.length - 1
+
+  const wanted = () => props.active && (props.hovered || !canHover.value)
+
+  const step = ref(0)
+  const stageEl = ref<globalThis.HTMLElement | null>(null)
+
+  const frame = computed(() => FRAMES[step.value])
+  const { position } = useMockupCursor(stageEl, () => frame.value.cursor)
+
+  let timer: ReturnType<typeof globalThis.setTimeout> | null = null
+
+  const halt = () => {
+    if (timer) globalThis.clearTimeout(timer)
+    timer = null
+  }
+
+  const advance = () => {
+    halt()
+    const target = wanted() ? LAST : 0
+    if (step.value === target) return
+    if (reduced.value || !canHover.value) {
+      step.value = target
+      return
+    }
+    const forward = target > step.value
+    const next = step.value + (forward ? 1 : -1)
+    const delay = forward ? FRAMES[next].forward : FRAMES[step.value].back
+    timer = globalThis.setTimeout(() => {
+      step.value = next
+      advance()
+    }, delay)
+  }
+
+  watch(wanted, advance, { immediate: true })
+
+  onScopeDispose(halt)
+
+  const shown = (value: unknown) => String(value)
+</script>
+
+<template>
+  <ConsoleMockupShell
+    variant="bare"
+    shell="legacy"
+    fade="bottom"
+    class="[--mockup-fade-start:72%]"
+    :chrome="false"
+    :active="active"
+    :width="420"
+    :mobile-width="380"
+  >
+    <div
+      ref="stageEl"
+      class="relative flex h-full flex-col gap-(--spacing-md) py-(--spacing-xs)"
+    >
+      <ConsoleMockupShellItem :order="0">
+        <div class="flex flex-col gap-(--spacing-sm)">
+          <span class="flex items-center gap-(--spacing-sm)">
+            <span class="text-body-sm text-(--text-default) capitalize">if</span>
+            <span class="h-0 flex-1 border-t border-dashed border-(--border-default)" />
+          </span>
+          <span class="grid min-w-0 grid-cols-[4fr_4fr_5fr] gap-(--spacing-xs)">
+            <Input
+              model-value="${uri}"
+              size="medium"
+              aria-label="Variable"
+            />
+            <Select
+              model-value="matches"
+              size="medium"
+              :display-value="shown"
+            >
+              <Select.Trigger aria-label="Operator" />
+            </Select>
+            <Input
+              model-value="\.(jpe?g|png|gif|webp)$"
+              size="medium"
+              aria-label="Argument"
+            />
+          </span>
+        </div>
+      </ConsoleMockupShellItem>
+
+      <ConsoleMockupShellItem :order="1">
+        <span class="flex gap-(--spacing-xs)">
+          <Button
+            label="And"
+            variant="outline"
+            size="small"
+            icon="ai ai-circle-plus"
+          />
+          <Button
+            label="Or"
+            variant="outline"
+            size="small"
+            icon="ai ai-circle-plus"
+          />
+        </span>
+      </ConsoleMockupShellItem>
+
+      <ConsoleMockupShellItem
+        :order="2"
+        :data-state="frame.open ? 'open' : 'closed'"
+        class="relative data-[state=open]:z-1"
+      >
+        <div class="flex flex-col gap-(--spacing-sm)">
+          <span class="flex items-center gap-(--spacing-sm)">
+            <span class="text-body-sm text-(--text-default) capitalize">Then</span>
+            <span class="h-0 flex-1 border-t border-dashed border-(--border-default)" />
+          </span>
+          <span class="grid min-w-0 grid-cols-2 gap-(--spacing-xs)">
+            <MockupSelect
+              :value="frame.behavior"
+              :options="BEHAVIORS"
+              :open="frame.open"
+              :highlighted-index="frame.highlight"
+              :focused="frame.focused"
+              side="top"
+              data-cursor="behavior"
+              aria-label="Behavior"
+            />
+          </span>
+        </div>
+      </ConsoleMockupShellItem>
+
+      <ConsoleMockupShellItem :order="3">
+        <span class="flex">
+          <Button
+            label="Add Behavior"
+            variant="outline"
+            size="small"
+            icon="ai ai-circle-plus"
+          />
+        </span>
+      </ConsoleMockupShellItem>
+
+      <MockupCursor
+        name="Priya"
+        :x="position.x"
+        :y="position.y"
+        :pressed="frame.press"
+      />
+    </div>
+  </ConsoleMockupShell>
+</template>

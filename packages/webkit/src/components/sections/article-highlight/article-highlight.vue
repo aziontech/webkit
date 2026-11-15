@@ -7,7 +7,7 @@
   import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
   import IconButton from '../../actions/icon-button/icon-button.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import type { CardGridColumns } from '../../marketing/card-grid/card-grid.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
@@ -28,7 +28,7 @@
     image: string
     /** URL of a cover cropped for the panel; wins over image. */
     highlightImage?: string
-    /** Overline, usually the category and the date. */
+    /** Eyebrow, usually the category and the date. */
     meta: string
     /** Headline of the article. */
     title: string
@@ -206,7 +206,7 @@
       :divided="false"
       :padded="false"
     >
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="all"
@@ -230,7 +230,7 @@
             class="absolute end-(--spacing-xs) top-(--spacing-xs) z-20"
             @click="paused = !paused"
           />
-          <FrameBox
+          <RegistrationFrame
             :id="panelId"
             borders="bottom"
             marks="all"
@@ -330,7 +330,7 @@
               :style="{ width: `${progress}%` }"
               class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
             />
-          </FrameBox>
+          </RegistrationFrame>
 
           <div ref="wallEl">
             <CardGrid
@@ -369,7 +369,7 @@
             </CardGrid>
           </div>
         </div>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

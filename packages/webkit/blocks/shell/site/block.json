@@ -3,7 +3,7 @@
   "name": "Site",
   "title": "Blocks/Shell/Site",
   "surface": "site",
-  "summary": "The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteNav data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooter data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width=\"site\"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooter closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `FrameBox`, `BigNumbers` and `TextureMaterial`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteNav.",
+  "summary": "The website shell: `SiteLayout` composed once in the app around RouterView, so the chrome is never rebuilt per page. The navigation is the SiteHeader data (the azion.com mega-menus, Pricing, Contact, Login and Start for free, every item with its `href`) in `navigation`, and the footer is the SiteFooter data (`variant: 'site'`, columns, socials, status line, languages) in `footer`; the layout paints the canvas, owns the single `<main>`, and opens a ⌘K / Ctrl K Command palette that lists every navigation destination. Every page is only its sections in the default slot: one `Hero` band opening the page, then every section stacked inside one framed `SectionContainer max-width=\"site\"` separated by hatched `SectionGap`s, ending on a closing frame that draws no rule of its own, so the SiteFooter closes the page frame. The hero, the sections and the footer all resolve to the site measure, which is the only reason the side rules running down the page are continuous. Built from `SiteLayout`, `Hero`, `Button`, `SectionContainer`, `SectionGap`, `SectionModule`, `RegistrationFrame`, `Stats` and `Texture`. The full mega-menus and the navigation sheet are documented on Templates › Marketing › Shell › SiteHeader.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -21,7 +21,7 @@
     "marketing site shell",
     "site layout component",
     "SiteLayout",
-    "layout do site com SiteNav"
+    "layout do site com SiteHeader"
   ],
   "skills": ["webkit-layout"],
   "primary": {

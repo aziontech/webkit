@@ -1,8 +1,7 @@
 <script setup lang="ts">
-  import BigNumbers from '@aziontech/webkit/big-numbers'
   import Button from '@aziontech/webkit/button'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import Hero from '@aziontech/webkit/hero'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import SectionModule from '@aziontech/webkit/section-module'
@@ -10,7 +9,8 @@
     type SiteLayoutFooter,
     type SiteLayoutNavigation
   } from '@aziontech/webkit/site-layout'
-  import TextureMaterial from '@aziontech/webkit/texture-material'
+  import Stats from '@aziontech/webkit/stats'
+  import Texture from '@aziontech/webkit/texture'
 
   const navigation: SiteLayoutNavigation = {
     home: '/en/',
@@ -488,25 +488,25 @@
         :divided="false"
         :padded="false"
       >
-        <FrameBox
+        <RegistrationFrame
           flush
           borders="y"
           marks="bottom"
         >
-          <BigNumbers :items="figures" />
-        </FrameBox>
+          <Stats :items="figures" />
+        </RegistrationFrame>
       </SectionModule>
 
       <SectionGap hatch />
 
-      <FrameBox
+      <RegistrationFrame
         borders="none"
         marks="all"
         data-hatch="true"
         class="h-[calc(var(--spacing-2xl)*2)]"
       >
-        <TextureMaterial variant="lines" />
-      </FrameBox>
+        <Texture variant="lines" />
+      </RegistrationFrame>
     </SectionContainer>
   </SiteLayout>
 </template>

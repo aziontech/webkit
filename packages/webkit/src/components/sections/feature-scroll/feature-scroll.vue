@@ -4,14 +4,14 @@
   import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
   import Button from '../../actions/button/button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import MediaTile from '../../marketing/media-tile/media-tile.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
   import StickyStack from '../../marketing/sticky-stack/sticky-stack.vue'
-  import TextureMaterial from '../../marketing/texture-material/texture-material.vue'
+  import Texture from '../../marketing/texture/texture.vue'
 
   defineOptions({
     name: 'FeatureScroll',
@@ -68,7 +68,7 @@
   export interface FeatureScrollProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
-    /** Overline above the section title. */
+    /** Eyebrow above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty. */
     title?: string
@@ -139,7 +139,7 @@
         />
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="bottom"
@@ -189,9 +189,9 @@
             </MediaTile>
           </CardGridCell>
         </CardGrid>
-      </FrameBox>
+      </RegistrationFrame>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="bottom"
@@ -203,7 +203,7 @@
               <div
                 class="relative h-[30rem] w-full min-w-0 overflow-hidden rounded-(--shape-card) bg-(--bg-surface) lg:absolute lg:inset-0 lg:h-auto lg:rounded-none lg:border-0 [background-clip:var(--illustration-rim-boxes)] [background-image:linear-gradient(var(--bg-surface),var(--bg-surface)),var(--illustration-rim),linear-gradient(var(--bg-surface),var(--bg-surface))] [background-origin:var(--illustration-rim-boxes)] [border:var(--illustration-rim-width-hairline)_solid_transparent]"
               >
-                <TextureMaterial
+                <Texture
                   variant="dots"
                   size="small"
                   class="opacity-40"
@@ -255,7 +255,7 @@
             />
           </template>
         </StickyStack>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

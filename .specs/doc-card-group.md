@@ -4,7 +4,7 @@ category: documentation
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 35037a83aaa27b1307ad34381f35ec440357a54d8cb640e6e379f101858f9d42
+checksum: 0adb43ef190ec6628f9911753afc05429b0d061627d6a5168db60ab3bc474bcb
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `FrameBox` draws the perimeter and the four corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a 1px ring into them — so two neighbours share one hairline, an incomplete last row stays simply empty, and the set reads as one object the reader scans across rather than as loose tiles. `columns` names the widest column count; the grid always steps down toward one column on a phone unless a set of tiny cells opts into two with `mobileColumns`.
+The framed, responsive grid a `DocCard` set sits in. The group is the frame, not each card: `RegistrationFrame` draws the perimeter and the four corner registration marks once around the whole set, the grid keeps 1px gaps, and every cell paints a 1px ring into them — so two neighbours share one hairline, an incomplete last row stays simply empty, and the set reads as one object the reader scans across rather than as loose tiles. `columns` names the widest column count; the grid always steps down toward one column on a phone unless a set of tiny cells opts into two with `mobileColumns`.
 
 ## When to use
 
@@ -28,7 +28,7 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 ## Related
 
 - `DocCard` — the cell this frames; the group draws the perimeter and the cells paint the internal rules.
-- `FrameBox` — the layout primitive that draws the frame and the corner registration marks.
+- `RegistrationFrame` — the layout primitive that draws the frame and the corner registration marks.
 - `DocProse` — the contract around it; `data-doc-block` puts the group on the block rung of the prose ladder.
 
 ## Best practices
@@ -67,10 +67,10 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 
 ## Props
 
-| Prop            | Type               | Default     | Required | JSDoc                                                                                                                          |
-| --------------- | ------------------ | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `columns`       | `1 \| 2 \| 3 \| 4` | `2`         | false    | Column count at the large breakpoint. A Markdown `CardGroup cols` attribute maps here (through DocMarkdown). |
-| `mobileColumns` | `1 \| 2`           | `1`         | false    | Column count on a phone. Two only pays when the cells are a mark plus a word.                                                  |
+| Prop            | Type               | Default | Required | JSDoc                                                                                                        |
+| --------------- | ------------------ | ------- | -------- | ------------------------------------------------------------------------------------------------------------ |
+| `columns`       | `1 \| 2 \| 3 \| 4` | `2`     | false    | Column count at the large breakpoint. A Markdown `CardGroup cols` attribute maps here (through DocMarkdown). |
+| `mobileColumns` | `1 \| 2`           | `1`     | false    | Column count on a phone. Two only pays when the cells are a mark plus a word.                                |
 
 ## Events
 

@@ -1,10 +1,10 @@
 <script setup>
   import Alert from '@aziontech/webkit/alert'
+  import AppHeader from '@aziontech/webkit/app-header'
   import AppLayout from '@aziontech/webkit/app-layout'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import HelpPanel from '@aziontech/webkit/help-panel'
   import IconButton from '@aziontech/webkit/icon-button'
   import KeyValueList from '@aziontech/webkit/key-value-list'
@@ -66,8 +66,8 @@
 
       <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container w-full">
-          <GlobalHeader aria-label="Console">
-            <GlobalHeader.Start>
+          <AppHeader aria-label="Console">
+            <AppHeader.Start>
               <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                 <IconButton
                   v-if="compact"
@@ -78,9 +78,9 @@
                   @click="openNavigation"
                 />
               </div>
-            </GlobalHeader.Start>
-            <GlobalHeader.Center />
-            <GlobalHeader.End>
+            </AppHeader.Start>
+            <AppHeader.Center />
+            <AppHeader.End>
               <SearchTrigger
                 collapsible
                 @open="searchOpen = true"
@@ -93,8 +93,8 @@
                 :aria-pressed="toolsOpen"
                 @click="toggleTools"
               />
-            </GlobalHeader.End>
-          </GlobalHeader>
+            </AppHeader.End>
+          </AppHeader>
           <Command v-model:open="searchOpen">
             <Command.Input placeholder="Search the console" />
             <Command.List>

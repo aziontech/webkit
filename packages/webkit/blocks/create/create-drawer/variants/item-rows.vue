@@ -4,7 +4,7 @@
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -12,7 +12,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref, watch } from 'vue'
@@ -148,7 +148,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="A unique identifier. Lower-case letters, numbers, and hyphen."
                       >
@@ -168,16 +168,15 @@
                                 @update:model-value="errors.name = ''"
                               />
                             </div>
-                            <HelperText
+                            <FieldError
                               v-if="errors.name"
                               id="origin-name-error"
-                              :type="form.name.trim() ? 'invalid' : 'required'"
-                              :label="errors.name"
-                            />
+                              >{{ errors.name }}</FieldError
+                            >
                           </div>
                         </div>
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Description"
                         description="A short note about what this origin serves."
                       >
@@ -191,7 +190,7 @@
                             placeholder="Optional"
                           />
                         </div>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -202,7 +201,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Protocol"
                         description="How storefront connects to the origin."
                       >
@@ -235,16 +234,15 @@
                                 </Select.Item>
                               </Select.Content>
                             </Select>
-                            <HelperText
+                            <FieldError
                               v-if="errors.protocol"
                               id="origin-protocol-error"
-                              type="required"
-                              :label="errors.protocol"
-                            />
+                              >{{ errors.protocol }}</FieldError
+                            >
                           </div>
                         </div>
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Region"
                         description="Where the origin server runs."
                       >
@@ -271,7 +269,7 @@
                             </Select.Content>
                           </Select>
                         </div>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -282,7 +280,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Active"
                         description="Send traffic to the origin as soon as it is added."
                         variant="compact"
@@ -292,8 +290,8 @@
                           aria-label="Active"
                           :disabled="submitting"
                         />
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Request logging"
                         description="Record the requests storefront sends to this origin."
                         variant="compact"
@@ -303,7 +301,7 @@
                           aria-label="Request logging"
                           :disabled="submitting"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

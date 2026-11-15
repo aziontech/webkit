@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import Tag from '../../../content/tag/tag.vue'
-  import FrameBox from '../../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../../layout/registration-frame/registration-frame.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import type { DiagramNode } from '../types'
 
@@ -49,7 +49,7 @@
     v-else-if="node.type === 'tile'"
     :content="node.title"
   >
-    <FrameBox
+    <RegistrationFrame
       borders="none"
       marks="all"
     >
@@ -65,7 +65,7 @@
           class="text-body-lg leading-none"
         />
       </span>
-    </FrameBox>
+    </RegistrationFrame>
   </Tooltip>
 
   <div

@@ -1,13 +1,16 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import LogView, { type LogViewStep, type LogViewStepsView } from '@aziontech/webkit/log-view'
+  import LogViewer, {
+    type LogViewerStep,
+    type LogViewerStepsView
+  } from '@aziontech/webkit/log-viewer'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { ref } from 'vue'
 
-  type DeployStep = LogViewStep & {
+  type DeployStep = LogViewerStep & {
     tag?: {
       label: string
       severity: TagSeverity
@@ -248,7 +251,7 @@
 
   const stepTag = (key: string) => steps.find((step) => step.id === key)?.tag
 
-  const logView = ref<LogViewStepsView>('phased')
+  const logViewer = ref<LogViewerStepsView>('phased')
   const openStep = ref('rules')
   const redeploying = ref(false)
 
@@ -272,7 +275,7 @@
       />
       <ToggleGroup
         v-else
-        v-model="logView"
+        v-model="logViewer"
         :options="logViews"
         class="shrink-0"
         aria-label="Log view"
@@ -280,8 +283,8 @@
     </template>
 
     <template #default>
-      <LogView.Steps
-        v-model:view="logView"
+      <LogViewer.Steps
+        v-model:view="logViewer"
         v-model:open-step="openStep"
         :steps="steps"
         :view-switch="false"
@@ -309,7 +312,7 @@
               : 'No log lines yet.'
           }}
         </template>
-      </LogView.Steps>
+      </LogViewer.Steps>
     </template>
 
     <template #footer>

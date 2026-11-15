@@ -7,7 +7,7 @@ spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: c4c93d4664f8ff7e9eda794a2dd65ec6b33a8545836ab09981d154a62fe9d032
+checksum: 35078fa84be04fe42596bc52c9593b2df3c968324aa3ca7934e4a4ed0c1531e8
 created: 2026-05-25
 last_updated: 2026-11-15
 ---
@@ -29,7 +29,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 - It is the app's primary navigation → use `navigation-menu` or `sidebar` with `sidebar-menu`.
 - It moves between sibling views of the same page → use `tabs`.
-- It is the previous / next pair at the end of a docs page → use `doc-prev-next`.
+- It is the previous / next pair at the end of a docs page → use `doc-previous-next`.
 
 ## Related
 

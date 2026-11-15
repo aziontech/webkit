@@ -13,9 +13,9 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
+  import FieldError from '@aziontech/webkit/field-error'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup from '@aziontech/webkit/file-token-group'
-  import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -943,11 +943,7 @@
                       <Checkbox v-model="createForm.columns[index].primaryKey" />
                     </template>
                   </AttributeEditor>
-                  <HelperText
-                    v-if="columnsError"
-                    type="invalid"
-                    :label="columnsError"
-                  />
+                  <FieldError v-if="columnsError">{{ columnsError }}</FieldError>
                 </div>
               </SettingsSection>
 

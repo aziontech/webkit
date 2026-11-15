@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -17,7 +17,7 @@
   import SaveBar from '@aziontech/webkit/save-bar'
   import SectionHeader from '@aziontech/webkit/section-header'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -147,8 +147,8 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Console">
-      <GlobalHeader.Start>
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
         <Tooltip
           content="Back to Services"
           placement="bottom"
@@ -161,7 +161,7 @@
             href="/services"
           />
         </Tooltip>
-        <GlobalHeader.Brand>
+        <AppHeader.Brand>
           <a
             href="/home"
             aria-label="Azion home"
@@ -172,11 +172,11 @@
               size="small"
             />
           </a>
-        </GlobalHeader.Brand>
+        </AppHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Start>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
         <DropdownMenu placement="bottom-end">
           <DropdownMenu.Trigger>
             <button
@@ -235,8 +235,8 @@
             </DropdownMenu.Item>
           </DropdownMenu.Group>
         </DropdownMenu>
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
     <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
       <form
         class="flex min-h-full flex-col"
@@ -256,7 +256,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="Name"
                       description="Give a unique and descriptive name to identify the service."
                     >
@@ -273,15 +273,14 @@
                             :disabled="submitting"
                             @update:model-value="errors.name = ''"
                           />
-                          <HelperText
+                          <FieldError
                             v-if="errors.name"
                             id="ev-name-error"
-                            type="required"
-                            :label="errors.name"
-                          />
+                            >{{ errors.name }}</FieldError
+                          >
                         </div>
                       </div>
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>
@@ -292,7 +291,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow title="Protocol usage">
+                    <SettingsRow title="Protocol usage">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.protocolUsage"
@@ -310,8 +309,8 @@
                           >
                         </RadioGroup>
                       </div>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="HTTP ports"
                       description="The ports the service listens on for HTTP traffic."
                     >
@@ -344,15 +343,14 @@
                               </MultiSelect.Item>
                             </MultiSelect.Content>
                           </MultiSelect>
-                          <HelperText
+                          <FieldError
                             v-if="errors.httpPorts"
                             id="ev-httpPorts-error"
-                            type="required"
-                            :label="errors.httpPorts"
-                          />
+                            >{{ errors.httpPorts }}</FieldError
+                          >
                         </div>
                       </div>
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>
@@ -363,7 +361,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="Compression"
                       description="Compress responses with gzip or Brotli before they are sent."
                       variant="compact"
@@ -373,8 +371,8 @@
                         aria-label="Compression"
                         :disabled="submitting"
                       />
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Rate limiting"
                       description="Limit how many requests a single client can send per minute."
                       variant="compact"
@@ -384,8 +382,8 @@
                         aria-label="Rate limiting"
                         :disabled="submitting"
                       />
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Image optimization"
                       description="Resize, crop, and convert images on the fly through URL parameters."
                       variant="compact"
@@ -395,8 +393,8 @@
                         aria-label="Image optimization"
                         :disabled="submitting"
                       />
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Secondary cache"
                       description="Add a second caching layer to reduce requests to the origin."
                       variant="compact"
@@ -406,7 +404,7 @@
                         aria-label="Secondary cache"
                         :disabled="submitting"
                       />
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>
@@ -465,7 +463,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="Origin"
                       description="The origin that serves this service’s content. Origins are shared across the account, so anyone on it can change one."
                     >
@@ -505,17 +503,16 @@
                                 </Select.Item>
                               </Select.Content>
                             </Select>
-                            <HelperText
+                            <FieldError
                               v-if="errors.originId"
                               id="ev-origin-error"
-                              :type="form.originId ? 'invalid' : 'required'"
-                              :label="errors.originId"
-                            />
+                              >{{ errors.originId }}</FieldError
+                            >
                           </template>
                         </div>
                       </div>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Host header"
                       description="Identify a virtualhost sent in the Host header to the origin."
                     >
@@ -533,15 +530,14 @@
                             :disabled="submitting"
                             @update:model-value="errors.hostHeader = ''"
                           />
-                          <HelperText
+                          <FieldError
                             v-if="errors.hostHeader"
                             id="ev-hostHeader-error"
-                            type="required"
-                            :label="errors.hostHeader"
-                          />
+                            >{{ errors.hostHeader }}</FieldError
+                          >
                         </div>
                       </div>
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>
@@ -552,7 +548,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="Browser maximum TTL"
                       description="How long browsers may keep a cached response, in seconds."
                     >
@@ -566,8 +562,8 @@
                           aria-label="Browser maximum TTL in seconds"
                         />
                       </div>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Cache maximum TTL"
                       description="How long the cache may keep a response, in seconds. A secondary cache requires a TTL of at least 3 seconds."
                     >
@@ -581,7 +577,7 @@
                           aria-label="Cache maximum TTL in seconds"
                         />
                       </div>
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>
@@ -592,7 +588,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="Active"
                       description="Rules that were successfully executed will be listed in the request logs and in the trace of each event."
                       variant="compact"
@@ -602,7 +598,7 @@
                         aria-label="Active"
                         :disabled="submitting"
                       />
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>

@@ -15,7 +15,7 @@
   import TableHeadCell from '../../data/table/table-head-cell/table-head-cell.vue'
   import TableHeader from '../../data/table/table-header/table-header.vue'
   import TableRow from '../../data/table/table-row/table-row.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
@@ -129,7 +129,7 @@
         />
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="bottom"
@@ -251,7 +251,7 @@
             </TableFooter>
           </template>
         </Table>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

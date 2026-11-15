@@ -51,7 +51,7 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   to offer `Collapse sidebar` in the palette (`search` slot + `@search-select`). A page sets its own
   trail, control crumb included, with `ConsoleLayout.Breadcrumb`, and a full-height workspace puts
   `data-layout-fill` on its root (never `calc(100dvh - …)`).
-- **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteNav` and `SiteFooter` data. The
+- **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteHeader` and `SiteFooter` data. The
   site is dark: `<html data-theme="dark">`. `SiteFooter` binds its language select with
   `v-model:language`; switch the locale from that value.
 - **Docs:** `DocLayout` — the docs tree, section links, `outline` (the article's headings), and
@@ -61,7 +61,7 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
 
 The shell blocks (`shell/console`, `shell/site`, `shell/docs`) are these layouts with
 the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
-A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `GlobalHeader`, `SiteNav`,
+A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `AppHeader`, `SiteHeader`,
 `SiteFooter` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
 create flow (`create/*`, headed by the `top-bar/creation-bar` bar) or a
 signed-out screen (`auth/sign-in`): route it outside the layout (a route meta `App.vue` reads), and
@@ -86,7 +86,7 @@ keeping to the guidelines. Only when no block fits, compose from components (bel
 ## Headers and the docs home — never hand-build these
 
 - **Every app header has search.** A console, demo, docs or site header puts `SearchTrigger`
-  (`@aziontech/webkit/search-trigger`) first in `GlobalHeader.End`, opening a `Command` palette;
+  (`@aziontech/webkit/search-trigger`) first in `AppHeader.End`, opening a `Command` palette;
   it draws `Search … ⌘K` (`Ctrl K` off macOS) on a wide bar and the magnifier on a narrow one, and
   binds the shortcut. `ConsoleLayout`, `SiteLayout` and `DocLayout` already carry it, wired to
   their palette (rule `webkit-header-search`, lint `webkit/require-header-search`).
@@ -259,7 +259,7 @@ site: your app does not serve it (lint `webkit/no-root-relative-asset`).
 
 ### Large data and server rendering
 
-- Pass the whole list: `Select`, `MultiSelect`, `LogView` and `CodeBlock` mount long lists (over 300 rows) in chunks as they scroll into view, and `Tree` renders collapsed children only when expanded. Do not page or slice the data yourself to make them fast.
+- Pass the whole list: `Select`, `MultiSelect`, `LogViewer` and `CodeBlock` mount long lists (over 300 rows) in chunks as they scroll into view, and `Tree` renders collapsed children only when expanded. Do not page or slice the data yourself to make them fast.
 - `Chart` takes 10k points per series; its hidden data table keeps an even sample of 1,000 rows, so turn on `tableView` when people need every value on screen.
 - `PhoneInput` loads its flag sprite the first time the country list opens; the closed field costs no image download.
 - Every block and example renders on the server (`renderToString`). Keep `window` and `document` out of `setup` in your own screens: read them in `onMounted`.

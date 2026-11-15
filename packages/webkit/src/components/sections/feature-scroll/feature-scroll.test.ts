@@ -123,7 +123,7 @@ describe('FeatureScroll', () => {
     expect(getByTestId(TESTID)).toBeInTheDocument()
     expect(queryByRole('heading', { level: 2 })).toBeNull()
     expect(queryAllByRole('heading', { level: 3 })).toHaveLength(0)
-    expect(queryByTestId('layout-frame-box')).toBeNull()
+    expect(queryByTestId('layout-registration-frame')).toBeNull()
     expect(queryByTestId('marketing-sticky-stack')).toBeNull()
   })
 
@@ -151,7 +151,7 @@ describe('FeatureScroll', () => {
       {
         title: 'Keys at the edge',
         description: 'Read and write keys from a function.',
-        scene: { component: 'ProductWidget', props: { name: 'kv-store-key' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'kv-store-key' } },
         illustration: 'global-network'
       },
       items[1]
@@ -160,7 +160,7 @@ describe('FeatureScroll', () => {
       props: { title: TITLE, items: sceneItems }
     })
 
-    const widgets = await findAllByTestId('content-product-widget')
+    const widgets = await findAllByTestId('content-console-mockup')
     expect(widgets.length).toBeGreaterThanOrEqual(2)
     widgets.forEach((widget) => expect(widget).toHaveAttribute('data-name', 'kv-store-key'))
     expect(getByTestId(TESTID).querySelectorAll('[data-name="kv-store-key"]').length).toBe(
@@ -176,7 +176,7 @@ describe('FeatureScroll', () => {
       }
     })
 
-    expect(queryByTestId('content-product-widget')).toBeNull()
+    expect(queryByTestId('content-console-mockup')).toBeNull()
   })
 
   it('has no a11y violations with a full band', async () => {

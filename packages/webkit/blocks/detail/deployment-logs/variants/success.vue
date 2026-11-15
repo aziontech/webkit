@@ -1,9 +1,12 @@
 <script setup lang="ts">
-  import LogView, { type LogViewStep, type LogViewStepsView } from '@aziontech/webkit/log-view'
+  import LogViewer, {
+    type LogViewerStep,
+    type LogViewerStepsView
+  } from '@aziontech/webkit/log-viewer'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
-  const steps: LogViewStep[] = [
+  const steps: LogViewerStep[] = [
     {
       id: 'token',
       title: 'Access token',
@@ -240,13 +243,13 @@
     }
   ]
 
-  const logView = ref<LogViewStepsView>('phased')
+  const logViewer = ref<LogViewerStepsView>('phased')
   const openStep = ref('deploy')
 </script>
 
 <template>
-  <LogView.Steps
-    v-model:view="logView"
+  <LogViewer.Steps
+    v-model:view="logViewer"
     v-model:open-step="openStep"
     :steps="steps"
   >
@@ -260,5 +263,5 @@
         <span class="text-label-sm text-(--text-muted)">Deployed in 42s</span>
       </div>
     </template>
-  </LogView.Steps>
+  </LogViewer.Steps>
 </template>

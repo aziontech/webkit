@@ -26,17 +26,17 @@ A medium `PageHeader` titled Invocation, singular because the page is one run, w
 
 `Card :padded="false"` with three bands. The subject band holds the function `Link` (its `Tooltip` says where it goes), the invocation ID in code type with a `CopyButton`, and the run's `StatusIndicator` (loading while it runs); then Replay as a secondary `Button` (disabled while the run is still going), the Recent switcher, an outlined medium `Button` with the history glyph inside `DropdownMenu.Trigger` (its `Tooltip` inside the trigger, like the actions menu) that opens a `DropdownMenu` of the recent invocations with their status and start that swaps the page to the picked run, and the Invocation actions `IconButton` menu with Open in Real-Time Events and Function settings. The facts band lists Started, Completed, Duration and Location. The state band, on the canvas fill, shows the request that triggered the run with a `CopyButton` and its outcome, in danger color when it failed.
 
-### C. Request path — `SectionHeader`, `Flow`, `Tag` (required)
+### C. Request path — `SectionHeader`, `FlowDiagram`, `Tag` (required)
 
-A small `SectionHeader`, then a horizontally scrolling surface holding a `Flow` with one unstyled `Flow.Node` per hop: service, resource, function and origin, the last one `terminal`. Each node card has an eyebrow with its glyph and a status `Tag`, its name, and a short list of facts ending on the time spent there. A node measured by a span carries an outlined small `IconButton` named "Show <name> in the trace" that selects that span and scrolls the trace into view, honoring reduced motion.
+A small `SectionHeader`, then a horizontally scrolling surface holding a `FlowDiagram` with one unstyled `FlowDiagram.Node` per hop: service, resource, function and origin, the last one `terminal`. Each node card has an eyebrow with its glyph and a status `Tag`, its name, and a short list of facts ending on the time spent there. A node measured by a span carries an outlined small `IconButton` named "Show <name> in the trace" that selects that span and scrolls the trace into view, honoring reduced motion.
 
 ### D. Trace — `Trace` (required)
 
 A small `SectionHeader` over the `Trace` waterfall of the run, its spans nested by `parentId` with a service word and glyph, bound with `v-model:selected` so a node of the request path and a row of the waterfall are one selection. A failed span carries `status: 'error'` and its `message`; a span still going carries `status: 'running'`.
 
-### E. Logs — `SectionHeader`, `StatusIndicator`, `LogView`, `LogViewContent` (required)
+### E. Logs — `SectionHeader`, `StatusIndicator`, `LogViewer`, `LogViewerContent` (required)
 
-A small `SectionHeader` over a copyable `LogView` whose lines are timed from the run's zero (+16 ms), the same clock as the trace. Warnings and errors use the warning line type and keep the level word in the message; the last line of a completed run is a success line. While the run is going the lines printed so far stay on screen and a loading `StatusIndicator` reading Streaming sits in the section header; the view shows its own loading state only while no line has arrived yet, and `LogViewContent` holds the empty text.
+A small `SectionHeader` over a copyable `LogViewer` whose lines are timed from the run's zero (+16 ms), the same clock as the trace. Warnings and errors use the warning line type and keep the level word in the message; the last line of a completed run is a success line. While the run is going the lines printed so far stay on screen and a loading `StatusIndicator` reading Streaming sits in the section header; the view shows its own loading state only while no line has arrived yet, and `LogViewerContent` holds the empty text.
 
 ## Do
 

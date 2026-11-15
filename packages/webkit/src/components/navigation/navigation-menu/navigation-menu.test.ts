@@ -21,7 +21,7 @@ const OPEN_TIMEOUT = 3000
 
 // The runtime string-template compiler lowercases member-expression tags
 // (`<NavigationMenu.Trigger>` -> `<navigation-menu.trigger>`), so — exactly like
-// the Flow/Table tests — the composed tree registers the SAME component objects
+// the FlowDiagram/Table tests — the composed tree registers the SAME component objects
 // the compound exposes (identity proven in the compound-API block) under flat
 // PascalCase tags the runtime compiler resolves. The rendered DOM is identical to
 // the SFC dot-notation form.
@@ -731,10 +731,10 @@ describe('NavigationMenu', () => {
   describe('audit fixes', () => {
     it('forwards consumer attributes to the nav landmark', () => {
       const { getByTestId } = renderTree(
-        `<NavigationMenu id="site-nav" aria-labelledby="nav-heading" data-track="nav"><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
+        `<NavigationMenu id="site-header" aria-labelledby="nav-heading" data-track="nav"><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
       )
       const root = getByTestId('navigation-navigation-menu')
-      expect(root.id).toBe('site-nav')
+      expect(root.id).toBe('site-header')
       expect(root).toHaveAttribute('aria-labelledby', 'nav-heading')
       expect(root).toHaveAttribute('data-track', 'nav')
     })

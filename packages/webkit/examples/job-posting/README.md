@@ -2,7 +2,7 @@
 
 The body of a careers posting page. The description runs down the page in rows, one per section of the posting, each a heading with its paragraphs and bullet lists. From the large breakpoint a rail beside it restates the posting (its area, its title and its facets) and stays on screen with the link to the application while the description scrolls. The application form follows, and a dialog confirms a sent application with a way back to the open positions.
 
-The band is the `JobPosting` component from `@aziontech/webkit/job-posting`. Place it under a `hero-band` (`variant: 'title-band'`) that carries the posting's title and an action pointing at `#apply`. It never sends the form: it validates on submit, emits `submit` with the DOM event and the values, and the site sends the application and sets `loading`, `submitted` or `failed`.
+The band is the `JobPosting` component from `@aziontech/webkit/job-posting`. Place it under a `hero-section` (`variant: 'title-band'`) that carries the posting's title and an action pointing at `#apply`. It never sends the form: it validates on submit, emits `submit` with the DOM event and the values, and the site sends the application and sets `loading`, `submitted` or `failed`.
 
 ## Examples
 

@@ -1,0 +1,195 @@
+<script setup lang="ts">
+  import { duration } from '@aziontech/theme/animations'
+  import { useElementVisibility } from '@vueuse/core'
+  import { computed, onScopeDispose, ref, watch } from 'vue'
+
+  import { useMediaQuery } from '../../../../composables/use-media-query'
+  import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
+  import Separator from '../../../layout/separator/separator.vue'
+  import Card from '../../card/card.vue'
+  import Tag from '../../tag/tag.vue'
+  import ConsoleMockupShell, {
+    type ConsoleMockupConsoleMockupShellFade,
+    type ConsoleMockupShellVariant
+  } from '../console-mockup-shell/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import { DEFAULT_DEPLOYMENT_STEPS } from '../lib/deployment-steps'
+  import DeploymentLogs from '../parts/deployment-logs.vue'
+
+  defineOptions({ name: 'WorkloadDeployLogsWidget' })
+
+  interface Props {
+    /** How the mockup is plated. */
+    variant?: ConsoleMockupShellVariant
+    /** Draw the console bar over the body. */
+    chrome?: boolean
+    /** Design width of the frame from `md` up. */
+    width?: number
+    /** Edge the mockup fades out along. */
+    fade?: ConsoleMockupConsoleMockupShellFade
+    /** Whether this widget is the one showing; the deployment streams only while it is and is on screen. */
+    active?: boolean
+    /** Milliseconds between revealed log lines. */
+    autoplayInterval?: number
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    variant: 'bare',
+    chrome: false,
+    width: 600,
+    fade: 'none',
+    active: true,
+    autoplayInterval: 120
+  })
+
+  const STEP_KEYS = ['build', 'upload', 'application', 'rules', 'deploy']
+  const STEPS = DEFAULT_DEPLOYMENT_STEPS.filter((step) => STEP_KEYS.includes(step.key))
+  const SUMMARY_HOLD_MS = 4800
+
+  const DEPLOYED = [
+    { key: 'workload', icon: 'ai ai-workloads', eyebrow: 'Workload', name: 'storefront-prod' },
+    {
+      key: 'application',
+      icon: 'ai ai-edge-application',
+      eyebrow: 'Application',
+      name: 'storefront'
+    },
+    { key: 'firewall', icon: 'ai ai-edge-firewall', eyebrow: 'Firewall', name: 'edge-rules' },
+    { key: 'domains', icon: 'ai ai-domains', eyebrow: 'Domains', name: 'shop.example.com +2' }
+  ]
+
+  const rowDelay = (index: number) => ({
+    transitionDelay: `${Math.round(globalThis.parseFloat(duration['fast-02']) * index)}ms`
+  })
+
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+
+  const shellEl = ref<InstanceType<typeof ConsoleMockupShell> | null>(null)
+  const visible = useElementVisibility(shellEl, { threshold: 0.35 })
+
+  const run = ref(0)
+  const deployed = ref(false)
+  const streaming = computed(() => props.active && visible.value && !reduced.value)
+
+  let restartTimer: ReturnType<typeof setTimeout> | null = null
+
+  const clearRestart = () => {
+    if (restartTimer) clearTimeout(restartTimer)
+    restartTimer = null
+  }
+
+  const restart = () => {
+    clearRestart()
+    deployed.value = false
+    run.value += 1
+  }
+
+  const onComplete = () => {
+    deployed.value = true
+    restartTimer = setTimeout(restart, SUMMARY_HOLD_MS)
+  }
+
+  watch(streaming, (live) => {
+    if (live) restart()
+    else clearRestart()
+  })
+
+  onScopeDispose(clearRestart)
+</script>
+
+<template>
+  <ConsoleMockupShell
+    ref="shellEl"
+    :variant="variant"
+    :chrome="chrome"
+    :width="width"
+    :fade="fade"
+    :active="active"
+  >
+    <div class="flex h-full flex-col justify-center p-(--spacing-xs)">
+      <ConsoleMockupShellItem :order="0">
+        <Card
+          :padded="false"
+          class="w-full"
+        >
+          <template #header>
+            <p class="truncate text-heading-xs text-(--text-default)">Deployment</p>
+            <StatusIndicator
+              :loading="!deployed"
+              :severity="deployed ? 'success' : 'info'"
+              :label="deployed ? 'Deployed' : 'Building'"
+            />
+          </template>
+
+          <template #default>
+            <Transition
+              mode="out-in"
+              leave-to-class="opacity-0"
+              leave-active-class="transition-opacity duration-moderate-02 ease-in-out motion-reduce:transition-none"
+            >
+              <div
+                v-if="deployed"
+                key="summary"
+              >
+                <TransitionGroup
+                  appear
+                  tag="ul"
+                  class="m-0 flex list-none flex-col p-0"
+                  enter-from-class="translate-y-2 opacity-0"
+                  enter-active-class="transition-[translate,opacity] duration-slow-01 ease-expressive-entrance motion-reduce:transition-none"
+                >
+                  <li
+                    v-for="(resource, index) in DEPLOYED"
+                    :key="resource.key"
+                    :style="rowDelay(index)"
+                  >
+                    <Separator v-if="index" />
+                    <div
+                      class="flex items-center gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-sm)"
+                    >
+                      <i
+                        :class="resource.icon"
+                        class="shrink-0 text-body-md leading-none text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <span class="flex min-w-0 flex-col">
+                        <span class="truncate text-label-sm text-(--text-muted)">
+                          {{ resource.eyebrow }}
+                        </span>
+                        <span class="truncate text-label-md text-(--text-default)">
+                          {{ resource.name }}
+                        </span>
+                      </span>
+                      <Tag
+                        class="ms-auto shrink-0"
+                        label="Deployed"
+                        severity="success"
+                        size="small"
+                      />
+                    </div>
+                  </li>
+                </TransitionGroup>
+              </div>
+              <div
+                v-else
+                key="logs"
+              >
+                <DeploymentLogs
+                  :key="streaming ? run : 'idle'"
+                  :live="streaming"
+                  active-at="build"
+                  label="Logs"
+                  :show-controls="false"
+                  :show-progress="false"
+                  :steps="STEPS"
+                  :autoplay-interval="autoplayInterval"
+                  @complete="onComplete"
+                />
+              </div>
+            </Transition>
+          </template>
+        </Card>
+      </ConsoleMockupShellItem>
+    </div>
+  </ConsoleMockupShell>
+</template>

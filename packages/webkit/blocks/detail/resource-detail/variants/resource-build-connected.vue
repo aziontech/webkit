@@ -9,7 +9,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Tabs from '@aziontech/webkit/tabs'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -103,7 +103,7 @@
                       >
                         <legend class="sr-only">Git repository</legend>
                         <Item.List>
-                          <SettingRow
+                          <SettingsRow
                             title="Connected repository"
                             variant="compact"
                           >
@@ -139,9 +139,9 @@
                               variant="danger"
                               size="small"
                             />
-                          </SettingRow>
+                          </SettingsRow>
 
-                          <SettingRow
+                          <SettingsRow
                             title="Production branch"
                             description="Pushes to this branch build and deploy to Production."
                             stackable
@@ -157,9 +157,9 @@
                                 :spellcheck="false"
                               />
                             </div>
-                          </SettingRow>
+                          </SettingsRow>
 
-                          <SettingRow
+                          <SettingsRow
                             title="Preview branch"
                             description="Pushes to this branch deploy a preview with its own URL. Production is untouched."
                             stackable
@@ -175,7 +175,7 @@
                                 :spellcheck="false"
                               />
                             </div>
-                          </SettingRow>
+                          </SettingsRow>
                         </Item.List>
                       </fieldset>
                     </template>
@@ -200,7 +200,7 @@
                         >
                           <legend class="sr-only">Build configuration</legend>
                           <Item.List>
-                            <SettingRow
+                            <SettingsRow
                               title="Framework preset"
                               description="The preset the CLI builds with."
                             >
@@ -221,9 +221,9 @@
                                   </Tooltip>
                                 </div>
                               </div>
-                            </SettingRow>
+                            </SettingsRow>
 
-                            <SettingRow
+                            <SettingsRow
                               title="Build command"
                               description="The command that builds the resource."
                               stackable
@@ -239,9 +239,9 @@
                                   :spellcheck="false"
                                 />
                               </div>
-                            </SettingRow>
+                            </SettingsRow>
 
-                            <SettingRow
+                            <SettingsRow
                               title="Deploy command"
                               description="The command that deploys the build."
                               stackable
@@ -257,7 +257,7 @@
                                   :spellcheck="false"
                                 />
                               </div>
-                            </SettingRow>
+                            </SettingsRow>
                           </Item.List>
                         </fieldset>
                       </template>
@@ -273,7 +273,7 @@
                   <Card :padded="false">
                     <template #default>
                       <Item.List>
-                        <SettingRow
+                        <SettingsRow
                           title="API token"
                           description="Stored as the PLATFORM_TOKEN GitHub secret."
                           stackable
@@ -298,7 +298,7 @@
                               />
                             </InputGroupRoot>
                           </div>
-                        </SettingRow>
+                        </SettingsRow>
                       </Item.List>
                     </template>
                   </Card>

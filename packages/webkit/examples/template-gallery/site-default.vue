@@ -68,7 +68,7 @@
     }
   ]
 
-  const tickerMarks = [
+  const marqueeMarks = [
     'nextjs',
     'astro',
     'react',
@@ -115,8 +115,8 @@
       :templates="templates"
       deploy-label="Deploy now"
       templates-aria-label="Templates you can deploy"
-      ticker-label="Compatible with Your Stack"
-      :ticker-marks="tickerMarks"
+      marquee-label="Compatible with Your Stack"
+      :marquee-marks="marqueeMarks"
     />
 
     <SectionGap hatch />

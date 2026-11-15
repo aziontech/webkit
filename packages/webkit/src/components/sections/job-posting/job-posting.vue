@@ -2,7 +2,7 @@
   import { computed, nextTick, ref, useAttrs, useId, watch } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import Overline from '../../content/overline/overline.vue'
+  import Eyebrow from '../../content/eyebrow/eyebrow.vue'
   import Alert from '../../feedback/alert/alert.vue'
   import Field from '../../inputs/field/field.vue'
   import FieldDescription from '../../inputs/field/field-description/field-description.vue'
@@ -13,7 +13,7 @@
   import Input from '../../inputs/input/input.vue'
   import { defaultCountries } from '../../inputs/phone-input/countries'
   import PhoneInput from '../../inputs/phone-input/phone-input.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
@@ -324,7 +324,7 @@
         :divided="false"
         :padded="false"
       >
-        <FrameBox
+        <RegistrationFrame
           flush
           borders="y"
           marks="bottom"
@@ -336,7 +336,7 @@
             >
               <div class="sticky top-14 flex flex-col gap-(--spacing-lg) p-(--spacing-xl)">
                 <div class="flex flex-col gap-(--spacing-xs)">
-                  <Overline v-if="area">{{ area }}</Overline>
+                  <Eyebrow v-if="area">{{ area }}</Eyebrow>
                   <p class="m-0 text-pretty text-heading-sm text-(--text-default)">
                     {{ title }}
                   </p>
@@ -420,7 +420,7 @@
               </div>
             </div>
           </div>
-        </FrameBox>
+        </RegistrationFrame>
       </SectionModule>
 
       <SectionModule
@@ -431,7 +431,7 @@
         class="scroll-mt-(--spacing-2xl)"
       >
         <template #header>
-          <FrameBox
+          <RegistrationFrame
             flush
             borders="y"
             marks="bottom"
@@ -444,10 +444,10 @@
                 :description="form.description ?? ''"
               />
             </div>
-          </FrameBox>
+          </RegistrationFrame>
         </template>
 
-        <FrameBox
+        <RegistrationFrame
           flush
           borders="y"
           marks="bottom"
@@ -567,7 +567,7 @@
               />
             </form>
           </div>
-        </FrameBox>
+        </RegistrationFrame>
       </SectionModule>
 
       <Dialog

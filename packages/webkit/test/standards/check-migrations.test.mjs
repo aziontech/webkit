@@ -59,25 +59,25 @@ test('a removed block fails unless v<N>-blocks.json maps it', () => {
 })
 
 test('a removed prop or prop value fails unless v<N>-props.json maps it', () => {
-  const before = api(['log-view', 'button'], {
-    'log-view': { border: null, showCopy: null, dense: null },
+  const before = api(['log-viewer', 'button'], {
+    'log-viewer': { border: null, showCopy: null, dense: null },
     button: { kind: ['primary', 'text'], size: ['large', 'tiny'] }
   })
-  const after = api(['log-view', 'button'], {
-    'log-view': { bordered: null, copyable: null },
+  const after = api(['log-viewer', 'button'], {
+    'log-viewer': { bordered: null, copyable: null },
     button: { kind: ['primary', 'transparent'], size: ['large'] }
   })
   const migrations = {
     ...none,
     props: {
-      'log-view': { border: 'bordered', showCopy: 'copyable' },
+      'log-viewer': { border: 'bordered', showCopy: 'copyable' },
       button: { kind: { to: 'kind', values: { text: 'transparent' } } }
     }
   }
   const { uncovered } = diffApi(before, after, migrations)
   assert.deepEqual(uncovered.sort(), [
     'button: size="tiny" is no longer allowed (add "values": { "tiny": … } to v<N>-props.json["button"].size)',
-    'log-view: prop dense was removed or renamed (add it to v<N>-props.json["log-view"])'
+    'log-viewer: prop dense was removed or renamed (add it to v<N>-props.json["log-viewer"])'
   ])
 })
 

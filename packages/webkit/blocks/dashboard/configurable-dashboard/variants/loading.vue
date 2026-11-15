@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
-  import Board, { type BoardLayoutItem } from '@aziontech/webkit/board'
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DashboardGrid, { type DashboardGridLayoutItem } from '@aziontech/webkit/dashboard-grid'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -183,7 +183,7 @@
     }
   }
 
-  const defaultLayout: BoardLayoutItem[] = [
+  const defaultLayout: DashboardGridLayoutItem[] = [
     {
       id: 'requests',
       span: 8
@@ -228,7 +228,7 @@
   }
 
   const editing = ref(false)
-  const layout = ref<BoardLayoutItem[]>(defaultLayout.map((card) => ({ ...card })))
+  const layout = ref<DashboardGridLayoutItem[]>(defaultLayout.map((card) => ({ ...card })))
   const activeIndex = ref<number | null>(null)
   const announcement = ref('')
 
@@ -275,7 +275,7 @@
         </div>
       </div>
 
-      <Board
+      <DashboardGrid
         v-model:layout="layout"
         :editing="editing"
         aria-label="Traffic overview cards"
@@ -284,7 +284,7 @@
         :min-height="280"
         :max-height="720"
       >
-        <Board.Item
+        <DashboardGrid.Item
           v-for="card in layout"
           :key="card.id"
           :item-id="card.id"
@@ -354,8 +354,8 @@
             </ChartCard.Content>
             <ChartCard.ResizeHandle :aria-label="'Resize ' + cards[card.id].title" />
           </ChartCard>
-        </Board.Item>
-      </Board>
+        </DashboardGrid.Item>
+      </DashboardGrid>
 
       <p
         class="sr-only"

@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
+  import AppHeader from '@aziontech/webkit/app-header'
   import Brand from '@aziontech/webkit/brand'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import OtpInput from '@aziontech/webkit/otp-input'
   import PageHeader from '@aziontech/webkit/page-header'
   import { computed, nextTick, onMounted, ref } from 'vue'
@@ -81,11 +81,11 @@
 
 <template>
   <div class="flex h-dvh flex-col overflow-hidden bg-(--bg-canvas)">
-    <GlobalHeader
+    <AppHeader
       aria-label="Console"
       class="shrink-0"
     >
-      <GlobalHeader.Brand>
+      <AppHeader.Brand>
         <a
           href="/home"
           aria-label="Azion home"
@@ -96,9 +96,9 @@
             size="small"
           />
         </a>
-      </GlobalHeader.Brand>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Brand>
+      <AppHeader.Center />
+      <AppHeader.End>
         <Button
           label="Documentation"
           variant="outline"
@@ -106,8 +106,8 @@
           icon="ai ai-book"
           href="/docs"
         />
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="flex min-h-0 flex-1 flex-col overflow-y-auto lg:overflow-hidden">
       <div class="layout-column-site flex flex-1 flex-col lg:min-h-0">

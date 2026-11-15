@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: d63878e77b81add983ca67f86630ad41e1d9f5dfbb3c17a61eebbfa369cdc074
+checksum: 480bcad66c5a3d32fcfcb2ba5dcff1494de77263f9977f078147e9c2d5ee80fa
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -21,18 +21,18 @@ A span waterfall: one row per span of a run (a function invocation, a request th
 - Use Trace for the timed span waterfall of one request or invocation; a nested data hierarchy without timing is a Tree.
 - The test run of a function or the detail of one invocation, to show where the time went.
 - A request that crossed several services, each with its own span, where the order and the overlap matter.
-- Next to the run's logs (`log-view`), on the same clock.
+- Next to the run's logs (`log-viewer`), on the same clock.
 
 ## When NOT to use
 
-- A list of log lines with levels → use `log-view`.
+- A list of log lines with levels → use `log-viewer`.
 - Durations to compare across many items with no parent/child relation → use `bar-list` or `chart`.
 - Status history of a service over days → use `tracker`.
 - A hierarchy without time → use `tree`.
 
 ## Related
 
-- `log-view` — the run's log lines, shown under the trace on the same clock.
+- `log-viewer` — the run's log lines, shown under the trace on the same clock.
 - `tree` — the same expand and collapse model without the time axis.
 - `bar-list` — ranked durations without nesting.
 - `key-value-list` — the facts of the run above the trace.

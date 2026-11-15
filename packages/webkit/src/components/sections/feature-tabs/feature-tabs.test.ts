@@ -150,14 +150,14 @@ describe('FeatureTabs', () => {
 
   it('draws the band scene as the media of every tab', async () => {
     const { findAllByTestId } = band({
-      scene: { component: 'ProductWidget', props: { name: 'functions-start' } },
+      scene: { component: 'ConsoleMockup', props: { name: 'functions-start' } },
       tabs: [
         { title: 'Agents', description: 'Ask an agent.', value: 'agents' },
         { title: 'Console', description: 'Click through.', value: 'console' }
       ]
     })
 
-    const widgets = await findAllByTestId('content-product-widget')
+    const widgets = await findAllByTestId('content-console-mockup')
     expect(widgets.length).toBeGreaterThanOrEqual(2)
     widgets.forEach((widget) => expect(widget).toHaveAttribute('data-name', 'functions-start'))
   })

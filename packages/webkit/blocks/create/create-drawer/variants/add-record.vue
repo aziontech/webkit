@@ -5,7 +5,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
   import Input from '@aziontech/webkit/input'
   import InputGroup from '@aziontech/webkit/input-group'
   import Link from '@aziontech/webkit/link'
@@ -201,17 +201,14 @@
                       </Select.Item>
                     </Select.Content>
                   </Select>
-                  <HelperText
-                    id="record-type-helper"
-                    type="helper"
-                  >
+                  <FieldDescription id="record-type-helper">
                     <Link
                       label="Read more about record types"
                       size="medium"
                       href="https://example.com/docs/dns-records"
                       target="_blank"
                     />
-                  </HelperText>
+                  </FieldDescription>
                 </Field>
 
                 <Field>
@@ -227,10 +224,9 @@
                     :disabled="submitting"
                     aria-label="TTL in seconds"
                   />
-                  <HelperText
-                    id="record-ttl-helper"
-                    type="helper"
-                    >Time-to-live a response can be cached for on a resolver server.</HelperText
+                  <FieldDescription id="record-ttl-helper"
+                    >Time-to-live a response can be cached for on a resolver
+                    server.</FieldDescription
                   >
                 </Field>
 
@@ -295,11 +291,9 @@
                       </Select.Item>
                     </Select.Content>
                   </Select>
-                  <HelperText
-                    id="record-policy-helper"
-                    type="helper"
+                  <FieldDescription id="record-policy-helper"
                     >Simple is standard resolution. Weighted distributes answers across records by
-                    weight.</HelperText
+                    weight.</FieldDescription
                   >
                 </Field>
 
@@ -317,11 +311,9 @@
                     :disabled="submitting"
                     aria-label="Weight"
                   />
-                  <HelperText
-                    id="record-weight-helper"
-                    type="helper"
+                  <FieldDescription id="record-weight-helper"
                     >Relative weight for this record within the weighted set, from 0 to
-                    255.</HelperText
+                    255.</FieldDescription
                   >
                 </Field>
               </div>

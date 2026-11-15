@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: a3219daae6666cb993567629566e5850325d963d46f639367381499ed5a9a821
+checksum: 4c18e1d29fbf60c45b85c200e6ecec43bb9d94bfca9ccc3919d8cace5bdb3347
 created: 2026-10-21
 last_updated: 2026-11-15
 ---
@@ -33,7 +33,7 @@ A node-and-connector diagram for marketing pages: the request path of an archite
 
 - `illustration` — the drawn scene library; a diagram is generated from data, an illustration is authored art. Both pick an official drawing by `name`.
 - `media-tabs` — hosts one diagram per tab in its media column; key each `Diagram` by its tab so it re-measures.
-- `frame-box` — the registration frame a diagram's groups and tiles are drawn in.
+- `registration-frame` — the registration frame a diagram's groups and tiles are drawn in.
 - `tag` — the status chip a card or item node carries.
 
 ## Best practices
@@ -189,7 +189,7 @@ _None — every node is drawn from `spec`._
 - Spec — a one-off request path passed as `spec`, from a client through an application to the lit product and its outcomes, with labelled, active edges. Justified addition: `spec` is the second way in, for a diagram the library does not have, and Default shows only `name`.
 - Nodes — composite story drawing one node of each type (`pill`, `card`, `item`, `tile`, `app`) in one diagram. Justified addition: the node type is the component's one visual axis, carried in the data rather than a `type` prop, so no Types story covers it.
 - Groups — a framed group with a grid of tiles and a dashed, tinted group, connected to the nodes beside them. Justified addition: groups and grids are the layout primitives a Default row does not show.
-- Flow — a five-node vertical flow in a 640 px docs column (terminal → project folder → CLI → API → account resources) with a labelled `azion deploy` edge. Justified addition: it is the centred stacked geometry — connectors through each node's centre, the chip centred on its line — that the docs use and no other example reaches (Spec stacks as a tree).
+- FlowDiagram — a five-node vertical flow in a 640 px docs column (terminal → project folder → CLI → API → account resources) with a labelled `azion deploy` edge. Justified addition: it is the centred stacked geometry — connectors through each node's centre, the chip centred on its line — that the docs use and no other example reaches (Spec stacks as a tree).
 
 <!-- Types/Sizes omitted: Diagram has no `type` or `size` prop. Loading/Disabled omitted: it declares neither prop. -->
 

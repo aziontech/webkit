@@ -11,7 +11,7 @@
   } from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
   import IconButton from '@aziontech/webkit/icon-button'
   import InputGroup from '@aziontech/webkit/input-group'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -370,11 +370,9 @@
                         </Select.Item>
                       </Select.Content>
                     </Select>
-                    <HelperText
-                      id="domain-certificate-helper"
-                      type="helper"
-                      >{{ certificateHint }}</HelperText
-                    >
+                    <FieldDescription id="domain-certificate-helper">{{
+                      certificateHint
+                    }}</FieldDescription>
                   </Field>
                 </template>
 

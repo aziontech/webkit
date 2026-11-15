@@ -16,7 +16,7 @@
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -593,11 +593,7 @@
                       </Select.Item>
                     </Select.Content>
                   </Select>
-                  <HelperText
-                    id="token-expiry-hint"
-                    type="helper"
-                    >{{ expiryHint }}</HelperText
-                  >
+                  <FieldDescription id="token-expiry-hint">{{ expiryHint }}</FieldDescription>
                 </Field>
               </SettingsSection>
             </fieldset>

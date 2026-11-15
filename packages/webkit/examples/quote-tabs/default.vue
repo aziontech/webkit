@@ -5,12 +5,12 @@
   import magaluLogo from '@aziontech/webkit/assets/magalu-extended-color.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import Button from '@aziontech/webkit/button'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import QuoteTabs from '@aziontech/webkit/quote-tabs'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
 </script>
 
 <template>
-  <FrameBox>
+  <RegistrationFrame>
     <QuoteTabs
       aria-label="Client stories"
       :items="[
@@ -72,5 +72,5 @@
         />
       </template>
     </QuoteTabs>
-  </FrameBox>
+  </RegistrationFrame>
 </template>

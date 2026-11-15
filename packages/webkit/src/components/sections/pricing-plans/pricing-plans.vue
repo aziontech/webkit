@@ -3,8 +3,8 @@
 
   import Button from '../../actions/button/button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
-  import CardPricing from '../../content/card-pricing/card-pricing.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import PricingCard from '../../content/pricing-card/pricing-card.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
@@ -123,7 +123,7 @@
       :data-testid="`${testId}__band`"
       class="w-full border-b border-(--border-default) bg-(--bg-canvas) px-(--layout-boundary-inline)"
     >
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="x"
         marks="bottom"
@@ -143,7 +143,7 @@
           variant="divider"
           :columns="3"
         >
-          <CardPricing
+          <PricingCard
             v-for="plan in visiblePlans"
             :key="plan.name"
             equal-height
@@ -201,9 +201,9 @@
                 :href="plan.action?.href ?? ''"
               />
             </template>
-          </CardPricing>
+          </PricingCard>
         </CardGrid>
-      </FrameBox>
+      </RegistrationFrame>
     </div>
   </section>
 </template>

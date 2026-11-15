@@ -118,13 +118,13 @@ Heading (what this is, one line)
 
 Each piece of the anatomy is a component — compose them, never re-type their markup:
 
-| Piece                        | Component                                                                                                                                   |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| Heading                      | `PageHeader` (`@aziontech/webkit/page-header`), `size="small"` on a settings tab                                                            |
-| Section, Advanced band       | `SettingsSection` (`@aziontech/webkit/settings-section`); Advanced is `collapsible icon="ai ai-settings"`                                        |
-| Row (field, switch, stacked) | `SettingRow` (`@aziontech/webkit/setting-row`) with `variant` `field`, `compact` or `stacked`                                                  |
+| Piece                        | Component                                                                                                                                                                                                                                                               |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Heading                      | `PageHeader` (`@aziontech/webkit/page-header`), `size="small"` on a settings tab                                                                                                                                                                                        |
+| Section, Advanced band       | `SettingsSection` (`@aziontech/webkit/settings-section`); Advanced is `collapsible icon="ai ai-settings"`                                                                                                                                                               |
+| Row (field, switch, stacked) | `SettingsRow` (`@aziontech/webkit/settings-row`) with `variant` `field`, `compact` or `stacked`                                                                                                                                                                         |
 | Commit bar                   | `SaveBar` (`@aziontech/webkit/save-bar`): `variant="centered"` on a create page (Cancel and Create in a raised card centred at the bottom), `variant="plain"` on an in-page form saved as one unit, `variant="fade"` on a wizard step, the floating default on settings |
-| Destructive guard            | `ConfirmDialog` (`@aziontech/webkit/confirm-dialog`)                                                                                        |
+| Destructive guard            | `ConfirmDialog` (`@aziontech/webkit/confirm-dialog`)                                                                                                                                                                                                                    |
 
 ## 3. Advanced is the endpoint's not-required set
 

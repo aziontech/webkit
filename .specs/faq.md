@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: d7707520b79b0e4165f4e103ad62908403cadd97ad7e16a45254ce1ff6539051
+checksum: 7b1a345030dbb64712f6354007bb8b82f9341b7e77ba0a432cedfc271f047399
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -35,11 +35,11 @@ The band is drawn in the hairline register: the two columns and every row are se
 
 - `accordion` — the disclosure primitive this band renders its answers through.
 - `section-title` — the header for a section whose body is not a question list.
-- `frame-box` — the frame the band is drawn with, applied by whatever assembles the page; the band draws none of its own.
+- `registration-frame` — the frame the band is drawn with, applied by whatever assembles the page; the band draws none of its own.
 
 ## Best practices
 
-- `framed` decides who draws the rule. On, the band draws its own registration frame. Off, the rule and the corner marks belong to the `section-module` or `frame-box` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
+- `framed` decides who draws the rule. On, the band draws its own registration frame. Off, the rule and the corner marks belong to the `section-module` or `registration-frame` the page assembles it into, so a band placed in an already-framed column never lands a second hairline on the column's own.
 - Keep the band to the questions a reader actually asks before buying; a FAQ is objection handling, not a manual.
 - Write each `question` as the reader would ask it, in their words rather than the product's.
 - Keep answers to a couple of sentences and link out for the rest — use the `answer` slot when an answer needs a link or richer content.
@@ -50,7 +50,7 @@ The band is drawn in the hairline register: the two columns and every row are se
 
 ```vue
 <script setup>
-import Faq from '@aziontech/webkit/faq'
+  import Faq from '@aziontech/webkit/faq'
 </script>
 
 <template>
@@ -79,11 +79,11 @@ import Faq from '@aziontech/webkit/faq'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `title` | `string` | `''` | false | Headline of the band, rendered as its `h2` in the left column. |
-| `items` | `FaqItem[]` | `[]` | false | The questions and their answers, in order; each item is `{ value, question, answer }` where `value` is the item's stable key. |
-| `framed` | `boolean` | `false` | false | Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame. |
+| Prop     | Type        | Default | Required | JSDoc                                                                                                                         |
+| -------- | ----------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `title`  | `string`    | `''`    | false    | Headline of the band, rendered as its `h2` in the left column.                                                                |
+| `items`  | `FaqItem[]` | `[]`    | false    | The questions and their answers, in order; each item is `{ value, question, answer }` where `value` is the item's stable key. |
+| `framed` | `boolean`   | `false` | false    | Draw the band's own registration frame. Turn it off when the page already wraps the band in a frame.                          |
 
 ## Events
 
@@ -91,8 +91,8 @@ import Faq from '@aziontech/webkit/faq'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
+| Slot     | Scope               | Notes                                                                                         |
+| -------- | ------------------- | --------------------------------------------------------------------------------------------- |
 | `answer` | `{ item: FaqItem }` | Replaces the rendered answer for every item, so an answer can carry a link or richer content. |
 
 ## States
@@ -107,25 +107,25 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (headline) | `.text-heading-lg` |
-| typography (question) | `.text-body-md` |
-| typography (answer) | `.text-body-sm` |
-| headline text | `var(--text-default)` |
-| question text | `var(--text-default)` |
-| answer text | `var(--text-muted)` |
-| band rules and marks | `var(--border-default)` |
-| cell fill | `var(--bg-canvas)` |
+| Region                              | Token (DESIGN.md)                                                                                                              |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| typography (headline)               | `.text-heading-lg`                                                                                                             |
+| typography (question)               | `.text-body-md`                                                                                                                |
+| typography (answer)                 | `.text-body-sm`                                                                                                                |
+| headline text                       | `var(--text-default)`                                                                                                          |
+| question text                       | `var(--text-default)`                                                                                                          |
+| answer text                         | `var(--text-muted)`                                                                                                            |
+| band rules and marks                | `var(--border-default)`                                                                                                        |
+| cell fill                           | `var(--bg-canvas)`                                                                                                             |
 | spacing (content inset, below `lg`) | `var(--spacing-lg)` — bound to `--accordion-inset`, so the heading, every trigger and every answer start on one content column |
-| spacing (content inset, from `lg`) | `var(--spacing-xl)` — the same hook, one step wider |
-| spacing (row rhythm) | `var(--spacing-md)` |
+| spacing (content inset, from `lg`)  | `var(--spacing-xl)` — the same hook, one step wider                                                                            |
+| spacing (row rhythm)                | `var(--spacing-md)`                                                                                                            |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

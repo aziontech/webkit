@@ -3,7 +3,7 @@
 
   import Button from '../../actions/button/button.vue'
   import Brand from '../../content/brand/brand.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import type { SectionTitleAction } from '../../marketing/section-title/section-title.vue'
 
   defineOptions({ name: 'DocCallToAction', inheritAttrs: false })
@@ -42,7 +42,7 @@
 </script>
 
 <template>
-  <FrameBox
+  <RegistrationFrame
     v-bind="$attrs"
     :data-testid="testId"
     role="complementary"
@@ -93,5 +93,5 @@
         />
       </div>
     </div>
-  </FrameBox>
+  </RegistrationFrame>
 </template>

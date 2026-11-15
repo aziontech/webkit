@@ -120,7 +120,7 @@ describe('CliTerminal', () => {
     async (script, name) => {
       const { findByTestId, queryByTestId } = band({ script })
 
-      expect(await findByTestId('content-product-widget')).toHaveAttribute('data-name', name)
+      expect(await findByTestId('content-console-mockup')).toHaveAttribute('data-name', name)
       expect(queryByTestId('code-code-block')).toBeNull()
     }
   )
@@ -129,13 +129,13 @@ describe('CliTerminal', () => {
     const { findByTestId, getByRole } = band({ script: 'deploy', session: '' })
 
     expect(getByRole('heading', { level: 2, name: TITLE })).toBeInTheDocument()
-    expect(await findByTestId('content-product-widget')).toBeInTheDocument()
+    expect(await findByTestId('content-console-mockup')).toBeInTheDocument()
   })
 
   it('marks the script stage entered once it scrolls into view', async () => {
     const { findByTestId } = band({ script: 'deploy' })
 
-    const widget = await findByTestId('content-product-widget')
+    const widget = await findByTestId('content-console-mockup')
     await expect.poll(() => widget.parentElement?.hasAttribute('data-entered')).toBe(true)
   })
 

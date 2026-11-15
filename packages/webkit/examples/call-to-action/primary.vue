@@ -1,8 +1,8 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import CallToAction from '@aziontech/webkit/call-to-action'
-  import TextureMaterial from '@aziontech/webkit/texture-material'
-  import Ticker from '@aziontech/webkit/ticker'
+  import Marquee from '@aziontech/webkit/marquee'
+  import Texture from '@aziontech/webkit/texture'
 </script>
 
 <template>
@@ -12,7 +12,7 @@
     description="Get a faster path to launch, lower latency, and less infrastructure overhead."
   >
     <template #background>
-      <TextureMaterial
+      <Texture
         variant="pixelate"
         size="small"
         fade="bottom"
@@ -34,7 +34,7 @@
       />
     </template>
     <template #bottom>
-      <Ticker
+      <Marquee
         aria-label="Why teams choose Azion"
         :items="[
           { icon: 'ai ai-edge-nodes', label: 'Distributed to 100+ locations automatically' },

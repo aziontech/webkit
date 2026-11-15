@@ -15,7 +15,8 @@
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
-  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import InputGroupAddon from '@aziontech/webkit/input-group-addon'
@@ -51,7 +52,7 @@
   type Variable = VariableSeed & { type: string }
   type VariableDraft = { key: string; value: string; secret: boolean; scope: ScopeRef[] }
   type Entry = { id: number; key: string; value: string; secret: boolean; visible: boolean }
-  type EntryProblem = { type: HelperTextType; message: string }
+  type EntryProblem = { type: 'helper' | 'invalid' | 'required'; message: string }
   type Pair = { key: string; value: string }
   type ScopeOption = { value: string; label: string }
   type ScopeState = {
@@ -1071,27 +1072,25 @@
                           </Field>
                         </div>
 
-                        <HelperText
+                        <FieldError
                           v-if="keyError(entries[index])"
                           key="key-error"
                           :id="messageId(entries[index], 'key')"
-                          :type="keyError(entries[index])?.type"
-                          :label="keyError(entries[index])?.message"
-                        />
-                        <HelperText
+                          >{{ keyError(entries[index])?.message }}</FieldError
+                        >
+                        <FieldError
                           v-if="valueError(entries[index])"
                           key="value-error"
                           :id="messageId(entries[index], 'value')"
-                          :type="valueError(entries[index])?.type"
-                          :label="valueError(entries[index])?.message"
-                        />
+                          >{{ valueError(entries[index])?.message }}</FieldError
+                        >
                       </template>
                       <template #limit>Edit one variable at a time.</template>
                       <template #info>
-                        <HelperText
-                          v-if="!editing"
-                          label="Paste JSON or .env contents into an empty key field to create one row per variable."
-                        />
+                        <FieldDescription v-if="!editing"
+                          >Paste JSON or .env contents into an empty key field to create one row per
+                          variable.</FieldDescription
+                        >
                       </template>
                     </AttributeEditor>
                   </template>
@@ -1103,24 +1102,21 @@
                       :invalid="!!jsonError"
                       :aria-describedby="jsonError ? formId + '-json-message' : undefined"
                     />
-                    <HelperText>
+                    <FieldDescription>
                       Use a JSON object format, for example:
                       <code class="text-label-code-sm">{"API_URL":"https://example.com"}</code>
-                    </HelperText>
-                    <HelperText
+                    </FieldDescription>
+                    <FieldError
                       v-if="jsonError"
                       :id="formId + '-json-message'"
-                      type="invalid"
-                      :label="jsonError"
-                    />
+                      >{{ jsonError }}</FieldError
+                    >
                   </template>
 
-                  <HelperText :label="SECRET_HINT" />
-                  <HelperText
-                    v-if="submitted && noVariables"
-                    type="required"
-                    label="Add at least one variable."
-                  />
+                  <FieldDescription>{{ SECRET_HINT }}</FieldDescription>
+                  <FieldError v-if="submitted && noVariables"
+                    >Add at least one variable.</FieldError
+                  >
                 </div>
               </SettingsSection>
 
@@ -1201,12 +1197,11 @@
                         />
                       </InputGroupAddon>
                     </InputGroupRoot>
-                    <HelperText
+                    <FieldError
                       v-if="scopeError(scope)"
                       :id="formId + '-scope-' + scope.type"
-                      type="required"
-                      label="Select at least one resource for this scope."
-                    />
+                      >Select at least one resource for this scope.</FieldError
+                    >
                   </div>
                 </div>
               </SettingsSection>

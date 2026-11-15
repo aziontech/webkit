@@ -1,0 +1,229 @@
+<script setup lang="ts">
+  import Button from '../../../actions/button/button.vue'
+  import StatusIndicator, {
+    type StatusIndicatorSeverity
+  } from '../../../feedback/status-indicator/status-indicator.vue'
+  import Input from '../../../inputs/input/input.vue'
+  import Avatar from '../../avatar/avatar.vue'
+  import Card from '../../card/card.vue'
+  import ConsoleMockupShell, {
+    type ConsoleMockupConsoleMockupShellFade,
+    type ConsoleMockupShellVariant
+  } from '../console-mockup-shell/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+
+  defineOptions({ name: 'WorkloadsListWidget' })
+
+  interface Props {
+    /** How the mockup is plated. */
+    variant?: ConsoleMockupShellVariant
+    /** Draw the console bar over the body. */
+    chrome?: boolean
+    /** Design width of the frame from `md` up. */
+    width?: number
+    /** Edge the mockup fades out along. */
+    fade?: ConsoleMockupConsoleMockupShellFade
+    /** Whether this widget is the one showing. */
+    active?: boolean
+  }
+
+  withDefaults(defineProps<Props>(), {
+    variant: 'window',
+    chrome: true,
+    width: 860,
+    fade: 'none',
+    active: true
+  })
+
+  interface WorkloadRow {
+    name: string
+    domain: string
+    status: string
+    severity: StatusIndicatorSeverity
+    loading: boolean
+    owner: string
+    time: string
+  }
+
+  const ROWS: WorkloadRow[] = [
+    {
+      name: 'storefront-prod',
+      domain: 'shop.example.com',
+      status: 'Live',
+      severity: 'success',
+      loading: false,
+      owner: 'Jane Doe',
+      time: '2 minutes ago'
+    },
+    {
+      name: 'api-gateway',
+      domain: 'api.example.com',
+      status: 'Live',
+      severity: 'success',
+      loading: false,
+      owner: 'John Smith',
+      time: '1 hour ago'
+    },
+    {
+      name: 'checkout-service',
+      domain: 'checkout.example.com',
+      status: 'Building',
+      severity: 'info',
+      loading: true,
+      owner: 'Alex Morgan',
+      time: 'Just now'
+    },
+    {
+      name: 'assets-cdn',
+      domain: 'cdn.example.com',
+      status: 'Live',
+      severity: 'success',
+      loading: false,
+      owner: 'Alex Morgan',
+      time: 'Yesterday'
+    },
+    {
+      name: 'checkout-canary',
+      domain: 'canary.example.com',
+      status: 'Queued',
+      severity: 'neutral',
+      loading: false,
+      owner: 'Jane Doe',
+      time: 'Just now'
+    },
+    {
+      name: 'search-api',
+      domain: 'search.example.com',
+      status: 'Building',
+      severity: 'info',
+      loading: true,
+      owner: 'Jane Doe',
+      time: '12 minutes ago'
+    },
+    {
+      name: 'auth-edge',
+      domain: 'auth.example.com',
+      status: 'Live',
+      severity: 'success',
+      loading: false,
+      owner: 'John Smith',
+      time: 'Yesterday'
+    },
+    {
+      name: 'docs-site',
+      domain: 'docs.example.com',
+      status: 'Live',
+      severity: 'success',
+      loading: false,
+      owner: 'Priya Patel',
+      time: '2 days ago'
+    }
+  ]
+
+  const ROW_GRID =
+    'grid grid-cols-[1.1fr_6.5rem] items-center gap-(--spacing-sm) md:grid-cols-[1.1fr_1.4fr_6.5rem_1fr]'
+</script>
+
+<template>
+  <ConsoleMockupShell
+    :variant="variant"
+    :chrome="chrome"
+    :width="width"
+    :fade="fade"
+    :active="active"
+    title="Workloads"
+  >
+    <div class="flex h-full flex-col gap-(--spacing-md) p-(--spacing-lg)">
+      <ConsoleMockupShellItem :order="0">
+        <div class="flex items-center gap-(--spacing-sm)">
+          <Input
+            model-value=""
+            size="medium"
+            placeholder="Search workloads"
+            aria-label="Search workloads"
+            class="w-60 max-md:flex-1"
+          >
+            <template #leading>
+              <i
+                class="ai ai-search"
+                aria-hidden="true"
+              />
+            </template>
+          </Input>
+          <span class="ms-auto inline-flex shrink-0">
+            <Button
+              label="Create Workload"
+              variant="outline"
+              size="medium"
+              icon="ai ai-plus"
+            />
+          </span>
+        </div>
+      </ConsoleMockupShellItem>
+
+      <ConsoleMockupShellItem
+        :order="1"
+        class="min-h-0 flex-1"
+      >
+        <Card
+          :padded="false"
+          class="h-full overflow-hidden"
+        >
+          <template #default>
+            <div
+              :class="ROW_GRID"
+              class="shrink-0 border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs) text-label-sm text-(--text-muted)"
+            >
+              <span>Name</span>
+              <span class="hidden md:block">Domains</span>
+              <span>Status</span>
+              <span class="hidden md:block">Last Modified</span>
+            </div>
+
+            <ConsoleMockupShellItem
+              v-for="(row, index) in ROWS"
+              :key="row.name"
+              :order="2 + index"
+              class="flex flex-1 flex-col"
+            >
+              <div
+                :class="ROW_GRID"
+                :data-last="index === ROWS.length - 1 || null"
+                class="flex-1 border-b border-(--border-muted) px-(--spacing-md) py-(--spacing-sm) data-last:border-b-0"
+              >
+                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                  <i
+                    class="ai ai-workloads shrink-0 text-body-md leading-none text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                  <span class="truncate text-body-sm text-(--text-default)">{{ row.name }}</span>
+                </span>
+                <span class="hidden min-w-0 items-center gap-(--spacing-xs) md:flex">
+                  <i
+                    class="ai ai-domains shrink-0 text-body-md leading-none text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                  <span class="truncate text-body-sm text-(--text-muted)">{{ row.domain }}</span>
+                </span>
+                <span class="inline-flex">
+                  <StatusIndicator
+                    :label="row.status"
+                    :severity="row.severity"
+                    :loading="row.loading"
+                  />
+                </span>
+                <span class="hidden min-w-0 items-center gap-(--spacing-xs) md:flex">
+                  <Avatar
+                    :label="row.owner"
+                    size="small"
+                  />
+                  <span class="truncate text-body-sm text-(--text-muted)">{{ row.time }}</span>
+                </span>
+              </div>
+            </ConsoleMockupShellItem>
+          </template>
+        </Card>
+      </ConsoleMockupShellItem>
+    </div>
+  </ConsoleMockupShell>
+</template>

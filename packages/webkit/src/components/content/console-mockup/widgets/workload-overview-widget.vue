@@ -1,0 +1,616 @@
+<script setup lang="ts">
+  import { computed, nextTick, onMounted, ref, useId, watch } from 'vue'
+
+  import Button from '../../../actions/button/button.vue'
+  import CopyButton from '../../../actions/copy-button/copy-button.vue'
+  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
+  import RadioGroup from '../../../inputs/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../../inputs/radio-group/radio-group-item/radio-group-item.vue'
+  import type { TextureVariant } from '../../../marketing/texture/texture.vue'
+  import Tabs from '../../../navigation/tabs'
+  import Avatar from '../../avatar/avatar.vue'
+  import Card from '../../card/card.vue'
+  import Tag, { type TagSeverity } from '../../tag/tag.vue'
+  import ConsoleMockupShell, {
+    type ConsoleMockupConsoleMockupShellFade
+  } from '../console-mockup-shell/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+
+  defineOptions({ name: 'WorkloadOverviewWidget' })
+
+  export type ConsoleMockupWorkloadOverviewTab = 'overview' | 'topology' | 'deploy'
+
+  interface Props {
+    /** Beat the mockup plays: the page top, the topology scrolled into view, or the deploy drawer open. */
+    tab?: ConsoleMockupWorkloadOverviewTab
+    /** Edge the mockup fades out along. */
+    fade?: ConsoleMockupConsoleMockupShellFade
+    /** Texture the frame is grounded with. */
+    texture?: TextureVariant
+    /** Whether this widget is the one showing. */
+    active?: boolean
+  }
+
+  const props = withDefaults(defineProps<Props>(), {
+    tab: 'overview',
+    fade: 'none',
+    texture: 'none',
+    active: true
+  })
+
+  interface TopologyNode {
+    key: string
+    kind: string
+    icon: string
+    name: string
+    status: string
+    severity: TagSeverity
+    link?: boolean
+    dashed?: boolean
+    column: number
+    row: number
+  }
+
+  const environmentHeadingId = useId()
+  const SCROLL_INSET = 16
+
+  const topologyEl = ref<globalThis.HTMLElement | null>(null)
+  const scrolled = ref(0)
+
+  const measure = () => {
+    scrolled.value =
+      props.tab === 'topology' && topologyEl.value
+        ? Math.max(topologyEl.value.offsetTop - SCROLL_INSET, 0)
+        : 0
+  }
+
+  const pageStyle = computed(() => ({ translate: `0 -${scrolled.value}px` }))
+
+  onMounted(() => nextTick(measure))
+  watch(
+    () => props.tab,
+    () => nextTick(measure)
+  )
+
+  const TABS = [
+    { value: 'overview', label: 'Overview' },
+    { value: 'deployments', label: 'Deployments' },
+    { value: 'settings', label: 'Settings' }
+  ]
+
+  const FACTS = {
+    domain: 'w1082318.azion.run',
+    id: '1082318',
+    created: 'Jul 13 by Jordan Avery',
+    owner: 'JA'
+  }
+
+  const NODES: TopologyNode[] = [
+    {
+      key: 'domains',
+      kind: 'Domains',
+      icon: 'ai ai-domains',
+      name: FACTS.domain,
+      status: '1 domain',
+      severity: 'neutral',
+      column: 1,
+      row: 1
+    },
+    {
+      key: 'workload',
+      kind: 'Workload',
+      icon: 'ai ai-workloads',
+      name: 'storefront-prod',
+      status: 'Live',
+      severity: 'success',
+      link: true,
+      column: 3,
+      row: 1
+    },
+    {
+      key: 'firewall',
+      kind: 'Firewall',
+      icon: 'ai ai-edge-firewall',
+      name: '',
+      status: 'Not bound',
+      severity: 'neutral',
+      dashed: true,
+      column: 5,
+      row: 1
+    },
+    {
+      key: 'application',
+      kind: 'Application',
+      icon: 'ai ai-edge-application',
+      name: 'storefront-prod',
+      status: 'Active',
+      severity: 'success',
+      link: true,
+      column: 7,
+      row: 1
+    },
+    {
+      key: 'custom-page',
+      kind: 'Custom Page',
+      icon: 'ai ai-custom-pages',
+      name: '',
+      status: 'Not bound',
+      severity: 'neutral',
+      dashed: true,
+      column: 7,
+      row: 2
+    }
+  ]
+
+  const LINKS = [2, 4]
+
+  const SELECTED_ENVIRONMENT = 'Production'
+
+  const ENVIRONMENTS = [
+    {
+      name: 'Production',
+      tag: 'Last used',
+      selected: true,
+      description: 'Live traffic. One version serves the domain, and deploying replaces it.'
+    },
+    {
+      name: 'Preview',
+      tag: '',
+      selected: false,
+      description:
+        'Every other branch. Each version keeps its own URL, so a build can be read before it is live.'
+    }
+  ]
+</script>
+
+<template>
+  <ConsoleMockupShell
+    :fade="fade"
+    :texture="texture"
+    :active="active"
+    :width="1320"
+    rail="workloads"
+    title="Workloads › storefront-prod"
+  >
+    <div class="flex h-full flex-col">
+      <ConsoleMockupShellItem :order="0">
+        <div
+          class="flex items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-sm)"
+        >
+          <Tabs
+            model-value="overview"
+            class="-ms-(--spacing-xs) min-w-0 flex-1"
+          >
+            <Tabs.List>
+              <Tabs.Trigger
+                v-for="tab in TABS"
+                :key="tab.value"
+                :value="tab.value"
+                :label="tab.label"
+              />
+            </Tabs.List>
+          </Tabs>
+          <Button
+            label="Deploy"
+            variant="outline"
+            size="medium"
+            icon="ai ai-cloud-upload"
+          />
+        </div>
+      </ConsoleMockupShellItem>
+
+      <div class="relative min-h-0 flex-1 overflow-hidden">
+        <div
+          :style="pageStyle"
+          class="relative flex flex-col gap-(--spacing-xl) px-(--spacing-lg) pt-(--spacing-lg) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
+        >
+          <ConsoleMockupShellItem :order="1">
+            <Card :padded="false">
+              <template #default>
+                <div
+                  class="flex min-h-14 items-center gap-(--spacing-md) px-(--spacing-md) py-(--spacing-xs)"
+                >
+                  <div class="flex min-w-0 flex-1 items-center gap-(--spacing-xs)">
+                    <i
+                      class="ai ai-domains shrink-0 text-body-lg text-(--text-muted)"
+                      aria-hidden="true"
+                    />
+                    <span
+                      class="inline-flex items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
+                    >
+                      {{ FACTS.domain }}
+                      <i
+                        class="ai ai-external-link text-body-xs leading-none"
+                        aria-hidden="true"
+                      />
+                    </span>
+                  </div>
+                  <div class="flex shrink-0 items-center gap-(--spacing-xs)">
+                    <Button
+                      label="Visit"
+                      variant="secondary"
+                      size="medium"
+                      icon="ai ai-external-link"
+                    />
+                    <span
+                      class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default)"
+                    >
+                      <i
+                        class="ai ai-layers shrink-0 text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      Production
+                      <i
+                        class="ai ai-chevron-down shrink-0 text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                    </span>
+                    <IconButton
+                      icon="ai ai-ellipsis"
+                      variant="outline"
+                      size="medium"
+                      ariaLabel="Workload actions"
+                    />
+                  </div>
+                </div>
+
+                <div
+                  class="grid grid-cols-4 gap-(--spacing-sm) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md)"
+                >
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+                    <span
+                      class="flex items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"
+                    >
+                      Custom domains
+                      <i
+                        class="ai ai-circle-plus text-body-sm leading-none"
+                        aria-hidden="true"
+                      />
+                    </span>
+                    <div class="flex min-h-7 items-center">
+                      <span class="text-body-sm text-(--text-disabled)">None</span>
+                    </div>
+                  </div>
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+                    <span class="text-label-sm text-(--text-muted)">Status</span>
+                    <div class="flex min-h-7 items-center">
+                      <StatusIndicator
+                        severity="success"
+                        label="Live"
+                      />
+                    </div>
+                  </div>
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+                    <span class="text-label-sm text-(--text-muted)">Workload ID</span>
+                    <div class="flex min-h-7 items-center gap-(--spacing-xs)">
+                      <span class="text-body-sm tabular-nums text-(--text-default)">{{
+                        FACTS.id
+                      }}</span>
+                      <CopyButton
+                        variant="outline"
+                        :value="FACTS.id"
+                        aria-label="Copy workload ID"
+                        size="small"
+                      />
+                    </div>
+                  </div>
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+                    <span class="text-label-sm text-(--text-muted)">Created</span>
+                    <div class="flex min-h-7 items-center gap-(--spacing-xs)">
+                      <span class="truncate text-body-sm text-(--text-default)">{{
+                        FACTS.created
+                      }}</span>
+                      <Avatar
+                        :label="FACTS.owner"
+                        size="small"
+                        variant="square"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <div
+                  class="flex min-h-12 items-center gap-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md)"
+                >
+                  <i
+                    class="ai ai-chevron-down text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                  <span class="text-label-md text-(--text-default)">Deployment Settings</span>
+                  <span
+                    class="ms-auto inline-flex items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
+                  >
+                    Azion Default
+                    <i
+                      class="ai ai-external-link text-body-xs leading-none"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </div>
+              </template>
+            </Card>
+          </ConsoleMockupShellItem>
+
+          <div ref="topologyEl">
+            <ConsoleMockupShellItem :order="2">
+              <div class="flex flex-col gap-(--layout-group-gap)">
+                <h2 class="m-0 text-heading-xs text-(--text-default)">Deployment topology</h2>
+                <Card
+                  :padded="false"
+                  class="overflow-hidden bg-(--bg-surface-raised)"
+                >
+                  <template #default>
+                    <div
+                      class="grid grid-cols-[1fr_1.5rem_1fr_1.5rem_1fr_1.5rem_1fr_1.5rem] p-(--spacing-md)"
+                    >
+                      <div
+                        v-for="column in LINKS"
+                        :key="column"
+                        :style="{ gridColumn: column, gridRow: 1 }"
+                        class="relative mt-5 h-px border-t border-dashed border-(--accent)"
+                      >
+                        <span
+                          class="absolute top-1/2 start-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
+                        />
+                        <span
+                          class="absolute top-1/2 end-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
+                        />
+                      </div>
+                      <div
+                        class="relative"
+                        style="grid-column: 6; grid-row: 1"
+                      >
+                        <span
+                          class="absolute top-5 start-0 w-3/4 border-t border-dashed border-(--accent)"
+                        />
+                        <span
+                          class="absolute top-5 bottom-0 start-3/4 border-s border-dashed border-(--accent)"
+                        />
+                        <span
+                          class="absolute top-5 start-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
+                        />
+                        <span
+                          class="absolute top-5 end-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
+                        />
+                      </div>
+                      <div
+                        class="relative"
+                        style="grid-column: 6; grid-row: 2"
+                      >
+                        <span
+                          class="absolute top-0 start-3/4 h-5 border-s border-dashed border-(--accent)"
+                        />
+                        <span
+                          class="absolute top-5 end-0 start-3/4 border-t border-dashed border-(--accent)"
+                        />
+                        <span
+                          class="absolute top-5 end-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
+                        />
+                      </div>
+                      <div
+                        class="relative mt-5 h-px border-t border-dashed border-(--accent)"
+                        style="grid-column: 8; grid-row: 1"
+                      >
+                        <span
+                          class="absolute top-1/2 start-0 size-2 -translate-y-1/2 rounded-(--radius-sm) border border-(--border-muted) bg-(--accent)"
+                        />
+                      </div>
+                      <div
+                        v-for="node in NODES"
+                        :key="node.key"
+                        :style="{ gridColumn: node.column, gridRow: node.row }"
+                        :data-dashed="node.dashed || null"
+                        :data-focused="(tab === 'topology' && node.key === 'workload') || null"
+                        :data-gap="node.key === 'application' || null"
+                        class="min-w-0 self-start rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) shadow-sm data-dashed:border-dashed data-focused:border-(--primary) data-gap:mb-(--spacing-sm)"
+                      >
+                        <div
+                          class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
+                        >
+                          <i
+                            :class="node.icon"
+                            class="shrink-0 text-body-xs leading-none text-(--text-muted)"
+                            aria-hidden="true"
+                          />
+                          <span class="truncate text-label-sm text-(--text-muted)">{{
+                            node.kind
+                          }}</span>
+                          <Tag
+                            class="ms-auto shrink-0"
+                            :severity="node.severity"
+                            :label="node.status"
+                            size="small"
+                          />
+                          <i
+                            class="ai ai-chevron-down shrink-0 text-(--text-muted)"
+                            aria-hidden="true"
+                          />
+                        </div>
+                        <div
+                          class="flex min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)"
+                        >
+                          <span
+                            class="inline-flex min-w-0 items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
+                          >
+                            <span class="truncate">{{ node.name || '—' }}</span>
+                            <i
+                              v-if="node.link"
+                              class="ai ai-external-link shrink-0 text-body-xs leading-none"
+                              aria-hidden="true"
+                            />
+                          </span>
+                          <IconButton
+                            v-if="node.status !== 'Live' && node.status !== 'Active'"
+                            class="ms-auto shrink-0"
+                            icon="ai ai-plus"
+                            variant="outline"
+                            size="small"
+                            ariaLabel="Bind"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                </Card>
+              </div>
+            </ConsoleMockupShellItem>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <template #overlay>
+      <div
+        :data-state="tab === 'deploy' ? 'open' : 'closed'"
+        class="absolute inset-0 bg-(--bg-backdrop) opacity-0 transition-opacity duration-moderate-02 ease-productive-entrance data-[state=open]:opacity-100 motion-reduce:transition-none"
+      />
+      <aside
+        :data-state="tab === 'deploy' ? 'open' : 'closed'"
+        class="absolute inset-y-0 end-0 flex w-[47%] translate-x-full flex-col border-s border-(--border-default) bg-(--bg-surface) transition-[translate] duration-slow-01 ease-productive-entrance data-[state=open]:translate-x-0 motion-reduce:transition-none"
+      >
+        <div
+          class="flex shrink-0 items-start gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
+        >
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+            <h2 class="m-0 text-heading-xs text-(--text-default)">Deploy</h2>
+            <p class="m-0 text-body-sm text-(--text-muted)">
+              Publish storefront-prod. Review what this release carries and where it lands.
+            </p>
+          </div>
+          <IconButton
+            class="ms-auto shrink-0"
+            icon="ai ai-x"
+            variant="outline"
+            size="small"
+            ariaLabel="Close"
+          />
+        </div>
+
+        <div
+          class="flex min-h-0 flex-1 flex-col gap-(--spacing-xl) px-(--spacing-lg) py-(--spacing-lg)"
+        >
+          <div class="flex flex-col gap-(--spacing-sm)">
+            <h3
+              class="m-0 flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)"
+            >
+              Resources
+              <i
+                class="ai ai-circle-info text-body-xs text-(--text-muted)"
+                aria-hidden="true"
+              />
+            </h3>
+            <div
+              class="flex flex-col overflow-hidden rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface)"
+            >
+              <div class="flex items-center gap-(--spacing-sm) p-(--spacing-sm)">
+                <span
+                  class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default)"
+                >
+                  <i
+                    class="ai ai-edge-application text-body-md leading-none text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span class="flex min-w-0 flex-col">
+                  <span class="flex items-center gap-(--spacing-xs) text-body-sm">
+                    <span class="text-(--text-muted)">Application</span>
+                    <span class="text-(--text-default)">storefront-prod</span>
+                    <Tag
+                      label="Ready"
+                      severity="success"
+                      size="small"
+                    />
+                  </span>
+                  <span class="text-body-sm text-(--text-muted)">AWFBBZ1Q</span>
+                </span>
+                <span
+                  class="ms-auto flex h-8 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) text-label-sm text-(--text-default)"
+                >
+                  Change Version
+                  <i
+                    class="ai ai-chevron-down text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </span>
+              </div>
+              <div
+                class="flex items-center border-y border-(--border-default) bg-(--bg-canvas) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"
+              >
+                Dependencies
+                <i
+                  class="ai ai-chevron-down ms-auto text-(--text-muted)"
+                  aria-hidden="true"
+                />
+              </div>
+              <div class="flex items-center gap-(--spacing-sm) p-(--spacing-sm)">
+                <span
+                  class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default)"
+                >
+                  <i
+                    class="ai ai-edge-storage text-body-md leading-none text-(--text-default)"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span class="flex min-w-0 flex-col">
+                  <span class="flex items-center gap-(--spacing-xs) text-body-sm">
+                    <span class="text-(--text-muted)">Object Storage</span>
+                    <span class="text-(--text-default)">storefront-prod-storage</span>
+                  </span>
+                  <span class="text-body-sm text-(--text-muted)">Not versioned</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-(--spacing-sm)">
+            <h3
+              :id="environmentHeadingId"
+              class="m-0 flex items-center gap-(--spacing-xs) text-label-md text-(--text-default)"
+            >
+              Environment
+              <i
+                class="ai ai-circle-info text-body-xs text-(--text-muted)"
+                aria-hidden="true"
+              />
+            </h3>
+            <RadioGroup
+              :model-value="SELECTED_ENVIRONMENT"
+              variant="card"
+              :aria-labelledby="environmentHeadingId"
+            >
+              <RadioGroupItem
+                v-for="environment in ENVIRONMENTS"
+                :key="environment.name"
+                :value="environment.name"
+                :description="environment.description"
+              >
+                {{ environment.name }}
+                <template
+                  v-if="environment.tag"
+                  #tag
+                >
+                  <Tag
+                    :label="environment.tag"
+                    severity="info"
+                    size="small"
+                  />
+                </template>
+              </RadioGroupItem>
+            </RadioGroup>
+          </div>
+        </div>
+
+        <div
+          class="flex shrink-0 items-center justify-end border-t border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
+        >
+          <Button
+            label="Deploy"
+            variant="primary"
+            size="medium"
+          />
+        </div>
+      </aside>
+    </template>
+  </ConsoleMockupShell>
+</template>

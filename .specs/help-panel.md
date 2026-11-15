@@ -3,7 +3,7 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: b2780d7d6e5d58aae1de08cbff3b3697d8641b4e2c738e473ff0f74e697a4d15
+checksum: c17198f63713865c44a2a2147e36f0a44cf9d688bd196ca2fa33c6dbf8e08b80
 spec_version: 4
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -30,7 +30,7 @@ the links or carry one section or five.
 
 ## When NOT to use
 
-- A one-line hint attached to a single control → use `tooltip` or `hint`, or the field's `helper-text`.
+- A one-line hint attached to a single control → use `tooltip` or `hint`, or the field's `field-description`.
 - A guided tutorial with tasks, progress and hotspots on the real controls → use `tutorial-panel`.
 - The region itself (overlay, slide-in, close button, focus trap) → use `drawer`; put `help-panel` inside it.
 - Ordered steps the reader navigates between, with the step's form filling the column beside it → use `stepper`.

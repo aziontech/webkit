@@ -1,11 +1,11 @@
 <script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -14,7 +14,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, reactive, ref } from 'vue'
@@ -148,15 +148,15 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Console">
-      <GlobalHeader.Start>
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Services"
           variant="outline"
           size="small"
         />
-        <GlobalHeader.Brand>
+        <AppHeader.Brand>
           <a
             href="/home"
             aria-label="Azion home"
@@ -167,11 +167,11 @@
               size="small"
             />
           </a>
-        </GlobalHeader.Brand>
+        </AppHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Start>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -183,8 +183,8 @@
             variant="square"
           />
         </button>
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
     <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
       <form
         class="flex min-h-full flex-col"
@@ -209,7 +209,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="Name"
                       description="Give a unique and descriptive name to identify the service."
                     >
@@ -225,15 +225,14 @@
                             :aria-describedby="errors.name ? 'app-name-error' : undefined"
                             @update:model-value="errors.name = ''"
                           />
-                          <HelperText
+                          <FieldError
                             v-if="errors.name"
                             id="app-name-error"
-                            type="required"
-                            :label="errors.name"
-                          />
+                            >{{ errors.name }}</FieldError
+                          >
                         </div>
                       </div>
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>
@@ -246,7 +245,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow title="Protocol usage">
+                    <SettingsRow title="Protocol usage">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.protocolUsage"
@@ -264,8 +263,8 @@
                           >
                         </RadioGroup>
                       </div>
-                    </SettingRow>
-                    <SettingRow title="HTTP ports">
+                    </SettingsRow>
+                    <SettingsRow title="HTTP ports">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <MultiSelect
@@ -294,16 +293,15 @@
                               </MultiSelect.Item>
                             </MultiSelect.Content>
                           </MultiSelect>
-                          <HelperText
+                          <FieldError
                             v-if="errors.httpPorts"
                             id="app-httpPorts-error"
-                            type="required"
-                            :label="errors.httpPorts"
-                          />
+                            >{{ errors.httpPorts }}</FieldError
+                          >
                         </div>
                       </div>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="HTTPS ports"
                       description="Applies when the service serves HTTPS traffic."
                     >
@@ -328,7 +326,7 @@
                           </MultiSelect.Content>
                         </MultiSelect>
                       </div>
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>
@@ -339,7 +337,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="Origin type"
                       description="The origin type is pre-defined and can't be customized."
                     >
@@ -352,8 +350,8 @@
                           readonly
                         />
                       </div>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Protocol policy"
                       description="Select the protocol used between the cache servers and the origin."
                     >
@@ -373,8 +371,8 @@
                           >
                         </RadioGroup>
                       </div>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Address"
                       description="Define an origin for the content in FQDN format or an IPv4/IPv6 address."
                     >
@@ -390,16 +388,15 @@
                             :aria-describedby="errors.address ? 'app-address-error' : undefined"
                             @update:model-value="errors.address = ''"
                           />
-                          <HelperText
+                          <FieldError
                             v-if="errors.address"
                             id="app-address-error"
-                            type="required"
-                            :label="errors.address"
-                          />
+                            >{{ errors.address }}</FieldError
+                          >
                         </div>
                       </div>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Host header"
                       description="Identify a virtualhost sent in the Host header to the origin."
                     >
@@ -416,15 +413,14 @@
                             "
                             @update:model-value="errors.hostHeader = ''"
                           />
-                          <HelperText
+                          <FieldError
                             v-if="errors.hostHeader"
                             id="app-hostHeader-error"
-                            type="required"
-                            :label="errors.hostHeader"
-                          />
+                            >{{ errors.hostHeader }}</FieldError
+                          >
                         </div>
                       </div>
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>
@@ -437,7 +433,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow title="Browser cache settings">
+                    <SettingsRow title="Browser cache settings">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.browserCache"
@@ -455,8 +451,8 @@
                           >
                         </RadioGroup>
                       </div>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Maximum TTL"
                       description="In seconds."
                     >
@@ -469,8 +465,8 @@
                           aria-label="Browser maximum TTL in seconds"
                         />
                       </div>
-                    </SettingRow>
-                    <SettingRow title="Cache Settings">
+                    </SettingsRow>
+                    <SettingsRow title="Cache Settings">
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <RadioGroup
                           v-model="form.cache"
@@ -488,8 +484,8 @@
                           >
                         </RadioGroup>
                       </div>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Maximum TTL"
                       description="In seconds. Enable dynamic acceleration in the Main Settings tab to use values lower than 60 seconds. A secondary cache requires a cache TTL equal to or greater than 3 seconds."
                     >
@@ -502,7 +498,7 @@
                           aria-label="Cache maximum TTL in seconds"
                         />
                       </div>
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>
@@ -513,7 +509,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="Active"
                       description="Rules that were successfully executed will be listed in the request logs and in the trace of each event."
                       variant="compact"
@@ -522,7 +518,7 @@
                         v-model="form.debugRules"
                         aria-label="Active"
                       />
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>

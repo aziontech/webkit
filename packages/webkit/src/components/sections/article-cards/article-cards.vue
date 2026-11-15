@@ -4,7 +4,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import type { LogoMark } from '../../content/logo/logo.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -30,7 +30,7 @@
     title: string
     /** One or two sentences under the headline. */
     description: string
-    /** Overline pinned to the foot, usually the date and read time. */
+    /** Eyebrow pinned to the foot, usually the date and read time. */
     meta: string
     /** URL of the cover drawn in the media cell. */
     image?: string
@@ -45,7 +45,7 @@
     variant?: ArticleCardsVariant
     /** Id set on the band so an in-page hash link can target it. */
     anchor?: string
-    /** Overline above the heading. */
+    /** Eyebrow above the heading. */
     eyebrow?: string
     /** Headline of the band; the band renders no header when empty. */
     title?: string
@@ -100,7 +100,7 @@
         />
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="all"
@@ -163,7 +163,7 @@
             </a>
           </CardGridCell>
         </CardGrid>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

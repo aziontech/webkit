@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import Illustration from '../../content/illustration/illustration.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
   import MediaTile from '../../marketing/media-tile/media-tile.vue'
@@ -38,7 +38,7 @@
     variant?: FeatureTilesVariant
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
-    /** Overline above the section title. */
+    /** Eyebrow above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. */
     title?: string
@@ -91,7 +91,7 @@
         />
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         :marks="variant === 'artwork' ? 'all' : 'bottom'"
@@ -131,7 +131,7 @@
             />
           </CardGridCell>
         </CardGrid>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

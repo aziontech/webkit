@@ -1,9 +1,9 @@
 <script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
   import Tooltip from '@aziontech/webkit/tooltip'
 
@@ -14,8 +14,8 @@
 
 <template>
   <div class="w-full bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Console">
-      <GlobalHeader.Start>
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
         <Tooltip
           content="Back to Resources"
           placement="bottom"
@@ -28,7 +28,7 @@
             href="/resources"
           />
         </Tooltip>
-        <GlobalHeader.Brand>
+        <AppHeader.Brand>
           <a
             href="/home"
             aria-label="Azion home"
@@ -39,11 +39,11 @@
               size="small"
             />
           </a>
-        </GlobalHeader.Brand>
+        </AppHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Start>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
         <DropdownMenu placement="bottom-end">
           <DropdownMenu.Trigger>
             <button
@@ -102,7 +102,7 @@
             </DropdownMenu.Item>
           </DropdownMenu.Group>
         </DropdownMenu>
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
   </div>
 </template>

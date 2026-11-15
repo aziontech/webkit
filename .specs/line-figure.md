@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 56a12fa7f0ef9fa362bd409c6925621e5376f6ee86fa1bc4e495872c040728b7
+checksum: 1c0c37d1b7c8ade8138d06d61b55beffac0cf7b675deb6bc59e9efb6f5e91a97
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -31,7 +31,7 @@ An isometric line-art figure that answers the pointer: one per product (cache TT
 ## Related
 
 - `Illustration` — static art from the registry.
-- `ProductWidget` — product scenes.
+- `ConsoleMockup` — product scenes.
 - `EmptyState` — can carry a figure in its art slot.
 
 ## Best practices
@@ -56,12 +56,12 @@ An isometric line-art figure that answers the pointer: one per product (cache TT
 
 ## Props
 
-| Prop        | Type               | Default | Required | JSDoc                                                                                                                |
-| ----------- | ------------------ | ------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
-| `name`      | `LineFigureName \| ''` | `''`    | false    | Registered figure to draw; an unknown or empty name draws nothing. |
-| `intensity` | `number`           | `0.5`   | false    | How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong).                                          |
-| `play`      | `boolean`          | `false` | false    | Walks the figure through its answer on its own until a pointer or focus arrives; a still frame under reduced motion. |
-| `ariaLabel` | `string`           | `''`    | false    | Accessible name; falls back to the figure's own English description.                                                 |
+| Prop        | Type                   | Default | Required | JSDoc                                                                                                                |
+| ----------- | ---------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------- |
+| `name`      | `LineFigureName \| ''` | `''`    | false    | Registered figure to draw; an unknown or empty name draws nothing.                                                   |
+| `intensity` | `number`               | `0.5`   | false    | How strongly the figure answers the pointer, from 0 (subtle) to 1 (strong).                                          |
+| `play`      | `boolean`              | `false` | false    | Walks the figure through its answer on its own until a pointer or focus arrives; a still frame under reduced motion. |
+| `ariaLabel` | `string`               | `''`    | false    | Accessible name; falls back to the figure's own English description.                                                 |
 
 ## Events
 

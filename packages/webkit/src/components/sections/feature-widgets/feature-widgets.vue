@@ -5,9 +5,9 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Button from '../../actions/button/button.vue'
-  import ButtonHighlight from '../../actions/button-highlight/button-highlight.vue'
+  import HighlightButton from '../../actions/highlight-button/highlight-button.vue'
   import Illustration from '../../content/illustration/illustration.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import BentoGrid from '../../marketing/bento-grid/bento-grid.vue'
   import BentoGridCell from '../../marketing/bento-grid/bento-grid-cell/bento-grid-cell.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -56,7 +56,7 @@
   export interface FeatureWidgetsProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
-    /** Overline above the section title. */
+    /** Eyebrow above the section title. */
     eyebrow?: string
     /** Headline of the band, rendered by the section title as its `h2`, and the accessible name of the band. */
     title?: string
@@ -169,7 +169,7 @@
           </template>
         </SectionTitle>
       </template>
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="bottom"
@@ -222,7 +222,7 @@
                     icon-position="trailing"
                     animated
                   />
-                  <ButtonHighlight
+                  <HighlightButton
                     v-if="item.copy"
                     :label="copied === index ? doneLabel : item.copy.label"
                     size="medium"
@@ -234,7 +234,7 @@
             </div>
           </BentoGridCell>
         </BentoGrid>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

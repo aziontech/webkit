@@ -3,7 +3,7 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: 3a889e75215e79da80d19920bb7f32e18720d77e26e72373443276a73184fd5e
+checksum: bee8ec21ec2f7871741017ab49526f1f5640e42fd4794a808269cff88c94e673
 spec_version: 6
 created: 2026-10-20
 last_updated: 2026-11-15
@@ -13,7 +13,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Use StatTile to show one headline metric (figure, delta, sparkline) in product UI; the strip of related metrics is a StatTileGroup, one value against a range with thresholds is a GaugeChart, and a money amount on its own is a Currency.
+Use StatTile to show one headline metric (figure, delta, sparkline) in product UI; the strip of related metrics is a StatTileGroup, one value against a range with thresholds is a GaugeChart, and a money amount on its own is a CurrencyAmount.
 
 A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses. Inside a `StatTileGroup` the tiles become the cells of one card, split by dividers, with the delta aligned to the cell's end. `variant` picks the figure face: `mono` (the big-number mono figure of a usage strip) or `sans` (the large heading figure of a traffic summary).
 
@@ -26,13 +26,13 @@ A KPI tile: a label, one big figure that counts up into place with an optional m
 
 - The history itself is the point → use `chart`.
 - A share of a whole → use `donut-chart`.
-- Marketing figures on a site band → use `big-numbers`.
+- Marketing figures on a site band → use `stats`.
 
 ## Related
 
 - `chart` — the full history behind a tile.
 - `chart-card` — the box for a chart; a tile is its own small surface and does not sit in one.
-- `big-numbers` — the marketing figure band, with no delta and no live data.
+- `stats` — the marketing figure band, with no delta and no live data.
 - `spark-chart` — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.
 - `tag` — the delta renders as a `Tag`; the empty band's "No data" is a `Tag` too.
 - `separator` — carries the "No data" `Tag` across the empty band.
@@ -76,7 +76,7 @@ A KPI tile: a label, one big figure that counts up into place with an optional m
 | `label`       | `string`                    | `''`            | false    | Metric name, in sentence case. Fallback for the default slot.                                                                      |
 | `value`       | `number \| null`            | `null`          | false    | The current value. It counts up from the previous value on change; null renders a dash.                                            |
 | `formatValue` | `(value: number) => string` | `formatCompact` | false    | Formats the figure.                                                                                                                |
-| `variant`        | `StatTileVariant`              | `'mono'`        | false    | Figure face: `mono` is the big-number mono figure, `sans` the large heading figure.                                                |
+| `variant`     | `StatTileVariant`           | `'mono'`        | false    | Figure face: `mono` is the big-number mono figure, `sans` the large heading figure.                                                |
 | `unit`        | `string`                    | `''`            | false    | Unit read after the figure, smaller and in a muted sans tone. Empty hides it.                                                      |
 | `delta`       | `number \| null`            | `null`          | false    | Signed change against the named period, in percent, printed with at most two decimals and no trailing zeros. Null hides the delta. |
 | `deltaLabel`  | `string`                    | `''`            | false    | The comparison period, read after the delta.                                                                                       |
@@ -121,8 +121,8 @@ _No events — a tile is content; wrap it in a link or button to make it interac
 | figure       | `mono`: `.text-big-number-sm`; `sans`: `.text-heading-lg`; `var(--text-default)`                                                        |
 | unit         | `mono`: `.text-body-xs`; `sans`: `.text-body-md`; `var(--text-muted)`                                                                   |
 | delta        | `tag` at `size="small"` (`success` / `danger` / `neutral`); period in `.text-label-sm`, `var(--text-muted)`                             |
-| sparkline    | `spark-chart` at `size="medium"`, area variant, `var(--chart-series-1)`, edge to edge                                                      |
-| no-data band | `spark-chart` `color="other"` at reduced opacity, `separator`, `tag` `severity="neutral"` at `size="small"`                               |
+| sparkline    | `spark-chart` at `size="medium"`, area variant, `var(--chart-series-1)`, edge to edge                                                   |
+| no-data band | `spark-chart` `color="other"` at reduced opacity, `separator`, `tag` `severity="neutral"` at `size="small"`                             |
 | spacing      | `var(--spacing-2xs)`, `var(--spacing-xs)`, `var(--spacing-md)`                                                                          |
 
 ## Theme gaps

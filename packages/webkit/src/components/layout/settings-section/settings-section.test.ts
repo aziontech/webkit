@@ -101,7 +101,7 @@ describe('SettingsSection', () => {
   })
 
   it('renders the examples', async () => {
-    expect(within(render(Default).container).getAllByTestId('layout-setting-row')).toHaveLength(2)
+    expect(within(render(Default).container).getAllByTestId('layout-settings-row')).toHaveLength(2)
     expect(
       within(render(Stacked).container).getAllByTestId('layout-settings-section')
     ).toHaveLength(2)

@@ -2,13 +2,13 @@
   import { computed, useAttrs } from 'vue'
 
   import Button from '../../actions/button/button.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CardGrid from '../../marketing/card-grid/card-grid.vue'
   import CardGridCell from '../../marketing/card-grid/card-grid-cell/card-grid-cell.vue'
+  import FeatureItem from '../../marketing/feature-item/feature-item.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { SectionTitleVariant } from '../../marketing/section-title/section-title.vue'
   import SectionTitle from '../../marketing/section-title/section-title.vue'
-  import Topic from '../../marketing/topic/topic.vue'
 
   defineOptions({ name: 'CapabilityGrid', inheritAttrs: false })
 
@@ -47,7 +47,7 @@
   }
 
   export interface CapabilityGridProps {
-    /** Overline above the title. */
+    /** Eyebrow above the title. */
     eyebrow?: string
     /** Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`. */
     title?: string
@@ -141,7 +141,7 @@
         </SectionTitle>
       </template>
 
-      <FrameBox
+      <RegistrationFrame
         flush
         borders="y"
         marks="bottom"
@@ -157,7 +157,7 @@
             variant="canvas"
             class="relative"
           >
-            <Topic
+            <FeatureItem
               :heading-level="headingLevel"
               :icon="item.icon ?? ''"
               :title="item.title"
@@ -177,7 +177,7 @@
             </ul>
           </CardGridCell>
         </CardGrid>
-      </FrameBox>
+      </RegistrationFrame>
     </SectionModule>
   </section>
 </template>

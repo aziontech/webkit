@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, provide, readonly, ref, useAttrs, useId } from 'vue'
 
-  import { BoardItemInjectionKey } from '../../layout/board/injection-key'
+  import { DashboardGridItemInjectionKey } from '../../layout/dashboard-grid/injection-key'
   import {
     ChartCardInjectionKey,
     type ChartCardMeasure,
@@ -54,7 +54,7 @@
   }>()
 
   const attrs = useAttrs()
-  const boardItem = inject(BoardItemInjectionKey, null)
+  const boardItem = inject(DashboardGridItemInjectionKey, null)
   const uid = useId()
   const rootEl = ref<globalThis.HTMLElement | null>(null)
   const armed = ref(false)

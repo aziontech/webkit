@@ -6,7 +6,8 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import Field from '@aziontech/webkit/field'
-  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
@@ -17,14 +18,14 @@
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 
-  type FieldProblem = { type: HelperTextType; message: string }
+  type FieldProblem = { type: 'helper' | 'invalid' | 'required'; message: string }
   type LabeledOption = SelectOptionItem<string | number>
 
   const port = (value: number, label = String(value)) => ({ value, label })
@@ -257,7 +258,7 @@
                   <TransitionGroup
                     enter-active-class="animate-content-enter motion-reduce:animate-none"
                   >
-                    <SettingRow
+                    <SettingsRow
                       key="httpPorts"
                       title="HTTP ports"
                       description="The ports this workload answers plain HTTP on."
@@ -290,14 +291,13 @@
                           </MultiSelect.Item>
                         </MultiSelect.Content>
                       </MultiSelect>
-                      <HelperText
+                      <FieldError
                         v-if="errors.httpPorts"
                         id="protocols-httpPorts-message"
-                        :type="errors.httpPorts.type"
-                        :label="errors.httpPorts.message"
-                      />
-                    </SettingRow>
-                    <SettingRow
+                        >{{ errors.httpPorts.message }}</FieldError
+                      >
+                    </SettingsRow>
+                    <SettingsRow
                       key="useHttps"
                       title="HTTPS support"
                       description="Answer on HTTPS as well as HTTP. HTTP/3 and mutual authentication need it."
@@ -309,8 +309,8 @@
                         :disabled="saving"
                         @update:model-value="setHttps"
                       />
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="form.useHttps"
                       key="httpsPorts"
                       title="HTTPS ports"
@@ -345,14 +345,13 @@
                           </MultiSelect.Item>
                         </MultiSelect.Content>
                       </MultiSelect>
-                      <HelperText
+                      <FieldError
                         v-if="errors.httpsPorts"
                         id="protocols-httpsPorts-message"
-                        :type="errors.httpsPorts.type"
-                        :label="errors.httpsPorts.message"
-                      />
-                    </SettingRow>
-                    <SettingRow
+                        >{{ errors.httpsPorts.message }}</FieldError
+                      >
+                    </SettingsRow>
+                    <SettingsRow
                       key="useHttp3"
                       title="HTTP/3 support"
                       description="Serve over HTTP/3 where the client supports it. Turns HTTPS support on with it."
@@ -364,8 +363,8 @@
                         :disabled="saving"
                         @update:model-value="setHttp3"
                       />
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="form.useHttp3"
                       key="http3Ports"
                       title="HTTP/3 ports"
@@ -400,14 +399,13 @@
                           </MultiSelect.Item>
                         </MultiSelect.Content>
                       </MultiSelect>
-                      <HelperText
+                      <FieldError
                         v-if="errors.http3Ports"
                         id="protocols-http3Ports-message"
-                        :type="errors.http3Ports.type"
-                        :label="errors.http3Ports.message"
-                      />
-                    </SettingRow>
-                    <SettingRow
+                        >{{ errors.http3Ports.message }}</FieldError
+                      >
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="form.useHttps"
                       key="minimumTls"
                       title="Minimum TLS version"
@@ -431,8 +429,8 @@
                           </Select.Item>
                         </Select.Content>
                       </Select>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="form.useHttps"
                       key="cipherSuite"
                       title="Cipher suite"
@@ -456,7 +454,7 @@
                           </Select.Item>
                         </Select.Content>
                       </Select>
-                    </SettingRow>
+                    </SettingsRow>
                   </TransitionGroup>
                 </Item.List>
               </template>
@@ -473,7 +471,7 @@
                   <TransitionGroup
                     enter-active-class="animate-content-enter motion-reduce:animate-none"
                   >
-                    <SettingRow
+                    <SettingsRow
                       key="mtls"
                       title="Mutual authentication"
                       description="Clients without a valid certificate are refused or flagged, depending on the mode."
@@ -484,12 +482,11 @@
                         aria-label="Mutual authentication"
                         :disabled="saving || !form.useHttps"
                       />
-                      <HelperText
-                        v-if="!form.useHttps"
-                        label="Turn on HTTPS support to use mutual authentication."
-                      />
-                    </SettingRow>
-                    <SettingRow
+                      <FieldDescription v-if="!form.useHttps"
+                        >Turn on HTTPS support to use mutual authentication.</FieldDescription
+                      >
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="armed"
                       key="mtlsMode"
                       title="Mode"
@@ -512,8 +509,8 @@
                           >{{ option.label }}</RadioGroup.Item
                         >
                       </RadioGroup>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="armed"
                       key="trustedCa"
                       title="Trusted CA certificate"
@@ -591,14 +588,13 @@
                           </template>
                         </Select.Content>
                       </Select>
-                      <HelperText
+                      <FieldError
                         v-if="errors.trustedCa"
                         id="protocols-trustedCa-message"
-                        :type="errors.trustedCa.type"
-                        :label="errors.trustedCa.message"
-                      />
-                    </SettingRow>
-                    <SettingRow
+                        >{{ errors.trustedCa.message }}</FieldError
+                      >
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="armed"
                       key="crl"
                       title="Certificate revocation lists"
@@ -627,7 +623,7 @@
                           </MultiSelect.Item>
                         </MultiSelect.Content>
                       </MultiSelect>
-                    </SettingRow>
+                    </SettingsRow>
                   </TransitionGroup>
                 </Item.List>
               </template>
@@ -704,12 +700,11 @@
                     uploadErrors.name ? 'protocols-upload-name-message' : undefined
                   "
                 />
-                <HelperText
+                <FieldError
                   v-if="uploadErrors.name"
                   id="protocols-upload-name-message"
-                  :type="uploadErrors.name.type"
-                  :label="uploadErrors.name.message"
-                />
+                  >{{ uploadErrors.name.message }}</FieldError
+                >
               </Field>
               <Field>
                 <Field.Label for="protocols-upload-pem">
@@ -725,12 +720,11 @@
                   :invalid="uploadErrors.pem?.type === 'invalid'"
                   :aria-describedby="uploadErrors.pem ? 'protocols-upload-pem-message' : undefined"
                 />
-                <HelperText
+                <FieldError
                   v-if="uploadErrors.pem"
                   id="protocols-upload-pem-message"
-                  :type="uploadErrors.pem.type"
-                  :label="uploadErrors.pem.message"
-                />
+                  >{{ uploadErrors.pem.message }}</FieldError
+                >
               </Field>
             </div>
           </PanelBody>

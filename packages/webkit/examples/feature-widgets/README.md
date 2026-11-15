@@ -4,7 +4,7 @@ A band that shows several ways in to the same product, each as a picture over a 
 
 Each cell holds a live fragment of the console (a `scene`) that wakes while the pointer is over it, or an `Illustration`. The grid collapses to one column on a phone.
 
-The band is the `FeatureWidgets` component from `@aziontech/webkit/feature-widgets`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `BentoGrid`, `Illustration`, `Button` and `ButtonHighlight`.
+The band is the `FeatureWidgets` component from `@aziontech/webkit/feature-widgets`; it composes `SectionModule`, `SectionTitle`, `RegistrationFrame`, `BentoGrid`, `Illustration`, `Button` and `HighlightButton`.
 
 ## Examples
 

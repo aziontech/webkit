@@ -1,0 +1,26 @@
+import type { LogViewerLine } from '../injection-key'
+
+export function formatLogLineText(line: LogViewerLine): string {
+  const parts: string[] = [line.time]
+
+  if (line.level) parts.push(line.level.toUpperCase())
+
+  if (line.type === 'success') {
+    const hasCheckmark = line.message.includes('✔') || line.message.includes('✓')
+
+    parts.push(hasCheckmark ? line.message : `✓ ${line.message}`)
+  } else if (line.type === 'framework-version') {
+    parts.push(line.message)
+    if (line.suffix) parts.push(line.suffix)
+  } else if (line.type === 'folder') {
+    parts.push(line.message)
+    if (line.folderType) parts.push(line.folderType)
+    if (line.size) {
+      parts.push(line.gzipSize ? `${line.size} | gzip: ${line.gzipSize}` : line.size)
+    }
+  } else {
+    parts.push(line.message)
+  }
+
+  return parts.filter(Boolean).join(' ')
+}
