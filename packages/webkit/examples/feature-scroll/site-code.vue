@@ -1,7 +1,7 @@
 <script setup>
+  import FeatureScroll from '@aziontech/webkit/feature-scroll'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
-  import StickyScrollCode from '@aziontech/webkit/sticky-scroll-code'
 
   const items = [
     {
@@ -96,7 +96,7 @@
   <SectionContainer max-width="site">
     <SectionGap hatch />
 
-    <StickyScrollCode
+    <FeatureScroll
       eyebrow="Ship It"
       title="Everything You Need to Build and Deploy"
       description="Deploy from Git or the CLI, automate with APIs and Terraform, and query every metric over GraphQL. One platform carries your web app from the first push to the traffic it serves."

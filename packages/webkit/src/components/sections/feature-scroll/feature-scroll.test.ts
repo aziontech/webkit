@@ -1,6 +1,7 @@
 import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import Code from '../../../../examples/feature-scroll/code.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FeatureScroll from './feature-scroll.vue'
 
@@ -187,6 +188,68 @@ describe('FeatureScroll', () => {
   it('has no a11y violations with an empty band', async () => {
     const { container } = render(FeatureScroll, { props: { title: TITLE, items: [] } })
 
+    await expectNoA11yViolations(container)
+  })
+
+  it('pins an item code sample under its file name, in the grid and in the stack', async () => {
+    const codeItems = [
+      {
+        title: 'Automated deployment via Git or CLI',
+        description: 'Run one command from the project you already have.',
+        code: {
+          fileName: 'deploy.sh',
+          language: 'bash',
+          code: 'azion deploy',
+          copyAriaLabel: 'Copy the deploy.sh sample'
+        }
+      },
+      {
+        title: 'Infrastructure as code with Terraform',
+        description: 'Declare workloads in the provider.',
+        code: { fileName: 'main.tf', language: 'hcl', code: 'resource "azion_workload" "app" {}' },
+        illustration: 'global-network'
+      }
+    ]
+    const { findAllByRole, findAllByText, queryByTestId } = render(FeatureScroll, {
+      props: { title: TITLE, items: codeItems }
+    })
+
+    const copies = await findAllByRole(
+      'button',
+      { name: 'Copy the deploy.sh sample' },
+      { timeout: 5000 }
+    )
+    expect(copies.length).toBeGreaterThanOrEqual(2)
+    expect((await findAllByText('main.tf', {}, { timeout: 5000 })).length).toBeGreaterThanOrEqual(1)
+    expect(queryByTestId('content-illustration')).toBeNull()
+  })
+
+  it('draws an item action secondary unless it sets its kind, and carries its target', () => {
+    const { getAllByRole } = band({
+      items: [
+        items[0],
+        {
+          ...items[1],
+          action: {
+            label: 'Terraform registry',
+            href: 'https://registry.terraform.io/',
+            kind: 'outlined',
+            target: '_blank'
+          }
+        }
+      ]
+    })
+
+    expect(getAllByRole('link', { name: 'List docs' })[0]).toHaveAttribute('data-kind', 'secondary')
+    const external = getAllByRole('link', { name: 'Terraform registry' })[0]
+    expect(external).toHaveAttribute('data-kind', 'outlined')
+    expect(external).toHaveAttribute('target', '_blank')
+  })
+
+  it('has no a11y violations with code samples', async () => {
+    const { container, findAllByRole } = render(Code)
+
+    await findAllByRole('button', { name: /Copy/ }, { timeout: 5000 })
     await expectNoA11yViolations(container)
   })
 })

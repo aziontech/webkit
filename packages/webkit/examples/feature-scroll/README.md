@@ -1,10 +1,10 @@
 # FeatureScroll
 
-A list of features with the media that shows each one. The band pins under the site header while the page scrolls; as the reader scrolls, the open feature moves on and the media beside it changes to match. The media is a live console scene (an item `scene` naming a `ProductWidget`) or an `Illustration`.
+A list of features with the media that shows each one. The band pins under the site header while the page scrolls; as the reader scrolls, the open feature moves on and the media beside it changes to match. The media is a live console scene (an item `scene` naming a `ProductWidget`), a one-file code sample (an item `code`) or an `Illustration`.
 
-It is the sibling of `StickyScrollCode`: the same pinned band, with media in place of a code sample. Below `lg` it turns into a FeatureTiles grid: each feature becomes a tile, its media over the title and description.
+Below `lg` it turns into a FeatureTiles grid: each feature becomes a tile, its media over the title and description.
 
-The band is the `FeatureScroll` component from `@aziontech/webkit/feature-scroll`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `StickyStack`, `TextureMaterial`, `Button`, `CardGrid`, `MediaTile` and `Illustration`.
+The band is the `FeatureScroll` component from `@aziontech/webkit/feature-scroll`; it composes `SectionModule`, `SectionTitle`, `FrameBox`, `StickyStack`, `TextureMaterial`, `Button`, `CardGrid`, `MediaTile`, `CodeBlock` and `Illustration`.
 
 ## Examples
 
@@ -25,3 +25,11 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 Example:
 
 Site JSON: [`site-default.json`](./site-default.json)
+
+### Code
+
+From the Web Apps page: five capabilities, each pinning the one file you would write for it (`code`: `fileName`, `code`, `language`, `fileIcon`, `copyAriaLabel`), with a docs button under the open step; an action's `kind` and `target` are optional.
+
+Example: [`site-code.vue`](./site-code.vue)
+
+Site JSON: [`site-code.json`](./site-code.json)

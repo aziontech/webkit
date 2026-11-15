@@ -1,5 +1,5 @@
 <script setup>
-  import StickyScrollCode from '@aziontech/webkit/sticky-scroll-code'
+  import FeatureScroll from '@aziontech/webkit/feature-scroll'
 
   const items = [
     {
@@ -92,7 +92,7 @@
 </script>
 
 <template>
-  <StickyScrollCode
+  <FeatureScroll
     anchor="ship-it"
     eyebrow="Ship It"
     title="Everything You Need to Build and Deploy"
