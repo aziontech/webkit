@@ -7,7 +7,7 @@
   {
     "name": "console-layout-root",
     "path": "src/components/layout/console-layout/console-layout.vue",
-    "limit": "67.7 KB",
+    "limit": "72.8 KB",
     "entryOnly": true
   },
   {
@@ -93,12 +93,12 @@
   {
     "name": "table-root",
     "path": "src/components/data/table/table.vue",
-    "limit": "55.9 KB"
+    "limit": "56.35 KB"
   },
   {
     "name": "property-filter",
     "path": "src/components/data/property-filter/property-filter.vue",
-    "limit": "31.5 KB"
+    "limit": "31.95 KB"
   },
   {
     "name": "collection-preferences",
@@ -822,7 +822,7 @@
   {
     "name": "chart",
     "path": "src/components/chart/chart/index.ts",
-    "limit": "22.45 KB"
+    "limit": "23.75 KB"
   },
   {
     "name": "chart-root",
@@ -963,7 +963,7 @@
   {
     "name": "timestamp",
     "path": "src/components/content/timestamp/timestamp.vue",
-    "limit": "17.5 KB"
+    "limit": "18.6 KB"
   },
   {
     "name": "error-boundary",
@@ -1053,7 +1053,7 @@
   {
     "name": "tree",
     "path": "src/components/data/tree/tree.vue",
-    "limit": "7.3 KB"
+    "limit": "7.75 KB"
   },
   {
     "name": "file-dropzone",
@@ -1205,7 +1205,7 @@
   {
     "name": "multi-select",
     "path": "src/components/inputs/multi-select/index.ts",
-    "limit": "23.55 KB"
+    "limit": "29.35 KB"
   },
   {
     "name": "code-block",
@@ -1749,7 +1749,7 @@
   {
     "name": "table-live-button",
     "path": "src/components/data/table/table-live-button/table-live-button.vue",
-    "limit": "3.6 KB"
+    "limit": "3.75 KB"
   },
   {
     "name": "pagination",
@@ -1844,12 +1844,12 @@
   {
     "name": "toast",
     "path": "src/components/feedback/toast/index.ts",
-    "limit": "9.95 KB"
+    "limit": "10.35 KB"
   },
   {
     "name": "toast-root",
     "path": "src/components/feedback/toast/toaster.vue",
-    "limit": "9.6 KB"
+    "limit": "10.05 KB"
   },
   {
     "name": "toast-item",
@@ -1974,17 +1974,17 @@
   {
     "name": "textarea",
     "path": "src/components/inputs/textarea/textarea.vue",
-    "limit": "1.85 KB"
+    "limit": "2 KB"
   },
   {
     "name": "context-menu",
     "path": "src/components/navigation/context-menu/index.ts",
-    "limit": "9.3 KB"
+    "limit": "10.3 KB"
   },
   {
     "name": "context-menu-root",
     "path": "src/components/navigation/context-menu/context-menu.vue",
-    "limit": "6.1 KB"
+    "limit": "6.8 KB"
   },
   {
     "name": "context-menu-trigger",
@@ -1994,12 +1994,12 @@
   {
     "name": "dropdown-menu",
     "path": "src/components/navigation/dropdown-menu/index.ts",
-    "limit": "10.15 KB"
+    "limit": "11.15 KB"
   },
   {
     "name": "dropdown-menu-root",
     "path": "src/components/navigation/dropdown-menu/dropdown-menu.vue",
-    "limit": "6.25 KB"
+    "limit": "6.55 KB"
   },
   {
     "name": "dropdown-menu-trigger",
@@ -2014,7 +2014,7 @@
   {
     "name": "dropdown-menu-option",
     "path": "src/components/navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue",
-    "limit": "1.65 KB"
+    "limit": "2 KB"
   },
   {
     "name": "dropdown-menu-sub",
@@ -2034,17 +2034,17 @@
   {
     "name": "multi-select-root",
     "path": "src/components/inputs/multi-select/multi-select.vue",
-    "limit": "2.05 KB"
+    "limit": "3.3 KB"
   },
   {
     "name": "multi-select-trigger",
     "path": "src/components/inputs/multi-select/multi-select-trigger/multi-select-trigger.vue",
-    "limit": "1.8 KB"
+    "limit": "9.65 KB"
   },
   {
     "name": "multi-select-content",
     "path": "src/components/inputs/multi-select/multi-select-content/multi-select-content.vue",
-    "limit": "18.65 KB"
+    "limit": "20.45 KB"
   },
   {
     "name": "multi-select-group",
@@ -2054,7 +2054,7 @@
   {
     "name": "multi-select-option",
     "path": "src/components/inputs/multi-select/multi-select-option/multi-select-option.vue",
-    "limit": "3.1 KB"
+    "limit": "3.3 KB"
   },
   {
     "name": "select-root",
@@ -2104,7 +2104,7 @@
   {
     "name": "console-layout",
     "path": "src/components/layout/console-layout/index.ts",
-    "limit": "71.8 KB"
+    "limit": "74.1 KB"
   },
   {
     "name": "use-console-layout",
@@ -2154,12 +2154,12 @@
   {
     "name": "sidebar",
     "path": "src/components/layout/sidebar/index.ts",
-    "limit": "26.2 KB"
+    "limit": "26.6 KB"
   },
   {
     "name": "sidebar-root",
     "path": "src/components/layout/sidebar/sidebar.vue",
-    "limit": "24.1 KB"
+    "limit": "24.35 KB"
   },
   {
     "name": "sidebar-group",
