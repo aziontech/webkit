@@ -24,7 +24,7 @@
     },
     {
       "name": "MediaMobileCentered",
-      "summary": "The `media` band with `mobile-centered` on `Hero.Title`: beside the media from `md` up the copy keeps its start alignment, and below `md`, where the media stacks under it, the copy centers above it. Open the story on its own to see it at phone width.",
+      "summary": "The `media` band with `mobile-align=\"center\"` on `Hero.Title`: beside the media from `md` up the copy keeps its start alignment, and below `md`, where the media stacks under it, the copy centers above it. Open the story on its own to see it at phone width.",
       "file": "media-mobile-centered.vue"
     },
     {

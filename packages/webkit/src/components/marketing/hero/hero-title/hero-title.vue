@@ -14,6 +14,9 @@
   /** Headline scale. */
   export type HeroTitleSize = 'medium' | 'large'
 
+  /** Where the copy block aligns. */
+  export type HeroTitleAlign = 'start' | 'center'
+
   /** Width the copy block is capped at. */
   export type HeroTitleWidth = 'lg' | 'xl' | '2xl' | '3xl' | '4xl'
 
@@ -21,17 +24,17 @@
     /** Headline of the page, rendered as the page's `h1`. */
     title: string
     /** Opening phrase of the headline, painted in the brand accent; reads as one sentence with `title`. */
-    highlight?: string
+    titleHighlight?: string
     /** Supporting sentence under the headline; overridden by the default slot. */
     description?: string
     /** Short uppercase overline rendered above the headline. */
     eyebrow?: string
     /** Mark set before the eyebrow label; empty renders the label alone. */
     eyebrowPrefix?: HeroTitleEyebrowPrefix
-    /** Center the whole block — copy, headline and actions — instead of aligning it to the start. */
-    centered?: boolean
-    /** Center the whole block below the medium breakpoint only, where a band with media stacks the copy above it. */
-    mobileCentered?: boolean
+    /** Where the whole block — copy, headline and actions — aligns, at every width. */
+    align?: HeroTitleAlign
+    /** Where the whole block aligns below the medium breakpoint only, where a band with media stacks the copy above it; unset, it follows align. */
+    mobileAlign?: HeroTitleAlign
     /** Headline scale; medium steps one rung below large. */
     size?: HeroTitleSize
     /** Width the copy block — headline, paragraph and actions — is capped at. */
@@ -41,12 +44,12 @@
   }
 
   withDefaults(defineProps<Props>(), {
-    highlight: '',
+    titleHighlight: '',
     description: '',
     eyebrow: '',
     eyebrowPrefix: '',
-    centered: false,
-    mobileCentered: false,
+    align: 'start',
+    mobileAlign: undefined,
     size: 'medium',
     maxWidth: '4xl',
     sticky: false
@@ -70,11 +73,11 @@
   <header
     v-bind="$attrs"
     :data-testid="testId"
-    :data-centered="centered || null"
-    :data-mobile-centered="mobileCentered || null"
+    :data-align="align"
+    :data-mobile-align="mobileAlign"
     :data-width="maxWidth"
     :data-sticky="sticky || null"
-    class="group flex w-full max-w-(--container-4xl) flex-col items-start gap-(--spacing-md) data-[width=lg]:max-w-(--container-lg) data-[width=xl]:max-w-(--container-xl) data-[width=2xl]:max-w-(--container-2xl) data-[width=3xl]:max-w-(--container-3xl) lg:data-[sticky]:sticky lg:data-[sticky]:self-start lg:data-[sticky]:top-[calc(var(--banner-offset,0rem)+var(--spacing-xl))] data-[centered]:mx-auto data-[centered]:items-center data-[centered]:text-center max-md:data-[mobile-centered]:mx-auto max-md:data-[mobile-centered]:items-center max-md:data-[mobile-centered]:text-center"
+    class="group flex w-full max-w-(--container-4xl) flex-col items-start gap-(--spacing-md) data-[width=lg]:max-w-(--container-lg) data-[width=xl]:max-w-(--container-xl) data-[width=2xl]:max-w-(--container-2xl) data-[width=3xl]:max-w-(--container-3xl) lg:data-[sticky]:sticky lg:data-[sticky]:self-start lg:data-[sticky]:top-[calc(var(--banner-offset,0rem)+var(--spacing-xl))] data-[align=center]:mx-auto data-[align=center]:items-center data-[align=center]:text-center max-md:data-[mobile-align=center]:mx-auto max-md:data-[mobile-align=center]:items-center max-md:data-[mobile-align=center]:text-center max-md:data-[mobile-align=start]:mx-0 max-md:data-[mobile-align=start]:items-start max-md:data-[mobile-align=start]:text-start"
   >
     <Overline
       v-if="eyebrow"
@@ -88,9 +91,9 @@
       class="m-0 text-balance text-(--text-default) data-[size=large]:text-heading-2xl data-[size=medium]:text-heading-xl"
     >
       <span
-        v-if="highlight"
+        v-if="titleHighlight"
         class="text-(--text-primary) [text-shadow:0_0_2rem_color-mix(in_srgb,var(--primary)_30%,transparent)]"
-        >{{ highlight }}</span
+        >{{ titleHighlight }}</span
       >
       {{ title }}
     </h1>
@@ -105,7 +108,7 @@
       class="@container mt-(--spacing-xs) w-full"
     >
       <div
-        class="flex flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full @2xs:flex-row @2xs:flex-wrap @2xs:items-center @2xs:group-data-[centered]:justify-center max-md:@2xs:group-data-[mobile-centered]:justify-center @2xs:[&>*]:w-auto"
+        class="flex flex-col items-stretch gap-(--spacing-sm) [&>*]:w-full @2xs:flex-row @2xs:flex-wrap @2xs:items-center @2xs:group-data-[align=center]:justify-center max-md:@2xs:group-data-[mobile-align=center]:justify-center max-md:@2xs:group-data-[mobile-align=start]:justify-start @2xs:[&>*]:w-auto"
       >
         <slot name="actions" />
       </div>

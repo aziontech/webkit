@@ -14,7 +14,7 @@
   <div
     class="flex h-[28rem] w-full max-w-(--container-xs) flex-col rounded-(--shape-card) border border-(--border-default)"
   >
-    <Conversation alignment="start">
+    <Conversation layout="start">
       <ChatMessageRoot
         from="user"
         timestamp="10:41"

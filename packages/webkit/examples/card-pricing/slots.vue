@@ -7,7 +7,7 @@
   <CardPricing
     title="Pro"
     pricing-details="Billed annually or $25/mo billed monthly."
-    slot-position="middle"
+    actions-position="middle"
     kind="contained"
     show-tag
     tag-label="Popular"

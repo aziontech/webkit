@@ -10,7 +10,7 @@
       { key: 'team', label: 'Team and location', grow: 2 },
       { key: 'type', label: 'Work type', align: 'end' }
     ]"
-    :rows="[
+    :data="[
       {
         href: '/careers/senior-platform-engineer',
         values: {

@@ -42,7 +42,7 @@
   /** One article or resource, rendered as a linked row. */
   export type ArticleIndexItem = {
     /** Stable identity of the entry within the list. */
-    key: string
+    id: string
     /** Destination of the entry. */
     href: string
     /** URL of the cover drawn at the start of the row. */
@@ -63,22 +63,14 @@
     categories?: string[]
     /** The values the entry carries per facet key, matched by the facet dropdowns. */
     facets?: Record<string, string[]>
-    /** Opens the destination in a new tab. */
-    external?: boolean
-  }
-
-  /** The search field. */
-  export type ArticleIndexSearch = {
-    /** Placeholder of the field. */
-    placeholder: string
-    /** Accessible name of the field. */
-    label: string
+    /** Where the destination opens; `_blank` opens it in a new tab. */
+    target?: '_blank' | '_self'
   }
 
   /** One facet, rendered as a searchable dropdown. */
   export type ArticleIndexFacet = {
-    /** Key matched against each entry's facets. */
-    key: string
+    /** Identity of the facet, matched against the keys of each entry's facets. */
+    id: string
     /** Accessible name of the dropdown. */
     label: string
     /** The first option, selected on load, which keeps every entry. */
@@ -87,18 +79,8 @@
     options: string[]
   }
 
-  /** The state rendered when nothing matches. */
-  export type ArticleIndexEmpty = {
-    /** Headline of the empty state. */
-    title: string
-    /** Sentence under the headline. */
-    description?: string
-    /** Label of the button that clears every filter. */
-    action?: string
-  }
-
-  /** Row layout: byline pins the writers to the foot of the copy, centered centres the copy. */
-  export type ArticleIndexRowKind = 'byline' | 'centered'
+  /** Row layout: byline pins the writers to the foot of the copy, center centres the copy. */
+  export type ArticleIndexRowKind = 'byline' | 'center'
 
   interface Props {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
@@ -107,17 +89,19 @@
     title?: string
     /** Filter bar: `category-search` draws the category picker and the search field, `facets` draws one dropdown per facet. */
     filters?: ArticleIndexFilters
-    /** The entries, in order; each is `{ key, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, facets?, external? }`. */
+    /** The entries, in order; each is `{ id, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, facets?, target? }`. */
     items?: ArticleIndexItem[]
     /** Segments of the category picker after the show-all segment (`category-search`); the picker is omitted when empty. */
     categories?: string[]
     /** Label of the first category segment, which shows every category (`category-search`). */
     allLabel?: string
     /** Accessible name of the category picker (`category-search`). */
-    categoryLabel?: string
-    /** The search field's `placeholder` and accessible `label` (`category-search`); the field is omitted when absent. */
-    search?: ArticleIndexSearch
-    /** The facet dropdowns, in order (`facets`); each is `{ key, label, allLabel, options }`. */
+    categoryAriaLabel?: string
+    /** Placeholder of the search field (`category-search`); the field is omitted when this and `searchAriaLabel` are both empty. */
+    searchPlaceholder?: string
+    /** Accessible name of the search field (`category-search`). */
+    searchAriaLabel?: string
+    /** The facet dropdowns, in order (`facets`); each is `{ id, label, allLabel, options }`. */
     facets?: ArticleIndexFacet[]
     /** Read cue revealed at the end of a row under hover or focus. */
     rowLabel?: string
@@ -127,9 +111,13 @@
     pageSize?: number
     /** Leading entries left out until a filter applies, because a band above already shows them. */
     leading?: number
-    /** Copy of the state when nothing matches: `{ title, description?, action? }`; `action` labels a button that clears every filter. */
-    empty?: ArticleIndexEmpty
-    /** Row layout: `byline` pins the writers to the foot of the copy, `centered` centres the copy; unset, `byline` for `category-search` and `centered` for `facets`. */
+    /** Headline of the state when nothing matches; the state renders only with it. */
+    emptyTitle?: string
+    /** Sentence under the empty-state headline. */
+    emptyDescription?: string
+    /** Label of the empty-state button that clears every filter; no button renders without it. */
+    emptyActionLabel?: string
+    /** Row layout: `byline` pins the writers to the foot of the copy, `center` centres the copy; unset, `byline` for `category-search` and `center` for `facets`. */
     rowKind?: ArticleIndexRowKind
     /** Name of a URL query parameter that preselects a category on load and scrolls the band into view (`category-search`); off when empty. */
     categoryParam?: string
@@ -144,14 +132,17 @@
     items: () => [],
     categories: () => [],
     allLabel: '',
-    categoryLabel: '',
-    search: undefined,
+    categoryAriaLabel: '',
+    searchPlaceholder: '',
+    searchAriaLabel: '',
     facets: () => [],
     rowLabel: '',
     moreLabel: '',
     pageSize: 12,
     leading: 0,
-    empty: undefined,
+    emptyTitle: '',
+    emptyDescription: '',
+    emptyActionLabel: '',
     rowKind: undefined,
     categoryParam: '',
     ariaLabel: ''
@@ -182,12 +173,14 @@
   const faceted = computed(() => props.filters === 'facets')
 
   const layout = computed<ArticleIndexRowKind>(
-    () => props.rowKind ?? (faceted.value ? 'centered' : 'byline')
+    () => props.rowKind ?? (faceted.value ? 'center' : 'byline')
   )
 
   const showCategories = computed(() => !faceted.value && props.categories.length > 0)
 
-  const showSearch = computed(() => !faceted.value && Boolean(props.search))
+  const showSearch = computed(
+    () => !faceted.value && Boolean(props.searchPlaceholder || props.searchAriaLabel)
+  )
 
   const showFacets = computed(() => faceted.value && props.facets.length > 0)
 
@@ -196,7 +189,7 @@
     ...props.categories.map((label) => ({ label, value: label }))
   ])
 
-  const valueOf = (facet: ArticleIndexFacet): string => selection.value[facet.key] ?? facet.allLabel
+  const valueOf = (facet: ArticleIndexFacet): string => selection.value[facet.id] ?? facet.allLabel
 
   const filtering = computed(() =>
     faceted.value
@@ -208,7 +201,7 @@
     if (faceted.value) {
       return props.facets.every((facet) => {
         const value = valueOf(facet)
-        return value === facet.allLabel || (item.facets?.[facet.key] ?? []).includes(value)
+        return value === facet.allLabel || (item.facets?.[facet.id] ?? []).includes(value)
       })
     }
     const term = query.value.trim().toLowerCase()
@@ -255,14 +248,14 @@
   const searchable = (facet: ArticleIndexFacet): boolean => facet.options.length > SEARCH_THRESHOLD
 
   const optionsOf = (facet: ArticleIndexFacet): string[] => {
-    const term = (optionQuery.value[facet.key] ?? '').trim().toLowerCase()
+    const term = (optionQuery.value[facet.id] ?? '').trim().toLowerCase()
     return facet.options.filter((option) => option.toLowerCase().includes(term))
   }
 
   const select = (facet: ArticleIndexFacet, value: unknown): void => {
     selection.value = {
       ...selection.value,
-      [facet.key]: typeof value === 'string' ? value : facet.allLabel
+      [facet.id]: typeof value === 'string' ? value : facet.allLabel
     }
   }
 
@@ -313,22 +306,22 @@
             <ToggleGroup
               v-model="category"
               :options="options"
-              :aria-label="categoryLabel || undefined"
+              :aria-label="categoryAriaLabel || undefined"
               size="medium"
               class="w-max max-w-none"
             />
           </div>
 
           <div
-            v-if="showSearch && search"
+            v-if="showSearch"
             class="w-full shrink-0 lg:w-(--container-3xs)"
           >
             <Input
               v-model="query"
               size="medium"
               type="text"
-              :placeholder="search.placeholder"
-              :aria-label="search.label"
+              :placeholder="searchPlaceholder || undefined"
+              :aria-label="searchAriaLabel || undefined"
             >
               <template #prefix>
                 <i class="ai ai-search text-(--text-muted)" />
@@ -342,12 +335,12 @@
           >
             <Select
               v-for="facet in facets"
-              :key="facet.key"
+              :key="facet.id"
               :model-value="valueOf(facet)"
               size="medium"
               class="w-full sm:w-56"
               @update:model-value="select(facet, $event)"
-              @update:open="resetOptionQuery(facet.key)"
+              @update:open="resetOptionQuery(facet.id)"
             >
               <SelectTrigger :aria-label="facet.label" />
               <SelectContent>
@@ -356,13 +349,13 @@
                   #search
                 >
                   <Input
-                    :model-value="optionQuery[facet.key] ?? ''"
+                    :model-value="optionQuery[facet.id] ?? ''"
                     size="small"
                     :placeholder="t('articleIndex.search')"
                     :aria-label="
                       t('articleIndex.searchFacet', { facet: facet.label.toLowerCase() })
                     "
-                    @update:model-value="setOptionQuery(facet.key, $event)"
+                    @update:model-value="setOptionQuery(facet.id, $event)"
                   >
                     <template #prefix>
                       <i
@@ -410,7 +403,7 @@
           >
             <li
               v-for="(item, index) in visible"
-              :key="item.key"
+              :key="item.id"
             >
               <div
                 v-if="index > 0"
@@ -440,20 +433,20 @@
                 </div>
                 <div class="flex min-w-0 gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-lg)">
                   <div
-                    class="flex min-w-0 flex-1 flex-col justify-between gap-(--spacing-sm) group-data-[kind=centered]/rows:justify-center"
+                    class="flex min-w-0 flex-1 flex-col justify-between gap-(--spacing-sm) group-data-[kind=center]/rows:justify-center"
                   >
                     <div class="flex flex-col gap-(--spacing-sm)">
                       <span class="text-overline-sm text-(--text-muted)">{{ item.meta }}</span>
                       <h3 class="m-0">
                         <a
                           :href="item.href"
-                          :target="item.external ? '_blank' : undefined"
-                          :rel="item.external ? 'noopener' : undefined"
+                          :target="item.target"
+                          :rel="item.target === '_blank' ? 'noopener' : undefined"
                           class="text-pretty text-heading-sm text-(--text-default) no-underline after:absolute after:inset-0 after:content-[''] focus-visible:outline-none focus-visible:after:ring-2 focus-visible:after:ring-inset focus-visible:after:ring-(--ring-color)"
                         >
                           {{ item.title }}
                           <span
-                            v-if="item.external"
+                            v-if="item.target === '_blank'"
                             class="sr-only"
                             >{{ t('articleIndex.newTab') }}</span
                           >
@@ -520,24 +513,24 @@
       </template>
 
       <FrameBox
-        v-else-if="empty"
+        v-else-if="emptyTitle"
         key="empty"
         flush
         borders="y"
         marks="bottom"
       >
         <EmptyState
-          :title="empty.title"
-          :description="empty.description"
+          :title="emptyTitle"
+          :description="emptyDescription"
           icon="ai ai-search"
           class="p-(--spacing-2xl)"
         >
           <template
-            v-if="empty.action"
+            v-if="emptyActionLabel"
             #actions
           >
             <Button
-              :label="empty.action"
+              :label="emptyActionLabel"
               kind="secondary"
               size="large"
               @click="clearFilters"

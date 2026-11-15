@@ -2,7 +2,7 @@
   "_id": "hero-form",
   "props": {
     "eyebrow": "Under Cyberattack?",
-    "highlight": "",
+    "titleHighlight": "",
     "title": "Mitigating Cyberattacks",
     "description": "Our digital security team is available to provide immediate assistance.",
     "items": [

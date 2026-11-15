@@ -44,7 +44,7 @@
 
   const emit = defineEmits<{
     /** The open claim changed; the index now open. */
-    'index-change': [index: number]
+    'active-index-change': [index: number]
   }>()
 
   defineSlots<{
@@ -125,7 +125,7 @@
     sliceProgress.value = Math.min(1, Math.max(0, raw - next))
     if (next === activeIndex.value) return
     activeIndex.value = next
-    emit('index-change', next)
+    emit('active-index-change', next)
   }
 
   function schedule(): void {
@@ -184,11 +184,11 @@
             v-for="(item, index) in items"
             :key="`${item.title}-${index}`"
             :data-active="isActive(index) || null"
-            :data-complete="index < activeIndex || null"
+            :data-completed="index < activeIndex || null"
             class="group relative border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) last:border-b-0 lg:flex lg:grow-0 lg:flex-col lg:justify-start lg:transition-[flex-grow] lg:duration-moderate-01 lg:ease-productive-entrance lg:data-[active]:min-h-(--sticky-stack-open) lg:data-[active]:grow lg:data-[active]:pt-(--spacing-xl) motion-reduce:transition-none"
           >
             <h3
-              class="m-0 text-heading-md text-(--text-muted) transition-[color,opacity] duration-moderate-01 ease-out group-data-[active]:text-(--text-default) group-data-[complete]:opacity-55 motion-reduce:transition-none"
+              class="m-0 text-heading-md text-(--text-muted) transition-[color,opacity] duration-moderate-01 ease-out group-data-[active]:text-(--text-default) group-data-[completed]:opacity-55 motion-reduce:transition-none"
             >
               <button
                 type="button"

@@ -70,7 +70,7 @@ function activeTitle(container: HTMLElement): string {
 
 function completedTitles(container: HTMLElement): string[] {
   return rowsOf(container)
-    .filter((row) => row.getAttribute('data-complete') !== null)
+    .filter((row) => row.getAttribute('data-completed') !== null)
     .map((row) => row.querySelector('button')?.textContent?.trim() ?? '')
 }
 
@@ -208,7 +208,7 @@ describe('StickyStack', () => {
       expect(activeTitle(container)).toBe(ITEMS[2].title)
       expect(completedTitles(container)).toEqual([ITEMS[0].title, ITEMS[1].title])
 
-      expect(emitted('index-change')).toEqual([[1], [2]])
+      expect(emitted('active-index-change')).toEqual([[1], [2]])
     } finally {
       release()
     }
@@ -223,7 +223,7 @@ describe('StickyStack', () => {
       await scrollTo(slice() * 1.4)
       await scrollTo(slice() * 1.8)
 
-      expect(emitted('index-change')).toEqual([[1]])
+      expect(emitted('active-index-change')).toEqual([[1]])
     } finally {
       release()
     }

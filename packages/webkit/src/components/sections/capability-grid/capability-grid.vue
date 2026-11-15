@@ -63,7 +63,7 @@
     secondaryAction?: CapabilityGridAction
     /** In-page id set on the band so a hash link can target it. */
     anchor?: string
-    /** Layout of the section title: `centered` stacks and centers it, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns. */
+    /** Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. */
     titleKind?: SectionTitleKind
   }
 
@@ -76,7 +76,7 @@
     primaryAction: undefined,
     secondaryAction: undefined,
     anchor: '',
-    titleKind: 'centered'
+    titleKind: 'center'
   })
 
   const attrs = useAttrs()

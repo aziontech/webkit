@@ -1,11 +1,11 @@
 <script setup>
-  import SectionContainer from '@aziontech/webkit/section-container'
-  import SectionGap from '@aziontech/webkit/section-gap'
-  import NetworkSection from '@aziontech/webkit/network-section'
   import dafitiExtendedMono from '@aziontech/webkit/assets/dafiti-extended-mono.svg'
   import fourbankExtendedReversed from '@aziontech/webkit/assets/fourbank-extended-reversed.svg'
   import madeiramadeiraExtendedReversed from '@aziontech/webkit/assets/madeiramadeira-extended-reversed.svg'
   import rennerExtendedColor from '@aziontech/webkit/assets/renner-extended-color.svg'
+  import NetworkSection from '@aziontech/webkit/network-section'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
 
   const claims = [
     '100+ data centers',
@@ -54,7 +54,7 @@
       kind="outcomes"
       eyebrow="Region: Earth."
       title="One distributed infrastructure without the complexity of managing, securing and scaling it"
-      lead="Built around your users. Distributed around your data."
+      claims-eyebrow="Built around your users. Distributed around your data."
       :claims="claims"
       :outcomes="outcomes"
     />

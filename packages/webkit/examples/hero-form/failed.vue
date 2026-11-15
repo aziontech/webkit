@@ -147,7 +147,7 @@
 <template>
   <HeroForm
     eyebrow="Sales"
-    highlight=""
+    title-highlight=""
     title="Talk to our sales team"
     description="Get a custom demo, plan your migration, and explore plans and pricing built for your company."
     :items="items"
@@ -157,7 +157,7 @@
     :messages="messages"
     ticker-label="Trusted by teams running critical workloads"
     :ticker-marks="tickerMarks"
-    :error="true"
+    :failed="true"
     @submit="onSubmit"
   />
 </template>

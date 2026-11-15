@@ -316,7 +316,8 @@ describe('HeroForm', () => {
   })
 
   it('shows the error message under the form on error', () => {
-    const { getByRole } = band({ error: true })
+    const { getByRole, getByTestId } = band({ failed: true })
+    expect(getByTestId(TESTID)).toHaveAttribute('data-failed', 'true')
 
     expect(getByRole('alert').textContent).toContain(messages.error)
     expect(getByRole('button', { name: SUBMIT })).toBeInTheDocument()
@@ -348,7 +349,7 @@ describe('HeroForm', () => {
     await expectNoA11yViolations(submitted.container)
     submitted.unmount()
 
-    const failed = band({ error: true })
+    const failed = band({ failed: true })
     await expectNoA11yViolations(failed.container)
   })
 })

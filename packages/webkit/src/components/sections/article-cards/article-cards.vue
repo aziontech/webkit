@@ -15,7 +15,7 @@
   })
 
   /** Placement of the band heading. */
-  export type ArticleCardsKind = 'left' | 'centered'
+  export type ArticleCardsKind = 'start' | 'center'
 
   /** The client mark drawn in the media cell of a card that has no cover. */
   export type ArticleCardsMark = {
@@ -28,7 +28,7 @@
   /** One linked article card. */
   export type ArticleCardsItem = {
     /** Stable identity of the card within the band. */
-    key: string
+    id: string
     /** Destination the card links to. */
     href: string
     /** Headline of the article. */
@@ -41,12 +41,12 @@
     image?: string
     /** Client mark drawn in the media cell when there is no cover. */
     mark?: ArticleCardsMark
-    /** Opens the destination in a new tab. */
-    external?: boolean
+    /** Where the destination opens; `_blank` opens it in a new tab. */
+    target?: '_blank' | '_self'
   }
 
   interface Props {
-    /** Placement of the heading: `left` sets it at the start, `centered` centres it over the cards. */
+    /** Placement of the heading: `start` sets it at the start, `center` centres it over the cards. */
     kind?: ArticleCardsKind
     /** Id set on the band so an in-page hash link can target it. */
     anchor?: string
@@ -54,14 +54,14 @@
     eyebrow?: string
     /** Headline of the band; the band renders no header when empty. */
     title?: string
-    /** The cards, in order; each is `{ key, href, title, description, meta, image?, mark?, external? }`; an `external` card opens in a new tab. */
+    /** The cards, in order; each is `{ id, href, title, description, meta, image?, mark?, target? }`; a card whose `target` is `_blank` opens in a new tab. */
     items?: ArticleCardsItem[]
     /** Accessible name of the card grid. */
     ariaLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    kind: 'left',
+    kind: 'start',
     anchor: '',
     eyebrow: '',
     title: '',
@@ -120,14 +120,14 @@
         >
           <CardGridCell
             v-for="item in items"
-            :key="item.key"
+            :key="item.id"
             kind="canvas"
             :padded="false"
           >
             <a
               :href="item.href"
-              :target="item.external ? '_blank' : undefined"
-              :rel="item.external ? 'noopener' : undefined"
+              :target="item.target"
+              :rel="item.target === '_blank' ? 'noopener' : undefined"
               class="group/post flex h-full flex-col transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
             >
               <span
@@ -153,7 +153,7 @@
                 <h3 class="m-0 text-balance text-heading-sm text-(--text-default)">
                   {{ item.title }}
                   <span
-                    v-if="item.external"
+                    v-if="item.target === '_blank'"
                     class="sr-only"
                     >{{ t('articleCards.newTab') }}</span
                   >

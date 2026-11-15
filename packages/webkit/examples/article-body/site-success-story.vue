@@ -22,7 +22,7 @@
     },
     {
       label: 'Magalu Ensures High Availability at Scale with Azion',
-      current: true
+      active: true
     }
   ]
 

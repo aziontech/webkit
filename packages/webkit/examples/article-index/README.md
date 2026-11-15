@@ -19,9 +19,9 @@ Example: [`site-all-articles.vue`](./site-all-articles.vue)
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `anchor` is the band id for in-page links.
-- `items[]` are the articles, newest first. Each is a `key`, an `href`, an `image`, a `meta` overline, a `title`, a `description`, its `authors` (each a `name`), a `byline`, and the `categories` it is filed under.
-- `categories` are the segments of the category picker, `allLabel` the segment that shows every category, and `categoryLabel` its accessible name.
-- `search` sets the field's `placeholder` and `label`.
+- `items[]` are the articles, newest first. Each is an `id`, an `href`, an `image`, a `meta` overline, a `title`, a `description`, its `authors` (each a `name`), a `byline`, and the `categories` it is filed under.
+- `categories` are the segments of the category picker, `allLabel` the segment that shows every category, and `categoryAriaLabel` its accessible name.
+- `searchPlaceholder` and `searchAriaLabel` set the field's placeholder and accessible name.
 - `rowLabel` is the cue revealed on a row under hover or focus, and `moreLabel` the button into the next page.
 - `ariaLabel` names the list for assistive tech.
 
@@ -41,8 +41,8 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 
 - `filters` is `facets`, for one dropdown per facet.
 - `anchor` is the band id for in-page links, and `title` the headline beside the filters.
-- `items[]` are the resources. Each is a `key`, an `href`, an `image`, a `meta` overline, a `title` and a `description`, with `facets` holding its value for each dropdown.
-- `facets[]` are the dropdowns, each a `key`, a `label`, an `allLabel` and its `options`.
+- `items[]` are the resources. Each is an `id`, an `href`, an `image`, a `meta` overline, a `title` and a `description`, with `facets` holding its value for each dropdown.
+- `facets[]` are the dropdowns, each an `id`, a `label`, an `allLabel` and its `options`.
 - `rowLabel` is the cue revealed on a row under hover or focus, and `moreLabel` the button into the next page.
 - `ariaLabel` names the list for assistive tech.
 

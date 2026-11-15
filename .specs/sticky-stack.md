@@ -3,8 +3,8 @@ name: sticky-stack
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 2f147d5fb14cd0b4c7ead5bce04d6d7865ae2c9897809f74df3001d6244caf8c
+spec_version: 4
+checksum: 62a458773ea144ad58e4a47b5f931d4d5d6fc47515b6b0a428b859b1ee1ea4b8
 created: 2026-09-25
 last_updated: 2026-11-15
 ---
@@ -108,7 +108,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 
 | Event | Payload | Notes |
 |---|---|---|
-| `index-change` | `number` | The open claim changed; the payload is the index now open. Fires on the scroll that moved it and on a reader selecting a claim. |
+| `active-index-change` | `number` | The open claim changed; the payload is the index now open. Fires on the scroll that moved it and on a reader selecting a claim. |
 
 ## Slots
 
@@ -122,7 +122,7 @@ A band that pins to the viewport and is read by scrolling through it: a stack of
 
 - Visual states: `default`, `hover`, `focus-visible` on each claim's title control
 - `data-active` marks the open claim; it holds the plain text tone and shows its description
-- `data-complete` marks every claim already read; they collapse to their title and rest at a muted tone, further dimmed so the read part of the run is legible at a glance, stacked above the open one
+- `data-completed` marks every claim already read; they collapse to their title and rest at a muted tone, further dimmed so the read part of the run is legible at a glance, stacked above the open one
 - `data-size` carries the size token, which is what sets the open claim's height and so the stack's height
 - `data-progress` is present on the root while `showProgress` is on
 - The media frame shows exactly one medium: the outgoing one leaves as the incoming one mounts

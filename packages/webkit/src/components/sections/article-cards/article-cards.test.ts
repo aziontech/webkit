@@ -10,7 +10,7 @@ const EYEBROW = 'Success cases'
 
 const posts = [
   {
-    key: 'latency',
+    id: 'latency',
     href: '/blog/how-to-reduce-ai-agent-latency',
     title: 'How Do You Reduce AI Agent Latency?',
     description: 'Learn where latency builds up in AI agents.',
@@ -18,7 +18,7 @@ const posts = [
     image: '/media/blog/reduce-ai-agent-latency.png'
   },
   {
-    key: 'alternatives',
+    id: 'alternatives',
     href: '/blog/cloudflare-alternatives-and-competitors',
     title: 'Best Cloudflare Alternatives and Competitors',
     description: 'Compare six Cloudflare alternatives.',
@@ -29,7 +29,7 @@ const posts = [
 
 const stories = [
   {
-    key: 'netshoes',
+    id: 'netshoes',
     href: '/success-cases/netshoes',
     title: 'Netshoes Blocks 4M+ Threats',
     description: 'Netshoes strengthened its e-commerce security.',
@@ -37,7 +37,7 @@ const stories = [
     mark: { name: 'Netshoes', logo: '/logos/netshoes.svg' }
   },
   {
-    key: 'gpa',
+    id: 'gpa',
     href: '/success-cases/gpa',
     title: 'GPA solved a cyberattack',
     description: 'Grupo Pão de Açúcar solved a targeted DNS attack.',
@@ -68,7 +68,7 @@ describe('ArticleCards', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it.each(['left', 'centered'] as const)('mirrors kind=%s on data-kind', (kind) => {
+  it.each(['start', 'center'] as const)('mirrors kind=%s on data-kind', (kind) => {
     const { getByTestId } = band({ kind })
 
     expect(getByTestId(TESTID).getAttribute('data-kind')).toBe(kind)
@@ -77,7 +77,7 @@ describe('ArticleCards', () => {
   it('defaults to the left kind', () => {
     const { getByTestId } = band()
 
-    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe('left')
+    expect(getByTestId(TESTID).getAttribute('data-kind')).toBe('start')
   })
 
   it('names the section by its title and renders it as the h2', () => {
@@ -88,7 +88,7 @@ describe('ArticleCards', () => {
   })
 
   it('renders the eyebrow over the heading', () => {
-    const { getByText } = band({ kind: 'centered', eyebrow: EYEBROW })
+    const { getByText } = band({ kind: 'center', eyebrow: EYEBROW })
 
     expect(getByText(EYEBROW)).toBeInTheDocument()
   })
@@ -159,7 +159,7 @@ describe('ArticleCards', () => {
   })
 
   it('opens an external card in a new tab and says so in its name', () => {
-    const { getByRole } = band({ items: [{ ...posts[0], external: true }, posts[1]] })
+    const { getByRole } = band({ items: [{ ...posts[0], target: '_blank' }, posts[1]] })
 
     const external = getByRole('link', {
       name: /How Do You Reduce AI Agent Latency\? \(opens in a new tab\)/
@@ -179,7 +179,7 @@ describe('ArticleCards', () => {
   })
 
   it('has no a11y violations with the centered kind and client marks', async () => {
-    const { container } = band({ kind: 'centered', eyebrow: EYEBROW, items: stories })
+    const { container } = band({ kind: 'center', eyebrow: EYEBROW, items: stories })
 
     await expectNoA11yViolations(container)
   })

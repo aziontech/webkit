@@ -20,7 +20,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 
 - `eyebrow` is the overline above the headline.
 - `article` is the piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`.
-- `trail` is the breadcrumb, each a `label` and an `href`, the last entry marked `current`.
+- `trail` is the breadcrumb, each a `label` and an `href`, the last entry marked `active`.
 - `body` is the article as markdown: headings, `-` lists and paragraphs separated by blank lines. Its `##` and `###` headings feed the "On this page" outline.
 - `banner` is the image over the masthead.
 - `share` labels the share group: `title`, `copyLink`, `shareX` and `shareLinkedIn`. The X and LinkedIn links are built from `article.href`, which the copy-link button copies.

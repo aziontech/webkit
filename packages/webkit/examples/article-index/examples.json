@@ -14,7 +14,7 @@
     },
     {
       "name": "Empty",
-      "summary": "A list whose filters match nothing renders the `empty` state: a search icon, its title and description, and an action that clears the category and the search. Type in the search field to see it; the action brings the list back.",
+      "summary": "A list whose filters match nothing renders the empty state (`emptyTitle`): a search icon, its title and description, and an action that clears the category and the search. Type in the search field to see it; the action brings the list back.",
       "file": "empty.vue"
     }
   ],

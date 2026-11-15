@@ -9,9 +9,9 @@ const title = instance.getString('title')
 const showSubtitle = instance.getBoolean('showSubtitle')
 const description = showSubtitle ? instance.getString('description') : ''
 const kind = instance.getEnum('kind', {
-  horizontal: 'horizontal',
-  left: 'left',
-  centered: 'centered'
+  horizontal: 'split',
+  left: 'start',
+  centered: 'center'
 })
 const showOverline = instance.getBoolean('showOverline')
 const overline = instance.findInstance('Overline')
@@ -39,7 +39,7 @@ export default {
   eyebrow="${eyebrow}"`
       : ''
   }${
-    kind && kind !== 'centered'
+    kind && kind !== 'center'
       ? figma.code`
   kind="${kind}"`
       : ''

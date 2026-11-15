@@ -9,7 +9,7 @@
     },
     {
       "name": "States",
-      "summary": "The same band with `error` set, so the failure alert shows under the submit button, and a button that sets `submitted` to open the confirmation dialog with its way back to the open positions.",
+      "summary": "The same band with `failed` set, so the failure alert shows under the submit button, and a button that sets `submitted` to open the confirmation dialog with its way back to the open positions.",
       "file": "states.vue"
     }
   ],

@@ -21,7 +21,7 @@
     :trail="[
       { label: 'Success cases', href: '/success-cases' },
       { label: 'Retail', href: '/success-cases?industry=Retail' },
-      { label: 'Magalu Ensures High Availability at Scale with Azion', current: true }
+      { label: 'Magalu Ensures High Availability at Scale with Azion', active: true }
     ]"
     :share="{
       title: 'Share this article',

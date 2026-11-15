@@ -18,9 +18,9 @@
 
   /** Layout of the opening band. */
   export type HeroBandKind =
-    | 'centered'
+    | 'center'
     | 'title-band'
-    | 'centered-band'
+    | 'center-band'
     | 'compact-band'
     | 'pixel-floor'
     | 'copy-beside-art'
@@ -100,14 +100,14 @@
   }
 
   interface Props {
-    /** Layout of the band: `centered` fills a screen over a dot field, `title-band` is a padded band, `centered-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. */
+    /** Layout of the band: `center` fills a screen over a dot field, `title-band` is a padded band, `center-band` is a large site-wide band with the copy centered, `compact-band` is a short site-wide band with the copy at the start, `pixel-floor` sets the copy over an animated pixel floor, `copy-beside-art` sets an illustration or an image beside the copy, `copy-on-top-art` fills a screen with the copy centered over a scene in the `top` or `bottom` slot. */
     kind?: HeroBandKind
     /** Vertical rhythm of the band; `large` is the opening a product page leads with. */
     size?: HeroBandSize
     /** Short overline above the headline. */
     eyebrow?: string
     /** Opening words of the headline, painted in the brand accent; reads as one sentence with `title`. */
-    highlight?: string
+    titleHighlight?: string
     /** Page headline, rendered as the page `h1`; the band renders nothing when empty. */
     title?: string
     /** Sentence under the headline. */
@@ -134,7 +134,7 @@
     headerOffset?: string
     /** Length of the headline: `short` sets it on the site's narrow headline measure in the centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the sentence under it keeps the full column; `long` lets the headline take the whole column. */
     titleLength?: HeroBandTitleLength
-    /** Drops the dot texture of the `centered` layout. */
+    /** Drops the dot texture of the `center` layout. */
     plain?: boolean
     /** Columns of the topology the `copy-on-top-art` layout draws under the copy when neither scene slot is given, left to right; each is `{ nodes }`, the cards top to bottom, each `{ eyebrow, icon, title, label, severity, lit? }`. A card without `title` is skipped. */
     levels?: HeroBandLevel[]
@@ -146,7 +146,7 @@
     kind: 'title-band',
     size: 'medium',
     eyebrow: '',
-    highlight: '',
+    titleHighlight: '',
     title: '',
     description: '',
     primaryAction: undefined,
@@ -236,7 +236,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-hero-band'
   )
 
-  const BANDS: HeroBandKind[] = ['title-band', 'centered-band', 'compact-band']
+  const BANDS: HeroBandKind[] = ['title-band', 'center-band', 'compact-band']
 
   const isScreen = computed(() => !BANDS.includes(props.kind))
 
@@ -250,9 +250,9 @@
   const heroWidth = computed(() => {
     if (props.kind === 'pixel-floor') return 'full'
     if (
-      props.kind === 'centered' ||
+      props.kind === 'center' ||
       props.kind === 'copy-on-top-art' ||
-      props.kind === 'centered-band' ||
+      props.kind === 'center-band' ||
       props.kind === 'compact-band'
     )
       return 'site'
@@ -260,16 +260,16 @@
   })
 
   const heroSize = computed(() => {
-    if (props.kind === 'centered-band') return 'large'
+    if (props.kind === 'center-band') return 'large'
     if (props.kind === 'compact-band') return 'medium'
     return props.size
   })
 
   const titleWidth = computed(() => {
     const long = props.titleLength === 'long'
-    if (props.kind === 'centered') return long ? '3xl' : 'xl'
+    if (props.kind === 'center') return long ? '3xl' : 'xl'
     if (props.kind === 'copy-beside-art' || props.kind === 'copy-on-top-art') return 'xl'
-    if (props.kind === 'centered-band' || props.kind === 'compact-band') return long ? '3xl' : '2xl'
+    if (props.kind === 'center-band' || props.kind === 'compact-band') return long ? '3xl' : '2xl'
     return '4xl'
   })
 
@@ -277,7 +277,7 @@
     () => isCentered.value && props.kind !== 'copy-on-top-art' && props.titleLength === 'short'
   )
 
-  const dots = computed(() => props.kind === 'centered' && !props.plain)
+  const dots = computed(() => props.kind === 'center' && !props.plain)
 
   const hasArt = computed(
     () => props.kind === 'copy-beside-art' && Boolean(props.illustration || props.image?.src)
@@ -316,7 +316,7 @@
 
   const portrait = computed(() => Boolean(props.image && props.image.height > props.image.width))
 
-  const headline = computed(() => [props.highlight, props.title].filter(Boolean).join(' '))
+  const headline = computed(() => [props.titleHighlight, props.title].filter(Boolean).join(' '))
 
   const primary = computed(() =>
     props.primaryAction?.label && props.primaryAction.href ? props.primaryAction : null
@@ -364,12 +364,12 @@
       :aria-label="headline"
     >
       <HeroTitle
-        :centered="isCentered"
-        :mobile-centered="kind === 'copy-beside-art'"
+        :align="isCentered ? 'center' : 'start'"
+        :mobile-align="kind === 'copy-beside-art' ? 'center' : undefined"
         :max-width="titleWidth"
         :eyebrow="eyebrow"
         :eyebrow-prefix="eyebrow ? eyebrowPrefix : ''"
-        :highlight="highlight"
+        :title-highlight="titleHighlight"
         :title="title"
         :description="description"
         size="large"
@@ -420,7 +420,7 @@
             class="flex animate-content-enter justify-center pb-(--spacing-2xl) [--content-enter-delay:120ms] motion-reduce:animate-none @max-2xl:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]"
           >
             <slot name="bottom">
-              <HeroBandTopology :columns="scene()" />
+              <HeroBandTopology :nodes="scene()" />
             </slot>
           </div>
         </div>

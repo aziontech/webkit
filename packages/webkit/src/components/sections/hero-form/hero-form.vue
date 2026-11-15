@@ -93,7 +93,7 @@
     /** Short overline above the headline. */
     eyebrow?: string
     /** Opening words of the headline, painted in the brand accent. */
-    highlight?: string
+    titleHighlight?: string
     /** Page headline, rendered as the page `h1`; the band renders nothing when empty. */
     title?: string
     /** Sentence under the headline. */
@@ -125,12 +125,12 @@
     /** The site sent the values: the form gives way to `messages.success`. */
     submitted?: boolean
     /** The site could not send the values: `messages.error` shows under the form. */
-    error?: boolean
+    failed?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
     eyebrow: '',
-    highlight: '',
+    titleHighlight: '',
     title: '',
     description: '',
     descriptionLink: undefined,
@@ -146,7 +146,7 @@
     tickerMarks: () => [],
     loading: false,
     submitted: false,
-    error: false
+    failed: false
   })
 
   const emit = defineEmits<{
@@ -249,7 +249,7 @@
     :data-testid="testId"
     :data-loading="loading || null"
     :data-submitted="submitted || null"
-    :data-error="error || null"
+    :data-failed="failed || null"
     class="scroll-mt-(--spacing-2xl)"
   >
     <Hero
@@ -270,7 +270,7 @@
         <HeroTitle
           :eyebrow="eyebrow"
           :eyebrow-prefix="EYEBROW_PREFIX"
-          :highlight="highlight"
+          :title-highlight="titleHighlight"
           :title="title"
           max-width="lg"
           :sticky="items.length === 0"
@@ -423,7 +423,7 @@
             </div>
 
             <Alert
-              v-if="error"
+              v-if="failed"
               severity="danger"
               :label="messages.error"
             />

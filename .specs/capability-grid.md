@@ -3,9 +3,9 @@ name: capability-grid
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 6594b54ccd793adfa4c92c7f235029c68ff985547635e5b3a684f95010209261
+checksum: 2299a3754af018384fd5c912e561ef1960630e61424f6284a2d87047bb5989d9
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -40,7 +40,7 @@ Use CapabilityGrid for any grid of claims or links on a marketing page; icons an
 - Three or six items at three columns, four or eight at four, so rows stay full.
 - Keep points to three short lines.
 - Give either every item an `href` or none, so the grid reads as one kind of cell; do not combine `points` with an `href` (the whole cell is the link).
-- Set `titleKind: 'left'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
+- Set `titleKind: 'start'` for a band whose header sits at the start edge (the Partners page's "Why you should be a partner"); the grid keeps its title, so each capability stays an `h3`. Never wrap a bare grid in `SectionModule` to move the title: the capability headings rise to `h2` and the outline breaks.
 
 ## Usage
 
@@ -81,7 +81,7 @@ Use CapabilityGrid for any grid of claims or links on a marketing page; icons an
 | `primaryAction`   | `CapabilityGridAction`  | `undefined`  | false    | First button under the section title, `secondary`; `{ label, href, trailing?, target? }`. Shown only with a label and a link.                                                    |
 | `secondaryAction` | `CapabilityGridAction`  | `undefined`  | false    | Second button under the section title, `outlined`; same shape. Shown only with a label and a link.                                                                               |
 | `anchor`          | `string`                | `''`         | false    | In-page id set on the band so a hash link can target it.                                                                                                                         |
-| `titleKind`       | `SectionTitleKind`      | `'centered'` | false    | Layout of the section title: `centered` stacks and centers it, `left` stacks it at the start edge, `horizontal` sets the headline and its description in two columns.            |
+| `titleKind`       | `SectionTitleKind`      | `'center'` | false    | Layout of the section title: `center` stacks and centers it, `start` stacks it at the start edge, `split` sets the headline and its description in two columns.            |
 
 ## Events
 
@@ -148,7 +148,7 @@ _none_
 
 - Default — three capabilities with a title and an action.
 - Points — six capabilities with bullet points at four columns.
-- Left title — `titleKind: 'left'` sets the header at the start edge over the grid.
+- Left title — `titleKind: 'start'` sets the header at the start edge over the grid.
 - Links — use cases without points, each cell linking to its page.
 
 ## Constraints — DO NOT

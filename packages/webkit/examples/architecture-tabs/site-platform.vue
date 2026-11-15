@@ -55,7 +55,7 @@
       eyebrow="Platform"
       title="One request through the Azion platform"
       description="The base architecture every product plugs into: a workload answers near the user, Firewall filters first, a function runs where logic is needed, data sits in the same data center, and every request is seen."
-      position="bottom"
+      tabs-side="bottom"
       :tabs="tabs"
       :primary-action="primaryAction"
     />

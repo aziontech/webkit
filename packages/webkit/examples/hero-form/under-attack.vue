@@ -96,7 +96,7 @@
 <template>
   <HeroForm
     eyebrow="Under Cyberattack?"
-    highlight=""
+    title-highlight=""
     title="Mitigating Cyberattacks"
     description="Our digital security team is available to provide immediate assistance."
     :items="items"

@@ -68,7 +68,7 @@
     /** The columns left to right; each is `{ key, label, grow?, align? }` where `key` picks the row value, `grow` is the flex weight (1, 2 or 3) and `align` is `start` or `end`. The first column names the row and the second describes it on phones. */
     columns?: ListingTableColumn[]
     /** The linked rows, in order; each is `{ href, values }` where `values` maps a column key to its text. */
-    rows?: ListingTableRow[]
+    data?: ListingTableRow[]
     /** Outlined button into the full listing, in the table footer; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
     primaryAction?: ListingTableAction
   }
@@ -77,7 +77,7 @@
     anchor: '',
     title: '',
     columns: () => [],
-    rows: () => [],
+    data: () => [],
     primaryAction: undefined
   })
 
@@ -87,7 +87,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-listing-table'
   )
 
-  const hasRows = computed(() => props.rows.length > 0 && props.columns.length > 0)
+  const hasRows = computed(() => props.data.length > 0 && props.columns.length > 0)
 
   const titleKey = computed(() => props.columns[0]?.key ?? '')
 
@@ -131,7 +131,7 @@
         #header
       >
         <SectionTitle
-          kind="left"
+          kind="start"
           :title="title"
         />
       </template>
@@ -145,7 +145,7 @@
           <ItemList>
             <LazyNodes :row-height="76">
               <Item
-                v-for="row in rows"
+                v-for="row in data"
                 :key="row.href"
                 role="listitem"
                 class="relative px-(--spacing-xl)! py-(--spacing-lg)! hover:bg-(--bg-hover)"
@@ -206,7 +206,7 @@
           <TableBody>
             <LazyNodes :row-height="56">
               <TableRow
-                v-for="row in rows"
+                v-for="row in data"
                 :key="row.href"
                 class="cursor-pointer hover:[--table-row-bg:var(--bg-hover)]!"
                 @click="followRow"

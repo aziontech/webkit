@@ -393,38 +393,38 @@ describe('MediaTabs', () => {
     expect(container.textContent).not.toContain('A fourth claim')
   })
 
-  it('defaults the tabs to the left of the media', () => {
+  it('defaults the tabs to the start of the media', () => {
     const { getByTestId } = render(MediaTabs, { props: { items: ITEMS, autoplay: false } })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-position', 'left')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-tabs-side', 'start')
     expect(getByTestId(TESTID)).toHaveAttribute('data-orientation', 'vertical')
   })
 
   it.each([
-    ['left', 'vertical'],
-    ['right', 'vertical'],
+    ['start', 'vertical'],
+    ['end', 'vertical'],
     ['top', 'horizontal'],
     ['bottom', 'horizontal']
-  ] as const)('maps position %s to the root and the %s axis', (position, orientation) => {
+  ] as const)('maps tabsSide %s to the root and the %s axis', (tabsSide, orientation) => {
     const { getByTestId } = render(MediaTabs, {
-      props: { items: ITEMS, position, autoplay: false }
+      props: { items: ITEMS, tabsSide, autoplay: false }
     })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-position', position)
+    expect(getByTestId(TESTID)).toHaveAttribute('data-tabs-side', tabsSide)
     expect(getByTestId(TESTID)).toHaveAttribute('data-orientation', orientation)
   })
 
   it.each([
-    ['left', 3],
-    ['right', 3],
+    ['start', 3],
+    ['end', 3],
     ['top', 5],
     ['bottom', 5]
-  ] as const)('renders at most %s-position limit of %s tabs', (position, limit) => {
+  ] as const)('renders at most %s-side limit of %s tabs', (tabsSide, limit) => {
     const items = Array.from({ length: 6 }, (_, index) => ({
       ...ITEMS[0],
       title: `Use case ${index + 1}`
     }))
-    const { container } = render(MediaTabs, { props: { items, position, autoplay: false } })
+    const { container } = render(MediaTabs, { props: { items, tabsSide, autoplay: false } })
 
     expect(rowsOf(container)).toHaveLength(limit)
     expect(container.textContent).not.toContain(`Use case ${limit + 1}`)
@@ -432,13 +432,13 @@ describe('MediaTabs', () => {
 
   it.each(['top', 'bottom'] as const)(
     'selects a tab on click and emits its index when the tabs are on the %s',
-    async (position) => {
+    async (tabsSide) => {
       const items = Array.from({ length: 5 }, (_, index) => ({
         ...ITEMS[0],
         title: `Use case ${index + 1}`
       }))
       const { container, emitted } = render(MediaTabs, {
-        props: { items, position, autoplay: false }
+        props: { items, tabsSide, autoplay: false }
       })
 
       await fireEvent.click(rowsOf(container)[4].querySelector('button') as HTMLElement)
@@ -449,11 +449,11 @@ describe('MediaTabs', () => {
     }
   )
 
-  it.each(['left', 'right', 'top', 'bottom'] as const)(
+  it.each(['start', 'right', 'top', 'bottom'] as const)(
     'has no a11y violations with the tabs on the %s',
-    async (position) => {
+    async (tabsSide) => {
       const { container } = render(MediaTabs, {
-        props: { items: ITEMS, position, autoplay: false }
+        props: { items: ITEMS, tabsSide, autoplay: false }
       })
 
       await expectNoA11yViolations(container)

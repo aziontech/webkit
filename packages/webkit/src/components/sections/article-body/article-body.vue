@@ -56,8 +56,8 @@
     label: string
     /** Destination of the entry. */
     href?: string
-    /** Marks the entry as the current page. */
-    current?: boolean
+    /** Marks the entry as the page you are on; it renders `aria-current`. */
+    active?: boolean
   }
 
   /** Labels of the share group. */
@@ -125,7 +125,7 @@
     eyebrow?: string
     /** The piece being read: its `title` (the page h1), `description`, `date`, `readTime` and canonical `href`. */
     article: ArticleBodyArticle
-    /** The breadcrumb over the headline, each a `label` and an `href`, the last one marked `current`. */
+    /** The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`. */
     trail?: ArticleBodyCrumb[]
     /** The article as markdown; its `##` and `###` headings feed the outline. */
     body?: string

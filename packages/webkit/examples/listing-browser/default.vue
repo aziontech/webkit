@@ -10,7 +10,7 @@
       { key: 'team', label: 'Team and location', grow: 2 },
       { key: 'type', label: 'Work type', align: 'end' }
     ]"
-    :rows="[
+    :data="[
       {
         href: '/careers/software-engineer-go',
         group: 'Engineering',
@@ -35,7 +35,7 @@
     :groups="['Engineering', 'Security']"
     :facets="[
       {
-        key: 'area',
+        id: 'area',
         label: 'Department',
         allLabel: 'All departments',
         options: [
@@ -44,7 +44,7 @@
         ]
       },
       {
-        key: 'location',
+        id: 'location',
         label: 'Location',
         allLabel: 'All locations',
         options: [
@@ -58,15 +58,11 @@
       { value: 'title', label: 'Title (A–Z)', by: 'role' }
     ]"
     sort-aria-label="Sort positions"
-    :search="{
-      placeholder: 'Search by title, team, or location',
-      shortPlaceholder: 'Search positions',
-      label: 'Search positions'
-    }"
-    :empty="{
-      title: 'Nothing here yet',
-      description: 'No open positions match your search.',
-      clearLabel: 'View all open positions'
-    }"
+    search-placeholder="Search by title, team, or location"
+    search-short-placeholder="Search positions"
+    search-aria-label="Search positions"
+    empty-title="Nothing here yet"
+    empty-description="No open positions match your search."
+    empty-action-label="View all open positions"
   />
 </template>

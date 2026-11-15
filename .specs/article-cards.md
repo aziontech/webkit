@@ -3,17 +3,17 @@ name: article-cards
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 9f6380c2623e8177d2357d70507405ebf19942bd8f550bef1648b4875c44cc48
+checksum: 4ef7051ea08dcf414505c8a0d0663605ee51aab02fbf8ae58e2d16d9488b2267
 ---
 # ArticleCards — Component Spec
 
 ## Purpose
 
-A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `card-grid`. `kind` places the heading only: `left` at the start (an article's closing row), `centered` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
+A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `card-grid`. `kind` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.
 
 ## When to use
 
@@ -34,7 +34,7 @@ A titled row of three linked article cards on one hairline frame grid with no gu
 
 - Give a card either `image` or `mark`; the mark is drawn only when there is no cover.
 - Keep the band to three cards so the frame row stays full.
-- Set `external` on a card whose article lives on another site; it opens in a new tab and says so to assistive technology.
+- Set `target: '_blank'` on a card whose article lives on another site; it opens in a new tab and says so to assistive technology.
 
 ## Usage
 
@@ -45,12 +45,12 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 
 <template>
   <ArticleCards
-    kind="left"
+    kind="start"
     title="Related Articles"
     aria-label="Related Articles"
     :items="[
       {
-        key: 'how-to-reduce-ai-agent-latency',
+        id: 'how-to-reduce-ai-agent-latency',
         href: '/blog/how-to-reduce-ai-agent-latency',
         title: 'How Do You Reduce AI Agent Latency?',
         description: 'Learn where latency builds up in AI agents.',
@@ -66,11 +66,11 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 
 | Prop | Type | Default | Required | JSDoc |
 |---|---|---|---|---|
-| `kind` | `ArticleCardsKind` | `'left'` | false | Placement of the heading: `left` sets it at the start, `centered` centres it over the cards. |
+| `kind` | `ArticleCardsKind` | `'start'` | false | Placement of the heading: `start` sets it at the start, `center` centres it over the cards. |
 | `anchor` | `string` | `''` | false | Id set on the band so an in-page `#hash` link can target it. |
 | `eyebrow` | `string` | `''` | false | Overline above the heading. |
 | `title` | `string` | `''` | false | Headline of the band; the band renders no header when empty. |
-| `items` | `ArticleCardsItem[]` | `[]` | false | The cards, in order; each is `{ key, href, title, description, meta, image?, mark?, external? }`; an `external` card opens in a new tab. |
+| `items` | `ArticleCardsItem[]` | `[]` | false | The cards, in order; each is `{ id, href, title, description, meta, image?, mark?, target? }`; a card whose `target` is `_blank` opens in a new tab. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the card grid. |
 
 ## Events
@@ -87,7 +87,7 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 - `data-kind` mirrors the `kind` prop and places the heading
 - Empty: when `items` is empty the band renders nothing — not the header, not the frame
 - The header renders only when `title` is set
-- `anchor` sets the band's `id`; an `external` card links with `target="_blank"` and `rel="noopener"`
+- `anchor` sets the band's `id`; a card whose `target` is `_blank` links with `rel="noopener"`
 
 ## Motion & Animations
 
@@ -116,7 +116,7 @@ import ArticleCards from '@aziontech/webkit/article-cards'
 
 - Visible focus: each card is one link with an inset `focus-visible` ring.
 - Keyboard map: `Tab` moves card to card; `Enter` follows the link.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the grid is a `group` named by `ariaLabel` when set; the headline is the section title's `h2` and each card's headline an `h3`; a cover is decorative (`alt=""`), a client mark is named by the client; an `external` card appends the visually hidden `(opens in a new tab)` to its name.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the grid is a `group` named by `ariaLabel` when set; the headline is the section title's `h2` and each card's headline an `h3`; a cover is decorative (`alt=""`), a client mark is named by the client; a `_blank` card appends the visually hidden `(opens in a new tab)` to its name.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): text uses `--text-default` / `--text-muted` on the canvas.
 - `motion-reduce:transition-none` on every transition.
 - Touch target ≥40×40 px — the whole card is the target.

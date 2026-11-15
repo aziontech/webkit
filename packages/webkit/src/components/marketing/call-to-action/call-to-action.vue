@@ -180,7 +180,7 @@
           >
             <SectionTitle
               :framed="false"
-              kind="centered"
+              kind="center"
               size="large"
               :title="title"
               :description="description"
@@ -218,7 +218,7 @@
         >
           <SectionTitle
             :framed="false"
-            kind="left"
+            kind="start"
             :title="title"
             :eyebrow="eyebrow"
           />
@@ -247,7 +247,7 @@
       >
         <SectionTitle
           :framed="false"
-          kind="left"
+          kind="start"
           :title="title"
           :eyebrow="eyebrow"
           :description="description"

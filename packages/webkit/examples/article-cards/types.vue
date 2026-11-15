@@ -9,12 +9,12 @@
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
     <ArticleCards
-      kind="left"
+      kind="start"
       title="Related Articles"
       aria-label="Related Articles"
       :items="[
         {
-          key: 'how-to-reduce-ai-agent-latency',
+          id: 'how-to-reduce-ai-agent-latency',
           href: '/blog/how-to-reduce-ai-agent-latency',
           title: 'How Do You Reduce AI Agent Latency?',
           description:
@@ -23,7 +23,7 @@
           image: placeholderImage
         },
         {
-          key: 'cloudflare-alternatives-and-competitors',
+          id: 'cloudflare-alternatives-and-competitors',
           href: '/blog/cloudflare-alternatives-and-competitors',
           title: 'Best Cloudflare Alternatives and Competitors',
           description:
@@ -32,7 +32,7 @@
           image: placeholderImage
         },
         {
-          key: 'which-azion-plan-is-right-for-your-project',
+          id: 'which-azion-plan-is-right-for-your-project',
           href: '/blog/which-azion-plan-is-right-for-your-project',
           title: 'Which Azion Plan Is Right for Your Project?',
           description: 'Compare Azion’s Hobby, Pro, and Enterprise plans.',
@@ -42,13 +42,13 @@
       ]"
     />
     <ArticleCards
-      kind="centered"
+      kind="center"
       eyebrow="Success cases"
       title="When our customers succeed, we succeed"
       aria-label="When our customers succeed, we succeed"
       :items="[
         {
-          key: 'netshoes',
+          id: 'netshoes',
           href: '/success-cases/netshoes',
           title: 'Netshoes Blocks 4M+ Threats in 6 Months with Azion WAF',
           description:
@@ -60,7 +60,7 @@
           }
         },
         {
-          key: 'renner',
+          id: 'renner',
           href: '/success-cases/renner',
           title: 'Lojas Renner Optimizes Online Shopping Journey with Azion',
           description: 'Faster product pages allowed Renner to scale its e-commerce platform.',
@@ -68,7 +68,7 @@
           mark: { name: 'Renner', logo: rennerExtendedColor }
         },
         {
-          key: 'gpa',
+          id: 'gpa',
           href: '/success-cases/gpa',
           title: 'GPA solved a cyberattack and reduced costs by 30%',
           description:

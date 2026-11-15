@@ -20,11 +20,11 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 
 - `title` heads the listing; `anchor` gives the band an id for in-page links.
 - `columns` are the columns left to right, each a `key`, a `label`, and an optional `grow` (1, 2 or 3) and `align` (`start` or `end`). The first column names the row and the second describes it on phones.
-- `rows[]` are every row, each an `href`, its `values` keyed by column, the `group` it sits under, and its `facets` keyed by facet.
+- `data[]` are every row, each an `href`, its `values` keyed by column, the `group` it sits under, and its `facets` keyed by facet.
 - `groups` lists the groups in order.
-- `facets[]` are the selects, each a `key` that matches a row facet (and seeds it from `?<key>=`), a `label`, an `allLabel` and its `options` as `value` and `label`.
+- `facets[]` are the selects, each an `id` that matches a row facet (and seeds it from `?<id>=`), a `label`, an `allLabel` and its `options` as `value` and `label`.
 - `sorts[]` are the orders, the first the default, each a `value`, a `label` and the column `by` it sorts on (empty keeps the source order); `sortAriaLabel` names the order select.
-- `search` is the field's `placeholder`, its `shortPlaceholder` below `lg`, and its `label`; `empty` is the `title`, `description` and `clearLabel` (the button that clears the search and every facet) shown when nothing matches.
+- `searchPlaceholder` is the field's placeholder, `searchShortPlaceholder` the one below `lg`, and `searchAriaLabel` its accessible name; `emptyTitle`, `emptyDescription` and `emptyActionLabel` (the button that clears the search and every facet) are shown when nothing matches.
 
 Example:
 

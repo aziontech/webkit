@@ -14,7 +14,7 @@
   })
 
   /** Side of the diagram the tabs sit on. */
-  export type ArchitectureTabsPosition = 'top' | 'bottom' | 'left' | 'right'
+  export type ArchitectureTabsSide = 'top' | 'bottom' | 'start' | 'end'
 
   /** The large button in the section title. */
   export type ArchitectureTabsAction = {
@@ -51,8 +51,8 @@
     title?: string
     /** Supporting sentence beside the headline. */
     description?: string
-    /** Side of the diagram the tabs sit on: `top`, `bottom`, `left` or `right`; left and right hold up to three tabs. */
-    position?: ArchitectureTabsPosition
+    /** Side of the diagram the tabs sit on: `top`, `bottom`, `start` or `end`; start and end hold up to three tabs. */
+    tabsSide?: ArchitectureTabsSide
     /** The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description it ships. */
     tabs?: ArchitectureTabsTab[]
     /** Opens the next tab on a timer, with the composed tabs' visible pause control. */
@@ -68,7 +68,7 @@
     eyebrow: '',
     title: '',
     description: '',
-    position: 'top',
+    tabsSide: 'top',
     tabs: () => [],
     autoplay: true,
     autoplayInterval: 6000,
@@ -108,7 +108,7 @@
         #header
       >
         <SectionTitle
-          kind="horizontal"
+          kind="split"
           padding="small"
           :eyebrow="eyebrow"
           :title="title"
@@ -138,7 +138,7 @@
         marks="none"
       >
         <MediaTabs
-          :position="position"
+          :tabs-side="tabsSide"
           size="small"
           :items="items"
           :autoplay="autoplay"

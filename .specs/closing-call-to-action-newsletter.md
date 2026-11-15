@@ -3,10 +3,10 @@ name: closing-call-to-action-newsletter
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 0c85b1bff5fc3b1c12233de737b81fa49256912a359a394c6b7288c396fe2d5e
+checksum: c1af7e1d059135bb47c848a87b4764fedf9165e6fccfae6567d383c4372f29b8
 template: 2
 ---
 
@@ -14,7 +14,7 @@ template: 2
 
 ## Purpose
 
-The closing band whose ask is a newsletter sign-up: the overline and a large headline on the lead side, a subscribe form labelled by the ask on the other, over a strip lit by the pixelated primary wave, then the hatched closing frame. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-newsletter', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `overline`, `field`, `input`, `button` and `texture-material`. The block never sends: it validates the address locally (an empty field and a malformed address each show their message under the field) and on a valid submit emits `submit` with the event and `{ email }`; the site posts the address and reports the outcome back through `loading`, `submitted` and `error`, which the band renders with the messages from `form`.
+The closing band whose ask is a newsletter sign-up: the overline and a large headline on the lead side, a subscribe form labelled by the ask on the other, over a strip lit by the pixelated primary wave, then the hatched closing frame. It is a page section — the site places it from a `{ _id: 'closing-call-to-action-newsletter', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `overline`, `field`, `input`, `button` and `texture-material`. The block never sends: it validates the address locally (an empty field and a malformed address each show their message under the field) and on a valid submit emits `submit` with the event and `{ email }`; the site posts the address and reports the outcome back through `loading`, `submitted` and `failed`, which the band renders with the messages from `form`.
 
 ## When to use
 
@@ -34,7 +34,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 
 ## Best practices
 
-- Set `loading` while the address is sent, then `submitted` or `error` with the outcome.
+- Set `loading` while the address is sent, then `submitted` or `failed` with the outcome.
 - Keep `description` to one sentence; it is set as the large headline.
 - Write `form.invalidMessage` with an example address so the fix is obvious.
 - Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `FrameBox` + `TextureMaterial` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
@@ -48,16 +48,16 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 
   const loading = ref(false)
   const submitted = ref(false)
-  const error = ref(false)
+  const failed = ref(false)
 
   const onSubmit = async (event, values) => {
     loading.value = true
-    error.value = false
+    failed.value = false
     try {
       await fetch('/newsletter', { method: 'POST', body: JSON.stringify(values) })
       submitted.value = true
     } catch {
-      error.value = true
+      failed.value = true
     } finally {
       loading.value = false
     }
@@ -80,7 +80,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
     }"
     :loading="loading"
     :submitted="submitted"
-    :error="error"
+    :failed="failed"
     @submit="onSubmit"
   />
 </template>
@@ -97,7 +97,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 | `description` | `string`                            | `''`    | false    | The pitch, rendered as the band's large `h2` on the lead side.                                                                          |
 | `loading`     | `boolean`                           | `false` | false    | The site is sending the address: the field is disabled, the button shows its loading state and a submit is ignored.                     |
 | `submitted`   | `boolean`                           | `false` | false    | The site sent the address: the form gives way to `form.successMessage`.                                                                 |
-| `error`       | `boolean`                           | `false` | false    | The site could not send the address: `form.errorMessage` shows under the form.                                                          |
+| `failed`      | `boolean`                           | `false` | false    | The site could not send the address: `form.errorMessage` shows under the form.                                                          |
 | `hatch`       | `boolean`                           | `true`  | false    | Draws the hatched closing frame under the band; turn it off when another closing band stacks directly below and draws the shared frame. |
 
 ## Events
@@ -112,11 +112,11 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 
 ## States
 
-- Visual states: `default`, `invalid`, `loading`, `submitted`, `error`
+- Visual states: `default`, `invalid`, `loading`, `submitted`, `failed`
 - `invalid`: an empty field takes the amber `required` state with `form.requiredMessage`, a malformed address the red `invalid` state with `form.invalidMessage`, under the field (never both at once); focus returns to the field; typing clears it; nothing is emitted
 - `loading` (prop): the field is disabled, the button shows its loading state and a submit emits nothing
 - `submitted` (prop): the form is replaced by a success `Alert` with `form.successMessage`, which takes focus when focus was in the form
-- `error` (prop): a danger `Alert` with `form.errorMessage` shows under the form, which stays editable
+- `failed` (prop): a danger `Alert` with `form.errorMessage` shows under the form, which stays editable
 - `hatch` off: the band renders without its closing frame, so the closing band stacked below draws the page's one close
 
 ## Motion & Animations

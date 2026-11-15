@@ -5,7 +5,7 @@
 <template>
   <Hero max-width="site">
     <Hero.Title
-      mobile-centered
+      mobile-align="center"
       eyebrow="Infrastructure"
       eyebrow-prefix="//"
       title="A global network built for fast applications"

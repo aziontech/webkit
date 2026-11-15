@@ -9,7 +9,7 @@
   defineOptions({ name: 'HeroBandTopology' })
 
   defineProps<{
-    columns: HeroBandNode[][]
+    nodes: HeroBandNode[][]
   }>()
 </script>
 
@@ -19,13 +19,13 @@
     class="w-[40rem] shrink-0 @4xl:w-(--container-3xl) [&>div]:w-full"
   >
     <FlowParallel
-      v-for="(nodes, index) in columns"
+      v-for="(column, index) in nodes"
       :key="index"
       align="start"
       class="min-w-0 flex-1 @4xl:min-w-[15rem]"
     >
       <FlowNode
-        v-for="node in nodes"
+        v-for="node in column"
         :key="node.title"
         unstyled
         class="flex w-full flex-col rounded-(--shape-card) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none has-[[data-lit]]:border-(--primary) has-[[data-lit]]:before:pointer-events-none has-[[data-lit]]:before:absolute has-[[data-lit]]:before:inset-0 has-[[data-lit]]:before:rounded-[inherit] has-[[data-lit]]:before:shadow-[-22px_0_44px_-16px_var(--accent),22px_0_44px_-16px_var(--primary),0_0_20px_-8px_var(--primary)] has-[[data-lit]]:before:content-['']"

@@ -31,7 +31,7 @@
   /** One success story, rendered as a linked card. */
   export type StoryLibraryItem = {
     /** Stable identity of the story within the library. */
-    key: string
+    id: string
     /** Destination of the story. */
     href: string
     /** The client the story is about. */
@@ -42,8 +42,8 @@
     description: string
     /** The values the story carries per facet key. */
     facets?: Record<string, string[]>
-    /** Opens the destination in a new tab. */
-    external?: boolean
+    /** Where the destination opens; `_blank` opens it in a new tab. */
+    target?: '_blank' | '_self'
   }
 
   /** One option of a facet select. */
@@ -56,8 +56,8 @@
 
   /** One facet, rendered as a searchable select. */
   export type StoryLibraryFacet = {
-    /** Key matched against each story's facets. */
-    key: string
+    /** Identity of the facet, matched against the keys of each story's facets. */
+    id: string
     /** Accessible name of the select. */
     label: string
     /** Placeholder shown while no value is selected. */
@@ -66,37 +66,25 @@
     options: StoryLibraryFacetOption[]
   }
 
-  /** The search field. */
-  export type StoryLibrarySearch = {
-    /** Placeholder of the field. */
-    placeholder: string
-    /** Shorter placeholder below the large breakpoint. */
-    shortPlaceholder?: string
-    /** Accessible name of the field. */
-    label: string
-  }
-
-  /** The no-match state. */
-  export type StoryLibraryEmpty = {
-    /** Message of the empty state. */
-    title: string
-    /** Label of the button that clears every filter. */
-    action: string
-  }
-
   interface Props {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
     /** Headline of the band, rendered left-aligned as its `h2`; the band renders no header when empty. */
     title?: string
-    /** The stories, in order; each is `{ key, href, client, category, description, facets?, external? }`; an `external` story opens in a new tab. */
+    /** The stories, in order; each is `{ id, href, client, category, description, facets?, target? }`; a story whose `target` is `_blank` opens in a new tab. */
     items?: StoryLibraryItem[]
-    /** The facet selects, in order; each is `{ key, label, allLabel, options }`. */
+    /** The facet selects, in order; each is `{ id, label, allLabel, options }`. */
     facets?: StoryLibraryFacet[]
-    /** The search field's `placeholder`, optional `shortPlaceholder` (below the large breakpoint) and accessible `label`; the field is omitted when absent. */
-    search?: StoryLibrarySearch
-    /** The no-match state's `title` and the `action` label of its clear-filters button. */
-    empty?: StoryLibraryEmpty
+    /** Placeholder of the search field; the field is omitted when this and `searchAriaLabel` are both empty. */
+    searchPlaceholder?: string
+    /** Shorter placeholder of the search field below the large breakpoint; empty uses `searchPlaceholder`. */
+    searchShortPlaceholder?: string
+    /** Accessible name of the search field. */
+    searchAriaLabel?: string
+    /** Message of the no-match state; the state renders only with it. */
+    emptyTitle?: string
+    /** Label of the no-match state's button that clears every filter; no button renders without it. */
+    emptyActionLabel?: string
     /** Read cue at the foot of each card, also the lead of its accessible name. */
     linkLabel?: string
     /** Label of the load-more button under the grid; without it every match is listed and no button renders. */
@@ -105,7 +93,7 @@
     pageSize?: number
     /** Label of the filter button below the large breakpoint; empty uses the locale catalog (`Filters`). */
     filterLabel?: string
-    /** Seeds each facet on mount from the URL query parameter named by its `key` when the value is one of its options. */
+    /** Seeds each facet on mount from the URL query parameter named by its `id` when the value is one of its options. */
     seedFromQuery?: boolean
     /** Accessible name of the list of stories. */
     ariaLabel?: string
@@ -116,8 +104,11 @@
     title: '',
     items: () => [],
     facets: () => [],
-    search: undefined,
-    empty: undefined,
+    searchPlaceholder: '',
+    searchShortPlaceholder: '',
+    searchAriaLabel: '',
+    emptyTitle: '',
+    emptyActionLabel: '',
     linkLabel: '',
     moreLabel: '',
     pageSize: 12,
@@ -138,7 +129,7 @@
 
   const pages = ref(1)
 
-  const expanded = ref(false)
+  const filtersOpen = ref(false)
 
   const panelId = useId()
 
@@ -165,8 +156,8 @@
         return false
       }
       return props.facets.every((facet) => {
-        const value = selection.value[facet.key]
-        return value === undefined || (item.facets?.[facet.key] ?? []).includes(value)
+        const value = selection.value[facet.id]
+        return value === undefined || (item.facets?.[facet.id] ?? []).includes(value)
       })
     })
   })
@@ -179,20 +170,20 @@
 
   const hasMore = computed(() => paged.value && visible.value.length < matches.value.length)
 
+  const hasSearch = computed(() => Boolean(props.searchPlaceholder || props.searchAriaLabel))
+
   const placeholder = computed(() =>
-    wide.value
-      ? (props.search?.placeholder ?? '')
-      : props.search?.shortPlaceholder || props.search?.placeholder || ''
+    wide.value ? props.searchPlaceholder : props.searchShortPlaceholder || props.searchPlaceholder
   )
 
   const applied = computed(() =>
     props.facets.flatMap((facet) => {
-      const value = selection.value[facet.key]
+      const value = selection.value[facet.id]
       const option =
         value === undefined
           ? undefined
           : facet.options.find((candidate) => candidate.value === value)
-      return option ? [{ key: facet.key, label: `${facet.label}: ${option.label}` }] : []
+      return option ? [{ key: facet.id, label: `${facet.label}: ${option.label}` }] : []
     })
   )
 
@@ -212,14 +203,14 @@
     const params = new URLSearchParams(window.location.search)
     const seeded = { ...selection.value }
     props.facets.forEach((facet) => {
-      const value = params.get(facet.key)
-      if (value && facet.options.some((option) => option.value === value)) seeded[facet.key] = value
+      const value = params.get(facet.id)
+      if (value && facet.options.some((option) => option.value === value)) seeded[facet.id] = value
     })
     selection.value = seeded
   })
 
   const optionsOf = (facet: StoryLibraryFacet): StoryLibraryFacetOption[] => {
-    const term = (optionQuery.value[facet.key] ?? '').trim().toLowerCase()
+    const term = (optionQuery.value[facet.id] ?? '').trim().toLowerCase()
     return facet.options.filter((option) => option.label.toLowerCase().includes(term))
   }
 
@@ -248,7 +239,7 @@
 
   const cardLabel = (item: StoryLibraryItem): string => {
     const name = props.linkLabel ? `${props.linkLabel}: ${item.client.name}` : item.client.name
-    return item.external ? `${name} ${t('storyLibrary.newTab')}` : name
+    return item.target === '_blank' ? `${name} ${t('storyLibrary.newTab')}` : name
   }
 </script>
 
@@ -269,14 +260,14 @@
         #header
       >
         <SectionTitle
-          kind="left"
+          kind="start"
           :title="title"
         />
       </template>
 
       <FrameBox
         key="toolbar"
-        v-if="search || facets.length > 0"
+        v-if="hasSearch || facets.length > 0"
         flush
         borders="y"
       >
@@ -292,18 +283,18 @@
               kind="outlined"
               size="large"
               icon="ai ai-filter"
-              :aria-expanded="expanded ? 'true' : 'false'"
+              :aria-expanded="filtersOpen ? 'true' : 'false'"
               :aria-controls="panelId"
               class="shrink-0 lg:hidden"
-              @click="expanded = !expanded"
+              @click="filtersOpen = !filtersOpen"
             />
             <Input
-              v-if="search"
+              v-if="hasSearch"
               v-model="query"
               size="large"
               type="text"
               :placeholder="placeholder"
-              :aria-label="search.label"
+              :aria-label="searchAriaLabel || undefined"
               class="min-w-0 flex-1"
             >
               <template #prefix>
@@ -315,17 +306,17 @@
             v-if="facets.length > 0"
             :id="panelId"
             :data-testid="`${testId}__filters`"
-            :data-expanded="expanded || null"
-            class="flex flex-col gap-(--spacing-sm) max-lg:hidden max-lg:data-[expanded]:flex lg:contents"
+            :data-state="filtersOpen ? 'open' : 'closed'"
+            class="flex flex-col gap-(--spacing-sm) max-lg:hidden max-lg:data-[state=open]:flex lg:contents"
           >
             <Select
               v-for="facet in facets"
-              :key="facet.key"
-              :model-value="selection[facet.key]"
+              :key="facet.id"
+              :model-value="selection[facet.id]"
               size="large"
               :placeholder="facet.allLabel"
-              @update:model-value="select(facet.key, $event)"
-              @update:open="resetOptionQuery(facet.key)"
+              @update:model-value="select(facet.id, $event)"
+              @update:open="resetOptionQuery(facet.id)"
             >
               <SelectTrigger :aria-label="facet.label" />
               <SelectContent>
@@ -334,13 +325,13 @@
                   #search
                 >
                   <Input
-                    :model-value="optionQuery[facet.key] ?? ''"
+                    :model-value="optionQuery[facet.id] ?? ''"
                     size="small"
                     :placeholder="t('storyLibrary.search')"
                     :aria-label="
                       t('storyLibrary.searchFacet', { facet: facet.label.toLowerCase() })
                     "
-                    @update:model-value="setOptionQuery(facet.key, $event)"
+                    @update:model-value="setOptionQuery(facet.id, $event)"
                   >
                     <template #prefix>
                       <i
@@ -397,15 +388,15 @@
           >
             <li
               v-for="(item, index) in visible"
-              :key="item.key"
+              :key="item.id"
               :data-last-row-sm="index >= lastRowFrom(2) || undefined"
               :data-last-row-lg="index >= lastRowFrom(3) || undefined"
               class="border-b border-(--border-default) last:border-b-0 sm:border-e sm:max-lg:even:border-e-0 sm:max-lg:data-last-row-sm:border-b-0 lg:nth-[3n]:border-e-0 lg:data-last-row-lg:border-b-0"
             >
               <a
                 :href="item.href"
-                :target="item.external ? '_blank' : undefined"
-                :rel="item.external ? 'noopener' : undefined"
+                :target="item.target"
+                :rel="item.target === '_blank' ? 'noopener' : undefined"
                 :aria-label="cardLabel(item)"
                 class="group/card flex h-full flex-col gap-(--spacing-lg) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none"
               >
@@ -454,19 +445,22 @@
 
       <FrameBox
         key="empty"
-        v-else-if="empty"
+        v-else-if="emptyTitle"
         flush
         borders="y"
         marks="bottom"
       >
         <EmptyState
-          :title="empty.title"
+          :title="emptyTitle"
           icon="ai ai-search"
           class="p-(--spacing-2xl)"
         >
-          <template #actions>
+          <template
+            v-if="emptyActionLabel"
+            #actions
+          >
             <Button
-              :label="empty.action"
+              :label="emptyActionLabel"
               kind="secondary"
               size="large"
               @click="clear"

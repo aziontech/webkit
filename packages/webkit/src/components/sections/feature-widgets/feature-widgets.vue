@@ -73,7 +73,7 @@
     primaryAction?: FeatureWidgetsAction
     /** Second, outlined button under the headline; `{ label, href, trailing? }` where `trailing` adds the chevron. Omitted when absent. */
     secondaryAction?: FeatureWidgetsAction
-    /** Alignment of the section title over the grid: `centered`, `left` or `horizontal`. */
+    /** Alignment of the section title over the grid: `center`, `start` or `split`. */
     titleKind?: SectionTitleKind
     /** Column count of the grid from the medium breakpoint up: `2`, `3` or `4`. */
     columns?: FeatureWidgetsColumns
@@ -90,7 +90,7 @@
     description: '',
     primaryAction: undefined,
     secondaryAction: undefined,
-    titleKind: 'centered',
+    titleKind: 'center',
     columns: 2,
     copiedLabel: '',
     items: () => []

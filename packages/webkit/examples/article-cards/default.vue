@@ -5,12 +5,12 @@
 
 <template>
   <ArticleCards
-    kind="left"
+    kind="start"
     title="Related Articles"
     aria-label="Related Articles"
     :items="[
       {
-        key: 'how-to-reduce-ai-agent-latency',
+        id: 'how-to-reduce-ai-agent-latency',
         href: '/blog/how-to-reduce-ai-agent-latency',
         title: 'How Do You Reduce AI Agent Latency?',
         description:
@@ -19,7 +19,7 @@
         image: placeholderImage
       },
       {
-        key: 'cloudflare-alternatives-and-competitors',
+        id: 'cloudflare-alternatives-and-competitors',
         href: '/blog/cloudflare-alternatives-and-competitors',
         title: 'Best Cloudflare Alternatives and Competitors',
         description:
@@ -28,7 +28,7 @@
         image: placeholderImage
       },
       {
-        key: 'which-azion-plan-is-right-for-your-project',
+        id: 'which-azion-plan-is-right-for-your-project',
         href: '/blog/which-azion-plan-is-right-for-your-project',
         title: 'Which Azion Plan Is Right for Your Project?',
         description:

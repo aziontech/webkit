@@ -12,7 +12,7 @@
       kind="outcomes"
       eyebrow="Region: Earth."
       title="One distributed infrastructure without the complexity of managing, securing and scaling it"
-      lead="Built around your users. Distributed around your data."
+      claims-eyebrow="Built around your users. Distributed around your data."
       :claims="[
         '100+ data centers',
         '100+ Tbps network capacity',
@@ -54,7 +54,7 @@
       kind="benefits"
       eyebrow="Region: Earth."
       title="One distributed infrastructure without the complexity of managing, securing and scaling it"
-      lead="Built around your users. Distributed around your data."
+      claims-eyebrow="Built around your users. Distributed around your data."
       :claims="[
         '100+ data centers',
         '100+ Tbps network capacity',
@@ -84,7 +84,7 @@
       anchor="network-figures"
       eyebrow="Region: Earth."
       title="One distributed infrastructure without the complexity of managing, securing and scaling it"
-      lead="Built around your users. Distributed around your data."
+      claims-eyebrow="Built around your users. Distributed around your data."
       :claims="[
         '100+ data centers',
         '100+ Tbps network capacity',

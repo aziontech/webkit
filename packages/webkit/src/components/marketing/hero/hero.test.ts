@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import Hero from './hero.vue'
+import HeroTitle from './hero-title/hero-title.vue'
 
 const TESTID = 'marketing-hero'
 
@@ -117,13 +118,34 @@ describe('Hero', () => {
     expect(backdrop).toContainElement(getByTestId('marketing-texture-material'))
   })
 
-  it.each(['top', 'center', 'bottom'] as const)(
+  it.each(['start', 'center', 'end'] as const)(
     'carries the %s content alignment on data-align',
     (align) => {
       const { getByTestId } = render(Hero, { props: { kind: 'screen', align } })
       expect(getByTestId(TESTID)).toHaveAttribute('data-align', align)
     }
   )
+
+  it('aligns the title block from align and mobileAlign and paints titleHighlight', () => {
+    const { getByRole, getByText } = render(HeroTitle, {
+      props: {
+        title: 'on the edge.',
+        titleHighlight: 'Build anything',
+        align: 'center',
+        mobileAlign: 'start'
+      }
+    })
+    const header = getByRole('banner')
+    expect(header).toHaveAttribute('data-align', 'center')
+    expect(header).toHaveAttribute('data-mobile-align', 'start')
+    expect(getByText('Build anything').tagName).toBe('SPAN')
+  })
+
+  it('leaves the title block mobile alignment unset by default', () => {
+    const { getByRole } = render(HeroTitle, { props: { title: 'Headline' } })
+    expect(getByRole('banner')).toHaveAttribute('data-align', 'start')
+    expect(getByRole('banner')).not.toHaveAttribute('data-mobile-align')
+  })
 
   it('centers its content by default', () => {
     const { getByTestId } = render(Hero, { props: { kind: 'screen' } })

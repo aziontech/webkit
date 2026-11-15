@@ -157,7 +157,7 @@
     /** The site sent the application: the confirmation dialog opens. */
     submitted?: boolean
     /** The site could not send the application: `messages.error` shows under the submit button. */
-    error?: boolean
+    failed?: boolean
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -170,7 +170,7 @@
     secondaryAction: undefined,
     loading: false,
     submitted: false,
-    error: false
+    failed: false
   })
 
   const emit = defineEmits<{
@@ -321,7 +321,7 @@
     :data-testid="testId"
     :data-loading="loading || null"
     :data-submitted="submitted || null"
-    :data-error="error || null"
+    :data-failed="failed || null"
     class="scroll-mt-(--spacing-2xl)"
   >
     <template v-if="title">
@@ -393,7 +393,7 @@
                 >
                   <SectionTitle
                     :framed="false"
-                    kind="left"
+                    kind="start"
                     size="small"
                     :title="section.title"
                   />
@@ -444,7 +444,7 @@
             <div class="max-w-(--layout-measure-content) px-(--spacing-xl) py-(--spacing-2xl)">
               <SectionTitle
                 :framed="false"
-                kind="left"
+                kind="start"
                 :title="form.title"
                 :description="form.description ?? ''"
               />
@@ -566,7 +566,7 @@
               </div>
 
               <Alert
-                v-if="error"
+                v-if="failed"
                 severity="danger"
                 :label="messages.error"
               />

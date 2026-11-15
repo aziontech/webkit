@@ -3,10 +3,10 @@ name: architecture-tabs
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 104e1e363e8c82f2d1add68109e3ae66bfcca566ab5434bcbf3faf22882863cf
+checksum: 947f823eb6b3c8fc50e5f99fc84ed798d7ba10011b6bd19686fc83a4943c0738
 ---
 
 # ArchitectureTabs — Component Spec
@@ -32,7 +32,7 @@ The architecture band of a product page: a horizontal section title with one lar
 
 ## Best practices
 
-- Keep to five tabs with `position` `top` or `bottom`, three with `left` or `right`; tabs past the limit are not rendered.
+- Keep to five tabs with `tabsSide` `top` or `bottom`, three with `start` or `end`; tabs past the limit are not rendered.
 - Give every tab a `diagram` from the diagram library and a stable `value`.
 
 ## Usage
@@ -47,7 +47,7 @@ The architecture band of a product page: a horizontal section title with one lar
     eyebrow="Routing"
     title="Every AI request through one control point"
     description="Every client calls one endpoint."
-    position="bottom"
+    tabs-side="bottom"
     :tabs="[
       {
         value: 'request-path',
@@ -75,7 +75,7 @@ The architecture band of a product page: a horizontal section title with one lar
 | `eyebrow`          | `string`                   | `''`        | false    | Overline above the section title.                                                                                                                                                                                                             |
 | `title`            | `string`                   | `''`        | false    | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty.                                                                                                                            |
 | `description`      | `string`                   | `''`        | false    | Supporting sentence beside the headline.                                                                                                                                                                                                      |
-| `position`         | `ArchitectureTabsPosition` | `'top'`     | false    | Side of the diagram the tabs sit on: `top`, `bottom`, `left` or `right`; left and right hold up to three tabs.                                                                                                                                |
+| `tabsSide`         | `ArchitectureTabsSide`     | `'top'`     | false    | Side of the diagram the tabs sit on: `top`, `bottom`, `start` or `end`; start and end hold up to three tabs.                                                                                                                                  |
 | `tabs`             | `ArchitectureTabsTab[]`    | `[]`        | false    | The architectures, in order; each is `{ value, title, description, diagram, diagramAriaLabel? }` where `diagram` is the name of the diagram drawn while the tab is active and `diagramAriaLabel` replaces the description that diagram ships. |
 | `autoplay`         | `boolean`                  | `true`      | false    | Opens the next tab on a timer, with the composed tabs' visible pause control.                                                                                                                                                                 |
 | `autoplayInterval` | `number`                   | `6000`      | false    | Milliseconds each tab holds before the next one opens.                                                                                                                                                                                        |

@@ -90,7 +90,7 @@
         {
           label: 'Status',
           href: '#',
-          external: true
+          target: '_blank'
         }
       ]
     },

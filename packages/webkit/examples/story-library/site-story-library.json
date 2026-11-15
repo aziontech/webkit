@@ -5,7 +5,7 @@
     "title": "Companies building with Azion",
     "items": [
       {
-        "key": "case-gpa",
+        "id": "case-gpa",
         "href": "/site/success-cases/gpa",
         "client": {
           "name": "GPA",
@@ -20,7 +20,7 @@
         }
       },
       {
-        "key": "case-axur",
+        "id": "case-axur",
         "href": "/site/success-cases/axur",
         "client": {
           "name": "Axur",
@@ -35,7 +35,7 @@
         }
       },
       {
-        "key": "case-exame",
+        "id": "case-exame",
         "href": "/site/success-cases/exame",
         "client": {
           "name": "Exame",
@@ -56,7 +56,7 @@
         }
       },
       {
-        "key": "case-fourbank",
+        "id": "case-fourbank",
         "href": "/site/success-cases/fourbank",
         "client": {
           "name": "Fourbank",
@@ -71,7 +71,7 @@
         }
       },
       {
-        "key": "case-panvel",
+        "id": "case-panvel",
         "href": "/site/success-cases/panvel",
         "client": {
           "name": "Panvel",
@@ -86,7 +86,7 @@
         }
       },
       {
-        "key": "case-marisa",
+        "id": "case-marisa",
         "href": "/site/success-cases/marisa",
         "client": {
           "name": "Marisa",
@@ -103,7 +103,7 @@
     ],
     "facets": [
       {
-        "key": "industry",
+        "id": "industry",
         "label": "Industry",
         "allLabel": "All industries",
         "options": [
@@ -122,7 +122,7 @@
         ]
       },
       {
-        "key": "solution",
+        "id": "solution",
         "label": "Solution",
         "allLabel": "All solutions",
         "options": [
@@ -145,7 +145,7 @@
         ]
       },
       {
-        "key": "product",
+        "id": "product",
         "label": "Product",
         "allLabel": "All products",
         "options": [
@@ -200,14 +200,10 @@
         ]
       }
     ],
-    "search": {
-      "placeholder": "Search by company or story",
-      "label": "Search success stories"
-    },
-    "empty": {
-      "title": "No stories match these filters.",
-      "action": "View all success stories"
-    },
+    "searchPlaceholder": "Search by company or story",
+    "searchAriaLabel": "Search success stories",
+    "emptyTitle": "No stories match these filters.",
+    "emptyActionLabel": "View all success stories",
     "linkLabel": "Read story",
     "moreLabel": "Load more",
     "ariaLabel": "Success stories"

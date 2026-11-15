@@ -4,7 +4,7 @@
     "anchor": "posts",
     "items": [
       {
-        "key": "ship-portfolio-two-commands-azion-cli",
+        "id": "ship-portfolio-two-commands-azion-cli",
         "href": "/blog/ship-portfolio-two-commands-azion-cli",
         "image": "/media/blog/ship-portfolio-two-commands.png",
         "meta": "Developers • SEP 25, 2026",
@@ -19,7 +19,7 @@
         "categories": ["Developers"]
       },
       {
-        "key": "how-to-reduce-ai-agent-latency",
+        "id": "how-to-reduce-ai-agent-latency",
         "href": "/blog/how-to-reduce-ai-agent-latency",
         "image": "/media/blog/reduce-ai-agent-latency.png",
         "meta": "Serverless • SEP 23, 2026",
@@ -34,7 +34,7 @@
         "categories": ["Serverless"]
       },
       {
-        "key": "cloudflare-alternatives-and-competitors",
+        "id": "cloudflare-alternatives-and-competitors",
         "href": "/blog/cloudflare-alternatives-and-competitors",
         "image": "/media/blog/best-cloudflare-alternatives.png",
         "meta": "Security • SEP 22, 2026",
@@ -49,7 +49,7 @@
         "categories": ["Security"]
       },
       {
-        "key": "which-azion-plan-is-right-for-your-project",
+        "id": "which-azion-plan-is-right-for-your-project",
         "href": "/blog/which-azion-plan-is-right-for-your-project",
         "image": "/media/blog/which-azion-plan.png",
         "meta": "Company news • SEP 22, 2026",
@@ -75,17 +75,13 @@
       "Routing and networking"
     ],
     "allLabel": "All articles",
-    "categoryLabel": "Category",
-    "search": {
-      "placeholder": "Search articles",
-      "label": "Search articles"
-    },
+    "categoryAriaLabel": "Category",
+    "searchPlaceholder": "Search articles",
+    "searchAriaLabel": "Search articles",
     "rowLabel": "Read article",
     "moreLabel": "Load more",
-    "empty": {
-      "title": "No articles match these filters",
-      "action": "View all articles"
-    },
+    "emptyTitle": "No articles match these filters",
+    "emptyActionLabel": "View all articles",
     "ariaLabel": "Articles"
   }
 }

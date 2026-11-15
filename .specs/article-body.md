@@ -3,11 +3,11 @@ name: article-body
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: a5f52ae0c3820b9fddf97301376dddb2e1a758d13bb5dd7163d5ff5599ad4014
+checksum: e5916f87f725db24a6afe785984f05047ad4c77fa7020e38147146d9dfb89c01
 ---
 
 # ArticleBody — Component Spec
@@ -33,7 +33,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 ## Best practices
 
 - Write the body as plain blocks — headings, paragraphs and `-` lists separated by blank lines; inline markdown is rendered as text.
-- Mark the last breadcrumb entry `current`.
+- Mark the last breadcrumb entry `active` (it renders `aria-current="page"`).
 
 ## Usage
 
@@ -56,7 +56,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
     }"
     :trail="[
       { label: 'Success cases', href: '/success-cases' },
-      { label: 'Magalu Ensures High Availability at Scale with Azion', current: true }
+      { label: 'Magalu Ensures High Availability at Scale with Azion', active: true }
     ]"
     :share="{
       title: 'Share this article',
@@ -74,7 +74,7 @@ The reading page of an article. A brand banner sits over a three-column grid: th
 | ------------ | ------------------------ | ----------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `eyebrow`    | `string`                 | `''`        | false    | Overline above the headline.                                                                                                                                                                                                                    |
 | `article`    | `ArticleBodyArticle`     | `—`         | true     | The piece being read: its `title` (the page h1), `description`, `date`, `readTime`, canonical `href`, and optionally `author` (the writers' names) and `authors` (each a `name` and an `avatar` photo URL).                                     |
-| `trail`      | `ArticleBodyCrumb[]`     | `[]`        | false    | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `current`.                                                                                                                                                  |
+| `trail`      | `ArticleBodyCrumb[]`     | `[]`        | false    | The breadcrumb over the headline, each a `label` and an `href`, the last one marked `active`.                                                                                                                                                  |
 | `body`       | `string`                 | `''`        | false    | The article as markdown; its `##` and `###` headings feed the outline.                                                                                                                                                                          |
 | `banner`     | `string`                 | `''`        | false    | URL of the image over the masthead; the banner frame is omitted when empty.                                                                                                                                                                     |
 | `share`      | `ArticleBodyShare`       | `undefined` | false    | Labels of the share group: its `title`, `copyLink`, `shareX` and `shareLinkedIn`, optional `copyFeed` with the `feed` URL it copies, and optional toast messages `copiedLink`, `copiedFeed` and `copiedPage`; the group is omitted when absent. |

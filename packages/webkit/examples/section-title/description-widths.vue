@@ -5,14 +5,14 @@
 <template>
   <div>
     <SectionTitle
-      kind="horizontal"
+      kind="split"
       description-width="narrow"
       eyebrow="Narrow"
       title="Builders, not spectators"
       description="We make every application fast and reliable. Deploy your projects instantly on the most reliable global infrastructure, leverage enterprise-grade security, and scale from zero to peak without cold starts."
     />
     <SectionTitle
-      kind="horizontal"
+      kind="split"
       description-width="wide"
       eyebrow="Wide"
       title="Builders, not spectators"

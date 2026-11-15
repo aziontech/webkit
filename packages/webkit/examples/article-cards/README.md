@@ -4,7 +4,7 @@ A titled row of three article cards on one hairline grid with no gutter, stackin
 
 The media cell holds the article's cover. When the article has no cover, it holds the client's mark, drawn in one flat ink that follows the theme. On hover the card lifts to the raised surface and the media scales up slightly. The band closes every blog post with its related articles and every success story with its related stories.
 
-The band is the `ArticleCards` component from `@aziontech/webkit/article-cards`; it composes `SectionModule`, `SectionTitle`, `FrameBox` and `CardGrid` (`CardGrid.Cell`). `kind` places the heading: `left` (an article's closing row) or `centered` (a landing-page band). Every variant uses the one `_id`, `article-cards`.
+The band is the `ArticleCards` component from `@aziontech/webkit/article-cards`; it composes `SectionModule`, `SectionTitle`, `FrameBox` and `CardGrid` (`CardGrid.Cell`). `kind` places the heading: `start` (an article's closing row) or `center` (a landing-page band). Every variant uses the one `_id`, `article-cards`.
 
 ## Examples
 
@@ -18,8 +18,8 @@ Example: [`site-related-articles.vue`](./site-related-articles.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `kind` is `left`, and `title` is the band heading, set at the left.
-- `items[]` are the cards, each a `key`, an `href`, a `title`, a `description` and a `meta` overline (date and read time), plus an `image` cover or, when there is none, a client `mark` with its `name` and `logo`.
+- `kind` is `start`, and `title` is the band heading, set at the start.
+- `items[]` are the cards, each an `id`, an `href`, a `title`, a `description` and a `meta` overline (date and read time), plus an `image` cover or, when there is none, a client `mark` with its `name` and `logo`.
 - `ariaLabel` names the grid for assistive tech.
 
 Example:
@@ -44,8 +44,8 @@ Example: [`site-related-success-cases.vue`](./site-related-success-cases.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `kind` is `left`, and `title` is the band heading, set at the left.
-- `items[]` are the cards, each a `key`, an `href`, a `title`, a `description` and a `meta` overline (date and read time), plus an `image` cover or, when there is none, a client `mark` with its `name` and `logo`. Success stories have no cover, so each card carries its `mark`.
+- `kind` is `start`, and `title` is the band heading, set at the start.
+- `items[]` are the cards, each an `id`, an `href`, a `title`, a `description` and a `meta` overline (date and read time), plus an `image` cover or, when there is none, a client `mark` with its `name` and `logo`. Success stories have no cover, so each card carries its `mark`.
 - `ariaLabel` names the grid for assistive tech.
 
 Example:
@@ -70,9 +70,9 @@ Example: [`site-centered.vue`](./site-centered.vue)
 
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
-- `kind` is `centered`: the heading is centred over the cards.
+- `kind` is `center`: the heading is centred over the cards.
 - `eyebrow` and `title` make the heading.
-- `items[]` are the cards, each a `key`, an `href`, a `title`, a `description` and a `meta` overline (date and read time), plus an `image` cover or, when there is none, a client `mark` with its `name` and `logo`.
+- `items[]` are the cards, each an `id`, an `href`, a `title`, a `description` and a `meta` overline (date and read time), plus an `image` cover or, when there is none, a client `mark` with its `name` and `logo`.
 - `ariaLabel` names the grid for assistive tech.
 
 Example:

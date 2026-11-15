@@ -3,8 +3,8 @@ name: section-module
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 90943ee0e958ddcecf693d4b6bb5f8fbbc0961778f95f0f80df810bddb72dc38
+spec_version: 3
+checksum: 8f2f520ba9ea1807c9706440277b13eed82d5b79d19c4d51b3e8983c41f74446
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-15
@@ -68,7 +68,7 @@ import SectionModule from '@aziontech/webkit/section-module'
 | `title` | `string` | `''` | false | Headline of the module's header row, rendered as its `h2`. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `kind` | `SectionModuleKind` | `'left'` | false | Layout of the default header row. |
+| `kind` | `SectionModuleKind` | `'start'` | false | Layout of the default header row. |
 | `divided` | `boolean` | `true` | false | Draw the top rule that divides this module from the one above it. |
 | `padded` | `boolean` | `true` | false | Pad the module's body. Leave off for an edge-to-edge grid that owns its cell padding. |
 

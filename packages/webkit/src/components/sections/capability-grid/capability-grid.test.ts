@@ -49,13 +49,13 @@ describe('CapabilityGrid', () => {
     expect(getAllByRole('heading', { level: 3 })).toHaveLength(3)
   })
 
-  it('centers the title by default and sets it at the start edge with titleKind left', () => {
+  it('centers the title by default and sets it at the start edge with titleKind start', () => {
     const { getByTestId, unmount } = render(Default)
-    expect(getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'centered')
+    expect(getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'center')
     unmount()
 
     const left = render(LeftTitle)
-    expect(left.getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'left')
+    expect(left.getByTestId('marketing-section-title')).toHaveAttribute('data-kind', 'start')
     expect(left.getByRole('heading', { level: 2 }).textContent?.trim()).toBe(
       'Why you should be a partner'
     )

@@ -19,9 +19,9 @@ Example: [`site-default.vue`](./site-default.vue)
 Add this entry to the `sections` array of the page JSON. `_id` picks the block and `props` fill it:
 
 - `anchor` is the band id for in-page links, and `title` is the band heading.
-- `items[]` are the stories, each a `key`, an `href`, a `client` with its `name` and `logo`, a `category` overline, a `description`, and `facets` listing its `industry`, `solution` and `product` values.
-- `facets[]` are the selects, each a `key`, a `label`, an `allLabel` and its `options`.
-- `search` sets the field's `placeholder` and `label`; `empty` sets the empty state's `title` and `action`.
+- `items[]` are the stories, each an `id`, an `href`, a `client` with its `name` and `logo`, a `category` overline, a `description`, and `facets` listing its `industry`, `solution` and `product` values.
+- `facets[]` are the selects, each an `id`, a `label`, an `allLabel` and its `options`.
+- `searchPlaceholder` and `searchAriaLabel` set the field's placeholder and accessible name; `emptyTitle` and `emptyActionLabel` set the empty state's message and its action.
 - `linkLabel` is the read cue on every card and the lead of its accessible name, `moreLabel` the button under the grid, and `ariaLabel` names the list for assistive tech.
 
 Example:

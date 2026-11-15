@@ -30,19 +30,16 @@ describe('SectionTitle', () => {
     expect(root).toHaveAttribute('data-borders', 'bottom')
   })
 
-  it.each(['centered', 'left', 'horizontal'] as const)(
-    'reflects kind="%s" on data-kind',
-    (kind) => {
-      const { getByTestId } = render(SectionTitle, { props: { ...props, kind } })
+  it.each(['center', 'start', 'split'] as const)('reflects kind="%s" on data-kind', (kind) => {
+    const { getByTestId } = render(SectionTitle, { props: { ...props, kind } })
 
-      expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
-    }
-  )
+    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
+  })
 
   it('defaults to the centered kind', () => {
     const { getByTestId } = render(SectionTitle, { props })
 
-    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'centered')
+    expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'center')
   })
 
   it.each(['small', 'medium', 'large'] as const)('reflects size="%s" on data-size', (size) => {
@@ -73,7 +70,7 @@ describe('SectionTitle', () => {
     'reflects descriptionWidth="%s" on data-description-width',
     (descriptionWidth) => {
       const { getByTestId } = render(SectionTitle, {
-        props: { ...props, kind: 'horizontal', descriptionWidth }
+        props: { ...props, kind: 'split', descriptionWidth }
       })
 
       expect(getByTestId(TESTID)).toHaveAttribute('data-description-width', descriptionWidth)
@@ -95,7 +92,7 @@ describe('SectionTitle', () => {
     }
   )
 
-  it.each(['centered', 'left', 'horizontal'] as const)(
+  it.each(['center', 'start', 'split'] as const)(
     'keeps the headline before its description in DOM order when kind="%s"',
     (kind) => {
       const { container } = render(SectionTitle, {
@@ -168,7 +165,7 @@ describe('SectionTitle', () => {
       attrs: { 'data-testid': 'my-section-title' }
     })
 
-    expect(getByTestId('my-section-title')).toHaveAttribute('data-kind', 'centered')
+    expect(getByTestId('my-section-title')).toHaveAttribute('data-kind', 'center')
   })
 
   it('has no a11y violations with the full copy block', async () => {
@@ -182,7 +179,7 @@ describe('SectionTitle', () => {
     it('renders the Default story fixture', () => {
       const { getByTestId, getByRole } = render(Default)
 
-      expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'centered')
+      expect(getByTestId(TESTID)).toHaveAttribute('data-kind', 'center')
       expect(getByRole('heading', { level: 2 })).toHaveTextContent('Everything runs at the edge')
     })
 
@@ -190,9 +187,9 @@ describe('SectionTitle', () => {
       const { getAllByTestId } = render(Kinds)
 
       expect(getAllByTestId(TESTID).map((el) => el.getAttribute('data-kind'))).toEqual([
-        'centered',
-        'left',
-        'horizontal'
+        'center',
+        'start',
+        'split'
       ])
     })
 
@@ -219,7 +216,7 @@ describe('SectionTitle', () => {
       const { getAllByTestId } = render(DescriptionWidths)
       const roots = getAllByTestId(TESTID)
 
-      expect(roots.map((el) => el.getAttribute('data-kind'))).toEqual(['horizontal', 'horizontal'])
+      expect(roots.map((el) => el.getAttribute('data-kind'))).toEqual(['split', 'split'])
       expect(roots.map((el) => el.getAttribute('data-description-width'))).toEqual([
         'narrow',
         'wide'

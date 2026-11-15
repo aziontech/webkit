@@ -6,7 +6,7 @@
 <template>
   <div class="flex flex-col">
     <HeroBand
-      kind="centered-band"
+      kind="center-band"
       eyebrow="Pricing"
       title="Pay for what runs, not for what waits"
       description="Start free and grow without changing plans."
@@ -20,7 +20,7 @@
       description="New features and fixes, newest first."
     />
     <HeroBand
-      kind="centered"
+      kind="center"
       plain
       title="Ship from your terminal"
       description="One command creates, builds and deploys a project."

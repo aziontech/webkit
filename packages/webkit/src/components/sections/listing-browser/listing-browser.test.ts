@@ -49,7 +49,7 @@ const rows = [
 
 const facets = [
   {
-    key: 'area',
+    id: 'area',
     label: 'Department',
     allLabel: 'All departments',
     options: [
@@ -66,15 +66,15 @@ const sorts = [
 ]
 
 const search = {
-  placeholder: 'Search by title, team, or location',
-  shortPlaceholder: 'Search positions',
-  label: 'Search positions'
+  searchPlaceholder: 'Search by title, team, or location',
+  searchShortPlaceholder: 'Search positions',
+  searchAriaLabel: 'Search positions'
 }
 
 const empty = {
-  title: 'Nothing here yet',
-  description: 'No open positions match your search.',
-  clearLabel: 'View all open positions'
+  emptyTitle: 'Nothing here yet',
+  emptyDescription: 'No open positions match your search.',
+  emptyActionLabel: 'View all open positions'
 }
 
 const band = (props: Record<string, unknown> = {}) =>
@@ -83,13 +83,13 @@ const band = (props: Record<string, unknown> = {}) =>
       anchor: 'positions',
       title: TITLE,
       columns,
-      rows,
+      data: rows,
       groups: ['Engineering', 'Security'],
       facets,
       sorts,
       sortAriaLabel: 'Sort positions',
-      search,
-      empty,
+      ...search,
+      ...empty,
       ...props
     }
   })
@@ -126,7 +126,7 @@ describe('ListingBrowser', () => {
 
   it('lets a consumer data-testid win over the fallback', () => {
     const { getByTestId, queryByTestId } = render(ListingBrowser, {
-      props: { title: TITLE, columns, rows, groups: ['Engineering'] },
+      props: { title: TITLE, columns, data: rows, groups: ['Engineering'] },
       attrs: { 'data-testid': 'careers-jobs' }
     })
 
@@ -174,7 +174,7 @@ describe('ListingBrowser', () => {
       values: { role: `Role ${i}`, team: 'Engineering', type: 'Remote' },
       facets: {}
     }))
-    const { getByTestId } = band({ rows: many, groups, facets: [] })
+    const { getByTestId } = band({ data: many, groups, facets: [] })
     const mounted = tableRoles(getByTestId).length
     expect(mounted).toBeGreaterThan(0)
     expect(mounted).toBeLessThan(many.length)
@@ -201,7 +201,7 @@ describe('ListingBrowser', () => {
   it('narrows the rows by the search query, ignoring case', async () => {
     const { getByRole, getByTestId } = band()
 
-    await fireEvent.update(getByRole('textbox', { name: search.label }), 'grc')
+    await fireEvent.update(getByRole('textbox', { name: search.searchAriaLabel }), 'grc')
 
     expect(tableRoles(getByTestId)).toEqual(['GRC Analyst'])
   })
@@ -232,21 +232,21 @@ describe('ListingBrowser', () => {
     await pick(getByRole('combobox', { name: 'Department' }), 'Marketing')
 
     expect(queryByTestId(`${TESTID}__table`)).toBeNull()
-    expect(getByText(empty.title)).toBeInTheDocument()
-    expect(getByText(empty.description)).toBeInTheDocument()
+    expect(getByText(empty.emptyTitle)).toBeInTheDocument()
+    expect(getByText(empty.emptyDescription)).toBeInTheDocument()
 
-    await fireEvent.click(getByRole('button', { name: empty.clearLabel }))
+    await fireEvent.click(getByRole('button', { name: empty.emptyActionLabel }))
 
     expect(tableRoles(getByTestId)).toHaveLength(rows.length)
   })
 
-  it('shows nothing in place of the rows when nothing matches and empty is omitted', async () => {
-    const { getByRole, queryByTestId, queryByText } = band({ empty: undefined })
+  it('shows nothing in place of the rows when nothing matches and emptyTitle is omitted', async () => {
+    const { getByRole, queryByTestId, queryByText } = band({ emptyTitle: '' })
 
-    await fireEvent.update(getByRole('textbox', { name: search.label }), 'nothing at all')
+    await fireEvent.update(getByRole('textbox', { name: search.searchAriaLabel }), 'nothing at all')
 
     expect(queryByTestId(`${TESTID}__table`)).toBeNull()
-    expect(queryByText(empty.title)).toBeNull()
+    expect(queryByText(empty.emptyTitle)).toBeNull()
   })
 
   it('seeds a facet from the URL query when the value is one of its options', async () => {
@@ -272,11 +272,11 @@ describe('ListingBrowser', () => {
     const panel = getByTestId(`${TESTID}__filters`)
     expect(button.getAttribute('aria-controls')).toBe(panel.id)
     expect(button.getAttribute('aria-expanded')).toBe('false')
-    expect(panel.hasAttribute('data-expanded')).toBe(false)
+    expect(panel.getAttribute('data-state')).toBe('closed')
 
     await fireEvent.click(button)
     expect(button.getAttribute('aria-expanded')).toBe('true')
-    expect(panel.hasAttribute('data-expanded')).toBe(true)
+    expect(panel.getAttribute('data-state')).toBe('open')
   })
 
   it('lists each applied facet as a removable chip and counts it on the filter button', async () => {
@@ -304,7 +304,7 @@ describe('ListingBrowser', () => {
 
   it('searches the options only of a select with more than seven', async () => {
     const long = {
-      key: 'location',
+      id: 'location',
       label: 'Location',
       allLabel: 'All locations',
       options: [
@@ -332,7 +332,7 @@ describe('ListingBrowser', () => {
 
   it('draws a row mark in the table and the phone list', () => {
     const { getAllByAltText } = band({
-      rows: [{ ...rows[0], mark: { name: 'Acme', logo: '/logos/acme.svg' } }, rows[1], rows[2]]
+      data: [{ ...rows[0], mark: { name: 'Acme', logo: '/logos/acme.svg' } }, rows[1], rows[2]]
     })
 
     const marks = getAllByAltText('Acme')
@@ -365,13 +365,18 @@ describe('ListingBrowser', () => {
   })
 
   it('renders no toolbar without search, facets or sorts', () => {
-    const { queryByRole } = band({ search: undefined, facets: [], sorts: [] })
+    const { queryByRole } = band({
+      searchPlaceholder: '',
+      searchAriaLabel: '',
+      facets: [],
+      sorts: []
+    })
 
     expect(queryByRole('search')).toBeNull()
   })
 
-  it('renders only the section when rows is empty', () => {
-    const { getByTestId, queryByRole } = band({ rows: [] })
+  it('renders only the section when data is empty', () => {
+    const { getByTestId, queryByRole } = band({ data: [] })
 
     expect(getByTestId(TESTID)).toBeInTheDocument()
     expect(queryByRole('heading')).toBeNull()
@@ -395,7 +400,7 @@ describe('ListingBrowser', () => {
   it('has no a11y violations in the empty state', async () => {
     const { container, getByRole } = band()
 
-    await fireEvent.update(getByRole('textbox', { name: search.label }), 'nothing at all')
+    await fireEvent.update(getByRole('textbox', { name: search.searchAriaLabel }), 'nothing at all')
 
     await expectNoA11yViolations(container)
   })

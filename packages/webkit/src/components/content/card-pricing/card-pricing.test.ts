@@ -5,7 +5,7 @@ import Default from '../../../../examples/card-pricing/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CardPricing from './card-pricing.vue'
 
-const SLOT_POSITIONS = ['bottom', 'middle'] as const
+const ACTIONS_POSITIONS = ['bottom', 'middle'] as const
 const CARD_STYLES = ['contained', 'transparent'] as const
 
 const ROOT = 'content-card-pricing'
@@ -37,7 +37,11 @@ describe('CardPricing', () => {
     // above it duplicated the job, so it is gone: passing the old prop renders nothing
     // and adds no element, in either composition.
     const { queryByTestId } = render(CardPricing, {
-      props: { description: 'Best for growing teams.', aligned: true, slotPosition: 'middle' }
+      props: {
+        description: 'Best for growing teams.',
+        equalHeight: true,
+        actionsPosition: 'middle'
+      }
     })
     expect(queryByTestId(`${ROOT}__description`)).toBeNull()
     expect(queryByTestId(`${ROOT}__pricing-details`)).not.toBeNull()
@@ -130,9 +134,9 @@ describe('CardPricing', () => {
   })
 
   it('renders currency, pricing, actions and slot regions for both slot positions', () => {
-    for (const slotPosition of SLOT_POSITIONS) {
+    for (const actionsPosition of ACTIONS_POSITIONS) {
       const { getByTestId, unmount } = render(CardPricing, {
-        props: { slotPosition, pricingDetails: 'x', showPricingDetails: true }
+        props: { actionsPosition, pricingDetails: 'x', showPricingDetails: true }
       })
 
       expect(getByTestId(ROOT)).toBeInTheDocument()
@@ -159,10 +163,13 @@ describe('CardPricing', () => {
     expect(getByTestId('my-card__action')).toBeInTheDocument()
   })
 
-  it.each(SLOT_POSITIONS)('renders slotPosition=%s without dropping the root', (slotPosition) => {
-    const { getByTestId } = render(CardPricing, { props: { slotPosition } })
-    expect(getByTestId(ROOT)).toBeInTheDocument()
-  })
+  it.each(ACTIONS_POSITIONS)(
+    'renders actionsPosition=%s without dropping the root',
+    (actionsPosition) => {
+      const { getByTestId } = render(CardPricing, { props: { actionsPosition } })
+      expect(getByTestId(ROOT)).toBeInTheDocument()
+    }
+  )
 
   it.each(CARD_STYLES)('renders kind=%s without dropping the root', (cardStyle) => {
     const { getByTestId } = render(CardPricing, { props: { kind: cardStyle } })
@@ -182,38 +189,43 @@ describe('CardPricing', () => {
 
   it('has no accessibility violations for the middle slot position with a filled slot', async () => {
     const { container } = render(CardPricing, {
-      props: { title: 'Pro', slotPosition: 'middle', showTag: true, description: 'Middle layout.' },
+      props: {
+        title: 'Pro',
+        actionsPosition: 'middle',
+        showTag: true,
+        description: 'Middle layout.'
+      },
       slots: { default: '<ul><li>Feature one</li><li>Feature two</li></ul>' }
     })
     await expectNoA11yViolations(container)
   })
 
-  it('does not render the caveat band when aligned is off and the copy is empty', () => {
+  it('does not render the caveat band when equalHeight is off and the copy is empty', () => {
     const { queryByTestId } = render(CardPricing, { props: {} })
     // pricingDetails '' -> no band, so a lone card is sized by what it actually says.
     expect(queryByTestId(`${ROOT}__pricing-details`)).toBeNull()
   })
 
-  it('renders the caveat band under aligned even with no copy to put in it', () => {
+  it('renders the caveat band under equalHeight even with no copy to put in it', () => {
     // This is the whole mechanism: a tier with no caveat still has to occupy the lines
     // its siblings do, or the row does not line up. Without the empty band there is
     // nothing for the reservation to apply to.
-    const { getByTestId } = render(CardPricing, { props: { aligned: true } })
+    const { getByTestId } = render(CardPricing, { props: { equalHeight: true } })
 
     expect(getByTestId(`${ROOT}__pricing-details`).textContent?.trim()).toBe('')
-    expect(getByTestId(ROOT).getAttribute('data-aligned')).toBe('true')
+    expect(getByTestId(ROOT).getAttribute('data-equal-height')).toBe('true')
   })
 
-  it('leaves data-aligned off by default, so the reservation is opt-in', () => {
+  it('leaves data-equal-height off by default, so the reservation is opt-in', () => {
     const { getByTestId } = render(CardPricing, { props: {} })
-    expect(getByTestId(ROOT).getAttribute('data-aligned')).toBeNull()
+    expect(getByTestId(ROOT).getAttribute('data-equal-height')).toBeNull()
   })
 
   it('keeps the pricing-details band empty when showPricingDetails is off', () => {
-    // The band is reserved (aligned) but the copy is suppressed — the row still lines
+    // The band is reserved (equalHeight) but the copy is suppressed — the row still lines
     // up and the caveat is genuinely not stated.
     const { getByTestId } = render(CardPricing, {
-      props: { aligned: true, pricingDetails: 'Billed annually.', showPricingDetails: false }
+      props: { equalHeight: true, pricingDetails: 'Billed annually.', showPricingDetails: false }
     })
     expect(getByTestId(`${ROOT}__pricing-details`).textContent?.trim()).toBe('')
   })

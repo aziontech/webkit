@@ -15,7 +15,7 @@
     :page-size="2"
     :items="[
       {
-        key: 'case-gpa',
+        id: 'case-gpa',
         href: '/site/success-cases/gpa',
         client: { name: 'GPA', logo: gpaExtendedReversed },
         category: 'Retail',
@@ -24,7 +24,7 @@
         facets: { industry: ['Retail'], solution: ['Secure'] }
       },
       {
-        key: 'case-axur',
+        id: 'case-axur',
         href: '/site/success-cases/axur',
         client: { name: 'Axur', logo: axurExtendedReversed },
         category: 'Tech',
@@ -33,7 +33,7 @@
         facets: { industry: ['Tech'], solution: ['Build', 'Secure'] }
       },
       {
-        key: 'case-exame',
+        id: 'case-exame',
         href: '/site/success-cases/exame',
         client: { name: 'Exame', logo: exameExtendedReversed },
         category: 'Media',
@@ -44,7 +44,7 @@
     ]"
     :facets="[
       {
-        key: 'industry',
+        id: 'industry',
         label: 'Industry',
         allLabel: 'All industries',
         options: [
@@ -54,7 +54,7 @@
         ]
       },
       {
-        key: 'solution',
+        id: 'solution',
         label: 'Solution',
         allLabel: 'All solutions',
         options: [
@@ -64,11 +64,10 @@
         ]
       }
     ]"
-    :search="{
-      placeholder: 'Search by company or story',
-      shortPlaceholder: 'Search stories',
-      label: 'Search success stories'
-    }"
-    :empty="{ title: 'No stories match these filters.', action: 'View all success stories' }"
+    search-placeholder="Search by company or story"
+    search-short-placeholder="Search stories"
+    search-aria-label="Search success stories"
+    empty-title="No stories match these filters."
+    empty-action-label="View all success stories"
   />
 </template>

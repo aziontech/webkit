@@ -11,7 +11,7 @@ type Turn = {
   id: number
   from: 'user' | 'assistant'
   text: string
-  state: 'pending' | 'streaming' | 'complete'
+  status: 'pending' | 'streaming' | 'success'
 }
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 30)))
@@ -24,7 +24,11 @@ function thread(initial: Turn[], props: Record<string, unknown> = {}) {
         h(Conversation, props, {
           default: () =>
             turns.value.map((turn) =>
-              h(ChatMessage, { key: turn.id, from: turn.from, state: turn.state }, () => turn.text)
+              h(
+                ChatMessage,
+                { key: turn.id, from: turn.from, status: turn.status },
+                () => turn.text
+              )
             )
         })
       ])
@@ -37,7 +41,7 @@ const many = (n: number): Turn[] =>
     id: i,
     from: i % 2 ? 'assistant' : 'user',
     text: `Message ${i} `.repeat(12),
-    state: 'complete'
+    status: 'success'
   }))
 
 describe('Conversation', () => {
@@ -62,8 +66,8 @@ describe('Conversation', () => {
     expect(log).toHaveAttribute('tabindex', '0')
   })
 
-  it('hands alignment to its messages', () => {
-    const { getAllByTestId } = thread(many(2), { alignment: 'start' })
+  it('hands its layout to its messages', () => {
+    const { getAllByTestId } = thread(many(2), { layout: 'start' })
     for (const message of getAllByTestId('ai-chat-message')) {
       expect(message).toHaveAttribute('data-alignment', 'start')
     }
@@ -76,13 +80,13 @@ describe('Conversation', () => {
   })
 
   it('announces an assistant message once it finishes, never while streaming', async () => {
-    const { getByTestId, turns } = thread([{ id: 0, from: 'user', text: 'Hi', state: 'complete' }])
-    turns.value = [...turns.value, { id: 1, from: 'assistant', text: 'Hel', state: 'streaming' }]
+    const { getByTestId, turns } = thread([{ id: 0, from: 'user', text: 'Hi', status: 'success' }])
+    turns.value = [...turns.value, { id: 1, from: 'assistant', text: 'Hel', status: 'streaming' }]
     await frame()
     const announcer = getByTestId('ai-conversation__announcer')
     expect(announcer).toHaveTextContent('')
     turns.value = turns.value.map((t) =>
-      t.id === 1 ? { ...t, text: 'Hello there.', state: 'complete' } : t
+      t.id === 1 ? { ...t, text: 'Hello there.', status: 'success' } : t
     )
     await frame()
     expect(announcer).toHaveTextContent('AI assistant: Hello there.')
@@ -90,7 +94,7 @@ describe('Conversation', () => {
 
   it('does not announce the user’s own new message', async () => {
     const { getByTestId, turns } = thread([])
-    turns.value = [{ id: 0, from: 'user', text: 'Purge one URL', state: 'complete' }]
+    turns.value = [{ id: 0, from: 'user', text: 'Purge one URL', status: 'success' }]
     await frame()
     expect(getByTestId('ai-conversation__announcer')).toHaveTextContent('')
   })

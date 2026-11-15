@@ -3,8 +3,8 @@ name: hero
 category: marketing
 structure: composition
 status: implemented
-spec_version: 5
-checksum: 8f5a93caa16455dc55e30be700b1146bb091821ed858d18898adf10eafa422f7
+spec_version: 6
+checksum: 60c3c3ee7396201acdc35648989dda08046e16a98c6172e0a6078d658c2938a4
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -48,7 +48,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 - Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.
 - Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.
 - Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.
-- Keep `highlight` to the opening phrase of the headline — it is the same sentence, only painted differently.
+- Keep `titleHighlight` to the opening phrase of the headline — it is the same sentence, only painted differently.
 - Put the calls to action in `Hero.Title`'s `actions` slot; it stacks them full-width on narrow screens, which is what makes a hero button a comfortable thumb target.
 - Set `mediaAlign="end"` when the media should close on the same vertical line as the frames below the band; leave it `center` when the media is a self-contained object that reads best balanced in its column.
 - Reach for `floorTexture` rather than wiring a texture into the `bottom` slot by hand: the window is a fixed cell, so the band already carries the ink and the horizontal falloff fitted to it, and a hand-fitted copy of that drifts.
@@ -70,9 +70,9 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
     texture-fade="bottom"
   >
     <Hero.Title
-      centered
+      align="center"
       eyebrow="Edge platform"
-      highlight="Build anything."
+      title-highlight="Build anything."
       title="Run it everywhere."
       description="Ship applications, security and observability from one platform."
     >
@@ -104,7 +104,7 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 | `textureFade`      | `TextureMaterialFade` | `'none'`   | false    | Fade applied to the layer the `texture` prop paints.                                                                                                                   |
 | `floorTexture`     | `TextureMaterialKind` | `'none'`   | false    | Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip.                                                                    |
 | `floorTextureSize` | `TextureMaterialSize` | `'medium'` | false    | Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit.                                                                                      |
-| `align`            | `HeroAlign`           | `'center'` | false    | Where the content column sits vertically when the band fills a screen.                                                                                                 |
+| `align`            | `HeroAlign`           | `'center'` | false    | Where the content column sits vertically when the band fills a screen (`start` is the top, `end` the bottom).                                                                                            |
 | `mediaAlign`       | `HeroMediaAlign`      | `'center'` | false    | Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. |
 | `offset`           | `string`              | `''`       | false    | Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length.                                                       |
 | `bottomHeight`     | `string`              | `''`       | false    | Height of the window under the content, where the brand strip and the floor texture stand; any CSS length.                                                             |
@@ -131,7 +131,7 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 The root `Hero` owns the band — the full-bleed section, the capped column, the bottom rule, the backdrop and asset windows, and the one-screen height. `Hero.Title` owns the copy block placed in its default slot. There is no shared state between them: the band is a layout shell and the copy block is self-contained, so nothing is provided or injected and the consumer wires nothing. Member names mirror this component's anatomy; the band has no `data-state="open|closed"`, so it has no `Trigger` or `Content`.
 
 - `hero-title/hero-title.vue` — the page's leading statement: overline, `h1` with an optionally accented opening phrase, supporting paragraph and the actions row. Renders a `header`, so it carries the band's document outline.
-  - Props: `title` (`string`, required) — headline of the page, rendered as the page's `h1`; `highlight` (`string`, `''`) — opening phrase of the headline, painted in the brand accent, reading as one sentence with `title`; `description` (`string`, `''`) — supporting sentence under the headline, overridden by the default slot, running to the block's own width and set one step further from the headline than the rest of the block; `eyebrow` (`string`, `''`) — short uppercase overline rendered above the headline, always closed by the blinking cursor, wrapping to the block's width instead of overflowing it; `eyebrowPrefix` (`HeroTitleEyebrowPrefix` = `'' | '//' | '<>' | '</>'`, `''`) — mark set before the eyebrow label, empty renders the label alone; `centered` (`boolean`, `false`) — centre the whole block instead of aligning it to the start. `mobileCentered` (`boolean`, `false`) — centre the whole block below `md` only, where a band with `media` stacks the copy above it; from `md` up the block keeps its start alignment. `size` (`HeroTitleSize` = `'medium' | 'large'`, `'medium'`) — headline scale, medium steps one rung below large. `maxWidth` (`HeroTitleWidth` = `'lg' | 'xl' | '2xl' | '3xl' | '4xl'`, `'4xl'`) — width the whole block (headline, paragraph and actions) is capped at; beside a `media` slot the block is capped inside its half of the band. `sticky` (`boolean`, `false`) — keep the block pinned beneath the fixed chrome while the column beside it scrolls, from the large breakpoint up.
+  - Props: `title` (`string`, required) — headline of the page, rendered as the page's `h1`; `titleHighlight` (`string`, `''`) — opening phrase of the headline, painted in the brand accent, reading as one sentence with `title`; `description` (`string`, `''`) — supporting sentence under the headline, overridden by the default slot, running to the block's own width and set one step further from the headline than the rest of the block; `eyebrow` (`string`, `''`) — short uppercase overline rendered above the headline, always closed by the blinking cursor, wrapping to the block's width instead of overflowing it; `eyebrowPrefix` (`HeroTitleEyebrowPrefix` = `'' | '//' | '<>' | '</>'`, `''`) — mark set before the eyebrow label, empty renders the label alone; `align` (`HeroTitleAlign` = `'start' | 'center'`, `'start'`) — where the whole block aligns, at every width. `mobileAlign` (`HeroTitleAlign`, `undefined`) — where the whole block aligns below `md` only, where a band with `media` stacks the copy above it; unset, it follows `align`. `size` (`HeroTitleSize` = `'medium' | 'large'`, `'medium'`) — headline scale, medium steps one rung below large. `maxWidth` (`HeroTitleWidth` = `'lg' | 'xl' | '2xl' | '3xl' | '4xl'`, `'4xl'`) — width the whole block (headline, paragraph and actions) is capped at; beside a `media` slot the block is capped inside its half of the band. `sticky` (`boolean`, `false`) — keep the block pinned beneath the fixed chrome while the column beside it scrolls, from the large breakpoint up.
   - Events: _none_.
   - Slots: `default` — description body, replacing the `description` prop when provided; `actions` — the page's leading calls to action, stacked full-width while the title's container is narrower than `@2xs` (300 px, so a 390 px phone keeps the row and a 320 px one stacks) and laid out in a row from it.
 
@@ -145,7 +145,7 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - `data-size` carries the rhythm key (`medium` or `large`); it takes effect only with `data-padded`, and the same step applies above and below the content, so the copy and the media sit on the band's vertical centre
 - `data-media` present when the `media` slot is filled and the content column is split into two equal halves from `md` up, the copy leading and the media trailing; stacked below `md`
 - `data-media-align` carries where the `media` slot sits in its column (`center` or `end`); it takes effect only with `data-media`. With `end`, from `md` up, the media cell extends through the end-side inline inset so its end edge lands on the container boundary — the same line the frames of the section below draw — and media narrower than the cell is set against that edge. Stacked below `md`, the media keeps the inset
-- `data-align` carries where the content column sits vertically in a `screen` band. The column takes the band's leftover height, so `center` is the centre of the space actually available — a `bottom` asset reserves its height and the copy centres above it, while a `top` asset overlays and claims none
+- `data-align` carries where the content column sits vertically in a `screen` band. The column takes the band's leftover height, (`start`, `center` or `end`), so `center` is the centre of the space actually available — a `bottom` asset reserves its height and the copy centres above it, while a `top` asset overlays and claims none
 - The band is an `isolate` stacking context, so its layer order never leaks into the page. Layer tokens set that order: `--banner-z-background` (0), `--banner-z-top` / `--banner-z-bottom` (1), `--banner-z-content` (10)
 - Each asset window clips its slotted child, so an asset larger than the band shows only the part the window frames. Custom properties place it: `--banner-top-height` / `--banner-bottom-height` size the window, and `--banner-top-x` / `-y`, `--banner-bottom-x` / `-y`, `--banner-background-x` / `-y` move the asset inside it
 - The backdrop sets `--texture-fade-lead: transparent`, so a `top` / `bottom` fade on the `texture` layer — or on a `texture-material` in the `background` slot — ramps in from zero at its leading edge as well as fading out: the opening band sits under the site header, and the texture must clear it. Outside a hero the same fades stay single
@@ -203,7 +203,7 @@ _none_
 - Widths — composite story rendering the width keys side-by-side (justified: a cap is only legible when two are compared in one view)
 - Screen — the band filling one viewport (mutually-exclusive state of the `kind` prop)
 - Media — the band with the copy beside a media column (justified: the two-column split is a structural mode the default story cannot show)
-- MediaMobileCentered — the `media` band with `Hero.Title` `mobileCentered` set, opened at the mobile viewport (justified: the copy only re-aligns below `md`, where the media stacks under it, so the default `Media` story cannot show it)
+- MediaMobileCentered — the `media` band with `Hero.Title` `mobile-align="center"` set, opened at the mobile viewport (justified: the copy only re-aligns below `md`, where the media stacks under it, so the default `Media` story cannot show it)
 - Background — the band with a backdrop in its `background` slot (justified: the layering of backdrop beneath copy is the band's one non-obvious behaviour)
 - Backdrops — composite story rendering every `texture` value (justified: a texture is a multi-option axis, and the canonical composite story for it)
 - AssetWindows — the `top` and `bottom` slots filled (justified: the clipping windows and their `--banner-*` geometry cannot be read from the prop table)

@@ -37,7 +37,7 @@ const primaryAction = { label: 'See all 23 roles', href: '/careers/jobs', traili
 
 const band = (props: Record<string, unknown> = {}) =>
   render(ListingTable, {
-    props: { title: TITLE, columns, rows, primaryAction, ...props }
+    props: { title: TITLE, columns, data: rows, primaryAction, ...props }
   })
 
 describe('ListingTable', () => {
@@ -49,7 +49,7 @@ describe('ListingTable', () => {
 
   it('lets a consumer data-testid win over the fallback', () => {
     const { getByTestId, queryByTestId } = render(ListingTable, {
-      props: { title: TITLE, columns, rows },
+      props: { title: TITLE, columns, data: rows },
       attrs: { 'data-testid': 'latest-roles' }
     })
 
@@ -108,7 +108,7 @@ describe('ListingTable', () => {
       href: `/careers/role-${i}`,
       values: { role: `Role ${i}`, team: 'Engineering', type: 'Remote' }
     }))
-    const { getAllByRole } = band({ rows: many })
+    const { getAllByRole } = band({ data: many })
     const links = getAllByRole('link')
     const cellLinks = links.filter((link) => link.closest('[role="cell"]'))
     const itemLinks = links.filter((link) => link.closest('[role="listitem"]'))
@@ -205,7 +205,7 @@ describe('ListingTable', () => {
   })
 
   it('renders only the section when rows is empty', () => {
-    const { getByTestId, queryByRole } = band({ rows: [] })
+    const { getByTestId, queryByRole } = band({ data: [] })
 
     expect(getByTestId(TESTID)).toBeInTheDocument()
     expect(queryByRole('heading', { level: 2 })).toBeNull()

@@ -38,7 +38,7 @@ const band = (props: Record<string, unknown> = {}) =>
       eyebrow: EYEBROW,
       title: TITLE,
       description: DESCRIPTION,
-      position: 'bottom',
+      tabsSide: 'bottom',
       tabs,
       primaryAction,
       ...props
@@ -101,10 +101,10 @@ describe('ArchitectureTabs', () => {
     )
   })
 
-  it('forwards the position to the tab row', () => {
-    const { getByTestId } = band({ position: 'left' })
+  it('forwards the tabs side to the tab row', () => {
+    const { getByTestId } = band({ tabsSide: 'start' })
 
-    expect(getByTestId('marketing-media-tabs').getAttribute('data-position')).toBe('left')
+    expect(getByTestId('marketing-media-tabs').getAttribute('data-tabs-side')).toBe('start')
   })
 
   it('draws the named diagram of every tab', () => {

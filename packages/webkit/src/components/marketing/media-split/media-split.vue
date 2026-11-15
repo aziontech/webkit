@@ -24,7 +24,7 @@
   /** Level of the band's headline element. */
   export type MediaSplitHeadingLevel = 2 | 3
   /** Where the copy sits down its cell. */
-  export type MediaSplitAlign = 'top' | 'center'
+  export type MediaSplitAlign = 'start' | 'center'
   /** Type scale of the copy. */
   export type MediaSplitSize = 'medium' | 'large'
 
@@ -63,7 +63,7 @@
     mediaPadded?: boolean
     /** URL the band links to. With it set the media cell is one link named by the band's title, a click anywhere else on the band follows it, and hovering the band reveals the chevron affordance and the hover state of its link actions. */
     mediaHref?: string
-    /** Where the copy sits down its cell. `top` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle. */
+    /** Where the copy sits down its cell. `start` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle. */
     align?: MediaSplitAlign
     /** Type scale and air of the copy. `medium` sets the headline at heading-md for a band beside other content; `large` sets it at heading-xl with a larger description and pads the copy cell a step wider, for a band that carries only its headline and actions. */
     size?: MediaSplitSize
@@ -86,7 +86,7 @@
     textureFade: 'vignette',
     mediaPadded: false,
     mediaHref: '',
-    align: 'top',
+    align: 'start',
     size: 'medium'
   })
 

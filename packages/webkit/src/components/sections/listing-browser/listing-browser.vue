@@ -79,8 +79,8 @@
 
   /** One facet select the reader narrows the listing by. */
   export type ListingBrowserFacet = {
-    /** Key of the row facet it narrows, and the URL query parameter that seeds it. */
-    key: string
+    /** Identity of the facet: the key of the row facet it narrows, and the URL query parameter that seeds it. */
+    id: string
     /** Accessible name of the select. */
     label: string
     /** Label of the option that keeps every row. */
@@ -99,26 +99,6 @@
     by?: string
   }
 
-  /** Copy of the search field. */
-  export type ListingBrowserSearch = {
-    /** Placeholder of the field from the large breakpoint up. */
-    placeholder: string
-    /** Shorter placeholder below the large breakpoint. */
-    shortPlaceholder?: string
-    /** Accessible name of the field. */
-    label: string
-  }
-
-  /** Copy of the state shown when nothing matches. */
-  export type ListingBrowserEmpty = {
-    /** Headline of the state. */
-    title: string
-    /** Sentence under the headline. */
-    description?: string
-    /** Label of the button that clears the search and every facet. */
-    clearLabel?: string
-  }
-
   interface Props {
     /** In-page `id` of the band, the target of a `#hash` link. */
     anchor?: string
@@ -127,19 +107,27 @@
     /** The columns, left to right; each is `{ key, label, grow?, align? }`. The first names the row and links it, the second describes it on phones. */
     columns?: ListingBrowserColumn[]
     /** Every row, in source order; each is `{ href, group, values, facets, mark? }` where `values` and `facets` are keyed by column and facet and `mark` is the client's `{ name, logo }`. */
-    rows?: ListingBrowserRow[]
+    data?: ListingBrowserRow[]
     /** The groups the rows are listed under, in order; a group with no matching row is not shown. */
     groups?: string[]
-    /** The facet selects; each is `{ key, label, allLabel, options }` where `key` matches a row facet and seeds it from `?key=` in the URL, and every option is `{ value, label }`. */
+    /** The facet selects; each is `{ id, label, allLabel, options }` where `id` matches a row facet and seeds it from `?id=` in the URL, and every option is `{ value, label }`. */
     facets?: ListingBrowserFacet[]
     /** The orders, the first the default; each is `{ value, label, by? }` where `by` is the column it sorts on and an empty `by` keeps the source order. */
     sorts?: ListingBrowserSort[]
     /** Accessible name of the order select. */
     sortAriaLabel?: string
-    /** The search field; `{ placeholder, shortPlaceholder, label }` where `shortPlaceholder` is used below the large breakpoint and `label` names the field. Omitted when absent. */
-    search?: ListingBrowserSearch
-    /** The state shown when nothing matches; `{ title, description, clearLabel }` where `clearLabel` is the button that clears the search and every facet. Omitted when absent. */
-    empty?: ListingBrowserEmpty
+    /** Placeholder of the search field from the large breakpoint up; the field is omitted when this and `searchAriaLabel` are both empty. */
+    searchPlaceholder?: string
+    /** Shorter placeholder of the search field below the large breakpoint; empty uses `searchPlaceholder`. */
+    searchShortPlaceholder?: string
+    /** Accessible name of the search field. */
+    searchAriaLabel?: string
+    /** Headline of the state shown when nothing matches; the state renders only with it. */
+    emptyTitle?: string
+    /** Sentence under the empty-state headline. */
+    emptyDescription?: string
+    /** Label of the empty-state button that clears the search and every facet; no button renders without it. */
+    emptyActionLabel?: string
     /** Label of the filter button below the large breakpoint; empty uses the locale catalog (`Filters`). */
     filterLabel?: string
   }
@@ -148,13 +136,17 @@
     anchor: '',
     title: '',
     columns: () => [],
-    rows: () => [],
+    data: () => [],
     groups: () => [],
     facets: () => [],
     sorts: () => [],
     sortAriaLabel: '',
-    search: undefined,
-    empty: undefined,
+    searchPlaceholder: '',
+    searchShortPlaceholder: '',
+    searchAriaLabel: '',
+    emptyTitle: '',
+    emptyDescription: '',
+    emptyActionLabel: '',
     filterLabel: ''
   })
 
@@ -174,10 +166,10 @@
   const query = ref('')
   const sort = ref(props.sorts[0]?.value ?? '')
   const selected = ref<Record<string, string>>(
-    Object.fromEntries(props.facets.map((facet) => [facet.key, '']))
+    Object.fromEntries(props.facets.map((facet) => [facet.id, '']))
   )
 
-  const expanded = ref(false)
+  const filtersOpen = ref(false)
 
   const optionQuery = ref<Record<string, string>>({})
 
@@ -188,14 +180,16 @@
   onMounted(() => {
     const params = new URLSearchParams(globalThis.location?.search ?? '')
     props.facets.forEach((facet) => {
-      const value = params.get(facet.key)
+      const value = params.get(facet.id)
       if (value && facet.options.some((option) => option.value === value)) {
-        selected.value[facet.key] = value
+        selected.value[facet.id] = value
       }
     })
   })
 
-  const hasRows = computed(() => props.rows.length > 0)
+  const hasRows = computed(() => props.data.length > 0)
+
+  const hasSearch = computed(() => Boolean(props.searchPlaceholder || props.searchAriaLabel))
 
   const hasHeader = computed(() => hasRows.value && props.title.length > 0)
 
@@ -204,14 +198,12 @@
   const detailKey = computed(() => props.columns[1]?.key ?? '')
 
   const placeholder = computed(() =>
-    wide.value
-      ? (props.search?.placeholder ?? '')
-      : props.search?.shortPlaceholder || props.search?.placeholder || ''
+    wide.value ? props.searchPlaceholder : props.searchShortPlaceholder || props.searchPlaceholder
   )
 
   const matches = computed(() => {
     const needle = query.value.trim().toLowerCase()
-    const found = props.rows.filter(
+    const found = props.data.filter(
       (row) =>
         Object.entries(selected.value).every(
           ([key, value]) => !value || (row.facets?.[key] ?? []).includes(value)
@@ -262,11 +254,11 @@
 
   const applied = computed(() =>
     props.facets.flatMap((facet) => {
-      const value = selected.value[facet.key]
+      const value = selected.value[facet.id]
       const option = value
         ? facet.options.find((candidate) => candidate.value === value)
         : undefined
-      return option ? [{ key: facet.key, label: `${facet.label}: ${option.label}` }] : []
+      return option ? [{ key: facet.id, label: `${facet.label}: ${option.label}` }] : []
     })
   )
 
@@ -314,7 +306,7 @@
   const clearFilters = () => {
     query.value = ''
     props.facets.forEach((facet) => {
-      selected.value[facet.key] = ''
+      selected.value[facet.id] = ''
     })
   }
 </script>
@@ -339,14 +331,14 @@
       >
         <SectionTitle
           v-if="hasHeader"
-          kind="left"
+          kind="start"
           :framed="false"
           :title="title"
           class="border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-2xl)"
         />
 
         <div
-          v-if="search || facets.length > 0 || sorts.length > 0"
+          v-if="hasSearch || facets.length > 0 || sorts.length > 0"
           role="search"
           :data-testid="`${testId}__toolbar`"
           class="grid gap-(--spacing-md) border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-lg) lg:grid-cols-[minmax(0,4fr)_repeat(3,minmax(0,1fr))] lg:items-center"
@@ -359,18 +351,18 @@
               kind="outlined"
               size="large"
               icon="ai ai-filter"
-              :aria-expanded="expanded ? 'true' : 'false'"
+              :aria-expanded="filtersOpen ? 'true' : 'false'"
               :aria-controls="panelId"
               class="shrink-0 lg:hidden"
-              @click="expanded = !expanded"
+              @click="filtersOpen = !filtersOpen"
             />
             <Input
-              v-if="search"
+              v-if="hasSearch"
               v-model="query"
               size="large"
               type="text"
               :placeholder="placeholder"
-              :aria-label="search.label"
+              :aria-label="searchAriaLabel || undefined"
               class="min-w-0 flex-1"
             >
               <template #prefix>
@@ -382,18 +374,18 @@
             v-if="facets.length > 0 || sorts.length > 0"
             :id="panelId"
             :data-testid="`${testId}__filters`"
-            :data-expanded="expanded || null"
-            class="flex flex-col gap-(--spacing-sm) max-lg:hidden max-lg:data-[expanded]:flex lg:contents"
+            :data-state="filtersOpen ? 'open' : 'closed'"
+            class="flex flex-col gap-(--spacing-sm) max-lg:hidden max-lg:data-[state=open]:flex lg:contents"
           >
             <Select
               v-for="facet in facets"
-              :key="facet.key"
-              :model-value="selected[facet.key]"
+              :key="facet.id"
+              :model-value="selected[facet.id]"
               size="large"
               :placeholder="facet.allLabel"
               :display-value="facetDisplay(facet)"
-              @update:model-value="(value) => updateFacet(facet.key, value)"
-              @update:open="setOptionQuery(facet.key, '')"
+              @update:model-value="(value) => updateFacet(facet.id, value)"
+              @update:open="setOptionQuery(facet.id, '')"
             >
               <SelectTrigger :aria-label="facet.label" />
               <SelectContent>
@@ -402,13 +394,13 @@
                   #search
                 >
                   <Input
-                    :model-value="optionQuery[facet.key] ?? ''"
+                    :model-value="optionQuery[facet.id] ?? ''"
                     size="small"
                     :placeholder="t('listingBrowser.search')"
                     :aria-label="
                       t('listingBrowser.searchFacet', { facet: facet.label.toLowerCase() })
                     "
-                    @update:model-value="setOptionQuery(facet.key, $event)"
+                    @update:model-value="setOptionQuery(facet.id, $event)"
                   >
                     <template #prefix>
                       <i
@@ -420,14 +412,14 @@
                 </template>
                 <SelectOption value="">{{ facet.allLabel }}</SelectOption>
                 <SelectOption
-                  v-for="option in narrowed(facet.key, facet.options)"
+                  v-for="option in narrowed(facet.id, facet.options)"
                   :key="option.value"
                   :value="option.value"
                 >
                   {{ option.label }}
                 </SelectOption>
                 <p
-                  v-if="narrowed(facet.key, facet.options).length === 0"
+                  v-if="narrowed(facet.id, facet.options).length === 0"
                   role="status"
                   class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                 >
@@ -659,16 +651,16 @@
         </template>
 
         <EmptyState
-          v-else-if="empty"
-          :title="empty.title"
-          :description="empty.description ?? ''"
+          v-else-if="emptyTitle"
+          :title="emptyTitle"
+          :description="emptyDescription"
         >
           <template
-            v-if="empty.clearLabel"
+            v-if="emptyActionLabel"
             #actions
           >
             <Button
-              :label="empty.clearLabel"
+              :label="emptyActionLabel"
               kind="secondary"
               size="large"
               @click="clearFilters"

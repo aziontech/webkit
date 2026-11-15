@@ -225,7 +225,7 @@ describe('MediaSplit', () => {
 
   it('mirrors its copy alignment on the root, top by default', () => {
     const flush = render(MediaSplit, { props: { title: TITLE, src: SRC, alt: ALT } })
-    expect(flush.getByTestId(TESTID).getAttribute('data-align')).toBe('top')
+    expect(flush.getByTestId(TESTID).getAttribute('data-align')).toBe('start')
 
     const centred = render(MediaSplit, {
       props: { title: TITLE, src: SRC, alt: ALT, align: 'center' }
