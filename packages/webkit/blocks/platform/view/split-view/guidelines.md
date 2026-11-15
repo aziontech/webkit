@@ -44,9 +44,9 @@ Above the table, a summary `dl` of Events, Errors and Avg request time, and the 
 
 Each row's detail cell is an `IconButton` named Open event <id> with `aria-expanded`, so a keyboard user opens an event with Tab and Enter; a row click does the same for a pointer. When the explorer is wide enough for the fields panel, the log and the document, the event opens in the end pane of a horizontal `Resizable` (`Resizable.Handle` named Resize the event panel, the pane 320 to 512 px, collapsed while no event is open), so the handle sits on the inner edge and dragging it inward widens the document. Its header holds the Event heading and a small Close `IconButton` in a `Tooltip`; the body shows the level and source as small `Tag`s, lists the fields and ends with the full event in a `CodeBlock` that copies it as JSON.
 
-### G. Narrow document — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `Tag`, `CodeBlock` (required)
+### G. Narrow document — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `Tag`, `CodeBlock` (required)
 
-Below that width the same document opens in a medium right `Drawer` titled Event, with `PanelHeader`, `DrawerTitle` and `DrawerClose`. Crossing the breakpoint moves an open event between the pane and the drawer instead of closing it.
+Below that width the same document opens in a medium right `Drawer` titled Event, with `PanelHeader`, `DrawerTitle` and the drawer's own close button. Crossing the breakpoint moves an open event between the pane and the drawer instead of closing it.
 
 The fields panel (D) is the `split-view#Fields` piece of the inventory; it lives in the primary and every variant, so it has no variant of its own.
 

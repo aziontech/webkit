@@ -58,7 +58,7 @@ Only on `Matched requests over time`.
 
 Names Expand and More options.
 
-### H. Expand — `IconButton`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `DialogClose`, `PanelContent` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `PanelContent` (optional)
 
 Its `aria-label` names the card (`Expand Matched requests over time`). It opens one large `Dialog`
 with the card title, its Hint sentence as the description, and the region at full size: the matched

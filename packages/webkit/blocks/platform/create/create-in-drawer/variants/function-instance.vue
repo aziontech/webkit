@@ -5,10 +5,7 @@
     type CodeEditorMarker,
     type CodeEditorMonacoModule
   } from '@aziontech/webkit/code-editor'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import Field from '@aziontech/webkit/field'
@@ -315,164 +312,160 @@
     size="medium"
     side="right"
   >
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          :aria-label="title"
-          novalidate
-          @submit.prevent="submit"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>{{ title }}</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                An instance runs a function on this resource with its own arguments.
-              </p>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
+    <DrawerContent>
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        :aria-label="title"
+        novalidate
+        @submit.prevent="submit"
+      >
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DrawerTitle>{{ title }}</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              An instance runs a function on this resource with its own arguments.
+            </p>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col border-0 p-0"
-              :disabled="submitting"
+        <PanelContent>
+          <fieldset
+            class="m-0 flex min-w-0 flex-col border-0 p-0"
+            :disabled="submitting"
+          >
+            <legend class="sr-only">{{ title }}</legend>
+            <SettingsSection
+              title="General"
+              hint="The function this instance runs, and the name it is listed under."
             >
-              <legend class="sr-only">{{ title }}</legend>
-              <SettingsSection
-                title="General"
-                hint="The function this instance runs, and the name it is listed under."
-              >
-                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                  <Field :required="!!errors.functionId">
-                    <Field.Label for="instance-function">Function</Field.Label>
-                    <Select
-                      :model-value="form.functionId"
-                      size="large"
-                      class="w-full"
-                      placeholder="Select a function"
-                      :disabled="submitting"
-                      :invalid="!!errors.functionId"
-                      :display-value="functionLabel"
-                      @update:model-value="onFunction"
-                    >
-                      <Select.Trigger
-                        id="instance-function"
-                        aria-describedby="instance-function-helper"
-                      />
-                      <Select.Content>
-                        <Select.Option
-                          v-for="option in FUNCTIONS"
-                          :key="option.value"
-                          :value="option.value"
-                        >
-                          {{ option.label }}
-                        </Select.Option>
-                      </Select.Content>
-                    </Select>
-                    <HelperText
-                      id="instance-function-helper"
-                      :kind="errors.functionId ? 'required' : 'helper'"
-                      >{{
-                        errors.functionId ||
-                        (selected
-                          ? `${selected.runtime}. Changing the function clears the arguments.`
-                          : 'Its arguments appear below once a function is chosen.')
-                      }}</HelperText
-                    >
-                  </Field>
-                  <Field :required="!!errors.name">
-                    <Field.Label>Name</Field.Label>
-                    <Input
-                      v-model="form.name"
-                      size="large"
-                      placeholder="resize-product-images"
-                      autocomplete="off"
-                      :spellcheck="false"
-                      :disabled="submitting"
-                      @update:model-value="errors.name = ''"
-                    />
-                    <Field.Description>{{
-                      errors.name || 'How this instance is listed on the resource.'
-                    }}</Field.Description>
-                  </Field>
-                </div>
-              </SettingsSection>
-
-              <SettingsSection
-                v-if="selected"
-                title="Arguments"
-                hint="The values this instance passes to the function, as the fields it declares or as JSON."
-              >
-                <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-                  <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-                    <ToggleGroup
-                      v-model="view"
-                      :options="VIEWS"
-                      aria-label="Arguments view"
-                      size="small"
-                    />
-                    <p class="m-0 min-w-0 truncate text-body-xs text-(--text-muted)">
-                      {{
-                        view === 'fields'
-                          ? 'The arguments this function declares.'
-                          : 'What this instance sends as its arguments.'
-                      }}
-                    </p>
-                  </div>
-                  <div v-show="view === 'fields'">
-                    <SchemaForm
-                      ref="schemaForm"
-                      v-model="form.args"
-                      :schema="selected.schema"
-                      validate-on="submit"
-                      :disabled="submitting"
-                    />
-                  </div>
-                  <div
-                    v-if="view === 'json'"
-                    class="flex min-w-0 flex-col gap-(--spacing-xs)"
+              <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <Field :required="!!errors.functionId">
+                  <Field.Label for="instance-function">Function</Field.Label>
+                  <Select
+                    :model-value="form.functionId"
+                    size="large"
+                    class="w-full"
+                    placeholder="Select a function"
+                    :disabled="submitting"
+                    :invalid="!!errors.functionId"
+                    :display-value="functionLabel"
+                    @update:model-value="onFunction"
                   >
-                    <CodeEditor
-                      :model-value="json"
-                      language="json"
-                      path="args.json"
-                      height="16rem"
-                      :loader="loadMonaco"
-                      :markers="jsonMarkers"
-                      :invalid="jsonMarkers.length > 0"
-                      :disabled="submitting"
-                      aria-label="Arguments JSON"
-                      @update:model-value="onJson"
+                    <Select.Trigger
+                      id="instance-function"
+                      aria-describedby="instance-function-helper"
                     />
-                    <HelperText
-                      :kind="jsonMarkers.length ? 'invalid' : 'helper'"
-                      :label="
-                        jsonMarkers.length
-                          ? 'Fix the JSON to keep these arguments. The fields keep the last valid value.'
-                          : 'Edits here update the fields.'
-                      "
-                    />
-                  </div>
-                </div>
-              </SettingsSection>
-            </fieldset>
-          </PanelContent>
+                    <Select.Content>
+                      <Select.Option
+                        v-for="option in FUNCTIONS"
+                        :key="option.value"
+                        :value="option.value"
+                      >
+                        {{ option.label }}
+                      </Select.Option>
+                    </Select.Content>
+                  </Select>
+                  <HelperText
+                    id="instance-function-helper"
+                    :kind="errors.functionId ? 'required' : 'helper'"
+                    >{{
+                      errors.functionId ||
+                      (selected
+                        ? `${selected.runtime}. Changing the function clears the arguments.`
+                        : 'Its arguments appear below once a function is chosen.')
+                    }}</HelperText
+                  >
+                </Field>
+                <Field :required="!!errors.name">
+                  <Field.Label>Name</Field.Label>
+                  <Input
+                    v-model="form.name"
+                    size="large"
+                    placeholder="resize-product-images"
+                    autocomplete="off"
+                    :spellcheck="false"
+                    :disabled="submitting"
+                    @update:model-value="errors.name = ''"
+                  />
+                  <Field.Description>{{
+                    errors.name || 'How this instance is listed on the resource.'
+                  }}</Field.Description>
+                </Field>
+              </div>
+            </SettingsSection>
 
-          <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-              <Button
-                :label="editingId ? 'Save' : 'Add Function Instance'"
-                kind="primary"
-                size="medium"
-                :loading="submitting"
-                type="submit"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </DrawerPortal>
+            <SettingsSection
+              v-if="selected"
+              title="Arguments"
+              hint="The values this instance passes to the function, as the fields it declares or as JSON."
+            >
+              <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+                <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+                  <ToggleGroup
+                    v-model="view"
+                    :options="VIEWS"
+                    aria-label="Arguments view"
+                    size="small"
+                  />
+                  <p class="m-0 min-w-0 truncate text-body-xs text-(--text-muted)">
+                    {{
+                      view === 'fields'
+                        ? 'The arguments this function declares.'
+                        : 'What this instance sends as its arguments.'
+                    }}
+                  </p>
+                </div>
+                <div v-show="view === 'fields'">
+                  <SchemaForm
+                    ref="schemaForm"
+                    v-model="form.args"
+                    :schema="selected.schema"
+                    validate-on="submit"
+                    :disabled="submitting"
+                  />
+                </div>
+                <div
+                  v-if="view === 'json'"
+                  class="flex min-w-0 flex-col gap-(--spacing-xs)"
+                >
+                  <CodeEditor
+                    :model-value="json"
+                    language="json"
+                    path="args.json"
+                    height="16rem"
+                    :loader="loadMonaco"
+                    :markers="jsonMarkers"
+                    :invalid="jsonMarkers.length > 0"
+                    :disabled="submitting"
+                    aria-label="Arguments JSON"
+                    @update:model-value="onJson"
+                  />
+                  <HelperText
+                    :kind="jsonMarkers.length ? 'invalid' : 'helper'"
+                    :label="
+                      jsonMarkers.length
+                        ? 'Fix the JSON to keep these arguments. The fields keep the last valid value.'
+                        : 'Edits here update the fields.'
+                    "
+                  />
+                </div>
+              </div>
+            </SettingsSection>
+          </fieldset>
+        </PanelContent>
+
+        <PanelFooter>
+          <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
+            <Button
+              :label="editingId ? 'Save' : 'Add Function Instance'"
+              kind="primary"
+              size="medium"
+              :loading="submitting"
+              type="submit"
+            />
+          </div>
+        </PanelFooter>
+      </form>
+    </DrawerContent>
   </Drawer>
 </template>

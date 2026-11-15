@@ -1,10 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -293,249 +290,242 @@
       v-model:open="dropOpen"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <DialogTitle>New production deployment</DialogTitle>
-            <DialogClose />
-          </PanelHeader>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <DialogTitle>New production deployment</DialogTitle>
+        </PanelHeader>
 
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <span class="truncate text-body-sm text-(--text-default)">web-app</span>
-                  <Tag
-                    label="Production"
-                    severity="secondary"
-                    size="small"
-                    class="shrink-0"
-                  />
-                </div>
-                <DialogDescription>
-                  These files ship as the new production version of web-app, replacing the one
-                  serving now. Production deploys with {{ items.length }} {{ noun(items.length) }}.
-                </DialogDescription>
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                <span class="truncate text-body-sm text-(--text-default)">web-app</span>
+                <Tag
+                  label="Production"
+                  severity="secondary"
+                  size="small"
+                  class="shrink-0"
+                />
               </div>
+              <DialogDescription>
+                These files ship as the new production version of web-app, replacing the one serving
+                now. Production deploys with {{ items.length }} {{ noun(items.length) }}.
+              </DialogDescription>
+            </div>
 
-              <div
-                class="flex min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm)"
+            <div
+              class="flex min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-sm)"
+            >
+              <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+                <i
+                  class="pi pi-folder shrink-0 text-(--text-muted)"
+                  aria-hidden="true"
+                />
+                <div class="flex min-w-0 flex-col">
+                  <span class="truncate text-body-sm text-(--text-default)">Dropped files</span>
+                  <span class="text-body-xs text-(--text-muted)">{{ manifest }}</span>
+                </div>
+              </div>
+              <ul
+                aria-label="Dropped files"
+                tabindex="0"
+                class="m-0 flex max-h-64 min-w-0 list-none flex-col gap-(--spacing-xxs) overflow-auto overscroll-contain p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
               >
-                <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+                <li
+                  v-for="file in shownFiles"
+                  :key="file.path"
+                  class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
+                >
                   <i
-                    class="pi pi-folder shrink-0 text-(--text-muted)"
+                    class="pi pi-file shrink-0 text-(--text-muted)"
                     aria-hidden="true"
                   />
-                  <div class="flex min-w-0 flex-col">
-                    <span class="truncate text-body-sm text-(--text-default)">Dropped files</span>
-                    <span class="text-body-xs text-(--text-muted)">{{ manifest }}</span>
-                  </div>
-                </div>
-                <ul
-                  aria-label="Dropped files"
-                  tabindex="0"
-                  class="m-0 flex max-h-64 min-w-0 list-none flex-col gap-(--spacing-xxs) overflow-auto overscroll-contain p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                  <span
+                    dir="ltr"
+                    class="min-w-0 truncate text-body-code-sm text-(--text-default)"
+                    :title="file.path"
+                  >
+                    {{ file.path }}
+                  </span>
+                  <span class="ms-auto shrink-0 text-body-xs tabular-nums text-(--text-muted)">
+                    {{ formatSize(file.size) }}
+                  </span>
+                </li>
+                <li
+                  v-if="hiddenFileCount > 0"
+                  class="px-(--spacing-sm) py-(--spacing-xs) text-body-xs text-(--text-muted)"
                 >
-                  <li
-                    v-for="file in shownFiles"
-                    :key="file.path"
-                    class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-xs)"
-                  >
-                    <i
-                      class="pi pi-file shrink-0 text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                    <span
-                      dir="ltr"
-                      class="min-w-0 truncate text-body-code-sm text-(--text-default)"
-                      :title="file.path"
-                    >
-                      {{ file.path }}
-                    </span>
-                    <span class="ms-auto shrink-0 text-body-xs tabular-nums text-(--text-muted)">
-                      {{ formatSize(file.size) }}
-                    </span>
-                  </li>
-                  <li
-                    v-if="hiddenFileCount > 0"
-                    class="px-(--spacing-sm) py-(--spacing-xs) text-body-xs text-(--text-muted)"
-                  >
-                    and {{ hiddenFileCount }} more
-                  </li>
-                </ul>
-              </div>
+                  and {{ hiddenFileCount }} more
+                </li>
+              </ul>
             </div>
-          </PanelContent>
+          </div>
+        </PanelContent>
 
-          <PanelFooter>
-            <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  label="Cancel"
-                  kind="transparent"
-                  size="medium"
-                  @click="dropOpen = false"
-                />
-              </div>
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  label="Deploy to Production"
-                  kind="primary"
-                  size="medium"
-                  icon="pi pi-cloud-upload"
-                  @click="deployDropped"
-                />
-              </div>
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                label="Cancel"
+                kind="transparent"
+                size="medium"
+                @click="dropOpen = false"
+              />
             </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                label="Deploy to Production"
+                kind="primary"
+                size="medium"
+                icon="pi pi-cloud-upload"
+                @click="deployDropped"
+              />
+            </div>
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
 
     <Dialog
       v-model:open="open"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 items-start gap-(--spacing-sm)">
-              <OutcomeMark
-                v-if="!running"
-                :severity="outcomeSeverity"
-                size="large"
-                :animated="settledOnce"
-                :aria-label="counts.failed ? 'Some failed' : 'Succeeded'"
-                class="shrink-0"
-              />
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DialogTitle>{{ title }}</DialogTitle>
-                <DialogDescription>
-                  {{ tally }}
-                </DialogDescription>
-              </div>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 items-start gap-(--spacing-sm)">
+            <OutcomeMark
+              v-if="!running"
+              :severity="outcomeSeverity"
+              size="large"
+              :animated="settledOnce"
+              :aria-label="counts.failed ? 'Some failed' : 'Succeeded'"
+              class="shrink-0"
+            />
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DialogTitle>{{ title }}</DialogTitle>
+              <DialogDescription>
+                {{ tally }}
+              </DialogDescription>
             </div>
-          </PanelHeader>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                <Progress
-                  :value="percent"
-                  aria-label="Deploy progress"
-                />
-                <p
-                  v-if="activeName"
-                  class="truncate text-body-sm text-(--text-muted)"
-                >
-                  Deploying {{ activeName }}
-                </p>
-              </div>
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+              <Progress
+                :value="percent"
+                aria-label="Deploy progress"
+              />
+              <p
+                v-if="activeName"
+                class="truncate text-body-sm text-(--text-muted)"
+              >
+                Deploying {{ activeName }}
+              </p>
+            </div>
 
-              <ToggleGroup
-                v-model="filter"
-                :options="filterOptions"
-                aria-label="Filter deploys by status"
+            <ToggleGroup
+              v-model="filter"
+              :options="filterOptions"
+              aria-label="Filter deploys by status"
+              size="small"
+              class="self-start"
+            />
+
+            <Item.List
+              v-if="visibleItems.length"
+              aria-label="Deployment Settings"
+            >
+              <Item
+                v-for="item in visibleItems"
+                :key="item.id"
+                kind="outlined"
                 size="small"
-                class="self-start"
-              />
+              >
+                <Item.Media>
+                  <OutcomeMark
+                    v-if="MARK[item.status]"
+                    :severity="MARK[item.status]"
+                    size="small"
+                    :animated="settledOnce || running"
+                    :aria-label="STATUS_TAG[item.status].label"
+                  />
+                  <i
+                    v-else
+                    class="pi pi-sliders-h text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </Item.Media>
+                <Item.Content>
+                  <Item.Title>{{ item.name }}</Item.Title>
+                  <Item.Description>{{ item.environments }}</Item.Description>
+                  <span
+                    v-if="item.message"
+                    class="text-body-xs text-(--danger-contrast)"
+                  >
+                    {{ item.message }}
+                  </span>
+                </Item.Content>
+                <Item.Actions>
+                  <span
+                    v-if="item.status === 'deploying'"
+                    class="flex size-4 shrink-0 text-(--text-muted)"
+                  >
+                    <Spinner class="w-full" />
+                  </span>
+                  <Tag
+                    :label="STATUS_TAG[item.status].label"
+                    :severity="STATUS_TAG[item.status].severity"
+                    size="small"
+                  />
+                </Item.Actions>
+              </Item>
+            </Item.List>
+            <EmptyState
+              v-else
+              size="small"
+              icon="pi pi-filter"
+              :title="emptyLabel"
+            />
+            <span
+              class="sr-only"
+              role="status"
+            >
+              {{ running ? '' : title }}
+            </span>
+          </div>
+        </PanelContent>
 
-              <Item.List
-                v-if="visibleItems.length"
-                aria-label="Deployment Settings"
-              >
-                <Item
-                  v-for="item in visibleItems"
-                  :key="item.id"
-                  kind="outlined"
-                  size="small"
-                >
-                  <Item.Media>
-                    <OutcomeMark
-                      v-if="MARK[item.status]"
-                      :severity="MARK[item.status]"
-                      size="small"
-                      :animated="settledOnce || running"
-                      :aria-label="STATUS_TAG[item.status].label"
-                    />
-                    <i
-                      v-else
-                      class="pi pi-sliders-h text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </Item.Media>
-                  <Item.Content>
-                    <Item.Title>{{ item.name }}</Item.Title>
-                    <Item.Description>{{ item.environments }}</Item.Description>
-                    <span
-                      v-if="item.message"
-                      class="text-body-xs text-(--danger-contrast)"
-                    >
-                      {{ item.message }}
-                    </span>
-                  </Item.Content>
-                  <Item.Actions>
-                    <span
-                      v-if="item.status === 'deploying'"
-                      class="flex size-4 shrink-0 text-(--text-muted)"
-                    >
-                      <Spinner class="w-full" />
-                    </span>
-                    <Tag
-                      :label="STATUS_TAG[item.status].label"
-                      :severity="STATUS_TAG[item.status].severity"
-                      size="small"
-                    />
-                  </Item.Actions>
-                </Item>
-              </Item.List>
-              <EmptyState
-                v-else
-                size="small"
-                icon="pi pi-filter"
-                :title="emptyLabel"
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <div
+              v-if="counts.failed && !running"
+              class="w-full md:w-fit"
+            >
+              <Button
+                class="w-full"
+                label="Retry failed"
+                kind="outlined"
+                size="medium"
+                icon="pi pi-refresh"
+                @click="retryFailed"
               />
-              <span
-                class="sr-only"
-                role="status"
-              >
-                {{ running ? '' : title }}
-              </span>
             </div>
-          </PanelContent>
-
-          <PanelFooter>
-            <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-              <div
-                v-if="counts.failed && !running"
-                class="w-full md:w-fit"
-              >
-                <Button
-                  class="w-full"
-                  label="Retry failed"
-                  kind="outlined"
-                  size="medium"
-                  icon="pi pi-refresh"
-                  @click="retryFailed"
-                />
-              </div>
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  :label="running ? 'Hide' : 'Close'"
-                  kind="primary"
-                  size="medium"
-                  @click="open = false"
-                />
-              </div>
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                :label="running ? 'Hide' : 'Close'"
+                kind="primary"
+                size="medium"
+                @click="open = false"
+              />
             </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
   </div>
 </template>

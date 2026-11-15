@@ -2,8 +2,6 @@
   import Brand from '@aziontech/webkit/brand'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -201,32 +199,29 @@
       :side="settings.dir === 'rtl' ? 'right' : 'left'"
       size="small"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <DrawerTitle>{{ t.navigation }}</DrawerTitle>
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <div class="flex flex-wrap gap-(--spacing-xs)">
-                <a
-                  v-for="section in sections"
-                  :key="section.to"
-                  :href="section.to"
-                  class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-label-md"
-                  >{{ section.label }}</a
-                >
-              </div>
-              <ThemeSwitcher
-                v-model="settings.theme"
-                :aria-label="t.theme"
-              />
-              <SideNav />
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <DrawerTitle>{{ t.navigation }}</DrawerTitle>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <div class="flex flex-wrap gap-(--spacing-xs)">
+              <a
+                v-for="section in sections"
+                :key="section.to"
+                :href="section.to"
+                class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-label-md"
+                >{{ section.label }}</a
+              >
             </div>
-          </PanelContent>
-        </DrawerContent>
-      </DrawerPortal>
+            <ThemeSwitcher
+              v-model="settings.theme"
+              :aria-label="t.theme"
+            />
+            <SideNav />
+          </div>
+        </PanelContent>
+      </DrawerContent>
     </Drawer>
 
     <SearchCommand v-model:open="searchOpen" />

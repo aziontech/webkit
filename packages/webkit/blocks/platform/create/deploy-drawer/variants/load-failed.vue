@@ -1,10 +1,7 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
@@ -38,96 +35,92 @@
       />
     </DrawerTrigger>
 
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Deploy"
-          novalidate
-          @submit.prevent
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>Deploy</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                Deploy project-01. Review what goes live and where.
-              </p>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
+    <DrawerContent>
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Deploy"
+        novalidate
+        @submit.prevent
+      >
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DrawerTitle>Deploy</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              Deploy project-01. Review what goes live and where.
+            </p>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <div
-              v-if="retrying"
-              class="flex min-w-0 flex-col"
-              aria-busy="true"
-            >
-              <SettingsSection
-                title="Resources"
-                hint="Everything this project serves, at the version this deployment sends live, with the version of every dependency they reference."
-              >
-                <div aria-hidden="true">
-                  <Skeleton height="var(--size-40)" />
-                </div>
-              </SettingsSection>
-              <SettingsSection
-                title="Environment"
-                hint="Where the deployment goes live. Each environment goes live with its own Deployment Settings."
-              >
-                <div
-                  class="flex min-w-0 flex-col gap-(--spacing-xs)"
-                  aria-hidden="true"
-                >
-                  <Skeleton
-                    v-for="row in 2"
-                    :key="row"
-                    height="var(--size-16)"
-                  />
-                </div>
-              </SettingsSection>
-              <span
-                class="sr-only"
-                role="status"
-              >
-                Loading the resources and environments for this deployment.
-              </span>
-            </div>
-
+        <PanelContent>
+          <div
+            v-if="retrying"
+            class="flex min-w-0 flex-col"
+            aria-busy="true"
+          >
             <SettingsSection
-              v-else
-              title="Deploy targets"
+              title="Resources"
+              hint="Everything this project serves, at the version this deployment sends live, with the version of every dependency they reference."
             >
-              <div class="flex min-w-0 flex-col items-start gap-(--spacing-sm)">
-                <Alert
-                  severity="danger"
-                  label="The deploy targets for project-01 couldn't be loaded. Check your connection and try again."
-                />
-                <Button
-                  label="Retry"
-                  kind="outlined"
-                  size="small"
-                  icon="pi pi-refresh"
-                  @click="retrying = true"
+              <div aria-hidden="true">
+                <Skeleton height="var(--size-40)" />
+              </div>
+            </SettingsSection>
+            <SettingsSection
+              title="Environment"
+              hint="Where the deployment goes live. Each environment goes live with its own Deployment Settings."
+            >
+              <div
+                class="flex min-w-0 flex-col gap-(--spacing-xs)"
+                aria-hidden="true"
+              >
+                <Skeleton
+                  v-for="row in 2"
+                  :key="row"
+                  height="var(--size-16)"
                 />
               </div>
             </SettingsSection>
-          </PanelContent>
+            <span
+              class="sr-only"
+              role="status"
+            >
+              Loading the resources and environments for this deployment.
+            </span>
+          </div>
 
-          <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
-              <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
+          <SettingsSection
+            v-else
+            title="Deploy targets"
+          >
+            <div class="flex min-w-0 flex-col items-start gap-(--spacing-sm)">
+              <Alert
+                severity="danger"
+                label="The deploy targets for project-01 couldn't be loaded. Check your connection and try again."
+              />
               <Button
-                label="Deploy"
-                kind="primary"
-                size="medium"
-                type="submit"
-                disabled
+                label="Retry"
+                kind="outlined"
+                size="small"
+                icon="pi pi-refresh"
+                @click="retrying = true"
               />
             </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </DrawerPortal>
+          </SettingsSection>
+        </PanelContent>
+
+        <PanelFooter>
+          <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
+            <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
+            <Button
+              label="Deploy"
+              kind="primary"
+              size="medium"
+              type="submit"
+              disabled
+            />
+          </div>
+        </PanelFooter>
+      </form>
+    </DrawerContent>
   </Drawer>
 </template>

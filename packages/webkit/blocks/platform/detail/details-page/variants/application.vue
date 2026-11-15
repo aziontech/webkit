@@ -2,11 +2,8 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -610,70 +607,66 @@
       side="right"
       size="medium"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <DrawerTitle>Deploy {{ APP.name }}</DrawerTitle>
-            <DrawerClose />
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <DrawerDescription>
-                Version {{ APP.version }} goes to Production. The version that is live keeps serving
-                until the new one is ready.
-              </DrawerDescription>
-              <section
-                aria-labelledby="application-deploy-changes"
-                class="flex flex-col gap-(--spacing-xs)"
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <DrawerTitle>Deploy {{ APP.name }}</DrawerTitle>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <DrawerDescription>
+              Version {{ APP.version }} goes to Production. The version that is live keeps serving
+              until the new one is ready.
+            </DrawerDescription>
+            <section
+              aria-labelledby="application-deploy-changes"
+              class="flex flex-col gap-(--spacing-xs)"
+            >
+              <h3
+                id="application-deploy-changes"
+                class="m-0 text-label-md text-(--text-default)"
               >
-                <h3
-                  id="application-deploy-changes"
-                  class="m-0 text-label-md text-(--text-default)"
+                Topology changes
+              </h3>
+              <ul
+                v-if="stagedChanges.length"
+                class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
+              >
+                <li
+                  v-for="change in stagedChanges"
+                  :key="change.key"
+                  class="flex flex-wrap items-center justify-between gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
                 >
-                  Topology changes
-                </h3>
-                <ul
-                  v-if="stagedChanges.length"
-                  class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
-                >
-                  <li
-                    v-for="change in stagedChanges"
-                    :key="change.key"
-                    class="flex flex-wrap items-center justify-between gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
+                  <span class="text-body-sm text-(--text-default)">{{ change.kind }}</span>
+                  <span class="text-body-sm text-(--text-muted)"
+                    >{{ change.from }} to {{ change.to }}</span
                   >
-                    <span class="text-body-sm text-(--text-default)">{{ change.kind }}</span>
-                    <span class="text-body-sm text-(--text-muted)"
-                      >{{ change.from }} to {{ change.to }}</span
-                    >
-                  </li>
-                </ul>
-                <p
-                  v-else
-                  class="m-0 text-body-sm text-(--text-muted)"
-                >
-                  No topology change is staged. The deploy publishes the active version as it is.
-                </p>
-              </section>
-            </div>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                label="Cancel"
-                kind="outlined"
-                @click="deployOpen = false"
-              />
-              <Button
-                label="Deploy"
-                kind="primary"
-                icon="pi pi-cloud-upload"
-                @click="runDeploy"
-              />
-            </div>
-          </PanelFooter>
-        </DrawerContent>
-      </DrawerPortal>
+                </li>
+              </ul>
+              <p
+                v-else
+                class="m-0 text-body-sm text-(--text-muted)"
+              >
+                No topology change is staged. The deploy publishes the active version as it is.
+              </p>
+            </section>
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              @click="deployOpen = false"
+            />
+            <Button
+              label="Deploy"
+              kind="primary"
+              icon="pi pi-cloud-upload"
+              @click="runDeploy"
+            />
+          </div>
+        </PanelFooter>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

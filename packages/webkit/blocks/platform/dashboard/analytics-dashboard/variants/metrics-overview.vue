@@ -1,11 +1,8 @@
 <script setup lang="ts">
   import Chart, { type ChartColor, type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -555,55 +552,51 @@
       v-model:open="expanded"
       size="large"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DialogTitle>{{ expandedCard?.title }}</DialogTitle>
-              <DialogDescription>{{ expandedCard?.hint }}</DialogDescription>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DialogTitle>{{ expandedCard?.title }}</DialogTitle>
+            <DialogDescription>{{ expandedCard?.hint }}</DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelContent>
+          <div
+            v-if="expandedCard"
+            class="flex min-w-0 flex-col gap-(--spacing-md)"
+          >
+            <div>
+              <ToggleGroup
+                v-model="forms[expandedCard.id]"
+                :options="chartForms"
+                size="small"
+                :aria-label="`Chart form for ${expandedCard.title}`"
+              />
             </div>
-            <DialogClose />
-          </PanelHeader>
-          <PanelContent>
-            <div
-              v-if="expandedCard"
-              class="flex min-w-0 flex-col gap-(--spacing-md)"
+            <Chart
+              :series="expandedCard.series"
+              :labels="currentPeriod.labels"
+              :format-value="formatters[expandedCard.format]"
+              :height="420"
+              :aria-label="expandedCard.title"
+              empty-title="No traffic yet"
+              empty-description="Metrics appear here once a product serves requests."
             >
-              <div>
-                <ToggleGroup
-                  v-model="forms[expandedCard.id]"
-                  :options="chartForms"
-                  size="small"
-                  :aria-label="`Chart form for ${expandedCard.title}`"
-                />
-              </div>
-              <Chart
-                :series="expandedCard.series"
-                :labels="currentPeriod.labels"
-                :format-value="formatters[expandedCard.format]"
-                :height="420"
-                :aria-label="expandedCard.title"
-                empty-title="No traffic yet"
-                empty-description="Metrics appear here once a product serves requests."
-              >
-                <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
-                <Chart.Bar
-                  v-if="forms[expandedCard.id] === 'bar'"
-                  :stacked="expandedCard.series.length > 1"
-                />
-                <Chart.Area v-else-if="expandedCard.form === 'area'" />
-                <Chart.Line v-else />
-                <Chart.Crosshair />
-                <Chart.Tooltip />
-                <Chart.Legend total />
-              </Chart>
-            </div>
-          </PanelContent>
-        </DialogContent>
-      </DialogPortal>
+              <Chart.Grid />
+              <Chart.Axis kind="y" />
+              <Chart.Axis kind="x" />
+              <Chart.Bar
+                v-if="forms[expandedCard.id] === 'bar'"
+                :stacked="expandedCard.series.length > 1"
+              />
+              <Chart.Area v-else-if="expandedCard.form === 'area'" />
+              <Chart.Line v-else />
+              <Chart.Crosshair />
+              <Chart.Tooltip />
+              <Chart.Legend total />
+            </Chart>
+          </div>
+        </PanelContent>
+      </DialogContent>
     </Dialog>
   </div>
 </template>

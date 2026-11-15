@@ -4,11 +4,8 @@
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -808,50 +805,46 @@
       side="right"
       size="medium"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <DrawerTitle>Deploy {{ APP.name }}</DrawerTitle>
-            <DrawerClose />
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <DrawerDescription>
-                We build a new version of {{ APP.name }} from {{ deploySource }}, then it goes live
-                in Production. The deployment that is live keeps serving until the new one is ready.
-              </DrawerDescription>
-              <dl class="m-0 grid grid-cols-[auto_1fr] gap-x-(--spacing-md) gap-y-(--spacing-xs)">
-                <dt class="text-label-sm text-(--text-muted)">Source</dt>
-                <dd class="m-0 truncate text-body-sm text-(--text-default)">{{ deploySource }}</dd>
-                <dt class="text-label-sm text-(--text-muted)">Environment</dt>
-                <dd class="m-0">
-                  <Tag
-                    label="Production"
-                    severity="secondary"
-                    size="small"
-                  />
-                </dd>
-              </dl>
-            </div>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                label="Cancel"
-                kind="outlined"
-                @click="deployOpen = false"
-              />
-              <Button
-                label="Deploy"
-                kind="primary"
-                icon="pi pi-cloud-upload"
-                @click="runDeploy"
-              />
-            </div>
-          </PanelFooter>
-        </DrawerContent>
-      </DrawerPortal>
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <DrawerTitle>Deploy {{ APP.name }}</DrawerTitle>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <DrawerDescription>
+              We build a new version of {{ APP.name }} from {{ deploySource }}, then it goes live in
+              Production. The deployment that is live keeps serving until the new one is ready.
+            </DrawerDescription>
+            <dl class="m-0 grid grid-cols-[auto_1fr] gap-x-(--spacing-md) gap-y-(--spacing-xs)">
+              <dt class="text-label-sm text-(--text-muted)">Source</dt>
+              <dd class="m-0 truncate text-body-sm text-(--text-default)">{{ deploySource }}</dd>
+              <dt class="text-label-sm text-(--text-muted)">Environment</dt>
+              <dd class="m-0">
+                <Tag
+                  label="Production"
+                  severity="secondary"
+                  size="small"
+                />
+              </dd>
+            </dl>
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              @click="deployOpen = false"
+            />
+            <Button
+              label="Deploy"
+              kind="primary"
+              icon="pi pi-cloud-upload"
+              @click="runDeploy"
+            />
+          </div>
+        </PanelFooter>
+      </DrawerContent>
     </Drawer>
 
     <ConfirmDialog v-bind="leaveDialog">

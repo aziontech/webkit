@@ -7,8 +7,6 @@
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
@@ -746,77 +744,74 @@
       v-model:open="moveOpen"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DialogTitle>{{ moveTitle }}</DialogTitle>
-              <DialogDescription>
-                {{ moving.length === 1 ? '1 file' : `${moving.length} files` }}, {{ movingSize }},
-                from {{ folderKey || rootName }}. Pick a folder or type a new path; leave it empty
-                for the storage root.
-              </DialogDescription>
-            </div>
-          </PanelHeader>
-          <PanelContent>
-            <form
-              class="flex flex-col gap-(--spacing-md)"
-              novalidate
-              @submit.prevent="confirmMove"
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DialogTitle>{{ moveTitle }}</DialogTitle>
+            <DialogDescription>
+              {{ moving.length === 1 ? '1 file' : `${moving.length} files` }}, {{ movingSize }},
+              from {{ folderKey || rootName }}. Pick a folder or type a new path; leave it empty for
+              the storage root.
+            </DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelContent>
+          <form
+            class="flex flex-col gap-(--spacing-md)"
+            novalidate
+            @submit.prevent="confirmMove"
+          >
+            <ul
+              aria-label="Files to move"
+              class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0"
             >
-              <ul
-                aria-label="Files to move"
-                class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0"
+              <li
+                v-for="item in moving"
+                :key="item.name"
+                class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
               >
-                <li
-                  v-for="item in moving"
-                  :key="item.name"
-                  class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-default)"
-                >
-                  <i
-                    class="pi pi-file shrink-0 text-(--text-muted)"
-                    aria-hidden="true"
-                  />
-                  <span class="min-w-0 truncate">{{ item.name }}</span>
-                  <span class="ms-auto shrink-0 text-(--text-muted)">{{ item.size }}</span>
-                </li>
-              </ul>
-              <Field :invalid="!!destinationError">
-                <Field.Label>Destination folder</Field.Label>
-                <Combobox
-                  v-model="destination"
-                  :options="destinationOptions"
-                  placeholder="/ (storage root)"
-                  size="large"
-                  clearable
-                  @update:model-value="destinationError = ''"
+                <i
+                  class="pi pi-file shrink-0 text-(--text-muted)"
+                  aria-hidden="true"
                 />
-                <Field.Description
-                  >A folder that does not exist yet is created with the move.</Field.Description
-                >
-                <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
-              </Field>
-            </form>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                label="Cancel"
-                kind="outlined"
-                size="medium"
-                @click="moveOpen = false"
+                <span class="min-w-0 truncate">{{ item.name }}</span>
+                <span class="ms-auto shrink-0 text-(--text-muted)">{{ item.size }}</span>
+              </li>
+            </ul>
+            <Field :invalid="!!destinationError">
+              <Field.Label>Destination folder</Field.Label>
+              <Combobox
+                v-model="destination"
+                :options="destinationOptions"
+                placeholder="/ (storage root)"
+                size="large"
+                clearable
+                @update:model-value="destinationError = ''"
               />
-              <Button
-                :label="moving.length === 1 ? 'Move file' : `Move ${moving.length} files`"
-                kind="primary"
-                size="medium"
-                @click="confirmMove"
-              />
-            </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+              <Field.Description
+                >A folder that does not exist yet is created with the move.</Field.Description
+              >
+              <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
+            </Field>
+          </form>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              size="medium"
+              @click="moveOpen = false"
+            />
+            <Button
+              :label="moving.length === 1 ? 'Move file' : `Move ${moving.length} files`"
+              kind="primary"
+              size="medium"
+              @click="confirmMove"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
     <UploadProgress
       v-if="transfer.length"

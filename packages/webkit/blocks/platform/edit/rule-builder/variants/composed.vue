@@ -4,10 +4,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Combobox from '@aziontech/webkit/combobox'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
@@ -545,396 +542,390 @@
         size="medium"
       />
     </DrawerTrigger>
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <form
-          ref="formEl"
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Edit Rule"
-          novalidate
-          @submit.prevent="submit"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>Edit Rule</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                Handle the conditional execution of behaviors through logical operators.
-              </p>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
+    <DrawerContent>
+      <form
+        ref="formEl"
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Edit Rule"
+        novalidate
+        @submit.prevent="submit"
+      >
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DrawerTitle>Edit Rule</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              Handle the conditional execution of behaviors through logical operators.
+            </p>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <div
-              v-if="saveError"
-              class="mb-(--spacing-md)"
+        <PanelContent>
+          <div
+            v-if="saveError"
+            class="mb-(--spacing-md)"
+          >
+            <Alert
+              severity="danger"
+              :label="saveError"
+              data-testid="rule-builder-save-error"
+            />
+          </div>
+          <fieldset
+            class="m-0 flex min-w-0 flex-col border-0 p-0"
+            :disabled="submitting"
+          >
+            <legend class="sr-only">Edit Rule</legend>
+            <SettingsSection
+              title="General"
+              hint="Names the rule in the list and in the deployment log."
             >
-              <Alert
-                severity="danger"
-                :label="saveError"
-                data-testid="rule-builder-save-error"
-              />
-            </div>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col border-0 p-0"
-              :disabled="submitting"
-            >
-              <legend class="sr-only">Edit Rule</legend>
-              <SettingsSection
-                title="General"
-                hint="Names the rule in the list and in the deployment log."
-              >
-                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                  <Field
-                    :disabled="submitting"
-                    :required="nameError"
-                  >
-                    <Field.Label for="rule-name">Name</Field.Label>
-                    <Input
-                      id="rule-name"
-                      v-model="form.name"
-                      size="large"
-                      placeholder="My rule"
-                    />
-                    <Field.Description v-if="nameError">Name is required.</Field.Description>
-                  </Field>
-
-                  <Field :disabled="submitting">
-                    <Field.Label for="rule-description">Description</Field.Label>
-                    <Input
-                      id="rule-description"
-                      v-model="form.description"
-                      size="large"
-                      placeholder="Optional"
-                    />
-                    <Field.Description
-                      >For whoever reads this rule next. It never affects what the rule
-                      does.</Field.Description
-                    >
-                  </Field>
-                </div>
-              </SettingsSection>
-
-              <SettingsSection
-                title="Phase"
-                hint="When the rule runs. Request rules act on what arrives at the service; response rules act on what leaves it. The two are separate programs and never interleave."
-              >
-                <Card :padded="false">
-                  <template #content>
-                    <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
-                      <div class="flex flex-col gap-(--spacing-xs)">
-                        <Field.Label
-                          v-for="phase in PHASES"
-                          :key="phase.value"
-                        >
-                          <Field
-                            orientation="horizontal"
-                            :disabled="submitting || editing"
-                          >
-                            <RadioButton
-                              v-model="form.phase"
-                              :value="phase.value"
-                              name="rule-phase"
-                              :id="`rule-phase-${phase.value}`"
-                            />
-                            <Field.Content>
-                              <Field.Title>{{ phase.label }}</Field.Title>
-                              <Field.Description>{{ phase.description }}</Field.Description>
-                            </Field.Content>
-                          </Field>
-                        </Field.Label>
-                        <HelperText
-                          v-if="editing"
-                          kind="disabled"
-                          label="A rule’s phase is set when it is created. Create a rule in the other phase to run these behaviors there."
-                        />
-                      </div>
-                    </div>
-                  </template>
-                </Card>
-              </SettingsSection>
-
-              <SettingsSection
-                title="Criteria"
-                hint="The conditions that decide whether the rule runs. Every condition in a group must match, and any one group is enough."
-              >
-                <AttributeEditor
-                  v-model:groups="form.criteria"
-                  :definition="criteriaColumns"
-                  :new-item="newCondition"
-                  :errors="criteriaErrors"
-                  :limit="10"
-                  :group-limit="5"
-                  :min-items="1"
+              <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <Field
                   :disabled="submitting"
-                  reorderable
-                  size="large"
-                  add-button-label="Add condition"
-                  add-group-label="Add OR group"
-                  remove-button-label="Remove condition"
-                  aria-label="Criteria"
+                  :required="nameError"
                 >
-                  <template #cell-variable="{ value, update, invalid }">
-                    <div class="contents font-code">
-                      <Combobox
-                        :model-value="value"
-                        :options="variablesForPhase"
-                        size="large"
-                        placeholder="${uri}"
-                        empty-title="No variable matches. Type the one you need."
-                        required
-                        :invalid="invalid"
-                        :disabled="submitting"
-                        @update:model-value="update"
+                  <Field.Label for="rule-name">Name</Field.Label>
+                  <Input
+                    id="rule-name"
+                    v-model="form.name"
+                    size="large"
+                    placeholder="My rule"
+                  />
+                  <Field.Description v-if="nameError">Name is required.</Field.Description>
+                </Field>
+
+                <Field :disabled="submitting">
+                  <Field.Label for="rule-description">Description</Field.Label>
+                  <Input
+                    id="rule-description"
+                    v-model="form.description"
+                    size="large"
+                    placeholder="Optional"
+                  />
+                  <Field.Description
+                    >For whoever reads this rule next. It never affects what the rule
+                    does.</Field.Description
+                  >
+                </Field>
+              </div>
+            </SettingsSection>
+
+            <SettingsSection
+              title="Phase"
+              hint="When the rule runs. Request rules act on what arrives at the service; response rules act on what leaves it. The two are separate programs and never interleave."
+            >
+              <Card :padded="false">
+                <template #content>
+                  <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
+                    <div class="flex flex-col gap-(--spacing-xs)">
+                      <Field.Label
+                        v-for="phase in PHASES"
+                        :key="phase.value"
+                      >
+                        <Field
+                          orientation="horizontal"
+                          :disabled="submitting || editing"
+                        >
+                          <RadioButton
+                            v-model="form.phase"
+                            :value="phase.value"
+                            name="rule-phase"
+                            :id="`rule-phase-${phase.value}`"
+                          />
+                          <Field.Content>
+                            <Field.Title>{{ phase.label }}</Field.Title>
+                            <Field.Description>{{ phase.description }}</Field.Description>
+                          </Field.Content>
+                        </Field>
+                      </Field.Label>
+                      <HelperText
+                        v-if="editing"
+                        kind="disabled"
+                        label="A rule’s phase is set when it is created. Create a rule in the other phase to run these behaviors there."
                       />
                     </div>
-                  </template>
-                  <template #cell-operator="{ value, update }">
-                    <Select
-                      :model-value="value"
-                      size="large"
-                      class="w-full"
-                      :disabled="submitting"
-                      :display-value="operatorLabel"
-                      @update:model-value="update"
-                    >
-                      <Select.Trigger />
-                      <Select.Content>
-                        <Select.Option
-                          v-for="op in OPERATORS"
-                          :key="op.value"
-                          :value="op.value"
-                        >
-                          {{ op.label }}
-                        </Select.Option>
-                      </Select.Content>
-                    </Select>
-                  </template>
-                  <template #cell-argument="{ item, value, update }">
-                    <Input
-                      v-if="takesArgument(item.operator)"
-                      key="argument"
-                      :model-value="value"
-                      size="large"
-                      class="w-full"
-                      autocomplete="off"
-                      :spellcheck="false"
-                      :disabled="submitting"
-                      @update:model-value="update"
-                    />
-                    <Input
-                      v-else
-                      key="no-argument"
-                      model-value=""
-                      size="large"
-                      class="w-full"
-                      placeholder="No argument"
-                      disabled
-                    />
-                  </template>
-                </AttributeEditor>
-              </SettingsSection>
+                  </div>
+                </template>
+              </Card>
+            </SettingsSection>
 
-              <SettingsSection
-                title="Behaviors"
-                hint="What the rule does when its criteria are met, run top to bottom in this order."
+            <SettingsSection
+              title="Criteria"
+              hint="The conditions that decide whether the rule runs. Every condition in a group must match, and any one group is enough."
+            >
+              <AttributeEditor
+                v-model:groups="form.criteria"
+                :definition="criteriaColumns"
+                :new-item="newCondition"
+                :errors="criteriaErrors"
+                :limit="10"
+                :group-limit="5"
+                :min-items="1"
+                :disabled="submitting"
+                reorderable
+                size="large"
+                add-button-label="Add condition"
+                add-group-label="Add OR group"
+                remove-button-label="Remove condition"
+                aria-label="Criteria"
               >
-                <Card :padded="false">
-                  <template #content>
-                    <div
-                      class="transition-[height] duration-moderate-02 ease-productive-entrance data-resizing:overflow-hidden motion-reduce:transition-none"
-                    >
-                      <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
-                        <div class="flex items-center gap-(--spacing-xs)">
-                          <span class="text-overline-sm text-(--text-muted)">Then</span>
-                          <span class="h-px flex-1 bg-(--border-default)" />
-                        </div>
+                <template #cell-variable="{ value, update, invalid }">
+                  <div class="contents font-code">
+                    <Combobox
+                      :model-value="value"
+                      :options="variablesForPhase"
+                      size="large"
+                      placeholder="${uri}"
+                      empty-title="No variable matches. Type the one you need."
+                      required
+                      :invalid="invalid"
+                      :disabled="submitting"
+                      @update:model-value="update"
+                    />
+                  </div>
+                </template>
+                <template #cell-operator="{ value, update }">
+                  <Select
+                    :model-value="value"
+                    size="large"
+                    class="w-full"
+                    :disabled="submitting"
+                    :display-value="operatorLabel"
+                    @update:model-value="update"
+                  >
+                    <Select.Trigger />
+                    <Select.Content>
+                      <Select.Option
+                        v-for="op in OPERATORS"
+                        :key="op.value"
+                        :value="op.value"
+                      >
+                        {{ op.label }}
+                      </Select.Option>
+                    </Select.Content>
+                  </Select>
+                </template>
+                <template #cell-argument="{ item, value, update }">
+                  <Input
+                    v-if="takesArgument(item.operator)"
+                    key="argument"
+                    :model-value="value"
+                    size="large"
+                    class="w-full"
+                    autocomplete="off"
+                    :spellcheck="false"
+                    :disabled="submitting"
+                    @update:model-value="update"
+                  />
+                  <Input
+                    v-else
+                    key="no-argument"
+                    model-value=""
+                    size="large"
+                    class="w-full"
+                    placeholder="No argument"
+                    disabled
+                  />
+                </template>
+              </AttributeEditor>
+            </SettingsSection>
 
-                        <AttributeEditor
-                          v-model:items="form.behaviors"
-                          :definition="behaviorColumns"
-                          :new-item="newBehavior"
-                          :limit="10"
-                          :min-items="1"
-                          :add-disabled="lastBehaviorEnds"
-                          :disabled="submitting"
-                          reorderable
-                          size="large"
-                          add-button-label="Add behavior"
-                          remove-button-label="Remove behavior"
-                          aria-label="Behaviors"
-                        >
-                          <template #cell-type="{ item, index }">
-                            <Select
-                              :model-value="item.type"
+            <SettingsSection
+              title="Behaviors"
+              hint="What the rule does when its criteria are met, run top to bottom in this order."
+            >
+              <Card :padded="false">
+                <template #content>
+                  <div
+                    class="transition-[height] duration-moderate-02 ease-productive-entrance data-resizing:overflow-hidden motion-reduce:transition-none"
+                  >
+                    <div class="flex flex-col gap-(--spacing-lg) p-(--spacing-md)">
+                      <div class="flex items-center gap-(--spacing-xs)">
+                        <span class="text-overline-sm text-(--text-muted)">Then</span>
+                        <span class="h-px flex-1 bg-(--border-default)" />
+                      </div>
+
+                      <AttributeEditor
+                        v-model:items="form.behaviors"
+                        :definition="behaviorColumns"
+                        :new-item="newBehavior"
+                        :limit="10"
+                        :min-items="1"
+                        :add-disabled="lastBehaviorEnds"
+                        :disabled="submitting"
+                        reorderable
+                        size="large"
+                        add-button-label="Add behavior"
+                        remove-button-label="Remove behavior"
+                        aria-label="Behaviors"
+                      >
+                        <template #cell-type="{ item, index }">
+                          <Select
+                            :model-value="item.type"
+                            size="large"
+                            class="w-full"
+                            :disabled="submitting"
+                            :display-value="behaviorLabel"
+                            @update:model-value="setBehaviorType(index, $event)"
+                            @update:open="onBehaviorPanel(item.id, $event)"
+                          >
+                            <Select.Trigger />
+                            <Select.Content>
+                              <template #search>
+                                <Input
+                                  v-model="behaviorQuery[item.id]"
+                                  size="medium"
+                                  class="w-full"
+                                  placeholder="Search behaviors"
+                                  aria-label="Search behaviors"
+                                  @keydown.stop
+                                >
+                                  <template #prefix>
+                                    <i
+                                      class="pi pi-search"
+                                      aria-hidden="true"
+                                    />
+                                  </template>
+                                </Input>
+                              </template>
+                              <Select.Option
+                                v-for="option in behaviorMatches(item.id)"
+                                :key="option.value"
+                                :value="option.value"
+                              >
+                                {{ option.label }}
+                              </Select.Option>
+                              <p
+                                v-if="!behaviorMatches(item.id).length"
+                                class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
+                              >
+                                No behavior matches “{{ behaviorQuery[item.id] }}”.
+                              </p>
+                            </Select.Content>
+                          </Select>
+                        </template>
+                        <template #cell-argument="{ item, index }">
+                          <template
+                            v-for="argument in [behaviorArgument(item.type)]"
+                            :key="item.type"
+                          >
+                            <Input
+                              key="input-1"
+                              v-if="argument?.kind === 'text'"
+                              v-model="form.behaviors[index][argument.field]"
                               size="large"
                               class="w-full"
+                              :aria-label="argument.label"
+                              :placeholder="argument.placeholder"
                               :disabled="submitting"
-                              :display-value="behaviorLabel"
-                              @update:model-value="setBehaviorType(index, $event)"
-                              @update:open="onBehaviorPanel(item.id, $event)"
+                              :required="argumentMissing(item, argument.field)"
+                            />
+                            <div
+                              v-else-if="argument?.kind === 'select'"
+                              class="flex w-full flex-col gap-(--spacing-xxs)"
                             >
-                              <Select.Trigger />
-                              <Select.Content>
-                                <template #search>
-                                  <Input
-                                    v-model="behaviorQuery[item.id]"
-                                    size="medium"
-                                    class="w-full"
-                                    placeholder="Search behaviors"
-                                    aria-label="Search behaviors"
-                                    @keydown.stop
-                                  >
-                                    <template #prefix>
-                                      <i
-                                        class="pi pi-search"
-                                        aria-hidden="true"
-                                      />
-                                    </template>
-                                  </Input>
-                                </template>
-                                <Select.Option
-                                  v-for="option in behaviorMatches(item.id)"
-                                  :key="option.value"
-                                  :value="option.value"
-                                >
-                                  {{ option.label }}
-                                </Select.Option>
-                                <p
-                                  v-if="!behaviorMatches(item.id).length"
-                                  class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
-                                >
-                                  No behavior matches “{{ behaviorQuery[item.id] }}”.
-                                </p>
-                              </Select.Content>
-                            </Select>
-                          </template>
-                          <template #cell-argument="{ item, index }">
-                            <template
-                              v-for="argument in [behaviorArgument(item.type)]"
-                              :key="item.type"
-                            >
-                              <Input
-                                key="input-1"
-                                v-if="argument?.kind === 'text'"
+                              <Select
                                 v-model="form.behaviors[index][argument.field]"
                                 size="large"
                                 class="w-full"
-                                :aria-label="argument.label"
-                                :placeholder="argument.placeholder"
                                 :disabled="submitting"
+                                :placeholder="`Select a ${argument.label.toLowerCase()}`"
                                 :required="argumentMissing(item, argument.field)"
-                              />
-                              <div
-                                v-else-if="argument?.kind === 'select'"
-                                class="flex w-full flex-col gap-(--spacing-xxs)"
+                                :display-value="(value) => optionLabelIn(argument.source, value)"
                               >
-                                <Select
-                                  v-model="form.behaviors[index][argument.field]"
-                                  size="large"
-                                  class="w-full"
-                                  :disabled="submitting"
-                                  :placeholder="`Select a ${argument.label.toLowerCase()}`"
-                                  :required="argumentMissing(item, argument.field)"
-                                  :display-value="(value) => optionLabelIn(argument.source, value)"
-                                >
-                                  <Select.Trigger :aria-label="argument.label" />
-                                  <Select.Content>
-                                    <Select.Option
-                                      v-for="option in optionsFor(argument.source)"
-                                      :key="option.value"
-                                      :value="option.value"
-                                    >
-                                      {{ option.label }}
-                                    </Select.Option>
-                                  </Select.Content>
-                                </Select>
-                                <HelperText
-                                  v-if="behaviorArgumentNote(argument.source, form.phase)"
-                                >
-                                  {{ behaviorArgumentNote(argument.source, form.phase) }}
-                                </HelperText>
-                              </div>
-                              <div
-                                v-else-if="argument?.kind === 'group'"
-                                class="flex w-full flex-col gap-(--spacing-xs)"
-                              >
-                                <Input
-                                  v-for="part in argument.fields"
-                                  :key="part.field"
-                                  v-model="form.behaviors[index][part.field]"
-                                  size="large"
-                                  class="w-full"
-                                  :aria-label="part.label"
-                                  :placeholder="part.placeholder"
-                                  :disabled="submitting"
-                                  :required="argumentMissing(item, part.field)"
-                                />
-                              </div>
+                                <Select.Trigger :aria-label="argument.label" />
+                                <Select.Content>
+                                  <Select.Option
+                                    v-for="option in optionsFor(argument.source)"
+                                    :key="option.value"
+                                    :value="option.value"
+                                  >
+                                    {{ option.label }}
+                                  </Select.Option>
+                                </Select.Content>
+                              </Select>
+                              <HelperText v-if="behaviorArgumentNote(argument.source, form.phase)">
+                                {{ behaviorArgumentNote(argument.source, form.phase) }}
+                              </HelperText>
+                            </div>
+                            <div
+                              v-else-if="argument?.kind === 'group'"
+                              class="flex w-full flex-col gap-(--spacing-xs)"
+                            >
                               <Input
-                                key="input-2"
-                                v-else
-                                model-value=""
+                                v-for="part in argument.fields"
+                                :key="part.field"
+                                v-model="form.behaviors[index][part.field]"
                                 size="large"
                                 class="w-full"
-                                placeholder="No argument"
-                                disabled
+                                :aria-label="part.label"
+                                :placeholder="part.placeholder"
+                                :disabled="submitting"
+                                :required="argumentMissing(item, part.field)"
                               />
-                            </template>
+                            </div>
+                            <Input
+                              key="input-2"
+                              v-else
+                              model-value=""
+                              size="large"
+                              class="w-full"
+                              placeholder="No argument"
+                              disabled
+                            />
                           </template>
-                          <template
-                            v-if="lastBehaviorEnds"
-                            #info
-                          >
-                            {{ behaviorLabel(form.behaviors[form.behaviors.length - 1].type) }} ends
-                            the rule. Nothing after it runs.
-                          </template>
-                        </AttributeEditor>
-                      </div>
+                        </template>
+                        <template
+                          v-if="lastBehaviorEnds"
+                          #info
+                        >
+                          {{ behaviorLabel(form.behaviors[form.behaviors.length - 1].type) }} ends
+                          the rule. Nothing after it runs.
+                        </template>
+                      </AttributeEditor>
                     </div>
-                  </template>
-                </Card>
-              </SettingsSection>
+                  </div>
+                </template>
+              </Card>
+            </SettingsSection>
 
-              <SettingsSection
-                title="Status"
-                hint="An inactive rule stays in the list and in its place in the order, but is skipped at runtime."
-              >
-                <Card :padded="false">
-                  <template #content>
-                    <Item.List>
-                      <SettingRow
-                        title="Active"
-                        description="Turn the rule on right after it is created."
-                        kind="compact"
-                      >
-                        <Switch
-                          v-model="form.active"
-                          aria-label="Active"
-                          :disabled="submitting"
-                        />
-                      </SettingRow>
-                    </Item.List>
-                  </template>
-                </Card>
-              </SettingsSection>
-            </fieldset>
-          </PanelContent>
+            <SettingsSection
+              title="Status"
+              hint="An inactive rule stays in the list and in its place in the order, but is skipped at runtime."
+            >
+              <Card :padded="false">
+                <template #content>
+                  <Item.List>
+                    <SettingRow
+                      title="Active"
+                      description="Turn the rule on right after it is created."
+                      kind="compact"
+                    >
+                      <Switch
+                        v-model="form.active"
+                        aria-label="Active"
+                        :disabled="submitting"
+                      />
+                    </SettingRow>
+                  </Item.List>
+                </template>
+              </Card>
+            </SettingsSection>
+          </fieldset>
+        </PanelContent>
 
-          <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-              <Button
-                label="Save"
-                kind="primary"
-                size="medium"
-                :loading="submitting"
-                type="submit"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </DrawerPortal>
+        <PanelFooter>
+          <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
+            <Button
+              label="Save"
+              kind="primary"
+              size="medium"
+              :loading="submitting"
+              type="submit"
+            />
+          </div>
+        </PanelFooter>
+      </form>
+    </DrawerContent>
   </Drawer>
 </template>

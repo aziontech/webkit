@@ -65,7 +65,7 @@ Switches a time series between Line and Bar. Only on time series, never on a ran
 
 Names each icon-only control on hover and focus (`Expand`, `More options`).
 
-### H. Expand — `IconButton`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `DialogClose`, `PanelContent` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `PanelContent` (optional)
 
 Opens the card at full size. Icon-only, with an `aria-label` that names the card
 (`Expand Requests over time`). It opens one large `Dialog` for the page: the card title as the

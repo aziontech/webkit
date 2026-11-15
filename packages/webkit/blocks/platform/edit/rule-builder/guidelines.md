@@ -17,9 +17,9 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 ## Building blocks
 
-### A. Drawer and trigger — `Drawer`, `DrawerTrigger`, `Button`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent` (required)
+### A. Drawer and trigger — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent` (required)
 
-A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add Rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and `DrawerClose`, and `PanelContent` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
+A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add Rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelContent` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
 
 ### B. General — `SettingsSection`, `Field`, `Input` (required)
 
@@ -56,7 +56,7 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 
 ## Don't
 
-- Don't put a Cancel button beside Save; `DrawerClose` and the overlay close the drawer.
+- Don't put a Cancel button beside Save; the drawer's close button and the overlay close it.
 - Don't nest groups inside groups; one level of Or over And is the whole model.
 - Don't draw criteria rows by hand; `AttributeEditor` grouped mode owns their labels, errors, limits and announcements.
 - Don't let the user switch an existing rule's phase; tell them to create a rule in the other phase.

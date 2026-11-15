@@ -2,10 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DocProse from '@aziontech/webkit/doc-prose'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -298,101 +295,97 @@
       size="medium"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 items-center gap-(--spacing-sm)">
-              <span
-                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-              >
-                <i
-                  :class="[selected.icon, MARKS[selected.framework]]"
-                  class="text-body-lg leading-none text-(--text-default)"
-                  aria-hidden="true"
-                />
-              </span>
-              <DrawerTitle>{{ selected.title }}</DrawerTitle>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+            <span
+              class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+            >
+              <i
+                :class="[selected.icon, MARKS[selected.framework]]"
+                class="text-body-lg leading-none text-(--text-default)"
+                aria-hidden="true"
+              />
+            </span>
+            <DrawerTitle>{{ selected.title }}</DrawerTitle>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <div class="flex flex-col gap-(--layout-section-gap)">
-              <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
+        <PanelContent>
+          <div class="flex flex-col gap-(--layout-section-gap)">
+            <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
 
-              <KeyValuePairs
-                :columns="2"
-                aria-label="Template details"
+            <KeyValuePairs
+              :columns="2"
+              aria-label="Template details"
+            >
+              <KeyValuePairs.Item label="Framework">{{
+                FRAMEWORKS[selected.framework]
+              }}</KeyValuePairs.Item>
+              <KeyValuePairs.Item label="Category">{{
+                categoryLabel(selected.category)
+              }}</KeyValuePairs.Item>
+              <KeyValuePairs.Item label="Repository"
+                ><bdi>{{ selected.repository }}</bdi></KeyValuePairs.Item
               >
-                <KeyValuePairs.Item label="Framework">{{
-                  FRAMEWORKS[selected.framework]
-                }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Category">{{
-                  categoryLabel(selected.category)
-                }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Repository"
-                  ><bdi>{{ selected.repository }}</bdi></KeyValuePairs.Item
-                >
-                <KeyValuePairs.Item label="Updated">{{ selected.updated }}</KeyValuePairs.Item>
-              </KeyValuePairs>
+              <KeyValuePairs.Item label="Updated">{{ selected.updated }}</KeyValuePairs.Item>
+            </KeyValuePairs>
 
-              <section
-                class="flex flex-col gap-(--layout-group-gap)"
-                aria-labelledby="template-readme"
+            <section
+              class="flex flex-col gap-(--layout-group-gap)"
+              aria-labelledby="template-readme"
+            >
+              <h3
+                id="template-readme"
+                class="text-heading-xxs text-(--text-default)"
               >
-                <h3
-                  id="template-readme"
-                  class="text-heading-xxs text-(--text-default)"
-                >
-                  README
-                </h3>
-                <Card>
-                  <template #content>
-                    <DocProse>
-                      <p>{{ selected.description }}</p>
-                      <h4>Deploy</h4>
-                      <p>
-                        Deploy creates a copy of this repository in your Git account, builds it and
-                        publishes it. Every push to the main branch deploys again.
-                      </p>
-                      <h4>Run it locally</h4>
-                      <pre><code>npm install
+                README
+              </h3>
+              <Card>
+                <template #content>
+                  <DocProse>
+                    <p>{{ selected.description }}</p>
+                    <h4>Deploy</h4>
+                    <p>
+                      Deploy creates a copy of this repository in your Git account, builds it and
+                      publishes it. Every push to the main branch deploys again.
+                    </p>
+                    <h4>Run it locally</h4>
+                    <pre><code>npm install
 npm run dev</code></pre>
-                      <h4>Settings</h4>
-                      <ul>
-                        <li>The build command and the output folder are read from the project.</li>
-                        <li>Environment variables can be added after the first deploy.</li>
-                      </ul>
-                    </DocProse>
-                  </template>
-                </Card>
-              </section>
-            </div>
-          </PanelContent>
+                    <h4>Settings</h4>
+                    <ul>
+                      <li>The build command and the output folder are read from the project.</li>
+                      <li>Environment variables can be added after the first deploy.</li>
+                    </ul>
+                  </DocProse>
+                </template>
+              </Card>
+            </section>
+          </div>
+        </PanelContent>
 
-          <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-              <Button
-                label="View repository"
-                icon="pi pi-external-link"
-                icon-position="trailing"
-                kind="outlined"
-                size="medium"
-                :href="`https://example.com/${selected.repository}`"
-                target="_blank"
-              />
-              <Button
-                label="Deploy"
-                icon="pi pi-cloud-upload"
-                kind="primary"
-                size="medium"
-                :href="`/create/deploy?template=${selected.id}`"
-              />
-            </div>
-          </PanelFooter>
-        </DrawerContent>
-      </DrawerPortal>
+        <PanelFooter>
+          <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
+            <Button
+              label="View repository"
+              icon="pi pi-external-link"
+              icon-position="trailing"
+              kind="outlined"
+              size="medium"
+              :href="`https://example.com/${selected.repository}`"
+              target="_blank"
+            />
+            <Button
+              label="Deploy"
+              icon="pi pi-cloud-upload"
+              kind="primary"
+              size="medium"
+              :href="`/create/deploy?template=${selected.id}`"
+            />
+          </div>
+        </PanelFooter>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

@@ -4,10 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import CodeEditor, { type CodeEditorMarker } from '@aziontech/webkit/code-editor'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -1494,81 +1491,77 @@ LIMIT 3;`
       size="large"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>SQL quick templates</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                Pick a snippet to load it into the editor.
-              </p>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DrawerTitle>SQL quick templates</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              Pick a snippet to load it into the editor.
+            </p>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <Input
-                v-model="templateQuery"
-                size="large"
-                class="w-full"
-                placeholder="Search templates"
-                aria-label="Search templates"
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <Input
+              v-model="templateQuery"
+              size="large"
+              class="w-full"
+              placeholder="Search templates"
+              aria-label="Search templates"
+            >
+              <template #prefix>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+
+            <div
+              v-if="filteredTemplates.length"
+              class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2"
+            >
+              <Item
+                v-for="template in filteredTemplates"
+                :key="template.id"
+                kind="outlined"
+                clickable
+                @click="chooseTemplate(template)"
               >
-                <template #prefix>
+                <Item.Media>
                   <i
-                    class="pi pi-search"
+                    :class="template.icon"
+                    class="text-(--text-muted)"
                     aria-hidden="true"
                   />
-                </template>
-              </Input>
-
-              <div
-                v-if="filteredTemplates.length"
-                class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2"
-              >
-                <Item
-                  v-for="template in filteredTemplates"
-                  :key="template.id"
-                  kind="outlined"
-                  clickable
-                  @click="chooseTemplate(template)"
-                >
-                  <Item.Media>
-                    <i
-                      :class="template.icon"
-                      class="text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </Item.Media>
-                  <Item.Content>
-                    <Item.Title>{{ template.title }}</Item.Title>
-                    <Item.Description>{{ template.description }}</Item.Description>
-                  </Item.Content>
-                </Item>
-              </div>
-
-              <EmptyState
-                v-else
-                size="small"
-                icon="pi pi-search"
-                :title="`No templates match “${templateQuery}”`"
-                description="Try another name or statement."
-              >
-                <template #actions>
-                  <Button
-                    label="Clear search"
-                    kind="outlined"
-                    size="small"
-                    @click="templateQuery = ''"
-                  />
-                </template>
-              </EmptyState>
+                </Item.Media>
+                <Item.Content>
+                  <Item.Title>{{ template.title }}</Item.Title>
+                  <Item.Description>{{ template.description }}</Item.Description>
+                </Item.Content>
+              </Item>
             </div>
-          </PanelContent>
-        </DrawerContent>
-      </DrawerPortal>
+
+            <EmptyState
+              v-else
+              size="small"
+              icon="pi pi-search"
+              :title="`No templates match “${templateQuery}”`"
+              description="Try another name or statement."
+            >
+              <template #actions>
+                <Button
+                  label="Clear search"
+                  kind="outlined"
+                  size="small"
+                  @click="templateQuery = ''"
+                />
+              </template>
+            </EmptyState>
+          </div>
+        </PanelContent>
+      </DrawerContent>
     </Drawer>
 
     <Drawer
@@ -1576,239 +1569,235 @@ LIMIT 3;`
       size="large"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            class="flex min-h-0 flex-1 flex-col"
-            :aria-label="`Import data into ${selectedTable?.name ?? 'the table'}`"
-            novalidate
-            @submit.prevent="submitImport"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Import data into {{ selectedTable?.name }}</DrawerTitle>
-                <p class="text-body-sm text-(--text-muted)">
-                  Read a CSV file, choose the table column each CSV column fills, check the rows,
-                  then insert them. Rows with errors are skipped.
-                </p>
-              </div>
-              <DrawerClose />
-            </PanelHeader>
+      <DrawerContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          :aria-label="`Import data into ${selectedTable?.name ?? 'the table'}`"
+          novalidate
+          @submit.prevent="submitImport"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>Import data into {{ selectedTable?.name }}</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                Read a CSV file, choose the table column each CSV column fills, check the rows, then
+                insert them. Rows with errors are skipped.
+              </p>
+            </div>
+          </PanelHeader>
 
-            <PanelContent>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col border-0 p-0"
-                :disabled="importing"
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="importing"
+            >
+              <legend class="sr-only">Import data from CSV</legend>
+              <SettingsSection
+                title="File"
+                hint="One .csv file whose first line names its columns."
               >
-                <legend class="sr-only">Import data from CSV</legend>
+                <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                  <FileDropzone
+                    v-if="!importFile"
+                    accept=".csv,text/csv"
+                    description="One .csv file, comma-separated, up to 10 MB."
+                    @drop="(_event, files) => onImportFiles(files)"
+                  >
+                    <Button
+                      type="button"
+                      label="Browse files"
+                      kind="secondary"
+                      size="medium"
+                      @click="importInput?.click()"
+                    />
+                  </FileDropzone>
+                  <input
+                    ref="importInput"
+                    type="file"
+                    accept=".csv,text/csv"
+                    class="hidden"
+                    aria-hidden="true"
+                    tabindex="-1"
+                    @change="onImportPick"
+                  />
+                  <FileTokenGroup
+                    v-if="importFile"
+                    :items="importTokens"
+                    @remove="clearImport"
+                  />
+                  <p
+                    v-if="importFileMissing"
+                    class="m-0 text-body-sm text-(--danger-contrast)"
+                  >
+                    {{ importFileMissing }}
+                  </p>
+                </div>
+              </SettingsSection>
+
+              <template v-if="importRows.length">
                 <SettingsSection
-                  title="File"
-                  hint="One .csv file whose first line names its columns."
+                  title="Map columns"
+                  :hint="`Choose the column of ${selectedTable?.name} each CSV column fills, or Skip it. Columns left out take NULL or their default.`"
                 >
                   <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                    <FileDropzone
-                      v-if="!importFile"
-                      accept=".csv,text/csv"
-                      description="One .csv file, comma-separated, up to 10 MB."
-                      @drop="(_event, files) => onImportFiles(files)"
-                    >
-                      <Button
-                        type="button"
-                        label="Browse files"
-                        kind="secondary"
-                        size="medium"
-                        @click="importInput?.click()"
-                      />
-                    </FileDropzone>
-                    <input
-                      ref="importInput"
-                      type="file"
-                      accept=".csv,text/csv"
-                      class="hidden"
-                      aria-hidden="true"
-                      tabindex="-1"
-                      @change="onImportPick"
+                    <Alert
+                      v-if="importSubmitted && mappingError"
+                      severity="danger"
+                      size="small"
+                      :label="mappingError"
                     />
-                    <FileTokenGroup
-                      v-if="importFile"
-                      :items="importTokens"
-                      @remove="clearImport"
-                    />
-                    <p
-                      v-if="importFileMissing"
-                      class="m-0 text-body-sm text-(--danger-contrast)"
+                    <ul
+                      aria-label="Column mapping"
+                      class="m-0 flex list-none flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-muted) p-0"
                     >
-                      {{ importFileMissing }}
-                    </p>
+                      <li
+                        v-for="header in importHeaders"
+                        :key="header"
+                        class="flex flex-wrap items-center gap-(--spacing-sm) border-t border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs) first:border-t-0"
+                      >
+                        <span class="flex min-w-0 flex-[1_1_10rem] flex-col">
+                          <span
+                            class="truncate font-code text-label-code-sm text-(--text-default)"
+                            >{{ header }}</span
+                          >
+                          <span class="truncate text-body-xs text-(--text-muted)"
+                            >e.g. {{ importRows[0].cells[header] || 'empty' }}</span
+                          >
+                        </span>
+                        <i
+                          class="pi pi-arrow-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                          aria-hidden="true"
+                        />
+                        <div class="min-w-0 flex-[1_1_12rem]">
+                          <Select
+                            v-model="importMapping[header]"
+                            :display-value="mappingLabel"
+                            size="medium"
+                            class="w-full"
+                          >
+                            <Select.Trigger :aria-label="`Table column for ${header}`" />
+                            <Select.Content>
+                              <Select.Option :value="SKIP">Skip</Select.Option>
+                              <Select.Group :label="`Columns of ${selectedTable?.name}`">
+                                <Select.Option
+                                  v-for="column in selectedTable?.columns ?? []"
+                                  :key="column.id"
+                                  :value="column.name"
+                                >
+                                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                                    <span class="font-code text-label-code-sm">{{
+                                      column.name
+                                    }}</span>
+                                    <span class="truncate text-body-xs text-(--text-muted)"
+                                      >{{ column.type
+                                      }}{{
+                                        column.notNull && !column.primaryKey ? ', required' : ''
+                                      }}</span
+                                    >
+                                  </span>
+                                </Select.Option>
+                              </Select.Group>
+                            </Select.Content>
+                          </Select>
+                        </div>
+                      </li>
+                    </ul>
                   </div>
                 </SettingsSection>
 
-                <template v-if="importRows.length">
-                  <SettingsSection
-                    title="Map columns"
-                    :hint="`Choose the column of ${selectedTable?.name} each CSV column fills, or Skip it. Columns left out take NULL or their default.`"
-                  >
-                    <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                      <Alert
-                        v-if="importSubmitted && mappingError"
-                        severity="danger"
-                        size="small"
-                        :label="mappingError"
-                      />
-                      <ul
-                        aria-label="Column mapping"
-                        class="m-0 flex list-none flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-muted) p-0"
+                <SettingsSection
+                  title="Check rows"
+                  hint="Each value is checked against its column's type, and required columns against empty values."
+                >
+                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                    <p
+                      class="m-0 text-body-sm text-(--text-default)"
+                      aria-live="polite"
+                    >
+                      {{ validRows.length }} of {{ checkedRows.length }}
+                      {{ checkedRows.length === 1 ? 'row is' : 'rows are' }} ready to insert.
+                      <template v-if="failedRows.length"
+                        >{{ failedRows.length }}
+                        {{ failedRows.length === 1 ? 'row has' : 'rows have' }} errors and will be
+                        skipped.</template
                       >
-                        <li
-                          v-for="header in importHeaders"
-                          :key="header"
-                          class="flex flex-wrap items-center gap-(--spacing-sm) border-t border-(--border-muted) px-(--spacing-sm) py-(--spacing-xs) first:border-t-0"
-                        >
-                          <span class="flex min-w-0 flex-[1_1_10rem] flex-col">
-                            <span
-                              class="truncate font-code text-label-code-sm text-(--text-default)"
-                              >{{ header }}</span
-                            >
-                            <span class="truncate text-body-xs text-(--text-muted)"
-                              >e.g. {{ importRows[0].cells[header] || 'empty' }}</span
-                            >
-                          </span>
-                          <i
-                            class="pi pi-arrow-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
-                            aria-hidden="true"
-                          />
-                          <div class="min-w-0 flex-[1_1_12rem]">
-                            <Select
-                              v-model="importMapping[header]"
-                              :display-value="mappingLabel"
-                              size="medium"
-                              class="w-full"
-                            >
-                              <Select.Trigger :aria-label="`Table column for ${header}`" />
-                              <Select.Content>
-                                <Select.Option :value="SKIP">Skip</Select.Option>
-                                <Select.Group :label="`Columns of ${selectedTable?.name}`">
-                                  <Select.Option
-                                    v-for="column in selectedTable?.columns ?? []"
-                                    :key="column.id"
-                                    :value="column.name"
-                                  >
-                                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                                      <span class="font-code text-label-code-sm">{{
-                                        column.name
-                                      }}</span>
-                                      <span class="truncate text-body-xs text-(--text-muted)"
-                                        >{{ column.type
-                                        }}{{
-                                          column.notNull && !column.primaryKey ? ', required' : ''
-                                        }}</span
-                                      >
-                                    </span>
-                                  </Select.Option>
-                                </Select.Group>
-                              </Select.Content>
-                            </Select>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </SettingsSection>
-
-                  <SettingsSection
-                    title="Check rows"
-                    hint="Each value is checked against its column's type, and required columns against empty values."
-                  >
-                    <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                      <p
-                        class="m-0 text-body-sm text-(--text-default)"
-                        aria-live="polite"
+                    </p>
+                    <Alert
+                      v-if="importSubmitted && !mappingError && !validRows.length"
+                      severity="danger"
+                      size="small"
+                      label="Every row has an error, so there is nothing to insert. Fix the file or the mapping."
+                    />
+                    <ul
+                      v-if="failedRows.length"
+                      aria-label="Rows with errors"
+                      class="m-0 flex list-none flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--danger-border) p-(--spacing-sm)"
+                    >
+                      <li
+                        v-for="row in failedRows.slice(0, 10)"
+                        :key="row.line"
+                        class="flex gap-(--spacing-xs) text-body-sm text-(--text-default)"
                       >
-                        {{ validRows.length }} of {{ checkedRows.length }}
-                        {{ checkedRows.length === 1 ? 'row is' : 'rows are' }} ready to insert.
-                        <template v-if="failedRows.length"
-                          >{{ failedRows.length }}
-                          {{ failedRows.length === 1 ? 'row has' : 'rows have' }} errors and will be
-                          skipped.</template
-                        >
-                      </p>
-                      <Alert
-                        v-if="importSubmitted && !mappingError && !validRows.length"
-                        severity="danger"
-                        size="small"
-                        label="Every row has an error, so there is nothing to insert. Fix the file or the mapping."
-                      />
-                      <ul
-                        v-if="failedRows.length"
-                        aria-label="Rows with errors"
-                        class="m-0 flex list-none flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--danger-border) p-(--spacing-sm)"
-                      >
-                        <li
-                          v-for="row in failedRows.slice(0, 10)"
-                          :key="row.line"
-                          class="flex gap-(--spacing-xs) text-body-sm text-(--text-default)"
-                        >
-                          <i
-                            class="pi pi-times-circle mt-(--spacing-xxs) shrink-0 text-(--danger-contrast)"
-                            aria-hidden="true"
-                          />
-                          <span
-                            ><span class="text-label-sm">Line {{ row.line }}:</span>
-                            {{ row.problems.join(' ') }}</span
-                          >
-                        </li>
-                        <li
-                          v-if="failedRows.length > 10"
-                          class="text-body-xs text-(--text-muted)"
-                        >
-                          And {{ failedRows.length - 10 }} more.
-                        </li>
-                      </ul>
-                      <template v-if="importPreview.length">
-                        <p class="m-0 text-body-sm text-(--text-muted)">
-                          The first {{ importPreview.length }} rows as they will be inserted.
-                        </p>
-                        <TableRoot
-                          :data="importPreview"
-                          :columns="importPreviewColumns"
-                          row-key="__row"
-                          :bordered="true"
-                          density="compact"
-                          aria-label="Import preview"
+                        <i
+                          class="pi pi-times-circle mt-(--spacing-xxs) shrink-0 text-(--danger-contrast)"
+                          aria-hidden="true"
                         />
-                      </template>
-                    </div>
-                  </SettingsSection>
-                </template>
-              </fieldset>
-            </PanelContent>
+                        <span
+                          ><span class="text-label-sm">Line {{ row.line }}:</span>
+                          {{ row.problems.join(' ') }}</span
+                        >
+                      </li>
+                      <li
+                        v-if="failedRows.length > 10"
+                        class="text-body-xs text-(--text-muted)"
+                      >
+                        And {{ failedRows.length - 10 }} more.
+                      </li>
+                    </ul>
+                    <template v-if="importPreview.length">
+                      <p class="m-0 text-body-sm text-(--text-muted)">
+                        The first {{ importPreview.length }} rows as they will be inserted.
+                      </p>
+                      <TableRoot
+                        :data="importPreview"
+                        :columns="importPreviewColumns"
+                        row-key="__row"
+                        :bordered="true"
+                        density="compact"
+                        aria-label="Import preview"
+                      />
+                    </template>
+                  </div>
+                </SettingsSection>
+              </template>
+            </fieldset>
+          </PanelContent>
 
-            <PanelFooter>
-              <div class="flex w-full justify-end gap-(--spacing-xs)">
-                <Button
-                  type="button"
-                  label="Cancel"
-                  kind="outlined"
-                  size="medium"
-                  :disabled="importing"
-                  @click="importOpen = false"
-                />
-                <Button
-                  type="submit"
-                  :label="
-                    validRows.length
-                      ? `Insert ${validRows.length} ${validRows.length === 1 ? 'row' : 'rows'}`
-                      : 'Insert rows'
-                  "
-                  kind="primary"
-                  size="medium"
-                  :loading="importing"
-                />
-              </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+          <PanelFooter>
+            <div class="flex w-full justify-end gap-(--spacing-xs)">
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+                :disabled="importing"
+                @click="importOpen = false"
+              />
+              <Button
+                type="submit"
+                :label="
+                  validRows.length
+                    ? `Insert ${validRows.length} ${validRows.length === 1 ? 'row' : 'rows'}`
+                    : 'Insert rows'
+                "
+                kind="primary"
+                size="medium"
+                :loading="importing"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

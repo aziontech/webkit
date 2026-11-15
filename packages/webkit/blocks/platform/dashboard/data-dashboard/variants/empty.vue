@@ -1,11 +1,8 @@
 <script setup lang="ts">
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -663,54 +660,27 @@
       v-model:open="expanded"
       size="large"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DialogTitle>{{ expandedReport.label }}</DialogTitle>
-              <DialogDescription>{{ expandedReport.description }}</DialogDescription>
-            </div>
-            <DialogClose />
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-              <template v-if="expandedId === 'comparison'">
-                <div>
-                  <ToggleGroup
-                    v-model="form"
-                    :options="FORMS"
-                    size="small"
-                    :aria-label="`Chart form for ${expandedReport.label}`"
-                  />
-                </div>
-                <Chart
-                  :series="comparison.series"
-                  :labels="comparison.labels"
-                  :format-value="formatBytes"
-                  :height="420"
-                  empty-title="No usage yet"
-                  empty-description="Usage appears here once a project serves requests."
-                  :aria-label="expandedReport.label"
-                >
-                  <Chart.Grid />
-                  <Chart.Axis kind="y" />
-                  <Chart.Axis kind="x" />
-                  <Chart.Bar
-                    v-if="form === 'bar'"
-                    stacked
-                  />
-                  <Chart.Line v-else />
-                  <Chart.Crosshair />
-                  <Chart.Tooltip />
-                  <Chart.Legend total />
-                </Chart>
-              </template>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DialogTitle>{{ expandedReport.label }}</DialogTitle>
+            <DialogDescription>{{ expandedReport.description }}</DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+            <template v-if="expandedId === 'comparison'">
+              <div>
+                <ToggleGroup
+                  v-model="form"
+                  :options="FORMS"
+                  size="small"
+                  :aria-label="`Chart form for ${expandedReport.label}`"
+                />
+              </div>
               <Chart
-                v-else-if="expandedId === 'projects'"
-                :series="ranking.series"
-                :labels="ranking.labels"
-                orientation="horizontal"
+                :series="comparison.series"
+                :labels="comparison.labels"
                 :format-value="formatBytes"
                 :height="420"
                 empty-title="No usage yet"
@@ -720,37 +690,60 @@
                 <Chart.Grid />
                 <Chart.Axis kind="y" />
                 <Chart.Axis kind="x" />
-                <Chart.Bar labeled />
+                <Chart.Bar
+                  v-if="form === 'bar'"
+                  stacked
+                />
+                <Chart.Line v-else />
+                <Chart.Crosshair />
                 <Chart.Tooltip />
+                <Chart.Legend total />
               </Chart>
-              <TableRoot
-                v-else
-                :data="rows"
-                :columns="columns"
-                row-key="id"
-                enable-sorting
-                paginated
-                :page-size="10"
-                density="compact"
-                bordered
-              >
-                <template #empty>
-                  <EmptyState
-                    size="small"
-                    icon="pi pi-chart-line"
-                    title="No usage yet"
-                    description="Usage appears here once a project serves requests."
-                  />
-                </template>
+            </template>
+            <Chart
+              v-else-if="expandedId === 'projects'"
+              :series="ranking.series"
+              :labels="ranking.labels"
+              orientation="horizontal"
+              :format-value="formatBytes"
+              :height="420"
+              empty-title="No usage yet"
+              empty-description="Usage appears here once a project serves requests."
+              :aria-label="expandedReport.label"
+            >
+              <Chart.Grid />
+              <Chart.Axis kind="y" />
+              <Chart.Axis kind="x" />
+              <Chart.Bar labeled />
+              <Chart.Tooltip />
+            </Chart>
+            <TableRoot
+              v-else
+              :data="rows"
+              :columns="columns"
+              row-key="id"
+              enable-sorting
+              paginated
+              :page-size="10"
+              density="compact"
+              bordered
+            >
+              <template #empty>
+                <EmptyState
+                  size="small"
+                  icon="pi pi-chart-line"
+                  title="No usage yet"
+                  description="Usage appears here once a project serves requests."
+                />
+              </template>
 
-                <template #cell-requests="{ row }">
-                  <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
-                </template>
-              </TableRoot>
-            </div>
-          </PanelContent>
-        </DialogContent>
-      </DialogPortal>
+              <template #cell-requests="{ row }">
+                <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
+              </template>
+            </TableRoot>
+          </div>
+        </PanelContent>
+      </DialogContent>
     </Dialog>
   </div>
 </template>

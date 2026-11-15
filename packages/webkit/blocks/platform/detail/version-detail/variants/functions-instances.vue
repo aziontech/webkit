@@ -4,11 +4,8 @@
   import Card from '@aziontech/webkit/card'
   import CodeEditor from '@aziontech/webkit/code-editor'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
@@ -883,154 +880,150 @@
                     size="medium"
                     side="right"
                   >
-                    <DrawerPortal>
-                      <DrawerOverlay />
-                      <DrawerContent>
-                        <form
-                          class="flex min-h-0 flex-1 flex-col"
-                          :aria-label="drawerTitle"
-                          novalidate
-                          @submit.prevent="submit"
-                        >
-                          <PanelHeader class="w-full">
-                            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                              <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
-                              <DrawerDescription>
-                                Pick a function and the arguments it runs with on this resource.
-                              </DrawerDescription>
-                            </div>
-                            <DrawerClose />
-                          </PanelHeader>
-                          <PanelContent>
-                            <fieldset
-                              class="m-0 flex min-w-0 flex-col border-0 p-0"
-                              :disabled="submitting"
+                    <DrawerContent>
+                      <form
+                        class="flex min-h-0 flex-1 flex-col"
+                        :aria-label="drawerTitle"
+                        novalidate
+                        @submit.prevent="submit"
+                      >
+                        <PanelHeader class="w-full">
+                          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                            <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
+                            <DrawerDescription>
+                              Pick a function and the arguments it runs with on this resource.
+                            </DrawerDescription>
+                          </div>
+                        </PanelHeader>
+                        <PanelContent>
+                          <fieldset
+                            class="m-0 flex min-w-0 flex-col border-0 p-0"
+                            :disabled="submitting"
+                          >
+                            <legend class="sr-only">{{ drawerTitle }}</legend>
+                            <SettingsSection
+                              title="General"
+                              hint="A function can run more than once with different arguments; the name tells the instances apart in the rules."
                             >
-                              <legend class="sr-only">{{ drawerTitle }}</legend>
-                              <SettingsSection
-                                title="General"
-                                hint="A function can run more than once with different arguments; the name tells the instances apart in the rules."
+                              <Field
+                                :invalid="!!errors.name"
+                                :disabled="submitting"
                               >
+                                <Field.Label>Name</Field.Label>
+                                <Input
+                                  v-model="form.name"
+                                  size="large"
+                                  class="w-full"
+                                  placeholder="product-images"
+                                  autocomplete="off"
+                                />
+                                <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
+                              </Field>
+                            </SettingsSection>
+                            <SettingsSection
+                              title="Function"
+                              hint="Select an existing function and set the arguments it runs with."
+                            >
+                              <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
                                 <Field
-                                  :invalid="!!errors.name"
+                                  :invalid="!!errors.functionId"
                                   :disabled="submitting"
                                 >
-                                  <Field.Label>Name</Field.Label>
-                                  <Input
-                                    v-model="form.name"
+                                  <Field.Label>Function</Field.Label>
+                                  <Select
+                                    v-model:open="functionSelectOpen"
+                                    :model-value="form.functionId"
                                     size="large"
                                     class="w-full"
-                                    placeholder="product-images"
-                                    autocomplete="off"
-                                  />
-                                  <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
-                                </Field>
-                              </SettingsSection>
-                              <SettingsSection
-                                title="Function"
-                                hint="Select an existing function and set the arguments it runs with."
-                              >
-                                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                                  <Field
+                                    placeholder="Select a function"
                                     :invalid="!!errors.functionId"
-                                    :disabled="submitting"
+                                    :display-value="functionLabel"
+                                    @update:model-value="onFunction"
                                   >
-                                    <Field.Label>Function</Field.Label>
-                                    <Select
-                                      v-model:open="functionSelectOpen"
-                                      :model-value="form.functionId"
-                                      size="large"
-                                      class="w-full"
-                                      placeholder="Select a function"
-                                      :invalid="!!errors.functionId"
-                                      :display-value="functionLabel"
-                                      @update:model-value="onFunction"
-                                    >
-                                      <Select.Trigger />
-                                      <Select.Content>
+                                    <Select.Trigger />
+                                    <Select.Content>
+                                      <Select.Option
+                                        v-for="option in functionOptions"
+                                        :key="option.value"
+                                        :value="option.value"
+                                      >
+                                        {{ option.label }}
+                                      </Select.Option>
+                                      <template #footer>
                                         <Select.Option
-                                          v-for="option in functionOptions"
-                                          :key="option.value"
-                                          :value="option.value"
+                                          :value="CREATE_FUNCTION"
+                                          class="w-full"
                                         >
-                                          {{ option.label }}
+                                          <span class="flex items-center gap-(--spacing-xs)">
+                                            <i
+                                              class="pi pi-plus-circle"
+                                              aria-hidden="true"
+                                            />
+                                            Create Function
+                                          </span>
                                         </Select.Option>
-                                        <template #footer>
-                                          <Select.Option
-                                            :value="CREATE_FUNCTION"
-                                            class="w-full"
-                                          >
-                                            <span class="flex items-center gap-(--spacing-xs)">
-                                              <i
-                                                class="pi pi-plus-circle"
-                                                aria-hidden="true"
-                                              />
-                                              Create Function
-                                            </span>
-                                          </Select.Option>
-                                        </template>
-                                      </Select.Content>
-                                    </Select>
-                                    <Field.Description>
-                                      Only functions written for this resource are listed.
-                                    </Field.Description>
-                                    <Field.Error v-if="errors.functionId">{{
-                                      errors.functionId
-                                    }}</Field.Error>
-                                  </Field>
+                                      </template>
+                                    </Select.Content>
+                                  </Select>
+                                  <Field.Description>
+                                    Only functions written for this resource are listed.
+                                  </Field.Description>
+                                  <Field.Error v-if="errors.functionId">{{
+                                    errors.functionId
+                                  }}</Field.Error>
+                                </Field>
 
-                                  <SchemaForm
-                                    v-if="selectedSchema"
-                                    v-model="form.args"
-                                    :schema="selectedSchema"
-                                    :disabled="submitting"
-                                  />
-                                  <Field
-                                    v-else-if="form.functionId"
+                                <SchemaForm
+                                  v-if="selectedSchema"
+                                  v-model="form.args"
+                                  :schema="selectedSchema"
+                                  :disabled="submitting"
+                                />
+                                <Field
+                                  v-else-if="form.functionId"
+                                  :invalid="!!errors.args"
+                                  :disabled="submitting"
+                                >
+                                  <Field.Label>Arguments</Field.Label>
+                                  <CodeEditor
+                                    v-model="form.argsJson"
+                                    language="json"
+                                    path="function-instance.args.json"
+                                    height="12rem"
                                     :invalid="!!errors.args"
                                     :disabled="submitting"
-                                  >
-                                    <Field.Label>Arguments</Field.Label>
-                                    <CodeEditor
-                                      v-model="form.argsJson"
-                                      language="json"
-                                      path="function-instance.args.json"
-                                      height="12rem"
-                                      :invalid="!!errors.args"
-                                      :disabled="submitting"
-                                      aria-label="Arguments"
-                                    />
-                                    <Field.Description>
-                                      A JSON object, read in the function as event.args.
-                                    </Field.Description>
-                                    <Field.Error v-if="errors.args">{{ errors.args }}</Field.Error>
-                                  </Field>
-                                </div>
-                              </SettingsSection>
-                            </fieldset>
-                          </PanelContent>
-                          <PanelFooter>
-                            <div class="flex w-full justify-end gap-(--spacing-xs)">
-                              <Button
-                                type="button"
-                                label="Cancel"
-                                kind="outlined"
-                                size="medium"
-                                :disabled="submitting"
-                                @click="drawerOpen = false"
-                              />
-                              <Button
-                                type="submit"
-                                :label="editingId ? 'Save' : 'Add Functions Instance'"
-                                kind="primary"
-                                size="medium"
-                                :loading="submitting"
-                              />
-                            </div>
-                          </PanelFooter>
-                        </form>
-                      </DrawerContent>
-                    </DrawerPortal>
+                                    aria-label="Arguments"
+                                  />
+                                  <Field.Description>
+                                    A JSON object, read in the function as event.args.
+                                  </Field.Description>
+                                  <Field.Error v-if="errors.args">{{ errors.args }}</Field.Error>
+                                </Field>
+                              </div>
+                            </SettingsSection>
+                          </fieldset>
+                        </PanelContent>
+                        <PanelFooter>
+                          <div class="flex w-full justify-end gap-(--spacing-xs)">
+                            <Button
+                              type="button"
+                              label="Cancel"
+                              kind="outlined"
+                              size="medium"
+                              :disabled="submitting"
+                              @click="drawerOpen = false"
+                            />
+                            <Button
+                              type="submit"
+                              :label="editingId ? 'Save' : 'Add Functions Instance'"
+                              kind="primary"
+                              size="medium"
+                              :loading="submitting"
+                            />
+                          </div>
+                        </PanelFooter>
+                      </form>
+                    </DrawerContent>
                   </Drawer>
                 </div>
               </ScrollArea>

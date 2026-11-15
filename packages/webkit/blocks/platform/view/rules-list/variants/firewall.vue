@@ -3,11 +3,8 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -648,78 +645,75 @@
     <Dialog
       v-model:open="reviewOpen"
       :dismissible="!saving"
+      :closable="!saving"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <DialogTitle>Review changes</DialogTitle>
-            <DialogClose />
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-              <Alert
-                v-if="saveFailed"
-                severity="danger"
-                label="The new order wasn't saved. The rules still run in the saved order; save again to apply it."
-              />
-              <DialogDescription>
-                Rules run top to bottom within each phase. Saving applies this order to every
-                {{ SUBJECT === 'firewall' ? 'request' : 'request and response' }} the
-                {{ SUBJECT }} handles.
-              </DialogDescription>
-              <section
-                v-for="phase in changes"
-                :key="phase.value"
-                class="flex min-w-0 flex-col gap-(--spacing-xs)"
-                :aria-labelledby="`rules-review-${phase.value}`"
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <DialogTitle>Review changes</DialogTitle>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+            <Alert
+              v-if="saveFailed"
+              severity="danger"
+              label="The new order wasn't saved. The rules still run in the saved order; save again to apply it."
+            />
+            <DialogDescription>
+              Rules run top to bottom within each phase. Saving applies this order to every
+              {{ SUBJECT === 'firewall' ? 'request' : 'request and response' }} the
+              {{ SUBJECT }} handles.
+            </DialogDescription>
+            <section
+              v-for="phase in changes"
+              :key="phase.value"
+              class="flex min-w-0 flex-col gap-(--spacing-xs)"
+              :aria-labelledby="`rules-review-${phase.value}`"
+            >
+              <h3
+                :id="`rules-review-${phase.value}`"
+                class="m-0 text-label-sm text-(--text-muted)"
               >
-                <h3
-                  :id="`rules-review-${phase.value}`"
-                  class="m-0 text-label-sm text-(--text-muted)"
+                {{ phase.label }} phase
+              </h3>
+              <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0">
+                <li
+                  v-for="line in phase.items"
+                  :key="line.key"
+                  class="text-body-sm text-(--text-muted)"
                 >
-                  {{ phase.label }} phase
-                </h3>
-                <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0">
-                  <li
-                    v-for="line in phase.items"
-                    :key="line.key"
-                    class="text-body-sm text-(--text-muted)"
-                  >
-                    <span class="font-medium text-(--text-default)">{{ line.name }}</span>
-                    {{ line.text }}.
-                  </li>
-                </ul>
-              </section>
+                  <span class="font-medium text-(--text-default)">{{ line.name }}</span>
+                  {{ line.text }}.
+                </li>
+              </ul>
+            </section>
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                :disabled="saving"
+                @click="reviewOpen = false"
+              />
             </div>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  type="button"
-                  label="Cancel"
-                  kind="outlined"
-                  :disabled="saving"
-                  @click="reviewOpen = false"
-                />
-              </div>
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  type="button"
-                  :label="saveFailed ? 'Save again' : 'Save'"
-                  kind="primary"
-                  :loading="saving"
-                  @click="save"
-                />
-              </div>
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                type="button"
+                :label="saveFailed ? 'Save again' : 'Save'"
+                kind="primary"
+                :loading="saving"
+                @click="save"
+              />
             </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
   </div>
 </template>

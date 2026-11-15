@@ -1,9 +1,6 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
@@ -264,193 +261,188 @@ mr+L2DBwFXtW2qJfNedf/9rU
         />
       </div>
     </DrawerTrigger>
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <form
-          ref="formEl"
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Create Certificate"
-          novalidate
-          @submit.prevent="submit"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>Create Certificate</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                Import a TLS certificate to serve your domains or to verify client certificates.
-              </p>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
+    <DrawerContent>
+      <form
+        ref="formEl"
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Create Certificate"
+        novalidate
+        @submit.prevent="submit"
+      >
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DrawerTitle>Create Certificate</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              Import a TLS certificate to serve your domains or to verify client certificates.
+            </p>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col border-0 p-0"
-              :disabled="submitting"
+        <PanelContent>
+          <fieldset
+            class="m-0 flex min-w-0 flex-col border-0 p-0"
+            :disabled="submitting"
+          >
+            <legend class="sr-only">Create Certificate</legend>
+            <SettingsSection
+              title="General"
+              hint="Names the certificate where domains and workloads pick it."
             >
-              <legend class="sr-only">Create Certificate</legend>
-              <SettingsSection
-                title="General"
-                hint="Names the certificate where domains and workloads pick it."
+              <Field
+                required
+                :invalid="Boolean(errors.name)"
               >
+                <Field.Label>Name</Field.Label>
+                <Input
+                  v-model="form.name"
+                  size="large"
+                  placeholder="shop.example.com"
+                  autocomplete="off"
+                />
+                <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
+              </Field>
+            </SettingsSection>
+
+            <SettingsSection
+              title="Certificate"
+              :hint="KIND_HINTS[form.kind]"
+            >
+              <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <ToggleGroup
+                  v-model="form.kind"
+                  :options="KINDS"
+                  aria-label="Certificate type"
+                  size="medium"
+                />
+
                 <Field
                   required
-                  :invalid="Boolean(errors.name)"
+                  :invalid="Boolean(errors.certificate)"
                 >
-                  <Field.Label>Name</Field.Label>
-                  <Input
-                    v-model="form.name"
-                    size="large"
-                    placeholder="shop.example.com"
-                    autocomplete="off"
-                  />
-                  <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
+                  <div
+                    class="flex min-w-0 flex-wrap items-center justify-between gap-(--spacing-xs)"
+                  >
+                    <Field.Label>Certificate (PEM)</Field.Label>
+                    <Button
+                      type="button"
+                      label="Upload file"
+                      icon="pi pi-upload"
+                      kind="outlined"
+                      size="small"
+                      @click="fileInput?.click()"
+                    />
+                  </div>
+                  <div class="[&_textarea]:font-code [&_textarea]:text-body-sm">
+                    <Textarea
+                      v-model="form.certificate"
+                      :rows="8"
+                      spellcheck="false"
+                      placeholder="-----BEGIN CERTIFICATE-----"
+                    />
+                  </div>
+                  <Field.Description
+                    >Paste the certificate, or upload a .pem, .crt or .cer file.</Field.Description
+                  >
+                  <Field.Error v-if="errors.certificate">{{ errors.certificate }}</Field.Error>
                 </Field>
-              </SettingsSection>
+                <input
+                  ref="fileInput"
+                  type="file"
+                  accept=".pem,.crt,.cer,application/x-pem-file"
+                  class="sr-only"
+                  tabindex="-1"
+                  aria-hidden="true"
+                  @change="onFilePicked"
+                />
+                <p
+                  class="sr-only"
+                  role="status"
+                  aria-live="polite"
+                >
+                  {{ uploadStatus }}
+                </p>
 
-              <SettingsSection
-                title="Certificate"
-                :hint="KIND_HINTS[form.kind]"
-              >
-                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                  <ToggleGroup
-                    v-model="form.kind"
-                    :options="KINDS"
-                    aria-label="Certificate type"
-                    size="medium"
-                  />
-
-                  <Field
-                    required
-                    :invalid="Boolean(errors.certificate)"
-                  >
-                    <div
-                      class="flex min-w-0 flex-wrap items-center justify-between gap-(--spacing-xs)"
-                    >
-                      <Field.Label>Certificate (PEM)</Field.Label>
-                      <Button
-                        type="button"
-                        label="Upload file"
-                        icon="pi pi-upload"
-                        kind="outlined"
-                        size="small"
-                        @click="fileInput?.click()"
-                      />
-                    </div>
-                    <div class="[&_textarea]:font-code [&_textarea]:text-body-sm">
-                      <Textarea
-                        v-model="form.certificate"
-                        :rows="8"
-                        spellcheck="false"
-                        placeholder="-----BEGIN CERTIFICATE-----"
-                      />
-                    </div>
-                    <Field.Description
-                      >Paste the certificate, or upload a .pem, .crt or .cer
-                      file.</Field.Description
-                    >
-                    <Field.Error v-if="errors.certificate">{{ errors.certificate }}</Field.Error>
-                  </Field>
-                  <input
-                    ref="fileInput"
-                    type="file"
-                    accept=".pem,.crt,.cer,application/x-pem-file"
-                    class="sr-only"
-                    tabindex="-1"
-                    aria-hidden="true"
-                    @change="onFilePicked"
-                  />
-                  <p
-                    class="sr-only"
-                    role="status"
-                    aria-live="polite"
-                  >
-                    {{ uploadStatus }}
-                  </p>
-
-                  <section
-                    v-if="parsed && !parsed.invalid"
-                    class="flex min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-md)"
+                <section
+                  v-if="parsed && !parsed.invalid"
+                  class="flex min-w-0 flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-md)"
+                  aria-label="Certificate details"
+                  data-testid="certificate-details"
+                >
+                  <KeyValuePairs
+                    :columns="2"
                     aria-label="Certificate details"
-                    data-testid="certificate-details"
                   >
-                    <KeyValuePairs
-                      :columns="2"
-                      aria-label="Certificate details"
-                    >
-                      <KeyValuePairs.Item label="Issued to">{{
-                        parsed.subject || 'No common name'
-                      }}</KeyValuePairs.Item>
-                      <KeyValuePairs.Item label="Issued by">{{
-                        parsed.issuer || 'No common name'
-                      }}</KeyValuePairs.Item>
-                      <KeyValuePairs.Item label="Valid from">{{
-                        formatDate(parsed.notBefore)
-                      }}</KeyValuePairs.Item>
-                      <KeyValuePairs.Item label="Expires">
-                        <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
-                          <span>{{ formatDate(parsed.notAfter) }}</span>
-                          <StatusIndicator
-                            :severity="expiry?.severity"
-                            :label="expiry?.label"
-                          />
-                        </span>
-                      </KeyValuePairs.Item>
-                    </KeyValuePairs>
-                    <p
-                      v-if="parsed.chain > 1"
-                      class="m-0 text-body-sm text-(--text-muted)"
-                    >
-                      {{ parsed.chain - 1 }} intermediate
-                      {{ parsed.chain === 2 ? 'certificate' : 'certificates' }} follow it.
-                    </p>
-                    <p
-                      v-if="expiry?.message && expiry.severity === 'warning'"
-                      class="m-0 text-body-sm text-(--text-default)"
-                    >
-                      {{ expiry.message }}
-                    </p>
-                  </section>
-
-                  <Field
-                    v-if="form.kind === 'server'"
-                    required
-                    :invalid="Boolean(errors.privateKey)"
+                    <KeyValuePairs.Item label="Issued to">{{
+                      parsed.subject || 'No common name'
+                    }}</KeyValuePairs.Item>
+                    <KeyValuePairs.Item label="Issued by">{{
+                      parsed.issuer || 'No common name'
+                    }}</KeyValuePairs.Item>
+                    <KeyValuePairs.Item label="Valid from">{{
+                      formatDate(parsed.notBefore)
+                    }}</KeyValuePairs.Item>
+                    <KeyValuePairs.Item label="Expires">
+                      <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
+                        <span>{{ formatDate(parsed.notAfter) }}</span>
+                        <StatusIndicator
+                          :severity="expiry?.severity"
+                          :label="expiry?.label"
+                        />
+                      </span>
+                    </KeyValuePairs.Item>
+                  </KeyValuePairs>
+                  <p
+                    v-if="parsed.chain > 1"
+                    class="m-0 text-body-sm text-(--text-muted)"
                   >
-                    <Field.Label>Private key (PEM)</Field.Label>
-                    <div class="[&_textarea]:font-code [&_textarea]:text-body-sm">
-                      <Textarea
-                        v-model="form.privateKey"
-                        :rows="6"
-                        spellcheck="false"
-                        autocomplete="off"
-                        placeholder="-----BEGIN PRIVATE KEY-----"
-                      />
-                    </div>
-                    <Field.Description
-                      >Stored encrypted and never shown again; paste a new key to replace
-                      it.</Field.Description
-                    >
-                    <Field.Error v-if="errors.privateKey">{{ errors.privateKey }}</Field.Error>
-                  </Field>
-                </div>
-              </SettingsSection>
-            </fieldset>
-          </PanelContent>
+                    {{ parsed.chain - 1 }} intermediate
+                    {{ parsed.chain === 2 ? 'certificate' : 'certificates' }} follow it.
+                  </p>
+                  <p
+                    v-if="expiry?.message && expiry.severity === 'warning'"
+                    class="m-0 text-body-sm text-(--text-default)"
+                  >
+                    {{ expiry.message }}
+                  </p>
+                </section>
 
-          <PanelFooter
-            ><div class="flex w-full justify-end">
-              <Button
-                type="submit"
-                label="Save"
-                kind="primary"
-                size="medium"
-                :loading="submitting"
-              /></div
-          ></PanelFooter>
-        </form>
-      </DrawerContent>
-    </DrawerPortal>
+                <Field
+                  v-if="form.kind === 'server'"
+                  required
+                  :invalid="Boolean(errors.privateKey)"
+                >
+                  <Field.Label>Private key (PEM)</Field.Label>
+                  <div class="[&_textarea]:font-code [&_textarea]:text-body-sm">
+                    <Textarea
+                      v-model="form.privateKey"
+                      :rows="6"
+                      spellcheck="false"
+                      autocomplete="off"
+                      placeholder="-----BEGIN PRIVATE KEY-----"
+                    />
+                  </div>
+                  <Field.Description
+                    >Stored encrypted and never shown again; paste a new key to replace
+                    it.</Field.Description
+                  >
+                  <Field.Error v-if="errors.privateKey">{{ errors.privateKey }}</Field.Error>
+                </Field>
+              </div>
+            </SettingsSection>
+          </fieldset>
+        </PanelContent>
+
+        <PanelFooter
+          ><div class="flex w-full justify-end">
+            <Button
+              type="submit"
+              label="Save"
+              kind="primary"
+              size="medium"
+              :loading="submitting"
+            /></div
+        ></PanelFooter>
+      </form>
+    </DrawerContent>
   </Drawer>
 </template>

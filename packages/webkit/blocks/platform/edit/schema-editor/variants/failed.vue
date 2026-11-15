@@ -6,10 +6,7 @@
   import Checkbox from '@aziontech/webkit/checkbox'
   import CodeEditor from '@aziontech/webkit/code-editor'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
@@ -751,384 +748,149 @@
       size="large"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create Table"
-            novalidate
-            @submit.prevent="submitCreate"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Create Table</DrawerTitle>
-                <p class="text-body-sm text-(--text-muted)">
-                  Define the table name and its columns in {{ DATABASE }}, or start from a CSV file.
-                  Drag a column's grip, or focus it and use the arrow keys, to reorder.
-                </p>
-              </div>
-              <DrawerClose />
-            </PanelHeader>
+      <DrawerContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          aria-label="Create Table"
+          novalidate
+          @submit.prevent="submitCreate"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>Create Table</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                Define the table name and its columns in {{ DATABASE }}, or start from a CSV file.
+                Drag a column's grip, or focus it and use the arrow keys, to reorder.
+              </p>
+            </div>
+          </PanelHeader>
 
-            <PanelContent>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col border-0 p-0"
-                :disabled="createSubmitting"
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="createSubmitting"
+            >
+              <legend class="sr-only">Create Table</legend>
+              <SettingsSection
+                title="General"
+                hint="Names the table inside this database."
               >
-                <legend class="sr-only">Create Table</legend>
-                <SettingsSection
-                  title="General"
-                  hint="Names the table inside this database."
-                >
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                    <Alert
-                      v-if="createServerError"
-                      severity="danger"
-                      :label="`The table wasn't created. ${createServerError} Your columns are kept; pick another name and create it again.`"
-                    />
-                    <Field :invalid="!!tableNameError">
-                      <Field.Label>Name</Field.Label>
-                      <Input
-                        v-model="createForm.name"
-                        size="large"
-                        class="w-full"
-                        placeholder="users"
-                        autocomplete="off"
-                        @update:model-value="createServerError = ''"
-                      />
-                      <Field.Description
-                        >Every query addresses it, so it cannot be changed later without rewriting
-                        them.</Field.Description
-                      >
-                      <Field.Error v-if="tableNameError">{{ tableNameError }}</Field.Error>
-                    </Field>
-                  </div>
-                </SettingsSection>
-
-                <SettingsSection
-                  title="Import data from CSV"
-                  hint="Optional. The first line names the columns; the types are guessed from the values and can be changed below. Every row is inserted after the table is created."
-                >
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                    <FileDropzone
-                      v-if="!csvFile"
-                      accept=".csv,text/csv"
-                      description="One .csv file, comma-separated, up to 10 MB."
-                      @drop="(_event, files) => onCsvFiles(files)"
-                    >
-                      <Button
-                        type="button"
-                        label="Browse files"
-                        kind="secondary"
-                        size="medium"
-                        @click="csvInput?.click()"
-                      />
-                    </FileDropzone>
-                    <input
-                      ref="csvInput"
-                      type="file"
-                      accept=".csv,text/csv"
-                      class="hidden"
-                      aria-hidden="true"
-                      tabindex="-1"
-                      @change="onCsvPick"
-                    />
-                    <FileTokenGroup
-                      v-if="csvFile"
-                      :items="csvTokens"
-                      @remove="clearCsv"
-                    />
-                    <template v-if="csvRows.length">
-                      <p class="m-0 text-body-sm text-(--text-muted)">
-                        {{ csvHeaders.length }} columns and {{ csvRows.length }}
-                        {{ csvRows.length === 1 ? 'row' : 'rows' }} read. The first
-                        {{ csvPreview.length }} below; the columns were filled from the header.
-                      </p>
-                      <TableRoot
-                        :data="csvPreview"
-                        :columns="csvPreviewColumns"
-                        row-key="__row"
-                        :bordered="true"
-                        aria-label="CSV preview"
-                      />
-                    </template>
-                  </div>
-                </SettingsSection>
-
-                <SettingsSection
-                  title="Columns"
-                  hint="The table's schema, created in this order. A primary key is NOT NULL."
-                >
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                    <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-                      <Button
-                        type="button"
-                        label="About data types"
-                        kind="outlined"
-                        size="small"
-                        icon="pi pi-external-link"
-                        href="https://www.azion.com/en/documentation/"
-                        target="_blank"
-                      />
-                    </div>
-                    <AttributeEditor
-                      v-model:items="createForm.columns"
-                      :definition="columnDefinition"
-                      :errors="columnErrors"
-                      :new-item="newColumn"
-                      :min-items="1"
-                      :disabled="createSubmitting"
-                      reorderable
+                <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                  <Alert
+                    v-if="createServerError"
+                    severity="danger"
+                    :label="`The table wasn't created. ${createServerError} Your columns are kept; pick another name and create it again.`"
+                  />
+                  <Field :invalid="!!tableNameError">
+                    <Field.Label>Name</Field.Label>
+                    <Input
+                      v-model="createForm.name"
                       size="large"
-                      add-button-label="Add column"
-                      remove-button-label="Remove column"
-                      aria-label="Columns"
-                    >
-                      <template #cell-name="{ index, invalid }">
-                        <Input
-                          v-model="createForm.columns[index].name"
-                          size="large"
-                          class="w-full"
-                          placeholder="column_name"
-                          :invalid="invalid"
-                        />
-                      </template>
-                      <template #cell-type="{ index }">
-                        <Select
-                          v-model="createForm.columns[index].type"
-                          size="large"
-                          class="w-full"
-                        >
-                          <Select.Trigger>
-                            <template #prefix>
-                              <span
-                                class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
-                                aria-hidden="true"
-                                >{{ glyphOf(createForm.columns[index].type) }}</span
-                              >
-                            </template>
-                          </Select.Trigger>
-                          <Select.Content>
-                            <template #search>
-                              <Input
-                                v-model="typeQuery"
-                                size="medium"
-                                class="w-full"
-                                placeholder="Search types"
-                                aria-label="Search types"
-                                @keydown.stop
-                              />
-                            </template>
-                            <Select.Group label="Data types">
-                              <Select.Option
-                                v-for="type in filteredTypes"
-                                :key="type.value"
-                                :value="type.value"
-                              >
-                                <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                                  <span class="font-code text-label-code-sm">{{ type.value }}</span>
-                                  <span class="truncate text-body-xs text-(--text-muted)">{{
-                                    type.description
-                                  }}</span>
-                                </span>
-                              </Select.Option>
-                            </Select.Group>
-                          </Select.Content>
-                        </Select>
-                      </template>
-                      <template #cell-defaultValue="{ index }">
-                        <Input
-                          v-model="createForm.columns[index].defaultValue"
-                          size="large"
-                          class="w-full"
-                          placeholder="NULL"
-                        />
-                      </template>
-                      <template #cell-primaryKey="{ index }">
-                        <Checkbox v-model="createForm.columns[index].primaryKey" />
-                      </template>
-                    </AttributeEditor>
-                    <HelperText
-                      v-if="columnsError"
-                      kind="invalid"
-                      :label="columnsError"
+                      class="w-full"
+                      placeholder="users"
+                      autocomplete="off"
+                      @update:model-value="createServerError = ''"
                     />
-                  </div>
-                </SettingsSection>
-
-                <SettingsSection
-                  title="Foreign keys"
-                  hint="Optional. Tie a column to a row in another table, so a value that does not exist there is refused."
-                >
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                    <AttributeEditor
-                      v-model:items="createForm.relations"
-                      :definition="relationDefinition"
-                      :errors="relationErrors"
-                      :new-item="newRelation"
-                      :disabled="createSubmitting"
-                      size="large"
-                      add-button-label="Add foreign key"
-                      remove-button-label="Remove foreign key"
-                      empty="No foreign keys."
-                      aria-label="Foreign keys"
+                    <Field.Description
+                      >Every query addresses it, so it cannot be changed later without rewriting
+                      them.</Field.Description
                     >
-                      <template #cell-column="{ index, invalid }">
-                        <Select
-                          v-model="createForm.relations[index].column"
-                          size="large"
-                          class="w-full"
-                          placeholder="Column"
-                          :invalid="invalid"
-                        >
-                          <Select.Trigger />
-                          <Select.Content>
-                            <Select.Option
-                              v-for="column in namedColumns"
-                              :key="column.key"
-                              :value="column.name.trim()"
-                              >{{ column.name.trim() }}</Select.Option
-                            >
-                          </Select.Content>
-                        </Select>
-                      </template>
-                      <template #cell-table="{ index, invalid }">
-                        <Select
-                          v-model="createForm.relations[index].table"
-                          size="large"
-                          class="w-full"
-                          placeholder="Table"
-                          :invalid="invalid"
-                          @update:model-value="createForm.relations[index].references = ''"
-                        >
-                          <Select.Trigger />
-                          <Select.Content>
-                            <Select.Option
-                              v-for="item in tables"
-                              :key="item.name"
-                              :value="item.name"
-                              >{{ item.name }}</Select.Option
-                            >
-                          </Select.Content>
-                        </Select>
-                      </template>
-                      <template #cell-references="{ item, index, invalid }">
-                        <Select
-                          v-model="createForm.relations[index].references"
-                          size="large"
-                          class="w-full"
-                          placeholder="Column"
-                          :invalid="invalid"
-                          :disabled="!item.table"
-                        >
-                          <Select.Trigger />
-                          <Select.Content>
-                            <Select.Option
-                              v-for="column in referenceColumns(item)"
-                              :key="column.name"
-                              :value="column.name"
-                              >{{ column.name }}</Select.Option
-                            >
-                          </Select.Content>
-                        </Select>
-                      </template>
-                      <template #cell-onDelete="{ index }">
-                        <Select
-                          v-model="createForm.relations[index].onDelete"
-                          size="large"
-                          class="w-full"
-                        >
-                          <Select.Trigger />
-                          <Select.Content>
-                            <Select.Option
-                              v-for="option in ON_DELETE"
-                              :key="option.value"
-                              :value="option.value"
-                              >{{ option.label }}</Select.Option
-                            >
-                          </Select.Content>
-                        </Select>
-                      </template>
-                    </AttributeEditor>
-                  </div>
-                </SettingsSection>
-              </fieldset>
-            </PanelContent>
+                    <Field.Error v-if="tableNameError">{{ tableNameError }}</Field.Error>
+                  </Field>
+                </div>
+              </SettingsSection>
 
-            <PanelFooter>
-              <div class="flex w-full justify-end gap-(--spacing-xs)">
-                <Button
-                  type="button"
-                  label="Cancel"
-                  kind="outlined"
-                  size="medium"
-                  :disabled="createSubmitting"
-                  @click="createOpen = false"
-                />
-                <Button
-                  type="submit"
-                  label="Create Table"
-                  kind="primary"
-                  size="medium"
-                  :loading="createSubmitting"
-                />
-              </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
-    </Drawer>
-
-    <Drawer
-      v-model:open="columnOpen"
-      size="medium"
-      side="right"
-    >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            class="flex min-h-0 flex-1 flex-col"
-            aria-label="Add column"
-            novalidate
-            @submit.prevent="submitColumn"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Add column</DrawerTitle>
-                <p class="text-body-sm text-(--text-muted)">
-                  The column is added at the end of {{ table?.name }}.
-                </p>
-              </div>
-              <DrawerClose />
-            </PanelHeader>
-            <PanelContent>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col border-0 p-0"
-                :disabled="columnSubmitting"
+              <SettingsSection
+                title="Import data from CSV"
+                hint="Optional. The first line names the columns; the types are guessed from the values and can be changed below. Every row is inserted after the table is created."
               >
-                <legend class="sr-only">Add column</legend>
-                <SettingsSection
-                  title="Column"
-                  hint="Its name, type and the value rows get when they leave it empty."
-                >
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-md)">
-                    <Field :invalid="!!columnNameError">
-                      <Field.Label>Name</Field.Label>
+                <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                  <FileDropzone
+                    v-if="!csvFile"
+                    accept=".csv,text/csv"
+                    description="One .csv file, comma-separated, up to 10 MB."
+                    @drop="(_event, files) => onCsvFiles(files)"
+                  >
+                    <Button
+                      type="button"
+                      label="Browse files"
+                      kind="secondary"
+                      size="medium"
+                      @click="csvInput?.click()"
+                    />
+                  </FileDropzone>
+                  <input
+                    ref="csvInput"
+                    type="file"
+                    accept=".csv,text/csv"
+                    class="hidden"
+                    aria-hidden="true"
+                    tabindex="-1"
+                    @change="onCsvPick"
+                  />
+                  <FileTokenGroup
+                    v-if="csvFile"
+                    :items="csvTokens"
+                    @remove="clearCsv"
+                  />
+                  <template v-if="csvRows.length">
+                    <p class="m-0 text-body-sm text-(--text-muted)">
+                      {{ csvHeaders.length }} columns and {{ csvRows.length }}
+                      {{ csvRows.length === 1 ? 'row' : 'rows' }} read. The first
+                      {{ csvPreview.length }} below; the columns were filled from the header.
+                    </p>
+                    <TableRoot
+                      :data="csvPreview"
+                      :columns="csvPreviewColumns"
+                      row-key="__row"
+                      :bordered="true"
+                      aria-label="CSV preview"
+                    />
+                  </template>
+                </div>
+              </SettingsSection>
+
+              <SettingsSection
+                title="Columns"
+                hint="The table's schema, created in this order. A primary key is NOT NULL."
+              >
+                <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                  <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                    <Button
+                      type="button"
+                      label="About data types"
+                      kind="outlined"
+                      size="small"
+                      icon="pi pi-external-link"
+                      href="https://www.azion.com/en/documentation/"
+                      target="_blank"
+                    />
+                  </div>
+                  <AttributeEditor
+                    v-model:items="createForm.columns"
+                    :definition="columnDefinition"
+                    :errors="columnErrors"
+                    :new-item="newColumn"
+                    :min-items="1"
+                    :disabled="createSubmitting"
+                    reorderable
+                    size="large"
+                    add-button-label="Add column"
+                    remove-button-label="Remove column"
+                    aria-label="Columns"
+                  >
+                    <template #cell-name="{ index, invalid }">
                       <Input
-                        v-model="columnForm.name"
+                        v-model="createForm.columns[index].name"
                         size="large"
                         class="w-full"
                         placeholder="column_name"
-                        autocomplete="off"
+                        :invalid="invalid"
                       />
-                      <Field.Error v-if="columnNameError">{{ columnNameError }}</Field.Error>
-                    </Field>
-                    <Field>
-                      <Field.Label>Type</Field.Label>
+                    </template>
+                    <template #cell-type="{ index }">
                       <Select
-                        v-model="columnForm.type"
+                        v-model="createForm.columns[index].type"
                         size="large"
                         class="w-full"
                       >
@@ -1137,7 +899,7 @@
                             <span
                               class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
                               aria-hidden="true"
-                              >{{ glyphOf(columnForm.type) }}</span
+                              >{{ glyphOf(createForm.columns[index].type) }}</span
                             >
                           </template>
                         </Select.Trigger>
@@ -1168,78 +930,305 @@
                           </Select.Group>
                         </Select.Content>
                       </Select>
-                    </Field>
-                    <Field>
-                      <Field.Label>Default value</Field.Label>
+                    </template>
+                    <template #cell-defaultValue="{ index }">
                       <Input
-                        v-model="columnForm.defaultValue"
+                        v-model="createForm.columns[index].defaultValue"
                         size="large"
                         class="w-full"
                         placeholder="NULL"
-                        autocomplete="off"
                       />
-                      <Field.Description
-                        >Applies to rows that do not supply a value. Leave it empty for NULL, or use
-                        an expression such as now().</Field.Description
+                    </template>
+                    <template #cell-primaryKey="{ index }">
+                      <Checkbox v-model="createForm.columns[index].primaryKey" />
+                    </template>
+                  </AttributeEditor>
+                  <HelperText
+                    v-if="columnsError"
+                    kind="invalid"
+                    :label="columnsError"
+                  />
+                </div>
+              </SettingsSection>
+
+              <SettingsSection
+                title="Foreign keys"
+                hint="Optional. Tie a column to a row in another table, so a value that does not exist there is refused."
+              >
+                <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                  <AttributeEditor
+                    v-model:items="createForm.relations"
+                    :definition="relationDefinition"
+                    :errors="relationErrors"
+                    :new-item="newRelation"
+                    :disabled="createSubmitting"
+                    size="large"
+                    add-button-label="Add foreign key"
+                    remove-button-label="Remove foreign key"
+                    empty="No foreign keys."
+                    aria-label="Foreign keys"
+                  >
+                    <template #cell-column="{ index, invalid }">
+                      <Select
+                        v-model="createForm.relations[index].column"
+                        size="large"
+                        class="w-full"
+                        placeholder="Column"
+                        :invalid="invalid"
                       >
-                    </Field>
-                  </div>
-                </SettingsSection>
-                <SettingsSection
-                  title="Constraints"
-                  hint="A primary key is always NOT NULL, so turning it on also turns on Not null."
-                >
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
-                    <Field orientation="horizontal">
-                      <Field.Content>
-                        <Field.Title>Primary key</Field.Title>
-                        <Field.Description
-                          >Use this column as the table's primary key.</Field.Description
-                        >
-                      </Field.Content>
-                      <Switch
-                        v-model="columnForm.primaryKey"
-                        aria-label="Primary key"
-                      />
-                    </Field>
-                    <Field orientation="horizontal">
-                      <Field.Content>
-                        <Field.Title>Not null</Field.Title>
-                        <Field.Description>Require a value in every row.</Field.Description>
-                      </Field.Content>
-                      <Switch
-                        :model-value="columnForm.notNull || columnForm.primaryKey"
-                        :disabled="columnForm.primaryKey"
-                        aria-label="Not null"
-                        @update:model-value="(value) => (columnForm.notNull = !!value)"
-                      />
-                    </Field>
-                  </div>
-                </SettingsSection>
-              </fieldset>
-            </PanelContent>
-            <PanelFooter>
-              <div class="flex w-full justify-end gap-(--spacing-xs)">
-                <Button
-                  type="button"
-                  label="Cancel"
-                  kind="outlined"
-                  size="medium"
-                  :disabled="columnSubmitting"
-                  @click="columnOpen = false"
-                />
-                <Button
-                  type="submit"
-                  label="Add column"
-                  kind="primary"
-                  size="medium"
-                  :loading="columnSubmitting"
-                />
-              </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+                        <Select.Trigger />
+                        <Select.Content>
+                          <Select.Option
+                            v-for="column in namedColumns"
+                            :key="column.key"
+                            :value="column.name.trim()"
+                            >{{ column.name.trim() }}</Select.Option
+                          >
+                        </Select.Content>
+                      </Select>
+                    </template>
+                    <template #cell-table="{ index, invalid }">
+                      <Select
+                        v-model="createForm.relations[index].table"
+                        size="large"
+                        class="w-full"
+                        placeholder="Table"
+                        :invalid="invalid"
+                        @update:model-value="createForm.relations[index].references = ''"
+                      >
+                        <Select.Trigger />
+                        <Select.Content>
+                          <Select.Option
+                            v-for="item in tables"
+                            :key="item.name"
+                            :value="item.name"
+                            >{{ item.name }}</Select.Option
+                          >
+                        </Select.Content>
+                      </Select>
+                    </template>
+                    <template #cell-references="{ item, index, invalid }">
+                      <Select
+                        v-model="createForm.relations[index].references"
+                        size="large"
+                        class="w-full"
+                        placeholder="Column"
+                        :invalid="invalid"
+                        :disabled="!item.table"
+                      >
+                        <Select.Trigger />
+                        <Select.Content>
+                          <Select.Option
+                            v-for="column in referenceColumns(item)"
+                            :key="column.name"
+                            :value="column.name"
+                            >{{ column.name }}</Select.Option
+                          >
+                        </Select.Content>
+                      </Select>
+                    </template>
+                    <template #cell-onDelete="{ index }">
+                      <Select
+                        v-model="createForm.relations[index].onDelete"
+                        size="large"
+                        class="w-full"
+                      >
+                        <Select.Trigger />
+                        <Select.Content>
+                          <Select.Option
+                            v-for="option in ON_DELETE"
+                            :key="option.value"
+                            :value="option.value"
+                            >{{ option.label }}</Select.Option
+                          >
+                        </Select.Content>
+                      </Select>
+                    </template>
+                  </AttributeEditor>
+                </div>
+              </SettingsSection>
+            </fieldset>
+          </PanelContent>
+
+          <PanelFooter>
+            <div class="flex w-full justify-end gap-(--spacing-xs)">
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+                :disabled="createSubmitting"
+                @click="createOpen = false"
+              />
+              <Button
+                type="submit"
+                label="Create Table"
+                kind="primary"
+                size="medium"
+                :loading="createSubmitting"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
+    </Drawer>
+
+    <Drawer
+      v-model:open="columnOpen"
+      size="medium"
+      side="right"
+    >
+      <DrawerContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          aria-label="Add column"
+          novalidate
+          @submit.prevent="submitColumn"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>Add column</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                The column is added at the end of {{ table?.name }}.
+              </p>
+            </div>
+          </PanelHeader>
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="columnSubmitting"
+            >
+              <legend class="sr-only">Add column</legend>
+              <SettingsSection
+                title="Column"
+                hint="Its name, type and the value rows get when they leave it empty."
+              >
+                <div class="flex w-full min-w-0 flex-col gap-(--spacing-md)">
+                  <Field :invalid="!!columnNameError">
+                    <Field.Label>Name</Field.Label>
+                    <Input
+                      v-model="columnForm.name"
+                      size="large"
+                      class="w-full"
+                      placeholder="column_name"
+                      autocomplete="off"
+                    />
+                    <Field.Error v-if="columnNameError">{{ columnNameError }}</Field.Error>
+                  </Field>
+                  <Field>
+                    <Field.Label>Type</Field.Label>
+                    <Select
+                      v-model="columnForm.type"
+                      size="large"
+                      class="w-full"
+                    >
+                      <Select.Trigger>
+                        <template #prefix>
+                          <span
+                            class="shrink-0 font-code text-label-code-sm text-(--text-muted)"
+                            aria-hidden="true"
+                            >{{ glyphOf(columnForm.type) }}</span
+                          >
+                        </template>
+                      </Select.Trigger>
+                      <Select.Content>
+                        <template #search>
+                          <Input
+                            v-model="typeQuery"
+                            size="medium"
+                            class="w-full"
+                            placeholder="Search types"
+                            aria-label="Search types"
+                            @keydown.stop
+                          />
+                        </template>
+                        <Select.Group label="Data types">
+                          <Select.Option
+                            v-for="type in filteredTypes"
+                            :key="type.value"
+                            :value="type.value"
+                          >
+                            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                              <span class="font-code text-label-code-sm">{{ type.value }}</span>
+                              <span class="truncate text-body-xs text-(--text-muted)">{{
+                                type.description
+                              }}</span>
+                            </span>
+                          </Select.Option>
+                        </Select.Group>
+                      </Select.Content>
+                    </Select>
+                  </Field>
+                  <Field>
+                    <Field.Label>Default value</Field.Label>
+                    <Input
+                      v-model="columnForm.defaultValue"
+                      size="large"
+                      class="w-full"
+                      placeholder="NULL"
+                      autocomplete="off"
+                    />
+                    <Field.Description
+                      >Applies to rows that do not supply a value. Leave it empty for NULL, or use
+                      an expression such as now().</Field.Description
+                    >
+                  </Field>
+                </div>
+              </SettingsSection>
+              <SettingsSection
+                title="Constraints"
+                hint="A primary key is always NOT NULL, so turning it on also turns on Not null."
+              >
+                <div class="flex w-full min-w-0 flex-col gap-(--spacing-sm)">
+                  <Field orientation="horizontal">
+                    <Field.Content>
+                      <Field.Title>Primary key</Field.Title>
+                      <Field.Description
+                        >Use this column as the table's primary key.</Field.Description
+                      >
+                    </Field.Content>
+                    <Switch
+                      v-model="columnForm.primaryKey"
+                      aria-label="Primary key"
+                    />
+                  </Field>
+                  <Field orientation="horizontal">
+                    <Field.Content>
+                      <Field.Title>Not null</Field.Title>
+                      <Field.Description>Require a value in every row.</Field.Description>
+                    </Field.Content>
+                    <Switch
+                      :model-value="columnForm.notNull || columnForm.primaryKey"
+                      :disabled="columnForm.primaryKey"
+                      aria-label="Not null"
+                      @update:model-value="(value) => (columnForm.notNull = !!value)"
+                    />
+                  </Field>
+                </div>
+              </SettingsSection>
+            </fieldset>
+          </PanelContent>
+          <PanelFooter>
+            <div class="flex w-full justify-end gap-(--spacing-xs)">
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+                :disabled="columnSubmitting"
+                @click="columnOpen = false"
+              />
+              <Button
+                type="submit"
+                label="Add column"
+                kind="primary"
+                size="medium"
+                :loading="columnSubmitting"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
 
     <Drawer
@@ -1247,80 +1236,76 @@
       size="medium"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            class="flex min-h-0 flex-1 flex-col"
-            aria-label="Insert row"
-            novalidate
-            @submit.prevent="submitRow"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Insert row</DrawerTitle>
-                <p class="text-body-sm text-(--text-muted)">
-                  One field per column of {{ table?.name }}, in the table's own order.
-                </p>
-              </div>
-              <DrawerClose />
-            </PanelHeader>
-            <PanelContent>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
-                :disabled="rowSubmitting"
+      <DrawerContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          aria-label="Insert row"
+          novalidate
+          @submit.prevent="submitRow"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>Insert row</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                One field per column of {{ table?.name }}, in the table's own order.
+              </p>
+            </div>
+          </PanelHeader>
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
+              :disabled="rowSubmitting"
+            >
+              <legend class="sr-only">Insert row</legend>
+              <Field
+                v-for="column in table?.columns ?? []"
+                :key="column.name"
+                :invalid="!!rowError(column)"
+                :disabled="isAuto(column)"
               >
-                <legend class="sr-only">Insert row</legend>
-                <Field
-                  v-for="column in table?.columns ?? []"
-                  :key="column.name"
-                  :invalid="!!rowError(column)"
-                  :disabled="isAuto(column)"
-                >
-                  <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                    <Field.Label
-                      ><span class="font-code">{{ column.name }}</span></Field.Label
-                    >
-                    <span class="shrink-0 font-code text-body-xs text-(--text-muted)">{{
-                      column.type
-                    }}</span>
-                  </div>
-                  <Input
-                    v-model="rowForm[column.name]"
-                    size="large"
-                    class="w-full"
-                    :placeholder="
-                      isAuto(column) ? 'Automatically generated' : column.defaultValue || 'NULL'
-                    "
-                    autocomplete="off"
-                  />
-                  <Field.Description>{{ rowHint(column) }}</Field.Description>
-                  <Field.Error v-if="rowError(column)">{{ rowError(column) }}</Field.Error>
-                </Field>
-              </fieldset>
-            </PanelContent>
-            <PanelFooter>
-              <div class="flex w-full justify-end gap-(--spacing-xs)">
-                <Button
-                  type="button"
-                  label="Cancel"
-                  kind="outlined"
-                  size="medium"
-                  :disabled="rowSubmitting"
-                  @click="rowOpen = false"
+                <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+                  <Field.Label
+                    ><span class="font-code">{{ column.name }}</span></Field.Label
+                  >
+                  <span class="shrink-0 font-code text-body-xs text-(--text-muted)">{{
+                    column.type
+                  }}</span>
+                </div>
+                <Input
+                  v-model="rowForm[column.name]"
+                  size="large"
+                  class="w-full"
+                  :placeholder="
+                    isAuto(column) ? 'Automatically generated' : column.defaultValue || 'NULL'
+                  "
+                  autocomplete="off"
                 />
-                <Button
-                  type="submit"
-                  label="Insert row"
-                  kind="primary"
-                  size="medium"
-                  :loading="rowSubmitting"
-                />
-              </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+                <Field.Description>{{ rowHint(column) }}</Field.Description>
+                <Field.Error v-if="rowError(column)">{{ rowError(column) }}</Field.Error>
+              </Field>
+            </fieldset>
+          </PanelContent>
+          <PanelFooter>
+            <div class="flex w-full justify-end gap-(--spacing-xs)">
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+                :disabled="rowSubmitting"
+                @click="rowOpen = false"
+              />
+              <Button
+                type="submit"
+                label="Insert row"
+                kind="primary"
+                size="medium"
+                :loading="rowSubmitting"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
 
     <ConfirmDialog

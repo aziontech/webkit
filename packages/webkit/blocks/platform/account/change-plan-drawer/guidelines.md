@@ -22,87 +22,75 @@ The drawer the Billing page opens from its Subscription Plan card. The user want
 
 Two drawers, both `side="right"`, `size="large"`. The upgrade drawer opens on top of the plan drawer and, on success, closes both. Each reset to Yearly and to the account's address when reopened.
 
-### C. Drawer layer — `DrawerPortal` (required)
+### C. Drawer panel — `DrawerContent` (required)
 
-Mounts each drawer at the document root, so the upgrade drawer can stack over the plan drawer.
+The panel that holds header, body and footer, with an accessible name taken from its title. It mounts each drawer at the document root, so the upgrade drawer stacks over the plan drawer, and dims the page behind it with its own overlay.
 
-### D. Drawer backdrop — `DrawerOverlay` (required)
+### D. Drawer header — `PanelHeader` (required)
 
-Dims the page behind the open drawer.
+Holds the title at the top of each drawer, and the drawer adds its close button at the end, so the drawer can be left without scrolling to the footer.
 
-### E. Drawer panel — `DrawerContent` (required)
-
-The panel that holds header, body and footer, with an accessible name taken from its title.
-
-### F. Drawer header — `PanelHeader` (required)
-
-Holds the title and the close control at the top of each drawer.
-
-### G. Title — `DrawerTitle` (required)
+### E. Title — `DrawerTitle` (required)
 
 Names the task: `Change plan`, `Upgrade to Pro`. It labels the drawer for assistive technology.
 
-### H. Close — `DrawerClose` (required)
-
-Always present in the header, so the drawer can be left without scrolling to the footer.
-
-### I. Body — `PanelContent` (required)
+### F. Body — `PanelContent` (required)
 
 The scrolling body of each drawer, between header and footer.
 
-### J. Description — `DrawerDescription` (plan drawer)
+### G. Description — `DrawerDescription` (plan drawer)
 
 Says why the user is here before the cards: `Compare what each tier includes before moving the account onto it.`
 
-### K. Billing period — `ToggleGroup` (required)
+### H. Billing period — `ToggleGroup` (required)
 
 `Monthly` or `Yearly`, `aria-label="Billing period"`, defaulting to Yearly. In the plan drawer it reprices the cards; in the upgrade drawer it sits in the Charged card's header and switches the charge rows.
 
-### L. Plan — `CardPricing` (required)
+### I. Plan — `CardPricing` (required)
 
 One per tier, `kind="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a `FeatureList` headed by what it builds on (`All Free features, plus:`).
 
-### M. Divider — `Separator` (required)
+### J. Divider — `Separator` (required)
 
 Above the pricing links and above the Total row.
 
-### N. Pricing links — `Link` (required)
+### K. Pricing links — `Link` (required)
 
 `Learn more about pricing` and `Compare plans`, small, opening in a new tab.
 
-### O. Sections — `Card` (required)
+### L. Sections — `Card` (required)
 
 Flush cards for Charged (rows, then Total), Payment method and Address information.
 
-### P. Field — `Field` (required)
+### M. Field — `Field` (required)
 
 Each control of the card form (cardholder, country, number, expiry, security code) and of the address (country, postal code, state, city, line 2) sits in a `Field` with its `Field.Label`.
 
-### Q. Text value — `Input` (required)
+### N. Text value — `Input` (required)
 
 Cardholder, number, expiry, security code and the address lines, with `cc-*` autocomplete, `postal-code`, `address-line1` and `address-line2` on the address, and `inputmode="numeric"` on the card numbers.
 
-### R. Choice — `Select` (required)
+### O. Choice — `Select` (required)
 
 Country and state.
 
-### S. Notices — `Alert` (required)
+### P. Notices — `Alert` (required)
 
 `severity="info"`, `size="small"`, under the card fields: the data goes to a PCI-compliant partner. A declined card adds a `danger` `Alert` at the top of the Payment method card, and the number field takes the invalid state and focus.
 
-### T. Same address — `Checkbox` (required)
+### Q. Same address — `Checkbox` (required)
 
 `Use the same information as my account`, checked by default; unchecking clears the address fields for a different billing address.
 
-### U. Footer — `PanelFooter` (required)
+### R. Footer — `PanelFooter` (required)
 
 Cancel and Upgrade, side by side from `md`, full width below.
 
-### V. Card brand — `PaymentBrand` (required)
+### S. Card brand — `PaymentBrand` (required)
 
 The plate before the card on file in the Payment method section, named after the brand.
 
-### W. Included features — `FeatureList` (required)
+### T. Included features — `FeatureList` (required)
 
 What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards use the same `FeatureList` in their slot, so every feature list in the flow reads the same.
 

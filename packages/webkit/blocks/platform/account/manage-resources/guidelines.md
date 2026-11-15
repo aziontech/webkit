@@ -34,7 +34,7 @@ The data stays flat (`parentId`) and the page builds the tree for the table, so 
 
 An `aside` beside the table from `2xl` and under it below that: next to the panel, the nine columns of the tree do not fit under 1536 px. Its heading says what is selected (`No resource selected`, `1 resource selected`, `3 resources selected`) and is polite live. Tabs: Permissions lists the role bindings of the one selected resource as split `KeyValuePairs` (role, member count); Labels shows its labels and an Edit labels button, or a small `No labels` `EmptyState`. With none or several selected, a small `EmptyState` (`Select a resource`, `Several resources selected`) says what to do.
 
-### E. Move — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Select` (required)
+### E. Move — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Select` (required)
 
 Title `Move <name>` or `Move 3 resources`. The description says that everything inside moves too and that inherited bindings stop applying. One `Select` of organizations and groups, excluding the moving resources and everything inside them. Move without a choice shows `Choose where to move the resources.` under the field. The new parent opens after the move.
 

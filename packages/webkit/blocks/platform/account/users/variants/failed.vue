@@ -7,15 +7,10 @@
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
@@ -602,239 +597,228 @@
       side="right"
       size="medium"
       :dismissible="!sending"
+      :closable="!sending"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            ref="formEl"
-            class="flex min-h-0 flex-1 flex-col"
-            aria-label="Invite User"
-            novalidate
-            @submit.prevent="sendInvite"
-          >
-            <PanelHeader class="w-full">
-              <DrawerTitle>Invite User</DrawerTitle>
-              <DrawerClose />
-            </PanelHeader>
-            <PanelContent>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
-                :disabled="sending"
+      <DrawerContent>
+        <form
+          ref="formEl"
+          class="flex min-h-0 flex-1 flex-col"
+          aria-label="Invite User"
+          novalidate
+          @submit.prevent="sendInvite"
+        >
+          <PanelHeader class="w-full">
+            <DrawerTitle>Invite User</DrawerTitle>
+          </PanelHeader>
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
+              :disabled="sending"
+            >
+              <legend class="sr-only">Invite User</legend>
+              <DrawerDescription>
+                They get an email with a link to join this account. Their teams decide what they can
+                see and change.
+              </DrawerDescription>
+              <Field
+                required
+                :invalid="Boolean(errors.email)"
               >
-                <legend class="sr-only">Invite User</legend>
-                <DrawerDescription>
-                  They get an email with a link to join this account. Their teams decide what they
-                  can see and change.
-                </DrawerDescription>
-                <Field
-                  required
-                  :invalid="Boolean(errors.email)"
+                <Field.Label for="invite-email">Email</Field.Label>
+                <Input
+                  id="invite-email"
+                  v-model="invite.email"
+                  type="email"
+                  size="large"
+                  autocomplete="off"
+                  placeholder="name@example.com"
+                />
+                <Field.Error v-if="errors.email">{{ errors.email }}</Field.Error>
+              </Field>
+              <Field
+                required
+                :invalid="Boolean(errors.teams)"
+              >
+                <Field.Label for="invite-teams">Teams</Field.Label>
+                <MultiSelect
+                  v-model="invite.teams"
+                  size="large"
+                  class="w-full"
+                  placeholder="Choose teams"
+                  :display-value="() => teamsLabel(invite.teams)"
                 >
-                  <Field.Label for="invite-email">Email</Field.Label>
-                  <Input
-                    id="invite-email"
-                    v-model="invite.email"
-                    type="email"
-                    size="large"
-                    autocomplete="off"
-                    placeholder="name@example.com"
+                  <MultiSelect.Trigger
+                    id="invite-teams"
+                    aria-label="Teams"
                   />
-                  <Field.Error v-if="errors.email">{{ errors.email }}</Field.Error>
-                </Field>
-                <Field
-                  required
-                  :invalid="Boolean(errors.teams)"
+                  <MultiSelect.Content>
+                    <MultiSelect.Option
+                      v-for="team in TEAMS"
+                      :key="team.value"
+                      :value="team.value"
+                    >
+                      {{ team.label }}
+                    </MultiSelect.Option>
+                  </MultiSelect.Content>
+                </MultiSelect>
+                <Field.Description v-if="!errors.teams"
+                  >Permissions add up across teams. Change them later from the
+                  list.</Field.Description
                 >
-                  <Field.Label for="invite-teams">Teams</Field.Label>
-                  <MultiSelect
-                    v-model="invite.teams"
-                    size="large"
-                    class="w-full"
-                    placeholder="Choose teams"
-                    :display-value="() => teamsLabel(invite.teams)"
-                  >
-                    <MultiSelect.Trigger
-                      id="invite-teams"
-                      aria-label="Teams"
-                    />
-                    <MultiSelect.Content>
-                      <MultiSelect.Option
-                        v-for="team in TEAMS"
-                        :key="team.value"
-                        :value="team.value"
-                      >
-                        {{ team.label }}
-                      </MultiSelect.Option>
-                    </MultiSelect.Content>
-                  </MultiSelect>
-                  <Field.Description v-if="!errors.teams"
-                    >Permissions add up across teams. Change them later from the
-                    list.</Field.Description
-                  >
-                  <Field.Error v-else>{{ errors.teams }}</Field.Error>
-                </Field>
-              </fieldset>
-            </PanelContent>
-            <PanelFooter>
-              <div class="flex w-full justify-end gap-(--spacing-xs)">
-                <Button
-                  type="button"
-                  label="Cancel"
-                  kind="outlined"
-                  :disabled="sending"
-                  @click="inviteOpen = false"
-                />
-                <Button
-                  type="submit"
-                  label="Send invitation"
-                  kind="primary"
-                  icon="pi pi-send"
-                  :loading="sending"
-                />
-              </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+                <Field.Error v-else>{{ errors.teams }}</Field.Error>
+              </Field>
+            </fieldset>
+          </PanelContent>
+          <PanelFooter>
+            <div class="flex w-full justify-end gap-(--spacing-xs)">
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                :disabled="sending"
+                @click="inviteOpen = false"
+              />
+              <Button
+                type="submit"
+                label="Send invitation"
+                kind="primary"
+                icon="pi pi-send"
+                :loading="sending"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
 
     <Dialog
       v-model:open="profileOpen"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 items-center gap-(--spacing-sm)">
-              <Avatar
-                :label="pending ? displayName(pending) : ''"
-                size="medium"
-                kind="square"
-              />
-              <DialogTitle>{{ pending ? displayName(pending) : '' }}</DialogTitle>
-            </div>
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <DialogDescription>
-                What this person can do comes from their role and their teams.
-              </DialogDescription>
-              <KeyValuePairs
-                v-if="pending"
-                :columns="2"
-                aria-label="Profile"
-              >
-                <KeyValuePairs.Item label="Email">
-                  <span dir="ltr">{{ pending.email }}</span>
-                </KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Role">
-                  <Tag
-                    :label="pending.role"
-                    :severity="roleSeverity(pending.role)"
-                    size="small"
-                  />
-                </KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Teams">{{
-                  teamsLabel(pending.teams)
-                }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Status">{{ pending.status }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Last active">
-                  <Table.CellTime
-                    v-if="pending.lastActive"
-                    :value="pending.lastActive"
-                  />
-                  <span v-else>Not signed in yet</span>
-                </KeyValuePairs.Item>
-              </KeyValuePairs>
-            </div>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                label="Close"
-                kind="outlined"
-                size="medium"
-                @click="profileOpen = false"
-              />
-              <Button
-                v-if="pending && !pending.owner"
-                label="Edit role"
-                kind="primary"
-                size="medium"
-                @click="openRole(pending)"
-              />
-            </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+            <Avatar
+              :label="pending ? displayName(pending) : ''"
+              size="medium"
+              kind="square"
+            />
+            <DialogTitle>{{ pending ? displayName(pending) : '' }}</DialogTitle>
+          </div>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <DialogDescription>
+              What this person can do comes from their role and their teams.
+            </DialogDescription>
+            <KeyValuePairs
+              v-if="pending"
+              :columns="2"
+              aria-label="Profile"
+            >
+              <KeyValuePairs.Item label="Email">
+                <span dir="ltr">{{ pending.email }}</span>
+              </KeyValuePairs.Item>
+              <KeyValuePairs.Item label="Role">
+                <Tag
+                  :label="pending.role"
+                  :severity="roleSeverity(pending.role)"
+                  size="small"
+                />
+              </KeyValuePairs.Item>
+              <KeyValuePairs.Item label="Teams">{{ teamsLabel(pending.teams) }}</KeyValuePairs.Item>
+              <KeyValuePairs.Item label="Status">{{ pending.status }}</KeyValuePairs.Item>
+              <KeyValuePairs.Item label="Last active">
+                <Table.CellTime
+                  v-if="pending.lastActive"
+                  :value="pending.lastActive"
+                />
+                <span v-else>Not signed in yet</span>
+              </KeyValuePairs.Item>
+            </KeyValuePairs>
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Close"
+              kind="outlined"
+              size="medium"
+              @click="profileOpen = false"
+            />
+            <Button
+              v-if="pending && !pending.owner"
+              label="Edit role"
+              kind="primary"
+              size="medium"
+              @click="openRole(pending)"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
 
     <Dialog
       v-model:open="roleOpen"
       size="small"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <form
-            class="flex min-h-0 flex-1 flex-col"
-            aria-label="Edit role"
-            novalidate
-            @submit.prevent="saveRole"
-          >
-            <PanelHeader class="w-full">
-              <DialogTitle>Edit role</DialogTitle>
-            </PanelHeader>
-            <PanelContent>
-              <div class="flex flex-col gap-(--spacing-md)">
-                <DialogDescription>
-                  Choose what {{ pending ? displayName(pending) : '' }} can do on the account. Their
-                  teams still decide which resources they reach.
-                </DialogDescription>
-                <Field>
-                  <Field.Label for="user-role">Role</Field.Label>
-                  <Select
-                    v-model="nextRole"
-                    size="large"
-                    class="w-full"
-                  >
-                    <Select.Trigger id="user-role" />
-                    <Select.Content>
-                      <Select.Option
-                        v-for="role in ROLES"
-                        :key="role.value"
-                        :value="role.value"
-                      >
-                        {{ role.value }}
-                      </Select.Option>
-                    </Select.Content>
-                  </Select>
-                  <Field.Description>{{ roleHint }}</Field.Description>
-                </Field>
-              </div>
-            </PanelContent>
-            <PanelFooter>
-              <div class="flex w-full justify-end gap-(--spacing-xs)">
-                <Button
-                  type="button"
-                  label="Cancel"
-                  kind="outlined"
-                  size="medium"
-                  @click="roleOpen = false"
-                />
-                <Button
-                  type="submit"
-                  label="Save role"
-                  kind="primary"
-                  size="medium"
-                />
-              </div>
-            </PanelFooter>
-          </form>
-        </DialogContent>
-      </DialogPortal>
+      <DialogContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          aria-label="Edit role"
+          novalidate
+          @submit.prevent="saveRole"
+        >
+          <PanelHeader class="w-full">
+            <DialogTitle>Edit role</DialogTitle>
+          </PanelHeader>
+          <PanelContent>
+            <div class="flex flex-col gap-(--spacing-md)">
+              <DialogDescription>
+                Choose what {{ pending ? displayName(pending) : '' }} can do on the account. Their
+                teams still decide which resources they reach.
+              </DialogDescription>
+              <Field>
+                <Field.Label for="user-role">Role</Field.Label>
+                <Select
+                  v-model="nextRole"
+                  size="large"
+                  class="w-full"
+                >
+                  <Select.Trigger id="user-role" />
+                  <Select.Content>
+                    <Select.Option
+                      v-for="role in ROLES"
+                      :key="role.value"
+                      :value="role.value"
+                    >
+                      {{ role.value }}
+                    </Select.Option>
+                  </Select.Content>
+                </Select>
+                <Field.Description>{{ roleHint }}</Field.Description>
+              </Field>
+            </div>
+          </PanelContent>
+          <PanelFooter>
+            <div class="flex w-full justify-end gap-(--spacing-xs)">
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+                @click="roleOpen = false"
+              />
+              <Button
+                type="submit"
+                label="Save role"
+                kind="primary"
+                size="medium"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DialogContent>
     </Dialog>
 
     <ConfirmDialog

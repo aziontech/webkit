@@ -36,11 +36,11 @@ The Teams cell is a small `MultiSelect` named `Teams of <person>` whose value re
 
 `Table.CellActions` named after the person. Everyone gets `View profile`; everyone but the owner gets `Edit role`. An invited person gets `Resend invitation` (toast: the earlier link stops working) and `Cancel invitation`; everyone else but the owner gets `Remove from account`. Both removals ask in a `ConfirmDialog` that says what the person loses and what stays.
 
-### F. Profile and role dialogs — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `KeyValuePairs`, `Select` (required)
+### F. Profile and role dialogs — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `KeyValuePairs`, `Select` (required)
 
 View profile opens a medium `Dialog` titled with the person's name and `Avatar`: `KeyValuePairs` with Email, Role, Teams, Status and Last active, then Close and, for anyone but the owner, `Edit role`. Edit role opens a small `Dialog` around a `form`: a role `Select` (Admin, Developer, Viewer; Owner is never assignable) whose `Field.Description` says what the chosen role allows, then Cancel and the primary `Save role`. Saving changes the Role tag at once and raises a toast with Undo; saving the same role closes without a toast.
 
-### G. Invite drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerDescription`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
+### G. Invite drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `DrawerDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
 
 A medium right `Drawer` around a `form`: a description of what the invitation does, a required Email `Field` and a required Teams `Field` with Developers preselected and a description saying permissions add up. Footer: Cancel and the primary `Send invitation`, which shows its loading state; the drawer cannot be dismissed while it sends. Errors follow `platform/states/form-error`: nothing is red before the first Send; after it each field shows its own `Field.Error` and focus moves to the first invalid one.
 

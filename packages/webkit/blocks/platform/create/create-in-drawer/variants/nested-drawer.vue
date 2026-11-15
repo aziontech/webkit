@@ -1,10 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -132,153 +129,149 @@
       size="large"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            class="flex min-h-0 flex-1 flex-col"
-            aria-label="Add Rule"
-            novalidate
-            @submit.prevent="submitParent"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Add Rule</DrawerTitle>
-                <p class="text-body-sm text-(--text-muted)">
-                  A rule sends the requests it matches to one origin of this resource. Select the
-                  origin, or create it here.
-                </p>
-              </div>
-              <DrawerClose />
-            </PanelHeader>
+      <DrawerContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          aria-label="Add Rule"
+          novalidate
+          @submit.prevent="submitParent"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>Add Rule</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                A rule sends the requests it matches to one origin of this resource. Select the
+                origin, or create it here.
+              </p>
+            </div>
+          </PanelHeader>
 
-            <PanelContent>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
-                :disabled="submitting"
-              >
-                <legend class="sr-only">Add Rule</legend>
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
+              :disabled="submitting"
+            >
+              <legend class="sr-only">Add Rule</legend>
 
-                <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
-                  <Card :padded="false">
-                    <template #content>
-                      <Item.List>
-                        <SettingRow
-                          title="Name"
-                          description="Give a unique and descriptive name to identify the rule."
-                        >
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <Input
-                                v-model="form.name"
-                                size="large"
-                                :disabled="submitting"
-                                class="w-full"
-                                aria-label="Name"
-                                placeholder="my-rule"
-                                :required="!!errors.name && !form.name.trim()"
-                                :invalid="!!errors.name && !!form.name.trim()"
-                                :aria-describedby="errors.name ? 'rule-name-error' : undefined"
-                                @update:model-value="errors.name = ''"
-                              />
-                              <HelperText
-                                v-if="errors.name"
-                                id="rule-name-error"
-                                :kind="form.name.trim() ? 'invalid' : 'required'"
-                                :label="errors.name"
-                              />
-                            </div>
+              <section class="flex flex-col gap-(--layout-group-gap)">
+                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="Name"
+                        description="Give a unique and descriptive name to identify the rule."
+                      >
+                        <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                          <div class="flex w-full flex-col gap-(--spacing-xs)">
+                            <Input
+                              v-model="form.name"
+                              size="large"
+                              :disabled="submitting"
+                              class="w-full"
+                              aria-label="Name"
+                              placeholder="my-rule"
+                              :required="!!errors.name && !form.name.trim()"
+                              :invalid="!!errors.name && !!form.name.trim()"
+                              :aria-describedby="errors.name ? 'rule-name-error' : undefined"
+                              @update:model-value="errors.name = ''"
+                            />
+                            <HelperText
+                              v-if="errors.name"
+                              id="rule-name-error"
+                              :kind="form.name.trim() ? 'invalid' : 'required'"
+                              :label="errors.name"
+                            />
                           </div>
-                        </SettingRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </section>
+                        </div>
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </section>
 
-                <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Behavior</p>
-                  <Card :padded="false">
-                    <template #content>
-                      <Item.List>
-                        <SettingRow
-                          title="Origin"
-                          description="Select the origin matching requests go to, or create one."
-                        >
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <Select
-                                :model-value="form.originId"
-                                v-model:open="originSelectOpen"
-                                size="large"
-                                :disabled="submitting"
-                                class="w-full"
-                                placeholder="Select an origin"
-                                :required="!!errors.originId"
-                                :display-value="originLabel"
-                                @update:model-value="onOriginModel"
-                              >
-                                <Select.Trigger
-                                  id="rule-origin"
-                                  aria-label="Origin"
-                                  :aria-describedby="
-                                    errors.originId ? 'rule-origin-error' : undefined
-                                  "
-                                />
-                                <Select.Content>
+              <section class="flex flex-col gap-(--layout-group-gap)">
+                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Behavior</p>
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="Origin"
+                        description="Select the origin matching requests go to, or create one."
+                      >
+                        <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                          <div class="flex w-full flex-col gap-(--spacing-xs)">
+                            <Select
+                              :model-value="form.originId"
+                              v-model:open="originSelectOpen"
+                              size="large"
+                              :disabled="submitting"
+                              class="w-full"
+                              placeholder="Select an origin"
+                              :required="!!errors.originId"
+                              :display-value="originLabel"
+                              @update:model-value="onOriginModel"
+                            >
+                              <Select.Trigger
+                                id="rule-origin"
+                                aria-label="Origin"
+                                :aria-describedby="
+                                  errors.originId ? 'rule-origin-error' : undefined
+                                "
+                              />
+                              <Select.Content>
+                                <Select.Option
+                                  v-for="origin in origins"
+                                  :key="origin.value"
+                                  :value="origin.value"
+                                >
+                                  {{ origin.label }}
+                                </Select.Option>
+                                <template #footer>
                                   <Select.Option
-                                    v-for="origin in origins"
-                                    :key="origin.value"
-                                    :value="origin.value"
+                                    :value="CREATE_ORIGIN"
+                                    icon="pi pi-plus-circle"
+                                    class="w-full"
                                   >
-                                    {{ origin.label }}
+                                    Create Origin
                                   </Select.Option>
-                                  <template #footer>
-                                    <Select.Option
-                                      :value="CREATE_ORIGIN"
-                                      icon="pi pi-plus-circle"
-                                      class="w-full"
-                                    >
-                                      Create Origin
-                                    </Select.Option>
-                                  </template>
-                                </Select.Content>
-                              </Select>
-                              <HelperText
-                                v-if="errors.originId"
-                                id="rule-origin-error"
-                                kind="required"
-                                :label="errors.originId"
-                              />
-                            </div>
+                                </template>
+                              </Select.Content>
+                            </Select>
+                            <HelperText
+                              v-if="errors.originId"
+                              id="rule-origin-error"
+                              kind="required"
+                              :label="errors.originId"
+                            />
                           </div>
-                        </SettingRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </section>
-              </fieldset>
-            </PanelContent>
+                        </div>
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </section>
+            </fieldset>
+          </PanelContent>
 
-            <PanelFooter>
-              <div
-                class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
-              >
-                <div class="w-full md:w-fit">
-                  <Button
-                    class="w-full"
-                    label="Add Rule"
-                    kind="primary"
-                    size="medium"
-                    :loading="submitting"
-                    type="submit"
-                  />
-                </div>
+          <PanelFooter>
+            <div
+              class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
+            >
+              <div class="w-full md:w-fit">
+                <Button
+                  class="w-full"
+                  label="Add Rule"
+                  kind="primary"
+                  size="medium"
+                  :loading="submitting"
+                  type="submit"
+                />
               </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
 
     <Drawer
@@ -286,123 +279,117 @@
       size="medium"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create Origin"
-            novalidate
-            @submit.prevent="submitChild"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Create Origin</DrawerTitle>
-                <p class="text-body-sm text-(--text-muted)">
-                  An origin is a host this resource fetches content from. Once saved, the rule sends
-                  its requests to it.
-                </p>
-              </div>
-              <DrawerClose />
-            </PanelHeader>
+      <DrawerContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          aria-label="Create Origin"
+          novalidate
+          @submit.prevent="submitChild"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>Create Origin</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                An origin is a host this resource fetches content from. Once saved, the rule sends
+                its requests to it.
+              </p>
+            </div>
+          </PanelHeader>
 
-            <PanelContent>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
-                :disabled="childSubmitting"
-              >
-                <legend class="sr-only">Create Origin</legend>
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
+              :disabled="childSubmitting"
+            >
+              <legend class="sr-only">Create Origin</legend>
 
-                <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
-                  <Card :padded="false">
-                    <template #content>
-                      <Item.List>
-                        <SettingRow
-                          title="Name"
-                          description="A unique name for the origin."
-                        >
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <Input
-                                v-model="childForm.name"
-                                size="large"
-                                :disabled="childSubmitting"
-                                class="w-full"
-                                aria-label="Name"
-                                placeholder="my-origin"
-                                :required="!!childErrors.name && !childForm.name.trim()"
-                                :invalid="!!childErrors.name && !!childForm.name.trim()"
-                                :aria-describedby="
-                                  childErrors.name ? 'origin-name-error' : undefined
-                                "
-                                @update:model-value="childErrors.name = ''"
-                              />
-                              <HelperText
-                                v-if="childErrors.name"
-                                id="origin-name-error"
-                                :kind="childForm.name.trim() ? 'invalid' : 'required'"
-                                :label="childErrors.name"
-                              />
-                            </div>
+              <section class="flex flex-col gap-(--layout-group-gap)">
+                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="Name"
+                        description="A unique name for the origin."
+                      >
+                        <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                          <div class="flex w-full flex-col gap-(--spacing-xs)">
+                            <Input
+                              v-model="childForm.name"
+                              size="large"
+                              :disabled="childSubmitting"
+                              class="w-full"
+                              aria-label="Name"
+                              placeholder="my-origin"
+                              :required="!!childErrors.name && !childForm.name.trim()"
+                              :invalid="!!childErrors.name && !!childForm.name.trim()"
+                              :aria-describedby="childErrors.name ? 'origin-name-error' : undefined"
+                              @update:model-value="childErrors.name = ''"
+                            />
+                            <HelperText
+                              v-if="childErrors.name"
+                              id="origin-name-error"
+                              :kind="childForm.name.trim() ? 'invalid' : 'required'"
+                              :label="childErrors.name"
+                            />
                           </div>
-                        </SettingRow>
-                        <SettingRow
-                          title="Address"
-                          description="The host this resource fetches content from."
-                          stackable
-                        >
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <Input
-                                v-model="childForm.address"
-                                size="large"
-                                :disabled="childSubmitting"
-                                class="w-full"
-                                aria-label="Address"
-                                placeholder="origin.example.com"
-                                :required="!!childErrors.address && !childForm.address.trim()"
-                                :invalid="!!childErrors.address && !!childForm.address.trim()"
-                                :aria-describedby="
-                                  childErrors.address ? 'origin-address-error' : undefined
-                                "
-                                @update:model-value="childErrors.address = ''"
-                              />
-                              <HelperText
-                                v-if="childErrors.address"
-                                id="origin-address-error"
-                                :kind="childForm.address.trim() ? 'invalid' : 'required'"
-                                :label="childErrors.address"
-                              />
-                            </div>
+                        </div>
+                      </SettingRow>
+                      <SettingRow
+                        title="Address"
+                        description="The host this resource fetches content from."
+                        stackable
+                      >
+                        <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                          <div class="flex w-full flex-col gap-(--spacing-xs)">
+                            <Input
+                              v-model="childForm.address"
+                              size="large"
+                              :disabled="childSubmitting"
+                              class="w-full"
+                              aria-label="Address"
+                              placeholder="origin.example.com"
+                              :required="!!childErrors.address && !childForm.address.trim()"
+                              :invalid="!!childErrors.address && !!childForm.address.trim()"
+                              :aria-describedby="
+                                childErrors.address ? 'origin-address-error' : undefined
+                              "
+                              @update:model-value="childErrors.address = ''"
+                            />
+                            <HelperText
+                              v-if="childErrors.address"
+                              id="origin-address-error"
+                              :kind="childForm.address.trim() ? 'invalid' : 'required'"
+                              :label="childErrors.address"
+                            />
                           </div>
-                        </SettingRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </section>
-              </fieldset>
-            </PanelContent>
+                        </div>
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </section>
+            </fieldset>
+          </PanelContent>
 
-            <PanelFooter>
-              <div
-                class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
-              >
-                <div class="w-full md:w-fit">
-                  <Button
-                    class="w-full"
-                    label="Create Origin"
-                    kind="primary"
-                    size="medium"
-                    :loading="childSubmitting"
-                    type="submit"
-                  />
-                </div>
+          <PanelFooter>
+            <div
+              class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
+            >
+              <div class="w-full md:w-fit">
+                <Button
+                  class="w-full"
+                  label="Create Origin"
+                  kind="primary"
+                  size="medium"
+                  :loading="childSubmitting"
+                  type="submit"
+                />
               </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

@@ -25,13 +25,13 @@ The resource page the reader is on. The assistant's support prompts and answers 
 
 An outlined Agent `Button` with the assistant mark in the page header actions, `aria-expanded` while the drawer is open. A console-wide entry point lives in the global header instead.
 
-### C. Drawer frame — `Drawer`, `DrawerPortal`, `DrawerContent`
+### C. Drawer frame — `Drawer`, `DrawerContent`
 
-A medium right-side `Drawer` with no `DrawerOverlay`, so the resource page beside it stays undimmed and readable while the reader asks about it. Escape and the close button dismiss it. Inside `ConsoleLayout` on a wide screen, put the same conversation in the layout's tools region (`v-model:tools-open`, as the console Notifications do) and keep the drawer for narrow screens; the conversation survives closing and reopening during the visit.
+A medium right-side `Drawer` with no so the resource page beside it stays undimmed and readable while the reader asks about it. Escape and the close button dismiss it. Inside `ConsoleLayout` on a wide screen, put the same conversation in the layout's tools region (`v-model:tools-open`, as the console Notifications do) and keep the drawer for narrow screens; the conversation survives closing and reopening during the visit.
 
-### D. Header — `PanelHeader`, `DrawerTitle`, `Tag`, `IconButton`, `DrawerClose`
+### D. Header — `PanelHeader`, `DrawerTitle`, `Tag`, `IconButton`
 
-`DrawerTitle` with the assistant's name, a Preview `Tag`, New chat as an `IconButton` and `DrawerClose`.
+`DrawerTitle` with the assistant's name, a Preview `Tag`, New chat as an `IconButton`, then the drawer's own close button.
 
 ### E. Empty state — `EmptyState`, `SuggestionGroup`
 

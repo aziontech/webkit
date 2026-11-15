@@ -1,9 +1,6 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
@@ -132,222 +129,218 @@
         />
       </div>
     </DrawerTrigger>
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Add Record"
-          novalidate
-          @submit.prevent="submit"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>Add Record</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                A new record in example.com, and how the zone should answer requests for it.
-              </p>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
+    <DrawerContent>
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Add Record"
+        novalidate
+        @submit.prevent="submit"
+      >
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DrawerTitle>Add Record</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              A new record in example.com, and how the zone should answer requests for it.
+            </p>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col border-0 p-0"
-              :disabled="submitting"
+        <PanelContent>
+          <fieldset
+            class="m-0 flex min-w-0 flex-col border-0 p-0"
+            :disabled="submitting"
+          >
+            <legend class="sr-only">Add Record</legend>
+            <SettingsSection
+              title="Settings"
+              hint="Which addresses are associated with the domain and how the zone should handle requests."
             >
-              <legend class="sr-only">Add Record</legend>
-              <SettingsSection
-                title="Settings"
-                hint="Which addresses are associated with the domain and how the zone should handle requests."
-              >
-                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                  <Field
+              <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <Field
+                  :disabled="submitting"
+                  required
+                  :invalid="!!errors.name"
+                >
+                  <Field.Label>Name</Field.Label>
+                  <InputGroup>
+                    <InputGroup.Input
+                      v-model="form.name"
+                      placeholder="subdomain"
+                      @update:model-value="errors.name = ''"
+                    />
+                    <InputGroup.Addon>.example.com</InputGroup.Addon>
+                  </InputGroup>
+                  <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
+                  <Field.Description v-else>
+                    Use @ to create a record for the root domain.
+                  </Field.Description>
+                </Field>
+
+                <Field>
+                  <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+                    <Field.Label for="record-type">Record type</Field.Label>
+                  </div>
+                  <Select
+                    v-model="form.type"
+                    size="large"
+                    class="w-full"
                     :disabled="submitting"
-                    required
-                    :invalid="!!errors.name"
+                    :display-value="typeLabel"
                   >
-                    <Field.Label>Name</Field.Label>
-                    <InputGroup>
-                      <InputGroup.Input
-                        v-model="form.name"
-                        placeholder="subdomain"
-                        @update:model-value="errors.name = ''"
-                      />
-                      <InputGroup.Addon>.example.com</InputGroup.Addon>
-                    </InputGroup>
-                    <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
-                    <Field.Description v-else>
-                      Use @ to create a record for the root domain.
-                    </Field.Description>
-                  </Field>
-
-                  <Field>
-                    <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                      <Field.Label for="record-type">Record type</Field.Label>
-                    </div>
-                    <Select
-                      v-model="form.type"
-                      size="large"
-                      class="w-full"
-                      :disabled="submitting"
-                      :display-value="typeLabel"
-                    >
-                      <Select.Trigger
-                        id="record-type"
-                        aria-label="Record type"
-                      />
-                      <Select.Content>
-                        <Select.Option
-                          v-for="type in recordTypes"
-                          :key="type.value"
-                          :value="type.value"
-                        >
-                          {{ type.label }}
-                        </Select.Option>
-                      </Select.Content>
-                    </Select>
-                    <HelperText
-                      id="record-type-helper"
-                      kind="helper"
-                    >
-                      <Link
-                        label="Read more about record types"
-                        size="medium"
-                        href="https://example.com/docs/dns-records"
-                        target="_blank"
-                      />
-                    </HelperText>
-                  </Field>
-
-                  <Field>
-                    <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                      <Field.Label for="record-ttl">TTL in seconds</Field.Label>
-                    </div>
-                    <NumberInput
-                      id="record-ttl"
-                      v-model="form.ttl"
-                      size="large"
-                      class="w-full"
-                      :min="0"
-                      :disabled="submitting"
-                      aria-label="TTL in seconds"
+                    <Select.Trigger
+                      id="record-type"
+                      aria-label="Record type"
                     />
-                    <HelperText
-                      id="record-ttl-helper"
-                      kind="helper"
-                      >Time-to-live a response can be cached for on a resolver server.</HelperText
-                    >
-                  </Field>
+                    <Select.Content>
+                      <Select.Option
+                        v-for="type in recordTypes"
+                        :key="type.value"
+                        :value="type.value"
+                      >
+                        {{ type.label }}
+                      </Select.Option>
+                    </Select.Content>
+                  </Select>
+                  <HelperText
+                    id="record-type-helper"
+                    kind="helper"
+                  >
+                    <Link
+                      label="Read more about record types"
+                      size="medium"
+                      href="https://example.com/docs/dns-records"
+                      target="_blank"
+                    />
+                  </HelperText>
+                </Field>
 
-                  <Field
+                <Field>
+                  <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+                    <Field.Label for="record-ttl">TTL in seconds</Field.Label>
+                  </div>
+                  <NumberInput
+                    id="record-ttl"
+                    v-model="form.ttl"
+                    size="large"
+                    class="w-full"
+                    :min="0"
                     :disabled="submitting"
-                    required
-                    :invalid="!!errors.value"
+                    aria-label="TTL in seconds"
+                  />
+                  <HelperText
+                    id="record-ttl-helper"
+                    kind="helper"
+                    >Time-to-live a response can be cached for on a resolver server.</HelperText
                   >
-                    <Field.Label>Value</Field.Label>
-                    <Textarea
-                      v-model="form.value"
-                      :placeholder="selectedType.placeholder"
-                      @update:model-value="errors.value = ''"
+                </Field>
+
+                <Field
+                  :disabled="submitting"
+                  required
+                  :invalid="!!errors.value"
+                >
+                  <Field.Label>Value</Field.Label>
+                  <Textarea
+                    v-model="form.value"
+                    :placeholder="selectedType.placeholder"
+                    @update:model-value="errors.value = ''"
+                  />
+                  <Field.Error v-if="errors.value">{{ errors.value }}</Field.Error>
+                  <Field.Description v-else-if="selectedType.valueHelper">
+                    {{ selectedType.valueHelper }}
+                  </Field.Description>
+                </Field>
+
+                <Field :disabled="submitting">
+                  <Field.Label>Description</Field.Label>
+                  <Input
+                    v-model="form.description"
+                    size="large"
+                    placeholder="Optional description"
+                  />
+                  <Field.Description
+                    >An optional note to help identify this record.</Field.Description
+                  >
+                </Field>
+              </div>
+            </SettingsSection>
+
+            <SettingsSection
+              title="Policy"
+              hint="How the zone should deal with requests answered by this record."
+            >
+              <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                <Field>
+                  <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+                    <Field.Label for="record-policy">Policy type</Field.Label>
+                  </div>
+                  <Select
+                    v-model="form.policy"
+                    size="large"
+                    class="w-full"
+                    :disabled="submitting"
+                    :display-value="policyLabelOf"
+                  >
+                    <Select.Trigger
+                      id="record-policy"
+                      aria-label="Policy type"
                     />
-                    <Field.Error v-if="errors.value">{{ errors.value }}</Field.Error>
-                    <Field.Description v-else-if="selectedType.valueHelper">
-                      {{ selectedType.valueHelper }}
-                    </Field.Description>
-                  </Field>
+                    <Select.Content>
+                      <Select.Option
+                        v-for="policy in policyTypes"
+                        :key="policy.value"
+                        :value="policy.value"
+                      >
+                        {{ policy.label }}
+                      </Select.Option>
+                    </Select.Content>
+                  </Select>
+                  <HelperText
+                    id="record-policy-helper"
+                    kind="helper"
+                    >Simple is standard resolution. Weighted distributes answers across records by
+                    weight.</HelperText
+                  >
+                </Field>
 
-                  <Field :disabled="submitting">
-                    <Field.Label>Description</Field.Label>
-                    <Input
-                      v-model="form.description"
-                      size="large"
-                      placeholder="Optional description"
-                    />
-                    <Field.Description
-                      >An optional note to help identify this record.</Field.Description
-                    >
-                  </Field>
-                </div>
-              </SettingsSection>
+                <Field v-if="isWeighted">
+                  <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
+                    <Field.Label for="record-weight">Weight</Field.Label>
+                  </div>
+                  <NumberInput
+                    id="record-weight"
+                    v-model="form.weight"
+                    size="large"
+                    class="w-full"
+                    :min="0"
+                    :max="255"
+                    :disabled="submitting"
+                    aria-label="Weight"
+                  />
+                  <HelperText
+                    id="record-weight-helper"
+                    kind="helper"
+                    >Relative weight for this record within the weighted set, from 0 to
+                    255.</HelperText
+                  >
+                </Field>
+              </div>
+            </SettingsSection>
+          </fieldset>
+        </PanelContent>
 
-              <SettingsSection
-                title="Policy"
-                hint="How the zone should deal with requests answered by this record."
-              >
-                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                  <Field>
-                    <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                      <Field.Label for="record-policy">Policy type</Field.Label>
-                    </div>
-                    <Select
-                      v-model="form.policy"
-                      size="large"
-                      class="w-full"
-                      :disabled="submitting"
-                      :display-value="policyLabelOf"
-                    >
-                      <Select.Trigger
-                        id="record-policy"
-                        aria-label="Policy type"
-                      />
-                      <Select.Content>
-                        <Select.Option
-                          v-for="policy in policyTypes"
-                          :key="policy.value"
-                          :value="policy.value"
-                        >
-                          {{ policy.label }}
-                        </Select.Option>
-                      </Select.Content>
-                    </Select>
-                    <HelperText
-                      id="record-policy-helper"
-                      kind="helper"
-                      >Simple is standard resolution. Weighted distributes answers across records by
-                      weight.</HelperText
-                    >
-                  </Field>
-
-                  <Field v-if="isWeighted">
-                    <div class="flex min-w-0 items-center justify-between gap-(--spacing-xs)">
-                      <Field.Label for="record-weight">Weight</Field.Label>
-                    </div>
-                    <NumberInput
-                      id="record-weight"
-                      v-model="form.weight"
-                      size="large"
-                      class="w-full"
-                      :min="0"
-                      :max="255"
-                      :disabled="submitting"
-                      aria-label="Weight"
-                    />
-                    <HelperText
-                      id="record-weight-helper"
-                      kind="helper"
-                      >Relative weight for this record within the weighted set, from 0 to
-                      255.</HelperText
-                    >
-                  </Field>
-                </div>
-              </SettingsSection>
-            </fieldset>
-          </PanelContent>
-
-          <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-              <Button
-                label="Add Record"
-                kind="primary"
-                size="medium"
-                :loading="submitting"
-                type="submit"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </DrawerPortal>
+        <PanelFooter>
+          <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
+            <Button
+              label="Add Record"
+              kind="primary"
+              size="medium"
+              :loading="submitting"
+              type="submit"
+            />
+          </div>
+        </PanelFooter>
+      </form>
+    </DrawerContent>
   </Drawer>
 </template>

@@ -5,10 +5,7 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
@@ -973,166 +970,163 @@
       size="medium"
       side="right"
       :dismissible="!submitting"
+      :closable="!submitting"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            ref="formEl"
-            class="flex min-h-0 flex-1 flex-col"
-            :aria-label="drawerTitle"
-            novalidate
-            @submit.prevent="submit"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
-                <p class="text-body-sm text-(--text-muted)">
-                  A Deployment Setting says how a deploy routes: whether versions lock the resource
-                  IDs they shipped with, and how many of them take traffic. An environment publishes
-                  with exactly one.
-                </p>
-              </div>
-              <DrawerClose />
-            </PanelHeader>
+      <DrawerContent>
+        <form
+          ref="formEl"
+          class="flex min-h-0 flex-1 flex-col"
+          :aria-label="drawerTitle"
+          novalidate
+          @submit.prevent="submit"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                A Deployment Setting says how a deploy routes: whether versions lock the resource
+                IDs they shipped with, and how many of them take traffic. An environment publishes
+                with exactly one.
+              </p>
+            </div>
+          </PanelHeader>
 
-            <PanelContent>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col border-0 p-0"
-                :disabled="submitting"
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="submitting"
+            >
+              <legend class="sr-only">{{ drawerTitle }}</legend>
+              <SettingsSection
+                title="General"
+                hint="How this setting reads in this list and in the field that applies it."
               >
-                <legend class="sr-only">{{ drawerTitle }}</legend>
-                <SettingsSection
-                  title="General"
-                  hint="How this setting reads in this list and in the field that applies it."
-                >
-                  <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                    <Field
-                      :required="Boolean(nameError) && !draft.name.trim()"
-                      :invalid="Boolean(nameError) && Boolean(draft.name.trim())"
+                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                  <Field
+                    :required="Boolean(nameError) && !draft.name.trim()"
+                    :invalid="Boolean(nameError) && Boolean(draft.name.trim())"
+                  >
+                    <Field.Label for="deployment-settings-name">Name</Field.Label>
+                    <Input
+                      id="deployment-settings-name"
+                      v-model="draft.name"
+                      size="large"
+                      placeholder="production-hardened"
+                      autocomplete="off"
+                      @update:model-value="nameError = ''"
+                    />
+                    <Field.Description>{{
+                      nameError || 'Name it after the services or the traffic it serves.'
+                    }}</Field.Description>
+                  </Field>
+                  <Field>
+                    <Field.Label for="deployment-settings-description">Description</Field.Label>
+                    <Textarea
+                      id="deployment-settings-description"
+                      v-model="draft.description"
+                      :rows="3"
+                    />
+                    <Field.Description
+                      >Optional. Used for internal identification.</Field.Description
                     >
-                      <Field.Label for="deployment-settings-name">Name</Field.Label>
-                      <Input
-                        id="deployment-settings-name"
-                        v-model="draft.name"
-                        size="large"
-                        placeholder="production-hardened"
-                        autocomplete="off"
-                        @update:model-value="nameError = ''"
-                      />
-                      <Field.Description>{{
-                        nameError || 'Name it after the services or the traffic it serves.'
-                      }}</Field.Description>
-                    </Field>
-                    <Field>
-                      <Field.Label for="deployment-settings-description">Description</Field.Label>
-                      <Textarea
-                        id="deployment-settings-description"
-                        v-model="draft.description"
-                        :rows="3"
-                      />
+                  </Field>
+                  <Field orientation="horizontal">
+                    <Switch
+                      id="deployment-settings-active"
+                      v-model="draft.active"
+                    />
+                    <Field.Content>
+                      <Field.Label for="deployment-settings-active">Active</Field.Label>
                       <Field.Description
-                        >Optional. Used for internal identification.</Field.Description
+                        >When off, the setting stays in the list but no environment can choose
+                        it.</Field.Description
                       >
-                    </Field>
-                    <Field orientation="horizontal">
-                      <Switch
-                        id="deployment-settings-active"
-                        v-model="draft.active"
+                    </Field.Content>
+                  </Field>
+                </div>
+              </SettingsSection>
+
+              <SettingsSection
+                title="Routing and policy"
+                hint="How versions bind to the resources they ship with, and how traffic reaches them."
+              >
+                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                  <fieldset
+                    class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
+                  >
+                    <Field.Legend kind="label">Binding policy</Field.Legend>
+                    <Field
+                      v-for="policy in BINDING_POLICIES"
+                      :key="policy.value"
+                      orientation="horizontal"
+                    >
+                      <RadioButton
+                        v-model="draft.bindingPolicy"
+                        :value="policy.value"
+                        name="deployment-settings-binding"
+                        :id="`deployment-settings-binding-${policy.value}`"
                       />
                       <Field.Content>
-                        <Field.Label for="deployment-settings-active">Active</Field.Label>
-                        <Field.Description
-                          >When off, the setting stays in the list but no environment can choose
-                          it.</Field.Description
-                        >
+                        <Field.Label :for="`deployment-settings-binding-${policy.value}`">{{
+                          policy.label
+                        }}</Field.Label>
+                        <Field.Description>{{ policy.description }}</Field.Description>
                       </Field.Content>
                     </Field>
-                  </div>
-                </SettingsSection>
-
-                <SettingsSection
-                  title="Routing and policy"
-                  hint="How versions bind to the resources they ship with, and how traffic reaches them."
-                >
-                  <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                    <fieldset
-                      class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
+                  </fieldset>
+                  <fieldset
+                    class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
+                    :disabled="Boolean(editingId)"
+                  >
+                    <Field.Legend kind="label">Deployment policy</Field.Legend>
+                    <Field
+                      v-for="policy in DEPLOYMENT_POLICIES"
+                      :key="policy.value"
+                      orientation="horizontal"
                     >
-                      <Field.Legend kind="label">Binding policy</Field.Legend>
-                      <Field
-                        v-for="policy in BINDING_POLICIES"
-                        :key="policy.value"
-                        orientation="horizontal"
-                      >
-                        <RadioButton
-                          v-model="draft.bindingPolicy"
-                          :value="policy.value"
-                          name="deployment-settings-binding"
-                          :id="`deployment-settings-binding-${policy.value}`"
-                        />
-                        <Field.Content>
-                          <Field.Label :for="`deployment-settings-binding-${policy.value}`">{{
-                            policy.label
-                          }}</Field.Label>
-                          <Field.Description>{{ policy.description }}</Field.Description>
-                        </Field.Content>
-                      </Field>
-                    </fieldset>
-                    <fieldset
-                      class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
-                      :disabled="Boolean(editingId)"
+                      <RadioButton
+                        v-model="draft.deploymentPolicy"
+                        :value="policy.value"
+                        name="deployment-settings-policy"
+                        :id="`deployment-settings-policy-${policy.value}`"
+                      />
+                      <Field.Content>
+                        <Field.Label :for="`deployment-settings-policy-${policy.value}`">{{
+                          policy.label
+                        }}</Field.Label>
+                        <Field.Description>{{ policy.description }}</Field.Description>
+                      </Field.Content>
+                    </Field>
+                    <Field.Description
+                      >Cannot be changed after the setting is created.</Field.Description
                     >
-                      <Field.Legend kind="label">Deployment policy</Field.Legend>
-                      <Field
-                        v-for="policy in DEPLOYMENT_POLICIES"
-                        :key="policy.value"
-                        orientation="horizontal"
-                      >
-                        <RadioButton
-                          v-model="draft.deploymentPolicy"
-                          :value="policy.value"
-                          name="deployment-settings-policy"
-                          :id="`deployment-settings-policy-${policy.value}`"
-                        />
-                        <Field.Content>
-                          <Field.Label :for="`deployment-settings-policy-${policy.value}`">{{
-                            policy.label
-                          }}</Field.Label>
-                          <Field.Description>{{ policy.description }}</Field.Description>
-                        </Field.Content>
-                      </Field>
-                      <Field.Description
-                        >Cannot be changed after the setting is created.</Field.Description
-                      >
-                    </fieldset>
-                  </div>
-                </SettingsSection>
-              </fieldset>
-            </PanelContent>
+                  </fieldset>
+                </div>
+              </SettingsSection>
+            </fieldset>
+          </PanelContent>
 
-            <PanelFooter>
-              <div class="flex w-full justify-end gap-(--spacing-xs)">
-                <Button
-                  type="button"
-                  label="Cancel"
-                  kind="outlined"
-                  size="medium"
-                  :disabled="submitting"
-                  @click="drawerOpen = false"
-                />
-                <Button
-                  type="submit"
-                  :label="editingId ? 'Save changes' : 'Create Deployment Setting'"
-                  kind="primary"
-                  size="medium"
-                  :loading="submitting"
-                />
-              </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+          <PanelFooter>
+            <div class="flex w-full justify-end gap-(--spacing-xs)">
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+                :disabled="submitting"
+                @click="drawerOpen = false"
+              />
+              <Button
+                type="submit"
+                :label="editingId ? 'Save changes' : 'Create Deployment Setting'"
+                kind="primary"
+                size="medium"
+                :loading="submitting"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
 
     <ConfirmDialog

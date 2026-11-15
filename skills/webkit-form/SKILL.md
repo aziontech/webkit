@@ -314,7 +314,7 @@ link on the left and Save on the right. Canonical pattern:
 
 ### Example — Dialog form (destructive confirm)
 
-A modal for a short, blocking decision. Compose `Dialog` + `DialogPortal`/`DialogOverlay`/`DialogContent`
+A modal for a short, blocking decision. Compose `Dialog` + `DialogContent` (it renders the overlay and the close button itself)
 with the `Panel*` regions; the body uses the compact `--spacing-md` rhythm. The primary (destructive)
 action stays disabled until the user types the exact confirmation phrase — error prevention, not a toast.
 Canonical pattern:
@@ -323,10 +323,7 @@ Canonical pattern:
 <script setup>
   import Button from '@aziontech/webkit/button'
   import Dialog from '@aziontech/webkit/dialog-root'
-  import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import Input from '@aziontech/webkit/input'
   import Alert from '@aziontech/webkit/alert'
@@ -352,63 +349,59 @@ Canonical pattern:
     v-model:open="open"
     size="medium"
   >
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogContent>
-        <PanelHeader class="w-full">
-          <DialogTitle>Delete Application</DialogTitle>
-          <DialogClose />
-        </PanelHeader>
+    <DialogContent>
+      <PanelHeader class="w-full">
+        <DialogTitle>Delete Application</DialogTitle>
+      </PanelHeader>
 
-        <!-- compact modal body: --spacing-md between blocks, on your own wrapper -->
-        <PanelContent>
-          <div class="flex flex-col gap-(--spacing-md)">
-            <Alert
-              severity="warning"
-              label="Once confirmed, this action can't be reversed."
-            />
-            <p class="m-0 text-body-sm text-(--text-muted)">
-              The selected Application will be deleted, along with all associated settings or
-              instances.
-            </p>
-            <label
-              for="confirm-delete"
-              class="text-body-sm text-(--text-default)"
-            >
-              To confirm, type "{{ phrase }}" in the box below:
-            </label>
-            <Input
-              id="confirm-delete"
-              v-model="confirmation"
-              autocomplete="off"
+      <!-- compact modal body: --spacing-md between blocks, on your own wrapper -->
+      <PanelContent>
+        <div class="flex flex-col gap-(--spacing-md)">
+          <Alert
+            severity="warning"
+            label="Once confirmed, this action can't be reversed."
+          />
+          <p class="m-0 text-body-sm text-(--text-muted)">
+            The selected Application will be deleted, along with all associated settings or
+            instances.
+          </p>
+          <label
+            for="confirm-delete"
+            class="text-body-sm text-(--text-default)"
+          >
+            To confirm, type "{{ phrase }}" in the box below:
+          </label>
+          <Input
+            id="confirm-delete"
+            v-model="confirmation"
+            autocomplete="off"
+            class="w-full"
+          />
+        </div>
+      </PanelContent>
+
+      <PanelFooter>
+        <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+          <div class="w-full md:w-fit">
+            <Button
               class="w-full"
+              label="Cancel"
+              kind="outlined"
+              @click="open = false"
             />
           </div>
-        </PanelContent>
-
-        <PanelFooter>
-          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-            <div class="w-full md:w-fit">
-              <Button
-                class="w-full"
-                label="Cancel"
-                kind="outlined"
-                @click="open = false"
-              />
-            </div>
-            <div class="w-full md:w-fit">
-              <Button
-                class="w-full"
-                label="Delete"
-                kind="danger"
-                :disabled="!canDelete"
-                @click="remove"
-              />
-            </div>
+          <div class="w-full md:w-fit">
+            <Button
+              class="w-full"
+              label="Delete"
+              kind="danger"
+              :disabled="!canDelete"
+              @click="remove"
+            />
           </div>
-        </PanelFooter>
-      </DialogContent>
-    </DialogPortal>
+        </div>
+      </PanelFooter>
+    </DialogContent>
   </Dialog>
 </template>
 ```
@@ -530,26 +523,23 @@ Canonical pattern:
     size="medium"
     side="right"
   >
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Create Origin"
-          novalidate
-          @submit.prevent="submitChild"
+    <DrawerContent>
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Create Origin"
+        novalidate
+        @submit.prevent="submitChild"
+      >
+        <fieldset
+          class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
+          :disabled="childSubmitting"
         >
-          <fieldset
-            class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
-            :disabled="childSubmitting"
-          >
-            <legend class="sr-only">Create origin</legend>
-            <!-- Approach A ItemGroup sections here: Name, Address -->
-          </fieldset>
-          <!-- PanelFooter: Cancel + Create Origin type="submit" :loading="childSubmitting" -->
-        </form>
-      </DrawerContent>
-    </DrawerPortal>
+          <legend class="sr-only">Create origin</legend>
+          <!-- Approach A ItemGroup sections here: Name, Address -->
+        </fieldset>
+        <!-- PanelFooter: Cancel + Create Origin type="submit" :loading="childSubmitting" -->
+      </form>
+    </DrawerContent>
   </Drawer>
 </template>
 ```

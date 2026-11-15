@@ -1,10 +1,7 @@
 <script setup lang="ts">
   import AttributeEditor from '@aziontech/webkit/attribute-editor'
   import Button from '@aziontech/webkit/button'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
@@ -276,217 +273,213 @@
         />
       </div>
     </DrawerTrigger>
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <form
-          ref="formEl"
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Create Network List"
-          novalidate
-          @submit.prevent="submit"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>Create Network List</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                A list of addresses, ASNs or countries that firewall rules allow or refuse.
-              </p>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
+    <DrawerContent>
+      <form
+        ref="formEl"
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Create Network List"
+        novalidate
+        @submit.prevent="submit"
+      >
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DrawerTitle>Create Network List</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              A list of addresses, ASNs or countries that firewall rules allow or refuse.
+            </p>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col border-0 p-0"
-              :disabled="submitting"
+        <PanelContent>
+          <fieldset
+            class="m-0 flex min-w-0 flex-col border-0 p-0"
+            :disabled="submitting"
+          >
+            <legend class="sr-only">Create Network List</legend>
+            <SettingsSection
+              title="General"
+              hint="Names the list where firewall rules pick it."
             >
-              <legend class="sr-only">Create Network List</legend>
-              <SettingsSection
-                title="General"
-                hint="Names the list where firewall rules pick it."
+              <Field
+                required
+                :invalid="nameMissing"
               >
-                <Field
-                  required
-                  :invalid="nameMissing"
-                >
-                  <Field.Label>Name</Field.Label>
-                  <Input
-                    v-model="name"
-                    size="large"
-                    placeholder="Office and partners"
-                    autocomplete="off"
+                <Field.Label>Name</Field.Label>
+                <Input
+                  v-model="name"
+                  size="large"
+                  placeholder="Office and partners"
+                  autocomplete="off"
+                />
+                <Field.Error v-if="nameMissing">Name is required.</Field.Error>
+              </Field>
+            </SettingsSection>
+
+            <SettingsSection
+              title="Entries"
+              :hint="
+                copy?.hint ?? 'The countries the list matches, by where the request comes from.'
+              "
+            >
+              <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+                <div class="flex flex-wrap items-center justify-between gap-(--spacing-xs)">
+                  <ToggleGroup
+                    v-model="type"
+                    :options="TYPES"
+                    aria-label="List type"
+                    size="medium"
                   />
-                  <Field.Error v-if="nameMissing">Name is required.</Field.Error>
-                </Field>
-              </SettingsSection>
-
-              <SettingsSection
-                title="Entries"
-                :hint="
-                  copy?.hint ?? 'The countries the list matches, by where the request comes from.'
-                "
-              >
-                <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
-                  <div class="flex flex-wrap items-center justify-between gap-(--spacing-xs)">
-                    <ToggleGroup
-                      v-model="type"
-                      :options="TYPES"
-                      aria-label="List type"
-                      size="medium"
-                    />
-                    <Button
-                      v-if="copy"
-                      ref="pasteToggle"
-                      label="Paste list"
-                      icon="pi pi-clipboard"
-                      kind="outlined"
-                      size="medium"
-                      :aria-expanded="pasteOpen"
-                      :aria-controls="pasteOpen ? `${pasteId}-panel` : undefined"
-                      @click="pasteOpen = !pasteOpen"
-                    />
-                  </div>
-
-                  <template v-if="copy">
-                    <div
-                      v-if="pasteOpen"
-                      :id="`${pasteId}-panel`"
-                      class="flex min-w-0 flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-md)"
-                      data-testid="network-list-paste-panel"
-                    >
-                      <Field>
-                        <Field.Label :for="pasteId">Paste one {{ copy.noun }} per line</Field.Label>
-                        <div class="[&_textarea]:font-code">
-                          <Textarea
-                            :id="pasteId"
-                            v-model="pasteText"
-                            :rows="7"
-                            spellcheck="false"
-                            :aria-describedby="`${pasteId}-report`"
-                          />
-                        </div>
-                      </Field>
-                      <div
-                        :id="`${pasteId}-report`"
-                        class="flex flex-col gap-(--spacing-xxs)"
-                      >
-                        <HelperText
-                          key="found"
-                          :label="`${pasteReport.lines.length} ${pasteReport.lines.length === 1 ? 'entry' : 'entries'} found. Text after # is kept as the comment.`"
-                        />
-                        <HelperText
-                          v-if="pasteReport.invalid.length"
-                          key="invalid"
-                          kind="invalid"
-                          :label="`${lineList(pasteReport.invalid)} not ${copy.rule}; ${pasteReport.invalid.length === 1 ? 'it is' : 'they are'} added with an error to fix.`"
-                        />
-                        <HelperText
-                          v-if="pasteReport.duplicates.length"
-                          key="duplicates"
-                          :label="`${lineList(pasteReport.duplicates)} already in the list and will be skipped.`"
-                        />
-                        <HelperText
-                          v-if="pasteOverflow"
-                          key="overflow"
-                          kind="invalid"
-                          :label="`A list holds at most ${LIMIT} entries; the last ${pasteOverflow} will be skipped.`"
-                        />
-                      </div>
-                      <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-                        <Button
-                          :label="`Add ${pasteReport.lines.length} ${pasteReport.lines.length === 1 ? 'entry' : 'entries'}`"
-                          kind="primary"
-                          size="medium"
-                          :disabled="!pasteReport.lines.length"
-                          data-testid="network-list-paste-apply"
-                          @click="applyPaste"
-                        />
-                        <Button
-                          label="Cancel"
-                          kind="transparent"
-                          size="medium"
-                          @click="cancelPaste"
-                        />
-                      </div>
-                    </div>
-                    <p
-                      class="sr-only"
-                      role="status"
-                      aria-live="polite"
-                    >
-                      {{ status }}
-                    </p>
-                    <AttributeEditor
-                      v-model:items="rows"
-                      :definition="columns"
-                      :errors="rowErrors"
-                      :new-item="() => createEntry()"
-                      :min-items="1"
-                      :limit="LIMIT"
-                      size="large"
-                      :add-button-label="`Add ${copy.noun}`"
-                      :remove-button-label="`Remove ${copy.noun}`"
-                      :aria-label="`${copy.column} entries`"
-                    >
-                      <template #cell-value="{ value, update, invalid }">
-                        <div class="contents font-code">
-                          <Input
-                            :model-value="value"
-                            size="large"
-                            :placeholder="copy.placeholder"
-                            autocomplete="off"
-                            :spellcheck="false"
-                            :invalid="invalid"
-                            @update:model-value="update"
-                          />
-                        </div>
-                      </template>
-                    </AttributeEditor>
-                  </template>
-
-                  <Field
-                    v-else
-                    required
-                    :invalid="countriesMissing"
-                  >
-                    <Field.Label>Countries</Field.Label>
-                    <MultiSelect
-                      v-model="countries"
-                      size="large"
-                      placeholder="Select countries"
-                      :display-value="countryDisplay"
-                    >
-                      <MultiSelect.Trigger aria-label="Countries" />
-                      <MultiSelect.Content>
-                        <MultiSelect.Option
-                          v-for="option in COUNTRIES"
-                          :key="option.value"
-                          :value="option.value"
-                        >
-                          {{ option.label }}
-                        </MultiSelect.Option>
-                      </MultiSelect.Content>
-                    </MultiSelect>
-                    <Field.Error v-if="countriesMissing">Select at least one country.</Field.Error>
-                  </Field>
+                  <Button
+                    v-if="copy"
+                    ref="pasteToggle"
+                    label="Paste list"
+                    icon="pi pi-clipboard"
+                    kind="outlined"
+                    size="medium"
+                    :aria-expanded="pasteOpen"
+                    :aria-controls="pasteOpen ? `${pasteId}-panel` : undefined"
+                    @click="pasteOpen = !pasteOpen"
+                  />
                 </div>
-              </SettingsSection>
-            </fieldset>
-          </PanelContent>
 
-          <PanelFooter
-            ><div class="flex w-full justify-end">
-              <Button
-                type="submit"
-                label="Save"
-                kind="primary"
-                size="medium"
-                :loading="submitting"
-              /></div
-          ></PanelFooter>
-        </form>
-      </DrawerContent>
-    </DrawerPortal>
+                <template v-if="copy">
+                  <div
+                    v-if="pasteOpen"
+                    :id="`${pasteId}-panel`"
+                    class="flex min-w-0 flex-col gap-(--spacing-xs) rounded-(--shape-card) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-md)"
+                    data-testid="network-list-paste-panel"
+                  >
+                    <Field>
+                      <Field.Label :for="pasteId">Paste one {{ copy.noun }} per line</Field.Label>
+                      <div class="[&_textarea]:font-code">
+                        <Textarea
+                          :id="pasteId"
+                          v-model="pasteText"
+                          :rows="7"
+                          spellcheck="false"
+                          :aria-describedby="`${pasteId}-report`"
+                        />
+                      </div>
+                    </Field>
+                    <div
+                      :id="`${pasteId}-report`"
+                      class="flex flex-col gap-(--spacing-xxs)"
+                    >
+                      <HelperText
+                        key="found"
+                        :label="`${pasteReport.lines.length} ${pasteReport.lines.length === 1 ? 'entry' : 'entries'} found. Text after # is kept as the comment.`"
+                      />
+                      <HelperText
+                        v-if="pasteReport.invalid.length"
+                        key="invalid"
+                        kind="invalid"
+                        :label="`${lineList(pasteReport.invalid)} not ${copy.rule}; ${pasteReport.invalid.length === 1 ? 'it is' : 'they are'} added with an error to fix.`"
+                      />
+                      <HelperText
+                        v-if="pasteReport.duplicates.length"
+                        key="duplicates"
+                        :label="`${lineList(pasteReport.duplicates)} already in the list and will be skipped.`"
+                      />
+                      <HelperText
+                        v-if="pasteOverflow"
+                        key="overflow"
+                        kind="invalid"
+                        :label="`A list holds at most ${LIMIT} entries; the last ${pasteOverflow} will be skipped.`"
+                      />
+                    </div>
+                    <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                      <Button
+                        :label="`Add ${pasteReport.lines.length} ${pasteReport.lines.length === 1 ? 'entry' : 'entries'}`"
+                        kind="primary"
+                        size="medium"
+                        :disabled="!pasteReport.lines.length"
+                        data-testid="network-list-paste-apply"
+                        @click="applyPaste"
+                      />
+                      <Button
+                        label="Cancel"
+                        kind="transparent"
+                        size="medium"
+                        @click="cancelPaste"
+                      />
+                    </div>
+                  </div>
+                  <p
+                    class="sr-only"
+                    role="status"
+                    aria-live="polite"
+                  >
+                    {{ status }}
+                  </p>
+                  <AttributeEditor
+                    v-model:items="rows"
+                    :definition="columns"
+                    :errors="rowErrors"
+                    :new-item="() => createEntry()"
+                    :min-items="1"
+                    :limit="LIMIT"
+                    size="large"
+                    :add-button-label="`Add ${copy.noun}`"
+                    :remove-button-label="`Remove ${copy.noun}`"
+                    :aria-label="`${copy.column} entries`"
+                  >
+                    <template #cell-value="{ value, update, invalid }">
+                      <div class="contents font-code">
+                        <Input
+                          :model-value="value"
+                          size="large"
+                          :placeholder="copy.placeholder"
+                          autocomplete="off"
+                          :spellcheck="false"
+                          :invalid="invalid"
+                          @update:model-value="update"
+                        />
+                      </div>
+                    </template>
+                  </AttributeEditor>
+                </template>
+
+                <Field
+                  v-else
+                  required
+                  :invalid="countriesMissing"
+                >
+                  <Field.Label>Countries</Field.Label>
+                  <MultiSelect
+                    v-model="countries"
+                    size="large"
+                    placeholder="Select countries"
+                    :display-value="countryDisplay"
+                  >
+                    <MultiSelect.Trigger aria-label="Countries" />
+                    <MultiSelect.Content>
+                      <MultiSelect.Option
+                        v-for="option in COUNTRIES"
+                        :key="option.value"
+                        :value="option.value"
+                      >
+                        {{ option.label }}
+                      </MultiSelect.Option>
+                    </MultiSelect.Content>
+                  </MultiSelect>
+                  <Field.Error v-if="countriesMissing">Select at least one country.</Field.Error>
+                </Field>
+              </div>
+            </SettingsSection>
+          </fieldset>
+        </PanelContent>
+
+        <PanelFooter
+          ><div class="flex w-full justify-end">
+            <Button
+              type="submit"
+              label="Save"
+              kind="primary"
+              size="medium"
+              :loading="submitting"
+            /></div
+        ></PanelFooter>
+      </form>
+    </DrawerContent>
   </Drawer>
 </template>

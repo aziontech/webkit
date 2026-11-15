@@ -24,13 +24,13 @@ The right-side drawer that adds or edits something that only exists inside anoth
 
 An outlined medium `Button` where the list lives: under the section on the resource's Settings tab, a heading action, or a row menu entry for edit. Its label is the drawer's title and the footer button, word for word.
 
-### B. Drawer frame — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
+### B. Drawer frame — `Drawer`, `DrawerContent` (required)
 
 `Drawer` at `size="medium"` for a form of two or three sections; large for the ItemRows shape. It portals over the page with an overlay and holds one `form` with an `aria-label` equal to the title. State resets each time the drawer opens, never on close, so the content stays in place while it slides out.
 
-### C. Panel header — `PanelHeader`, `DrawerTitle`, `DrawerClose` (required)
+### C. Panel header — `PanelHeader`, `DrawerTitle` (required)
 
-`DrawerTitle` with the action and object, a muted one-line description under it, and `DrawerClose` on the right. The close button, the overlay and Escape are the dismissal; there is no Cancel.
+`DrawerTitle` with the action and object, a muted one-line description under it, and the drawer's own close button on the right. The close button, the overlay and Escape are the dismissal; there is no Cancel.
 
 ### D. Sections — `PanelContent`, `SettingsSection` (required)
 

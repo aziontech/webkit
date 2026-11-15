@@ -8,10 +8,7 @@
   } from '@aziontech/webkit/chart'
   import Checkbox from '@aziontech/webkit/checkbox'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -1580,75 +1577,69 @@
       size="medium"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <DrawerTitle>Event</DrawerTitle>
-            <DrawerClose />
-          </PanelHeader>
-          <div class="min-h-0 flex-1 overflow-auto">
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <DrawerTitle>Event</DrawerTitle>
+        </PanelHeader>
+        <div class="min-h-0 flex-1 overflow-auto">
+          <div
+            v-if="documentEvent"
+            class="flex min-w-0 flex-col"
+          >
             <div
-              v-if="documentEvent"
-              class="flex min-w-0 flex-col"
+              class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
             >
-              <div
-                class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
-              >
-                <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                  <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-                    <Tag
-                      :label="documentEvent.level"
-                      :severity="eventLevelSeverity(documentEvent.level)"
-                      size="small"
-                    />
-                    <Tag
-                      :label="documentEvent.sourceLabel"
-                      severity="secondary"
-                      size="small"
-                    />
-                  </div>
-                  <p class="text-body-md text-(--text-default)">
-                    {{ documentEvent.message }}
-                  </p>
-                  <p class="text-label-code-sm tabular-nums text-(--text-muted)">
-                    {{ documentEvent.time }}
-                  </p>
-                </div>
-
-                <dl
-                  class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
-                >
-                  <template
-                    v-for="row in documentRows"
-                    :key="row.id"
-                  >
-                    <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-                    <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
-                      {{ row.value }}
-                    </dd>
-                  </template>
-                </dl>
-              </div>
-
               <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
-                  Event document
-                </h3>
-                <div class="min-w-0">
-                  <CodeBlock
-                    :tabs="documentTabs"
-                    :bordered="false"
-                    line-numbers
-                    copy-aria-label="Copy the event document as JSON"
-                    class="w-full"
+                <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                  <Tag
+                    :label="documentEvent.level"
+                    :severity="eventLevelSeverity(documentEvent.level)"
+                    size="small"
+                  />
+                  <Tag
+                    :label="documentEvent.sourceLabel"
+                    severity="secondary"
+                    size="small"
                   />
                 </div>
+                <p class="text-body-md text-(--text-default)">
+                  {{ documentEvent.message }}
+                </p>
+                <p class="text-label-code-sm tabular-nums text-(--text-muted)">
+                  {{ documentEvent.time }}
+                </p>
+              </div>
+
+              <dl
+                class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
+              >
+                <template
+                  v-for="row in documentRows"
+                  :key="row.id"
+                >
+                  <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+                  <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
+                    {{ row.value }}
+                  </dd>
+                </template>
+              </dl>
+            </div>
+
+            <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Event document</h3>
+              <div class="min-w-0">
+                <CodeBlock
+                  :tabs="documentTabs"
+                  :bordered="false"
+                  line-numbers
+                  copy-aria-label="Copy the event document as JSON"
+                  class="w-full"
+                />
               </div>
             </div>
           </div>
-        </DrawerContent>
-      </DrawerPortal>
+        </div>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>
