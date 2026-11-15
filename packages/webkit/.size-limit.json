@@ -103,7 +103,7 @@
   {
     "name": "data-grid",
     "path": "src/components/data/data-grid/data-grid.vue",
-    "limit": "9.3 KB"
+    "limit": "9.4 KB"
   },
   {
     "name": "property-filter",
@@ -955,7 +955,7 @@
   {
     "name": "tree",
     "path": "src/components/data/tree/tree.vue",
-    "limit": "8.3 KB"
+    "limit": "8.4 KB"
   },
   {
     "name": "file-dropzone",
@@ -2324,12 +2324,12 @@
   {
     "name": "hover-card",
     "path": "src/components/overlay/hover-card/index.ts",
-    "limit": "5.05 KB"
+    "limit": "5.35 KB"
   },
   {
     "name": "hover-card-root",
     "path": "src/components/overlay/hover-card/hover-card.vue",
-    "limit": "3.9 KB"
+    "limit": "4.1 KB"
   },
   {
     "name": "hover-card-trigger",
@@ -2339,7 +2339,7 @@
   {
     "name": "hover-card-content",
     "path": "src/components/overlay/hover-card/hover-card-content/hover-card-content.vue",
-    "limit": "1.2 KB"
+    "limit": "1.45 KB"
   },
   {
     "name": "popover",

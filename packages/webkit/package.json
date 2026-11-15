@@ -80,7 +80,7 @@
   },
   "peerDependencies": {
     "@aziontech/icons": "^4.4.0",
-    "@aziontech/theme": "^5.2.2",
+    "@aziontech/theme": "^5.2.2 || ^6.0.0",
     "eslint": ">=9",
     "monaco-editor": ">=0.50",
     "stylelint": ">=16",
@@ -2611,6 +2611,9 @@
       "chart-line": [
         "./types/components/chart/chart/chart-line/chart-line.vue.d.ts"
       ],
+      "chart-reference": [
+        "./types/components/chart/chart/chart-reference/chart-reference.vue.d.ts"
+      ],
       "chart-scatter": [
         "./types/components/chart/chart/chart-scatter/chart-scatter.vue.d.ts"
       ],
@@ -2676,6 +2679,12 @@
       ],
       "severity-tag": [
         "./types/components/content/severity-tag/severity-tag.vue.d.ts"
+      ],
+      "status-code": [
+        "./types/components/content/status-code/status-code.vue.d.ts"
+      ],
+      "timestamp": [
+        "./types/components/content/timestamp/timestamp.vue.d.ts"
       ],
       "avatar": [
         "./types/components/content/avatar/avatar.vue.d.ts"
@@ -2913,6 +2922,9 @@
       ],
       "table-refresh-button": [
         "./types/components/data/table/table-refresh-button/table-refresh-button.vue.d.ts"
+      ],
+      "table-live-button": [
+        "./types/components/data/table/table-live-button/table-live-button.vue.d.ts"
       ],
       "property-filter": [
         "./types/components/data/property-filter/property-filter.vue.d.ts"
@@ -3214,6 +3226,15 @@
       "textarea": [
         "./types/components/inputs/textarea/textarea.vue.d.ts"
       ],
+      "context-menu": [
+        "./types/components/navigation/context-menu/index.d.ts"
+      ],
+      "context-menu-root": [
+        "./types/components/navigation/context-menu/context-menu.vue.d.ts"
+      ],
+      "context-menu-trigger": [
+        "./types/components/navigation/context-menu/context-menu-trigger/context-menu-trigger.vue.d.ts"
+      ],
       "dropdown-menu": [
         "./types/components/navigation/dropdown-menu/index.d.ts"
       ],
@@ -3228,6 +3249,15 @@
       ],
       "dropdown-menu-option": [
         "./types/components/navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue.d.ts"
+      ],
+      "dropdown-menu-sub": [
+        "./types/components/navigation/dropdown-menu/dropdown-menu-sub/dropdown-menu-sub.vue.d.ts"
+      ],
+      "dropdown-menu-sub-content": [
+        "./types/components/navigation/dropdown-menu/dropdown-menu-sub-content/dropdown-menu-sub-content.vue.d.ts"
+      ],
+      "dropdown-menu-sub-trigger": [
+        "./types/components/navigation/dropdown-menu/dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue.d.ts"
       ],
       "multi-select": [
         "./types/components/inputs/multi-select/index.d.ts"
@@ -3541,6 +3571,9 @@
       "command-separator": [
         "./types/components/overlay/command/command-separator/command-separator.vue.d.ts"
       ],
+      "command-page": [
+        "./types/components/overlay/command/command-page/command-page.vue.d.ts"
+      ],
       "dialog": [
         "./types/components/overlay/dialog/index.d.ts"
       ],
@@ -3600,6 +3633,18 @@
       ],
       "panel-header": [
         "./types/components/overlay/panel/panel-header.vue.d.ts"
+      ],
+      "hover-card": [
+        "./types/components/overlay/hover-card/index.d.ts"
+      ],
+      "hover-card-root": [
+        "./types/components/overlay/hover-card/hover-card.vue.d.ts"
+      ],
+      "hover-card-trigger": [
+        "./types/components/overlay/hover-card/hover-card-trigger/hover-card-trigger.vue.d.ts"
+      ],
+      "hover-card-content": [
+        "./types/components/overlay/hover-card/hover-card-content/hover-card-content.vue.d.ts"
       ],
       "popover": [
         "./types/components/overlay/popover/index.d.ts"
