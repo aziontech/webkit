@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: c971f7dfc7c4d80b2ae69c2e255bc4742b615855616ae28a69be5f36642e2adc
+checksum: 67c79dabe0c4c05f9239a18c7be6c74a24693cbd6d9fde5225d71d29fe00a8f8
 created: 2026-05-28
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # CodeBlock — Component Spec

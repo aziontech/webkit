@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 6fa766c3929b3c82c007bd09b1946a8c04b30373ea8511518606462944362fe6
+checksum: 04a897fcb984a9d9d29032da283592613c7720444da41954af427ba906fb4b1a
 created: 2026-06-26
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DropdownMenu — Component Spec

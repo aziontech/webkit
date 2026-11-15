@@ -9,9 +9,9 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 8233b6d4293a67c8e96c6a9f584fdff52f8d8837f1d654c865ab80e7e1e764a8
+checksum: 61623ca7eb814f2c2e262a33d5db97563ad25e721c60e7de1949a9dee8e541c6
 created: 2026-06-23
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Toast — Component Spec

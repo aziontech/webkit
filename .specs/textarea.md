@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: d15c6d4bb186ec85fc185e425cf4cb20ffd91eb1fd117f9975be3d42326b5f1f
+checksum: 2affcac0679a4c09ba6cbe7e00a13e7d3439e220b1dfc70b7df65eeb4600b303
 created: 2026-06-23
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Textarea — Component Spec

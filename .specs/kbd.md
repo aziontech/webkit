@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 3bf948689a4fcd74789e4b9a85b11437a17bb4786d7da220b38f513891500e5b
+checksum: 05c5f913eb84ab1c53e92530be48daf4af939ccf040f7220379e6491e94fd75a
 created: 2026-07-23
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Kbd — Component Spec

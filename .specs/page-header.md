@@ -7,7 +7,7 @@ checksum: a80ef113a3b417de3aa447c69920a7013dfac72a47babca04670c84e1a4342d5
 spec_version: 2
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # PageHeader — Component Spec

@@ -3,11 +3,11 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: abf51e645defc8b3bf3e4ddd926493b92818d4c1cb93f6af25f749512d7afd49
+checksum: ac4dc70e16e37ff532f855e34a63de44bb114db7580a3ee5116eccbb4ddc1c2e
 spec_version: 8
 template: 2
 created: 2026-10-20
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Chart — Component Spec

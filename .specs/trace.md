@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 171261780e20ca66c3ee5b5a358bb55265782c995fa9ede6a119c9cdaaf14b31
+checksum: 80abd6bc663e610c7a20b8532837df61256621ddaef14485391335d11add07e6
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Trace — Component Spec

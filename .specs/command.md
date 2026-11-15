@@ -5,9 +5,9 @@ structure: composition
 status: implemented
 spec_version: 5
 template: 2
-checksum: 7b6120a970798531d517feccaf26378b7e3feece23598725069e39a07d71f1de
+checksum: 64e2e90ac067c311a612ee50a9d4fa970fa8f66f886377a7e5fc7b06a1ee9585
 created: 2026-07-23
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Command Menu — Component Spec
