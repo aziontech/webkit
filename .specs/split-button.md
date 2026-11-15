@@ -3,24 +3,25 @@ name: split-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: 9074b432e543c78f50678a248648a4d4f6b6fb06e9e947704ce10d93401ff82d
+checksum: 8c871a349b862d525ca625aa88924fee1677dc22d7a54fa6f3cf4a40b90694ec
 created: 2026-06-30
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Split Button — Component Spec
 
 ## Purpose
 
-A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by an `items` array (`model` is its deprecated name until 7.0). The primary button runs the default action; the joined toggle composes `navigation/dropdown-menu` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a "default is the last selection" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.
+A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by an `items` array. The primary button runs the default action; the joined toggle composes `dropdown-menu` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a "default is the last selection" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.
 
 ## When to use
 
+- Use SplitButton when one default action has a few related alternatives; for a list of actions opened from a button use DropdownMenu, and for a toolbar of icon actions use ButtonGroup.
 - One default action with a few related alternatives (Save and Save as draft, Deploy and Deploy to staging).
 - A "repeat the last choice" control: set `updateLabelOnSelect` so the primary segment mirrors the last action picked.
 
@@ -38,7 +39,7 @@ A primary command button visually joined to a chevron toggle that opens an overl
 
 ## Best practices
 
-- Give every `model` entry a stable `value`; without one the `label` identifies the action, so renaming it changes what handlers receive.
+- Give every `items` entry a stable `value`; without one the `label` identifies the action, so renaming it changes what handlers receive.
 - Handle the default action in `@click` and the menu actions in `@item-click`; both receive `(event, item)`.
 - With `updateLabelOnSelect`, read the second argument of `click` (the mirrored item, `null` until one is picked) to run whichever action is active.
 - Set `loading` while the action runs: it disables both segments and keeps the menu closed.
@@ -73,8 +74,7 @@ A primary command button visually joined to a chevron toggle that opens an overl
 | --------------------- | ---------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `label`               | `string`                                 | `''`        | false    | Visible label text on the primary command button.                                                                                                                                                                                                                                 |
 | `icon`                | `string`                                 | `''`        | false    | PrimeIcons class for the primary button's leading icon.                                                                                                                                                                                                                           |
-| `items`               | `SplitButtonItem[]`                      | `[]`        | false    | Actions rendered as rows in the attached overlay menu. Same name as ButtonGroup's actions. |
-| `model`               | `SplitButtonItem[]`                      | `[]`        | false    | `@deprecated since 6.0 — use items. Removed in 7.0.` Read when `items` is empty. |
+| `items`               | `SplitButtonItem[]`                      | `[]`        | false    | Actions rendered as rows in the attached overlay menu. Same name as ButtonGroup's actions.                                                                                                                                                                                        |
 | `kind`                | `'primary' \| 'secondary' \| 'outlined'` | `'primary'` | false    | Visual variant applied to both joined segments.                                                                                                                                                                                                                                   |
 | `size`                | `'small' \| 'medium' \| 'large'`         | `'large'`   | false    | Size token; affects height, padding, and typography.                                                                                                                                                                                                                              |
 | `disabled`            | `boolean`                                | `false`     | false    | Disables both segments and prevents the menu from opening.                                                                                                                                                                                                                        |
@@ -85,8 +85,8 @@ A primary command button visually joined to a chevron toggle that opens an overl
 
 ## v-model
 
-| Model              | Type             | Default | Emits             | Notes                                                                                                                                                                         |
-| ------------------ | ---------------- | ------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model              | Type             | Default | Emits             | Notes                                                                                                                                                                                                                                                                    |
+| ------------------ | ---------------- | ------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `v-model:selected` | `string \| null` | `null`  | `update:selected` | Value (`value`, else `label`) of the action the primary button mirrors when `updateLabelOnSelect` is on, via `defineModel('selected')`. Bind it to read or restore the mirrored action; unbound, the control keeps its own. `null` shows the default `label` and `icon`. |
 
 ## Events
@@ -94,7 +94,7 @@ A primary command button visually joined to a chevron toggle that opens an overl
 | Event        | Payload                                                       | Notes                                                                                                                                                                                                                              |
 | ------------ | ------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `click`      | `(event: MouseEvent, item: SplitButtonItem \| null)`          | Fired by the primary command button on activation. `item` is the action currently mirrored on the primary segment when `updateLabelOnSelect` is on, otherwise `null`. Never fires while `disabled` or `loading`.                   |
-| `item-click` | `(event: MouseEvent \| KeyboardEvent, item: SplitButtonItem)` | Fired when a menu action is selected. `event` is the pointer/keyboard event that activated the option; `item` is the matched `model` entry. The menu cannot open while `disabled` or `loading`, so it never fires in those states. |
+| `item-click` | `(event: MouseEvent \| KeyboardEvent, item: SplitButtonItem)` | Fired when a menu action is selected. `event` is the pointer/keyboard event that activated the option; `item` is the matched `items` entry. The menu cannot open while `disabled` or `loading`, so it never fires in those states. |
 
 ## Slots
 

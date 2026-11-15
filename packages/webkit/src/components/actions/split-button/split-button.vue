@@ -34,8 +34,6 @@
     icon?: string
     /** Actions rendered as rows in the attached overlay menu. */
     items?: SplitButtonItem[]
-    /** @deprecated since 6.0 — use `items`. Removed in 7.0. */
-    model?: SplitButtonItem[]
     /** Visual variant applied to both joined segments. */
     kind?: SplitButtonKind
     /** Size token; affects height, padding, and typography. */
@@ -52,7 +50,6 @@
     label: '',
     icon: '',
     items: () => [],
-    model: () => [],
     kind: 'primary',
     size: 'large',
     disabled: false,
@@ -79,7 +76,7 @@
     return item.value ?? item.label
   }
 
-  const actions = computed(() => (props.items.length ? props.items : props.model))
+  const actions = computed(() => props.items)
 
   const selectedItem = computed(() => {
     if (!props.updateLabelOnSelect || selectedValue.value === null) return null
