@@ -88,7 +88,10 @@
   },
   "log-view": {
     "border": "bordered",
-    "showCopy": "copyable"
+    "showCopy": "copyable",
+    "warningsOnly": {
+      "removed": "bind v-model:level and set it to 'warn' to show only warnings; a line with type: 'warning' becomes type: 'text' with level: 'warn'."
+    }
   },
   "media-tabs": {
     "autoPlay": "autoplay",
@@ -223,6 +226,19 @@
       "values": {
         "secondary": "neutral"
       }
+    }
+  },
+  "toast-item": {
+    "type": {
+      "to": "severity",
+      "values": {
+        "error": "danger"
+      }
+    }
+  },
+  "log-view-root": {
+    "warningsOnly": {
+      "removed": "bind v-model:level and set it to 'warn' to show only warnings; a line with type: 'warning' becomes type: 'text' with level: 'warn'."
     }
   }
 }

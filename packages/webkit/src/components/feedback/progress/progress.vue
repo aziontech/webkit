@@ -5,11 +5,6 @@
   import * as en from '../../../i18n/messages/en'
 
   export type ProgressKind = 'rounded' | 'flat'
-  /**
-   * Legacy name of the corner variant union.
-   * @deprecated since 6.0 — use `ProgressKind`. Removed in 7.0.
-   */
-  export type ProgressShape = ProgressKind
   export type ProgressSize = 'small' | 'medium' | 'large'
 
   defineOptions({
@@ -24,11 +19,6 @@
     max?: number
     /** Track and fill corner-radius variant. */
     kind?: ProgressKind
-    /**
-     * Track and fill corner-radius variant; read only when `kind` is unset.
-     * @deprecated since 6.0 — use `kind`. Removed in 7.0.
-     */
-    shape?: ProgressShape
     /** Bar height token. */
     size?: ProgressSize
     /** Loading state; animates a sliding segment and ignores `value`. */
@@ -38,8 +28,7 @@
   const props = withDefaults(defineProps<Props>(), {
     value: 0,
     max: 100,
-    kind: undefined,
-    shape: undefined,
+    kind: 'flat',
     size: 'medium',
     indeterminate: false
   })
@@ -56,8 +45,6 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-progress')
 
-  const resolvedKind = computed<ProgressKind>(() => props.kind ?? props.shape ?? 'flat')
-
   const percent = computed(() => Math.min(100, Math.max(0, (props.value / props.max) * 100)))
 </script>
 
@@ -67,8 +54,7 @@
     role="progressbar"
     :aria-label="accessibleName"
     :data-testid="testId"
-    :data-kind="resolvedKind"
-    :data-shape="resolvedKind"
+    :data-kind="kind"
     :data-size="size"
     :data-indeterminate="indeterminate || null"
     :aria-valuemin="indeterminate ? undefined : 0"

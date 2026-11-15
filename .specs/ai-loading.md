@@ -3,16 +3,18 @@ name: ai-loading
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 47a1f663c1e5039850fd69ef5702c00e02cda1369027c26066e779258d1f1f6f
+checksum: 0be4fe250238d02c13468aa38840f081d0b7e1a3521672413e4593395859dc6a
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # AiLoading — Component Spec
 
 ## Purpose
+
+Use AiLoading only while a generative AI answer is being produced; never for loading product data, which uses Skeleton (known shape), Spinner (inline) or Progress (measurable).
 
 The loading state of a generative AI response (Cloudscape generative AI loading states and loading
 bar, AI Elements Loader): visible loading text — `Generating a response`, `Loading list of workloads`

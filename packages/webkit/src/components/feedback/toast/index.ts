@@ -38,8 +38,7 @@ export type {
   ToastOptions,
   ToastPromiseMessages,
   ToastSeverity,
-  ToastStore,
-  ToastType
+  ToastStore
 } from './use-toast-store'
 type ToasterProps = InstanceType<typeof Toaster>['$props']
 

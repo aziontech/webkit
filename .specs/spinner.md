@@ -3,16 +3,18 @@ name: spinner
 category: utils
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 069c94075400eb6dccaa533e891e0f1e81cf11a45937b215aa2fe9b1652a606c
+spec_version: 4
+checksum: 3cbaf7fc93ba834da5671974e32b75e5b373d3bc30a5937acf61ee40562cfef7
 style_seam: true
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Spinner — Component Spec
 
 ## Purpose
+
+Use Spinner only for an inline busy mark in a row, log line or custom control that has no loading prop; buttons use their own `loading`, a loading region with a known shape uses Skeleton, and measurable work uses Progress.
 
 A small rotating mark that says work is in progress, for a row, a log line or a custom control that has no loading state of its own. It is decorative by default; with an `aria-label` it becomes a `status` region that announces the work, and it stops rotating under reduced motion.
 

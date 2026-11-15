@@ -2,9 +2,9 @@
   import GaugeChart from '@aziontech/webkit/gauge-chart'
 
   const thresholds = [
-    { value: 0, color: 'success', label: 'Healthy' },
-    { value: 70, color: 'warning', label: 'Busy' },
-    { value: 90, color: 'danger', label: 'Critical' }
+    { value: 0, severity: 'success', label: 'Healthy' },
+    { value: 70, severity: 'warning', label: 'Busy' },
+    { value: 90, severity: 'danger', label: 'Critical' }
   ]
   const formatValue = (value) => `${value}%`
 </script>

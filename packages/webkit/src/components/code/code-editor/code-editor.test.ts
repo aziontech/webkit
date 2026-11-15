@@ -232,6 +232,24 @@ describe('CodeEditor', () => {
     expect(view.getByRole('textbox', { name: 'Modified' })).toBeTruthy()
   })
 
+  it('marks removed and added lines in the diff gutters with the shared line diff', async () => {
+    const view = render(CodeEditor, {
+      props: { modelValue: 'one\nTWO\nthree\nfour', original: 'one\ntwo\nthree', diff: true }
+    })
+    const [original, modified] = view.getAllByTestId('code-code-editor__gutter')
+    const changes = (gutter: HTMLElement) =>
+      Array.from(gutter.querySelectorAll('li')).map((li) => li.getAttribute('data-change'))
+    expect(changes(original!)).toEqual([null, 'removed', null])
+    expect(changes(modified!)).toEqual([null, 'added', null, 'added'])
+    await view.rerender({ modelValue: 'one\ntwo\nthree', original: 'one\ntwo\nthree', diff: true })
+    expect(changes(view.getAllByTestId('code-code-editor__gutter')[1]!)).toEqual([null, null, null])
+  })
+
+  it('marks no change outside diff mode', () => {
+    const view = render(CodeEditor, { props: { modelValue: 'a\nb', original: 'a' } })
+    expect(view.getByTestId('code-code-editor__gutter').querySelector('[data-change]')).toBeNull()
+  })
+
   it('takes the id and description from attrs and paints invalid', () => {
     const view = render(CodeEditor, {
       props: { modelValue: '', invalid: true },

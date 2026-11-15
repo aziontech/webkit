@@ -8,10 +8,10 @@
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import Checkbox from '../../inputs/checkbox/checkbox.vue'
   import RadioButton from '../../inputs/radio-button/radio-button.vue'
-  import type { CardsItemSlotProps, CardsSelectionMode } from './types'
+  import type { CardListItemSlotProps, CardListSelectionMode } from './types'
 
   defineOptions({
-    name: 'Cards',
+    name: 'CardList',
     inheritAttrs: false
   })
 
@@ -22,7 +22,7 @@
       /** Field that identifies an item; selection keys read it. */
       trackBy?: string
       /** No selection, one card, or several cards with a select-all above them. */
-      selectionMode?: CardsSelectionMode
+      selectionMode?: CardListSelectionMode
       /** Shows placeholder cards and sets aria-busy while true. */
       loading?: boolean
       /** Accessible name of the list. Empty uses the locale catalog. */
@@ -39,19 +39,19 @@
 
   defineSlots<{
     /** Card title; names the card and its selection control. */
-    header(props: CardsItemSlotProps<TItem>): unknown
+    header(props: CardListItemSlotProps<TItem>): unknown
     /** Card body: the item's fields. */
-    default(props: CardsItemSlotProps<TItem>): unknown
+    default(props: CardListItemSlotProps<TItem>): unknown
     /** Shown when there are no items. */
     empty(): unknown
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ cards: en.cards })
+  const { t } = useTranslate({ cardList: en.cardList })
   const uid = useId()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-cards'
+    () => (attrs['data-testid'] as string | undefined) ?? 'data-card-list'
   )
   const rootAttrs = computed(() =>
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'data-testid'))
@@ -102,7 +102,7 @@
 </script>
 
 <script lang="ts">
-  export type { CardsItemSlotProps, CardsSelectionMode } from './types'
+  export type { CardListItemSlotProps, CardListSelectionMode } from './types'
 </script>
 
 <template>
@@ -111,7 +111,7 @@
     :data-testid="testId"
     :data-selection="selectionMode"
     :aria-busy="loading || undefined"
-    class="@container/cards flex w-full min-w-0 flex-col gap-(--spacing-sm)"
+    class="@container/card-list flex w-full min-w-0 flex-col gap-(--spacing-sm)"
   >
     <div
       v-if="selectionMode === 'multi' && !loading && items.length > 0"
@@ -127,15 +127,15 @@
       <label
         :for="`${uid}-select-all`"
         class="cursor-pointer text-label-sm text-(--text-default)"
-        >{{ t('cards.selectAll') }}</label
+        >{{ t('cardList.selectAll') }}</label
       >
     </div>
 
     <ul
       v-if="loading"
-      :aria-label="ariaLabel || t('cards.label')"
+      :aria-label="ariaLabel || t('cardList.label')"
       :data-testid="`${testId}__list`"
-      class="grid grid-cols-1 gap-(--spacing-sm) @xl/cards:grid-cols-2 @4xl/cards:grid-cols-3 @6xl/cards:grid-cols-4"
+      class="grid grid-cols-1 gap-(--spacing-sm) @xl/card-list:grid-cols-2 @4xl/card-list:grid-cols-3 @6xl/card-list:grid-cols-4"
     >
       <li
         v-for="n in SKELETONS"
@@ -157,9 +157,9 @@
 
     <ul
       v-else-if="items.length > 0"
-      :aria-label="ariaLabel || t('cards.label')"
+      :aria-label="ariaLabel || t('cardList.label')"
       :data-testid="`${testId}__list`"
-      class="grid grid-cols-1 gap-(--spacing-sm) @xl/cards:grid-cols-2 @4xl/cards:grid-cols-3 @6xl/cards:grid-cols-4"
+      class="grid grid-cols-1 gap-(--spacing-sm) @xl/card-list:grid-cols-2 @4xl/card-list:grid-cols-3 @6xl/card-list:grid-cols-4"
     >
       <template
         v-for="chunk in chunks"
@@ -236,8 +236,8 @@
         <EmptyState
           size="small"
           icon="pi pi-th-large"
-          :title="t('cards.emptyTitle')"
-          :description="t('cards.emptyDescription')"
+          :title="t('cardList.emptyTitle')"
+          :description="t('cardList.emptyDescription')"
         />
       </slot>
     </div>

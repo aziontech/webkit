@@ -3,8 +3,8 @@ name: stat-tile
 category: chart
 structure: monolithic
 status: implemented
-checksum: e98fccb16a12327146334f13795af2effa3734db3ba6f0bfd273a9deb1574a47
-spec_version: 3
+checksum: 027290b067c4917ebd1ceae4bb5b7b5634ab78990a2afa5540c49e7fd0e8bfe8
+spec_version: 4
 created: 2026-10-20
 last_updated: 2026-11-15
 ---
@@ -12,6 +12,8 @@ last_updated: 2026-11-15
 # StatTile — Component Spec
 
 ## Purpose
+
+Use StatTile to show one headline metric (figure, delta, sparkline) in product UI; the strip of related metrics is a StatTileGroup, one value against a range with thresholds is a GaugeChart, and a money amount on its own is a Currency.
 
 A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses. Inside a `StatTileGroup` the tiles become the cells of one card, split by dividers, with the delta aligned to the cell's end. `kind` picks the figure face: `mono` (the big-number mono figure of a usage strip) or `sans` (the large heading figure of a traffic summary).
 

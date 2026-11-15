@@ -100,13 +100,10 @@ describe('Progress', () => {
     expect(getByRole('progressbar').getAttribute('data-kind')).toBe(kind)
   })
 
-  it('keeps the deprecated shape working, and kind wins over it', () => {
-    const legacy = render(Progress, { props: { shape: 'rounded' } })
-    expect(legacy.getByRole('progressbar').getAttribute('data-kind')).toBe('rounded')
-    expect(legacy.getByRole('progressbar').getAttribute('data-shape')).toBe('rounded')
-    legacy.unmount()
-    const both = render(Progress, { props: { shape: 'rounded', kind: 'flat' } })
-    expect(both.getByRole('progressbar').getAttribute('data-kind')).toBe('flat')
+  it('defaults to the flat kind and drops the retired data-shape', () => {
+    const { getByRole } = render(Progress)
+    expect(getByRole('progressbar').getAttribute('data-kind')).toBe('flat')
+    expect(getByRole('progressbar').hasAttribute('data-shape')).toBe(false)
   })
 
   it('defaults to the medium bar', () => {

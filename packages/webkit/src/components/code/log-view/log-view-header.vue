@@ -49,10 +49,10 @@
           v-if="ctx.warningCount.value > 0"
           type="button"
           :data-testid="`${testId}__warnings-filter`"
-          :aria-pressed="ctx.warningsOnly.value"
+          :aria-pressed="ctx.level.value === 'warn'"
           :disabled="ctx.disabled.value"
           class="inline-flex h-8 min-w-8 items-center justify-center rounded-(--shape-elements) p-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) disabled:cursor-not-allowed disabled:opacity-60 pointer-coarse:h-11"
-          @click="ctx.toggleWarningsOnly"
+          @click="ctx.toggleLevel('warn')"
         >
           <Tag
             severity="warning"

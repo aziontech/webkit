@@ -417,7 +417,7 @@
     "card-grid-cell",
     "card-grid-root",
     "card-pricing",
-    "cards",
+    "card-list",
     "carousel",
     "carousel-item",
     "carousel-next",
@@ -2304,7 +2304,7 @@
       "sections": null,
       "title": null
     },
-    "cards": {
+    "card-list": {
       "ariaLabel": null,
       "items": null,
       "loading": null,

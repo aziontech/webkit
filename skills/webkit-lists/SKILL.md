@@ -1,6 +1,6 @@
 ---
 name: webkit-lists
-description: The list page — the one shape every resource index takes on @aziontech/webkit, and the collection model behind it. Every list runs on `useCollection` (`@aziontech/webkit/use-collection`), in client mode (in-memory items) or server mode (a `fetch` that returns one page and the total) — it owns the text and property filters, sorting, pagination, selection across pages, the empty vs no-match states, the filter, sort and page in the URL and the saved preferences, and hands back props to bind on `Table`, `Pagination`, `PropertyFilter`, `CollectionPreferences` and `Cards`. Fixes the page skeleton (shell → page heading carrying the create action → controls row with the PropertyFilter and CollectionPreferences → card-wrapped Table, or Cards), which columns become filter properties, and the two empty states. Use when building or reviewing any resource index, list, card view or "all X" page. The page-level companion to /webkit-tables (which owns the Table and its cell recipes).
+description: The list page — the one shape every resource index takes on @aziontech/webkit, and the collection model behind it. Every list runs on `useCollection` (`@aziontech/webkit/use-collection`), in client mode (in-memory items) or server mode (a `fetch` that returns one page and the total) — it owns the text and property filters, sorting, pagination, selection across pages, the empty vs no-match states, the filter, sort and page in the URL and the saved preferences, and hands back props to bind on `Table`, `Pagination`, `PropertyFilter`, `CollectionPreferences` and `CardList`. Fixes the page skeleton (shell → page heading carrying the create action → controls row with the PropertyFilter and CollectionPreferences → card-wrapped Table, or CardList), which columns become filter properties, and the two empty states. Use when building or reviewing any resource index, list, card view or "all X" page. The page-level companion to /webkit-tables (which owns the Table and its cell recipes).
 status: active
 last_updated: 2026-11-12
 scope: general
@@ -175,7 +175,7 @@ and returns props for every component that shows them:
 | `propertyFilterProps` | `PropertyFilter`        | the query, the properties, the match count                                                        |
 | `filterProps`         | `Input`                 | free text only (`v-model`), for a list too small for properties                                   |
 | `preferencesProps`    | `CollectionPreferences` | the saved preferences, the columns, the page sizes                                                |
-| `cardsProps`          | `Cards`                 | one page of items, the selection mode and keys                                                    |
+| `cardListProps`       | `CardList`              | one page of items, the selection mode and keys                                                    |
 
 Plus `status`, `totalCount`, `selectedCount`, `selectedItems`, `allMatchingSelected`, and the actions
 (`setQuery`, `clearFilters`, `setPage`, `selectPage`, `selectAllMatching`, `clearSelection`, `refresh`, …).
@@ -291,10 +291,10 @@ default), so it survives paging, sorting and filtering (a filter drops the keys 
 
 ---
 
-## 7. Cards — the same collection, as cards
+## 7. CardList — the same collection, as cards
 
 When items are recognised by a few fields or a picture rather than compared column by column, render
-`Cards` (`@aziontech/webkit/cards`) with `cardsProps` and a `Pagination` with `paginationProps`. The same
+`CardList` (`@aziontech/webkit/card-list`) with `cardListProps` and a `Pagination` with `paginationProps`. The same
 `useCollection` call drives it; the preferences panel then offers `sections: ['page-size', 'columns']`,
 the "columns" being the fields each card shows. Name each card in the `header` slot with a link to the
 item. Four cards a row in a wide container, one in a narrow one — the grid uses container queries.
@@ -352,7 +352,7 @@ Close with `List sound` or `N gaps — fix before polish`.
 - `/webkit-microcopy` — property labels, the empty-state sentences, the filter placeholder.
 - Blocks: `platform/view/table-view` (rows) and `platform/view/card-view` (cards).
 - Resolvable through the MCP or the catalog: `useCollection`, `PropertyFilter`, `CollectionPreferences`,
-  `Table`, `Cards`, `Pagination`, `Card`, `EmptyState`, `Button`.
+  `Table`, `CardList`, `Pagination`, `Card`, `EmptyState`, `Button`.
 
 ## Definition of Done
 
@@ -360,7 +360,7 @@ Close with `List sound` or `N gaps — fix before polish`.
 - [ ] First-level index carries a `size="medium"` `PageHeader` with the create action in `#actions`.
 - [ ] Heading action `large`; every control on the controls row `medium`.
 - [ ] One `useCollection` call holds filter, sort, page, selection and preferences; `tableProps` /
-      `cardsProps`, `propertyFilterProps` and `preferencesProps` are bound with `v-bind`.
+      `cardListProps`, `propertyFilterProps` and `preferencesProps` are bound with `v-bind`.
 - [ ] Server lists pass `fetch` and forward `signal` to the request.
 - [ ] Every enumerable column is a property with `options`; ordered columns carry `type`.
 - [ ] `empty` and `no-match` render different states; `no-match` offers Clear filters.

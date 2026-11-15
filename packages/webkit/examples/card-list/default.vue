@@ -1,5 +1,5 @@
 <script setup>
-  import Cards from '@aziontech/webkit/cards'
+  import CardList from '@aziontech/webkit/card-list'
   import Tag from '@aziontech/webkit/tag'
 
   const applications = [
@@ -23,7 +23,7 @@
 </script>
 
 <template>
-  <Cards :items="applications">
+  <CardList :items="applications">
     <template #header="{ item }">{{ item.name }}</template>
     <template #default="{ item }">
       <dl class="grid grid-cols-[auto_1fr] gap-x-(--spacing-sm) gap-y-(--spacing-xxs)">
@@ -43,5 +43,5 @@
         <dd class="tabular-nums">{{ item.requests }}</dd>
       </dl>
     </template>
-  </Cards>
+  </CardList>
 </template>

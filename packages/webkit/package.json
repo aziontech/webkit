@@ -656,6 +656,10 @@
       "types": "./types/components/code/log-view/log-view-footer.vue.d.ts",
       "default": "./src/components/code/log-view/log-view-footer.vue"
     },
+    "./log-view-steps": {
+      "types": "./types/components/code/log-view/log-view-steps.vue.d.ts",
+      "default": "./src/components/code/log-view/log-view-steps.vue"
+    },
     "./log-view-header": {
       "types": "./types/components/code/log-view/log-view-header.vue.d.ts",
       "default": "./src/components/code/log-view/log-view-header.vue"
@@ -768,9 +772,9 @@
       "types": "./types/components/data/collection-preferences/collection-preferences.vue.d.ts",
       "default": "./src/components/data/collection-preferences/collection-preferences.vue"
     },
-    "./cards": {
-      "types": "./types/components/data/cards/cards.vue.d.ts",
-      "default": "./src/components/data/cards/cards.vue"
+    "./card-list": {
+      "types": "./types/components/data/card-list/card-list.vue.d.ts",
+      "default": "./src/components/data/card-list/card-list.vue"
     },
     "./pagination": {
       "types": "./types/components/data/pagination/index.d.ts",
@@ -2950,6 +2954,9 @@
       "log-view-footer": [
         "./types/components/code/log-view/log-view-footer.vue.d.ts"
       ],
+      "log-view-steps": [
+        "./types/components/code/log-view/log-view-steps.vue.d.ts"
+      ],
       "log-view-header": [
         "./types/components/code/log-view/log-view-header.vue.d.ts"
       ],
@@ -3031,8 +3038,8 @@
       "collection-preferences": [
         "./types/components/data/collection-preferences/collection-preferences.vue.d.ts"
       ],
-      "cards": [
-        "./types/components/data/cards/cards.vue.d.ts"
+      "card-list": [
+        "./types/components/data/card-list/card-list.vue.d.ts"
       ],
       "pagination": [
         "./types/components/data/pagination/index.d.ts"

@@ -3,8 +3,8 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: adccd868224ac0ec85e1b9f3cfb467f7a2e40d66a95ae6c038ee7bafc5a1005e
-spec_version: 1
+checksum: 5fb240990d2edbb2915118d1cbe36c27ad8a141074a7dc0027d553fa1d8cfdc7
+spec_version: 2
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -233,7 +233,7 @@ _No events — the panel is content; opening, closing and tutorial actions belon
 - No `data-disabled` — nothing in the panel is interactive on its own; interactive content (`Link`, `Button`) is composed by the consumer and carries its own states
 
 The root, while `loading`: the default slot is not rendered; in its place the root renders a title
-line and three body lines with `Skeleton` (`kind="shape"`; title `width="60%"` `height="1.25rem"`, body
+line and three body lines with `Skeleton` (`kind="rectangle"`; title `width="60%"` `height="1.25rem"`, body
 lines `width="100%"`, `width="100%"`, `width="75%"`, each `height="0.875rem"`), and sets
 `aria-busy="true"`. The loading lines carry `aria-hidden="true"`; the landmark keeps its accessible
 name.

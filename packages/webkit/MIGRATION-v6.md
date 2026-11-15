@@ -56,6 +56,7 @@ the paths it moved onto a name a v3 wrapper also used (`button`, `card`, `dialog
 | `@aziontech/webkit/resizable-panel`    | `@aziontech/webkit/resizable`      | `ResizablePanel`   | `Resizable`     |
 | `@aziontech/webkit/segmented-button`   | `@aziontech/webkit/toggle-group`   | `SegmentedButton`  | `ToggleGroup`   |
 | `@aziontech/webkit/doc-pagination`     | `@aziontech/webkit/doc-prev-next`  | `DocPagination`    | `DocPrevNext`   |
+| `@aziontech/webkit/cards`              | `@aziontech/webkit/card-list`      | `Cards`            | `CardList`      |
 
 The AI tooling knows the old names too: the MCP and `catalog.json#aliases` resolve a retired or
 market name (`paginator`, `message`, `modal`, `sheet`, `tiles`, `segmented-control`, …) to the v6
@@ -107,28 +108,21 @@ component.
 These old names keep working through v6 and are marked `@deprecated` in the types; the codemod
 rewrites the prop renames, the rest are listed here so you can move at your own pace.
 
-| Component      | Deprecated                    | Use instead                                    |
-| -------------- | ----------------------------- | ---------------------------------------------- |
-| `code-block`   | `showLineNumbers`             | `lineNumbers`                                  |
-| `flow-anchor`  | `type`, type `FlowAnchorType` | `side`, type `FlowAnchorSide`                  |
-| `log-view`     | `v-model:warnings-only`       | `v-model:level` with `'warn'`                  |
-| `log-view`     | line `type: 'warning'`        | line `level: 'warn'`                           |
-| `pick-list`    | `dataKey`                     | `trackBy` (the name `cards` uses)              |
-| `table`        | `headerKind`                  | `density` (now sets the header and the rows)   |
-| `table`        | `rowsPerPageOptions`          | `pageSizeOptions` (the name `pagination` uses) |
-| `table-header` | `kind`                        | `density`                                      |
+| Component      | Deprecated           | Use instead                                    |
+| -------------- | -------------------- | ---------------------------------------------- |
+| `pick-list`    | `dataKey`            | `trackBy` (the name `card-list` uses)          |
+| `table`        | `headerKind`         | `density` (now sets the header and the rows)   |
+| `table`        | `rowsPerPageOptions` | `pageSizeOptions` (the name `pagination` uses) |
+| `table-header` | `kind`               | `density`                                      |
 
 `headerKind` and `density` are not one-to-one: `density="compact"` also compacts the rows, so the
-codemod leaves `headerKind` for you. `warningsOnly` and `type: 'warning'` are data or inverted
-booleans; move them by hand.
+codemod leaves `headerKind` for you.
 
 These also keep working in 6.x and are marked `@deprecated` in the types:
 
-- The old prop names in the table above that are marked as aliases: `card-pricing` `planTitle`
-  and `overline` `showCursor`. The new name wins when both are set; the codemod writes the new name.
-  (`doc-card-group` `cols` and the `DocCardGroupCols` type are removed in 6.0; the codemod writes
-  `columns` and `DocCardGroupColumns`, and a Markdown `<CardGroup cols>` still works through
-  `DocMarkdown`.)
+- None: `card-pricing` `planTitle`, `overline` `showCursor` and `doc-card-group` `cols` (with the
+  `DocCardGroupCols` type) are removed in 6.0; the codemod writes the new names, and a Markdown
+  `<CardGroup cols>` still works through `DocMarkdown`.
 
 `Illustration` keeps eight retired scene names as aliases of the renamed scenes; `name` resolves
 them through 6.x and they are removed in 7.0:
@@ -388,19 +382,45 @@ rewrite this, because the replacement depends on whether the child was a link or
 </Item>
 ```
 
+### Removed in 6.0: feedback, content, code and chart names
+
+These names were deprecated during the 6.0 cycle and are gone in 6.0 itself. The codemod rewrites
+the prop renames of section 3 (`skeleton` `kind="shape"`, `progress` `shape`, `badge`
+`severity="default"`, `overline` `showCursor`, `card-pricing` `planTitle`, `code-block`
+`showLineNumbers`, `flow-anchor` `type`, `toast-item` `type`) and the type names; the rest need a
+hand edit.
+
+| Component         | Removed                                                 | Use instead                                                   |
+| ----------------- | ------------------------------------------------------- | ------------------------------------------------------------- |
+| `toast-item`      | `type` (and the value `error`)                          | `severity` (`danger`)                                         |
+| `toast`           | `ToastType`, store entry `type`, `data-type`            | `ToastSeverity`, entry `severity`, `data-severity`            |
+| `progress`        | `shape`, `ProgressShape`, `data-shape`                  | `kind`, `ProgressKind`, `data-kind`                           |
+| `skeleton`        | `kind="shape"`                                          | `kind="rectangle"`                                            |
+| `badge`           | `severity="default"`                                    | `severity="neutral"`                                          |
+| `overline`        | `showCursor`                                            | `cursor`                                                      |
+| `card-pricing`    | `planTitle` (and its built-in `Pro`)                    | `title`, set on every card                                    |
+| `code-block`      | `showLineNumbers`                                       | `lineNumbers`                                                 |
+| `flow-anchor`     | `type`, `FlowAnchorType`                                | `side`, `FlowAnchorSide`                                      |
+| `log-view`        | `v-model:warnings-only`, `data-warnings-only`           | `v-model:level` set to `'warn'`                               |
+| `log-view`        | line `type: 'warning'`                                  | line `type: 'text', level: 'warn'`                            |
+| `gauge-chart`     | threshold `color`, `GaugeChartThreshold`, `data-status` | threshold `severity`, `ChartThreshold`, `data-severity`       |
+| `chart-reference` | `ChartReferenceSeverity`                                | `ChartThresholdSeverity` (now also takes the findings levels) |
+
+`Badge` is for counts only (`12`, `99+`): a status word goes to `StatusIndicator` (the state of a
+resource) or `Tag` (a category or outcome word). `CodeEditor`'s plain diff mode now marks added and
+removed lines in its gutters with the same line diff `CodeBlock` draws. `LogView.Steps`
+(`@aziontech/webkit/log-view-steps`) is the one pipeline of steps for a build or deploy run.
+
 ### Deprecated overlay and feedback names (removed in 7.0)
 
 The old names still work in v6 and are marked `@deprecated`; move to the new ones when you touch the
-code. The codemod rewrites `popover` `width`, `progress` `shape` and `skeleton` `kind="shape"`
+code. The codemod rewrites `popover` `width`
 (section 3); the rest need a hand edit, because a mechanical rename would invert or retype a value.
 
-| Component    | Deprecated                     | Use instead                                               |
-| ------------ | ------------------------------ | --------------------------------------------------------- |
-| `toast-item` | `type` (and the value `error`) | `severity` (`danger`); store entries carry `severity` too |
-| `toast`      | `ToastType`                    | `ToastSeverity`; `toast.error()` keeps its name           |
-| `tooltip`    | `@show`, `@hide`               | `@update:open`                                            |
-| `popover`    | `PopoverWidth`                 | `PopoverSize`                                             |
-| `progress`   | `ProgressShape`                | `ProgressKind`                                            |
+| Component | Deprecated       | Use instead    |
+| --------- | ---------------- | -------------- |
+| `tooltip` | `@show`, `@hide` | `@update:open` |
+| `popover` | `PopoverWidth`   | `PopoverSize`  |
 
 `ConfirmDialog` opens with focus on Cancel and has no close button (an alert
 dialog is answered with Cancel, the confirm button or `Esc`). `Popover` moves focus to its first
@@ -408,6 +428,8 @@ control on open, and `Tab` past its last control closes it and moves on.
 
 Behaviour that changed with them: `ConfirmDialog` renders `role="alertdialog"`; `StatusIndicator` is
 no longer a `role="status"` live region (announce a change you need heard through a toast);
+`Toaster` announces through two hidden live regions: a `danger` toast (`toast.error`) interrupts
+(assertive), every other kind is polite; the visible stack is no longer `aria-live`;
 `Drawer` widths come from container tokens (`small` 408px, `medium` 644px, `large` 1024px instead of
 384 / 672 / 1024 px); `Alert` `close` and `ErrorBoundary` `retry` now pass the triggering event
 (handlers that take no argument keep working).
@@ -650,7 +672,7 @@ split view or a card these change:
   rather than writing a raw `@min-[…]:`. Width utilities (`max-w-md`, `w-2xl`,
   `max-w-(--container-md)`) already read the theme values and do not change. In WebKit itself
   `Hero.Title` keeps its actions in a row from `@2xs`, the wide `Diagram` layout now starts at
-  `@5xl` and `Cards` shows four columns from `@6xl`; the `get-started` steps (`platform/detail/get-started`, the Overview of
+  `@5xl` and `CardList` shows four columns from `@6xl`; the `get-started` steps (`platform/detail/get-started`, the Overview of
   `platform/detail/details-page`) sit side by side from `@4xl` (1024 px), so a 1280 px console
   window stacks them.
 
@@ -859,8 +881,10 @@ Paths in `file`, `examplesFile` and `docsFile` are relative to the folder that h
 
 v6 adds `useCollection` (`@aziontech/webkit/use-collection`) and three components that bind to it:
 `PropertyFilter` (`@aziontech/webkit/property-filter`), `CollectionPreferences`
-(`@aziontech/webkit/collection-preferences`) and `Cards` (`@aziontech/webkit/cards`). Nothing is
+(`@aziontech/webkit/collection-preferences`) and `CardList` (`@aziontech/webkit/card-list`). Nothing is
 removed, and the codemod changes nothing here: this is the shape a list page moves to when you touch it.
+`Cards` is now `CardList`: the codemod renames the import and the tag; rename `cardsProps` to
+`cardListProps` (from `useCollection`) and any locale override of `cards.*` to `cardList.*` by hand.
 
 A list that kept its own `search`, `filters`, `pagination` and `columnVisibility` refs, filtered `:data`
 in a `computed` and rewound the page in a `watch` becomes one call:

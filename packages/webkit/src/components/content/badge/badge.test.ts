@@ -5,15 +5,7 @@ import Default from '../../../../examples/badge/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Badge from './badge.vue'
 
-const SEVERITIES = [
-  'primary',
-  'secondary',
-  'success',
-  'warning',
-  'danger',
-  'neutral',
-  'default'
-] as const
+const SEVERITIES = ['primary', 'secondary', 'success', 'warning', 'danger', 'neutral'] as const
 const SIZES = ['small', 'medium', 'large'] as const
 
 describe('Badge', () => {
@@ -105,7 +97,7 @@ describe('Badge', () => {
   it('has no accessibility violations for a slotted badge', async () => {
     const { container } = render(Badge, {
       props: { severity: 'danger' },
-      slots: { default: 'New' }
+      slots: { default: '3' }
     })
     await expectNoA11yViolations(container)
   })

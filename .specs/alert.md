@@ -3,12 +3,12 @@ name: alert
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: b52868a1bb5bd53a60635fb0682e69869b8df261cdadba47125ce7f2279446d8
+checksum: 7db0a11efe379368a849fd12a1e86418f2aab538bb171b8d87f491ad641f59e4
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -16,6 +16,8 @@ last_updated: 2026-11-15
 # Alert — Component Spec
 
 ## Purpose
+
+Use Alert for a persistent message on a console page or section (info, warning, error) — the answer for 'banner' or 'notice'. A short confirmation after an action that disappears on its own is a Toast.
 
 Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon, an optional bold `title` over the copy, and message copy that may carry inline links, plus an optional secondary action button.
 

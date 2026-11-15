@@ -3,9 +3,9 @@ name: status-code
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 3
 template: 2
-checksum: 6a0edb143a38bd4f17169fa4f64b674263adb2a003d30901c2a10a8f4f8f26fb
+checksum: 304e15d9c9e2fbc0e7c53667f62f9f668c34e725ad0cedae24df88f37293d028
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -13,6 +13,8 @@ last_updated: 2026-11-15
 # StatusCode — Component Spec
 
 ## Purpose
+
+Use StatusCode only for an HTTP status code or method (200, 404, GET); for resource state use StatusIndicator, and for any other word use Tag.
 
 StatusCode shows the HTTP status of a request, optionally preceded by its method, as one compact monospace pill whose colour comes from the status class: informational, success and redirect responses (1xx, 2xx, 3xx) stay neutral, client errors (4xx) take the warning colour and server errors (5xx) the danger colour, so failures stand out in a long request log without every successful row competing for attention. Anything that is not a status from 100 to 599 renders muted, as written. It composes `Tag` for the surface, so its sizes, shape and colours are the tag's; the component owns only the mapping from status to colour and the method plus code layout that every logs table would otherwise repeat.
 

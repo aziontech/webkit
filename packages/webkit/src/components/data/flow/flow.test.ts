@@ -66,7 +66,7 @@ describe('Flow (composition compound)', () => {
           <FlowNode>Start</FlowNode>
           <FlowParallel>
             <FlowNode unstyled>
-              <FlowAnchor type="end">A</FlowAnchor>
+              <FlowAnchor side="end">A</FlowAnchor>
             </FlowNode>
           </FlowParallel>
         </Flow>
@@ -251,7 +251,7 @@ describe('Flow (composition compound)', () => {
       const { getByTestId } = renderTree(`
         <Flow>
           <FlowNode unstyled>
-            <FlowAnchor side="${side}" type="${side === 'end' ? 'start' : 'end'}">x</FlowAnchor>
+            <FlowAnchor side="${side}">x</FlowAnchor>
           </FlowNode>
         </Flow>
       `)
@@ -291,19 +291,30 @@ describe('Flow (composition compound)', () => {
     })
   })
 
-  describe('Flow.Anchor — flow-anchor.vue type prop', () => {
-    it.each([['end'], ['start']])('maps type=%s to data-flow-anchor=%s', (type) => {
+  describe('Flow.Anchor — flow-anchor.vue side prop', () => {
+    it.each([['end'], ['start']])('maps side=%s to data-flow-anchor=%s', (type) => {
       const { getByTestId } = renderTree(`
         <Flow>
           <FlowNode unstyled>
-            <FlowAnchor type="${type}">x</FlowAnchor>
+            <FlowAnchor side="${type}">x</FlowAnchor>
           </FlowNode>
         </Flow>
       `)
       expect(getByTestId('data-flow__anchor').getAttribute('data-flow-anchor')).toBe(type)
     })
 
-    it('marks an anchor with no type as "both"', () => {
+    it('ignores the retired type attribute: only side marks an edge', () => {
+      const { getByTestId } = renderTree(`
+        <Flow>
+          <FlowNode unstyled>
+            <FlowAnchor type="end">x</FlowAnchor>
+          </FlowNode>
+        </Flow>
+      `)
+      expect(getByTestId('data-flow__anchor').getAttribute('data-flow-anchor')).toBe('both')
+    })
+
+    it('marks an anchor with no side as "both"', () => {
       const { getByTestId } = renderTree(`
         <Flow>
           <FlowNode unstyled>
@@ -317,11 +328,11 @@ describe('Flow (composition compound)', () => {
     it.each([
       ['end', ['end']],
       ['start', ['start']]
-    ])('places a port only on the edge type=%s attaches to', (type, expected) => {
+    ])('places a port only on the edge side=%s attaches to', (type, expected) => {
       const { getByTestId } = renderTree(`
         <Flow>
           <FlowNode unstyled>
-            <FlowAnchor type="${type}">x</FlowAnchor>
+            <FlowAnchor side="${type}">x</FlowAnchor>
           </FlowNode>
         </Flow>
       `)
@@ -331,7 +342,7 @@ describe('Flow (composition compound)', () => {
       expect(ports.map((p) => p.getAttribute('data-flow-port'))).toEqual(expected)
     })
 
-    it('places ports on both edges when the anchor has no type', () => {
+    it('places ports on both edges when the anchor has no side', () => {
       const { getByTestId } = renderTree(`
         <Flow>
           <FlowNode unstyled>

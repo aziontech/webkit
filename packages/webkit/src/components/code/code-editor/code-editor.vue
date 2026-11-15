@@ -14,6 +14,7 @@
   import { useFieldControl } from '../../../composables/use-field-control'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
+  import { diffLines } from '../../../utils/line-diff'
   import {
     applyThemeOnce,
     CODE_EDITOR_THEME,
@@ -211,6 +212,17 @@
   const linesOf = (text: string) => text.split('\n')
 
   const lineLabel = (line: number) => (props.padLineNumbers ? padLineNumber(line) : String(line))
+
+  const changesBySide = computed(() => {
+    const removed = new Map<number, 'removed'>()
+    const added = new Map<number, 'added'>()
+    if (!props.diff) return { original: removed, modified: added }
+    for (const row of diffLines(props.original, model.value)) {
+      if (row.change === 'removed' && row.oldNumber !== null) removed.set(row.oldNumber, 'removed')
+      if (row.change === 'added' && row.newNumber !== null) added.set(row.newNumber, 'added')
+    }
+    return { original: removed, modified: added }
+  })
 
   const panes = computed(() => {
     const modified = {
@@ -668,7 +680,13 @@
             <div class="flex min-h-full w-max min-w-full">
               <ol
                 v-if="lineNumbers"
-                v-memo="[pane.lines.length, pane.main && markerByLine, padLineNumbers, testId]"
+                v-memo="[
+                  pane.lines.length,
+                  pane.main && markerByLine,
+                  padLineNumbers,
+                  testId,
+                  diff && changesBySide
+                ]"
                 aria-hidden="true"
                 class="sticky start-0 z-1 m-0 shrink-0 list-none border-e border-(--border-default) bg-(--bg-canvas) py-(--spacing-xs) ps-(--spacing-sm) pe-(--spacing-xs) text-end text-body-code-sm text-(--code-sintax-line-number) select-none"
                 :data-testid="`${testId}__gutter`"
@@ -677,7 +695,11 @@
                   v-for="(_, index) in pane.lines"
                   :key="index"
                   :data-severity="(pane.main && markerByLine.get(index + 1)) || null"
-                  class="relative min-w-[2ch] tabular-nums data-[severity]:font-medium data-[severity=error]:text-(--danger-contrast) data-[severity=info]:text-(--info-contrast) data-[severity=warning]:text-(--warning-contrast) forced-colors:data-[severity]:text-[Highlight]"
+                  :data-change="
+                    (diff && changesBySide[pane.main ? 'modified' : 'original'].get(index + 1)) ||
+                    null
+                  "
+                  class="relative min-w-[2ch] tabular-nums data-[change=added]:bg-(--success) data-[change=added]:text-(--success-contrast) data-[change=removed]:bg-(--danger) data-[change=removed]:text-(--danger-contrast) data-[severity]:font-medium data-[severity=error]:text-(--danger-contrast) data-[severity=info]:text-(--info-contrast) data-[severity=warning]:text-(--warning-contrast) forced-colors:data-[severity]:text-[Highlight]"
                 >
                   {{ lineLabel(index + 1) }}
                 </li>

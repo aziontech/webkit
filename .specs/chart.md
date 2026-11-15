@@ -3,8 +3,8 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: ac4dc70e16e37ff532f855e34a63de44bb114db7580a3ee5116eccbb4ddc1c2e
-spec_version: 8
+checksum: ce08db88b34c0593e5a8a488141bc9bffe496d7cc9599f63bc2b562622112dc2
+spec_version: 9
 template: 2
 created: 2026-10-20
 last_updated: 2026-11-15
@@ -147,7 +147,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
   - Events: _none_ (the span flows through the root's `v-model:range`).
   - Slots: _none_.
 - `chart-reference/chart-reference.vue` — a reference on the value axis: a dashed 1px line across the plot at `value`, or a band between `from` and `to` (a 12% wash of the tone with dashed edges). Horizontal in a vertical chart, vertical in a horizontal one. The `label` sits at the inline end of a line (above it, below it when the line is near the top) or inside the top of a band, in `.text-label-sm` on a `var(--bg-surface)` halo. The reference registers with the root, so the value axis extends to show a line or band above the data unless the root sets `max`, and the chart summary reads it (`Rate limit at 1.5K.`). A reference outside the axis domain is not drawn; a band is clipped to the plot.
-  - Props: `value?: number` (default `undefined` — the line position), `from?: number` and `to?: number` (default `undefined` — the band bounds, in either order; used when `value` is unset), `label?: string` (default `''`), `severity?: 'neutral' | 'success' | 'warning' | 'danger' | 'info'` (default `'neutral'` — `neutral` draws in `var(--chart-label)`, a status in its `var(--chart-status-*)` role).
+  - Props: `value?: number` (default `undefined` — the line position), `from?: number` and `to?: number` (default `undefined` — the band bounds, in either order; used when `value` is unset), `label?: string` (default `''`), `severity?: ChartThresholdSeverity` (`'neutral'`, a status `'success' | 'warning' | 'danger' | 'info'`, or a findings level `'severity-critical'` … `'severity-info'`; default `'neutral'` — `neutral` draws in `var(--chart-label)`, a status in its `var(--chart-status-*)` role, a findings level in `var(--severity-*)`). It is the severity map of `ChartThreshold`, the type GaugeChart bands use, so a gauge band and a reference line never disagree. Use Chart.Reference for threshold lines or bands inside a Chart; use GaugeChart bands for a single reading.
   - Events: _none_.
   - Slots: _none_.
 - `chart-crosshair/chart-crosshair.vue` — the hairline at the active index in `var(--chart-crosshair)`.
@@ -270,7 +270,7 @@ The entrance is a composition assembling on first paint with a per-series stagge
 | tick labels                    | `var(--chart-label)`, `.text-label-sm`                                                                                        |
 | brush band                     | `var(--bg-selected)`, `var(--border-selected)`                                                                                |
 | crosshair                      | `var(--chart-crosshair)`                                                                                                      |
-| reference line, band and label | `var(--chart-label)` (neutral), `var(--chart-status-success)`, `-warning`, `-danger`, `-info`; label halo `var(--bg-surface)` |
+| reference line, band and label | `var(--chart-label)` (neutral), `var(--chart-status-success)`, `-warning`, `-danger`, `-info`, `var(--severity-*)` (findings levels); label halo `var(--bg-surface)` |
 | tooltip surface                | `var(--chart-tooltip-bg)`, `var(--chart-tooltip-text)`, `var(--chart-tooltip-muted)`, `var(--chart-tooltip-border)`           |
 | tooltip label and series names | `.text-label-md`                                                                                                              |
 | tooltip values                 | `.text-label-code-md`                                                                                                         |

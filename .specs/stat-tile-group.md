@@ -3,16 +3,18 @@ name: stat-tile-group
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: d7ece73839205cebbb3d4f6011f7afb1baeda6bdf7c374b7b714685d5de9e9e5
+checksum: 159f27012418d777eb7dd2cbfb70fcdc5ff58a88040edc066bdc06fae946e5a9
 created: 2026-11-12
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # StatTileGroup — Component Spec
 
 ## Purpose
+
+Use StatTileGroup for the strip of related metrics at the top of a product overview; one metric on its own is a StatTile.
 
 One card split into cells, one `StatTile` per cell: the KPI strip at the top of an overview (data transferred, requests per second, bandwidth saving, data offload). The group draws the card (surface, border, radius) and the grid; each tile inside it drops its own card and draws its end and bottom edges as the dividers, with its delta aligned to the end of the figure row. The cells sit one per row in a narrow box, two per row from the group's `@md`, and all in one row from its `@3xl`.
 

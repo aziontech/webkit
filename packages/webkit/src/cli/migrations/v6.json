@@ -71,6 +71,11 @@
       "from": "ResizablePanel",
       "binding": "Resizable"
     },
+    "cards": {
+      "to": "card-list",
+      "from": "Cards",
+      "binding": "CardList"
+    },
     "segmented-button": {
       "to": "toggle-group",
       "from": "SegmentedButton",
@@ -128,7 +133,15 @@
     "TabViewContext": "TabsContext",
     "TabViewSlideDirection": "TabsSlideDirection",
     "TabViewTabRegistration": "TabsTabRegistration",
-    "TabViewValue": "TabsValue"
+    "TabViewValue": "TabsValue",
+    "CardsItemSlotProps": "CardListItemSlotProps",
+    "CardsSelectionMode": "CardListSelectionMode",
+    "CollectionCardsProps": "CollectionCardListProps",
+    "ProgressShape": "ProgressKind",
+    "ToastType": "ToastSeverity",
+    "FlowAnchorType": "FlowAnchorSide",
+    "GaugeChartThreshold": "ChartThreshold",
+    "ChartReferenceSeverity": "ChartThresholdSeverity"
   },
   "legacy": {
     "major": 3,

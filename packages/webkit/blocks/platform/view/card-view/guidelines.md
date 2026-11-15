@@ -42,9 +42,9 @@ The `platform/delete/delete-with-confirmation` pattern adapted to a selection: a
 
 The last control of the row. `CollectionPreferences` bound with `v-bind="preferencesProps"` and `:sections="['page-size', 'columns']"` opens a dialog that edits a draft and applies it on Confirm: the page size (12, 24, 48, multiples of the four-card row) and which fields every card shows, in what order. `preferences.storageKey` saves the choice per list; `defaults.columns` hides Owner until someone shows it. The card's name is never a field, so it cannot be hidden.
 
-### F. Cards — `Cards`, `Link`, `Tag` (required)
+### F. CardList — `CardList`, `Link`, `Tag` (required)
 
-`Cards` bound with `v-bind="cardsProps"` (one page of items, the selection mode and the selected keys) and an `aria-label` naming the collection. The `header` slot names each card with a `Link` to the resource, so its focus ring, hover and routing match every other link; the default slot lists the visible fields as a `dl` of label and value pairs, in the order the preferences set. Status is a small `Tag` with the same severity on every card (success, warning, neutral); the domain is isolated in `bdi`; the request count uses compact notation with tabular numerals. Each card has a checkbox labelled by its name, and a visible Select all items sits above the grid; the selection is a set of keys, so it survives paging and sorting. Four cards a row in a wide container, down to one in a narrow one, through container queries.
+`CardList` bound with `v-bind="cardListProps"` (one page of items, the selection mode and the selected keys) and an `aria-label` naming the collection. The `header` slot names each card with a `Link` to the resource, so its focus ring, hover and routing match every other link; the default slot lists the visible fields as a `dl` of label and value pairs, in the order the preferences set. Status is a small `Tag` with the same severity on every card (success, warning, neutral); the domain is isolated in `bdi`; the request count uses compact notation with tabular numerals. Each card has a checkbox labelled by its name, and a visible Select all items sits above the grid; the selection is a set of keys, so it survives paging and sorting. Four cards a row in a wide container, down to one in a narrow one, through container queries.
 
 ### G. Pagination — `Pagination` (required)
 
@@ -52,7 +52,7 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 ### H. No matching applications — `EmptyState`, `Button` (required)
 
-When `status` is `no-match`, the `Cards` `#empty` slot holds a medium `EmptyState` with the filter-slash glyph, "No matching applications", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`. The heading and the filter tokens stay, so the user can see and undo what hid the cards.
+When `status` is `no-match`, the `CardList` `#empty` slot holds a medium `EmptyState` with the filter-slash glyph, "No matching applications", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`. The heading and the filter tokens stay, so the user can see and undo what hid the cards.
 
 ### I. Empty listing and load failure — `Card`, `EmptyState`, `Alert`, `Button` (required)
 
@@ -60,7 +60,7 @@ When `status` is `error`, a danger `Alert` with Retry (bound to the collection's
 
 ## Do
 
-- Run the whole list on one `useCollection` call with `selection: { mode: 'multi' }` and bind `cardsProps`, `paginationProps`, `propertyFilterProps` and `preferencesProps` with `v-bind`.
+- Run the whole list on one `useCollection` call with `selection: { mode: 'multi' }` and bind `cardListProps`, `paginationProps`, `propertyFilterProps` and `preferencesProps` with `v-bind`.
 - Keep the controls row, the cards and the pagination in one band at the group gap; the heading sits one section step above.
 - Name every card with a link to the resource in the `header` slot, and keep its fields to the few that tell one item from another.
 - Render the fields from `preferences.columns`, so the order and visibility set in the dialog reach every card.
@@ -95,7 +95,7 @@ When `status` is `error`, a danger `Alert` with Retry (bound to the collection's
 ## Accessibility
 
 - The layout owns the one `main` landmark; the `PageHeader` title is the page's only `h1`.
-- `Cards` is a list named by its `aria-label`; each card is labelled by its header, and its checkbox is named by the same text.
+- `CardList` is a list named by its `aria-label`; each card is labelled by its header, and its checkbox is named by the same text.
 - Select all items is a visible, labelled checkbox, not an icon; its state is mixed when part of the page is selected.
 - Field labels and values are a `dl`, so each value is read with its label; status is a `Tag` with text, never color alone.
 - The `PropertyFilter` has an `aria-label` that matches its placeholder, and the match count is announced after each change.
@@ -106,7 +106,7 @@ When `status` is `error`, a danger `Alert` with Retry (bound to the collection's
 ## States
 
 - Default: applications exist; the cards show them with the property filter, multi-select with Delete (n) behind its confirmation dialog, preferences and pagination wired, and filtering to nothing shows No matching applications with Clear filters.
-- Loading: the first load; the heading stays, the filter, Delete and preferences are disabled, and `Cards` shows its placeholder cards (`loading`, `aria-busy`).
+- Loading: the first load; the heading stays, the filter, Delete and preferences are disabled, and `CardList` shows its placeholder cards (`loading`, `aria-busy`).
 - Failed: the applications could not load; the heading and the disabled controls stay and a danger `Alert` with Retry takes the cards' place.
 - Empty: the account has no applications; `useCollection` reports `empty`, the heading and controls stay, and a flush card holding a medium empty state with Create Application replaces the cards.
 
@@ -117,4 +117,4 @@ When `status` is `error`, a danger `Alert` with Retry (bound to the collection's
 - `platform/create/single-page-create` — where the Create action leads for a short form.
 - `platform/detail/details-page` — where a card's name leads.
 - `platform/states/first-use` — the module before its first resource.
-- `useCollection`, `Cards` and `Pagination` — see `skills/webkit-lists`.
+- `useCollection`, `CardList` and `Pagination` — see `skills/webkit-lists`.

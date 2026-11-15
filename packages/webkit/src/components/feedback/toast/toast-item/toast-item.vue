@@ -3,7 +3,7 @@
 
   import Spinner from '../../../utils/spinner/spinner.vue'
   import { ToastInjectionKey } from '../injection-key'
-  import type { ToastSeverity, ToastType } from '../use-toast-store'
+  import type { ToastSeverity } from '../use-toast-store'
 
   defineOptions({
     name: 'ToastItem',
@@ -14,15 +14,9 @@
     defineProps<{
       /** Severity / lifecycle variant; drives the leading icon and its color. */
       severity?: ToastSeverity
-      /**
-       * Legacy severity, with `error` for `danger`; read only when `severity` is left at `default`.
-       * @deprecated since 6.0 — use `severity`. Removed in 7.0.
-       */
-      type?: ToastType
     }>(),
     {
-      severity: 'default',
-      type: 'default'
+      severity: 'default'
     }
   )
 
@@ -40,16 +34,9 @@
 
   const inToaster = inject(ToastInjectionKey, null) !== null
 
-  const resolvedSeverity = computed<ToastSeverity>(() => {
-    if (props.severity !== 'default') return props.severity
-    return props.type === 'error' ? 'danger' : props.type
-  })
-
   const role = computed(() => {
     if (inToaster) return undefined
-    return resolvedSeverity.value === 'danger' || resolvedSeverity.value === 'warning'
-      ? 'alert'
-      : 'status'
+    return props.severity === 'danger' ? 'alert' : 'status'
   })
 
   const icons: Record<ToastSeverity, string> = {
@@ -60,7 +47,7 @@
     danger: 'pi pi-exclamation-circle',
     loading: ''
   }
-  const icon = computed(() => icons[resolvedSeverity.value])
+  const icon = computed(() => icons[props.severity])
 </script>
 
 <template>
@@ -68,24 +55,23 @@
     v-bind="$attrs"
     :role="role"
     :data-testid="testId"
-    :data-severity="resolvedSeverity"
-    :data-type="resolvedSeverity === 'danger' ? 'error' : resolvedSeverity"
+    :data-severity="severity"
     class="group pointer-events-auto relative flex w-full items-start gap-(--spacing-sm) rounded-(--shape-elements) border-solid border-[length:var(--border-width-default,1px)] border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-sm) text-(--text-default) shadow-(--shadow-sm)"
   >
     <div class="flex min-w-0 flex-1 items-start gap-(--spacing-sm)">
       <span
-        v-if="resolvedSeverity === 'loading' || icon"
+        v-if="severity === 'loading' || icon"
         class="flex h-[1lh] shrink-0 items-center text-label-md"
         aria-hidden="true"
       >
         <Spinner
-          v-if="resolvedSeverity === 'loading'"
+          v-if="severity === 'loading'"
           class="size-4 text-(--text-muted)"
         />
         <i
           v-else
           :class="icon"
-          :data-severity="resolvedSeverity"
+          :data-severity="severity"
           class="leading-none text-(--text-muted) data-[severity=success]:text-(--success-contrast) data-[severity=info]:text-(--info-contrast) data-[severity=warning]:text-(--warning-contrast) data-[severity=danger]:text-(--danger-contrast)"
         />
       </span>

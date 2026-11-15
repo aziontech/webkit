@@ -8,7 +8,14 @@
   import type { LogViewLine, LogViewLineLevel } from './injection-key'
   import { lineLevel, LogViewInjectionKey } from './injection-key'
 
-  export type { LogViewLine, LogViewLineLevel, LogViewLineType } from './injection-key'
+  export type {
+    LogViewLine,
+    LogViewLineLevel,
+    LogViewLineType,
+    LogViewStep,
+    LogViewStepStatus,
+    LogViewStepsView
+  } from './injection-key'
 
   defineOptions({
     name: 'LogView',
@@ -16,7 +23,7 @@
   })
 
   interface Props {
-    /** Log entries (filtered in LogViewContent by search and warnings-only). */
+    /** Log entries (filtered in LogViewContent by search and level). */
     lines?: LogViewLine[]
     /** Draw the outer card border and corner radius around the log shell. On by default; set to false to render flush inside a surface that already frames it. */
     bordered?: boolean
@@ -50,11 +57,6 @@
 
   /** Bound to LogViewHeader search; filters LogViewContent when set. */
   const search = defineModel<string>('search', { default: '' })
-  /**
-   * When true, shows only warning lines (`level: 'warn'`, or the deprecated `type: 'warning'`).
-   * @deprecated since 6.0 — use `v-model:level` with `'warn'`. Removed in 7.0.
-   */
-  const warningsOnly = defineModel<boolean>('warningsOnly', { default: false })
   /** The level the log is filtered to; empty shows every level. */
   const level = defineModel<LogViewLineLevel | ''>('level', { default: '' })
 
@@ -118,10 +120,6 @@
     const query = search.value.trim().toLowerCase()
     let result = props.lines
 
-    if (warningsOnly.value) {
-      result = result.filter((line) => lineLevel(line) === 'warn')
-    }
-
     if (level.value) {
       result = result.filter((line) => lineLevel(line) === level.value)
     }
@@ -166,12 +164,6 @@
     search.value = value
   }
 
-  const toggleWarningsOnly = () => {
-    if (props.disabled) return
-
-    warningsOnly.value = !warningsOnly.value
-  }
-
   const toggleLevel = (next: LogViewLineLevel) => {
     if (props.disabled) return
 
@@ -187,7 +179,6 @@
     lines: computed(() => props.lines),
     filteredLines,
     search: computed(() => search.value),
-    warningsOnly: computed(() => warningsOnly.value),
     levels: computed(() => props.levels),
     level: computed(() => level.value),
     levelCounts,
@@ -203,7 +194,6 @@
     canCopy,
     copyText,
     setSearch,
-    toggleWarningsOnly,
     toggleLevel,
     emitCopy
   })
@@ -217,7 +207,6 @@
     :data-disabled="disabled || null"
     :data-loading="loading || null"
     :data-error="error ? true : null"
-    :data-warnings-only="warningsOnly || null"
     :data-level="level || null"
     :class="
       cn(

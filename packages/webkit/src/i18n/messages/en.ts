@@ -131,7 +131,7 @@ export const card = {
   installed: 'Installed'
 } as const
 
-export const cards = {
+export const cardList = {
   label: 'Items',
   selectAll: 'Select all items',
   emptyTitle: 'No items yet',
@@ -641,7 +641,18 @@ export const logView = {
   copy: 'Copy logs',
   copied: 'Copied logs',
   levels: 'Log levels',
-  levelCount: { one: '{level}, {count} line', other: '{level}, {count} lines' }
+  levelCount: { one: '{level}, {count} line', other: '{level}, {count} lines' },
+  stepsView: 'Log view',
+  stepsPhased: 'Phased',
+  stepsComplete: 'Complete',
+  stepsProgress: 'Run progress',
+  stepsWaiting: 'Waiting to start…',
+  stepsNeverRan: 'Never ran.',
+  stepDone: 'Done',
+  stepFailed: 'Failed',
+  stepSkipped: 'Skipped',
+  stepRunning: 'Running',
+  stepPending: 'Not started'
 } as const
 
 export const logoWall = {
@@ -1407,7 +1418,7 @@ export const en = {
   buttonGroup,
   calendar,
   card,
-  cards,
+  cardList,
   carousel,
   chart,
   chartCard,

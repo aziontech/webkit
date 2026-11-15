@@ -205,7 +205,7 @@ export const ptBR: Messages = {
     byVendor: 'por {vendor}',
     installed: 'Instalado'
   },
-  cards: {
+  cardList: {
     label: 'Itens',
     selectAll: 'Selecionar todos os itens',
     emptyTitle: 'Nenhum item ainda',
@@ -689,7 +689,18 @@ export const ptBR: Messages = {
     copy: 'Copiar logs',
     copied: 'Logs copiados',
     levels: 'Níveis de log',
-    levelCount: { one: '{level}, {count} linha', other: '{level}, {count} linhas' }
+    levelCount: { one: '{level}, {count} linha', other: '{level}, {count} linhas' },
+    stepsView: 'Visualização do log',
+    stepsPhased: 'Por fases',
+    stepsComplete: 'Completo',
+    stepsProgress: 'Progresso da execução',
+    stepsWaiting: 'Aguardando para iniciar…',
+    stepsNeverRan: 'Não foi executado.',
+    stepDone: 'Concluído',
+    stepFailed: 'Falhou',
+    stepSkipped: 'Ignorado',
+    stepRunning: 'Em execução',
+    stepPending: 'Não iniciado'
   },
   logoWall: {
     link: 'Ler história'

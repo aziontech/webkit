@@ -31,7 +31,7 @@ import ItemTitle from '../components/content/item/item-title.vue'
 import KeyValuePairs from '../components/content/key-value-pairs/key-value-pairs.vue'
 import KeyValuePairsItem from '../components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue'
 import Timestamp from '../components/content/timestamp/timestamp.vue'
-import Cards from '../components/data/cards/cards.vue'
+import CardList from '../components/data/card-list/card-list.vue'
 import FilterMenu from '../components/data/filter-menu/filter-menu.vue'
 import PickList, { PickListSource, PickListTarget } from '../components/data/pick-list'
 import PropertyFilter from '../components/data/property-filter/property-filter.vue'
@@ -1241,7 +1241,7 @@ function cardsCase(): Case {
     mount: () => ({
       render: () =>
         h(
-          Cards,
+          CardList,
           {
             items,
             selectionMode: 'multi',
@@ -1445,7 +1445,7 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('PickList with 1k items per side: mount and move all', async () => {
     check('pick-list-1k', await measure(pickListCase))
   })
-  it('Cards with 1k items: mount and select all', async () => {
+  it('CardList with 1k items: mount and select all', async () => {
     check('cards-1k', await measure(cardsCase))
   })
   it('Table with 1k rows of preset cells, first 50 rendered lazily: mount and sort', async () => {

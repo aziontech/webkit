@@ -205,7 +205,7 @@ export const es: Messages = {
     byVendor: 'por {vendor}',
     installed: 'Instalado'
   },
-  cards: {
+  cardList: {
     label: 'Elementos',
     selectAll: 'Seleccionar todos los elementos',
     emptyTitle: 'Aún no hay elementos',
@@ -689,7 +689,18 @@ export const es: Messages = {
     copy: 'Copiar registros',
     copied: 'Registros copiados',
     levels: 'Niveles de registro',
-    levelCount: { one: '{level}, {count} línea', other: '{level}, {count} líneas' }
+    levelCount: { one: '{level}, {count} línea', other: '{level}, {count} líneas' },
+    stepsView: 'Vista del registro',
+    stepsPhased: 'Por fases',
+    stepsComplete: 'Completo',
+    stepsProgress: 'Progreso de la ejecución',
+    stepsWaiting: 'Esperando para comenzar…',
+    stepsNeverRan: 'No se ejecutó.',
+    stepDone: 'Hecho',
+    stepFailed: 'Falló',
+    stepSkipped: 'Omitido',
+    stepRunning: 'En curso',
+    stepPending: 'Sin iniciar'
   },
   logoWall: {
     link: 'Leer historia'

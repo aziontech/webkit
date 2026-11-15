@@ -1,4 +1,10 @@
-import type { ChartColor, ChartSeries, ChartSlot, NormalizedSeries } from './types'
+import type {
+  ChartColor,
+  ChartSeries,
+  ChartSlot,
+  ChartThresholdSeverity,
+  NormalizedSeries
+} from './types'
 
 export const OTHER_SERIES_ID = '__other'
 
@@ -9,6 +15,10 @@ export function colorToken(color: ChartColor): string {
   if (typeof color === 'number') return `var(--chart-series-${color})`
   if (color.startsWith('severity-')) return `var(--${color})`
   return `var(--chart-status-${color})`
+}
+
+export function thresholdToken(severity: ChartThresholdSeverity): string {
+  return severity === 'neutral' ? 'var(--chart-label)' : colorToken(severity)
 }
 
 export function isFiniteNumber(value: unknown): value is number {

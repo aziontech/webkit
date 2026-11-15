@@ -204,7 +204,7 @@ describe('useCollection — client mode', () => {
     c.toggleSelection('1')
     c.toggleSelection('2')
     expect(c.selectedKeys.value).toEqual(['2'])
-    c.cardsProps.value['onUpdate:selectedKeys'](['5'])
+    c.cardListProps.value['onUpdate:selectedKeys'](['5'])
     expect(c.selectedKeys.value).toEqual(['5'])
   })
 

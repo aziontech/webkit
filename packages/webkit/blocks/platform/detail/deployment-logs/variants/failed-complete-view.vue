@@ -102,7 +102,8 @@
         {
           id: '3',
           time: '13:47:48',
-          type: 'warning',
+          type: 'text',
+          level: 'warn',
           message: '24 vulnerabilities (5 low, 7 moderate, 10 high, 2 critical)'
         },
         {
@@ -214,7 +215,8 @@
         {
           id: '1',
           time: '13:48:09',
-          type: 'warning',
+          type: 'text',
+          level: 'warn',
           message: '[ERROR] - # Routing rules rejected the configuration'
         },
         {
@@ -226,7 +228,8 @@
         {
           id: '3',
           time: '13:48:11',
-          type: 'warning',
+          type: 'text',
+          level: 'warn',
           message: '[ERROR] - # Deploy finalized with errors. Nothing was published.'
         }
       ]

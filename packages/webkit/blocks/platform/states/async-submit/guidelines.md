@@ -74,7 +74,7 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 ## Accessibility
 
 - The run status is text in the heading's `Tag`, not color alone.
-- Toasts are announced politely by the app's `Toaster` region; the progress toast must not steal focus.
+- Toasts are announced by the app's `Toaster`, politely except the failure toast (`danger`), which interrupts; the progress toast must not steal focus.
 - The failure toast's actions and close button are reachable by keyboard, and it stays until closed.
 - The logs card (Running and Failed) streams into a `LogView`; do not announce every log line.
 - Page entrance and the outcome `Alert` animate with `motion-reduce:animate-none`.

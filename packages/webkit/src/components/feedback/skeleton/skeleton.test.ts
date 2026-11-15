@@ -31,12 +31,6 @@ describe('Skeleton', () => {
     expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe('rectangle')
   })
 
-  it('renders the deprecated kind="shape" as a rectangle', () => {
-    const { getByTestId } = render(Skeleton, { props: { kind: 'shape' } })
-
-    expect(getByTestId('feedback-skeleton').getAttribute('data-kind')).toBe('rectangle')
-  })
-
   it('reflects kind="circle" on data-kind', () => {
     const { getByTestId } = render(Skeleton, { props: { kind: 'circle' } })
 

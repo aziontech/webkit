@@ -1,5 +1,8 @@
 <script setup lang="ts">
-  import Cards, { type CardsItemSlotProps, type CardsSelectionMode } from '@aziontech/webkit/cards'
+  import CardList, {
+    type CardListItemSlotProps,
+    type CardListSelectionMode
+  } from '@aziontech/webkit/card-list'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { ref } from 'vue'
 
@@ -10,15 +13,15 @@
   }
 
   const domains = ref<Domain[]>([{ id: 'd1', name: 'storefront', hits: 3 }])
-  const mode: CardsSelectionMode = 'multi'
+  const mode: CardListSelectionMode = 'multi'
   const selected = ref<string[]>([])
   const collection = useCollection<Domain>({ items: domains.value })
-  const titleOf = (scope: CardsItemSlotProps<Domain>): string =>
+  const titleOf = (scope: CardListItemSlotProps<Domain>): string =>
     `${scope.index + 1}. ${scope.item.name}`
 </script>
 
 <template>
-  <Cards
+  <CardList
     v-model:selected-keys="selected"
     :items="domains"
     :selection-mode="mode"
@@ -31,16 +34,16 @@
         {{ item.missing }}
       </span>
     </template>
-  </Cards>
+  </CardList>
 
-  <Cards v-bind="collection.cardsProps.value">
+  <CardList v-bind="collection.cardListProps.value">
     <template #header="{ item }">{{ item.name.toUpperCase() }}</template>
-  </Cards>
+  </CardList>
 
-  <Cards :items="[{ id: 'a', size: 2 }]">
+  <CardList :items="[{ id: 'a', size: 2 }]">
     <template #default="{ item }">
       <!-- @vue-expect-error size is a number -->
       {{ item.size.toUpperCase() }}
     </template>
-  </Cards>
+  </CardList>
 </template>

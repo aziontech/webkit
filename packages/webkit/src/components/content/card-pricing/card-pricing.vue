@@ -16,12 +16,8 @@
   export type CardPricingKind = 'contained' | 'transparent'
 
   interface CardPricingProps {
-    /** Plan name shown as the card heading. Empty falls back to the deprecated `planTitle`. */
+    /** Plan name shown as the card heading. */
     title?: string
-    /**
-     * @deprecated since 6.0 — use `title` instead. Removed in 7.0.
-     */
-    planTitle?: string
     /** Caveat under the price, such as the billing terms. */
     pricingDetails?: string
     /** Shows the pricing details line. */
@@ -54,7 +50,6 @@
 
   const props = withDefaults(defineProps<CardPricingProps>(), {
     title: '',
-    planTitle: 'Pro',
     pricingDetails: '',
     showPricingDetails: true,
     showTag: false,
@@ -112,7 +107,7 @@
             class="text-overline-md text-(--text-default) [word-break:break-word]"
             :data-testid="`${testId}__title`"
           >
-            {{ title || planTitle }}
+            {{ title }}
           </h3>
           <Tag
             v-if="showTag"
