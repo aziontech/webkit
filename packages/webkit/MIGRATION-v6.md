@@ -1538,6 +1538,16 @@ Paths in `file`, `examplesFile` and `docsFile` are relative to the folder that h
 (`get_block`, `get_component`, `get_usage_example`) return the same answers as before. The asset
 lists are `catalog/assets/<kind>.json` in kebab-case (`line-figures.json`, `brand-marks.json`).
 
+### Example files renamed
+
+The first example of every component is `default.vue`, and the others are named after what they
+show. A tool that opens an example by path or name (`get_usage_example`, `/example?path=`) uses the
+new names: `table/composition` → `table/default`, `footer/default-footer` → `footer/default`,
+`*/read-only` → `*/readonly`, `*/grouped` and `*/with-groups` → `*/groups`, `*/kinds` →
+`*/variants`, `input-group/with-addon-left|right` → `with-addon-start|end`, `*/failed` →
+`*/error`, `select/transparent` → `select/ghost`. The full list is in `examples.json` of each
+folder.
+
 ### Performance
 
 - `PhoneInput` loads the flag sprite (about 80 KB) with a dynamic `import()` when the country list
