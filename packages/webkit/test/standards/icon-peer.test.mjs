@@ -13,12 +13,15 @@ test('webkit declares the icon package its components render as a peer, at the w
   const range = webkit.peerDependencies?.['@aziontech/icons']
   assert.ok(range, 'peerDependencies is missing @aziontech/icons')
   assert.equal(webkit.peerDependenciesMeta?.['@aziontech/icons']?.optional, undefined)
-  const match = /^\^(\d+)\.(\d+)\.(\d+)$/.exec(range)
-  assert.ok(match, `expected a caret range, got ${range}`)
+  const alternatives = range.split(' || ').map((part) => /^\^(\d+)\.(\d+)\.(\d+)$/.exec(part))
+  assert.ok(alternatives.every(Boolean), `expected caret ranges joined by ||, got ${range}`)
   const [major, minor, patch] = icons.version.split('.').map(Number)
-  assert.equal(Number(match[1]), major)
   assert.ok(
-    Number(match[2]) < minor || (Number(match[2]) === minor && Number(match[3]) <= patch),
+    alternatives.some(
+      (match) =>
+        Number(match[1]) === major &&
+        (Number(match[2]) < minor || (Number(match[2]) === minor && Number(match[3]) <= patch))
+    ),
     `${range} does not accept the workspace version ${icons.version}`
   )
   assert.equal(webkit.devDependencies?.['@aziontech/icons'], 'workspace:^')

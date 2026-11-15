@@ -98,7 +98,11 @@ export function diffApi(before, after, migrations) {
       const rule = rules[prop] ? ruleOf(rules[prop]) : null
       if (rule && rule.removed) continue
       const to =
-        prop in now ? prop : rule && (rule.to in now || rule.to === 'modelValue') ? rule.to : null
+        prop in now
+          ? prop
+          : rule && (rule.to in now || rule.to === 'modelValue' || rule.attribute)
+            ? rule.to
+            : null
       if (!to) {
         uncovered.push(
           `${target}: prop ${prop} was removed or renamed (add it to v<N>-props.json["${target}"])`

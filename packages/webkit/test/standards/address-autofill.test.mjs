@@ -39,7 +39,10 @@ for (const form of FORMS) {
 }
 
 test('profile address rows and company name carry autofill tokens', () => {
-  const source = readFileSync(join(BLOCKS, 'profile/profile.vue'), 'utf8')
+  const source = readFileSync(
+    join(BLOCKS, '../settings/settings-form/variants/profile.vue'),
+    'utf8'
+  )
   for (const token of ['postal-code', 'address-line1', 'address-line2', 'organization']) {
     assert.match(source, new RegExp(`autocomplete="${token}"`))
   }
