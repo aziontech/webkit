@@ -321,7 +321,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
     }, 700)
   }
 
-  const tableRef = ref<TableExposed<DnsRecord> | null>(null)
+  const tableEl = ref<TableExposed<DnsRecord> | null>(null)
 </script>
 
 <template>
@@ -633,7 +633,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                     size="medium"
                     :disabled="!matchingItems.length"
                     aria-label="Download CSV"
-                    @click="tableRef?.exportCsv({ filename: 'records.csv' })"
+                    @click="tableEl?.exportCsv({ filename: 'records.csv' })"
                   />
                 </Tooltip>
                 <CollectionPreferences
@@ -645,7 +645,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
             <Card :padded="false">
               <template #content>
                 <DataTable
-                  ref="tableRef"
+                  ref="tableEl"
                   v-bind="tableProps"
                   :loading="loading || fetching"
                   enable-sorting

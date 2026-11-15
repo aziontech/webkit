@@ -84,7 +84,7 @@
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: item icons are the consumer's and do not mirror.
-- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous item, swapped under `dir="rtl"` (`useDirection(rootRef)` + `logicalArrowKey`): `ArrowLeft` moves forward.
+- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous item, swapped under `dir="rtl"` (`useDirection(rootEl)` + `logicalArrowKey`): `ArrowLeft` moves forward.
 - Indicator: the selection pill is anchored with a physical `left: 0` and moved by the measured `offsetLeft`, which is already a physical distance, so it lands on the selected item in both directions.
 - User data: none.
 

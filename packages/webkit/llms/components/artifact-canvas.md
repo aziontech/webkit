@@ -147,18 +147,18 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
     narrowQuery?.addEventListener('change', onNarrowChange)
   })
   onBeforeUnmount(() => narrowQuery?.removeEventListener('change', onNarrowChange))
-  const canvas = ref(null)
-  const opener = ref(null)
+  const canvasEl = ref(null)
+  const openerEl = ref(null)
 
   const show = async () => {
     open.value = true
     await nextTick()
-    canvas.value?.focus()
+    canvasEl.value?.focus()
   }
   const hide = async () => {
     open.value = false
     await nextTick()
-    opener.value?.querySelector('button')?.focus()
+    openerEl.value?.querySelector('button')?.focus()
   }
 </script>
 
@@ -174,7 +174,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
     >
       <Resizable.Pane>
         <div
-          ref="opener"
+          ref="openerEl"
           class="flex h-full flex-col gap-(--spacing-sm) overflow-auto p-(--spacing-md)"
         >
           <p class="m-0 text-body-sm text-(--text-default)">
@@ -201,7 +201,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
         @update:basis="(value) => (narrow ? (height = value) : (width = value))"
       >
         <ArtifactCanvas
-          ref="canvas"
+          ref="canvasEl"
           v-model:version="version"
           title="top-orders.sql"
           :meta="`SQL · ${versions[version].split('\n').length} lines`"

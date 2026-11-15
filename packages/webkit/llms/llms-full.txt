@@ -10522,7 +10522,7 @@ _none_ — items are data (`items`), because every item has the same anatomy (ic
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: item icons are the consumer's and do not mirror.
-- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous item, swapped under `dir="rtl"` (`useDirection(rootRef)` + `logicalArrowKey`): `ArrowLeft` moves forward.
+- Keyboard: `ArrowRight`/`ArrowLeft` move to the next/previous item, swapped under `dir="rtl"` (`useDirection(rootEl)` + `logicalArrowKey`): `ArrowLeft` moves forward.
 - Indicator: the selection pill is anchored with a physical `left: 0` and moved by the measured `offsetLeft`, which is already a physical distance, so it lands on the selected item in both directions.
 - User data: none.
 
@@ -10819,18 +10819,18 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
     narrowQuery?.addEventListener('change', onNarrowChange)
   })
   onBeforeUnmount(() => narrowQuery?.removeEventListener('change', onNarrowChange))
-  const canvas = ref(null)
-  const opener = ref(null)
+  const canvasEl = ref(null)
+  const openerEl = ref(null)
 
   const show = async () => {
     open.value = true
     await nextTick()
-    canvas.value?.focus()
+    canvasEl.value?.focus()
   }
   const hide = async () => {
     open.value = false
     await nextTick()
-    opener.value?.querySelector('button')?.focus()
+    openerEl.value?.querySelector('button')?.focus()
   }
 </script>
 
@@ -10846,7 +10846,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
     >
       <Resizable.Pane>
         <div
-          ref="opener"
+          ref="openerEl"
           class="flex h-full flex-col gap-(--spacing-sm) overflow-auto p-(--spacing-md)"
         >
           <p class="m-0 text-body-sm text-(--text-default)">
@@ -10873,7 +10873,7 @@ _none_ — monolithic. The split and the handle are `Resizable`'s; the pager is 
         @update:basis="(value) => (narrow ? (height = value) : (width = value))"
       >
         <ArtifactCanvas
-          ref="canvas"
+          ref="canvasEl"
           v-model:version="version"
           title="top-orders.sql"
           :meta="`SQL · ${versions[version].split('\n').length} lines`"
@@ -12411,7 +12411,7 @@ shared with `StreamingResponse`._
 
 ## Sub-components
 
-_None public. Internals shared by the AI family in `src/components/ai/_lib/`: `parse-markdown.ts`
+_None public. Internals shared by the AI family in `src/components/ai/lib/`: `parse-markdown.ts`
 (`parseMarkdown`, `parseInline`, `safeHref`, `plainText`) and `markdown-inline.vue` (recursive inline
 renderer, also used by `ToolApproval` for backticks in its title). Exports: `"./streaming-response"`. Composed DS
 components: `code-block`, `citation`._
@@ -13459,7 +13459,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: the drag and resize grips are symmetric and do not mirror.
 - Keyboard: the drag handle moves the card one slot with the arrow keys and the resize handle grows (`ArrowRight`) or shrinks (`ArrowLeft`) the column span; both swap under `dir="rtl"` (`logicalArrowKey`).
-- Pointer: the resize delta is inverted under `rtl` (`useDirection(handleRef)`), so dragging toward the end edge widens the card.
+- Pointer: the resize delta is inverted under `rtl` (`useDirection(handleEl)`), so dragging toward the end edge widens the card.
 - User data: chart values keep the number format of the locale.
 
 ## Examples
@@ -18504,7 +18504,7 @@ The root ships a **compound API**: `index.ts` attaches the provider to the panel
 `<TutorialPanel.Provider>` resolves from the same import. The panel has no open state (the tools region
 that hosts it owns that), so there is no `Trigger` / `Content`. State flows through `provide`/`inject`
 (`injection-key.ts`, provided by the provider): the panel reads it through
-`composables/use-tutorial-context.ts`, which throws outside a provider, and `Hotspot` reads it through
+`composables/use-tutorial-panel-context.ts`, which throws outside a provider, and `Hotspot` reads it through
 the optional variant, which returns null so a hotspot outside a provider renders only its content.
 
 - `tutorial-panel-provider/tutorial-panel-provider.vue` — Holds the tutorials, the running tutorial (`v-model:active`), the current step (`v-model:step`, flat across tasks), whether the reader dismissed the current step…
@@ -18525,8 +18525,8 @@ packages/webkit/src/components/content/tutorial-panel/
 ├── index.ts                              (compound: attaches Provider)
 ├── injection-key.ts                      (types + TutorialContext)
 ├── composables/
-│   ├── use-tutorial-context.ts           (strict and optional injectors)
-│   └── use-tutorial-tasks-context.ts     (task registry; throws outside the task list)
+│   ├── use-tutorial-panel-context.ts           (strict and optional injectors)
+│   └── use-tutorial-panel-tasks-context.ts     (task registry; throws outside the task list)
 ├── tutorial-panel-provider/
 │   └── tutorial-panel-provider.vue
 ├── tutorial-panel-tasks/
@@ -24627,7 +24627,7 @@ One-time app-level wiring before the first toast() call — service (recommended
 
 The imperative API is backed by a small reactive store composable, declared here (undeclared composables are forbidden):
 
-- `use-toast-store.ts` — a singleton reactive store (one module-level reactive list of toast entries) exposing `add(entry)`, `update(id, patch)`, `dismiss(id?)`, and the reactive `toasts` list.
+- `composables/use-toast-store.ts` — a singleton reactive store (one module-level reactive list of toast entries) exposing `add(entry)`, `update(id, patch)`, `dismiss(id?)`, and the reactive `toasts` list.
 
 ## States
 
@@ -25866,7 +25866,7 @@ Internal parts, not exported, shared with `date-range-picker`: `date-picker-grid
 
 ## Sub-components
 
-The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `controlId`, the reactive `invalid` / `disabled` / `required` flags, `describedBy` (the ids of the mounted `Field.Description` and `Field.Error` parts), `labelledBy` (the ids of the mounted `Field.Title` parts) and `register`. Controls read it through the shared `useFieldControl` composable (`src/composables/use-field-control`); an explicit prop or attribute on the control always wins over the Field, except `aria-describedby`: the control's own ids are joined with the Field's description and error ids (deduplicated), so a consumer description never hides the Field's error. Composite controls (`Select`, `MultiSelect`, `PhoneInput`) consume the context on their root and provide `null` below it, so their inner search inputs never take the field id. Every part works outside a `Field` too (it then reads no state). Member names mirror the anatomy; there is no `Trigger`/`Content` pair because the field has no open/closed state.
+The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated `controlId`, the reactive `invalid` / `disabled` / `required` flags, `describedBy` (the ids of the mounted `Field.Description` and `Field.Error` parts), `labelledBy` (the ids of the mounted `Field.Title` parts) and `register`. Controls read it through the shared `useFieldControl` composable (`src/composables/use-field-control`); an explicit prop or attribute on the control always wins over the Field, except `aria-describedby`: the control's own ids are joined with the Field's description and error ids (deduplicated), so a consumer description never hides the Field's error. Composite controls (`Select`, `MultiSelect`, `PhoneInput`) consume the context on their root and provide `null` below it, so their inner search inputs never take the field id. Every part works outside a `Field` too (it then reads no state). Member names mirror the anatomy; there is no `Trigger`/`Content` pair because the field has no open/closed state.
 
 - `field-label/field-label.vue` — `<label>` whose `for` defaults to the Field's `controlId`; appends the Required marker (`*` + "(Required)") when the Field is `required` or its own `required` prop is set (for a label s…
   - Props: `hint` (`string`, default `''`) — short explanation revealed by a `Hint` glyph.
@@ -26050,8 +26050,8 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import { ref } from 'vue'
 
-  const input = ref(null)
-  const browse = () => input.value?.click()
+  const inputEl = ref(null)
+  const browse = () => inputEl.value?.click()
 </script>
 
 <template>
@@ -26065,7 +26065,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
       />
     </FileDropzone>
     <input
-      ref="input"
+      ref="inputEl"
       type="file"
       multiple
       class="hidden"
@@ -26185,7 +26185,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
 
   const LIMIT = 300 * 1024 * 1024
 
-  const input = ref(null)
+  const inputEl = ref(null)
   const items = ref([
     { file: { name: 'logo.svg', size: 4210, type: 'image/svg+xml' } },
     { file: { name: 'index.html', size: 18432, type: 'text/html' } },
@@ -26223,11 +26223,11 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
         label="Browse files"
         kind="secondary"
         size="medium"
-        @click="input?.click()"
+        @click="inputEl?.click()"
       />
     </FileDropzone>
     <input
-      ref="input"
+      ref="inputEl"
       type="file"
       multiple
       class="hidden"
@@ -30100,7 +30100,7 @@ context, so a consumer never wires one part to the other.
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: the grip is symmetric and does not mirror.
-- Keyboard: on a horizontal group `ArrowLeft`/`ArrowRight` nudge the handle toward the start/end panel, swapped under `dir="rtl"` (`useDirection(handleRef)`), so `ArrowRight` always moves the handle right on screen.
+- Keyboard: on a horizontal group `ArrowLeft`/`ArrowRight` nudge the handle toward the start/end panel, swapped under `dir="rtl"` (`useDirection(handleEl)`), so `ArrowRight` always moves the handle right on screen.
 - Pointer: the drag delta is inverted on horizontal groups under `rtl`, because the first panel sits on the right.
 - User data: none.
 
@@ -32160,7 +32160,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 - `data-divider-color` carries the hairline weight
 - `data-flush` mirrors `flush`, and is what withholds the `frame` grid's own outer rules
 - `data-layout` mirrors `layout`; `data-count` carries how many cells render (comments and empty text are not cells)
-- The root is a CSS grid of equal tracks; it sets `--card-grid-cols-base`, `--card-grid-cols-sm` and `--card-grid-cols-lg` to the track count each breakpoint resolves to (`balanced`: the narrowest count for the fewest rows; `fixed`: `mobileColumns`, two, `columns`); every direct child is set to `height: auto` and stretches to its row; the counts come from the render, so the server HTML and the hydrated page lay out the same
+- The root is a CSS grid of equal tracks; it sets `--card-grid-columns-base`, `--card-grid-columns-sm` and `--card-grid-columns-lg` to the track count each breakpoint resolves to (`balanced`: the narrowest count for the fewest rows; `fixed`: `mobileColumns`, two, `columns`); every direct child is set to `height: auto` and stretches to its row; the counts come from the render, so the server HTML and the hydrated page lay out the same
 - `data-fill-trailing` marks a `balanced` `divider` grid: its `::after` fills the trailing empty tracks of a short last row with `--bg-canvas` (spanning `--card-grid-rest`, hidden when the row is full), so the rule colour the gaps show through never shows as a block
 - `data-filled` mirrors whether any cell renders, so an empty `frame` grid draws no stray rules
 - `data-kind` and `data-padded` on each cell's content box mirror its fill and its padding
@@ -32875,7 +32875,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 ## Do
 
 - One `Hero` per page. It owns the `h1` through `Hero.Title`, and a second breaks the document outline.
-- Pass `kind="screen"` for an opening band that should measure one screen, and declare the sticky bar's height as `--banner-offset` so the band still measures exactly one screen beneath it.
+- Pass `kind="screen"` for an opening band that should measure one screen, and declare the sticky bar's height as `--hero-banner-offset` so the band still measures exactly one screen beneath it.
 - Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.
 - Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.
 - Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.
@@ -32906,7 +32906,7 @@ The compound `index.ts` annotates the `Object.assign` result with an explicit `t
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `HeroKind` | `'band'` | false | Height of the band; `screen` fills one viewport minus `--banner-offset`. |
+| `kind` | `HeroKind` | `'band'` | false | Height of the band; `screen` fills one viewport minus `--hero-banner-offset`. |
 | `maxWidth` | `HeroWidth` | `'7xl'` | false | Width the inner column is capped at; `site` is the marketing measure, `full` keeps only the inset. |
 | `bordered` | `boolean` | `true` | false | Draw the band's bottom rule, which is the top edge of whatever follows it. |
 | `padded` | `boolean` | `true` | false | Apply the band's own vertical rhythm. The inline inset is always applied. |
@@ -38109,7 +38109,7 @@ No built-in strings: the card shows only consumer content.
 
 ## Sub-components
 
-The root `Popover` owns open/closed state, anchoring/placement (exposing the computed `panelStyle`), outside-click + `Esc` dismissal, focus entry on open, Tab hand-off and focus return. Shared state flows through `provide`/`inject` (`isOpen`, `triggerId`, `contentId`, `titleId`, `descriptionId`, `setOpen`, resolved `placement`, `size`, `panelStyle`, and the `panelRef` that `Popover.Content` assigns), so every sub-component is context-aware and the consumer wires nothing. **`Popover.Content` renders the single teleported, animated floating panel with its content inline** (the Select / Tooltip pattern — one `<Teleport>` + `<Transition>`, so the scale animation carries the whole panel on enter/leave); the panel element carries `role="dialog"`, the surface/border/radius/shadow tokens, the open/close `animate-popup-scale-*`, `--popup-origin` (via `panelStyle`), and `data-state` / `data-placement`, and assigns itself to the root's `panelRef` so the root's placement/focus logic operates on it. Member names mirror this component's anatomy; `Trigger` / `Content` are valid here because the popover has a real `data-state="open|closed"`.
+The root `Popover` owns open/closed state, anchoring/placement (exposing the computed `panelStyle`), outside-click + `Esc` dismissal, focus entry on open, Tab hand-off and focus return. Shared state flows through `provide`/`inject` (`isOpen`, `triggerId`, `contentId`, `titleId`, `descriptionId`, `setOpen`, resolved `placement`, `size`, `panelStyle`, and the `panelEl` that `Popover.Content` assigns), so every sub-component is context-aware and the consumer wires nothing. **`Popover.Content` renders the single teleported, animated floating panel with its content inline** (the Select / Tooltip pattern — one `<Teleport>` + `<Transition>`, so the scale animation carries the whole panel on enter/leave); the panel element carries `role="dialog"`, the surface/border/radius/shadow tokens, the open/close `animate-popup-scale-*`, `--popup-origin` (via `panelStyle`), and `data-state` / `data-placement`, and assigns itself to the root's `panelEl` so the root's placement/focus logic operates on it. Member names mirror this component's anatomy; `Trigger` / `Content` are valid here because the popover has a real `data-state="open|closed"`.
 
 - `popover-trigger/popover-trigger.vue` — as-child trigger.
   - Props: _none_.

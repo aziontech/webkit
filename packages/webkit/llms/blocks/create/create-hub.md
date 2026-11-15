@@ -518,8 +518,8 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
   const search = ref('')
   const repoLimit = ref(REPO_PAGE)
   const templateSearch = ref('')
-  const fileInput = ref<HTMLInputElement | null>(null)
-  const folderInput = ref<HTMLInputElement | null>(null)
+  const fileInputEl = ref<HTMLInputElement | null>(null)
+  const folderInputEl = ref<HTMLInputElement | null>(null)
   const timers = new Set<ReturnType<typeof setTimeout>>()
 
   const later = (run: () => void, delay: number) => {
@@ -597,8 +597,8 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
 
   const templateHref = (item: HubItem) => `/create/templates/${item.slug}`
 
-  const openFilePicker = () => fileInput.value?.click()
-  const openFolderPicker = () => folderInput.value?.click()
+  const openFilePicker = () => fileInputEl.value?.click()
+  const openFolderPicker = () => folderInputEl.value?.click()
 
   const onPick = (event: Event) => {
     const input = event.target as HTMLInputElement
@@ -676,7 +676,7 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
                 @click="openFolderPicker"
               />.
               <input
-                ref="fileInput"
+                ref="fileInputEl"
                 type="file"
                 multiple
                 class="sr-only"
@@ -685,7 +685,7 @@ Each variant is the same screen in another state: `get_block("create/create-hub"
                 @change="onPick"
               />
               <input
-                ref="folderInput"
+                ref="folderInputEl"
                 type="file"
                 webkitdirectory
                 class="sr-only"

@@ -525,8 +525,8 @@ Each variant is the same screen in another state: `get_block("account/deployment
       }
     })
 
-  const settingsTable = ref<TableExposed<SettingRowData> | null>(null)
-  const exportCsv = () => settingsTable.value?.exportCsv({ filename: 'deployment-settings.csv' })
+  const settingsTableEl = ref<TableExposed<SettingRowData> | null>(null)
+  const exportCsv = () => settingsTableEl.value?.exportCsv({ filename: 'deployment-settings.csv' })
 
   const refreshing = ref(false)
   const refresh = () => {
@@ -1002,7 +1002,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
               <Card :padded="false">
                 <template #content>
                   <DataTable
-                    ref="settingsTable"
+                    ref="settingsTableEl"
                     v-bind="tableProps"
                     :loading="loading || refreshing"
                     enable-sorting

@@ -193,7 +193,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   const turns = ref<Turn[]>([])
   const state = ref<PromptInputState>('ready')
   const prompt = ref('')
-  const composer = ref<InstanceType<typeof PromptInput> | null>(null)
+  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
   const assistantOpen = ref(true)
 
   const knowledge: Record<'cache' | 'errors', Answer> = {
@@ -293,7 +293,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
     turn.state = 'complete'
     turn.thinking = false
     state.value = 'ready'
-    composer.value?.focus()
+    composerEl.value?.focus()
   }
 
   function respond(turn: AssistantTurn) {
@@ -523,7 +523,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
           </div>
           <div class="border-t border-(--border-default) p-(--spacing-sm)">
             <PromptInput
-              ref="composer"
+              ref="composerEl"
               v-model="prompt"
               :state="state"
               :max-rows="4"

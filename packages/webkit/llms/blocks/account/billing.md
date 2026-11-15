@@ -337,8 +337,8 @@ Each variant is the same screen in another state: `get_block("account/billing", 
       preferences: { storageKey: 'billing-invoices' }
     })
 
-  const invoicesTable = ref<TableExposed<Invoice> | null>(null)
-  const exportCsv = () => invoicesTable.value?.exportCsv({ filename: 'invoices.csv' })
+  const invoicesTableEl = ref<TableExposed<Invoice> | null>(null)
+  const exportCsv = () => invoicesTableEl.value?.exportCsv({ filename: 'invoices.csv' })
 
   const methodColumns: TableColumn[] = [
     {
@@ -649,7 +649,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
             >
               <template #content>
                 <DataTable
-                  ref="invoicesTable"
+                  ref="invoicesTableEl"
                   v-bind="tableProps"
                   :loading="loading"
                   enable-sorting

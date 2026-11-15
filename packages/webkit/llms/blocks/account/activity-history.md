@@ -318,8 +318,8 @@ Each variant is the same screen in another state: `get_block("account/activity-h
     }, 700)
   }
 
-  const activityTable = ref<TableExposed<ActivityEvent> | null>(null)
-  const exportCsv = () => activityTable.value?.exportCsv({ filename: 'activity-history.csv' })
+  const activityTableEl = ref<TableExposed<ActivityEvent> | null>(null)
+  const exportCsv = () => activityTableEl.value?.exportCsv({ filename: 'activity-history.csv' })
 
   const RETENTION_DAYS = 90
   const widerRange = computed<RelativeOption | null>(() => {
@@ -467,7 +467,7 @@ Each variant is the same screen in another state: `get_block("account/activity-h
         >
           <template #content>
             <DataTable
-              ref="activityTable"
+              ref="activityTableEl"
               v-bind="tableProps"
               :loading="loading"
               enable-sorting

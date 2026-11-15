@@ -37,7 +37,7 @@
  ],
  "bestPractices": [
   "One `Hero` per page. It owns the `h1` through `Hero.Title`, and a second breaks the document outline.",
-  "Pass `kind=\"screen\"` for an opening band that should measure one screen, and declare the sticky bar's height as `--banner-offset` so the band still measures exactly one screen beneath it.",
+  "Pass `kind=\"screen\"` for an opening band that should measure one screen, and declare the sticky bar's height as `--hero-banner-offset` so the band still measures exactly one screen beneath it.",
   "Put the backdrop in the `background` slot rather than on the band's own class: the slot renders beneath the content layer and is already marked decorative.",
   "Turn `padded` off when the slotted content owns its block rhythm; the inline inset is not optional, because it is the page boundary the bar above the band also reads.",
   "Set the band's air with `size`, never with a padded wrapper around the copy: `large` is the opening a page leads with, and the rhythm is the same above and below so the copy and the media sit on the band's vertical centre.",
@@ -53,7 +53,7 @@
    "type": "HeroKind",
    "default": "'band'",
    "required": "false",
-   "doc": "Height of the band; `screen` fills one viewport minus `--banner-offset`."
+   "doc": "Height of the band; `screen` fills one viewport minus `--hero-banner-offset`."
   },
   {
    "name": "maxWidth",

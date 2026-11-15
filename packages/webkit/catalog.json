@@ -1720,22 +1720,33 @@
  "vocabulary": {
   "props": [
    {
-    "concept": "visual/structural variant",
-    "canonical": "kind",
+    "concept": "visual variant (the look); a sort of part is `type`",
+    "canonical": "variant",
     "aliases": [
-     "variant",
      "appearance",
      "intent",
      "headerVariant",
      "mediaKind",
-     "cardStyle"
+     "cardStyle",
+     "kind",
+     "look",
+     "styleVariant"
     ]
    },
    {
-    "concept": "severity / status color token",
+    "concept": "severity (colour meaning: neutral | info | success | warning | danger)",
     "canonical": "severity",
     "aliases": [
-     "status"
+     "tone"
+    ]
+   },
+   {
+    "concept": "job or step status (pending | running | success | error | canceled | skipped)",
+    "canonical": "status",
+    "aliases": [
+     "state",
+     "phase",
+     "outcome"
     ]
    },
    {
@@ -1751,7 +1762,8 @@
     "canonical": "title",
     "aliases": [
      "heading",
-     "header"
+     "header",
+     "headline"
     ]
    },
    {
@@ -1759,6 +1771,52 @@
     "canonical": "modelValue",
     "aliases": [
      "isToggled"
+    ]
+   },
+   {
+    "concept": "anything that opens (v-model:open, data-state=\"open|closed\")",
+    "canonical": "open",
+    "aliases": [
+     "expanded",
+     "visible",
+     "show",
+     "opened",
+     "shown"
+    ]
+   },
+   {
+    "concept": "page or item you are on (renders aria-current)",
+    "canonical": "active",
+    "aliases": [
+     "current",
+     "activated",
+     "isCurrent"
+    ]
+   },
+   {
+    "concept": "picked keys of a multi-selection (v-model:selectedKeys)",
+    "canonical": "selectedKeys",
+    "aliases": [
+     "selectedIds",
+     "selectedValues",
+     "checkedKeys",
+     "selectedItems"
+    ]
+   },
+   {
+    "concept": "disabled",
+    "canonical": "disabled",
+    "aliases": [
+     "enabled"
+    ]
+   },
+   {
+    "concept": "leading or trailing glyph (icon name)",
+    "canonical": "icon",
+    "aliases": [
+     "iconName",
+     "leadingIcon",
+     "trailingIcon"
     ]
    },
    {
@@ -1812,7 +1870,8 @@
     "concept": "self-advancing media interval (ms)",
     "canonical": "autoplayInterval",
     "aliases": [
-     "autoPlayInterval"
+     "autoPlayInterval",
+     "interval"
     ]
    },
    {
@@ -1826,7 +1885,9 @@
     "concept": "short label above a heading",
     "canonical": "eyebrow",
     "aliases": [
-     "overline"
+     "overline",
+     "kicker",
+     "tagline"
     ]
    },
    {
@@ -1843,20 +1904,115 @@
     "aliases": [
      "mobileCols"
     ]
+   },
+   {
+    "concept": "number of grid columns",
+    "canonical": "columns",
+    "aliases": [
+     "cols"
+    ]
+   },
+   {
+    "concept": "choices the user picks a value from (items for displayed lists, data + columns for tables)",
+    "canonical": "options",
+    "aliases": [
+     "model",
+     "choices"
+    ]
+   },
+   {
+    "concept": "identity key of a row (rowKey) or list item (itemKey)",
+    "canonical": "itemKey",
+    "aliases": [
+     "trackBy",
+     "dataKey",
+     "keyField",
+     "idKey"
+    ]
+   },
+   {
+    "concept": "empty-state title (with emptyDescription, emptyActionLabel)",
+    "canonical": "emptyTitle",
+    "aliases": [
+     "emptyText",
+     "emptyMessage",
+     "emptyLabel",
+     "noResultsText",
+     "noDataText",
+     "empty"
+    ]
+   },
+   {
+    "concept": "main call-to-action object (with secondaryAction, one shared type)",
+    "canonical": "primaryAction",
+    "aliases": [
+     "mainAction",
+     "primaryCta",
+     "primaryButton"
+    ]
+   },
+   {
+    "concept": "second call-to-action object",
+    "canonical": "secondaryAction",
+    "aliases": [
+     "secondaryCta",
+     "secondaryButton"
+    ]
+   },
+   {
+    "concept": "heading level of a title the component renders",
+    "canonical": "headingLevel",
+    "aliases": [
+     "titleLevel",
+     "headingTag",
+     "headerLevel"
+    ]
+   },
+   {
+    "concept": "where a link opens (target, as on button and link)",
+    "canonical": "target",
+    "aliases": [
+     "external",
+     "newTab",
+     "openInNewTab",
+     "blank"
+    ]
+   },
+   {
+    "concept": "more than one may be picked",
+    "canonical": "multiple",
+    "aliases": [
+     "multi"
+    ]
    }
   ],
+  "groupLabel": {
+   "canonical": "label",
+   "aliases": [
+    "title",
+    "heading",
+    "header",
+    "groupLabel"
+   ]
+  },
   "size": {
    "canonical": [
+    "tiny",
     "small",
     "medium",
-    "large"
+    "large",
+    "xlarge"
    ],
    "bannedTokens": [
     "xs",
     "sm",
     "md",
     "lg",
-    "xl"
+    "xl",
+    "2xs",
+    "2xl",
+    "xxs",
+    "xxl"
    ]
   },
   "closable": {
@@ -1869,31 +2025,120 @@
   "booleanPrefixes": {
    "banned": [
     "is",
-    "has"
+    "has",
+    "hide",
+    "enable",
+    "disable"
    ]
   },
   "negativeBooleans": {
-   "hidden": "visible",
+   "hidden": "show<Part>",
    "closed": "open",
    "inactive": "active",
-   "invisible": "visible",
-   "collapsed": "expanded"
+   "invisible": "show<Part>",
+   "collapsed": "open"
   },
   "values": {
-   "kind": {
-    "outline": "outlined",
-    "text": "transparent",
-    "ghost": "transparent",
-    "destructive": "danger"
-   },
    "severity": {
     "error": "danger",
-    "destructive": "danger"
+    "destructive": "danger",
+    "default": "neutral",
+    "secondary": "neutral",
+    "alt": "neutral"
+   },
+   "variant": {
+    "outlined": "outline",
+    "transparent": "ghost",
+    "text": "ghost",
+    "destructive": "danger",
+    "error": "danger"
+   },
+   "status": {
+    "done": "success",
+    "ok": "success",
+    "complete": "success",
+    "completed": "success",
+    "succeeded": "success",
+    "finished": "success",
+    "failed": "error",
+    "failure": "error",
+    "errored": "error",
+    "cancelled": "canceled",
+    "queued": "pending",
+    "waiting": "pending",
+    "in-progress": "running",
+    "progress": "running"
    }
+  },
+  "positions": {
+   "leadingTrailing": {
+    "left": "leading",
+    "right": "trailing",
+    "start": "leading",
+    "end": "trailing",
+    "before": "leading",
+    "after": "trailing",
+    "prefix": "leading",
+    "suffix": "trailing"
+   },
+   "align": {
+    "left": "start",
+    "right": "end",
+    "top": "start",
+    "bottom": "end",
+    "centered": "center"
+   },
+   "side": {
+    "left": "start",
+    "right": "end"
+   }
+  },
+  "slots": {
+   "prefix": "leading",
+   "suffix": "trailing",
+   "left": "leading",
+   "right": "trailing",
+   "prepend": "leading",
+   "append": "trailing",
+   "icon-left": "leading",
+   "icon-right": "trailing",
+   "header-start": "header-leading",
+   "header-end": "header-trailing",
+   "action": "actions",
+   "header-action": "header-actions",
+   "breadcrumb": "breadcrumbs"
+  },
+  "dataAttributes": {
+   "data-kind": "data-variant (look) or data-type (sort of part)",
+   "data-open": "data-state=\"open|closed\"",
+   "data-expanded": "data-state=\"open|closed\"",
+   "data-collapsed": "data-state=\"open|closed\"",
+   "data-shown": "data-state=\"open|closed\"",
+   "data-visible": "data-state=\"open|closed\"",
+   "data-current": "data-active",
+   "data-border": "data-bordered",
+   "data-tone": "data-status or data-severity",
+   "data-has-icon-left": "data-leading",
+   "data-has-icon-right": "data-trailing",
+   "data-inactive": "data-disabled or data-inert",
+   "data-part": "data-slot",
+   "data-focus": "data-focused",
+   "data-hover": "data-hovered",
+   "data-highlight": "data-highlighted"
   },
   "events": {
    "convention": "kebab-case, or update:<prop> for v-model",
-   "noEchoRule": "Do not emit \"<x>-change\" when \"update:<x>\" exists — it is redundant; use v-model / @update:<x>."
+   "noEchoRule": "Do not emit \"<x>-change\" when \"update:<x>\" exists — it is redundant; use v-model / @update:<x>.",
+   "words": {
+    "dblclick": "double-click",
+    "finish": "complete",
+    "finished": "complete",
+    "done": "complete",
+    "failed": "error",
+    "fail": "error",
+    "dismiss": "close",
+    "delete": "remove"
+   }
   }
  },
  "surfaces": {
@@ -17337,7 +17582,7 @@
      "type": "HeroKind",
      "default": "'band'",
      "required": "false",
-     "doc": "Height of the band; `screen` fills one viewport minus `--banner-offset`."
+     "doc": "Height of the band; `screen` fills one viewport minus `--hero-banner-offset`."
     },
     {
      "name": "maxWidth",
@@ -17497,7 +17742,7 @@
      "type": "HeroKind",
      "default": "'band'",
      "required": "false",
-     "doc": "Height of the band; `screen` fills one viewport minus `--banner-offset`."
+     "doc": "Height of the band; `screen` fills one viewport minus `--hero-banner-offset`."
     },
     {
      "name": "maxWidth",
@@ -26295,7 +26540,7 @@
   },
   "utils/cn": {
    "import": "@aziontech/webkit/utils/cn",
-   "target": "./src/utils/cn.js",
+   "target": "./src/utils/cn.ts",
    "kind": "util",
    "treeShakeableImport": "@aziontech/webkit/utils/cn"
   },

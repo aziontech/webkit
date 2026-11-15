@@ -44,7 +44,7 @@
 
 ## Sub-components
 
-_None public. Internals shared by the AI family in `src/components/ai/_lib/`: `parse-markdown.ts`
+_None public. Internals shared by the AI family in `src/components/ai/lib/`: `parse-markdown.ts`
 (`parseMarkdown`, `parseInline`, `safeHref`, `plainText`) and `markdown-inline.vue` (recursive inline
 renderer, also used by `ToolApproval` for backticks in its title). Exports: `"./streaming-response"`. Composed DS
 components: `code-block`, `citation`._

@@ -335,8 +335,8 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
   })
 
   const loading = ref(false)
-  const table = ref<TableExposed<Variable> | null>(null)
-  const exportCsv = () => table.value?.exportCsv({ filename: 'variables.csv' })
+  const tableEl = ref<TableExposed<Variable> | null>(null)
+  const exportCsv = () => tableEl.value?.exportCsv({ filename: 'variables.csv' })
 
   const refresh = () => {
     if (loading.value) return
@@ -479,7 +479,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
   const view = ref('Form')
   const jsonText = ref('{}')
   const jsonError = ref('')
-  const fileInput = ref<HTMLInputElement | null>(null)
+  const fileInputEl = ref<HTMLInputElement | null>(null)
 
   const filledEntries = computed(() => entries.value.filter((entry) => !isEmptyEntry(entry)))
   const keyCounts = computed(() =>
@@ -907,7 +907,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
           >
             <template #content>
               <DataTable
-                ref="table"
+                ref="tableEl"
                 v-bind="tableProps"
                 :loading="loading || fetching"
                 enable-sorting
@@ -1098,10 +1098,10 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                       icon="ai ai-upload"
                       kind="outlined"
                       size="medium"
-                      @click="fileInput?.click()"
+                      @click="fileInputEl?.click()"
                     />
                     <input
-                      ref="fileInput"
+                      ref="fileInputEl"
                       type="file"
                       accept=".env,.txt,text/plain"
                       class="sr-only"

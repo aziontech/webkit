@@ -205,7 +205,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
   const turns = ref<Turn[]>([])
   const state = ref<PromptInputState>('ready')
   const prompt = ref('')
-  const composer = ref<InstanceType<typeof PromptInput> | null>(null)
+  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
 
   const knowledge: Record<'cache' | 'errors', Answer> = {
     cache: {
@@ -304,7 +304,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     turn.state = 'complete'
     turn.thinking = false
     state.value = 'ready'
-    composer.value?.focus()
+    composerEl.value?.focus()
   }
 
   function respond(turn: AssistantTurn) {
@@ -488,7 +488,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat", { var
     </div>
     <footer class="layout-column-content layout-boundary-inline pb-(--spacing-md)">
       <PromptInput
-        ref="composer"
+        ref="composerEl"
         v-model="prompt"
         :state="state"
         :max-length="4000"

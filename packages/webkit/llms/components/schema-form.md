@@ -238,12 +238,12 @@
   }
 
   const value = ref({ name: 'shop' })
-  const form = ref(null)
+  const formEl = ref(null)
   const saving = ref(false)
   const serverErrors = ref({})
 
   const save = async () => {
-    const { valid } = await form.value.validate()
+    const { valid } = await formEl.value.validate()
     if (!valid) return
     saving.value = true
     setTimeout(() => {
@@ -260,7 +260,7 @@
     @submit.prevent="save"
   >
     <SchemaForm
-      ref="form"
+      ref="formEl"
       v-model="value"
       :schema="schema"
       :errors="serverErrors"

@@ -289,8 +289,8 @@ Each variant is the same screen in another state: `get_block("account/team-permi
       preferences: { storageKey: 'account-teams' }
     })
 
-  const teamsTable = ref<TableExposed<TeamRow> | null>(null)
-  const exportCsv = () => teamsTable.value?.exportCsv({ filename: 'teams.csv' })
+  const teamsTableEl = ref<TableExposed<TeamRow> | null>(null)
+  const exportCsv = () => teamsTableEl.value?.exportCsv({ filename: 'teams.csv' })
 
   const statusSeverity = (value: TeamStatus): TagSeverity =>
     value === 'Active' ? 'success' : 'neutral'
@@ -465,7 +465,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
         >
           <template #content>
             <DataTable
-              ref="teamsTable"
+              ref="teamsTableEl"
               v-bind="tableProps"
               :loading="loading || refreshing"
               enable-sorting

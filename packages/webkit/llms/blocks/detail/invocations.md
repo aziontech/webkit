@@ -478,12 +478,12 @@ Each variant is the same screen in another state: `get_block("detail/invocations
   )
 
   const selectedSpan = ref('')
-  const traceRef = ref<HTMLElement | null>(null)
+  const traceEl = ref<HTMLElement | null>(null)
   const showSpan = async (spanId: string) => {
     selectedSpan.value = spanId
     await nextTick()
     const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
-    traceRef.value?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' })
+    traceEl.value?.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth', block: 'center' })
   }
 
   const pickRun = (id: string) => {
@@ -772,7 +772,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
         </section>
 
         <section
-          ref="traceRef"
+          ref="traceEl"
           aria-label="Trace"
           class="flex min-w-0 scroll-mt-(--spacing-lg) flex-col gap-(--layout-group-gap)"
         >

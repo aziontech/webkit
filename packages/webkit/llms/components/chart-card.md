@@ -142,7 +142,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: the drag and resize grips are symmetric and do not mirror.
 - Keyboard: the drag handle moves the card one slot with the arrow keys and the resize handle grows (`ArrowRight`) or shrinks (`ArrowLeft`) the column span; both swap under `dir="rtl"` (`logicalArrowKey`).
-- Pointer: the resize delta is inverted under `rtl` (`useDirection(handleRef)`), so dragging toward the end edge widens the card.
+- Pointer: the resize delta is inverted under `rtl` (`useDirection(handleEl)`), so dragging toward the end edge widens the card.
 - User data: chart values keep the number format of the locale.
 
 ## Examples

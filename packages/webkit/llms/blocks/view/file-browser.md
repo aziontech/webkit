@@ -326,7 +326,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
     deleteOpen.value = false
   }
 
-  const tableRef = ref<TableExposed<FileRow> | null>(null)
+  const tableEl = ref<TableExposed<FileRow> | null>(null)
   const isFolder = (entry: TreeEntry | undefined): entry is FolderEntry =>
     Boolean(entry && 'children' in entry)
   const isFileEntry = (pair: [string, TreeEntry]): pair is [string, FileEntry] => !isFolder(pair[1])
@@ -433,7 +433,7 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
         <Card :padded="false">
           <template #content>
             <DataTable
-              ref="tableRef"
+              ref="tableEl"
               v-model:sorting="sorting"
               v-model:global-filter="search"
               :data="sortedRows"
@@ -490,9 +490,9 @@ Each variant is the same screen in another state: `get_block("view/file-browser"
                         icon="ai ai-download"
                         kind="outlined"
                         size="large"
-                        :disabled="!tableRef"
+                        :disabled="!tableEl"
                         aria-label="Download CSV"
-                        @click="tableRef?.exportCsv({ filename: 'files.csv' })"
+                        @click="tableEl?.exportCsv({ filename: 'files.csv' })"
                       />
                     </Tooltip>
                     <CollectionPreferences

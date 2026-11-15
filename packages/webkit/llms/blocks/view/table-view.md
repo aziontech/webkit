@@ -292,8 +292,8 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
     }, 700)
   }
 
-  const resourcesTable = ref<TableExposed<Resource> | null>(null)
-  const exportCsv = () => resourcesTable.value?.exportCsv({ filename: 'resources.csv' })
+  const resourcesTableEl = ref<TableExposed<Resource> | null>(null)
+  const exportCsv = () => resourcesTableEl.value?.exportCsv({ filename: 'resources.csv' })
 
   const pending = ref<Resource | null>(null)
   const deleteOpen = ref(false)
@@ -432,7 +432,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
             >
               <template #content>
                 <DataTable
-                  ref="resourcesTable"
+                  ref="resourcesTableEl"
                   v-bind="tableProps"
                   :loading="loading || fetching"
                   enable-sorting

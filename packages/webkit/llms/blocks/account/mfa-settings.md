@@ -227,8 +227,8 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
       preferences: { storageKey: 'account-mfa' }
     })
 
-  const membersTable = ref<TableExposed<MemberRow> | null>(null)
-  const exportCsv = () => membersTable.value?.exportCsv({ filename: 'mfa-status.csv' })
+  const membersTableEl = ref<TableExposed<MemberRow> | null>(null)
+  const exportCsv = () => membersTableEl.value?.exportCsv({ filename: 'mfa-status.csv' })
 
   const refreshing = ref(false)
   const refresh = () => {
@@ -415,7 +415,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
           >
             <template #content>
               <DataTable
-                ref="membersTable"
+                ref="membersTableEl"
                 v-bind="tableProps"
                 :loading="loading"
                 enable-sorting

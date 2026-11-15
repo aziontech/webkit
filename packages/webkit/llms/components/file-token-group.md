@@ -105,7 +105,7 @@
 
   const LIMIT = 300 * 1024 * 1024
 
-  const input = ref(null)
+  const inputEl = ref(null)
   const items = ref([
     { file: { name: 'logo.svg', size: 4210, type: 'image/svg+xml' } },
     { file: { name: 'index.html', size: 18432, type: 'text/html' } },
@@ -143,11 +143,11 @@
         label="Browse files"
         kind="secondary"
         size="medium"
-        @click="input?.click()"
+        @click="inputEl?.click()"
       />
     </FileDropzone>
     <input
-      ref="input"
+      ref="inputEl"
       type="file"
       multiple
       class="hidden"

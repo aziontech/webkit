@@ -77,7 +77,7 @@ One-time app-level wiring before the first toast() call — service (recommended
 
 The imperative API is backed by a small reactive store composable, declared here (undeclared composables are forbidden):
 
-- `use-toast-store.ts` — a singleton reactive store (one module-level reactive list of toast entries) exposing `add(entry)`, `update(id, patch)`, `dismiss(id?)`, and the reactive `toasts` list. The exported `toast()` function and its shortcuts (`success`/`error`/`info`/`warning`/`loading`/`progress`/`promise`/`dismiss`) are thin wrappers over `add`/`update`/`dismiss`; the `Toaster` injects the same store to render the stack. Lives beside `injection-key.ts` at the component root (one directory up from each sub-component).
+- `composables/use-toast-store.ts` — a singleton reactive store (one module-level reactive list of toast entries) exposing `add(entry)`, `update(id, patch)`, `dismiss(id?)`, and the reactive `toasts` list. The exported `toast()` function and its shortcuts (`success`/`error`/`info`/`warning`/`loading`/`progress`/`promise`/`dismiss`) are thin wrappers over `add`/`update`/`dismiss`; the `Toaster` injects the same store to render the stack. Lives in the component's `composables/` folder, beside `injection-key.ts`.
 
 ## States
 
