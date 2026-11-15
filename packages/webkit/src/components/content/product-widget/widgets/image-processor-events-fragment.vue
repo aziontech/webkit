@@ -148,7 +148,7 @@
               label="Refresh"
               kind="outlined"
               size="small"
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
             />
           </span>
           <span

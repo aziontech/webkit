@@ -273,7 +273,7 @@
       :open="openPanel"
     >
       <IconButton
-        icon="pi pi-cog"
+        icon="ai ai-cog"
         kind="outlined"
         size="medium"
         :ariaLabel="heading"
@@ -371,7 +371,7 @@
                       >
                     </label>
                     <IconButton
-                      icon="pi pi-arrow-up"
+                      icon="ai ai-arrow-up"
                       kind="transparent"
                       size="small"
                       data-move="up"
@@ -382,7 +382,7 @@
                       @click="move(index, -1)"
                     />
                     <IconButton
-                      icon="pi pi-arrow-down"
+                      icon="ai ai-arrow-down"
                       kind="transparent"
                       size="small"
                       data-move="down"

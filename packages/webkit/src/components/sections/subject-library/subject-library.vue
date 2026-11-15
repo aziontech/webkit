@@ -189,7 +189,7 @@
                   :target="closing.primaryAction.target"
                   kind="secondary"
                   size="large"
-                  :icon="closing.primaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                  :icon="closing.primaryAction.trailing ? 'ai ai-chevron-right' : ''"
                   icon-position="trailing"
                   :animated="Boolean(closing.primaryAction.trailing)"
                 />
@@ -201,7 +201,7 @@
                   :target="closing.secondaryAction.target"
                   kind="outlined"
                   size="large"
-                  :icon="closing.secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
+                  :icon="closing.secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
                   icon-position="trailing"
                   :animated="Boolean(closing.secondaryAction.trailing)"
                 />

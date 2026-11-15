@@ -38,9 +38,9 @@
   )
 
   const MODES = [
-    { value: 'system', icon: 'pi pi-desktop', key: 'themeSwitcher.system' },
-    { value: 'dark', icon: 'pi pi-moon', key: 'themeSwitcher.dark' },
-    { value: 'light', icon: 'pi pi-sun', key: 'themeSwitcher.light' }
+    { value: 'system', icon: 'ai ai-desktop', key: 'themeSwitcher.system' },
+    { value: 'dark', icon: 'ai ai-moon', key: 'themeSwitcher.dark' },
+    { value: 'light', icon: 'ai ai-sun', key: 'themeSwitcher.light' }
   ] as const
 
   const rootRef = ref<globalThis.HTMLElement | null>(null)

@@ -208,12 +208,12 @@
           >
             <span class="px-0.5 text-(--text-muted)">Applications</span>
             <i
-              class="pi pi-angle-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
+              class="ai ai-angle-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="px-0.5 text-(--text-default)">qa-p-app</span>
             <i
-              class="pi pi-angle-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
+              class="ai ai-angle-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="px-0.5 text-(--text-default)">A7TEE0XR</span>
@@ -226,7 +226,7 @@
               label="Ready"
               severity="success"
               size="small"
-              icon="pi pi-circle-fill"
+              icon="ai ai-circle-fill"
             />
           </div>
         </div>
@@ -309,7 +309,7 @@
                         class="mt-1 inline-flex w-fit items-center gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) px-2 py-1 text-body-xs text-(--text-default)"
                       >
                         <i
-                          class="pi pi-lock text-body-xs"
+                          class="ai ai-lock text-body-xs"
                           aria-hidden="true"
                         />
                         {{ module.locked }}
@@ -324,7 +324,7 @@
                       label="Contact sales"
                       kind="outlined"
                       size="medium"
-                      icon="pi pi-shopping-cart"
+                      icon="ai ai-shopping-cart"
                     />
                   </span>
                 </div>
@@ -347,7 +347,7 @@
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -355,13 +355,13 @@
                 </div>
                 <span class="ms-auto inline-flex gap-(--spacing-xs)">
                   <IconButton
-                    icon="pi pi-refresh"
+                    icon="ai ai-refresh"
                     kind="outlined"
                     size="medium"
                     ariaLabel="Refresh"
                   />
                   <IconButton
-                    icon="pi pi-download"
+                    icon="ai ai-download"
                     kind="outlined"
                     size="medium"
                     ariaLabel="Export"
@@ -396,7 +396,7 @@
                 <template v-if="row.group">
                   <span class="inline-flex items-center gap-(--spacing-xs) px-3.5 font-medium">
                     <i
-                      class="pi pi-chevron-down text-body-xs"
+                      class="ai ai-chevron-down text-body-xs"
                       aria-hidden="true"
                     />
                     {{ row.cells['name'] }}
@@ -428,11 +428,11 @@
                 >
                 <span class="inline-flex items-center gap-(--spacing-sm)">
                   <i
-                    class="pi pi-angle-double-left rtl:-scale-x-100"
+                    class="ai ai-angle-double-left rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <i
-                    class="pi pi-angle-left rtl:-scale-x-100"
+                    class="ai ai-angle-left rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span
@@ -440,11 +440,11 @@
                     >1</span
                   >
                   <i
-                    class="pi pi-angle-right rtl:-scale-x-100"
+                    class="ai ai-angle-right rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <i
-                    class="pi pi-angle-double-right rtl:-scale-x-100"
+                    class="ai ai-angle-double-right rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span
@@ -452,7 +452,7 @@
                   >
                     50
                     <i
-                      class="pi pi-chevron-down"
+                      class="ai ai-chevron-down"
                       aria-hidden="true"
                     />
                   </span>
@@ -475,7 +475,7 @@
             class="inline-flex size-9 shrink-0 items-center justify-center rounded-(--shape-elements) bg-(--bg-canvas)"
           >
             <i
-              class="pi pi-check-circle text-body-lg text-(--text-muted)"
+              class="ai ai-check-circle text-body-lg text-(--text-muted)"
               aria-hidden="true"
             />
           </span>
@@ -488,13 +488,13 @@
                 label="Ready"
                 severity="success"
                 size="small"
-                icon="pi pi-circle-fill"
+                icon="ai ai-circle-fill"
               />
               <span
                 class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) px-2 py-0.5 text-body-xs text-(--text-muted)"
               >
                 <i
-                  class="pi pi-lock text-body-xs"
+                  class="ai ai-lock text-body-xs"
                   aria-hidden="true"
                 />
                 Read Only
@@ -510,13 +510,13 @@
               label="New Version"
               kind="outlined"
               size="small"
-              icon="pi pi-plus"
+              icon="ai ai-plus"
             />
             <Button
               label="Deploy"
               kind="primary"
               size="small"
-              icon="pi pi-cloud-upload"
+              icon="ai ai-cloud-upload"
             />
           </span>
         </div>

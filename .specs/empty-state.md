@@ -3,11 +3,11 @@ name: empty-state
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 3bbeccf9c75fa8be19b81fd09b73ee3aec68b4c7cc128097ad2018235b5aae40
+checksum: 0aa32ad11b4a8bf483f344168445d0cbeb27b7b0402647ab17b3adc9f39b3bbb
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -72,7 +72,7 @@ Centered placeholder shown when a resource list or section has no content yet. S
       </div>
       <Link
         label="View Documentation"
-        icon="pi pi-arrow-right"
+        icon="ai ai-arrow-right"
         size="medium"
         href="#"
       />
@@ -87,7 +87,7 @@ Centered placeholder shown when a resource list or section has no content yet. S
 | ------------- | --------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `title`       | `string`              | `—`        | true     | Primary heading announcing the empty resource.                                                                                                                                                                                                                        |
 | `description` | `string`              | `''`       | false    | Supporting body copy below the title.                                                                                                                                                                                                                                 |
-| `icon`        | `string`              | `''`       | false    | PrimeIcons/Azion icon class for the standardized adornment (e.g. `pi pi-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders.                                                                  |
+| `icon`        | `string`              | `''`       | false    | Azion icon class for the standardized adornment (e.g. `ai ai-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders.                                                                  |
 | `size`        | `'small' \| 'medium'` | `'medium'` | false    | Size token (subset — only `small` and `medium`; no `large`). Scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. |
 | `bordered`    | `boolean`             | `false`    | false    | When true, wraps the content in a dashed-bordered surface card; otherwise renders on a transparent background.                                                                                                                                                        |
 

@@ -3,11 +3,11 @@ name: tag
 category: content
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
-checksum: 917d9da35e557274f611c1ccd96a0012028bbe42b504635bd8d225baa2e9f563
+checksum: 9dead6f33c6d43ed75ab1b13fc79f8d0cea97f68fa6548b3e22c147578e82b99
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -67,7 +67,7 @@ A compact, read-only word on an item, colored by `severity` so the category or o
 | `severity` | `Severity \| 'primary' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false    | Color style for the tag surface and label: the shared `Severity` scale (`neutral`, `info`, `success`, `warning`, `danger`, exported from this component) plus `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
 | `size`     | `'small' \| 'medium'`                                            | `'medium'`  | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                                                                                                                                                                                                                              |
 | `rounded`  | `boolean`                                                        | `false`     | false    | Pill shape when true.                                                                                                                                                                                                                                                                                            |
-| `icon`     | `string`                                                         | `''`        | false    | PrimeIcons class for the leading icon.                                                                                                                                                                                                                                                                           |
+| `icon`     | `string`                                                         | `''`        | false    | Azion icon class for the leading icon.                                                                                                                                                                                                                                                                           |
 
 ## Events
 

@@ -3,11 +3,11 @@ name: article-index
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 created: 2026-11-15
 last_updated: 2026-11-15
-checksum: bb83f385a704e1e4ddbbfd2bf0ace2d1c8f42c53b0c8a07ac1a3a262f6144cf9
+checksum: 58423708abb6d70dac10a970f984408bab313bce950f7cd3386ab249a3ab5def
 ---
 
 # ArticleIndex — Component Spec
@@ -196,7 +196,7 @@ Every article or resource of a blog or a resource hub as one ruled list, with th
 ## Right-to-left
 
 - Layout: logical utilities only (`border-e`, `ps-`/`pe-`); the cover cell sits at the inline start.
-- Icons: the read cue's `pi-arrow-up-right` and the search glyph do not mirror; client marks never mirror.
+- Icons: the read cue's `ai-arrow-up-right` and the search glyph do not mirror; client marks never mirror.
 - Keyboard: the category picker and the dropdowns own their keyboard maps under `rtl`.
 - User data: none.
 

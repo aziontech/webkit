@@ -298,7 +298,7 @@
               :target="action.target"
               :kind="index === 0 && primary ? 'secondary' : 'outlined'"
               size="large"
-              :icon="action.trailing ? 'pi pi-chevron-right' : ''"
+              :icon="action.trailing ? 'ai ai-chevron-right' : ''"
               :icon-position="action.trailing ? 'trailing' : 'leading'"
               :animated="Boolean(action.trailing)"
             />

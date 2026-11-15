@@ -185,7 +185,7 @@ describe('Card integration kind', () => {
     kind: 'integration' as const,
     title: 'Request Signer',
     vendor: 'Northwind Labs',
-    logo: 'pi pi-key',
+    logo: 'ai ai-key',
     description: 'Sign every request at the edge.',
     badges: [{ label: 'Firewall' }, { label: 'Paid', severity: 'warning' as const }]
   }
@@ -199,7 +199,7 @@ describe('Card integration kind', () => {
     expect(view.getByText('Sign every request at the edge.')).toBeTruthy()
     expect(view.getByText('Firewall')).toBeTruthy()
     expect(view.getByText('Paid')).toBeTruthy()
-    expect(view.getByTestId('content-card__logo').querySelector('.pi-key')).toBeTruthy()
+    expect(view.getByTestId('content-card__logo').querySelector('.ai-key')).toBeTruthy()
     expect(view.queryByTestId('content-card__installed')).toBeNull()
   })
 
@@ -249,7 +249,7 @@ describe('Card integration kind', () => {
     })
 
     expect(view.getByTestId('content-card__logo').querySelector('img')).toBeTruthy()
-    expect(view.getByTestId('content-card__logo').querySelector('.pi-key')).toBeNull()
+    expect(view.getByTestId('content-card__logo').querySelector('.ai-key')).toBeNull()
   })
 
   it('reads its strings from the provider locale', () => {

@@ -16,7 +16,7 @@
     label: string
     /** Identifier emitted with item-click; falls back to the label when omitted. */
     value?: string
-    /** PrimeIcons class for the action's leading icon. */
+    /** Azion icon class for the action's leading icon. */
     icon?: string
     /** Disables the action row. */
     disabled?: boolean
@@ -30,7 +30,7 @@
   interface Props {
     /** Visible label text on the primary command button. */
     label?: string
-    /** PrimeIcons class for the primary button's leading icon. */
+    /** Azion icon class for the primary button's leading icon. */
     icon?: string
     /** Actions rendered as rows in the attached overlay menu. */
     items?: SplitButtonItem[]
@@ -146,7 +146,7 @@
 
         <DropdownMenu.Trigger :data-testid="`${testId}__toggle`">
           <IconButton
-            icon="pi pi-chevron-down"
+            icon="ai ai-chevron-down"
             :ariaLabel="toggleAriaLabel"
             :kind="kind"
             :size="size"

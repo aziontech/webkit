@@ -515,14 +515,14 @@
               @keydown="onGroupGripKeydown($event, groupIndex)"
             >
               <i
-                class="pi pi-bars"
+                class="ai ai-bars"
                 aria-hidden="true"
               />
             </button>
             <span class="flex-1" />
             <Tooltip :text="t('attributeEditor.moveGroupUp', { index: groupIndex + 1 })">
               <IconButton
-                icon="pi pi-chevron-up"
+                icon="ai ai-chevron-up"
                 kind="outlined"
                 size="small"
                 data-reorder="group-up"
@@ -534,7 +534,7 @@
             </Tooltip>
             <Tooltip :text="t('attributeEditor.moveGroupDown', { index: groupIndex + 1 })">
               <IconButton
-                icon="pi pi-chevron-down"
+                icon="ai ai-chevron-down"
                 kind="outlined"
                 size="small"
                 data-reorder="group-down"
@@ -693,7 +693,7 @@
                           @keydown="onGripKeydown($event, index, grouped ? groupIndex : undefined)"
                         >
                           <i
-                            class="pi pi-bars"
+                            class="ai ai-bars"
                             aria-hidden="true"
                           />
                         </button>
@@ -705,7 +705,7 @@
                           "
                         >
                           <IconButton
-                            icon="pi pi-chevron-up"
+                            icon="ai ai-chevron-up"
                             kind="outlined"
                             :size="size"
                             data-reorder="up"
@@ -727,7 +727,7 @@
                           "
                         >
                           <IconButton
-                            icon="pi pi-chevron-down"
+                            icon="ai ai-chevron-down"
                             kind="outlined"
                             :size="size"
                             data-reorder="down"
@@ -761,7 +761,7 @@
                           :text="removeLabel(position(index, grouped ? groupIndex : undefined))"
                         >
                           <IconButton
-                            icon="pi pi-trash"
+                            icon="ai ai-trash"
                             kind="outlined"
                             :size="size"
                             :ariaLabel="
@@ -790,7 +790,7 @@
           >
             <Button
               :label="addLabel"
-              icon="pi pi-plus"
+              icon="ai ai-plus"
               kind="outlined"
               size="small"
               :disabled="disabled || addDisabled || atLimit(group)"
@@ -814,7 +814,7 @@
           key="add"
           ref="addRef"
           :label="addLabel"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
           kind="outlined"
           size="medium"
           :disabled="disabled || addDisabled || atLimit(items)"
@@ -826,7 +826,7 @@
           key="add-group"
           ref="addRef"
           :label="groupAddLabel"
-          icon="pi pi-plus"
+          icon="ai ai-plus"
           kind="outlined"
           size="medium"
           :disabled="!canAddGroup"

@@ -669,7 +669,7 @@ describe('Select (compound / overlay)', () => {
           h(Select, { open: open.value, placeholder: 'Pick' }, () => [
             h(SelectTrigger, { 'aria-label': 'Pick' }),
             h(SelectContent, null, () => [
-              h(SelectOption, { value: 'a', icon: 'pi pi-heart' }, () => 'With icon'),
+              h(SelectOption, { value: 'a', icon: 'ai ai-heart' }, () => 'With icon'),
               h(SelectOption, { value: 'b' }, () => 'Without icon')
             ])
           ])
@@ -692,7 +692,7 @@ describe('Select (compound / overlay)', () => {
     // Only the iconed option is marked — that marker is what turns the column on.
     expect(boxes[0].hasAttribute('data-leading')).toBe(true)
     expect(boxes[1].hasAttribute('data-leading')).toBe(false)
-    expect(boxes[0].querySelector('i.pi-heart')).not.toBeNull()
+    expect(boxes[0].querySelector('i.ai-heart')).not.toBeNull()
     expect(boxes[1].querySelector('i')).toBeNull()
 
     // The rule is scoped by the list, so the group marker has to be there.

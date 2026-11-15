@@ -238,7 +238,7 @@
           :text="removeLabel"
         >
           <IconButton
-            icon="pi pi-trash"
+            icon="ai ai-trash"
             kind="outlined"
             size="medium"
             :ariaLabel="removeLabel"

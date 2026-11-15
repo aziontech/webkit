@@ -91,21 +91,21 @@
     item.error ? 'error' : item.warning ? 'warning' : item.loading ? 'loading' : 'idle'
 
   const GLYPHS: Array<[RegExp, string]> = [
-    [/^image\/|\.(png|jpe?g|gif|svg|webp|avif|ico)$/i, 'pi pi-image'],
-    [/pdf$/i, 'pi pi-file-pdf'],
-    [/^video\/|\.(mp4|webm|mov)$/i, 'pi pi-video'],
-    [/(zip|tar|gzip|x-7z|rar)$|\.(zip|tar|gz|tgz|7z|rar)$/i, 'pi pi-box'],
+    [/^image\/|\.(png|jpe?g|gif|svg|webp|avif|ico)$/i, 'ai ai-image'],
+    [/pdf$/i, 'ai ai-file-pdf'],
+    [/^video\/|\.(mp4|webm|mov)$/i, 'ai ai-video'],
+    [/(zip|tar|gzip|x-7z|rar)$|\.(zip|tar|gz|tgz|7z|rar)$/i, 'ai ai-box'],
     [
       /(json|javascript|typescript|html|css|xml|sql)$|\.(json|m?js|ts|vue|html|css|xml|sql|ya?ml)$/i,
-      'pi pi-code'
+      'ai ai-code'
     ],
-    [/(csv|spreadsheet|excel)|\.(csv|xlsx?)$/i, 'pi pi-file-excel']
+    [/(csv|spreadsheet|excel)|\.(csv|xlsx?)$/i, 'ai ai-file-excel']
   ]
   const glyphOf = (file: FileTokenGroupFile): string => {
     for (const [pattern, glyph] of GLYPHS) {
       if (pattern.test(file.type ?? '') || pattern.test(file.name)) return glyph
     }
-    return 'pi pi-file'
+    return 'ai ai-file'
   }
 
   const mounted = ref(false)
@@ -197,7 +197,7 @@
             class="ms-auto flex shrink-0"
           >
             <IconButton
-              icon="pi pi-times"
+              icon="ai ai-times"
               kind="transparent"
               size="small"
               :ariaLabel="t('fileTokenGroup.remove', { name: relativePathOf(item.file) })"
@@ -223,7 +223,7 @@
           class="m-0 flex items-center gap-(--spacing-xxs) text-label-sm text-(--warning-contrast) data-[status=error]:text-(--danger-contrast)"
         >
           <i
-            :class="item.error ? 'pi pi-times-circle' : 'pi pi-exclamation-triangle'"
+            :class="item.error ? 'ai ai-times-circle' : 'ai ai-exclamation-triangle'"
             class="shrink-0"
             aria-hidden="true"
           />
@@ -241,7 +241,7 @@
         :label="
           expanded ? t('fileTokenGroup.showFewer') : t('fileTokenGroup.showMore', { count: hidden })
         "
-        :icon="expanded ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
+        :icon="expanded ? 'ai ai-chevron-up' : 'ai ai-chevron-down'"
         :aria-expanded="expanded ? 'true' : 'false'"
         :data-testid="`${testId}__toggle`"
         @click="expanded = !expanded"

@@ -140,7 +140,7 @@
             <span class="flex">
               <Tag
                 label="Sum"
-                icon="pi pi-calculator"
+                icon="ai ai-calculator"
                 severity="info"
                 size="small"
               />

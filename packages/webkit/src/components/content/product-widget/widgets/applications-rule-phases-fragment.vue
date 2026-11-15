@@ -185,7 +185,7 @@
                             />
                           </span>
                           <IconButton
-                            icon="pi pi-bars"
+                            icon="ai ai-bars"
                             kind="outlined"
                             size="small"
                             :disabled="index === 0"

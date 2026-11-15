@@ -157,7 +157,7 @@
           :kind="action.kind ?? 'outlined'"
           size="large"
           class="shrink-0"
-          :icon="action.trailing ? 'pi pi-chevron-right' : ''"
+          :icon="action.trailing ? 'ai ai-chevron-right' : ''"
           icon-position="trailing"
           :animated="Boolean(action.trailing)"
         />

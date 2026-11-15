@@ -26,12 +26,12 @@
   }>()
 
   const KINDS = {
-    note: { severity: 'info', icon: 'pi pi-info-circle', neutral: false },
-    info: { severity: 'info', icon: 'pi pi-info-circle', neutral: false },
-    tip: { severity: 'info', icon: 'pi pi-lightbulb', neutral: true },
-    check: { severity: 'success', icon: 'pi pi-check-circle', neutral: false },
-    warning: { severity: 'warning', icon: 'pi pi-exclamation-triangle', neutral: false },
-    danger: { severity: 'danger', icon: 'pi pi-times-circle', neutral: false }
+    note: { severity: 'info', icon: 'ai ai-info-circle', neutral: false },
+    info: { severity: 'info', icon: 'ai ai-info-circle', neutral: false },
+    tip: { severity: 'info', icon: 'ai ai-lightbulb', neutral: true },
+    check: { severity: 'success', icon: 'ai ai-check-circle', neutral: false },
+    warning: { severity: 'warning', icon: 'ai ai-exclamation-triangle', neutral: false },
+    danger: { severity: 'danger', icon: 'ai ai-times-circle', neutral: false }
   } as const
 
   const attrs = useAttrs()

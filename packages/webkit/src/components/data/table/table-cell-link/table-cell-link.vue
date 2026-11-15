@@ -124,7 +124,7 @@
         >
         <i
           v-if="isLink"
-          class="pi pi-external-link shrink-0 text-body-xs leading-none"
+          class="ai ai-external-link shrink-0 text-body-xs leading-none"
           aria-hidden="true"
         />
       </component>

@@ -3,9 +3,9 @@ name: doc-heading
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 36d2f471e29b01a8973bc638502bf4fc276119bf7667d120e341f8646d9e9d99
+checksum: 8aeb799c4d37f15638324f176b63917bd7433063fb2174d004939f18acaa60a4
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -109,7 +109,7 @@ The glyph fades in with `transition-opacity duration-150`; `motion-reduce:transi
 ## Right-to-left
 
 - Layout: the glyph sits at the inline end (`ms-*`).
-- Icons: `pi-link` is not mirrored.
+- Icons: `ai-link` is not mirrored.
 - Keyboard: unchanged.
 
 ## Responsive

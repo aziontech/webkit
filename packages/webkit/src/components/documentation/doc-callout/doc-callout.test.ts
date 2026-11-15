@@ -12,12 +12,12 @@ import DocCallout from './doc-callout.vue'
 // asserted instead: the severity/glyph each kind resolves to, testid, and copy.
 
 const KINDS = [
-  { kind: 'note', severity: 'info', icon: 'pi pi-info-circle', neutral: false },
-  { kind: 'info', severity: 'info', icon: 'pi pi-info-circle', neutral: false },
-  { kind: 'tip', severity: 'info', icon: 'pi pi-lightbulb', neutral: true },
-  { kind: 'check', severity: 'success', icon: 'pi pi-check-circle', neutral: false },
-  { kind: 'warning', severity: 'warning', icon: 'pi pi-exclamation-triangle', neutral: false },
-  { kind: 'danger', severity: 'danger', icon: 'pi pi-times-circle', neutral: false }
+  { kind: 'note', severity: 'info', icon: 'ai ai-info-circle', neutral: false },
+  { kind: 'info', severity: 'info', icon: 'ai ai-info-circle', neutral: false },
+  { kind: 'tip', severity: 'info', icon: 'ai ai-lightbulb', neutral: true },
+  { kind: 'check', severity: 'success', icon: 'ai ai-check-circle', neutral: false },
+  { kind: 'warning', severity: 'warning', icon: 'ai ai-exclamation-triangle', neutral: false },
+  { kind: 'danger', severity: 'danger', icon: 'ai ai-times-circle', neutral: false }
 ] as const
 
 describe('DocCallout', () => {
@@ -97,7 +97,7 @@ describe('DocCallout', () => {
         slots: { default: 'Copy.' }
       })
       expect(getByTestId('documentation-doc-callout').hasAttribute('data-neutral')).toBe(false)
-      expect(container.querySelector('i.pi.pi-info-circle')).toBeInTheDocument()
+      expect(container.querySelector('i.ai.ai-info-circle')).toBeInTheDocument()
     })
   })
 

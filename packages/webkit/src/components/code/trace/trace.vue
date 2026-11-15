@@ -548,7 +548,7 @@
         >
           <template #prefix>
             <i
-              class="pi pi-search text-(--text-muted)"
+              class="ai ai-search text-(--text-muted)"
               aria-hidden="true"
             />
           </template>
@@ -724,7 +724,7 @@
             >
               <i
                 :class="
-                  row.expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right rtl:-scale-x-100'
+                  row.expanded ? 'ai ai-chevron-down' : 'ai ai-chevron-right rtl:-scale-x-100'
                 "
                 class="text-[0.7em]"
               />
@@ -755,12 +755,12 @@
             >
               <i
                 v-if="row.span.id === slowestId"
-                class="pi pi-clock text-(--text-default)"
+                class="ai ai-clock text-(--text-default)"
                 :data-testid="`${testId}__slowest`"
               />
               <i
                 v-if="row.span.status === 'error'"
-                class="pi pi-exclamation-circle text-(--danger-contrast)"
+                class="ai ai-exclamation-circle text-(--danger-contrast)"
               />
             </span>
           </span>
@@ -804,7 +804,7 @@
       >
         <EmptyState
           size="small"
-          :icon="term ? 'pi pi-search' : 'pi pi-sitemap'"
+          :icon="term ? 'ai ai-search' : 'ai ai-sitemap'"
           :title="term ? t('trace.noMatch', { query: search.trim() }) : t('trace.empty')"
         >
           <template

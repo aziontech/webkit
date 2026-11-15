@@ -3,14 +3,14 @@ name: avatar
 category: content
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-882
   node_id: 477:882
-checksum: 9e3268371da29bd3e34b16e20ca1f5d656856d408233e5675630125bea76cc5d
+checksum: 1f6ffe20ecfff63bc98c9b4913a69538103fde60ac6268855b13d44de7ebb530
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Avatar — Component Spec
@@ -41,7 +41,7 @@ Identifies a person, an account or an organization with a small visual mark: the
 
 - Pass initials in `label` (`"JD"`); it keeps the first two characters, so a full name shows its first two letters, not initials.
 - Set `alt` to the person's name ("Jane Doe"). With `src` it is the image's `alt`; without an image it names the initials or icon fallback (`role="img"`), so a screen reader hears "Jane Doe", not "JD". Without `alt` the name falls back to the initials, then "Avatar" for an image or "User avatar" for the icon.
-- Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `pi pi-user`).
+- Content precedence is `src`, then `pattern`, then `label`, then `icon` (default `ai ai-user`).
 - For a generated mark, pass the full name in `label` (`"Acme Inc."`) with `pattern="marble"`: the name seeds the shapes, so one organization keeps one mark. Pass `colors` to pick its palette (three theme colors, such as an accent the person chose); do not inline your own generator or a data-URL image.
 - `size` maps to 24 / 32 / 48 px with `medium` as the default; `kind` is `circle` (default) or `square`.
 
@@ -60,7 +60,7 @@ Identifies a person, an account or an organization with a small visual mark: the
     size="large"
   />
   <Avatar
-    icon="pi pi-users"
+    icon="ai ai-users"
     kind="square"
     size="small"
   />
@@ -74,7 +74,7 @@ Identifies a person, an account or an organization with a small visual mark: the
 | `src`     | `string`        | `''`                                                          | false    | Image URL. When set, renders a photo and takes precedence over label and icon.                                   |
 | `alt`     | `string`        | `''`                                                          | false    | Accessible name: the image's `alt` with `src`, and the name of the initials or icon fallback without it.         |
 | `label`   | `string`        | `''`                                                          | false    | Initials shown when no image (normalized to two uppercase characters).                                           |
-| `icon`    | `string`        | `'pi pi-user'`                                                | false    | Icon class for the fallback when no image or label (PrimeIcons class).                                           |
+| `icon`    | `string`        | `'ai ai-user'`                                                | false    | Icon class for the fallback when no image or label (Azion icon class).                                           |
 | `kind`    | `AvatarKind`    | `'circle'`                                                    | false    | Visual shape of the avatar container.                                                                            |
 | `size`    | `AvatarSize`    | `'medium'`                                                    | false    | Size preset matching Figma sm / md / lg (24 / 32 / 48 px).                                                       |
 | `pattern` | `AvatarPattern` | `undefined`                                                   | false    | Generated fallback drawn when there is no image: `marble` blends three soft shapes seeded by `label` (or `alt`). |

@@ -145,7 +145,7 @@ describe('Breadcrumb (composition, data-driven root)', () => {
         props: {
           items: [
             { label: 'Home', href: '/home' },
-            { label: 'Projects', href: '/projects', showIcon: true, icon: 'pi pi-folder' },
+            { label: 'Projects', href: '/projects', showIcon: true, icon: 'ai ai-folder' },
             { label: 'Settings' }
           ]
         }
@@ -156,7 +156,7 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       const option = document.body.querySelector(
         `[data-testid="${TESTID}__overflow-item-0"]`
       ) as HTMLElement | null
-      expect(option?.querySelector('i.pi-folder')).toBeTruthy()
+      expect(option?.querySelector('i.ai-folder')).toBeTruthy()
     })
 
     // This was skipped as a harness limitation ("@select does not fire under test
@@ -464,7 +464,7 @@ describe('Breadcrumb (composition, data-driven root)', () => {
       const { container } = await renderMounted(Breadcrumb, {
         props: {
           items: [
-            { label: 'Home', href: '/home', showIcon: true, icon: 'pi pi-home' },
+            { label: 'Home', href: '/home', showIcon: true, icon: 'ai ai-home' },
             { label: 'Current' }
           ]
         }

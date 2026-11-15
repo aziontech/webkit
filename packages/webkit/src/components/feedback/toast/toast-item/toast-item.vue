@@ -41,10 +41,10 @@
 
   const icons: Record<ToastSeverity, string> = {
     default: '',
-    success: 'pi pi-check',
-    info: 'pi pi-info-circle',
-    warning: 'pi pi-exclamation-triangle',
-    danger: 'pi pi-exclamation-circle',
+    success: 'ai ai-check',
+    info: 'ai ai-info-circle',
+    warning: 'ai ai-exclamation-triangle',
+    danger: 'ai ai-exclamation-circle',
     loading: ''
   }
   const icon = computed(() => icons[props.severity])

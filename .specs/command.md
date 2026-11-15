@@ -3,9 +3,9 @@ name: command
 category: overlay
 structure: composition
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
-checksum: 51f1ed22884f65d5bf3b0f7b970cb43843f64568a89c739d35e8f140b8a92ed9
+checksum: 1b1f9aa91aa011016f256de8f8fe56a96e12f42288dc56c86d71a34a5a73dce6
 created: 2026-07-23
 last_updated: 2026-11-15
 ---
@@ -238,9 +238,9 @@ The palette panel's open/close scale animation is owned by the wrapped `Dialog` 
 | item hover surface                                        | `var(--bg-hover)`                                                                                                                                        |
 | item disabled text                                        | `var(--text-disabled)`                                                                                                                                   |
 | item match highlight                                      | `font-semibold` on a transparent `<mark>`, `text-inherit` (inherits the row's color)                                                                     |
-| item page chevron                                         | `pi pi-chevron-right` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                       |
+| item page chevron                                         | `ai ai-chevron-right` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                       |
 | back control                                              | `.text-label-sm` + `text-(--text-default)`, `var(--shape-elements)`, `h-8`, `px-(--spacing-xs)`, hover `var(--bg-hover)`, focus ring `var(--ring-color)` |
-| back control glyph                                        | `pi pi-chevron-left` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                        |
+| back control glyph                                        | `ai ai-chevron-left` in `text-(--text-muted)`, `rtl:-scale-x-100`                                                                                        |
 | separator                                                 | `border-t border-(--border-default)`                                                                                                                     |
 | separator spacing.above                                   | `var(--spacing-sm)`                                                                                                                                      |
 | separator spacing.below                                   | `var(--spacing-xs)`                                                                                                                                      |

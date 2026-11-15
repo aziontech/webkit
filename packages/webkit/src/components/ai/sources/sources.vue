@@ -95,13 +95,13 @@
       @click="toggle"
     >
       <i
-        class="pi pi-book"
+        class="ai ai-book"
         aria-hidden="true"
       />
       <span>{{ heading }}</span>
       <i
         :data-state="isOpen ? 'open' : 'closed'"
-        class="pi pi-chevron-down text-body-xs transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
+        class="ai ai-chevron-down text-body-xs transition-transform duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
         aria-hidden="true"
       />
     </button>

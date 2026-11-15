@@ -257,14 +257,14 @@ describe('Button', () => {
 
     it('defaults an icon to the leading side', () => {
       const { getByRole } = render(Button, {
-        props: { label: 'Save', icon: 'pi pi-check' }
+        props: { label: 'Save', icon: 'ai ai-check' }
       })
       expect(getByRole('button').getAttribute('data-icon-position')).toBe('leading')
     })
 
     it('puts the glyph after the label when iconPosition is trailing', () => {
       const { getByRole } = render(Button, {
-        props: { label: 'Read the guide', icon: 'pi pi-chevron-right', iconPosition: 'trailing' }
+        props: { label: 'Read the guide', icon: 'ai ai-chevron-right', iconPosition: 'trailing' }
       })
       const node = getByRole('button', { name: 'Read the guide' })
       expect(node.getAttribute('data-icon-position')).toBe('trailing')
@@ -275,7 +275,7 @@ describe('Button', () => {
 
     it('keeps a trailing glyph still unless animated is set', () => {
       const { getByRole } = render(Button, {
-        props: { label: 'Read the guide', icon: 'pi pi-chevron-right', iconPosition: 'trailing' }
+        props: { label: 'Read the guide', icon: 'ai ai-chevron-right', iconPosition: 'trailing' }
       })
       expect(getByRole('button').querySelector('[data-animated]')).toBeNull()
     })
@@ -284,7 +284,7 @@ describe('Button', () => {
       const { getByRole } = render(Button, {
         props: {
           label: 'Read the guide',
-          icon: 'pi pi-chevron-right',
+          icon: 'ai ai-chevron-right',
           iconPosition: 'trailing',
           animated: true
         }
@@ -294,7 +294,7 @@ describe('Button', () => {
 
     it('never animates a leading glyph', () => {
       const { getByRole } = render(Button, {
-        props: { label: 'Save', icon: 'pi pi-check', animated: true }
+        props: { label: 'Save', icon: 'ai ai-check', animated: true }
       })
       expect(getByRole('button').querySelector('[data-animated]')).toBeNull()
     })
@@ -303,7 +303,7 @@ describe('Button', () => {
       const { getByRole } = render(Button, {
         props: {
           label: 'Deploy now',
-          icon: 'pi pi-chevron-right',
+          icon: 'ai ai-chevron-right',
           iconPosition: 'trailing',
           animated: true,
           href: '/deploy'
@@ -325,7 +325,7 @@ describe('Button', () => {
       const { getByRole, getByTestId } = render(Button, {
         props: {
           label: 'Save',
-          icon: 'pi pi-chevron-right',
+          icon: 'ai ai-chevron-right',
           iconPosition: 'trailing',
           loading: true
         }
@@ -343,7 +343,7 @@ describe('Button', () => {
 
     it('Prefix + trailing glyph has no violations', async () => {
       const { container } = render(Button, {
-        props: { label: 'Deploy now', icon: 'pi pi-chevron-right', iconPosition: 'trailing' },
+        props: { label: 'Deploy now', icon: 'ai ai-chevron-right', iconPosition: 'trailing' },
         slots: { prefix: '<i class="ai ai-azion" aria-hidden="true"></i>' }
       })
       await expectNoA11yViolations(container)

@@ -780,10 +780,10 @@
               :data-severity="marker.severity"
               :class="
                 marker.severity === 'error'
-                  ? 'pi pi-times-circle'
+                  ? 'ai ai-times-circle'
                   : marker.severity === 'warning'
-                    ? 'pi pi-exclamation-triangle'
-                    : 'pi pi-info-circle'
+                    ? 'ai ai-exclamation-triangle'
+                    : 'ai ai-info-circle'
               "
               class="shrink-0 text-body-xs data-[severity=error]:text-(--danger-contrast) data-[severity=info]:text-(--info-contrast) data-[severity=warning]:text-(--warning-contrast)"
               aria-hidden="true"

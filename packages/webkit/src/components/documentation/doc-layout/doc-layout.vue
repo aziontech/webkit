@@ -302,7 +302,7 @@
           <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
             <IconButton
               v-if="navigation.length"
-              icon="pi pi-bars"
+              icon="ai ai-bars"
               kind="outlined"
               size="medium"
               :ariaLabel="t('docLayout.openNavigation')"

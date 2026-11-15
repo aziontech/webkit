@@ -174,7 +174,7 @@
               label="Filter"
               kind="outlined"
               size="medium"
-              icon="pi pi-filter"
+              icon="ai ai-filter"
             />
             <Badge
               label="1"
@@ -193,13 +193,13 @@
           >
             <template #prefix>
               <i
-                class="pi pi-search"
+                class="ai ai-search"
                 aria-hidden="true"
               />
             </template>
           </Input>
           <IconButton
-            icon="pi pi-refresh"
+            icon="ai ai-refresh"
             kind="outlined"
             size="medium"
             ariaLabel="Refresh"
@@ -210,7 +210,7 @@
             class="inline-flex shrink-0 rounded-(--shape-button) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-pressed:ring-2 data-pressed:ring-offset-2 motion-reduce:transition-none"
           >
             <IconButton
-              icon="pi pi-download"
+              icon="ai ai-download"
               kind="outlined"
               size="medium"
               ariaLabel="Download CSV"
@@ -245,7 +245,7 @@
             >
               <i
                 :data-open="selected(index) || null"
-                class="pi pi-angle-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none rtl:-scale-x-100 rtl:data-open:-rotate-90"
+                class="ai ai-angle-right text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance data-open:rotate-90 data-open:text-(--primary) motion-reduce:transition-none rtl:-scale-x-100 rtl:data-open:-rotate-90"
                 aria-hidden="true"
               />
             </span>

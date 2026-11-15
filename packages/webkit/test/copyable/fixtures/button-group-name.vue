@@ -5,8 +5,8 @@
 
   const surface = ref<string>('Editor')
   const items: ButtonGroupItem[] = [
-    { id: 'copy', label: 'Copy code', icon: 'pi pi-copy' },
-    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'pi pi-arrows-h', pressed: false }
+    { id: 'copy', label: 'Copy code', icon: 'ai ai-copy' },
+    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'ai ai-arrows-h', pressed: false }
   ]
 </script>
 

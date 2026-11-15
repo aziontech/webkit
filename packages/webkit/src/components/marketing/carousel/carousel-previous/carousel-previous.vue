@@ -39,7 +39,7 @@
     @click="context.scrollPrev()"
   >
     <i
-      class="pi pi-chevron-left rtl:-scale-x-100"
+      class="ai ai-chevron-left rtl:-scale-x-100"
       aria-hidden="true"
     />
   </button>

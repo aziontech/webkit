@@ -65,7 +65,7 @@
     >
       <span
         v-if="status === 'complete'"
-        class="pi pi-check text-label-sm"
+        class="ai ai-check text-label-sm"
       />
       <span v-else>{{ index }}</span>
     </span>

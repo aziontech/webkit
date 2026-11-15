@@ -68,7 +68,7 @@
       class="group inline-flex items-center gap-(--spacing-xxs) self-start"
     >
       <IconButton
-        icon="pi pi-chevron-left"
+        icon="ai ai-chevron-left"
         :ariaLabel="t('responseBranches.previous')"
         kind="transparent"
         size="small"
@@ -84,7 +84,7 @@
         >{{ t('responseBranches.position', { current: index + 1, total: count }) }}</span
       >
       <IconButton
-        icon="pi pi-chevron-right"
+        icon="ai ai-chevron-right"
         :ariaLabel="t('responseBranches.next')"
         kind="transparent"
         size="small"

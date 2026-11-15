@@ -55,7 +55,7 @@
     @keydown="onKeydown"
   >
     <i
-      class="pi pi-bars"
+      class="ai ai-bars"
       aria-hidden="true"
     />
   </button>

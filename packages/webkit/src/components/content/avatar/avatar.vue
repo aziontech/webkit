@@ -22,7 +22,7 @@
     alt?: string
     /** Initials shown when no image (normalized to two uppercase characters). */
     label?: string
-    /** Icon class for the fallback when no image or label (PrimeIcons class). */
+    /** Icon class for the fallback when no image or label (Azion icon class). */
     icon?: string
     /** Visual shape of the avatar container. */
     kind?: AvatarKind
@@ -38,7 +38,7 @@
     src: '',
     alt: '',
     label: '',
-    icon: 'pi pi-user',
+    icon: 'ai ai-user',
     kind: 'circle',
     size: 'medium',
     pattern: undefined,

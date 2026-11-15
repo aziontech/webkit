@@ -64,7 +64,7 @@
       </option>
     </select>
     <i
-      class="pi pi-chevron-down pointer-events-none absolute end-(--spacing-sm) text-[length:inherit] leading-none"
+      class="ai ai-chevron-down pointer-events-none absolute end-(--spacing-sm) text-[length:inherit] leading-none"
       aria-hidden="true"
     />
   </div>

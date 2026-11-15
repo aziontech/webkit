@@ -162,7 +162,7 @@
       class="pointer-events-none absolute inset-x-0 bottom-(--spacing-sm) flex justify-center"
     >
       <IconButton
-        icon="pi pi-arrow-down"
+        icon="ai ai-arrow-down"
         kind="outlined"
         size="medium"
         class="pointer-events-auto bg-(--bg-surface) shadow-(--shadow-sm)"

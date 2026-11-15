@@ -141,7 +141,7 @@
           >
             <span class="flex items-center gap-(--spacing-sm)">
               <i
-                class="pi pi-bars text-body-sm leading-none text-(--text-muted)"
+                class="ai ai-bars text-body-sm leading-none text-(--text-muted)"
                 aria-hidden="true"
               />
               <span

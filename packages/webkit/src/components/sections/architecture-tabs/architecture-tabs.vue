@@ -124,7 +124,7 @@
               kind="secondary"
               size="large"
               :target="primaryAction.target"
-              :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
+              :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
               :animated="Boolean(primaryAction.trailing)"
             />

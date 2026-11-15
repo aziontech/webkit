@@ -56,7 +56,7 @@
   >
     <Tooltip :text="t('chatMessage.helpful')">
       <IconButton
-        :icon="model === 'up' ? 'pi pi-thumbs-up-fill' : 'pi pi-thumbs-up'"
+        :icon="model === 'up' ? 'ai ai-thumbs-up-fill' : 'ai ai-thumbs-up'"
         :ariaLabel="t('chatMessage.helpful')"
         :aria-pressed="model === 'up' ? 'true' : 'false'"
         :disabled="model === 'down'"
@@ -69,7 +69,7 @@
     </Tooltip>
     <Tooltip :text="t('chatMessage.notHelpful')">
       <IconButton
-        :icon="model === 'down' ? 'pi pi-thumbs-down-fill' : 'pi pi-thumbs-down'"
+        :icon="model === 'down' ? 'ai ai-thumbs-down-fill' : 'ai ai-thumbs-down'"
         :ariaLabel="t('chatMessage.notHelpful')"
         :aria-pressed="model === 'down' ? 'true' : 'false'"
         :disabled="model === 'up'"

@@ -24,7 +24,7 @@ export default {
   }${
     showIcon
       ? figma.code`
-  icon="pi pi-sparkles"`
+  icon="ai ai-sparkles"`
       : ''
   }${
     disabled

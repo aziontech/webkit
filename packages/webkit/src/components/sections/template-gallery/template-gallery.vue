@@ -177,7 +177,7 @@
                       :label="deployLabel"
                       kind="outlined"
                       size="medium"
-                      icon="pi pi-chevron-right"
+                      icon="ai ai-chevron-right"
                       icon-position="trailing"
                       animated
                       :href="template.href"
@@ -212,7 +212,7 @@
             :target="primaryAction.target"
             kind="secondary"
             size="large"
-            :icon="primaryAction.trailing ? 'pi pi-chevron-right' : ''"
+            :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
             icon-position="trailing"
             :animated="Boolean(primaryAction.trailing)"
           />
@@ -224,7 +224,7 @@
             :target="secondaryAction.target"
             kind="outlined"
             size="large"
-            :icon="secondaryAction.trailing ? 'pi pi-chevron-right' : ''"
+            :icon="secondaryAction.trailing ? 'ai ai-chevron-right' : ''"
             icon-position="trailing"
             :animated="Boolean(secondaryAction.trailing)"
           />

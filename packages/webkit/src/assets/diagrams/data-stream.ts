@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       kind: 'pill',
       title: 'Requests',
-      icon: 'pi pi-user',
+      icon: 'ai ai-user',
       active: true
     },
     {
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'SIEM',
       title: 'Splunk, Datadog',
-      icon: 'pi pi-chart-bar',
+      icon: 'ai ai-chart-bar',
       active: true
     },
     {
@@ -45,7 +45,7 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'Data lake',
       title: 'S3, Kafka, Elasticsearch',
-      icon: 'pi pi-database'
+      icon: 'ai ai-database'
     }
   ],
   layout: {

@@ -141,7 +141,7 @@
           >
             <template #prefix>
               <i
-                class="pi pi-search"
+                class="ai ai-search"
                 aria-hidden="true"
               />
             </template>

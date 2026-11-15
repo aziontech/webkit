@@ -710,7 +710,7 @@
         :class="
           cn(
             'text-label-code-sm shrink-0 text-(--text-muted)',
-            isOutput ? 'pi pi-align-left' : 'pi pi-code'
+            isOutput ? 'ai ai-align-left' : 'ai ai-code'
           )
         "
         aria-hidden="true"

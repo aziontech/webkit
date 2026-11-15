@@ -3,9 +3,9 @@ name: feature-list
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: bb3dca0b59fbe700024e701e49fa40e0a630a06d933b612b77658d691cf0b942
+checksum: 381e2b95758cd5b8ddc5990f2f23929368a51e1f2c24b4e8938b1006a850daba
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-15
 
 Use FeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValuePairs.
 
-The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `pi pi-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
+The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `ai ai-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
 
 ## When to use
 
@@ -99,7 +99,7 @@ _none_
 
 | Region                       | Token (DESIGN.md)                          |
 | ---------------------------- | ------------------------------------------ |
-| check glyph                  | `pi pi-check`, `var(--success-contrast)`   |
+| check glyph                  | `ai ai-check`, `var(--success-contrast)`   |
 | label                        | `.text-label-sm`, `var(--text-default)`    |
 | description                  | `.text-body-xs`, `var(--text-muted)`       |
 | row gap / column gap         | `var(--spacing-sm)` / `var(--spacing-lg)`  |

@@ -154,7 +154,7 @@
           >
             <template #prefix>
               <i
-                class="pi pi-search"
+                class="ai ai-search"
                 aria-hidden="true"
               />
             </template>
@@ -190,7 +190,7 @@
                 >
                 <span class="sr-only">{{ ` ${t('overflowCount.newTab')}` }}</span>
                 <i
-                  class="pi pi-external-link ms-auto shrink-0 text-body-xs leading-none"
+                  class="ai ai-external-link ms-auto shrink-0 text-body-xs leading-none"
                   aria-hidden="true"
                 />
               </a>

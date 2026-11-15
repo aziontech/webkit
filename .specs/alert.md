@@ -3,12 +3,12 @@ name: alert
 category: feedback
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-892
   node_id: 478:892
-checksum: 130c64bb51bacbd19ded5617b63aa9b4dc96e1a47903d3b444acf97c859f5812
+checksum: 4c4358e8bcf8b8cf1d699e3ec45edceae8d343e134c400d6d0f72e8cffe5aa62
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -88,7 +88,7 @@ Inline feedback banner that communicates status, alerts, or progress. Presents a
 | `size`        | `'small' \| 'medium'`                          | `'medium'` | false    | Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. |
 | `label`       | `string`                                       | `''`       | false    | Fallback message copy when the default slot is empty.                                             |
 | `title`       | `string`                                       | `''`       | false    | Bold heading above the message copy; hidden when empty.                                           |
-| `icon`        | `string`                                       | `''`       | false    | PrimeIcons class override for the leading icon.                                                   |
+| `icon`        | `string`                                       | `''`       | false    | Azion icon class override for the leading icon.                                                   |
 | `actionLabel` | `string`                                       | `''`       | false    | Label for the built-in secondary action button; hidden when empty.                                |
 | `closable`    | `boolean`                                      | `false`    | false    | When true, shows a close control that dismisses the message.                                      |
 | `life`        | `number`                                       | `0`        | false    | Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss.                          |

@@ -473,7 +473,7 @@
       >
         <template #prefix>
           <i
-            class="pi pi-search text-(--text-muted)"
+            class="ai ai-search text-(--text-muted)"
             aria-hidden="true"
           />
         </template>
@@ -489,7 +489,7 @@
       </Input>
       <IconButton
         v-if="showClear"
-        icon="pi pi-times"
+        icon="ai ai-times"
         :ariaLabel="t('combobox.clear')"
         kind="transparent"
         size="small"
@@ -581,13 +581,13 @@
                     </slot>
                     <i
                       v-if="row.option.value === model"
-                      class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
+                      class="ai ai-check shrink-0 text-body-xs text-(--text-default)"
                       aria-hidden="true"
                     />
                   </template>
                   <template v-else>
                     <i
-                      class="pi pi-plus shrink-0 text-body-xs text-(--text-muted)"
+                      class="ai ai-plus shrink-0 text-body-xs text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <span class="min-w-0 flex-1 truncate">{{

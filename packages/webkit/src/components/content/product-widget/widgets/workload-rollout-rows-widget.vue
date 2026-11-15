@@ -97,7 +97,7 @@
       frameworkIcon: 'ai-cor ai-react',
       environment: 'Production',
       action: 'Rollback',
-      actionIcon: 'pi pi-undo'
+      actionIcon: 'ai ai-undo'
     }
   ]
 
@@ -125,7 +125,7 @@
                 label="New Version"
                 kind="outlined"
                 size="medium"
-                icon="pi pi-plus"
+                icon="ai ai-plus"
               />
             </span>
           </template>

@@ -21,7 +21,7 @@
     selected?: boolean
     /** Disables interaction. */
     disabled?: boolean
-    /** PrimeIcons class for the leading icon. */
+    /** Azion icon class for the leading icon. */
     icon?: string
     /** Destination URL; renders an anchor when set. */
     href?: string

@@ -229,7 +229,7 @@
                     >
                       <template #prefix>
                         <i
-                          class="pi pi-search"
+                          class="ai ai-search"
                           aria-hidden="true"
                         />
                       </template>
@@ -336,7 +336,7 @@
                           <IconButton
                             kind="transparent"
                             size="small"
-                            icon="pi pi-info-circle"
+                            icon="ai ai-info-circle"
                             :aria-label="t('comparePlans.about', { label: row.label })"
                           />
                         </PopoverTrigger>
@@ -369,7 +369,7 @@
               <template v-if="isIncluded(row.values[index])">
                 <Tooltip :text="includedText">
                   <i
-                    class="pi pi-check-circle text-body-md text-(--success-contrast)"
+                    class="ai ai-check-circle text-body-md text-(--success-contrast)"
                     aria-hidden="true"
                   />
                 </Tooltip>
@@ -396,7 +396,7 @@
                 :label="closingOf(section)?.label"
                 :href="closingOf(section)?.href"
                 target="_blank"
-                icon="pi pi-arrow-right"
+                icon="ai ai-arrow-right"
                 size="medium"
               />
             </td>
@@ -412,7 +412,7 @@
                 :label="primaryAction.label"
                 :href="primaryAction.href"
                 target="_blank"
-                icon="pi pi-arrow-right"
+                icon="ai ai-arrow-right"
                 size="medium"
               />
             </td>

@@ -11,7 +11,7 @@ const SIZES = ['small', 'medium', 'large'] as const
 describe('IconButton', () => {
   it('renders a <button type="button"> by default with the fallback data-testid and aria-label', () => {
     const { getByTestId } = render(IconButton, {
-      props: { icon: 'pi pi-plus', ariaLabel: 'Add' }
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add' }
     })
 
     const el = getByTestId('actions-icon-button')
@@ -22,7 +22,7 @@ describe('IconButton', () => {
 
   it('honors a consumer-provided data-testid', () => {
     const { getByTestId } = render(IconButton, {
-      props: { icon: 'pi pi-plus', ariaLabel: 'Add' },
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add' },
       attrs: { 'data-testid': 'my-button' }
     })
 
@@ -31,7 +31,7 @@ describe('IconButton', () => {
 
   it('emits click with the MouseEvent when the button is activated', async () => {
     const { getByTestId, emitted } = render(IconButton, {
-      props: { icon: 'pi pi-plus', ariaLabel: 'Add' }
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add' }
     })
 
     await fireEvent.click(getByTestId('actions-icon-button'))
@@ -42,7 +42,7 @@ describe('IconButton', () => {
 
   it('does NOT emit click when disabled', async () => {
     const { getByTestId, emitted } = render(IconButton, {
-      props: { icon: 'pi pi-plus', ariaLabel: 'Add', disabled: true }
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add', disabled: true }
     })
 
     const el = getByTestId('actions-icon-button')
@@ -56,7 +56,7 @@ describe('IconButton', () => {
 
   it('does NOT emit click when loading, and marks aria-busy', async () => {
     const { getByTestId, emitted } = render(IconButton, {
-      props: { icon: 'pi pi-plus', ariaLabel: 'Add', loading: true }
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add', loading: true }
     })
 
     const el = getByTestId('actions-icon-button')
@@ -69,29 +69,29 @@ describe('IconButton', () => {
 
   it('renders the spinner (with its own testid) while loading and no icon glyph', () => {
     const { getByTestId, container } = render(IconButton, {
-      props: { icon: 'pi pi-plus', ariaLabel: 'Add', loading: true }
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add', loading: true }
     })
 
     expect(getByTestId('actions-icon-button__loading')).toBeInTheDocument()
-    expect(container.querySelector('i.pi.pi-plus')).toBeNull()
+    expect(container.querySelector('i.ai.ai-plus')).toBeNull()
   })
 
   it('renders the icon glyph (aria-hidden) when not loading', () => {
     const { container } = render(IconButton, {
-      props: { icon: 'pi pi-plus', ariaLabel: 'Add' }
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add' }
     })
 
-    const glyph = container.querySelector('i.pi.pi-plus')
+    const glyph = container.querySelector('i.ai.ai-plus')
     expect(glyph).not.toBeNull()
     expect(glyph).toHaveAttribute('aria-hidden', 'true')
   })
 
   it('applies iconClass to the icon glyph', () => {
     const { container } = render(IconButton, {
-      props: { icon: 'pi pi-plus', ariaLabel: 'Add', iconClass: 'text-lg' }
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add', iconClass: 'text-lg' }
     })
 
-    expect(container.querySelector('i.pi.pi-plus.text-lg')).not.toBeNull()
+    expect(container.querySelector('i.ai.ai-plus.text-lg')).not.toBeNull()
   })
 
   describe('as a link (href set)', () => {
@@ -99,7 +99,7 @@ describe('IconButton', () => {
     // The shared click handler is already exercised on the button path.
     it('renders an <a> carrying href/target when href is set', () => {
       const { getByTestId } = render(IconButton, {
-        props: { icon: 'pi pi-external-link', ariaLabel: 'Open', href: '/somewhere' }
+        props: { icon: 'ai ai-external-link', ariaLabel: 'Open', href: '/somewhere' }
       })
 
       const el = getByTestId('actions-icon-button')
@@ -111,7 +111,7 @@ describe('IconButton', () => {
     it('adds rel="noopener noreferrer" only when target is _blank', () => {
       const { getByTestId } = render(IconButton, {
         props: {
-          icon: 'pi pi-external-link',
+          icon: 'ai ai-external-link',
           ariaLabel: 'Open',
           href: '/somewhere',
           target: '_blank'
@@ -126,7 +126,7 @@ describe('IconButton', () => {
     it('does not set rel when target is _self', () => {
       const { getByTestId } = render(IconButton, {
         props: {
-          icon: 'pi pi-external-link',
+          icon: 'ai ai-external-link',
           ariaLabel: 'Open',
           href: '/somewhere',
           target: '_self'
@@ -139,7 +139,7 @@ describe('IconButton', () => {
     it('does NOT emit click and sets tabindex=-1 when disabled anchor is activated', async () => {
       const { getByTestId, emitted } = render(IconButton, {
         props: {
-          icon: 'pi pi-external-link',
+          icon: 'ai ai-external-link',
           ariaLabel: 'Open',
           href: '/somewhere',
           disabled: true
@@ -157,20 +157,20 @@ describe('IconButton', () => {
 
   it.each(KINDS)('renders kind=%s', (kind) => {
     const { getByTestId } = render(IconButton, {
-      props: { icon: 'pi pi-plus', ariaLabel: 'Add', kind }
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add', kind }
     })
     expect(getByTestId('actions-icon-button').getAttribute('data-kind')).toBe(kind)
   })
 
   it.each(SIZES)('renders size=%s', (size) => {
     const { getByTestId } = render(IconButton, {
-      props: { icon: 'pi pi-plus', ariaLabel: 'Add', size }
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add', size }
     })
     expect(getByTestId('actions-icon-button').getAttribute('data-size')).toBe(size)
   })
 
   it('defaults to type=button and takes type=submit to submit its form', async () => {
-    const plain = render(IconButton, { props: { icon: 'pi pi-search', ariaLabel: 'Search' } })
+    const plain = render(IconButton, { props: { icon: 'ai ai-search', ariaLabel: 'Search' } })
     expect(plain.getByRole('button', { name: 'Search' }).getAttribute('type')).toBe('button')
     plain.unmount()
 
@@ -178,7 +178,7 @@ describe('IconButton', () => {
     const view = render({
       components: { IconButton },
       template:
-        '<form @submit.prevent="onSubmit"><IconButton type="submit" icon="pi pi-send" aria-label="Send" /></form>',
+        '<form @submit.prevent="onSubmit"><IconButton type="submit" icon="ai ai-send" aria-label="Send" /></form>',
       setup: () => ({ onSubmit: () => (submitted += 1) })
     })
     await fireEvent.click(view.getByRole('button', { name: 'Send' }))
@@ -190,7 +190,7 @@ describe('IconButton', () => {
     const view = render({
       components: { IconButton },
       template:
-        '<form @submit.prevent="onSubmit"><IconButton type="submit" loading icon="pi pi-send" aria-label="Send" /></form>',
+        '<form @submit.prevent="onSubmit"><IconButton type="submit" loading icon="ai ai-send" aria-label="Send" /></form>',
       setup: () => ({ onSubmit: () => (submitted += 1) })
     })
     await fireEvent.click(view.getByRole('button', { name: 'Send' }))
@@ -199,21 +199,21 @@ describe('IconButton', () => {
 
   it('has no a11y violations on the default button render', async () => {
     const { container } = render(IconButton, {
-      props: { icon: 'pi pi-plus', ariaLabel: 'Add' }
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add' }
     })
     await expectNoA11yViolations(container)
   })
 
   it('has no a11y violations when rendered as a link', async () => {
     const { container } = render(IconButton, {
-      props: { icon: 'pi pi-external-link', ariaLabel: 'Open', href: '/somewhere' }
+      props: { icon: 'ai ai-external-link', ariaLabel: 'Open', href: '/somewhere' }
     })
     await expectNoA11yViolations(container)
   })
 
   it('has no a11y violations in the disabled state', async () => {
     const { container } = render(IconButton, {
-      props: { icon: 'pi pi-plus', ariaLabel: 'Add', disabled: true }
+      props: { icon: 'ai ai-plus', ariaLabel: 'Add', disabled: true }
     })
     await expectNoA11yViolations(container)
   })
@@ -228,7 +228,7 @@ describe('IconButton accessible name', () => {
   it('takes its name from the kebab aria-label attribute a template writes', () => {
     const { getByRole } = render({
       components: { IconButton },
-      template: '<IconButton icon="pi pi-trash" aria-label="Delete domain" />'
+      template: '<IconButton icon="ai ai-trash" aria-label="Delete domain" />'
     })
 
     const button = getByRole('button', { name: 'Delete domain' })
@@ -241,7 +241,7 @@ describe('IconButton accessible name', () => {
       data: () => ({ label: 'Show password' }),
       template: `
         <div>
-          <IconButton icon="pi pi-eye" :aria-label="label" />
+          <IconButton icon="ai ai-eye" :aria-label="label" />
           <button type="button" data-testid="toggle" @click="label = 'Hide password'">toggle</button>
         </div>
       `
@@ -258,7 +258,7 @@ describe('IconButton accessible name', () => {
       template: `
         <div>
           <span id="close-name">Close panel</span>
-          <IconButton icon="pi pi-times" aria-labelledby="close-name" />
+          <IconButton icon="ai ai-times" aria-labelledby="close-name" />
         </div>
       `
     })
@@ -272,7 +272,7 @@ describe('IconButton accessible name', () => {
 
 describe('IconButton touch target', () => {
   it('adds a 44px hit area on coarse pointers without changing the drawn size', () => {
-    const view = render(IconButton, { props: { icon: 'pi pi-times', ariaLabel: 'Close' } })
+    const view = render(IconButton, { props: { icon: 'ai ai-times', ariaLabel: 'Close' } })
     const target = view.getByRole('button').querySelector('[data-slot="touch-target"]')
 
     expect(target?.className).toContain('pointer-coarse:block')

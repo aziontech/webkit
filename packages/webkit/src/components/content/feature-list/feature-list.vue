@@ -59,7 +59,7 @@
         class="flex min-w-0 items-start gap-(--spacing-xs)"
       >
         <i
-          class="pi pi-check mt-0.5 shrink-0 text-body-sm text-(--success-contrast)"
+          class="ai ai-check mt-0.5 shrink-0 text-body-sm text-(--success-contrast)"
           aria-hidden="true"
         />
         <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">

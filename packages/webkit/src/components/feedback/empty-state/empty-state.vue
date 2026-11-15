@@ -13,7 +13,7 @@
     title: string
     /** Supporting body copy below the title. */
     description?: string
-    /** PrimeIcons/Azion icon class for the standardized adornment (e.g. `pi pi-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders. */
+    /** Azion icon class for the standardized adornment (e.g. `ai ai-inbox`). When set, renders a size-scaled featured-icon tile; when empty and the `icon` slot is unused, no adornment renders. */
     icon?: string
     /** Size token; scales the whole block on one harmonic ramp — the adornment size, the title and description typography, the surrounding padding, and the gaps between adornment, text, and actions all step up together. */
     size?: EmptyStateSize

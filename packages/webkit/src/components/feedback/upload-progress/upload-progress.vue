@@ -104,9 +104,9 @@
   const RUNNING_KEY = { upload: 'uploading', move: 'moving', delete: 'deleting' } as const
   const DONE_KEY = { upload: 'uploaded', move: 'moved', delete: 'deleted' } as const
   const GLYPH = {
-    upload: 'pi pi-upload',
-    move: 'pi pi-arrow-right-arrow-left',
-    delete: 'pi pi-trash'
+    upload: 'ai ai-upload',
+    move: 'ai ai-arrow-right-arrow-left',
+    delete: 'ai ai-trash'
   } as const
 
   const heading = computed<string>(() => {
@@ -190,7 +190,7 @@
         >{{ percentText }}</span
       >
       <IconButton
-        :icon="isCollapsed ? 'pi pi-chevron-up' : 'pi pi-chevron-down'"
+        :icon="isCollapsed ? 'ai ai-chevron-up' : 'ai ai-chevron-down'"
         kind="transparent"
         size="small"
         :ariaLabel="isCollapsed ? t('uploadProgress.expand') : t('uploadProgress.collapse')"
@@ -201,7 +201,7 @@
       />
       <IconButton
         v-if="state !== 'running'"
-        icon="pi pi-times"
+        icon="ai ai-times"
         kind="transparent"
         size="small"
         :ariaLabel="t('uploadProgress.close')"
@@ -257,7 +257,7 @@
                   class="flex items-center gap-(--spacing-xxs) text-label-sm text-(--danger-contrast)"
                 >
                   <i
-                    class="pi pi-times-circle shrink-0"
+                    class="ai ai-times-circle shrink-0"
                     aria-hidden="true"
                   />
                   <span class="min-w-0">{{ item.error }}</span>
@@ -278,7 +278,7 @@
               <IconButton
                 key="icon-button-2"
                 v-if="cancelable && (item.status === 'queued' || item.status === 'running')"
-                icon="pi pi-times"
+                icon="ai ai-times"
                 kind="transparent"
                 size="small"
                 :ariaLabel="t('uploadProgress.cancelItem', { name: item.name })"
@@ -288,7 +288,7 @@
               <IconButton
                 key="icon-button-3"
                 v-else-if="item.status === 'error'"
-                icon="pi pi-refresh"
+                icon="ai ai-refresh"
                 kind="transparent"
                 size="small"
                 :ariaLabel="t('uploadProgress.retryItem', { name: item.name })"
@@ -297,7 +297,7 @@
               />
               <i
                 v-else-if="item.status === 'done'"
-                class="pi pi-check shrink-0 px-(--spacing-xs) text-(--text-muted)"
+                class="ai ai-check shrink-0 px-(--spacing-xs) text-(--text-muted)"
                 aria-hidden="true"
               />
             </div>
@@ -330,7 +330,7 @@
         key="button-2"
         v-if="state === 'failed'"
         :label="t('uploadProgress.retryFailed')"
-        icon="pi pi-refresh"
+        icon="ai ai-refresh"
         kind="outlined"
         size="small"
         :data-testid="`${testId}__retry-failed`"

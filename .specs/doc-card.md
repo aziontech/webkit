@@ -3,8 +3,8 @@ name: doc-card
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 5abfee5ebc8f5fc8e268f4780b2215e53a78ec7fa9586c9863173bdb8e2d102e
+spec_version: 3
+checksum: e28e3e8beedd0ba75f8660ca44236f45f2ba7b2bda661a5e02d54e0533db53d9
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -48,7 +48,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 <template>
   <DocCard
     title="Edge Application"
-    icon="pi pi-server"
+    icon="ai ai-server"
     href="/docs/edge-application"
     link-label="Read the guide"
   >
@@ -63,7 +63,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 | ----------- | --------------------- | --------- | -------- | ------------------------------------------------------------------------------------ |
 | `title`     | `string`              | `''`      | false    | Card heading.                                                                        |
 | `eyebrow`   | `string`              | `''`      | false    | Small muted line above the title — who makes the thing, when the title does not say. |
-| `icon`      | `string`              | `''`      | false    | PrimeIcons class for the leading glyph. Ignored when the `icon` slot is filled.      |
+| `icon`      | `string`              | `''`      | false    | Azion icon class for the leading glyph. Ignored when the `icon` slot is filled.      |
 | `href`      | `string`              | `''`      | false    | Destination; when set the whole card becomes the link.                               |
 | `target`    | `'_self' \| '_blank'` | `'_self'` | false    | Where the link opens.                                                                |
 | `label`     | `string`              | `''`      | false    | Fallback copy when the default slot is empty.                                        |

@@ -20,7 +20,7 @@ const TESTID = 'marketing-diagram'
 
 const spec: DiagramSpec = {
   nodes: [
-    { key: 'user', kind: 'pill', title: 'User', icon: 'pi pi-user', active: true },
+    { key: 'user', kind: 'pill', title: 'User', icon: 'ai ai-user', active: true },
     { key: 'workload', kind: 'card', eyebrow: 'Workload', title: 'shop.example.com', lit: true },
     { key: 'cache', kind: 'item', eyebrow: 'Cache', title: 'Served from cache' },
     { key: 'origin', kind: 'item', eyebrow: 'Origin', title: 'origin.example.com' }

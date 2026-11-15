@@ -95,15 +95,15 @@ describe('FileDropzone', () => {
     })
 
     it('renders the icon class on the decorative glyph', () => {
-      const { getByTestId } = render(FileDropzone, { props: { icon: 'pi pi-upload' } })
+      const { getByTestId } = render(FileDropzone, { props: { icon: 'ai ai-upload' } })
       const glyph = getByTestId(TEST_ID).querySelector('i')
-      expect(glyph?.className).toContain('pi-upload')
+      expect(glyph?.className).toContain('ai-upload')
       expect(glyph?.getAttribute('aria-hidden')).toBe('true')
     })
 
     it('draws the cloud-upload glyph when icon is left empty', () => {
       const { getByTestId } = render(FileDropzone)
-      expect(getByTestId(TEST_ID).querySelector('i')?.classList.contains('pi-cloud-upload')).toBe(
+      expect(getByTestId(TEST_ID).querySelector('i')?.classList.contains('ai-cloud-upload')).toBe(
         true
       )
     })

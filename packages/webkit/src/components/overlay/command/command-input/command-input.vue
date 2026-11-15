@@ -72,7 +72,7 @@
       @click="goBack"
     >
       <i
-        class="pi pi-chevron-left shrink-0 text-label-sm text-(--text-muted) rtl:-scale-x-100"
+        class="ai ai-chevron-left shrink-0 text-label-sm text-(--text-muted) rtl:-scale-x-100"
         aria-hidden="true"
       />
       <span class="truncate">{{ ctx.pageHeading.value }}</span>
@@ -95,7 +95,7 @@
     >
       <template #prefix>
         <span
-          class="pi pi-search"
+          class="ai ai-search"
           aria-hidden="true"
         />
       </template>

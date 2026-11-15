@@ -3,11 +3,11 @@ name: chip
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-948
   node_id: 476:948
-checksum: e689181e94f54d9d2b51710b564989b4e0988ac157cce9b1647c15b7941ef9f6
+checksum: 3cc7e9fbbf5557b7d75c936e56ca124b032ae15d92ad5b61fc654873de5b6640
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -220,7 +220,7 @@ Without `v-model:selected` the chip is uncontrolled and holds its own state, sta
 
 - Visible focus: both the clickable root (when `clickable`) and the remove button use `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Keyboard map: when `clickable` or `selectable` (and not `disabled`), the root is focusable (`tabindex="0"`) and `Enter` / `Space` **dispatch a real DOM click** on the root (`preventDefault`ed first, so `Space` does not scroll), which in turn emits `click` (and, when `selectable`, toggles `selected`). Dispatching rather than emitting directly is what lets a chip serve as an overlay trigger — `Popover.Trigger` and friends open on the DOM click that bubbles out of their child, so a chip that only emitted a Vue event would work with the mouse and do nothing from the keyboard. When `removable`, `Tab` reaches the remove button and `Enter` / `Space` activate it and emit `remove`. Keystrokes that originate on the remove button do not bubble to the root activation (the handler ignores events whose `target` is not the root itself). When a chip is both interactive and `removable`, the button role, `tabindex`, `aria-pressed` and the `Enter` / `Space` handler move from the root to an inner body element (`data-chip-body`, testid `<testid>__body`) that holds the label, and the remove button sits beside it, not inside it: a `role="button"` with a `<button>` inside is `nested-interactive`, and screen readers flatten the inner control away. The root keeps the click handler and draws the focus ring when the body is focused (`has-[[data-chip-body]:focus-visible]`). Tab order is body, then remove button.
-- ARIA: when neither `clickable` nor `selectable`, the root is a non-interactive `<span>` container; when either is set, it is `role="button"` with `tabindex="0"`. A `selectable` chip is a toggle button: `aria-pressed="true|false"` mirrors the `selected` model and flips on every activation, so the state is announced, not only painted. When `disabled`, the root carries `aria-disabled="true"` (interactive or not) and an interactive root drops `tabindex`; the remove control is a native disabled `<button>`. The remove control is a real `<button type="button">`; the `pi pi-times` glyph is `aria-hidden="true"`. Its `aria-label` and its tooltip text are **the same derived string** — `Remove <label>` when `label` is set, `Remove` otherwise — so what is shown and what is announced cannot drift.
+- ARIA: when neither `clickable` nor `selectable`, the root is a non-interactive `<span>` container; when either is set, it is `role="button"` with `tabindex="0"`. A `selectable` chip is a toggle button: `aria-pressed="true|false"` mirrors the `selected` model and flips on every activation, so the state is announced, not only painted. When `disabled`, the root carries `aria-disabled="true"` (interactive or not) and an interactive root drops `tabindex`; the remove control is a native disabled `<button>`. The remove control is a real `<button type="button">`; the `ai ai-times` glyph is `aria-hidden="true"`. Its `aria-label` and its tooltip text are **the same derived string** — `Remove <label>` when `label` is set, `Remove` otherwise — so what is shown and what is announced cannot drift.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the remove icon.
 - `motion-reduce:transition-none` on every transition the chip declares (kind/border colour, remove-button colour). The chip declares no dismiss animation at all, so there is nothing to suppress there.
 - Touch target: the remove control is drawn at 24×24 px at `medium` and 16×16 px at `small`; a `[data-slot=touch-target]` span extends its hit area to at least 24×24 px at both sizes (WCAG 2.5.8), and to 44×44 px on a coarse pointer.

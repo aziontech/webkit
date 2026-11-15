@@ -133,7 +133,7 @@
               :target="action.target"
               :kind="action.kind"
               size="large"
-              :icon="action.trailing ? 'pi pi-chevron-right' : ''"
+              :icon="action.trailing ? 'ai ai-chevron-right' : ''"
               icon-position="trailing"
               :animated="Boolean(action.trailing)"
             />

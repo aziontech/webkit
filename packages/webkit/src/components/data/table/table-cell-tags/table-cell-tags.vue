@@ -18,7 +18,7 @@
     defineProps<{
       /** The tags. As many as fit show; the rest hide behind a `+N` chip. Empty renders a muted dash. */
       items?: string[]
-      /** PrimeIcons class for a leading glyph that names the column. */
+      /** Azion icon class for a leading glyph that names the column. */
       icon?: string
       /** What the tags are, for the `+N` popover. Empty uses the catalog (`tag` / `tags`). */
       noun?: OverflowCountNoun

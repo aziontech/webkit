@@ -119,7 +119,7 @@
               class="flex items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
             >
               <i
-                class="pi pi-chevron-down text-body-xs text-(--text-default)"
+                class="ai ai-chevron-down text-body-xs text-(--text-default)"
                 aria-hidden="true"
               />
               <span class="flex min-w-0 flex-col">
@@ -181,7 +181,7 @@ product_id"
             class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
           >
             <i
-              class="pi pi-chevron-right text-body-xs text-(--text-default) rtl:-scale-x-100"
+              class="ai ai-chevron-right text-body-xs text-(--text-default) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="flex min-w-0 flex-col">

@@ -24,7 +24,7 @@ const groups = instance
 export default {
   example: figma.code`<DropdownMenu>
   <DropdownMenu.Trigger>
-    <IconButton kind="outlined" icon="pi pi-ellipsis-h" aria-label="Open menu" />
+    <IconButton kind="outlined" icon="ai ai-ellipsis-h" aria-label="Open menu" />
   </DropdownMenu.Trigger>${
     showTop
       ? figma.code`

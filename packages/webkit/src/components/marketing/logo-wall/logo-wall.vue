@@ -133,7 +133,7 @@
             class="pointer-events-none absolute inset-x-0 top-1/2 mt-(--spacing-xs) flex translate-y-1 items-center justify-center gap-(--spacing-xxs) whitespace-nowrap text-overline-md uppercase text-(--text-default) opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-hover/logo:translate-y-0 group-hover/logo:opacity-100 group-focus-visible/logo:translate-y-0 group-focus-visible/logo:opacity-100 motion-reduce:transition-none"
           >
             {{ linkText }}
-            <i class="pi pi-arrow-up-right leading-none" />
+            <i class="ai ai-arrow-up-right leading-none" />
           </span>
         </a>
         <div

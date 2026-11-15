@@ -102,13 +102,13 @@ describe('Tag', () => {
 
   it('renders the leading icon element with the provided class and hides it from a11y', () => {
     const { getByTestId } = render(Tag, {
-      props: { label: 'Label', icon: 'pi pi-box' }
+      props: { label: 'Label', icon: 'ai ai-box' }
     })
 
     const iconEl = getByTestId('content-tag__icon')
     expect(iconEl.getAttribute('aria-hidden')).toBe('true')
-    expect(iconEl.classList.contains('pi')).toBe(true)
-    expect(iconEl.classList.contains('pi-box')).toBe(true)
+    expect(iconEl.classList.contains('ai')).toBe(true)
+    expect(iconEl.classList.contains('ai-box')).toBe(true)
   })
 
   it('treats an empty icon string as no icon and keeps the tag out of the tab order', () => {
@@ -142,7 +142,7 @@ describe('Tag', () => {
 
   it('has no a11y violations with an icon and pill shape', async () => {
     const { container } = render(Tag, {
-      props: { label: 'Label', icon: 'pi pi-box', rounded: true, size: 'small' }
+      props: { label: 'Label', icon: 'ai ai-box', rounded: true, size: 'small' }
     })
 
     await expectNoA11yViolations(container)

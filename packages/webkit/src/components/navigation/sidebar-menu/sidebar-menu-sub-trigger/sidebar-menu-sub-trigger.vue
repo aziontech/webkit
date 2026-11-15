@@ -91,7 +91,7 @@
     return name ? t('menu.expandNamed', { label: name }) : t('menu.expand')
   })
 
-  const arrowIcon = computed(() => (isInline.value ? 'pi pi-chevron-down' : 'pi pi-chevron-right'))
+  const arrowIcon = computed(() => (isInline.value ? 'ai ai-chevron-down' : 'ai ai-chevron-right'))
 
   const ROW_CLASS = 'group/row relative flex h-8 w-full shrink-0 items-center'
 

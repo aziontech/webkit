@@ -127,7 +127,7 @@
   const platforms = ['azion', 'competitor'] as const
 
   const supportIcon: Record<ComparisonTableSupport, string> = {
-    full: 'pi pi-check-circle',
+    full: 'ai ai-check-circle',
     partial: 'ai ai-circle-half',
     none: 'ai ai-circle-minus'
   }
@@ -256,7 +256,7 @@
                         <IconButton
                           kind="transparent"
                           size="small"
-                          icon="pi pi-info-circle"
+                          icon="ai ai-info-circle"
                           :ariaLabel="t('comparisonTable.about', { capability: item.capability })"
                         />
                       </PopoverTrigger>

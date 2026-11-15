@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       kind: 'pill',
       title: 'User',
-      icon: 'pi pi-user',
+      icon: 'ai ai-user',
       active: true
     },
     {
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'Origin',
       title: 'origin-a · us-east',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       active: true
     },
     {
@@ -45,14 +45,14 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'Origin',
       title: 'origin-b · eu-west',
-      icon: 'pi pi-server'
+      icon: 'ai ai-server'
     },
     {
       key: 'south',
       kind: 'item',
       eyebrow: 'Origin',
       title: 'origin-c · sa-east',
-      icon: 'pi pi-server',
+      icon: 'ai ai-server',
       status: {
         label: 'Unhealthy',
         severity: 'warning'

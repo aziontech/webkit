@@ -38,8 +38,8 @@
   ]
 
   const ADD_TO_FILES = [
-    { label: 'Upload file', value: 'upload', icon: 'pi pi-upload' },
-    { label: 'Add folder', value: 'folder', icon: 'pi pi-folder-plus' }
+    { label: 'Upload file', value: 'upload', icon: 'ai ai-upload' },
+    { label: 'Add folder', value: 'folder', icon: 'ai ai-folder-plus' }
   ]
 
   type Kind = 'parent' | 'folder' | 'file'
@@ -55,7 +55,7 @@
     name,
     kind: 'folder',
     size: '-',
-    icon: 'pi pi-folder'
+    icon: 'ai ai-folder'
   })
   const file = (name: string, size: string, icon: string): Entry => ({
     name,
@@ -67,18 +67,18 @@
   const ROOT: Entry[] = [
     folder('assets/'),
     folder('images/'),
-    file('favicon.ico', '15 KB', 'pi pi-image'),
-    file('index.html', '2.1 KB', 'pi pi-code'),
-    file('manifest.json', '412 B', 'pi pi-database'),
-    file('robots.txt', '64 B', 'pi pi-file')
+    file('favicon.ico', '15 KB', 'ai ai-image'),
+    file('index.html', '2.1 KB', 'ai ai-code'),
+    file('manifest.json', '412 B', 'ai ai-database'),
+    file('robots.txt', '64 B', 'ai ai-file')
   ]
 
   const ASSETS: Entry[] = [
-    { name: '..', kind: 'parent', size: '-', icon: 'pi pi-folder-open' },
-    file('index-B7xq2k1d.js', '148.2 KB', 'pi pi-code'),
-    file('index-Cm4r9zLp.css', '21.6 KB', 'pi pi-code'),
-    file('logo-9aW3eT0c.svg', '3.2 KB', 'pi pi-image'),
-    file('vendor-D1f8sKqa.js', '412.9 KB', 'pi pi-code')
+    { name: '..', kind: 'parent', size: '-', icon: 'ai ai-folder-open' },
+    file('index-B7xq2k1d.js', '148.2 KB', 'ai ai-code'),
+    file('index-Cm4r9zLp.css', '21.6 KB', 'ai ai-code'),
+    file('logo-9aW3eT0c.svg', '3.2 KB', 'ai ai-image'),
+    file('vendor-D1f8sKqa.js', '412.9 KB', 'ai ai-code')
   ]
 
   const tableRows = (entries: Entry[]) => {
@@ -219,7 +219,7 @@
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -233,7 +233,7 @@
                     <span class="flex shrink-0">
                       <SplitButton
                         label="Add to files"
-                        icon="pi pi-plus"
+                        icon="ai ai-plus"
                         kind="primary"
                         size="medium"
                         :items="ADD_TO_FILES"

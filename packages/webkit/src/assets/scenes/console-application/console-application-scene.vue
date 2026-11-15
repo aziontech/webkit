@@ -201,7 +201,7 @@
             :label="step.action"
             kind="outlined"
             size="medium"
-            icon="pi pi-plus"
+            icon="ai ai-plus"
             class="shrink-0"
           />
         </div>
@@ -216,7 +216,7 @@
             >
               <template #prefix>
                 <i
-                  class="pi pi-search"
+                  class="ai ai-search"
                   aria-hidden="true"
                 />
               </template>
@@ -225,7 +225,7 @@
               label="Filter"
               kind="outlined"
               size="medium"
-              icon="pi pi-filter"
+              icon="ai ai-filter"
               class="shrink-0"
             />
           </div>
@@ -304,7 +304,7 @@
         >
           <template #leading>
             <i
-              class="pi pi-info-circle shrink-0 text-(--text-muted)"
+              class="ai ai-info-circle shrink-0 text-(--text-muted)"
               aria-hidden="true"
             />
             <span class="min-w-0">
@@ -351,7 +351,7 @@
               drawer.title
             }}</span>
             <IconButton
-              icon="pi pi-times"
+              icon="ai ai-times"
               aria-label="Close"
               kind="transparent"
               size="small"

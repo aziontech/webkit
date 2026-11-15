@@ -3,8 +3,8 @@ name: media-split
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: 0156d19343b9795c4f84dfe0bc8dedc030ffc143b1c762e16f874f8b01ddc7e5
+spec_version: 5
+checksum: d3689541c1c26184357a468819e0f02e31c382cfb5af30bf9f3f462239f2a816
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -144,7 +144,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 | `default` | —     | Description body; replaces the `description` prop when provided.                                                                                                                                                                                             |
 | `content` | —     | Further copy-column content under the description — an inventory, a list of surfaces — inside the paragraph's own measure.                                                                                                                                   |
 | `media`   | —     | The band's media; replaces the image built from `src`.                                                                                                                                                                                                       |
-| `actions` | —     | Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `kind="secondary"` for the action, `kind="outlined"` for a second beside it, `icon="pi pi-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
+| `actions` | —     | Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `kind="secondary"` for the action, `kind="outlined"` for a second beside it, `icon="ai ai-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
 
 ## States
 

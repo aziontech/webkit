@@ -3,9 +3,9 @@ name: overflow-count
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 237a69675cd91698739720c7436b783ed4a43c6317bff7ff4c1474a2f082bc37
+checksum: 8d65d09cdb8f3b315f8e4bdabd0359646d88eb8dc4a7bf4574f8e554a21f4e53
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -133,7 +133,7 @@ _none_
 ## Right-to-left
 
 - Layout: logical utilities only; the external-link glyph sits at the inline end.
-- Icons: `pi-external-link` and `pi-search` are not mirrored.
+- Icons: `ai-external-link` and `ai-search` are not mirrored.
 - Keyboard: unchanged.
 - User data: each entry is wrapped in `dir="auto"` so a domain keeps its order inside right-to-left text.
 

@@ -704,7 +704,7 @@
         <slot name="empty">
           <EmptyState
             size="small"
-            icon="pi pi-table"
+            icon="ai ai-table"
             :title="t('dataGrid.emptyTitle')"
             :description="t('dataGrid.emptyDescription')"
           />

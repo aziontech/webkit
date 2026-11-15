@@ -291,7 +291,7 @@
               :label="filterButtonLabel"
               kind="outlined"
               size="large"
-              icon="pi pi-filter"
+              icon="ai ai-filter"
               :aria-expanded="expanded ? 'true' : 'false'"
               :aria-controls="panelId"
               class="shrink-0 lg:hidden"
@@ -307,7 +307,7 @@
               class="min-w-0 flex-1"
             >
               <template #prefix>
-                <i class="pi pi-search text-(--text-muted)" />
+                <i class="ai ai-search text-(--text-muted)" />
               </template>
             </Input>
           </div>
@@ -344,7 +344,7 @@
                   >
                     <template #prefix>
                       <i
-                        class="pi pi-search"
+                        class="ai ai-search"
                         aria-hidden="true"
                       />
                     </template>
@@ -427,7 +427,7 @@
                 >
                   {{ linkLabel }}
                   <i
-                    class="pi pi-arrow-up-right text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none"
+                    class="ai ai-arrow-up-right text-[length:inherit] leading-none transition-[translate] duration-moderate-02 ease-expressive-entrance group-hover/card:-translate-y-0.5 group-hover/card:translate-x-0.5 rtl:group-hover/card:-translate-x-0.5 motion-reduce:transition-none"
                   />
                 </span>
               </a>
@@ -461,7 +461,7 @@
       >
         <EmptyState
           :title="empty.title"
-          icon="pi pi-search"
+          icon="ai ai-search"
           class="p-(--spacing-xxl)"
         >
           <template #actions>

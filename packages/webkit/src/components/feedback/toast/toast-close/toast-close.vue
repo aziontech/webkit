@@ -26,7 +26,7 @@
 <template>
   <IconButton
     v-bind="$attrs"
-    icon="pi pi-times"
+    icon="ai ai-times"
     kind="transparent"
     size="small"
     :ariaLabel="t('toast.close')"

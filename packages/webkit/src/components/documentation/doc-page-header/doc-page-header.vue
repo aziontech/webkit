@@ -17,7 +17,7 @@
   export type DocPageAction = {
     /** The control's words. Two or three; the sentence goes in `tip`. */
     label: string
-    /** PrimeIcons class for the leading glyph. */
+    /** Azion icon class for the leading glyph. */
     icon?: string
     /** Destination. With it the control is a real anchor, without it a button. */
     href?: string
@@ -134,7 +134,7 @@
         class="m-0 flex items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
       >
         <i
-          class="pi pi-history shrink-0 text-label-sm leading-none"
+          class="ai ai-history shrink-0 text-label-sm leading-none"
           aria-hidden="true"
         />
         <span>

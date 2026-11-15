@@ -239,7 +239,7 @@
       <slot name="empty">
         <EmptyState
           size="small"
-          icon="pi pi-th-large"
+          icon="ai ai-th-large"
           :title="t('cardList.emptyTitle')"
           :description="t('cardList.emptyDescription')"
         />

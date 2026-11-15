@@ -32,7 +32,7 @@
   withDefaults(defineProps<Props>(), {
     description: '',
     meta: '',
-    icon: 'pi pi-file',
+    icon: 'ai ai-file',
     copyValue: '',
     downloadHref: '',
     openable: false
@@ -110,7 +110,7 @@
         />
         <IconButton
           v-if="downloadHref"
-          icon="pi pi-download"
+          icon="ai ai-download"
           kind="transparent"
           size="small"
           :href="downloadHref"
@@ -124,7 +124,7 @@
           :aria-label="t('artifactPreview.openLabel', { title })"
           kind="outlined"
           size="small"
-          icon="pi pi-external-link"
+          icon="ai ai-external-link"
           icon-position="trailing"
           :data-testid="`${testId}__open`"
           @click="(event: MouseEvent) => emit('open', event)"

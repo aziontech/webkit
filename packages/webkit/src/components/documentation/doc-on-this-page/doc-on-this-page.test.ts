@@ -20,7 +20,7 @@ const ITEMS = [
 const GROUPS = [
   {
     label: 'Repository',
-    links: [{ label: 'View source', href: 'https://github.com/aziontech', icon: 'pi pi-github' }]
+    links: [{ label: 'View source', href: 'https://github.com/aziontech', icon: 'ai ai-github' }]
   },
   { label: 'Community', links: [{ label: 'Discord', href: 'https://discord.gg' }] }
 ]

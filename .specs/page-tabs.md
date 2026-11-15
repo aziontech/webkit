@@ -3,8 +3,8 @@ name: page-tabs
 category: navigation
 structure: monolithic
 status: implemented
-checksum: 6a49f22126a977279b16d78d7d581a58e4a30d6c2daf60faf2aa28a9e4ee2ede
-spec_version: 4
+checksum: fe4b1b9c4212032c209ced3b9bbe9789d88085191a16bca4110ee789b65ef575
+spec_version: 5
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -68,7 +68,7 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
         label="Deploy"
         kind="outlined"
         size="medium"
-        icon="pi pi-cloud-upload"
+        icon="ai ai-cloud-upload"
       />
     </template>
   </PageTabs>

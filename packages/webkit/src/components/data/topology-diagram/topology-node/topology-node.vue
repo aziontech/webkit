@@ -102,7 +102,7 @@
         />
         <i
           :data-pushed="!status || null"
-          class="pi pi-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-transform duration-moderate-01 ease-productive-entrance group-data-[state=open]:rotate-180 data-[pushed]:ms-auto motion-reduce:transition-none"
+          class="ai ai-chevron-down shrink-0 text-body-xs text-(--text-muted) transition-transform duration-moderate-01 ease-productive-entrance group-data-[state=open]:rotate-180 data-[pushed]:ms-auto motion-reduce:transition-none"
           aria-hidden="true"
         />
       </button>
@@ -129,7 +129,7 @@
           >{{ node.name }}</span
         >
         <i
-          class="pi pi-external-link shrink-0 text-body-xs leading-none"
+          class="ai ai-external-link shrink-0 text-body-xs leading-none"
           aria-hidden="true"
           :data-testid="`${testId}__node-link-icon`"
         />
@@ -153,7 +153,7 @@
             <DropdownMenuTrigger>
               <Tooltip :text="bindLabel">
                 <IconButton
-                  :icon="bound ? 'pi pi-pencil' : 'pi pi-plus'"
+                  :icon="bound ? 'ai ai-pencil' : 'ai ai-plus'"
                   kind="outlined"
                   size="small"
                   :ariaLabel="bindLabel"
@@ -189,7 +189,7 @@
             :text="removeLabel"
           >
             <IconButton
-              icon="pi pi-times"
+              icon="ai ai-times"
               kind="outlined"
               size="small"
               :ariaLabel="removeLabel"

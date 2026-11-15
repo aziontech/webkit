@@ -14,7 +14,7 @@ export interface RadioGroupOption {
   label: string
   /** One-line explanation under the label. */
   description?: string
-  /** PrimeIcons class of a glyph before the label. */
+  /** Azion icon class of a glyph before the label. */
   icon?: string
   /** Accessible name when the label alone is ambiguous. */
   ariaLabel?: string

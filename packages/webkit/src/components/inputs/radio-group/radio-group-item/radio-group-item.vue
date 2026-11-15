@@ -16,7 +16,7 @@
     disabled?: boolean
     /** One-line explanation under the label; it also describes the radio to assistive tech. */
     description?: string
-    /** PrimeIcons class of a glyph before the label. Empty renders none. */
+    /** Azion icon class of a glyph before the label. Empty renders none. */
     icon?: string
     /** Accessible name of the radio when the label alone is ambiguous or is not text. */
     ariaLabel?: string

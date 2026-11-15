@@ -71,7 +71,7 @@ describe('Table cell presets', () => {
   it('CellLink: no destination renders plain text with no mark', () => {
     const view = render(TableCellLink, { props: { label: 'draft' } })
     expect(view.queryByRole('link')).toBeNull()
-    expect(view.container.querySelector('.pi-external-link')).toBeNull()
+    expect(view.container.querySelector('.ai-external-link')).toBeNull()
   })
 
   it('CellLink: an in-app route uses a registered RouterLink, else a plain href', () => {

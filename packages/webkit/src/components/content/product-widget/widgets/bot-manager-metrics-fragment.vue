@@ -99,7 +99,7 @@
                       {{ metric.label }}
                     </span>
                     <i
-                      class="pi pi-info-circle text-body-xs leading-none text-(--text-muted)"
+                      class="ai ai-info-circle text-body-xs leading-none text-(--text-muted)"
                       aria-hidden="true"
                     />
                   </span>

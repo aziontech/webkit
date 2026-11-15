@@ -118,12 +118,12 @@
         <i
           aria-hidden="true"
           :data-testid="`${testId}__lock`"
-          class="pi pi-lock text-body-xxs leading-none text-(--bg-surface) group-data-[checked]:hidden"
+          class="ai ai-lock text-body-xxs leading-none text-(--bg-surface) group-data-[checked]:hidden"
         />
         <i
           aria-hidden="true"
           :data-testid="`${testId}__lock-open`"
-          class="pi pi-lock-open hidden text-body-xxs leading-none text-(--color-base-black) group-data-[checked]:inline"
+          class="ai ai-lock-open hidden text-body-xxs leading-none text-(--color-base-black) group-data-[checked]:inline"
         />
       </template>
     </span>

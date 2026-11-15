@@ -22,7 +22,7 @@ const items = entries
     <NavigationMenu.Item>
       <NavigationMenu.Trigger>
         ${entry.label}
-        <NavigationMenu.Icon><i class="pi pi-chevron-down" aria-hidden="true" /></NavigationMenu.Icon>
+        <NavigationMenu.Icon><i class="ai ai-chevron-down" aria-hidden="true" /></NavigationMenu.Icon>
       </NavigationMenu.Trigger>
       <NavigationMenu.Content />
     </NavigationMenu.Item>`

@@ -193,7 +193,7 @@
             label="Deploy"
             kind="outlined"
             size="medium"
-            icon="pi pi-cloud-upload"
+            icon="ai ai-cloud-upload"
           />
         </div>
       </ShellMockupPart>
@@ -219,7 +219,7 @@
                     >
                       {{ FACTS.domain }}
                       <i
-                        class="pi pi-external-link text-body-xs leading-none"
+                        class="ai ai-external-link text-body-xs leading-none"
                         aria-hidden="true"
                       />
                     </span>
@@ -229,7 +229,7 @@
                       label="Visit"
                       kind="secondary"
                       size="medium"
-                      icon="pi pi-external-link"
+                      icon="ai ai-external-link"
                     />
                     <span
                       class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default)"
@@ -240,12 +240,12 @@
                       />
                       Production
                       <i
-                        class="pi pi-chevron-down shrink-0 text-(--text-muted)"
+                        class="ai ai-chevron-down shrink-0 text-(--text-muted)"
                         aria-hidden="true"
                       />
                     </span>
                     <IconButton
-                      icon="pi pi-ellipsis-h"
+                      icon="ai ai-ellipsis-h"
                       kind="outlined"
                       size="medium"
                       ariaLabel="Workload actions"
@@ -262,7 +262,7 @@
                     >
                       Custom domains
                       <i
-                        class="pi pi-plus-circle text-body-sm leading-none"
+                        class="ai ai-plus-circle text-body-sm leading-none"
                         aria-hidden="true"
                       />
                     </span>
@@ -312,7 +312,7 @@
                   class="flex min-h-12 items-center gap-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md)"
                 >
                   <i
-                    class="pi pi-angle-down text-(--text-muted)"
+                    class="ai ai-angle-down text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <span class="text-label-md text-(--text-default)">Deployment Settings</span>
@@ -321,7 +321,7 @@
                   >
                     Azion Default
                     <i
-                      class="pi pi-external-link text-body-xs leading-none"
+                      class="ai ai-external-link text-body-xs leading-none"
                       aria-hidden="true"
                     />
                   </span>
@@ -421,7 +421,7 @@
                             size="small"
                           />
                           <i
-                            class="pi pi-chevron-down shrink-0 text-(--text-muted)"
+                            class="ai ai-chevron-down shrink-0 text-(--text-muted)"
                             aria-hidden="true"
                           />
                         </div>
@@ -434,14 +434,14 @@
                             <span class="truncate">{{ node.name || '—' }}</span>
                             <i
                               v-if="node.link"
-                              class="pi pi-external-link shrink-0 text-body-xs leading-none"
+                              class="ai ai-external-link shrink-0 text-body-xs leading-none"
                               aria-hidden="true"
                             />
                           </span>
                           <IconButton
                             v-if="node.status !== 'Live' && node.status !== 'Active'"
                             class="ms-auto shrink-0"
-                            icon="pi pi-plus"
+                            icon="ai ai-plus"
                             kind="outlined"
                             size="small"
                             ariaLabel="Bind"
@@ -478,7 +478,7 @@
           </div>
           <IconButton
             class="ms-auto shrink-0"
-            icon="pi pi-times"
+            icon="ai ai-times"
             kind="outlined"
             size="small"
             ariaLabel="Close"
@@ -494,7 +494,7 @@
             >
               Resources
               <i
-                class="pi pi-info-circle text-body-xs text-(--text-muted)"
+                class="ai ai-info-circle text-body-xs text-(--text-muted)"
                 aria-hidden="true"
               />
             </h3>
@@ -527,7 +527,7 @@
                 >
                   Change Version
                   <i
-                    class="pi pi-chevron-down text-(--text-muted)"
+                    class="ai ai-chevron-down text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </span>
@@ -537,7 +537,7 @@
               >
                 Dependencies
                 <i
-                  class="pi pi-chevron-down ms-auto text-(--text-muted)"
+                  class="ai ai-chevron-down ms-auto text-(--text-muted)"
                   aria-hidden="true"
                 />
               </div>
@@ -568,7 +568,7 @@
             >
               Environment
               <i
-                class="pi pi-info-circle text-body-xs text-(--text-muted)"
+                class="ai ai-info-circle text-body-xs text-(--text-muted)"
                 aria-hidden="true"
               />
             </h3>

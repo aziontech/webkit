@@ -3,11 +3,11 @@ name: tooltip
 category: overlay
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 1da8c41b80fc9f920d7ab596991df7d7180349560bdfb5ce33ac593812f09cfd
+checksum: d9ccaed55b56832a02a901181e07831b9c578c19d52a88d2ed415d4a8b881e23
 created: 2026-06-02
 last_updated: 2026-11-15
 ---
@@ -62,7 +62,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
     placement="top"
   >
     <IconButton
-      icon="pi pi-trash"
+      icon="ai ai-trash"
       aria-label="Delete"
     />
   </Tooltip>

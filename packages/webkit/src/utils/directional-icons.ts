@@ -1,36 +1,30 @@
 export const MIRROR_CLASS = 'rtl:-scale-x-100'
 
 export const DIRECTIONAL_ICONS: ReadonlySet<string> = new Set([
-  'pi-chevron-left',
-  'pi-chevron-right',
-  'pi-chevron-circle-left',
-  'pi-chevron-circle-right',
-  'pi-angle-left',
-  'pi-angle-right',
-  'pi-angle-double-left',
-  'pi-angle-double-right',
-  'pi-arrow-left',
-  'pi-arrow-right',
-  'pi-arrow-circle-left',
-  'pi-arrow-circle-right',
-  'pi-arrow-down-left',
-  'pi-arrow-down-right',
-  'pi-caret-left',
-  'pi-caret-right',
-  'pi-sign-in',
-  'pi-sign-out',
-  'pi-reply',
-  'pi-undo',
-  'ai-angle-left',
-  'ai-angle-right',
   'ai-chevron-left',
   'ai-chevron-right',
+  'ai-chevron-circle-left',
+  'ai-chevron-circle-right',
+  'ai-angle-left',
+  'ai-angle-right',
+  'ai-angle-double-left',
+  'ai-angle-double-right',
   'ai-arrow-left',
-  'ai-arrow-right'
+  'ai-arrow-right',
+  'ai-arrow-circle-left',
+  'ai-arrow-circle-right',
+  'ai-arrow-down-left',
+  'ai-arrow-down-right',
+  'ai-caret-left',
+  'ai-caret-right',
+  'ai-sign-in',
+  'ai-sign-out',
+  'ai-reply',
+  'ai-undo'
 ])
 
 const DIRECTIONAL_TOKEN =
-  /(?:^|\s)(?:(?:pi-(?:(?:chevron|arrow)(?:-circle)?|angle(?:-double)?|arrow-down|caret)|ai-(?:angle|chevron|arrow))-(?:left|right)|pi-(?:sign-in|sign-out|reply|undo))(?=\s|$)/
+  /(?:^|\s)ai-(?:(?:(?:chevron|arrow)(?:-circle)?|angle(?:-double)?|arrow-down|caret)-(?:left|right)|sign-in|sign-out|reply|undo)(?=\s|$)/
 
 export function isDirectionalIcon(icon?: string | null): boolean {
   return Boolean(icon && DIRECTIONAL_TOKEN.test(icon))

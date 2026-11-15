@@ -19,7 +19,7 @@
     anchor?: string
     /** Turns the title into a disclosure that folds the band body. */
     collapsible?: boolean
-    /** Glyph shown before the title of a collapsible band (e.g. `pi pi-cog`). */
+    /** Glyph shown before the title of a collapsible band (e.g. `ai ai-cog`). */
     icon?: string
   }
 
@@ -95,7 +95,7 @@
         @click="copyLink"
       >
         <i
-          :class="copied ? 'pi pi-check' : 'pi pi-link'"
+          :class="copied ? 'ai ai-check' : 'ai ai-link'"
           class="text-body-xs"
           aria-hidden="true"
         />
@@ -123,7 +123,7 @@
           />
           <slot name="title">{{ title }}</slot>
           <i
-            class="pi pi-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance group-data-[state=open]/disclosure:rotate-180 motion-reduce:transition-none"
+            class="ai ai-chevron-down shrink-0 text-body-xs leading-none text-(--text-muted) transition-transform duration-fast-02 ease-productive-entrance group-data-[state=open]/disclosure:rotate-180 motion-reduce:transition-none"
             aria-hidden="true"
           />
         </button>

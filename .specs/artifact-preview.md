@@ -3,9 +3,9 @@ name: artifact-preview
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 99e43d9c319e6e265477732ac4a03ab91d193f18843f83c8228ab3a349e2cd2f
+checksum: b6d1a842b6e2095e27780075c87a8a1ee27cf89eb062baef17d3ab4e8104820c
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -58,7 +58,7 @@ preview (Cloudscape's inline preview): the first lines of code, the first rows o
   <ArtifactPreview
     title="cache-rules.json"
     meta="1 KB · JSON"
-    icon="pi pi-code"
+    icon="ai ai-code"
     :copy-value="rules"
     openable
     @open="showInDrawer"
@@ -84,7 +84,7 @@ _None. Exports: `"./artifact-preview"`. Composed DS components: `button` (Open),
 | `title`        | `string`  | —              | true     | File name or title of what was generated (`cache-rules.json`).                                                  |
 | `description`  | `string`  | `''`           | false    | One line on what it is or does.                                                                                 |
 | `meta`         | `string`  | `''`           | false    | Facts that help recognize it: size, rows, language (`2.4 KB · JSON`).                                           |
-| `icon`         | `string`  | `'pi pi-file'` | false    | Icon class for the file type.                                                                                   |
+| `icon`         | `string`  | `'ai ai-file'` | false    | Icon class for the file type.                                                                                   |
 | `copyValue`    | `string`  | `''`           | false    | Text the Copy control puts on the clipboard. Empty hides Copy.                                                  |
 | `downloadHref` | `string`  | `''`           | false    | URL of the file for the Download control. Empty hides Download.                                                 |
 | `openable`     | `boolean` | `false`        | false    | Shows Open, which emits `open` so the owner shows the full artifact in a side panel or page (a canvas preview). |

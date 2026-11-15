@@ -156,7 +156,7 @@
               class="flex items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
             >
               <i
-                class="pi pi-chevron-down text-body-xs text-(--text-default)"
+                class="ai ai-chevron-down text-body-xs text-(--text-default)"
                 aria-hidden="true"
               />
               <span class="flex min-w-0 flex-col">

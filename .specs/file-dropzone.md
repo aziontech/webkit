@@ -3,10 +3,10 @@ name: file-dropzone
 category: inputs
 structure: monolithic
 status: implemented
-checksum: 2fd81ec2c111751a13b5e29bdc19960a83d0fcecb65ea5724ac4795650757b0f
-spec_version: 4
+checksum: 8f5d946f53e0b6e4dff3b1f07f45d8e642539cb0a0dada0f930e363bcb036d50
+spec_version: 5
 created: 2026-11-10
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # FileDropzone — Component Spec
@@ -130,7 +130,7 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 | `directories` | `boolean`               | `false`    | false    | Accepts dropped folders: walks every dropped folder and emits the files inside, each with its `webkitRelativePath` (`assets/img/logo.svg`). The events fire after the walk.                     |
 | `disabled`    | `boolean`               | `false`    | false    | Ignores drags and drops: no active state, no events.                                                                                                                                            |
 | `invalid`     | `boolean`               | `false`    | false    | Paints the inline region with the danger border so a wrapping field can show a validation error. Drops still work.                                                                              |
-| `icon`        | `string`                | `''`       | false    | PrimeIcons class for the glyph above the title. Empty draws the cloud-upload glyph (`pi pi-cloud-upload`).                                                                                      |
+| `icon`        | `string`                | `''`       | false    | Azion icon class for the glyph above the title. Empty draws the cloud-upload glyph (`ai ai-cloud-upload`).                                                                                      |
 
 `multiple` defaults to `true` on purpose, against the "booleans default to `false`" habit. Most drops carry several files (a folder's contents, a batch of assets), and the positive name `multiple` matches the native `<input multiple>` attribute the consumer pairs it with. The inverse (`single`) would be a new term with no native counterpart.
 

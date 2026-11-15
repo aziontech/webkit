@@ -80,7 +80,7 @@ describe('DocMarkdown', () => {
         '</CardGroup>',
         '',
         '<ItemGroup>',
-        '  <Item title="SQL" icon="pi pi-database">Store relational data.</Item>',
+        '  <Item title="SQL" icon="ai ai-database">Store relational data.</Item>',
         '</ItemGroup>',
         '',
         '<AccordionGroup>',

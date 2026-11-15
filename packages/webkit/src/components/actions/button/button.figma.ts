@@ -37,7 +37,7 @@ export default {
   }${
     showIcon
       ? figma.code`
-  icon="pi pi-plus"`
+  icon="ai ai-plus"`
       : ''
   }${
     disabled

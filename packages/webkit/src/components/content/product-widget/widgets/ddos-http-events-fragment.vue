@@ -100,7 +100,7 @@
         <div class="flex flex-col gap-(--spacing-xs)">
           <span class="flex items-center gap-(--spacing-xs)">
             <IconButton
-              icon="pi pi-filter"
+              icon="ai ai-filter"
               kind="outlined"
               size="small"
               ariaLabel="Filter"
@@ -119,14 +119,14 @@
               class="flex h-7 items-center gap-(--spacing-xs) rounded-(--shape-button) border border-(--border-default) px-(--spacing-sm)"
             >
               <i
-                class="pi pi-calendar text-body-xs text-(--text-muted)"
+                class="ai ai-calendar text-body-xs text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="text-body-xs text-(--text-default)">Last 5 minutes</span>
             </span>
             <Button
               label="Refresh"
-              icon="pi pi-refresh"
+              icon="ai ai-refresh"
               kind="outlined"
               size="small"
             />

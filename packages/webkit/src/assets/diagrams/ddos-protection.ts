@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       kind: 'pill',
       title: 'Users and attackers',
-      icon: 'pi pi-exclamation-triangle',
+      icon: 'ai ai-exclamation-triangle',
       active: true
     },
     {
@@ -16,7 +16,7 @@ const spec: DiagramSpec = {
       kind: 'card',
       eyebrow: 'DDoS Protection',
       title: 'Always-on mitigation',
-      icon: 'pi pi-shield',
+      icon: 'ai ai-shield',
       status: {
         label: 'Mitigated',
         severity: 'success'
@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'Flood',
       title: 'Absorbed at the edge',
-      icon: 'pi pi-ban'
+      icon: 'ai ai-ban'
     }
   ],
   layout: {

@@ -41,9 +41,9 @@
   )
 
   const icon = computed<string>(() => {
-    if (props.direction === 'ascending') return 'pi pi-sort-amount-up'
-    if (props.direction === 'descending') return 'pi pi-sort-amount-down'
-    return 'pi pi-sort-alt'
+    if (props.direction === 'ascending') return 'ai ai-sort-amount-up'
+    if (props.direction === 'descending') return 'ai ai-sort-amount-down'
+    return 'ai ai-sort-alt'
   })
 
   const ariaLabel = computed<string>(() => {

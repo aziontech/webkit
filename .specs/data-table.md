@@ -3,12 +3,12 @@ name: data-table
 category: data
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 90a45ecd69ae638f8650519400000b76e12757bfeb4a548305326c4409cffe6c
+checksum: 29726e9fe6152cfc96985d4d511bf683eb7bed28da03bb09b3b1a6f2336e86cf
 created: 2026-11-15
 last_updated: 2026-11-15
 ---
@@ -295,7 +295,7 @@ Per-column slots are name-computed at runtime, one per column id, so they are ty
 - Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
 - Hover-free devices: a sortable header shows its sort affordance where the pointer cannot hover (`@media (hover: none)`).
 - Reorderable rows (`reorderable`): a 40 px leading column holds a grip `IconButton` per row (`data-reorder-handle`), frozen at the start edge when other columns are; the row being dragged sets `data-dragging` (dashed accent outline, 60% opacity) and the row under the pointer `data-drop="before" | "after"` (a 2 px accent line on that edge). While a sort is applied every grip is disabled and its description says to clear the sort.
-- Tree rows (`getSubRows`): the grid element is `role="treegrid"` and sets `data-tree`. Each body row carries `aria-level` (1-based depth), `aria-setsize` and `aria-posinset` among its siblings, `aria-expanded` when it has children, and `data-depth`; the principal cell starts with one `aria-hidden` gutter (`data-tree-gutter`) `calc(var(--spacing-md) * depth + var(--size-7))` wide, which holds the 28 px chevron toggle (`__expand-toggle`, `pi-chevron-right` mirrored in RTL, `pi-chevron-down` when open) at its end on rows with children, so the content of every row at one depth starts on one column and each level shifts it by exactly one step. Rows use a roving tab stop (one row has `tabindex="0"`, the rest `-1`) and draw an inset `var(--ring-color)` outline on `focus-visible`.
+- Tree rows (`getSubRows`): the grid element is `role="treegrid"` and sets `data-tree`. Each body row carries `aria-level` (1-based depth), `aria-setsize` and `aria-posinset` among its siblings, `aria-expanded` when it has children, and `data-depth`; the principal cell starts with one `aria-hidden` gutter (`data-tree-gutter`) `calc(var(--spacing-md) * depth + var(--size-7))` wide, which holds the 28 px chevron toggle (`__expand-toggle`, `ai-chevron-right` mirrored in RTL, `ai-chevron-down` when open) at its end on rows with children, so the content of every row at one depth starts on one column and each level shifts it by exactly one step. Rows use a roving tab stop (one row has `tabindex="0"`, the rest `-1`) and draw an inset `var(--ring-color)` outline on `focus-visible`.
 
 ## Motion & Animations
 

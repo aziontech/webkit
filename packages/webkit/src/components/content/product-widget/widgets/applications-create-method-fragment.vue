@@ -29,7 +29,7 @@
         'Create the application now and push to it from your own terminal. Azion links the local project, builds it with your framework preset, and keeps azion.json in sync. No repository required.'
     },
     {
-      icon: 'pi pi-objects-column',
+      icon: 'ai ai-objects-column',
       title: 'Start from a template',
       description:
         'Clone a framework starter already wired to build and deploy on Azion. Next, Astro, Vue, Nuxt, and more.'
@@ -77,7 +77,7 @@
                 </Item.Content>
                 <Item.Actions>
                   <i
-                    class="pi pi-chevron-right text-(--text-muted) rtl:-scale-x-100"
+                    class="ai ai-chevron-right text-(--text-muted) rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                 </Item.Actions>

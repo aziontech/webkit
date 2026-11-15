@@ -11,7 +11,7 @@
   interface Props {
     /** Fallback text when the default slot is empty. */
     label?: string
-    /** Visual variant; `disabled` also prepends a pi pi-lock icon. */
+    /** Visual variant; `disabled` also prepends a ai ai-lock icon. */
     kind?: HelperTextKind
   }
   export type HelperTextProps = Props
@@ -40,7 +40,7 @@
   >
     <i
       v-if="kind === 'disabled'"
-      class="pi pi-lock flex shrink-0 items-center"
+      class="ai ai-lock flex shrink-0 items-center"
       aria-hidden="true"
       :data-testid="`${testId}__icon`"
     />

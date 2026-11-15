@@ -544,7 +544,7 @@
                       <IconButton
                         kind="outlined"
                         size="medium"
-                        icon="pi pi-link"
+                        icon="ai ai-link"
                         :ariaLabel="share.copyLink"
                         @click="copyLink"
                       />
@@ -575,7 +575,7 @@
                       <IconButton
                         kind="outlined"
                         size="medium"
-                        icon="pi pi-linkedin"
+                        icon="ai ai-linkedin"
                         :ariaLabel="share.shareLinkedIn"
                         :href="shareLinkedIn"
                         target="_blank"
@@ -619,7 +619,7 @@
                   v-if="copyPage"
                   kind="outlined"
                   size="medium"
-                  icon="pi pi-copy"
+                  icon="ai ai-copy"
                   :label="copyPage.label"
                   :items="copyPage.menu"
                   class="self-start"

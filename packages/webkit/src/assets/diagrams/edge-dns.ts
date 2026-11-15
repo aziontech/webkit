@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       kind: 'pill',
       title: 'Resolver',
-      icon: 'pi pi-globe',
+      icon: 'ai ai-globe',
       active: true
     },
     {
@@ -37,14 +37,14 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'MX record',
       title: 'Mail provider',
-      icon: 'pi pi-envelope'
+      icon: 'ai ai-envelope'
     },
     {
       key: 'txt',
       kind: 'item',
       eyebrow: 'TXT record',
       title: 'Domain verification',
-      icon: 'pi pi-key'
+      icon: 'ai ai-key'
     }
   ],
   layout: {

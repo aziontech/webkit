@@ -222,7 +222,7 @@
         >
       </p>
       <IconButton
-        icon="pi pi-arrow-up"
+        icon="ai ai-arrow-up"
         kind="primary"
         size="small"
         ariaLabel="Send"

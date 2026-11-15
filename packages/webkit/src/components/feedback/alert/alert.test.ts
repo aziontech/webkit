@@ -132,12 +132,12 @@ describe('Alert', () => {
 
   it('renders the leading icon on every severity, and applies an icon override', () => {
     const { getByTestId } = render(Alert, {
-      props: { label: 'With icon', icon: 'pi pi-star' }
+      props: { label: 'With icon', icon: 'ai ai-star' }
     })
 
     const glyph = getByTestId('feedback-alert').querySelector('i')
     expect(glyph).toBeTruthy()
-    expect(glyph?.className).toContain('pi-star')
+    expect(glyph?.className).toContain('ai-star')
     expect(glyph?.getAttribute('aria-hidden')).toBe('true')
   })
 

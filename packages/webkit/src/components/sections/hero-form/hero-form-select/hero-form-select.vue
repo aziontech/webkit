@@ -109,7 +109,7 @@
           @keydown="onSearchKeydown"
         >
           <template #prefix>
-            <i class="pi pi-search" />
+            <i class="ai ai-search" />
           </template>
         </Input>
       </template>

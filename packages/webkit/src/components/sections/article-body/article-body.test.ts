@@ -41,16 +41,16 @@ const share = {
 const community = {
   title: 'Community',
   links: [
-    { label: 'Join us on Discord', href: 'https://discord.com/invite/x', icon: 'pi pi-discord' },
-    { label: 'Read our blog posts', href: '/blog', icon: 'pi pi-comment' }
+    { label: 'Join us on Discord', href: 'https://discord.com/invite/x', icon: 'ai ai-discord' },
+    { label: 'Read our blog posts', href: '/blog', icon: 'ai ai-comment' }
   ]
 }
 
 const copyPage = {
   label: 'Copy page',
   menu: [
-    { value: 'link', label: 'Get page link', icon: 'pi pi-link' },
-    { value: 'markdown', label: 'View page as markdown', icon: 'pi pi-eye' }
+    { value: 'link', label: 'Get page link', icon: 'ai ai-link' },
+    { value: 'markdown', label: 'View page as markdown', icon: 'ai ai-eye' }
   ]
 }
 
@@ -233,7 +233,7 @@ describe('ArticleBody', () => {
         label: 'Copy page',
         menu: [
           ...copyPage.menu,
-          { value: 'claude', label: 'Open in Claude', icon: 'pi pi-sparkles' }
+          { value: 'claude', label: 'Open in Claude', icon: 'ai ai-sparkles' }
         ]
       },
       assistants: { claude: 'https://claude.example.com/new?q={prompt}' }

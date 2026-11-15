@@ -235,7 +235,7 @@
                 :href="band.action.href"
                 kind="outlined"
                 size="medium"
-                icon="pi pi-chevron-right"
+                icon="ai ai-chevron-right"
                 icon-position="trailing"
                 animated
               />

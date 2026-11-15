@@ -56,7 +56,7 @@
         >
           <Tag
             severity="warning"
-            icon="pi pi-exclamation-triangle"
+            icon="ai ai-exclamation-triangle"
             :label="ctx.warningTagLabel.value"
           />
         </button>
@@ -114,7 +114,7 @@
           >
             <template #prefix>
               <i
-                class="pi pi-search"
+                class="ai ai-search"
                 aria-hidden="true"
               />
             </template>

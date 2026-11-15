@@ -61,17 +61,17 @@ const levels = [
 
 const items = [
   {
-    icon: 'pi pi-shield',
+    icon: 'ai ai-shield',
     title: 'Programmable rule engine',
     description: 'Define custom rules across OSI layers L3-L7.'
   },
   {
-    icon: 'pi pi-code',
+    icon: 'ai ai-code',
     title: 'Extensible with Functions',
     description: 'Run custom JavaScript security code.'
   },
   {
-    icon: 'pi pi-sync',
+    icon: 'ai ai-sync',
     title: 'Real-time synchronization',
     description: 'Rules sync automatically across every data center.'
   }

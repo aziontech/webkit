@@ -565,7 +565,7 @@ test('list_assets filters by name, label and keyword', () => {
     ['magalu']
   )
   const trash = listAssets(catalog, { kind: 'icons', query: 'delete' }).items.map((i) => i.class)
-  assert.ok(trash.includes('pi pi-trash'), trash.join(', '))
+  assert.ok(trash.includes('ai ai-trash'), trash.join(', '))
   const colour = listAssets(catalog, { kind: 'icons', query: 'react' }).items.map((i) => i.class)
   assert.ok(colour.includes('ai-cor ai-react'), colour.join(', '))
   const cache = listAssets(catalog, { kind: 'diagrams', query: 'tiered cache' }).items

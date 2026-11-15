@@ -219,7 +219,7 @@
                 class="flex items-center gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
               >
                 <i
-                  class="pi pi-chevron-right text-body-xs text-(--text-muted) rtl:-scale-x-100"
+                  class="ai ai-chevron-right text-body-xs text-(--text-muted) rtl:-scale-x-100"
                   aria-hidden="true"
                 />
                 <span class="flex min-w-0 flex-1 flex-col">
@@ -229,7 +229,7 @@
                   <span class="text-body-xs text-(--text-muted)">Value: q</span>
                 </span>
                 <IconButton
-                  icon="pi pi-trash"
+                  icon="ai ai-trash"
                   kind="outlined"
                   size="small"
                   ariaLabel="Remove condition"
@@ -256,14 +256,14 @@
                       class="flex items-center gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-sm)"
                     >
                       <i
-                        class="pi pi-chevron-down text-body-xs text-(--text-muted)"
+                        class="ai ai-chevron-down text-body-xs text-(--text-muted)"
                         aria-hidden="true"
                       />
                       <span class="min-w-0 flex-1 truncate text-label-md text-(--text-default)">
                         Match {{ frame.condition }}
                       </span>
                       <IconButton
-                        icon="pi pi-trash"
+                        icon="ai ai-trash"
                         kind="outlined"
                         size="small"
                         ariaLabel="Remove condition"
@@ -303,7 +303,7 @@
                 label="Condition"
                 kind="outlined"
                 size="small"
-                icon="pi pi-plus"
+                icon="ai ai-plus"
               />
             </span>
           </ShellMockupPart>

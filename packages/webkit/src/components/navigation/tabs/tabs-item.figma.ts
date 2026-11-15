@@ -24,12 +24,12 @@ export default {
       ? figma.code`<Tabs.Item${attrs}>${
           showLeftIcon
             ? figma.code`
-  <template #leading><i class="pi pi-box" aria-hidden="true" /></template>`
+  <template #leading><i class="ai ai-box" aria-hidden="true" /></template>`
             : ''
         }${
           showRightIcon
             ? figma.code`
-  <template #trailing><i class="pi pi-box" aria-hidden="true" /></template>`
+  <template #trailing><i class="ai ai-box" aria-hidden="true" /></template>`
             : ''
         }
 </Tabs.Item>`

@@ -346,7 +346,7 @@
       <span class="min-w-0 truncate">{{ option.label }}</span>
       <i
         v-if="option.locked"
-        class="pi pi-lock shrink-0 text-(--text-disabled)"
+        class="ai ai-lock shrink-0 text-(--text-disabled)"
         aria-hidden="true"
         :data-testid="`${testId}__option-lock`"
       />

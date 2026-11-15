@@ -3,9 +3,9 @@ name: job-posting
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: abf7cd912ebce12223571129b7d429fc42f40a869cc4ab75360211983fb50087
+checksum: e044a882bedaf4c46ef3360420d584b5023ac4ed3cb806b7b9210e39444e65fc
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -68,8 +68,8 @@ The body of a careers posting page, under the posting's title band: the descript
     title="Senior Platform Engineer"
     apply-label="Apply for this position"
     :facets="[
-      { label: 'Engineering', icon: 'pi pi-sitemap' },
-      { label: 'San Francisco, California', icon: 'pi pi-map-marker' }
+      { label: 'Engineering', icon: 'ai ai-sitemap' },
+      { label: 'San Francisco, California', icon: 'ai ai-map-marker' }
     ]"
     :sections="[
       {
@@ -191,7 +191,7 @@ No built-in strings: every visible string and accessible name comes from the pro
 ## Right-to-left
 
 - Layout: logical utilities only (`border-s` on the rail, `ps-` on the bullet lists, `text-start`); the rail sits at the inline end.
-- Icons: the apply button's `pi pi-chevron-right` is mirrored by `button`; facet glyphs are not mirrored.
+- Icons: the apply button's `ai ai-chevron-right` is mirrored by `button`; facet glyphs are not mirrored.
 - Keyboard: no arrow-key interaction of its own.
 - User data: the posting copy is passed as props and inherits the page direction; field values are typed by the reader.
 

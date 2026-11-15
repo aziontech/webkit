@@ -54,10 +54,10 @@ describe('Link', () => {
   })
 
   it('renders the trailing icon when icon is set, hidden from assistive tech', () => {
-    const { getByTestId } = render(Link, { props: { icon: 'pi pi-arrow-right' } })
+    const { getByTestId } = render(Link, { props: { icon: 'ai ai-arrow-right' } })
     const icon = getByTestId('navigation-link__icon')
 
-    expect(icon.classList.contains('pi-arrow-right')).toBe(true)
+    expect(icon.classList.contains('ai-arrow-right')).toBe(true)
     expect(icon.getAttribute('aria-hidden')).toBe('true')
   })
 
@@ -72,7 +72,7 @@ describe('Link', () => {
       props: { href: 'https://example.com', target: '_blank' }
     })
 
-    expect(getByTestId('navigation-link__icon').classList.contains('pi-external-link')).toBe(true)
+    expect(getByTestId('navigation-link__icon').classList.contains('ai-external-link')).toBe(true)
   })
 
   it('ignores a removed showIcon attribute', () => {

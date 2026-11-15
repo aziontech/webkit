@@ -121,7 +121,7 @@
       <slot name="empty">
         <EmptyState
           size="small"
-          icon="pi pi-sitemap"
+          icon="ai ai-sitemap"
           :title="t('topologyDiagram.empty')"
         />
       </slot>

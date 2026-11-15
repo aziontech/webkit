@@ -168,15 +168,15 @@ describe('SidebarMenuItem', () => {
 
   it('renders the leading icon element hidden from a11y with the provided class', () => {
     const { getByTestId } = render(SidebarMenuItem, {
-      props: { label: 'Home', icon: 'pi pi-cog' }
+      props: { label: 'Home', icon: 'ai ai-cog' }
     })
 
     const iconBox = getByTestId('navigation-sidebar-menu-item__icon')
     expect(iconBox.getAttribute('aria-hidden')).toBe('true')
     const glyph = iconBox.querySelector('i')
     expect(glyph).toBeTruthy()
-    expect(glyph?.classList.contains('pi')).toBe(true)
-    expect(glyph?.classList.contains('pi-cog')).toBe(true)
+    expect(glyph?.classList.contains('ai')).toBe(true)
+    expect(glyph?.classList.contains('ai-cog')).toBe(true)
   })
 
   it('renders no icon box at all when icon is empty', () => {

@@ -3,12 +3,12 @@ name: card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 46c184af53f18e6e280da9ee13f5a86d324eadd1e33b840132ec23454e729b61
+checksum: 44fe2bcef2db5cf8fb6ecc9ccc12c9ebe12a26f0e5794027dd99caab714388a6
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -103,7 +103,7 @@ A bordered surface that groups related content under a title, with a header, a b
     kind="integration"
     title="Request Signer"
     vendor="Acme Inc."
-    logo="pi pi-key"
+    logo="ai ai-key"
     description="Sign every request at the edge with a rotating key."
     :badges="[{ label: 'Firewall' }]"
     @select="openDetail"

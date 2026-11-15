@@ -3,11 +3,11 @@ name: navigation-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 8
+spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 1cb0a6ae0bc1e43a054f230ee506efeae450395f5d570e3582c6d65a9767f70c
+checksum: b7bac75f671c12e0584845218abe074ffe38af3da3a50d537c0a91920d943cba
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -71,7 +71,7 @@ The top bar of a site: a row of links and triggers whose items open large panels
           Products
           <NavigationMenu.Icon>
             <i
-              class="pi pi-chevron-down"
+              class="ai ai-chevron-down"
               aria-hidden="true"
             />
           </NavigationMenu.Icon>
