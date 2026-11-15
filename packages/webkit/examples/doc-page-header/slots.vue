@@ -2,13 +2,13 @@
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import Tag from '@aziontech/webkit/tag'
 
-  const onMetaAction = (action) => action
+  const onActionClick = (event, action) => action
 </script>
 
 <template>
   <DocPageHeader
     description="Terminal agent that reads your codebase, runs commands, and edits files. One CLI command connects the Azion MCP server."
-    :breadcrumb="[{ label: 'Agent Setup', href: '/docs/agent-setup' }, { label: 'Claude Code' }]"
+    :breadcrumbs="[{ label: 'Agent Setup', href: '/docs/agent-setup' }, { label: 'Claude Code' }]"
     :meta-actions="[
       {
         value: 'copy',
@@ -24,7 +24,7 @@
         tip: 'Set up your coding agent to build on Azion.'
       }
     ]"
-    @meta-action="onMetaAction"
+    @action-click="onActionClick"
   >
     <template #title>
       <div

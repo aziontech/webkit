@@ -35,7 +35,7 @@
     /** The deck under the title. */
     description?: string
     /** Ancestor trail, current page last. */
-    breadcrumb?: DocCrumb[]
+    breadcrumbs?: DocCrumb[]
     /** When the page's content last changed. ISO date, or a ready-made string. */
     lastUpdated?: string
     /** The controls on the meta line, in reading order. */
@@ -45,19 +45,19 @@
   const props = withDefaults(defineProps<Props>(), {
     title: '',
     description: '',
-    breadcrumb: () => [],
+    breadcrumbs: () => [],
     lastUpdated: '',
     metaActions: () => []
   })
 
   const emit = defineEmits<{
     /** A meta-line control was activated; a link's default navigation is the consumer's to keep or prevent. */
-    'meta-action': [event: MouseEvent, item: DocPageAction]
+    'action-click': [event: MouseEvent, item: DocPageAction]
   }>()
 
   defineSlots<{
     /** The trail; replaces the built-in breadcrumb. */
-    breadcrumb(): unknown
+    breadcrumbs(): unknown
     /** The page's name; replaces the built-in `h1`, for a title that is more than a string. */
     title(): unknown
     /** A control on the title's line. Empty by default; the meta line carries the page's actions. */
@@ -72,10 +72,10 @@
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-page-header')
 
   const crumbs = computed(() =>
-    props.breadcrumb.map((crumb, position) => ({
+    props.breadcrumbs.map((crumb, position) => ({
       label: crumb.label,
       href: crumb.href,
-      current: position === props.breadcrumb.length - 1
+      active: position === props.breadcrumbs.length - 1
     }))
   )
 
@@ -99,7 +99,7 @@
     :data-testid="testId"
     class="flex w-full flex-col gap-(--spacing-lg) border-b border-(--border-default) pb-(--spacing-lg)"
   >
-    <slot name="breadcrumb">
+    <slot name="breadcrumbs">
       <Breadcrumb
         v-if="crumbs.length"
         :items="crumbs"
@@ -153,7 +153,7 @@
         >
           <Separator orientation="vertical" />
         </span>
-        <Tooltip :text="action.tip ?? ''">
+        <Tooltip :content="action.tip ?? ''">
           <Button
             kind="transparent"
             size="small"
@@ -161,7 +161,7 @@
             :icon="action.icon ?? ''"
             :href="action.href ?? ''"
             :target="action.target ?? '_self'"
-            @click="(event) => emit('meta-action', event, action)"
+            @click="(event) => emit('action-click', event, action)"
           />
         </Tooltip>
       </template>

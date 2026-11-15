@@ -1,7 +1,7 @@
 <script setup>
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
 
-  const onMetaAction = (action) => action
+  const onActionClick = (event, action) => action
 </script>
 
 <template>
@@ -32,6 +32,6 @@
         tip: 'Open this page in the repository and propose a change.'
       }
     ]"
-    @meta-action="onMetaAction"
+    @action-click="onActionClick"
   />
 </template>

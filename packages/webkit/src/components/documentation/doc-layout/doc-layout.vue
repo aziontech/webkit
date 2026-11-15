@@ -108,8 +108,8 @@
   /** Whether the search palette is open. Use with `v-model:search-open`. */
   const searchOpen = defineModel<boolean>('searchOpen', { default: false })
 
-  /** Whether the navigation rail is expanded from lg; false collapses it. Use with `v-model:navigation-expanded`. */
-  const navigationExpanded = defineModel<boolean>('navigationExpanded', { default: true })
+  /** Whether the navigation rail is open from lg; false collapses it. Use with `v-model:navigation-open`. */
+  const navigationOpen = defineModel<boolean>('navigationOpen', { default: true })
 
   /** The rail width in px after a drag; null uses the natural width. Use with `v-model:navigation-width`. */
   const navigationWidth = defineModel<number | null>('navigationWidth', { default: null })
@@ -367,7 +367,7 @@
           class="sticky top-(--layout-header-height) flex h-[calc(100dvh-var(--layout-header-height))]"
         >
           <Sidebar
-            v-model:open="navigationExpanded"
+            v-model:open="navigationOpen"
             v-model:width="navigationWidth"
             resizable
             collapsible
@@ -431,7 +431,7 @@
     <Drawer
       v-if="navigation.length"
       v-model:open="drawerOpen"
-      side="left"
+      side="start"
       size="small"
     >
       <DrawerContent>

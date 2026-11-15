@@ -44,7 +44,7 @@ describe('DocPageHeader', () => {
 
     it('renders the deck and the breadcrumb trail', () => {
       const { getByText } = render(DocPageHeader, {
-        props: { title: 'T', description: 'The deck.', breadcrumb: CRUMBS }
+        props: { title: 'T', description: 'The deck.', breadcrumbs: CRUMBS }
       })
       expect(getByText('The deck.')).toBeInTheDocument()
       expect(getByText('Docs')).toBeInTheDocument()
@@ -152,7 +152,7 @@ describe('DocPageHeader', () => {
 
       await fireEvent.click(getByText('Copy as Markdown'))
 
-      const calls = emitted()['meta-action'] as unknown[][]
+      const calls = emitted()['action-click'] as unknown[][]
       expect(calls).toHaveLength(1)
       // event-payloads.md: the DOM event is always first, the subject second.
       expect(calls[0][0]).toBeInstanceOf(MouseEvent)
@@ -166,7 +166,7 @@ describe('DocPageHeader', () => {
 
       await fireEvent.click(getByText('Agent setup'))
 
-      const calls = emitted()['meta-action'] as unknown[][]
+      const calls = emitted()['action-click'] as unknown[][]
       expect(calls[0][1]).toMatchObject({ value: 'agent', href: '/docs/agent-setup' })
     })
 
@@ -186,8 +186,8 @@ describe('DocPageHeader', () => {
   describe('every region is a slot over its built-in', () => {
     it('replaces the built-in breadcrumb with a passed trail', () => {
       const { getByText, queryByText } = render(DocPageHeader, {
-        props: { title: 'T', breadcrumb: CRUMBS },
-        slots: { breadcrumb: '<nav aria-label="Trail"><a href="/home">Home</a></nav>' }
+        props: { title: 'T', breadcrumbs: CRUMBS },
+        slots: { breadcrumbs: '<nav aria-label="Trail"><a href="/home">Home</a></nav>' }
       })
       expect(getByText('Home')).toBeInTheDocument()
       // The prop-fed fallback is the slot's content, so passing one replaces it.
@@ -232,7 +232,7 @@ describe('DocPageHeader', () => {
         props: {
           title: 'Deploy an application',
           description: 'Go from a template to a live edge application.',
-          breadcrumb: CRUMBS,
+          breadcrumbs: CRUMBS,
           lastUpdated: '2026-06-30',
           metaActions: META_ACTIONS
         }

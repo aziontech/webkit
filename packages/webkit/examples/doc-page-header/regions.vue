@@ -11,7 +11,7 @@
     />
     <DocPageHeader
       title="No deck"
-      :breadcrumb="[{ label: 'Docs', href: '/docs' }, { label: 'No deck' }]"
+      :breadcrumbs="[{ label: 'Docs', href: '/docs' }, { label: 'No deck' }]"
       last-updated="Updated this morning"
     />
     <DocPageHeader

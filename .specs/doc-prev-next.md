@@ -3,8 +3,8 @@ name: doc-prev-next
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: d807502f1562add7f18867b5351745052bd488da52f316ad60c1f6a38a2cd686
+spec_version: 3
+checksum: 4de1139e089fa7333ca9cb77c961dc322a552d3bbedb430a70df22931525ff5d
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -46,8 +46,8 @@ The previous / next pair that closes a documentation page. Each side is a link c
 
 <template>
   <DocPrevNext
-    :previous="{ title: 'Deploy an application', href: '/docs/deploy' }"
-    :next="{ title: 'Bind a domain', href: '/docs/domains' }"
+    :previous="{ label: 'Deploy an application', href: '/docs/deploy' }"
+    :next="{ label: 'Bind a domain', href: '/docs/domains' }"
     @navigate="(event, page) => router.push(page.href)"
   />
 </template>
@@ -61,6 +61,8 @@ The previous / next pair that closes a documentation page. Each side is a link c
 | `next`          | `DocPageLink \| null` | `null`  | false    | The page after this one.                                                    |
 | `previousLabel` | `string`              | `''`    | false    | Eyebrow over the previous link. Empty uses the locale catalog (`Previous`). |
 | `nextLabel`     | `string`              | `''`    | false    | Eyebrow over the next link. Empty uses the locale catalog (`Next`).         |
+
+`DocPageLink`: `{ label: string; href: string }` — `label` is the destination page title shown on the link.
 
 ## Events
 

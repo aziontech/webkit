@@ -3,8 +3,8 @@ name: doc-page-header
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: 54e12439fb356676a99b4cd1e726037692f71c082d1c9f16aa2cd98f9df07be0
+spec_version: 5
+checksum: f8587aa7785e41c099bdedbb3288ef3b97bcd20daf52b67be632ba23827a35ee
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -35,9 +35,9 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
 ## Best practices
 
 - Give every `metaActions` entry a `tip`: two or three words name a control, and only a sentence says what it does.
-- Give an entry an `href` when it has a destination, so it is a real link — then prevent the default in `meta-action` if the app routes in-page.
+- Give an entry an `href` when it has a destination, so it is a real link — then prevent the default in `action-click` if the app routes in-page.
 - Let `lastUpdated` come from the page's own frontmatter. It is the author's claim that the content changed, not the file's mtime.
-- Put the current page last in `breadcrumb`; it is marked as current for you.
+- Put the current page last in `breadcrumbs`; it is marked `active` for you.
 - Use `title` and `details` for a page ABOUT something (a tool, a product): its mark and maker are a title, and its facts belong between the deck and the meta line.
 
 ## Usage
@@ -51,7 +51,7 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
   <DocPageHeader
     title="Deploy an application"
     description="Go from a template to a live edge application in a few clicks."
-    :breadcrumb="[{ label: 'Docs', href: '/docs' }, { label: 'Deploy an application' }]"
+    :breadcrumbs="[{ label: 'Docs', href: '/docs' }, { label: 'Deploy an application' }]"
     last-updated="2026-06-30"
     :meta-actions="[
       {
@@ -68,7 +68,7 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
         tip: 'Set up your coding agent to build on Azion.'
       }
     ]"
-    @meta-action="(event, item) => onPageAction(event, item)"
+    @action-click="(event, item) => onPageAction(event, item)"
   />
 </template>
 ```
@@ -79,24 +79,24 @@ The masthead of a documentation page: where the reader is (the breadcrumb), what
 | ------------- | ----------------- | ------- | -------- | ----------------------------------------------------------------------- |
 | `title`       | `string`          | `''`    | false    | The page title.                                                         |
 | `description` | `string`          | `''`    | false    | The deck under the title.                                               |
-| `breadcrumb`  | `DocCrumb[]`      | `[]`    | false    | Ancestor trail, current page last.                                      |
+| `breadcrumbs` | `DocCrumb[]`      | `[]`    | false    | Ancestor trail, current page last.                                      |
 | `lastUpdated` | `string`          | `''`    | false    | When the page's content last changed. ISO date, or a ready-made string. |
 | `metaActions` | `DocPageAction[]` | `[]`    | false    | The controls on the meta line, in reading order.                        |
 
 ## Events
 
-| Event         | Payload                                    | Notes                                                                                                                                                                                        |
-| ------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `meta-action` | `(event: MouseEvent, item: DocPageAction)` | Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent. |
+| Event          | Payload                                    | Notes                                                                                                                                                                                        |
+| -------------- | ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `action-click` | `(event: MouseEvent, item: DocPageAction)` | Fired when a meta-line control is activated; `item` is the entry that was picked. Event first, per `event-payloads.md`. A link's default navigation is the consumer's to keep or to prevent. |
 
 ## Slots
 
-| Slot         | Scope | Notes                                                                                      |
-| ------------ | ----- | ------------------------------------------------------------------------------------------ |
-| `breadcrumb` | —     | The trail; replaces the built-in `Breadcrumb` fed by the `breadcrumb` prop.                |
-| `title`      | —     | The page's name; replaces the built-in `h1`, for a title that is more than a string.       |
-| `actions`    | —     | A control on the title's line. Empty by default; the meta line carries the page's actions. |
-| `details`    | —     | Rows between the deck and the meta line — a page's own facts, tags or references.          |
+| Slot          | Scope | Notes                                                                                      |
+| ------------- | ----- | ------------------------------------------------------------------------------------------ |
+| `breadcrumbs` | —     | The trail; replaces the built-in `Breadcrumb` fed by the `breadcrumbs` prop.               |
+| `title`       | —     | The page's name; replaces the built-in `h1`, for a title that is more than a string.       |
+| `actions`     | —     | A control on the title's line. Empty by default; the meta line carries the page's actions. |
+| `details`     | —     | Rows between the deck and the meta line — a page's own facts, tags or references.          |
 
 ## States
 

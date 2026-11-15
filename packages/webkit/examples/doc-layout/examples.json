@@ -9,7 +9,7 @@
     },
     {
       "name": "Persisted rail",
-      "summary": "The navigation rail resized by dragging its edge (or the arrow keys on its handle) and collapsed from the button at its foot, with v-model:navigation-expanded and v-model:navigation-width saved to local storage so the rail keeps its size and state across reloads.",
+      "summary": "The navigation rail resized by dragging its edge (or the arrow keys on its handle) and collapsed from the button at its foot, with v-model:navigation-open and v-model:navigation-width saved to local storage so the rail keeps its size and state across reloads.",
       "file": "persisted-rail.vue"
     }
   ]

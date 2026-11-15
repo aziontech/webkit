@@ -18,14 +18,14 @@
     }
   ]
 
-  const expanded = ref(true)
+  const open = ref(true)
   const width = ref<number | null>(null)
 
   onMounted(() => {
     try {
       const saved = JSON.parse(globalThis.localStorage.getItem(STORAGE_KEY) ?? 'null')
       if (saved) {
-        expanded.value = saved.expanded !== false
+        open.value = saved.open !== false
         width.value = typeof saved.width === 'number' ? saved.width : null
       }
     } catch {
@@ -33,11 +33,11 @@
     }
   })
 
-  watch([expanded, width], () => {
+  watch([open, width], () => {
     try {
       globalThis.localStorage.setItem(
         STORAGE_KEY,
-        JSON.stringify({ expanded: expanded.value, width: width.value })
+        JSON.stringify({ open: open.value, width: width.value })
       )
     } catch {
       return
@@ -47,7 +47,7 @@
 
 <template>
   <DocLayout
-    v-model:navigation-expanded="expanded"
+    v-model:navigation-open="open"
     v-model:navigation-width="width"
     :navigation="navigation"
     :outline="[{ id: 'resize-the-rail', text: 'Resize the rail', depth: 2 }]"
