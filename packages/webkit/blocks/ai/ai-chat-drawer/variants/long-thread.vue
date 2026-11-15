@@ -384,7 +384,7 @@
                 v-for="turn in turns"
                 :key="turn.id"
                 :from="turn.from"
-                :state="turn.from === 'user' ? 'success' : turn.status"
+                :status="turn.from === 'user' ? 'success' : turn.status"
                 :timestamp="turn.time"
                 :error-message="turn.error"
                 @retry="retry(turn)"

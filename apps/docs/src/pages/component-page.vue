@@ -106,7 +106,7 @@
       <DocPageHeader
         :title="item.title"
         :description="item.purpose"
-        :breadcrumb="[
+        :breadcrumbs="[
           { label: t.components, href: '/components' },
           { label: titleCase(item.category) }
         ]"

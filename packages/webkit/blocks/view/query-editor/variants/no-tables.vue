@@ -714,7 +714,7 @@ LIMIT 3;`
                   >
                 </template>
                 <template #cell-__actions="{ row }">
-                  <Tooltip :text="`Delete row ${row['id'] ?? row.__k}`">
+                  <Tooltip :content="`Delete row ${row['id'] ?? row.__k}`">
                     <IconButton
                       icon="ai ai-trash"
                       kind="transparent"

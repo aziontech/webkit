@@ -331,9 +331,11 @@ describe('Wizard', () => {
       const view = await mount({ start: 1 })
       const states = view
         .getAllByTestId('navigation-stepper-step')
-        .map((step) => step.getAttribute('data-state'))
+        .map((step) =>
+          step.hasAttribute('data-active') ? 'active' : step.getAttribute('data-status')
+        )
 
-      expect(states).toEqual(['complete', 'current', 'upcoming'])
+      expect(states).toEqual(['success', 'active', 'pending'])
       expect(railButtons(view).map((rail) => rail.disabled)).toEqual([false, false, true])
       expect(railButtons(view)[1].getAttribute('aria-current')).toBe('step')
     })
@@ -360,8 +362,10 @@ describe('Wizard', () => {
       expect(
         view
           .getAllByTestId('navigation-stepper-step')
-          .map((step) => step.getAttribute('data-state'))
-      ).toEqual(['current', 'complete', 'upcoming'])
+          .map((step) =>
+            step.hasAttribute('data-active') ? 'active' : step.getAttribute('data-status')
+          )
+      ).toEqual(['active', 'success', 'pending'])
 
       await userEvent.click(railButtons(view)[2])
       expect(view.getByTestId('model').textContent).toBe('2')
@@ -383,7 +387,7 @@ describe('Wizard', () => {
       const view = await mount({ start: 1, invalidStep: 0 })
       const [first, second] = view.getAllByTestId('navigation-stepper-step')
 
-      expect(first.getAttribute('data-state')).toBe('error')
+      expect(first.getAttribute('data-status')).toBe('error')
       expect(first.hasAttribute('data-invalid')).toBe(true)
       expect(first.textContent).toContain('Needs attention')
       expect(second.hasAttribute('data-invalid')).toBe(false)
@@ -400,7 +404,7 @@ describe('Wizard', () => {
       await nextTick()
       const [first] = view.getAllByTestId('navigation-stepper-step')
 
-      expect(first.getAttribute('data-state')).toBe('complete')
+      expect(first.getAttribute('data-status')).toBe('success')
       expect(first.hasAttribute('data-invalid')).toBe(false)
       expect(view.getAllByTestId('navigation-wizard-step')[0].hasAttribute('data-invalid')).toBe(
         false

@@ -470,7 +470,7 @@
               </template>
               <template #cell-teams="{ row }">
                 <Tooltip
-                  :text="row.owner ? 'The account owner is always an administrator.' : ''"
+                  :content="row.owner ? 'The account owner is always an administrator.' : ''"
                   :disabled="!row.owner"
                   class="w-full"
                 >

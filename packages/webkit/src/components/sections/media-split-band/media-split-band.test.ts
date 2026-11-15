@@ -176,8 +176,8 @@ describe('MediaSplitBand', () => {
     )
   })
 
-  it('aligns the copy to the top at size medium and centres it at size large', () => {
-    expect(band().getByTestId(SPLIT_TESTID)).toHaveAttribute('data-align', 'top')
+  it('aligns the copy to the start at size medium and centres it at size large', () => {
+    expect(band().getByTestId(SPLIT_TESTID)).toHaveAttribute('data-align', 'start')
     expect(band({ size: 'large' }).getAllByTestId(SPLIT_TESTID)[1]).toHaveAttribute(
       'data-align',
       'center'

@@ -232,7 +232,7 @@
       <MediaSplit
         framed
         :orientation="orientation"
-        :align="size === 'large' ? 'center' : 'top'"
+        :align="size === 'large' ? 'center' : 'start'"
         :size="size"
         media-fill="surface"
         :texture="texture"

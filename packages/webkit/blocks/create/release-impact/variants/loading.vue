@@ -620,7 +620,7 @@
                                 </span>
                                 <Tooltip
                                   v-if="row.sharedWith?.length"
-                                  :text="`Also referenced by ${row.sharedWith.join(' and ')}.`"
+                                  :content="`Also referenced by ${row.sharedWith.join(' and ')}.`"
                                 >
                                   <span
                                     tabindex="0"

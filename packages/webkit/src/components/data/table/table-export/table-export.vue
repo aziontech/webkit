@@ -49,7 +49,7 @@
     name="trigger"
     :export="onExport"
   >
-    <Tooltip :text="t('tableExport.label')">
+    <Tooltip :content="t('tableExport.label')">
       <IconButton
         v-bind="$attrs"
         :data-testid="testId"

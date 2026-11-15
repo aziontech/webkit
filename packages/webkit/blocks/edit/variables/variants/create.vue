@@ -513,7 +513,7 @@
                             />
                             <Tooltip
                               v-if="entries[index].secret"
-                              :text="entries[index].visible ? 'Hide value' : 'Show value'"
+                              :content="entries[index].visible ? 'Hide value' : 'Show value'"
                             >
                               <IconButton
                                 :icon="entries[index].visible ? 'ai ai-eye-off' : 'ai ai-eye'"

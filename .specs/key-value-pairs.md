@@ -3,7 +3,7 @@ name: key-value-pairs
 category: content
 structure: composition
 status: implemented
-checksum: 992fb7f4ee05da7769383973841c25532c5b4f8cd921fffb3ecef4d89495c000
+checksum: cfac5817a3fb0759cf7ed6587c998f2ade767742b91c072fabc92445fd4959ca
 spec_version: 3
 created: 2026-11-10
 last_updated: 2026-11-15

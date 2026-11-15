@@ -165,7 +165,7 @@
                               <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                                 <div class="flex flex-1 cursor-not-allowed">
                                   <Tooltip
-                                    text="Detected from platform.config and can't be changed here."
+                                    content="Detected from platform.config and can't be changed here."
                                     class="w-full"
                                   >
                                     <div class="pointer-events-none">

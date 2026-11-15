@@ -460,7 +460,7 @@
                                     />
                                     <Tooltip
                                       v-if="field.secret"
-                                      :text="revealed[field.name] ? 'Hide value' : 'Show value'"
+                                      :content="revealed[field.name] ? 'Hide value' : 'Show value'"
                                     >
                                       <IconButton
                                         :icon="revealed[field.name] ? 'ai ai-eye-off' : 'ai ai-eye'"
@@ -475,7 +475,7 @@
                                     </Tooltip>
                                     <InputGroupAddon>
                                       <Tooltip
-                                        :text="
+                                        :content="
                                           field.secret
                                             ? 'The template keeps this value secret.'
                                             : 'The template stores this value as plain text.'

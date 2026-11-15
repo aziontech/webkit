@@ -113,7 +113,7 @@
         </DropdownMenu.Item>
       </DropdownMenu.Group>
     </DropdownMenu>
-    <Tooltip :text="settings.theme === 'dark' ? t.light : t.dark">
+    <Tooltip :content="settings.theme === 'dark' ? t.light : t.dark">
       <IconButton
         :icon="settings.theme === 'dark' ? 'ai ai-sun' : 'ai ai-moon'"
         kind="outlined"
@@ -122,7 +122,7 @@
         @click="toggleTheme"
       />
     </Tooltip>
-    <Tooltip :text="settings.dir === 'rtl' ? t.ltr : t.rtl">
+    <Tooltip :content="settings.dir === 'rtl' ? t.ltr : t.rtl">
       <IconButton
         icon="ai ai-arrow-right-left"
         kind="outlined"

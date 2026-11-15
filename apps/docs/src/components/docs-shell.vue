@@ -143,7 +143,7 @@
               </Select.Content>
             </Select>
           </div>
-          <Tooltip :text="settings.dir === 'rtl' ? t.leftToRight : t.rightToLeft">
+          <Tooltip :content="settings.dir === 'rtl' ? t.leftToRight : t.rightToLeft">
             <IconButton
               :icon="settings.dir === 'rtl' ? 'ai ai-align-left' : 'ai ai-align-right'"
               kind="outlined"

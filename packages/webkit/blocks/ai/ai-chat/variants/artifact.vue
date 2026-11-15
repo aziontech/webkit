@@ -247,7 +247,7 @@
                 v-for="turn in turns"
                 :key="turn.id"
                 :from="turn.from"
-                :state="turn.from === 'user' ? 'success' : turn.status"
+                :status="turn.from === 'user' ? 'success' : turn.status"
                 :timestamp="turn.time"
               >
                 <template v-if="turn.from === 'user'">{{ turn.text }}</template>

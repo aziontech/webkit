@@ -1192,7 +1192,7 @@
                           class="flex items-center gap-(--spacing-2xs)"
                         >
                           <Tooltip
-                            :text="
+                            :content="
                               lockReason(group.value, row) ||
                               'Type a position to move the rule there'
                             "
@@ -1221,7 +1221,7 @@
                               />
                             </span>
                           </Tooltip>
-                          <Tooltip :text="lockReason(group.value, row) || 'Move up'">
+                          <Tooltip :content="lockReason(group.value, row) || 'Move up'">
                             <IconButton
                               icon="ai ai-chevron-up"
                               kind="outlined"
@@ -1236,7 +1236,7 @@
                               @click="step(group.value, position(group.value, row), -1, 'up')"
                             />
                           </Tooltip>
-                          <Tooltip :text="lockReason(group.value, row) || 'Move down'">
+                          <Tooltip :content="lockReason(group.value, row) || 'Move down'">
                             <IconButton
                               icon="ai ai-chevron-down"
                               kind="outlined"

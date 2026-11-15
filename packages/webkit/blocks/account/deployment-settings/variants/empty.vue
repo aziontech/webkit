@@ -835,7 +835,7 @@
                     </template>
                     <template #cell-services="{ row }">
                       <Tooltip
-                        :text="
+                        :content="
                           row.services.length
                             ? row.services.join(' · ')
                             : 'No environment publishes with this setting yet.'

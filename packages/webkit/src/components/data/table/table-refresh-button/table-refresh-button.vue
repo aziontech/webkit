@@ -40,7 +40,7 @@
 </script>
 
 <template>
-  <Tooltip :text="t('tableRefreshButton.label')">
+  <Tooltip :content="t('tableRefreshButton.label')">
     <IconButton
       v-bind="$attrs"
       :data-testid="testId"

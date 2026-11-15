@@ -551,7 +551,7 @@
                     </Tooltip>
                     <Tooltip
                       v-if="hasFeed"
-                      :text="share.copyFeed ?? ''"
+                      :content="share.copyFeed ?? ''"
                     >
                       <IconButton
                         kind="outlined"
