@@ -24,17 +24,23 @@ In your app's root CSS:
 
 ```css
 @import '@aziontech/theme';
+@import '@aziontech/theme/fonts.css';
 ```
 
 or from JavaScript (Vite and friends):
 
 ```javascript
 import '@aziontech/theme'
+import '@aziontech/theme/fonts.css'
 ```
 
-That single import provides:
+`@aziontech/theme/fonts.css` holds the `@font-face` declarations for the Azion type system
+(Rubik, Roboto, Roboto Mono, Noto Sans Arabic…), served from `fonts.azion.com`. Leave it out when
+your app hosts its own font files or its Content Security Policy blocks that host; the font stacks
+then fall back to your faces or the system ones.
 
-- the `@font-face` declarations for the Azion type system (no separate font imports needed);
+The main import provides:
+
 - every primitive CSS variable (colors, spacing, shape, typography, effects, breakpoints);
 - the semantic light/dark variables (`--primary`, `--text-default`, `--bg-surface`…);
 - text-style utilities (`text-heading-2xl`, `text-big-number-md`, …) with responsive sizes;
@@ -78,6 +84,7 @@ The entire public surface, from `package.json#exports`:
 | Path                            | What it is                                                                 |
 | ------------------------------- | -------------------------------------------------------------------------- |
 | `@aziontech/theme`              | the compiled stylesheet (`dist/v4/globals.css`)                            |
+| `@aziontech/theme/fonts.css`    | the `@font-face` declarations (`dist/v4/fonts.css`), optional              |
 | `@aziontech/theme/colors`       | color primitives: `primitives`, `brandPrimitives`                          |
 | `@aziontech/theme/animations`   | motion primitives: `animate`, `curve`, `duration`, `useWhen`               |
 | `@aziontech/theme/texts`        | `textsData` — font-size/line-height/weight bundles per text style          |

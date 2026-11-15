@@ -1,4 +1,5 @@
 import '@aziontech/theme'
+import '@aziontech/theme/fonts.css'
 import './styles/main.css'
 import '@aziontech/icons'
 import '@aziontech/webkit/styles/country-flags'

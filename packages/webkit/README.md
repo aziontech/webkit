@@ -92,6 +92,7 @@ source registration, and import it once at your app entry (e.g. `src/main.ts`) w
 ```css
 /* src/webkit.css */
 @import '@aziontech/theme';
+@import '@aziontech/theme/fonts.css'; /* skip it if your app hosts its own font files */
 @import '@aziontech/webkit/styles';
 ```
 

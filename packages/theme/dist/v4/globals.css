@@ -2,206 +2,6 @@
 
 @import "tailwindcss";
 
-/**
- * @font-face declarations for the Azion type system.
- *
- * Prepended verbatim into `dist/v4/globals.css` by `scripts/build-tokens.mjs`
- * so any consumer of `@aziontech/theme/globals.css` gets the same faces the
- * design system was authored against — no separate <link rel="stylesheet"> or
- * per-app `@import "@fontsource/…"` needed.
- *
- * Fonts are hosted at fonts.azion.com under a permissive CORS policy; the
- * requests are subresource-cached with `font-display: swap` so first paint
- * uses the system fallback while the .woff2 loads.
- */
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('https://fonts.azion.com/roboto/roboto-light.woff2') format('woff2');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('https://fonts.azion.com/roboto/roboto-regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('https://fonts.azion.com/roboto/roboto-italic.woff2') format('woff2');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('https://fonts.azion.com/roboto/roboto-medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('https://fonts.azion.com/roboto/roboto-mediumitalic.woff2') format('woff2');
-  font-weight: 500;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('https://fonts.azion.com/roboto/roboto-bold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('https://fonts.azion.com/roboto/roboto-bold.woff2') format('woff2');
-  font-weight: bold;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('https://fonts.azion.com/roboto/roboto-bolditalic.woff2') format('woff2');
-  font-weight: bold;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('https://fonts.azion.com/roboto/roboto-bolditalic.woff2') format('woff2');
-  font-weight: 600;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto';
-  src: url('https://fonts.azion.com/roboto/roboto-black.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto Mono';
-  src: url('https://fonts.azion.com/roboto-mono/roboto-mono-regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto Mono';
-  src: url('https://fonts.azion.com/roboto-mono/roboto-mono-light.ttf') format('truetype');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Rubik (OFL), variable 300–900. fonts.azion.com serves apps/fonts/rubik/; the jsDelivr copy of
-   google/fonts is the fallback while a new upload propagates. */
-@font-face {
-  font-family: 'Rubik';
-  src:
-    url('https://fonts.azion.com/rubik/Rubik-VariableFont_wght.ttf') format('truetype'),
-    url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/rubik/Rubik%5Bwght%5D.ttf') format('truetype');
-  font-weight: 300 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Rubik';
-  src:
-    url('https://fonts.azion.com/rubik/Rubik-Italic-VariableFont_wght.ttf') format('truetype'),
-    url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/rubik/Rubik-Italic%5Bwght%5D.ttf') format('truetype');
-  font-weight: 300 900;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Noto Sans Arabic';
-  src: url('https://cdn.jsdelivr.net/gh/google/fonts@main/ofl/notosansarabic/NotoSansArabic%5Bwdth,wght%5D.ttf') format('truetype');
-  font-weight: 100 900;
-  font-stretch: 62.5% 100%;
-  font-style: normal;
-  font-display: swap;
-  unicode-range: U+0600-06FF, U+0750-077F, U+0870-08FF, U+FB50-FDFF, U+FE70-FEFF, U+200C-200E;
-}
-
-@layer base {
-  :where(:lang(ar), :lang(fa), :lang(ur)) {
-    line-height: 1.75;
-  }
-}
-
-@font-face {
-  font-family: 'Proto Mono';
-  src: url('https://fonts.azion.com/proto-mono/ProtoMono-Light.woff2') format('woff2');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Proto Mono';
-  src: url('https://fonts.azion.com/proto-mono/ProtoMono-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Proto Mono';
-  src: url('https://fonts.azion.com/proto-mono/ProtoMono-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Proto Mono';
-  src: url('https://fonts.azion.com/proto-mono/ProtoMono-SemiBold.woff2') format('woff2');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Roboto Condensed';
-  src:
-    url('https://fonts.azion.com/roboto-condensed/RobotoCondensed-Italic.woff') format('woff'),
-    url('https://fonts.azion.com/roboto-condensed/RobotoCondensed-Italic.ttf') format('truetype');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Titillium Web';
-  src:
-    url('https://fonts.azion.com/titillium-web/TitilliumWeb-Italic.woff') format('woff'),
-    url('https://fonts.azion.com/titillium-web/TitilliumWeb-Italic.ttf') format('truetype');
-  font-weight: 400;
-  font-style: italic;
-  font-display: swap;
-}
-
-
 /*
  * `@aziontech/webkit` components use arbitrary values (`bg-(--x)`) that
  * Tailwind v4 only picks up when the source files are inside the scan.
@@ -953,6 +753,7 @@
   --bg-disabled: #E5E5E5;
   --border-default: #D1D1D1;
   --border-muted: #DADADA;
+  --border-input: #D1D1D1;
   --border-strong: #000000;
   --border-selected: var(--primary);
   --text-default: #141414;
@@ -1069,6 +870,7 @@
   --bg-disabled: #1A1A1A;
   --border-default: #535353;
   --border-muted: #535353;
+  --border-input: #535353;
   --border-strong: #FFFFFF;
   --border-selected: var(--primary);
   --text-default: #FAFAFA;
@@ -1154,6 +956,13 @@
   --severity-medium: #F7BD08;
   --severity-low: #66ADFF;
   --severity-info: #999999;
+  --shadow-2xs: 0 1px rgb(0 0 0 / 0.5);
+  --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.6);
+  --shadow-sm: 0 0 0 1px rgb(255 255 255 / 0.06), 0 1px 3px 0 rgb(0 0 0 / 0.6), 0 1px 2px -1px rgb(0 0 0 / 0.6);
+  --shadow-md: 0 0 0 1px rgb(255 255 255 / 0.06), 0 4px 6px -1px rgb(0 0 0 / 0.6), 0 2px 4px -2px rgb(0 0 0 / 0.6);
+  --shadow-lg: 0 0 0 1px rgb(255 255 255 / 0.06), 0 10px 15px -3px rgb(0 0 0 / 0.6), 0 4px 6px -4px rgb(0 0 0 / 0.6);
+  --shadow-xl: 0 0 0 1px rgb(255 255 255 / 0.06), 0 20px 25px -5px rgb(0 0 0 / 0.6), 0 8px 10px -6px rgb(0 0 0 / 0.6);
+  --shadow-2xl: 0 0 0 1px rgb(255 255 255 / 0.06), 0 25px 50px -12px rgb(0 0 0 / 0.8);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -1186,6 +995,7 @@
     --bg-disabled: #1A1A1A;
     --border-default: #535353;
     --border-muted: #535353;
+    --border-input: #535353;
     --border-strong: #FFFFFF;
     --border-selected: var(--primary);
     --text-default: #FAFAFA;
@@ -1271,6 +1081,13 @@
     --severity-medium: #F7BD08;
     --severity-low: #66ADFF;
     --severity-info: #999999;
+    --shadow-2xs: 0 1px rgb(0 0 0 / 0.5);
+    --shadow-xs: 0 1px 2px 0 rgb(0 0 0 / 0.6);
+    --shadow-sm: 0 0 0 1px rgb(255 255 255 / 0.06), 0 1px 3px 0 rgb(0 0 0 / 0.6), 0 1px 2px -1px rgb(0 0 0 / 0.6);
+    --shadow-md: 0 0 0 1px rgb(255 255 255 / 0.06), 0 4px 6px -1px rgb(0 0 0 / 0.6), 0 2px 4px -2px rgb(0 0 0 / 0.6);
+    --shadow-lg: 0 0 0 1px rgb(255 255 255 / 0.06), 0 10px 15px -3px rgb(0 0 0 / 0.6), 0 4px 6px -4px rgb(0 0 0 / 0.6);
+    --shadow-xl: 0 0 0 1px rgb(255 255 255 / 0.06), 0 20px 25px -5px rgb(0 0 0 / 0.6), 0 8px 10px -6px rgb(0 0 0 / 0.6);
+    --shadow-2xl: 0 0 0 1px rgb(255 255 255 / 0.06), 0 25px 50px -12px rgb(0 0 0 / 0.8);
   }
 }
 
@@ -1795,6 +1612,7 @@
 @utility bg-disabled { background-color: var(--bg-disabled); }
 @utility border-default { border-color: var(--border-default); }
 @utility border-muted { border-color: var(--border-muted); }
+@utility border-input { border-color: var(--border-input); }
 @utility border-strong { border-color: var(--border-strong); }
 @utility border-selected { border-color: var(--border-selected); }
 @utility text-default { color: var(--text-default); }
@@ -1849,6 +1667,10 @@
   body {
     background-color: var(--bg-canvas);
     color: var(--text-default);
+  }
+
+  :where(:lang(ar), :lang(fa), :lang(ur)) {
+    line-height: 1.75;
   }
 
   button:not(:disabled),

@@ -174,6 +174,10 @@ function styleEntryContent() {
   return `/* @aziontech/webkit design-system styles. Import this once from your app entry. */
 @import '@aziontech/theme';
 
+/* The Azion fonts (Rubik, Roboto Mono, …) from fonts.azion.com. Delete this line if your app
+   hosts its own font files. */
+@import '@aziontech/theme/fonts.css';
+
 /* webkit is consumed as source — this registers it with Tailwind so its component classes compile. */
 @import '@aziontech/webkit/styles';
 

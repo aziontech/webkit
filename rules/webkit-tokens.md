@@ -7,7 +7,7 @@ The design system ships tokens. Use them. Never hardcode a raw color or an off-s
 - Use CSS variables from `@aziontech/theme` for color: `var(--primary)`, `var(--bg-surface)`, `var(--text-default)`, `var(--border-default)`, and the other semantic tokens.
 - Use the theme's semantic spacing and radius tokens: `var(--spacing-xs)`, `var(--spacing-md)` (scale `xxs…xxl`), `var(--shape-button)`.
 - Use the generated typography classes / tokens for text (`text-button-lg`, and the other named type scales), not raw font sizes.
-- Import the theme once, near your app entry: `import '@aziontech/theme'` (and `import '@aziontech/icons'` for icons).
+- Import the theme once, near your app entry: `import '@aziontech/theme'`, plus `import '@aziontech/theme/fonts.css'` for the Azion font faces (leave it out when the app hosts its own fonts) and `import '@aziontech/icons'` for icons.
 
 ## Do not
 
@@ -38,6 +38,7 @@ use it, so you can check a choice against a real one.
 | Status message                                      | `--success`, `--warning`, `--danger`, `--info` with `-border` and `-contrast` | `Alert`, `Tag`, `Badge`, `Trace` spans, `Button kind="danger"`. The fill is the box, `-border` its edge, `-contrast` its icon or text. A status dot is the `-contrast` color (`StatusIndicator`). |
 | Severity                                            | `--severity-critical`, `-high`, `-medium`, `-low`                             | the bars of `SeverityTag` only                                                                                                                                                                    |
 | Links                                               | `--text-link`, `--text-link-hover`                                            | `Button kind="link"`, links in text                                                                                                                                                               |
+| Form field outline                                  | `--border-input`                                                              | the resting and disabled outline of `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `OtpInput`, the date fields, `Checkbox`, `RadioButton`, `Switch`                |
 | Charts                                              | `--chart-*`                                                                   | the chart components; series, status and severity colors are not interchangeable                                                                                                                  |
 
 Defined but not used by any component yet: `--accent-mask`, `--accent-selected`,

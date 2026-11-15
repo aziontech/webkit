@@ -2,6 +2,7 @@ import {
   brandPrimitives,
   primitives as colorPrimitives
 } from '../tokens/primitives/colors/colors.js'
+import { shadowDark } from '../tokens/primitives/effects/shadow.js'
 import { accent } from '../tokens/theme/accent.js'
 import { background } from '../tokens/theme/background.js'
 import { border } from '../tokens/theme/border.js'
@@ -118,11 +119,17 @@ export const compileThemeVars = () => {
   return Object.fromEntries(VARIANTS.map((v) => [v, compiled[v].vars]))
 }
 
+const darkShadows = Object.fromEntries(
+  Object.entries(shadowDark).map(([key, value]) => [`--shadow-${key}`, value])
+)
+
 export const compileThemeCssVars = () => {
   const compiled = compileAll()
-  return Object.fromEntries(
+  const css = Object.fromEntries(
     VARIANTS.map((v) => [v, { ...compiled[v].vars, ...compiled[v].aliases }])
   )
+  Object.assign(css.dark, darkShadows)
+  return css
 }
 
 const fmt = (vars, indent = '  ') =>

@@ -118,6 +118,8 @@ test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
     const cssEntry = plan.find((a) => a.type === 'write' && a.path === 'src/webkit.css')
     assert.ok(cssEntry, 'expected src/webkit.css write action')
     assert.match(cssEntry.content, /@import '@aziontech\/theme'/)
+    // The font faces are their own entry, so an app that hosts its fonts can drop the line.
+    assert.match(cssEntry.content, /@import '@aziontech\/theme\/fonts\.css'/)
     // Critically, it must register webkit's source so component classes compile — via the
     // package-name import (the @source ships inside webkit), never a ../node_modules path.
     assert.match(cssEntry.content, /@import '@aziontech\/webkit\/styles'/)

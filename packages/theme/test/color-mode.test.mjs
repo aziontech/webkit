@@ -65,3 +65,21 @@ test('the ring offset is a whole pixel', () => {
 test('globals.css is up to date with the token sources', () => {
   assert.ok(globals.includes(css))
 })
+
+test('dark mode carries its own elevation shadows, deeper and with a light edge', () => {
+  const light = block(css, ':root, [data-theme=light], .azion.azion-light')
+  const dark = block(css, '[data-theme=dark], .dark, .azion.azion-dark')
+  assert.doesNotMatch(light, /--shadow-md:/)
+  assert.match(globals, /--shadow-md: 0 4px 6px -1px rgb\(0 0 0 \/ 0\.1\)/)
+  for (const step of ['2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl']) {
+    assert.match(dark, new RegExp(`--shadow-${step}: [^;]*rgb\\(0 0 0 / 0\\.[5-9]\\)`), step)
+  }
+  assert.match(dark, /--shadow-md: 0 0 0 1px rgb\(255 255 255 \/ 0\.06\)/)
+})
+
+test('form fields have their own outline token in both themes', () => {
+  const { light, dark } = compileThemeVars()
+  assert.equal(light['--border-input'], light['--border-default'])
+  assert.equal(dark['--border-input'], dark['--border-default'])
+  assert.match(globals, /@utility border-input \{ border-color: var\(--border-input\); \}/)
+})

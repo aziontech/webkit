@@ -251,7 +251,7 @@ export function planDoctor(projectDir) {
       styled ? 'ok' : 'warn',
       styled
         ? `imported in ${entry}`
-        : `add \`import './webkit.css'\` (theme tokens + fonts + Tailwind + the webkit source registration) to ${entry}.`
+        : `add \`import './webkit.css'\` (theme tokens + Tailwind + the webkit source registration) to ${entry}.`
     )
     const declaredIcons = Boolean(
       pkg?.dependencies?.['@aziontech/icons'] || pkg?.devDependencies?.['@aziontech/icons']
@@ -297,7 +297,7 @@ export function planDoctor(projectDir) {
     'theme import',
     themed ? 'ok' : 'fail',
     themed
-      ? "src/webkit.css imports '@aziontech/theme' (tokens + Tailwind + fonts)"
+      ? "src/webkit.css imports '@aziontech/theme' (tokens + Tailwind)"
       : "src/webkit.css does not `@import '@aziontech/theme'` — no design tokens, so every component renders unstyled. Run `npx @aziontech/webkit init`."
   )
 
