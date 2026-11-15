@@ -1078,6 +1078,8 @@ export function getPattern(catalog, id, { variant } = {}) {
 function sectionSuggestion(catalog, need) {
   const q = normalize(need)
   const words = contentWords(q)
+  const aliases = aliasHits(catalog, need)
+  const concepts = conceptHits(catalog, need)
   const ranked = catalog.subpaths
     .filter((sub) => {
       const e = catalog.getEntry(sub)
@@ -1087,7 +1089,7 @@ function sectionSuggestion(catalog, need) {
       const e = catalog.getDetails(sub)
       const name = normalize(sub)
       const prose = normalize([e.purpose || '', ...(e.useWhen || [])].join(' '))
-      let score = 0
+      let score = (aliases.get(sub)?.boost ?? 0) + (concepts.get(sub) ?? 0)
       for (const w of words) {
         if (hasPhrase(name, w)) score += 20
         else if (name.includes(w)) score += 10
@@ -1100,14 +1102,6 @@ function sectionSuggestion(catalog, need) {
   return ranked
 }
 
-function preferProductSurface(catalog, component) {
-  if (!component?.best) return component
-  const all = [component.best, ...(component.alternatives || [])]
-  const isProduct = (c) => (catalog.getEntry(c.name)?.surface ?? 'product') === 'product'
-  const ordered = [...all.filter(isProduct), ...all.filter((c) => !isProduct(c))]
-  return { ...component, best: ordered[0], alternatives: ordered.slice(1) }
-}
-
 export function suggestComponent(catalog, need, { surface } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const q = String(need || '')
@@ -1117,10 +1111,7 @@ export function suggestComponent(catalog, need, { surface } = {}) {
   const isMarketing =
     wantedSurface === 'marketing' ||
     (!wantedSurface && MARKETING_WORDS.some((w) => hasPhrase(nq, normalize(w))))
-  const component =
-    isMarketing || wantedSurface
-      ? componentSuggestion(catalog, q, opts)
-      : preferProductSurface(catalog, componentSuggestion(catalog, q, opts))
+  const component = componentSuggestion(catalog, q, opts)
 
   const page = marketingPageIntent(q, wantedSurface)
   if (page && !page.words.length) {

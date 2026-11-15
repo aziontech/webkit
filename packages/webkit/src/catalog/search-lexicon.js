@@ -412,7 +412,20 @@ export const COMPONENT_TERMS = {
     'reference band',
     'target line'
   ],
-  'data-grid': ['data grid', 'editable grid', 'spreadsheet', 'edit cells', 'inline edit table']
+  'data-grid': ['data grid', 'editable grid', 'spreadsheet', 'edit cells', 'inline edit table'],
+  'client-quotes': ['testimonial', 'testimonials', 'customer quotes', 'depoimentos', 'testimonios'],
+  'stats-band': ['stats', 'stats band', 'proof figures'],
+  'closing-call-to-action': ['cta', 'closing cta', 'call to action band'],
+  ticker: ['marquee', 'logo marquee', 'logo ticker'],
+  'logo-wall': ['logo cloud', 'logo wall', 'customer logos'],
+  'capability-grid': ['feature grid', 'features grid', 'capabilities grid'],
+  'compare-plans': ['comparison', 'plan comparison', 'feature matrix', 'compare plans'],
+  'article-index': ['blog index', 'article index', 'resource hub', 'blog list'],
+  'closing-call-to-action-newsletter': [
+    'newsletter',
+    'newsletter signup',
+    'subscribe to newsletter'
+  ]
 }
 
 export const STOPWORDS = new Set([
