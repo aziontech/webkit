@@ -3,9 +3,9 @@
   "title": "Components/Primitives/Layout/GlobalHeader",
   "examples": [
     {
-      "name": "DefaultHeader",
+      "name": "Default",
       "summary": "The shell composed with the Azion logo in the brand slot at the start region, leaving the center and end regions ready for consumer content.",
-      "file": "default-header.vue"
+      "file": "default.vue"
     },
     {
       "name": "ContentZone",

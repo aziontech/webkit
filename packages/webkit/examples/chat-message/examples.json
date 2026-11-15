@@ -23,9 +23,9 @@
       "file": "error.vue"
     },
     {
-      "name": "GroupedAndSystem",
+      "name": "Thread",
       "summary": "A system line centered in the thread, then two consecutive assistant messages where the second is grouped: no avatar or author line, so the two read as one turn.",
-      "file": "grouped-and-system.vue"
+      "file": "thread.vue"
     }
   ]
 }

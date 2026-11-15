@@ -3,9 +3,9 @@ name: tool-call
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 89f6919feceb2a17cffe91fef2b83325a92f0a9cd91d3fff05b7093fb223945c
+checksum: d5de557fd4d51da3dffefa908d8eb2da6752c70b248dcc6e1aa0507692e99bcf
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -168,7 +168,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/tool-call/`: States (every status), With details (input and output, error open)._
+_Examples in `packages/webkit/examples/tool-call/`: Default (every status), With details (input and output, error open)._
 
 ## Constraints — DO NOT
 

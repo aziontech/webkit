@@ -23,9 +23,9 @@
       "file": "required.vue"
     },
     {
-      "name": "ReadOnly",
+      "name": "Readonly",
       "summary": "A read-only certificate keeps the filled look, drops the hover border and reads in the code face (`monospace`); the field description says why the value cannot change.",
-      "file": "read-only.vue"
+      "file": "readonly.vue"
     },
     {
       "name": "Monospace",

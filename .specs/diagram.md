@@ -3,8 +3,8 @@ name: diagram
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: 548204887630c7b4053df1b53056ac09f40d7531991c9bbde4e88999f012e439
+spec_version: 5
+checksum: e97601a194d5f1a13ee7ab6320db8bf7d53395ecc61c6ef5f100fe127e426f9d
 created: 2026-10-21
 last_updated: 2026-11-15
 ---
@@ -187,7 +187,7 @@ _None — every node is drawn from `spec`._
 
 - Default — a named diagram from the library (`name`), with Controls to switch between every registered name.
 - Spec — a one-off request path passed as `spec`, from a client through an application to the lit product and its outcomes, with labelled, active edges. Justified addition: `spec` is the second way in, for a diagram the library does not have, and Default shows only `name`.
-- NodeKinds — composite story drawing one node of each kind (`pill`, `card`, `item`, `tile`, `app`) in one diagram. Justified addition: the node kind is the component's one visual axis, carried in the data rather than a `kind` prop, so no Types story covers it.
+- Nodes — composite story drawing one node of each kind (`pill`, `card`, `item`, `tile`, `app`) in one diagram. Justified addition: the node kind is the component's one visual axis, carried in the data rather than a `kind` prop, so no Types story covers it.
 - Groups — a framed group with a grid of tiles and a dashed, tinted group, connected to the nodes beside them. Justified addition: groups and grids are the layout primitives a Default row does not show.
 - Flow — a five-node vertical flow in a 640 px docs column (terminal → project folder → CLI → API → account resources) with a labelled `azion deploy` edge. Justified addition: it is the centred stacked geometry — connectors through each node's centre, the chip centred on its line — that the docs use and no other example reaches (Spec stacks as a tree).
 

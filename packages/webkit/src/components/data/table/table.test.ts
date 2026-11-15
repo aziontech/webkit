@@ -2,7 +2,7 @@ import { fireEvent, render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { defineComponent, ref } from 'vue'
 
-import Composition from '../../../../examples/table/composition.vue'
+import Default from '../../../../examples/table/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Table from './index'
 import tableSource from './table.vue?raw'
@@ -253,15 +253,15 @@ describe('Table', () => {
     })
 
     describe('documented examples', () => {
-      it('renders the Composition story cleanly', () => {
-        const { getByTestId, getAllByRole } = render(Composition)
+      it('renders the Default story cleanly', () => {
+        const { getByTestId, getAllByRole } = render(Default)
 
         expect(getByTestId('data-table')).toBeTruthy()
         // 1 header row + 5 body rows (the story slices the first five records).
         expect(getAllByRole('row')).toHaveLength(6)
       })
       it('never stacks a hand-composed table', () => {
-        const { getByTestId } = render(Composition)
+        const { getByTestId } = render(Default)
 
         expect(getByTestId('data-table').hasAttribute('data-stacked')).toBe(false)
       })

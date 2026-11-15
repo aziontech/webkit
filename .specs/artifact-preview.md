@@ -3,9 +3,9 @@ name: artifact-preview
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 5a118f8b6ca7e1f7569e7e5976cd238e7e0a6ef5b384ffd556b3bead354279eb
+checksum: 782da806d4dba06bf16aa237d322cfa53b7af823faa4de115f1b68a095ea28e1
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -164,7 +164,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/artifact-preview/`: Code (copy and open), Table (download)._
+_Examples in `packages/webkit/examples/artifact-preview/`: Default (copy and open), Table (download)._
 
 ## Constraints — DO NOT
 

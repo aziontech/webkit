@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Kinds",
+      "name": "Variants",
       "summary": "Five materials at their measured geometry. `dots` is the quiet default and `lines` the quietest — fine vertical rules whose transparency is the ink’s own, so each one stays solid edge to edge. `dither` ramps its density along an axis, and `pixelate` lights its grid from underneath with two crossing waves.",
-      "file": "kinds.vue"
+      "file": "variants.vue"
     },
     {
       "name": "Sizes",

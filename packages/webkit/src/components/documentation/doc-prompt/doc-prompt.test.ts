@@ -4,7 +4,7 @@ import { nextTick, ref } from 'vue'
 
 import Bare from '../../../../examples/doc-prompt/bare.vue'
 import Default from '../../../../examples/doc-prompt/default.vue'
-import Kinds from '../../../../examples/doc-prompt/kinds.vue'
+import Variants from '../../../../examples/doc-prompt/variants.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DocPrompt from './doc-prompt.vue'
 
@@ -217,7 +217,7 @@ describe('DocPrompt', () => {
     })
 
     it('has no violations across both kinds', async () => {
-      const { container } = render(Kinds)
+      const { container } = render(Variants)
       await expectNoA11yViolations(container)
     })
 

@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Grouped",
+      "name": "Groups",
       "summary": "Rule criteria: conditions inside a group are joined by and, groups by or. Each group has its own Add condition; removing the last condition removes the group.",
-      "file": "grouped.vue"
+      "file": "groups.vue"
     },
     {
       "name": "CustomCells",

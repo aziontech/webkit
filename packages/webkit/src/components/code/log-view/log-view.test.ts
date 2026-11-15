@@ -7,7 +7,7 @@ import Borderless from '../../../../examples/log-view/borderless.vue'
 import Default from '../../../../examples/log-view/default.vue'
 import Levels from '../../../../examples/log-view/levels.vue'
 import StepsExample from '../../../../examples/log-view/steps.vue'
-import StepsFailed from '../../../../examples/log-view/steps-failed.vue'
+import StepsError from '../../../../examples/log-view/steps-error.vue'
 import StepsRunning from '../../../../examples/log-view/steps-running.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import LogViewCompound from './index'
@@ -825,8 +825,8 @@ describe('LogView', () => {
         expect(queryByTestId('code-log-view__steps')).toBeNull()
       })
 
-      it('renders the Steps, StepsRunning and StepsFailed examples without violations', async () => {
-        for (const Example of [StepsExample, StepsRunning, StepsFailed]) {
+      it('renders the Steps, StepsRunning and StepsError examples without violations', async () => {
+        for (const Example of [StepsExample, StepsRunning, StepsError]) {
           const view = render(Example)
           expect(view.getAllByTestId('code-log-view__steps__step').length).toBeGreaterThan(0)
           await expectNoA11yViolations(view.container)

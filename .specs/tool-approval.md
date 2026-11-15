@@ -3,9 +3,9 @@ name: tool-approval
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 8c3aa136610b4c69c07c31d509275882cbe096c9b8759040d59d20bf9f16462a
+checksum: 6ae9d06852b63f4e5bf9dc6923558c07723c887e94787d1eafc056c950a3c567
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -181,7 +181,7 @@ _None._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/tool-approval/`: Command (pending), Irreversible (typed phrase), Resolved (approved, denied, expired)._
+_Examples in `packages/webkit/examples/tool-approval/`: Default (pending), Irreversible (typed phrase), Resolved (approved, denied, expired)._
 
 ## Constraints — DO NOT
 

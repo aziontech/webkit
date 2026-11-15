@@ -4,7 +4,7 @@ import { userEvent } from 'vitest/browser'
 import { createApp, defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/otp-input/default.vue'
-import Grouped from '../../../../examples/otp-input/grouped.vue'
+import Groups from '../../../../examples/otp-input/groups.vue'
 import States from '../../../../examples/otp-input/states.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
@@ -195,7 +195,7 @@ describe('OtpInput', () => {
   })
 
   it('has no axe violations', async () => {
-    for (const Example of [Default, Grouped, States]) {
+    for (const Example of [Default, Groups, States]) {
       const { container } = render(Example)
       await expectNoA11yViolations(container)
       cleanup()

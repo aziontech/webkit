@@ -2,7 +2,7 @@ import { render, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 import { nextTick, ref } from 'vue'
 
-import DefaultFooter from '../../../../examples/footer/default-footer.vue'
+import DefaultFooter from '../../../../examples/footer/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Footer from './index'
 

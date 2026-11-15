@@ -3,8 +3,8 @@ name: input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 7
-checksum: e7deedbf62fa96e033da6796695c00029dc4c252c102951b7c307135736ba403
+spec_version: 8
+checksum: 26f05f9151d30574c342413d2e0796595f6e35d90ba9419c09d4d5c9585d9b70
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -179,7 +179,7 @@ _none_
 - Email — justification: documents `type="email"` (native browser keyboard / validation surface) since the `type` prop is restricted and only two values matter visually.
 - MaxLength — justification: documents `maxLength` as a hard character cap; behavior is invisible from props alone and only observable while typing.
 - Disabled
-- ReadOnly — justification: the `readonly` look (filled, non-editable) is a top-level prop and not visible from the other stories; shown with `monospace` as a copyable CLI command beside a read-only ID.
+- Readonly — justification: the `readonly` look (filled, non-editable) is a top-level prop and not visible from the other stories; shown with `monospace` as a copyable CLI command beside a read-only ID.
 
 ## Constraints — DO NOT
 

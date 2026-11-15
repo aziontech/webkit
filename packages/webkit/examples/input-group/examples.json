@@ -13,19 +13,19 @@
       "file": "sizes.vue"
     },
     {
-      "name": "WithAddonLeft",
+      "name": "WithAddonStart",
       "summary": "`<InputGroupAddon>` before the middle input — static-text island on the left.",
-      "file": "with-addon-left.vue"
+      "file": "with-addon-start.vue"
     },
     {
-      "name": "WithAddonRight",
+      "name": "WithAddonEnd",
       "summary": "`<InputGroupAddon>` after the middle input — static-text island on the right.",
-      "file": "with-addon-right.vue"
+      "file": "with-addon-end.vue"
     },
     {
-      "name": "BothAddons",
+      "name": "WithAddons",
       "summary": "Addons on both sides flanking the input — `https://…​.com` composition.",
-      "file": "both-addons.vue"
+      "file": "with-addons.vue"
     },
     {
       "name": "WithButton",

@@ -3,12 +3,12 @@ name: log-view
 category: code
 structure: composition
 status: implemented
-spec_version: 10
+spec_version: 11
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 3ca4cc262b54ed6515d96931ae28d44eaf0c1f7800996de6fd574251064ace42
+checksum: dfa9e6a2aca29a533d17952c478f8c7e35e92d67668929dc6143250e1cca7efb
 created: 2026-05-26
 last_updated: 2026-11-15
 ---
@@ -317,7 +317,7 @@ the height of a single row the moment the root stopped stretching.
 - WithFooter — `LogView.Footer` with a summary and an action; justified because the footer is public anatomy no other example shows.
 - Steps — `LogView.Steps` over a finished deploy: each step's log in Phased, every line in Complete; justified because the steps part is public anatomy.
 - StepsRunning — `LogView.Steps` mid-run: done steps, a running step with its spinner, pending steps waiting, and the flush progress bar.
-- StepsFailed — `LogView.Steps` after a failure: the failed step open with its reason, the remaining steps skipped, and a `step-meta` Tag.
+- StepsError — `LogView.Steps` after a failure: the failed step open with its reason, the remaining steps skipped, and a `step-meta` Tag.
 
 ## Constraints — DO NOT
 

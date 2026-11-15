@@ -3,11 +3,11 @@ name: input-group
 category: inputs
 structure: composition
 status: implemented
-spec_version: 8
+spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 4b498f8a72ff60af717c0a4b79ffa59207690c2af1a424b7d72b25a19278364d
+checksum: 6fa68d536400666bc42160909f3029c7bd417988c3eed24fbd8f2916b01f9ea3
 created: 2026-07-01
 last_updated: 2026-11-15
 ---
@@ -240,9 +240,9 @@ Root props:
 
 - Default — root with a middle input, no addons or extra children.
 - Sizes — the three sizes stacked (small=28px, medium=32px, large=40px).
-- WithAddonLeft — `<InputGroup.Addon>https://</InputGroup.Addon>` + middle input.
-- WithAddonRight — middle input + `<InputGroup.Addon>.com</InputGroup.Addon>`.
-- BothAddons — addon + input + addon.
+- WithAddonStart — `<InputGroup.Addon>https://</InputGroup.Addon>` + middle input.
+- WithAddonEnd — middle input + `<InputGroup.Addon>.com</InputGroup.Addon>`.
+- WithAddons — addon + input + addon.
 - WithButton — middle input + trailing `<Button label="Search" />`.
 - WithSelect — leading `<Select placeholder="USD" />` + middle input.
 - WithAll — addon + `<Select>` + input + `<Button>` (four children).

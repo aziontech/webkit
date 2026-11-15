@@ -43,9 +43,9 @@
       "file": "with-link.vue"
     },
     {
-      "name": "WithGroup",
+      "name": "Groups",
       "summary": "ItemGroup is the off-card list: it stacks rows with a gap between them (no dividers) and forces its items inline (no per-item surface/padding) to avoid a box-in-box effect.",
-      "file": "with-group.vue"
+      "file": "groups.vue"
     },
     {
       "name": "WithList",

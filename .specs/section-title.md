@@ -3,8 +3,8 @@ name: section-title
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 6
-checksum: 2446a8206ae257e85c9348843faebf0e0182a384986f41f5623b9bb714b6747b
+spec_version: 7
+checksum: bb3d21fc9c72ae43ec1799df056dc64263004df25c7b2268225e4bf32d39edf4
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=7495-24338
   node_id: 7495:24338
@@ -146,7 +146,7 @@ _none_
 ## Examples
 
 - Default
-- Kinds — composite story rendering every `kind` value stacked, so the three layouts can be compared (justified: the difference between the layouts is structural)
+- Variants — composite story rendering every `kind` value stacked, so the three layouts can be compared (justified: the difference between the layouts is structural)
 - Sizes — composite story rendering every `size` value stacked, so the three steps of the headline scale can be compared
 - WithActions — an `actions` row under the description (justified: the slot owns its own responsive layout, which no prop-driven story shows)
 - DescriptionWidths — composite story rendering the horizontal layout with every `descriptionWidth` value stacked, so the two column spans can be compared

@@ -3,8 +3,8 @@ name: media-tile
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: c6bc615dbea425836c4d6d35e2103c8bb298e3b92541029356c8059ef4b4bedf
+spec_version: 3
+checksum: 9e7d0125d2d13014a2ccf2a5739d4d7b53d37c53f8a364869a5808979d72618e
 created: 2026-09-25
 last_updated: 2026-11-15
 ---
@@ -156,7 +156,7 @@ _none_
 ## Examples
 
 - Default
-- Kinds — composite story rendering both registers side-by-side (justified: `frame` and `plain` are the same tile drawn with and without the page's rules, legible only in comparison).
+- Variants — composite story rendering both registers side-by-side (justified: `frame` and `plain` are the same tile drawn with and without the page's rules, legible only in comparison).
 - Unpadded — the `padded: false` state (an args delta of the one boolean the component declares).
 - Band — composite story rendering four tiles inside a `card-grid`. **Justified addition:** the tile exists for a row, and its proportions only read against its neighbours — one tile alone shows neither the caption baseline the grid row equalises nor the gutter that keeps each frame its own.
 

@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import CustomCells from '../../../../examples/attribute-editor/custom-cells.vue'
 import Default from '../../../../examples/attribute-editor/default.vue'
 import EmptyAndDisabled from '../../../../examples/attribute-editor/empty-and-disabled.vue'
-import Grouped from '../../../../examples/attribute-editor/grouped.vue'
+import Groups from '../../../../examples/attribute-editor/groups.vue'
 import Reorderable from '../../../../examples/attribute-editor/reorderable.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import AttributeEditor, { type AttributeEditorItem } from './attribute-editor.vue'
@@ -374,7 +374,7 @@ describe('AttributeEditor', () => {
 
     it.each([
       ['Default', Default],
-      ['Grouped', Grouped],
+      ['Groups', Groups],
       ['CustomCells', CustomCells],
       ['Reorderable', Reorderable]
     ])('renders the %s example with no axe violations', async (_name, Example) => {

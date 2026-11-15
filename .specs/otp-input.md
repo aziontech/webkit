@@ -3,9 +3,9 @@ name: otp-input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: a4d2c3317c8add8fd67f6d75ba24ef7c7f1bef7eeaa8c43ca25cd0063f8290d5
+checksum: bcd49d7f3930ba150e9d2513d71ff57baec3896dbae059324ddf25b8c42ca424
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -161,7 +161,7 @@ _none_
 ## Examples
 
 - Default — the 6-digit code in a `Field`.
-- Grouped — `group="3"` with a separator; the alphanumeric mode with an 8-character recovery code.
+- Groups — `group="3"` with a separator; the alphanumeric mode with an 8-character recovery code.
 - States — invalid after a rejected code, disabled while checking.
 
 ## Constraints — DO NOT

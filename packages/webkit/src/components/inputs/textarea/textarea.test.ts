@@ -8,7 +8,7 @@ import Default from '../../../../examples/textarea/default.vue'
 import Disabled from '../../../../examples/textarea/disabled.vue'
 import Invalid from '../../../../examples/textarea/invalid.vue'
 import Monospace from '../../../../examples/textarea/monospace.vue'
-import ReadOnly from '../../../../examples/textarea/read-only.vue'
+import ReadonlyExample from '../../../../examples/textarea/readonly.vue'
 import Required from '../../../../examples/textarea/required.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Textarea from './textarea.vue'
@@ -199,8 +199,8 @@ describe('Textarea', () => {
       expect(readonly.hasAttribute('data-disabled')).toBe(false)
     })
 
-    it('renders the ReadOnly example inside a Field with its description', async () => {
-      const { container, getByRole } = render(ReadOnly)
+    it('renders the Readonly example inside a Field with its description', async () => {
+      const { container, getByRole } = render(ReadonlyExample)
       await nextTick()
       const control = getByRole('textbox', { name: 'Certificate' })
       expect(control).toHaveAttribute('readonly')
@@ -348,14 +348,14 @@ describe('Textarea', () => {
       expect(emitted()['update:modelValue']?.at(-1)).toEqual(['@ A'])
     })
 
-    it('renders the Monospace and ReadOnly examples in the code face with no a11y violations', async () => {
+    it('renders the Monospace and Readonly examples in the code face with no a11y violations', async () => {
       const paste = render(Monospace)
       const zone = paste.getByLabelText('Zone file') as HTMLTextAreaElement
       expect(zone.hasAttribute('data-monospace')).toBe(true)
       expect(zone.value).toContain('$ORIGIN example.com.')
       await expectNoA11yViolations(paste.container)
       paste.unmount()
-      const fixed = render(ReadOnly)
+      const fixed = render(ReadonlyExample)
       expect(fixed.getByLabelText('Certificate').hasAttribute('data-monospace')).toBe(true)
     })
   })

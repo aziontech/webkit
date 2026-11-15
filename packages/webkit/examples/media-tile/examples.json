@@ -8,9 +8,9 @@
       "file": "default.vue"
     },
     {
-      "name": "Kinds",
+      "name": "Variants",
       "summary": "The two registers, each in the grid it belongs to. `frame` sits in `card-grid`'s `gap` register, where gutters keep every frame its own. `plain` sits in the `divider` register, where the grid draws every rule and the tile only has to fill its own background — a framed tile there would put a frame rule and a grid hairline a padding apart.",
-      "file": "kinds.vue"
+      "file": "variants.vue"
     },
     {
       "name": "Unpadded",

@@ -3,8 +3,8 @@ name: texture-material
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: c4502942f7cd931ab9123845c418bc61b9d23447148865f0b3bad270cc898be9
+spec_version: 2
+checksum: a50f440eb88f2c753c896009c31473fa86d1d1eeeefda595bffa2eb3de372c70
 created: 2026-09-23
 last_updated: 2026-11-15
 ---
@@ -124,7 +124,7 @@ Reduced motion keeps both crests — they are part of the picture, not only of t
 ## Examples
 
 - Default
-- Kinds — composite story rendering every `kind` value side by side
+- Variants — composite story rendering every `kind` value side by side
 - Sizes — composite story rendering every `size` value side by side
 
 ## Constraints — DO NOT

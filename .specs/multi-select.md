@@ -3,12 +3,12 @@ name: multi-select
 category: inputs
 structure: composition
 status: implemented
-spec_version: 12
+spec_version: 13
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: aa8cf7332043449815f0dbd79fa053302cf66e2004bc1ab6edff6be5ac3998de
+checksum: 0a4ded112c18221c3fb01eaf07ad55902338b8edf61632e9e1c62914bcff0215
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -302,7 +302,7 @@ Chips, typed filter and a create row:
 
 - Default
 - Sizes — composite story rendering all three sizes side by side (canonical composite example).
-- WithGroups — justification: documents the `<MultiSelectGroup label="…">` heading anatomy from Figma `3899:29362` (Group region), which is not reachable from Default.
+- Groups — justification: documents the `<MultiSelectGroup label="…">` heading anatomy from Figma `3899:29362` (Group region), which is not reachable from Default.
 - WithSearchAndFooter — justification: documents the `#search` and `#footer` slots on `<MultiSelectContent>` (Top/Bottom regions in Figma `3899:29362`), which are slot-only and invisible from Default.
 - WithOptionExtras — justification: documents the `icon`, `#leading`, and `#tag` slots on `<MultiSelectOption>` in one composite frame.
 - LongList — justification: documents the panel's internal scroll behaviour (options list wrapped in `ScrollArea`) when the option count exceeds the `max-h-80` viewport; not reachable from any other story.
@@ -310,7 +310,7 @@ Chips, typed filter and a create row:
 - Invalid — justification: documents the `invalid` visual treatment, which is a top-level prop with distinct token bindings.
 - Disabled
 - Chips — justification: documents `kind="chips"` with `chipLimit` (removable chips and the `+N more` chip), a trigger anatomy no other example shows.
-- TypeToFilter — justification: documents `searchable` + `allowCustom` (typing in the trigger, `Backspace`, the `Add "…"` row and `create`).
+- Searchable — justification: documents `searchable` + `allowCustom` (typing in the trigger, `Backspace`, the `Add "…"` row and `create`).
 - ListStates — justification: documents the `loading`, `error` and empty list states the panel owns, which no other example reaches.
 
 ## Constraints — DO NOT

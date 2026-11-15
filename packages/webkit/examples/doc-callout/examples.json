@@ -13,9 +13,9 @@
       "file": "prose.vue"
     },
     {
-      "name": "Kinds",
+      "name": "Variants",
       "summary": "The six kinds together. Five carry a severity — they say something about the copy's stakes — and `tip` carries none: it takes the page's own surface and rule so a friendly shortcut is not painted the same green as a confirmed success.",
-      "file": "kinds.vue"
+      "file": "variants.vue"
     }
   ]
 }

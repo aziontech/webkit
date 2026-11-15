@@ -3,10 +3,10 @@ name: hero-form
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: af4b52b5974ea67ea2bdd14465dab22c23e4f2d42bfaabfc53b902a1b1110ab7
+checksum: cdd01517a6945300672d06e2c42e279fa6a7c64999fb5412cae56c9ee3641b71
 template: 2
 ---
 
@@ -206,7 +206,7 @@ No built-in strings: every label, placeholder, message and action is a prop from
 - ScaleUp (site) — no highlights or client strip, a two-line headline and a phone field labelled by its placeholder through `visuallyHiddenLabel`
 - Loading
 - Submitted
-- Failed
+- Error
 - Contact line — justification: `descriptionLink`, `descriptionAfter` and the two actions are parts no other example shows (a phone line inline in the description, actions under the copy, no highlights so the copy stays sticky).
 
 ## Constraints — DO NOT

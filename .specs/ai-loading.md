@@ -3,9 +3,9 @@ name: ai-loading
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 132ff429be3da6f90cb6d0f45ddfa00a41800787d8e81f1abc31083592f877b6
+checksum: 4dfeaaa72128d0c7ee875802d91fe3f3d17eef446f46d5ce3b22dd4ec8ed931f
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -141,7 +141,7 @@ _No slots._
 
 ## Examples
 
-_Examples in `packages/webkit/examples/ai-loading/`: Inline, Bar._
+_Examples in `packages/webkit/examples/ai-loading/`: Default, Bar._
 
 ## Constraints — DO NOT
 

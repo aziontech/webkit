@@ -3,9 +3,9 @@
   "title": "Components/Primitives/AI/ToolCall",
   "examples": [
     {
-      "name": "States",
+      "name": "Default",
       "summary": "Every status of a tool call in the order an agent goes through them: waiting for authorization, running, completed, failed and denied, each with its status in text.",
-      "file": "states.vue"
+      "file": "default.vue"
     },
     {
       "name": "WithDetails",

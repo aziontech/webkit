@@ -2,11 +2,11 @@ import { fireEvent, render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import Default from '../../../../examples/item/default.vue'
+import Groups from '../../../../examples/item/groups.vue'
 import Muted from '../../../../examples/item/muted.vue'
 import Option from '../../../../examples/item/option.vue'
 import Outline from '../../../../examples/item/outline.vue'
 import Small from '../../../../examples/item/small.vue'
-import WithGroup from '../../../../examples/item/with-group.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Item from './index'
 
@@ -266,8 +266,8 @@ describe('Item', () => {
         expect(root.getAttribute('data-size')).toBe(size)
       })
 
-      it('WithGroup story wraps rows in a role="list" and renders separators from context', () => {
-        const { getByRole, getAllByText } = render(WithGroup)
+      it('Groups story wraps rows in a role="list" and renders separators from context', () => {
+        const { getByRole, getAllByText } = render(Groups)
         expect(getByRole('list')).toBeTruthy()
         expect(getAllByText(/@example\.com/).length).toBe(3)
       })
@@ -297,8 +297,8 @@ describe('Item', () => {
         await expectNoA11yViolations(container)
       })
 
-      it('WithGroup example has no violations', async () => {
-        const { container } = render(WithGroup)
+      it('Groups example has no violations', async () => {
+        const { container } = render(Groups)
         await expectNoA11yViolations(container)
       })
     })
@@ -334,7 +334,7 @@ describe('Item', () => {
 
     describe('list structure (Item.List and Item.Group own the listitem role)', () => {
       it('exposes Item.Group rows as listitems and hides its separators from the list', () => {
-        const { getByRole } = render(WithGroup)
+        const { getByRole } = render(Groups)
         const list = getByRole('list')
         Array.from(list.children).forEach((child) => {
           const expected =

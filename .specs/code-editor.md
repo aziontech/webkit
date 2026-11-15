@@ -3,9 +3,9 @@ name: code-editor
 category: code
 structure: monolithic
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
-checksum: 471f74cd706091c23ca72c42df9dfb23cdbdb29bc14b12a5fd27b27a03b72163
+checksum: a0bcf296a14a8f589908de2a4133f3c64b915d1728465e8f24d761c05bffde5d
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -240,7 +240,7 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 - Monaco — the same with `loader` set (the monaco-editor 0.56+ worker wiring), plus a JavaScript function editor with `padLineNumbers` and coloured calls; justified because the lazy path is the main use in the console.
 - WithToolbar — the console's function editor: the Code / Arguments switch in `toolbar` and `padLineNumbers`.
 - Diff — `diff` with `original`; justified as a distinct mode.
-- ReadOnly — the `readonly` state.
+- Readonly — the `readonly` state.
 - Schema — a JSON document checked against `schema` with Monaco loaded; `markers-change` puts the first problem in a `Field.Error`. Justified: schema checking and the `markers-change` event only run in Monaco.
 - Borderless — `:bordered="false"` filling a framed pane under its own toolbar, as the console's full-page function editor sits. Justified as a distinct look of the `bordered` prop.
 

@@ -3,8 +3,8 @@ name: doc-prompt
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: a61b751a9bbcca0aa618145489bec2046dd6316e5d01f4c1b2afe5770d7bd598
+spec_version: 5
+checksum: 0198baa1cce5df8c6a574b303ff5fbc1157afba8bb9cc1e2c31599f7ac6ea2cd
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -153,7 +153,7 @@ DocPrompt renders text the reader is meant to **run, not read** — the block a 
 ## Examples
 
 - Default
-- Kinds — composite story rendering `block` and `line` side by side. This is the component's only variant axis; it stands in for the template's `Types` story.
+- Variants — composite story rendering `block` and `line` side by side. This is the component's only variant axis; it stands in for the template's `Types` story.
 - Capped — a `block` prompt long enough to earn its disclosure control, which is the state the four-line cap exists for and the only one that renders the `Show more` button. Justified as a state story: `capped` is measured at runtime, not a prop, so no args delta can reach it from `Default`.
 - Bare — no `title`, the shape a "Prompts to try" list uses, where the heading above has already said what the prompts are. Justified: the bare anatomy (no title row, no divided surface) is a rendered-structure variant a `Default` args delta cannot show beside the titled shape.
 
