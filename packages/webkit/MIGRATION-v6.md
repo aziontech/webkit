@@ -23,7 +23,11 @@ It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `d
   `bordered`, `kind="text"` → `kind="transparent"`, …);
 - renamed exported types where you import them (`SeverityTagLevel` → `SeverityTagSeverity`,
   `DocCardGroupMobileCols` → `DocCardGroupMobileColumns`, `SegmentedButtonOption` →
-  `ToggleGroupOption`, …; the `types` map of `src/cli/migrations/v6.json`).
+  `ToggleGroupOption`, …; the `types` map of `src/cli/migrations/v6.json`);
+- PrimeIcons classes, in every source file whether it imports WebKit or not: each `pi pi-<name>`
+  pair becomes its Azion twin (`pi pi-check` → `ai ai-check`, `pi pi-minus-circle` →
+  `ai ai-circle-minus`, `pi pi-twitter` → `ai ai-x`; the map is `src/cli/migrations/v6-icons.json`).
+  A `pi-<name>` outside a pair, and a third-party mark with no Azion glyph, is listed to fix by hand.
 
 It prints `MANUAL` for anything it cannot rewrite safely (section 4), and for any import that v6
 does not export.
@@ -205,6 +209,17 @@ before the rename keeps rendering. Write the new name in code:
 | `white-gloves-when-it-matters`                          | `chat-and-headset-tiles`       |
 
 ## 4. Manual changes
+
+### Icons: the Azion set replaces PrimeIcons
+
+Every WebKit component, default `icon` and example now draws `ai ai-<name>` from `@aziontech/icons`;
+no component renders a PrimeIcons (`pi pi-*`) class. The Azion font carries every glyph the `pi` set
+had under the same name (`ai ai-chevron-right`, `ai ai-trash`, …), so an `icon` you pass keeps
+working once `migrate v6` has rewritten it. `import '@aziontech/icons'` now loads only the Azion set
+and the colour icons: if your app still renders `pi` classes (one of the third-party marks the
+codemod lists, such as `pi-apple` or `pi-paypal`), add `import '@aziontech/icons/primeicons'`
+yourself. The RTL mirror of `@aziontech/webkit/styles` targets the `ai` names (`ai-chevron-left`,
+`ai-arrow-right`, …).
 
 ### `@aziontech/theme` is a peer dependency
 
@@ -895,8 +910,8 @@ Optional text props that defaulted to `undefined` now default to `''`, and an em
 - `Kbd`: `keyName` defaults to `''`; an empty `keyName` draws no named key, only the modifiers and the slot.
 - `OverflowCount`: `noun` defaults to `''`; an empty `noun` uses the catalog (`item` / `items`).
 - `Tag`: `icon` defaults to `''`; an empty `icon` draws no glyph.
-- `FileDropzone`: `icon` defaults to `''` and still draws `pi pi-cloud-upload`; pass a PrimeIcons
-  class to change it, as before.
+- `FileDropzone`: `icon` defaults to `''` and still draws `ai ai-cloud-upload`; pass an icon class
+  to change it, as before.
 - `StatTile`: `trend` accepts `null` entries (`(number | null)[]`) for gaps in the sparkline. Arrays
   of numbers keep working; a typed `number[]` variable still assigns to it.
 

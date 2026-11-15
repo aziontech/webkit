@@ -452,7 +452,7 @@
   },
   "link": {
     "showIcon": {
-      "removed": "set icon to show a trailing glyph (icon=\"pi pi-external-link\"); leave it empty to hide it"
+      "removed": "set icon to show a trailing glyph (icon=\"ai ai-external-link\"); leave it empty to hide it"
     }
   },
   "tabs-item": {
