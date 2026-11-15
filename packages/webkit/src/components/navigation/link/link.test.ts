@@ -75,18 +75,11 @@ describe('Link', () => {
     expect(getByTestId('navigation-link__icon').classList.contains('pi-external-link')).toBe(true)
   })
 
-  it('keeps the deprecated showIcon: true showing the external-link glyph', () => {
-    const { getByTestId } = render(Link, { props: { showIcon: true } })
-
-    expect(getByTestId('navigation-link__icon').classList.contains('pi-external-link')).toBe(true)
-  })
-
-  it('keeps the deprecated showIcon: false hiding a set icon', () => {
-    const { queryByTestId } = render(Link, {
-      props: { showIcon: false, icon: 'pi pi-arrow-right', target: '_blank' }
-    })
+  it('ignores a removed showIcon attribute', () => {
+    const { queryByTestId, getByTestId } = render(Link, { attrs: { showIcon: true } })
 
     expect(queryByTestId('navigation-link__icon')).toBeNull()
+    expect(getByTestId('navigation-link').hasAttribute('showicon')).toBe(true)
   })
 
   it('renders the default slot as the label, falling back to label and the catalog', () => {
