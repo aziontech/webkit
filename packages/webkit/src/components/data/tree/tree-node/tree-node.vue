@@ -170,7 +170,7 @@
             :ref="mountRenameField"
             type="text"
             data-tree-rename
-            :data-testid="`${ctx.testId.value}-rename`"
+            :data-testid="`${ctx.testId.value}__rename`"
             :value="item.label"
             :aria-label="ctx.renameLabel(item.label)"
             class="h-6 min-w-0 flex-1 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-canvas) px-(--spacing-xxs) text-label-md text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
@@ -210,7 +210,7 @@
       <li
         v-if="item.loading"
         role="none"
-        :data-testid="`${ctx.testId.value}-loading`"
+        :data-testid="`${ctx.testId.value}__loading`"
         class="m-0 flex min-h-8 list-none items-center gap-(--spacing-xs) px-(--spacing-xs) ps-[calc(var(--spacing-xs)+1rem+var(--spacing-xs))]"
       >
         <span
