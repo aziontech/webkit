@@ -1,5 +1,7 @@
 import { type MaybeRefOrGetter, onScopeDispose, readonly, type Ref, ref, toValue, watch } from 'vue'
 
+import { useMediaQuery } from '../../../../composables/use-media-query'
+
 export type SceneWait = (ms: number) => Promise<void>
 
 export interface SceneScriptOptions {
@@ -58,13 +60,13 @@ export function useSceneScript(
     }
   }
 
-  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)')
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
   let observer: globalThis.IntersectionObserver | null = null
 
   const onScreen = ref(false)
 
   const start = () => {
-    if (reduced?.matches) {
+    if (reduced.value) {
       stop()
       settle()
       return

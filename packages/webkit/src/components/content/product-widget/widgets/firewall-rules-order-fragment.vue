@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../actions/button/button.vue'
   import NumberInput from '../../../inputs/number-input/number-input.vue'
   import Badge from '../../badge/badge.vue'
@@ -21,8 +22,8 @@
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
-  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  const canHover = useMediaQuery('(hover: hover)', true)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const SAVED = ['qa-qc-fw-nl', 'qa-qc-fw-rl', 'qa-qc-fw-cr', 'qa-qc-fw-fn', 'qa-qc-fw-waf']
   const RAISED_ONCE = ['qa-qc-fw-nl', 'qa-qc-fw-rl', 'qa-qc-fw-cr', 'qa-qc-fw-waf', 'qa-qc-fw-fn']
@@ -58,7 +59,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover)
+  const wanted = () => props.active && (props.hover || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -82,7 +83,7 @@
     halt()
     const target = wanted() ? LAST : 0
     if (step.value === target) return
-    if (reduced) {
+    if (reduced.value) {
       step.value = target
       return
     }

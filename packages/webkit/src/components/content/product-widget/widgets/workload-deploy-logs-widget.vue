@@ -3,6 +3,7 @@
   import { useElementVisibility } from '@vueuse/core'
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
   import Separator from '../../../layout/separator/separator.vue'
   import Card from '../../card/card.vue'
@@ -61,14 +62,14 @@
     transitionDelay: `${Math.round(globalThis.parseFloat(duration['fast-02']) * index)}ms`
   })
 
-  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const shell = ref<InstanceType<typeof ShellMockup> | null>(null)
   const visible = useElementVisibility(shell, { threshold: 0.35 })
 
   const run = ref(0)
   const deployed = ref(false)
-  const streaming = computed(() => props.active && visible.value && !reduced)
+  const streaming = computed(() => props.active && visible.value && !reduced.value)
 
   let restartTimer: ReturnType<typeof setTimeout> | null = null
 

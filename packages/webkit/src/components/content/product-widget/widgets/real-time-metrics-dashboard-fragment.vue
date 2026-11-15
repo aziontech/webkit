@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Menu from '../../../navigation/menu/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -18,8 +19,8 @@
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
-  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  const canHover = useMediaQuery('(hover: hover)', true)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const GROUPS = [
     { label: '', items: [{ id: 'overview', label: 'Overview' }] },
@@ -89,9 +90,9 @@
   const LAST = FRAMES.length - 1
   const LEAD = 12
 
-  const wanted = () => props.active && (props.hover || !canHover)
+  const wanted = () => props.active && (props.hover || !canHover.value)
 
-  const step = ref(reduced || !canHover ? LAST : 0)
+  const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
 
   const stage = ref<globalThis.HTMLElement | null>(null)
@@ -120,7 +121,7 @@
     halt()
     const target = wanted() ? LAST : 0
     if (step.value === target) return
-    if (reduced) {
+    if (reduced.value || !canHover.value) {
       step.value = target
       return
     }

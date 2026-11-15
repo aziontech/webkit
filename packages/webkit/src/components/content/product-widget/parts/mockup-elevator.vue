@@ -2,6 +2,7 @@
   import { curve, duration } from '@aziontech/theme/animations'
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import { useSceneScript } from '../composables/use-scene-script'
 
   defineOptions({ name: 'MockupElevator' })
@@ -57,7 +58,7 @@
 
   onScopeDispose(() => observer?.disconnect())
 
-  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const offset = computed(() => {
     const { pitch, row, box } = metrics.value
@@ -68,7 +69,7 @@
   const trackStyle = computed(() => ({
     translate: `0 ${-offset.value}px`,
     transition:
-      reduced || jump.value
+      reduced.value || jump.value
         ? 'none'
         : `translate ${duration['moderate-02']} ${curve['productive-entrance']}`
   }))

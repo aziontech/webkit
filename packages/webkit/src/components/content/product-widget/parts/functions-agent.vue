@@ -9,6 +9,7 @@
     shallowRef
   } from 'vue'
 
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Tag from '../../tag/tag.vue'
   import { typeInto, useSceneScript } from '../composables/use-scene-script'
@@ -43,7 +44,7 @@
   const heights = ref({ window: 0, track: 0 })
   const glide = ref(false)
 
-  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   let observer: globalThis.ResizeObserver | null = null
 
@@ -54,7 +55,7 @@
   const trackStyle = computed(() => ({
     translate: `0 ${-Math.max(0, heights.value.track - heights.value.window)}px`,
     transition:
-      reduced || !glide.value
+      reduced.value || !glide.value
         ? 'none'
         : `translate ${duration['moderate-02']} ${curve['productive-entrance']}`
   }))

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import Input from '../../../inputs/input/input.vue'
@@ -17,7 +18,7 @@
 
   withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
+  const canHover = useMediaQuery('(hover: hover)', true)
 
   const EVENTS = [
     {
