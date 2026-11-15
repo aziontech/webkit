@@ -4,7 +4,7 @@ import { dirname, resolve } from 'node:path'
 import test from 'node:test'
 import { fileURLToPath } from 'node:url'
 
-import { GATES, formatTable, parseGateArgs } from '../../scripts/gates.mjs'
+import { GATES, formatTable, parseGateArgs } from '../../scripts/run-gates.mjs'
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../..')
 const workflow = readFileSync(resolve(ROOT, '.github/workflows/governance.yml'), 'utf8')

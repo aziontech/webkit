@@ -1,7 +1,7 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
 
-import { rewrite } from '../../scripts/kebab-aria-label.mjs'
+import { rewrite } from '../../scripts/codemod-kebab-aria-label.mjs'
 
 test('rewrites camelCase accessible-name attributes to the kebab form in templates only', () => {
   const source = `<script setup lang="ts">

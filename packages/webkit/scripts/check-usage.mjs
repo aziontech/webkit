@@ -21,7 +21,7 @@ const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const ROOT = resolve(PKG, '../..')
 
 export const USAGE = [
-  'usage: node scripts/usage-check.mjs <component-or-block> "<intent prompt>" [options]',
+  'usage: node scripts/check-usage.mjs <component-or-block> "<intent prompt>" [options]',
   '',
   '  <component-or-block>  an export subpath (date-picker) or a block id (platform/auth, auth)',
   '  "<intent prompt>"     what a product team would ask for, without naming the component',

@@ -166,7 +166,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
   try {
     opts = parseGateArgs(process.argv.slice(2))
   } catch (e) {
-    process.stderr.write(`gates: ${e.message}\nusage: gates.mjs [--only id,id] [--bail] [--json]\n`)
+    process.stderr.write(`gates: ${e.message}\nusage: run-gates.mjs [--only id,id] [--bail] [--json]\n`)
     process.exit(2)
   }
   const results = runGates(opts)

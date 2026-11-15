@@ -15,7 +15,7 @@ const CAMEL_TO_KEBAB = new Map([
   ['ariaDescribedby', 'aria-describedby']
 ])
 
-const USAGE = `Usage: node scripts/kebab-aria-label.mjs [--write] [dir ...]
+const USAGE = `Usage: node scripts/codemod-kebab-aria-label.mjs [--write] [dir ...]
 
 Rewrites camelCase accessible-name attributes in templates (ariaLabel=, :ariaLabel=,
 v-bind:ariaLabel=, and the same for ariaLabelledby / ariaDescribedby) to the canonical kebab

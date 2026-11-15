@@ -19,7 +19,7 @@ const ROOT = resolve(SCRIPT_DIR, '..', '..', '..')
 const KEEP = process.argv.includes('--keep')
 
 const fail = (msg) => {
-  console.error(`\n✖ smoke-consume: ${msg}`)
+  console.error(`\n✖ test-consume: ${msg}`)
   process.exit(1)
 }
 
@@ -90,7 +90,7 @@ if (!/data-kind=primary/.test(css) && !/\[data-kind/.test(css)) {
 }
 
 console.log(
-  `\n✓ smoke-consume: init + build succeeded; ${cssFiles.length} CSS file(s), component classes present.`
+  `\n✓ test-consume: init + build succeeded; ${cssFiles.length} CSS file(s), component classes present.`
 )
 if (KEEP) console.log(`  workdir kept: ${work}`)
 else rmSync(work, { recursive: true, force: true })

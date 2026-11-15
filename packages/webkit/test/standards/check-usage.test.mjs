@@ -16,9 +16,9 @@ import {
   parseUsageArgs,
   pinMcpToInstalledPackage,
   resolveTarget
-} from '../../scripts/usage-check.mjs'
+} from '../../scripts/check-usage.mjs'
 
-const SCRIPT = resolve(dirname(fileURLToPath(import.meta.url)), '../../scripts/usage-check.mjs')
+const SCRIPT = resolve(dirname(fileURLToPath(import.meta.url)), '../../scripts/check-usage.mjs')
 
 const withDir = (fn) => {
   const dir = mkdtempSync(join(tmpdir(), 'usage-check-'))
