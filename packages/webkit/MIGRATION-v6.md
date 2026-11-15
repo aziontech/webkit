@@ -94,8 +94,6 @@ component.
 | `quote-tabs`      | `autoPlay`         | `autoplay`           |
 | `radio-button`    | `inputId`          | `id`                 |
 | `severity-tag`    | `level`            | `severity`           |
-| `shell-mockup`    | `still="false"`    | `animated="true"`    |
-| `shell-mockup`    | `still="true"`     | `animated="false"`   |
 | `skeleton`        | `kind="shape"`     | `kind="rectangle"`   |
 | `split-button`    | `model`            | `items`              |
 | `table`           | `border`           | `bordered`           |
@@ -537,16 +535,15 @@ the old look.
   (set `'as-is'` to keep its colours).
 - `ArticleBody`: the share group's copy link button copies the page URL (`location.href`, then
   `article.href`).
-- `ArticleIndexBlog`, `ArticleIndexResourceHub`, `StoryLibrary`: with `moreLabel` set the list pages
+- `ArticleIndex`, `StoryLibrary`: with `moreLabel` set the list pages
   by `pageSize` (default `12`), and the load-more button shows only while more remain.
 
-### Marketing names deprecated in 6.0
+### Marketing names removed in 6.0
 
-These still work in 6.x and are removed in 7.0. `webkit migrate` rewrites the prop renames marked
-with a codemod; move the rest by hand. When both names are set, the new one wins (except
-`architecture-tabs` / `feature-tabs`, where a non-zero `interval` still sets the hold).
+The names marked deprecated earlier in the 6.0 cycle are gone. `webkit migrate` rewrites the prop
+renames marked with a codemod; move the rest by hand.
 
-| Component                | Deprecated                                   | Use                                    | Codemod |
+| Component                | Removed                                      | Use                                    | Codemod |
 | ------------------------ | -------------------------------------------- | -------------------------------------- | ------- |
 | `architecture-tabs`      | `interval`                                   | `autoplayInterval` (and `autoplay`)    | yes     |
 | `compare-plans`          | section `link`                               | section `action`                       | no      |
@@ -554,13 +551,44 @@ with a codemod; move the rest by hand. When both names are set, the new one wins
 | `hero`                   | `carousel`, `carouselMarks`, `carouselLabel` | `ticker`, `tickerMarks`, `tickerLabel` | yes     |
 | `hero-band`, `hero-form` | `carouselMarks`, `carouselLabel`             | `tickerMarks`, `tickerLabel`           | yes     |
 | `media-tabs`             | `@tab-change`                                | `v-model` (`update:modelValue`)        | no      |
-| `logo-wall` (types)      | `LogoItem`, `LogoShape`                      | `LogoWallItem`, `LogoWallShape`        | no      |
-| `big-numbers` (type)     | `BigNumberItem`                              | `BigNumbersItem`                       | no      |
-| `content-columns` (type) | `ContentColumnItem`                          | `ContentColumnsItem`                   | no      |
+| `logo-wall` (types)      | `LogoItem`, `LogoShape`                      | `LogoWallItem`, `LogoWallShape`        | yes     |
+| `big-numbers` (type)     | `BigNumberItem`                              | `BigNumbersItem`                       | yes     |
 
-Site JSON written for these sections can keep the old keys through 6.x; the examples now show the
-new ones. `media-tabs`, `quote-tabs`, `ticker`, `article-highlight` (with `autoplay`) and the
-sections that compose them now draw a visible pause control while they move (WCAG 2.2.2).
+Site JSON must use the new keys: an old key such as `carouselMarks` or `interval` is ignored now, so
+the band renders without its client strip or with the default hold. `media-tabs`, `quote-tabs`,
+`ticker`, `article-highlight` (with `autoplay`) and the sections that compose them draw a visible
+pause control while they move (WCAG 2.2.2); `recognition-marquee` and `photo-marquee` now draw it
+too, through the marquee loop they share with `ticker`.
+
+### Marketing sections merged
+
+Sections that did the same job as another were folded into it. The old import is gone (the codemod
+lists it as manual work); page JSON that still names the old `_id` keeps rendering, because
+`SitePage` maps it to its successor and rewrites its props.
+
+| Removed                               | Use                                                                                       |
+| ------------------------------------- | ----------------------------------------------------------------------------------------- |
+| `hero-copy-on-top-art`                | `hero-band` with `kind="copy-on-top-art"` and the same `levels`                           |
+| `hero-with-opening`                   | `hero-band` with `size="large"` and the same `items`                                      |
+| `closing-call-to-action-agents`       | `closing-call-to-action` with `kind="primary"` and `audiences`                            |
+| `closing-call-to-action-templates`    | `template-gallery` with `closing`                                                         |
+| `banner`                              | `call-to-action` with `kind="announcement"`; the `aside` slot is the default slot         |
+| `customer-spotlight`                  | `client-mosaic-columns` with `reveal="hover"`; `items` → `cells`, `description` → `story` |
+| `sticky-carousel`                     | `process-scroll` with `pinned` and `title-kind="centered"`; `items` → `steps`             |
+| `quote-carousel`                      | `client-quotes`, or `Quote` cards in a `CardCarousel`                                     |
+| `compare-support-tiers`               | `compare-plans`; `tiers` → `plans`                                                        |
+| `article-index-blog`                  | `article-index` (`filters="category-search"`, the default)                                |
+| `article-index-resource-hub`          | `article-index` with `filters="facets"`                                                   |
+| `use-case-links`                      | `capability-grid` with `title-kind="left"`; items keep `href`                             |
+| `resource-grid`                       | `capability-grid` with `title-kind="horizontal"`; items keep `href`                       |
+| `content-columns`                     | `capability-grid`; `columns` is `3` or `4`                                                |
+| `code-split`                          | `media-split-band` with the same `codeTabs`, `defaultFile` and actions                    |
+| `sticky-scroll-code`                  | `feature-scroll`; each item keeps its `code`                                              |
+| `shell-mockup` (and `-root`, `-part`) | internal to `product-widget`; show a console screen with `ProductWidget`                  |
+
+Their exported types map to the survivor's (`ArticleIndexBlogItem` → `ArticleIndexItem`,
+`CodeSplitTab` → `MediaSplitBandCodeTab`, …); `webkit migrate` rewrites them.
+`sticky-carousel`'s header offset now follows `--layout-header-height` instead of a fixed `3.5rem`.
 
 ### Right-to-left
 
