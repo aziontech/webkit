@@ -133,7 +133,7 @@ npx @aziontech/webkit report   # adoption score via this project's own ESLint
 npx @aziontech/webkit canary   # proves the design-system rules still reach this project
 ```
 
-Full documentation: [`docs/toolkit/report.md`](./report.md).
+Full documentation: [`docs/toolkit/REPORT.md`](./REPORT.md).
 
 ## `doctor` — check the wiring is healthy
 

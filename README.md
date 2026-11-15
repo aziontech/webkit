@@ -87,7 +87,7 @@ pnpm install
 npx @aziontech/webkit doctor
 ```
 
-`doctor` writes nothing and exits non-zero on a broken setup, so it also works as a CI gate. To pull in a newer webkit's `.claude/` bundle and `CLAUDE.md` fragment later, run `npx @aziontech/webkit sync` (`--check` reports drift without writing). Full flag reference: [`packages/webkit/docs/toolkit/cli.md`](./packages/webkit/docs/toolkit/cli.md).
+`doctor` writes nothing and exits non-zero on a broken setup, so it also works as a CI gate. To pull in a newer webkit's `.claude/` bundle and `CLAUDE.md` fragment later, run `npx @aziontech/webkit sync` (`--check` reports drift without writing). Full flag reference: [`packages/webkit/docs/toolkit/CLI.md`](./packages/webkit/docs/toolkit/CLI.md).
 
 Once the project is wired, import components by path:
 
@@ -336,7 +336,7 @@ If your tooling does not run these natively (Cursor, Copilot, plain ChatGPT with
 - [Theme package guide](./packages/theme/README.md)
 - [Icons package guide](./packages/icons/README.md)
 - [Webkit package guide](./packages/webkit/README.md)
-- [webkit CLI reference](./packages/webkit/docs/toolkit/cli.md) — `init`, `doctor`, `report`, `canary`, `sync`
+- [webkit CLI reference](./packages/webkit/docs/toolkit/CLI.md) — `init`, `doctor`, `report`, `canary`, `sync`
 - [Contributing guide](./CONTRIBUTING.md) — workflow, commit conventions, review checklist
 - [Contribution rules](./.claude/rules/) — dependencies, migration, styling, no-invention
 - [Component specs](./.specs/) — source of truth for every component API

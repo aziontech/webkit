@@ -352,7 +352,7 @@ husky pre-commit, and a `.claude/` guidance bundle. Idempotent; `--dry-run` prev
    `webkit-prefer-over-custom`, …), a `webkit-usage` skill, and reviewer/expert/adopter
    agents (sources at the repo root: [`skills/`](../../skills/), [`rules/`](../../rules/),
    [`adapters/claude/agents/`](../../adapters/claude/agents/); the package ships them through `prepack`).
-7. **`AGENTS.md` / `CLAUDE.md` fragment** ([`adapters/AGENTS.fragment.md`](../../adapters/AGENTS.fragment.md)) — the same block, fenced in both files.
+7. **`AGENTS.md` / `CLAUDE.md` fragment** ([`adapters/AGENTS_FRAGMENT.md`](../../adapters/AGENTS_FRAGMENT.md)) — the same block, fenced in both files.
 8. **Theme wiring advice** — suggests the theme import at your entry file, never edits it.
 
 Flags: `--dry-run` (plan only) · `--strict` (default preset — everything `error`) ·

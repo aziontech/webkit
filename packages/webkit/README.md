@@ -82,7 +82,7 @@ npx @aziontech/webkit init
 ```
 
 `init` reads your project first and never clobbers existing files — run with `--dry-run`
-to preview the plan. See [`docs/toolkit/cli.md`](./docs/toolkit/cli.md).
+to preview the plan. See [`docs/toolkit/CLI.md`](./docs/toolkit/CLI.md).
 
 ### 2 · Add the theme CSS
 

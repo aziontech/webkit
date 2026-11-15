@@ -53,7 +53,7 @@ What goes in `llms-full.txt` (budget: 3 MB, `FULL_BUDGET_BYTES`; never raise it,
 
 ## How it fits the adoption toolkit
 
-This is the **GUIDE** layer: assistive, helps get usage right up front. The companion **FORCE** layer (the [webkit ESLint plugin](https://github.com/aziontech/webkit/blob/main/packages/webkit/docs/toolkit/eslint-plugin.md) + [Stylelint config](https://github.com/aziontech/webkit/blob/main/packages/webkit/docs/toolkit/stylelint-config.md)) blocks incorrect usage on commit and in CI. Both read the same `catalog.json`. Wire everything in one step with `npx @aziontech/webkit init`.
+This is the **GUIDE** layer: assistive, helps get usage right up front. The companion **FORCE** layer (the [webkit ESLint plugin](https://github.com/aziontech/webkit/blob/main/packages/webkit/docs/toolkit/eslint-plugin.md) + [Stylelint config](https://github.com/aziontech/webkit/blob/main/packages/webkit/docs/toolkit/STYLELINT_CONFIG.md)) blocks incorrect usage on commit and in CI. Both read the same `catalog.json`. Wire everything in one step with `npx @aziontech/webkit init`.
 
 ## License
 

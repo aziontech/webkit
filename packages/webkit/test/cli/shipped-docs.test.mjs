@@ -130,7 +130,7 @@ test('the docs that list the allowed layout classes list all of LAYOUT_CLASS_FAM
   for (const rel of [
     'rules/webkit-style-override.md',
     'skills/webkit-usage/SKILL.md',
-    'adapters/AGENTS.fragment.md'
+    'adapters/AGENTS_FRAGMENT.md'
   ]) {
     const text = readFileSync(join(REPO_ROOT, rel), 'utf8').replace(/\s*\n\s*/g, ' ')
     if (!text.includes(full)) stale.push(rel)
