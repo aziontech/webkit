@@ -7,7 +7,7 @@ const CWD = process.cwd()
 const CHARSET = 'utf-8'
 const DIST_DIR = './dist'
 const SVG_DIR = join(CWD, 'src/svg-raw')
-const FONT_FOLDERS = ['ai', 'pi']
+const FONT_FOLDERS = ['ai']
 const svgFolder = readdirSync(SVG_DIR).filter((folder) => FONT_FOLDERS.includes(folder))
 const data = []
 

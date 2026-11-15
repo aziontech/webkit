@@ -31,25 +31,5 @@ export default [
     templates: {
       css: TEMPLATE.css
     }
-  },
-  {
-    assetTypes: ASSETSTYPE,
-    fontTypes: FONTTYPES,
-    fontHeight: FONTHEIGHT,
-    fontsUrl: '',
-    formatOptions: {
-      json: {
-        indent: JSONIdent
-      }
-    },
-    inputDir: svgInputDir('pi'),
-    name: 'primeicons',
-    normalize: true,
-    outputDir: OUTPUTDIR,
-    prefix: 'pi',
-    tag: '',
-    templates: {
-      css: TEMPLATE.css
-    }
   }
 ]
