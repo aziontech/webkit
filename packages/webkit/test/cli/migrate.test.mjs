@@ -596,3 +596,63 @@ test('every 5.x block id in v6-blocks.json points at a block that ships', () => 
     )
   }
 })
+
+test('renamed compound parts are rewritten on the dot-notation, the subpath and the named import', () => {
+  const v6 = loadMigration(6)
+  const sfc = [
+    '<script setup lang="ts">',
+    "import Tabs from '@aziontech/webkit/tabs'",
+    "import Select, { SelectOption } from '@aziontech/webkit/select'",
+    "import Toast from '@aziontech/webkit/toast'",
+    "import PanelContent from '@aziontech/webkit/panel-content'",
+    "import KeyValuePairs from '@aziontech/webkit/key-value-pairs'",
+    "import type { SelectOptionProps } from '@aziontech/webkit/select'",
+    'const props: SelectOptionProps = { value: 1 }',
+    '</script>',
+    '<template>',
+    '  <Toast.Toaster />',
+    '  <Tabs.Root v-model="tab">',
+    '    <Tabs.List><Tabs.Item value="a">A</Tabs.Item></Tabs.List>',
+    '    <Tabs.Panel value="a">One</Tabs.Panel>',
+    '  </Tabs.Root>',
+    '  <Select><Select.Option value="a">A</Select.Option><SelectOption value="b" /></Select>',
+    '  <PanelContent /><KeyValuePairs><KeyValuePairs.Item label="Region" /></KeyValuePairs>',
+    '</template>'
+  ].join('\n')
+  const { source } = migrateSource(sfc, v6)
+  assert.match(source, /<Toast \/>/)
+  assert.match(source, /<Tabs v-model="tab">/)
+  assert.match(source, /<\/Tabs>/)
+  assert.match(source, /<Tabs\.Trigger value="a">A<\/Tabs\.Trigger>/)
+  assert.match(source, /<Tabs\.Content value="a">One<\/Tabs\.Content>/)
+  assert.match(source, /<Select\.Item value="a">A<\/Select\.Item><SelectItem value="b" \/>/)
+  assert.match(source, /import Select, \{ SelectItem \} from '@aziontech\/webkit\/select'/)
+  assert.match(source, /import type \{ SelectItemProps \} from/)
+  assert.match(source, /import PanelBody from '@aziontech\/webkit\/panel-body'/)
+  assert.match(
+    source,
+    /<PanelBody \/><KeyValueList><KeyValueList\.Item label="Region" \/><\/KeyValueList>/
+  )
+  assert.doesNotMatch(source, /Tabs\.(Root|Item|Panel)|Select\.Option|SelectOption|Toast\.Toaster/)
+  assert.equal(migrateSource(source, v6).source, source)
+})
+
+test('every renamed compound part points at a member the v6 compound attaches', () => {
+  const { members } = loadMigration(6)
+  for (const [subpath, renames] of Object.entries(members)) {
+    const index = execFileSync('git', ['ls-files', `src/components/*/${subpath}/index.ts`], {
+      cwd: PKG,
+      encoding: 'utf8'
+    }).trim()
+    assert.ok(index, `${subpath} has a compound index.ts`)
+    const text = readFileSync(join(PKG, index), 'utf8')
+    for (const [from, to] of Object.entries(renames)) {
+      assert.doesNotMatch(
+        text,
+        new RegExp(`^\\s+${from}:`, 'm'),
+        `${subpath}.${from} still attached`
+      )
+      if (to) assert.match(text, new RegExp(`(^\\s+${to}:|\\.${to} =)`, 'm'), `${subpath}.${to}`)
+    }
+  }
+})

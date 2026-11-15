@@ -28,6 +28,8 @@ export function loadMigration(version) {
     components: base.components || {},
     removed: base.removed || {},
     types: base.types || {},
+    named: base.named || {},
+    members: base.members || {},
     legacy: base.legacy || null,
     exports: exportList(),
     props: readJson(join(MIGRATIONS_DIR, `v${version}-props.json`)),
@@ -432,7 +434,7 @@ export function migrateSource(input, migration, { fromMajor = null, declaredMajo
       }
     }
     for (const { imported, local } of imp.named) {
-      const to = types[imported]
+      const to = types[imported] || (migration.named || {})[imported]
       if (!to || identifierRenames.has(local)) continue
       if (local === imported) identifierRenames.set(imported, to)
       else typeRenames.push([imported, to])
@@ -462,6 +464,18 @@ export function migrateSource(input, migration, { fromMajor = null, declaredMajo
       (all, open) => `${open}${kebab(to)}`
     )
     changes.push(`${from} → ${to}`)
+  }
+
+  for (const [binding, base] of bindingToSubpath) {
+    const renames = (migration.members || {})[base]
+    if (!renames) continue
+    for (const [from, to] of Object.entries(renames)) {
+      const next = to ? `${binding}.${to}` : binding
+      const re = new RegExp(`(?<![\\w$.])${escapeRe(binding)}\\.${escapeRe(from)}(?![\\w$])`, 'g')
+      if (!re.test(out)) continue
+      out = replaceOutsideComments(out, re, () => next)
+      changes.push(`${binding}.${from} → ${next}`)
+    }
   }
 
   for (const [binding, base] of bindingToSubpath) {
