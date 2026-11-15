@@ -60,13 +60,9 @@
   const lines = CONSOLE_TRACE_LOGS.map((line, index) => ({
     id: String(index),
     time: formatDuration(line.at),
-    type:
-      line.level === 'warn' || line.level === 'error'
-        ? ('warning' as const)
-        : index === CONSOLE_TRACE_LOGS.length - 1
-          ? ('success' as const)
-          : ('text' as const),
-    message: `${line.level.toUpperCase().padEnd(5, ' ')}  ${line.message}`
+    type: index === CONSOLE_TRACE_LOGS.length - 1 ? ('success' as const) : ('text' as const),
+    level: line.level,
+    message: line.message
   }))
 
   function formatDuration(ms: number): string {

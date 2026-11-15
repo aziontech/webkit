@@ -48,7 +48,7 @@
   const severity = computed<TagSeverity>(() => {
     if (statusClass.value === 'client-error') return 'warning'
     if (statusClass.value === 'server-error') return 'danger'
-    return 'secondary'
+    return 'neutral'
   })
   const methodText = computed<string>(() => props.method.trim().toUpperCase())
 </script>
@@ -68,7 +68,7 @@
         v-if="methodText"
         :data-testid="`${testId}__method`"
         :data-severity="severity"
-        class="data-[severity=secondary]:text-(--text-muted)"
+        class="data-[severity=neutral]:text-(--text-muted)"
         >{{ methodText }}</span
       >
       <span

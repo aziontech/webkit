@@ -3,9 +3,9 @@ name: status-code
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 1a1a95eb75780d020bca18ce381e23b6697b2636539b863d2cf738fe764c93d2
+checksum: 304e15d9c9e2fbc0e7c53667f62f9f668c34e725ad0cedae24df88f37293d028
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -76,7 +76,7 @@ _none_
 
 - `data-status-class` on the root: `informational` (1xx), `success` (2xx), `redirect` (3xx), `client-error` (4xx), `server-error` (5xx) or `invalid` (anything else, including empty).
 - `data-size` mirrors `size` (set by `Tag`).
-- The `Tag` severity follows the class: `secondary` for 1xx to 3xx and `invalid`, `warning` for 4xx, `danger` for 5xx.
+- The `Tag` severity follows the class: `neutral` for 1xx to 3xx and `invalid`, `warning` for 4xx, `danger` for 5xx.
 - `invalid` mutes the text; an empty `code` shows a dash, any other invalid value shows as written.
 - Non-interactive: no hover, focus, active or disabled state.
 
@@ -90,7 +90,7 @@ _none_
 
 | Region                      | Token                                                                      |
 | --------------------------- | -------------------------------------------------------------------------- |
-| surface, border, colour     | the `Tag` severity tokens (`secondary`, `warning`, `danger`)               |
+| surface, border, colour     | the `Tag` severity tokens (`neutral`, `warning`, `danger`)               |
 | method and code text        | `.text-label-code-sm`                                                      |
 | method text                 | `var(--text-muted)` on the neutral surface; inherits on warning and danger |
 | invalid text                | `var(--text-muted)`                                                        |
