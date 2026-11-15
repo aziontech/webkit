@@ -3,12 +3,12 @@ name: sidebar
 category: layout
 structure: composition
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 9e07182b7be3d59349e9238c2e97f5465632a9b44b8ef084665149d46382fe1b
+checksum: cd8fb0bf3cfe091a82aaffe73f9ed923fe526547c81deb84f451f8c2b6f33688
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -56,7 +56,7 @@ always has, with the host owning the width — every existing consumer is unaffe
 ## Best practices
 
 - Put a `SidebarMenu` with `role="presentation"` in the default slot; the sidebar already renders the `nav` landmark and its `aria-label` (default `'Sidebar'`) names the region.
-- Use `SidebarMenu.Group` for new navigation — `SidebarGroup` still works but is superseded.
+- Group the rows with `SidebarMenu.Group`; the sidebar has no group part of its own.
 - Without `resizable` or `collapsible`, size the rail with a width class on the root; with either set, the sidebar owns the width and clamps it between `min-width-token` and `max-width-token`.
 - When the sidebar is revealed after mount (for example leaving a mobile layout where it was hidden), call the exposed `measure()` so the rail does not keep a zero width.
 - Keep the profile block in the `footer` slot; with `collapsible`, the collapse trigger renders in the same footer row.
@@ -339,17 +339,11 @@ the freed space on the same frames.
 ## Sub-components
 
 The compound `@aziontech/webkit/sidebar` (its `index.ts`) attaches every part for dot-notation —
-`Sidebar.Header`, `Sidebar.Group`, `Sidebar.Footer` — and `@aziontech/webkit/sidebar-root` is the
+`Sidebar.Header`, `Sidebar.Footer` — and `@aziontech/webkit/sidebar-root` is the
 standalone, tree-shakeable root with nothing attached. The flat sub-component paths below keep
 working.
 
 - `sidebar-footer.vue` — Public sub-component `sidebar-footer`.
-- `sidebar-group.vue` — Public sub-component `sidebar-group`. One flat block of rows under an
-  optional title, **superseded by `SidebarMenu.Group`**: the docs, the stories and every example here
-  compose `SidebarMenu`, which does everything this does and also nests, collapses and drills. It keeps
-  working untouched for existing consumers and is **not** deprecated (no `@deprecated` tag, because
-  `webkit/no-deprecated-component` is `error` in the recommended config and would turn a consumer's
-  lint green→red on a minor). Reach for `SidebarMenu` in anything new.
 - `sidebar-header.vue` — Public sub-component `sidebar-header`.
 
 `Sidebar` does not import `SidebarMenu` and `SidebarMenu` does not import `Sidebar`. Two things pass between
@@ -626,7 +620,7 @@ canvas the tokens fall back to.
   icon rail, its tooltips, the `{ rail }` footer scope and the Ctrl+B toggle are a distinct
   presentation and interaction that no args delta on Default shows.
 
-Every story composes `SidebarMenu`; none composes `SidebarGroup` (see Sub-components).
+Every story composes `SidebarMenu` for its rows and groups.
 
 ## Internationalization
 

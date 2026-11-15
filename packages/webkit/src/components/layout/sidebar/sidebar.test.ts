@@ -13,7 +13,6 @@ import SidebarMenuItem from '../../navigation/sidebar-menu/sidebar-menu-item/sid
 import SidebarCompound from './index'
 import Sidebar from './sidebar.vue'
 import SidebarFooter from './sidebar-footer.vue'
-import SidebarGroup from './sidebar-group.vue'
 import SidebarHeader from './sidebar-header.vue'
 
 describe('Sidebar', () => {
@@ -62,10 +61,9 @@ describe('Sidebar', () => {
   })
 
   describe('compound API', () => {
-    it('attaches Header, Group and Footer to the root for dot-notation', () => {
+    it('attaches Header and Footer to the root for dot-notation', () => {
       expect(SidebarCompound).toBe(Sidebar)
       expect(SidebarCompound.Header).toBe(SidebarHeader)
-      expect(SidebarCompound.Group).toBe(SidebarGroup)
       expect(SidebarCompound.Footer).toBe(SidebarFooter)
     })
 
@@ -77,13 +75,16 @@ describe('Sidebar', () => {
             {},
             {
               header: () => h(SidebarCompound.Header, () => 'Acme'),
-              default: () => h(SidebarCompound.Group, { label: 'Build' }, () => h('li', 'Item')),
+              default: () =>
+                h(SidebarMenu, { ariaLabel: 'Main' }, () =>
+                  h(SidebarMenuGroup, { label: 'Build' }, () => 'Item')
+                ),
               footer: () => h(SidebarCompound.Footer, () => 'Jane Doe')
             }
           )
       })
       expect(getByTestId('layout-sidebar__header-region').textContent).toContain('Acme')
-      expect(getByTestId('layout-sidebar__group')).toBeTruthy()
+      expect(getByTestId('layout-sidebar__nav').textContent).toContain('Build')
       expect(getByTestId('layout-sidebar__footer-region').textContent).toContain('Jane Doe')
     })
   })

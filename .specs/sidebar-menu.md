@@ -3,11 +3,11 @@ name: sidebar-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 94d3ab757f2b8845d8f61b76eeed2beb813e8570690857bd6dbb316685ebc721
+checksum: 9c942a485ce631914b82b67252e2b87620e1d9d6a4e0b97577b45a99fed5be52
 created: 2026-08-03
 last_updated: 2026-11-15
 ---
@@ -54,7 +54,7 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 
 - `sidebar` — the most common host. It supplies the landmark, the scroll region, and the header/footer; this menu is placed in its default slot. The two are independent — neither imports the other.
 - `sidebar-menu-item` — **is** `SidebarMenu.Item`. The existing standalone component, attached to this compound and reachable both ways, and now documented here rather than in a spec of its own (see Sub-components). **Two changes are made to it**: an empty icon box no longer renders, and its two branches share one label class. Its wider visual redesign remains a separate, later `spec_version: 2` revision of this spec.
-- `sidebar-group` — functionally **superseded by `SidebarMenu.Group`**, which adds collapsing and shares the root's context. It keeps working untouched; no `@deprecated` tag is added here, because `webkit/no-deprecated-component` is `error` in the recommended config and would turn a consumer's lint green→red on a minor. Deprecating it is a separate, announced change.
+- `sidebar-group` — removed in 6.0; `SidebarMenu.Group` is the one way to group sidebar rows (it collapses and shares the root's context).
 - `navigation-menu` — the horizontal megamenu. Different component, different axis; see the testid note in Sub-components.
 - `accordion` — a **reference only**, for content disclosure rather than navigation. `SidebarMenu` borrows the _shape_ of its collapse (a `:css="false"` `<Transition>` driving `height` in JS, because CSS cannot animate to `auto`) and nothing else. `SidebarMenu` must **not** import, wrap, extend, or re-export `accordion` or any of its sub-components: a nav group is not an accordion — it has no heading-wrapped trigger, no single/multiple `type` model, no roving arrow-key model across items, and its rows are navigation, not panels. `Group` and `Sub` own their disclosure end to end. The timing itself comes from `menu/presets/transitions.ts`, not from accordion (whose inline `'height 150ms ease-out'` literal predates and violates the token rules § Forbidden in animations).
 - `tag` — renders the optional trailing badge on a row via `sidebar-menu-item`'s `tagValue`.
@@ -537,7 +537,7 @@ and the Figma row height), and its `rounded-lg` (8 px) becomes `var(--shape-elem
 
 - Default — a console-style menu inside a `Sidebar` host: two titled `Group`s with a selected row.
 - Types — composite story rendering both `SubTrigger` `kind` values side-by-side, so the `chevron-down` and `chevron-right` affordances are directly comparable.
-- Condensed — **justified addition.** A three-level recursive tree with the nested indent rail. `Default` renders flat groups and cannot show the rail's nesting, which is the primary reason this component exists over `sidebar-group`.
+- Condensed — **justified addition.** A three-level recursive tree with the nested indent rail. `Default` renders flat groups and cannot show the rail's nesting, which is the primary reason this component exists over a flat list of groups.
 - Drill — **justified addition.** The view stack is stateful: pushing a level, the `Back` row, and focus restoration on pop cannot be shown by any static args delta.
 - Disabled — a disabled `SidebarMenu.Item` and a disabled `SubTrigger`, demonstrating that activation is suppressed.
 - ClientRouting — **justified addition.** A data-driven tree whose rows carry `href` and whose `@navigate` hands the path to a client-side router (a stand-in for `router.push`) and moves `active-id`; the one documented way to wire Vue Router, which no args delta can show.

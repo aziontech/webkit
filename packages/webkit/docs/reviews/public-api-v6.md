@@ -194,7 +194,7 @@ Unchanged: `calendar`, `calendar-root`, `calendar-preset`, `calendar-clear`, `in
 | `resizable-handle` | renamed | from `resizable-panel-handle` |
 | `resizable-pane`   | renamed | from `resizable-panel-pane`   |
 
-Unchanged: `footer`, `footer-root`, `footer-column`, `footer-link`, `frame-box`, `scroll-area`, `global-header`, `sidebar`, `sidebar-group`, `sidebar-header`, `sidebar-footer`.
+Unchanged: `footer`, `footer-root`, `footer-column`, `footer-link`, `frame-box`, `scroll-area`, `global-header`, `sidebar`, `sidebar-header`, `sidebar-footer`. Removed: `sidebar-group` (use `SidebarMenu.Group`).
 
 ## Components — marketing
 
