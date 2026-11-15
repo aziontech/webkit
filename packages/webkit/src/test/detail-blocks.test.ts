@@ -109,7 +109,9 @@ describe('platform/detail/deployment-logs', () => {
     const view = render(DeploymentLogs)
     const root = view.container as HTMLElement
     expect(view.getByRole('heading', { name: 'Deployment logs', level: 2 })).toBeTruthy()
-    expect(view.getByRole('status').textContent).toMatch(/3\/8 steps\s*Build/)
+    const heading = view.getByRole('heading', { name: 'Deployment logs', level: 2 })
+    const progress = within(heading.parentElement as HTMLElement).getByRole('status')
+    expect(progress.textContent).toMatch(/3\/8 steps\s*Build/)
     expect(view.getByRole('progressbar').getAttribute('aria-valuenow')).toBe('38')
     const publish = within(root).getByText('Publish').closest('button') as HTMLElement
     expect(publish.textContent).not.toMatch(/\d+s/)
