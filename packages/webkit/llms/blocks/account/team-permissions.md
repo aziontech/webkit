@@ -149,7 +149,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable from '@aziontech/webkit/data-table'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -317,7 +317,7 @@ Each variant is the same screen in another state: `get_block("account/team-permi
   const pending = ref<TeamRow | null>(null)
   const deleteOpen = ref(false)
 
-  const onAction = (value: DropdownMenuOptionValue, row: TeamRow) => {
+  const onAction = (value: DropdownMenuItemValue, row: TeamRow) => {
     if (value === 'duplicate') {
       const source = teams.value.find((team) => team.id === row.id)
       if (!source) return

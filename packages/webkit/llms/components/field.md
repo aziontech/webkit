@@ -27,7 +27,7 @@
 
 - A control with no visible label inside a toolbar or a table cell → render the control alone with an `aria-label`.
 - A group of mutually exclusive cards with icons → use `radio-group` with `type="card"`.
-- A static key/value read-out → use `key-value-pairs`.
+- A static key/value read-out → use `key-value-list`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

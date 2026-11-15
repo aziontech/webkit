@@ -27,7 +27,7 @@
 
 - [tool-approval](tool-approval.md) — the authorization step before a sensitive call.
 - [status-indicator](status-indicator.md) — the status the row shows.
-- [code-block](code-block.md), `key-value-pairs` — what goes in the input and output slots.
+- [code-block](code-block.md), `key-value-list` — what goes in the input and output slots.
 
 ## Props
 
@@ -43,7 +43,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `input` | — | The parameters the tool is called with (`CodeBlock`, `KeyValuePairs`). |
+| `input` | — | The parameters the tool is called with (`CodeBlock`, `KeyValueList`). |
 | `output` | — | What the tool returned, or the error it failed with. |
 
 ## Sub-components

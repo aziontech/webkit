@@ -7,12 +7,12 @@
  "avoidWhen": [
   "Figures that stand alone or carry their own sparkline history at different periods → separate `StatTile`s in a grid.",
   "Marketing figures on a site band → use `big-numbers`.",
-  "Label/value details of one resource → use `key-value-pairs`."
+  "Label/value details of one resource → use `key-value-list`."
  ],
  "related": [
   "stat-tile` — the cell; the group changes its chrome through an injected context, so the tiles take no extra prop.",
   "card` — a plain surface; do not hand-build a strip by putting tiles in a `Card` grid.",
-  "key-value-pairs` — static label/value details."
+  "key-value-list` — static label/value details."
  ],
  "bestPractices": [
   "Put only `StatTile`s in the default slot, in reading order.",

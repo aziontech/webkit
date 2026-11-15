@@ -1,11 +1,11 @@
-# Key Value Pairs
+# Key Value List
 
-> Use KeyValuePairs to show read-only label/value facts about one resource, including its tags; rows with their own actions are Item rows. A grid of labelled facts about one subject: each pair is a key (the term) and its value, which may be plain text or a composed component such as a `Link`, `Tag`, `CopyButton` or `StatusIndicator`. It renders a native description list laid out in 1 to 4 responsive columns, optionally split into titled groups, and owns its loading and empty-value surfaces. It replaces the hand-rolled label/value grids the resource detail templates (`ResourceSummary`, the detail Overview tabs) draw today.
+> Use KeyValueList to show read-only label/value facts about one resource, including its tags; rows with their own actions are Item rows. A grid of labelled facts about one subject: each pair is a key (the term) and its value, which may be plain text or a composed component such as a `Link`, `Tag`, `CopyButton` or `StatusIndicator`. It renders a native description list laid out in 1 to 4 responsive columns, optionally split into titled groups, and owns its loading and empty-value surfaces. It replaces the hand-rolled label/value grids the resource detail templates (`ResourceSummary`, the detail Overview tabs) draw today.
 
-- Import: `import KeyValuePairsRoot from '@aziontech/webkit/key-value-pairs-root'`
-- Compound import (dot notation, not tree-shakeable): `import KeyValuePairs from '@aziontech/webkit/key-value-pairs'`
+- Import: `import KeyValueListRoot from '@aziontech/webkit/key-value-list-root'`
+- Compound import (dot notation, not tree-shakeable): `import KeyValueList from '@aziontech/webkit/key-value-list'`
 - Category: content · Surface: app · Structure: composition
-- API as JSON: [key-value-pairs.json](https://github.com/aziontech/webkit/blob/main/.specs/key-value-pairs.json)
+- API as JSON: [key-value-list.json](https://github.com/aziontech/webkit/blob/main/.specs/key-value-list.json)
 
 ## When to use
 
@@ -20,7 +20,7 @@
 - Keep keys short nouns in sentence case ("Created", "Region"), never sentences or trailing colons.
 - Order pairs by what the reader looks for first: identity, status, then the rest.
 - Pick `variant` by the box: `stacked` (label over value) for a facts band that spans a page; `split` (label at the start, value at the end of one row) for a narrow summary card where each row reads as a line of a receipt. Do not hand-write a `<dl>` with `justify-between` for it.
-- Use `columns` for width, not for grouping; use `KeyValuePairs.Group` when the facts form named clusters, one group per column.
+- Use `columns` for width, not for grouping; use `KeyValueList.Group` when the facts form named clusters, one group per column.
 - Do not mix bare Items and Groups at the same level; pick one shape per instance.
 - Leave the value slot out (or render nothing in it) when a value is absent; the component shows the em dash and its accessible "Not set". Do not type your own "-", "N/A" or "None".
 - Put a `CopyButton` after an ID or key, never in place of the visible value.
@@ -37,8 +37,8 @@
 
 ## Related
 
-- [table](table.md) — many subjects, one row each; KeyValuePairs describes one subject.
-- [card](card.md) — the surface a KeyValuePairs usually sits in; KeyValuePairs brings no surface of its own.
+- [table](table.md) — many subjects, one row each; KeyValueList describes one subject.
+- [card](card.md) — the surface a KeyValueList usually sits in; KeyValueList brings no surface of its own.
 - [copy-button](copy-button.md) — the trailing copy affordance for IDs and keys inside a value.
 - [status-indicator](status-indicator.md), `tag` — status and category values.
 - [link](link.md) — a value that navigates (a domain, a linked resource).
@@ -58,30 +58,30 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | KeyValuePairs.Item` children, or `KeyValuePairs.Group` children — one shape per instance. |
+| `default` | — | KeyValueList.Item` children, or `KeyValueList.Group` children — one shape per instance. |
 
 ## Sub-component imports
 
-- `@aziontech/webkit/key-value-pairs-item`
-- `@aziontech/webkit/key-value-pairs-group`
+- `@aziontech/webkit/key-value-list-item`
+- `@aziontech/webkit/key-value-list-group`
 
 ## Sub-components
 
-The root `key-value-pairs.vue` renders a `<dl>` that is the grid. It provides a context (`injection-key.ts` + `composables/use-key-value-pairs-context.ts`) holding the root test id and the `loading` state, read-only. Every part throws a clear error when used outside `<KeyValuePairs>`.
+The root `key-value-list.vue` renders a `<dl>` that is the grid. It provides a context (`injection-key.ts` + `composables/use-key-value-list-context.ts`) holding the root test id and the `loading` state, read-only. Every part throws a clear error when used outside `<KeyValueList>`.
 
 Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` and one `<dd>` (allowed as a direct child of `<dl>`). A Group is also a `<div>` child of the root `<dl>`: its title is the `<dt>`, and its `<dd>` holds a nested `<dl>` with the group's Items — a term whose description is a list of pairs. A heading element is not used for the group title because `<dt>` does not allow heading content.
 
-- `key-value-pairs.vue` — the root: the `<dl>` grid, the `columns` layout, `aria-label`, `aria-busy`, the context.
-- `key-value-pairs-item/key-value-pairs-item.vue` — one pair: `<div>` → `<dt>` (label + `info`) + `<dd>` (value).
+- `key-value-list.vue` — the root: the `<dl>` grid, the `columns` layout, `aria-label`, `aria-busy`, the context.
+- `key-value-list-item/key-value-list-item.vue` — one pair: `<div>` → `<dt>` (label + `info`) + `<dd>` (value).
   - Props: `label: string` (required — the key, rendered in the `<dt>`).
   - Events: _none_.
   - Slots: `default` — the value (text or composed components); fallback is the empty-value marker (`<span aria-hidden="true">—</span><span class="sr-only">Not set</span>`), shown when the slot is omitted or renders nothing. `info` — optional affordance after the label text inside the `<dt>`, such as a `Hint`.
   - While the root is `loading`, the `<dd>` renders a `Skeleton` in place of the value; the label stays visible.
   - `data-testid` fallback `${rootTestId}__item`; a consumer `data-testid` on the Item wins.
-- `key-value-pairs-group/key-value-pairs-group.vue` — a titled column: `<div>` → `<dt>` (title) + `<dd>` → nested `<dl>` stacking its Items in one column.
+- `key-value-list-group/key-value-list-group.vue` — a titled column: `<div>` → `<dt>` (title) + `<dd>` → nested `<dl>` stacking its Items in one column.
   - Props: `title: string` (required — the group's term, shown above its Items).
   - Events: _none_.
-  - Slots: `default` — the group's `KeyValuePairs.Item` children.
+  - Slots: `default` — the group's `KeyValueList.Item` children.
   - Occupies one cell of the root grid, so `columns` sets how many groups sit side by side.
   - `data-testid` fallback `${rootTestId}__group`; a consumer `data-testid` on the Group wins.
 
@@ -115,37 +115,37 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ```vue
 <script setup>
   import CopyButton from '@aziontech/webkit/copy-button'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import Link from '@aziontech/webkit/link'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>
 
 <template>
-  <KeyValuePairs aria-label="Workload details">
-    <KeyValuePairs.Item label="Workload ID">
+  <KeyValueList aria-label="Workload details">
+    <KeyValueList.Item label="Workload ID">
       <span>1752167890</span>
       <CopyButton
         value="1752167890"
         aria-label="Copy workload ID"
         size="small"
       />
-    </KeyValuePairs.Item>
-    <KeyValuePairs.Item label="Status">
+    </KeyValueList.Item>
+    <KeyValueList.Item label="Status">
       <StatusIndicator
         severity="success"
         label="Active"
       />
-    </KeyValuePairs.Item>
-    <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-    <KeyValuePairs.Item label="Region">US East (Virginia)</KeyValuePairs.Item>
-    <KeyValuePairs.Item label="Domain">
+    </KeyValueList.Item>
+    <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+    <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
+    <KeyValueList.Item label="Domain">
       <Link
         label="shop.example.com"
         href="https://shop.example.com"
         size="small"
       />
-    </KeyValuePairs.Item>
-  </KeyValuePairs>
+    </KeyValueList.Item>
+  </KeyValueList>
 </template>
 ```
 
@@ -154,97 +154,97 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 ```vue
 <script setup>
   import CopyButton from '@aziontech/webkit/copy-button'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import Link from '@aziontech/webkit/link'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
-    <KeyValuePairs
+    <KeyValueList
       :columns="2"
       aria-label="Workload details in two columns"
     >
-      <KeyValuePairs.Item label="Workload ID">
+      <KeyValueList.Item label="Workload ID">
         <span>1752167890</span>
         <CopyButton
           value="1752167890"
           aria-label="Copy workload ID"
           size="small"
         />
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Status">
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Status">
         <StatusIndicator
           severity="success"
           label="Active"
         />
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Region">US East (Virginia)</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Domain">
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
+      <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
           size="small"
         />
-      </KeyValuePairs.Item>
-    </KeyValuePairs>
-    <KeyValuePairs
+      </KeyValueList.Item>
+    </KeyValueList>
+    <KeyValueList
       :columns="3"
       aria-label="Workload details in three columns"
     >
-      <KeyValuePairs.Item label="Workload ID">
+      <KeyValueList.Item label="Workload ID">
         <span>1752167890</span>
         <CopyButton
           value="1752167890"
           aria-label="Copy workload ID"
           size="small"
         />
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Status">
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Status">
         <StatusIndicator
           severity="success"
           label="Active"
         />
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Region">US East (Virginia)</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Domain">
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
+      <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
           size="small"
         />
-      </KeyValuePairs.Item>
-    </KeyValuePairs>
-    <KeyValuePairs
+      </KeyValueList.Item>
+    </KeyValueList>
+    <KeyValueList
       :columns="4"
       aria-label="Workload details in four columns"
     >
-      <KeyValuePairs.Item label="Workload ID">
+      <KeyValueList.Item label="Workload ID">
         <span>1752167890</span>
         <CopyButton
           value="1752167890"
           aria-label="Copy workload ID"
           size="small"
         />
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Status">
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Status">
         <StatusIndicator
           severity="success"
           label="Active"
         />
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Region">US East (Virginia)</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Domain">
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+      <KeyValueList.Item label="Region">US East (Virginia)</KeyValueList.Item>
+      <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
           size="small"
         />
-      </KeyValuePairs.Item>
-    </KeyValuePairs>
+      </KeyValueList.Item>
+    </KeyValueList>
   </div>
 </template>
 ```
@@ -255,54 +255,54 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
 <script setup>
   import CopyButton from '@aziontech/webkit/copy-button'
   import Hint from '@aziontech/webkit/hint'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import Link from '@aziontech/webkit/link'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
 </script>
 
 <template>
-  <KeyValuePairs
+  <KeyValueList
     :columns="3"
     aria-label="Workload details"
   >
-    <KeyValuePairs.Group title="General">
-      <KeyValuePairs.Item label="Workload ID">
+    <KeyValueList.Group title="General">
+      <KeyValueList.Item label="Workload ID">
         <span>1752167890</span>
         <CopyButton
           value="1752167890"
           aria-label="Copy workload ID"
           size="small"
         />
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Status">
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Status">
         <StatusIndicator
           severity="success"
           label="Active"
         />
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Created">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-    </KeyValuePairs.Group>
-    <KeyValuePairs.Group title="Networking">
-      <KeyValuePairs.Item label="Domain">
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
+    </KeyValueList.Group>
+    <KeyValueList.Group title="Networking">
+      <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
           href="https://shop.example.com"
           size="small"
         />
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Region">
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Region">
         <template #info>
           <Hint content="Where the workload was first provisioned." />
         </template>
         US East (Virginia)
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Custom certificate" />
-    </KeyValuePairs.Group>
-    <KeyValuePairs.Group title="Source">
-      <KeyValuePairs.Item label="Repository">acme/storefront</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Branch">main</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Framework">Next.js</KeyValuePairs.Item>
-    </KeyValuePairs.Group>
-  </KeyValuePairs>
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Custom certificate" />
+    </KeyValueList.Group>
+    <KeyValueList.Group title="Source">
+      <KeyValueList.Item label="Repository">acme/storefront</KeyValueList.Item>
+      <KeyValueList.Item label="Branch">main</KeyValueList.Item>
+      <KeyValueList.Item label="Framework">Next.js</KeyValueList.Item>
+    </KeyValueList.Group>
+  </KeyValueList>
 </template>
 ```

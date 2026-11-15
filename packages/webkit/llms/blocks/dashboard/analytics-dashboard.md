@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/analytics-dashboard/analytics-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/analytics-dashboard")`
-- Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelHeader`, [Select](../../components/select.md), [StatTile](../../components/stat-tile.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `utils/csv`
+- Components: [Alert](../../components/alert.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [StatTile](../../components/stat-tile.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -78,7 +78,7 @@ Switches a time series between Line and Bar. Only on time series, never on a ran
 
 Names each icon-only control on hover and focus (`Expand`, `More options`).
 
-### H. Expand — `IconButton`, `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `PanelContent` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `PanelBody` (optional)
 
 Opens the card at full size. Icon-only, with an `aria-label` that names the card
 (`Expand Requests over time`). It opens one large `Dialog` for the page: the card title as the
@@ -121,7 +121,7 @@ Each card keeps its box with its own empty state: `No traffic yet` /
 
 ### N. Product and period — `PageHeader` (optional)
 
-In the Metrics variant one page holds the dashboards of several products. A `PageTabs` strip of `Tabs.Item`s under the `PageHeader` switches the product (`Applications`, `Functions`, `Firewall`, `DNS`, `Data stream`); each product brings its own four tiles and four cards, and the header description changes with it. One `Select` in the header actions (`Last hour`, `Last 24 hours`, `Last 7 days`, `Last 30 days`), named `Period` by its `aria-label`, drives every tile, card and the comparison label of the deltas (`vs previous 7 days`). The interval of the points follows the period: 5 minutes for an hour, 2 hours for a day, a day for a week, 3 days for a month. The period stays when the product changes.
+In the Metrics variant one page holds the dashboards of several products. A `PageTabs` strip of `Tabs.Trigger`s under the `PageHeader` switches the product (`Applications`, `Functions`, `Firewall`, `DNS`, `Data stream`); each product brings its own four tiles and four cards, and the header description changes with it. One `Select` in the header actions (`Last hour`, `Last 24 hours`, `Last 7 days`, `Last 30 days`), named `Period` by its `aria-label`, drives every tile, card and the comparison label of the deltas (`vs previous 7 days`). The interval of the points follows the period: 5 minutes for an hour, 2 hours for a day, a day for a week, 3 days for a month. The period stays when the product changes.
 
 ### O. Sub-dashboards and breakdowns — `ToggleGroup`, `Input`, `DataTable`, `EmptyState` (optional)
 
@@ -251,7 +251,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
@@ -711,13 +711,13 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
           >
             <Select.Trigger aria-label="Period" />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in periods"
                 :key="option.value"
                 :value="option.value"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </template>
@@ -1131,7 +1131,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
             <DialogDescription>{{ expandedReport.description }}</DialogDescription>
           </div>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex min-w-0 flex-col gap-(--spacing-md)">
             <div v-if="expandedId === 'requests' || expandedId === 'status-codes'">
               <ToggleGroup
@@ -1227,7 +1227,7 @@ Each variant is the same screen in another state: `get_block("dashboard/analytic
               </template>
             </DataTable>
           </div>
-        </PanelContent>
+        </PanelBody>
       </DialogContent>
     </Dialog>
   </div>

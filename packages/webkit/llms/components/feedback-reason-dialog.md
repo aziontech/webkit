@@ -87,7 +87,7 @@
 
 ## Responsive
 
-- Container queries: the dialog body is the `@container/panel` from `PanelContent`.
+- Container queries: the dialog body is the `@container/panel` from `PanelBody`.
 - Narrow: the dialog is the `small` size and becomes full width under `sm`; the footer buttons stretch (from `PanelFooter`).
 - Touch: radios and buttons keep their 40 px targets.
 - Reflow: no horizontal scroll at 320 px.

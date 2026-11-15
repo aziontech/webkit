@@ -1,11 +1,11 @@
 # ChangePlanDrawer (`account/change-plan-drawer`)
 
-> The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, with what is included as a `FeatureList`, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelContent`, `ToggleGroup`, `CardPricing`, `FeatureList` and `Button`.
+> The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, with what is included as a `FeatureList`, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelBody`, `ToggleGroup`, `CardPricing`, `FeatureList` and `Button`.
 
 - Surface: app
 - Source: `blocks/account/change-plan-drawer/change-plan-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/change-plan-drawer")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CardPricing](../../components/card-pricing.md), [Checkbox](../../components/checkbox.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [FeatureList](../../components/feature-list.md), [Field](../../components/field.md), [Input](../../components/input.md), [Link](../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../components/payment-brand.md), [Select](../../components/select.md), [Separator](../../components/separator.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CardPricing](../../components/card-pricing.md), [Checkbox](../../components/checkbox.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [FeatureList](../../components/feature-list.md), [Field](../../components/field.md), [Input](../../components/input.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../components/payment-brand.md), [Select](../../components/select.md), [Separator](../../components/separator.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md)
 - Skills: `webkit-navigation`, `webkit-microcopy`, `webkit-ux-heuristics`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -47,7 +47,7 @@ Holds the title at the top of each drawer, and the drawer adds its close button 
 
 Names the task: `Change plan`, `Upgrade to Pro`. It labels the drawer for assistive technology.
 
-### F. Body — `PanelContent` (required)
+### F. Body — `PanelBody` (required)
 
 The scrolling body of each drawer, between header and footer.
 
@@ -176,7 +176,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
@@ -546,7 +546,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
       <PanelHeader class="w-full">
         <DrawerTitle>Change plan</DrawerTitle>
       </PanelHeader>
-      <PanelContent>
+      <PanelBody>
         <div class="flex flex-col items-center gap-(--spacing-md)">
           <DrawerDescription class="w-full">
             Compare what each tier includes before moving the account onto it.
@@ -603,7 +603,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
             </div>
           </div>
         </div>
-      </PanelContent>
+      </PanelBody>
     </DrawerContent>
   </Drawer>
 
@@ -622,7 +622,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
         <PanelHeader class="w-full">
           <DrawerTitle>Upgrade to Pro</DrawerTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div
             class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-(--spacing-xl)"
           >
@@ -761,14 +761,14 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                           >
                             <Select.Trigger id="card-country" />
                             <Select.Content>
-                              <Select.Option
+                              <Select.Item
                                 v-for="option in countryOptions"
                                 :key="String(option.value)"
                                 :value="option.value"
                                 :disabled="option.disabled"
                               >
                                 {{ option.label }}
-                              </Select.Option>
+                              </Select.Item>
                             </Select.Content>
                           </Select>
                         </Field>
@@ -889,14 +889,14 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                         >
                           <Select.Trigger />
                           <Select.Content>
-                            <Select.Option
+                            <Select.Item
                               v-for="option in countryOptions"
                               :key="String(option.value)"
                               :value="option.value"
                               :disabled="option.disabled"
                             >
                               {{ option.label }}
-                            </Select.Option>
+                            </Select.Item>
                           </Select.Content>
                         </Select>
                       </Field>
@@ -918,14 +918,14 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                         >
                           <Select.Trigger />
                           <Select.Content>
-                            <Select.Option
+                            <Select.Item
                               v-for="option in stateOptions"
                               :key="String(option.value)"
                               :value="option.value"
                               :disabled="option.disabled"
                             >
                               {{ option.label }}
-                            </Select.Option>
+                            </Select.Item>
                           </Select.Content>
                         </Select>
                       </Field>
@@ -938,14 +938,14 @@ Each variant is the same screen in another state: `get_block("account/change-pla
                         >
                           <Select.Trigger />
                           <Select.Content>
-                            <Select.Option
+                            <Select.Item
                               v-for="option in cityOptions"
                               :key="String(option.value)"
                               :value="option.value"
                               :disabled="option.disabled"
                             >
                               {{ option.label }}
-                            </Select.Option>
+                            </Select.Item>
                           </Select.Content>
                         </Select>
                       </Field>
@@ -974,7 +974,7 @@ Each variant is the same screen in another state: `get_block("account/change-pla
               </Card>
             </div>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div
             class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"

@@ -14,7 +14,7 @@
 
 ## Do
 
-- Bind `v-model` to the route (or a ref) and render the section below from it. PageTabs renders only the tab list, so it takes no `Tabs.Content` / `Tabs.Panel`: the page renders the active section itself from the `v-model` value.
+- Bind `v-model` to the route (or a ref) and render the section below from it. PageTabs renders only the tab list, so it takes no `Tabs.Content`: the page renders the active section itself from the `v-model` value.
 - Keep the labels to one word where possible.
 - Put only actions that apply to the whole resource in `actions`; page-level actions go in the `page-header`.
 - Set `column` to the column the page body uses (`form` over a settings form, `data` over a list) so the tabs start where the content starts.
@@ -28,7 +28,7 @@
 
 ## Related
 
-- [tabs](tabs.md) — the tablist it renders; pass one `Tabs.Item` per section in the default slot.
+- [tabs](tabs.md) — the tablist it renders; pass one `Tabs.Trigger` per section in the default slot.
 - [page-header](page-header.md) — the page heading under the strip.
 - [tag](tag.md) and `button` — the usual content of the `actions` slot.
 
@@ -43,7 +43,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | One Tabs.Item per section of the resource. |
+| `default` | — | One Tabs.Trigger per section of the resource. |
 | `actions` | — | The actions the whole resource owns, on the right of the strip: a staged-changes Tag, Deploy. |
 
 ## v-model
@@ -57,7 +57,7 @@
 
 ## Accessibility
 
-- Visible focus: owned by `Tabs.Item` and the actions.
+- Visible focus: owned by `Tabs.Trigger` and the actions.
 - Keyboard map: the tablist follows `tabs` (arrows move between tabs, `Home`/`End` jump); `Tab` leaves the tablist for the actions.
 - ARIA: `role="tablist"` and `role="tab"` come from `tabs`.
 - Contrast ≥4.5:1, owned by `tabs`.
@@ -107,7 +107,7 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
 
 <template>
   <PageTabs v-model="activeTab">
-    <Tabs.Item
+    <Tabs.Trigger
       v-for="tab in tabs"
       :key="tab.value"
       :value="tab.value"
@@ -137,7 +137,7 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
 
 <template>
   <PageTabs v-model="activeTab">
-    <Tabs.Item
+    <Tabs.Trigger
       v-for="tab in tabs"
       :key="tab.value"
       :value="tab.value"
@@ -181,7 +181,7 @@ No built-in strings: the tab labels and the actions come from the consumer's slo
     v-model="activeTab"
     column="form"
   >
-    <Tabs.Item
+    <Tabs.Trigger
       v-for="tab in tabs"
       :key="tab.value"
       :value="tab.value"

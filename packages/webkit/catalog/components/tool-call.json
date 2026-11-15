@@ -11,7 +11,7 @@
  "related": [
   "tool-approval` — the authorization step before a sensitive call.",
   "status-indicator` — the status the row shows.",
-  "code-block`, `key-value-pairs` — what goes in the input and output slots."
+  "code-block`, `key-value-list` — what goes in the input and output slots."
  ],
  "bestPractices": [
   "Name the tool exactly as it is (`list_workloads`) and describe it in plain words (`Listing your workloads`).",

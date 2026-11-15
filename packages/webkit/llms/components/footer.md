@@ -204,11 +204,11 @@
         >
           <Select.Trigger aria-label="Language" />
           <Select.Content>
-            <Select.Option
+            <Select.Item
               v-for="o in languageOptions"
               :key="o.value"
               :value="o.value"
-              >{{ o.label }}</Select.Option
+              >{{ o.label }}</Select.Item
             >
           </Select.Content>
         </Select>
@@ -343,11 +343,11 @@
         >
           <Select.Trigger aria-label="Language" />
           <Select.Content>
-            <Select.Option
+            <Select.Item
               v-for="o in languageOptions"
               :key="o.value"
               :value="o.value"
-              >{{ o.label }}</Select.Option
+              >{{ o.label }}</Select.Item
             >
           </Select.Content>
         </Select>

@@ -31,7 +31,7 @@
 ## Related
 
 - [pagination](pagination.md) — the root that frames the strip and, in data-driven mode, renders these buttons; re-exports this component as `Pagination.Button`.
-- pagination-info` — the page-info text that sits beside the strip.
+- pagination-description` — the page-info text that sits beside the strip.
 - pagination-page-size` — the rows-per-page selector placed in the pagination's `controls` slot.
 - [icon-button](icon-button.md) — a standalone icon-only action with its own frame and radius.
 

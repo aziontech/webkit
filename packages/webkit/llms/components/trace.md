@@ -37,7 +37,7 @@
 - [log-view](log-view.md) — the run's log lines, shown under the trace on the same clock.
 - [tree](tree.md) — the same expand and collapse model without the time axis.
 - [bar-list](bar-list.md) — ranked durations without nesting.
-- [key-value-pairs](key-value-pairs.md) — the facts of the run above the trace.
+- [key-value-list](key-value-list.md) — the facts of the run above the trace.
 
 ## Props
 

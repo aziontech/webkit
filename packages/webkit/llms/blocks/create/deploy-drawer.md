@@ -1,11 +1,11 @@
 # DeployDrawer (`create/deploy-drawer`)
 
-> The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`variant="card"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.
+> The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`variant="card"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.
 
 - Surface: app
 - Source: `blocks/create/deploy-drawer/deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/deploy-drawer")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [RadioGroup](../../components/radio-group.md), [Separator](../../components/separator.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [RadioGroup](../../components/radio-group.md), [Separator](../../components/separator.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
@@ -39,9 +39,9 @@ An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the servic
 
 `DrawerTitle` reads Deploy, or Build and deployment while a version is being built first. The drawer's own close button sits on the right; no Cancel anywhere.
 
-### C. Sections — `PanelContent`, `SettingsSection` (required)
+### C. Sections — `PanelBody`, `SettingsSection` (required)
 
-`PanelContent` holds one `fieldset` of `SettingsSection` bands, each with a title and a `hint`: Resources, Project, Environment, Projects impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches.
+`PanelBody` holds one `fieldset` of `SettingsSection` bands, each with a title and a `hint`: Resources, Project, Environment, Projects impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches.
 
 ### D. Resources card — `Card`, `Separator`, `Item`, `Tag`, `DropdownMenu`, `Input`, `Avatar`, `Button` (required)
 
@@ -174,7 +174,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
@@ -731,7 +731,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
             <legend class="sr-only">Deploy</legend>
             <SettingsSection
@@ -1416,7 +1416,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-draw
               role="status"
             />
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">

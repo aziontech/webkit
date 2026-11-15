@@ -34,7 +34,7 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   (`@aziontech/webkit/use-console-layout`); a body that also renders on its own calls
   `useConsoleLayout({ optional: true })`, which returns `null` outside a layout. Bind `v-model:navigation-open` to persist the rail or
   to offer `Collapse sidebar` in the palette (`search` slot + `@search-select`). A page sets its own
-  trail, control crumb included, with `ConsoleLayout.Breadcrumbs`, and a full-height workspace puts
+  trail, control crumb included, with `ConsoleLayout.Breadcrumb`, and a full-height workspace puts
   `data-layout-fill` on its root (never `calc(100dvh - …)`).
 - **Site:** `SiteLayout` — `navigation` and `footer` are the `SiteNav` and `SiteFooter` data. The
   site is dark: `<html data-theme="dark">`. `SiteFooter` binds its language select with

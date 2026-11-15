@@ -295,14 +295,14 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
           <Select v-model="region">
             <Select.Trigger />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in regions"
                 :key="String(option.value)"
                 :value="option.value"
                 :disabled="option.disabled"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </Field>
@@ -318,14 +318,14 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
           <Select v-model="environment">
             <Select.Trigger />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in environments"
                 :key="String(option.value)"
                 :value="option.value"
                 :disabled="option.disabled"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </Field>
@@ -357,14 +357,14 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
           <Select v-model="behavior">
             <Select.Trigger />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in behaviors"
                 :key="String(option.value)"
                 :value="option.value"
                 :disabled="option.disabled"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </Field>
@@ -438,14 +438,14 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
           <Select v-model="region">
             <Select.Trigger />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in regions"
                 :key="String(option.value)"
                 :value="option.value"
                 :disabled="option.disabled"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </Field>
@@ -542,14 +542,14 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
           <Select v-model="region">
             <Select.Trigger />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in regions"
                 :key="String(option.value)"
                 :value="option.value"
                 :disabled="option.disabled"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </Field>
@@ -565,14 +565,14 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
           <Select v-model="environment">
             <Select.Trigger />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in environments"
                 :key="String(option.value)"
                 :value="option.value"
                 :disabled="option.disabled"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </Field>
@@ -604,14 +604,14 @@ focus-visible:ring-offset-(--bg-canvas)`. The step heading is a programmatic foc
           <Select v-model="behavior">
             <Select.Trigger />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in behaviors"
                 :key="String(option.value)"
                 :value="option.value"
                 :disabled="option.disabled"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </Field>

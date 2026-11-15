@@ -21,13 +21,13 @@
  "bestPractices": [
   "Give every panel item a stable `value` on `NavigationMenu.Item`; `v-model` and `default-value` refer to it, and an omitted value is auto-generated and cannot be controlled.",
   "A top-level item with no panel is a `NavigationMenu.Trigger` with an `href`; inside panels use `NavigationMenu.Item` with `layout=\"entry\"`, an `href`, an optional `description` and `close-on-click`.",
-  "Render the popup chain exactly once per root: `Portal` → `Positioner` → `Popup` → `Viewport`. Each `Content` is moved into the shared `Viewport`, so a missing chain renders no panel.",
-  "Portal` teleports to `container` when set and to `body` otherwise, passing the selector through so the server renders the same chain the client hydrates.",
-  "Pin a wide panel to the page column with the positioner's `collision-padding`, not with override classes on the popup.",
+  "Render one `NavigationMenu.Viewport` per root, after the list (the shadcn shape). It holds the whole overlay: it teleports, positions the popup on the active trigger, sizes it and hosts every panel. Each `Content` is moved into it, so a menu without a `Viewport` renders no panel.",
+  "The `Viewport` teleports to `container` when set and to `body` otherwise, passing the selector through so the server renders the same tree the client hydrates.",
+  "Pin a wide panel to the page column with the viewport's `collision-padding`, not with override classes on the popup.",
   "Set `aria-label` on the root (default `'Main'`) when the page has more than one navigation landmark.",
-  "Test ids: root fallback `navigation-navigation-menu` (`<category>-<name>`); every part derives from it (`navigation-navigation-menu__list`, `__item`, `__trigger`, `__content`, `__portal`, `__positioner`, `__popup`, `__viewport`, `__arrow`, `__backdrop`, `__icon`), and a consumer `data-testid` wins on every part.",
+  "Test ids: root fallback `navigation-navigation-menu` (`<category>-<name>`); every part derives from it (`navigation-navigation-menu__list`, `__item`, `__trigger`, `__icon` (the trigger chevron), `__content`, and inside the viewport `__portal`, `__positioner`, `__popup`, `__viewport`, `__arrow`, `__backdrop`), and a consumer `data-testid` wins on every part; one set on the `Viewport` lands on its popup.",
   "Attributes on the root (`id`, `aria-labelledby`, `data-*`, listeners) land on the `nav` landmark.",
-  "Portal`, `Backdrop`, `Positioner`, `Popup`, `Viewport` and `Arrow` are the overlay chain that hosts every panel. They stay public so a page can place, pad and decorate the one shared popup; most pages copy the chain from the Usage block unchanged.",
+  "The compound has the shadcn parts only: `List`, `Item`, `Trigger`, `Content`, `Link`, `Viewport`. 6.0 folded the Base UI overlay chain (`Portal`, `Positioner`, `Popup`, `Arrow`, `Backdrop`) into `Viewport` props, and the `Icon` part into the trigger, which renders its own chevron.",
   "NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`); 6.0 removed its `native-button` prop."
  ]
 }

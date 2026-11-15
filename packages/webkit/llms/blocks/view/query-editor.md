@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/query-editor/query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/query-editor")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [CodeEditor](../../components/code-editor.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [CodeEditor](../../components/code-editor.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Sidebar](../../components/sidebar.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -34,7 +34,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Page tabs — `PageTabs`, `Tabs` (required)
 
-`PageTabs` bound with `v-model` holds two `Tabs.Item`s, Tables and Editor. The tabs are the page's top level; each one swaps the side panel and the working pane together.
+`PageTabs` bound with `v-model` holds two `Tabs.Trigger`s, Tables and Editor. The tabs are the page's top level; each one swaps the side panel and the working pane together.
 
 ### B. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
 
@@ -64,7 +64,7 @@ A toolbar with the primary Run query `Button` (`:loading` while it runs) and out
 
 A Results band with its own search `Input`, a `ToggleGroup` switching Table and JSON, and Refresh, Download and Columns `IconButton`s named by `Tooltip`s. A SELECT shows its rows in a `DataTable` paged at 50 (10, 25, 50 and 100 per page), and JSON shows them in a copyable `CodeBlock`; any other statement shows a success `Alert` with what ran; a statement the database rejects shows a danger `Alert` with the reason and what to do (`The statement wasn't executed: near "SELEC", a syntax error. Check the statement and run it again.`), and the statement stays in the editor; before anything runs an `EmptyState` reads Ready to execute, and while a query runs `Skeleton` lines hold the band. A visually hidden `role="status"` announces the outcome (`3 rows returned.` or the error).
 
-### I. Templates drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent`, `Input`, `Item` (optional)
+### I. Templates drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `Input`, `Item` (optional)
 
 Templates opens a large right `Drawer` titled SQL quick templates with a one-line description, a Search templates `Input` and one outlined clickable `Item` per snippet (a small `EmptyState` with Clear search when none matches). Choosing a card loads its SQL into the editor and closes the drawer.
 
@@ -188,7 +188,7 @@ Each variant is the same screen in another state: `get_block("view/query-editor"
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Sidebar from '@aziontech/webkit/sidebar-root'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -678,7 +678,7 @@ LIMIT 3;`
     class="flex h-dvh min-h-0 flex-col"
   >
     <PageTabs v-model="activeTab">
-      <Tabs.Item
+      <Tabs.Trigger
         v-for="tab in tabs"
         :key="tab.value"
         :value="tab.value"
@@ -1342,7 +1342,7 @@ LIMIT 3;`
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <Input
               v-model="templateQuery"
@@ -1401,7 +1401,7 @@ LIMIT 3;`
               </template>
             </EmptyState>
           </div>
-        </PanelContent>
+        </PanelBody>
       </DrawerContent>
     </Drawer>
   </div>

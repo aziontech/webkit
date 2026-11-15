@@ -54,7 +54,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `type="checkbox"` / `type="radio"` options, which keep it open. Options inside a sub-menu emit on the same root event. |
+| `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuItemValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `type="checkbox"` / `type="radio"` options, which keep it open. Options inside a sub-menu emit on the same root event. |
 
 ## Slots
 
@@ -68,7 +68,7 @@
 
 - `@aziontech/webkit/dropdown-menu-trigger`
 - `@aziontech/webkit/dropdown-menu-group`
-- `@aziontech/webkit/dropdown-menu-option`
+- `@aziontech/webkit/dropdown-menu-item`
 - `@aziontech/webkit/dropdown-menu-sub`
 - `@aziontech/webkit/dropdown-menu-sub-content`
 - `@aziontech/webkit/dropdown-menu-sub-trigger`
@@ -83,7 +83,7 @@
   - Props: `label: string` default `''` — section label rendered above the options. Omit for an unlabeled group.
   - Events: _none_.
   - Slots: `default` — one or more `<DropdownMenu.Item>`; `header` — inline region rendered between the group label and the options (e.g. a per-section search or description); `footer` — inline region rendered after the options (e.g. a "see all" link).
-- `dropdown-menu-option/dropdown-menu-option.vue` — selectable row, attached as `DropdownMenu.Item`. Renders the leading slot, the label, the trailing slot, an optional `command` hint and, when `selected`, a check mark. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`. Every row is `tabindex="-1"`; the root moves focus with the arrows and typeahead. Outside a group the row teleports itself into the panel body (`data-ungrouped`, with the group's horizontal inset).
+- `dropdown-menu-item/dropdown-menu-item.vue` — selectable row, attached as `DropdownMenu.Item`. Renders the leading slot, the label, the trailing slot, an optional `command` hint and, when `selected`, a check mark. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`. Every row is `tabindex="-1"`; the root moves focus with the arrows and typeahead. Outside a group the row teleports itself into the panel body (`data-ungrouped`, with the group's horizontal inset).
   - Props:
     - `value: string | number` (required) — identifier emitted on the root `select` event when this option is activated.
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
@@ -91,7 +91,7 @@
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
     - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `ai ai-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
-    - `type: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuOptionType`.
+    - `type: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuItemType`.
   - Events: _none_ (root emits `select`).
   - Slots: `default` (override of the `label` prop, for rich label content), `leading` (icon / avatar before the label), `trailing` (icon / badge after the label; mutually exclusive with `command`).
 - `dropdown-menu-sub/dropdown-menu-sub.vue` — sub-menu scope. Owns the open state of one nested menu and shares it with its `SubTrigger` and `SubContent`. Renders a `display: contents` wrapper carrying `data-testid` (`<root>__sub`) and `data-state`. Only one sub-menu per menu level is open at a time: hovering or focusing a sibling item closes it after a 150 ms grace period, so a pointer moving diagonally toward the sub-panel does not close it; entering the sub-panel cancels the close. Closing the root closes every sub-menu.
@@ -167,7 +167,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
 ```vue
 <script setup>
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -183,27 +183,27 @@ No built-in strings: every label comes from the consumer (`label` props and slot
       />
     </DropdownMenuTrigger>
     <DropdownMenuGroup>
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="profile"
         label="Profile"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="settings"
         label="Settings"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="billing"
         label="Billing"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="invite"
         label="Invite members"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="logs"
         label="Audit log"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="signout"
         label="Sign out"
       />
@@ -217,7 +217,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
 ```vue
 <script setup>
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -233,22 +233,22 @@ No built-in strings: every label comes from the consumer (`label` props and slot
       />
     </DropdownMenuTrigger>
     <DropdownMenuGroup label="Account">
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="profile"
         label="Profile"
         command="⌘P"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="settings"
         label="Settings"
       />
     </DropdownMenuGroup>
     <DropdownMenuGroup label="Workspace">
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="invite"
         label="Invite members"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="logs"
         label="Audit log"
         selected
@@ -263,7 +263,7 @@ No built-in strings: every label comes from the consumer (`label` props and slot
 ```vue
 <script setup>
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -279,16 +279,16 @@ No built-in strings: every label comes from the consumer (`label` props and slot
       />
     </DropdownMenuTrigger>
     <DropdownMenuGroup label="Option states">
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="default"
         label="Default"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="selected"
         label="Selected"
         selected
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="disabled"
         label="Disabled"
         disabled

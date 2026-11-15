@@ -18,7 +18,7 @@
 - One topic per panel. When the reader moves to another part of the page, swap the panel's content — do not stack two headers.
 - Keep each `Section` to a short paragraph or a short list. If the reader has to scroll a section, the content belongs in the docs and the panel should link to it.
 - Title sections with the question the reader is asking (`What is a workload?`), not with a noun (`Overview`).
-- Put links to the documentation in `HelpPanel.Links`, at the end, not inline in every section.
+- Put links to the documentation in `HelpPanel.Footer`, at the end, not inline in every section.
 - Close affordances belong to the host. Do not put a close button in `HelpPanel.Header`; the `Drawer` or side rail already has one.
 
 ## Don’t
@@ -35,7 +35,7 @@
 
 - [drawer](drawer.md) — the host that opens, closes and traps focus around a help panel shown as an overlay.
 - [tutorial-panel](tutorial-panel.md) — guided tutorials, drawn with these parts plus its own task list.
-- [link](link.md) — the standalone link each `HelpPanel.Links` row is composed from.
+- [link](link.md) — the standalone link each `HelpPanel.Footer` row is composed from.
 - [skeleton](skeleton.md) — what the panel renders in place of its content while `loading`.
 - [doc-prose](doc-prose.md) — long-form documentation prose; a help section is a few short paragraphs, not an article.
 
@@ -50,18 +50,18 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | The panel's parts — `HelpPanel.Header`, `HelpPanel.Section`, `HelpPanel.Links` — in reading order. Not rendered while `loading`. |
+| `default` | — | The panel's parts — `HelpPanel.Header`, `HelpPanel.Group`, `HelpPanel.Footer` — in reading order. Not rendered while `loading`. |
 
 ## Sub-component imports
 
 - `@aziontech/webkit/help-panel-header`
-- `@aziontech/webkit/help-panel-section`
-- `@aziontech/webkit/help-panel-links`
+- `@aziontech/webkit/help-panel-group`
+- `@aziontech/webkit/help-panel-footer`
 
 ## Sub-components
 
 The root ships a **compound API**: an `index.ts` (beside `help-panel.vue`) attaches every sub-component
-to the root so `<HelpPanel.Header>`, `<HelpPanel.Section>` and `<HelpPanel.Links>` resolve from one
+to the root so `<HelpPanel.Header>`, `<HelpPanel.Group>` and `<HelpPanel.Footer>` resolve from one
 import; the standalone imports remain the tree-shaking path. The panel has no open/closed state, so
 there is no `Trigger` / `Content` — every member is named after a part of a help page. 6.0 removed the
 tutorial mode (`HelpPanel.Tutorial`, `HelpPanel.Task`): `TutorialPanel` owns tutorials.
@@ -70,14 +70,14 @@ tutorial mode (`HelpPanel.Tutorial`, `HelpPanel.Task`): `TutorialPanel` owns tut
   - Props: `title?: string` (default `''` — the topic's name, rendered as the panel's heading), `description?: string` (default `''` — one line under the title saying what the topic covers; not rendered when empty).
   - Slot: `default` — optional extra content under the description (a `Tag` naming the product state, for example).
   - `data-testid` fallback: `content-help-panel-header`.
-- `help-panel-section/help-panel-section.vue` — One block of guidance with its own heading. Renders a `<section aria-labelledby>` holding an `<h3>` (only when `title` is non-empty) and the slot, in `text-body-sm`, with a fixed vertical rhythm between paragraphs and lists inside it.
+- `help-panel-group/help-panel-group.vue` — One block of guidance with its own heading. Renders a `<section aria-labelledby>` holding an `<h3>` (only when `title` is non-empty) and the slot, in `text-body-sm`, with a fixed vertical rhythm between paragraphs and lists inside it.
   - Props: `title?: string` (default `''` — the question this section answers; the section renders no heading when empty).
   - Slot: `default` — the section's prose: paragraphs, short lists, inline `text-link` anchors.
-  - `data-testid` fallback: `content-help-panel-section`.
-- `help-panel-links/help-panel-links.vue` — The "Learn more" footer: a heading over a column of `Link` items the consumer composes. Renders a `<section aria-labelledby>` holding an `<h3>` and a vertical flex column of the slot, separated from the content above by a `Separator`.
+  - `data-testid` fallback: `content-help-panel-group`.
+- `help-panel-footer/help-panel-footer.vue` — The "Learn more" footer: a heading over a column of `Link` items the consumer composes. Renders a `<section aria-labelledby>` holding an `<h3>` and a vertical flex column of the slot, separated from the content above by a `Separator`.
   - Props: `title?: string` (default `undefined` — the heading over the links; absent uses the locale catalog, `Learn more` in English, and an empty string renders no heading).
   - Slot: `default` — `Link` items, one per destination.
-  - `data-testid` fallback: `content-help-panel-links`.
+  - `data-testid` fallback: `content-help-panel-footer`.
     Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports`
     resolves every path, and `.d.ts` is generated at publish time):
 
@@ -88,10 +88,10 @@ packages/webkit/src/components/content/help-panel/
 ├── index.ts                               (compound: attaches the three parts to the root)
 ├── help-panel-header/
 │   └── help-panel-header.vue
-├── help-panel-section/
-│   └── help-panel-section.vue
-└── help-panel-links/
-    └── help-panel-links.vue
+├── help-panel-group/
+│   └── help-panel-group.vue
+└── help-panel-footer/
+    └── help-panel-footer.vue
 ```
 
 Exports to add to `packages/webkit/package.json#exports` (flat public names; category lives in the
@@ -101,8 +101,8 @@ folder only):
 "./help-panel": "./src/components/content/help-panel/index.ts",
 "./help-panel-root": "./src/components/content/help-panel/help-panel.vue",
 "./help-panel-header": "./src/components/content/help-panel/help-panel-header/help-panel-header.vue",
-"./help-panel-section": "./src/components/content/help-panel/help-panel-section/help-panel-section.vue",
-"./help-panel-links": "./src/components/content/help-panel/help-panel-links/help-panel-links.vue"
+"./help-panel-group": "./src/components/content/help-panel/help-panel-group/help-panel-group.vue",
+"./help-panel-footer": "./src/components/content/help-panel/help-panel-footer/help-panel-footer.vue"
 ```
 
 Composed DS components (all present in `packages/webkit/package.json#exports`, imported by relative path
@@ -149,16 +149,16 @@ name.
         title="Cache settings"
         description="How long content stays at the edge before it is fetched again."
       />
-      <HelpPanel.Section title="What does the cache TTL control?">
+      <HelpPanel.Group title="What does the cache TTL control?">
         <p>
           The TTL sets how many seconds an object is served from the edge before the origin is asked
           for a fresh copy.
         </p>
-      </HelpPanel.Section>
-      <HelpPanel.Section title="When should I bypass the cache?">
+      </HelpPanel.Group>
+      <HelpPanel.Group title="When should I bypass the cache?">
         <p>Bypass it for responses that change per user, such as carts and account pages.</p>
-      </HelpPanel.Section>
-      <HelpPanel.Links>
+      </HelpPanel.Group>
+      <HelpPanel.Footer>
         <Link
           label="Cache settings documentation"
           href="https://www.azion.com/en/documentation/"
@@ -169,7 +169,7 @@ name.
           href="https://www.azion.com/en/documentation/"
           target="_blank"
         />
-      </HelpPanel.Links>
+      </HelpPanel.Footer>
     </HelpPanel>
   </div>
 </template>
@@ -193,16 +193,16 @@ name.
         title="Cache settings"
         description="How long content stays at the edge before it is fetched again."
       />
-      <HelpPanel.Section title="What does the cache TTL control?">
+      <HelpPanel.Group title="What does the cache TTL control?">
         <p>
           The TTL sets how many seconds an object is served from the edge before the origin is asked
           for a fresh copy.
         </p>
-      </HelpPanel.Section>
-      <HelpPanel.Section title="When should I bypass the cache?">
+      </HelpPanel.Group>
+      <HelpPanel.Group title="When should I bypass the cache?">
         <p>Bypass it for responses that change per user, such as carts and account pages.</p>
-      </HelpPanel.Section>
-      <HelpPanel.Links>
+      </HelpPanel.Group>
+      <HelpPanel.Footer>
         <Link
           label="Cache settings documentation"
           href="https://www.azion.com/en/documentation/"
@@ -213,7 +213,7 @@ name.
           href="https://www.azion.com/en/documentation/"
           target="_blank"
         />
-      </HelpPanel.Links>
+      </HelpPanel.Footer>
     </HelpPanel>
   </div>
 </template>

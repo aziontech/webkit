@@ -1,11 +1,11 @@
 # WafTuning (`view/waf-tuning`)
 
-> The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow selected, then Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `DataTable` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, as `Table.CellTags` whose `+N` popover lists the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it; a search that matches nothing shows No matching rules with Clear search, and a load failure shows a danger `Alert` with Retry. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `DataTable`, `Table.CellTags`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Textarea`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow selected, then Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `DataTable` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, as `Table.CellTags` whose `+N` popover lists the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it; a search that matches nothing shows No matching rules with Clear search, and a load failure shows a danger `Alert` with Retry. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `DataTable`, `Table.CellTags`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Textarea`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/view/waf-tuning/waf-tuning.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/waf-tuning")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Table](../../components/table.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Table](../../components/table.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -42,7 +42,7 @@ A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours,
 
 A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells are `Table.CellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
 
-### D. Allow dialog — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
+### D. Allow dialog — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 
 A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says requests these rules matched on their paths will no longer be blocked and how many allowed rules will be created (one per rule and path); a list of the selected rules with their threat and path count; and a required Reason `Textarea` with a description saying it is kept with the allowed rules. "Enter why these requests are legitimate." shows under it only after Allow rules is pressed with it empty, and focus moves to it. Footer: Cancel and primary Allow rules, which shows its loading state; the dialog cannot be dismissed while it runs.
 
@@ -128,7 +128,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
@@ -358,13 +358,13 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
               >
                 <Select.Trigger />
                 <Select.Content>
-                  <Select.Option
+                  <Select.Item
                     v-for="option in RANGES"
                     :key="option.value"
                     :value="option.value"
                   >
                     {{ option.label }}
-                  </Select.Option>
+                  </Select.Item>
                 </Select.Content>
               </Select>
             </Field>
@@ -518,7 +518,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
               Allow {{ selected.length }} {{ selected.length === 1 ? 'rule' : 'rules' }}
             </DialogTitle>
           </PanelHeader>
-          <PanelContent>
+          <PanelBody>
             <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
               <Alert
                 v-if="allowFailed"
@@ -564,7 +564,7 @@ Each variant is the same screen in another state: `get_block("view/waf-tuning", 
                 </Field>
               </div>
             </div>
-          </PanelContent>
+          </PanelBody>
           <PanelFooter
             ><div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
               <div class="w-full md:w-fit">

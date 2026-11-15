@@ -1,11 +1,11 @@
 # Billing (`account/billing`)
 
-> The Billing page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValuePairs` for plan start, next charge date and value as `Currency`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `Table` with No., Invoice ID, Plan, Cycle, Seats, Billing date, Amount, Payment method, Status as `Table.CellStatus` and a download `IconButton` per invoice. Payment methods shows Payment information as `KeyValuePairs` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `Table` of cards (holder with a Default `Tag`, brand and last four, expiry, `Table.CellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.
+> The Billing page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValueList` for plan start, next charge date and value as `Currency`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `Table` with No., Invoice ID, Plan, Cycle, Seats, Billing date, Amount, Payment method, Status as `Table.CellStatus` and a download `IconButton` per invoice. Payment methods shows Payment information as `KeyValueList` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `Table` of cards (holder with a Default `Tag`, brand and last four, expiry, `Table.CellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/billing/billing.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/billing")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [Currency](../../components/currency.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValuePairs](../../components/key-value-pairs.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), [PaymentBrand](../../components/payment-brand.md), [PropertyFilter](../../components/property-filter.md), [SectionHeader](../../components/section-header.md), [Skeleton](../../components/skeleton.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [Currency](../../components/currency.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValueList](../../components/key-value-list.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), [PaymentBrand](../../components/payment-brand.md), [PropertyFilter](../../components/property-filter.md), [SectionHeader](../../components/section-header.md), [Skeleton](../../components/skeleton.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-navigation`, `webkit-microcopy`
 
 ## Asked as
@@ -34,15 +34,15 @@ Title `Billing` and one sentence on what the page holds. Actions: the time of th
 
 ### B. Tabs — `PageTabs`, `Tabs` (required)
 
-`PageTabs` with one `Tabs.Item` per tab: `Bills` and `Payment methods`. Only the active tab's content renders; the heading and the load state are shared.
+`PageTabs` with one `Tabs.Trigger` per tab: `Bills` and `Payment methods`. Only the active tab's content renders; the heading and the load state are shared.
 
 ### C. Load failure — `Alert` (conditional)
 
 When the billing data fails to load, a danger `Alert` with Retry takes the tab's place and says that nothing was charged or changed.
 
-### D. Subscription plan — `Card`, `Skeleton`, `Tag`, `KeyValuePairs`, `Currency`, `PaymentBrand` (required)
+### D. Subscription plan — `Card`, `Skeleton`, `Tag`, `KeyValueList`, `Currency`, `PaymentBrand` (required)
 
-A `Card` whose header holds the `Subscription plan` heading and the outlined `Change plan`, which opens `account/change-plan-drawer` (the copyable SFC links to the plans route so it stands alone). The body shows the plan name with a small secondary `Current plan` `Tag` (a `Skeleton` while loading), then split `KeyValuePairs` with Plan start date, Next charge date, Next charge value as `Currency`, and the default card as a decorative `PaymentBrand` plate and its brand and last four. The footer says what an invoice includes. On wide containers it takes about half the row.
+A `Card` whose header holds the `Subscription plan` heading and the outlined `Change plan`, which opens `account/change-plan-drawer` (the copyable SFC links to the plans route so it stands alone). The body shows the plan name with a small secondary `Current plan` `Tag` (a `Skeleton` while loading), then split `KeyValueList` with Plan start date, Next charge date, Next charge value as `Currency`, and the default card as a decorative `PaymentBrand` plate and its brand and last four. The footer says what an invoice includes. On wide containers it takes about half the row.
 
 ### E. Upgrade card — `Card` (required)
 
@@ -62,7 +62,7 @@ An account with no invoice yet replaces the table with `No invoices yet` and a l
 
 ### I. Payment information — `StatusIndicator` (required on the Payment methods tab)
 
-A `SectionHeader` with Update over a `Card` of four-column `KeyValuePairs`: Billing email, Auto-renewal as a `StatusIndicator` (On or Off, never colour alone), Billing address and Tax ID (empty shows the empty-value marker).
+A `SectionHeader` with Update over a `Card` of four-column `KeyValueList`: Billing email, Auto-renewal as a `StatusIndicator` (On or Off, never colour alone), Billing address and Tax ID (empty shows the empty-value marker).
 
 ### J. Payment methods — `DropdownMenu`, `ConfirmDialog` (required on the Payment methods tab)
 
@@ -139,10 +139,10 @@ Each variant is the same screen in another state: `get_block("account/billing", 
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Currency from '@aziontech/webkit/currency'
   import DataTable from '@aziontech/webkit/data-table'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
@@ -357,7 +357,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
   const pendingRemoval = ref<PaymentMethod | null>(null)
   const removeOpen = ref(false)
 
-  const onMethodAction = (value: DropdownMenuOptionValue, method: PaymentMethod) => {
+  const onMethodAction = (value: DropdownMenuItemValue, method: PaymentMethod) => {
     if (value === 'default') {
       paymentMethods.value = paymentMethods.value.map((item) => ({
         ...item,
@@ -419,7 +419,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
       </PageHeader>
 
       <PageTabs v-model="activeTab">
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
           :value="tab.value"
@@ -480,20 +480,20 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                         />
                       </template>
                     </div>
-                    <KeyValuePairs
+                    <KeyValueList
                       variant="split"
                       :loading="loading"
                       aria-label="Subscription details"
                     >
-                      <KeyValuePairs.Item label="Plan start date">Jan 25, 2023</KeyValuePairs.Item>
-                      <KeyValuePairs.Item label="Next charge date">Dec 1, 2026</KeyValuePairs.Item>
-                      <KeyValuePairs.Item label="Next charge value">
+                      <KeyValueList.Item label="Plan start date">Jan 25, 2023</KeyValueList.Item>
+                      <KeyValueList.Item label="Next charge date">Dec 1, 2026</KeyValueList.Item>
+                      <KeyValueList.Item label="Next charge value">
                         <Currency
                           value="184.20"
                           size="small"
                         />
-                      </KeyValuePairs.Item>
-                      <KeyValuePairs.Item label="Payment method">
+                      </KeyValueList.Item>
+                      <KeyValueList.Item label="Payment method">
                         <template v-if="defaultMethod">
                           <PaymentBrand
                             :brand="defaultMethod.brand"
@@ -502,8 +502,8 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                           />
                           <span>{{ methodLabel(defaultMethod) }}</span>
                         </template>
-                      </KeyValuePairs.Item>
-                    </KeyValuePairs>
+                      </KeyValueList.Item>
+                    </KeyValueList>
                   </div>
                 </template>
                 <template #footer>
@@ -751,25 +751,25 @@ Each variant is the same screen in another state: `get_block("account/billing", 
             </SectionHeader>
             <Card>
               <template #default>
-                <KeyValuePairs
+                <KeyValueList
                   :columns="4"
                   :loading="loading"
                   aria-label="Payment information"
                 >
-                  <KeyValuePairs.Item label="Billing email">
+                  <KeyValueList.Item label="Billing email">
                     <span dir="ltr">billing@example.com</span>
-                  </KeyValuePairs.Item>
-                  <KeyValuePairs.Item label="Auto-renewal">
+                  </KeyValueList.Item>
+                  <KeyValueList.Item label="Auto-renewal">
                     <StatusIndicator
                       severity="success"
                       label="On"
                     />
-                  </KeyValuePairs.Item>
-                  <KeyValuePairs.Item label="Billing address"
-                    >100 Market Street, Suite 400, San Francisco, CA 94105</KeyValuePairs.Item
+                  </KeyValueList.Item>
+                  <KeyValueList.Item label="Billing address"
+                    >100 Market Street, Suite 400, San Francisco, CA 94105</KeyValueList.Item
                   >
-                  <KeyValuePairs.Item label="Tax ID" />
-                </KeyValuePairs>
+                  <KeyValueList.Item label="Tax ID" />
+                </KeyValueList>
               </template>
             </Card>
           </div>

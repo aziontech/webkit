@@ -1,11 +1,11 @@
 # Variables (`edit/variables`)
 
-> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `DataTable`, `Card`, `EmptyState`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.
+> A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `DataTable`, `Card`, `EmptyState`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/edit/variables/variables.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/variables")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -46,9 +46,9 @@ The same controls row as `view/table-view`, all bound to one client-mode `useCol
 
 `Table.CellActions`, named after the variable ("Actions for API_URL"), opens its menu of `DropdownMenu.Group`s placed `bottom-end`: Edit and Clone in the first group, Delete alone in the last. Edit opens the drawer on that variable; Clone inserts a copy right below it with `_COPY` appended to the key; Delete opens the confirmation dialog.
 
-### E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent` (required)
+### E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
-A right-side `Drawer` whose content is one `form` labeled Create Variable or Edit Variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelContent` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create Variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
+A right-side `Drawer` whose content is one `form` labeled Create Variable or Edit Variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create Variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
 
 ### F. Variables section — `SettingsSection`, `Button`, `ToggleGroup` (required)
 
@@ -72,7 +72,7 @@ A `SettingsSection` titled Scope with one large `InputGroupRoot` per scope type:
 
 ### K. Drawer footer — `PanelFooter`, `Button` (required)
 
-`PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving. When the save fails, the drawer stays open with every row kept and a danger `Alert` at the top of `PanelContent` says why ("Variables not saved. You are offline; check your connection and save again."); pressing Save again retries.
+`PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving. When the save fails, the drawer stays open with every row kept and a danger `Alert` at the top of `PanelBody` says why ("Variables not saved. You are offline; check your connection and save again."); pressing Save again retries.
 
 ### L. List states — `EmptyState`, `Button` (required)
 
@@ -180,7 +180,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
@@ -191,7 +191,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -424,7 +424,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
     toast.success(`${key} deleted.`)
   }
 
-  const onRowAction = (value: DropdownMenuOptionValue, row: Variable) => {
+  const onRowAction = (value: DropdownMenuItemValue, row: Variable) => {
     if (value === 'edit') {
       editing.value = row
       drawerOpen.value = true
@@ -1068,7 +1068,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <div
               v-if="saveError"
               class="mb-(--spacing-md)"
@@ -1350,13 +1350,13 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                                 </template>
                               </Input>
                             </template>
-                            <MultiSelect.Option
+                            <MultiSelect.Item
                               v-for="option in visibleScopeOptions(scope)"
                               :key="option.value"
                               :value="option.value"
                             >
                               {{ option.label }}
-                            </MultiSelect.Option>
+                            </MultiSelect.Item>
                           </MultiSelect.Content>
                         </MultiSelect>
                       </div>
@@ -1379,7 +1379,7 @@ Each variant is the same screen in another state: `get_block("edit/variables", {
                 </div>
               </SettingsSection>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">

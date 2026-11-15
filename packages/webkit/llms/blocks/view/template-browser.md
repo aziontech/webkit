@@ -1,11 +1,11 @@
 # TemplateBrowser (`view/template-browser`)
 
-> The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card variant="integration"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a large right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card variant="integration"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a large right `Drawer`: the mark and the name in the header, the description, a `KeyValueList` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `KeyValueList` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/view/template-browser/template-browser.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/template-browser")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DocProse](../../components/doc-prose.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [KeyValuePairs](../../components/key-value-pairs.md), [PageHeader](../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [Skeleton](../../components/skeleton.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DocProse](../../components/doc-prose.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [KeyValueList](../../components/key-value-list.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [Skeleton](../../components/skeleton.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-create-surface`, `webkit-ui-states`
 
 ## Asked as
@@ -50,13 +50,13 @@ One `section` per category that still has matches, labelled by its `h2` in the m
 
 When `status` is `no-match`, the sections give way to a medium `EmptyState` with the filter-slash glyph, "No matching templates", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`. The filter keeps its tokens, so the person can see what hid the tiles.
 
-### E. Preview drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
+### E. Preview drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter` (required)
 
-A large right `Drawer` controlled by `v-model:open`, opened by the tile. `PanelHeader` carries the mark, the template name as `DrawerTitle` and the drawer's own close button; `PanelContent` scrolls; `PanelFooter` holds the actions at the end: View repository (outlined, trailing external-link icon, new tab) and the primary Deploy. Deploy is a link to the deploy template flow with the template's id; the drawer never runs the deploy itself.
+A large right `Drawer` controlled by `v-model:open`, opened by the tile. `PanelHeader` carries the mark, the template name as `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls; `PanelFooter` holds the actions at the end: View repository (outlined, trailing external-link icon, new tab) and the primary Deploy. Deploy is a link to the deploy template flow with the template's id; the drawer never runs the deploy itself.
 
-### F. Template facts — `KeyValuePairs` (required)
+### F. Template facts — `KeyValueList` (required)
 
-Under the description, a two-column `KeyValuePairs` named "Template details": Framework, Category, Repository (in `bdi`) and Updated. Keep it to facts that help choose; settings belong to the deploy form.
+Under the description, a two-column `KeyValueList` named "Template details": Framework, Category, Repository (in `bdi`) and Updated. Keep it to facts that help choose; settings belong to the deploy form.
 
 ### G. README — `Card`, `DocProse` (required)
 
@@ -139,9 +139,9 @@ Each variant is the same screen in another state: `get_block("view/template-brow
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -444,25 +444,25 @@ Each variant is the same screen in another state: `get_block("view/template-brow
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--layout-section-gap)">
             <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
 
-            <KeyValuePairs
+            <KeyValueList
               :columns="2"
               aria-label="Template details"
             >
-              <KeyValuePairs.Item label="Framework">{{
+              <KeyValueList.Item label="Framework">{{
                 FRAMEWORKS[selected.framework]
-              }}</KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Category">{{
+              }}</KeyValueList.Item>
+              <KeyValueList.Item label="Category">{{
                 categoryLabel(selected.category)
-              }}</KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Repository"
-                ><bdi>{{ selected.repository }}</bdi></KeyValuePairs.Item
+              }}</KeyValueList.Item>
+              <KeyValueList.Item label="Repository"
+                ><bdi>{{ selected.repository }}</bdi></KeyValueList.Item
               >
-              <KeyValuePairs.Item label="Updated">{{ selected.updated }}</KeyValuePairs.Item>
-            </KeyValuePairs>
+              <KeyValueList.Item label="Updated">{{ selected.updated }}</KeyValueList.Item>
+            </KeyValueList>
 
             <section
               class="flex flex-col gap-(--layout-group-gap)"
@@ -496,7 +496,7 @@ npm run dev</code></pre>
               </Card>
             </section>
           </div>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">

@@ -19,7 +19,7 @@
   "People read, sort, filter, select and act on records but do not edit cells → use `data-table` (or a hand-composed `table`).",
   "A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.",
   "One record edited field by field → use a form with `field` controls.",
-  "Key and value pairs shown for reading → use `key-value-pairs`."
+  "Key and value pairs shown for reading → use `key-value-list`."
  ],
  "related": [
   "data-table` — the read-and-act table (sorting, filters, paging, toolbar parts); DataGrid is its editable counterpart.",

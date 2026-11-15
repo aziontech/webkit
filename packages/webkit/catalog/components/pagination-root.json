@@ -4,7 +4,7 @@
   "Use Pagination to page through the rows of a table or list; alternative versions of one AI response use ResponseBranches.",
   "A list or table outside `table`'s own footer needs page navigation and a rows-per-page selector.",
   "You know the item count — pass `total` and bind `v-model:page` / `v-model:page-size`; the component renders the info text, the windowed page numbers and the selector.",
-  "The page strip needs custom content (a different info line, extra controls) — compose `Pagination.Info`, `Pagination.Button` and `Pagination.PageSize` through the slots."
+  "The page strip needs custom content (a different info line, extra controls) — compose `Pagination.Description`, `Pagination.Button` and `Pagination.PageSize` through the slots."
  ],
  "avoidWhen": [
   "The rows live in a data-driven `table` → set `paginated` on the table; it renders this pagination in its footer and wires it for you.",

@@ -1,11 +1,11 @@
 # Users (`account/users`)
 
-> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over the table-view controls row (`PropertyFilter` over name, email, role and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email), Email, Role as a `Tag` (Owner, Admin, Developer, Viewer), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with View profile (a `Dialog` with `KeyValuePairs`), Edit role (a `Dialog` with a role `Select` and an Undo toast), Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a large `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `DropdownMenu`, `Dialog` and its parts, `KeyValuePairs`, `Select`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `EmptyState`, `Alert`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
+> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over the table-view controls row (`PropertyFilter` over name, email, role and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email), Email, Role as a `Tag` (Owner, Admin, Developer, Viewer), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with View profile (a `Dialog` with `KeyValueList`), Edit role (a `Dialog` with a role `Select` and an Undo toast), Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a large `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `DropdownMenu`, `Dialog` and its parts, `KeyValueList`, `Select`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `EmptyState`, `Alert`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/users/users.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/users")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValuePairs](../../components/key-value-pairs.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -48,11 +48,11 @@ The Teams cell is a small `MultiSelect` named `Teams of <person>` whose value re
 
 `Table.CellActions` named after the person. Everyone gets `View profile`; everyone but the owner gets `Edit role`. An invited person gets `Resend invitation` (toast: the earlier link stops working) and `Cancel invitation`; everyone else but the owner gets `Remove from account`. Both removals ask in a `ConfirmDialog` that says what the person loses and what stays.
 
-### F. Profile and role dialogs — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `KeyValuePairs`, `Select` (required)
+### F. Profile and role dialogs — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `KeyValueList`, `Select` (required)
 
-View profile opens a medium `Dialog` titled with the person's name and `Avatar`: `KeyValuePairs` with Email, Role, Teams, Status and Last active, then Close and, for anyone but the owner, `Edit role`. Edit role opens a small `Dialog` around a `form`: a role `Select` (Admin, Developer, Viewer; Owner is never assignable) whose `Field.Description` says what the chosen role allows, then Cancel and the primary `Save role`. Saving changes the Role tag at once and raises a toast with Undo; saving the same role closes without a toast.
+View profile opens a medium `Dialog` titled with the person's name and `Avatar`: `KeyValueList` with Email, Role, Teams, Status and Last active, then Close and, for anyone but the owner, `Edit role`. Edit role opens a small `Dialog` around a `form`: a role `Select` (Admin, Developer, Viewer; Owner is never assignable) whose `Field.Description` says what the chosen role allows, then Cancel and the primary `Save role`. Saving changes the Role tag at once and raises a toast with Undo; saving the same role closes without a toast.
 
-### G. Invite drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `DrawerDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
+### G. Invite drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `DrawerDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
 
 A large right `Drawer` around a `form`: a description of what the invitation does, a required Email `Field` and a required Teams `Field` with Developers preselected and a description saying permissions add up. Footer: Cancel and the primary `Send invitation`, which shows its loading state; the drawer cannot be dismissed while it sends. Errors follow `state/form-validation` (SectionRejected): nothing is red before the first Send; after it each field shows its own `Field.Error` and focus moves to the first invalid one.
 
@@ -143,15 +143,15 @@ Each variant is the same screen in another state: `get_block("account/users", { 
   import DrawerDescription from '@aziontech/webkit/drawer-description'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -380,7 +380,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
   const editOnStart = users.value.find((user) => user.id === EDIT_ROLE_ON_START)
   if (editOnStart) openRole(editOnStart)
 
-  const onAction = (value: DropdownMenuOptionValue, user: User) => {
+  const onAction = (value: DropdownMenuItemValue, user: User) => {
     if (value === 'view') {
       pending.value = user
       profileOpen.value = true
@@ -614,13 +614,13 @@ Each variant is the same screen in another state: `get_block("account/users", { 
                   >
                     <MultiSelect.Trigger :aria-label="`Teams of ${displayName(row)}`" />
                     <MultiSelect.Content>
-                      <MultiSelect.Option
+                      <MultiSelect.Item
                         v-for="team in TEAMS"
                         :key="team.value"
                         :value="team.value"
                       >
                         {{ team.label }}
-                      </MultiSelect.Option>
+                      </MultiSelect.Item>
                     </MultiSelect.Content>
                   </MultiSelect>
                 </Tooltip>
@@ -742,7 +742,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
           <PanelHeader class="w-full">
             <DrawerTitle>Invite User</DrawerTitle>
           </PanelHeader>
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
               :disabled="sending"
@@ -784,13 +784,13 @@ Each variant is the same screen in another state: `get_block("account/users", { 
                     aria-label="Teams"
                   />
                   <MultiSelect.Content>
-                    <MultiSelect.Option
+                    <MultiSelect.Item
                       v-for="team in TEAMS"
                       :key="team.value"
                       :value="team.value"
                     >
                       {{ team.label }}
-                    </MultiSelect.Option>
+                    </MultiSelect.Item>
                   </MultiSelect.Content>
                 </MultiSelect>
                 <Field.Description v-if="!errors.teams"
@@ -800,7 +800,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
                 <Field.Error v-else>{{ errors.teams }}</Field.Error>
               </Field>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">
               <Button
@@ -838,39 +838,39 @@ Each variant is the same screen in another state: `get_block("account/users", { 
             <DialogTitle>{{ pending ? displayName(pending) : '' }}</DialogTitle>
           </div>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <DialogDescription>
               What this person can do comes from their role and their teams.
             </DialogDescription>
-            <KeyValuePairs
+            <KeyValueList
               v-if="pending"
               :columns="2"
               aria-label="Profile"
             >
-              <KeyValuePairs.Item label="Email">
+              <KeyValueList.Item label="Email">
                 <span dir="ltr">{{ pending.email }}</span>
-              </KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Role">
+              </KeyValueList.Item>
+              <KeyValueList.Item label="Role">
                 <Tag
                   :label="pending.role"
                   :variant="roleVariant(pending.role)"
                   :severity="roleSeverity(pending.role)"
                   size="small"
                 />
-              </KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Teams">{{ teamsLabel(pending.teams) }}</KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Status">{{ pending.status }}</KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Last active">
+              </KeyValueList.Item>
+              <KeyValueList.Item label="Teams">{{ teamsLabel(pending.teams) }}</KeyValueList.Item>
+              <KeyValueList.Item label="Status">{{ pending.status }}</KeyValueList.Item>
+              <KeyValueList.Item label="Last active">
                 <Table.CellTime
                   v-if="pending.lastActive"
                   :value="pending.lastActive"
                 />
                 <span v-else>Not signed in yet</span>
-              </KeyValuePairs.Item>
-            </KeyValuePairs>
+              </KeyValueList.Item>
+            </KeyValueList>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
@@ -905,7 +905,7 @@ Each variant is the same screen in another state: `get_block("account/users", { 
           <PanelHeader class="w-full">
             <DialogTitle>Edit role</DialogTitle>
           </PanelHeader>
-          <PanelContent>
+          <PanelBody>
             <div class="flex flex-col gap-(--spacing-md)">
               <DialogDescription>
                 Choose what {{ pending ? displayName(pending) : '' }} can do on the account. Their
@@ -920,19 +920,19 @@ Each variant is the same screen in another state: `get_block("account/users", { 
                 >
                   <Select.Trigger id="user-role" />
                   <Select.Content>
-                    <Select.Option
+                    <Select.Item
                       v-for="role in ROLES"
                       :key="role.value"
                       :value="role.value"
                     >
                       {{ role.value }}
-                    </Select.Option>
+                    </Select.Item>
                   </Select.Content>
                 </Select>
                 <Field.Description>{{ roleHint }}</Field.Description>
               </Field>
             </div>
-          </PanelContent>
+          </PanelBody>
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">
               <Button

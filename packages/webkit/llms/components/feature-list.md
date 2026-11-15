@@ -1,6 +1,6 @@
 # Feature List
 
-> Use FeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValuePairs. The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `ai ai-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
+> Use FeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValueList. The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `ai ai-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
 
 - Import: `import FeatureList from '@aziontech/webkit/feature-list'`
 - Category: content · Surface: app · Structure: monolithic
@@ -23,14 +23,14 @@
 
 - Steps or tasks with a done/not-done state (a production checklist, a setup guide) → use `outcome-mark` per row, or the `stepper`.
 - A comparison of features across plans → use `compare-plans` or `table`.
-- Label and value facts → use `key-value-pairs`.
+- Label and value facts → use `key-value-list`.
 - Rows that navigate or carry actions → use `item`.
 - Marketing pricing cards on the site → use `card-pricing` / `pricing-plans`, which carry their own feature lists.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [key-value-pairs](key-value-pairs.md) — the plan facts that sit next to the feature list in a billing card.
+- [key-value-list](key-value-list.md) — the plan facts that sit next to the feature list in a billing card.
 - [card](card.md) — the surface the list sits in; FeatureList brings no surface of its own.
 - [outcome-mark](outcome-mark.md) — the mark for a step that finished, which this check is not.
 

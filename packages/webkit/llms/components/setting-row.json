@@ -16,7 +16,7 @@
  ],
  "avoidWhen": [
   "A stand-alone form field with a visible label above it → use `field` around the control (`Field`, `FieldLabel`, `FieldDescription`).",
-  "A read-only list of label and value pairs → use `key-value-pairs`.",
+  "A read-only list of label and value pairs → use `key-value-list`.",
   "A navigable list row → use `item` directly."
  ],
  "related": [

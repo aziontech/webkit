@@ -1,11 +1,11 @@
 # Marketplace (`view/marketplace`)
 
-> The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/template-browser`): a Featured row of three `featured` integration cards (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card variant="integration"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValuePairs` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/template-browser`): a Featured row of three `featured` integration cards (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card variant="integration"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValueList` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/view/marketplace/marketplace.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/marketplace")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), [DocProse](../../components/doc-prose.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValuePairs](../../components/key-value-pairs.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [DataTable](../../components/data-table.md), [DocProse](../../components/doc-prose.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-form`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -51,17 +51,17 @@ A `ul` grid, one to three tiles a row by width, of `Card variant="integration"`:
 
 When `status` is `no-match`, the grid gives way to a medium `EmptyState` with the filter-slash glyph, "No matching integrations", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`.
 
-### F. Integration drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
+### F. Integration drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter` (required)
 
-A large right `Drawer` controlled by `v-model:open`. Its content is a `form` named `Install <name>` with `novalidate`. `PanelHeader` holds the logo, the name as `DrawerTitle`, "by" the publisher and the drawer's own close button. `PanelContent` scrolls; `PanelFooter` holds, at the end, Configure (outlined, a link to the integration's settings) when it is installed somewhere, and the primary submit Install while an application is left.
+A large right `Drawer` controlled by `v-model:open`. Its content is a `form` named `Install <name>` with `novalidate`. `PanelHeader` holds the logo, the name as `DrawerTitle`, "by" the publisher and the drawer's own close button. `PanelBody` scrolls; `PanelFooter` holds, at the end, Configure (outlined, a link to the integration's settings) when it is installed somewhere, and the primary submit Install while an application is left.
 
 ### G. Install outcome — `Alert` (required)
 
 The inline half of the async-submit outcome, at the top of the drawer: a success `Alert` naming the application ("Rate Guard is installed on storefront. It runs from the next request."), or a danger `Alert` with the server's reason and a Reinstall action. Nothing shows while idle or running; the button and the toast carry the running state.
 
-### H. Integration facts — `KeyValuePairs` (required)
+### H. Integration facts — `KeyValueList` (required)
 
-A two-column `KeyValuePairs` named "Integration details": Publisher (in `bdi`), Category, Context, Version, Updated and Installed on (the applications, or "Not installed").
+A two-column `KeyValueList` named "Integration details": Publisher (in `bdi`), Category, Context, Version, Updated and Installed on (the applications, or "Not installed").
 
 ### I. Overview — `DocProse` (required)
 
@@ -71,9 +71,9 @@ An "Overview" `h3` over the publisher's text in `DocProse`, ending on what insta
 
 An "Install" `h3` ("Install on another application" once installed somewhere) over a required `Field` labelled Application with a `Select` of the applications it is not installed on yet. Submitting without a choice marks the `Field` invalid and shows `Field.Error` ("Select the application to install Rate Guard on."); otherwise `Field.Description` says where it runs. While the run lasts the `Field` is disabled. When no application is left, the field gives way to one sentence and the footer drops Install.
 
-### K. Solution page — `Card`, `Select`, `Field`, `KeyValuePairs`, `DocProse` (optional)
+### K. Solution page — `Card`, `Select`, `Field`, `KeyValueList`, `DocProse` (optional)
 
-The drawer's content as a page, for the integration's own URL (the variant adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `Table.CellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValuePairs`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
+The drawer's content as a page, for the integration's own URL (the variant adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `Table.CellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
 
 ### L. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
 
@@ -174,9 +174,9 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -614,7 +614,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <div class="flex flex-col gap-(--layout-section-gap)">
               <Alert
                 key="alert-1"
@@ -638,23 +638,23 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
 
               <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
 
-              <KeyValuePairs
+              <KeyValueList
                 :columns="2"
                 aria-label="Integration details"
               >
-                <KeyValuePairs.Item label="Publisher"
-                  ><bdi>{{ selected.vendor }}</bdi></KeyValuePairs.Item
+                <KeyValueList.Item label="Publisher"
+                  ><bdi>{{ selected.vendor }}</bdi></KeyValueList.Item
                 >
-                <KeyValuePairs.Item label="Category">{{ selected.category }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Context">{{
+                <KeyValueList.Item label="Category">{{ selected.category }}</KeyValueList.Item>
+                <KeyValueList.Item label="Context">{{
                   CONTEXTS[selected.context]
-                }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Version">{{ selected.version }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Updated">{{ selected.updated }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Installed on">{{
+                }}</KeyValueList.Item>
+                <KeyValueList.Item label="Version">{{ selected.version }}</KeyValueList.Item>
+                <KeyValueList.Item label="Updated">{{ selected.updated }}</KeyValueList.Item>
+                <KeyValueList.Item label="Installed on">{{
                   selected.installedOn.length ? selected.installedOn.join(', ') : 'Not installed'
-                }}</KeyValuePairs.Item>
-              </KeyValuePairs>
+                }}</KeyValueList.Item>
+              </KeyValueList>
 
               <section
                 class="flex flex-col gap-(--layout-group-gap)"
@@ -728,11 +728,11 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                   >
                     <Select.Trigger class="w-full" />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="app in available"
                         :key="app"
                         :value="app"
-                        >{{ app }}</Select.Option
+                        >{{ app }}</Select.Item
                       >
                     </Select.Content>
                   </Select>
@@ -751,7 +751,7 @@ Each variant is the same screen in another state: `get_block("view/marketplace",
                 </p>
               </section>
             </div>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">

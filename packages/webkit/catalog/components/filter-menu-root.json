@@ -1,5 +1,5 @@
 {
- "purpose": "The list filter of a console list: a Filter button that carries the number of applied filters and opens a drill-in menu. The first level lists the fields, each with a summary of what is applied to it; picking a field slides to its values (check rows for a `multiple` field, radio rows for a `single` one, an optional avatar per value, a search box and a no-match line), and a `date` field offers periods plus a custom whole-day range on a `DateRangePicker` (`range-selector-mode=\"absolute-only\"`, no times, no zone selector). Back returns to the fields, Clear removes the field's filter, and the panel's height follows each level. `FilterMenu.Chips` shows the applied fields as chips under the controls row: the field label in muted ink, an avatar stack, the first value and `+N`; activating a chip reopens the menu at that field, removing it clears the field. The value is a `Record<fieldId, values[]>` bound with `v-model`; the menu never filters anything itself. Inside a DataTable, `Table.Filter type=\"menu\"` renders it and `FilterMenu.Chips` with no `fields` renders its chips, both mapped onto the table's `filters` model. It differs from `property-filter` (one text field that builds `property operator value` tokens and combines them with operators and and/or): this menu offers only the values a field has, one click each, which is what most lists need.",
+ "purpose": "The list filter of a console list: a Filter button that carries the number of applied filters and opens a drill-in menu. The first level lists the fields, each with a summary of what is applied to it; picking a field slides to its values (check rows for a `multiple` field, radio rows for a `single` one, an optional avatar per value, a search box and a no-match line), and a `date` field offers periods plus a custom whole-day range on a `DateRangePicker` (`range-selector-mode=\"absolute-only\"`, no times, no zone selector). Back returns to the fields, Clear removes the field's filter, and the panel's height follows each level. `FilterMenu.ChipGroup` shows the applied fields as chips under the controls row: the field label in muted ink, an avatar stack, the first value and `+N`; activating a chip reopens the menu at that field, removing it clears the field. The value is a `Record<fieldId, values[]>` bound with `v-model`; the menu never filters anything itself. Inside a DataTable, `Table.Filter type=\"menu\"` renders it and `FilterMenu.ChipGroup` with no `fields` renders its chips, both mapped onto the table's `filters` model. It differs from `property-filter` (one text field that builds `property operator value` tokens and combines them with operators and and/or): this menu offers only the values a field has, one click each, which is what most lists need.",
  "useWhen": [
   "Use FilterMenu when people filter by picking known values per field (status, region, owner) and see them as chips — the default console list filter.",
   "A resource list or table filtered by a few closed-set fields (status, owner, region, type) and a modification date.",
@@ -13,14 +13,14 @@
   "A single search over names → use `input`, or `table-search` inside a table."
  ],
  "related": [
-  "data-table` — `Table.Filter type=\"menu\"` and `FilterMenu.Chips` (no `fields`) render this menu and its chips over the table's `filters` model.",
+  "data-table` — `Table.Filter type=\"menu\"` and `FilterMenu.ChipGroup` (no `fields`) render this menu and its chips over the table's `filters` model.",
   "property-filter` — the token-based filter field for typed queries.",
   "popover` — the overlay the menu opens in.",
   "date-range-picker` — the range picker the custom date period uses.",
-  "chip` — each applied filter in `FilterMenu.Chips`."
+  "chip` — each applied filter in `FilterMenu.ChipGroup`."
  ],
  "bestPractices": [
-  "Put the Filter button first in the controls row, before the search field, and `FilterMenu.Chips` on its own row below the controls.",
+  "Put the Filter button first in the controls row, before the search field, and `FilterMenu.ChipGroup` on its own row below the controls.",
   "Pass the same `fields` array and the same `v-model` to the menu and to its chips: chips reopen the menu that shares their `fields`.",
   "Give people-like values an `avatar` (an image URL, or `''` for initials) so the chip shows who is filtered.",
   "Keep each field to the values that exist in the data; a field with no values is noise.",

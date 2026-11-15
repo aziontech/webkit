@@ -312,7 +312,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
   import Chart from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import Hint from '@aziontech/webkit/hint'
@@ -369,15 +369,15 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
             />
           </DropdownMenuTrigger>
           <DropdownMenuGroup>
-            <DropdownMenuOption
+            <DropdownMenuItem
               value="copy-query"
               label="Copy query"
             />
-            <DropdownMenuOption
+            <DropdownMenuItem
               value="export-csv"
               label="Export CSV"
             />
-            <DropdownMenuOption
+            <DropdownMenuItem
               value="mean-line"
               label="Show mean line"
             />

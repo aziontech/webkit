@@ -86,21 +86,21 @@
 - `@aziontech/webkit/multi-select-trigger`
 - `@aziontech/webkit/multi-select-content`
 - `@aziontech/webkit/multi-select-group`
-- `@aziontech/webkit/multi-select-option`
+- `@aziontech/webkit/multi-select-item`
 
 ## Sub-components
 
 - `multi-select-trigger/multi-select-trigger.vue` — With the default `variant="summary"` and no `searchable`, a bordered trigger button; otherwise a bordered field (`min-h` of the size, wrapping) that holds the chips (`variant="chips"`: one removable `Chip` of size `small` per selected value, the first `chipLimit` of them followed by a non-removable `+N more` chip when `chipLimit` > 0), then the combobox control — an `input` when `searchable` (its placeholder is the selection summary when `variant="summary"`), else a button — then the chevron. A click anywhere on the field but a chip's remove button opens the panel and focuses the control. The default trigger: bordered trigger field with an optional `#leading` slot (typed with `defineSlots`), selected-value label (comma-joined option labels, or `displayValue`). Each option records its label text with the root when it mounts; on mount `MultiSelectContent` renders only the selected options (and any group without a `value`) once inside a `hidden` container so their labels are known before the panel first opens, then drops it, and chevron-down. Mirrors `Input` size/state visuals.
 - `multi-select-content/multi-select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `default` (the options), `#search` and `#footer` slots, typed with `defineSlots`, and scrolls its option list when content exceeds `max-h-[320px]`. It owns the list states: `loading` replaces the options with a spinner row (`Loading options`), a non-empty `error` replaces them with the message, and when no option is visible it shows `emptyTitle` (or `No matches`). With `allowCustom` and typed text that equals no option label, it appends an `Add "…"` option row after the options. A visually hidden polite status region next to the panel announces the loading, error, empty and match-count states.
 - `multi-select-group/multi-select-group.vue` — Section wrapper for a labelled group of options; hidden while the typed filter hides every one of its options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
-- `multi-select-option/multi-select-option.vue` — Selectable option row; hidden (`v-show`) while `searchable` + `filter` and its label text does not contain the typed text (case and accent insensitive, in the active locale); with a checkbox indicator (the `Checkbox` webkit component), an optional `icon` (an Azion icon class), an optional leading `#leading` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#leading` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
+- `multi-select-item/multi-select-item.vue` — Selectable option row; hidden (`v-show`) while `searchable` + `filter` and its label text does not contain the typed text (case and accent insensitive, in the active locale); with a checkbox indicator (the `Checkbox` webkit component), an optional `icon` (an Azion icon class), an optional leading `#leading` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#leading` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed.
 
 ## v-model
 
-| Model          | Type       | Default     | Emits               | Notes                                                                                                                                                                                                     |
-| -------------- | ---------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`      | `TValue[]` | `[]`        | `update:modelValue` | The selection via `defineModel`. Always an array; each item is the `value` of a selected `<MultiSelectOption>`. Fires when an option is toggled with the next selection array. Uncontrolled when unbound. |
-| `v-model:open` | `boolean`  | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                                |
+| Model          | Type       | Default     | Emits               | Notes                                                                                                                                                                                                   |
+| -------------- | ---------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`      | `TValue[]` | `[]`        | `update:modelValue` | The selection via `defineModel`. Always an array; each item is the `value` of a selected `<MultiSelectItem>`. Fires when an option is toggled with the next selection array. Uncontrolled when unbound. |
+| `v-model:open` | `boolean`  | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                              |
 
 ## States
 
@@ -108,7 +108,7 @@
 - `data-state` on the root and trigger: `open` | `closed`
 - `data-size` on the trigger mirrors the `size` prop
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
-- `data-selected` on `<MultiSelectOption>` when the option's value is part of the current selection
+- `data-selected` on `<MultiSelectItem>` when the option's value is part of the current selection
 - `data-variant` on the root and trigger mirrors `variant`; `data-searchable` on the trigger mirrors `searchable`
 - `loading`: `aria-busy` on the listbox and the loading row; `error`: the message row; `empty`: the empty row — each in place of the options, in the panel
 - `data-variant="create"` on the `Add "…"` row
@@ -168,7 +168,7 @@
 ```vue
 <script setup>
   import MultiSelectContent from '@aziontech/webkit/multi-select-content'
-  import MultiSelectOption from '@aziontech/webkit/multi-select-option'
+  import MultiSelectItem from '@aziontech/webkit/multi-select-item'
   import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
   import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import { ref } from 'vue'
@@ -191,11 +191,11 @@
     >
       <MultiSelectTrigger />
       <MultiSelectContent>
-        <MultiSelectOption
+        <MultiSelectItem
           v-for="o in options"
           :key="o.value"
           :value="o.value"
-          >{{ o.label }}</MultiSelectOption
+          >{{ o.label }}</MultiSelectItem
         >
       </MultiSelectContent>
     </MultiSelectRoot>
@@ -208,7 +208,7 @@
 ```vue
 <script setup>
   import MultiSelectContent from '@aziontech/webkit/multi-select-content'
-  import MultiSelectOption from '@aziontech/webkit/multi-select-option'
+  import MultiSelectItem from '@aziontech/webkit/multi-select-item'
   import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
   import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import { ref } from 'vue'
@@ -236,11 +236,11 @@
     >
       <MultiSelectTrigger />
       <MultiSelectContent>
-        <MultiSelectOption
+        <MultiSelectItem
           v-for="o in options"
           :key="o.value"
           :value="o.value"
-          >{{ o.label }}</MultiSelectOption
+          >{{ o.label }}</MultiSelectItem
         >
       </MultiSelectContent>
     </MultiSelectRoot>
@@ -254,7 +254,7 @@
 <script setup>
   import MultiSelectContent from '@aziontech/webkit/multi-select-content'
   import MultiSelectGroup from '@aziontech/webkit/multi-select-group'
-  import MultiSelectOption from '@aziontech/webkit/multi-select-option'
+  import MultiSelectItem from '@aziontech/webkit/multi-select-item'
   import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
   import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import { ref } from 'vue'
@@ -292,11 +292,11 @@
           :key="g.label"
           :label="g.label"
         >
-          <MultiSelectOption
+          <MultiSelectItem
             v-for="o in g.options"
             :key="o.value"
             :value="o.value"
-            >{{ o.label }}</MultiSelectOption
+            >{{ o.label }}</MultiSelectItem
           >
         </MultiSelectGroup>
       </MultiSelectContent>

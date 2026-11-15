@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/view/table-view/table-view.vue` in `@aziontech/webkit`
 - MCP: `get_block("view/table-view")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`, `utils/csv`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), [PropertyFilter](../../components/property-filter.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md), `use-collection`, `utils/csv`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -59,7 +59,7 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 Every cell is a preset from `@aziontech/webkit/table`, so the list reads like every other WebKit list. Name is `Table.CellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `Table.CellId` (copy button named after the resource). The domain is `Table.CellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `Table.CellStatus`. Last modified is `Table.CellTime` on the `modifiedAt` timestamp: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
 
-### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
+### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
 `Table.CellActions` (an ellipsis button named after the row, e.g. "Actions for resource-01") opens a menu: the everyday actions (Deploy, View details, Clone) in one group, Delete alone in the last group. The root's `select` event hands the option value and the row to the page; Delete opens the confirmation below.
 
@@ -160,12 +160,12 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, {
-    type DropdownMenuOptionValue,
+    type DropdownMenuItemValue,
     type TableColumn,
     type TableExposed
   } from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -303,7 +303,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
     () => pending.value !== null && confirmation.value.trim() === pending.value.name
   )
 
-  const onRowAction = (value: DropdownMenuOptionValue, row: Resource) => {
+  const onRowAction = (value: DropdownMenuItemValue, row: Resource) => {
     if (value !== 'delete') return
     pending.value = row
     confirmation.value = ''
@@ -480,7 +480,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                       @select="(_event, value) => onRowAction(value, row)"
                     >
                       <DropdownMenuGroup>
-                        <DropdownMenuOption
+                        <DropdownMenuItem
                           value="deploy"
                           label="Deploy"
                         >
@@ -489,8 +489,8 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                               class="ai ai-cloud-upload"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
-                        <DropdownMenuOption
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                           value="view"
                           label="View details"
                         >
@@ -499,8 +499,8 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                               class="ai ai-eye"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
-                        <DropdownMenuOption
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                           value="duplicate"
                           label="Clone"
                         >
@@ -509,10 +509,10 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                               class="ai ai-copy"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
+                        </DropdownMenuItem>
                       </DropdownMenuGroup>
                       <DropdownMenuGroup>
-                        <DropdownMenuOption
+                        <DropdownMenuItem
                           value="delete"
                           label="Delete"
                         >
@@ -521,7 +521,7 @@ Each variant is the same screen in another state: `get_block("view/table-view", 
                               class="ai ai-trash"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
+                        </DropdownMenuItem>
                       </DropdownMenuGroup>
                     </Table.CellActions>
                   </template>

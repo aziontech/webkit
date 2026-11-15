@@ -12,7 +12,7 @@
 - Use Pagination to page through the rows of a table or list; alternative versions of one AI response use ResponseBranches.
 - A list or table outside `table`'s own footer needs page navigation and a rows-per-page selector.
 - You know the item count — pass `total` and bind `v-model:page` / `v-model:page-size`; the component renders the info text, the windowed page numbers and the selector.
-- The page strip needs custom content (a different info line, extra controls) — compose `Pagination.Info`, `Pagination.Button` and `Pagination.PageSize` through the slots.
+- The page strip needs custom content (a different info line, extra controls) — compose `Pagination.Description`, `Pagination.Button` and `Pagination.PageSize` through the slots.
 
 ## Do
 
@@ -56,13 +56,13 @@
 ## Sub-component imports
 
 - `@aziontech/webkit/pagination-button`
-- `@aziontech/webkit/pagination-info`
+- `@aziontech/webkit/pagination-description`
 - `@aziontech/webkit/pagination-page-size`
 
 ## Sub-components
 
 - `pagination-button/pagination-button.vue` — one segment of the numbers strip, 28px tall with a 28px minimum width and no horizontal padding; it carries no radius of its own except the outer corners at the two ends of the strip (`var(--shape-control)`). Props `type?: 'previous' | 'next' | 'number' | 'more'`, `active?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `ai ai-chevron-left`; `next` renders `ai ai-chevron-right`; `more` renders `ai ai-ellipsis`; only `number` renders the default slot — `previous` / `next` are icon-only and take their accessible name from `aria-label`; `more` renders as an inert `span` with `aria-hidden="true"` (not focusable, no state layers, never emits `click`). `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own and read against the strip. Hover/active use the DESIGN.md ghost-layer surfaces and are mutually exclusive (pressing replaces the hover layer rather than stacking on it); `active` uses `var(--bg-selected)` + border; `disabled` keeps the type's own surface and mutes the foreground to `var(--text-disabled)`.
-- `pagination-info/pagination-info.vue` — muted page-info text container (default slot), `.text-body-xs` / `var(--text-muted)`.
+- `pagination-description/pagination-description.vue` — muted page-info text container (default slot), `.text-body-xs` / `var(--text-muted)`.
 - `pagination-page-size/pagination-page-size.vue` — rows-per-page selector (native `<select>`), 64×28 (same height as the numbers strip), `var(--shape-control)` radius, `var(--bg-canvas)` frame over a `var(--bg-surface)` field with `var(--border-default)` border, value `.text-label-sm` muted, `ai ai-chevron-down`. Props `modelValue?: number`, `options?: number[]` (default `[10, 25, 50, 100]`). Emits `update:modelValue: [value: number]`. Placed in the Pagination `controls` slot.
 
 ## v-model
@@ -112,7 +112,7 @@
 <template>
   <Pagination>
     <template #info>
-      <Pagination.Info>Showing 1 to 10 of 20 entries</Pagination.Info>
+      <Pagination.Description>Showing 1 to 10 of 20 entries</Pagination.Description>
     </template>
 
     <Pagination.Button

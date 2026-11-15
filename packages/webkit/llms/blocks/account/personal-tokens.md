@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/personal-tokens/personal-tokens.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/personal-tokens")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsSection](../../components/settings-section.md), [Table](../../components/table.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../components/password-input.md), [PropertyFilter](../../components/property-filter.md), [Select](../../components/select.md), [SettingsSection](../../components/settings-section.md), [Table](../../components/table.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -51,7 +51,7 @@ The table's `#empty` slot holds `No matching tokens` with Clear filters; an acco
 
 When the list does not load, a danger `Alert` with Retry takes the table's place and the heading stays.
 
-### G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent`, `SettingsSection`, `PanelFooter` (required)
+### G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsSection`, `PanelFooter` (required)
 
 A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. The fields lock while it submits.
 
@@ -139,14 +139,14 @@ Each variant is the same screen in another state: `get_block("account/personal-t
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PasswordInput from '@aziontech/webkit/password-input'
@@ -390,7 +390,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
   const deleteOpen = ref(false)
   const working = ref(false)
 
-  const onAction = (value: DropdownMenuOptionValue, row: Token) => {
+  const onAction = (value: DropdownMenuItemValue, row: Token) => {
     pending.value = row
     if (value === 'revoke') revokeOpen.value = true
     if (value === 'delete') deleteOpen.value = true
@@ -655,7 +655,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="submitting"
@@ -709,13 +709,13 @@ Each variant is the same screen in another state: `get_block("account/personal-t
                       aria-describedby="token-expiry-hint"
                     />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="option in expiryOptions"
                         :key="option.value"
                         :value="option.value"
                       >
                         {{ option.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                   <HelperText
@@ -726,7 +726,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
                 </Field>
               </SettingsSection>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
@@ -760,7 +760,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
         <PanelHeader class="w-full">
           <DialogTitle>Copy your new token</DialogTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <DialogDescription>
               “{{ revealed.name }}” is ready. This is the only time the token is shown.
@@ -800,7 +800,7 @@ Each variant is the same screen in another state: `get_block("account/personal-t
               </p>
             </Field>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end">
             <Button

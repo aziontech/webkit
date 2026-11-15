@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/resource-detail/resource-detail.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/resource-detail")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [SectionHeader](../../components/section-header.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [TopologyDiagram](../../components/topology-diagram.md), `use-unsaved-changes`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeBlock](../../components/code-block.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Popover](../../components/popover.md), [SaveBar](../../components/save-bar.md), [SectionHeader](../../components/section-header.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [StatusIndicator](../../components/status-indicator.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [TopologyDiagram](../../components/topology-diagram.md), `use-unsaved-changes`
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -34,7 +34,7 @@ The second-level page of one resource. The user arrives from a list row or a dep
 
 ### A. Tab bar — `PageTabs`, `Tabs`, `EmptyState` (required)
 
-A full-bleed `PageTabs` with one `Tabs.Item` per concern: Overview, Versions, Build, Deployments, first in the body and in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. On a tabbed page the primary action (an outlined Deploy) sits on the tab row at medium size. Each tab is its own route: a variant renders the open tab's panel (Application renders all of its panels), and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it, so no tab is dead.
+A full-bleed `PageTabs` with one `Tabs.Trigger` per concern: Overview, Versions, Build, Deployments, first in the body and in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. On a tabbed page the primary action (an outlined Deploy) sits on the tab row at medium size. Each tab is its own route: a variant renders the open tab's panel (Application renders all of its panels), and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it, so no tab is dead.
 
 ### B. Summary subject band — `Card`, `Tooltip`, `Button`, `DropdownMenu`, `IconButton` (required)
 
@@ -54,8 +54,8 @@ For a resource made from the CLI, the `detail/get-started` section follows the s
 
 ## Breadcrumb and environment
 
-- The trail is in the layout's header: `breadcrumbs` from the route meta (`module › resource name`, e.g. Resources › analytics-app), or the page's own `ConsoleLayout.Breadcrumbs`. A page body never renders `Breadcrumb`, `GlobalHeader` or a `<main>`.
-- A service ends the trail on its environment. That crumb is a control, so the page sets the trail itself: `ConsoleLayout.Breadcrumbs` with the module and the service as `items` and, in its default slot, a `Select` with `variant="ghost"` and `size="small"` (no `w-full`: it sizes to its value like a crumb), labelled `Switch environment`, with a search `Input`, each environment tagged with its deployment policy and Add Environment at its foot. The environment is part of the route, so picking one navigates and the page reads it. ServiceOverview and `shell/console` (DetailPage) show it.
+- The trail is in the layout's header: `breadcrumbs` from the route meta (`module › resource name`, e.g. Resources › analytics-app), or the page's own `ConsoleLayout.Breadcrumb`. A page body never renders `Breadcrumb`, `GlobalHeader` or a `<main>`.
+- A service ends the trail on its environment. That crumb is a control, so the page sets the trail itself: `ConsoleLayout.Breadcrumb` with the module and the service as `items` and, in its default slot, a `Select` with `variant="ghost"` and `size="small"` (no `w-full`: it sizes to its value like a crumb), labelled `Switch environment`, with a search `Input`, each environment tagged with its deployment policy and Add Environment at its foot. The environment is part of the route, so picking one navigates and the page reads it. ServiceOverview and `shell/console` (DetailPage) show it.
 - The layout hides its breadcrumbs while compact, so below md the service summary's Deployment Settings band carries its own environment menu.
 
 ## Topology tab
@@ -64,7 +64,7 @@ For a resource made from the CLI, the `detail/get-started` section follows the s
 - Bind, create and remove act on staged state only. Nothing reaches Production until Deploy, and the deploy drawer lists every staged change before it runs.
 - Show the staged count on the tab row next to Deploy, so it stays visible from every tab.
 - Report the deploy through the async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
-- A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`ai ai-plus`) named Add domain inside a `Tooltip`, picked by `node.id === 'domains'`. Never hand-draw a node card to get the `+`.
+- A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`ai ai-plus`) named Add domain inside a `Tooltip`, picked by `node.key === 'domains'`. Never hand-draw a node card to get the `+`.
 
 ## Do
 
@@ -120,7 +120,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 ### Service
 
 - Service: the service summary with its domains, environment menu, ID and the Deployment Settings band.
-- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumbs`), Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
+- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumb`), Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
 
 ### Policy
 
@@ -152,7 +152,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 - `Policy` — The policy summary: the resource it protects, a Rules shortcut and actions, then status, environment, rule count, last edit and the enabled modules, and what the policy inspects.
 - `ResourceVersions` — The Versions tab of the same resource: the small Versions heading with Add Version, the controls row (Filter, search, Refresh, Download CSV, Columns) and the paginated versions table, each row with its code-set name and Latest mark, the comment, the state Tag, who built it and when, and the Open configuration or Deploy actions.
 - `ResourceBuild` — The Build tab of a resource made from the CLI: the small Build heading with an outlined Deploy, the Git repository band holding the Connect Git repository card, the Build configuration band with the read-only framework preset and the build and deploy commands, and the Deployment band with the API token. Editing a command raises the save bar.
-- `ServiceOverview` — A service (its environment crumb is a transparent small select the page sets with `ConsoleLayout.Breadcrumbs`): the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the layout hides the breadcrumb), the production checklist expands into a drawer, and the deployment topology is a `TopologyDiagram` from domains to storage, whose Domains node adds a domain from its `actions` slot: Policy, Error Page and Origin are bindable slots whose changes are staged, counted beside Deploy and listed in the deploy drawer, ending in the toast with Edit and Redeploy.
+- `ServiceOverview` — A service (its environment crumb is a transparent small select the page sets with `ConsoleLayout.Breadcrumb`): the outlined Deploy action sits on the tab row, the summary carries its Deployment Settings band (its own environment menu shows only below md, where the layout hides the breadcrumb), the production checklist expands into a drawer, and the deployment topology is a `TopologyDiagram` from domains to storage, whose Domains node adds a domain from its `actions` slot: Policy, Error Page and Origin are bindable slots whose changes are staged, counted beside Deploy and listed in the deploy drawer, ending in the toast with Edit and Redeploy.
 - `Application` — An application page body with working tabs: Overview (the summary card with the live address, Visit and actions, the deployment, status, active version, framework, source and creation facts, and a band that sends settings changes to the active version), Versions and Deployments (a small `SectionHeader` over a `DataTable` each), and Topology, where `TopologyDiagram` draws domain, workload, firewall, application and function instance. Binding or removing a firewall or function is staged: the tab row counts the changes in a warning `Tag`, Deploy opens a `Drawer` listing them, and the run reports through the async-submit toast with Edit (back to Topology) and Redeploy.
 - `FirstDeploy` — The summary cards before and during the first deploy: a resource never deployed (Not deployed yet in place of the address, None for Deployment and Domains, Not deployed as its status, Not yet as its creation, Connect Git repository and Project upload under Source, and the state band naming the three ways to deploy), then two service cards whose Status reads Deploying · Build with a loading `StatusIndicator`, and Inactive.
 - `ResourceBuildConnected` — The Build tab of a resource with a connected repository: the Git repository band holds the repository link with a danger Disconnect and the Production branch and Preview branch rows, then the Build configuration and Deployment bands. Editing a branch or a command raises the save bar.
@@ -310,7 +310,7 @@ jobs:
   <div class="flex min-h-0 flex-1 flex-col">
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
           :value="tab.value"

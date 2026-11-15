@@ -17,8 +17,8 @@
 ## Do
 
 - Render `Select.Trigger` and `Select.Content` inside the root; the parts read the root's context and throw outside it.
-- Give each `Select.Option` a stable `value`; pass `displayValue` to control how the trigger renders the selection.
-- Type an options list as `SelectOptionItem<string>[]` and render it with `v-for` into `Select.Option` (`:value`, `:icon`, `:disabled`, the `label` as the slot); bind a typed model so `displayValue` and `update:modelValue` take that type with no cast.
+- Give each `Select.Item` a stable `value`; pass `displayValue` to control how the trigger renders the selection.
+- Type an options list as `SelectOptionItem<string>[]` and render it with `v-for` into `Select.Item` (`:value`, `:icon`, `:disabled`, the `label` as the slot); bind a typed model so `displayValue` and `update:modelValue` take that type with no cast.
 - Use `readonly` to show a fixed selection and `disabled` when the field is unavailable; neither opens the panel.
 - A switcher inside a line of text, such as the environment that ends a resource's breadcrumb (`Workloads › workload_01 › Production ⌄`), is `variant="ghost"` with `size="small"` and an `aria-label` on `Select.Trigger`: no border or fill until hover, sized to its value. Never put a bordered field in the header, and never restyle the trigger with `!` overrides.
 - Keep `variant="ghost"` out of forms: it draws no border, so it cannot show the `invalid` or `required` border; a form field is the default `outline` inside a `Field`.
@@ -66,14 +66,14 @@
 - `@aziontech/webkit/select-trigger`
 - `@aziontech/webkit/select-content`
 - `@aziontech/webkit/select-group`
-- `@aziontech/webkit/select-option`
+- `@aziontech/webkit/select-item`
 
 ## Sub-components
 
 - `select-trigger/select-trigger.vue` — Bordered trigger field with an optional `#leading` slot (typed with `defineSlots`), selected-value label, and chevron-down. Mirrors `Input` size/state visuals. The selected value renders inside a `<bdi>`, so its own direction is isolated from the trigger's: an English value on a right-to-left page, or an Arabic value on a left-to-right one, keeps its character order while the label still aligns to the inline start. Prop `valueDir?: 'ltr' | 'rtl' | 'auto'` (default `undefined`, i.e. the `<bdi>` follows the value's first strong character) sets the `<bdi>`'s `dir`; pass `ltr` for values with no strong character whose order matters, such as dial codes (`PhoneInput` passes it, so `+1` never reads `1+`).
 - `select-content/select-content.vue` — Popover panel teleported to `body` and anchored with `usePlacement`; exposes `default` (the options), `#search` and `#footer` slots, typed with `defineSlots`, and scrolls its option list when content exceeds `max-h-[320px]`.
 - `select-group/select-group.vue` — Section wrapper for a labelled group of options; renders a `text-label-sm` heading in `--text-muted` when `label` is set. Groups never sit flush: `--spacing-sm` above every group but the first — the same rhythm DropdownMenu puts around its group divider and Command puts between two bare groups. No hairline: unlike DropdownMenu, this panel separates groups by space alone.
-- `select-option/select-option.vue` — Selectable option row with a trailing check when selected, an optional `icon` (an Azion icon class, default `''`), an optional leading `#leading` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#leading` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed for the column. Each option records its visible text with the root on mount and update, so the trigger names the selection by label; while a selected value has no recorded label and the panel is closed, the content renders only the selected options (and any group without a `value`) once in a `hidden` container (`<testId>__labels`) to collect them; a 1,000-option list with a preselection mounts within the `select-1k-preselected` budget.
+- `select-item/select-item.vue` — Selectable option row with a trailing check when selected, an optional `icon` (an Azion icon class, default `''`), an optional leading `#leading` slot, the option label, and an optional trailing `#tag` slot. **One leading column for the whole list**: as soon as any option in the panel has an `icon` or a `#leading` slot, _every_ option reserves the leading box (a fixed `size-4`), so a list mixing iconed and icon-less options keeps a single label edge instead of a ragged one. A panel where no option has either reserves nothing and pays no indent. The reservation is pure CSS — the list carries `group/options`, each option with a glyph carries `data-leading`, and `group-has-[[data-leading]]/options` turns the column on for all of them — so no option registry is needed for the column. Each option records its visible text with the root on mount and update, so the trigger names the selection by label; while a selected value has no recorded label and the panel is closed, the content renders only the selected options (and any group without a `value`) once in a `hidden` container (`<testId>__labels`) to collect them; a 1,000-option list with a preselection mounts within the `select-1k-preselected` budget.
 - `select-group/select-group.vue` `label` defaults to `''` (no heading, no `aria-label`).
 
 ## v-model
@@ -91,7 +91,7 @@
 - `data-variant` on the root, the trigger and the panel mirrors `variant` (`outline` | `ghost`)
 - `variant="ghost"`: the trigger and root size to the value (`w-auto`, capped at the container), no border, no fill, `--spacing-xs` inline padding, `.text-label-md` like a breadcrumb crumb, `--bg-mask` on hover and while open; the panel stops matching the trigger's width and takes at least `--container-3xs`
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
-- `data-selected` on `<SelectOption>` when the option's value is part of the current selection
+- `data-selected` on `<SelectItem>` when the option's value is part of the current selection
 - Long lists: above 300 options the list mounts in chunks of 100 as they scroll near view (unmounted chunks keep their height, 32 px per option), so opening a 1,000-option list stays within its runtime budget. The first arrow, `Home` or `End` key in the list mounts every option before moving focus, so keyboard navigation always reaches every option.
 
 ## Accessibility
@@ -135,11 +135,11 @@
   >
     <Select.Trigger />
     <Select.Content>
-      <Select.Option
+      <Select.Item
         v-for="o in options"
         :key="o.value"
         :value="o.value"
-        >{{ o.label }}</Select.Option
+        >{{ o.label }}</Select.Item
       >
     </Select.Content>
   </Select>
@@ -173,11 +173,11 @@
     >
       <Select.Trigger />
       <Select.Content>
-        <Select.Option
+        <Select.Item
           v-for="o in options"
           :key="o.value"
           :value="o.value"
-          >{{ o.label }}</Select.Option
+          >{{ o.label }}</Select.Item
         >
       </Select.Content>
     </Select>
@@ -223,11 +223,11 @@
           <Select.Trigger aria-label="Switch environment" />
           <Select.Content>
             <Select.Group label="Environments">
-              <Select.Option
+              <Select.Item
                 v-for="name in environments"
                 :key="name"
                 :value="name"
-                >{{ name }}</Select.Option
+                >{{ name }}</Select.Item
               >
             </Select.Group>
           </Select.Content>

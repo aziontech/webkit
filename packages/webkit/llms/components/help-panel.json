@@ -9,8 +9,8 @@
  "compoundRoot": true,
  "subcomponents": [
   "@aziontech/webkit/help-panel-header",
-  "@aziontech/webkit/help-panel-section",
-  "@aziontech/webkit/help-panel-links"
+  "@aziontech/webkit/help-panel-group",
+  "@aziontech/webkit/help-panel-footer"
  ],
  "purpose": "The content of a help side region: a topic's title, a few sections of short guidance, and the \"Learn more\" links that leave for the documentation. Guided tutorials belong to `tutorial-panel`. It is the thing that goes **inside** a side region, not the region itself: the consumer places it in a `Drawer` or in the page's side rail, and that host owns opening, closing and the close button. It owns no open state, so it has no `Trigger` / `Content` and no `data-state=\"open|closed\"`. Its anatomy is the anatomy of a help page — `Header`, `Section`, `Links` — composed by hand, so a topic can omit the links or carry one section or five.",
  "setup": null,
@@ -30,7 +30,7 @@
  "related": [
   "drawer` — the host that opens, closes and traps focus around a help panel shown as an overlay.",
   "tutorial-panel` — guided tutorials, drawn with these parts plus its own task list.",
-  "link` — the standalone link each `HelpPanel.Links` row is composed from.",
+  "link` — the standalone link each `HelpPanel.Footer` row is composed from.",
   "skeleton` — what the panel renders in place of its content while `loading`.",
   "doc-prose` — long-form documentation prose; a help section is a few short paragraphs, not an article."
  ],
@@ -38,7 +38,7 @@
   "One topic per panel. When the reader moves to another part of the page, swap the panel's content — do not stack two headers.",
   "Keep each `Section` to a short paragraph or a short list. If the reader has to scroll a section, the content belongs in the docs and the panel should link to it.",
   "Title sections with the question the reader is asking (`What is a workload?`), not with a noun (`Overview`).",
-  "Put links to the documentation in `HelpPanel.Links`, at the end, not inline in every section.",
+  "Put links to the documentation in `HelpPanel.Footer`, at the end, not inline in every section.",
   "Close affordances belong to the host. Do not put a close button in `HelpPanel.Header`; the `Drawer` or side rail already has one."
  ],
  "props": [
@@ -62,7 +62,7 @@
   {
    "name": "default",
    "scope": "—",
-   "notes": "The panel's parts — `HelpPanel.Header`, `HelpPanel.Section`, `HelpPanel.Links` — in reading order. Not rendered while `loading`."
+   "notes": "The panel's parts — `HelpPanel.Header`, `HelpPanel.Group`, `HelpPanel.Footer` — in reading order. Not rendered while `loading`."
   }
  ],
  "styleSeam": false,
@@ -70,11 +70,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import HelpPanel from '@aziontech/webkit/help-panel'\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <div class=\"max-w-(--container-xs)\">\n    <HelpPanel aria-label=\"Help: Cache settings\">\n      <HelpPanel.Header\n        title=\"Cache settings\"\n        description=\"How long content stays at the edge before it is fetched again.\"\n      />\n      <HelpPanel.Section title=\"What does the cache TTL control?\">\n        <p>\n          The TTL sets how many seconds an object is served from the edge before the origin is asked\n          for a fresh copy.\n        </p>\n      </HelpPanel.Section>\n      <HelpPanel.Section title=\"When should I bypass the cache?\">\n        <p>Bypass it for responses that change per user, such as carts and account pages.</p>\n      </HelpPanel.Section>\n      <HelpPanel.Links>\n        <Link\n          label=\"Cache settings documentation\"\n          href=\"https://www.azion.com/en/documentation/\"\n          target=\"_blank\"\n        />\n        <Link\n          label=\"Purging cached content\"\n          href=\"https://www.azion.com/en/documentation/\"\n          target=\"_blank\"\n        />\n      </HelpPanel.Links>\n    </HelpPanel>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import HelpPanel from '@aziontech/webkit/help-panel'\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <div class=\"max-w-(--container-xs)\">\n    <HelpPanel aria-label=\"Help: Cache settings\">\n      <HelpPanel.Header\n        title=\"Cache settings\"\n        description=\"How long content stays at the edge before it is fetched again.\"\n      />\n      <HelpPanel.Group title=\"What does the cache TTL control?\">\n        <p>\n          The TTL sets how many seconds an object is served from the edge before the origin is asked\n          for a fresh copy.\n        </p>\n      </HelpPanel.Group>\n      <HelpPanel.Group title=\"When should I bypass the cache?\">\n        <p>Bypass it for responses that change per user, such as carts and account pages.</p>\n      </HelpPanel.Group>\n      <HelpPanel.Footer>\n        <Link\n          label=\"Cache settings documentation\"\n          href=\"https://www.azion.com/en/documentation/\"\n          target=\"_blank\"\n        />\n        <Link\n          label=\"Purging cached content\"\n          href=\"https://www.azion.com/en/documentation/\"\n          target=\"_blank\"\n        />\n      </HelpPanel.Footer>\n    </HelpPanel>\n  </div>\n</template>"
   },
   {
    "name": "Loading",
-   "sfc": "<script setup>\n  import HelpPanel from '@aziontech/webkit/help-panel'\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <div class=\"max-w-(--container-xs)\">\n    <HelpPanel\n      aria-label=\"Help: Cache settings\"\n      loading\n    >\n      <HelpPanel.Header\n        title=\"Cache settings\"\n        description=\"How long content stays at the edge before it is fetched again.\"\n      />\n      <HelpPanel.Section title=\"What does the cache TTL control?\">\n        <p>\n          The TTL sets how many seconds an object is served from the edge before the origin is asked\n          for a fresh copy.\n        </p>\n      </HelpPanel.Section>\n      <HelpPanel.Section title=\"When should I bypass the cache?\">\n        <p>Bypass it for responses that change per user, such as carts and account pages.</p>\n      </HelpPanel.Section>\n      <HelpPanel.Links>\n        <Link\n          label=\"Cache settings documentation\"\n          href=\"https://www.azion.com/en/documentation/\"\n          target=\"_blank\"\n        />\n        <Link\n          label=\"Purging cached content\"\n          href=\"https://www.azion.com/en/documentation/\"\n          target=\"_blank\"\n        />\n      </HelpPanel.Links>\n    </HelpPanel>\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import HelpPanel from '@aziontech/webkit/help-panel'\n  import Link from '@aziontech/webkit/link'\n</script>\n\n<template>\n  <div class=\"max-w-(--container-xs)\">\n    <HelpPanel\n      aria-label=\"Help: Cache settings\"\n      loading\n    >\n      <HelpPanel.Header\n        title=\"Cache settings\"\n        description=\"How long content stays at the edge before it is fetched again.\"\n      />\n      <HelpPanel.Group title=\"What does the cache TTL control?\">\n        <p>\n          The TTL sets how many seconds an object is served from the edge before the origin is asked\n          for a fresh copy.\n        </p>\n      </HelpPanel.Group>\n      <HelpPanel.Group title=\"When should I bypass the cache?\">\n        <p>Bypass it for responses that change per user, such as carts and account pages.</p>\n      </HelpPanel.Group>\n      <HelpPanel.Footer>\n        <Link\n          label=\"Cache settings documentation\"\n          href=\"https://www.azion.com/en/documentation/\"\n          target=\"_blank\"\n        />\n        <Link\n          label=\"Purging cached content\"\n          href=\"https://www.azion.com/en/documentation/\"\n          target=\"_blank\"\n        />\n      </HelpPanel.Footer>\n    </HelpPanel>\n  </div>\n</template>"
   }
  ],
  "docs": "components/help-panel.md"

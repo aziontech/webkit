@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/deployment-settings/deployment-settings.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/deployment-settings")`
-- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Accordion](../../components/accordion.md), [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [PageHeader](../../components/page-header.md), [Pagination](../../components/pagination.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-form`, `webkit-tables`, `webkit-lists`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -52,7 +52,7 @@ The table-view controls row (`view/table-view`): a `PropertyFilter` over name, r
 
 `DataTable` with `v-bind="tableProps"` in a flush `Card`, newest change first. Name, with a `System` `Tag` on Default; Services, the count with a `Shared` `Tag` when more than one service uses it and the service names on a `Tooltip`; Type (System or Custom, hidden by default); Binding policy; Deployment policy; Status as `Table.CellStatus`; Last modified as `Table.CellTime` with the author. `Table.CellActions` named after the setting, absent on Default: Edit, Clone (a copy named `<name>-copy` with no environment), then Delete in its own group, which asks in a `ConfirmDialog` that says how many services fall back to Default. `No matching Deployment Settings` with Clear filters sits in the table's `#empty` slot.
 
-### G. Create and edit drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Textarea`, `RadioGroup` (required)
+### G. Create and edit drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Textarea`, `RadioGroup` (required)
 
 This page owns the Deployment Setting form, in a large right `Drawer` (`create/create-drawer#DeploymentSettings` should match it field for field): General (Name, required and unique; Description; Active `Switch`) and Routing and policy (binding policy and deployment policy as `RadioGroup`s with a description each, starting from the saved defaults). Edit opens the same form filled, titled `Edit Deployment Setting`, with the deployment policy locked because it cannot change after creation. Cancel and the primary `Create Deployment Setting` or `Save changes`, which spins; the drawer cannot be dismissed while it saves. A missing or taken name shows on the field after submit and focus moves to it.
 
@@ -134,7 +134,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -142,7 +142,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import Pagination from '@aziontech/webkit/pagination-root'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -642,7 +642,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
     toast.success(`${row.name} deleted.`)
   }
 
-  const onAction = (value: DropdownMenuOptionValue, row: SettingRowData) => {
+  const onAction = (value: DropdownMenuItemValue, row: SettingRowData) => {
     if (value === 'edit') {
       openEdit(row)
       return
@@ -735,13 +735,13 @@ Each variant is the same screen in another state: `get_block("account/deployment
                     >
                       <Select.Trigger aria-label="Binding policy" />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="policy in BINDING_POLICIES"
                           :key="policy.value"
                           :value="policy.value"
                         >
                           {{ policy.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                   </SettingRow>
@@ -763,13 +763,13 @@ Each variant is the same screen in another state: `get_block("account/deployment
                     >
                       <Select.Trigger aria-label="Deployment policy" />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="policy in DEPLOYMENT_POLICIES"
                           :key="policy.value"
                           :value="policy.value"
                         >
                           {{ policy.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                   </SettingRow>
@@ -911,14 +911,14 @@ Each variant is the same screen in another state: `get_block("account/deployment
                                   :aria-label="`Deployment Setting for ${service.name} ${environment.name}`"
                                 />
                                 <Select.Content>
-                                  <Select.Option
+                                  <Select.Item
                                     v-for="option in optionsFor(environment)"
                                     :key="option.id"
                                     :value="option.id"
                                     :disabled="option.status === 'Inactive'"
                                   >
                                     {{ option.name }}
-                                  </Select.Option>
+                                  </Select.Item>
                                 </Select.Content>
                               </Select>
                               <Tag
@@ -1180,7 +1180,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="submitting"
@@ -1283,7 +1283,7 @@ Each variant is the same screen in another state: `get_block("account/deployment
                 </div>
               </SettingsSection>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">

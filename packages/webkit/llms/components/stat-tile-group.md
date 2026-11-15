@@ -23,14 +23,14 @@
 
 - Figures that stand alone or carry their own sparkline history at different periods → separate `StatTile`s in a grid.
 - Marketing figures on a site band → use `big-numbers`.
-- Label/value details of one resource → use `key-value-pairs`.
+- Label/value details of one resource → use `key-value-list`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [stat-tile](stat-tile.md) — the cell; the group changes its chrome through an injected context, so the tiles take no extra prop.
 - [card](card.md) — a plain surface; do not hand-build a strip by putting tiles in a `Card` grid.
-- [key-value-pairs](key-value-pairs.md) — static label/value details.
+- [key-value-list](key-value-list.md) — static label/value details.
 
 ## Props
 

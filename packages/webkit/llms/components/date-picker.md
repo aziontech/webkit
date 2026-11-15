@@ -78,7 +78,7 @@
 
 - `date-picker-clear/date-picker-clear.vue` — context-aware button that clears the draft selection through injected context; disabled when there is no selection. Placed in the `footer` slot.
 
-Internal parts, not exported, shared with `date-range-picker`: `date-picker-grid/` (the month grid), `date-picker-fields/` (the date and time fields, a Start/End pair for a range), `date-picker-timezone/` (the time zone selector `date-range-picker` shows).
+Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows). A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
 
 ## v-model
 

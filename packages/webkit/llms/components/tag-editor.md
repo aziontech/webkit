@@ -23,7 +23,7 @@
 ## Don’t
 
 - Environment variables, headers or any pairs without tag rules → use `attribute-editor`.
-- Showing tags read-only → use `tag` (or `key-value-pairs`).
+- Showing tags read-only → use `tag` (or `key-value-list`).
 - Picking from a fixed list of labels → use `multi-select`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

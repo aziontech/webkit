@@ -2232,20 +2232,30 @@
   "card-box": "card",
   "cards": "card-list",
   "command-menu": "command",
+  "console-layout-breadcrumbs": "console-layout-breadcrumb",
   "divider": "separator",
   "doc-pagination": "doc-prev-next",
   "dropdown": "dropdown-menu",
+  "dropdown-menu-option": "dropdown-menu-item",
+  "filter-menu-chips": "filter-menu-chip-group",
+  "help-panel-links": "help-panel-footer",
+  "help-panel-section": "help-panel-group",
   "input-number": "number-input",
   "input-password": "password-input",
   "input-text": "input",
+  "key-value-pairs": "key-value-list",
   "message": "alert",
+  "multi-select-option": "multi-select-item",
+  "pagination-info": "pagination-description",
   "paginator": "pagination",
+  "panel-content": "panel-body",
   "pick-list": "transfer-list",
   "progress-bar": "progress",
   "radio-button": "radio-group",
   "radio-cards": "radio-group",
   "resizable-panel": "resizable",
   "segmented-button": "toggle-group",
+  "select-option": "select-item",
   "tab-view": "tabs"
  },
  "removed": {
@@ -2273,7 +2283,7 @@
   "field-phone-number": "Field + FieldLabel + PhoneInput + FieldDescription",
   "field-radio": "RadioGroup v-model with a RadioGroup.Item per option (description on the item)",
   "field-radio-block": "RadioGroup variant=\"card\" v-model with a RadioGroup.Item per option (description on the item)",
-  "field-select": "Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription",
+  "field-select": "Field + FieldLabel + Select (Trigger/Content/Item) + FieldDescription",
   "field-switch": "Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)",
   "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)",
   "field-text": "Field + FieldLabel + Input + FieldDescription",
@@ -2296,7 +2306,7 @@
   "sidebar-group": "SidebarMenu with a SidebarMenu.Group per section (label, the rows as SidebarMenu.Item)",
   "sticky-carousel": "ProcessScroll from @aziontech/webkit/process-scroll with pinned and title-variant=\"centered\"; items become steps",
   "sticky-scroll-code": "FeatureScroll from @aziontech/webkit/feature-scroll; items keep title, description, code and action",
-  "table-applied-filters": "FilterMenu.Chips with no fields in the DataTable filters slot (menu type); the property type shows its own tokens",
+  "table-applied-filters": "FilterMenu.ChipGroup with no fields in the DataTable filters slot (menu type); the property kind shows its own tokens",
   "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)",
   "use-case-links": "CapabilityGrid from @aziontech/webkit/capability-grid with title-variant=\"left\"; items keep icon, title, description and href",
   "vite": "delete the webkitViteConfig import and its mergeConfig call; an app that uses vee-validate sets optimizeDeps: { include: ['vee-validate'] } in its own Vite config"
@@ -2466,7 +2476,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "What exactly will run: a `CodeBlock`, or `KeyValuePairs` with parameters."
+     "notes": "What exactly will run: a `CodeBlock`, or `KeyValueList` with parameters."
     }
    ],
    "surface": "app",
@@ -3499,7 +3509,7 @@
     {
      "name": "input",
      "scope": "—",
-     "notes": "The parameters the tool is called with (`CodeBlock`, `KeyValuePairs`)."
+     "notes": "The parameters the tool is called with (`CodeBlock`, `KeyValueList`)."
     },
     {
      "name": "output",
@@ -6556,8 +6566,8 @@
    "treeShakeableImport": "@aziontech/webkit/help-panel-root",
    "subcomponents": [
     "@aziontech/webkit/help-panel-header",
-    "@aziontech/webkit/help-panel-section",
-    "@aziontech/webkit/help-panel-links"
+    "@aziontech/webkit/help-panel-group",
+    "@aziontech/webkit/help-panel-footer"
    ],
    "category": "content",
    "structure": "composition",
@@ -6581,7 +6591,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The panel's parts — `HelpPanel.Header`, `HelpPanel.Section`, `HelpPanel.Links` — in reading order. Not rendered while `loading`."
+     "notes": "The panel's parts — `HelpPanel.Header`, `HelpPanel.Group`, `HelpPanel.Footer` — in reading order. Not rendered while `loading`."
     }
    ],
    "surface": "app",
@@ -6616,7 +6626,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The panel's parts — `HelpPanel.Header`, `HelpPanel.Section`, `HelpPanel.Links` — in reading order. Not rendered while `loading`."
+     "notes": "The panel's parts — `HelpPanel.Header`, `HelpPanel.Group`, `HelpPanel.Footer` — in reading order. Not rendered while `loading`."
     }
    ],
    "surface": "app",
@@ -6630,20 +6640,20 @@
    "treeShakeableImport": "@aziontech/webkit/help-panel-header",
    "surface": "app"
   },
-  "help-panel-section": {
-   "import": "@aziontech/webkit/help-panel-section",
-   "target": "./src/components/content/help-panel/help-panel-section/help-panel-section.vue",
+  "help-panel-group": {
+   "import": "@aziontech/webkit/help-panel-group",
+   "target": "./src/components/content/help-panel/help-panel-group/help-panel-group.vue",
    "kind": "subcomponent",
    "parent": "help-panel",
-   "treeShakeableImport": "@aziontech/webkit/help-panel-section",
+   "treeShakeableImport": "@aziontech/webkit/help-panel-group",
    "surface": "app"
   },
-  "help-panel-links": {
-   "import": "@aziontech/webkit/help-panel-links",
-   "target": "./src/components/content/help-panel/help-panel-links/help-panel-links.vue",
+  "help-panel-footer": {
+   "import": "@aziontech/webkit/help-panel-footer",
+   "target": "./src/components/content/help-panel/help-panel-footer/help-panel-footer.vue",
    "kind": "subcomponent",
    "parent": "help-panel",
-   "treeShakeableImport": "@aziontech/webkit/help-panel-links",
+   "treeShakeableImport": "@aziontech/webkit/help-panel-footer",
    "surface": "app"
   },
   "hotspot": {
@@ -7422,15 +7432,15 @@
    "examplesFile": "catalog/examples/kbd.json",
    "docsFile": "catalog/components/kbd.json"
   },
-  "key-value-pairs": {
-   "import": "@aziontech/webkit/key-value-pairs",
-   "target": "./src/components/content/key-value-pairs/index.ts",
+  "key-value-list": {
+   "import": "@aziontech/webkit/key-value-list",
+   "target": "./src/components/content/key-value-list/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": "@aziontech/webkit/key-value-pairs-root",
+   "treeShakeableImport": "@aziontech/webkit/key-value-list-root",
    "subcomponents": [
-    "@aziontech/webkit/key-value-pairs-item",
-    "@aziontech/webkit/key-value-pairs-group"
+    "@aziontech/webkit/key-value-list-item",
+    "@aziontech/webkit/key-value-list-group"
    ],
    "category": "content",
    "structure": "composition",
@@ -7468,12 +7478,12 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "KeyValuePairs.Item` children, or `KeyValuePairs.Group` children — one shape per instance."
+     "notes": "KeyValueList.Item` children, or `KeyValueList.Group` children — one shape per instance."
     }
    ],
    "surface": "app",
-   "examplesFile": "catalog/examples/key-value-pairs.json",
-   "docsFile": "catalog/components/key-value-pairs.json"
+   "examplesFile": "catalog/examples/key-value-list.json",
+   "docsFile": "catalog/components/key-value-list.json"
   },
   "overflow-count": {
    "import": "@aziontech/webkit/overflow-count",
@@ -7591,12 +7601,12 @@
    "examplesFile": "catalog/examples/qr-code.json",
    "docsFile": "catalog/components/qr-code.json"
   },
-  "key-value-pairs-root": {
-   "import": "@aziontech/webkit/key-value-pairs-root",
-   "target": "./src/components/content/key-value-pairs/key-value-pairs.vue",
+  "key-value-list-root": {
+   "import": "@aziontech/webkit/key-value-list-root",
+   "target": "./src/components/content/key-value-list/key-value-list.vue",
    "kind": "root",
-   "rootOf": "key-value-pairs",
-   "treeShakeableImport": "@aziontech/webkit/key-value-pairs-root",
+   "rootOf": "key-value-list",
+   "treeShakeableImport": "@aziontech/webkit/key-value-list-root",
    "category": "content",
    "structure": "composition",
    "props": [
@@ -7633,26 +7643,26 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "KeyValuePairs.Item` children, or `KeyValuePairs.Group` children — one shape per instance."
+     "notes": "KeyValueList.Item` children, or `KeyValueList.Group` children — one shape per instance."
     }
    ],
    "surface": "app",
-   "docsFile": "catalog/components/key-value-pairs-root.json"
+   "docsFile": "catalog/components/key-value-list-root.json"
   },
-  "key-value-pairs-item": {
-   "import": "@aziontech/webkit/key-value-pairs-item",
-   "target": "./src/components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue",
+  "key-value-list-item": {
+   "import": "@aziontech/webkit/key-value-list-item",
+   "target": "./src/components/content/key-value-list/key-value-list-item/key-value-list-item.vue",
    "kind": "subcomponent",
-   "parent": "key-value-pairs",
-   "treeShakeableImport": "@aziontech/webkit/key-value-pairs-item",
+   "parent": "key-value-list",
+   "treeShakeableImport": "@aziontech/webkit/key-value-list-item",
    "surface": "app"
   },
-  "key-value-pairs-group": {
-   "import": "@aziontech/webkit/key-value-pairs-group",
-   "target": "./src/components/content/key-value-pairs/key-value-pairs-group/key-value-pairs-group.vue",
+  "key-value-list-group": {
+   "import": "@aziontech/webkit/key-value-list-group",
+   "target": "./src/components/content/key-value-list/key-value-list-group/key-value-list-group.vue",
    "kind": "subcomponent",
-   "parent": "key-value-pairs",
-   "treeShakeableImport": "@aziontech/webkit/key-value-pairs-group",
+   "parent": "key-value-list",
+   "treeShakeableImport": "@aziontech/webkit/key-value-list-group",
    "surface": "app"
   },
   "network-map": {
@@ -8676,7 +8686,7 @@
     {
      "name": "filter-remove",
      "payload": "(event: Event, filter: AppliedFilter)",
-     "notes": "One applied filter was removed (a `FilterMenu.Chips` chip)."
+     "notes": "One applied filter was removed (a `FilterMenu.ChipGroup` chip)."
     },
     {
      "name": "refresh",
@@ -9320,7 +9330,7 @@
    "treeShakeableImport": "@aziontech/webkit/pagination-root",
    "subcomponents": [
     "@aziontech/webkit/pagination-button",
-    "@aziontech/webkit/pagination-info",
+    "@aziontech/webkit/pagination-description",
     "@aziontech/webkit/pagination-page-size"
    ],
    "models": [
@@ -9518,12 +9528,12 @@
    "surface": "app",
    "docsFile": "catalog/components/pagination-button.json"
   },
-  "pagination-info": {
-   "import": "@aziontech/webkit/pagination-info",
-   "target": "./src/components/data/pagination/pagination-info/pagination-info.vue",
+  "pagination-description": {
+   "import": "@aziontech/webkit/pagination-description",
+   "target": "./src/components/data/pagination/pagination-description/pagination-description.vue",
    "kind": "subcomponent",
    "parent": "pagination",
-   "treeShakeableImport": "@aziontech/webkit/pagination-info",
+   "treeShakeableImport": "@aziontech/webkit/pagination-description",
    "surface": "app"
   },
   "pagination-page-size": {
@@ -11430,7 +11440,7 @@
   },
   "toast-root": {
    "import": "@aziontech/webkit/toast-root",
-   "target": "./src/components/feedback/toast/toaster.vue",
+   "target": "./src/components/feedback/toast/toast.vue",
    "kind": "root",
    "rootOf": "toast",
    "treeShakeableImport": "@aziontech/webkit/toast-root",
@@ -13262,7 +13272,7 @@
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/filter-menu-root",
    "subcomponents": [
-    "@aziontech/webkit/filter-menu-chips"
+    "@aziontech/webkit/filter-menu-chip-group"
    ],
    "models": [
     "modelValue",
@@ -13391,12 +13401,12 @@
    "surface": "app",
    "docsFile": "catalog/components/filter-menu-root.json"
   },
-  "filter-menu-chips": {
-   "import": "@aziontech/webkit/filter-menu-chips",
-   "target": "./src/components/data/filter-menu/filter-menu-chips/filter-menu-chips.vue",
+  "filter-menu-chip-group": {
+   "import": "@aziontech/webkit/filter-menu-chip-group",
+   "target": "./src/components/data/filter-menu/filter-menu-chip-group/filter-menu-chip-group.vue",
    "kind": "subcomponent",
    "parent": "filter-menu",
-   "treeShakeableImport": "@aziontech/webkit/filter-menu-chips",
+   "treeShakeableImport": "@aziontech/webkit/filter-menu-chip-group",
    "models": [
     "modelValue"
    ],
@@ -13407,8 +13417,7 @@
    "target": "./src/components/inputs/password-requirements/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": null,
-   "treeShakeableNote": "No tree-shakeable root. Add \"./password-requirements-root\" -> the root .vue, or import sub-components individually.",
+   "treeShakeableImport": "@aziontech/webkit/password-requirements-root",
    "subcomponents": [],
    "category": "inputs",
    "structure": "monolithic",
@@ -13438,6 +13447,40 @@
    "surface": "app",
    "examplesFile": "catalog/examples/password-requirements.json",
    "docsFile": "catalog/components/password-requirements.json"
+  },
+  "password-requirements-root": {
+   "import": "@aziontech/webkit/password-requirements-root",
+   "target": "./src/components/inputs/password-requirements/password-requirements.vue",
+   "kind": "root",
+   "rootOf": "password-requirements",
+   "treeShakeableImport": "@aziontech/webkit/password-requirements-root",
+   "category": "inputs",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "requirements",
+     "type": "PasswordRequirement[]",
+     "default": "DEFAULT_PASSWORD_REQUIREMENTS",
+     "required": "false",
+     "doc": "Rules rendered as chips, one per entry. Defaults to the built-in rule set; an empty array renders only the caption."
+    },
+    {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Caption that opens the row and names the group for assistive tech. Empty uses the locale catalog (`Must contain:`)."
+    },
+    {
+     "name": "value",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Password every rule is evaluated against; pass the PasswordInput value."
+    }
+   ],
+   "surface": "app",
+   "docsFile": "catalog/components/password-requirements-root.json"
   },
   "radio-group": {
    "import": "@aziontech/webkit/radio-group",
@@ -14113,7 +14156,7 @@
    "events": [
     {
      "name": "select",
-     "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue)",
      "notes": "Fires when an enabled option is activated, at any sub-menu depth. The panel closes and focus returns to the element that was focused in the area, except for checkbox and radio options."
     }
    ],
@@ -14165,7 +14208,7 @@
    "events": [
     {
      "name": "select",
-     "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue)",
      "notes": "Fires when an enabled option is activated, at any sub-menu depth. The panel closes and focus returns to the element that was focused in the area, except for checkbox and radio options."
     }
    ],
@@ -14196,7 +14239,7 @@
    "subcomponents": [
     "@aziontech/webkit/dropdown-menu-trigger",
     "@aziontech/webkit/dropdown-menu-group",
-    "@aziontech/webkit/dropdown-menu-option",
+    "@aziontech/webkit/dropdown-menu-item",
     "@aziontech/webkit/dropdown-menu-sub",
     "@aziontech/webkit/dropdown-menu-sub-content",
     "@aziontech/webkit/dropdown-menu-sub-trigger"
@@ -14246,7 +14289,7 @@
    "events": [
     {
      "name": "select",
-     "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue)",
      "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `type=\"checkbox\"` / `type=\"radio\"` options, which keep it open. Options inside a sub-menu emit on the same root event."
     }
    ],
@@ -14322,7 +14365,7 @@
    "events": [
     {
      "name": "select",
-     "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue)",
      "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `type=\"checkbox\"` / `type=\"radio\"` options, which keep it open. Options inside a sub-menu emit on the same root event."
     }
    ],
@@ -14362,12 +14405,12 @@
    "treeShakeableImport": "@aziontech/webkit/dropdown-menu-group",
    "surface": "app"
   },
-  "dropdown-menu-option": {
-   "import": "@aziontech/webkit/dropdown-menu-option",
-   "target": "./src/components/navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue",
+  "dropdown-menu-item": {
+   "import": "@aziontech/webkit/dropdown-menu-item",
+   "target": "./src/components/navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue",
    "kind": "subcomponent",
    "parent": "dropdown-menu",
-   "treeShakeableImport": "@aziontech/webkit/dropdown-menu-option",
+   "treeShakeableImport": "@aziontech/webkit/dropdown-menu-item",
    "surface": "app"
   },
   "dropdown-menu-sub": {
@@ -14404,7 +14447,7 @@
     "@aziontech/webkit/multi-select-trigger",
     "@aziontech/webkit/multi-select-content",
     "@aziontech/webkit/multi-select-group",
-    "@aziontech/webkit/multi-select-option"
+    "@aziontech/webkit/multi-select-item"
    ],
    "models": [
     "modelValue",
@@ -14763,12 +14806,12 @@
    "treeShakeableImport": "@aziontech/webkit/multi-select-group",
    "surface": "app"
   },
-  "multi-select-option": {
-   "import": "@aziontech/webkit/multi-select-option",
-   "target": "./src/components/inputs/multi-select/multi-select-option/multi-select-option.vue",
+  "multi-select-item": {
+   "import": "@aziontech/webkit/multi-select-item",
+   "target": "./src/components/inputs/multi-select/multi-select-item/multi-select-item.vue",
    "kind": "subcomponent",
    "parent": "multi-select",
-   "treeShakeableImport": "@aziontech/webkit/multi-select-option",
+   "treeShakeableImport": "@aziontech/webkit/multi-select-item",
    "surface": "app"
   },
   "select": {
@@ -14781,7 +14824,7 @@
     "@aziontech/webkit/select-trigger",
     "@aziontech/webkit/select-content",
     "@aziontech/webkit/select-group",
-    "@aziontech/webkit/select-option"
+    "@aziontech/webkit/select-item"
    ],
    "models": [
     "modelValue",
@@ -15018,12 +15061,12 @@
    "treeShakeableImport": "@aziontech/webkit/select-group",
    "surface": "app"
   },
-  "select-option": {
-   "import": "@aziontech/webkit/select-option",
-   "target": "./src/components/inputs/select/select-option/select-option.vue",
+  "select-item": {
+   "import": "@aziontech/webkit/select-item",
+   "target": "./src/components/inputs/select/select-item/select-item.vue",
    "kind": "subcomponent",
    "parent": "select",
-   "treeShakeableImport": "@aziontech/webkit/select-option",
+   "treeShakeableImport": "@aziontech/webkit/select-item",
    "surface": "app"
   },
   "separator": {
@@ -15457,7 +15500,7 @@
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/console-layout-root",
    "subcomponents": [
-    "@aziontech/webkit/console-layout-breadcrumbs"
+    "@aziontech/webkit/console-layout-breadcrumb"
    ],
    "models": [
     "searchOpen",
@@ -15586,7 +15629,7 @@
     {
      "name": "breadcrumbs",
      "scope": "—",
-     "notes": "An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumbs` replaces both; hidden while compact."
+     "notes": "An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumb` replaces both; hidden while compact."
     },
     {
      "name": "notifications",
@@ -15746,7 +15789,7 @@
     {
      "name": "breadcrumbs",
      "scope": "—",
-     "notes": "An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumbs` replaces both; hidden while compact."
+     "notes": "An app-wide composed trail that replaces the one built from `breadcrumbs`; a page's `ConsoleLayout.Breadcrumb` replaces both; hidden while compact."
     },
     {
      "name": "notifications",
@@ -15772,12 +15815,12 @@
    "surface": "app",
    "docsFile": "catalog/components/console-layout-root.json"
   },
-  "console-layout-breadcrumbs": {
-   "import": "@aziontech/webkit/console-layout-breadcrumbs",
-   "target": "./src/components/layout/console-layout/console-layout-breadcrumbs/console-layout-breadcrumbs.vue",
+  "console-layout-breadcrumb": {
+   "import": "@aziontech/webkit/console-layout-breadcrumb",
+   "target": "./src/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue",
    "kind": "subcomponent",
    "parent": "console-layout",
-   "treeShakeableImport": "@aziontech/webkit/console-layout-breadcrumbs",
+   "treeShakeableImport": "@aziontech/webkit/console-layout-breadcrumb",
    "surface": "app"
   },
   "use-console-layout": {
@@ -18729,7 +18772,11 @@
    "kind": "component",
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/tabs-root",
-   "subcomponents": [],
+   "subcomponents": [
+    "@aziontech/webkit/tabs-list",
+    "@aziontech/webkit/tabs-trigger",
+    "@aziontech/webkit/tabs-content"
+   ],
    "models": [
     "modelValue"
    ],
@@ -18771,7 +18818,7 @@
   },
   "tabs-root": {
    "import": "@aziontech/webkit/tabs-root",
-   "target": "./src/components/navigation/tabs/tabs-root.vue",
+   "target": "./src/components/navigation/tabs/tabs.vue",
    "kind": "root",
    "rootOf": "tabs",
    "treeShakeableImport": "@aziontech/webkit/tabs-root",
@@ -18813,6 +18860,30 @@
    "surface": "app",
    "docsFile": "catalog/components/tabs-root.json"
   },
+  "tabs-list": {
+   "import": "@aziontech/webkit/tabs-list",
+   "target": "./src/components/navigation/tabs/tabs-list.vue",
+   "kind": "subcomponent",
+   "parent": "tabs",
+   "treeShakeableImport": "@aziontech/webkit/tabs-list",
+   "surface": "app"
+  },
+  "tabs-trigger": {
+   "import": "@aziontech/webkit/tabs-trigger",
+   "target": "./src/components/navigation/tabs/tabs-trigger.vue",
+   "kind": "subcomponent",
+   "parent": "tabs",
+   "treeShakeableImport": "@aziontech/webkit/tabs-trigger",
+   "surface": "app"
+  },
+  "tabs-content": {
+   "import": "@aziontech/webkit/tabs-content",
+   "target": "./src/components/navigation/tabs/tabs-content.vue",
+   "kind": "subcomponent",
+   "parent": "tabs",
+   "treeShakeableImport": "@aziontech/webkit/tabs-content",
+   "surface": "app"
+  },
   "page-tabs": {
    "import": "@aziontech/webkit/page-tabs",
    "target": "./src/components/navigation/page-tabs/page-tabs.vue",
@@ -18843,7 +18914,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "One Tabs.Item per section of the resource."
+     "notes": "One Tabs.Trigger per section of the resource."
     },
     {
      "name": "actions",
@@ -19095,7 +19166,14 @@
    "kind": "component",
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/navigation-menu-root",
-   "subcomponents": [],
+   "subcomponents": [
+    "@aziontech/webkit/navigation-menu-list",
+    "@aziontech/webkit/navigation-menu-item",
+    "@aziontech/webkit/navigation-menu-trigger",
+    "@aziontech/webkit/navigation-menu-content",
+    "@aziontech/webkit/navigation-menu-link",
+    "@aziontech/webkit/navigation-menu-viewport"
+   ],
    "models": [
     "modelValue"
    ],
@@ -19165,7 +19243,7 @@
   },
   "navigation-menu-root": {
    "import": "@aziontech/webkit/navigation-menu-root",
-   "target": "./src/components/navigation/navigation-menu/navigation-menu-root.vue",
+   "target": "./src/components/navigation/navigation-menu/navigation-menu.vue",
    "kind": "root",
    "rootOf": "navigation-menu",
    "treeShakeableImport": "@aziontech/webkit/navigation-menu-root",
@@ -19234,6 +19312,54 @@
    ],
    "surface": "app",
    "docsFile": "catalog/components/navigation-menu-root.json"
+  },
+  "navigation-menu-list": {
+   "import": "@aziontech/webkit/navigation-menu-list",
+   "target": "./src/components/navigation/navigation-menu/navigation-menu-list.vue",
+   "kind": "subcomponent",
+   "parent": "navigation-menu",
+   "treeShakeableImport": "@aziontech/webkit/navigation-menu-list",
+   "surface": "app"
+  },
+  "navigation-menu-item": {
+   "import": "@aziontech/webkit/navigation-menu-item",
+   "target": "./src/components/navigation/navigation-menu/navigation-menu-item.vue",
+   "kind": "subcomponent",
+   "parent": "navigation-menu",
+   "treeShakeableImport": "@aziontech/webkit/navigation-menu-item",
+   "surface": "app"
+  },
+  "navigation-menu-trigger": {
+   "import": "@aziontech/webkit/navigation-menu-trigger",
+   "target": "./src/components/navigation/navigation-menu/navigation-menu-trigger.vue",
+   "kind": "subcomponent",
+   "parent": "navigation-menu",
+   "treeShakeableImport": "@aziontech/webkit/navigation-menu-trigger",
+   "surface": "app"
+  },
+  "navigation-menu-content": {
+   "import": "@aziontech/webkit/navigation-menu-content",
+   "target": "./src/components/navigation/navigation-menu/navigation-menu-content.vue",
+   "kind": "subcomponent",
+   "parent": "navigation-menu",
+   "treeShakeableImport": "@aziontech/webkit/navigation-menu-content",
+   "surface": "app"
+  },
+  "navigation-menu-link": {
+   "import": "@aziontech/webkit/navigation-menu-link",
+   "target": "./src/components/navigation/navigation-menu/navigation-menu-link.vue",
+   "kind": "subcomponent",
+   "parent": "navigation-menu",
+   "treeShakeableImport": "@aziontech/webkit/navigation-menu-link",
+   "surface": "app"
+  },
+  "navigation-menu-viewport": {
+   "import": "@aziontech/webkit/navigation-menu-viewport",
+   "target": "./src/components/navigation/navigation-menu/navigation-menu-viewport.vue",
+   "kind": "subcomponent",
+   "parent": "navigation-menu",
+   "treeShakeableImport": "@aziontech/webkit/navigation-menu-viewport",
+   "surface": "app"
   },
   "tooltip": {
    "import": "@aziontech/webkit/tooltip",
@@ -19509,7 +19635,10 @@
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
     "@aziontech/webkit/dialog-title",
-    "@aziontech/webkit/dialog-trigger"
+    "@aziontech/webkit/dialog-trigger",
+    "@aziontech/webkit/dialog-header",
+    "@aziontech/webkit/dialog-body",
+    "@aziontech/webkit/dialog-footer"
    ],
    "models": [
     "open"
@@ -19662,6 +19791,30 @@
    "treeShakeableImport": "@aziontech/webkit/dialog-trigger",
    "surface": "app"
   },
+  "dialog-header": {
+   "import": "@aziontech/webkit/dialog-header",
+   "target": "./src/components/overlay/panel/panel-header.vue",
+   "kind": "subcomponent",
+   "parent": "dialog",
+   "treeShakeableImport": "@aziontech/webkit/dialog-header",
+   "surface": "app"
+  },
+  "dialog-body": {
+   "import": "@aziontech/webkit/dialog-body",
+   "target": "./src/components/overlay/panel/panel-body.vue",
+   "kind": "subcomponent",
+   "parent": "dialog",
+   "treeShakeableImport": "@aziontech/webkit/dialog-body",
+   "surface": "app"
+  },
+  "dialog-footer": {
+   "import": "@aziontech/webkit/dialog-footer",
+   "target": "./src/components/overlay/panel/panel-footer.vue",
+   "kind": "subcomponent",
+   "parent": "dialog",
+   "treeShakeableImport": "@aziontech/webkit/dialog-footer",
+   "surface": "app"
+  },
   "confirm-dialog": {
    "import": "@aziontech/webkit/confirm-dialog",
    "target": "./src/components/overlay/confirm-dialog/confirm-dialog.vue",
@@ -19788,7 +19941,10 @@
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
     "@aziontech/webkit/drawer-title",
-    "@aziontech/webkit/drawer-trigger"
+    "@aziontech/webkit/drawer-trigger",
+    "@aziontech/webkit/drawer-header",
+    "@aziontech/webkit/drawer-body",
+    "@aziontech/webkit/drawer-footer"
    ],
    "models": [
     "open"
@@ -19969,6 +20125,30 @@
    "treeShakeableImport": "@aziontech/webkit/drawer-trigger",
    "surface": "app"
   },
+  "drawer-header": {
+   "import": "@aziontech/webkit/drawer-header",
+   "target": "./src/components/overlay/panel/panel-header.vue",
+   "kind": "subcomponent",
+   "parent": "drawer",
+   "treeShakeableImport": "@aziontech/webkit/drawer-header",
+   "surface": "app"
+  },
+  "drawer-body": {
+   "import": "@aziontech/webkit/drawer-body",
+   "target": "./src/components/overlay/panel/panel-body.vue",
+   "kind": "subcomponent",
+   "parent": "drawer",
+   "treeShakeableImport": "@aziontech/webkit/drawer-body",
+   "surface": "app"
+  },
+  "drawer-footer": {
+   "import": "@aziontech/webkit/drawer-footer",
+   "target": "./src/components/overlay/panel/panel-footer.vue",
+   "kind": "subcomponent",
+   "parent": "drawer",
+   "treeShakeableImport": "@aziontech/webkit/drawer-footer",
+   "surface": "app"
+  },
   "panel": {
    "import": "@aziontech/webkit/panel",
    "target": "./src/components/overlay/panel/index.ts",
@@ -19976,7 +20156,7 @@
    "compoundRoot": true,
    "treeShakeableImport": "@aziontech/webkit/panel-root",
    "subcomponents": [
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header"
    ],
@@ -20043,12 +20223,12 @@
    "surface": "app",
    "docsFile": "catalog/components/panel-root.json"
   },
-  "panel-content": {
-   "import": "@aziontech/webkit/panel-content",
-   "target": "./src/components/overlay/panel/panel-content.vue",
+  "panel-body": {
+   "import": "@aziontech/webkit/panel-body",
+   "target": "./src/components/overlay/panel/panel-body.vue",
    "kind": "subcomponent",
    "parent": "panel",
-   "treeShakeableImport": "@aziontech/webkit/panel-content",
+   "treeShakeableImport": "@aziontech/webkit/panel-body",
    "surface": "app"
   },
   "panel-footer": {
@@ -28104,7 +28284,7 @@
    "title": "Blocks/Account/AccountHierarchy",
    "source": "blocks/account/account-hierarchy/account-hierarchy.vue",
    "surface": "app",
-   "summary": "The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader` with Create Workspace, a search `Input` over name, ID, type and labels that keeps the ancestors of each match (a small `EmptyState` with Clear search when nothing matches), the paginated tree, an action row with Create Group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource as `KeyValuePairs`) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo. A page body for ConsoleLayout, rendered in its default slot.",
+   "summary": "The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader` with Create Workspace, a search `Input` over name, ID, type and labels that keeps the ancestors of each match (a small `EmptyState` with Clear search when nothing matches), the paginated tree, an action row with Create Group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource as `KeyValueList`) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "manage resources",
     "resource hierarchy",
@@ -28142,11 +28322,11 @@
     "Field",
     "IconButton",
     "Input",
-    "KeyValuePairs",
+    "KeyValueList",
     "Link",
     "MultiSelect",
     "PageHeader",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "Select",
@@ -28173,11 +28353,11 @@
     "@aziontech/webkit/field",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
-    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/link",
     "@aziontech/webkit/multi-select",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",
@@ -28286,7 +28466,7 @@
    "title": "Blocks/Account/Billing",
    "source": "blocks/account/billing/billing.vue",
    "surface": "app",
-   "summary": "The Billing page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValuePairs` for plan start, next charge date and value as `Currency`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `Table` with No., Invoice ID, Plan, Cycle, Seats, Billing date, Amount, Payment method, Status as `Table.CellStatus` and a download `IconButton` per invoice. Payment methods shows Payment information as `KeyValuePairs` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `Table` of cards (holder with a Default `Tag`, brand and last four, expiry, `Table.CellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.",
+   "summary": "The Billing page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValueList` for plan start, next charge date and value as `Currency`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `Table` with No., Invoice ID, Plan, Cycle, Seats, Billing date, Amount, Payment method, Status as `Table.CellStatus` and a download `IconButton` per invoice. Payment methods shows Payment information as `KeyValueList` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `Table` of cards (holder with a Default `Tag`, brand and last four, expiry, `Table.CellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "billing",
     "billing page",
@@ -28323,7 +28503,7 @@
     "DropdownMenu",
     "EmptyState",
     "IconButton",
-    "KeyValuePairs",
+    "KeyValueList",
     "PageHeader",
     "PageTabs",
     "PaymentBrand",
@@ -28350,7 +28530,7 @@
     "@aziontech/webkit/dropdown-menu",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
-    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
     "@aziontech/webkit/payment-brand",
@@ -28392,7 +28572,7 @@
    "title": "Blocks/Account/ChangePlanDrawer",
    "source": "blocks/account/change-plan-drawer/change-plan-drawer.vue",
    "surface": "app",
-   "summary": "The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, with what is included as a `FeatureList`, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelContent`, `ToggleGroup`, `CardPricing`, `FeatureList` and `Button`.",
+   "summary": "The Change plan drawer the Billing page opens from its Subscription Plan card: a Monthly or Yearly switch over the Free, Pro and Enterprise `CardPricing` cards, each with its feature list and one action, on an account that is on Free. Continue with Pro opens the Upgrade to Pro drawer on top of it, with what is included as a `FeatureList`, and Contact sales closes it. In the upgrade drawer a declined card lands in an `Alert` in the Payment method card with the number invalid, and a payment-service failure raises an error toast with Retry. Built from `Drawer`, `PanelHeader`, `PanelBody`, `ToggleGroup`, `CardPricing`, `FeatureList` and `Button`.",
    "intents": [
     "change plan",
     "plan selection",
@@ -28441,7 +28621,7 @@
     "Field",
     "Input",
     "Link",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "PaymentBrand",
@@ -28464,7 +28644,7 @@
     "@aziontech/webkit/field",
     "@aziontech/webkit/input",
     "@aziontech/webkit/link",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/payment-brand",
@@ -28529,7 +28709,7 @@
     "Item",
     "PageHeader",
     "Pagination",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "PropertyFilter",
@@ -28566,7 +28746,7 @@
     "@aziontech/webkit/item",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/pagination-root",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/property-filter",
@@ -28729,7 +28909,7 @@
     "HelperText",
     "Input",
     "Link",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "PaymentBrand",
@@ -28757,7 +28937,7 @@
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/input",
     "@aziontech/webkit/link",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/payment-brand",
@@ -28887,7 +29067,7 @@
     "IconButton",
     "Input",
     "PageHeader",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "PasswordInput",
@@ -28923,7 +29103,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/password-input",
@@ -29072,7 +29252,7 @@
    "title": "Blocks/Account/Users",
    "source": "blocks/account/users/users.vue",
    "surface": "app",
-   "summary": "The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over the table-view controls row (`PropertyFilter` over name, email, role and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email), Email, Role as a `Tag` (Owner, Admin, Developer, Viewer), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with View profile (a `Dialog` with `KeyValuePairs`), Edit role (a `Dialog` with a role `Select` and an Undo toast), Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a large `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `DropdownMenu`, `Dialog` and its parts, `KeyValuePairs`, `Select`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `EmptyState`, `Alert`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.",
+   "summary": "The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over the table-view controls row (`PropertyFilter` over name, email, role and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email), Email, Role as a `Tag` (Owner, Admin, Developer, Viewer), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with View profile (a `Dialog` with `KeyValueList`), Edit role (a `Dialog` with a role `Select` and an Undo toast), Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a large `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `DropdownMenu`, `Dialog` and its parts, `KeyValueList`, `Select`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `EmptyState`, `Alert`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.",
    "intents": [
     "users",
     "users management",
@@ -29123,10 +29303,10 @@
     "Field",
     "IconButton",
     "Input",
-    "KeyValuePairs",
+    "KeyValueList",
     "MultiSelect",
     "PageHeader",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "PropertyFilter",
@@ -29158,10 +29338,10 @@
     "@aziontech/webkit/field",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
-    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/multi-select",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/property-filter",
@@ -29368,7 +29548,7 @@
    "title": "Blocks/Ai/AiChatDrawer",
    "source": "blocks/ai/ai-chat-drawer/ai-chat-drawer.vue",
    "surface": "app",
-   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValuePairs` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
+   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
    "intents": [
     "ai assistant drawer",
     "ask ai about this page",
@@ -29401,7 +29581,7 @@
     "DrawerTitle",
     "EmptyState",
     "IconButton",
-    "KeyValuePairs",
+    "KeyValueList",
     "PageHeader",
     "PanelHeader",
     "PromptInput",
@@ -29424,7 +29604,7 @@
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
-    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/prompt-input",
@@ -29557,7 +29737,7 @@
     "IconButton",
     "Input",
     "Item",
-    "KeyValuePairs",
+    "KeyValueList",
     "OtpInput",
     "PageHeader",
     "PasswordInput",
@@ -29581,7 +29761,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
-    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/otp-input",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/password-input",
@@ -29645,7 +29825,7 @@
    "title": "Blocks/Create/CreateDrawer",
    "source": "blocks/create/create-drawer/create-drawer.vue",
    "surface": "app",
-   "summary": "The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer; required fields carry the Required marker from the start, an empty submit marks them invalid with a `Field.Error` under each, the button shows its loading state while the save is in flight, a successful save closes the drawer with a toast naming the item, and a failed save keeps the values with a danger Alert and Retry above the footer. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field` (with `InputGroup`), `RadioGroup` (`variant=\"card\"`), `Field` with `Field.Description` and `Field.Error` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.",
+   "summary": "The right-side form drawer every item created or edited inside a resource opens, such as a domain, a record, an environment, a variable or a rule: a panel header with the title, a muted one-line description and the close button; a disabled-while-saving fieldset of `SettingsSection` bands, each a heading with a hint glyph over its stacked `Field` components; and one submit button in the footer; required fields carry the Required marker from the start, an empty submit marks them invalid with a `Field.Error` under each, the button shows its loading state while the save is in flight, a successful save closes the drawer with a toast naming the item, and a failed save keeps the values with a danger Alert and Retry above the footer. Its state resets each time it opens, so the content stays in place while it closes. Add Domain opens from under Domains on the resource’s Settings tab, from a domain row menu to edit it, and from Add Environment in the resource environment menu. The Environment select lists every environment, says when choosing one connects it to the resource, and ends in a Create Environment option. Choosing Bring my own domain drops the free-domain addon and reveals the Certificate select, preselecting a certificate that already covers the address. Built from `SettingsSection`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field` (with `InputGroup`), `RadioGroup` (`variant=\"card\"`), `Field` with `Field.Description` and `Field.Error` around `Select`, `NumberInput`, `Input`, `Textarea`, `Link`, `Alert` and `Button`. The same drawer comes in three more shapes, each a variant: ItemRows, an Origins page inside a resource whose Add Origin drawer groups `Item` rows under section-titled flush `Card`s; NestedDrawer, an Add Rule drawer on a resource's Rules Engine whose Origin select creates the missing origin of that same resource in a second, medium drawer stacked above it and selects it back; and DeploymentSettings, the drawer that creates a Deployment Setting from a Build and deployment settings panel. CreateEnvironment is the Create Environment drawer, on its own or stacked above Add Domain; FunctionInstance adds or edits a function instance whose arguments are a `SchemaForm` with a Fields or JSON (`CodeEditor`) `ToggleGroup`. The variants add `PageHeader`, `SettingRow`, `Card`, `Item`, `Switch`, `Textarea`, `SchemaForm`, `CodeEditor` and `ToggleGroup`.",
    "intents": [
     "create domain",
     "add domain",
@@ -29732,7 +29912,7 @@
     "DrawerTitle",
     "DrawerTrigger",
     "DropdownMenuGroup",
-    "DropdownMenuOption",
+    "DropdownMenuItem",
     "DropdownMenuRoot",
     "DropdownMenuTrigger",
     "Field",
@@ -29742,11 +29922,11 @@
     "Input",
     "InputGroup",
     "Item",
-    "KeyValuePairs",
+    "KeyValueList",
     "Link",
     "NumberInput",
     "PageHeader",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "RadioGroup",
@@ -29772,7 +29952,7 @@
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/drawer-trigger",
     "@aziontech/webkit/dropdown-menu-group",
-    "@aziontech/webkit/dropdown-menu-option",
+    "@aziontech/webkit/dropdown-menu-item",
     "@aziontech/webkit/dropdown-menu-root",
     "@aziontech/webkit/dropdown-menu-trigger",
     "@aziontech/webkit/field",
@@ -29782,11 +29962,11 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/input-group",
     "@aziontech/webkit/item",
-    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/link",
     "@aziontech/webkit/number-input",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/radio-group",
@@ -30167,7 +30347,7 @@
    "title": "Blocks/Create/DeployDrawer",
    "source": "blocks/create/deploy-drawer/deploy-drawer.vue",
    "surface": "app",
-   "summary": "The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`variant=\"card\"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.",
+   "summary": "The drawer a platform deploys from, opened by the outlined Deploy button on a service or a project. Every variant shares one Resources card: a row per resource with its Ready tag, the picked version and a Change version menu, and a Dependencies disclosure with the modules and integrations the service references. On a service the default flow is environment first: the Project card uses an existing project or creates one, the environments come as radio blocks, and Projects impacted lists every project the environment’s shared Deployment Settings deploy to. A deploy started without a pinned version first builds one, so the drawer opens as Build and deployment with a Building row and the other sections faded. A service can also deploy project first, picking the project before the environment. On a project, the drawer carries every resource it serves and warns when its Deployment Settings also deploy elsewhere. The footer counts the version changes and where they go live; while the targets resolve the sections are Skeletons, a load failure is an Alert with Retry, and a project with no environment shows an EmptyState with Add environment, Deploy disabled in all three. Built from `SettingsSection`, `Drawer`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Card`, `Item`, `Accordion`, `Separator`, `Popover`, `DropdownMenu`, `ToggleGroup`, `RadioGroup` (`variant=\"card\"`), `Input`, `Avatar`, `Tag`, `Spinner`, `Skeleton`, `EmptyState`, `Alert`, `Tooltip` and `Button`.",
    "intents": [
     "deploy drawer",
     "deploy panel",
@@ -30200,7 +30380,7 @@
     "Input",
     "Item",
     "Link",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "Popover",
@@ -30229,7 +30409,7 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/popover",
@@ -30278,7 +30458,7 @@
    "title": "Blocks/Create/DeployProgressDialog",
    "source": "blocks/create/deploy-progress-dialog/deploy-progress-dialog.vue",
    "surface": "app",
-   "summary": "The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeMark` once it settles. When the run settles the header gains a large `OutcomeMark` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeMark`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.",
+   "summary": "The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeMark` once it settles. When the run settles the header gains a large `OutcomeMark` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeMark`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.",
    "intents": [
     "deploy progress",
     "deploy progress dialog",
@@ -30303,7 +30483,7 @@
     "EmptyState",
     "Item",
     "OutcomeMark",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "Progress",
@@ -30322,7 +30502,7 @@
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/item",
     "@aziontech/webkit/outcome-mark",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/progress",
@@ -30827,7 +31007,7 @@
     "Link",
     "PageHeader",
     "PageTabs",
-    "PanelContent",
+    "PanelBody",
     "PanelHeader",
     "Select",
     "StatTile",
@@ -30856,7 +31036,7 @@
     "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",
     "@aziontech/webkit/stat-tile",
@@ -31052,7 +31232,7 @@
    "title": "Blocks/Dashboard/DashboardSwitcher",
    "source": "blocks/dashboard/dashboard-switcher/dashboard-switcher.vue",
    "surface": "app",
-   "summary": "The dashboards hub: one page that switches between every dashboard of the account. A `PageHeader` named Dashboards sits over the controls row: a grouped `Select` of the dashboards (Platform, Security, Business and Yours) with a chart icon, a `FilterMenu` that sets the shared Period and counts it on its Filter button, and a Refresh `IconButton` in a `Tooltip` at the end. The applied period shows as a removable chip in `FilterMenu.Chips`. Under the controls, a placeholder body for the chosen dashboard (in an app, render the real dashboard block there, and `configurable-dashboard` for Custom): four `StatTile`s with a `Hint` each and the comparison period, a `ChartCard` with the dashboard's `Chart` and its tooltip total, and a `ChartCard` with a ranked `BarList`. Switching the dashboard loads its body (Skeletons in place); changing the period or pressing Refresh refetches it, holding the previous render. A dashboard that owns its period (Executive summary, Spend, Project status) hides the shared filter and its chip and shows its own quarter `ToggleGroup` instead. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The dashboards hub: one page that switches between every dashboard of the account. A `PageHeader` named Dashboards sits over the controls row: a grouped `Select` of the dashboards (Platform, Security, Business and Yours) with a chart icon, a `FilterMenu` that sets the shared Period and counts it on its Filter button, and a Refresh `IconButton` in a `Tooltip` at the end. The applied period shows as a removable chip in `FilterMenu.ChipGroup`. Under the controls, a placeholder body for the chosen dashboard (in an app, render the real dashboard block there, and `configurable-dashboard` for Custom): four `StatTile`s with a `Hint` each and the comparison period, a `ChartCard` with the dashboard's `Chart` and its tooltip total, and a `ChartCard` with a ranked `BarList`. Switching the dashboard loads its body (Skeletons in place); changing the period or pressing Refresh refetches it, holding the previous render. A dashboard that owns its period (Executive summary, Spend, Project status) hides the shared filter and its chip and shows its own quarter `ToggleGroup` instead. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "dashboards",
     "dashboard switcher",
@@ -31326,7 +31506,7 @@
     "Card",
     "DataTable",
     "DropdownMenuGroup",
-    "DropdownMenuOption",
+    "DropdownMenuItem",
     "EmptyState",
     "Hint",
     "IconButton",
@@ -31356,7 +31536,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu-group",
-    "@aziontech/webkit/dropdown-menu-option",
+    "@aziontech/webkit/dropdown-menu-item",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/hint",
     "@aziontech/webkit/icon-button",
@@ -31522,7 +31702,7 @@
     "Item",
     "Link",
     "PageHeader",
-    "PanelContent",
+    "PanelBody",
     "PanelHeader",
     "Select",
     "SeverityTag",
@@ -31556,7 +31736,7 @@
     "@aziontech/webkit/item",
     "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",
     "@aziontech/webkit/severity-tag",
@@ -31684,7 +31864,7 @@
     "Card",
     "DataTable",
     "DropdownMenuGroup",
-    "DropdownMenuOption",
+    "DropdownMenuItem",
     "Table",
     "Tag"
    ],
@@ -31693,7 +31873,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu-group",
-    "@aziontech/webkit/dropdown-menu-option",
+    "@aziontech/webkit/dropdown-menu-item",
     "@aziontech/webkit/table",
     "@aziontech/webkit/tag"
    ],
@@ -31846,7 +32026,7 @@
     "Drawer",
     "DrawerTitle",
     "DropdownMenuGroup",
-    "DropdownMenuOption",
+    "DropdownMenuItem",
     "EmptyState",
     "Field",
     "FileDropzone",
@@ -31857,7 +32037,7 @@
     "ItemList",
     "PageHeader",
     "PageTabs",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "PropertyFilter",
@@ -31885,7 +32065,7 @@
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu-group",
-    "@aziontech/webkit/dropdown-menu-option",
+    "@aziontech/webkit/dropdown-menu-item",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
     "@aziontech/webkit/file-dropzone",
@@ -31896,7 +32076,7 @@
     "@aziontech/webkit/item-list",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/property-filter",
@@ -32049,7 +32229,7 @@
    "source": "blocks/detail/production-checklist/production-checklist.vue",
    "surface": "app",
    "kind": "fragment",
-   "summary": "A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button (named by a `Tooltip`) and clickable rows that open the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `Card`, `Item`, `Tag`, `IconButton`, `Tooltip`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter` and `Button`.",
+   "summary": "A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button (named by a `Tooltip`) and clickable rows that open the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `Card`, `Item`, `Tag`, `IconButton`, `Tooltip`, `Drawer`, `PanelHeader`, `PanelBody`, `PanelFooter` and `Button`.",
    "intents": [
     "production checklist",
     "go-live checklist",
@@ -32073,7 +32253,7 @@
     "DrawerTitle",
     "IconButton",
     "Item",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "Tag",
@@ -32087,7 +32267,7 @@
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/item",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/tag",
@@ -32178,7 +32358,7 @@
     "Link",
     "PageHeader",
     "PageTabs",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "Popover",
@@ -32220,7 +32400,7 @@
     "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/popover",
@@ -32360,7 +32540,7 @@
    "title": "Blocks/Detail/VersionDetail",
    "source": "blocks/detail/version-detail/version-detail.vue",
    "surface": "app",
-   "summary": "One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumbs`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the Edit/RuleBuilder template. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `DataTable`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.",
+   "summary": "One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumb`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the Edit/RuleBuilder template. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `DataTable`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.",
    "intents": [
     "version detail",
     "resource version",
@@ -32419,7 +32599,7 @@
     "NumberInput",
     "PageHeader",
     "PageTabs",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "Resizable",
@@ -32463,7 +32643,7 @@
     "@aziontech/webkit/number-input",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/resizable",
@@ -32689,7 +32869,7 @@
     "NumberInput",
     "PageHeader",
     "PageTabs",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "PasswordInput",
@@ -32730,7 +32910,7 @@
     "@aziontech/webkit/number-input",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/password-input",
@@ -32840,7 +33020,7 @@
     "IconButton",
     "Input",
     "Item",
-    "KeyValuePairs",
+    "KeyValueList",
     "Link",
     "LogViewContent",
     "LogView",
@@ -32874,7 +33054,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
-    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/link",
     "@aziontech/webkit/log-view-content",
     "@aziontech/webkit/log-view-root",
@@ -32923,7 +33103,7 @@
    "title": "Blocks/Edit/RuleBuilder",
    "source": "blocks/edit/rule-builder/rule-builder.vue",
    "surface": "app",
-   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant=\"card\"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.",
+   "summary": "A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant=\"card\"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.",
    "intents": [
     "rules engine",
     "rule form",
@@ -32955,7 +33135,7 @@
     "HelperText",
     "Input",
     "Item",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "RadioGroup",
@@ -32978,7 +33158,7 @@
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/radio-group",
@@ -33046,7 +33226,7 @@
     "HelperText",
     "IconButton",
     "Input",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "Select",
@@ -33076,7 +33256,7 @@
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",
@@ -33116,7 +33296,7 @@
    "title": "Blocks/Edit/Variables",
    "source": "blocks/edit/variables/variables.vue",
    "surface": "app",
-   "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `DataTable`, `Card`, `EmptyState`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.",
+   "summary": "A key/value editor, drawn as a variables list page and the Create Variable drawer its heading action opens. The list follows the table-view recipe: one client-mode `useCollection` drives a `PropertyFilter`, `CollectionPreferences` and a data-driven `DataTable`, with a first-use and a no-match `EmptyState`; each row's Edit opens the drawer on that variable, Clone inserts a copy below it, and Delete opens the typed `ConfirmDialog` of delete-dialog. In the drawer the variables are an `AttributeEditor` (add, remove, focus, announcements, minimum one row) whose `row` slot draws each variable as a pair of `InputGroupRoot` rows with `InputGroupInput` fields, a Key row with a Remove button and a Value row with a show-value button and a Secret checkbox, beside a Form or JSON view and an Upload of a .env file; every scope is an `InputGroupRoot` joining its label, a `MultiSelect` of resources and an enable `Switch`, with Global giving way to any specific scope. Required and invalid states appear only after Save is pressed; every create, edit, clone and delete raises a success toast, and a save that fails keeps the drawer open with a danger `Alert`. Built from `AttributeEditor`, `PageHeader`, `PropertyFilter`, `CollectionPreferences`, `SettingsSection`, `DataTable`, `Card`, `EmptyState`, `Table.CellId`, `Table.CellLink`, `Table.CellActions`, `Avatar`, `DropdownMenu`, `ConfirmDialog`, `Alert`, `Input`, `IconButton`, `Tooltip`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `InputGroupRoot`, `InputGroupAddon`, `InputGroupInput`, `Checkbox`, `ToggleGroup`, `MultiSelect`, `Switch`, `HelperText` and `Button`; the JSON view is a webkit `Textarea`. A page body for ConsoleLayout.",
    "intents": [
     "variables",
     "environment variables",
@@ -33186,7 +33366,7 @@
     "InputGroupRoot",
     "MultiSelect",
     "PageHeader",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "PropertyFilter",
@@ -33224,7 +33404,7 @@
     "@aziontech/webkit/input-group-root",
     "@aziontech/webkit/multi-select",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/property-filter",
@@ -33454,7 +33634,7 @@
     "Item",
     "PageHeader",
     "PageTabs",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "Select",
@@ -33489,7 +33669,7 @@
     "@aziontech/webkit/item",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",
@@ -34377,14 +34557,14 @@
     "Dialog",
     "DialogTitle",
     "DropdownMenuGroup",
-    "DropdownMenuOption",
+    "DropdownMenuItem",
     "EmptyState",
     "Field",
     "FileDropzone",
     "FileTokenGroup",
     "IconButton",
     "Input",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "SplitButton",
@@ -34408,14 +34588,14 @@
     "@aziontech/webkit/dialog-root",
     "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/dropdown-menu-group",
-    "@aziontech/webkit/dropdown-menu-option",
+    "@aziontech/webkit/dropdown-menu-item",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
     "@aziontech/webkit/file-dropzone",
     "@aziontech/webkit/file-token-group",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/split-button",
@@ -34451,7 +34631,7 @@
    "title": "Blocks/View/Marketplace",
    "source": "blocks/view/marketplace/marketplace.vue",
    "surface": "app",
-   "summary": "The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/template-browser`): a Featured row of three `featured` integration cards (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card variant=\"integration\"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValuePairs` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The marketplace page: a medium page heading with the outlined Documentation action over the integration catalog, the integrations installed into an existing application (templates live in `view/template-browser`): a Featured row of three `featured` integration cards (centred, raised, the context badge in the corner) while no filter is set, then All integrations: one `PropertyFilter` (free text over name, publisher and description; Publisher, Category, Context and Status as properties, all in the URL through `useCollection`) over a grid of `Card variant=\"integration\"` tiles with the logo, the name, by the publisher, two lines of description, the category badge, the Installed tag and an Install or Configure action. A tile opens the integration in a large right `Drawer`: name and publisher in the header, the description, `KeyValueList` (publisher, category, context, version, last update, the applications it runs on), an Overview in `DocProse`, the permissions it needs, and the install form, a required Application `Field` with a `Select` of the applications it is not on yet. Install is an async run (`state/async-submit`): the button shows `loading`, a progress toast follows the user, and the outcome lands as a toast and an inline `Alert` in the drawer; success carries Configure and Open application, failure is permanent and carries Edit and Reinstall. A search that matches nothing shows No matching integrations with Clear filters; while the catalog loads the tiles are skeletons. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "marketplace",
     "integration catalog",
@@ -34488,10 +34668,10 @@
     "Field",
     "Input",
     "Item",
-    "KeyValuePairs",
+    "KeyValueList",
     "Link",
     "PageHeader",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "PropertyFilter",
@@ -34520,10 +34700,10 @@
     "@aziontech/webkit/field",
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
-    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/link",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/property-filter",
@@ -34635,7 +34815,7 @@
     "Item",
     "PageHeader",
     "PageTabs",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "SaveBar",
@@ -34675,7 +34855,7 @@
     "@aziontech/webkit/item",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/save-bar",
@@ -34729,7 +34909,7 @@
    "title": "Blocks/View/RuleList",
    "source": "blocks/view/rule-list/rule-list.vue",
    "surface": "app",
-   "summary": "An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `DataTable` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `DataTable`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "An ordered list of rules grouped by phase, the Rules tab of an application or a firewall. A `PageHeader` with Documentation and Add Rule sits over a search `Input` and a flush `Card` holding an `Accordion` with one item per phase (Request, Response), each trigger reading the phase and its rule count and each panel a data-driven `DataTable` (scrolling sideways when narrow) with the grip, Position, Name, Description, Status and Last modified. The table is `reorderable`: its grip drags the row or moves it with the arrow keys, Home and End, and `row-reorderable` pins the locked rule; a Position cell adds a numeric position `Input` (type a position and press Enter to move the rule there; disabled with the lock reason on the locked rule) and Move up and Move down `IconButton`s; every move is announced in a polite status region and focus follows the moved rule. A leading locked rule (the default rule) keeps first place and cannot be turned off; a search turns reordering off and says so in an info `Alert`. The Status cell is a `Switch` that turns a rule on or off without losing its place. Any change raises a `SaveBar` with Discard and Review changes; Review changes opens a `Dialog` listing, per phase, every rule that moves (from and to) and every rule turned on or off, with Cancel and Save, and a danger `Alert` in the dialog when the save fails. A success toast confirms the saved order. Built from `PageHeader`, `Button`, `Input`, `Alert`, `Card`, `Accordion`, `DataTable`, `IconButton`, `Tooltip`, `Tag`, `Switch`, `EmptyState`, `SaveBar`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "rules list",
     "rules engine list",
@@ -34776,7 +34956,7 @@
     "Input",
     "Item",
     "PageHeader",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "RadioGroup",
@@ -34811,7 +34991,7 @@
     "@aziontech/webkit/input",
     "@aziontech/webkit/item",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/radio-group",
@@ -34859,7 +35039,7 @@
    "title": "Blocks/View/SplitView",
    "source": "blocks/view/split-view/split-view.vue",
    "surface": "app",
-   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.Chips`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.",
+   "summary": "The events explorer (the app marks its Events navigation entry active): the controls row (`FilterMenu`, event search, Refresh and Download CSV) over the applied `FilterMenu.ChipGroup`, and the explorer. The explorer pairs a resizable, collapsible fields `Sidebar` (each field a column checkbox and a popover of its top values, grouped in an `Accordion` by category) with the log: the Events, Errors and Avg request time summary, the stacked volume chart whose buckets filter the period on click or drag, and the event `DataTable`. Each row's detail `IconButton` (or a row click) opens the event document beside the log in the end pane of a `Resizable` when the explorer is wide enough, and in a `Drawer` when it is not. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main. Its root carries data-layout-fill, so the main stops scrolling and the fields panel, the log and the document scroll on their own.",
    "intents": [
     "real-time events",
     "events visualizer",
@@ -35056,7 +35236,7 @@
     "ConfirmDialog",
     "DataTable",
     "DropdownMenuGroup",
-    "DropdownMenuOption",
+    "DropdownMenuItem",
     "EmptyState",
     "IconButton",
     "Input",
@@ -35077,7 +35257,7 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/data-table",
     "@aziontech/webkit/dropdown-menu-group",
-    "@aziontech/webkit/dropdown-menu-option",
+    "@aziontech/webkit/dropdown-menu-item",
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
@@ -35113,7 +35293,7 @@
    "title": "Blocks/View/TemplateBrowser",
    "source": "blocks/view/template-browser/template-browser.vue",
    "surface": "app",
-   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card variant=\"integration\"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a large right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card variant=\"integration\"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a large right `Drawer`: the mark and the name in the header, the description, a `KeyValueList` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `KeyValueList` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "template browser",
     "template gallery",
@@ -35150,9 +35330,9 @@
     "Drawer",
     "DrawerTitle",
     "EmptyState",
-    "KeyValuePairs",
+    "KeyValueList",
     "PageHeader",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "PropertyFilter",
@@ -35168,9 +35348,9 @@
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
-    "@aziontech/webkit/key-value-pairs",
+    "@aziontech/webkit/key-value-list",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/property-filter",
@@ -35200,7 +35380,7 @@
    "title": "Blocks/View/WafTuning",
    "source": "blocks/view/waf-tuning/waf-tuning.vue",
    "surface": "app",
-   "summary": "The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow selected, then Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `DataTable` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, as `Table.CellTags` whose `+N` popover lists the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it; a search that matches nothing shows No matching rules with Clear search, and a load failure shows a danger `Alert` with Retry. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `DataTable`, `Table.CellTags`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Textarea`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The Tuning tab of a WAF rule set: the requests it matched, grouped by rule, so the user can allow the legitimate ones. A `PageHeader` with Export to CSV and an allow action that reads Allow selected, then Allow n selected once rows are checked; threshold settings above the table (a Time range `Select`, a Minimum hits `Input` that validates as a whole number, a search `Input` and a Refresh `IconButton`); and a flush `Card` with a data-driven `DataTable` with row selection and sorting (Rule ID, Threat, Hits sorted high to low, and the top IP addresses, countries and paths, as `Table.CellTags` whose `+N` popover lists the rest). Rows below the minimum hits drop out, and a table with none left shows a small `EmptyState` saying how to widen it; a search that matches nothing shows No matching rules with Clear search, and a load failure shows a danger `Alert` with Retry. Allowing opens a `Dialog` form listing the selected rules and how many allowed rules will be created (one per rule and path), with a required Reason `Textarea` whose error shows only after Allow rules is pressed; success closes it, clears the selection and raises a success toast, failure keeps it open with a danger `Alert` and Try again. Built from `PageHeader`, `Button`, `Field`, `Select`, `Input`, `IconButton`, `Tooltip`, `Card`, `DataTable`, `Table.CellTags`, `EmptyState`, `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Textarea`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "waf tuning",
     "web application firewall",
@@ -35236,7 +35416,7 @@
     "IconButton",
     "Input",
     "PageHeader",
-    "PanelContent",
+    "PanelBody",
     "PanelFooter",
     "PanelHeader",
     "Select",
@@ -35260,7 +35440,7 @@
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/panel-content",
+    "@aziontech/webkit/panel-body",
     "@aziontech/webkit/panel-footer",
     "@aziontech/webkit/panel-header",
     "@aziontech/webkit/select",

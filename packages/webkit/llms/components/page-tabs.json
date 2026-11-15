@@ -21,12 +21,12 @@
   "Navigation between pages of the app → use `sidebar` or `navigation-menu`."
  ],
  "related": [
-  "tabs` — the tablist it renders; pass one `Tabs.Item` per section in the default slot.",
+  "tabs` — the tablist it renders; pass one `Tabs.Trigger` per section in the default slot.",
   "page-header` — the page heading under the strip.",
   "tag` and `button` — the usual content of the `actions` slot."
  ],
  "bestPractices": [
-  "Bind `v-model` to the route (or a ref) and render the section below from it. PageTabs renders only the tab list, so it takes no `Tabs.Content` / `Tabs.Panel`: the page renders the active section itself from the `v-model` value.",
+  "Bind `v-model` to the route (or a ref) and render the section below from it. PageTabs renders only the tab list, so it takes no `Tabs.Content`: the page renders the active section itself from the `v-model` value.",
   "Keep the labels to one word where possible.",
   "Put only actions that apply to the whole resource in `actions`; page-level actions go in the `page-header`.",
   "Set `column` to the column the page body uses (`form` over a settings form, `data` over a list) so the tabs start where the content starts."
@@ -52,7 +52,7 @@
   {
    "name": "default",
    "scope": "—",
-   "notes": "One Tabs.Item per section of the resource."
+   "notes": "One Tabs.Trigger per section of the resource."
   },
   {
    "name": "actions",
@@ -65,15 +65,15 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import PageTabs from '@aziontech/webkit/page-tabs'\n  import Tabs from '@aziontech/webkit/tabs'\n  import { ref } from 'vue'\n\n  const activeTab = ref('overview')\n  const tabs = [\n    { value: 'overview', label: 'Overview' },\n    { value: 'build', label: 'Build' },\n    { value: 'deployments', label: 'Deployments' },\n    { value: 'variables', label: 'Variables' },\n    { value: 'rules', label: 'Rules' },\n    { value: 'logs', label: 'Logs' },\n    { value: 'metrics', label: 'Metrics' },\n    { value: 'settings', label: 'Settings' }\n  ]\n</script>\n\n<template>\n  <PageTabs v-model=\"activeTab\">\n    <Tabs.Item\n      v-for=\"tab in tabs\"\n      :key=\"tab.value\"\n      :value=\"tab.value\"\n      :label=\"tab.label\"\n    />\n  </PageTabs>\n</template>"
+   "sfc": "<script setup>\n  import PageTabs from '@aziontech/webkit/page-tabs'\n  import Tabs from '@aziontech/webkit/tabs'\n  import { ref } from 'vue'\n\n  const activeTab = ref('overview')\n  const tabs = [\n    { value: 'overview', label: 'Overview' },\n    { value: 'build', label: 'Build' },\n    { value: 'deployments', label: 'Deployments' },\n    { value: 'variables', label: 'Variables' },\n    { value: 'rules', label: 'Rules' },\n    { value: 'logs', label: 'Logs' },\n    { value: 'metrics', label: 'Metrics' },\n    { value: 'settings', label: 'Settings' }\n  ]\n</script>\n\n<template>\n  <PageTabs v-model=\"activeTab\">\n    <Tabs.Trigger\n      v-for=\"tab in tabs\"\n      :key=\"tab.value\"\n      :value=\"tab.value\"\n      :label=\"tab.label\"\n    />\n  </PageTabs>\n</template>"
   },
   {
    "name": "WithActions",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import PageTabs from '@aziontech/webkit/page-tabs'\n  import Tabs from '@aziontech/webkit/tabs'\n  import Tag from '@aziontech/webkit/tag'\n  import { ref } from 'vue'\n\n  const activeTab = ref('overview')\n  const tabs = [\n    { value: 'overview', label: 'Overview' },\n    { value: 'deployments', label: 'Deployments' },\n    { value: 'settings', label: 'Settings' }\n  ]\n</script>\n\n<template>\n  <PageTabs v-model=\"activeTab\">\n    <Tabs.Item\n      v-for=\"tab in tabs\"\n      :key=\"tab.value\"\n      :value=\"tab.value\"\n      :label=\"tab.label\"\n    />\n    <template #actions>\n      <Tag\n        severity=\"warning\"\n        size=\"small\"\n        label=\"2 changes\"\n      />\n      <Button\n        label=\"Deploy\"\n        variant=\"outline\"\n        size=\"medium\"\n        icon=\"ai ai-cloud-upload\"\n      />\n    </template>\n  </PageTabs>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import PageTabs from '@aziontech/webkit/page-tabs'\n  import Tabs from '@aziontech/webkit/tabs'\n  import Tag from '@aziontech/webkit/tag'\n  import { ref } from 'vue'\n\n  const activeTab = ref('overview')\n  const tabs = [\n    { value: 'overview', label: 'Overview' },\n    { value: 'deployments', label: 'Deployments' },\n    { value: 'settings', label: 'Settings' }\n  ]\n</script>\n\n<template>\n  <PageTabs v-model=\"activeTab\">\n    <Tabs.Trigger\n      v-for=\"tab in tabs\"\n      :key=\"tab.value\"\n      :value=\"tab.value\"\n      :label=\"tab.label\"\n    />\n    <template #actions>\n      <Tag\n        severity=\"warning\"\n        size=\"small\"\n        label=\"2 changes\"\n      />\n      <Button\n        label=\"Deploy\"\n        variant=\"outline\"\n        size=\"medium\"\n        icon=\"ai ai-cloud-upload\"\n      />\n    </template>\n  </PageTabs>\n</template>"
   },
   {
    "name": "FormColumn",
-   "sfc": "<script setup>\n  import PageTabs from '@aziontech/webkit/page-tabs'\n  import Tabs from '@aziontech/webkit/tabs'\n  import { ref } from 'vue'\n\n  const activeTab = ref('general')\n  const tabs = [\n    { value: 'general', label: 'General' },\n    { value: 'members', label: 'Members' },\n    { value: 'billing', label: 'Billing' }\n  ]\n</script>\n\n<template>\n  <PageTabs\n    v-model=\"activeTab\"\n    column=\"form\"\n  >\n    <Tabs.Item\n      v-for=\"tab in tabs\"\n      :key=\"tab.value\"\n      :value=\"tab.value\"\n      :label=\"tab.label\"\n    />\n  </PageTabs>\n</template>"
+   "sfc": "<script setup>\n  import PageTabs from '@aziontech/webkit/page-tabs'\n  import Tabs from '@aziontech/webkit/tabs'\n  import { ref } from 'vue'\n\n  const activeTab = ref('general')\n  const tabs = [\n    { value: 'general', label: 'General' },\n    { value: 'members', label: 'Members' },\n    { value: 'billing', label: 'Billing' }\n  ]\n</script>\n\n<template>\n  <PageTabs\n    v-model=\"activeTab\"\n    column=\"form\"\n  >\n    <Tabs.Trigger\n      v-for=\"tab in tabs\"\n      :key=\"tab.value\"\n      :value=\"tab.value\"\n      :label=\"tab.label\"\n    />\n  </PageTabs>\n</template>"
   }
  ],
  "docs": "components/page-tabs.md"

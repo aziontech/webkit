@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/function-editor/function-editor.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/function-editor")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValuePairs](../../components/key-value-pairs.md), [Link](../../components/link.md), `LogViewContent`, [LogView](../../components/log-view.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [CopyButton](../../components/copy-button.md), [EmptyState](../../components/empty-state.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), `LogViewContent`, [LogView](../../components/log-view.md), [PageTabs](../../components/page-tabs.md), [RadioGroup](../../components/radio-group.md), `ResizableHandle`, `ResizablePane`, `ResizableRoot`, [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [StatusIndicator](../../components/status-indicator.md), [Switch](../../components/switch.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-form`
 
 ## Asked as
@@ -33,7 +33,7 @@ The editing page of a service whose behavior lives in source code. The user writ
 
 ### A. Page tabs — `PageTabs`, `Tabs` (required)
 
-A full-bleed `PageTabs` with Code and Settings as `Tabs.Item`s. Each tab keeps its state when the user switches away, so unsaved code survives a visit to Settings.
+A full-bleed `PageTabs` with Code and Settings as `Tabs.Trigger`s. Each tab keeps its state when the user switches away, so unsaved code survives a visit to Settings.
 
 ### B. Editor toolbar — `ToggleGroup`, `Button` (required)
 
@@ -45,13 +45,13 @@ A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded li
 
 ### D. Test run — `ResizableRoot`, `ResizablePane`, `ResizableHandle` (optional)
 
-Variant TestRun only; it adds `StatusIndicator`, `CopyButton`, `KeyValuePairs`, `Trace`, `LogView` and `LogViewContent` to the page.
+Variant TestRun only; it adds `StatusIndicator`, `CopyButton`, `KeyValueList`, `Trace`, `LogView` and `LogViewContent` to the page.
 
 In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is the flexible pane, and the Test run pane under it has a `basis`, a minimum and a maximum height and collapses past its minimum, so the editor can take the whole height back. The pane scrolls on its own and reads top to bottom like the invocation page of the design sample:
 
 1. The heading Test run, a `StatusIndicator` (Completed, or Running with its loading dot), the run ID in code type with a `CopyButton`.
 2. The request that triggered the run and one line on its outcome (the status code and what happened).
-3. A four-column `KeyValuePairs` of Started, Duration, Edge location and Memory, in skeletons while the run is in flight.
+3. A four-column `KeyValueList` of Started, Duration, Edge location and Memory, in skeletons while the run is in flight.
 4. Trace: one sentence on how to read it, then the `Trace` waterfall bound with `v-model:selected`, so the selected span's details (service, start, duration, share, attributes) open under it. While running, a status line says the trace appears when the run finishes.
 5. Logs: a `LogView` with `LogViewContent` on the same clock as the trace, `copyable`, and its loading state while running.
 
@@ -492,7 +492,7 @@ export async function handleRequest(request, args = {}) {
   >
     <h1 class="sr-only">{{ form.name }}</h1>
     <PageTabs v-model="activeTab">
-      <Tabs.Item
+      <Tabs.Trigger
         v-for="tab in tabs"
         :key="tab.value"
         :value="tab.value"
@@ -832,13 +832,13 @@ export async function handleRequest(request, args = {}) {
                                                     >
                                                       <Select.Trigger aria-label="Type" />
                                                       <Select.Content>
-                                                        <Select.Option
+                                                        <Select.Item
                                                           v-for="option in fieldTypes"
                                                           :key="option.value"
                                                           :value="option.value"
                                                         >
                                                           {{ option.label }}
-                                                        </Select.Option>
+                                                        </Select.Item>
                                                       </Select.Content>
                                                     </Select>
                                                   </SettingRow>
@@ -928,13 +928,13 @@ export async function handleRequest(request, args = {}) {
                                                                 aria-label="Default"
                                                               />
                                                               <Select.Content>
-                                                                <Select.Option
+                                                                <Select.Item
                                                                   v-for="option in field.options"
                                                                   :key="option"
                                                                   :value="option"
                                                                 >
                                                                   {{ option }}
-                                                                </Select.Option>
+                                                                </Select.Item>
                                                               </Select.Content>
                                                             </Select>
                                                             <div
@@ -1093,13 +1093,13 @@ export async function handleRequest(request, args = {}) {
                                                     >
                                                       <Select.Trigger aria-label="List of" />
                                                       <Select.Content>
-                                                        <Select.Option
+                                                        <Select.Item
                                                           v-for="option in itemTypes"
                                                           :key="option.value"
                                                           :value="option.value"
                                                         >
                                                           {{ option.label }}
-                                                        </Select.Option>
+                                                        </Select.Item>
                                                       </Select.Content>
                                                     </Select>
                                                   </SettingRow>

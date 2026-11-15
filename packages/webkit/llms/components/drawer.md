@@ -61,10 +61,13 @@
 - `@aziontech/webkit/drawer-description`
 - `@aziontech/webkit/drawer-title`
 - `@aziontech/webkit/drawer-trigger`
+- `@aziontech/webkit/drawer-header`
+- `@aziontech/webkit/drawer-body`
+- `@aziontech/webkit/drawer-footer`
 
 ## Sub-components
 
-- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header` (`panel-header`), `Drawer.Body` (`panel-content`) and `Drawer.Footer` (`panel-footer`). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat).
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header`, `Drawer.Body` and `Drawer.Footer`, each importable on its own as `@aziontech/webkit/drawer-header`, `drawer-body` and `drawer-footer` (the same `panel-header`, `panel-body` and `panel-footer` files). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat).
 - `drawer-close.vue` — Public sub-component `drawer-close`: the close (X) `IconButton`. `Drawer.Content` puts one at the end of its `PanelHeader` while `closable` is true, so a consumer places it by hand only in a custom header with `:closable="false"`. It always closes the drawer.
 - `drawer-content.vue` — Public sub-component `drawer-content`: the drawer itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay while `modal` (`aria-hidden`, `__backdrop` test id; a click on it closes the drawer when `dismissible`) and the `role="dialog"` panel, traps focus and scroll-locks the page while `modal`, and restores focus on close.
 - `drawer-description.vue` — Public sub-component `drawer-description`.
@@ -161,7 +164,7 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import { reactive, watch } from 'vue'
@@ -207,11 +210,11 @@
         <PanelHeader class="w-full">
           <DrawerTitle>{{ sizeLabels[size] }}</DrawerTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <DrawerDescription>
             Panel max-width preset for the {{ size }} drawer. Height is always 100% viewport.
           </DrawerDescription>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
             <Button
@@ -241,7 +244,7 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import { ref } from 'vue'
@@ -249,7 +252,7 @@
   const open = ref(false)
   const scrollSections = Array.from({ length: 12 }, (_, index) => ({
     title: `Section ${index + 1}`,
-    body: `Scrollable drawer body copy for section ${index + 1}. Only PanelContent scrolls; header and footer stay in the panel layout.`
+    body: `Scrollable drawer body copy for section ${index + 1}. Only PanelBody scrolls; header and footer stay in the panel layout.`
   }))
 </script>
 
@@ -270,10 +273,10 @@
       <PanelHeader class="w-full">
         <DrawerTitle>Scrollable drawer</DrawerTitle>
       </PanelHeader>
-      <PanelContent>
+      <PanelBody>
         <div class="flex flex-col gap-(--spacing-4)">
           <DrawerDescription>
-            Place long forms, lists, or settings inside PanelContent. Only the body scrolls inside
+            Place long forms, lists, or settings inside PanelBody. Only the body scrolls inside
             ScrollArea while header and footer stay in the panel layout.
           </DrawerDescription>
           <section
@@ -285,7 +288,7 @@
             <p class="m-0 text-body-sm text-(--text-muted)">{{ section.body }}</p>
           </section>
         </div>
-      </PanelContent>
+      </PanelBody>
       <PanelFooter>
         <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
           <Button

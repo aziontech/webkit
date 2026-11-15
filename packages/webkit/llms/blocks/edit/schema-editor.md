@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/edit/schema-editor/schema-editor.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/schema-editor")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [FileTokenGroup](../../components/file-token-group.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-create-surface`, `webkit-tables`, `webkit-errors`, `webkit-ui-states`
 
 ## Asked as
@@ -33,7 +33,7 @@ The table schema of a SQL database: the definition of one table and the drawers 
 
 One `Card :padded="false"` around a `DataTable :bordered="false"` named `Columns of <table>`. The toolbar slot holds the table glyph and name, a small secondary `Tag` with the row count, an outlined Add column `Button`, the primary Insert row `Button` and a Table actions `IconButton` (with its `Tooltip`) that opens a `DropdownMenu`: Create Table in the first group, Truncate table alone in the last. The rows are the columns: the name in the code font, the type as a secondary `Tag`, the constraints in muted text (`PRIMARY KEY, NOT NULL, DEFAULT now()`, or `None`), and a per-column `Table.CellActions` ("Actions for <column>") with Change type.
 
-### B. Create Table drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent`, `SettingsSection`, `Alert`, `Field`, `Input` (required)
+### B. Create Table drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `SettingsSection`, `Alert`, `Field`, `Input` (required)
 
 A large right `Drawer` whose content is a `form` named Create Table. The `PanelHeader` holds the `DrawerTitle`, one muted sentence (the database and how to reorder) and the drawer's own close button. A `fieldset` disabled while the request runs holds two `SettingsSection`s. General has one `Field` with the table Name in the code font and why it cannot be renamed lightly. A rejection from the server goes above it as a danger `Alert` that says what happened and that the columns are kept, and on the field as its `Field.Error`, per `state/form-validation` (SectionRejected).
 
@@ -147,14 +147,14 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup from '@aziontech/webkit/file-token-group'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
@@ -750,11 +750,11 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
     }, 700)
   }
 
-  const onTableAction = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue) => {
+  const onTableAction = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue) => {
     if (value === 'truncate') openTruncate()
     if (value === 'create') createOpen.value = true
   }
-  const onColumnAction = (value: DropdownMenuOptionValue, row: { name: string }) => {
+  const onColumnAction = (value: DropdownMenuItemValue, row: { name: string }) => {
     if (value === 'alter') openAlter(row.name)
   }
 </script>
@@ -901,7 +901,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="createSubmitting"
@@ -1051,7 +1051,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                             />
                           </template>
                           <Select.Group label="Data types">
-                            <Select.Option
+                            <Select.Item
                               v-for="type in filteredTypes"
                               :key="type.value"
                               :value="type.value"
@@ -1062,7 +1062,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                                   type.description
                                 }}</span>
                               </span>
-                            </Select.Option>
+                            </Select.Item>
                           </Select.Group>
                         </Select.Content>
                       </Select>
@@ -1114,11 +1114,11 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                       >
                         <Select.Trigger />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="column in namedColumns"
                             :key="column.key"
                             :value="column.name.trim()"
-                            >{{ column.name.trim() }}</Select.Option
+                            >{{ column.name.trim() }}</Select.Item
                           >
                         </Select.Content>
                       </Select>
@@ -1134,11 +1134,11 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                       >
                         <Select.Trigger />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="item in tables"
                             :key="item.name"
                             :value="item.name"
-                            >{{ item.name }}</Select.Option
+                            >{{ item.name }}</Select.Item
                           >
                         </Select.Content>
                       </Select>
@@ -1154,11 +1154,11 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                       >
                         <Select.Trigger />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="column in referenceColumns(item)"
                             :key="column.name"
                             :value="column.name"
-                            >{{ column.name }}</Select.Option
+                            >{{ column.name }}</Select.Item
                           >
                         </Select.Content>
                       </Select>
@@ -1171,11 +1171,11 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                       >
                         <Select.Trigger />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="option in ON_DELETE"
                             :key="option.value"
                             :value="option.value"
-                            >{{ option.label }}</Select.Option
+                            >{{ option.label }}</Select.Item
                           >
                         </Select.Content>
                       </Select>
@@ -1184,7 +1184,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                 </div>
               </SettingsSection>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">
@@ -1229,7 +1229,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
               </p>
             </div>
           </PanelHeader>
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="columnSubmitting"
@@ -1279,7 +1279,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                           />
                         </template>
                         <Select.Group label="Data types">
-                          <Select.Option
+                          <Select.Item
                             v-for="type in filteredTypes"
                             :key="type.value"
                             :value="type.value"
@@ -1290,7 +1290,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                                 type.description
                               }}</span>
                             </span>
-                          </Select.Option>
+                          </Select.Item>
                         </Select.Group>
                       </Select.Content>
                     </Select>
@@ -1343,7 +1343,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                 </div>
               </SettingsSection>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">
               <Button
@@ -1387,7 +1387,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
               </p>
             </div>
           </PanelHeader>
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
               :disabled="rowSubmitting"
@@ -1420,7 +1420,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                 <Field.Error v-if="rowError(column)">{{ rowError(column) }}</Field.Error>
               </Field>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">
               <Button
@@ -1472,7 +1472,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
             </Select.Trigger>
             <Select.Content>
               <Select.Group label="Data types">
-                <Select.Option
+                <Select.Item
                   v-for="type in TYPES"
                   :key="type.value"
                   :value="type.value"
@@ -1483,7 +1483,7 @@ Each variant is the same screen in another state: `get_block("edit/schema-editor
                       type.description
                     }}</span>
                   </span>
-                </Select.Option>
+                </Select.Item>
               </Select.Group>
             </Select.Content>
           </Select>

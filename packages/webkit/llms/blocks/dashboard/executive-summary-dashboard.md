@@ -613,13 +613,13 @@ Each variant is the same screen in another state: `get_block("dashboard/executiv
             >
               <Select.Trigger aria-label="Quarter" />
               <Select.Content>
-                <Select.Option
+                <Select.Item
                   v-for="option in quarters"
                   :key="option"
                   :value="option"
                 >
                   {{ option }}
-                </Select.Option>
+                </Select.Item>
               </Select.Content>
             </Select>
           </div>

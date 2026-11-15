@@ -17,7 +17,7 @@
  ],
  "avoidWhen": [
   "Environment variables, headers or any pairs without tag rules → use `attribute-editor`.",
-  "Showing tags read-only → use `tag` (or `key-value-pairs`).",
+  "Showing tags read-only → use `tag` (or `key-value-list`).",
   "Picking from a fixed list of labels → use `multi-select`."
  ],
  "related": [

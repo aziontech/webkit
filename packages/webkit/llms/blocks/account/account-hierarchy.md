@@ -1,11 +1,11 @@
 # AccountHierarchy (`account/account-hierarchy`)
 
-> The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader` with Create Workspace, a search `Input` over name, ID, type and labels that keeps the ancestors of each match (a small `EmptyState` with Clear search when nothing matches), the paginated tree, an action row with Create Group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource as `KeyValuePairs`) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo. A page body for ConsoleLayout, rendered in its default slot.
+> The account hierarchy: organizations, groups and workspaces in one `Table` with tree rows (`get-sub-rows`, `v-model:expanded`, a treegrid with the row-focus keyboard map) and row selection. A `PageHeader` with Create Workspace, a search `Input` over name, ID, type and labels that keeps the ancestors of each match (a small `EmptyState` with Clear search when nothing matches), the paginated tree, an action row with Create Group, the bulk Move, Labels and Delete that act on the selection, Refresh and Hide details, and a details panel with Permissions (role bindings of the one selected resource as `KeyValueList`) and Labels tabs. Move picks a new parent in a `Dialog` (never the resource itself or anything inside it); Labels adds and removes labels on every selected resource; Delete counts what is inside in a `ConfirmDialog` and keeps it in Resources pending deletion for 30 days; each ends in a toast, Move and Delete with Undo. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/account-hierarchy/account-hierarchy.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/account-hierarchy")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValuePairs](../../components/key-value-pairs.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Button](../../components/button.md), [Card](../../components/card.md), [ConfirmDialog](../../components/confirm-dialog.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [KeyValueList](../../components/key-value-list.md), [Link](../../components/link.md), [MultiSelect](../../components/multi-select.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Select](../../components/select.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -42,11 +42,11 @@ A search `Input` named `Search resources` over name, ID, type and labels sits ab
 
 The data stays flat (`parentId`) and the page builds the tree for the table, so a move only changes one field.
 
-### D. Details panel — `Card`, `Tabs`, `KeyValuePairs`, `EmptyState`, `Tag` (required)
+### D. Details panel — `Card`, `Tabs`, `KeyValueList`, `EmptyState`, `Tag` (required)
 
-An `aside` beside the table from `2xl` and under it below that: next to the panel, the nine columns of the tree do not fit under 1536 px. Its heading says what is selected (`No resource selected`, `1 resource selected`, `3 resources selected`) and is polite live. Tabs: Permissions lists the role bindings of the one selected resource as split `KeyValuePairs` (role, member count); Labels shows its labels and an Edit labels button, or a small `No labels` `EmptyState`. With none or several selected, a small `EmptyState` (`Select a resource`, `Several resources selected`) says what to do.
+An `aside` beside the table from `2xl` and under it below that: next to the panel, the nine columns of the tree do not fit under 1536 px. Its heading says what is selected (`No resource selected`, `1 resource selected`, `3 resources selected`) and is polite live. Tabs: Permissions lists the role bindings of the one selected resource as split `KeyValueList` (role, member count); Labels shows its labels and an Edit labels button, or a small `No labels` `EmptyState`. With none or several selected, a small `EmptyState` (`Select a resource`, `Several resources selected`) says what to do.
 
-### E. Move — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Select` (required)
+### E. Move — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Select` (required)
 
 Title `Move <name>` or `Move 3 resources`. The description says that everything inside moves too and that inherited bindings stop applying. One `Select` of organizations and groups, excluding the moving resources and everything inside them. Move without a choice shows `Choose where to move the resources.` under the field. The new parent opens after the move.
 
@@ -139,16 +139,16 @@ Each variant is the same screen in another state: `get_block("account/account-hi
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import Link from '@aziontech/webkit/link'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
@@ -486,7 +486,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
     toast.success(`Labels updated on ${plural(ids.size, 'resource', 'resources')}.`)
   }
 
-  const onRowAction = (value: DropdownMenuOptionValue, row: Resource) => {
+  const onRowAction = (value: DropdownMenuItemValue, row: Resource) => {
     const item = resources.value.find((entry) => entry.id === row.id)
     if (!item) return
     if (value === 'details') {
@@ -846,20 +846,20 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                   {{ detailsTitle }}
                 </h2>
 
-                <Tabs.Root v-model="detailsTab">
+                <Tabs v-model="detailsTab">
                   <div class="flex w-full flex-col gap-(--spacing-md)">
                     <Tabs.List aria-label="Details">
-                      <Tabs.Item
+                      <Tabs.Trigger
                         value="permissions"
                         label="Permissions"
                       />
-                      <Tabs.Item
+                      <Tabs.Trigger
                         value="labels"
                         label="Labels"
                       />
                     </Tabs.List>
                     <div class="relative isolate w-full">
-                      <Tabs.Panel value="permissions">
+                      <Tabs.Content value="permissions">
                         <EmptyState
                           v-if="!focused"
                           size="small"
@@ -889,22 +889,20 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                               focused.name
                             }}</span>
                           </div>
-                          <KeyValuePairs
+                          <KeyValueList
                             variant="split"
                             aria-label="Role bindings"
                           >
-                            <KeyValuePairs.Item
+                            <KeyValueList.Item
                               v-for="binding in roleBindings"
                               :key="binding.role"
                               :label="binding.role"
-                              >{{
-                                plural(binding.members, 'member', 'members')
-                              }}</KeyValuePairs.Item
+                              >{{ plural(binding.members, 'member', 'members') }}</KeyValueList.Item
                             >
-                          </KeyValuePairs>
+                          </KeyValueList>
                         </div>
-                      </Tabs.Panel>
-                      <Tabs.Panel value="labels">
+                      </Tabs.Content>
+                      <Tabs.Content value="labels">
                         <EmptyState
                           v-if="!focused"
                           size="small"
@@ -954,10 +952,10 @@ Each variant is the same screen in another state: `get_block("account/account-hi
                             @click="openLabels([focused])"
                           />
                         </div>
-                      </Tabs.Panel>
+                      </Tabs.Content>
                     </div>
                   </div>
-                </Tabs.Root>
+                </Tabs>
               </div>
             </template>
           </Card>
@@ -983,7 +981,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
             </DialogDescription>
           </div>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <form
             class="flex flex-col gap-(--spacing-md)"
             novalidate
@@ -999,11 +997,11 @@ Each variant is the same screen in another state: `get_block("account/account-hi
               >
                 <Select.Trigger />
                 <Select.Content>
-                  <Select.Option
+                  <Select.Item
                     v-for="option in destinationOptions"
                     :key="option.value"
                     :value="option.value"
-                    >{{ option.label }} · {{ types[option.type].label }}</Select.Option
+                    >{{ option.label }} · {{ types[option.type].label }}</Select.Item
                   >
                 </Select.Content>
               </Select>
@@ -1013,7 +1011,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
               <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
             </Field>
           </form>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
@@ -1051,7 +1049,7 @@ Each variant is the same screen in another state: `get_block("account/account-hi
             </DialogDescription>
           </div>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <form
             class="flex flex-col gap-(--spacing-md)"
             novalidate
@@ -1065,11 +1063,11 @@ Each variant is the same screen in another state: `get_block("account/account-hi
               >
                 <MultiSelect.Trigger />
                 <MultiSelect.Content>
-                  <MultiSelect.Option
+                  <MultiSelect.Item
                     v-for="label in knownLabels"
                     :key="label"
                     :value="label"
-                    >{{ label }}</MultiSelect.Option
+                    >{{ label }}</MultiSelect.Item
                   >
                 </MultiSelect.Content>
               </MultiSelect>
@@ -1082,17 +1080,17 @@ Each variant is the same screen in another state: `get_block("account/account-hi
               >
                 <MultiSelect.Trigger />
                 <MultiSelect.Content>
-                  <MultiSelect.Option
+                  <MultiSelect.Item
                     v-for="label in presentLabels"
                     :key="label"
                     :value="label"
-                    >{{ label }}</MultiSelect.Option
+                    >{{ label }}</MultiSelect.Item
                   >
                 </MultiSelect.Content>
               </MultiSelect>
             </Field>
           </form>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button

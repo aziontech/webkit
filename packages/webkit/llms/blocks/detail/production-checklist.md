@@ -1,11 +1,11 @@
 # ProductionChecklist (`detail/production-checklist`)
 
-> A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button (named by a `Tooltip`) and clickable rows that open the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `Card`, `Item`, `Tag`, `IconButton`, `Tooltip`, `Drawer`, `PanelHeader`, `PanelContent`, `PanelFooter` and `Button`.
+> A production checklist on a resource overview: a card that names the gates between the generated hostname and production, counts how many are done and lists each as a row, with an expand button (named by a `Tooltip`) and clickable rows that open the same list as a drawer where every step carries its description and its action. Once every gate is done the card collapses to its title with a Ready for production Tag. Rendered on a resource’s Overview tab. Built from `Card`, `Item`, `Tag`, `IconButton`, `Tooltip`, `Drawer`, `PanelHeader`, `PanelBody`, `PanelFooter` and `Button`.
 
 - Surface: app
 - Source: `blocks/detail/production-checklist/production-checklist.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/production-checklist")`
-- Components: [Button](../../components/button.md), [Card](../../components/card.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [IconButton](../../components/icon-button.md), [Item](../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
+- Components: [Button](../../components/button.md), [Card](../../components/card.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [IconButton](../../components/icon-button.md), [Item](../../components/item.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -45,9 +45,9 @@ A small outlined `IconButton` with the maximize icon at the header's end, `aria-
 
 One small `Item` per gate, rendered as a full-width button: the gate's icon, its title and, at the end, a check when done. A done row takes the primary mask fill and a primary icon. Each row carries a screen-reader status, "Done" or "Not started", and opens the drawer like the expand button.
 
-### E. Checklist drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Button` (required)
+### E. Checklist drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Button` (required)
 
-A large right-side `Drawer` that the expand button and every row open. `PanelHeader` repeats the title with the progress `Tag` and one sentence on where the service stands, beside the drawer's own close button; `PanelContent` lists every gate as a medium `Item` with its description and either its outlined action `Button` or, once done, a Done `Tag` with what it now serves; `PanelFooter` ends with a primary Done `Button` that closes it.
+A large right-side `Drawer` that the expand button and every row open. `PanelHeader` repeats the title with the progress `Tag` and one sentence on where the service stands, beside the drawer's own close button; `PanelBody` lists every gate as a medium `Item` with its description and either its outlined action `Button` or, once done, a Done `Tag` with what it now serves; `PanelFooter` ends with a primary Done `Button` that closes it.
 
 ## Do
 
@@ -114,7 +114,7 @@ Each variant is the same screen in another state: `get_block("detail/production-
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Tag from '@aziontech/webkit/tag'
@@ -257,7 +257,7 @@ Each variant is the same screen in another state: `get_block("detail/production-
         </div>
       </PanelHeader>
 
-      <PanelContent>
+      <PanelBody>
         <div class="flex flex-col gap-(--spacing-sm)">
           <Item
             v-for="step in steps"
@@ -313,7 +313,7 @@ Each variant is the same screen in another state: `get_block("detail/production-
             </Item.Footer>
           </Item>
         </div>
-      </PanelContent>
+      </PanelBody>
 
       <PanelFooter>
         <div class="flex w-full items-center justify-end gap-(--spacing-sm)">

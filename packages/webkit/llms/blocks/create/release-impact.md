@@ -640,7 +640,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                       >
                         <Select.Trigger class="w-full" />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             :value="LATEST"
                             icon="ai ai-sync"
                           >
@@ -650,9 +650,9 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                                 resolves at deploy
                               </span>
                             </template>
-                          </Select.Option>
+                          </Select.Item>
                           <Select.Group label="Pin a ready version">
-                            <Select.Option
+                            <Select.Item
                               v-for="version in card.versions"
                               :key="version.id"
                               :value="version.id"
@@ -671,7 +671,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                                   </span>
                                 </span>
                               </template>
-                            </Select.Option>
+                            </Select.Item>
                           </Select.Group>
                         </Select.Content>
                       </Select>
@@ -782,14 +782,14 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                                   :aria-label="`Version of ${row.name}`"
                                 />
                                 <Select.Content>
-                                  <Select.Option
+                                  <Select.Item
                                     :value="LATEST"
                                     icon="ai ai-sync"
                                   >
                                     Track latest Ready
-                                  </Select.Option>
+                                  </Select.Item>
                                   <Select.Group label="Pin a ready version">
-                                    <Select.Option
+                                    <Select.Item
                                       v-for="version in row.versions"
                                       :key="version.id"
                                       :value="version.id"
@@ -808,7 +808,7 @@ Each variant is the same screen in another state: `get_block("create/release-imp
                                           </span>
                                         </span>
                                       </template>
-                                    </Select.Option>
+                                    </Select.Item>
                                   </Select.Group>
                                 </Select.Content>
                               </Select>

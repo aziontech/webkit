@@ -242,11 +242,11 @@
       >
         <Select.Trigger />
         <Select.Content>
-          <Select.Option
+          <Select.Item
             v-for="operator in operators"
             :key="operator.value"
             :value="operator.value"
-            >{{ operator.label }}</Select.Option
+            >{{ operator.label }}</Select.Item
           >
         </Select.Content>
       </Select>
@@ -301,11 +301,11 @@
       >
         <Select.Trigger />
         <Select.Content>
-          <Select.Option
+          <Select.Item
             v-for="action in actions"
             :key="action.value"
             :value="action.value"
-            >{{ action.label }}</Select.Option
+            >{{ action.label }}</Select.Item
           >
         </Select.Content>
       </Select>

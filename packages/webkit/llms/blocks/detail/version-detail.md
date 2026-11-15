@@ -1,11 +1,11 @@
 # VersionDetail (`detail/version-detail`)
 
-> One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumbs`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the Edit/RuleBuilder template. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `DataTable`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.
+> One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumb`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the Edit/RuleBuilder template. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `DataTable`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.
 
 - Surface: app
 - Source: `blocks/detail/version-detail/version-detail.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/version-detail")`
-- Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -31,7 +31,7 @@ One version of a resource, opened from its Versions tab. The user is here to cha
 
 ### A. Version switcher — `ConsoleLayout`, `Select`, `Input`, `Tag`, `IconButton`, `Tooltip` (required)
 
-The page sets the trail with `ConsoleLayout.Breadcrumbs`: `items` are the module and the resource, and the slot holds the version, a `Select` with `variant="ghost"`, `size="small"` and `aria-label="Switch version"`, no `w-full`. The version is part of the route, so picking one navigates. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
+The page sets the trail with `ConsoleLayout.Breadcrumb`: `items` are the module and the resource, and the slot holds the version, a `Select` with `variant="ghost"`, `size="small"` and `aria-label="Switch version"`, no `w-full`. The version is part of the route, so picking one navigates. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
 
 The layout hides its breadcrumbs while compact, so the body opens on a row (`md:hidden`, its own `nav` named Breadcrumb) that carries a Back `IconButton` to the resource's Versions tab and the same `Select` crumbs, full width: the version, and in EnvironmentCrumb the environment before it. A phone keeps every switch the desktop breadcrumb offers.
 
@@ -41,7 +41,7 @@ A horizontal `Resizable` named "Version workspace": the version settings pane, a
 
 ### C. Version tab bar — `PageTabs`, `Tabs`, `Tag`, `DropdownMenu`, `IconButton`, `EmptyState` (required)
 
-`PageTabs` with one `Tabs.Item` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: a variant renders the open tab's panel, and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it.
+`PageTabs` with one `Tabs.Trigger` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: a variant renders the open tab's panel, and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it.
 
 ### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Switch`, `Tooltip` (required)
 
@@ -72,7 +72,7 @@ While Add Version copies a built version into a new draft, the workspace is draw
 - Keep one primary action on the page, in the version bar; the tabs share it.
 - Lock the settings fieldset, not each control one by one, when the version is built.
 - Let the user switch versions from the breadcrumb without going back to the list.
-- Set the trail from the page with `ConsoleLayout.Breadcrumbs`, and mark the root with `data-layout-fill`.
+- Set the trail from the page with `ConsoleLayout.Breadcrumb`, and mark the root with `data-layout-fill`.
 - Show the state in three places that agree: the breadcrumb option, the tab row tag and the version bar.
 - Keep the history pane collapsible and resizable so the settings keep their width when it is closed.
 - Show what a revert changes before it runs: the settings with old and new values, and the rules added and removed.
@@ -123,7 +123,7 @@ While Add Version copies a built version into a new draft, the workspace is draw
 - Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
 - Revert: an earlier Ready version, read-only, with history open, Revert to <id> in the bar, a confirmation with the diff, and the revert reported by a toast with Edit and Redeploy.
 - VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
-- EnvironmentCrumb: a resource that is deployed to several environments. The page's `ConsoleLayout.Breadcrumbs` ends on two control crumbs, environment then version, each a small transparent `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
+- EnvironmentCrumb: a resource that is deployed to several environments. The page's `ConsoleLayout.Breadcrumb` ends on two control crumbs, environment then version, each a small transparent `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
 - Creating: Add Version copying AEO25I38 into a new draft, the workspace as `Skeleton` wires and the version bar busy.
 - NotFound: a version that does not exist, a bordered `EmptyState` with View Versions.
 - Source: the draft on its Source tab, the file list of the version bucket with its folder path and Open in Object Storage.
@@ -149,7 +149,7 @@ While Add Version copies a built version into a new draft, the workspace is draw
 - `Deployed` — The deployed version, read-only: the creation date beside the Deployed Tag, the settings fieldset disabled, and the version bar reading Viewing a deployed version and Read-only with its description, Add Version and Redeploy.
 - `VersionHistory` — The draft with Version history open beside it: the current version with its description, author and the pencil that edits it in place, the empty changes entry, and the five newest earlier versions with Show older for the rest.
 - `Revert` — An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed.
-- `EnvironmentCrumb` — The same version page reached from an environment: the trail reads Resources, the resource, then two `Select` crumbs (the page's `ConsoleLayout.Breadcrumbs` from md up, the body's own row below md). The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`.
+- `EnvironmentCrumb` — The same version page reached from an environment: the trail reads Resources, the resource, then two `Select` crumbs (the page's `ConsoleLayout.Breadcrumb` from md up, the body's own row below md). The environment crumb searches the environments, tags each with its deployment policy and offers Add Environment at its foot; picking one moves the version crumb to the version that environment serves. The version crumb marks each version with the environments it is live in, beside its state `Tag`.
 - `Creating` — A new version being copied from the deployed AEO25I38: the workspace is drawn as `Skeleton` wires (a heading band, then sectioned cards of rows with a trailing switch) inside a polite busy status, and the version bar shows a `Spinner`, reads Creating new version… and Copying AEO25I38 into a new draft., with Add Version loading and Redeploy disabled.
 - `NotFound` — A version link that points nowhere: the trail ends on the missing version and the body is a bordered `EmptyState`, Version not found, saying the version may have been deleted, with View Versions back to the Versions tab.
 - `Source` — The draft on its Source tab: a small Source heading with Upload Files, the controls row (search in folder, Refresh, Download CSV, Columns and Open in Object Storage), a `Breadcrumb` of the folder path from the bucket, and the files table whose folders open in place and whose empty state offers Upload Files and Open Bucket.
@@ -167,7 +167,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -400,7 +400,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
     versions.filter((entry) => entry.name.toLowerCase().includes(query.value.trim().toLowerCase()))
   )
 
-  const openHistory = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue) => {
+  const openHistory = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue) => {
     if (value === 'history' && historyExpanded.value) {
       historyExpanded.value = false
       return
@@ -416,7 +416,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
     data-layout-fill
     class="flex h-dvh min-h-0 flex-col"
   >
-    <ConsoleLayout.Breadcrumbs
+    <ConsoleLayout.Breadcrumb
       :items="[
         { label: 'Resources', href: '/resources' },
         { label: 'web-app', href: '/resources/1784552864' }
@@ -452,7 +452,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
             </Input>
           </template>
           <Select.Group label="Versions">
-            <Select.Option
+            <Select.Item
               v-for="entry in matches"
               :key="entry.id"
               :value="entry.id"
@@ -467,7 +467,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                   size="small"
                 />
               </template>
-            </Select.Option>
+            </Select.Item>
             <p
               v-if="!matches.length"
               class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
@@ -476,7 +476,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
             </p>
           </Select.Group>
           <template #footer>
-            <Select.Option
+            <Select.Item
               value="__create-version__"
               class="w-full"
             >
@@ -487,11 +487,11 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                 />
                 Add Version
               </span>
-            </Select.Option>
+            </Select.Item>
           </template>
         </Select.Content>
       </Select>
-    </ConsoleLayout.Breadcrumbs>
+    </ConsoleLayout.Breadcrumb>
     <nav
       aria-label="Breadcrumb"
       class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"
@@ -537,7 +537,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
               </Input>
             </template>
             <Select.Group label="Versions">
-              <Select.Option
+              <Select.Item
                 v-for="entry in matches"
                 :key="entry.id"
                 :value="entry.id"
@@ -552,7 +552,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                     size="small"
                   />
                 </template>
-              </Select.Option>
+              </Select.Item>
               <p
                 v-if="!matches.length"
                 class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
@@ -561,7 +561,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
               </p>
             </Select.Group>
             <template #footer>
-              <Select.Option
+              <Select.Item
                 value="__create-version__"
                 class="w-full"
               >
@@ -572,7 +572,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                   />
                   Add Version
                 </span>
-              </Select.Option>
+              </Select.Item>
             </template>
           </Select.Content>
         </Select>
@@ -586,7 +586,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
         <Resizable.Pane aria-label="Version settings">
           <div class="flex min-h-0 min-w-0 flex-1 flex-col">
             <PageTabs v-model="activeTab">
-              <Tabs.Item
+              <Tabs.Trigger
                 v-for="tab in tabs"
                 :key="tab.value"
                 :value="tab.value"

@@ -1,6 +1,6 @@
 # Tool Approval
 
-> A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValuePairs` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`variant="danger"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.
+> A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValueList` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`variant="danger"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.
 
 - Import: `import ToolApproval from '@aziontech/webkit/tool-approval'`
 - Category: ai · Surface: app · Structure: monolithic
@@ -31,7 +31,7 @@
 
 - [tool-call](tool-call.md) — the record of the call after it is approved (or `denied`).
 - [confirm-dialog](confirm-dialog.md) — confirmation of the reader's own destructive action.
-- [code-block](code-block.md), `key-value-pairs` — what will run, in the body.
+- [code-block](code-block.md), `key-value-list` — what will run, in the body.
 - [chat-message](chat-message.md) — the assistant acknowledges the decision in the next message.
 
 ## Props
@@ -58,7 +58,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | What exactly will run: a `CodeBlock`, or `KeyValuePairs` with parameters. |
+| `default` | — | What exactly will run: a `CodeBlock`, or `KeyValueList` with parameters. |
 
 ## Sub-components
 

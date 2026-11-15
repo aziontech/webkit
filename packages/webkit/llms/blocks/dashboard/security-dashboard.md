@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/dashboard/security-dashboard/security-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_block("dashboard/security-dashboard")`
-- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [FilterMenu](../../components/filter-menu.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelContent`, `PanelHeader`, [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `utils/csv`
+- Components: [Alert](../../components/alert.md), [BarList](../../components/bar-list.md), [Button](../../components/button.md), [Chart](../../components/chart.md), [ChartCard](../../components/chart-card.md), [DataTable](../../components/data-table.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [FilterMenu](../../components/filter-menu.md), [Hint](../../components/hint.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [Link](../../components/link.md), [PageHeader](../../components/page-header.md), `PanelBody`, `PanelHeader`, [Select](../../components/select.md), [SeverityTag](../../components/severity-tag.md), [Skeleton](../../components/skeleton.md), [StatTile](../../components/stat-tile.md), [Table](../../components/table.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), [Tooltip](../../components/tooltip.md), `use-locale`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -70,7 +70,7 @@ Only on `Matched requests over time`.
 
 Names Expand and More options.
 
-### H. Expand — `IconButton`, `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `PanelContent` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `PanelBody` (optional)
 
 Its `aria-label` names the card (`Expand Matched requests over time`). It opens one large `Dialog`
 with the card title, its Hint sentence as the description, and the region at full size: the matched
@@ -123,7 +123,7 @@ Variant ByActor only; it adds `FilterMenu`, `Button`, `Table` and `SeverityTag` 
 decided each request. Title `Request activity`. The heading's actions hold the time range `Select`
 (named `Time range`) and a Refresh `IconButton` (`aria-label="Refresh"`, the block emits `refresh`).
 Under it, one `FilterMenu` with three multi-choice fields (Actor, Outcome, Category) in a container
-labelled `Filters`, its `FilterMenu.Chips` on the row below, and a destination `Input` named
+labelled `Filters`, its `FilterMenu.ChipGroup` on the row below, and a destination `Input` named
 `Destination host`. The filters are global: every tile, chart, breakdown and the log read them; when
 they match nothing, the chart and the log show `No requests match these filters` with an outlined
 `Clear filters` `Button`, and the tiles show a dash.
@@ -212,7 +212,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
@@ -618,13 +618,13 @@ Each variant is the same screen in another state: `get_block("dashboard/security
           >
             <Select.Trigger aria-label="Period" />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in periods"
                 :key="option.value"
                 :value="option.value"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </template>
@@ -1071,7 +1071,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
             <DialogDescription>{{ expandedReport.description }}</DialogDescription>
           </div>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex min-w-0 flex-col gap-(--spacing-md)">
             <template v-if="expandedId === 'matched'">
               <div>
@@ -1135,7 +1135,7 @@ Each variant is the same screen in another state: `get_block("dashboard/security
               </template>
             </DataTable>
           </div>
-        </PanelContent>
+        </PanelBody>
       </DialogContent>
     </Dialog>
   </div>

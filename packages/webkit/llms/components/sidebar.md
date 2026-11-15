@@ -212,7 +212,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   import Command from '@aziontech/webkit/command-root'
   import CommandSeparator from '@aziontech/webkit/command-separator'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -399,17 +399,17 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                     >
                   </div>
                 </template>
-                <DropdownMenuOption
+                <DropdownMenuItem
                   value="settings"
                   label="Account Settings"
                 />
-                <DropdownMenuOption
+                <DropdownMenuItem
                   value="personal-tokens"
                   label="Personal Tokens"
                 />
               </DropdownMenuGroup>
               <DropdownMenuGroup>
-                <DropdownMenuOption
+                <DropdownMenuItem
                   value="logout"
                   label="Log Out"
                 >
@@ -418,7 +418,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
                       class="ai ai-log-out"
                       aria-hidden="true"
                   /></template>
-                </DropdownMenuOption>
+                </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenu>
           </div>

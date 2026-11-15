@@ -18,14 +18,14 @@
   "breadcrumb` — location in a hierarchy, not sibling views."
  ],
  "bestPractices": [
-  "Give each `Tabs.Item` (also exposed as `Tabs.Trigger`, the shadcn / Radix name) and its `Tabs.Content` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility. `Tabs.Content` with a `value` is the `role=\"tabpanel\"`; `Tabs.Panel` renders the same panel and stays as an equivalent name.",
+  "Give each `Tabs.Trigger` and its `Tabs.Content` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility. `Tabs.Content` is the `role=\"tabpanel\"`. The compound has exactly three parts, the shadcn / Radix names: `List`, `Trigger`, `Content` (6.0 removed the `Item`, `Panel` and `Root` members, synonyms of these).",
   "Any string or number is a valid `value`, spaces and punctuation included: the tab and panel ids are derived from it with every character outside `A-Z a-z 0-9 -` encoded, so `aria-controls` / `aria-labelledby` stay valid id tokens.",
   "Type a variable that holds the active tab or a list of tab definitions with the exported `TabsValue` (`ref<TabsValue>('overview')`), never `string | number` spelled out or a cast.",
   "Drive the active tab with `v-model` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.",
   "closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.",
   "dirty` only marks the tab (a dot after the label, \"Unsaved changes\" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.",
-  "The selection always comes from the root's value. A row of pressed / unpressed pills outside a `Tabs` root is a `ToggleGroup`, not loose `Tabs.Item`s (6.0 removed the item's `selected` prop).",
-  "Put spacing between the list and the panels on an element of your own around the panels (or on each `Tabs.Content`), not inside each panel. `Tabs.Content` always renders the panel and needs a `value` (6.0 removed its wrapper mode).",
+  "The selection always comes from the root's value. A row of pressed / unpressed pills outside a `Tabs` root is a `ToggleGroup`, not loose `Tabs.Trigger`s (6.0 removed the item's `selected` prop).",
+  "Put spacing between the list and the panels on an element of your own around the panels (or on each `Tabs.Content`), not inside each panel. It always renders the panel and needs a `value` (6.0 removed its wrapper mode).",
   "Centre the tab row with `<Tabs.List align=\"center\">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form."
  ]
 }

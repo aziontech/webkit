@@ -1,6 +1,6 @@
 # DashboardSwitcher (`dashboard/dashboard-switcher`)
 
-> The dashboards hub: one page that switches between every dashboard of the account. A `PageHeader` named Dashboards sits over the controls row: a grouped `Select` of the dashboards (Platform, Security, Business and Yours) with a chart icon, a `FilterMenu` that sets the shared Period and counts it on its Filter button, and a Refresh `IconButton` in a `Tooltip` at the end. The applied period shows as a removable chip in `FilterMenu.Chips`. Under the controls, a placeholder body for the chosen dashboard (in an app, render the real dashboard block there, and `configurable-dashboard` for Custom): four `StatTile`s with a `Hint` each and the comparison period, a `ChartCard` with the dashboard's `Chart` and its tooltip total, and a `ChartCard` with a ranked `BarList`. Switching the dashboard loads its body (Skeletons in place); changing the period or pressing Refresh refetches it, holding the previous render. A dashboard that owns its period (Executive summary, Spend, Project status) hides the shared filter and its chip and shows its own quarter `ToggleGroup` instead. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The dashboards hub: one page that switches between every dashboard of the account. A `PageHeader` named Dashboards sits over the controls row: a grouped `Select` of the dashboards (Platform, Security, Business and Yours) with a chart icon, a `FilterMenu` that sets the shared Period and counts it on its Filter button, and a Refresh `IconButton` in a `Tooltip` at the end. The applied period shows as a removable chip in `FilterMenu.ChipGroup`. Under the controls, a placeholder body for the chosen dashboard (in an app, render the real dashboard block there, and `configurable-dashboard` for Custom): four `StatTile`s with a `Hint` each and the comparison period, a `ChartCard` with the dashboard's `Chart` and its tooltip total, and a `ChartCard` with a ranked `BarList`. Switching the dashboard loads its body (Skeletons in place); changing the period or pressing Refresh refetches it, holding the previous render. A dashboard that owns its period (Executive summary, Spend, Project status) hides the shared filter and its chip and shows its own quarter `ToggleGroup` instead. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/dashboard/dashboard-switcher/dashboard-switcher.vue` in `@aziontech/webkit`
@@ -69,7 +69,7 @@ When the chosen dashboard owns its period (Executive summary, Spend, Project sta
 
 An outlined medium `IconButton` at the end of the row, named Refresh by its `Tooltip` and `aria-label`; it shows `loading` while the body refetches.
 
-### F. Applied period — `FilterMenu.Chips` (required)
+### F. Applied period — `FilterMenu.ChipGroup` (required)
 
 The applied period as a chip under the controls (`Period: Last 24 hours`), bound to the same model as the menu. Removing it returns the dashboard to the default period (Last 24 hours) and the chip leaves. Hidden with the filter.
 
@@ -1144,13 +1144,13 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
                   :key="group.label"
                   :label="group.label"
                 >
-                  <Select.Option
+                  <Select.Item
                     v-for="option in group.views"
                     :key="option.value"
                     :value="option.value"
                   >
                     {{ option.label }}
-                  </Select.Option>
+                  </Select.Item>
                 </Select.Group>
               </Select.Content>
             </Select>
@@ -1186,7 +1186,7 @@ Each variant is the same screen in another state: `get_block("dashboard/dashboar
           </div>
         </div>
 
-        <FilterMenu.Chips
+        <FilterMenu.ChipGroup
           v-if="!active.ownPeriod"
           v-model="filters"
           :fields="filterFields"

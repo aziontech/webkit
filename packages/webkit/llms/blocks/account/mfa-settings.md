@@ -114,7 +114,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable from '@aziontech/webkit/data-table'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
@@ -271,7 +271,7 @@ Each variant is the same screen in another state: `get_block("account/mfa-settin
 
   const pending = ref<MemberRow | null>(null)
   const resetOpen = ref(false)
-  const onAction = (value: DropdownMenuOptionValue, row: MemberRow) => {
+  const onAction = (value: DropdownMenuItemValue, row: MemberRow) => {
     if (value === 'reset') {
       pending.value = row
       resetOpen.value = true

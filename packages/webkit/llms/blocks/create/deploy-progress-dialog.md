@@ -1,11 +1,11 @@
 # DeployProgressDialog (`create/deploy-progress-dialog`)
 
-> The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeMark` once it settles. When the run settles the header gains a large `OutcomeMark` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeMark`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.
+> The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeMark` once it settles. When the run settles the header gains a large `OutcomeMark` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeMark`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/create/deploy-progress-dialog/deploy-progress-dialog.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/deploy-progress-dialog")`
-- Components: [Button](../../components/button.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Item](../../components/item.md), [OutcomeMark](../../components/outcome-mark.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Progress](../../components/progress.md), [Spinner](../../components/spinner.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
+- Components: [Button](../../components/button.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Item](../../components/item.md), [OutcomeMark](../../components/outcome-mark.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Progress](../../components/progress.md), [Spinner](../../components/spinner.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -37,7 +37,7 @@ Titled "New production deployment" (the environment in lower case), with the dia
 
 `size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying 2 of 5…" while running, "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeMark` stands before the title: success when all deployed, warning when some failed.
 
-### C. Progress — `PanelContent`, `Progress` (required)
+### C. Progress — `PanelBody`, `Progress` (required)
 
 The share of settled settings, named "Deploy progress", with "Deploying <name>" under it while one runs.
 
@@ -121,7 +121,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
   import EmptyState from '@aziontech/webkit/empty-state'
   import Item from '@aziontech/webkit/item'
   import OutcomeMark, { type OutcomeMarkSeverity } from '@aziontech/webkit/outcome-mark'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Progress from '@aziontech/webkit/progress'
@@ -396,7 +396,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
               <Progress
@@ -482,7 +482,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
               {{ running ? '' : title }}
             </span>
           </div>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">

@@ -271,14 +271,14 @@ Each variant is the same screen in another state: `get_block("account/payment-me
               >
                 <Select.Trigger id="card-country" />
                 <Select.Content>
-                  <Select.Option
+                  <Select.Item
                     v-for="option in countryOptions"
                     :key="String(option.value)"
                     :value="option.value"
                     :disabled="option.disabled"
                   >
                     {{ option.label }}
-                  </Select.Option>
+                  </Select.Item>
                 </Select.Content>
               </Select>
             </Field>

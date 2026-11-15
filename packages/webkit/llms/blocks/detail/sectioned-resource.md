@@ -31,7 +31,7 @@ The page of one resource whose tab holds more sibling pages than a tab row can c
 
 ### A. Tab bar — `PageTabs`, `Tabs` (required)
 
-A full-bleed `PageTabs` with one `Tabs.Item` per section of the resource, in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. It is level 2; the breadcrumb names the resource and is not a level. Each tab is its own route: this block renders the open tab's page, and another tab shows an `EmptyState` with an Open link to that tab's route, so no tab is ever dead.
+A full-bleed `PageTabs` with one `Tabs.Trigger` per section of the resource, in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. It is level 2; the breadcrumb names the resource and is not a level. Each tab is its own route: this block renders the open tab's page, and another tab shows an `EmptyState` with an Open link to that tab's route, so no tab is ever dead.
 
 ### B. Local navigation — `SidebarMenuRoot` (required)
 
@@ -303,7 +303,7 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
   <div class="flex min-h-0 flex-1 flex-col">
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
           :value="tab.value"
@@ -345,13 +345,13 @@ Each variant is the same screen in another state: `get_block("detail/sectioned-r
                     :key="section.label"
                     :label="section.label"
                   >
-                    <Select.Option
+                    <Select.Item
                       v-for="sibling in section.items"
                       :key="sibling.id"
                       :value="hrefOf(sibling)"
                     >
                       {{ sibling.label }}
-                    </Select.Option>
+                    </Select.Item>
                   </Select.Group>
                 </Select.Content>
               </Select>

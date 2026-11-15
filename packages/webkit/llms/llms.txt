@@ -193,13 +193,13 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [Card](components/card.md): Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, and for the frame of a dashboard chart use ChartCard.
 - [CardPricing](components/card-pricing.md): One tier of a pricing table: what it is called, what it costs, what that price includes, and the one action that moves the account onto it.
 - [Currency](components/currency.md): Use Currency to typeset one money amount anywhere; a money metric with a delta and a sparkline is a StatTile.
-- [FeatureList](components/feature-list.md): Use FeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValuePairs.
+- [FeatureList](components/feature-list.md): Use FeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValueList.
 - [HelpPanel](components/help-panel.md): The content of a help side region: a topic's title, a few sections of short guidance, and the "Learn more" links that leave for the documentation.
 - [Hotspot](components/hotspot.md): Marks a real control as a step of a tutorial.
 - [Illustration](components/illustration.md): Renders an **official product illustration** — one of the scenes drawn in the Assets library in Figma and exported as an SVG that ships with this package.
-- [Item](components/item.md): Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValuePairs, records compared across columns are a Table, and…
+- [Item](components/item.md): Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValueList, records compared across columns are a Table, and w…
 - [Kbd](components/kbd.md): Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap.
-- [KeyValuePairs](components/key-value-pairs.md): Use KeyValuePairs to show read-only label/value facts about one resource, including its tags; rows with their own actions are Item rows.
+- [KeyValueList](components/key-value-list.md): Use KeyValueList to show read-only label/value facts about one resource, including its tags; rows with their own actions are Item rows.
 - [LineFigure](components/line-figure.md): An isometric line-art figure that answers the pointer: one per product (cache TTL, load balancer, DNS lookup, firewall, a 404 page and 20 more), drawn by a small engine into one SVG with the illustration tokens, so it…
 - [Logo](components/logo.md): A third-party mark (a client, a competitor, an analyst firm, a standard or certification, a coding agent) drawn right on both themes.
 - [NetworkMap](components/network-map.md): A decorative, full-bleed layer that paints the dotted world map with Azion's PoPs lit in the brand accent.

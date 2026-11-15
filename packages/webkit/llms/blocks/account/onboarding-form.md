@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/account/onboarding-form/onboarding-form.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/onboarding-form")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [FeatureList](../../components/feature-list.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [Input](../../components/input.md), [Link](../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../components/payment-brand.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [Separator](../../components/separator.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Wizard](../../components/wizard.md)
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [Checkbox](../../components/checkbox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [FeatureList](../../components/feature-list.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [Input](../../components/input.md), [Link](../../components/link.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../components/payment-brand.md), [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [Separator](../../components/separator.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [ToggleGroup](../../components/toggle-group.md), [Wizard](../../components/wizard.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -71,7 +71,7 @@ Square avatars: `pattern="marble"` seeded by the organization name with the card
 
 Under the picker: `Generated from the organization's name. Select its color.`
 
-### L. Plan step — `Tag`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter`, `FeatureList`, `ToggleGroup`, `Select`, `Checkbox`, `PaymentBrand`, `Separator`, `Link` (required)
+### L. Plan step — `Tag`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `FeatureList`, `ToggleGroup`, `Select`, `Checkbox`, `PaymentBrand`, `Separator`, `Link` (required)
 
 The plans are full-width `RadioGroup` cards, each with its name `Tag` and price. Free selects directly; Pro or Enterprise opens the upgrade `Drawer`, the Checkout of `account/change-plan-drawer` (What's included as a `FeatureList`, the billing period `ToggleGroup`, the payment method with its `PaymentBrand`, the billing address `Select`s and the `Checkbox` that reuses the account's address, the pricing `Link`s), and selects only once Upgrade is pressed.
 
@@ -151,7 +151,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
@@ -757,7 +757,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                   <DrawerTitle>Upgrade to {{ upgrade?.name }}</DrawerTitle>
                                 </PanelHeader>
 
-                                <PanelContent>
+                                <PanelBody>
                                   <div
                                     class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-(--spacing-xl)"
                                   >
@@ -912,14 +912,14 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                                   >
                                                     <Select.Trigger />
                                                     <Select.Content>
-                                                      <Select.Option
+                                                      <Select.Item
                                                         v-for="option in countryOptions"
                                                         :key="String(option.value)"
                                                         :value="option.value"
                                                         :disabled="option.disabled"
                                                       >
                                                         {{ option.label }}
-                                                      </Select.Option>
+                                                      </Select.Item>
                                                     </Select.Content>
                                                   </Select>
                                                 </Field>
@@ -1042,14 +1042,14 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                                 >
                                                   <Select.Trigger />
                                                   <Select.Content>
-                                                    <Select.Option
+                                                    <Select.Item
                                                       v-for="option in countryOptions"
                                                       :key="String(option.value)"
                                                       :value="option.value"
                                                       :disabled="option.disabled"
                                                     >
                                                       {{ option.label }}
-                                                    </Select.Option>
+                                                    </Select.Item>
                                                   </Select.Content>
                                                 </Select>
                                               </Field>
@@ -1071,14 +1071,14 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                                 >
                                                   <Select.Trigger />
                                                   <Select.Content>
-                                                    <Select.Option
+                                                    <Select.Item
                                                       v-for="option in stateOptions"
                                                       :key="String(option.value)"
                                                       :value="option.value"
                                                       :disabled="option.disabled"
                                                     >
                                                       {{ option.label }}
-                                                    </Select.Option>
+                                                    </Select.Item>
                                                   </Select.Content>
                                                 </Select>
                                               </Field>
@@ -1091,14 +1091,14 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                                 >
                                                   <Select.Trigger />
                                                   <Select.Content>
-                                                    <Select.Option
+                                                    <Select.Item
                                                       v-for="option in cityOptions"
                                                       :key="String(option.value)"
                                                       :value="option.value"
                                                       :disabled="option.disabled"
                                                     >
                                                       {{ option.label }}
-                                                    </Select.Option>
+                                                    </Select.Item>
                                                   </Select.Content>
                                                 </Select>
                                               </Field>
@@ -1131,7 +1131,7 @@ Each variant is the same screen in another state: `get_block("account/onboarding
                                       </Card>
                                     </div>
                                   </div>
-                                </PanelContent>
+                                </PanelBody>
 
                                 <PanelFooter>
                                   <div

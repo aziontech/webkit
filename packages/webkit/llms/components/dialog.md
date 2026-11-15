@@ -53,10 +53,13 @@
 - `@aziontech/webkit/dialog-description`
 - `@aziontech/webkit/dialog-title`
 - `@aziontech/webkit/dialog-trigger`
+- `@aziontech/webkit/dialog-header`
+- `@aziontech/webkit/dialog-body`
+- `@aziontech/webkit/dialog-footer`
 
 ## Sub-components
 
-- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Dialog.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Dialog.Header` (`panel-header`), `Dialog.Body` (`panel-content`) and `Dialog.Footer` (`panel-footer`). It adds no component of its own. Exported at `@aziontech/webkit/dialog`; the root alone is `@aziontech/webkit/dialog-root`. The parts stay in the root folder (flat).
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Dialog.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Dialog.Header`, `Dialog.Body` and `Dialog.Footer`, each importable on its own as `@aziontech/webkit/dialog-header`, `dialog-body` and `dialog-footer` (the same `panel-header`, `panel-body` and `panel-footer` files). It adds no component of its own. Exported at `@aziontech/webkit/dialog`; the root alone is `@aziontech/webkit/dialog-root`. The parts stay in the root folder (flat).
 - `dialog-close.vue` — Public sub-component `dialog-close`: the close (X) `IconButton`. `Dialog.Content` puts one at the end of its `PanelHeader` while `closable` is true, so a consumer places it by hand only in a custom header with `:closable="false"`. It always closes the dialog.
 - `dialog-content.vue` — Public sub-component `dialog-content`: the modal itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay (`aria-hidden`, `__backdrop` test id; a click on it closes the dialog when `dismissible`) and the `role="dialog"` panel, traps focus, scroll-locks the page and restores focus on close.
 - `dialog-description.vue` — Public sub-component `dialog-description`.
@@ -79,7 +82,7 @@
 #### Mobile sheet, height and scroll
 
 - Below `md` the dialog is a bottom sheet, capped at 80% of the **visible** viewport (`dvh`, not `vh`: on mobile browsers `vh` is the largest viewport with the toolbars retracted, so a `vh` sheet can extend under the URL bar with its footer off-screen).
-- Exactly one element caps the sheet (the panel) and exactly one element scrolls (`panel-content`), so the title and footer actions stay reachable while the body scrolls. The motion wrapper only positions and animates; it declares no cap and no scroll of its own.
+- Exactly one element caps the sheet (the panel) and exactly one element scrolls (`panel-body`), so the title and footer actions stay reachable while the body scrolls. The motion wrapper only positions and animates; it declares no cap and no scroll of its own.
 - The page behind the overlay is scroll-locked while the dialog is open, and the lock is released on close.
 - Phones: below `md` the panel is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content, its direct children stretch to equal widths and it keeps `env(safe-area-inset-bottom)` clear.
 - Server render and hydration: the phone layout and its motion timing are CSS breakpoints (`max-md:` / `md:` utilities), so the server HTML and the hydrated DOM are identical at every width.
@@ -158,7 +161,7 @@
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import { reactive, watch } from 'vue'
@@ -198,11 +201,11 @@
         <PanelHeader class="w-full">
           <DialogTitle>{{ sizeLabels[size] }}</DialogTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <DialogDescription>
             Panel max-width preset for the {{ size }} dialog, applied from the md breakpoint up.
           </DialogDescription>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
             <Button
@@ -228,7 +231,7 @@
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import { ref } from 'vue'
@@ -252,7 +255,7 @@
       <PanelHeader class="w-full">
         <DialogTitle>Domain settings</DialogTitle>
       </PanelHeader>
-      <PanelContent>
+      <PanelBody>
         <DialogDescription>Body taller than the dialog, so it has to scroll.</DialogDescription>
         <p>
           Setting 1 — the body is the only region that scrolls, so the title and the footer actions
@@ -326,7 +329,7 @@
           Setting 18 — the body is the only region that scrolls, so the title and the footer actions
           stay reachable.
         </p>
-      </PanelContent>
+      </PanelBody>
       <PanelFooter>
         <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
           <Button

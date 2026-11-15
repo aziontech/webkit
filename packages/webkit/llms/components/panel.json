@@ -8,14 +8,14 @@
  "structure": "composition",
  "compoundRoot": true,
  "subcomponents": [
-  "@aziontech/webkit/panel-content",
+  "@aziontech/webkit/panel-body",
   "@aziontech/webkit/panel-footer",
   "@aziontech/webkit/panel-header"
  ],
  "purpose": "The shell inside an overlay: a sized surface with a header for the title and the close control, a body that scrolls and a footer for the actions. `DialogContent` and `DrawerContent` lay their regions out with it, and a page can render it on its own as a static preview of an overlay.",
  "setup": null,
  "useWhen": [
-  "Laying out the regions inside `DialogContent` or `DrawerContent`: `PanelHeader` for the title (the overlay adds its close control), `PanelContent` for the body that scrolls, `PanelFooter` for the actions.",
+  "Laying out the regions inside `DialogContent` or `DrawerContent`: `PanelHeader` for the title (the overlay adds its close control), `PanelBody` for the body that scrolls, `PanelFooter` for the actions.",
   "A static preview of an overlay surface outside a live overlay, for example a frozen dialog on a docs or marketing page."
  ],
  "avoidWhen": [
@@ -26,12 +26,12 @@
  ],
  "related": [
   "dialog` — renders a `Panel` inside `DialogContent`; compose the `Panel*` regions directly in it.",
-  "drawer` — renders a `Panel` inside `DrawerContent`; there `PanelContent` scrolls through a `ScrollArea`.",
+  "drawer` — renders a `Panel` inside `DrawerContent`; there `PanelBody` scrolls through a `ScrollArea`.",
   "card` — in-page card with header, content and footer slots. `Panel` is the elevated overlay shell, with a large shadow and max-width presets."
  ],
  "bestPractices": [
-  "Inside a dialog or drawer, use only `PanelHeader`, `PanelContent` and `PanelFooter`. The overlay already renders the `Panel` root, so a second `Panel` inside it nests two shells.",
-  "Put long content in `PanelContent`. It is the only region that scrolls; the header and footer stay in place.",
+  "Inside a dialog or drawer, use only `PanelHeader`, `PanelBody` and `PanelFooter`. The overlay already renders the `Panel` root, so a second `Panel` inside it nests two shells.",
+  "Put long content in `PanelBody`. It is the only region that scrolls; the header and footer stay in place.",
   "size` caps the max width (`small`, `medium`, `large` map to the `--container-sm` / `--container-xl` / `--container-2xl` tokens). `sizeAtMd` applies that cap from `md` up only and is meant for the dialog's mobile bottom sheet.",
   "Panel` has no open state, no dismissal and no focus management. Don't use it alone as a modal."
  ],
@@ -64,7 +64,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import PanelContent from '@aziontech/webkit/panel-content'\n  import PanelFooter from '@aziontech/webkit/panel-footer'\n  import PanelHeader from '@aziontech/webkit/panel-header'\n  import Panel from '@aziontech/webkit/panel-root'\n</script>\n\n<template>\n  <Panel size=\"medium\">\n    <PanelHeader>\n      <h2 class=\"text-heading-sm text-(--text-default)\">Cache settings</h2>\n    </PanelHeader>\n    <PanelContent>\n      <p class=\"text-body-sm text-(--text-muted)\">\n        Objects are cached at the edge for the TTL set on each rule.\n      </p>\n    </PanelContent>\n    <PanelFooter>\n      <Button\n        label=\"Cancel\"\n        variant=\"outline\"\n      />\n      <Button\n        label=\"Save\"\n        variant=\"primary\"\n      />\n    </PanelFooter>\n  </Panel>\n</template>"
+   "sfc": "<script setup>\n  import Button from '@aziontech/webkit/button'\n  import PanelBody from '@aziontech/webkit/panel-body'\n  import PanelFooter from '@aziontech/webkit/panel-footer'\n  import PanelHeader from '@aziontech/webkit/panel-header'\n  import Panel from '@aziontech/webkit/panel-root'\n</script>\n\n<template>\n  <Panel size=\"medium\">\n    <PanelHeader>\n      <h2 class=\"text-heading-sm text-(--text-default)\">Cache settings</h2>\n    </PanelHeader>\n    <PanelBody>\n      <p class=\"text-body-sm text-(--text-muted)\">\n        Objects are cached at the edge for the TTL set on each rule.\n      </p>\n    </PanelBody>\n    <PanelFooter>\n      <Button\n        label=\"Cancel\"\n        variant=\"outline\"\n      />\n      <Button\n        label=\"Save\"\n        variant=\"primary\"\n      />\n    </PanelFooter>\n  </Panel>\n</template>"
   }
  ],
  "docs": "components/panel.md"

@@ -5,7 +5,7 @@
 - Surface: app
 - Source: `blocks/detail/dns-zone-detail/dns-zone-detail.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/dns-zone-detail")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [CopyButton](../../components/copy-button.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuItem`, [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [FileDropzone](../../components/file-dropzone.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../components/property-filter.md), [SaveBar](../../components/save-bar.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -31,7 +31,7 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 
 ### A. Tab bar — `PageTabs`, `Tabs` (required)
 
-A full-bleed `PageTabs` with one `Tabs.Item` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/webkit-navigation`.
+A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/webkit-navigation`.
 
 ### B. Settings sections — `SettingsSection`, `Card`, `ItemList`, `SettingRow`, `Input`, `HelperText` (required)
 
@@ -65,7 +65,7 @@ One row above the table: a `PropertyFilter` ("Filter records") that takes free t
 
 The table's `#empty` slot tells the two cases apart through `useCollection`'s `status`. A filter that matches nothing shows "No matching records" with Clear filters; a zone with no records shows "No records yet" with Add Record and Import zone file.
 
-### J. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
+### J. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
 `Table.CellActions`, named after the record ("Actions for www"), opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
 
@@ -148,7 +148,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
   import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -328,7 +328,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
   <div class="flex min-h-0 flex-1 flex-col">
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
           :value="tab.value"
@@ -686,7 +686,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                   <template #cell-actions="{ row }">
                     <Table.CellActions :name="row.name">
                       <DropdownMenuGroup>
-                        <DropdownMenuOption
+                        <DropdownMenuItem
                           value="edit"
                           label="Edit"
                         >
@@ -695,10 +695,10 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                               class="ai ai-pencil"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
+                        </DropdownMenuItem>
                       </DropdownMenuGroup>
                       <DropdownMenuGroup>
-                        <DropdownMenuOption
+                        <DropdownMenuItem
                           value="delete"
                           label="Delete"
                         >
@@ -707,7 +707,7 @@ Each variant is the same screen in another state: `get_block("detail/dns-zone-de
                               class="ai ai-trash"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
+                        </DropdownMenuItem>
                       </DropdownMenuGroup>
                     </Table.CellActions>
                   </template>

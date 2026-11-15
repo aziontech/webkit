@@ -27,7 +27,7 @@
 ## Don’t
 
 - A stand-alone form field with a visible label above it → use `field` around the control (`Field`, `FieldLabel`, `FieldDescription`).
-- A read-only list of label and value pairs → use `key-value-pairs`.
+- A read-only list of label and value pairs → use `key-value-list`.
 - A navigable list row → use `item` directly.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 

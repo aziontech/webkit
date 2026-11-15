@@ -588,13 +588,13 @@ Each variant is the same screen in another state: `get_block("dashboard/breakdow
             >
               <Select.Trigger aria-label="Period" />
               <Select.Content>
-                <Select.Option
+                <Select.Item
                   v-for="option in periods"
                   :key="option.value"
                   :value="option.value"
                 >
                   {{ option.label }}
-                </Select.Option>
+                </Select.Item>
               </Select.Content>
             </Select>
           </div>

@@ -9,7 +9,7 @@
  "compoundRoot": true,
  "subcomponents": [
   "@aziontech/webkit/pagination-button",
-  "@aziontech/webkit/pagination-info",
+  "@aziontech/webkit/pagination-description",
   "@aziontech/webkit/pagination-page-size"
  ],
  "purpose": "Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. **Composition mode** (default): a three-region landmark — page-info text, navigation buttons (Previous / page numbers / overflow / Next), and a rows-per-page selector — wired by hand through slots, with the consumer owning the current page, total, and page-size state. **Data-driven mode**: pass `total` (and optionally `page` / `pageSize`) and the Pagination renders its own info text, Previous / windowed page numbers / overflow ellipsis / Next, and the rows-per-page selector, emitting `update:page` / `update:pageSize` so the consumer can bind state via `v-model`. This component owns markup, tokens, and a11y; the data engine is a small internal page-window calculation — **no external pagination library**. Pairs with the [`Table`](table.md) component.",
@@ -18,7 +18,7 @@
   "Use Pagination to page through the rows of a table or list; alternative versions of one AI response use ResponseBranches.",
   "A list or table outside `table`'s own footer needs page navigation and a rows-per-page selector.",
   "You know the item count — pass `total` and bind `v-model:page` / `v-model:page-size`; the component renders the info text, the windowed page numbers and the selector.",
-  "The page strip needs custom content (a different info line, extra controls) — compose `Pagination.Info`, `Pagination.Button` and `Pagination.PageSize` through the slots."
+  "The page strip needs custom content (a different info line, extra controls) — compose `Pagination.Description`, `Pagination.Button` and `Pagination.PageSize` through the slots."
  ],
  "avoidWhen": [
   "The rows live in a data-driven `table` → set `paginated` on the table; it renders this pagination in its footer and wires it for you.",
@@ -103,7 +103,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n</script>\n\n<template>\n  <Pagination>\n    <template #info>\n      <Pagination.Info>Showing 1 to 10 of 20 entries</Pagination.Info>\n    </template>\n\n    <Pagination.Button\n      type=\"previous\"\n      aria-label=\"Previous page\"\n      disabled\n    />\n    <Pagination.Button\n      type=\"number\"\n      active\n      >1</Pagination.Button\n    >\n    <Pagination.Button type=\"number\">2</Pagination.Button>\n    <Pagination.Button type=\"number\">3</Pagination.Button>\n    <Pagination.Button type=\"more\" />\n    <Pagination.Button\n      type=\"next\"\n      aria-label=\"Next page\"\n    />\n\n    <template #controls>\n      <Pagination.PageSize\n        :model-value=\"10\"\n        :options=\"[10, 25, 50, 100]\"\n      />\n    </template>\n  </Pagination>\n</template>"
+   "sfc": "<script setup>\n  import Pagination from '@aziontech/webkit/pagination'\n</script>\n\n<template>\n  <Pagination>\n    <template #info>\n      <Pagination.Description>Showing 1 to 10 of 20 entries</Pagination.Description>\n    </template>\n\n    <Pagination.Button\n      type=\"previous\"\n      aria-label=\"Previous page\"\n      disabled\n    />\n    <Pagination.Button\n      type=\"number\"\n      active\n      >1</Pagination.Button\n    >\n    <Pagination.Button type=\"number\">2</Pagination.Button>\n    <Pagination.Button type=\"number\">3</Pagination.Button>\n    <Pagination.Button type=\"more\" />\n    <Pagination.Button\n      type=\"next\"\n      aria-label=\"Next page\"\n    />\n\n    <template #controls>\n      <Pagination.PageSize\n        :model-value=\"10\"\n        :options=\"[10, 25, 50, 100]\"\n      />\n    </template>\n  </Pagination>\n</template>"
   },
   {
    "name": "Buttons",

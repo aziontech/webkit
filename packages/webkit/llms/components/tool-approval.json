@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValuePairs` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`variant=\"danger\"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.",
+ "purpose": "A user-authorized action in a conversation (Cloudscape user-authorized actions, AI Elements Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy, delete — and the reader approves or denies it before anything runs. The card states the action as a question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a `CodeBlock` with the command, `KeyValueList` with parameters), and offers Deny and Approve. Once decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the decision stays in the thread. Irreversible actions (`variant=\"danger\"`) turn Approve destructive and can require typing a phrase first. It is a card in the conversation, not a dialog: it does not trap focus and does not take initial focus; `focus()` moves focus to its heading when the owner wants to bring the reader to it.",
  "setup": null,
  "useWhen": [
   "Use ToolApproval only inside an AI conversation when an agent asks permission to run a tool or command; for a person confirming an action they started use ConfirmDialog.",
@@ -23,7 +23,7 @@
  "related": [
   "tool-call` — the record of the call after it is approved (or `denied`).",
   "confirm-dialog` — confirmation of the reader's own destructive action.",
-  "code-block`, `key-value-pairs` — what will run, in the body.",
+  "code-block`, `key-value-list` — what will run, in the body.",
   "chat-message` — the assistant acknowledges the decision in the next message."
  ],
  "bestPractices": [
@@ -107,7 +107,7 @@
   {
    "name": "default",
    "scope": "—",
-   "notes": "What exactly will run: a `CodeBlock`, or `KeyValuePairs` with parameters."
+   "notes": "What exactly will run: a `CodeBlock`, or `KeyValueList` with parameters."
   }
  ],
  "styleSeam": false,

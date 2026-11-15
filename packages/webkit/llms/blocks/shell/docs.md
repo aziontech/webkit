@@ -438,13 +438,13 @@ Each variant is the same screen in another state: `get_block("shell/docs", { var
                   </template>
                 </Select.Trigger>
                 <Select.Content>
-                  <Select.Option
+                  <Select.Item
                     v-for="option in languages"
                     :key="option"
                     :value="option"
                   >
                     {{ option }}
-                  </Select.Option>
+                  </Select.Item>
                 </Select.Content>
               </Select>
             </div>

@@ -1,11 +1,11 @@
 # RuleBuilder (`edit/rule-builder`)
 
-> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
+> A rule builder drawer, the richest form pattern: a large right-side drawer with General, Phase, Criteria, Behaviors and Status sections over a single Save in the footer. Name shows its required state only after Save is pressed with it empty, never on first render. Criteria are an `AttributeEditor` in grouped mode: AND groups of variable, operator and argument rows joined by OR, the variable a `Combobox` of the phase's variables, with Add condition, Add OR group, limits and announcements from the editor, and conditions and groups that reorder by grip, Move up and Move down, or Alt+Arrow keys (`reorderable`); behaviors are a second `AttributeEditor` (list mode, `reorderable`, up to 10) labelled Then, whose argument cell follows the behavior picked from a searchable list filtered by phase; Add behavior waits while the last behavior ends the rule. Every form resets when the drawer opens, so its content stays in place while it closes. A resource’s Rules tab opens it as Add Rule or Edit Rule. A save that fails keeps the drawer open with a danger `Alert`. Built from `SettingsSection`, `SettingRow`, `Drawer` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `Field`, `Input`, `HelperText`, `Select`, `AttributeEditor`, `Combobox`, `RadioGroup` choice cards (`variant="card"`), `Card`, `Item`, `Switch`, `Alert` and `Button`.
 
 - Surface: app
 - Source: `blocks/edit/rule-builder/rule-builder.vue` in `@aziontech/webkit`
 - MCP: `get_block("edit/rule-builder")`
-- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [Field](../../components/field.md), [HelperText](../../components/helper-text.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md)
+- Components: [Alert](../../components/alert.md), [AttributeEditor](../../components/attribute-editor.md), [Button](../../components/button.md), [Card](../../components/card.md), [Combobox](../../components/combobox.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [Field](../../components/field.md), [HelperText](../../components/helper-text.md), [Input](../../components/input.md), [Item](../../components/item.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [RadioGroup](../../components/radio-group.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-create-surface`
 
 ## Asked as
@@ -29,9 +29,9 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 ## Building blocks
 
-### A. Drawer and trigger — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent` (required)
+### A. Drawer and trigger — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
-A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add Rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelContent` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
+A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add Rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelBody` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
 
 ### B. General — `SettingsSection`, `Field`, `Input` (required)
 
@@ -55,7 +55,7 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 
 ### G. Footer — `PanelFooter`, `Button`, `Alert` (required)
 
-`PanelFooter` with one primary medium Save `Button` at the end, which submits the form and shows its loading state. A save that fails keeps the drawer open with every field and a danger `Alert` at the top of `PanelContent` ("Rule not saved. You are offline; check your connection and save again."); Save retries.
+`PanelFooter` with one primary medium Save `Button` at the end, which submits the form and shows its loading state. A save that fails keeps the drawer open with every field and a danger `Alert` at the top of `PanelBody` ("Rule not saved. You are offline; check your connection and save again."); Save retries.
 
 ## Do
 
@@ -132,7 +132,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
@@ -668,7 +668,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <div
             v-if="saveError"
             class="mb-(--spacing-md)"
@@ -799,13 +799,13 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                   >
                     <Select.Trigger />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="op in OPERATORS"
                         :key="op.value"
                         :value="op.value"
                       >
                         {{ op.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                 </template>
@@ -892,13 +892,13 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                                   </template>
                                 </Input>
                               </template>
-                              <Select.Option
+                              <Select.Item
                                 v-for="option in behaviorMatches(item.id)"
                                 :key="option.value"
                                 :value="option.value"
                               >
                                 {{ option.label }}
-                              </Select.Option>
+                              </Select.Item>
                               <p
                                 v-if="!behaviorMatches(item.id).length"
                                 class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
@@ -939,13 +939,13 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
                               >
                                 <Select.Trigger :aria-label="argument.label" />
                                 <Select.Content>
-                                  <Select.Option
+                                  <Select.Item
                                     v-for="option in optionsFor(argument.source)"
                                     :key="option.value"
                                     :value="option.value"
                                   >
                                     {{ option.label }}
-                                  </Select.Option>
+                                  </Select.Item>
                                 </Select.Content>
                               </Select>
                               <HelperText v-if="behaviorArgumentNote(argument.source, form.phase)">
@@ -1016,7 +1016,7 @@ Each variant is the same screen in another state: `get_block("edit/rule-builder"
               </Card>
             </SettingsSection>
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">

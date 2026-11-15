@@ -47,7 +47,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated, at any sub-menu depth. The panel closes and focus returns to the element that was focused in the area, except for checkbox and radio options. |
+| `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuItemValue)` | Fires when an enabled option is activated, at any sub-menu depth. The panel closes and focus returns to the element that was focused in the area, except for checkbox and radio options. |
 
 ## Slots
 
@@ -65,7 +65,7 @@
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the area's content.
-- Item parts, shared with `DropdownMenu` and attached to the compound under the same names: `ContextMenu.Group` (`dropdown-menu-group`), `ContextMenu.Item` (`dropdown-menu-option`, including `type="checkbox"` / `type="radio"` and `command`), `ContextMenu.Sub`, `ContextMenu.SubTrigger` and `ContextMenu.SubContent` (`dropdown-menu-sub*`). Their props, slots and behaviour are specified in `.specs/dropdown-menu.md`; inside a `ContextMenu` they emit through this root's `select`.
+- Item parts, shared with `DropdownMenu` and attached to the compound under the same names: `ContextMenu.Group` (`dropdown-menu-group`), `ContextMenu.Item` (`dropdown-menu-item`, including `type="checkbox"` / `type="radio"` and `command`), `ContextMenu.Sub`, `ContextMenu.SubTrigger` and `ContextMenu.SubContent` (`dropdown-menu-sub*`). Their props, slots and behaviour are specified in `.specs/dropdown-menu.md`; inside a `ContextMenu` they emit through this root's `select`.
 
 ## v-model
 

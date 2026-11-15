@@ -825,13 +825,13 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
                   >
                     <Select.Trigger aria-label="Status" />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="option in statusOptions"
                         :key="option.value"
                         :value="option.value"
                       >
                         {{ option.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                 </div>
@@ -847,13 +847,13 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
                   >
                     <Select.Trigger aria-label="Verdict" />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="option in verdictOptions"
                         :key="option.value"
                         :value="option.value"
                       >
                         {{ option.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                 </div>
@@ -869,13 +869,13 @@ Each variant is the same screen in another state: `get_block("dashboard/scan-res
                   >
                     <Select.Trigger aria-label="Source" />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="option in sourceOptions"
                         :key="option.value"
                         :value="option.value"
                       >
                         {{ option.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                 </div>

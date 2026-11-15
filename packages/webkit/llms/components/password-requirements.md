@@ -1,8 +1,9 @@
 # Password Requirements
 
-> Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirement` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirement[]`, whose `test` may be a predicate.
+> Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirement` type so a form validates with the same rules it shows. `@aziontech/webkit/password-requirements` resolves to the `index.ts` that adds those exports; `@aziontech/webkit/password-requirements-root` is the component file alone. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirement[]`, whose `test` may be a predicate.
 
-- Import: `import PasswordRequirements from '@aziontech/webkit/password-requirements'`
+- Import: `import PasswordRequirementsRoot from '@aziontech/webkit/password-requirements-root'`
+- Compound import (dot notation, not tree-shakeable): `import PasswordRequirements from '@aziontech/webkit/password-requirements'`
 - Category: inputs · Surface: app · Structure: monolithic
 - API as JSON: [password-requirements.json](https://github.com/aziontech/webkit/blob/main/.specs/password-requirements.json)
 

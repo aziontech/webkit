@@ -1,11 +1,11 @@
 # AiChatDrawer (`ai/ai-chat-drawer`)
 
-> The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValuePairs` with a `StatusIndicator`) beside a medium `Drawer` with `:modal="false"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.
+> The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValueList` with a `StatusIndicator`) beside a medium `Drawer` with `:modal="false"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.
 
 - Surface: app
 - Source: `blocks/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_block("ai/ai-chat-drawer")`
-- Components: [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValuePairs](../../components/key-value-pairs.md), [PageHeader](../../components/page-header.md), `PanelHeader`, [PromptInput](../../components/prompt-input.md), [Reasoning](../../components/reasoning.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), `use-locale`
+- Components: [Button](../../components/button.md), [Card](../../components/card.md), [ChatMessage](../../components/chat-message.md), [Conversation](../../components/conversation.md), [CopyButton](../../components/copy-button.md), `DrawerContent`, [Drawer](../../components/drawer.md), `DrawerTitle`, [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValueList](../../components/key-value-list.md), [PageHeader](../../components/page-header.md), `PanelHeader`, [PromptInput](../../components/prompt-input.md), [Reasoning](../../components/reasoning.md), [Sources](../../components/sources.md), [StatusIndicator](../../components/status-indicator.md), [StreamingResponse](../../components/streaming-response.md), [SuggestionGroup](../../components/suggestion-group.md), [Tag](../../components/tag.md), `use-locale`
 - Skills: `webkit-ai-surfaces`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -30,7 +30,7 @@ The generative AI assistant beside the work: the reader is on a resource page �
 
 ## Building blocks
 
-### A. Page behind — `PageHeader`, `Card`, `KeyValuePairs`, `StatusIndicator`
+### A. Page behind — `PageHeader`, `Card`, `KeyValueList`, `StatusIndicator`
 
 The resource page the reader is on. The assistant's support prompts and answers refer to it, so keep it visible and undimmed: the drawer has no overlay.
 
@@ -137,7 +137,7 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PromptInput, { type PromptInputStatus } from '@aziontech/webkit/prompt-input'
@@ -379,24 +379,24 @@ Each variant is the same screen in another state: `get_block("ai/ai-chat-drawer"
         <Card>
           <template #default>
             <div class="p-(--spacing-md)">
-              <KeyValuePairs
+              <KeyValueList
                 :columns="3"
                 aria-label="Workload details"
               >
-                <KeyValuePairs.Item label="Status">
+                <KeyValueList.Item label="Status">
                   <StatusIndicator
                     severity="danger"
                     label="Errors above 30%"
                   />
-                </KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Domains"
-                  >www.example.com, shop.example.com</KeyValuePairs.Item
+                </KeyValueList.Item>
+                <KeyValueList.Item label="Domains"
+                  >www.example.com, shop.example.com</KeyValueList.Item
                 >
-                <KeyValuePairs.Item label="Origin">api.example.com</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Cache hit ratio">91%</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Last deployment">Today, 13:58</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Region">US East (Washington)</KeyValuePairs.Item>
-              </KeyValuePairs>
+                <KeyValueList.Item label="Origin">api.example.com</KeyValueList.Item>
+                <KeyValueList.Item label="Cache hit ratio">91%</KeyValueList.Item>
+                <KeyValueList.Item label="Last deployment">Today, 13:58</KeyValueList.Item>
+                <KeyValueList.Item label="Region">US East (Washington)</KeyValueList.Item>
+              </KeyValueList>
             </div>
           </template>
         </Card>
