@@ -65,9 +65,9 @@
     "test:browser-webkit": "BROWSER=webkit vitest run --config vitest.matrix.config.ts",
     "test:ui": "vitest --ui --browser.headless=false",
     "test:watch": "vitest",
-    "parse:figma": "figma connect parse",
+    "check:figma": "figma connect parse",
     "publish:figma": "figma connect publish",
-    "unpublish:figma": "figma connect unpublish"
+    "clean:figma": "figma connect unpublish"
   },
   "bin": {
     "webkit": "./src/cli/cli.js"
@@ -143,7 +143,7 @@
     "catalog",
     "llms",
     "package.json",
-    "MIGRATION-v6.md"
+    "MIGRATION_V6.md"
   ],
   "sideEffects": [
     "**/*.css"

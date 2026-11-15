@@ -973,6 +973,12 @@
   "command-group": {
     "heading": "label"
   },
+  "help-panel-group": {
+    "title": "label"
+  },
+  "key-value-list-group": {
+    "title": "label"
+  },
   "command-page": {
     "heading": "title"
   },
