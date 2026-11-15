@@ -184,19 +184,24 @@ export const DOMAIN_PARTS = {
     'scatter',
     'tooltip'
   ],
-  'chart-card': ['controls', 'handle'],
+  'chart-card': ['action', 'controls', 'handle'],
   'chat-message': ['actions', 'feedback'],
   'column-navigation': ['column'],
+  'console-layout': ['breadcrumb'],
+  'context-menu': ['sub'],
   command: ['empty', 'input', 'page'],
   'data-table': ['cell', 'row', 'column', 'toolbar', 'search', 'filter', 'export', 'button'],
-  'date-picker': ['clear', 'grid', 'timezone'],
-  diagram: ['node'],
+  'date-picker': ['clear'],
+  'dropdown-menu': ['sub'],
   field: ['error', 'legend', 'set'],
   flow: ['anchor', 'node', 'parallel'],
   footer: ['column', 'link'],
   'input-group': ['addon', 'input'],
+  item: ['actions', 'media'],
+  'log-view': ['steps'],
   pagination: ['button', 'size'],
   resizable: ['handle', 'pane'],
+  'sidebar-menu': ['back', 'sub'],
   stepper: ['step'],
   table: [
     'actions',
@@ -216,10 +221,8 @@ export const DOMAIN_PARTS = {
     'toolbar'
   ],
   toast: ['action'],
-  'topology-diagram': ['node'],
   'transfer-list': ['controls', 'source', 'target'],
-  tree: ['node'],
-  'tutorial-panel': ['task', 'tasks'],
+  'tutorial-panel': ['provider'],
   wizard: ['step']
 }
 
