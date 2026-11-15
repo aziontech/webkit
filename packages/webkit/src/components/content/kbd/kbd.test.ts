@@ -118,9 +118,10 @@ describe('Kbd', () => {
       expect(getByTestId('content-kbd')).toHaveTextContent('↑↓↵')
     })
 
-    it('resolves modifiers, named keys and single characters in a keys list', () => {
+    it('resolves modifiers, named keys and single characters in a keys list', async () => {
       vi.stubGlobal('navigator', { platform: 'MacIntel', userAgent: 'Macintosh' })
       const { getByTestId } = render(Kbd, { props: { keys: ['meta', 'shift', 'p', 'Enter'] } })
+      await nextTick()
       expect(getByTestId('content-kbd')).toHaveTextContent('⌘⇧PEnter')
     })
 
