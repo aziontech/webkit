@@ -2,7 +2,7 @@
 name: webkit-ux-heuristics
 description: Component-map discovery pass — for each UX moment (loading→Skeleton, destructive→Dialog confirm, field error→Field/Alert inline, overlay→shipped focus-trap, empty→one action) name the @aziontech/webkit component that already serves it, so the flow is sound before polish. Also owns three usability rules every surface follows — an external resource link opens in a new tab and says so (trailing ai-external-link + new-tab hint), every long list (a "+N" Tag opening a Popover, an inline picker of existing resources in a create flow, a Select of existing resources) carries a count, search and Load more, and any list of options longer than 7 turns search on. State rendering + async behavior lives in /webkit-ui-states.
 status: active
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 scope: general
 # prettier-ignore
 enforced_by: [webkit-prefer-over-custom, webkit-component-states, webkit-accessibility, ui-verify, review]
@@ -53,7 +53,7 @@ component for the moment; don't re-derive the principle.
 | Contextual actions / menu         | `@aziontech/webkit/dropdown-menu`                                                                                       | a hand-rolled popover                                 |
 | Side surface                      | `@aziontech/webkit/panel`, `@aziontech/webkit/drawer`                                                                   | a fixed div without focus management                  |
 | Tooltip help                      | `@aziontech/webkit/tooltip`                                                                                             | `title` attribute only                                |
-| Field label                       | `@aziontech/webkit/label`                                                                                               | placeholder-as-label                                  |
+| Field label                       | `Field.Label` from `@aziontech/webkit/field` (`@aziontech/webkit/field-label` beside a bare control)                    | placeholder-as-label                                  |
 | Link to an external resource      | `@aziontech/webkit/link` with `target="_blank"` (trailing `ai-external-link`) — see rule 1 below                        | a bare `<a>`, a `ButtonMini`, or a silent new tab     |
 | More items than the space holds   | first item + `+N` `@aziontech/webkit/tag` opening a `@aziontech/webkit/popover` with search and Load more — rule 2      | a wrapped inline list, or every item rendered at once |
 | Picking from more than 7 options  | `@aziontech/webkit/select` with an `Input` in `Select.Content`'s `#search` slot, or one above the overlay list — rule 3 | a long list the user has to scroll to scan            |
