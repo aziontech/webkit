@@ -14,6 +14,7 @@
  "purpose": "Rich preview that appears beside a link or name when the pointer rests on it or keyboard focus reaches it, and goes away when both leave. The root `HoverCard` owns the open state, the open and close delays and positioning (the shared `usePlacement`, the same engine as `Popover`); `HoverCard.Trigger` wraps the element being previewed; `HoverCard.Content` is the floating card. It sits between `Tooltip` (one line of plain text) and `Popover` (opened by a click, holds interactive content): the card shows a few lines of supplementary context, such as a person, a resource or a commit, without asking for a click.",
  "setup": null,
  "useWhen": [
+  "Use HoverCard for a read-only rich preview (a definition, a user card, a link preview) shown on hover or focus; interactive content is a Popover and a one-line hint is a Tooltip.",
   "Previewing what a link points to before following it: a user handle in an audit log, a resource name in a table, a commit hash.",
   "Showing a summary (status, owner, last update) that the destination page also shows."
  ],

@@ -1,15 +1,15 @@
 {
- "purpose": "One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Running…`, `Completed`, `Failed`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ActionConfirmation`.",
+ "purpose": "One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Running…`, `Completed`, `Failed`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ToolApproval`.",
  "useWhen": [
   "An agent calls a tool, an MCP server, an API or a CLI command during a response, and the reader should see what ran and what came back."
  ],
  "avoidWhen": [
-  "Asking the reader to allow a call → `action-confirmation` (then a `tool-call` records it).",
+  "Asking the reader to allow a call → `tool-approval` (then a `tool-call` records it).",
   "The model's reasoning → `reasoning`.",
   "A long-running job outside a chat → `progress` / `status-indicator` on the resource."
  ],
  "related": [
-  "action-confirmation` — the authorization step before a sensitive call.",
+  "tool-approval` — the authorization step before a sensitive call.",
   "status-indicator` — the status the row shows.",
   "code-block`, `key-value-pairs` — what goes in the input and output slots."
  ],

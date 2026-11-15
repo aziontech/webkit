@@ -33,8 +33,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `columns` | `1 \| 2 \| 3 \| 4` | `undefined` | false | Column count at the large breakpoint. Unset falls back to the deprecated `cols`. |
-| `cols` | `1 \| 2 \| 3 \| 4` | `2` | false | @deprecated since 6.0 — use `columns` instead. Removed in 7.0. The `cols` attribute of a Markdown `CardGroup` still maps here. |
+| `columns` | `1 \| 2 \| 3 \| 4` | `2` | false | Column count at the large breakpoint. A Markdown `CardGroup cols` attribute maps here (through DocMarkdown). |
 | `mobileColumns` | `1 \| 2` | `1` | false | Column count on a phone. Two only pays when the cells are a mark plus a word. |
 
 ## Slots
@@ -46,7 +45,7 @@
 ## States
 
 - Visual states: `default` (the component is not interactive and holds no state)
-- `data-columns` and `data-mobile-columns` mirror the column count (`columns`, else `cols`) and `mobileColumns`; Tailwind data-variants switch the grid's column count on them at the `sm` and `lg` breakpoints
+- `data-columns` and `data-mobile-columns` mirror `columns` and `mobileColumns`; Tailwind data-variants switch the grid's column count on them at the `sm` and `lg` breakpoints
 - `data-doc-block` is the `DocProse` contract (the group takes the block rung of the ladder)
 
 ## Accessibility

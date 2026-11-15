@@ -1,6 +1,7 @@
 {
  "purpose": "A multi-step create flow in one surface. It puts the step rail on the start side, the current step's header and fields in the content column, and a fixed footer with Cancel, Previous and Next. On the last step, Next becomes the submit action. It owns the order, which steps can be reached and where focus goes. The consumer owns the fields, the validation and the request. It differs from its siblings by owning the **whole flow**. `stepper` is only the rail and leaves layout, actions and gating to the caller. `tabs` switches between peer views that have no order and no completion.",
  "useWhen": [
+  "Use Wizard for any ordered multi-step create: Stepper + step content + Cancel/Previous/Next footer; compose Stepper alone only when the footer and gating must be custom.",
   "Creating a resource takes several ordered decisions, and showing them all at once would overwhelm the",
   "The reader has to finish a step before moving on. Validation runs on Next and can stop the move.",
   "The flow needs a review step before the final submit, and earlier steps must stay reachable to fix"

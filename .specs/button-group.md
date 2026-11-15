@@ -3,9 +3,9 @@ name: button-group
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 57ba406c1ff80cdd76facd9dc1e6b891243d83aa2326cdccc6898845d1f10099
+checksum: 73fad2391af3b3cf2378ba8902c8fccfb3b5a247616ddbadfa24246d7163d493
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -18,6 +18,7 @@ A toolbar of icon actions that belong to one surface (a code panel, a table head
 
 ## When to use
 
+- Use ButtonGroup for a toolbar of icon actions on one surface (code panel, table header); one default action with alternatives is a SplitButton.
 - A row of icon actions on one surface: Copy, Format, Wrap lines, Download above a code editor.
 - Compact actions in a panel header where labels would not fit, each explained by its tooltip.
 - A mix of actions and on / off view toggles (wrap lines, show whitespace) that sit together.

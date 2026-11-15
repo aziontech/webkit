@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use ButtonHighlight only for the one AI entry point on a screen (Copilot); every other action is Button.
 - The single entry point to an AI assistant or highlight flow (for example "Ask Azion") that must stand out from the actions around it.
 - A headline action in a header or marketing band where a primary `button` would blend in.
 

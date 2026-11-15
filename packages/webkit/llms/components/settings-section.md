@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use SettingsSection for a band of a settings page whose body is SettingRow rows; any other band heading is a SectionHeader.
 - Every settings page and create page: a resource's Settings tab, Account Settings, a create form, a create drawer.
 - An Advanced band that starts closed (`collapsible`).
 

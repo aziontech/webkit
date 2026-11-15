@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/frame-box",
  "treeShakeableImport": "@aziontech/webkit/frame-box",
  "category": "layout",
- "surface": "product",
+ "surface": "marketing",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

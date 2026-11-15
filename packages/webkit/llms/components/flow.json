@@ -31,7 +31,7 @@
  ],
  "bestPractices": [
   "Write steps as direct children of `Flow` in flow order; connectors are drawn between siblings, so wrapping nodes in extra elements breaks the chain.",
-  "Use `unstyled` when the slot content is the whole node, and put a `Flow.Anchor` (`type=\"end\"` incoming, `type=\"start\"` outgoing) on each part a connector should touch — an unstyled node renders no ports of its own.",
+  "Use `unstyled` when the slot content is the whole node, and put a `Flow.Anchor` (`side=\"end\"` incoming, `side=\"start\"` outgoing) on each part a connector should touch — an unstyled node renders no ports of its own.",
   "Mark a leaf that hangs off the chain with `terminal`; it receives a connector but sends none on.",
   "Do not clip a node with `overflow-hidden` in a wrapping card — the connector ports sit outside the node's box and would disappear.",
   "Let a wide flow scroll in its own container; the root is an `overflow: auto` region, and there is no drag-to-pan."

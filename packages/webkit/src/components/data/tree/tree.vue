@@ -128,6 +128,8 @@
 
   const editable = computed(() => props.editable)
 
+  const grid = computed(() => Boolean(slots.actions))
+
   const renamingId = ref('')
 
   const anchorId = ref('')
@@ -197,8 +199,7 @@
 
   function focusItem(id: string) {
     if (!id || !treeRef.value) return
-    const nodes = treeRef.value.querySelectorAll<globalThis.HTMLElement>('[role="treeitem"]')
-    const target = Array.from(nodes).find((node) => node.dataset['itemId'] === id)
+    const target = rowElement(id)
     if (!target) return
     navigation.setFocused(id)
     target.focus()
@@ -248,15 +249,82 @@
     writeSelection(navigation.visible.value.filter(isEnabled))
   }
 
+  function rowElement(id: string) {
+    const nodes = treeRef.value?.querySelectorAll<globalThis.HTMLElement>('[data-tree-focus]') ?? []
+    return Array.from(nodes).find((node) => node.dataset['itemId'] === id) ?? null
+  }
+
   function treeitemOf(target: EventTarget | null) {
     if (!(target instanceof globalThis.HTMLElement)) return ''
-    if (target.getAttribute('role') !== 'treeitem') return ''
+    if (!target.hasAttribute('data-tree-focus')) return ''
     return target.dataset['itemId'] ?? ''
   }
 
+  function rowOf(target: EventTarget | null) {
+    if (!(target instanceof globalThis.Element)) return null
+    return target.closest<globalThis.HTMLElement>('[data-tree-focus]')
+  }
+
+  const CELL_CONTROLS =
+    'a[href], button:not([disabled]), input:not([disabled]), select, textarea, [tabindex]'
+
+  function cellsOf(row: globalThis.HTMLElement | null): globalThis.HTMLElement[] {
+    if (!row) return []
+    const label = row.querySelector<globalThis.HTMLElement>('[data-tree-cell]')
+    const actions = row.querySelector<globalThis.HTMLElement>('[data-tree-actions]')
+    const controls = actions
+      ? Array.from(actions.querySelectorAll<globalThis.HTMLElement>(CELL_CONTROLS))
+      : []
+    return [...(label ? [label] : []), ...new Set(controls)]
+  }
+
   function onFocusin(event: FocusEvent) {
-    const id = treeitemOf(event.target)
+    const id =
+      treeitemOf(event.target) || (grid.value ? (rowOf(event.target)?.dataset['itemId'] ?? '') : '')
     if (id) navigation.setFocused(id)
+  }
+
+  function onCellKeydown(event: KeyboardEvent) {
+    const row = rowOf(event.target)
+    const id = row?.dataset['itemId'] ?? ''
+    if (!row || !id) return
+    const cells = cellsOf(row)
+    const at = cells.findIndex(
+      (cell) => cell === event.target || cell.contains(event.target as Node)
+    )
+    if (at === -1) return
+    const moveRow = (offset: 1 | -1) => {
+      const next = navigation.sibling(id, offset)
+      const target = cellsOf(rowElement(next))
+      if (!next || target.length === 0) return
+      navigation.setFocused(next)
+      target[Math.min(at, target.length - 1)]?.focus()
+    }
+    switch (logicalArrowKey(event.key, eventDirection(event))) {
+      case 'ArrowRight':
+        cells[at + 1]?.focus()
+        break
+      case 'ArrowLeft':
+        if (at > 0) cells[at - 1]?.focus()
+        else focusItem(id)
+        break
+      case 'ArrowDown':
+        moveRow(1)
+        break
+      case 'ArrowUp':
+        moveRow(-1)
+        break
+      case 'Escape':
+        focusItem(id)
+        break
+      case 'Enter':
+        if (at !== 0) return
+        activate(event, id)
+        break
+      default:
+        return
+    }
+    event.preventDefault()
   }
 
   function onClick(event: MouseEvent) {
@@ -264,7 +332,7 @@
     if (!(target instanceof globalThis.Element)) return
     if (target.closest('[data-tree-toggle], [data-tree-actions], [data-tree-rename]')) return
     const row = target.closest('[data-tree-row]')
-    const id = treeitemOf(row?.parentElement ?? null)
+    const id = row?.closest<globalThis.HTMLElement>('[data-item-id]')?.dataset['itemId'] ?? ''
     if (!id) return
     focusItem(id)
     activate(event, id)
@@ -275,14 +343,19 @@
     if (!(target instanceof globalThis.Element)) return
     if (target.closest('[data-tree-toggle], [data-tree-actions], [data-tree-rename]')) return
     const row = target.closest('[data-tree-row]')
-    const entry = navigation.entry(treeitemOf(row?.parentElement ?? null))
+    const entry = navigation.entry(
+      row?.closest<globalThis.HTMLElement>('[data-item-id]')?.dataset['itemId'] ?? ''
+    )
     if (!entry || entry.item.disabled) return
     emit('item-dblclick', event, entry.item)
   }
 
   function onKeydown(event: KeyboardEvent) {
     const id = treeitemOf(event.target)
-    if (!id) return
+    if (!id) {
+      if (grid.value) onCellKeydown(event)
+      return
+    }
     const parent = navigation.isParent(id)
     const extend = multiple.value && event.shiftKey
     if (multiple.value && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a') {
@@ -301,6 +374,7 @@
         break
       case 'ArrowRight':
         if (parent && !isExpanded(id)) setExpanded(id, true)
+        else if (grid.value) cellsOf(rowElement(id))[0]?.focus()
         else if (parent) focusItem(navigation.firstChildOf(id))
         break
       case 'ArrowLeft':
@@ -362,6 +436,7 @@
 
   provide(TreeInjectionKey, {
     testId,
+    grid,
     selectable: selectionOn,
     editable,
     renamingId,
@@ -414,10 +489,11 @@
         />
       </slot>
     </template>
-    <ul
+    <component
+      :is="grid ? 'div' : 'ul'"
       v-else
       ref="treeRef"
-      role="tree"
+      :role="grid ? 'treegrid' : 'tree'"
       :aria-label="ariaLabel || t('tree.label')"
       :aria-multiselectable="multiple || undefined"
       class="m-0 flex list-none flex-col p-0"
@@ -470,6 +546,6 @@
           <ActionsOutlet :scope="scope" />
         </template>
       </TreeNode>
-    </ul>
+    </component>
   </div>
 </template>

@@ -63,7 +63,7 @@ emit('click', event, { label, href }) // menu-item / breadcrumb-item — needs b
 
 ```ts
 // ✅ Unchanged — a lone control has no subject
-emit('click', event) // button, icon-button, link, mini-button
+emit('click', event) // button, icon-button, link
 
 // ✅ Unchanged — model / value events take the value, never a DOM event
 emit('update:value', next)

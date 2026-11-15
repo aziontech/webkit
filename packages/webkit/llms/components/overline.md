@@ -42,7 +42,6 @@
 | --- | --- | --- | --- | --- |
 | `singleLine` | `boolean` | `true` | false | Keeps the prefix unbroken and the label on one line while it fits; a longer label wraps instead of overflowing. |
 | `cursor` | `boolean` | `false` | false | Shows a blinking terminal-style cursor after the label. |
-| `showCursor` | `boolean` | `false` | false | @deprecated since 6.0 — use `cursor` instead. Removed in 7.0. Still shows the cursor. |
 | `prefix` | `'' \| '//' \| '<>' \| '</>'` | `''` | false | Preset prefix rendered before the label; empty renders no prefix. |
 
 ## Slots
@@ -55,7 +54,7 @@
 
 - Static: no hover, focus, active or disabled states; the root is a non-interactive `div`.
 - Prefix: a `span` before the label is rendered only when `prefix` is not empty; it carries `aria-hidden="true"`.
-- Cursor: a decorative, `aria-hidden` `span` after the label is rendered only when `cursor` (or the deprecated `showCursor`) is set; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
+- Cursor: a decorative, `aria-hidden` `span` after the label is rendered only when `cursor` is set; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
 - Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
 - Test ids: root `content-overline` (consumer `data-testid` wins).

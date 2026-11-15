@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/dashboard-switcher/dashboard-switcher.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/dashboard-switcher")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [FilterMenu](../../../components/filter-menu.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [FilterMenu](../../../components/filter-menu.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-locale`
 - Skills: `webkit-data-viz`, `webkit-ui-states`, `webkit-navigation`
 
 ## Asked as
@@ -129,6 +129,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import StatTile from '@aziontech/webkit/stat-tile'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   type Period = '1h' | '24h' | '7d' | '30d'
@@ -992,8 +993,10 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 
   const refresh = () => settle(refetching, 600)
 
+  const { formatNumber } = useLocale()
+
   const formatCount = (value: number) =>
-    new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(value)
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
 
   const formatters: Record<Format, (value: number) => string> = {
     count: formatCount,
@@ -1010,12 +1013,12 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     ms: (value) => `${Math.round(value)} ms`,
     percent: (value) => `${value.toFixed(value < 1 ? 2 : 1)}%`,
     usd: (value) =>
-      new Intl.NumberFormat('en-US', {
+      formatNumber(value, {
         style: 'currency',
         currency: 'USD',
         notation: 'compact',
         maximumFractionDigits: 1
-      }).format(value)
+      })
   }
 
   const scalesWithPeriod: ReadonlySet<Format> = new Set(['count', 'bytes', 'usd'])

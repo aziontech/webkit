@@ -11,6 +11,7 @@
  "purpose": "Visually emphasized action trigger built on a brand-accent gradient with a continuously rotating multicolor glow rim behind the surface (ported from the `azion-console-kit` Copilot button). Use it to draw attention to a primary AI / highlight flow that needs to stand out from a regular `Button`. One visual treatment (the gradient + glow); same prop surface as `Button` minus the `kind` axis.",
  "setup": null,
  "useWhen": [
+  "Use ButtonHighlight only for the one AI entry point on a screen (Copilot); every other action is Button.",
   "The single entry point to an AI assistant or highlight flow (for example \"Ask Azion\") that must stand out from the actions around it.",
   "A headline action in a header or marketing band where a primary `button` would blend in."
  ],

@@ -1,6 +1,6 @@
 # Code Editor
 
-> An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (a function that wires Monaco's workers and returns `import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.
+> Use CodeEditor only when the person edits the code (its diff mode is for editing one side beside the original); to show code, config or JSON the person reads or copies, including read-only diffs, use CodeBlock, and for build, deploy or runtime log lines use LogView. An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (a function that wires Monaco's workers and returns `import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.
 
 - Import: `import CodeEditor from '@aziontech/webkit/code-editor'`
 - Category: code · Surface: product · Structure: monolithic
@@ -98,6 +98,7 @@ _none_ — monolithic. The gutter, the fallback textarea, the Monaco host, the t
 - `data-invalid`, `data-readonly`, `data-disabled`, `data-diff`, `data-fill`, `data-bordered` mirror their props
 - Borderless (`bordered` false): no border and no radius; the focus ring is drawn inset so a pane edge never clips it
 - Each gutter line with a marker carries `data-severity` (`error` | `warning` | `info`)
+- Diff mode, plain editor: the gutters mark what changed with the same line diff `code-block` draws (`src/utils/line-diff.ts`, one model for both): a removed line carries `data-change="removed"` on the original side, an added line `data-change="added"` on the modified side, tinted `var(--danger)` / `var(--success)` with the `-contrast` number colour; Monaco's diff editor draws its own once it loads
 - Load failure: the plain editor stays and a muted note says the full editor could not load
 
 ## Accessibility

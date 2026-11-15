@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use DocCard only inside DocCardGroup on documentation pages; product UI uses Card.
 - A grid of peer destinations: "what you can build", the product tiles a landing section opens with.
 - A set of short, scannable entries whose titles carry most of the meaning.
 

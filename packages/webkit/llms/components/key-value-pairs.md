@@ -1,6 +1,6 @@
 # Key Value Pairs
 
-> A grid of labelled facts about one subject: each pair is a key (the term) and its value, which may be plain text or a composed component such as a `Link`, `Tag`, `CopyButton` or `StatusIndicator`. It renders a native description list laid out in 1 to 4 responsive columns, optionally split into titled groups, and owns its loading and empty-value surfaces. It replaces the hand-rolled label/value grids the resource detail templates (`ResourceSummary`, the detail Overview tabs) draw today.
+> Use KeyValuePairs to show read-only label/value facts about one resource, including its tags; rows with their own actions are Item rows. A grid of labelled facts about one subject: each pair is a key (the term) and its value, which may be plain text or a composed component such as a `Link`, `Tag`, `CopyButton` or `StatusIndicator`. It renders a native description list laid out in 1 to 4 responsive columns, optionally split into titled groups, and owns its loading and empty-value surfaces. It replaces the hand-rolled label/value grids the resource detail templates (`ResourceSummary`, the detail Overview tabs) draw today.
 
 - Import: `import KeyValuePairsRoot from '@aziontech/webkit/key-value-pairs-root'`
 - Compound import (dot notation, not tree-shakeable): `import KeyValuePairs from '@aziontech/webkit/key-value-pairs'`

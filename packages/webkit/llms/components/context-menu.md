@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use ContextMenu for the same actions as a DropdownMenu, opened by right-click or long-press on an item; opened from a button use DropdownMenu.
 - Secondary actions on an object the user is pointing at: a table row, a file in a browser, a tree node, a canvas.
 - Power-user shortcuts that also exist elsewhere in the interface.
 
@@ -68,8 +69,8 @@
 
 ## v-model
 
-| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                            |
-| -------------- | --------- | ----------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                              |
+| -------------- | --------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`. While unbound the menu is uncontrolled and starts closed. Opened from the model without a pointer position, the panel anchors at the trigger area's inline-start top corner. |
 
 ## States

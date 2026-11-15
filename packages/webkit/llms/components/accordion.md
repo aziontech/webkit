@@ -25,14 +25,14 @@
 
 - The panels are mutually exclusive views shown in the same place → use `tabs`.
 - It is the frequently-asked-questions band of a marketing page → use `faq-section` (or `faq` for the band without the page-section wiring).
-- It is hierarchical navigation with expandable rows → use `menu`.
+- It is hierarchical navigation with expandable rows → use `sidebar-menu`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [tabs](tabs.md) — switches between panels in place; one panel visible, headers in a row.
 - [faq](faq.md) — the marketing FAQ band that composes `accordion` with a heading column and hairline register.
-- [menu](menu.md) — expanding rows for navigation, not for revealing content.
+- [sidebar-menu](sidebar-menu.md) — expanding rows for navigation, not for revealing content.
 
 ## Props
 

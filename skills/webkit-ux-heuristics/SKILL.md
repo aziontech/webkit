@@ -103,8 +103,8 @@ Do not:
 
 - open an external resource in the same tab, or open an in-app route in a new tab;
 - put the mark on a link that stays in the app's tab, or on an action that goes nowhere — a `Link`
-  for an in-app action sets `:show-icon="false"`;
-- use `ButtonMini` or a `Button` for a link — those are actions, not destinations.
+  for an in-app route leaves `icon` empty and keeps the same tab;
+- use a `Button` (any `kind`, `link` included) for a link — those are actions, not destinations.
 
 ### 2. Long lists: count → search → list → Load more
 

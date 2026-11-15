@@ -1,6 +1,6 @@
 # Tree
 
-> A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron. It renders a nested `items` data structure on its own (recursively, through one internal row template) and follows the WAI-ARIA tree pattern, so it fits file and object browsers: the objects of a bucket, the source files of a deployment, the routes of an application. Unlike `menu` it navigates data, not the app, and unlike `accordion` its nodes are rows of the same kind at any depth, not panels of free content.
+> A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron. It renders a nested `items` data structure on its own (recursively, through one internal row template) and follows the WAI-ARIA tree pattern, so it fits file and object browsers: the objects of a bucket, the source files of a deployment, the routes of an application. Unlike `sidebar-menu` it navigates data, not the app, and unlike `accordion` its nodes are rows of the same kind at any depth, not panels of free content.
 
 - Import: `import Tree from '@aziontech/webkit/tree'`
 - Category: data · Surface: product · Structure: monolithic
@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Tree for a nested data hierarchy (files, resources) the person expands and selects in, not for app navigation; for the navigation tree of the app use SidebarMenu inside Sidebar.
 - Browsing a hierarchy whose depth is not fixed: bucket objects under folders, the source tree of a deployment, functions grouped by application.
 - Picking one node out of a hierarchy (`selectable`) to show its detail beside the tree, or several (`selectable="multiple"`) to act on them together (move, delete, download).
 - A hierarchy too large to send at once: mark unloaded parents `lazy` and fetch their children when they open.
@@ -27,7 +28,7 @@
 
 ## Don’t
 
-- Navigation between views of the app → use `menu` inside `sidebar`.
+- Navigation between views of the app → use `sidebar-menu` inside `sidebar`.
 - Flat records with several attributes each → use `table`.
 - A few sections of free content that open and close → use `accordion`.
 - A two- or three-level directory of destinations on a marketing page → use `column-navigation`.
@@ -36,7 +37,7 @@
 ## Related
 
 - [table](table.md) — the flat, multi-column view of the same records; switch to it when columns matter more than nesting.
-- [menu](menu.md) — the hierarchical list for app navigation, with routes and active state instead of selection.
+- [sidebar-menu](sidebar-menu.md) — the hierarchical list for app navigation, with routes and active state instead of selection.
 - [accordion](accordion.md) — disclosure of free content panels rather than rows of one kind.
 - [empty-state](empty-state.md) — what the tree renders when `items` is empty.
 - [skeleton](skeleton.md) — the rows the tree renders while `loading`.
@@ -93,7 +94,7 @@
 - Collapsed children are not rendered (`v-if`), so they cost nothing and are out of the accessibility tree.
 - A disabled node can still be focused (arrow keys) and, if it is a parent, expanded and collapsed; it cannot be selected, renamed, or emit `item-click` / `item-dblclick`.
 - `data-testid`: the root falls back to `data-tree` (a consumer `data-testid` wins); parts derive from the resolved root id — `<testId>__item` on every treeitem, `<testId>__toggle` on every chevron. Each treeitem also carries `data-item-id="<item.id>"` so a test reaches one node without depending on DOM order.
-- Loading renders five Skeleton rows (`kind="shape"`, row height, descending widths) at top level.
+- Loading renders five Skeleton rows (`kind="rectangle"`, row height, descending widths) at top level.
 
 ## Accessibility
 
@@ -111,11 +112,15 @@
   - `Ctrl+A` / `Cmd+A` (multiple only) — select every visible, enabled node.
   - `F2` (`editable` only) — open the rename field on the focused node. In the field `Enter` submits, `Escape` cancels and both return focus to the node; leaving the field submits. Tree keys are not handled inside the field.
   - Pointer, multiple only: click selects only the node, `Ctrl`/`Cmd`+click toggles it, `Shift`+click selects the visible range from the last clicked node (adding to the selection with `Ctrl`/`Cmd`).
-  - `Tab` / `Shift+Tab` — leave the tree from the tab stop, passing through the tab-stop row's `actions` controls (their natural tab order). The `actions` controls of every other row are parked at `tabindex="-1"` (their own `tabindex` is restored when their row becomes the tab stop), so the tree is one tab stop plus the current row's controls.
+  - `Tab` / `Shift+Tab` — leave the tree from the tab stop; the tree is one tab stop.
   - Type-ahead — a printable character focuses the next visible node whose label starts with it; characters typed within 500 ms add up to a prefix. Tests: `tree.test.ts` › moves focus to the next visible node whose label starts with the typed text.
-  - Arrow keys, `*` and type-ahead are not handled inside the `actions` region; `*` (expand siblings) is not part of v1.
+  - `*` (expand siblings) is not part of v1.
+- Row actions (WAI-ARIA treegrid pattern): when the `actions` slot is used, the tree renders as a `<div role="treegrid">` so screen readers reach each row's controls. Each node's row is the focusable `role="row"` (carrying `aria-level`, `aria-setsize`, `aria-posinset`, `aria-expanded`, `aria-selected`, `aria-disabled`, `aria-labelledby` and the roving `tabindex`); it holds two `role="gridcell"`s: the label cell (chevron, glyph and label, `tabindex="-1"`) and the actions cell. The nesting wrappers (`li`, the children `ul`) are `role="none"`, so rows stay owned by the treegrid while the indent guide and the nested layout stay the same; the lazy loading row is a `role="row"` with `aria-busy`. Every `actions` control is parked at `tabindex="-1"` so the treegrid stays one tab stop. Keyboard map on top of the tree map:
+  - On a row, `ArrowRight` expands a collapsed parent; on an expanded parent or a leaf it moves focus into the row's first cell (the label cell). `ArrowLeft` on a row behaves as in the tree.
+  - In a row, `ArrowRight` / `ArrowLeft` move between the label cell and each `actions` control; `ArrowLeft` on the label cell, or `Escape` anywhere in the row, returns focus to the row. `ArrowDown` / `ArrowUp` move to the same cell of the next / previous visible row. `Enter` on the label cell activates the row; `Enter` / `Space` on a control are the control's own.
+  - Without the `actions` slot the tree keeps the `tree` / `treeitem` / `group` structure above.
 - Chevron: a `<button type="button" tabindex="-1" aria-hidden="true">` that toggles the parent on click (pointer affordance; keyboard expansion is ArrowRight / ArrowLeft on the treeitem). It never receives focus and is not announced.
-- Visible focus: the ring is drawn on the focused node's own row, not around its whole subtree — `focus-visible:outline-none` on the treeitem and `ring-2 ring-(--ring-color) ring-offset-1 ring-offset-(--bg-canvas)` on its direct row child (an arbitrary variant scoped to `:focus-visible > row`).
+- Visible focus: the ring is drawn on the focused node's own row (in the treegrid, on the focused row or cell), not around its whole subtree — `focus-visible:outline-none` on the treeitem and `ring-2 ring-(--ring-color) ring-offset-1 ring-offset-(--bg-canvas)` on its direct row child (an arbitrary variant scoped to `:focus-visible > row`).
 - Loading: the root carries `aria-busy="true"`; the Skeleton rows are `aria-hidden`, and no `role="tree"` is rendered without treeitems.
 - Glyphs (`item.icon`), the chevron and the indent guide are decorative (`aria-hidden="true"`).
 - The rename field is named `Rename <label>` (`tree.renameLabel`); the loading row announces `Loading` once through its polite status.

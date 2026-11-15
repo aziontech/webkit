@@ -1,6 +1,6 @@
 # Tutorial Panel
 
-> The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`. The panel draws its views from `HelpPanel` parts (`Header`, `Tutorial`, `Task`), so a tutorial looks the same whether a product shows a static checklist with `HelpPanel.Tutorial` or a guided run with `TutorialPanel`. Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.
+> The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`: the panel is a `HelpPanel` with its `Header`, and draws each tutorial with its own internal task list (6.0 moved the former `HelpPanel.Tutorial` and `HelpPanel.Task` here; `HelpPanel` no longer has a tutorial mode). Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.
 
 - Import: `import TutorialPanelRoot from '@aziontech/webkit/tutorial-panel-root'`
 - Compound import (dot notation, not tree-shakeable): `import TutorialPanel from '@aziontech/webkit/tutorial-panel'`
@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use TutorialPanel for guided tutorials whose steps point at real controls through Hotspot.
 - A reader learns a product task by doing it on the real screen, step by step, with the instructions pointing at the control they need next.
 - A product offers several tutorials in its help region and records which ones the reader finished.
 - A first-run or onboarding flow guides the reader through a real create and deploy, not a mock.
@@ -24,7 +25,8 @@
 
 ## Don’t
 
-- Static help beside the page, with no guided run → use `help-panel` (a `HelpPanel.Tutorial` checklist when the owner only reports progress).
+- Static help beside the page, with no guided run → use `help-panel`.
+- The step rail of a multi-step task in the app → use `stepper`, or `wizard` for a create flow with its footer.
 - A multi-step create flow whose steps are forms in one surface → use `wizard`.
 - Ordered steps the reader navigates inside a page → use `stepper`.
 - A single tip pinned to one control → use `popover` or `hint`.
@@ -72,6 +74,9 @@ the optional variant, which returns null so a hotspot outside a provider renders
   - Events: `update:active` (`string \| null`) and `update:step` (`number`) from the models; `start` (`string` — the tutorial id, on Start and Restart), `exit` (`string` — on Exit or Back to tutorials), `finish` (`string` — on Finish of the last step). `start`, `exit` and `finish` are tutorial state events, not activation events: they report what the tutorial did, reached through the context from the panel's buttons, and carry no DOM event by design.
   - Slot: `default` — the page, with the panel and every hotspot inside.
 
+- `tutorial-panel-tasks/tutorial-panel-tasks.vue` — internal, not exported: a tutorial's title, description, a progress line derived from the registered tasks (`2 of 3 complete`, `aria-live="polite"`), the ordered task `<ol>` and an actions row. Provides the task registry (`TutorialTasksInjectionKey`) to its tasks. `data-testid` fallback `content-tutorial-panel-tasks`; the panel passes `<testId>__tutorial`. `data-completed` mirrors its `completed` prop.
+- `tutorial-panel-task/tutorial-panel-task.vue` — internal, not exported: one task, a numbered marker, a title and its steps. An `<li>` that registers with the task list on mount (ordinal + `status`), `data-status` mirrors `status` (`upcoming` / `current` / `complete`), the `current` task carries `aria-current="step"`, and an `sr-only` status word (`Not started`, `Current task`, `Complete`). Throws outside the task list. `data-testid` fallback `content-tutorial-panel-task`.
+
 Exported types: `Tutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialTask` (`title`, `steps`), `TutorialStep` (`title`, `content`, `hotspotId`).
 
 ```
@@ -81,9 +86,14 @@ packages/webkit/src/components/content/tutorial-panel/
 ├── index.ts                              (compound: attaches Provider)
 ├── injection-key.ts                      (types + TutorialContext)
 ├── composables/
-│   └── use-tutorial-context.ts           (strict and optional injectors)
-└── tutorial-panel-provider/
-    └── tutorial-panel-provider.vue
+│   ├── use-tutorial-context.ts           (strict and optional injectors)
+│   └── use-tutorial-tasks-context.ts     (task registry; throws outside the task list)
+├── tutorial-panel-provider/
+│   └── tutorial-panel-provider.vue
+├── tutorial-panel-tasks/
+│   └── tutorial-panel-tasks.vue          (internal)
+└── tutorial-panel-task/
+    └── tutorial-panel-task.vue           (internal)
 ```
 
 Exports:
@@ -94,21 +104,21 @@ Exports:
 "./tutorial-panel-provider": "./src/components/content/tutorial-panel/tutorial-panel-provider/tutorial-panel-provider.vue"
 ```
 
-Composed DS components (relative imports): `help-panel` (root, `Header`, `Tutorial`, `Task`), `button`, `empty-state`, `tag`.
+Composed DS components (relative imports): `help-panel` (root, `Header`), `button`, `empty-state`, `tag`.
 
 ## States
 
 - Visual states: `list`, `running`, `complete`, `empty` (no tutorials, rendered by a small `EmptyState` titled with `tutorialPanel.empty`), `loading`
 - `data-view` on the root: `list` | `running` | `complete`
 - `data-completed` on each list item mirrors the tutorial's `completed`
-- In `running`, each task's `HelpPanel.Task` status is derived from the current step: `complete` when every step of the task is behind it, `current` when it holds the current step, `upcoming` otherwise. The current step's row carries `aria-current="step"`.
+- In `running`, each task's status is derived from the current step: `complete` when every step of the task is behind it, `current` when it holds the current step, `upcoming` otherwise. The current step's row carries `aria-current="step"`.
 - `complete` shows a completion section (check icon, `Tutorial complete`, `You finished <title>.`, the `completion` slot, Restart and Back to tutorials) above the task list, every task complete.
 
 ## Accessibility
 
 - Visible focus: the composed `Button`s carry the standard ring; focus targets that are not controls (the list heading, the completion heading, the current step row) take `tabindex="-1"` and `outline-none` because they receive focus only programmatically.
 - Keyboard map: `Tab` moves through Start / Restart, Exit, Restart and Back. Focus management: Start moves focus to the current step's popover (through its hotspot) or, when that hotspot is not on the page, to the step's row in the panel; Finish moves focus to the `Tutorial complete` heading; Exit and Back move focus to the list's heading.
-- ARIA: the panel is a `HelpPanel` complementary landmark named by `ariaLabel` or the title. Each list item's Start button is described by its tutorial's heading (`aria-describedby`), so repeated buttons are distinct. The task progress line (`HelpPanel.Tutorial`) is `aria-live="polite"`. The current step row carries `aria-current="step"`.
+- ARIA: the panel is a `HelpPanel` complementary landmark named by `ariaLabel` or the title. Each list item's Start button is described by its tutorial's heading (`aria-describedby`), so repeated buttons are distinct. The task progress line is `aria-live="polite"`. The current step row carries `aria-current="step"`.
 - Contrast ≥4.5:1 on muted ink over `--bg-surface` in both themes.
 - Touch target: the composed `Button`s (small) meet 24 px; the panel adds no other control.
 

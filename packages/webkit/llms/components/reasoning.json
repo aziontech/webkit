@@ -15,7 +15,7 @@
  ],
  "avoidWhen": [
   "Ordinary loading with no reasoning → `ai-loading`.",
-  "Agent actions with side effects (calls, commands) → `tool-call` and `action-confirmation`.",
+  "Agent actions with side effects (calls, commands) → `tool-call` and `tool-approval`.",
   "Progressive steps of a long task → a `stepper` or a list of `tool-call`s."
  ],
  "related": [

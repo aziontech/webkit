@@ -1,6 +1,6 @@
 ---
 name: webkit-navigation
-description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `headers/creation-header` block every platform/create block carries) heads create flows (`platform/create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: one owner per level (rail, PageTabs, at most one local navigation — the `platform/detail/sectioned-resource` block, only past 7 sibling pages), a destination offered once per screen (no in-page `Menu` repeating rail rows), no rail row that routes into a resource, and active rows that agree with the route.
+description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `headers/creation-header` block every platform/create block carries) heads create flows (`platform/create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: one owner per level (rail, PageTabs, at most one local navigation — the `platform/detail/sectioned-resource` block, only past 7 sibling pages), a destination offered once per screen (no in-page `SidebarMenu` repeating rail rows), no rail row that routes into a resource, and active rows that agree with the route.
 status: active
 last_updated: 2026-11-14
 scope: general
@@ -47,7 +47,7 @@ every webkit primitive the same way:
 
 **The persistent console shell is one webkit component:** `ConsoleLayout`
 (`@aziontech/webkit/console-layout`), plus `useConsoleLayout` (`@aziontech/webkit/use-console-layout`)
-for a page that opens its search palette. It already composes `AppLayout`, `Sidebar`, `Menu`,
+for a page that opens its search palette. It already composes `AppLayout`, `Sidebar`, `SidebarMenu`,
 `GlobalHeader`, `Breadcrumb`, `SearchTrigger` and `Command`, so you never assemble those into a shell
 of your own. Start it from the `shells/console` block (`npx @aziontech/webkit add shells/console`, or
 `get_pattern`): the block is the `App.vue`, with the real console navigation.
@@ -657,7 +657,7 @@ is not a level; it names where the reader is (below).
    settings of one application) are reached through that resource: its list row, its tabs, its local
    navigation. Never as rail rows, not even as shortcuts into a default resource; a module that needs
    a shortcut opens the resource list or the resource itself.
-4. **Local navigation is a block, not a free `Menu`.** Only when a tab holds more than 7 sibling
+4. **Local navigation is a block, not a free `SidebarMenu`.** Only when a tab holds more than 7 sibling
    pages does its body carry one local navigation, and that is the
    `platform/detail/sectioned-resource` block, allowed only when rules 2 and 3 hold. Seven or fewer
    siblings are tabs, a `ToggleGroup` or sections of one page.
@@ -670,7 +670,7 @@ is not a level; it names where the reader is (below).
 
 **The counter-example.** A policy's Private access tab rendered four navigations at once: the rail
 drilled into "Private access" with 12 rows (App segments, Segment groups, Server groups, Access
-rules…), the breadcrumb `Policies › Teste`, the policy's `PageTabs`, and a vertical `Menu` in a left
+rules…), the breadcrumb `Policies › Teste`, the policy's `PageTabs`, and a vertical `SidebarMenu` in a left
 column of the tab with 16 rows, the same pages again. The rail rows pointed at the default policy, so
 the rail marked "Server groups" while the page showed "Access rules" of another policy; three columns
 of navigation left the table about 45% of the width, cut at the right edge at 1440 px. The fix: drop
@@ -678,7 +678,7 @@ the rail rows (the rail opens Policies), keep the pages inside the policy, and r
 `platform/detail/sectioned-resource` block in the tab.
 
 Rule `webkit-navigation-levels` states the invariant. The lint `webkit/no-page-navigation-menu` warns
-on a `Menu` in a page body, `ConsoleLayout` warns in development when an in-page `Menu` repeats a rail
+on a `SidebarMenu` in a page body, `ConsoleLayout` warns in development when an in-page `SidebarMenu` repeats a rail
 row, and `npx @aziontech/webkit check` with `/webkit-ui-verify` fail a duplicate route or disagreeing
 active rows at runtime.
 
@@ -723,20 +723,20 @@ Production ⌄`. The page composes it in the default slot of its `ConsoleLayout.
 
 Inside `ConsoleLayout` (and `DocLayout`) the navigation is already wired: give each row an `href` and
 the layout follows it with the router and matches the active row against the route. The rest of this
-section is for a `Menu` or `Breadcrumb` you render yourself inside a page.
+section is for a `SidebarMenu` or `Breadcrumb` you render yourself inside a page.
 
-`Menu` (and its `MenuNode` data), `Breadcrumb` items and `Menu.Item` take their destination in
+`SidebarMenu` (and its `SidebarMenuNode` data), `Breadcrumb` items and `SidebarMenu.Item` take their destination in
 **`href`**, and only there. There is no `to`, and a `path`, `to`, `url` or `route` key on a nav node
 is not read: the row renders as a button with nowhere to go (lint `webkit/menu-node-href`). Do not
-confuse it with `v-model:path` on `Menu`, which is the drill stack (ancestor node ids), not a URL.
+confuse it with `v-model:path` on `SidebarMenu`, which is the drill stack (ancestor node ids), not a URL.
 
 With Vue Router, keep the rows real links and let the router do the navigation:
 
 ```vue
 <script setup lang="ts">
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
-  import type { MenuNode } from '@aziontech/webkit/menu'
-  import Menu from '@aziontech/webkit/menu-root'
+  import type { SidebarMenuNode } from '@aziontech/webkit/sidebar-menu'
+  import SidebarMenu from '@aziontech/webkit/sidebar-menu-root'
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
@@ -766,10 +766,10 @@ With Vue Router, keep the rows real links and let the router do the navigation:
 </script>
 
 <template>
-  <Menu
+  <SidebarMenu
     :groups="groups"
     :active-id="activeId"
-    @navigate="(event: MouseEvent, node: MenuNode) => follow(event, node.href ?? '')"
+    @navigate="(event: MouseEvent, node: SidebarMenuNode) => follow(event, node.href ?? '')"
   />
   <Breadcrumb
     :items="[{ label: 'Applications', href: '/applications' }, { label: 'edge-app' }]"
@@ -790,7 +790,7 @@ With Vue Router, keep the rows real links and let the router do the navigation:
   never both, never neither.
 - **`ConsoleLayout` is the console shell, composed once.** One `ConsoleLayout` in `App.vue` around
   `RouterView`; every browse page is only the body of its default slot. Never hand-compose
-  `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `SearchTrigger` or `Command` into a shell of your
+  `AppLayout`, `Sidebar`, `SidebarMenu`, `GlobalHeader`, `SearchTrigger` or `Command` into a shell of your
   own, and never copy the chrome into a page.
 - **A browse page renders no `<main>`.** The layout owns the single `<main>`; the body starts on its
   `PageHeader` (or its `PageTabs`). Only a focused flow, rendered outside the layout, owns a `<main>`.
@@ -860,7 +860,7 @@ For `/webkit-navigation <file>`, list gaps. Each:
   rule: A tab is never a crumb — it is navigation within one page and travels in ?tab=.
   fix: end the trail at the resource name: [{ label: 'Applications', href }, { label: app.name }].
 
-✗ PolicyPage.vue:22  in-page Menu repeats 12 rail destinations
+✗ PolicyPage.vue:22  in-page SidebarMenu repeats 12 rail destinations
   rule: A destination appears once per screen; local navigation is the sectioned-resource block.
   fix: move the pages into the resource (block platform/detail/sectioned-resource) and drop the rail rows.
 

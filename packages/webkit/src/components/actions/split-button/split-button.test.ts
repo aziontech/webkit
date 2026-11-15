@@ -224,14 +224,10 @@ describe('SplitButton (joined command + menu overlay)', () => {
     expect(selected?.hasAttribute('data-selected')).toBe(true)
   })
 
-  it('keeps the deprecated model prop working', async () => {
-    const view = render(SplitButton, { props: { label: 'Deploy', model } })
+  it('reads the menu from items only; a removed model attribute adds no rows', async () => {
+    const view = render(SplitButton, { props: { label: 'Deploy' }, attrs: { model } })
     await openMenu(view)
-    expect(options().map((row) => row.textContent?.trim())).toEqual([
-      'Deploy to staging',
-      'Deploy preview',
-      'Rollback release'
-    ])
+    expect(options()).toHaveLength(0)
   })
 
   it('emits update:selected and restores the mirrored action from v-model:selected', async () => {

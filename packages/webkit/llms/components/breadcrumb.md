@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use Breadcrumb (with `items`, or Breadcrumb.Item parts) for the page trail.
 - A page sits two or more levels deep and the reader needs a way back to its parents (resource detail under a list, a settings sub-page).
 - The trail is known as data — pass `items` and let the component render the segments, separators and the collapse when its own box is narrower than 768px.
 - The trail needs a custom layout the `items` array cannot express — compose `Breadcrumb.List`, `Breadcrumb.Item` and `Breadcrumb.Separator` in the default slot.
@@ -23,9 +24,9 @@
 
 ## Don’t
 
-- It is the app's primary navigation → use `navigation-menu` or `sidebar` with `menu`.
+- It is the app's primary navigation → use `navigation-menu` or `sidebar` with `sidebar-menu`.
 - It moves between sibling views of the same page → use `tabs`.
-- It is the previous / next pair at the end of a docs page → use `doc-pagination`.
+- It is the previous / next pair at the end of a docs page → use `doc-prev-next`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -61,7 +62,7 @@
 
 - `breadcrumb.vue` — Root `<nav>` with `aria-label` from `ariaLabel`, or the locale catalog (`Breadcrumb`) when empty; a consumer `aria-label` lands on the prop and wins.
 - `breadcrumb-list.vue` — Ordered list wrapper (`<ol>`) for segments.
-- `breadcrumb-item.vue` — Re-exported segment control (same API as `@aziontech/webkit/breadcrumb-item`).
+- `breadcrumb-item/breadcrumb-item.vue` — `Breadcrumb.Item`, the segment control; it lives in this component's folder and keeps its flat export `@aziontech/webkit/breadcrumb-item`.
 - `breadcrumb-separator.vue` — Decorative chevron between segments (`aria-hidden`).
 
 ## States

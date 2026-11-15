@@ -37,7 +37,7 @@
 
 - use-collection` — applies the query; `propertyFilterProps` is the binding.
 - [table](table.md) — the collection it usually filters.
-- [cards](cards.md) — the card form of a collection.
+- cards` — the card form of a collection.
 - [collection-preferences](collection-preferences.md) — the panel that sits beside it in the controls row.
 
 ## Props

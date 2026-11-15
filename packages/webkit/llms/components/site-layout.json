@@ -4,7 +4,7 @@
  "import": "@aziontech/webkit/site-layout",
  "treeShakeableImport": "@aziontech/webkit/site-layout",
  "category": "layout",
- "surface": "product",
+ "surface": "marketing",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],

@@ -16,9 +16,10 @@
   "@aziontech/webkit/popover-close",
   "@aziontech/webkit/popover-footer"
  ],
- "purpose": "Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `overlay/tooltip` (plain text, non-interactive) and `overlay/dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.",
+ "purpose": "Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.",
  "setup": null,
  "useWhen": [
+  "Use Popover for rich or interactive content (a form, actions) opened by a click and closed on purpose; a one-line hint is a Tooltip and a read-only hover preview is a HoverCard.",
   "Interactive content anchored to a trigger while the page stays usable: an inline form, a filter builder, a quick edit of one field.",
   "Contextual detail or a light confirmation that needs buttons or links inside it."
  ],
@@ -73,13 +74,6 @@
    "default": "undefined",
    "required": "false",
    "doc": "Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`."
-  },
-  {
-   "name": "width",
-   "type": "PopoverWidth",
-   "default": "undefined",
-   "required": "false",
-   "doc": "**@deprecated since 6.0 — use `size`. Removed in 7.0.** Same values as `size`; read only when `size` is unset."
   },
   {
    "name": "defaultOpen",

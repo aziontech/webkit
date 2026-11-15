@@ -23,7 +23,7 @@
 
 - You know the item count → pass `total` to `pagination` and bind `v-model:page`; it renders and wires every PaginationButton itself.
 - The rows live in a data-driven `table` → set `paginated` on the table instead.
-- The control is a previous / next link between documentation pages → use `doc-pagination`.
+- The control is a previous / next link between documentation pages → use `doc-prev-next`.
 - It is a standalone action outside a pagination strip → use `button` or `icon-button`; this button has no radius or frame of its own except at the strip's ends.
 - It is a "Load more" control at the end of a list → use `button`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

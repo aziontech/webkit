@@ -5,15 +5,15 @@ structure: monolithic
 status: implemented
 spec_version: 3
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: ddd9054924029d8ea74e6eb2d855e8fbb20c2f3aa40f6703a7f6527217f6c089
+last_updated: 2026-11-15
+checksum: 8ca2f1d7c94deb9a5046f46958d2c3b67f48b95f92a2bf2952c131b715f97e22
 ---
 
 # FeatureTabs — Component Spec
 
 ## Purpose
 
-The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `media-tabs`, `code-block`, `illustration`, `button`, `mini-button` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
+The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
 
 ## When to use
 
@@ -95,7 +95,7 @@ The feature walkthrough band of a product page: a horizontal section title, with
 
 - Visual states: `default`; the active tab, its progress and the timer are owned by `media-tabs`
 - Empty: when `tabs` is empty the band renders nothing — not the header, not the frame
-- The header renders only when `title` is set; the action renders only when `primaryAction` is set — as a secondary `button` in the header, or as a `mini-button` under the frame when there is no header
+- The header renders only when `title` is set; the action renders only when `primaryAction` is set — as a secondary `button` in the header, or as a `link` under the frame when there is no header
 - Media per tab: its `code` wins, then the band `scene`, then its `illustration`; when any tab carries `code` the stage grows from 24rem to 30rem and draws the pixelate texture, and an open tab's code lines rise in (owned by `code-block`, never under reduced motion). A scene name that is not registered draws nothing.
 
 ## Motion & Animations
@@ -121,10 +121,10 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: owned by `media-tabs` (the tabs), `code-block` (the copy button), `button` and `mini-button`.
+- Visible focus: owned by `media-tabs` (the tabs), `code-block` (the copy button), `button` and `link`.
 - Keyboard map: `Tab` reaches the action, the tabs and the open file's copy button; the tabs' keys are owned by `media-tabs`.
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2`; each illustration is named by its tab's `illustrationLabel`, or decorative when empty; a code file is real text a screen reader reads, with a named copy button.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-tabs`, `code-block`, `button` and `mini-button`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-tabs`, `code-block`, `button` and `link`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the band adds no motion; the timer never runs under reduced motion (owned by `media-tabs`).
 - Touch target ≥40×40 px: the tab rows and the large header button; the under-frame link is supplementary to them.
 

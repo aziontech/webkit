@@ -1926,40 +1926,80 @@
  "aliases": {
   "alert-dialog": "confirm-dialog",
   "bordered-box": "frame-box",
-  "box-grid-selection": "radio-cards",
   "breadcrumbs": "breadcrumb",
   "callout": "alert",
-  "card-box": "card",
-  "command-menu": "command",
   "command-palette": "command",
+  "comparison": "compare-plans",
   "config-provider": "webkit-provider",
+  "cta": "closing-call-to-action",
   "data-table": "table",
   "datatable": "table",
-  "date-picker": "calendar",
-  "divider": "separator",
-  "dropdown": "dropdown-menu",
-  "input-number": "number-input",
+  "feature-grid": "capability-grid",
   "input-otp": "otp-input",
-  "input-password": "password-input",
-  "input-text": "input",
+  "kebab": "dropdown-menu",
   "keyboard": "kbd",
   "loader": "spinner",
   "locale-provider": "webkit-provider",
-  "message": "alert",
+  "logo-cloud": "logo-wall",
+  "marquee": "ticker",
   "modal": "dialog",
+  "newsletter": "closing-call-to-action-newsletter",
+  "notice": "alert",
   "notification": "toast",
+  "segmented-control": "toggle-group",
+  "sheet": "drawer",
+  "snackbar": "toast",
+  "stats": "stats-band",
+  "steps": "stepper",
+  "testimonial": "client-quotes",
+  "testimonials": "client-quotes",
+  "text-field": "input",
+  "tiles": "radio-group"
+ },
+ "renamed": {
+  "action-confirmation": "tool-approval",
+  "box-grid-selection": "radio-cards",
+  "card-box": "card",
+  "cards": "card-list",
+  "command-menu": "command",
+  "divider": "separator",
+  "doc-pagination": "doc-prev-next",
+  "dropdown": "dropdown-menu",
+  "input-number": "number-input",
+  "input-password": "password-input",
+  "input-text": "input",
+  "menu": "sidebar-menu",
+  "message": "alert",
   "paginator": "pagination",
   "progress-bar": "progress",
   "resizable-panel": "resizable",
   "segmented-button": "toggle-group",
-  "segmented-control": "toggle-group",
-  "sheet": "drawer",
-  "snackbar": "toast",
-  "steps": "stepper",
-  "tab-view": "tabs",
-  "text-field": "input",
-  "tiles": "radio-cards",
-  "toggle": "toggle-group"
+  "tab-view": "tabs"
+ },
+ "removed": {
+  "dialog-overlay": "delete the <DialogOverlay /> element: DialogContent renders the portal and the overlay itself",
+  "dialog-portal": "delete the <DialogPortal> wrapper (keep its children): DialogContent renders the portal and the overlay itself",
+  "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)",
+  "drawer-overlay": "delete the <DrawerOverlay /> element: DrawerContent renders the portal and the overlay itself",
+  "drawer-portal": "delete the <DrawerPortal> wrapper (keep its children): DrawerContent renders the portal and the overlay itself",
+  "field-checkbox": "Field orientation=horizontal + Checkbox + FieldContent (FieldLabel + FieldDescription)",
+  "field-checkbox-block": "FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription)",
+  "field-file-upload": "Field + FieldLabel + FileDropzone + FieldDescription",
+  "field-input-group": "Field + FieldLabel + InputGroup (Addon + InputGroupInput) + FieldDescription",
+  "field-password": "Field + FieldLabel + PasswordInput + FieldDescription (+ PasswordRequirements for the rules row)",
+  "field-phone-number": "Field + FieldLabel + PhoneInput + FieldDescription",
+  "field-radio": "Field orientation=horizontal + RadioButton + FieldContent (FieldLabel + FieldDescription)",
+  "field-radio-block": "FieldLabel wrapping Field orientation=horizontal + RadioButton + FieldContent (FieldTitle + FieldDescription)",
+  "field-select": "Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription",
+  "field-switch": "Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)",
+  "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)",
+  "field-text": "Field + FieldLabel + Input + FieldDescription",
+  "field-text-switch": "Field + FieldLabel + InputGroup (InputGroupInput + Addon with Switch) + FieldDescription",
+  "field-textarea": "Field + FieldLabel + Textarea + FieldDescription",
+  "field-time": "Field + FieldLabel + Input + FieldDescription",
+  "help-panel-task": "TutorialPanel: give each tutorial its tasks and steps as data",
+  "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",
+  "mini-button": "Link (label, href, icon) for a text link that navigates; Button kind=\"link\" for a text action without href"
  },
  "imports": {
   "catalog.json": {
@@ -2027,13 +2067,6 @@
      "doc": "Shows a blinking terminal-style cursor after the label."
     },
     {
-     "name": "showCursor",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `cursor` instead. Removed in 7.0. Still shows the cursor."
-    },
-    {
      "name": "prefix",
      "type": "'' | '//' | '<>' | '</>'",
      "default": "''",
@@ -2052,11 +2085,11 @@
    "examplesFile": "catalog/examples/overline.json",
    "docsFile": "catalog/components/overline.json"
   },
-  "action-confirmation": {
-   "import": "@aziontech/webkit/action-confirmation",
-   "target": "./src/components/ai/action-confirmation/action-confirmation.vue",
+  "tool-approval": {
+   "import": "@aziontech/webkit/tool-approval",
+   "target": "./src/components/ai/tool-approval/tool-approval.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/action-confirmation",
+   "treeShakeableImport": "@aziontech/webkit/tool-approval",
    "category": "ai",
    "structure": "monolithic",
    "props": [
@@ -2137,8 +2170,8 @@
     }
    ],
    "surface": "product",
-   "examplesFile": "catalog/examples/action-confirmation.json",
-   "docsFile": "catalog/components/action-confirmation.json"
+   "examplesFile": "catalog/examples/tool-approval.json",
+   "docsFile": "catalog/components/tool-approval.json"
   },
   "ai-loading": {
    "import": "@aziontech/webkit/ai-loading",
@@ -3356,75 +3389,6 @@
    "examplesFile": "catalog/examples/button-highlight.json",
    "docsFile": "catalog/components/button-highlight.json"
   },
-  "mini-button": {
-   "import": "@aziontech/webkit/mini-button",
-   "target": "./src/components/actions/mini-button/mini-button.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/mini-button",
-   "category": "actions",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "label",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Visible label rendered inside the control. Empty uses the locale catalog (`Learn more`)."
-    },
-    {
-     "name": "size",
-     "type": "'medium' | 'large'",
-     "default": "'large'",
-     "required": "false",
-     "doc": "Size token; affects height, gap, and typography."
-    },
-    {
-     "name": "disabled",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Disables interaction and applies disabled tokens."
-    },
-    {
-     "name": "showIcon",
-     "type": "boolean",
-     "default": "true",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — set icon to an empty string. Removed in 7.0.` False hides the icon."
-    },
-    {
-     "name": "icon",
-     "type": "string",
-     "default": "'pi pi-external-link'",
-     "required": "false",
-     "doc": "PrimeIcons class for the trailing icon. Empty renders no icon."
-    },
-    {
-     "name": "href",
-     "type": "string",
-     "default": "'#'",
-     "required": "false",
-     "doc": "Destination URL for the anchor."
-    },
-    {
-     "name": "target",
-     "type": "'_blank' | '_self'",
-     "default": "'_self'",
-     "required": "false",
-     "doc": "Link target when navigating."
-    }
-   ],
-   "events": [
-    {
-     "name": "click",
-     "payload": "MouseEvent",
-     "notes": "Fires on activation; suppressed when `disabled`."
-    }
-   ],
-   "surface": "product",
-   "examplesFile": "catalog/examples/mini-button.json",
-   "docsFile": "catalog/components/mini-button.json"
-  },
   "copy-button": {
    "import": "@aziontech/webkit/copy-button",
    "target": "./src/components/actions/copy-button/copy-button.vue",
@@ -3814,13 +3778,6 @@
      "doc": "Actions rendered as rows in the attached overlay menu. Same name as ButtonGroup's actions."
     },
     {
-     "name": "model",
-     "type": "SplitButtonItem[]",
-     "default": "[]",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use items. Removed in 7.0.` Read when `items` is empty."
-    },
-    {
      "name": "kind",
      "type": "'primary' | 'secondary' | 'outlined'",
      "default": "'primary'",
@@ -3872,7 +3829,7 @@
     {
      "name": "item-click",
      "payload": "(event: MouseEvent | KeyboardEvent, item: SplitButtonItem)",
-     "notes": "Fired when a menu action is selected. `event` is the pointer/keyboard event that activated the option; `item` is the matched `model` entry. The menu cannot open while `disabled` or `loading`, so it never fires in those states."
+     "notes": "Fired when a menu action is selected. `event` is the pointer/keyboard event that activated the option; `item` is the matched `items` entry. The menu cannot open while `disabled` or `loading`, so it never fires in those states."
     }
    ],
    "surface": "product",
@@ -4897,7 +4854,7 @@
     },
     {
      "name": "thresholds",
-     "type": "GaugeChartThreshold[]",
+     "type": "ChartThreshold[]",
      "default": "[]",
      "required": "false",
      "doc": "Bands from low to high; the arc takes the color of the band the value falls in, and each band start is marked on the track."
@@ -5706,10 +5663,10 @@
     },
     {
      "name": "severity",
-     "type": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'neutral' | 'default'",
+     "type": "'primary' | 'secondary' | 'success' | 'warning' | 'danger' | 'neutral'",
      "default": "'primary'",
      "required": "false",
-     "doc": "Color style for the badge surface and label; `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The status values come from the shared `Severity` scale (exported from this component). `default` is the same look under its old name, deprecated since 6.0 — use `neutral`. Removed in 7.0."
+     "doc": "Color style for the badge surface and label; `neutral` uses the `var(--bg-surface)` / `var(--text-default)` surface. The status values come from the shared `Severity` scale (exported from this component)."
     },
     {
      "name": "size",
@@ -6165,14 +6122,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Plan name shown as the card heading. Empty falls back to the deprecated `planTitle`."
-    },
-    {
-     "name": "planTitle",
-     "type": "string",
-     "default": "'Pro'",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `title` instead. Removed in 7.0."
+     "doc": "Plan name shown as the card heading."
     },
     {
      "name": "pricingDetails",
@@ -6298,9 +6248,7 @@
    "subcomponents": [
     "@aziontech/webkit/help-panel-header",
     "@aziontech/webkit/help-panel-section",
-    "@aziontech/webkit/help-panel-links",
-    "@aziontech/webkit/help-panel-tutorial",
-    "@aziontech/webkit/help-panel-task"
+    "@aziontech/webkit/help-panel-links"
    ],
    "category": "content",
    "structure": "composition",
@@ -6324,7 +6272,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The panel's parts — `HelpPanel.Header`, `HelpPanel.Section`, `HelpPanel.Tutorial`, `HelpPanel.Links` — in reading order. Not rendered while `loading`."
+     "notes": "The panel's parts — `HelpPanel.Header`, `HelpPanel.Section`, `HelpPanel.Links` — in reading order. Not rendered while `loading`."
     }
    ],
    "surface": "product",
@@ -6359,7 +6307,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The panel's parts — `HelpPanel.Header`, `HelpPanel.Section`, `HelpPanel.Tutorial`, `HelpPanel.Links` — in reading order. Not rendered while `loading`."
+     "notes": "The panel's parts — `HelpPanel.Header`, `HelpPanel.Section`, `HelpPanel.Links` — in reading order. Not rendered while `loading`."
     }
    ],
    "surface": "product",
@@ -6387,22 +6335,6 @@
    "kind": "subcomponent",
    "parent": "help-panel",
    "treeShakeableImport": "@aziontech/webkit/help-panel-links",
-   "surface": "product"
-  },
-  "help-panel-tutorial": {
-   "import": "@aziontech/webkit/help-panel-tutorial",
-   "target": "./src/components/content/help-panel/help-panel-tutorial/help-panel-tutorial.vue",
-   "kind": "subcomponent",
-   "parent": "help-panel",
-   "treeShakeableImport": "@aziontech/webkit/help-panel-tutorial",
-   "surface": "product"
-  },
-  "help-panel-task": {
-   "import": "@aziontech/webkit/help-panel-task",
-   "target": "./src/components/content/help-panel/help-panel-task/help-panel-task.vue",
-   "kind": "subcomponent",
-   "parent": "help-panel",
-   "treeShakeableImport": "@aziontech/webkit/help-panel-task",
    "surface": "product"
   },
   "hotspot": {
@@ -7851,11 +7783,11 @@
    "subcomponents": [
     "@aziontech/webkit/log-view-content",
     "@aziontech/webkit/log-view-footer",
+    "@aziontech/webkit/log-view-steps",
     "@aziontech/webkit/log-view-header"
    ],
    "models": [
     "search",
-    "warningsOnly",
     "level"
    ],
    "category": "code",
@@ -7866,7 +7798,7 @@
      "type": "LogViewLine[]",
      "default": "[]",
      "required": "false",
-     "doc": "Log entries; filtered in LogViewContent by search and warnings-only."
+     "doc": "Log entries; filtered in LogViewContent by search and level."
     },
     {
      "name": "bordered",
@@ -7930,13 +7862,6 @@
      "default": "''",
      "required": "false",
      "doc": "Two-way value (`v-model:search`)."
-    },
-    {
-     "name": "warningsOnly",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Two-way value (`v-model:warningsOnly`)."
     },
     {
      "name": "level",
@@ -7972,7 +7897,6 @@
    "treeShakeableImport": "@aziontech/webkit/log-view-root",
    "models": [
     "search",
-    "warningsOnly",
     "level"
    ],
    "category": "code",
@@ -7983,7 +7907,7 @@
      "type": "LogViewLine[]",
      "default": "[]",
      "required": "false",
-     "doc": "Log entries; filtered in LogViewContent by search and warnings-only."
+     "doc": "Log entries; filtered in LogViewContent by search and level."
     },
     {
      "name": "bordered",
@@ -8047,13 +7971,6 @@
      "default": "''",
      "required": "false",
      "doc": "Two-way value (`v-model:search`)."
-    },
-    {
-     "name": "warningsOnly",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Two-way value (`v-model:warningsOnly`)."
     },
     {
      "name": "level",
@@ -8094,6 +8011,18 @@
    "kind": "subcomponent",
    "parent": "log-view",
    "treeShakeableImport": "@aziontech/webkit/log-view-footer",
+   "surface": "product"
+  },
+  "log-view-steps": {
+   "import": "@aziontech/webkit/log-view-steps",
+   "target": "./src/components/code/log-view/log-view-steps.vue",
+   "kind": "subcomponent",
+   "parent": "log-view",
+   "treeShakeableImport": "@aziontech/webkit/log-view-steps",
+   "models": [
+    "view",
+    "openStep"
+   ],
    "surface": "product"
   },
   "log-view-header": {
@@ -8149,13 +8078,6 @@
      "default": "true",
      "required": "false",
      "doc": "Shows a fixed-width gutter with zero-padded line numbers before each code line (the same name as `code-editor`)."
-    },
-    {
-     "name": "showLineNumbers",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "**@deprecated since 6.0 — use `lineNumbers`. Removed in 7.0.** Shows the line-number gutter; when set it wins over `lineNumbers`."
     },
     {
      "name": "copyAriaLabel",
@@ -9557,11 +9479,11 @@
    "examplesFile": "catalog/examples/collection-preferences.json",
    "docsFile": "catalog/components/collection-preferences.json"
   },
-  "cards": {
-   "import": "@aziontech/webkit/cards",
-   "target": "./src/components/data/cards/cards.vue",
+  "card-list": {
+   "import": "@aziontech/webkit/card-list",
+   "target": "./src/components/data/card-list/card-list.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/cards",
+   "treeShakeableImport": "@aziontech/webkit/card-list",
    "models": [
     "selectedKeys"
    ],
@@ -9614,12 +9536,12 @@
    "slots": [
     {
      "name": "header",
-     "scope": "CardsItemSlotProps<TItem>",
+     "scope": "CardListItemSlotProps<TItem>",
      "notes": "Card title; names the card and its selection control."
     },
     {
      "name": "default",
-     "scope": "CardsItemSlotProps<TItem>",
+     "scope": "CardListItemSlotProps<TItem>",
      "notes": "Card body: the item's fields."
     },
     {
@@ -9629,8 +9551,8 @@
     }
    ],
    "surface": "product",
-   "examplesFile": "catalog/examples/cards.json",
-   "docsFile": "catalog/components/cards.json"
+   "examplesFile": "catalog/examples/card-list.json",
+   "docsFile": "catalog/components/card-list.json"
   },
   "pagination": {
    "import": "@aziontech/webkit/pagination",
@@ -10473,16 +10395,9 @@
     {
      "name": "columns",
      "type": "1 | 2 | 3 | 4",
-     "default": "undefined",
-     "required": "false",
-     "doc": "Column count at the large breakpoint. Unset falls back to the deprecated `cols`."
-    },
-    {
-     "name": "cols",
-     "type": "1 | 2 | 3 | 4",
      "default": "2",
      "required": "false",
-     "doc": "@deprecated since 6.0 — use `columns` instead. Removed in 7.0. The `cols` attribute of a Markdown `CardGroup` still maps here."
+     "doc": "Column count at the large breakpoint. A Markdown `CardGroup cols` attribute maps here (through DocMarkdown)."
     },
     {
      "name": "mobileColumns",
@@ -10914,11 +10829,11 @@
    "examplesFile": "catalog/examples/doc-page-header.json",
    "docsFile": "catalog/components/doc-page-header.json"
   },
-  "doc-pagination": {
-   "import": "@aziontech/webkit/doc-pagination",
-   "target": "./src/components/documentation/doc-pagination/doc-pagination.vue",
+  "doc-prev-next": {
+   "import": "@aziontech/webkit/doc-prev-next",
+   "target": "./src/components/documentation/doc-prev-next/doc-prev-next.vue",
    "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/doc-pagination",
+   "treeShakeableImport": "@aziontech/webkit/doc-prev-next",
    "category": "documentation",
    "structure": "monolithic",
    "props": [
@@ -10959,8 +10874,8 @@
     }
    ],
    "surface": "docs",
-   "examplesFile": "catalog/examples/doc-pagination.json",
-   "docsFile": "catalog/components/doc-pagination.json"
+   "examplesFile": "catalog/examples/doc-prev-next.json",
+   "docsFile": "catalog/components/doc-prev-next.json"
   },
   "doc-prompt": {
    "import": "@aziontech/webkit/doc-prompt",
@@ -11202,75 +11117,6 @@
    "surface": "docs",
    "examplesFile": "catalog/examples/doc-steps.json",
    "docsFile": "catalog/components/doc-steps.json"
-  },
-  "doc-tooltip": {
-   "import": "@aziontech/webkit/doc-tooltip",
-   "target": "./src/components/documentation/doc-tooltip/doc-tooltip.vue",
-   "kind": "component",
-   "treeShakeableImport": "@aziontech/webkit/doc-tooltip",
-   "category": "documentation",
-   "structure": "monolithic",
-   "props": [
-    {
-     "name": "tip",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "The definition shown inside the panel."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Bold lead-in above the definition — usually the term itself."
-    },
-    {
-     "name": "linkLabel",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Label for the panel's call-to-action link. Needs `href`."
-    },
-    {
-     "name": "href",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Destination for the call-to-action link."
-    },
-    {
-     "name": "placement",
-     "type": "'top' | 'bottom' | 'auto'",
-     "default": "'top'",
-     "required": "false",
-     "doc": "Where the panel opens; `'auto'` picks the side with the most room."
-    },
-    {
-     "name": "delay",
-     "type": "number",
-     "default": "150",
-     "required": "false",
-     "doc": "Hover-open delay in milliseconds."
-    },
-    {
-     "name": "label",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Fallback trigger text when the default slot is empty."
-    }
-   ],
-   "slots": [
-    {
-     "name": "default",
-     "scope": "—",
-     "notes": "The glossed term, rendered inline in the sentence."
-    }
-   ],
-   "surface": "docs",
-   "examplesFile": "catalog/examples/doc-tooltip.json",
-   "docsFile": "catalog/components/doc-tooltip.json"
   },
   "doc-update": {
    "import": "@aziontech/webkit/doc-update",
@@ -11830,7 +11676,7 @@
     {
      "name": "default",
      "scope": "{ toast, dismiss }",
-     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, type, message, description?, action?, actions?, duration, progress? }`; `type` is the deprecated mirror of `severity` with `error` for `danger`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`."
+     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, message, description?, action?, actions?, duration, progress? }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`."
     }
    ],
    "setup": "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region.",
@@ -11887,7 +11733,7 @@
     {
      "name": "default",
      "scope": "{ toast, dismiss }",
-     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, type, message, description?, action?, actions?, duration, progress? }`; `type` is the deprecated mirror of `severity` with `error` for `danger`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`."
+     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, message, description?, action?, actions?, duration, progress? }`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`."
     }
    ],
    "setup": "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region.",
@@ -11944,10 +11790,10 @@
    "props": [
     {
      "name": "kind",
-     "type": "'rectangle' | 'circle' | 'shape'",
+     "type": "'rectangle' | 'circle'",
      "default": "'rectangle'",
      "required": "false",
-     "doc": "Geometry: a rounded rectangular block (`rectangle`) or a circle. The value `shape` is **@deprecated since 6.0 — use `rectangle`. Removed in 7.0.** and renders as `rectangle`."
+     "doc": "Geometry: a rounded rectangular block (`rectangle`) or a circle."
     },
     {
      "name": "width",
@@ -12123,16 +11969,9 @@
     {
      "name": "kind",
      "type": "ProgressKind` (`'rounded' | 'flat'`)",
-     "default": "undefined` (resolves to `'flat'`)",
+     "default": "'flat'",
      "required": "false",
      "doc": "Track and fill corner-radius variant."
-    },
-    {
-     "name": "shape",
-     "type": "ProgressShape` (`'rounded' | 'flat'`)",
-     "default": "undefined",
-     "required": "false",
-     "doc": "**@deprecated since 6.0 — use `kind`. Removed in 7.0.** Read only when `kind` is unset."
     },
     {
      "name": "size",
@@ -16018,7 +15857,7 @@
     }
    ],
    "styleSeam": true,
-   "surface": "product",
+   "surface": "marketing",
    "examplesFile": "catalog/examples/frame-box.json",
    "docsFile": "catalog/components/frame-box.json"
   },
@@ -16591,7 +16430,7 @@
      "notes": "Extra `Command.Group`s listed before the navigation destinations."
     }
    ],
-   "surface": "product",
+   "surface": "marketing",
    "examplesFile": "catalog/examples/site-layout.json",
    "docsFile": "catalog/components/site-layout.json"
   },
@@ -17332,7 +17171,6 @@
    ],
    "models": [
     "open",
-    "collapsed",
     "width"
    ],
    "category": "layout",
@@ -17407,13 +17245,6 @@
      "default": "true",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
-    },
-    {
-     "name": "collapsed",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Two-way value (`v-model:collapsed`)."
     },
     {
      "name": "width",
@@ -17452,7 +17283,6 @@
    "treeShakeableImport": "@aziontech/webkit/sidebar-root",
    "models": [
     "open",
-    "collapsed",
     "width"
    ],
    "category": "layout",
@@ -17527,13 +17357,6 @@
      "default": "true",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
-    },
-    {
-     "name": "collapsed",
-     "type": "boolean",
-     "default": "false",
-     "required": "false",
-     "doc": "Two-way value (`v-model:collapsed`)."
     },
     {
      "name": "width",
@@ -19316,7 +19139,7 @@
   },
   "breadcrumb-item": {
    "import": "@aziontech/webkit/breadcrumb-item",
-   "target": "./src/components/navigation/breadcrumb-item/breadcrumb-item.vue",
+   "target": "./src/components/navigation/breadcrumb/breadcrumb-item/breadcrumb-item.vue",
    "kind": "subcomponent",
    "parent": "breadcrumb",
    "treeShakeableImport": "@aziontech/webkit/breadcrumb-item",
@@ -19407,13 +19230,6 @@
      "doc": "Disables interaction and applies disabled tokens."
     },
     {
-     "name": "showIcon",
-     "type": "boolean",
-     "default": "undefined",
-     "required": "false",
-     "doc": "@deprecated since 6.0 — use `icon` (set shows it, empty hides it). Removed in 7.0. `false` hides the icon; `true` shows `icon`, or `pi pi-external-link` when `icon` is empty."
-    },
-    {
      "name": "icon",
      "type": "string",
      "default": "''",
@@ -19453,19 +19269,19 @@
    "examplesFile": "catalog/examples/link.json",
    "docsFile": "catalog/components/link.json"
   },
-  "menu": {
-   "import": "@aziontech/webkit/menu",
-   "target": "./src/components/navigation/menu/index.ts",
+  "sidebar-menu": {
+   "import": "@aziontech/webkit/sidebar-menu",
+   "target": "./src/components/navigation/sidebar-menu/index.ts",
    "kind": "component",
    "compoundRoot": true,
-   "treeShakeableImport": "@aziontech/webkit/menu-root",
+   "treeShakeableImport": "@aziontech/webkit/sidebar-menu-root",
    "subcomponents": [
-    "@aziontech/webkit/menu-group",
-    "@aziontech/webkit/menu-sub",
-    "@aziontech/webkit/menu-sub-trigger",
-    "@aziontech/webkit/menu-sub-content",
-    "@aziontech/webkit/menu-back",
-    "@aziontech/webkit/menu-item"
+    "@aziontech/webkit/sidebar-menu-group",
+    "@aziontech/webkit/sidebar-menu-sub",
+    "@aziontech/webkit/sidebar-menu-sub-trigger",
+    "@aziontech/webkit/sidebar-menu-sub-content",
+    "@aziontech/webkit/sidebar-menu-back",
+    "@aziontech/webkit/sidebar-menu-item"
    ],
    "models": [
     "path",
@@ -19476,10 +19292,10 @@
    "props": [
     {
      "name": "groups",
-     "type": "MenuGroupNode[]",
+     "type": "SidebarMenuGroupNode[]",
      "default": "[]",
      "required": "false",
-     "doc": "Data-driven navigation tree; each entry renders through `Menu.Group` and its items through `Menu.Item` / `Menu.Sub`. Composes with the `default` slot rather than replacing it."
+     "doc": "Data-driven navigation tree; each entry renders through `SidebarMenu.Group` and its items through `SidebarMenu.Item` / `SidebarMenu.Sub`. Composes with the `default` slot rather than replacing it."
     },
     {
      "name": "activeId",
@@ -19500,7 +19316,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Accessible name for the navigation region. Empty uses the locale catalog (`Menu`)."
+     "doc": "Accessible name for the navigation region. Empty uses the locale catalog (`SidebarMenu`)."
     },
     {
      "name": "path",
@@ -19520,7 +19336,7 @@
    "events": [
     {
      "name": "navigate",
-     "payload": "(event: MouseEvent, node: MenuNode)",
+     "payload": "(event: MouseEvent, node: SidebarMenuNode)",
      "notes": "A leaf row — or the **label** of a row that owns children, of either kind, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check."
     }
    ],
@@ -19528,19 +19344,19 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The composed anatomy. Rendered **before** the `groups` tree, not instead of it — so a `Menu.Back` can accompany a data-driven menu, which is the one row `groups` cannot express (a drilled level would otherwise have no pointer route back)."
+     "notes": "The composed anatomy. Rendered **before** the `groups` tree, not instead of it — so a `SidebarMenu.Back` can accompany a data-driven menu, which is the one row `groups` cannot express (a drilled level would otherwise have no pointer route back)."
     }
    ],
    "surface": "product",
-   "examplesFile": "catalog/examples/menu.json",
-   "docsFile": "catalog/components/menu.json"
+   "examplesFile": "catalog/examples/sidebar-menu.json",
+   "docsFile": "catalog/components/sidebar-menu.json"
   },
-  "menu-root": {
-   "import": "@aziontech/webkit/menu-root",
-   "target": "./src/components/navigation/menu/menu.vue",
+  "sidebar-menu-root": {
+   "import": "@aziontech/webkit/sidebar-menu-root",
+   "target": "./src/components/navigation/sidebar-menu/sidebar-menu.vue",
    "kind": "root",
-   "rootOf": "menu",
-   "treeShakeableImport": "@aziontech/webkit/menu-root",
+   "rootOf": "sidebar-menu",
+   "treeShakeableImport": "@aziontech/webkit/sidebar-menu-root",
    "models": [
     "path",
     "expanded"
@@ -19550,10 +19366,10 @@
    "props": [
     {
      "name": "groups",
-     "type": "MenuGroupNode[]",
+     "type": "SidebarMenuGroupNode[]",
      "default": "[]",
      "required": "false",
-     "doc": "Data-driven navigation tree; each entry renders through `Menu.Group` and its items through `Menu.Item` / `Menu.Sub`. Composes with the `default` slot rather than replacing it."
+     "doc": "Data-driven navigation tree; each entry renders through `SidebarMenu.Group` and its items through `SidebarMenu.Item` / `SidebarMenu.Sub`. Composes with the `default` slot rather than replacing it."
     },
     {
      "name": "activeId",
@@ -19574,7 +19390,7 @@
      "type": "string",
      "default": "''",
      "required": "false",
-     "doc": "Accessible name for the navigation region. Empty uses the locale catalog (`Menu`)."
+     "doc": "Accessible name for the navigation region. Empty uses the locale catalog (`SidebarMenu`)."
     },
     {
      "name": "path",
@@ -19594,7 +19410,7 @@
    "events": [
     {
      "name": "navigate",
-     "payload": "(event: MouseEvent, node: MenuNode)",
+     "payload": "(event: MouseEvent, node: SidebarMenuNode)",
      "notes": "A leaf row — or the **label** of a row that owns children, of either kind, since such a row is a destination as well as a container — was activated in data-driven mode; `node` is the activated tree node. A row's **arrow** does not emit it: revealing children is a move inside the menu, not a navigation. A node with nothing to point at gives the consumer nothing to route to, which is the consumer's own check."
     }
    ],
@@ -19602,61 +19418,61 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The composed anatomy. Rendered **before** the `groups` tree, not instead of it — so a `Menu.Back` can accompany a data-driven menu, which is the one row `groups` cannot express (a drilled level would otherwise have no pointer route back)."
+     "notes": "The composed anatomy. Rendered **before** the `groups` tree, not instead of it — so a `SidebarMenu.Back` can accompany a data-driven menu, which is the one row `groups` cannot express (a drilled level would otherwise have no pointer route back)."
     }
    ],
    "surface": "product",
-   "docsFile": "catalog/components/menu-root.json"
+   "docsFile": "catalog/components/sidebar-menu-root.json"
   },
-  "menu-group": {
-   "import": "@aziontech/webkit/menu-group",
-   "target": "./src/components/navigation/menu/menu-group/menu-group.vue",
+  "sidebar-menu-group": {
+   "import": "@aziontech/webkit/sidebar-menu-group",
+   "target": "./src/components/navigation/sidebar-menu/sidebar-menu-group/sidebar-menu-group.vue",
    "kind": "subcomponent",
-   "parent": "menu",
-   "treeShakeableImport": "@aziontech/webkit/menu-group",
+   "parent": "sidebar-menu",
+   "treeShakeableImport": "@aziontech/webkit/sidebar-menu-group",
    "surface": "product"
   },
-  "menu-sub": {
-   "import": "@aziontech/webkit/menu-sub",
-   "target": "./src/components/navigation/menu/menu-sub/menu-sub.vue",
+  "sidebar-menu-sub": {
+   "import": "@aziontech/webkit/sidebar-menu-sub",
+   "target": "./src/components/navigation/sidebar-menu/sidebar-menu-sub/sidebar-menu-sub.vue",
    "kind": "subcomponent",
-   "parent": "menu",
-   "treeShakeableImport": "@aziontech/webkit/menu-sub",
+   "parent": "sidebar-menu",
+   "treeShakeableImport": "@aziontech/webkit/sidebar-menu-sub",
    "models": [
     "open"
    ],
    "surface": "product"
   },
-  "menu-sub-trigger": {
-   "import": "@aziontech/webkit/menu-sub-trigger",
-   "target": "./src/components/navigation/menu/menu-sub-trigger/menu-sub-trigger.vue",
+  "sidebar-menu-sub-trigger": {
+   "import": "@aziontech/webkit/sidebar-menu-sub-trigger",
+   "target": "./src/components/navigation/sidebar-menu/sidebar-menu-sub-trigger/sidebar-menu-sub-trigger.vue",
    "kind": "subcomponent",
-   "parent": "menu",
-   "treeShakeableImport": "@aziontech/webkit/menu-sub-trigger",
+   "parent": "sidebar-menu",
+   "treeShakeableImport": "@aziontech/webkit/sidebar-menu-sub-trigger",
    "surface": "product"
   },
-  "menu-sub-content": {
-   "import": "@aziontech/webkit/menu-sub-content",
-   "target": "./src/components/navigation/menu/menu-sub-content/menu-sub-content.vue",
+  "sidebar-menu-sub-content": {
+   "import": "@aziontech/webkit/sidebar-menu-sub-content",
+   "target": "./src/components/navigation/sidebar-menu/sidebar-menu-sub-content/sidebar-menu-sub-content.vue",
    "kind": "subcomponent",
-   "parent": "menu",
-   "treeShakeableImport": "@aziontech/webkit/menu-sub-content",
+   "parent": "sidebar-menu",
+   "treeShakeableImport": "@aziontech/webkit/sidebar-menu-sub-content",
    "surface": "product"
   },
-  "menu-back": {
-   "import": "@aziontech/webkit/menu-back",
-   "target": "./src/components/navigation/menu/menu-back/menu-back.vue",
+  "sidebar-menu-back": {
+   "import": "@aziontech/webkit/sidebar-menu-back",
+   "target": "./src/components/navigation/sidebar-menu/sidebar-menu-back/sidebar-menu-back.vue",
    "kind": "subcomponent",
-   "parent": "menu",
-   "treeShakeableImport": "@aziontech/webkit/menu-back",
+   "parent": "sidebar-menu",
+   "treeShakeableImport": "@aziontech/webkit/sidebar-menu-back",
    "surface": "product"
   },
-  "menu-item": {
-   "import": "@aziontech/webkit/menu-item",
-   "target": "./src/components/navigation/menu/menu-item/menu-item.vue",
+  "sidebar-menu-item": {
+   "import": "@aziontech/webkit/sidebar-menu-item",
+   "target": "./src/components/navigation/sidebar-menu/sidebar-menu-item/sidebar-menu-item.vue",
    "kind": "subcomponent",
-   "parent": "menu",
-   "treeShakeableImport": "@aziontech/webkit/menu-item",
+   "parent": "sidebar-menu",
+   "treeShakeableImport": "@aziontech/webkit/sidebar-menu-item",
    "surface": "product"
   },
   "tabs": {
@@ -20223,18 +20039,6 @@
      "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
-    }
-   ],
-   "events": [
-    {
-     "name": "show",
-     "payload": "void",
-     "notes": "Emitted right after the open transition starts. **@deprecated since 6.0 — use `update:open` (`v-model:open`). Removed in 7.0.** It echoes `update:open`."
-    },
-    {
-     "name": "hide",
-     "payload": "void",
-     "notes": "Emitted right after the close transition starts. **@deprecated since 6.0 — use `update:open` (`v-model:open`). Removed in 7.0.** It echoes `update:open`."
     }
    ],
    "slots": [
@@ -21230,13 +21034,6 @@
      "doc": "Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`."
     },
     {
-     "name": "width",
-     "type": "PopoverWidth",
-     "default": "undefined",
-     "required": "false",
-     "doc": "**@deprecated since 6.0 — use `size`. Removed in 7.0.** Same values as `size`; read only when `size` is unset."
-    },
-    {
      "name": "defaultOpen",
      "type": "boolean",
      "default": "false",
@@ -21308,13 +21105,6 @@
      "default": "undefined",
      "required": "false",
      "doc": "Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`."
-    },
-    {
-     "name": "width",
-     "type": "PopoverWidth",
-     "default": "undefined",
-     "required": "false",
-     "doc": "**@deprecated since 6.0 — use `size`. Removed in 7.0.** Same values as `size`; read only when `size` is unset."
     },
     {
      "name": "defaultOpen",
@@ -21436,9 +21226,9 @@
     {
      "name": "locale",
      "type": "string",
-     "default": "'en'",
+     "default": "''",
      "required": "false",
-     "doc": "BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats."
+     "doc": "BCP 47 locale of everything below the provider; picks the catalog from `catalogs` (English is built in) and the `Intl` formats. Empty follows the device locale, `en-US` on the server and until mount."
     },
     {
      "name": "catalogs",
@@ -29708,7 +29498,6 @@
     "file-dropzone",
     "icon-button",
     "link",
-    "mini-button",
     "settings-section",
     "split-button",
     "tag",
@@ -30089,7 +29878,8 @@
     "Tag",
     "toast",
     "Tooltip",
-    "use-collection"
+    "use-collection",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -30114,7 +29904,8 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-collection"
+    "@aziontech/webkit/use-collection",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "What the account pays, what it paid and which card it is charged to. An admin checks the current plan and the next charge, moves to another plan, finds and downloads an invoice, and keeps the cards on file current: which one is the default, which ones to remove. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
@@ -30398,7 +30189,8 @@
     "Tabs",
     "Tag",
     "toast",
-    "Tooltip"
+    "Tooltip",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -30427,7 +30219,8 @@
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "Where an account admin arranges the account's hierarchy. Workspaces sit under groups, groups under organizations, and a role binding set on a parent applies to everything under it, so where a workspace lives decides who can reach it. The page shows the whole hierarchy as one tree table, lets the admin select across levels and act on the selection (move, label, delete), and shows the role bindings and labels of the one resource selected. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
@@ -30933,7 +30726,8 @@
     "Textarea",
     "toast",
     "Tooltip",
-    "use-collection"
+    "use-collection",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -30967,7 +30761,8 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-collection"
+    "@aziontech/webkit/use-collection",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "The Personal tokens page of the account settings. A person creates a token for a script, a CI job or the CLI, copies its secret the one time it is shown, sees which tokens are still alive and when each expires or was last used, and revokes one that leaked or is no longer needed. The secret never comes back: the list shows only the name, status and dates, and a lost secret means a new token. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
@@ -31116,7 +30911,7 @@
    "title": "Templates/Platform/AI/AiActionApproval",
    "source": "blocks/platform/ai/ai-action-approval/ai-action-approval.vue",
    "surface": "product",
-   "summary": "A user-authorized action inside a generative AI conversation: the reader asks the assistant to deploy, the assistant records the read-only call it made (`ToolCall`), explains in `StreamingResponse` and proposes the deployment as an `ActionConfirmation` card whose title names the command in code, whose body shows the exact command in a `CodeBlock`, and whose Deny and Deploy buttons decide. Approving turns the card into Approved and adds a running `ToolCall` that completes, followed by a `ChatMessage` that reports what changed with Copy (`CopyButton`); denying or letting the request expire records the outcome on the card and the assistant says nothing ran. The `PromptInput` shows Stop while the approved action runs. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ActionConfirmation`, `CodeBlock`, `CopyButton` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
+   "summary": "A user-authorized action inside a generative AI conversation: the reader asks the assistant to deploy, the assistant records the read-only call it made (`ToolCall`), explains in `StreamingResponse` and proposes the deployment as an `ToolApproval` card whose title names the command in code, whose body shows the exact command in a `CodeBlock`, and whose Deny and Deploy buttons decide. Approving turns the card into Approved and adds a running `ToolCall` that completes, followed by a `ChatMessage` that reports what changed with Copy (`CopyButton`); denying or letting the request expire records the outcome on the card and the assistant says nothing ran. The `PromptInput` shows Stop while the approved action runs. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `CopyButton` and `PromptInput`. A page body for ConsoleLayout that fills its content region.",
    "intents": [
     "ai action approval",
     "approve ai action",
@@ -31137,7 +30932,6 @@
     "webkit-errors"
    ],
    "components": [
-    "ActionConfirmation",
     "Button",
     "ChatMessage",
     "CodeBlock",
@@ -31145,10 +30939,10 @@
     "CopyButton",
     "PromptInput",
     "StreamingResponse",
+    "ToolApproval",
     "ToolCall"
    ],
    "imports": [
-    "@aziontech/webkit/action-confirmation",
     "@aziontech/webkit/button",
     "@aziontech/webkit/chat-message",
     "@aziontech/webkit/code-block",
@@ -31156,6 +30950,7 @@
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/prompt-input",
     "@aziontech/webkit/streaming-response",
+    "@aziontech/webkit/tool-approval",
     "@aziontech/webkit/tool-call"
    ],
    "primary": "Pending",
@@ -31235,7 +31030,8 @@
     "Sources",
     "StreamingResponse",
     "SuggestionGroup",
-    "Tag"
+    "Tag",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/artifact-canvas",
@@ -31256,7 +31052,8 @@
     "@aziontech/webkit/sources",
     "@aziontech/webkit/streaming-response",
     "@aziontech/webkit/suggestion-group",
-    "@aziontech/webkit/tag"
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Empty",
    "guidelinesSummary": "A full page where a person talks with the generative AI assistant about their account: they ask in their own words, watch the response arrive, check where it came from, and keep going with a follow-up or a new question. The page is the conversation; everything else (header, composer) stays still while only the log scrolls. Use it as the assistant's home; on a resource page, open the same conversation in a drawer with `platform/ai/ai-chat-drawer`. It is a page body for `ConsoleLayout`: it fills the layout's content region (`grow basis-0 min-h-0`, never `h-dvh`), so only the log scrolls, and the layout owns the rail, the header and the `main`.",
@@ -31321,7 +31118,8 @@
     "StatusIndicator",
     "StreamingResponse",
     "SuggestionGroup",
-    "Tag"
+    "Tag",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/button",
@@ -31343,7 +31141,8 @@
     "@aziontech/webkit/status-indicator",
     "@aziontech/webkit/streaming-response",
     "@aziontech/webkit/suggestion-group",
-    "@aziontech/webkit/tag"
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Empty",
    "guidelinesSummary": "The generative AI assistant beside the work: the reader is on a resource page — here a workload whose error rate is up — and opens the assistant in a drawer to ask about what they see, without losing the page. The drawer carries the same conversation as the full assistant page, laid out for a narrow column: every message at the inline start, a shorter composer, and support prompts written about this resource. It is a page body for `ConsoleLayout`: the app renders it in the layout's default slot, and the layout owns the rail, the header and the `main`.",
@@ -31749,7 +31548,8 @@
     "Textarea",
     "toast",
     "ToggleGroup",
-    "Tooltip"
+    "Tooltip",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -31788,7 +31588,8 @@
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "The right-side drawer that adds or edits something that only exists inside another resource: a domain, a DNS record, an environment, a variable, a rule. The user is working on the resource behind it and must keep it in view, so the form slides over the page instead of replacing it. They fill a few sections, press the one commit button and land back where they were, with the new item in the list. The drawer opens over a console page: ItemRows and NestedDrawer draw that page as a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`).",
@@ -31975,7 +31776,8 @@
     "Spinner",
     "Tag",
     "toast",
-    "ToggleGroup"
+    "ToggleGroup",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/button",
@@ -31993,7 +31795,8 @@
     "@aziontech/webkit/spinner",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
-    "@aziontech/webkit/toggle-group"
+    "@aziontech/webkit/toggle-group",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Running",
    "guidelinesSummary": "The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The user dropped a folder (or started a deploy whose environment deploys through several Deployment Settings) and wants to see each one go live, know which failed and why, and retry only those. The page behind the dialog is a page body for `ConsoleLayout` (the layout owns the rail, the header and the `main`); the dialog teleports over it. **The toast stays the standard.** Every deploy reports through one toast with Edit and Redeploy (`platform/states/async-submit`). This dialog is only for the drop-to-deploy path and for a deploy that fans out to several Deployment Settings; even there the outcome still reaches the user through the toast, so they can close the dialog and leave.",
@@ -32113,7 +31916,8 @@
     "Select",
     "Skeleton",
     "Switch",
-    "Tooltip"
+    "Tooltip",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
@@ -32135,7 +31939,8 @@
     "@aziontech/webkit/select",
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/switch",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "ConnectGit",
    "guidelinesSummary": "A focused page, outside the console shell, where the user turns a template into a running project. They chose a template in the Creation Center and now need to see what it clones, connect a Git provider if they have none, name the repository it creates, fill the settings the template requires and deploy. The same column then shows the build and the outcome, so the user never leaves the page.",
@@ -32869,7 +32674,8 @@
     "StatTile",
     "Table",
     "TableRoot",
-    "Tag"
+    "Tag",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -32888,7 +32694,8 @@
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table",
     "@aziontech/webkit/table-root",
-    "@aziontech/webkit/tag"
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "The page an operator opens to answer \"what did these actors ask for, and what did the rules decide?\". It counts every request by its outcome (allowed, blocked, held, approved, denied, over budget), shows how those outcomes moved over time, breaks them down by actor, category and destination, and ends in the request log, where each row names the rule that decided it. Every region reads the same filters, so narrowing the time range or the actor moves the whole page at once. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
@@ -32942,7 +32749,8 @@
     "StatTile",
     "Table",
     "TableRoot",
-    "Tag"
+    "Tag",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -32959,7 +32767,8 @@
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table",
     "@aziontech/webkit/table-root",
-    "@aziontech/webkit/tag"
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "The page a security or operations lead opens to triage: what is open, how severe it is, what kind of alert it is and which entities are involved. It leads with the open counts, shows how many alerts were raised each day by severity, and ends in the open alerts table, ordered from critical to info, where the reader picks what to work on next. Severity reads on one scale everywhere: tiles, chart, tags and tables. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
@@ -33044,6 +32853,7 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
+    "use-locale",
     "utils/csv"
    ],
    "imports": [
@@ -33072,6 +32882,7 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "Default",
@@ -33139,6 +32950,7 @@
     "Tag",
     "toast",
     "ToggleGroup",
+    "use-locale",
     "utils/csv"
    ],
    "imports": [
@@ -33159,6 +32971,7 @@
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
+    "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "Default",
@@ -33210,7 +33023,8 @@
     "DonutChart",
     "Hint",
     "PageHeader",
-    "Tag"
+    "Tag",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -33222,7 +33036,8 @@
     "@aziontech/webkit/donut-chart",
     "@aziontech/webkit/hint",
     "@aziontech/webkit/page-header",
-    "@aziontech/webkit/tag"
+    "@aziontech/webkit/tag",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "A dashboard the reader arranges: they move cards, change how many columns a card spans and how tall it is, and keep that layout. It serves readers who come back to the same page every day and care about different cards than the default puts first. The page owns the layout (an array of id, span and height, in order) and binds it to `Board`, which moves, resizes, clamps and announces; the `ChartCard` inside each `Board.Item` provides the drag handle and the resize corner. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
@@ -33280,7 +33095,8 @@
     "Select",
     "StatTile",
     "ToggleGroup",
-    "Tooltip"
+    "Tooltip",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -33294,7 +33110,8 @@
     "@aziontech/webkit/select",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/toggle-group",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "The dashboards hub. The reader comes here to look at one of several prepared views of the account (traffic, usage, edge health, threats, business figures, or a layout of their own) without hunting for each page in the navigation. One control picks the dashboard, one shared period scopes it, and the body under them is the chosen dashboard. Switching keeps the period, so comparing traffic and threats over the same 7 days is two clicks. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
@@ -33364,6 +33181,7 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
+    "use-locale",
     "utils/csv"
    ],
    "imports": [
@@ -33389,6 +33207,7 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "Default",
@@ -33448,6 +33267,7 @@
     "StatTile",
     "Tag",
     "toast",
+    "use-locale",
     "utils/csv"
    ],
    "imports": [
@@ -33467,6 +33287,7 @@
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
+    "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "Default",
@@ -33519,6 +33340,7 @@
     "StatTile",
     "TableRoot",
     "toast",
+    "use-locale",
     "utils/csv"
    ],
    "imports": [
@@ -33535,6 +33357,7 @@
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/toast",
+    "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "Default",
@@ -33773,6 +33596,7 @@
     "TableRoot",
     "Tag",
     "toast",
+    "use-locale",
     "utils/csv"
    ],
    "imports": [
@@ -33795,6 +33619,7 @@
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/toast",
+    "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "Default",
@@ -33850,7 +33675,8 @@
     "Skeleton",
     "StatTile",
     "Table",
-    "TableRoot"
+    "TableRoot",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -33868,7 +33694,8 @@
     "@aziontech/webkit/skeleton",
     "@aziontech/webkit/stat-tile",
     "@aziontech/webkit/table",
-    "@aziontech/webkit/table-root"
+    "@aziontech/webkit/table-root",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "The page for a pipeline that sends items (files, attachments, packages) for analysis and gives each a verdict. The reader checks what was submitted, what is still waiting, what was flagged, and above all two exceptions: deliveries held until a verdict arrives, and items that were delivered before they were flagged. It ends in the submissions table, where the reader finds a specific item. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
@@ -33935,6 +33762,7 @@
     "toast",
     "ToggleGroup",
     "Tooltip",
+    "use-locale",
     "utils/csv"
    ],
    "imports": [
@@ -33965,6 +33793,7 @@
     "@aziontech/webkit/toast",
     "@aziontech/webkit/toggle-group",
     "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale",
     "@aziontech/webkit/utils/csv"
    ],
    "primary": "Default",
@@ -34708,7 +34537,7 @@
    "title": "Templates/Platform/Detail/SectionedResource",
    "source": "blocks/platform/detail/sectioned-resource/sectioned-resource.vue",
    "surface": "product",
-   "summary": "A resource page whose tab holds more sibling pages than a tab row can carry: the third navigation level, and the only sanctioned home for a `MenuRoot` inside a page body. A full-bleed `PageTabs` row names the resource's sections (here a policy: Web security, Network security, Private access, Data protection, Objects, Settings, Versions); the Private access tab carries 16 sibling pages in 4 groups. From `@3xl` of the tab body the local navigation is a `MenuRoot` of groups in a fixed `--container-3xs` column, its rows `href` links with no glyphs, like rail sub-rows, and exactly one row marked current, derived from the route; below `@3xl` it folds into a medium `Select` labelled with the tab name through `Field`, its options grouped the same way. Beside it the current page is the TableView body: a small `PageHeader` with an outlined Documentation and an outlined Add action, the `PropertyFilter` controls row with Refresh, and a flush `Card` around `TableRoot` driven by `useCollection`, with an `EmptyState` inside the table that tells a page with no entries (Add) apart from a filter that matches nothing (Clear filters); another tab shows an `EmptyState` linking to that tab's route. The container query sits on the tab body wrapper and the queries on its children, so the content column never drops below the page column minus the navigation column. Use it only when the rail does not already list these pages and the tab has more than 7 siblings; with 7 or fewer, use a `ToggleGroup` (the FewSiblings variant), tabs or sections of one page. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "A resource page whose tab holds more sibling pages than a tab row can carry: the third navigation level, and the only sanctioned home for a `SidebarMenuRoot` inside a page body. A full-bleed `PageTabs` row names the resource's sections (here a policy: Web security, Network security, Private access, Data protection, Objects, Settings, Versions); the Private access tab carries 16 sibling pages in 4 groups. From `@3xl` of the tab body the local navigation is a `SidebarMenuRoot` of groups in a fixed `--container-3xs` column, its rows `href` links with no glyphs, like rail sub-rows, and exactly one row marked current, derived from the route; below `@3xl` it folds into a medium `Select` labelled with the tab name through `Field`, its options grouped the same way. Beside it the current page is the TableView body: a small `PageHeader` with an outlined Documentation and an outlined Add action, the `PropertyFilter` controls row with Refresh, and a flush `Card` around `TableRoot` driven by `useCollection`, with an `EmptyState` inside the table that tells a page with no entries (Add) apart from a filter that matches nothing (Clear filters); another tab shows an `EmptyState` linking to that tab's route. The container query sits on the tab body wrapper and the queries on its children, so the content column never drops below the page column minus the navigation column. Use it only when the rail does not already list these pages and the tab has more than 7 siblings; with 7 or fewer, use a `ToggleGroup` (the FewSiblings variant), tabs or sections of one page. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "local navigation",
     "in-page navigation",
@@ -34742,11 +34571,11 @@
     "EmptyState",
     "Field",
     "IconButton",
-    "MenuRoot",
     "PageHeader",
     "PageTabs",
     "PropertyFilter",
     "Select",
+    "SidebarMenuRoot",
     "Table",
     "TableRoot",
     "Tabs",
@@ -34760,11 +34589,11 @@
     "@aziontech/webkit/empty-state",
     "@aziontech/webkit/field",
     "@aziontech/webkit/icon-button",
-    "@aziontech/webkit/menu-root",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/page-tabs",
     "@aziontech/webkit/property-filter",
     "@aziontech/webkit/select",
+    "@aziontech/webkit/sidebar-menu-root",
     "@aziontech/webkit/table",
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/tabs",
@@ -36155,7 +35984,7 @@
    "title": "Templates/Platform/View/CardView",
    "source": "blocks/platform/view/card-view/card-view.vue",
    "surface": "product",
-   "summary": "The card form of a first-level list page, for resources people recognise by a few fields rather than compare column by column: a medium page heading with the resource name and its one-line description and the outlined medium Documentation action beside a primary large Create Application, the page's only large control, then the controls row: a `PropertyFilter` (Name, Status, Region, Requests in 24h, or free text) that grows to fill the row, a Delete button that counts the selected cards and opens a `ConfirmDialog` (the delete-with-confirmation pattern: a warning `Alert`, the selected names and an `Input` that must read delete), and `CollectionPreferences` for the page size and which fields every card shows; then `Cards` and a `Pagination`. Each card is named by a `Link` to the resource and lists its fields as label and value pairs (the status as a `Tag`, the domain isolated in `bdi`, the request count in compact notation). Four cards a row in a wide container, down to one in a narrow one (container queries). A visible Select all items sits above the cards and the selection survives paging. All of it runs on `useCollection` in client mode: the filter and the page live in the URL, and the page size and the visible fields are saved per account in localStorage. An account with no applications keeps the heading and the controls and shows a flush `Card` holding a medium `EmptyState` with a Create action; a load failure shows a danger `Alert` with Retry; a filter that matches nothing shows a No matching applications state with Clear filters. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The card form of a first-level list page, for resources people recognise by a few fields rather than compare column by column: a medium page heading with the resource name and its one-line description and the outlined medium Documentation action beside a primary large Create Application, the page's only large control, then the controls row: a `PropertyFilter` (Name, Status, Region, Requests in 24h, or free text) that grows to fill the row, a Delete button that counts the selected cards and opens a `ConfirmDialog` (the delete-with-confirmation pattern: a warning `Alert`, the selected names and an `Input` that must read delete), and `CollectionPreferences` for the page size and which fields every card shows; then `CardList` and a `Pagination`. Each card is named by a `Link` to the resource and lists its fields as label and value pairs (the status as a `Tag`, the domain isolated in `bdi`, the request count in compact notation). Four cards a row in a wide container, down to one in a narrow one (container queries). A visible Select all items sits above the cards and the selection survives paging. All of it runs on `useCollection` in client mode: the filter and the page live in the URL, and the page size and the visible fields are saved per account in localStorage. An account with no applications keeps the heading and the controls and shows a flush `Card` holding a medium `EmptyState` with a Create action; a load failure shows a danger `Alert` with Retry; a filter that matches nothing shows a No matching applications state with Clear filters. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "card view",
     "cards view",
@@ -36182,7 +36011,7 @@
     "Alert",
     "Button",
     "Card",
-    "Cards",
+    "CardList",
     "CollectionPreferences",
     "ConfirmDialog",
     "EmptyState",
@@ -36192,13 +36021,14 @@
     "Pagination",
     "PropertyFilter",
     "Tag",
-    "use-collection"
+    "use-collection",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/cards",
+    "@aziontech/webkit/card-list",
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/empty-state",
@@ -36208,7 +36038,8 @@
     "@aziontech/webkit/pagination-root",
     "@aziontech/webkit/property-filter",
     "@aziontech/webkit/tag",
-    "@aziontech/webkit/use-collection"
+    "@aziontech/webkit/use-collection",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "The first-level index of one resource type, in cards. The user lands here from the sidebar to find a resource they recognise by its name and a few fields (its status, domain, region, traffic), narrow the list by those fields, open one, or select several and act on them together. One `useCollection` call holds the filter, the sort, the page, the selection across pages and the saved preferences, so the page is one heading over one band: the controls row, the cards and the pagination. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
@@ -36821,7 +36652,8 @@
     "Tabs",
     "Tag",
     "Tooltip",
-    "use-collection"
+    "use-collection",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/accordion",
@@ -36853,7 +36685,8 @@
     "@aziontech/webkit/tabs",
     "@aziontech/webkit/tag",
     "@aziontech/webkit/tooltip",
-    "@aziontech/webkit/use-collection"
+    "@aziontech/webkit/use-collection",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "The events explorer. The user comes here to answer what happened on their traffic: how many events, how many errors, when they spiked, and what one event looked like in full. They narrow the log by fields and time, scan the rows, and open one event beside the log without losing their place. The fields, the log and the event document are three panes of one workspace, and every filter acts on all of them at once. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`. The explorer is a workspace: its root carries `data-layout-fill`, so the layout's `main` stops scrolling, the root fills it, and the fields panel, the log and the event document each scroll on their own at every width (`h-dvh` only sizes a standalone preview).",
@@ -37134,7 +36967,8 @@
     "TableRoot",
     "Textarea",
     "toast",
-    "Tooltip"
+    "Tooltip",
+    "use-locale"
    ],
    "imports": [
     "@aziontech/webkit/alert",
@@ -37157,7 +36991,8 @@
     "@aziontech/webkit/table-root",
     "@aziontech/webkit/textarea",
     "@aziontech/webkit/toast",
-    "@aziontech/webkit/tooltip"
+    "@aziontech/webkit/tooltip",
+    "@aziontech/webkit/use-locale"
    ],
    "primary": "Default",
    "guidelinesSummary": "The Tuning tab of a WAF rule set. It shows the requests the rule set matched, grouped by the rule that matched them, with enough context (hits, top addresses, countries and paths) for the user to tell an attack from a false positive, and turns the legitimate ones into allowed rules with a recorded reason. This block is a page body: render it in the default slot of `ConsoleLayout` (`shells/console`), which owns the rail, the header and the `main`.",
@@ -37316,7 +37151,7 @@
    "title": "Templates/Shells/Documentation",
    "source": "blocks/shells/documentation/documentation.vue",
    "surface": "docs",
-   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCallToAction` in its `aside` slot, and the `Footer` (`kind=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Five variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPagination`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `Table` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `Table`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
+   "summary": "The documentation shell is `DocLayout`, composed once around the app's router view, so every docs page is only its article. The layout owns the chrome and the DOCUMENT scrolls: a sticky docs header (the Azion Docs mark, the section links from `sections`, the search field that opens the ⌘K palette of every navigation page, and the `actions` slot with the GitHub `IconButton` and the Console `Button`), a sticky navigation rail from `lg` built from the `navigation` data (groups of rows with in-app `href`s followed with the router, inline subsections as `children`) with the `ThemeSwitcher` in its `navigation-footer` slot and a drawer opened from the header below `lg`, the article in the layout's single main landmark, the sticky On this page rail from `xl` (the `outline` headings, tracked as the reader scrolls, plus the GitHub and Community `outline-groups`) with a `DocCallToAction` in its `aside` slot, and the `Footer` (`kind=\"content\"`) in the `footer` slot under the article, between the two rails; the primary's footer carries the columns, social links, status and language, with the brand leading the social row from `lg` (signature `compact`) and moving to the signature band below it, in CSS. No page wraps its article in a scroll area or a full-height frame. The primary's article is a short guide (`DocPageHeader`, then `DocProse` with `DocHeading` sections whose ids match the outline). Five variants fill the article from the documentation parts only: Article is a tutorial (First deploy) with breadcrumb, last updated and meta actions, a `DocCardGroup` chooser of paths, `DocCallout` tips, `DocSteps` with `CodeBlock` commands, a `DocPrompt`, Next steps, Related resources as `DocItem` rows in a `FrameBox`, and `DocPrevNext`; Reference is a product reference page (an info callout, two actions, the request path as a `Diagram` in a `DocFrame`, a JSON `CodeBlock`, a term list); Landing is the documentation home with the navigation rail but no outline rail: a `DocHero` with `Get started` and the `CopyPromptButton`, a `DocAgentCard` above the Console, CLI and API `DocCard`s, objectives, ready-made templates in their brand colours, Stop attacks, compliance, Follow along and the pager forward; AgentSetup is the index of agent setup pages: a `DocTabs` picker filtering `DocCard`s of coding agents by workflow, a comparison `Table` with check marks and `Tag`s, a legend `DocCallout` and a glossary of `DocCard` grids; AgentGuide is one agent's setup page: a masthead with the agent mark, fact `Tag`s and links, `DocSteps` with `DocCodeGroup` commands and `DocMarkdown` bodies, the MCP tools `Table`, CLI and context-file code, `DocItem` rows, `DocPrompt`s, tip callouts, FAQ and troubleshooting `DocAccordionGroup`s and the other agents grid.",
    "intents": [
     "docs shell",
     "documentation layout",
@@ -37393,7 +37228,7 @@
     "DocLayout",
     "DocMarkdown",
     "DocPageHeader",
-    "DocPagination",
+    "DocPrevNext",
     "DocPrompt",
     "DocProse",
     "DocStep",
@@ -37439,7 +37274,7 @@
     "@aziontech/webkit/doc-layout",
     "@aziontech/webkit/doc-markdown",
     "@aziontech/webkit/doc-page-header",
-    "@aziontech/webkit/doc-pagination",
+    "@aziontech/webkit/doc-prev-next",
     "@aziontech/webkit/doc-prompt",
     "@aziontech/webkit/doc-prose",
     "@aziontech/webkit/doc-step",

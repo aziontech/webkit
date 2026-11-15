@@ -1,7 +1,4 @@
 <script setup lang="ts">
-  import ActionConfirmation, {
-    type ActionConfirmationState
-  } from '@aziontech/webkit/action-confirmation'
   import Button from '@aziontech/webkit/button'
   import ChatMessage from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
@@ -9,11 +6,12 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import PromptInput from '@aziontech/webkit/prompt-input'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import ToolApproval, { type ToolApprovalState } from '@aziontech/webkit/tool-approval'
   import ToolCall, { type ToolCallState } from '@aziontech/webkit/tool-call'
   import { computed, onBeforeUnmount, ref } from 'vue'
 
   const command = 'azion deploy --workload storefront --build b-4821 --env production'
-  const decision = ref<ActionConfirmationState>('approved')
+  const decision = ref<ToolApprovalState>('approved')
   const run = ref<ToolCallState | ''>('error')
   const stopped = ref(false)
   const prompt = ref('')
@@ -85,7 +83,7 @@
         <StreamingResponse
           content="Build `b-4821` passed its checks 6 minutes ago. Deploying it needs your approval."
         />
-        <ActionConfirmation
+        <ToolApproval
           title="Allow `azion deploy --env production`?"
           description="Deploys build `b-4821` of storefront to production. The current version stays available for rollback."
           approve-label="Deploy"
@@ -97,7 +95,7 @@
             :tabs="[{ label: 'Shell', value: 'command', code: command, language: 'bash' }]"
             :line-numbers="false"
           />
-        </ActionConfirmation>
+        </ToolApproval>
         <ToolCall
           v-if="run"
           name="deploy_workload"

@@ -41,7 +41,8 @@ an icon-only control, which `webkit/accessible-name` requires on every `IconButt
 - Keep hit targets at **24px or more** (44px on touch layouts), even when the visible glyph is
   smaller.
 - Announce async results politely: inline validation and status updates go to an
-  `aria-live="polite"` region (the webkit `Toast` and `Alert` already do this).
+  `aria-live="polite"` region (the webkit `Toast` and `Alert` already do this). Only an error
+  interrupts: a `danger` toast is announced assertively by the `Toaster`, every other kind politely.
 - Give in-page link targets a scroll offset (`scroll-mt-(--spacing-xxl)`) so a sticky header never
   covers the heading the link jumps to.
 - Wrap brand names, product names and code tokens in `translate="no"` so browser translation does

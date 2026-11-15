@@ -11,6 +11,7 @@
  "purpose": "One cell of the grid a documentation page scans across: a leading glyph, an optional eyebrow, the title, the copy, and an optional call-to-action row at the foot. It renders as an anchor when it has an `href` and as a plain block when it does not, so a card is either a destination or a statement — never a dead link.",
  "setup": null,
  "useWhen": [
+  "Use DocCard only inside DocCardGroup on documentation pages; product UI uses Card.",
   "A grid of peer destinations: \"what you can build\", the product tiles a landing section opens with.",
   "A set of short, scannable entries whose titles carry most of the meaning."
  ],

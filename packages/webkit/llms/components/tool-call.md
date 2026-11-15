@@ -1,6 +1,6 @@
 # Tool Call
 
-> One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Running…`, `Completed`, `Failed`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ActionConfirmation`.
+> One tool or command the agent invoked, shown in the conversation (AI Elements Tool, Cloudscape progressive steps): a row with the tool name in code font, an optional plain description, and a status (`Waiting`, `Running…`, `Completed`, `Failed`, `Denied`), with the call's input and output in a collapsible panel. It is the record of what the agent did; authorization before it runs is `ToolApproval`.
 
 - Import: `import ToolCall from '@aziontech/webkit/tool-call'`
 - Category: ai · Surface: product · Structure: monolithic
@@ -18,14 +18,14 @@
 
 ## Don’t
 
-- Asking the reader to allow a call → `action-confirmation` (then a `tool-call` records it).
+- Asking the reader to allow a call → `tool-approval` (then a `tool-call` records it).
 - The model's reasoning → `reasoning`.
 - A long-running job outside a chat → `progress` / `status-indicator` on the resource.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [action-confirmation](action-confirmation.md) — the authorization step before a sensitive call.
+- [tool-approval](tool-approval.md) — the authorization step before a sensitive call.
 - [status-indicator](status-indicator.md) — the status the row shows.
 - [code-block](code-block.md), `key-value-pairs` — what goes in the input and output slots.
 

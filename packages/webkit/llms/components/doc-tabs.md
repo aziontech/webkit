@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use DocTabs only in documentation prose for alternative paths through one instruction (macOS / Linux); product UI uses Tabs.
 - The same procedure that differs per platform or per tool.
 
 ## Do

@@ -1,6 +1,6 @@
 # Bar List
 
-> A ranked list of named values: each row is a tinted bar whose length is the value against the largest one, with the name inside the bar and the formatted value in a right-aligned column. It reads as a list, not a chart — no axes, no grid — so it suits top-N breakdowns inside a card, where a horizontal `chart` would spend its width on an axis gutter.
+> Use BarList for a ranked top-N breakdown inside a chart card; a list of mixed rows with actions is Item rows. A ranked list of named values: each row is a tinted bar whose length is the value against the largest one, with the name inside the bar and the formatted value in a right-aligned column. It reads as a list, not a chart — no axes, no grid — so it suits top-N breakdowns inside a card, where a horizontal `chart` would spend its width on an axis gutter.
 
 - Import: `import BarList from '@aziontech/webkit/bar-list'`
 - Category: chart · Surface: product · Structure: monolithic

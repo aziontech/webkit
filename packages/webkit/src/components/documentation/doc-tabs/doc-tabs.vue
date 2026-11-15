@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import TabsContent from '../../navigation/tabs/tabs-content.vue'
   import TabsItem from '../../navigation/tabs/tabs-item.vue'
   import TabsList from '../../navigation/tabs/tabs-list.vue'
   import TabsPanel from '../../navigation/tabs/tabs-panel.vue'
@@ -50,7 +49,7 @@
           :label="panel.title"
         />
       </TabsList>
-      <TabsContent>
+      <div class="relative isolate w-full">
         <TabsPanel
           v-for="panel in panels"
           :key="panel.value"
@@ -58,7 +57,7 @@
         >
           <component :is="panel.node" />
         </TabsPanel>
-      </TabsContent>
+      </div>
     </TabsRoot>
   </div>
 </template>

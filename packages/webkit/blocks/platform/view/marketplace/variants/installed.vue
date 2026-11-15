@@ -487,7 +487,7 @@
               label="Integrations"
             />
           </Tabs.List>
-          <Tabs.Content>
+          <div class="relative isolate w-full">
             <Tabs.Panel value="templates">
               <section
                 class="flex min-w-0 flex-col gap-(--layout-group-gap) pt-(--layout-group-gap)"
@@ -643,7 +643,7 @@
                 </section>
               </div>
             </Tabs.Panel>
-          </Tabs.Content>
+          </div>
         </Tabs.Root>
       </div>
     </div>

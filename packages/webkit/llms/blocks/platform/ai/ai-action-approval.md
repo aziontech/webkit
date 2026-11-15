@@ -1,11 +1,11 @@
 # AiActionApproval (`platform/ai/ai-action-approval`)
 
-> A user-authorized action inside a generative AI conversation: the reader asks the assistant to deploy, the assistant records the read-only call it made (`ToolCall`), explains in `StreamingResponse` and proposes the deployment as an `ActionConfirmation` card whose title names the command in code, whose body shows the exact command in a `CodeBlock`, and whose Deny and Deploy buttons decide. Approving turns the card into Approved and adds a running `ToolCall` that completes, followed by a `ChatMessage` that reports what changed with Copy (`CopyButton`); denying or letting the request expire records the outcome on the card and the assistant says nothing ran. The `PromptInput` shows Stop while the approved action runs. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ActionConfirmation`, `CodeBlock`, `CopyButton` and `PromptInput`. A page body for ConsoleLayout that fills its content region.
+> A user-authorized action inside a generative AI conversation: the reader asks the assistant to deploy, the assistant records the read-only call it made (`ToolCall`), explains in `StreamingResponse` and proposes the deployment as an `ToolApproval` card whose title names the command in code, whose body shows the exact command in a `CodeBlock`, and whose Deny and Deploy buttons decide. Approving turns the card into Approved and adds a running `ToolCall` that completes, followed by a `ChatMessage` that reports what changed with Copy (`CopyButton`); denying or letting the request expire records the outcome on the card and the assistant says nothing ran. The `PromptInput` shows Stop while the approved action runs. Built from `Conversation`, `ChatMessage`, `ToolCall`, `StreamingResponse`, `ToolApproval`, `CodeBlock`, `CopyButton` and `PromptInput`. A page body for ConsoleLayout that fills its content region.
 
 - Surface: product
 - Source: `blocks/platform/ai/ai-action-approval/ai-action-approval.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/ai/ai-action-approval")`
-- Components: [ActionConfirmation](../../../components/action-confirmation.md), [Button](../../../components/button.md), [ChatMessage](../../../components/chat-message.md), [CodeBlock](../../../components/code-block.md), [Conversation](../../../components/conversation.md), [CopyButton](../../../components/copy-button.md), [PromptInput](../../../components/prompt-input.md), [StreamingResponse](../../../components/streaming-response.md), [ToolCall](../../../components/tool-call.md)
+- Components: [Button](../../../components/button.md), [ChatMessage](../../../components/chat-message.md), [CodeBlock](../../../components/code-block.md), [Conversation](../../../components/conversation.md), [CopyButton](../../../components/copy-button.md), [PromptInput](../../../components/prompt-input.md), [StreamingResponse](../../../components/streaming-response.md), [ToolApproval](../../../components/tool-approval.md), [ToolCall](../../../components/tool-call.md)
 - Skills: `webkit-genai`, `webkit-ui-states`, `webkit-errors`
 
 ## Asked as
@@ -41,7 +41,7 @@ The reader's request at the inline end, in their words.
 
 Each read-only call it made, as a completed `ToolCall` with the tool name in code and a plain description, then one or two sentences on what it found and why it needs approval.
 
-### D. Authorization card — `ActionConfirmation`, `CodeBlock`
+### D. Authorization card — `ToolApproval`, `CodeBlock`
 
 The question names the action and its target, with the command or tool in code. The description says what changes and what stays. The body is the exact command in a `CodeBlock`. Deny (outlined) and the approve button, labelled with the verb of the title (Deploy, Delete), sit at the inline end. For irreversible actions use `kind="danger"` and `confirmation-phrase` with the resource name. After a decision the buttons give way to Approved, Denied or Request expired.
 
@@ -119,9 +119,6 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
 
 ```vue
 <script setup lang="ts">
-  import ActionConfirmation, {
-    type ActionConfirmationState
-  } from '@aziontech/webkit/action-confirmation'
   import Button from '@aziontech/webkit/button'
   import ChatMessage from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
@@ -129,11 +126,12 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
   import CopyButton from '@aziontech/webkit/copy-button'
   import PromptInput from '@aziontech/webkit/prompt-input'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
+  import ToolApproval, { type ToolApprovalState } from '@aziontech/webkit/tool-approval'
   import ToolCall, { type ToolCallState } from '@aziontech/webkit/tool-call'
   import { computed, onBeforeUnmount, ref } from 'vue'
 
   const command = 'azion deploy --workload storefront --build b-4821 --env production'
-  const decision = ref<ActionConfirmationState>('pending')
+  const decision = ref<ToolApprovalState>('pending')
   const run = ref<ToolCallState | ''>('')
   const stopped = ref(false)
   const prompt = ref('')
@@ -205,7 +203,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
         <StreamingResponse
           content="Build `b-4821` passed its checks 6 minutes ago. Deploying it needs your approval."
         />
-        <ActionConfirmation
+        <ToolApproval
           title="Allow `azion deploy --env production`?"
           description="Deploys build `b-4821` of storefront to production. The current version stays available for rollback."
           approve-label="Deploy"
@@ -217,7 +215,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
             :tabs="[{ label: 'Shell', value: 'command', code: command, language: 'bash' }]"
             :line-numbers="false"
           />
-        </ActionConfirmation>
+        </ToolApproval>
         <ToolCall
           v-if="run"
           name="deploy_workload"

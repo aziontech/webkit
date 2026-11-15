@@ -1,12 +1,13 @@
 {
  "purpose": "The top bar of a site: a row of links and triggers whose items open large panels of grouped links (product and solution menus). The items share one hover-intent timing, one keyboard model and one animated popup that resizes and slides between panels, inside a `navigation` landmark.",
  "useWhen": [
+  "Use NavigationMenu only to build a marketing top bar with hover panels; the site already gets one from SiteNav, and app navigation uses SidebarMenu.",
   "A horizontal top bar whose items open large panels of grouped links (product and solution mega-menus).",
   "A mix of panel triggers and plain links in one bar that shares hover-intent timing, keyboard navigation and a single animated popup.",
   "Panel entries need a title plus a muted description line, a leading icon, or a featured \"see all\" link."
  ],
  "avoidWhen": [
-  "It is the persistent vertical navigation of an app → use `sidebar` with `menu`.",
+  "It is the persistent vertical navigation of an app → use `sidebar` with `sidebar-menu`.",
   "It is a list of actions or options opened from a button → use `dropdown-menu`.",
   "It shows where the current page sits in a hierarchy → use `breadcrumb`.",
   "It is the marketing site's whole navigation bar → use `site-nav`, which already composes this menu."
@@ -15,7 +16,7 @@
   "site-nav` — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.",
   "global-header` — the bar layout this menu usually sits in.",
   "dropdown` — a single-trigger option menu, not a site-wide navigation bar.",
-  "menu` — vertical, hierarchical navigation rows for a sidebar."
+  "sidebar-menu` — vertical, hierarchical navigation rows for a sidebar."
  ],
  "bestPractices": [
   "Give every panel item a stable `value` on `NavigationMenu.Item`; `v-model` and `default-value` refer to it, and an omitted value is auto-generated and cannot be controlled.",
@@ -27,6 +28,6 @@
   "Test ids: root fallback `navigation-navigation-menu` (`<category>-<name>`); every part derives from it (`navigation-navigation-menu__list`, `__item`, `__trigger`, `__content`, `__portal`, `__positioner`, `__popup`, `__viewport`, `__arrow`, `__backdrop`, `__icon`), and a consumer `data-testid` wins on every part.",
   "Attributes on the root (`id`, `aria-labelledby`, `data-*`, listeners) land on the `nav` landmark.",
   "Portal`, `Backdrop`, `Positioner`, `Popup`, `Viewport` and `Arrow` are the overlay chain that hosts every panel. They stay public so a page can place, pad and decorate the one shared popup; most pages copy the chain from the Usage block unchanged.",
-  "NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`). Its `native-button` prop is deprecated since 6.0 and removed in 7.0: with `:native-button=\"false\"` the trigger is still keyboard reachable (`role=\"button\"`, `tabindex=\"0\"`, `Enter`/`Space` toggle)."
+  "NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`); 6.0 removed its `native-button` prop."
  ]
 }

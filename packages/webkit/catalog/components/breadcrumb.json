@@ -1,14 +1,15 @@
 {
  "purpose": "Shows the page hierarchy so users can navigate back to parent views. Composes `BreadcrumbList`, `BreadcrumbItem`, and `BreadcrumbSeparator` (chevron). Accepts an `items` array for the common case or slot composition for custom layouts. Reference: PrimeNG Breadcrumb (adapted to Webkit tokens).",
  "useWhen": [
+  "Use Breadcrumb (with `items`, or Breadcrumb.Item parts) for the page trail.",
   "A page sits two or more levels deep and the reader needs a way back to its parents (resource detail under a list, a settings sub-page).",
   "The trail is known as data — pass `items` and let the component render the segments, separators and the collapse when its own box is narrower than 768px.",
   "The trail needs a custom layout the `items` array cannot express — compose `Breadcrumb.List`, `Breadcrumb.Item` and `Breadcrumb.Separator` in the default slot."
  ],
  "avoidWhen": [
-  "It is the app's primary navigation → use `navigation-menu` or `sidebar` with `menu`.",
+  "It is the app's primary navigation → use `navigation-menu` or `sidebar` with `sidebar-menu`.",
   "It moves between sibling views of the same page → use `tabs`.",
-  "It is the previous / next pair at the end of a docs page → use `doc-pagination`."
+  "It is the previous / next pair at the end of a docs page → use `doc-prev-next`."
  ],
  "related": [
   "breadcrumb-item` — the single segment this component renders; use it alone only inside a hand-composed trail.",

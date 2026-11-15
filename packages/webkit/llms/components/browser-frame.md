@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use BrowserFrame to run real components inside a resizable device viewport (docs, stories); for a screenshot or clip in documentation use DocFrame, for third-party iframe content use Embed.
 - Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.
 - Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, on a documentation page.
 - Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.

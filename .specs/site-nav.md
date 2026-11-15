@@ -3,10 +3,10 @@ name: site-nav
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: feb93be436131a91375170c9e12802f714eb52bc97e472169800b91eccfc95ad
+last_updated: 2026-11-15
+checksum: 111b1d86eebf40b93649743766ef4bae41af01a2c3ab596cf24ce209a19b8f14
 template: 2
 ---
 
@@ -14,7 +14,7 @@ template: 2
 
 ## Purpose
 
-The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`. It is a page section — the site places it from a `{ _id: 'site-nav', props }` entry and binds `props` straight onto it — and it composes `global-header`, `brand`, `navigation-menu`, `icon-button`, `search-trigger`, `button`, `drawer`, `panel-header`, `panel-footer`, `scroll-area` and `menu`. Each mega-menu lists its panel as columns of groups, and the sheet's drill-down tree is projected from the same menus, so an entry added to a panel is in both. The open state of the sheet, its drill path and the bar's inline inset are local state. Search is the folded `search-trigger` last in the bar: the section owns no palette, it emits `search` (on a click and on ⌘K / Ctrl K) and the page opens its own `command`, as every header does under `rules/webkit-header-search.md`.
+The marketing site's own navigation: a sticky bar with the Azion mark, the mega-menu triggers and plain links, and the contact, login and sign-up actions, plus the sheet that carries the same tree below `xl`. It is a page section — the site places it from a `{ _id: 'site-nav', props }` entry and binds `props` straight onto it — and it composes `global-header`, `brand`, `navigation-menu`, `icon-button`, `search-trigger`, `button`, `drawer`, `panel-header`, `panel-footer`, `scroll-area` and `sidebar-menu`. Each mega-menu lists its panel as columns of groups, and the sheet's drill-down tree is projected from the same menus, so an entry added to a panel is in both. The open state of the sheet, its drill path and the bar's inline inset are local state. Search is the folded `search-trigger` last in the bar: the section owns no palette, it emits `search` (on a click and on ⌘K / Ctrl K) and the page opens its own `command`, as every header does under `rules/webkit-header-search.md`.
 
 ## When to use
 
@@ -23,13 +23,13 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 ## When NOT to use
 
 - For the Console's application header → use `global-header` directly.
-- For an in-page list of links → use `navigation-menu` or `menu` directly.
+- For an in-page list of links → use `navigation-menu` or `sidebar-menu` directly.
 
 ## Related
 
 - `global-header` — the bar primitive the navigation is rendered in.
 - `navigation-menu` — the mega-menu the bar opens from `xl` up.
-- `menu` — the drill-down tree the sheet carries below `xl`.
+- `sidebar-menu` — the drill-down tree the sheet carries below `xl`.
 
 ## Best practices
 
@@ -160,7 +160,7 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 ## Right-to-left
 
 - Layout: logical utilities only; the bar, the panels and the sheet mirror under `dir="rtl"`, and the sheet slides from the end edge as `drawer` places it.
-- Icons: the menu, search and arrow glyphs belong to the composed components; the drill-in chevrons mirror as `menu` draws them; the mark is not mirrored.
+- Icons: the menu, search and arrow glyphs belong to the composed components; the drill-in chevrons mirror as `sidebar-menu` draws them; the mark is not mirrored.
 - Keyboard: the mega-menu and the sheet tree own their arrow keys and follow the direction.
 - User data: none.
 
@@ -173,7 +173,7 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 
 ## Performance
 
-- Bundle budget: 55.95 KB gzip, the `.size-limit.json` entry `site-nav` (it carries `navigation-menu`, `menu`, `drawer` and `global-header`).
+- Bundle budget: 55.95 KB gzip, the `.size-limit.json` entry `site-nav` (it carries `navigation-menu`, `sidebar-menu`, `drawer` and `global-header`).
 - Runtime budget: one resize listener and one media query, both removed on dispose.
 - Heavy parts: none; the panels render on open.
 

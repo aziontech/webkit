@@ -13,6 +13,7 @@
  "purpose": "A vertical rail that names the steps of one task, says which step the reader is on, and carries the progress between them on the line that joins the dots. It is the left column of a multi-step surface — a create wizard, a guided setup — while the content of the current step fills the column beside it. It is **vertical only**, by design. The rail runs the full height of the surface so the connector between two dots is the thing that measures progress; a horizontal variant would be a different component with a different job (a compact progress ribbon), not a prop on this one.",
  "setup": null,
  "useWhen": [
+  "Use Stepper for the step rail of a multi-step task in the app; for an ordered create with its Cancel/Previous/Next footer use Wizard, and for a guided tutorial use TutorialPanel.",
   "A task is split into ordered steps and only one is on screen at a time (a create wizard, a guided setup).",
   "The reader needs to see how many steps are left and go back to one they already answered.",
   "A step can fail validation, or sit in flight, and the rail has to say so without leaving the step."

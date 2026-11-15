@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use DocPageHeader only on documentation pages; console pages use PageHeader.
 - At the top of any documentation or changelog page, above `DocProse`.
 
 ## Do

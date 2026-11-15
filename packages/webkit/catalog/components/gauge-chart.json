@@ -1,5 +1,5 @@
 {
- "purpose": "One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it. Bands (thresholds) name what the value means and color the arc. It shares the chart palette, the loading, empty and error surface and the `ChartCard` naming with the rest of the chart family, and is rendered in-house SVG.",
+ "purpose": "Use GaugeChart for one value against a known range with thresholds; for threshold lines or bands inside a Chart use Chart.Reference, and for one headline metric with a delta use StatTile. Both thresholds share one model, `ChartThreshold`. One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it. Bands (thresholds) name what the value means and color the arc. It shares the chart palette, the loading, empty and error surface and the `ChartCard` naming with the rest of the chart family, and is rendered in-house SVG.",
  "useWhen": [
   "A utilization or ratio with a fixed range: CPU, memory, cache hit ratio, quota used.",
   "A latency or score against a target, where bands (healthy, busy, critical) carry the meaning.",
@@ -19,7 +19,7 @@
  "bestPractices": [
   "Give the range that means something for the reading (0 to 100 for a ratio, 0 to the quota for usage); the dial is meaningless without it.",
   "Name every band (`label`) so the value is read with its meaning, not only with a color.",
-  "Use status colors for bands (`success`, `warning`, `danger`) and severity colors only when the reading is a severity.",
+  "Use status severities for bands (`success`, `warning`, `danger`) and the findings levels (`severity-critical` … `severity-info`) only when the reading is a severity.",
   "Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`."
  ]
 }

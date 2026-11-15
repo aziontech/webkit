@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use SearchTrigger only in the top bar to open the ⌘K palette (Command); search over one table is Table.Search.
 - The search entry of every app header — console, demo, docs or site top bar (`GlobalHeader.End`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.
 - Anywhere a shortcut-backed launcher should look like a field without being one.
 

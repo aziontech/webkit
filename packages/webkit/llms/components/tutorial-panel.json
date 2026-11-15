@@ -10,15 +10,17 @@
  "subcomponents": [
   "@aziontech/webkit/tutorial-panel-provider"
  ],
- "purpose": "The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`. The panel draws its views from `HelpPanel` parts (`Header`, `Tutorial`, `Task`), so a tutorial looks the same whether a product shows a static checklist with `HelpPanel.Tutorial` or a guided run with `TutorialPanel`. Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.",
+ "purpose": "The guide that runs tutorials beside the real product. It lives in the page's tools or help region, lists the tutorials a reader can take, and while one runs it shows the tutorial's tasks and the reader's place in them. The steps themselves happen on the page: each step points at a `Hotspot` placed beside the real control, and the current step opens there in a popover. `TutorialPanel.Provider` wraps the whole page (the content and the tools region), holds the running tutorial and the current step, and is what the panel and every `Hotspot` read. It is the stateful layer over `help-panel`: the panel is a `HelpPanel` with its `Header`, and draws each tutorial with its own internal task list (6.0 moved the former `HelpPanel.Tutorial` and `HelpPanel.Task` here; `HelpPanel` no longer has a tutorial mode). Design call (M2.9, WP app-layout): neither the design sample nor the Console Kit has a guided tutorial, so the model is Cloudscape's tutorial panel, hotspot and annotation context, rebuilt on WebKit parts.",
  "setup": null,
  "useWhen": [
+  "Use TutorialPanel for guided tutorials whose steps point at real controls through Hotspot.",
   "A reader learns a product task by doing it on the real screen, step by step, with the instructions pointing at the control they need next.",
   "A product offers several tutorials in its help region and records which ones the reader finished.",
   "A first-run or onboarding flow guides the reader through a real create and deploy, not a mock."
  ],
  "avoidWhen": [
-  "Static help beside the page, with no guided run → use `help-panel` (a `HelpPanel.Tutorial` checklist when the owner only reports progress).",
+  "Static help beside the page, with no guided run → use `help-panel`.",
+  "The step rail of a multi-step task in the app → use `stepper`, or `wizard` for a create flow with its footer.",
   "A multi-step create flow whose steps are forms in one surface → use `wizard`.",
   "Ordered steps the reader navigates inside a page → use `stepper`.",
   "A single tip pinned to one control → use `popover` or `hint`.",

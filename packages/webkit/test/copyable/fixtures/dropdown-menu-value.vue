@@ -17,7 +17,7 @@
   <DropdownMenu @select="onSelect">
     <DropdownMenu.Trigger><button type="button">Open</button></DropdownMenu.Trigger>
     <DropdownMenu.Group>
-      <DropdownMenu.Option value="edit">Edit</DropdownMenu.Option>
+      <DropdownMenu.Item value="edit">Edit</DropdownMenu.Item>
     </DropdownMenu.Group>
   </DropdownMenu>
   <Table.CellActions
@@ -25,7 +25,7 @@
     @select="onAction"
   >
     <DropdownMenu.Group>
-      <DropdownMenu.Option :value="1">Delete</DropdownMenu.Option>
+      <DropdownMenu.Item :value="1">Delete</DropdownMenu.Item>
     </DropdownMenu.Group>
   </Table.CellActions>
   <!-- @vue-expect-error the select payload is a string or a number, never a boolean -->

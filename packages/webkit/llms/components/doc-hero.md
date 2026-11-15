@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use DocHero only on the documentation home; marketing page openings use HeroBand.
 - The top of a documentation home or a docs section landing (`shells/documentation`, variant `Landing`).
 
 ## Do

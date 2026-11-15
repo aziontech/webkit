@@ -4,12 +4,7 @@
   import { useControllable } from '../../../composables/use-controllable'
   import { useOverlayLayer } from '../../../composables/use-overlay-layer'
   import { usePlacement } from '../../../composables/use-placement'
-  import type {
-    PopoverPlacement,
-    PopoverPlacementInput,
-    PopoverSize,
-    PopoverWidth
-  } from './injection-key'
+  import type { PopoverPlacement, PopoverPlacementInput, PopoverSize } from './injection-key'
   import { PopoverInjectionKey } from './injection-key'
 
   defineOptions({
@@ -34,11 +29,6 @@
       disabled?: boolean
       /** Panel width preset mapped to container tokens: `'small'` (`--container-xs`), `'medium'` (`--container-sm`), `'large'` (`--container-md`). When omitted, the panel sizes fluidly between `--container-3xs` and `--container-xs`. */
       size?: PopoverSize
-      /**
-       * Same values as `size`; read only when `size` is unset.
-       * @deprecated since 6.0 — use `size`. Removed in 7.0.
-       */
-      width?: PopoverWidth
       /** Initial open state when uncontrolled. */
       defaultOpen?: boolean
       /** Light-dismiss: when true, the panel closes on outside-click and `Esc`. Set false to keep it open until the trigger or `PopoverClose` closes it. */
@@ -49,7 +39,6 @@
       offset: 4,
       disabled: false,
       size: undefined,
-      width: undefined,
       defaultOpen: false,
       dismissible: true
     }
@@ -85,7 +74,7 @@
   const disabledRef = computed(() => props.disabled)
   const placementRef = computed(() => props.placement)
   const offsetRef = computed(() => props.offset)
-  const sizeRef = computed(() => props.size ?? props.width)
+  const sizeRef = computed(() => props.size)
 
   const hasTitle = ref(false)
   const hasDescription = ref(false)

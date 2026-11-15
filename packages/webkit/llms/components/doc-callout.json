@@ -11,6 +11,7 @@
  "purpose": "The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.",
  "setup": null,
  "useWhen": [
+  "Use DocCallout only in documentation prose (Note, Tip, Warning); console pages use Alert.",
   "An aside the reader must not miss mid-prose: a caveat, a prerequisite, a warning about data loss.",
   "A short confirmation that a step worked (`check`), or a shortcut worth knowing (`tip`)."
  ],

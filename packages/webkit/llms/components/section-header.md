@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use SectionHeader for the h2 heading of one band inside a console page; for marketing pages use SectionTitle, and for a settings band use SettingsSection.
 - A band of a page that holds a card, a table or a list: Payment information on Billing, Get started on a resource, General in a create form.
 - A band that someone should be able to link to (`anchor`).
 

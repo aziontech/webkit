@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use HoverCard for a read-only rich preview (a definition, a user card, a link preview) shown on hover or focus; interactive content is a Popover and a one-line hint is a Tooltip.
 - Previewing what a link points to before following it: a user handle in an audit log, a resource name in a table, a commit hash.
 - Showing a summary (status, owner, last update) that the destination page also shows.
 
@@ -68,8 +69,8 @@
 
 ## v-model
 
-| Model          | Type      | Default     | Emits         | Notes                                                                                                   |
-| -------------- | --------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------- |
+| Model          | Type      | Default     | Emits         | Notes                                                                                                     |
+| -------------- | --------- | ----------- | ------------- | --------------------------------------------------------------------------------------------------------- |
 | `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`. While unbound the card is uncontrolled and starts at `defaultOpen`. |
 
 ## States

@@ -7,12 +7,11 @@
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import HelpPanel from '../help-panel/help-panel.vue'
   import HelpPanelHeader from '../help-panel/help-panel-header/help-panel-header.vue'
-  import HelpPanelTask from '../help-panel/help-panel-task/help-panel-task.vue'
-  import HelpPanelTutorial from '../help-panel/help-panel-tutorial/help-panel-tutorial.vue'
-  import type { HelpPanelTaskStatus } from '../help-panel/injection-key'
   import Tag from '../tag/tag.vue'
   import { useTutorialContext } from './composables/use-tutorial-context'
-  import type { Tutorial } from './injection-key'
+  import type { Tutorial, TutorialTaskStatus } from './injection-key'
+  import TutorialPanelTask from './tutorial-panel-task/tutorial-panel-task.vue'
+  import TutorialPanelTasks from './tutorial-panel-tasks/tutorial-panel-tasks.vue'
 
   defineOptions({
     name: 'TutorialPanel',
@@ -68,7 +67,7 @@
     return ranges
   })
 
-  const taskStatus = (taskIndex: number): HelpPanelTaskStatus => {
+  const taskStatus = (taskIndex: number): TutorialTaskStatus => {
     const range = taskRanges.value[taskIndex]
     if (!range) return 'upcoming'
     if (context.step.value > range.last) return 'complete'
@@ -242,13 +241,13 @@
           </div>
         </section>
 
-        <HelpPanelTutorial
+        <TutorialPanelTasks
           :title="context.active.value.title"
           :description="context.active.value.description"
           :completed="context.finished.value"
           :data-testid="`${testId}__tutorial`"
         >
-          <HelpPanelTask
+          <TutorialPanelTask
             v-for="(task, taskIndex) in context.active.value.tasks"
             :key="`${context.active.value.id}-${taskIndex}`"
             :title="task.title"
@@ -268,7 +267,7 @@
                 {{ item.title }}
               </li>
             </ol>
-          </HelpPanelTask>
+          </TutorialPanelTask>
           <template
             v-if="!context.finished.value"
             #actions
@@ -282,7 +281,7 @@
               @click="exit"
             />
           </template>
-        </HelpPanelTutorial>
+        </TutorialPanelTasks>
       </template>
     </HelpPanel>
   </div>

@@ -27,7 +27,7 @@
 
 - use-collection` — saves the preferences; `preferencesProps` is the binding.
 - [table](table.md) — takes `density`, `wrapLines`, `striped`, the visible columns and their order.
-- [cards](cards.md) — takes the page size and the visible fields.
+- cards` — takes the page size and the visible fields.
 - [property-filter](property-filter.md) — sits beside it in the controls row.
 
 ## Props

@@ -23,13 +23,13 @@
   import GlobalHeaderStart from '../../layout/global-header/global-header-start.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import Sidebar from '../../layout/sidebar/sidebar.vue'
-  import type { MenuNode } from '../../navigation/menu/injection-key'
-  import Menu from '../../navigation/menu/menu.vue'
-  import MenuBack from '../../navigation/menu/menu-back/menu-back.vue'
   import NavigationMenuItem from '../../navigation/navigation-menu/navigation-menu-item.vue'
   import NavigationMenuLink from '../../navigation/navigation-menu/navigation-menu-link.vue'
   import NavigationMenuList from '../../navigation/navigation-menu/navigation-menu-list.vue'
   import NavigationMenu from '../../navigation/navigation-menu/navigation-menu-root.vue'
+  import type { SidebarMenuNode } from '../../navigation/sidebar-menu/injection-key'
+  import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
+  import SidebarMenuBack from '../../navigation/sidebar-menu/sidebar-menu-back/sidebar-menu-back.vue'
   import Command from '../../overlay/command/command.vue'
   import CommandEmpty from '../../overlay/command/command-empty/command-empty.vue'
   import CommandGroup from '../../overlay/command/command-group/command-group.vue'
@@ -254,7 +254,7 @@
     follow(event, item)
   }
 
-  const onMenuNavigate = (event: globalThis.MouseEvent, node: MenuNode) => {
+  const onMenuNavigate = (event: globalThis.MouseEvent, node: SidebarMenuNode) => {
     const item = leaves.value.get(node.id)
     if (!item || node.groups || node.children) return
     activate(event, item)
@@ -378,7 +378,7 @@
             :data-testid="`${testId}__navigation`"
             class="[--sidebar-width:var(--container-2xs)]"
           >
-            <Menu
+            <SidebarMenu
               v-model:path="menuPath"
               v-model:expanded="menuExpanded"
               :groups="menuGroups"
@@ -386,8 +386,8 @@
               role="presentation"
               @navigate="onMenuNavigate"
             >
-              <MenuBack :label="backLabel" />
-            </Menu>
+              <SidebarMenuBack :label="backLabel" />
+            </SidebarMenu>
             <template
               v-if="$slots['navigation-footer']"
               #footer
@@ -439,7 +439,7 @@
           <DrawerTitle>{{ ariaLabel || t('docLayout.navigation') }}</DrawerTitle>
         </PanelHeader>
         <ScrollArea class="min-h-0 w-full min-w-0 flex-1">
-          <Menu
+          <SidebarMenu
             v-model:path="menuPath"
             v-model:expanded="menuExpanded"
             :groups="menuGroups"
@@ -448,8 +448,8 @@
             class="w-full p-(--spacing-md)"
             @navigate="onMenuNavigate"
           >
-            <MenuBack :label="backLabel" />
-          </Menu>
+            <SidebarMenuBack :label="backLabel" />
+          </SidebarMenu>
         </ScrollArea>
         <PanelFooter
           v-if="$slots['navigation-footer']"

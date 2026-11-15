@@ -1,11 +1,11 @@
 # CardView (`platform/view/card-view`)
 
-> The card form of a first-level list page, for resources people recognise by a few fields rather than compare column by column: a medium page heading with the resource name and its one-line description and the outlined medium Documentation action beside a primary large Create Application, the page's only large control, then the controls row: a `PropertyFilter` (Name, Status, Region, Requests in 24h, or free text) that grows to fill the row, a Delete button that counts the selected cards and opens a `ConfirmDialog` (the delete-with-confirmation pattern: a warning `Alert`, the selected names and an `Input` that must read delete), and `CollectionPreferences` for the page size and which fields every card shows; then `Cards` and a `Pagination`. Each card is named by a `Link` to the resource and lists its fields as label and value pairs (the status as a `Tag`, the domain isolated in `bdi`, the request count in compact notation). Four cards a row in a wide container, down to one in a narrow one (container queries). A visible Select all items sits above the cards and the selection survives paging. All of it runs on `useCollection` in client mode: the filter and the page live in the URL, and the page size and the visible fields are saved per account in localStorage. An account with no applications keeps the heading and the controls and shows a flush `Card` holding a medium `EmptyState` with a Create action; a load failure shows a danger `Alert` with Retry; a filter that matches nothing shows a No matching applications state with Clear filters. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The card form of a first-level list page, for resources people recognise by a few fields rather than compare column by column: a medium page heading with the resource name and its one-line description and the outlined medium Documentation action beside a primary large Create Application, the page's only large control, then the controls row: a `PropertyFilter` (Name, Status, Region, Requests in 24h, or free text) that grows to fill the row, a Delete button that counts the selected cards and opens a `ConfirmDialog` (the delete-with-confirmation pattern: a warning `Alert`, the selected names and an `Input` that must read delete), and `CollectionPreferences` for the page size and which fields every card shows; then `CardList` and a `Pagination`. Each card is named by a `Link` to the resource and lists its fields as label and value pairs (the status as a `Tag`, the domain isolated in `bdi`, the request count in compact notation). Four cards a row in a wide container, down to one in a narrow one (container queries). A visible Select all items sits above the cards and the selection survives paging. All of it runs on `useCollection` in client mode: the filter and the page live in the URL, and the page size and the visible fields are saved per account in localStorage. An account with no applications keeps the heading and the controls and shows a flush `Card` holding a medium `EmptyState` with a Create action; a load failure shows a danger `Alert` with Retry; a filter that matches nothing shows a No matching applications state with Clear filters. Laid out with the theme’s `layout-boundary`, `layout-column` and `layout-section-start` utilities. Its page-level parts are `PageHeader`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/view/card-view/card-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/card-view")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Cards](../../../components/cards.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [EmptyState](../../../components/empty-state.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Pagination](../../../components/pagination.md), [PropertyFilter](../../../components/property-filter.md), [Tag](../../../components/tag.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CardList](../../../components/card-list.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [EmptyState](../../../components/empty-state.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Pagination](../../../components/pagination.md), [PropertyFilter](../../../components/property-filter.md), [Tag](../../../components/tag.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-ui-states`
 
 ## Asked as
@@ -54,9 +54,9 @@ The `platform/delete/delete-with-confirmation` pattern adapted to a selection: a
 
 The last control of the row. `CollectionPreferences` bound with `v-bind="preferencesProps"` and `:sections="['page-size', 'columns']"` opens a dialog that edits a draft and applies it on Confirm: the page size (12, 24, 48, multiples of the four-card row) and which fields every card shows, in what order. `preferences.storageKey` saves the choice per list; `defaults.columns` hides Owner until someone shows it. The card's name is never a field, so it cannot be hidden.
 
-### F. Cards — `Cards`, `Link`, `Tag` (required)
+### F. CardList — `CardList`, `Link`, `Tag` (required)
 
-`Cards` bound with `v-bind="cardsProps"` (one page of items, the selection mode and the selected keys) and an `aria-label` naming the collection. The `header` slot names each card with a `Link` to the resource, so its focus ring, hover and routing match every other link; the default slot lists the visible fields as a `dl` of label and value pairs, in the order the preferences set. Status is a small `Tag` with the same severity on every card (success, warning, neutral); the domain is isolated in `bdi`; the request count uses compact notation with tabular numerals. Each card has a checkbox labelled by its name, and a visible Select all items sits above the grid; the selection is a set of keys, so it survives paging and sorting. Four cards a row in a wide container, down to one in a narrow one, through container queries.
+`CardList` bound with `v-bind="cardListProps"` (one page of items, the selection mode and the selected keys) and an `aria-label` naming the collection. The `header` slot names each card with a `Link` to the resource, so its focus ring, hover and routing match every other link; the default slot lists the visible fields as a `dl` of label and value pairs, in the order the preferences set. Status is a small `Tag` with the same severity on every card (success, warning, neutral); the domain is isolated in `bdi`; the request count uses compact notation with tabular numerals. Each card has a checkbox labelled by its name, and a visible Select all items sits above the grid; the selection is a set of keys, so it survives paging and sorting. Four cards a row in a wide container, down to one in a narrow one, through container queries.
 
 ### G. Pagination — `Pagination` (required)
 
@@ -64,7 +64,7 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 ### H. No matching applications — `EmptyState`, `Button` (required)
 
-When `status` is `no-match`, the `Cards` `#empty` slot holds a medium `EmptyState` with the filter-slash glyph, "No matching applications", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`. The heading and the filter tokens stay, so the user can see and undo what hid the cards.
+When `status` is `no-match`, the `CardList` `#empty` slot holds a medium `EmptyState` with the filter-slash glyph, "No matching applications", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`. The heading and the filter tokens stay, so the user can see and undo what hid the cards.
 
 ### I. Empty listing and load failure — `Card`, `EmptyState`, `Alert`, `Button` (required)
 
@@ -72,7 +72,7 @@ When `status` is `error`, a danger `Alert` with Retry (bound to the collection's
 
 ## Do
 
-- Run the whole list on one `useCollection` call with `selection: { mode: 'multi' }` and bind `cardsProps`, `paginationProps`, `propertyFilterProps` and `preferencesProps` with `v-bind`.
+- Run the whole list on one `useCollection` call with `selection: { mode: 'multi' }` and bind `cardListProps`, `paginationProps`, `propertyFilterProps` and `preferencesProps` with `v-bind`.
 - Keep the controls row, the cards and the pagination in one band at the group gap; the heading sits one section step above.
 - Name every card with a link to the resource in the `header` slot, and keep its fields to the few that tell one item from another.
 - Render the fields from `preferences.columns`, so the order and visibility set in the dialog reach every card.
@@ -107,7 +107,7 @@ When `status` is `error`, a danger `Alert` with Retry (bound to the collection's
 ## Accessibility
 
 - The layout owns the one `main` landmark; the `PageHeader` title is the page's only `h1`.
-- `Cards` is a list named by its `aria-label`; each card is labelled by its header, and its checkbox is named by the same text.
+- `CardList` is a list named by its `aria-label`; each card is labelled by its header, and its checkbox is named by the same text.
 - Select all items is a visible, labelled checkbox, not an icon; its state is mixed when part of the page is selected.
 - Field labels and values are a `dl`, so each value is read with its label; status is a `Tag` with text, never color alone.
 - The `PropertyFilter` has an `aria-label` that matches its placeholder, and the match count is announced after each change.
@@ -118,7 +118,7 @@ When `status` is `error`, a danger `Alert` with Retry (bound to the collection's
 ## States
 
 - Default: applications exist; the cards show them with the property filter, multi-select with Delete (n) behind its confirmation dialog, preferences and pagination wired, and filtering to nothing shows No matching applications with Clear filters.
-- Loading: the first load; the heading stays, the filter, Delete and preferences are disabled, and `Cards` shows its placeholder cards (`loading`, `aria-busy`).
+- Loading: the first load; the heading stays, the filter, Delete and preferences are disabled, and `CardList` shows its placeholder cards (`loading`, `aria-busy`).
 - Failed: the applications could not load; the heading and the disabled controls stay and a danger `Alert` with Retry takes the cards' place.
 - Empty: the account has no applications; `useCollection` reports `empty`, the heading and controls stay, and a flush card holding a medium empty state with Create Application replaces the cards.
 
@@ -129,12 +129,12 @@ When `status` is `error`, a danger `Alert` with Retry (bound to the collection's
 - `platform/create/single-page-create` — where the Create action leads for a short form.
 - `platform/detail/details-page` — where a card's name leads.
 - `platform/states/first-use` — the module before its first resource.
-- `useCollection`, `Cards` and `Pagination` — see `skills/webkit-lists`.
+- `useCollection`, `CardList` and `Pagination` — see `skills/webkit-lists`.
 
 ## Variants
 
 - `Default` — primary (the code below)
-- `Loading` — The first load: the heading stays, the filter, Delete and preferences are disabled, and `Cards` shows its placeholder cards with `aria-busy`.
+- `Loading` — The first load: the heading stays, the filter, Delete and preferences are disabled, and `CardList` shows its placeholder cards with `aria-busy`.
 - `Failed` — The applications could not load: the heading and the disabled controls stay, and a danger Alert with Retry takes the cards' place.
 - `Empty` — An account with no applications: the heading and the controls stay, and the cards give way to a medium EmptyState with a small secondary Create Application button.
 
@@ -147,7 +147,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import Cards from '@aziontech/webkit/cards'
+  import CardList from '@aziontech/webkit/card-list'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -158,6 +158,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, useId, watch } from 'vue'
 
   type ApplicationStatus = 'Active' | 'Degraded' | 'Inactive'
@@ -238,7 +239,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
   const items = ref<Application[]>([...applications])
 
   const {
-    cardsProps,
+    cardListProps,
     paginationProps,
     propertyFilterProps,
     preferencesProps,
@@ -271,7 +272,9 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
       .filter((field): field is Field => field !== undefined)
   )
 
-  const requestsFormat = new Intl.NumberFormat('en-US', { notation: 'compact' })
+  const { formatNumber } = useLocale()
+
+  const requestsFormat = (value: number) => formatNumber(value, { notation: 'compact' })
   const severityOf = (value: ApplicationStatus): TagSeverity =>
     value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'neutral'
 
@@ -432,8 +435,8 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
           />
 
           <template v-else>
-            <Cards
-              v-bind="cardsProps"
+            <CardList
+              v-bind="cardListProps"
               aria-label="Applications"
             >
               <template #header="{ item }">
@@ -463,7 +466,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
                       <span
                         v-else-if="field.id === 'requests'"
                         class="tabular-nums"
-                        >{{ requestsFormat.format(item.requests) }}</span
+                        >{{ requestsFormat(item.requests) }}</span
                       >
                       <template v-else>{{ item[field.id] }}</template>
                     </dd>
@@ -487,7 +490,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ca
                   </template>
                 </EmptyState>
               </template>
-            </Cards>
+            </CardList>
             <Pagination
               v-if="totalCount > 0"
               v-bind="paginationProps"

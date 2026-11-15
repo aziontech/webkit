@@ -1,6 +1,6 @@
 # Client Mosaic
 
-> The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a "read the case study" link, and a mark cell carries only the client's linked logo on a chosen fill. With `stories` and `logos` the layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. With `cells` the page places story and mark cells in one ordered list, each with its own column and row span, so stories and marks interleave as on the home page. It is a page section — the site places it from a `{ _id: 'client-mosaic', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `bento-grid`, `logo` and `mini-button`.
+> The client mosaic: a framed bento grid of customer cells where a story cell carries a photograph, the client's mark, one line of its result and a "read the case study" link, and a mark cell carries only the client's linked logo on a chosen fill. With `stories` and `logos` the layout is derived from the data: the first story spans two columns and two rows, every other story one column and two rows, every mark one cell. With `cells` the page places story and mark cells in one ordered list, each with its own column and row span, so stories and marks interleave as on the home page. It is a page section — the site places it from a `{ _id: 'client-mosaic', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `bento-grid`, `logo` and `link`.
 
 - Import: `import ClientMosaic from '@aziontech/webkit/client-mosaic'`
 - Category: sections · Surface: marketing · Structure: monolithic
@@ -50,7 +50,7 @@
 
 ## Accessibility
 
-- Visible focus: every mark cell is a link with `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`; the story link is a `mini-button` with its own ring.
+- Visible focus: every mark cell is a link with `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset`; the story link is a `link` with its own ring.
 - Keyboard map: `Tab` moves between mark links and story links; `Enter` follows.
 - ARIA: the band is a `<section>` named by `ariaLabel`; the photo of a story is decorative (`alt=""`, `aria-hidden`); every mark is a `Logo` (`role="img"`) named by `logoAlt`; the story text is a paragraph and its link is named by `linkLabel`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): story text `var(--text-default)` over the canvas gradient; marks are inked to their fill through `logoTreatment`.
@@ -60,7 +60,7 @@
 ## Right-to-left
 
 - Layout: the grid follows the reading direction (`bento-grid`); the story cell uses logical alignment (`items-start`, `self-start`).
-- Icons: the story link's chevron is mirrored by `mini-button`; logos are never mirrored.
+- Icons: the story link's chevron is mirrored by `link`; logos are never mirrored.
 - Keyboard: `Tab` order follows the placement order.
 - User data: none beyond the client names, which are images named by `logoAlt`.
 
@@ -74,7 +74,7 @@ No built-in strings: the story lines, the client names and `linkLabel` are conte
 
 - Container queries: none of its own; `bento-grid` sets four columns, two below `md`.
 - Narrow: a two-column span fills the phone row; cells keep a minimum height of `clamp(180px, 18vw, 240px)`.
-- Touch: every mark cell is a full-cell link; story links are `mini-button` targets.
+- Touch: every mark cell is a full-cell link; story links are `link` targets.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Examples

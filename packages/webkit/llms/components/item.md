@@ -1,6 +1,6 @@
 # Item
 
-> Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `Card`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming).
+> Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValuePairs, records compared across columns are a Table, and what a plan includes is a FeatureList. Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `Card`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming).
 
 - Import: `import ItemRoot from '@aziontech/webkit/item-root'`
 - Compound import (dot notation, not tree-shakeable): `import Item from '@aziontech/webkit/item'`
@@ -26,7 +26,7 @@
 ## Don’t
 
 - Records that share columns and need sorting, selection or paging → use `table`.
-- Hierarchical navigation rows in a sidebar → use `menu`.
+- Hierarchical navigation rows in a sidebar → use `sidebar-menu`.
 - A grid of selectable option cards → use `radio-cards`.
 - A single surface that frames arbitrary content → use `card`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
@@ -35,7 +35,7 @@
 
 - [card](card.md) — the surface an `Item.List` sits in (with `:padded="false"`).
 - [table](table.md) — columnar data; below `sm`, `listing-table` swaps its table rows for `item` rows.
-- [menu](menu.md) — navigation rows with nesting and drill levels.
+- [sidebar-menu](sidebar-menu.md) — navigation rows with nesting and drill levels.
 - [avatar](avatar.md) — the usual leading media for people rows inside `Item.Media`.
 
 ## Props

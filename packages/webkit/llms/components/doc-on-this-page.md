@@ -20,14 +20,14 @@
 ## Don’t
 
 - Expecting it to track scroll. It is presentation only: `activeId` is a prop, because the page owns the scroll container and therefore owns which heading is active.
-- For navigation _between_ pages — that is `DocPagination` at the foot, or the sidebar.
+- For navigation _between_ pages — that is `DocPrevNext` at the foot, or the sidebar.
 - For an outline deeper than a couple of levels; the indent is legible for two, not for five.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - DocPageHeader` — the masthead above the body, whose `h1` is chrome, so the outline starts at `h2`.
-- DocPagination` — navigation between documents, where this is navigation within one.
+- DocPrevNext` — navigation between documents, where this is navigation within one.
 - use-heading-nav` — the composable a page uses to receive a rail activation and scroll its own container.
 
 ## Props

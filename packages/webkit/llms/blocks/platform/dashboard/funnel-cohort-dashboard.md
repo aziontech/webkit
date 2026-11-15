@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/funnel-cohort-dashboard/funnel-cohort-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/funnel-cohort-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Toast](../../../components/toast.md), `utils/csv`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Toast](../../../components/toast.md), `use-locale`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -156,6 +156,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import { toast } from '@aziontech/webkit/toast'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
@@ -559,12 +560,15 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const grouped = new Intl.NumberFormat('en-US')
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
+  const { formatNumber } = useLocale()
+
+  const grouped = (value: number) => formatNumber(value)
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
 
   const formatters = {
-    number: (value: number) => grouped.format(value),
-    compact: (value: number) => compact.format(value),
+    number: (value: number) => grouped(value),
+    compact: (value: number) => compact(value),
     percent: (value: number | null) => (value === null ? '—' : `${value.toFixed(0)}%`),
     share: (value: number) => `${value.toFixed(1)}%`,
     drop: (value: number) => `−${value.toFixed(1)}%`

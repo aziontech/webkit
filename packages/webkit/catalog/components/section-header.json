@@ -1,6 +1,7 @@
 {
  "purpose": "The heading of one band inside a page: an h2 with a one-line description, a copy-link button that appears when the heading is hovered or focused (when it has an `anchor`), and the band's own actions on the right. Below `md` the actions drop under the copy.",
  "useWhen": [
+  "Use SectionHeader for the h2 heading of one band inside a console page; for marketing pages use SectionTitle, and for a settings band use SettingsSection.",
   "A band of a page that holds a card, a table or a list: Payment information on Billing, Get started on a resource, General in a create form.",
   "A band that someone should be able to link to (`anchor`)."
  ],

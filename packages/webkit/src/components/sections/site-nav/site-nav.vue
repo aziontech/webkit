@@ -23,9 +23,6 @@
   import GlobalHeaderEnd from '../../layout/global-header/global-header-end.vue'
   import GlobalHeaderStart from '../../layout/global-header/global-header-start.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
-  import type { MenuGroupNode, MenuNode } from '../../navigation/menu/injection-key'
-  import Menu from '../../navigation/menu/menu.vue'
-  import MenuBack from '../../navigation/menu/menu-back/menu-back.vue'
   import NavigationMenuArrow from '../../navigation/navigation-menu/navigation-menu-arrow.vue'
   import NavigationMenuContent from '../../navigation/navigation-menu/navigation-menu-content.vue'
   import NavigationMenuIcon from '../../navigation/navigation-menu/navigation-menu-icon.vue'
@@ -37,6 +34,12 @@
   import NavigationMenu from '../../navigation/navigation-menu/navigation-menu-root.vue'
   import NavigationMenuTrigger from '../../navigation/navigation-menu/navigation-menu-trigger.vue'
   import NavigationMenuViewport from '../../navigation/navigation-menu/navigation-menu-viewport.vue'
+  import type {
+    SidebarMenuGroupNode,
+    SidebarMenuNode
+  } from '../../navigation/sidebar-menu/injection-key'
+  import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
+  import SidebarMenuBack from '../../navigation/sidebar-menu/sidebar-menu-back/sidebar-menu-back.vue'
   import Drawer from '../../overlay/drawer/drawer.vue'
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
@@ -132,8 +135,8 @@
 
   const slug = (label: string) => label.toLowerCase().replace(/[^a-z0-9]+/g, '-')
 
-  const navGroups = computed<MenuGroupNode[]>(() => {
-    const menuNodes: MenuNode[] = props.menus.map((menu) => {
+  const navGroups = computed<SidebarMenuGroupNode[]>(() => {
+    const menuNodes: SidebarMenuNode[] = props.menus.map((menu) => {
       const groups = menu.columns.flat()
       return {
         id: menu.value,
@@ -149,12 +152,12 @@
         }))
       }
     })
-    const linkNodes: MenuNode[] = props.links.map((link) => ({
+    const linkNodes: SidebarMenuNode[] = props.links.map((link) => ({
       id: slug(link.label),
       label: link.label,
       href: link.href
     }))
-    const contactNodes: MenuNode[] = props.contact
+    const contactNodes: SidebarMenuNode[] = props.contact
       ? [{ id: 'contact', label: props.contact.label, href: props.contact.href }]
       : []
     return [{ items: [...menuNodes, ...linkNodes, ...contactNodes] }]
@@ -174,7 +177,7 @@
     if (wide) navOpen.value = false
   })
 
-  const onNavigate = (_event: globalThis.MouseEvent, node: MenuNode) => {
+  const onNavigate = (_event: globalThis.MouseEvent, node: SidebarMenuNode) => {
     if (!node.groups) navOpen.value = false
   }
 
@@ -377,15 +380,15 @@
         </PanelHeader>
 
         <ScrollArea class="min-h-0 w-full min-w-0 flex-1">
-          <Menu
+          <SidebarMenu
             v-model:path="navPath"
             :groups="navGroups"
             aria-label="Azion"
             class="w-full p-(--spacing-md)"
             @navigate="onNavigate"
           >
-            <MenuBack />
-          </Menu>
+            <SidebarMenuBack />
+          </SidebarMenu>
         </ScrollArea>
 
         <PanelFooter

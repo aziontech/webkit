@@ -262,6 +262,19 @@ describe('Tooltip (overlay: Teleport, data-state, hover/focus/Escape)', () => {
       expect(onUpdate).toHaveBeenCalledWith(true)
     })
 
+    it('emits no show or hide echo, only update:open', async () => {
+      const { getByTestId, emitted } = render(Tooltip, {
+        props: { text: 'Hint', defaultOpen: true },
+        slots: { default: () => h('button', { type: 'button' }, 'Trigger') }
+      })
+      await settle()
+      await fireEvent.focusIn(getByTestId('overlay-tooltip'))
+      await settle()
+
+      expect(emitted().show).toBeUndefined()
+      expect(emitted().hide).toBeUndefined()
+    })
+
     it('emits update:open(false) when it closes, and a controlled parent drives open', async () => {
       const onUpdate = vi.fn()
       const Wrapper = defineComponent({

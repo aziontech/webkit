@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use ConfirmDialog whenever the person must confirm an action they started (delete, discard, publish), including typed-name confirmation; an agent asking to run a tool uses ToolApproval, and a modal with your own body uses Dialog.
 - Before a removal (Remove domain, Delete resource) or a re-run (Clear again).
 - When someone leaves a form with unsaved changes.
 - A deletion that needs typed confirmation: put the field in the default slot and set `disabled` until it matches.

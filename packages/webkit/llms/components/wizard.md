@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use Wizard for any ordered multi-step create: Stepper + step content + Cancel/Previous/Next footer; compose Stepper alone only when the footer and gating must be custom.
 - Creating a resource takes several ordered decisions, and showing them all at once would overwhelm the
 - The reader has to finish a step before moving on. Validation runs on Next and can stop the move.
 - The flow needs a review step before the final submit, and earlier steps must stay reachable to fix

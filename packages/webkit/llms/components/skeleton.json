@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).",
+ "purpose": "Use Skeleton when a region with a known shape (text, table rows, cards, avatars) is still loading — the default answer to 'show a loading state'. For an inline busy mark use Spinner, for work with a measurable amount use Progress, and for a generative AI answer use AiLoading. A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).",
  "setup": null,
  "useWhen": [
   "Content is loading and its final layout is known: text lines, cards, media blocks.",
@@ -35,10 +35,10 @@
  "props": [
   {
    "name": "kind",
-   "type": "'rectangle' | 'circle' | 'shape'",
+   "type": "'rectangle' | 'circle'",
    "default": "'rectangle'",
    "required": "false",
-   "doc": "Geometry: a rounded rectangular block (`rectangle`) or a circle. The value `shape` is **@deprecated since 6.0 — use `rectangle`. Removed in 7.0.** and renders as `rectangle`."
+   "doc": "Geometry: a rounded rectangular block (`rectangle`) or a circle."
   },
   {
    "name": "width",

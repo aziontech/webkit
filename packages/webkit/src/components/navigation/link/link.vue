@@ -20,10 +20,6 @@
     size?: LinkSize
     /** Disables interaction and applies disabled token set. */
     disabled?: boolean
-    /**
-     * @deprecated since 6.0 — use `icon` (set shows it, empty hides it). Removed in 7.0.
-     */
-    showIcon?: boolean
     /** PrimeIcons class for the trailing icon; set shows it. Empty shows the external-link glyph only for `_blank` targets. */
     icon?: string
     /** Destination URL for the anchor. Empty renders `#`. */
@@ -36,7 +32,6 @@
     label: '',
     size: 'large',
     disabled: false,
-    showIcon: undefined,
     icon: '',
     href: '',
     target: '_self'
@@ -59,10 +54,8 @@
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-link')
 
   const resolvedIcon = computed(() => {
-    if (props.showIcon === false) return ''
     if (props.icon) return props.icon
-    if (props.showIcon === true || props.target === '_blank') return EXTERNAL_ICON
-    return ''
+    return props.target === '_blank' ? EXTERNAL_ICON : ''
   })
 
   const handleClick = (event: MouseEvent) => {

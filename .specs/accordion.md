@@ -3,13 +3,13 @@ name: accordion
 category: content
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: 0f34c0c3b3e78ab0ca09334a2305786fa33ef880b65feb8e623cfd3b553871f2
+checksum: cd6e0dcba116f1d4b35a846ae80c9ecb69b3272fac2842dfc455afa10fd74f96
 created: 2026-06-26
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Accordion — Component Spec
@@ -28,13 +28,13 @@ A vertically stacked set of disclosure items: each item has a clickable header t
 
 - The panels are mutually exclusive views shown in the same place → use `tabs`.
 - It is the frequently-asked-questions band of a marketing page → use `faq-section` (or `faq` for the band without the page-section wiring).
-- It is hierarchical navigation with expandable rows → use `menu`.
+- It is hierarchical navigation with expandable rows → use `sidebar-menu`.
 
 ## Related
 
 - `tabs` — switches between panels in place; one panel visible, headers in a row.
 - `faq` — the marketing FAQ band that composes `accordion` with a heading column and hairline register.
-- `menu` — expanding rows for navigation, not for revealing content.
+- `sidebar-menu` — expanding rows for navigation, not for revealing content.
 
 ## Best practices
 

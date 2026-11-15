@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use GlobalHeader for the console's top bar; inside ConsoleLayout it is already rendered.
 - The top bar of a console-style app: menu trigger and brand at the start, an optional nav or breadcrumb region, and trailing actions (create, help, account) at the end.
 - A bar above a content zone that sits beside a navigation rail — `kind="content"` insets its regions by the page boundary so they line up with the page below.
 - The bar of a framed marketing page — `kind="site"` keeps the surface full bleed but caps and centres the regions.
@@ -57,14 +58,11 @@
 - `global-header-start.vue` — `GlobalHeader.Start`. Start region; flex row for the menu trigger and leading actions. Logical name: it sits on the right under `dir="rtl"`.
 - `global-header-center.vue` — `GlobalHeader.Center`. Center region; grows to fill the space between start and end.
 - `global-header-end.vue` — `GlobalHeader.End`. End region; trailing actions aligned to the end.
-- `global-header-left.vue` — `GlobalHeader.Left`. **@deprecated since 6.0 — use `GlobalHeader.Start`. Removed in 7.0.** Same region and markup; keeps its `__left` testid.
-- `global-header-middle.vue` — `GlobalHeader.Middle`, also `GlobalHeader.Nav` (the Figma `Nav` name). **@deprecated since 6.0 — use `GlobalHeader.Center`. Removed in 7.0.** Same region and markup; keeps its `__middle` testid.
-- `global-header-right.vue` — `GlobalHeader.Right`. **@deprecated since 6.0 — use `GlobalHeader.End`. Removed in 7.0.** Same region and markup; keeps its `__right` testid.
 
 The regions are named start / center / end, not left / right, because the bar mirrors under
-right-to-left: the start region is on the right there. The deprecated physical names render the
-same markup and keep working until 7.0. The new parts derive `__start`, `__center` and `__end`
-testids from the root.
+right-to-left: the start region is on the right there. 6.0 removed the physical names (`Left`,
+`Middle`, `Nav`, `Right`). The parts derive `__start`, `__center` and `__end` testids from the root.
+
 - `global-header-brand.vue` — Brand slot wrapper sized for Azion logo SVGs (default / min).
 
 ## States

@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=446-864
   node_id: 446:864
-checksum: 2ecdd2501f66823527bd4f6a2897c20f8295cc3b885fc9845073224375cc3d93
+checksum: 9f9d74693b875fc0446e13209b16e07b030eaacdc854f3414ba24c2cb229fa14
 created: 2026-06-25
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Empty State — Component Spec
@@ -50,7 +50,7 @@ Centered placeholder shown when a resource list or section has no content yet. S
 <script setup>
   import EmptyState from '@aziontech/webkit/empty-state'
   import Button from '@aziontech/webkit/button'
-  import MiniButton from '@aziontech/webkit/mini-button'
+  import Link from '@aziontech/webkit/link'
 </script>
 
 <template>
@@ -70,7 +70,7 @@ Centered placeholder shown when a resource list or section has no content yet. S
           label="Create Item"
         />
       </div>
-      <MiniButton
+      <Link
         label="View Documentation"
         icon="pi pi-arrow-right"
         size="medium"

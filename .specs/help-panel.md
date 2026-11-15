@@ -3,7 +3,7 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: 5fb240990d2edbb2915118d1cbe36c27ad8a141074a7dc0027d553fa1d8cfdc7
+checksum: 82702536e6ab70fbee1b138da64969833dfaabf20c5ce8ca2d6aa8a5055ccfae
 spec_version: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -14,24 +14,24 @@ last_updated: 2026-11-15
 ## Purpose
 
 The content of a help side region: a topic's title, a few sections of short guidance, and the
-"Learn more" links that leave for the documentation — or, in tutorial mode, an ordered list of tasks
-with the reader's progress through them. It is the thing that goes **inside** a side region, not the
+"Learn more" links that leave for the documentation. Guided tutorials belong to `tutorial-panel`. It is the thing that goes **inside** a side region, not the
 region itself: the consumer places it in a `Drawer` or in the page's side rail, and that host owns
 opening, closing and the close button.
 
 It owns no open state, so it has no `Trigger` / `Content` and no `data-state="open|closed"`. Its anatomy
-is the anatomy of a help page — `Header`, `Section`, `Links`, `Tutorial`, `Task` — composed by hand,
-so a topic can omit the links, carry one section or five, or be a tutorial with no prose at all.
+is the anatomy of a help page — `Header`, `Section`, `Links` — composed by hand, so a topic can omit
+the links or carry one section or five.
 
 ## When to use
 
+- Use HelpPanel for static page help (title, guidance, Learn more links) in the app layout's tools region.
 - A Console screen needs contextual help beside the work: what this page is for, what a field means, where the docs are.
-- A guided, multi-task tutorial runs beside the real UI, and the reader needs to see which task they are on and how many are done.
 - The help content is loaded asynchronously and the region must reserve its space while it arrives (`loading`).
 
 ## When NOT to use
 
-- A one-line hint attached to a single control → use `tooltip` or the field's `helper-text`.
+- A one-line hint attached to a single control → use `tooltip` or `hint`, or the field's `helper-text`.
+- A guided tutorial with tasks, progress and hotspots on the real controls → use `tutorial-panel`.
 - The region itself (overlay, slide-in, close button, focus trap) → use `drawer`; put `help-panel` inside it.
 - Ordered steps the reader navigates between, with the step's form filling the column beside it → use `stepper`.
 - Numbered instructions inside a documentation page, read all at once → use `doc-steps` + `doc-step`.
@@ -40,9 +40,8 @@ so a topic can omit the links, carry one section or five, or be a tutorial with 
 ## Related
 
 - `drawer` — the host that opens, closes and traps focus around a help panel shown as an overlay.
-- `stepper` — the same dot language for steps the reader navigates; tutorial tasks are reported, not navigated.
+- `tutorial-panel` — guided tutorials, drawn with these parts plus its own task list.
 - `link` — the standalone link each `HelpPanel.Links` row is composed from.
-- `button` — the Start / Continue / Restart controls the consumer composes into a tutorial's `actions` slot.
 - `skeleton` — what the panel renders in place of its content while `loading`.
 - `doc-prose` — long-form documentation prose; a help section is a few short paragraphs, not an article.
 
@@ -52,7 +51,6 @@ so a topic can omit the links, carry one section or five, or be a tutorial with 
 - Keep each `Section` to a short paragraph or a short list. If the reader has to scroll a section, the content belongs in the docs and the panel should link to it.
 - Title sections with the question the reader is asking (`What is a workload?`), not with a noun (`Overview`).
 - Put links to the documentation in `HelpPanel.Links`, at the end, not inline in every section.
-- In tutorial mode, exactly one task is `current`. Mark a task `complete` only when the real UI confirms it, never on click.
 - Close affordances belong to the host. Do not put a close button in `HelpPanel.Header`; the `Drawer` or side rail already has one.
 
 ## Usage
@@ -61,7 +59,6 @@ so a topic can omit the links, carry one section or five, or be a tutorial with 
 <script setup>
   import HelpPanel from '@aziontech/webkit/help-panel'
   import Link from '@aziontech/webkit/link'
-  import Button from '@aziontech/webkit/button'
 </script>
 
 <template>
@@ -74,34 +71,6 @@ so a topic can omit the links, carry one section or five, or be a tutorial with 
     <HelpPanel.Section title="What is a workload?">
       <p>A workload binds one or more domains to an application and a firewall.</p>
     </HelpPanel.Section>
-
-    <HelpPanel.Tutorial
-      title="Put your first site online"
-      description="Three tasks, about five minutes."
-    >
-      <HelpPanel.Task
-        title="Create an application"
-        status="complete"
-      >
-        Choose a template or start from an empty application.
-      </HelpPanel.Task>
-      <HelpPanel.Task
-        title="Create a workload"
-        status="current"
-      >
-        Bind your domain to the application you just created.
-      </HelpPanel.Task>
-      <HelpPanel.Task title="Point your DNS">
-        Add the CNAME record shown on the workload page.
-      </HelpPanel.Task>
-
-      <template #actions>
-        <Button
-          label="Continue"
-          size="medium"
-        />
-      </template>
-    </HelpPanel.Tutorial>
 
     <HelpPanel.Links>
       <Link
@@ -128,20 +97,16 @@ Tree-shaking alternative — the standalone root and each sub-component from its
   import HelpPanelHeader from '@aziontech/webkit/help-panel-header'
   import HelpPanelSection from '@aziontech/webkit/help-panel-section'
   import HelpPanelLinks from '@aziontech/webkit/help-panel-links'
-  import HelpPanelTutorial from '@aziontech/webkit/help-panel-tutorial'
-  import HelpPanelTask from '@aziontech/webkit/help-panel-task'
 </script>
 ```
 
 ## Sub-components
 
 The root ships a **compound API**: an `index.ts` (beside `help-panel.vue`) attaches every sub-component
-to the root so `<HelpPanel.Header>` … `<HelpPanel.Task>` resolve from one import; the standalone imports
-remain the tree-shaking path. The panel has no open/closed state, so there is no `Trigger` / `Content` —
-every member is named after a part of a help page. Tutorial progress flows through `provide`/`inject`
-(`injection-key.ts`, provided by `HelpPanel.Tutorial`, not by the root): each `HelpPanel.Task` registers
-itself and its `status` with the nearest tutorial on mount, reads back its own ordinal, and unregisters
-on unmount, so the consumer never counts tasks or numbers them by hand.
+to the root so `<HelpPanel.Header>`, `<HelpPanel.Section>` and `<HelpPanel.Links>` resolve from one
+import; the standalone imports remain the tree-shaking path. The panel has no open/closed state, so
+there is no `Trigger` / `Content` — every member is named after a part of a help page. 6.0 removed the
+tutorial mode (`HelpPanel.Tutorial`, `HelpPanel.Task`): `TutorialPanel` owns tutorials.
 
 - `help-panel-header/help-panel-header.vue` — The topic's title and an optional one-line description. Renders a `<header>` holding an `<h2>` and, when `description` is non-empty, a `<p>`. No close affordance — the host owns closing.
   - Props: `title?: string` (default `''` — the topic's name, rendered as the panel's heading), `description?: string` (default `''` — one line under the title saying what the topic covers; not rendered when empty).
@@ -155,38 +120,20 @@ on unmount, so the consumer never counts tasks or numbers them by hand.
   - Props: `title?: string` (default `undefined` — the heading over the links; absent uses the locale catalog, `Learn more` in English, and an empty string renders no heading).
   - Slot: `default` — `Link` items, one per destination.
   - `data-testid` fallback: `content-help-panel-links`.
-- `help-panel-tutorial/help-panel-tutorial.vue` — Tutorial mode: a title, a description, a progress line derived from the registered tasks ("2 of 3 complete"), the ordered task list, and an action row. Renders a `<section aria-labelledby>` holding an `<h3>`, the description, the progress line, an `<ol>` wrapping the default slot, and the `actions` slot. Provides the tutorial context (the task registry and the derived counts) to its `HelpPanel.Task` children.
-  - Props: `title?: string` (default `''` — the tutorial's name), `description?: string` (default `''` — one line on what the reader will have done at the end; not rendered when empty), `completed?: boolean` (default `false` — the owner marks the whole tutorial done; renders `data-completed` and a `Tag` reading `Completed` beside the title).
-  - Slots: `default` — `HelpPanel.Task` items, in order; `actions` — the Start / Continue / Restart controls (`Button`) the consumer composes; the row is not rendered when the slot is empty.
-  - `data-testid` fallback: `content-help-panel-tutorial`.
-- `help-panel-task/help-panel-task.vue` — One task: a numbered marker, a title, and the task's instructions. Renders an `<li>`; must sit inside a `HelpPanel.Tutorial` — used anywhere else, its context composable throws a clear error. Registers with the tutorial on mount (ordinal + `status`) and re-reports when `status` changes.
-  - Props: `title?: string` (default `''` — what the reader does, in their words), `status?: 'upcoming' | 'current' | 'complete'` (default `'upcoming'` — where the reader is in the tutorial; set by the owner from what the real UI confirmed).
-  - Slot: `default` — the task's instructions, in `text-body-sm`.
-  - `data-testid` fallback: `content-help-panel-task`.
-
-Exported types (from the root folder, so a consumer can type the value it holds): `HelpPanelTaskStatus = 'upcoming' | 'current' | 'complete'`.
-
-Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports`
-resolves every path, and `.d.ts` is generated at publish time):
+    Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports`
+    resolves every path, and `.d.ts` is generated at publish time):
 
 ```
 packages/webkit/src/components/content/help-panel/
 ├── help-panel.vue                         (root; aside landmark, loading state)
 ├── help-panel.test.ts
-├── index.ts                               (compound: attaches the five parts to the root)
-├── injection-key.ts                       (HelpPanelTutorialContext — provided by Tutorial)
-├── composables/
-│   └── use-help-panel-tutorial-context.ts (injects; throws outside a HelpPanel.Tutorial)
+├── index.ts                               (compound: attaches the three parts to the root)
 ├── help-panel-header/
 │   └── help-panel-header.vue
 ├── help-panel-section/
 │   └── help-panel-section.vue
-├── help-panel-links/
-│   └── help-panel-links.vue
-├── help-panel-tutorial/
-│   └── help-panel-tutorial.vue
-└── help-panel-task/
-    └── help-panel-task.vue
+└── help-panel-links/
+    └── help-panel-links.vue
 ```
 
 Exports to add to `packages/webkit/package.json#exports` (flat public names; category lives in the
@@ -197,14 +144,12 @@ folder only):
 "./help-panel-root": "./src/components/content/help-panel/help-panel.vue",
 "./help-panel-header": "./src/components/content/help-panel/help-panel-header/help-panel-header.vue",
 "./help-panel-section": "./src/components/content/help-panel/help-panel-section/help-panel-section.vue",
-"./help-panel-links": "./src/components/content/help-panel/help-panel-links/help-panel-links.vue",
-"./help-panel-tutorial": "./src/components/content/help-panel/help-panel-tutorial/help-panel-tutorial.vue",
-"./help-panel-task": "./src/components/content/help-panel/help-panel-task/help-panel-task.vue"
+"./help-panel-links": "./src/components/content/help-panel/help-panel-links/help-panel-links.vue"
 ```
 
 Composed DS components (all present in `packages/webkit/package.json#exports`, imported by relative path
-inside the package): `skeleton` (root, `loading`), `divider` (`Links`), `tag` (`Tutorial`, `completed`).
-`link` and `button` are composed by the consumer through slots, never imported by the panel.
+inside the package): `skeleton` (root, `loading`), `divider` (`Links`).
+`link` is composed by the consumer through slots, never imported by the panel.
 
 ## Props
 
@@ -215,20 +160,18 @@ inside the package): `skeleton` (root, `loading`), `divider` (`Links`), `tag` (`
 
 ## Events
 
-_No events — the panel is content; opening, closing and tutorial actions belong to the host and to the controls the consumer composes._
+_No events — the panel is content; opening and closing belong to the host and to the controls the consumer composes._
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                                                                                  |
-| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `default` | —     | The panel's parts — `HelpPanel.Header`, `HelpPanel.Section`, `HelpPanel.Tutorial`, `HelpPanel.Links` — in reading order. Not rendered while `loading`. |
+| Slot      | Scope | Notes                                                                                                                            |
+| --------- | ----- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | The panel's parts — `HelpPanel.Header`, `HelpPanel.Section`, `HelpPanel.Links` — in reading order. Not rendered while `loading`. |
 
 ## States
 
-- Visual states: `default`, `loading`; on `HelpPanel.Task`: `upcoming`, `current`, `complete`
+- Visual states: `default`, `loading`
 - `data-loading` on the root mirrors the `loading` prop
-- `data-status` on `HelpPanel.Task` mirrors its `status` prop: `upcoming` | `current` | `complete`
-- `data-completed` on `HelpPanel.Tutorial` mirrors its `completed` prop
 - No `data-state` — the panel has no open/closed state (the host owns it)
 - No `data-disabled` — nothing in the panel is interactive on its own; interactive content (`Link`, `Button`) is composed by the consumer and carries its own states
 
@@ -238,51 +181,26 @@ lines `width="100%"`, `width="100%"`, `width="75%"`, each `height="0.875rem"`), 
 `aria-busy="true"`. The loading lines carry `aria-hidden="true"`; the landmark keeps its accessible
 name.
 
-The three task markers, and what each one renders:
-
-| `data-status` | Marker                                                  | Title ink             | Screen-reader word |
-| ------------- | ------------------------------------------------------- | --------------------- | ------------------ |
-| `upcoming`    | outlined in `--border-default`, muted, shows its number | `var(--text-muted)`   | `Not started`      |
-| `current`     | outlined in `--secondary`, shows its number             | `var(--text-default)` | `Current task`     |
-| `complete`    | filled `--secondary`, `pi pi-check` glyph               | `var(--text-default)` | `Complete`         |
-
-The tutorial's progress line reads `<complete> of <total> complete`, counting registered tasks whose
-`status` is `complete`. It is derived; the consumer never passes the counts.
 - Responsive: the root is the `@container/help-panel`, so the content in the side panel adapts to the panel width.
 
 ## Motion & Animations
 
-| Trigger                       | Animation / Transition                                    | Token (see `.claude/docs/DESIGN.md` § Animations)        | Reduced-motion fallback                                 |
-| ----------------------------- | --------------------------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------- |
-| task `status` change          | `transition-colors` on the task marker and the task title | inline · `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none`                         |
-| `loading` placeholder shimmer | `Skeleton` component (owns its own shimmer)               | component                                                | handled by `Skeleton` (suppressed under reduced motion) |
+| Trigger                       | Animation / Transition                      | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                 |
+| ----------------------------- | ------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------- |
+| `loading` placeholder shimmer | `Skeleton` component (owns its own shimmer) | component                                         | handled by `Skeleton` (suppressed under reduced motion) |
 
 ## Tokens
 
-| Region                                        | Token (DESIGN.md)           |
-| --------------------------------------------- | --------------------------- |
-| typography (header title)                     | `.text-heading-xs`          |
-| typography (header description)               | `.text-body-sm`             |
-| typography (section / links / tutorial title) | `.text-heading-xxs`         |
-| typography (section prose, task instructions) | `.text-body-sm`             |
-| typography (tutorial description)             | `.text-body-sm`             |
-| typography (tutorial progress line)           | `.text-label-sm`            |
-| typography (task title)                       | `.text-label-md`            |
-| typography (task marker number)               | `.text-label-sm`            |
-| typography (inline anchors in prose)          | `.text-link`                |
-| title ink                                     | `var(--text-default)`       |
-| description / progress / muted ink            | `var(--text-muted)`         |
-| marker surface (upcoming, current)            | `var(--bg-surface)`         |
-| marker border (upcoming)                      | `var(--border-default)`     |
-| marker border (current, complete)             | `var(--secondary)`          |
-| marker surface (complete)                     | `var(--secondary)`          |
-| marker ink (complete)                         | `var(--secondary-contrast)` |
-| shape (marker)                                | `var(--radius-full)`        |
-| padding (root)                                | `var(--spacing-md)`         |
-| gap (between panel parts)                     | `var(--spacing-lg)`         |
-| gap (title to body, inside a part)            | `var(--spacing-xs)`         |
-| gap (between paragraphs, between tasks)       | `var(--spacing-sm)`         |
-| gap (between links, marker to title)          | `var(--spacing-xxs)`        |
+| Region                               | Token (DESIGN.md)     |
+| ------------------------------------ | --------------------- |
+| typography (header title)            | `.text-heading-xs`    |
+| typography (header description)      | `.text-body-sm`       |
+| typography (inline anchors in prose) | `.text-link`          |
+| title ink                            | `var(--text-default)` |
+| description / progress / muted ink   | `var(--text-muted)`   |
+| padding (root)                       | `var(--spacing-md)`   |
+| gap (between panel parts)            | `var(--spacing-lg)`   |
+| gap (title to body, inside a part)   | `var(--spacing-xs)`   |
 
 ## Theme gaps
 
@@ -294,25 +212,20 @@ The tutorial's progress line reads `<complete> of <total> complete`, counting re
 
 - Visible focus: the panel itself is not focusable; focus rings belong to the composed `Link` / `Button` controls, which already carry `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`.
 - Keyboard map: `Tab` moves through the composed links and action buttons in reading order. The panel adds no key handling of its own — no roving tabindex, no arrow navigation. `Esc` and focus trap / restore are owned by the host (`Drawer`), not by the panel.
-- ARIA: the root is an `<aside>` (complementary landmark) named by `aria-label` from `ariaLabel`; `aria-busy="true"` while `loading`. Headings form an outline — `HelpPanel.Header` is `<h2>`, `Section` / `Links` / `Tutorial` titles are `<h3>` — and each `<section>` is `aria-labelledby` its heading via `useId()`. The tutorial's task list is an `<ol>`; the `current` task's `<li>` carries `aria-current="step"`. The task marker glyph is `aria-hidden="true"`, and each task carries an `sr-only` status word (see States). The progress line is `aria-live="polite"` so a task completing in the real UI is announced.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the muted `upcoming` title and the description ink
-- `motion-reduce:transition-none` on the task marker and title transition
+- ARIA: the root is an `<aside>` (complementary landmark) named by `aria-label` from `ariaLabel`; `aria-busy="true"` while `loading`. Headings form an outline — `HelpPanel.Header` is `<h2>`, `Section` / `Links` titles are `<h3>` — and each `<section>` is `aria-labelledby` its heading via `useId()`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons)
 - Touch target ≥40×40 px — not applicable to the panel's own markup (nothing in it is interactive); the composed `Link` / `Button` controls meet it
 
 ## Examples
 
 - Default — a help topic: `HelpPanel.Header`, two `HelpPanel.Section`s, and `HelpPanel.Links` with two `Link`s.
-- Tutorial — `HelpPanel.Header` plus a `HelpPanel.Tutorial` with three tasks (one `complete`, one `current`, one `upcoming`) and a `Continue` `Button` in `actions`. Justified as its own story because tutorial mode is a different composition of the same root, not an args delta — the same reason `Types` is a composite story on a component with a `kind`.
 - Loading — the root with `loading` set; the args delta is `loading` only.
 
 ## Open questions
 
 - **Heading levels are fixed (`h2` header, `h3` parts).** Inside a `Drawer` whose own title is an `h2`, the panel's header should arguably be an `h3`. A heading-level prop was not added (not in the brief); revisit if a host needs it.
-- **Progress line microcopy is English and fixed** (`n of N complete`, `Completed`, the screen-reader status words). The brief adds no label props for them; a localized host would need a `progressLabel`-style prop or a slot — decide before `approved`.
-- **`completed` is set by the owner, not derived** from "every task is `complete`". Deriving it would remove a prop but would also block a tutorial the owner wants to mark done early; kept as the brief states.
 - **Root padding.** The root owns `p-(--spacing-md)` so it reads correctly in a bare side rail; inside a `Drawer` whose content area already pads, that doubles. Confirm against the Drawer's content padding during scaffold.
 - **`HelpPanel.Links` is a column, not a list.** Wrapping each consumer-composed `Link` in an `<li>` needs slot-vnode iteration; the draft renders a flex column under a labelled `<section>` instead. Revisit if a11y review wants list semantics.
-- **Task instructions render for every task**, not only the `current` one. Collapsing non-current tasks (Cloudscape's tutorial behaviour) would add a disclosure and motion; out of scope for this draft.
 
 ## Constraints — DO NOT
 

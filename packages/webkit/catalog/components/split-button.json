@@ -1,6 +1,7 @@
 {
- "purpose": "A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by an `items` array (`model` is its deprecated name until 7.0). The primary button runs the default action; the joined toggle composes `navigation/dropdown-menu` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a \"default is the last selection\" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.",
+ "purpose": "A primary command button visually joined to a chevron toggle that opens an overlay menu of related actions defined by an `items` array. The primary button runs the default action; the joined toggle composes `dropdown-menu` to present the remaining actions. Opt into `updateLabelOnSelect` to have the primary segment mirror the last-chosen menu action (label + icon), turning the control into a \"default is the last selection\" pattern; the primary `click` then reports that mirrored action as its second argument, so a single handler can run whichever action is active. Use it when one action is the default and related actions belong in an attached menu; for a single action use `Button`, and for a standalone menu use `DropdownMenu`.",
  "useWhen": [
+  "Use SplitButton when one default action has a few related alternatives; for a list of actions opened from a button use DropdownMenu, and for a toolbar of icon actions use ButtonGroup.",
   "One default action with a few related alternatives (Save and Save as draft, Deploy and Deploy to staging).",
   "A \"repeat the last choice\" control: set `updateLabelOnSelect` so the primary segment mirrors the last action picked."
  ],
@@ -15,7 +16,7 @@
   "icon-button` — the chevron toggle segment."
  ],
  "bestPractices": [
-  "Give every `model` entry a stable `value`; without one the `label` identifies the action, so renaming it changes what handlers receive.",
+  "Give every `items` entry a stable `value`; without one the `label` identifies the action, so renaming it changes what handlers receive.",
   "Handle the default action in `@click` and the menu actions in `@item-click`; both receive `(event, item)`.",
   "With `updateLabelOnSelect`, read the second argument of `click` (the mirrored item, `null` until one is picked) to run whichever action is active.",
   "Set `loading` while the action runs: it disables both segments and keeps the menu closed.",

@@ -3,8 +3,8 @@ name: confirm-dialog
 category: overlay
 structure: monolithic
 status: implemented
-checksum: 2f5d20e448a107458b58d4086ca1b032e05f4b7a1a163289d26fc232997db3c2
-spec_version: 5
+checksum: 297f651ea25dee5db864eb512257e56221ee3c5b5331db196db9b6223438d7ce
+spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -17,6 +17,7 @@ A small confirmation dialog: a title, one sentence of description, and a Cancel 
 
 ## When to use
 
+- Use ConfirmDialog whenever the person must confirm an action they started (delete, discard, publish), including typed-name confirmation; an agent asking to run a tool uses ToolApproval, and a modal with your own body uses Dialog.
 - Before a removal (Remove domain, Delete resource) or a re-run (Clear again).
 - When someone leaves a form with unsaved changes.
 - A deletion that needs typed confirmation: put the field in the default slot and set `disabled` until it matches.

@@ -1,5 +1,5 @@
 {
- "purpose": "A status strip: one block per period — a day, an hour, a deployment — colored by its severity, with a readout of the period's label on hover or keyboard focus. It shows the history of a state at a glance (uptime, health checks, build results), where a `chart` would plot a measure.",
+ "purpose": "Use Tracker for the history of a state across periods (an uptime strip); the current state of one resource is a StatusIndicator. A status strip: one block per period — a day, an hour, a deployment — colored by its severity, with a readout of the period's label on hover or keyboard focus. It shows the history of a state at a glance (uptime, health checks, build results), where a `chart` would plot a measure.",
  "useWhen": [
   "Uptime and availability history: ninety days of a service, a region or an origin.",
   "Pass/fail history: health checks, scheduled jobs, deployments.",

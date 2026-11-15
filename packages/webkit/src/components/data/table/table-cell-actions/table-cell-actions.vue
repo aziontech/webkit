@@ -33,7 +33,7 @@
   }>()
 
   defineSlots<{
-    /** `DropdownMenu.Group`s of `DropdownMenu.Option`s; destructive options in their own last group. */
+    /** `DropdownMenu.Group`s of `DropdownMenu.Item`s; destructive items in their own last group. */
     default(): unknown
   }>()
 

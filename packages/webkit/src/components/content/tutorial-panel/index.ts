@@ -11,4 +11,4 @@ const TutorialPanelRoot = Object.assign(TutorialPanel, {
 
 export default TutorialPanelRoot
 export { TutorialPanelProvider }
-export type { Tutorial, TutorialStep, TutorialTask } from './injection-key'
+export type { Tutorial, TutorialStep, TutorialTask, TutorialTaskStatus } from './injection-key'

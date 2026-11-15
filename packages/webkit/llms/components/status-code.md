@@ -1,6 +1,6 @@
 # Status Code
 
-> StatusCode shows the HTTP status of a request, optionally preceded by its method, as one compact monospace pill whose colour comes from the status class: informational, success and redirect responses (1xx, 2xx, 3xx) stay neutral, client errors (4xx) take the warning colour and server errors (5xx) the danger colour, so failures stand out in a long request log without every successful row competing for attention. Anything that is not a status from 100 to 599 renders muted, as written. It composes `Tag` for the surface, so its sizes, shape and colours are the tag's; the component owns only the mapping from status to colour and the method plus code layout that every logs table would otherwise repeat.
+> Use StatusCode only for an HTTP status code or method (200, 404, GET); for resource state use StatusIndicator, and for any other word use Tag. StatusCode shows the HTTP status of a request, optionally preceded by its method, as one compact monospace pill whose colour comes from the status class: informational, success and redirect responses (1xx, 2xx, 3xx) stay neutral, client errors (4xx) take the warning colour and server errors (5xx) the danger colour, so failures stand out in a long request log without every successful row competing for attention. Anything that is not a status from 100 to 599 renders muted, as written. It composes `Tag` for the surface, so its sizes, shape and colours are the tag's; the component owns only the mapping from status to colour and the method plus code layout that every logs table would otherwise repeat.
 
 - Import: `import StatusCode from '@aziontech/webkit/status-code'`
 - Category: content · Surface: product · Structure: monolithic
@@ -42,7 +42,7 @@
 
 - `data-status-class` on the root: `informational` (1xx), `success` (2xx), `redirect` (3xx), `client-error` (4xx), `server-error` (5xx) or `invalid` (anything else, including empty).
 - `data-size` mirrors `size` (set by `Tag`).
-- The `Tag` severity follows the class: `secondary` for 1xx to 3xx and `invalid`, `warning` for 4xx, `danger` for 5xx.
+- The `Tag` severity follows the class: `neutral` for 1xx to 3xx and `invalid`, `warning` for 4xx, `danger` for 5xx.
 - `invalid` mutes the text; an empty `code` shows a dash, any other invalid value shows as written.
 - Non-interactive: no hover, focus, active or disabled state.
 

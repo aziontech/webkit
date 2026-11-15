@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Embed for third-party iframe content; for a screenshot in documentation use DocFrame, to run live components use BrowserFrame.
 - To embed a video player, live demo, status page or third-party form in a marketing page.
 - Whenever content comes from another origin and must sit inside the page's own frame.
 - When the embedded thing has a natural aspect ratio the page should preserve while it scales.

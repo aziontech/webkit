@@ -11,6 +11,7 @@
  "purpose": "A responsive `iframe` for third-party content — a demo, a player, a status page, a form — that keeps its aspect ratio at every width and always carries the accessible name an `iframe` needs. It is the one place external content enters a page, so the attributes that are easy to forget are not optional.",
  "setup": null,
  "useWhen": [
+  "Use Embed for third-party iframe content; for a screenshot in documentation use DocFrame, to run live components use BrowserFrame.",
   "To embed a video player, live demo, status page or third-party form in a marketing page.",
   "Whenever content comes from another origin and must sit inside the page's own frame.",
   "When the embedded thing has a natural aspect ratio the page should preserve while it scales."

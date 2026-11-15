@@ -12,7 +12,7 @@ import SidebarHeaderExample from '../../../../examples/console-layout/sidebar-he
 import { expectNoA11yViolations } from '../../../test/axe'
 import DropdownMenuGroup from '../../navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue'
 import DropdownMenuOption from '../../navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue'
-import Menu from '../../navigation/menu/menu.vue'
+import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
 import CommandGroup from '../../overlay/command/command-group/command-group.vue'
 import CommandItem from '../../overlay/command/command-item/command-item.vue'
 import { useConsoleLayout } from './composables/use-console-layout'
@@ -1015,7 +1015,7 @@ describe('ConsoleLayout — sidebar header example', () => {
 
 describe('ConsoleLayout — duplicate destinations in development', () => {
   const pageMenu = (href: string) =>
-    h(Menu, {
+    h(SidebarMenu, {
       'aria-label': 'Account pages',
       groups: [
         {
@@ -1032,7 +1032,7 @@ describe('ConsoleLayout — duplicate destinations in development', () => {
       .map((call: unknown[]) => String(call[0]))
       .filter((message: string) => message.includes('webkit-navigation-levels'))
 
-  it('warns once per route when a page Menu repeats a navigation row', async () => {
+  it('warns once per route when a page SidebarMenu repeats a navigation row', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     try {
       const router = fakeRouter('/account/users')
@@ -1043,7 +1043,7 @@ describe('ConsoleLayout — duplicate destinations in development', () => {
       )
       await waitFor(() => expect(duplicateWarnings(warn)).toHaveLength(1))
       const [message] = duplicateWarnings(warn)
-      expect(message).toContain('"Team members" (page Menu)')
+      expect(message).toContain('"Team members" (page SidebarMenu)')
       expect(message).toContain('"Users management" (navigation)')
       expect(message).toContain('/account/users')
       expect(message).not.toContain('Profile')
@@ -1056,7 +1056,7 @@ describe('ConsoleLayout — duplicate destinations in development', () => {
     }
   })
 
-  it('stays silent when the page Menu shares no route with the navigation', async () => {
+  it('stays silent when the page SidebarMenu shares no route with the navigation', async () => {
     const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
     try {
       const router = fakeRouter('/account/users')

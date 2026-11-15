@@ -2,7 +2,7 @@ import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import MenuItem from '../../navigation/menu/menu-item/menu-item.vue'
+import SidebarMenuItem from '../../navigation/sidebar-menu/sidebar-menu-item/sidebar-menu-item.vue'
 import SidebarGroup from './sidebar-group.vue'
 
 // Without an injected Sidebar context the group falls back to this testid.
@@ -17,12 +17,12 @@ describe('SidebarGroup', () => {
     expect(root.tagName).toBe('SECTION')
     // list is always rendered and its testid derives from the root testid
     expect(getByTestId(`${TESTID}__list`)).toBeInTheDocument()
-    // no label prop → no group MenuItem and no aria-label
+    // no label prop → no group SidebarMenuItem and no aria-label
     expect(queryByTestId(`${TESTID}__label`)).toBeNull()
     expect(root).not.toHaveAttribute('aria-label')
   })
 
-  it('renders a group MenuItem and sets aria-label when the label prop is provided', () => {
+  it('renders a group SidebarMenuItem and sets aria-label when the label prop is provided', () => {
     const { getByTestId } = render(SidebarGroup, { props: { label: 'Build' } })
     const root = getByTestId(TESTID)
     const label = getByTestId(`${TESTID}__label`)
@@ -34,9 +34,9 @@ describe('SidebarGroup', () => {
 
   it('renders default slot content inside the list', () => {
     const { getByTestId } = render(SidebarGroup, {
-      global: { components: { MenuItem } },
+      global: { components: { SidebarMenuItem } },
       slots: {
-        default: '<MenuItem label="Home" href="/" data-testid="slot-item" />'
+        default: '<SidebarMenuItem label="Home" href="/" data-testid="slot-item" />'
       }
     })
 
@@ -72,9 +72,9 @@ describe('SidebarGroup', () => {
 
   it('has no a11y violations without a label', async () => {
     const { container } = render(SidebarGroup, {
-      global: { components: { MenuItem } },
+      global: { components: { SidebarMenuItem } },
       slots: {
-        default: '<MenuItem label="Home" href="/" />'
+        default: '<SidebarMenuItem label="Home" href="/" />'
       }
     })
     await expectNoA11yViolations(container)
@@ -82,10 +82,10 @@ describe('SidebarGroup', () => {
 
   it('has no a11y violations with a labelled group', async () => {
     const { container } = render(SidebarGroup, {
-      global: { components: { MenuItem } },
+      global: { components: { SidebarMenuItem } },
       props: { label: 'Build' },
       slots: {
-        default: '<MenuItem label="Applications" href="/applications" />'
+        default: '<SidebarMenuItem label="Applications" href="/applications" />'
       }
     })
     await expectNoA11yViolations(container)
@@ -94,14 +94,14 @@ describe('SidebarGroup', () => {
   describe('composed the way a consumer still using it does', () => {
     it('renders several groups, each with its own list', () => {
       const { getAllByTestId } = render({
-        components: { SidebarGroup, MenuItem },
+        components: { SidebarGroup, SidebarMenuItem },
         template: `
           <div>
             <SidebarGroup>
-              <MenuItem label="Home" href="/" />
+              <SidebarMenuItem label="Home" href="/" />
             </SidebarGroup>
             <SidebarGroup label="Build">
-              <MenuItem label="Applications" href="/applications" />
+              <SidebarMenuItem label="Applications" href="/applications" />
             </SidebarGroup>
           </div>
         `

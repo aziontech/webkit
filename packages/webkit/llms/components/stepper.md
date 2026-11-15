@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use Stepper for the step rail of a multi-step task in the app; for an ordered create with its Cancel/Previous/Next footer use Wizard, and for a guided tutorial use TutorialPanel.
 - A task is split into ordered steps and only one is on screen at a time (a create wizard, a guided setup).
 - The reader needs to see how many steps are left and go back to one they already answered.
 - A step can fail validation, or sit in flight, and the rail has to say so without leaving the step.

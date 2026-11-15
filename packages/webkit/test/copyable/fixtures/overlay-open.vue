@@ -3,7 +3,7 @@
   import Dialog from '@aziontech/webkit/dialog'
   import Drawer from '@aziontech/webkit/drawer'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Menu from '@aziontech/webkit/menu'
+  import SidebarMenu from '@aziontech/webkit/sidebar-menu'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { ref } from 'vue'
 
@@ -43,10 +43,10 @@
   <Command v-model:open="open" />
   <DropdownMenu @update:open="onOpen" />
   <DropdownMenu v-model:open="open" />
-  <Menu>
-    <Menu.Sub @update:open="onOpen" />
-    <Menu.Sub v-model:open="open" />
-  </Menu>
+  <SidebarMenu>
+    <SidebarMenu.Sub @update:open="onOpen" />
+    <SidebarMenu.Sub v-model:open="open" />
+  </SidebarMenu>
 
   <!-- @vue-expect-error update:open sends a boolean -->
   <Dialog @update:open="(value) => label(value)" />
@@ -62,5 +62,5 @@
   <!-- @vue-expect-error update:open sends a boolean -->
   <DropdownMenu @update:open="(value) => label(value)" />
   <!-- @vue-expect-error update:open sends a boolean -->
-  <Menu.Sub @update:open="(value) => label(value)" />
+  <SidebarMenu.Sub @update:open="(value) => label(value)" />
 </template>

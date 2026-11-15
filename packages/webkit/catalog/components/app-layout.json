@@ -1,6 +1,7 @@
 {
  "purpose": "The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shells/console` block) keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the frame to `AppLayout`.",
  "useWhen": [
+  "Use AppLayout only to build a signed-in app shell other than the console; the console uses ConsoleLayout.",
   "A product shell needs a navigation rail, a global header and a scrolling content area that turn into a drawer-based layout on phones.",
   "A page offers contextual help beside the work (`HelpPanel` in the tools region) that the reader opens and closes.",
   "A list or table needs a resizable detail panel under it or beside it (the split panel), showing the selected item without leaving the page.",

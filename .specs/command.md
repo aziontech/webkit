@@ -3,9 +3,9 @@ name: command
 category: overlay
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 7
 template: 2
-checksum: 5f4753e8e4162f12b2dfc9c3370cc563d247ac3e2e8a13e1be96b487b425b154
+checksum: d4e92edfbdc15260cec026ce2d638bf01a7c538ac0930a8fe895f9131ea4885d
 created: 2026-07-23
 last_updated: 2026-11-15
 ---
@@ -18,6 +18,7 @@ Command Menu is a ⌘K command palette: a modal overlay with a search input and 
 
 ## When to use
 
+- Use Command for the searchable ⌘K palette of actions and destinations; a short list of actions opened from a button is a DropdownMenu.
 - Provide a global ⌘K launcher for navigating to pages or running actions across an app.
 - Let users filter a large, grouped list of commands by typing, then activate with the keyboard.
 
@@ -157,7 +158,7 @@ packages/webkit/src/components/overlay/command/
     - `shortcut: string` default `''` — a `'+'`-delimited shortcut hint (e.g. `'meta+d'`, `'meta+shift+p'`, `'esc'`) rendered on the right via `Kbd`. Modifier tokens (`meta`/`ctrl`/`shift`/`alt`) map to `Kbd` modifier props; the final token is the key. A named final token (`esc`/`escape`, `enter`/`return`, `space`, `tab`, `backspace`, `delete`/`del`) is printed from the locale catalog through `Kbd` `key-name` (`Esc`, `Enter`, `Espaço`…); any other key is upper-cased. Display only — it does not register a global keybinding.
   - Events: _none_ (root emits `select`).
   - Slots: `default` — the item label (rich content allowed); `prefix` — leading icon/avatar; `suffix` — trailing content (mutually exclusive with `shortcut`).
-  - **The icon box belongs to the item that has an icon.** An item renders the leading box only when it actually supplies a `prefix`; an icon-less item puts no empty element in the DOM and pays no indent, so a list that mixes iconed and icon-less rows lets each label start at the row inset it earns rather than every label inheriting the widest row's indent. The box is a fixed `size-4` — the same glyph size a `Menu` row uses — so an oversized icon cannot widen the row and pull its own label out of line with the iconed rows around it.
+  - **The icon box belongs to the item that has an icon.** An item renders the leading box only when it actually supplies a `prefix`; an icon-less item puts no empty element in the DOM and pays no indent, so a list that mixes iconed and icon-less rows lets each label start at the row inset it earns rather than every label inheriting the widest row's indent. The box is a fixed `size-4` — the same glyph size a `SidebarMenu` row uses — so an oversized icon cannot widen the row and pull its own label out of line with the iconed rows around it.
 - `command-empty/command-empty.vue` — the no-results state, shown only when the filter produces zero visible items. Fallback copy lives inside the slot.
   - Props: _none_.
   - Events: _none_.

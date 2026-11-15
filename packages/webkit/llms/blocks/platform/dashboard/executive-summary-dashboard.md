@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/executive-summary-dashboard/executive-summary-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/executive-summary-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), `utils/csv`
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), `use-locale`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -169,6 +169,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { ref } from 'vue'
 
@@ -533,18 +534,22 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
+  const { formatNumber } = useLocale()
 
-  const money = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    notation: 'compact',
-    maximumFractionDigits: 2
-  })
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
+
+  const money = (value: number) =>
+    formatNumber(value, {
+      style: 'currency',
+      currency: 'USD',
+      notation: 'compact',
+      maximumFractionDigits: 2
+    })
 
   const formatters: Record<MetricFormat, (value: number) => string> = {
-    currency: (value) => money.format(value),
-    count: (value) => compact.format(value),
+    currency: (value) => money(value),
+    count: (value) => compact(value),
     percentage: (value) => `${value.toFixed(0)}%`,
     uptime: (value) => `${value.toFixed(2)}%`,
     score: (value) => value.toFixed(0),

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import MenuGroup from '@aziontech/webkit/menu-group'
-  import MenuItem from '@aziontech/webkit/menu-item'
-  import MenuRoot from '@aziontech/webkit/menu-root'
+  import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
+  import SidebarMenuItem from '@aziontech/webkit/sidebar-menu-item'
+  import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
   import { computed, onMounted, ref } from 'vue'
   import { useRoute } from 'vue-router'
 
@@ -40,19 +40,19 @@
 </script>
 
 <template>
-  <MenuRoot role="presentation">
-    <MenuGroup
+  <SidebarMenuRoot role="presentation">
+    <SidebarMenuGroup
       v-for="group in groups"
       :key="group.label"
       :label="group.label"
     >
-      <MenuItem
+      <SidebarMenuItem
         v-for="item in group.items"
         :key="item.to"
         :label="item.label"
         :href="item.to"
         :selected="current === item.to"
       />
-    </MenuGroup>
-  </MenuRoot>
+    </SidebarMenuGroup>
+  </SidebarMenuRoot>
 </template>

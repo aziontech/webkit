@@ -1,6 +1,6 @@
 # Dropdown Menu
 
-> Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `DropdownMenu` owns open/closed state, positioning, focus return, and keyboard navigation; `DropdownMenu.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `DropdownMenu.Group` groups options under an optional label; `DropdownMenu.Item` (the shadcn / Radix name; `DropdownMenu.Option` is the same component, deprecated since 6.0 and removed in 7.0) is the selectable row with leading/trailing/command affordances, and with `kind="checkbox"` or `kind="radio"` it becomes a checkable item (`menuitemcheckbox` / `menuitemradio`). `DropdownMenu.Sub`, `DropdownMenu.SubTrigger` and `DropdownMenu.SubContent` nest a sub-menu that opens on hover or with `ArrowRight` and nests to any depth. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `DropdownMenu` in the project, in `navigation/`.
+> Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections. The root `DropdownMenu` owns open/closed state, positioning, focus return, and keyboard navigation; `DropdownMenu.Trigger` wires `aria-haspopup`/`aria-expanded`/`aria-controls` onto whatever element the consumer passes through its slot; `DropdownMenu.Group` groups options under an optional label; `DropdownMenu.Item` (the shadcn / Radix name) is the selectable row with leading/trailing/command affordances, and with `kind="checkbox"` or `kind="radio"` it becomes a checkable item (`menuitemcheckbox` / `menuitemradio`). `DropdownMenu.Sub`, `DropdownMenu.SubTrigger` and `DropdownMenu.SubContent` nest a sub-menu that opens on hover or with `ArrowRight` and nests to any depth. Replaces and removes the legacy monolithic input `dropdown` and the previous `dropdown-menu` composition — there is one `DropdownMenu` in the project, in `navigation/`.
 
 - Import: `import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'`
 - Compound import (dot notation, not tree-shakeable): `import DropdownMenu from '@aziontech/webkit/dropdown-menu'`
@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use DropdownMenu for a list of actions opened from a button (row actions, kebab, More); for the same actions on right-click or long-press use ContextMenu, and for a searchable palette use Command.
 - A menu of actions opened from a button: row actions, an account menu, an overflow ("more") menu.
 - Options grouped under section labels, optionally with keyboard-shortcut hints.
 
@@ -17,7 +18,7 @@
 - Give every `DropdownMenu.Item` a unique `value` and handle the root `select` event as `(event, value)`. The panel closes and focus returns to the trigger on its own.
 - selected` is a display flag. The dropdown never sets it, so derive it from your own state.
 - Use the `command` prop or the `trailing` slot on an option, not both. A `command` shortcut is live while its option is mounted (inside a group, only while the panel is open). Every menu on the page shares one `window` listener, so a shortcut fires one option only: the one in the open menu, else the one whose trigger has focus, else the first registered.
-- Write `DropdownMenu.Item` (also exported as `DropdownMenuItem`); `DropdownMenu.Option` and the `left` / `right` slots keep working as deprecated aliases until 7.0. Items may sit directly in the root: an item outside a group renders inside the panel like a grouped one.
+- Write `DropdownMenu.Item` (also exported as `DropdownMenuItem`); 6.0 removed the `DropdownMenu.Option` alias and the `left` / `right` slots. Items may sit directly in the root: an item outside a group renders inside the panel like a grouped one.
 - Add a `label` to each `DropdownMenu.Group` when there is more than one group. Put search in the root `top` slot and footer actions in `bottom`; those regions stay outside the scrolling list.
 - Nest at most two levels of sub-menus; deeper menus are hard to steer with a pointer. Put the `DropdownMenu.Sub` inside a `DropdownMenu.Group`, and the sub-menu's options inside a `DropdownMenu.Group` in `DropdownMenu.SubContent`, the same way as the top level.
 - Use `kind="checkbox"` for independent on/off settings and `kind="radio"` for one choice among the options of one `DropdownMenu.Group`. Drive `selected` from your own state in the `select` handler; checkable options keep the panel open so several can be toggled in a row.
@@ -29,7 +30,7 @@
 - A primary action joined to a menu of alternatives → use `split-button`.
 - A searchable palette of commands → use `command`.
 - Free-form or interactive content such as forms or filters → use `popover`.
-- Vertical application navigation → use `menu`.
+- Vertical application navigation → use `sidebar-menu`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -82,7 +83,7 @@
   - Props: `label: string` default `''` — section label rendered above the options. Omit for an unlabeled group.
   - Events: _none_.
   - Slots: `default` — one or more `<DropdownMenu.Item>`; `top` — inline region rendered between the group label and the options (e.g. a per-section search or description); `bottom` — inline region rendered after the options (e.g. a "see all" link).
-- `dropdown-menu-option/dropdown-menu-option.vue` — selectable row, attached as `DropdownMenu.Item` and as the deprecated alias `DropdownMenu.Option` (`@deprecated since 6.0 — use DropdownMenu.Item. Removed in 7.0.`). Renders the leading slot, the label, the trailing slot, an optional `command` hint and, when `selected`, a check mark. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`. Every row is `tabindex="-1"`; the root moves focus with the arrows and typeahead. Outside a group the row teleports itself into the panel body (`data-ungrouped`, with the group's horizontal inset).
+- `dropdown-menu-option/dropdown-menu-option.vue` — selectable row, attached as `DropdownMenu.Item`. Renders the leading slot, the label, the trailing slot, an optional `command` hint and, when `selected`, a check mark. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`. Every row is `tabindex="-1"`; the root moves focus with the arrows and typeahead. Outside a group the row teleports itself into the panel body (`data-ungrouped`, with the group's horizontal inset).
   - Props:
     - `value: string | number` (required) — identifier emitted on the root `select` event when this option is activated.
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
@@ -92,7 +93,7 @@
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
     - `kind: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuOptionKind`.
   - Events: _none_ (root emits `select`).
-  - Slots: `default` (override of the `label` prop, for rich label content), `leading` (icon / avatar before the label), `trailing` (icon / badge after the label; mutually exclusive with `command`), `left` / `right` (`@deprecated since 6.0 — use leading / trailing. Removed in 7.0.`; rendered as the fallback of `leading` / `trailing`).
+  - Slots: `default` (override of the `label` prop, for rich label content), `leading` (icon / avatar before the label), `trailing` (icon / badge after the label; mutually exclusive with `command`).
 - `dropdown-menu-sub/dropdown-menu-sub.vue` — sub-menu scope. Owns the open state of one nested menu and shares it with its `SubTrigger` and `SubContent`. Renders a `display: contents` wrapper carrying `data-testid` (`<root>__sub`) and `data-state`. Only one sub-menu per menu level is open at a time: hovering or focusing a sibling item closes it after a 150 ms grace period, so a pointer moving diagonally toward the sub-panel does not close it; entering the sub-panel cancels the close. Closing the root closes every sub-menu.
   - Props: `defaultOpen: boolean` default `false` — opens the sub-menu when the parent panel opens (for documentation and screenshots); the user can still close it.
   - Events: _none_ (activation inside bubbles to the root `select`).

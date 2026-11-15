@@ -11,6 +11,7 @@
  "purpose": "The second-level navigation strip of a resource detail page: a full-bleed bar ruled at the bottom, its `Tabs` at the page boundary inset, with room for the actions the whole resource owns on the right (a staged-changes `Tag`, Deploy). It is `Tabs` plus the strip and the actions region, so every detail page stops re-creating the same bar.",
  "setup": null,
  "useWhen": [
+  "Use PageTabs for the second-level navigation strip of a resource detail page; to switch peer views inside a page or panel use Tabs.",
   "The top of every resource detail page, under the global header.",
   "An account page split into tabs, such as Billing."
  ],

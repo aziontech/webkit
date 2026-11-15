@@ -11,6 +11,7 @@
  "purpose": "Alternative paths through the same instruction (\"macOS / Linux / Windows\", \"Console / CLI\"). It reads the `title` of each `DocTab` child to build the strip and renders each child body in its panel, on `Tabs`, so the strip, the indicator and the keyboard model are the design system's.",
  "setup": null,
  "useWhen": [
+  "Use DocTabs only in documentation prose for alternative paths through one instruction (macOS / Linux); product UI uses Tabs.",
   "The same procedure that differs per platform or per tool."
  ],
  "avoidWhen": [

@@ -1,7 +1,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import MiniButton from '@aziontech/webkit/mini-button'
+  import Link from '@aziontech/webkit/link'
 </script>
 
 <template>
@@ -21,7 +21,7 @@
           label="Create Item"
         />
       </div>
-      <MiniButton
+      <Link
         label="Docs"
         icon="pi pi-arrow-right"
         size="medium"

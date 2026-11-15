@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "Communicates the progress of an ongoing task as a horizontal bar. Use it for a determinate value within a range (`value` / `max`) or, when progress can't be measured, as an indeterminate loading indicator. Unlike `skeleton` (placeholder geometry) or `status-indicator` (discrete state), it expresses a continuous quantity.",
+ "purpose": "Use Progress when the work has a measurable amount (value/max), or for a long task with no layout to reserve (indeterminate). A region with a known shape loads with Skeleton, an inline busy mark is a Spinner, and a background file transfer is an UploadProgress. Communicates the progress of an ongoing task as a horizontal bar. Use it for a determinate value within a range (`value` / `max`) or, when progress can't be measured, as an indeterminate loading indicator. Unlike `skeleton` (placeholder geometry) or `status-indicator` (discrete state), it expresses a continuous quantity.",
  "setup": null,
  "useWhen": [
   "A task with measurable progress: an upload, a build, a multi-step import.",
@@ -48,16 +48,9 @@
   {
    "name": "kind",
    "type": "ProgressKind` (`'rounded' | 'flat'`)",
-   "default": "undefined` (resolves to `'flat'`)",
+   "default": "'flat'",
    "required": "false",
    "doc": "Track and fill corner-radius variant."
-  },
-  {
-   "name": "shape",
-   "type": "ProgressShape` (`'rounded' | 'flat'`)",
-   "default": "undefined",
-   "required": "false",
-   "doc": "**@deprecated since 6.0 — use `kind`. Removed in 7.0.** Read only when `kind` is unset."
   },
   {
    "name": "size",

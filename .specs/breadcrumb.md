@@ -3,11 +3,11 @@ name: breadcrumb
 category: navigation
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: 64d1a8934f527e791005cc6727dd3736265d62cd89b642c596f38a556e6357af
+checksum: f83c017bb81e81181caa5bb1a41af54220cf5f9dc610c4c9dba884c602ee61d3
 created: 2026-05-25
 last_updated: 2026-11-15
 ---
@@ -20,13 +20,14 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 ## When to use
 
+- Use Breadcrumb (with `items`, or Breadcrumb.Item parts) for the page trail.
 - A page sits two or more levels deep and the reader needs a way back to its parents (resource detail under a list, a settings sub-page).
 - The trail is known as data — pass `items` and let the component render the segments, separators and the collapse when its own box is narrower than 768px.
 - The trail needs a custom layout the `items` array cannot express — compose `Breadcrumb.List`, `Breadcrumb.Item` and `Breadcrumb.Separator` in the default slot.
 
 ## When NOT to use
 
-- It is the app's primary navigation → use `navigation-menu` or `sidebar` with `menu`.
+- It is the app's primary navigation → use `navigation-menu` or `sidebar` with `sidebar-menu`.
 - It moves between sibling views of the same page → use `tabs`.
 - It is the previous / next pair at the end of a docs page → use `doc-prev-next`.
 
@@ -85,7 +86,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 - `breadcrumb.vue` — Root `<nav>` with `aria-label` from `ariaLabel`, or the locale catalog (`Breadcrumb`) when empty; a consumer `aria-label` lands on the prop and wins.
 - `breadcrumb-list.vue` — Ordered list wrapper (`<ol>`) for segments.
-- `breadcrumb-item.vue` — Re-exported segment control (same API as `@aziontech/webkit/breadcrumb-item`).
+- `breadcrumb-item/breadcrumb-item.vue` — `Breadcrumb.Item`, the segment control; it lives in this component's folder and keeps its flat export `@aziontech/webkit/breadcrumb-item`.
 - `breadcrumb-separator.vue` — Decorative chevron between segments (`aria-hidden`).
 
 ## Props

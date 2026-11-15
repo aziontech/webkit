@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/manage-resources/manage-resources.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/manage-resources")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [Table](../../../components/table.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [Table](../../../components/table.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -156,6 +156,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, useId } from 'vue'
 
   type ResourceType = 'organization' | 'group' | 'workspace'
@@ -341,7 +342,9 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   }
   const statusSeverity = (status?: ResourceStatus): TagSeverity =>
     status ? statusSeverities[status] : 'neutral'
-  const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+  const { formatNumber } = useLocale()
+
+  const money = (value: number) => formatNumber(value, { style: 'currency', currency: 'USD' })
   const initials = (name: string) =>
     name
       .split(/\s+/)
@@ -757,7 +760,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                     <span
                       class="tabular-nums text-(--text-default) data-[empty]:text-(--text-muted)"
                       :data-empty="!value || null"
-                      >{{ value ? money.format(value) : '—' }}</span
+                      >{{ value ? money(value) : '—' }}</span
                     >
                   </template>
                   <template #header-charges>
@@ -852,7 +855,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                         label="Labels"
                       />
                     </Tabs.List>
-                    <Tabs.Content>
+                    <div class="relative isolate w-full">
                       <Tabs.Panel value="permissions">
                         <EmptyState
                           v-if="!focused"
@@ -948,7 +951,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                           />
                         </div>
                       </Tabs.Panel>
-                    </Tabs.Content>
+                    </div>
                   </div>
                 </Tabs.Root>
               </div>

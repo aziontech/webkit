@@ -463,8 +463,6 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
     ]
   })
 
-  const lineType = (level: LogLevel): LogViewLine['type'] =>
-    level === 'warn' || level === 'error' ? 'warning' : 'text'
   const lines = computed<LogViewLine[]>(() =>
     run.value.logs.map((entry, index) => ({
       id: `${run.value.id}-${index}`,
@@ -472,7 +470,8 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
       type:
         index === run.value.logs.length - 1 && run.value.status === 'Completed'
           ? 'success'
-          : lineType(entry.level),
+          : 'text',
+      level: entry.level,
       message: `${entry.level.toUpperCase()} ${entry.message}`
     }))
   )

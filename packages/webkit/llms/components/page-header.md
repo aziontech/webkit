@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use PageHeader once per console page for the h1, description and page actions; a band inside the page uses SectionHeader.
 - The top of any console page: a first-level list (`medium`), a detail tab or settings sub-page (`small`), a creation hub headline (`large`).
 - A page that owns actions (Documentation, a create action) that belong next to its title.
 - A resource detail page whose header carries the trail back to the list, the resource's icon, its status and the tabs of its sections (`breadcrumb`, `icon`, `meta`, `tabs`).

@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/billing/billing.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/billing")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Currency](../../../components/currency.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [PaymentBrand](../../../components/payment-brand.md), [PropertyFilter](../../../components/property-filter.md), [SectionHeader](../../../components/section-header.md), [Skeleton](../../../components/skeleton.md), [StatusIndicator](../../../components/status-indicator.md), [Table](../../../components/table.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [Currency](../../../components/currency.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [PaymentBrand](../../../components/payment-brand.md), [PropertyFilter](../../../components/property-filter.md), [SectionHeader](../../../components/section-header.md), [Skeleton](../../../components/skeleton.md), [StatusIndicator](../../../components/status-indicator.md), [Table](../../../components/table.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-navigation`, `webkit-microcopy`
 
 ## Asked as
@@ -159,6 +159,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     type PropertyFilterQuery,
     useCollection
   } from '@aziontech/webkit/use-collection'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
   type BillingTab = 'bills' | 'payment-methods'
@@ -193,22 +194,26 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const WITH_INVOICES = true
 
   const UPDATED_AT = new Date(Date.UTC(2026, 10, 10, 12))
-  const dateFormat = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    timeZone: 'UTC'
-  })
-  const updatedFormat = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZone: 'UTC',
-    timeZoneName: 'short'
-  })
-  const formatDate = (value: Date): string => dateFormat.format(value)
+  const { formatDate: formatLocaleDate } = useLocale()
+
+  const dateFormat = (value: Date | number | string) =>
+    formatLocaleDate(value, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      timeZone: 'UTC'
+    })
+  const updatedFormat = (value: Date | number | string) =>
+    formatLocaleDate(value, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'UTC',
+      timeZoneName: 'short'
+    })
+  const formatDate = (value: Date): string => dateFormat(value)
   const formatAmount = (value: number): string => value.toFixed(2)
 
   const seedMethods: PaymentMethod[] = [
@@ -386,7 +391,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       >
         <template #actions>
           <span class="text-body-sm text-(--text-muted)"
-            >Updated {{ updatedFormat.format(UPDATED_AT) }}</span
+            >Updated {{ updatedFormat(UPDATED_AT) }}</span
           >
           <Tooltip
             text="Refresh"

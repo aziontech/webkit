@@ -1,6 +1,6 @@
 # Skeleton
 
-> A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).
+> Use Skeleton when a region with a known shape (text, table rows, cards, avatars) is still loading — the default answer to 'show a loading state'. For an inline busy mark use Spinner, for work with a measurable amount use Progress, and for a generative AI answer use AiLoading. A loading placeholder that reserves the space of content while it loads, gently pulsing to signal activity. Use it in place of text lines, media, or avatars during fetches; unlike `status-indicator` (which communicates a settled state) the skeleton is a transient, decorative stand-in. Two geometries cover the common cases: a rounded rectangular block (`rectangle`) and a `circle` (for avatars / icons).
 
 - Import: `import Skeleton from '@aziontech/webkit/skeleton'`
 - Category: feedback · Surface: product · Structure: monolithic
@@ -37,7 +37,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `kind` | `'rectangle' \| 'circle' \| 'shape'` | `'rectangle'` | false | Geometry: a rounded rectangular block (`rectangle`) or a circle. The value `shape` is **@deprecated since 6.0 — use `rectangle`. Removed in 7.0.** and renders as `rectangle`. |
+| `kind` | `'rectangle' \| 'circle'` | `'rectangle'` | false | Geometry: a rounded rectangular block (`rectangle`) or a circle. |
 | `width` | `string` | `'100%'` | false | CSS width (any length). |
 | `height` | `string` | `'1rem'` | false | CSS height (any length); for a circle, set equal to `width`. |
 | `animated` | `boolean` | `true` | false | Shimmer while loading; suppressed under reduced motion. |
@@ -45,7 +45,7 @@
 ## States
 
 - Visual states: `default` (a single decorative placeholder; no hover/focus/active — it is not interactive)
-- `data-kind` mirrors the resolved geometry (`rectangle` | `circle`; the deprecated `shape` resolves to `rectangle`)
+- `data-kind` mirrors `kind` (`rectangle` | `circle`)
 - `data-animated` is present when `animated` is true (drives the shimmer)
 
 ## Accessibility

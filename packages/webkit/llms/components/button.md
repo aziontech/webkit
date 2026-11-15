@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Button `kind="link"` when the text runs an action (no navigation) but should read like a link.
 - Trigger an action that needs a visible text label: in a form, dialog footer, toolbar or page header.
 - Mark the main action of a view with `kind="primary"` and the lesser ones with `secondary`, `outlined` or `transparent`.
 - Submit or reset a form with `type="submit"` / `type="reset"`.
@@ -38,7 +39,7 @@
 - [icon-button](icon-button.md) — icon-only counterpart with the same sizes and a required `ariaLabel`; its `transparent` kind matches this one.
 - [split-button](split-button.md) — joins a Button to a chevron menu of related actions.
 - [button-highlight](button-highlight.md) — the same prop surface without `kind`, drawn with the brand gradient and a rotating glow rim.
-- [mini-button](mini-button.md) — compact text action with a brand-colored trailing icon for dense cards and tables.
+- [link](link.md) — a text link that navigates to a page, resource or URL.
 - [toggle-group](toggle-group.md) — a group of mutually exclusive options, not a single action.
 
 ## Props

@@ -3,7 +3,7 @@
   {
    "name": "Default",
    "summary": "One reading against its range. The bands name what the value means: the arc takes the color of the band it falls in and the name is read after the value.",
-   "sfc": "<script setup>\n  import GaugeChart from '@aziontech/webkit/gauge-chart'\n\n  const thresholds = [\n    { value: 0, color: 'success', label: 'Healthy' },\n    { value: 70, color: 'warning', label: 'Busy' },\n    { value: 90, color: 'danger', label: 'Critical' }\n  ]\n  const formatValue = (value) => `${value}%`\n</script>\n\n<template>\n  <GaugeChart\n    :value=\"74\"\n    label=\"Cache hit ratio\"\n    :thresholds=\"thresholds\"\n    :format-value=\"formatValue\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import GaugeChart from '@aziontech/webkit/gauge-chart'\n\n  const thresholds = [\n    { value: 0, severity: 'success', label: 'Healthy' },\n    { value: 70, severity: 'warning', label: 'Busy' },\n    { value: 90, severity: 'danger', label: 'Critical' }\n  ]\n  const formatValue = (value) => `${value}%`\n</script>\n\n<template>\n  <GaugeChart\n    :value=\"74\"\n    label=\"Cache hit ratio\"\n    :thresholds=\"thresholds\"\n    :format-value=\"formatValue\"\n  />\n</template>"
   },
   {
    "name": "Sizes",

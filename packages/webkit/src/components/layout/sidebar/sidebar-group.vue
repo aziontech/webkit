@@ -2,7 +2,6 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import MenuItem from '../../navigation/menu/menu-item/menu-item.vue'
   import { SidebarInjectionKey } from './injection-key'
 
   defineOptions({
@@ -38,12 +37,14 @@
     :aria-label="label || undefined"
     :data-testid="testId"
   >
-    <MenuItem
+    <div
       v-if="label"
-      kind="group"
-      :label="label"
+      :data-rail="ctx?.rail ? '' : undefined"
+      class="relative flex h-7 w-full shrink-0 items-center ps-(--spacing-xxs) pe-(--spacing-xs) py-(--spacing-xxs) text-(--text-muted) data-[rail]:hidden"
       :data-testid="`${testId}__label`"
-    />
+    >
+      <span class="min-w-0 flex-1 truncate text-overline-xs">{{ label }}</span>
+    </div>
     <ul
       class="m-0 flex w-full list-none flex-col p-0"
       :data-testid="`${testId}__list`"

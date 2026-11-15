@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use Pagination to page through the rows of a table or list; alternative versions of one AI response use ResponseBranches.
 - A list or table outside `table`'s own footer needs page navigation and a rows-per-page selector.
 - You know the item count — pass `total` and bind `v-model:page` / `v-model:page-size`; the component renders the info text, the windowed page numbers and the selector.
 - The page strip needs custom content (a different info line, extra controls) — compose `Pagination.Info`, `Pagination.Button` and `Pagination.PageSize` through the slots.
@@ -24,14 +25,14 @@
 ## Don’t
 
 - The rows live in a data-driven `table` → set `paginated` on the table; it renders this pagination in its footer and wires it for you.
-- It is the previous / next pair at the end of a documentation page → use `doc-pagination`.
+- It is the previous / next pair at the end of a documentation page → use `doc-prev-next`.
 - The content loads more as the reader scrolls or clicks "Load more" → use a `button` at the end of the list.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [table](table.md) — renders a wired pagination in its footer when `paginated` is set.
-- [doc-pagination](doc-pagination.md) — previous / next links between documentation pages, not numbered pages of a list.
+- [doc-prev-next](doc-prev-next.md) — previous / next links between documentation pages, not numbered pages of a list.
 
 ## Props
 

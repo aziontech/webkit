@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use DocSteps only inside documentation prose for numbered instructions read top to bottom.
 - A procedure the reader performs in order: install, link, deploy.
 - Any "follow these steps" band in documentation prose, however short.
 
@@ -19,7 +20,7 @@
 
 ## Don’t
 
-- For a wizard or form flow inside the application — that is the console's own stepper surface, not documentation chrome.
+- For a wizard or form flow inside the application — that is `Stepper` (or `Wizard`), not documentation chrome.
 - For an unordered list of options or features — order is the whole claim this component makes; a list that has none is a plain list or `DocItem` rows.
 - For a single instruction — one step is a sentence, not a walkthrough.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
@@ -27,6 +28,7 @@
 ## Related
 
 - DocStep` — the sibling root this numbers; a step registers with this context on mount and throws when rendered outside one.
+- Stepper` — the app's interactive step rail. Both number their steps with the same shared step registry (`useStepRegistry`), which reads the order from the page, so a step inserted between two others takes its place in the count.
 - DocProse` — the contract around it. The column marks itself `data-doc-block`, so it takes the block rung of the prose ladder.
 
 ## Slots
@@ -38,7 +40,7 @@
 ## States
 
 - Visual states: `default` (the column is not interactive and holds no visual state of its own)
-- Provides the numbering context: each `DocStep` registers on mount and deregisters on unmount; `index` is the 1-based document order and `last` marks the final registration, which suppresses that step's connector
+- Provides the numbering context (the shared step registry): each `DocStep` registers in setup, hands over its element on mount and deregisters on unmount; `index` is the 1-based position on the page; the final step's connector is suppressed by a last-child CSS variant
 - `data-doc-block` is the `DocProse` contract (the column takes the block rung of the ladder)
 
 ## Accessibility

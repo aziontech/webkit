@@ -1,6 +1,6 @@
 # Outcome Mark
 
-> A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run). It replaces the design sample's `StateMark` and `SuccessMark`. With `animated` the disc scales in and the glyph draws itself when the mark appears and every time its severity changes, so an outcome screen or a finished row can mark the moment a run lands; under reduced motion it shows at once.
+> Use OutcomeMark for the bare round glyph that says how one run ended, with no label; with a label, the state of a resource is a StatusIndicator. A small round mark that states how something ended: a check for success, a cross for danger, an exclamation for warning and a dash for neutral (not set, not run). It replaces the design sample's `StateMark` and `SuccessMark`. With `animated` the disc scales in and the glyph draws itself when the mark appears and every time its severity changes, so an outcome screen or a finished row can mark the moment a run lands; under reduced motion it shows at once.
 
 - Import: `import OutcomeMark from '@aziontech/webkit/outcome-mark'`
 - Category: feedback · Surface: product · Structure: monolithic

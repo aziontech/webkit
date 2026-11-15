@@ -355,8 +355,6 @@
     ]
   })
 
-  const lineType = (level: LogLevel): LogViewLine['type'] =>
-    level === 'warn' || level === 'error' ? 'warning' : 'text'
   const lines = computed<LogViewLine[]>(() =>
     run.value.logs.map((entry, index) => ({
       id: `${run.value.id}-${index}`,
@@ -364,7 +362,8 @@
       type:
         index === run.value.logs.length - 1 && run.value.status === 'Completed'
           ? 'success'
-          : lineType(entry.level),
+          : 'text',
+      level: entry.level,
       message: `${entry.level.toUpperCase()} ${entry.message}`
     }))
   )

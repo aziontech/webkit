@@ -13,10 +13,6 @@
     default(): unknown
     leading(): unknown
     trailing(): unknown
-    /** @deprecated since 6.0 — use the leading slot. Removed in 7.0. */
-    left(): unknown
-    /** @deprecated since 6.0 — use the trailing slot. Removed in 7.0. */
-    right(): unknown
   }>()
 
   interface Props {
@@ -60,8 +56,8 @@
 
   const hasCommand = computed(() => props.command.length > 0)
   const isLink = computed(() => props.href.length > 0 && !props.disabled)
-  const hasLeading = () => Boolean(slots['leading'] || slots['left'])
-  const hasTrailing = () => Boolean(slots['trailing'] || slots['right'])
+  const hasLeading = () => Boolean(slots['leading'])
+  const hasTrailing = () => Boolean(slots['trailing'])
 
   const checkable = computed(() => props.kind !== 'default')
 
@@ -173,7 +169,7 @@
         :data-testid="`${testId}__leading`"
         class="flex shrink-0 items-center"
       >
-        <slot name="leading"><slot name="left" /></slot>
+        <slot name="leading" />
       </span>
 
       <span class="flex-1 truncate text-start">
@@ -185,7 +181,7 @@
         :data-testid="`${testId}__trailing`"
         class="flex shrink-0 items-center"
       >
-        <slot name="trailing"><slot name="right" /></slot>
+        <slot name="trailing" />
       </span>
 
       <span

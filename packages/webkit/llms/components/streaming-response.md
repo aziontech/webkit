@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use StreamingResponse for model Markdown that arrives while it renders; a whole documentation page written in MDX uses DocMarkdown.
 - The content of every assistant `ChatMessage`.
 - Any generated text on a page (an explanation, a summary) that arrives token by token.
 
@@ -45,7 +46,7 @@
 
 _None public. Internals shared by the AI family in `src/components/ai/_lib/`: `parse-markdown.ts`
 (`parseMarkdown`, `parseInline`, `safeHref`, `plainText`) and `markdown-inline.vue` (recursive inline
-renderer, also used by `ActionConfirmation` for backticks in its title). Exports: `"./streaming-response"`. Composed DS
+renderer, also used by `ToolApproval` for backticks in its title). Exports: `"./streaming-response"`. Composed DS
 components: `code-block`, `citation`._
 
 ## States

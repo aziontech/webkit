@@ -8,12 +8,12 @@
  "avoidWhen": [
   "The panels are mutually exclusive views shown in the same place → use `tabs`.",
   "It is the frequently-asked-questions band of a marketing page → use `faq-section` (or `faq` for the band without the page-section wiring).",
-  "It is hierarchical navigation with expandable rows → use `menu`."
+  "It is hierarchical navigation with expandable rows → use `sidebar-menu`."
  ],
  "related": [
   "tabs` — switches between panels in place; one panel visible, headers in a row.",
   "faq` — the marketing FAQ band that composes `accordion` with a heading column and hairline register.",
-  "menu` — expanding rows for navigation, not for revealing content."
+  "sidebar-menu` — expanding rows for navigation, not for revealing content."
  ],
  "bestPractices": [
   "Give every `Accordion.Item` a unique `value`; the open state is keyed by it, and `default-value` / `v-model` refer to it.",

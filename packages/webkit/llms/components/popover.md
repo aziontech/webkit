@@ -1,6 +1,6 @@
 # Popover
 
-> Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `overlay/tooltip` (plain text, non-interactive) and `overlay/dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.
+> Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.
 
 - Import: `import PopoverRoot from '@aziontech/webkit/popover-root'`
 - Compound import (dot notation, not tree-shakeable): `import Popover from '@aziontech/webkit/popover'`
@@ -9,6 +9,7 @@
 
 ## When to use
 
+- Use Popover for rich or interactive content (a form, actions) opened by a click and closed on purpose; a one-line hint is a Tooltip and a read-only hover preview is a HoverCard.
 - Interactive content anchored to a trigger while the page stays usable: an inline form, a filter builder, a quick edit of one field.
 - Contextual detail or a light confirmation that needs buttons or links inside it.
 
@@ -47,7 +48,6 @@
 | `offset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
 | `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
 | `size` | `PopoverSize` (`'small' \| 'medium' \| 'large'`)` | `undefined` | false | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`. |
-| `width` | `PopoverWidth` | `undefined` | false | **@deprecated since 6.0 — use `size`. Removed in 7.0.** Same values as `size`; read only when `size` is unset. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
@@ -103,8 +103,8 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
+| Model          | Type                   | Default     | Emits         | Notes                                                                                                                                                                                                                                                                                                               |
+| -------------- | ---------------------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model:open` | `boolean \| undefined` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void`. Fires on every open/closed transition: trigger toggle, `Popover.Close`, `Esc`, and outside-click. While unbound (`undefined`) the popover is uncontrolled and starts at `defaultOpen`. |
 
 ## States
@@ -113,7 +113,7 @@ The root `Popover` owns open/closed state, anchoring/placement (exposing the com
 - `data-state` values (root, trigger, floating panel): `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop on root and trigger
 - Cursor: the trigger wrapper shows `pointer`, and `not-allowed` with `data-disabled`
-- `data-size` on the floating panel mirrors the resolved `size` (or the deprecated `width`)
+- `data-size` on the floating panel mirrors `size`
 - `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
 - `data-placement` on the floating panel mirrors the resolved placement (any `PopoverPlacement`; `'auto'` resolves to one of `'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
 

@@ -94,8 +94,7 @@
     {
       "tool": "components",
       "query": "approve tool call",
-      "top1": "tool-approval",
-      "pending": "action-confirmation is renamed to tool-approval by the actions-nav-overlay lane; un-skip after the catalog is regenerated"
+      "top1": "tool-approval"
     },
     {
       "tool": "components",

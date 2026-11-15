@@ -36,15 +36,15 @@
   import Avatar from '../../content/avatar/avatar.vue'
   import Brand from '../../content/brand/brand.vue'
   import Breadcrumb from '../../navigation/breadcrumb/breadcrumb.vue'
+  import BreadcrumbItem from '../../navigation/breadcrumb/breadcrumb-item/breadcrumb-item.vue'
   import BreadcrumbList from '../../navigation/breadcrumb/breadcrumb-list.vue'
   import BreadcrumbSeparator from '../../navigation/breadcrumb/breadcrumb-separator.vue'
-  import BreadcrumbItem from '../../navigation/breadcrumb-item/breadcrumb-item.vue'
   import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuTrigger from '../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
   import type { DropdownMenuOptionValue } from '../../navigation/dropdown-menu/injection-key'
-  import type { MenuNode } from '../../navigation/menu/injection-key'
-  import Menu from '../../navigation/menu/menu.vue'
-  import MenuBack from '../../navigation/menu/menu-back/menu-back.vue'
+  import type { SidebarMenuNode } from '../../navigation/sidebar-menu/injection-key'
+  import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
+  import SidebarMenuBack from '../../navigation/sidebar-menu/sidebar-menu-back/sidebar-menu-back.vue'
   import Command from '../../overlay/command/command.vue'
   import CommandEmpty from '../../overlay/command/command-empty/command-empty.vue'
   import CommandGroup from '../../overlay/command/command-group/command-group.vue'
@@ -336,13 +336,15 @@
             link.textContent ??
             ''
           ).trim()
-          pairs.push(`"${label}" (page Menu) and "${navLabel}" (navigation) both lead to ${target}`)
+          pairs.push(
+            `"${label}" (page SidebarMenu) and "${navLabel}" (navigation) both lead to ${target}`
+          )
         }
       }
       if (!pairs.length) return
       warnedRoutes.add(route)
       console.warn(
-        `[webkit] <ConsoleLayout>: on route "${route}" a Menu in the page body repeats the layout navigation: ${[...new Set(pairs)].join('; ')}. A destination appears once per screen: reach these pages through the resource (block platform/detail/sectioned-resource) or drop the duplicate rows (rule webkit-navigation-levels, rule 2).`
+        `[webkit] <ConsoleLayout>: on route "${route}" a SidebarMenu in the page body repeats the layout navigation: ${[...new Set(pairs)].join('; ')}. A destination appears once per screen: reach these pages through the resource (block platform/detail/sectioned-resource) or drop the duplicate rows (rule webkit-navigation-levels, rule 2).`
       )
     }
 
@@ -410,7 +412,7 @@
 
   const onMenuNavigate = (
     event: globalThis.MouseEvent,
-    node: MenuNode,
+    node: SidebarMenuNode,
     closeNavigation: () => void
   ) => {
     const item = leaves.value.get(node.id)
@@ -506,7 +508,7 @@
             ref="navEl"
             class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)"
           >
-            <Menu
+            <SidebarMenu
               v-model:path="menuPath"
               v-model:expanded="menuExpanded"
               :groups="menuGroups"
@@ -514,8 +516,8 @@
               role="presentation"
               @navigate="(event, node) => onMenuNavigate(event, node, closeNavigation)"
             >
-              <MenuBack />
-            </Menu>
+              <SidebarMenuBack />
+            </SidebarMenu>
           </div>
 
           <template

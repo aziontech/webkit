@@ -1,6 +1,7 @@
 {
  "purpose": "Menu of actions that opens at the pointer when the user right-clicks an area, presses `Shift+F10` or the context-menu key inside it, or long-presses it on touch. It is the right-click twin of `DropdownMenu`: the root `ContextMenu` owns open state, the pointer anchor, positioning and focus return through the same internal menu core, `ContextMenu.Trigger` marks the area that listens, and the item parts are DropdownMenu's own (`Group`, `Item` with its checkbox and radio kinds, `Sub`, `SubTrigger`, `SubContent`), attached to the compound so the two menus look and behave the same.",
  "useWhen": [
+  "Use ContextMenu for the same actions as a DropdownMenu, opened by right-click or long-press on an item; opened from a button use DropdownMenu.",
   "Secondary actions on an object the user is pointing at: a table row, a file in a browser, a tree node, a canvas.",
   "Power-user shortcuts that also exist elsewhere in the interface."
  ],

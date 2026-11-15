@@ -4,12 +4,12 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
-  import type { MenuGroupNode, MenuNode } from '@aziontech/webkit/menu'
-  import MenuRoot from '@aziontech/webkit/menu-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
+  import type { SidebarMenuGroupNode, SidebarMenuNode } from '@aziontech/webkit/sidebar-menu'
+  import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
   import Table from '@aziontech/webkit/table'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
@@ -89,7 +89,7 @@
 
   const hrefOf = (sibling: Sibling) => `${base}/${sibling.id}`
 
-  const groups: MenuGroupNode[] = sections.map((section) => ({
+  const groups: SidebarMenuGroupNode[] = sections.map((section) => ({
     label: section.label,
     items: section.items.map((sibling) => ({
       id: sibling.id,
@@ -158,7 +158,7 @@
     clearFilters()
   }
 
-  const navigate = (event: MouseEvent, node: MenuNode) => {
+  const navigate = (event: MouseEvent, node: SidebarMenuNode) => {
     if (!node.href || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
     event.preventDefault()
     go(node.href)
@@ -207,7 +207,7 @@
           class="flex min-w-0 flex-col gap-(--layout-group-gap) @3xl/tab:flex-row @3xl/tab:items-start @3xl/tab:gap-(--layout-section-gap)"
         >
           <div class="hidden w-(--container-3xs) shrink-0 @3xl/tab:block">
-            <MenuRoot
+            <SidebarMenuRoot
               :groups="groups"
               :active-id="match?.id ?? ''"
               :aria-label="tabLabel"

@@ -1,6 +1,6 @@
 # Tooltip
 
-> Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `overlay/popover` instead.
+> Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `popover` instead.
 
 - Import: `import Tooltip from '@aziontech/webkit/tooltip'`
 - Category: overlay · Surface: product · Structure: monolithic
@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Tooltip for a one-line plain-text name or hint on a control, shown on hover or focus; it cannot hold links. For rich or interactive content opened by a click use Popover; for a read-only rich preview on hover use HoverCard.
 - Naming an icon-only control on hover and focus.
 - Revealing the full text of a truncated label, or expanding an abbreviation.
 - One short, plain-text hint that the user can do without.
@@ -25,7 +26,7 @@
 
 - The content has links, buttons or more than one line of structure → use `popover`.
 - An info glyph beside a field label or column header → use `hint`.
-- A glossed term inside documentation prose → use `doc-tooltip`.
+- A read-only rich preview (a definition, a glossed term in documentation prose) → use `hover-card`.
 - Guidance or errors the user needs to complete a field → use `helper-text`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -33,7 +34,7 @@
 
 - [popover](popover.md) — click-opened, interactive, with a header, body and footer.
 - [hint](hint.md) — the focusable info glyph that renders a `Tooltip` for you.
-- [doc-tooltip](doc-tooltip.md) — inline glossed term for docs pages.
+- [hover-card](hover-card.md) — read-only rich preview on hover or focus; DocMarkdown's `<Tooltip>` tag renders one.
 - [icon-button](icon-button.md) — the most common trigger; it still needs its own `ariaLabel`.
 
 ## Props
@@ -47,13 +48,6 @@
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
 
-## Events
-
-| Event | Payload | Notes |
-| --- | --- | --- |
-| `show` | `void` | Emitted right after the open transition starts. **@deprecated since 6.0 — use `update:open` (`v-model:open`). Removed in 7.0.** It echoes `update:open`. |
-| `hide` | `void` | Emitted right after the close transition starts. **@deprecated since 6.0 — use `update:open` (`v-model:open`). Removed in 7.0.** It echoes `update:open`. |
-
 ## Slots
 
 | Slot | Scope | Notes |
@@ -62,8 +56,8 @@
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                                                               |
+| -------------- | --------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (hover, focus, `Esc`). While unbound the tooltip is uncontrolled and starts at `defaultOpen`. |
 
 ## States

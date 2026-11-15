@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use ButtonGroup for a toolbar of icon actions on one surface (code panel, table header); one default action with alternatives is a SplitButton.
 - A row of icon actions on one surface: Copy, Format, Wrap lines, Download above a code editor.
 - Compact actions in a panel header where labels would not fit, each explained by its tooltip.
 - A mix of actions and on / off view toggles (wrap lines, show whitespace) that sit together.

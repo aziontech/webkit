@@ -1,6 +1,6 @@
 ---
 name: webkit-genai
-description: Generative AI surfaces on @aziontech/webkit — a chat page or drawer, a streamed response, thinking and loading states, citations, feedback, follow-up questions, generated artifacts and actions the assistant may only run after the reader approves. Picks the right AI component for each moment (Conversation, ChatMessage, PromptInput, StreamingResponse, Reasoning, Sources, Citation, SuggestionGroup, ToolCall, ActionConfirmation, ArtifactPreview, AiLoading), wires the message lifecycle (pending → streaming → complete or error) and holds the safety line — model output is never rendered as HTML and nothing with side effects runs without an explicit approval. Use when building or reviewing anything where a person talks with an AI assistant or reads its output.
+description: Generative AI surfaces on @aziontech/webkit — a chat page or drawer, a streamed response, thinking and loading states, citations, feedback, follow-up questions, generated artifacts and actions the assistant may only run after the reader approves. Picks the right AI component for each moment (Conversation, ChatMessage, PromptInput, StreamingResponse, Reasoning, Sources, Citation, SuggestionGroup, ToolCall, ToolApproval, ArtifactPreview, AiLoading), wires the message lifecycle (pending → streaming → complete or error) and holds the safety line — model output is never rendered as HTML and nothing with side effects runs without an explicit approval. Use when building or reviewing anything where a person talks with an AI assistant or reads its output.
 status: active
 last_updated: 2026-11-11
 scope: general
@@ -60,7 +60,7 @@ expired and irreversible for approval) as variants. Adapt the words and the data
 | Where a statement comes from                                            | `[n]` in the Markdown → `Citation`; the list → `Sources` with the same `anchor` |
 | What to ask next, or what the assistant can do before the first message | `SuggestionGroup` (horizontal after a response, vertical in the empty state)    |
 | A tool or command the agent called                                      | `ToolCall`                                                                      |
-| Permission before something with side effects                           | `ActionConfirmation`                                                            |
+| Permission before something with side effects                           | `ToolApproval`                                                            |
 | A file, snippet or table the assistant generated                        | `ArtifactPreview` (stacked under the message, not inside the text)              |
 | Before the first message                                                | `EmptyState` + vertical `SuggestionGroup`                                       |
 
@@ -86,7 +86,7 @@ Drive `ChatMessage` from your request, never from timers in the view:
 - **No HTML from the model.** Render model text with `StreamingResponse` only. It parses Markdown into
   elements; raw tags show as text, and only `http(s)`, `mailto`, relative and `#` links survive. Never
   `v-html` model output, not even "sanitized".
-- **Nothing with side effects without `ActionConfirmation`.** Read-only calls are recorded with
+- **Nothing with side effects without `ToolApproval`.** Read-only calls are recorded with
   `ToolCall` and continue. Writes, deploys, purges and deletes wait for Approve. Irreversible actions
   use `kind="danger"` and `confirmation-phrase`. The card is not a dialog: no focus trap, no initial
   focus, Approve never pre-selected.
@@ -145,6 +145,6 @@ End with the count of Safety findings first; any Safety finding blocks the chang
 - [ ] Every thread is a `Conversation`; every turn a `ChatMessage` with the real lifecycle `state`.
 - [ ] Model text renders through `StreamingResponse`; no `v-html` anywhere near model output.
 - [ ] Citations share an `anchor` with their `Sources`.
-- [ ] Every side-effecting call waits for `ActionConfirmation`; denials and expiry are acknowledged.
+- [ ] Every side-effecting call waits for `ToolApproval`; denials and expiry are acknowledged.
 - [ ] Empty, streaming, error and long-thread states exist and were checked with a screen reader and
       with reduced motion.

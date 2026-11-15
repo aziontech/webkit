@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use CopyButton next to any value (API key, ID, snippet) to copy it; to copy a ready-made agent prompt without showing it use CopyPromptButton.
 - Next to a value the user will paste elsewhere: an ID, a domain, a token, a CLI command.
 - Inside key/value rows, terminal mocks and code samples that need a one-click copy.
 

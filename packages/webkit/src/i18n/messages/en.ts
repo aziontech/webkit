@@ -671,10 +671,6 @@ export const menu = {
   expandNamed: 'Expand {label}'
 } as const
 
-export const miniButton = {
-  label: 'Learn more'
-} as const
-
 export const multiSelect = {
   empty: 'No matches',
   loading: 'Loading options',
@@ -1212,7 +1208,7 @@ export const wizard = {
   submit: 'Create'
 } as const
 
-export const actionConfirmation = {
+export const toolApproval = {
   approve: 'Approve',
   deny: 'Deny',
   approved: 'Approved',
@@ -1400,7 +1396,7 @@ export const siteLayout = {
 } as const
 
 export const en = {
-  actionConfirmation,
+  toolApproval,
   aiLoading,
   alert,
   appLayout,
@@ -1476,7 +1472,6 @@ export const en = {
   logView,
   mapChart,
   menu,
-  miniButton,
   multiSelect,
   navigationMenu,
   numberInput,

@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use ResponseBranches to page through alternative versions of one AI response; rows of a table or list use Pagination.
 - A response was regenerated and the earlier versions stay available to compare.
 - A model returned several candidates and the person picks the one to keep reading.
 

@@ -1,5 +1,5 @@
 {
- "purpose": "Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `Card`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming).",
+ "purpose": "Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValuePairs, records compared across columns are a Table, and what a plan includes is a FeatureList. Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `Card`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming).",
  "useWhen": [
   "A row that pairs a title and description with leading media (icon, avatar, image) and trailing actions — settings entries, team members, next steps, notifications.",
   "A list of such rows: `Item.Group` for gapped rows off a card, `Item.List` for divided rows inside a `card`.",
@@ -8,14 +8,14 @@
  ],
  "avoidWhen": [
   "Records that share columns and need sorting, selection or paging → use `table`.",
-  "Hierarchical navigation rows in a sidebar → use `menu`.",
+  "Hierarchical navigation rows in a sidebar → use `sidebar-menu`.",
   "A grid of selectable option cards → use `radio-cards`.",
   "A single surface that frames arbitrary content → use `card`."
  ],
  "related": [
   "card` — the surface an `Item.List` sits in (with `:padded=\"false\"`).",
   "table` — columnar data; below `sm`, `listing-table` swaps its table rows for `item` rows.",
-  "menu` — navigation rows with nesting and drill levels.",
+  "sidebar-menu` — navigation rows with nesting and drill levels.",
   "avatar` — the usual leading media for people rows inside `Item.Media`."
  ],
  "bestPractices": [

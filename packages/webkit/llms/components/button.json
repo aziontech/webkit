@@ -11,6 +11,7 @@
  "purpose": "The labelled control that triggers an action. `kind` ranks the action in its view (one `primary`, the rest `secondary`, `outlined`, `transparent`, `danger` for a destructive one, or `link` for an action that reads as a link), `size` fits it to its context, and `loading` and `disabled` cover the states in between. With `href` it renders an anchor that looks the same, so a call to action that navigates needs no second component.",
  "setup": null,
  "useWhen": [
+  "Use Button `kind=\"link\"` when the text runs an action (no navigation) but should read like a link.",
   "Trigger an action that needs a visible text label: in a form, dialog footer, toolbar or page header.",
   "Mark the main action of a view with `kind=\"primary\"` and the lesser ones with `secondary`, `outlined` or `transparent`.",
   "Submit or reset a form with `type=\"submit\"` / `type=\"reset\"`.",
@@ -29,7 +30,7 @@
   "icon-button` — icon-only counterpart with the same sizes and a required `ariaLabel`; its `transparent` kind matches this one.",
   "split-button` — joins a Button to a chevron menu of related actions.",
   "button-highlight` — the same prop surface without `kind`, drawn with the brand gradient and a rotating glow rim.",
-  "mini-button` — compact text action with a brand-colored trailing icon for dense cards and tables.",
+  "link` — a text link that navigates to a page, resource or URL.",
   "toggle-group` — a group of mutually exclusive options, not a single action."
  ],
  "bestPractices": [

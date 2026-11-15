@@ -3,11 +3,11 @@ name: hover-card
 category: overlay
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 73ebe11a6a827904f2404df065f807837cac140ad8de3161c2f2b022d2d77c87
+checksum: bbf664510e82aff53d3f093ac695fc0ee3e0e5c90096b7eca600f4fc0d813963
 created: 2026-11-14
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # HoverCard — Component Spec
@@ -18,6 +18,7 @@ Rich preview that appears beside a link or name when the pointer rests on it or 
 
 ## When to use
 
+- Use HoverCard for a read-only rich preview (a definition, a user card, a link preview) shown on hover or focus; interactive content is a Popover and a one-line hint is a Tooltip.
 - Previewing what a link points to before following it: a user handle in an audit log, a resource name in a table, a commit hash.
 - Showing a summary (status, owner, last update) that the destination page also shows.
 
@@ -84,19 +85,19 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 
 ## Props
 
-| Prop          | Type                                                    | Default    | Required | JSDoc                                                                                                       |
-| ------------- | ------------------------------------------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------- |
-| `placement`   | `HoverCardPlacementInput` (a side with optional `-start` / `-end`, or `'auto'`) | `'bottom'` | false    | Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room.    |
-| `offset`      | `number`                                                | `8`        | false    | Pixel gap between the trigger and the card.                                                                 |
-| `openDelay`   | `number`                                                | `500`      | false    | Milliseconds the pointer or focus must stay on the trigger before the card opens.                           |
-| `closeDelay`  | `number`                                                | `300`      | false    | Milliseconds after the pointer or focus leaves the trigger and the card before the card closes.             |
-| `disabled`    | `boolean`                                               | `false`    | false    | Never opens the card.                                                                                       |
-| `defaultOpen` | `boolean`                                               | `false`    | false    | Initial open state while `v-model:open` is unbound.                                                        |
+| Prop          | Type                                                                            | Default    | Required | JSDoc                                                                                                   |
+| ------------- | ------------------------------------------------------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------- |
+| `placement`   | `HoverCardPlacementInput` (a side with optional `-start` / `-end`, or `'auto'`) | `'bottom'` | false    | Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room. |
+| `offset`      | `number`                                                                        | `8`        | false    | Pixel gap between the trigger and the card.                                                             |
+| `openDelay`   | `number`                                                                        | `500`      | false    | Milliseconds the pointer or focus must stay on the trigger before the card opens.                       |
+| `closeDelay`  | `number`                                                                        | `300`      | false    | Milliseconds after the pointer or focus leaves the trigger and the card before the card closes.         |
+| `disabled`    | `boolean`                                                                       | `false`    | false    | Never opens the card.                                                                                   |
+| `defaultOpen` | `boolean`                                                                       | `false`    | false    | Initial open state while `v-model:open` is unbound.                                                     |
 
 ## v-model
 
-| Model          | Type      | Default     | Emits         | Notes                                                                                                   |
-| -------------- | --------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------- |
+| Model          | Type      | Default     | Emits         | Notes                                                                                                     |
+| -------------- | --------- | ----------- | ------------- | --------------------------------------------------------------------------------------------------------- |
 | `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`. While unbound the card is uncontrolled and starts at `defaultOpen`. |
 
 ## Events
@@ -105,9 +106,9 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 
 ## Slots
 
-| Slot      | Scope | Notes                                                              |
-| --------- | ----- | ------------------------------------------------------------------ |
-| `default` | —     | Place one `<HoverCard.Trigger>` and one `<HoverCard.Content>`.     |
+| Slot      | Scope | Notes                                                          |
+| --------- | ----- | -------------------------------------------------------------- |
+| `default` | —     | Place one `<HoverCard.Trigger>` and one `<HoverCard.Content>`. |
 
 ## States
 
@@ -125,17 +126,17 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 
 ## Tokens
 
-| Region       | Token (DESIGN.md)                          |
-| ------------ | ------------------------------------------ |
-| card surface | `var(--bg-surface-raised)`                 |
-| card border  | `var(--border-default)`                    |
-| card shape   | `var(--shape-elements)`                    |
-| card shadow  | `var(--shadow-sm)`                         |
-| card padding | `var(--spacing-md)`                        |
-| card gap     | `var(--spacing-sm)`                        |
-| card width   | `--container-3xs` to `--container-xs`      |
-| card text    | `.text-body-sm` + `text-(--text-default)`  |
-| popup origin | `var(--popup-origin)`                      |
+| Region       | Token (DESIGN.md)                         |
+| ------------ | ----------------------------------------- |
+| card surface | `var(--bg-surface-raised)`                |
+| card border  | `var(--border-default)`                   |
+| card shape   | `var(--shape-elements)`                   |
+| card shadow  | `var(--shadow-sm)`                        |
+| card padding | `var(--spacing-md)`                       |
+| card gap     | `var(--spacing-sm)`                       |
+| card width   | `--container-3xs` to `--container-xs`     |
+| card text    | `.text-body-sm` + `text-(--text-default)` |
+| popup origin | `var(--popup-origin)`                     |
 
 ## Theme gaps
 

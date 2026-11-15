@@ -9,7 +9,7 @@ import GlobalHeader from './index.js'
 
 /**
  * global-header is a COMPOSITION component: `index.js` attaches the region
- * sub-components (Container/Left/Middle/Nav/Right/Brand) onto the root via
+ * sub-components (Container/Start/Center/End/Brand) onto the root via
  * Object.assign, and the root provides { testId } through GlobalHeaderInjectionKey.
  * Each sub-component injects that context and derives its own testid as
  * `${ctx.testId}__<region>`, so overriding the root testid proves provide/inject
@@ -21,15 +21,14 @@ import GlobalHeader from './index.js'
  */
 
 // The runtime string-template compiler resolves component tags from the
-// `components` map by tag name — it does not walk `GlobalHeader.Left` member
+// `components` map by tag name — it does not walk `GlobalHeader.Start` member
 // access the way the SFC compiler does. So register each region under a
 // PascalCase tag pointing at the compound member (the same shape the story uses).
 const compoundComponents = {
   GlobalHeader,
-  GlobalHeaderLeft: GlobalHeader.Left,
-  GlobalHeaderMiddle: GlobalHeader.Middle,
-  GlobalHeaderNav: GlobalHeader.Nav,
-  GlobalHeaderRight: GlobalHeader.Right,
+  GlobalHeaderStart: GlobalHeader.Start,
+  GlobalHeaderCenter: GlobalHeader.Center,
+  GlobalHeaderEnd: GlobalHeader.End,
   GlobalHeaderBrand: GlobalHeader.Brand,
   GlobalHeaderContainer: GlobalHeader.Container
 }
@@ -37,17 +36,17 @@ const compoundComponents = {
 // A minimal but realistic composed tree exercising every region.
 const composedTemplate = `
   <GlobalHeader>
-    <GlobalHeaderLeft>
+    <GlobalHeaderStart>
       <GlobalHeaderBrand>
         <a href="/" aria-label="Azion home"><svg viewBox="0 0 10 10"><rect width="10" height="10" /></svg></a>
       </GlobalHeaderBrand>
-    </GlobalHeaderLeft>
-    <GlobalHeaderMiddle>
+    </GlobalHeaderStart>
+    <GlobalHeaderCenter>
       <a href="/products">Products</a>
-    </GlobalHeaderMiddle>
-    <GlobalHeaderRight>
+    </GlobalHeaderCenter>
+    <GlobalHeaderEnd>
       <button type="button">Account</button>
-    </GlobalHeaderRight>
+    </GlobalHeaderEnd>
   </GlobalHeader>
 `
 
@@ -58,24 +57,21 @@ describe('GlobalHeader', () => {
   describe('compound API (index.js Object.assign)', () => {
     it('exposes each region sub-component via dot-notation on the root', () => {
       expect(GlobalHeader.Container).toBeTruthy()
-      expect(GlobalHeader.Left).toBeTruthy()
-      expect(GlobalHeader.Middle).toBeTruthy()
-      expect(GlobalHeader.Right).toBeTruthy()
+      expect(GlobalHeader.Start).toBeTruthy()
+      expect(GlobalHeader.Center).toBeTruthy()
+      expect(GlobalHeader.End).toBeTruthy()
       expect(GlobalHeader.Brand).toBeTruthy()
-      expect(GlobalHeader.Nav).toBeTruthy()
-    })
-
-    it('exposes Nav as an alias of Middle (same component, per the index.js comment)', () => {
-      // index.js: `GlobalHeader.Nav = GlobalHeaderMiddle` — one component, two names.
-      expect(GlobalHeader.Nav).toBe(GlobalHeader.Middle)
+      for (const removed of ['Left', 'Middle', 'Nav', 'Right']) {
+        expect(removed in GlobalHeader).toBe(false)
+      }
     })
 
     it('names each sub-component after its anatomy', () => {
       // defineOptions.name on each region .vue.
       expect(GlobalHeader.Container.name).toBe('GlobalHeaderContainer')
-      expect(GlobalHeader.Left.name).toBe('GlobalHeaderLeft')
-      expect(GlobalHeader.Middle.name).toBe('GlobalHeaderMiddle')
-      expect(GlobalHeader.Right.name).toBe('GlobalHeaderRight')
+      expect(GlobalHeader.Start.name).toBe('GlobalHeaderStart')
+      expect(GlobalHeader.Center.name).toBe('GlobalHeaderCenter')
+      expect(GlobalHeader.End.name).toBe('GlobalHeaderEnd')
       expect(GlobalHeader.Brand.name).toBe('GlobalHeaderBrand')
     })
   })
@@ -114,36 +110,32 @@ describe('GlobalHeader', () => {
     })
   })
 
-  describe('logical region names (Start / Center / End; Left / Middle / Nav / Right are deprecated)', () => {
+  describe('logical region names (Start / Center / End)', () => {
     it('attaches Start, Center and End to the compound', () => {
       expect(GlobalHeader.Start).toBeTruthy()
       expect(GlobalHeader.Center).toBeTruthy()
       expect(GlobalHeader.End).toBeTruthy()
-      expect(GlobalHeader.Start).not.toBe(GlobalHeader.Left)
     })
 
-    it('derives __start / __center / __end from the root testid and keeps the old parts working', () => {
+    it('derives __start / __center / __end from the root testid', () => {
       const { getByTestId } = render({
         components: {
           GlobalHeader,
           GlobalHeaderStart: GlobalHeader.Start,
           GlobalHeaderCenter: GlobalHeader.Center,
-          GlobalHeaderEnd: GlobalHeader.End,
-          GlobalHeaderLeft: GlobalHeader.Left
+          GlobalHeaderEnd: GlobalHeader.End
         },
         template: `
           <GlobalHeader data-testid="app-chrome">
             <GlobalHeaderStart>Menu</GlobalHeaderStart>
             <GlobalHeaderCenter>Products</GlobalHeaderCenter>
             <GlobalHeaderEnd>Account</GlobalHeaderEnd>
-            <GlobalHeaderLeft>Legacy</GlobalHeaderLeft>
           </GlobalHeader>
         `
       })
       expect(getByTestId('app-chrome__start').textContent).toContain('Menu')
       expect(getByTestId('app-chrome__center').textContent).toContain('Products')
       expect(getByTestId('app-chrome__end').textContent).toContain('Account')
-      expect(getByTestId('app-chrome__left').textContent).toContain('Legacy')
     })
   })
 
@@ -152,20 +144,20 @@ describe('GlobalHeader', () => {
       const { getByTestId } = renderComposed()
       // Root fallback is 'layout-global-header'; each region appends its own suffix.
       expect(getByTestId('layout-global-header').tagName).toBe('HEADER')
-      expect(getByTestId('layout-global-header__left').tagName).toBe('DIV')
-      expect(getByTestId('layout-global-header__middle').tagName).toBe('DIV')
-      expect(getByTestId('layout-global-header__right').tagName).toBe('DIV')
+      expect(getByTestId('layout-global-header__start').tagName).toBe('DIV')
+      expect(getByTestId('layout-global-header__center').tagName).toBe('DIV')
+      expect(getByTestId('layout-global-header__end').tagName).toBe('DIV')
       expect(getByTestId('layout-global-header__brand').tagName).toBe('DIV')
     })
 
     it('overriding the root data-testid re-keys every injected region (proves shared state)', () => {
       const overriddenTemplate = `
         <GlobalHeader data-testid="app-chrome">
-          <GlobalHeaderLeft>
+          <GlobalHeaderStart>
             <GlobalHeaderBrand>Azion</GlobalHeaderBrand>
-          </GlobalHeaderLeft>
-          <GlobalHeaderMiddle>Nav</GlobalHeaderMiddle>
-          <GlobalHeaderRight>Actions</GlobalHeaderRight>
+          </GlobalHeaderStart>
+          <GlobalHeaderCenter>Nav</GlobalHeaderCenter>
+          <GlobalHeaderEnd>Actions</GlobalHeaderEnd>
         </GlobalHeader>
       `
       const { getByTestId, queryByTestId } = render({
@@ -175,43 +167,34 @@ describe('GlobalHeader', () => {
 
       // Root uses the overridden value; each region derives from the injected ctx.testId.
       expect(getByTestId('app-chrome').tagName).toBe('HEADER')
-      expect(getByTestId('app-chrome__left')).toBeTruthy()
+      expect(getByTestId('app-chrome__start')).toBeTruthy()
       expect(getByTestId('app-chrome__brand')).toBeTruthy()
-      expect(getByTestId('app-chrome__middle')).toBeTruthy()
-      expect(getByTestId('app-chrome__right')).toBeTruthy()
+      expect(getByTestId('app-chrome__center')).toBeTruthy()
+      expect(getByTestId('app-chrome__end')).toBeTruthy()
 
       // The fallback keys no longer exist — the injected value drove every region.
       expect(queryByTestId('layout-global-header')).toBeNull()
-      expect(queryByTestId('layout-global-header__left')).toBeNull()
-      expect(queryByTestId('layout-global-header__middle')).toBeNull()
-    })
-
-    it('Nav (the Middle alias) derives the same __middle testid as Middle', () => {
-      const { getByTestId } = render({
-        components: compoundComponents,
-        template: '<GlobalHeader><GlobalHeaderNav>menu</GlobalHeaderNav></GlobalHeader>'
-      })
-      // Nav === Middle, so its injected testid suffix is __middle.
-      expect(getByTestId('layout-global-header__middle').tagName).toBe('DIV')
+      expect(queryByTestId('layout-global-header__start')).toBeNull()
+      expect(queryByTestId('layout-global-header__center')).toBeNull()
     })
 
     it('a region rendered without a root falls back to the literal default testId', () => {
       // No provider => inject() is undefined => ctx?.testId ?? 'layout-global-header'.
-      const { getByTestId } = render(GlobalHeader.Right, {
+      const { getByTestId } = render(GlobalHeader.End, {
         slots: { default: '<button type="button">solo</button>' }
       })
-      expect(getByTestId('layout-global-header__right').tagName).toBe('DIV')
+      expect(getByTestId('layout-global-header__end').tagName).toBe('DIV')
     })
 
     it('lets a region override its own testid independent of the injected context', () => {
       const { getByTestId, queryByTestId } = render({
         components: compoundComponents,
         template:
-          '<GlobalHeader><GlobalHeaderLeft data-testid="my-left">L</GlobalHeaderLeft></GlobalHeader>'
+          '<GlobalHeader><GlobalHeaderStart data-testid="my-left">L</GlobalHeaderStart></GlobalHeader>'
       })
       // The sub-component prefers its own attrs['data-testid'] over the derived value.
       expect(getByTestId('my-left').tagName).toBe('DIV')
-      expect(queryByTestId('layout-global-header__left')).toBeNull()
+      expect(queryByTestId('layout-global-header__start')).toBeNull()
     })
   })
 
@@ -219,10 +202,10 @@ describe('GlobalHeader', () => {
     it('places composed children into their matching regions', () => {
       const { getByTestId, getByText } = renderComposed()
 
-      const left = getByTestId('layout-global-header__left')
+      const left = getByTestId('layout-global-header__start')
       const brand = getByTestId('layout-global-header__brand')
-      const middle = getByTestId('layout-global-header__middle')
-      const right = getByTestId('layout-global-header__right')
+      const middle = getByTestId('layout-global-header__center')
+      const right = getByTestId('layout-global-header__end')
 
       // Brand is nested inside Left; the products link inside Middle; the button inside Right.
       expect(left.contains(brand)).toBe(true)
@@ -249,11 +232,11 @@ describe('GlobalHeader', () => {
       const { getByTestId } = render({
         components: compoundComponents,
         template:
-          '<GlobalHeader kind="content"><GlobalHeaderLeft>L</GlobalHeaderLeft><GlobalHeaderRight>R</GlobalHeaderRight></GlobalHeader>'
+          '<GlobalHeader kind="content"><GlobalHeaderStart>L</GlobalHeaderStart><GlobalHeaderEnd>R</GlobalHeaderEnd></GlobalHeader>'
       })
       const root = getByTestId('layout-global-header')
-      expect(getByTestId('layout-global-header__left').parentElement).toBe(root)
-      expect(getByTestId('layout-global-header__right').parentElement).toBe(root)
+      expect(getByTestId('layout-global-header__start').parentElement).toBe(root)
+      expect(getByTestId('layout-global-header__end').parentElement).toBe(root)
     })
 
     it('keeps the banner landmark in the content placement', () => {
@@ -275,11 +258,11 @@ describe('GlobalHeader', () => {
       const { getByTestId } = render({
         components: compoundComponents,
         template:
-          '<GlobalHeader kind="site"><GlobalHeaderBrand>Azion</GlobalHeaderBrand><GlobalHeaderRight>R</GlobalHeaderRight></GlobalHeader>'
+          '<GlobalHeader kind="site"><GlobalHeaderBrand>Azion</GlobalHeaderBrand><GlobalHeaderEnd>R</GlobalHeaderEnd></GlobalHeader>'
       })
       const root = getByTestId('layout-global-header')
       expect(getByTestId('layout-global-header__brand').parentElement).toBe(root)
-      expect(getByTestId('layout-global-header__right').parentElement).toBe(root)
+      expect(getByTestId('layout-global-header__end').parentElement).toBe(root)
     })
 
     it('keeps the banner landmark in the site placement', () => {
@@ -301,9 +284,9 @@ describe('GlobalHeader', () => {
         components: compoundComponents,
         template: `
           <GlobalHeader kind="content" aria-label="Console header">
-            <GlobalHeaderLeft><a href="/build">Build</a></GlobalHeaderLeft>
-            <GlobalHeaderMiddle />
-            <GlobalHeaderRight><button type="button">Create</button></GlobalHeaderRight>
+            <GlobalHeaderStart><a href="/build">Build</a></GlobalHeaderStart>
+            <GlobalHeaderCenter />
+            <GlobalHeaderEnd><button type="button">Create</button></GlobalHeaderEnd>
           </GlobalHeader>
         `
       })
@@ -316,8 +299,8 @@ describe('GlobalHeader', () => {
         template: `
           <GlobalHeader kind="site" aria-label="Azion">
             <GlobalHeaderBrand><a href="/" aria-label="Azion home">Azion</a></GlobalHeaderBrand>
-            <GlobalHeaderMiddle><a href="/pricing">Pricing</a></GlobalHeaderMiddle>
-            <GlobalHeaderRight><button type="button">Start for Free</button></GlobalHeaderRight>
+            <GlobalHeaderCenter><a href="/pricing">Pricing</a></GlobalHeaderCenter>
+            <GlobalHeaderEnd><button type="button">Start for Free</button></GlobalHeaderEnd>
           </GlobalHeader>
         `
       })

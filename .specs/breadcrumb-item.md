@@ -3,13 +3,13 @@ name: breadcrumb-item
 category: navigation
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6288
   node_id: 3374:6288
-checksum: 9f317c4664f7936cf4e13ef4036127d7333c07d7acd9bb0d6418fc85368972ab
+checksum: 6462ce8c7a4472eb7bdb57768d98777adec391fc17af986139609c9b97e4722e
 created: 2026-05-25
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # Breadcrumb Item — Component Spec
@@ -20,6 +20,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 
 ## When to use
 
+- Use Breadcrumb.Item only as a part of Breadcrumb; for the page trail itself use Breadcrumb.
 - Composing a breadcrumb trail by hand inside `Breadcrumb.List`, one segment per ancestor plus the current page.
 - A single ancestor or current-page segment that must match the breadcrumb's muted / current styling and focus ring.
 
@@ -27,7 +28,7 @@ Single segment in a breadcrumb trail. Ancestor segments use muted label text and
 
 - The whole trail is known as data → use `breadcrumb` with `items`, which renders the segments for you.
 - It is a standalone text link in content or a page footer → use `link`.
-- It is a navigation row in an app menu → use `menu`.
+- It is a navigation row in an app menu → use `sidebar-menu`.
 
 ## Related
 

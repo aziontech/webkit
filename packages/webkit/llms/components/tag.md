@@ -1,6 +1,6 @@
 # Tag
 
-> Compact status or category label with severity-based color coding. Supports optional icon, pill shape via `rounded`, and two sizes aligned with the Webkit Figma Tag component set.
+> Use Tag for a read-only category or outcome word on an item (Production, Beta, Allowed) that is not a lifecycle state. The state of a resource is a StatusIndicator, a number is a Badge, a removable or selectable token is a Chip, and a level on the critical → info scale is a SeverityTag. A compact, read-only word on an item, colored by `severity` so the category or outcome reads at a glance (Production in primary, Blocked in danger). It takes an optional leading icon, a pill shape with `rounded`, and two sizes; it is never interactive and never counts.
 
 - Import: `import Tag from '@aziontech/webkit/tag'`
 - Category: content · Surface: product · Structure: monolithic

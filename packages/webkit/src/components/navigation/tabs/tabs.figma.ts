@@ -31,11 +31,11 @@ export default {
   example: figma.code`<Tabs.Root default-value="${active}">
   <Tabs.List>${items}
   </Tabs.List>
-  <Tabs.Content>
+  <div class="relative isolate w-full">
     <Tabs.Panel value="${active}">
       ${panel}
     </Tabs.Panel>
-  </Tabs.Content>
+  </div>
 </Tabs.Root>`,
   imports: ["import Tabs from '@aziontech/webkit/tabs'"],
   id: 'tabs',

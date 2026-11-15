@@ -3,10 +3,10 @@ name: settings-section
 category: layout
 structure: monolithic
 status: implemented
-checksum: b08fa886994f8d5069a30d05e61f6cecdb96c1e0a3627c193e3241039347d58e
-spec_version: 2
+checksum: 9585808cf344bf16f49a3aadbfcf37a3f7b4e69782edf3017ca7a7c30e111304
+spec_version: 3
 created: 2026-11-10
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # SettingsSection — Component Spec
@@ -17,6 +17,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
 
 ## When to use
 
+- Use SettingsSection for a band of a settings page whose body is SettingRow rows; any other band heading is a SectionHeader.
 - Every settings page and create page: a resource's Settings tab, Account Settings, a create form, a create drawer.
 - An Advanced band that starts closed (`collapsible`).
 

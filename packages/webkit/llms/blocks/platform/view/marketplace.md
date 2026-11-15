@@ -140,7 +140,7 @@ Raised through `toast` with one id for the install, so progress turns into the o
 - The Installed state is text in a `Tag`, never colour alone.
 - The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to what opened it; its form has an accessible name.
 - The Application field is required and labelled; its error is tied to the `Select` through the `Field`, and focus stays on Install so the person can correct and resubmit.
-- Toasts are announced politely and never take focus; the failure toast stays until closed and its actions are reachable by keyboard.
+- Toasts never take focus and are announced politely, the failure toast assertively; the failure toast stays until closed and its actions are reachable by keyboard.
 
 ## States
 
@@ -673,7 +673,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
               label="Integrations"
             />
           </Tabs.List>
-          <Tabs.Content>
+          <div class="relative isolate w-full">
             <Tabs.Panel value="templates">
               <section
                 class="flex min-w-0 flex-col gap-(--layout-group-gap) pt-(--layout-group-gap)"
@@ -829,7 +829,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ma
                 </section>
               </div>
             </Tabs.Panel>
-          </Tabs.Content>
+          </div>
         </Tabs.Root>
       </div>
     </div>

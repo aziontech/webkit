@@ -56,31 +56,24 @@ test('deprecationsOfSource flags a whole component deprecated on its defineOptio
   assert.equal(found.component, true)
 })
 
-test('scanVue reports deprecated members, props, values and slots on real components', () => {
+test('scanVue reports deprecated members, props, models and slots', () => {
   const source = `<script setup>
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Input from '@aziontech/webkit/input'
-  import Popover from '@aziontech/webkit/popover'
-  import Skeleton from '@aziontech/webkit/skeleton'
+  import LegacyPanel from './fixtures/deprecated-usage/legacy-panel/index'
 </script>
 
 <template>
-  <DropdownMenu.Option value="a" />
-  <DropdownMenu.Item value="b"><template #left>x</template></DropdownMenu.Item>
-  <Input><template #iconLeft>x</template><template #prefix>y</template></Input>
-  <Popover width="small" />
-  <Popover size="small" />
-  <Skeleton kind="shape" />
-  <Skeleton kind="rectangle" />
+  <LegacyPanel.Option />
+  <LegacyPanel.Item />
+  <LegacyPanel width="small"><template #left>x</template><template #leading>y</template></LegacyPanel>
+  <LegacyPanel size="small" v-model:collapsed="closed" />
 </template>
 `
   const messages = scanVue(source, FIXTURE).map((f) => f.message)
   assert.deepEqual(messages, [
-    '<DropdownMenu.Option> is a deprecated compound member',
-    '<DropdownMenu.Item> slot #left is deprecated',
-    '<Input> slot #iconLeft is deprecated',
-    '<Popover> prop width is deprecated',
-    '<Skeleton> kind="shape" is deprecated, use "rectangle"'
+    '<LegacyPanel.Option> is a deprecated compound member',
+    '<LegacyPanel> prop width is deprecated',
+    '<LegacyPanel> slot #left is deprecated',
+    '<LegacyPanel> v-model:collapsed is deprecated'
   ])
 })
 
@@ -98,22 +91,23 @@ test('scanVue stays silent on the replacement names', () => {
   assert.deepEqual(scanVue(source, FIXTURE), [])
 })
 
-test('scanMarkdown reads fenced snippets, indented ones and prose member references', () => {
+test('scanMarkdown reads fenced snippets and indented ones, and stays silent on current members', () => {
   const source = [
-    'Put the trigger first in `GlobalHeader.Right`.',
-    'The old `GlobalHeader.Left` was renamed to `GlobalHeader.Start`.',
+    'Put the trigger first in `GlobalHeader.End`.',
     '',
     '1. A list item:',
     '   ```vue',
-    '   <Sidebar v-model:collapsed="closed" />',
+    '   <script setup>',
+    "     import LegacyPanel from './fixtures/deprecated-usage/legacy-panel/index'",
+    '   </script>',
+    '   <template>',
+    '     <LegacyPanel v-model:collapsed="closed" />',
+    '   </template>',
     '   ```'
   ].join('\n')
   assert.deepEqual(
     scanMarkdown(source, FIXTURE).map((f) => [f.line, f.message]),
-    [
-      [6, '<Sidebar> v-model:collapsed is deprecated'],
-      [1, 'GlobalHeader.Right is a deprecated compound member']
-    ]
+    [[9, '<LegacyPanel> v-model:collapsed is deprecated']]
   )
 })
 

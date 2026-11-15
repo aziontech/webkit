@@ -5,11 +5,12 @@ import test from 'node:test'
 import { build, modelProps } from '../../scripts/build-catalog.mjs'
 import { exportTarget } from '../../scripts/lib/exports.mjs'
 
-const exportsMap = JSON.parse(readFileSync(new URL('../../package.json', import.meta.url), 'utf-8'))
-  .exports
+const exportsMap = JSON.parse(
+  readFileSync(new URL('../../package.json', import.meta.url), 'utf-8')
+).exports
 
 test('modelProps reads every defineModel of a root, named and default', () => {
-  const menu = modelProps(exportTarget(exportsMap['./menu']))
+  const menu = modelProps(exportTarget(exportsMap['./sidebar-menu']))
   assert.deepEqual(
     menu.map((m) => [m.name, m.type]),
     [
@@ -35,10 +36,10 @@ test('the catalog lists v-model values as props, so webkit view shows them', asy
   const { imports } = await build()
   const find = (name) => imports[name]
   for (const [name, model] of [
-    ['menu', 'path'],
-    ['menu', 'expanded'],
+    ['sidebar-menu', 'path'],
+    ['sidebar-menu', 'expanded'],
     ['settings-section', 'open'],
-    ['sidebar', 'collapsed'],
+    ['sidebar', 'open'],
     ['tree', 'selected']
   ]) {
     const entry = find(name)

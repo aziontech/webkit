@@ -988,7 +988,7 @@
   {
     "name": "help-panel",
     "path": "src/components/content/help-panel/index.ts",
-    "limit": "5.5 KB"
+    "limit": "3 KB"
   },
   {
     "name": "help-panel-root",
@@ -1009,16 +1009,6 @@
     "name": "help-panel-links",
     "path": "src/components/content/help-panel/help-panel-links/help-panel-links.vue",
     "limit": "2.25 KB"
-  },
-  {
-    "name": "help-panel-tutorial",
-    "path": "src/components/content/help-panel/help-panel-tutorial/help-panel-tutorial.vue",
-    "limit": "3.5 KB"
-  },
-  {
-    "name": "help-panel-task",
-    "path": "src/components/content/help-panel/help-panel-task/help-panel-task.vue",
-    "limit": "2.5 KB"
   },
   {
     "name": "key-value-pairs",
@@ -1048,7 +1038,7 @@
   {
     "name": "tree",
     "path": "src/components/data/tree/tree.vue",
-    "limit": "7.75 KB"
+    "limit": "8.3 KB"
   },
   {
     "name": "file-dropzone",
@@ -1231,8 +1221,8 @@
     "limit": "34.75 KB"
   },
   {
-    "name": "action-confirmation",
-    "path": "src/components/ai/action-confirmation/action-confirmation.vue",
+    "name": "tool-approval",
+    "path": "src/components/ai/tool-approval/tool-approval.vue",
     "limit": "11.45 KB"
   },
   {
@@ -1464,11 +1454,6 @@
     "name": "button-highlight",
     "path": "src/components/actions/button-highlight/button-highlight.vue",
     "limit": "2.25 KB"
-  },
-  {
-    "name": "mini-button",
-    "path": "src/components/actions/mini-button/mini-button.vue",
-    "limit": "2.45 KB"
   },
   {
     "name": "copy-button",
@@ -2233,7 +2218,7 @@
   },
   {
     "name": "breadcrumb-item",
-    "path": "src/components/navigation/breadcrumb-item/breadcrumb-item.vue",
+    "path": "src/components/navigation/breadcrumb/breadcrumb-item/breadcrumb-item.vue",
     "limit": "13.15 KB"
   },
   {
@@ -2242,43 +2227,43 @@
     "limit": "2.2 KB"
   },
   {
-    "name": "menu",
-    "path": "src/components/navigation/menu/index.ts",
+    "name": "sidebar-menu",
+    "path": "src/components/navigation/sidebar-menu/index.ts",
     "limit": "23.4 KB"
   },
   {
-    "name": "menu-root",
-    "path": "src/components/navigation/menu/menu.vue",
+    "name": "sidebar-menu-root",
+    "path": "src/components/navigation/sidebar-menu/sidebar-menu.vue",
     "limit": "22.95 KB"
   },
   {
-    "name": "menu-group",
-    "path": "src/components/navigation/menu/menu-group/menu-group.vue",
+    "name": "sidebar-menu-group",
+    "path": "src/components/navigation/sidebar-menu/sidebar-menu-group/sidebar-menu-group.vue",
     "limit": "13.3 KB"
   },
   {
-    "name": "menu-sub",
-    "path": "src/components/navigation/menu/menu-sub/menu-sub.vue",
+    "name": "sidebar-menu-sub",
+    "path": "src/components/navigation/sidebar-menu/sidebar-menu-sub/sidebar-menu-sub.vue",
     "limit": "12.15 KB"
   },
   {
-    "name": "menu-sub-trigger",
-    "path": "src/components/navigation/menu/menu-sub-trigger/menu-sub-trigger.vue",
+    "name": "sidebar-menu-sub-trigger",
+    "path": "src/components/navigation/sidebar-menu/sidebar-menu-sub-trigger/sidebar-menu-sub-trigger.vue",
     "limit": "16.6 KB"
   },
   {
-    "name": "menu-sub-content",
-    "path": "src/components/navigation/menu/menu-sub-content/menu-sub-content.vue",
+    "name": "sidebar-menu-sub-content",
+    "path": "src/components/navigation/sidebar-menu/sidebar-menu-sub-content/sidebar-menu-sub-content.vue",
     "limit": "14.15 KB"
   },
   {
-    "name": "menu-back",
-    "path": "src/components/navigation/menu/menu-back/menu-back.vue",
+    "name": "sidebar-menu-back",
+    "path": "src/components/navigation/sidebar-menu/sidebar-menu-back/sidebar-menu-back.vue",
     "limit": "13.15 KB"
   },
   {
-    "name": "menu-item",
-    "path": "src/components/navigation/menu/menu-item/menu-item.vue",
+    "name": "sidebar-menu-item",
+    "path": "src/components/navigation/sidebar-menu/sidebar-menu-item/sidebar-menu-item.vue",
     "limit": "13.75 KB"
   },
   {

@@ -1,5 +1,5 @@
-import BreadcrumbItem from '../breadcrumb-item/breadcrumb-item.vue'
 import BreadcrumbRoot from './breadcrumb.vue'
+import BreadcrumbItem from './breadcrumb-item/breadcrumb-item.vue'
 import BreadcrumbList from './breadcrumb-list.vue'
 import BreadcrumbSeparator from './breadcrumb-separator.vue'
 

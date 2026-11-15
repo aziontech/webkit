@@ -8,7 +8,7 @@
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it. Bands (thresholds) name what the value means and color the arc. It shares the chart palette, the loading, empty and error surface and the `ChartCard` naming with the rest of the chart family, and is rendered in-house SVG.",
+ "purpose": "Use GaugeChart for one value against a known range with thresholds; for threshold lines or bands inside a Chart use Chart.Reference, and for one headline metric with a delta use StatTile. Both thresholds share one model, `ChartThreshold`. One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it. Bands (thresholds) name what the value means and color the arc. It shares the chart palette, the loading, empty and error surface and the `ChartCard` naming with the rest of the chart family, and is rendered in-house SVG.",
  "setup": null,
  "useWhen": [
   "A utilization or ratio with a fixed range: CPU, memory, cache hit ratio, quota used.",
@@ -29,7 +29,7 @@
  "bestPractices": [
   "Give the range that means something for the reading (0 to 100 for a ratio, 0 to the quota for usage); the dial is meaningless without it.",
   "Name every band (`label`) so the value is read with its meaning, not only with a color.",
-  "Use status colors for bands (`success`, `warning`, `danger`) and severity colors only when the reading is a severity.",
+  "Use status severities for bands (`success`, `warning`, `danger`) and the findings levels (`severity-critical` … `severity-info`) only when the reading is a severity.",
   "Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`."
  ],
  "props": [
@@ -63,7 +63,7 @@
   },
   {
    "name": "thresholds",
-   "type": "GaugeChartThreshold[]",
+   "type": "ChartThreshold[]",
    "default": "[]",
    "required": "false",
    "doc": "Bands from low to high; the arc takes the color of the band the value falls in, and each band start is marked on the track."
@@ -153,7 +153,7 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import GaugeChart from '@aziontech/webkit/gauge-chart'\n\n  const thresholds = [\n    { value: 0, color: 'success', label: 'Healthy' },\n    { value: 70, color: 'warning', label: 'Busy' },\n    { value: 90, color: 'danger', label: 'Critical' }\n  ]\n  const formatValue = (value) => `${value}%`\n</script>\n\n<template>\n  <GaugeChart\n    :value=\"74\"\n    label=\"Cache hit ratio\"\n    :thresholds=\"thresholds\"\n    :format-value=\"formatValue\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import GaugeChart from '@aziontech/webkit/gauge-chart'\n\n  const thresholds = [\n    { value: 0, severity: 'success', label: 'Healthy' },\n    { value: 70, severity: 'warning', label: 'Busy' },\n    { value: 90, severity: 'danger', label: 'Critical' }\n  ]\n  const formatValue = (value) => `${value}%`\n</script>\n\n<template>\n  <GaugeChart\n    :value=\"74\"\n    label=\"Cache hit ratio\"\n    :thresholds=\"thresholds\"\n    :format-value=\"formatValue\"\n  />\n</template>"
   },
   {
    "name": "Sizes",

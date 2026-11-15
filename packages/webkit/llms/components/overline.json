@@ -51,13 +51,6 @@
    "doc": "Shows a blinking terminal-style cursor after the label."
   },
   {
-   "name": "showCursor",
-   "type": "boolean",
-   "default": "false",
-   "required": "false",
-   "doc": "@deprecated since 6.0 — use `cursor` instead. Removed in 7.0. Still shows the cursor."
-  },
-  {
    "name": "prefix",
    "type": "'' | '//' | '<>' | '</>'",
    "default": "''",

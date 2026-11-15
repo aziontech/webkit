@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use DocHeading only for h2/h3 inside documentation pages; a console page band uses SectionHeader.
 - Every `h2`–`h4` on a docs page that the page rail lists.
 - Section headings on a designed docs page composed in Vue.
 

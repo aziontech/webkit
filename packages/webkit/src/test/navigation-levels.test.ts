@@ -6,7 +6,7 @@ import { collectNavigation, navigationFindings } from '../cli/navigation-levels.
 import ConsoleLayout, {
   type ConsoleLayoutNavGroup
 } from '../components/layout/console-layout/console-layout.vue'
-import Menu from '../components/navigation/menu/menu.vue'
+import SidebarMenu from '../components/navigation/sidebar-menu/sidebar-menu.vue'
 
 const ACCESS_RULES = '/policies/acme/private-access/access-rules'
 
@@ -69,7 +69,7 @@ const mount = (withAccessRules: boolean) =>
             },
             {
               default: () =>
-                h(Menu, {
+                h(SidebarMenu, {
                   groups: pageGroups,
                   activeId: 'access-rules',
                   'aria-label': 'Private access'
@@ -81,7 +81,7 @@ const mount = (withAccessRules: boolean) =>
   )
 
 describe('navigation levels collector', () => {
-  it('reports a route the rail and an in-page Menu both offer, naming both controls', async () => {
+  it('reports a route the rail and an in-page SidebarMenu both offer, naming both controls', async () => {
     mount(true)
     await waitFor(() => expect(document.querySelectorAll('a[aria-current="page"]').length).toBe(2))
     const findings = navigationFindings(collectNavigation())

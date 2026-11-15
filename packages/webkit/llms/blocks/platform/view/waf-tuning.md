@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/view/waf-tuning/waf-tuning.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/waf-tuning")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [Table](../../../components/table.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [Table](../../../components/table.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-locale`
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -136,6 +136,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, ref } from 'vue'
 
   interface Match {
@@ -244,7 +245,9 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
   })
   const selected = computed(() => rows.value.filter((row) => selection.value[row.ruleId]))
   const pathCount = computed(() => selected.value.reduce((sum, row) => sum + row.paths.length, 0))
-  const formatHits = (value: number) => new Intl.NumberFormat('en-US').format(value)
+  const { formatNumber } = useLocale()
+
+  const formatHits = (value: number) => formatNumber(value)
 
   const tuningTable = ref<TableExposed<Match> | null>(null)
   const resultsEl = ref<HTMLElement | null>(null)

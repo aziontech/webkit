@@ -9,19 +9,20 @@
 
 ## When to use
 
-- The persistent navigation column of an app shell, with an optional header (brand, workspace switcher) and footer (profile, settings) around a scrolling `Menu`.
+- Use Sidebar only when not using ConsoleLayout, which already renders the rail; put a SidebarMenu inside it.
+- The persistent navigation column of an app shell, with an optional header (brand, workspace switcher) and footer (profile, settings) around a scrolling `SidebarMenu`.
 - The user should be able to resize the rail by dragging its trailing edge (`resizable`) or take it out of the layout and bring it back (`collapsible`).
 - Wide work surfaces where the navigation should shrink to its icons rather than disappear (`collapsible="icon"`), so a destination stays one click away.
 - The rail's size or collapsed state must survive navigation or reloads — bind `v-model:width` and `v-model:open` and persist them in the app.
 
 ## Do
 
-- Put a `Menu` with `role="presentation"` in the default slot; the sidebar already renders the `nav` landmark and its `aria-label` (default `'Sidebar'`) names the region.
-- Use `Menu.Group` for new navigation — `SidebarGroup` still works but is superseded.
+- Put a `SidebarMenu` with `role="presentation"` in the default slot; the sidebar already renders the `nav` landmark and its `aria-label` (default `'Sidebar'`) names the region.
+- Use `SidebarMenu.Group` for new navigation — `SidebarGroup` still works but is superseded.
 - Without `resizable` or `collapsible`, size the rail with a width class on the root; with either set, the sidebar owns the width and clamps it between `min-width-token` and `max-width-token`.
 - When the sidebar is revealed after mount (for example leaving a mobile layout where it was hidden), call the exposed `measure()` so the rail does not keep a zero width.
 - Keep the profile block in the `footer` slot; with `collapsible`, the collapse trigger renders in the same footer row.
-- With `collapsible="icon"`, give every top-level `Menu.Item` and drill `Menu.SubTrigger` an icon: rows without one (and inline sub-menus) step aside in the rail. Use the `{ rail }` slot scope to compact header and footer content (an avatar without the name).
+- With `collapsible="icon"`, give every top-level `SidebarMenu.Item` and drill `SidebarMenu.SubTrigger` an icon: rows without one (and inline sub-menus) step aside in the rail. Use the `{ rail }` slot scope to compact header and footer content (an avatar without the name).
 - Turn on `shortcut` for one sidebar per page only; Ctrl+B / Cmd+B is a page-wide key.
 
 ## Don’t
@@ -33,7 +34,7 @@
 
 ## Related
 
-- [menu](menu.md) — the navigation rows, groups and drill levels that go in the sidebar's default slot.
+- [sidebar-menu](sidebar-menu.md) — the navigation rows, groups and drill levels that go in the sidebar's default slot.
 - [resizable](resizable.md) — draggable splits between content regions; the sidebar's rail gesture is for navigation only.
 - [global-header](global-header.md) — the top bar that usually sits above the sidebar in an app shell.
 - platform-shell` — the console layout template that composes the header, the sidebar and the page.
@@ -52,7 +53,6 @@
 | `expandAriaLabel` | `string` | `''` | false | Accessible name for the control and the grab bar that bring a collapsed rail back. Empty uses the locale catalog (`Expand sidebar`). |
 | `resizeAriaLabel` | `string` | `''` | false | Accessible name for the drag handle separator. Empty uses the locale catalog (`Resize sidebar`). |
 | `open` | `boolean` | `true` | false | Two-way value (`v-model:open`). |
-| `collapsed` | `boolean` | `false` | false | Two-way value (`v-model:collapsed`). |
 | `width` | `number \| null` | `null` | false | Two-way value (`v-model:width`). |
 
 ## Slots
@@ -78,26 +78,25 @@ working.
 
 - `sidebar-footer.vue` — Public sub-component `sidebar-footer`.
 - `sidebar-group.vue` — Public sub-component `sidebar-group`. One flat block of rows under an
-  optional title, **superseded by `Menu.Group`**: the docs, the stories and every example here
-  compose `Menu`, which does everything this does and also nests, collapses and drills. It keeps
+  optional title, **superseded by `SidebarMenu.Group`**: the docs, the stories and every example here
+  compose `SidebarMenu`, which does everything this does and also nests, collapses and drills. It keeps
   working untouched for existing consumers and is **not** deprecated (no `@deprecated` tag, because
   `webkit/no-deprecated-component` is `error` in the recommended config and would turn a consumer's
-  lint green→red on a minor). Reach for `Menu` in anything new.
+  lint green→red on a minor). Reach for `SidebarMenu` in anything new.
 - `sidebar-header.vue` — Public sub-component `sidebar-header`.
 
-`Sidebar` does not import `Menu` and `Menu` does not import `Sidebar`. Two things pass between
+`Sidebar` does not import `SidebarMenu` and `SidebarMenu` does not import `Sidebar`. Two things pass between
 them: the ring-offset surface below, and the sidebar context (`SidebarInjectionKey`, read with
-`inject(…, null)` so a `Menu` outside a sidebar is unaffected), which tells the menu rows whether
+`inject(…, null)` so a `SidebarMenu` outside a sidebar is unaffected), which tells the menu rows whether
 the sidebar is an icon rail, which side their tooltips open on, the `Tooltip` component to wrap a rail row in (handed down so
-`Menu` bundles no tooltip of its own), and how to expand it.
+`SidebarMenu` bundles no tooltip of its own), and how to expand it.
 
 ## v-model
 
-| Model               | Type             | Default | Emits              | Notes                                                                                                                                                                                                                                                                                           |
-| ------------------- | ---------------- | ------- | ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:open`      | `boolean`        | `true`  | `update:open`      | Whether the rail is in the layout. `false` collapses it: out of the layout (`collapsible` `true` / `'offcanvas'`) or down to its icon rail (`'icon'`) — by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle. Same name as shadcn's Sidebar `open`; the layouts that compose it call the same state `navigationOpen`.                          |
-| `v-model:width`     | `number \| null` | `null`  | `update:width`     | The sized width in px, already clamped to the token bounds and emitted continuously during a drag. `null` means _not sized yet_: the sidebar seeds it from its own natural width on mount, after which the gesture owns it. px is the model's native unit because it is the outcome of a pointer gesture; the **bounds** come from tokens (`minWidthToken` / `maxWidthToken`). |
-| `v-model:collapsed` | `boolean`        | `false` | `update:collapsed` | **@deprecated since 6.0 — use `v-model:open` (inverted). Removed in 7.0.** Still works: it is the inverse of `open`, both are emitted on every change, and when a host binds only `collapsed` it drives the rail.                                                                                 |
+| Model           | Type             | Default | Emits          | Notes                                                                                                                                                                                                                                                                                                                                                                          |
+| --------------- | ---------------- | ------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `v-model:open`  | `boolean`        | `true`  | `update:open`  | Whether the rail is in the layout. `false` collapses it: out of the layout (`collapsible` `true` / `'offcanvas'`) or down to its icon rail (`'icon'`) — by the trigger, the drag crossing the snap boundary, the keyboard nudge, or a double-click on the handle. Same name as shadcn's Sidebar `open`; the layouts that compose it call the same state `navigationOpen`.      |
+| `v-model:width` | `number \| null` | `null`  | `update:width` | The sized width in px, already clamped to the token bounds and emitted continuously during a drag. `null` means _not sized yet_: the sidebar seeds it from its own natural width on mount, after which the gesture owns it. px is the model's native unit because it is the outcome of a pointer gesture; the **bounds** come from tokens (`minWidthToken` / `maxWidthToken`). |
 
 Every model is inert unless `resizable` or `collapsible` is set. With neither, no inline width is
 applied and the host's own `class="w-[280px]"` governs exactly as before. The models are declared
@@ -136,7 +135,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses; `Enter`/`Space` activates; `Escape` closes overlays where applicable.
   The **scroll viewport is not a tab stop** (`tabindex="-1"` on the built-in `ScrollArea`): a scroll
-  region needs one only when nothing inside it is focusable, and this one holds a `Menu` of rows —
+  region needs one only when nothing inside it is focusable, and this one holds a `SidebarMenu` of rows —
   so `Tab` reaches the first row directly instead of the box around it.
   The region also keeps `var(--spacing-xxs)` of padding — and the same as `scroll-padding` — inside
   the clip, because the first row's focus ring (`ring-2` over `ring-offset-2`) reaches 4 px past the
@@ -224,16 +223,16 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
-  import MenuBack from '@aziontech/webkit/menu-back'
-  import MenuGroup from '@aziontech/webkit/menu-group'
-  import MenuItem from '@aziontech/webkit/menu-item'
-  import Menu from '@aziontech/webkit/menu-root'
-  import MenuSub from '@aziontech/webkit/menu-sub'
-  import MenuSubContent from '@aziontech/webkit/menu-sub-content'
-  import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import SidebarFooter from '@aziontech/webkit/sidebar-footer'
   import SidebarHeader from '@aziontech/webkit/sidebar-header'
+  import SidebarMenuBack from '@aziontech/webkit/sidebar-menu-back'
+  import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
+  import SidebarMenuItem from '@aziontech/webkit/sidebar-menu-item'
+  import SidebarMenu from '@aziontech/webkit/sidebar-menu-root'
+  import SidebarMenuSub from '@aziontech/webkit/sidebar-menu-sub'
+  import SidebarMenuSubContent from '@aziontech/webkit/sidebar-menu-sub-content'
+  import SidebarMenuSubTrigger from '@aziontech/webkit/sidebar-menu-sub-trigger'
   import Sidebar from '@aziontech/webkit/sidebar-root'
   import { ref } from 'vue'
 
@@ -291,89 +290,89 @@ with `defineModel`, so their `update:*` events are not hand-declared.
           </Command>
         </SidebarHeader>
       </template>
-      <Menu role="presentation">
-        <MenuBack />
-        <MenuGroup>
-          <MenuItem
+      <SidebarMenu role="presentation">
+        <SidebarMenuBack />
+        <SidebarMenuGroup>
+          <SidebarMenuItem
             label="Home"
             icon="ai ai-home"
             href="/"
             selected
           />
-          <MenuItem
+          <SidebarMenuItem
             label="Marketplace"
             icon="ai ai-marketplace"
             href="/marketplace"
           />
-        </MenuGroup>
-        <MenuGroup label="Build">
-          <MenuItem
+        </SidebarMenuGroup>
+        <SidebarMenuGroup label="Build">
+          <SidebarMenuItem
             label="Applications"
             icon="ai ai-edge-application"
             href="/applications"
           />
-          <MenuSub default-open>
-            <MenuSubTrigger
+          <SidebarMenuSub default-open>
+            <SidebarMenuSubTrigger
               label="Edge Functions"
               kind="inline"
             />
-            <MenuSubContent>
-              <MenuItem
+            <SidebarMenuSubContent>
+              <SidebarMenuItem
                 label="Runtime APIs"
                 href="/functions/runtime-apis"
               />
-              <MenuItem
+              <SidebarMenuItem
                 label="Bundlers"
                 href="/functions/bundlers"
               />
-            </MenuSubContent>
-          </MenuSub>
-          <MenuItem
+            </SidebarMenuSubContent>
+          </SidebarMenuSub>
+          <SidebarMenuItem
             label="Variables"
             icon="ai ai-variables"
             href="/variables"
           />
-        </MenuGroup>
-        <MenuGroup label="Store">
-          <MenuItem
+        </SidebarMenuGroup>
+        <SidebarMenuGroup label="Store">
+          <SidebarMenuItem
             label="Object Storage"
             icon="ai ai-edge-storage"
             href="/object-storage"
           />
-          <MenuItem
+          <SidebarMenuItem
             label="SQL Database"
             icon="ai ai-edge-sql"
             href="/sql-database"
             tag-value="Preview"
             tag-severity="primary"
           />
-        </MenuGroup>
-        <MenuGroup label="Account">
-          <MenuSub>
-            <MenuSubTrigger
+        </SidebarMenuGroup>
+        <SidebarMenuGroup label="Account">
+          <SidebarMenuSub>
+            <SidebarMenuSubTrigger
               label="Settings"
               icon="pi pi-cog"
               kind="drill"
             />
-            <MenuSubContent>
-              <MenuGroup label="Organization">
-                <MenuItem
+            <SidebarMenuSubContent>
+              <SidebarMenuGroup label="Organization">
+                <SidebarMenuItem
                   label="General"
                   href="/settings/general"
                 />
-                <MenuItem
+                <SidebarMenuItem
                   label="Members"
                   href="/settings/members"
                 />
-                <MenuItem
+                <SidebarMenuItem
                   label="Billing"
                   href="/settings/billing"
                 />
-              </MenuGroup>
-            </MenuSubContent>
-          </MenuSub>
-        </MenuGroup>
-      </Menu>
+              </SidebarMenuGroup>
+            </SidebarMenuSubContent>
+          </SidebarMenuSub>
+        </SidebarMenuGroup>
+      </SidebarMenu>
       <template #footer>
         <SidebarFooter>
           <div class="flex items-center gap-(--spacing-xs)">
@@ -442,15 +441,15 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 ```vue
 <script setup>
   import Avatar from '@aziontech/webkit/avatar'
-  import MenuBack from '@aziontech/webkit/menu-back'
-  import MenuGroup from '@aziontech/webkit/menu-group'
-  import MenuItem from '@aziontech/webkit/menu-item'
-  import Menu from '@aziontech/webkit/menu-root'
-  import MenuSub from '@aziontech/webkit/menu-sub'
-  import MenuSubContent from '@aziontech/webkit/menu-sub-content'
-  import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
   import SidebarFooter from '@aziontech/webkit/sidebar-footer'
+  import SidebarMenuBack from '@aziontech/webkit/sidebar-menu-back'
+  import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
+  import SidebarMenuItem from '@aziontech/webkit/sidebar-menu-item'
+  import SidebarMenu from '@aziontech/webkit/sidebar-menu-root'
+  import SidebarMenuSub from '@aziontech/webkit/sidebar-menu-sub'
+  import SidebarMenuSubContent from '@aziontech/webkit/sidebar-menu-sub-content'
+  import SidebarMenuSubTrigger from '@aziontech/webkit/sidebar-menu-sub-trigger'
   import { ref } from 'vue'
 
   const open = ref(false)
@@ -465,69 +464,69 @@ with `defineModel`, so their `update:*` events are not hand-declared.
         shortcut
         aria-label="Console"
       >
-        <Menu role="presentation">
-          <MenuBack />
-          <MenuGroup>
-            <MenuItem
+        <SidebarMenu role="presentation">
+          <SidebarMenuBack />
+          <SidebarMenuGroup>
+            <SidebarMenuItem
               label="Home"
               icon="ai ai-home"
               href="/"
               selected
             />
-            <MenuItem
+            <SidebarMenuItem
               label="Marketplace"
               icon="ai ai-marketplace"
               href="/marketplace"
             />
-          </MenuGroup>
-          <MenuGroup label="Build">
-            <MenuItem
+          </SidebarMenuGroup>
+          <SidebarMenuGroup label="Build">
+            <SidebarMenuItem
               label="Applications"
               icon="ai ai-edge-application"
               href="/applications"
             />
-            <MenuItem
+            <SidebarMenuItem
               label="Variables"
               icon="ai ai-variables"
               href="/variables"
             />
-          </MenuGroup>
-          <MenuGroup label="Store">
-            <MenuItem
+          </SidebarMenuGroup>
+          <SidebarMenuGroup label="Store">
+            <SidebarMenuItem
               label="Object Storage"
               icon="ai ai-edge-storage"
               href="/object-storage"
             />
-            <MenuItem
+            <SidebarMenuItem
               label="SQL Database"
               icon="ai ai-edge-sql"
               href="/sql-database"
               tag-value="Preview"
               tag-severity="primary"
             />
-          </MenuGroup>
-          <MenuGroup label="Account">
-            <MenuSub>
-              <MenuSubTrigger
+          </SidebarMenuGroup>
+          <SidebarMenuGroup label="Account">
+            <SidebarMenuSub>
+              <SidebarMenuSubTrigger
                 label="Settings"
                 icon="pi pi-cog"
                 kind="drill"
               />
-              <MenuSubContent>
-                <MenuGroup label="Organization">
-                  <MenuItem
+              <SidebarMenuSubContent>
+                <SidebarMenuGroup label="Organization">
+                  <SidebarMenuItem
                     label="General"
                     href="/settings/general"
                   />
-                  <MenuItem
+                  <SidebarMenuItem
                     label="Members"
                     href="/settings/members"
                   />
-                </MenuGroup>
-              </MenuSubContent>
-            </MenuSub>
-          </MenuGroup>
-        </Menu>
+                </SidebarMenuGroup>
+              </SidebarMenuSubContent>
+            </SidebarMenuSub>
+          </SidebarMenuGroup>
+        </SidebarMenu>
         <template #footer="{ rail }">
           <SidebarFooter>
             <div class="flex items-center gap-(--spacing-xs)">

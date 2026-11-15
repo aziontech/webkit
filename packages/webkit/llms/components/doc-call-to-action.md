@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use DocCallToAction only in the docs 'On this page' rail; marketing bands use CallToAction.
 - Once per documentation page, last in the right rail.
 
 ## Do

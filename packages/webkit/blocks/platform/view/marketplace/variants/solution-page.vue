@@ -176,7 +176,7 @@
               label="Applications"
             />
           </Tabs.List>
-          <Tabs.Content>
+          <div class="relative isolate w-full">
             <Tabs.Panel value="overview">
               <div class="pt-(--layout-group-gap)">
                 <DocProse>
@@ -285,7 +285,7 @@
                 </Card>
               </div>
             </Tabs.Panel>
-          </Tabs.Content>
+          </div>
         </Tabs.Root>
 
         <aside

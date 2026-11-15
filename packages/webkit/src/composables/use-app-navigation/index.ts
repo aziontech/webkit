@@ -9,10 +9,10 @@ import {
 } from 'vue'
 
 import type {
-  MenuGroupNode,
-  MenuNode,
-  MenuSubKind
-} from '../../components/navigation/menu/injection-key'
+  SidebarMenuGroupNode,
+  SidebarMenuNode,
+  SidebarMenuSubKind
+} from '../../components/navigation/sidebar-menu/injection-key'
 
 /** One row of a layout's navigation tree. */
 export interface AppNavItem {
@@ -31,7 +31,7 @@ export interface AppNavItem {
   /** Blocks activation of the row. */
   disabled?: boolean
   /** Whether the children expand in place or replace the menu. */
-  kind?: MenuSubKind
+  kind?: SidebarMenuSubKind
   /** Initial state of an inline row that owns children. */
   defaultOpen?: boolean
   /** Nested rows. */
@@ -177,9 +177,9 @@ export const matchActiveId = (
 export const toMenuGroups = (
   groups: AppNavGroup[],
   hrefOf: (link: AppLinkTarget) => string | undefined
-): MenuGroupNode[] => {
-  const toNode = (item: AppNavItem): MenuNode => {
-    const node: MenuNode = { id: item.id, label: item.label }
+): SidebarMenuGroupNode[] => {
+  const toNode = (item: AppNavItem): SidebarMenuNode => {
+    const node: SidebarMenuNode = { id: item.id, label: item.label }
     if (item.icon) node.icon = item.icon
     if (item.target) node.target = item.target
     if (item.tagValue) node.tagValue = item.tagValue

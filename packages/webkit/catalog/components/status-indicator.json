@@ -1,5 +1,5 @@
 {
- "purpose": "Shows the settled or transitional state of one resource as a colored dot (or a spinner while `loading`) beside a short label: Active, Failed, Paused, Deploying. It is the status column of tables and lists and the status line of a detail header, so it is static text, not a live region.",
+ "purpose": "Use StatusIndicator for the current state of one resource (Active, Failed, Deploying) in a table column or detail header — the default answer for 'status'. A category or outcome word is a Tag, a number is a Badge, a level on the critical → info scale is a SeverityTag, and an HTTP code is a StatusCode. Shows the settled or transitional state of one resource as a colored dot (or a spinner while `loading`) beside a short label: Active, Failed, Paused, Deploying. It is the status column of tables and lists and the status line of a detail header, so it is static text, not a live region.",
  "useWhen": [
   "The state of a resource in a table cell, a list row or a detail header: Active, Failed, Paused.",
   "A transitional state such as Deploying or Propagating, with `loading`."

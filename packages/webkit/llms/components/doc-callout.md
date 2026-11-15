@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use DocCallout only in documentation prose (Note, Tip, Warning); console pages use Alert.
 - An aside the reader must not miss mid-prose: a caveat, a prerequisite, a warning about data loss.
 - A short confirmation that a step worked (`check`), or a shortcut worth knowing (`tip`).
 

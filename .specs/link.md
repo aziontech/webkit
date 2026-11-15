@@ -3,10 +3,10 @@ name: link
 category: navigation
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 3ff2c5fb99df5b2ff4534fabcf334e7fef0cafa6ead55d828f071664a6afc64d
+spec_version: 4
+checksum: adf90e315b03d2c2a79e4dd042f88ad3ce78524570f26f2242e69664b1961dad
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3548-578
   node_id: 3548:578
@@ -20,6 +20,7 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## When to use
 
+- Use Link when the text takes the person to another page, resource or URL.
 - A standalone navigation link: a domain, a repository, a docs page, "View all".
 - An in-console navigation action ("Add custom domain"): no trailing icon unless `icon` is set.
 
@@ -27,11 +28,10 @@ Helps users move between views or sections. Migrated from the existing implement
 
 - A link inside a sentence → use a plain anchor with the text-link class.
 - An action that changes something instead of navigating → use `button`.
-- A compact marketing CTA with a brand-colored icon inside a card → use `mini-button`.
+- A text action that runs something instead of navigating → use `button` with `kind="link"`.
 
 ## Related
 
-- `mini-button` — same anatomy in default text color with a brand-colored icon; `large` and `medium` only.
 - `button` — set `href` when a link must look like a button.
 - `breadcrumb` — a trail of links for hierarchical location.
 
@@ -40,7 +40,7 @@ Helps users move between views or sections. Migrated from the existing implement
 - Always set `href` and a label that names the destination; an empty `href` renders `#` so the anchor stays focusable, and an empty label falls back to the locale catalog (`Learn more`).
 - Pass the label as the default slot or the `label` prop; the slot wins when both are set.
 - `target="_blank"` adds `rel="noopener noreferrer"` and, when `icon` is empty, the `pi pi-external-link` glyph so an off-site link reads as one; same-tab links show no icon unless `icon` is set.
-- An icon is shown when `icon` is set; `showIcon` is deprecated.
+- An icon is shown when `icon` is set.
 - Match `size` to the controls around it; heights follow `button` (40 / 32 / 28 px).
 - `disabled` drops it from the tab order and suppresses `click`; hide a link that can never be followed instead.
 
@@ -68,15 +68,14 @@ Helps users move between views or sections. Migrated from the existing implement
 
 ## Props
 
-| Prop       | Type                             | Default     | Required | JSDoc                                                                                                                                                                          |
-| ---------- | -------------------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `label`    | `string`                         | `''`        | false    | Visible label, the default slot's fallback. Empty uses the locale catalog (`Learn more`).                                                                                      |
-| `size`     | `'small' \| 'medium' \| 'large'` | `'large'`   | false    | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button.                                                                              |
-| `disabled` | `boolean`                        | `false`     | false    | Disables interaction and applies disabled tokens.                                                                                                                              |
-| `showIcon` | `boolean`                        | `undefined` | false    | @deprecated since 6.0 — use `icon` (set shows it, empty hides it). Removed in 7.0. `false` hides the icon; `true` shows `icon`, or `pi pi-external-link` when `icon` is empty. |
-| `icon`     | `string`                         | `''`        | false    | PrimeIcons class for the trailing icon; set shows it. Empty shows `pi pi-external-link` only when `target` is `_blank`.                                                        |
-| `href`     | `string`                         | `''`        | false    | Destination URL for the anchor. Empty renders `#`.                                                                                                                             |
-| `target`   | `'_blank' \| '_self'`            | `'_self'`   | false    | Link target when navigating.                                                                                                                                                   |
+| Prop       | Type                             | Default   | Required | JSDoc                                                                                                                   |
+| ---------- | -------------------------------- | --------- | -------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `label`    | `string`                         | `''`      | false    | Visible label, the default slot's fallback. Empty uses the locale catalog (`Learn more`).                               |
+| `size`     | `'small' \| 'medium' \| 'large'` | `'large'` | false    | Size token; affects height and typography (large 40px, medium 32px, small 28px), matching Button.                       |
+| `disabled` | `boolean`                        | `false`   | false    | Disables interaction and applies disabled tokens.                                                                       |
+| `icon`     | `string`                         | `''`      | false    | PrimeIcons class for the trailing icon; set shows it. Empty shows `pi pi-external-link` only when `target` is `_blank`. |
+| `href`     | `string`                         | `''`      | false    | Destination URL for the anchor. Empty renders `#`.                                                                      |
+| `target`   | `'_blank' \| '_self'`            | `'_self'` | false    | Link target when navigating.                                                                                            |
 
 ## Events
 

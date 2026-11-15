@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Breadcrumb.Item only as a part of Breadcrumb; for the page trail itself use Breadcrumb.
 - Composing a breadcrumb trail by hand inside `Breadcrumb.List`, one segment per ancestor plus the current page.
 - A single ancestor or current-page segment that must match the breadcrumb's muted / current styling and focus ring.
 
@@ -22,7 +23,7 @@
 
 - The whole trail is known as data → use `breadcrumb` with `items`, which renders the segments for you.
 - It is a standalone text link in content or a page footer → use `link`.
-- It is a navigation row in an app menu → use `menu`.
+- It is a navigation row in an app menu → use `sidebar-menu`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

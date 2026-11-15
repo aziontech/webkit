@@ -1,7 +1,7 @@
 import type { Messages } from '../types'
 
 export const es: Messages = {
-  actionConfirmation: {
+  toolApproval: {
     approve: 'Aprobar',
     deny: 'Denegar',
     approved: 'Aprobado',
@@ -715,9 +715,6 @@ export const es: Messages = {
     collapseNamed: 'Contraer {label}',
     expand: 'Expandir',
     expandNamed: 'Expandir {label}'
-  },
-  miniButton: {
-    label: 'Más información'
   },
   multiSelect: {
     empty: 'Sin resultados',

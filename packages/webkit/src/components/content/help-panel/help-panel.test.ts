@@ -1,25 +1,16 @@
 import { render } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
-import { defineComponent, nextTick } from 'vue'
+import { defineComponent } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import { useHelpPanelTutorialContext } from './composables/use-help-panel-tutorial-context'
-import HelpPanel, {
-  HelpPanelHeader,
-  HelpPanelLinks,
-  HelpPanelSection,
-  HelpPanelTask,
-  HelpPanelTutorial
-} from './index'
+import HelpPanel, { HelpPanelHeader, HelpPanelLinks, HelpPanelSection } from './index'
 
 const Topic = defineComponent({
   components: {
     HelpPanel,
     HelpPanelHeader,
     HelpPanelSection,
-    HelpPanelLinks,
-    HelpPanelTutorial,
-    HelpPanelTask
+    HelpPanelLinks
   },
   props: {
     loading: { type: Boolean, default: false }
@@ -44,52 +35,17 @@ const Topic = defineComponent({
   `
 })
 
-const Guide = defineComponent({
-  components: {
-    HelpPanel,
-    HelpPanelHeader,
-    HelpPanelSection,
-    HelpPanelLinks,
-    HelpPanelTutorial,
-    HelpPanelTask
-  },
-  props: {
-    second: { type: String, default: 'current' },
-    completed: { type: Boolean, default: false },
-    withActions: { type: Boolean, default: true }
-  },
-  template: `
-    <HelpPanel aria-label="Help: Get started">
-      <HelpPanelTutorial
-        title="Put your first site online"
-        description="Three tasks, about five minutes."
-        :completed="completed"
-      >
-        <HelpPanelTask title="Create an application" status="complete">
-          Choose a template.
-        </HelpPanelTask>
-        <HelpPanelTask title="Create a workload" :status="second">
-          Bind your domain.
-        </HelpPanelTask>
-        <HelpPanelTask title="Point your DNS">Add the CNAME record.</HelpPanelTask>
-        <template v-if="withActions" #actions>
-          <button type="button">Continue</button>
-        </template>
-      </HelpPanelTutorial>
-    </HelpPanel>
-  `
-})
-
-const tasksOf = (view: ReturnType<typeof render>) => view.getAllByTestId('content-help-panel-task')
-
 describe('HelpPanel', () => {
   describe('compound API', () => {
     it('attaches every part to the root for dot-notation', () => {
       expect(HelpPanel.Header).toBe(HelpPanelHeader)
       expect(HelpPanel.Section).toBe(HelpPanelSection)
       expect(HelpPanel.Links).toBe(HelpPanelLinks)
-      expect(HelpPanel.Tutorial).toBe(HelpPanelTutorial)
-      expect(HelpPanel.Task).toBe(HelpPanelTask)
+    })
+
+    it('no longer carries a tutorial mode; TutorialPanel owns tutorials', () => {
+      expect('Tutorial' in HelpPanel).toBe(false)
+      expect('Task' in HelpPanel).toBe(false)
     })
   })
 
@@ -169,82 +125,9 @@ describe('HelpPanel', () => {
     })
   })
 
-  describe('tutorial', () => {
-    it('numbers the tasks in order and mirrors their status', async () => {
-      const view = render(Guide)
-      await nextTick()
-      const tasks = tasksOf(view)
-      expect(tasks.map((task) => task.getAttribute('data-status'))).toEqual([
-        'complete',
-        'current',
-        'upcoming'
-      ])
-      expect(tasks[1]?.textContent).toContain('2')
-      expect(tasks[2]?.textContent).toContain('3')
-    })
-
-    it('marks only the current task with aria-current and announces each status', async () => {
-      const view = render(Guide)
-      await nextTick()
-      const tasks = tasksOf(view)
-      expect(tasks.map((task) => task.getAttribute('aria-current'))).toEqual([null, 'step', null])
-      expect(tasks[0]?.textContent).toContain('Complete')
-      expect(tasks[1]?.textContent).toContain('Current task')
-      expect(tasks[2]?.textContent).toContain('Not started')
-    })
-
-    it('derives the progress line from the task statuses', async () => {
-      const view = render(Guide)
-      await nextTick()
-      const progress = view.getByTestId('content-help-panel-tutorial__progress')
-      expect(progress.textContent?.trim()).toBe('1 of 3 complete')
-      expect(progress.getAttribute('aria-live')).toBe('polite')
-
-      await view.rerender({ second: 'complete' })
-      await nextTick()
-      expect(progress.textContent?.trim()).toBe('2 of 3 complete')
-    })
-
-    it('renders the tasks inside an ordered list labelled by the tutorial heading', () => {
-      const view = render(Guide)
-      const tutorial = view.getByRole('region', { name: 'Put your first site online' })
-      expect(tutorial.querySelector('ol')?.children).toHaveLength(3)
-    })
-
-    it('shows the Completed tag only when the owner marks the tutorial done', async () => {
-      const view = render(Guide)
-      const tutorial = view.getByTestId('content-help-panel-tutorial')
-      expect(tutorial.hasAttribute('data-completed')).toBe(false)
-      expect(view.queryByTestId('content-help-panel-tutorial__completed')).toBeNull()
-
-      await view.rerender({ completed: true })
-      expect(tutorial.hasAttribute('data-completed')).toBe(true)
-      expect(view.getByTestId('content-help-panel-tutorial__completed').textContent).toContain(
-        'Completed'
-      )
-    })
-
-    it('renders the actions row when the slot has content', () => {
-      const view = render(Guide)
-      const actions = view.getByTestId('content-help-panel-tutorial__actions')
-      expect(actions.querySelector('button')?.textContent).toBe('Continue')
-    })
-
-    it('omits the actions row when the slot is empty', () => {
-      const view = render(Guide, { props: { withActions: false } })
-      expect(view.queryByTestId('content-help-panel-tutorial__actions')).toBeNull()
-    })
-  })
-
   describe('a11y', () => {
     it('has no axe violations on a help topic', async () => {
       const { container } = render(Topic)
-      await expectNoA11yViolations(container)
-    })
-
-    it('has no axe violations in tutorial mode', async () => {
-      const { container } = render(Guide, { props: { completed: true } })
-      await nextTick()
       await expectNoA11yViolations(container)
     })
 
@@ -252,25 +135,6 @@ describe('HelpPanel', () => {
       const { container } = render(Topic, { props: { loading: true } })
       await expectNoA11yViolations(container)
     })
-  })
-})
-
-describe('useHelpPanelTutorialContext', () => {
-  it('throws when resolved outside a HelpPanel.Tutorial', () => {
-    const Loose = defineComponent({
-      setup() {
-        useHelpPanelTutorialContext()
-        return () => null
-      }
-    })
-
-    expect(() => render(Loose)).toThrow(/must be used within a HelpPanel.Tutorial/)
-  })
-
-  it('throws when a Task is rendered outside a Tutorial', () => {
-    expect(() => render(HelpPanelTask, { props: { title: 'Loose' } })).toThrow(
-      /must be used within a HelpPanel.Tutorial/
-    )
   })
 })
 

@@ -1,6 +1,6 @@
 # Gauge Chart
 
-> One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it. Bands (thresholds) name what the value means and color the arc. It shares the chart palette, the loading, empty and error surface and the `ChartCard` naming with the rest of the chart family, and is rendered in-house SVG.
+> Use GaugeChart for one value against a known range with thresholds; for threshold lines or bands inside a Chart use Chart.Reference, and for one headline metric with a delta use StatTile. Both thresholds share one model, `ChartThreshold`. One reading against a known range, drawn as a half-circle dial with the value under the arc and the scale ends beside it. Bands (thresholds) name what the value means and color the arc. It shares the chart palette, the loading, empty and error surface and the `ChartCard` naming with the rest of the chart family, and is rendered in-house SVG.
 
 - Import: `import GaugeChart from '@aziontech/webkit/gauge-chart'`
 - Category: chart · Surface: product · Structure: monolithic
@@ -16,7 +16,7 @@
 
 - Give the range that means something for the reading (0 to 100 for a ratio, 0 to the quota for usage); the dial is meaningless without it.
 - Name every band (`label`) so the value is read with its meaning, not only with a color.
-- Use status colors for bands (`success`, `warning`, `danger`) and severity colors only when the reading is a severity.
+- Use status severities for bands (`success`, `warning`, `danger`) and the findings levels (`severity-critical` … `severity-info`) only when the reading is a severity.
 - Put the unit in `formatValue` (`74%`, `92 ms`) and what is measured in `label`.
 
 ## Don’t
@@ -41,7 +41,7 @@
 | `min` | `number` | `0` | false | Start of the scale. |
 | `max` | `number` | `100` | false | End of the scale. |
 | `label` | `string` | `''` | false | Caption under the reading: what is measured, or the unit. |
-| `thresholds` | `GaugeChartThreshold[]` | `[]` | false | Bands from low to high; the arc takes the color of the band the value falls in, and each band start is marked on the track. |
+| `thresholds` | `ChartThreshold[]` | `[]` | false | Bands from low to high; the arc takes the color of the band the value falls in, and each band start is marked on the track. |
 | `formatValue` | `(value: number) => string` | `formatCompact` | false | Formats the reading and the scale ends. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Width of the dial: 160, 224 or 288 pixels. |
 | `loading` | `boolean` | `false` | false | Renders a Skeleton sized to the dial. |
@@ -65,7 +65,7 @@
 - Visual states: `default`, `loading` (Skeleton at the dial ratio), `error` (Alert), `empty` (EmptyState), `refetching` (reduced opacity)
 - `data-loading`, `data-error`, `data-empty`, `data-refetching` on the root; priority loading, then error, then empty, then the dial
 - `data-size`: `small` | `medium` | `large`
-- `data-status` on the meter: the color of the band the value falls in
+- `data-severity` on the meter: the severity of the band the value falls in
 - `data-entered` on the arc flips after two animation frames to run its entrance
 
 ## Accessibility
@@ -110,9 +110,9 @@
   import GaugeChart from '@aziontech/webkit/gauge-chart'
 
   const thresholds = [
-    { value: 0, color: 'success', label: 'Healthy' },
-    { value: 70, color: 'warning', label: 'Busy' },
-    { value: 90, color: 'danger', label: 'Critical' }
+    { value: 0, severity: 'success', label: 'Healthy' },
+    { value: 70, severity: 'warning', label: 'Busy' },
+    { value: 90, severity: 'danger', label: 'Critical' }
   ]
   const formatValue = (value) => `${value}%`
 </script>

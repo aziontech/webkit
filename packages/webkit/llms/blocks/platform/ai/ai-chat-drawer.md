@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/ai/ai-chat-drawer/ai-chat-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/ai/ai-chat-drawer")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [ChatMessage](../../../components/chat-message.md), [Conversation](../../../components/conversation.md), [CopyButton](../../../components/copy-button.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), `PanelHeader`, [PromptInput](../../../components/prompt-input.md), [Reasoning](../../../components/reasoning.md), [Sources](../../../components/sources.md), [StatusIndicator](../../../components/status-indicator.md), [StreamingResponse](../../../components/streaming-response.md), [SuggestionGroup](../../../components/suggestion-group.md), [Tag](../../../components/tag.md)
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [ChatMessage](../../../components/chat-message.md), [Conversation](../../../components/conversation.md), [CopyButton](../../../components/copy-button.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), `PanelHeader`, [PromptInput](../../../components/prompt-input.md), [Reasoning](../../../components/reasoning.md), [Sources](../../../components/sources.md), [StatusIndicator](../../../components/status-indicator.md), [StreamingResponse](../../../components/streaming-response.md), [SuggestionGroup](../../../components/suggestion-group.md), [Tag](../../../components/tag.md), `use-locale`
 - Skills: `webkit-genai`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -146,6 +146,7 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup, { type SuggestionItem } from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   interface Answer {
@@ -260,10 +261,10 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
     return /error|502|5xx|fail/i.test(text) ? knowledge.errors : knowledge.cache
   }
 
+  const { formatDate } = useLocale()
+
   function clock(): string {
-    return new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(
-      new Date()
-    )
+    return formatDate(new Date(), { hour: '2-digit', minute: '2-digit' })
   }
 
   let nextId = turns.value.length + 1

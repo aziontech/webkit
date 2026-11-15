@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use DocPrompt to show a prompt the reader pastes into an agent, with its copy control.
 - A documentation step, onboarding screen, or empty state whose next action is "paste this into your agent".
 - A short list of example prompts a reader can try, under a heading that has already said what they are.
 - Anywhere a literal string must be copied verbatim and the reader is the one who decides where it goes.

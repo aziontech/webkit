@@ -1,6 +1,6 @@
 # Alert
 
-> Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon, an optional bold `title` over the copy, and message copy that may carry inline links, plus an optional secondary action button.
+> Use Alert for a persistent message on a console page or section (info, warning, error) — the answer for 'banner' or 'notice'. A short confirmation after an action that disappears on its own is a Toast. Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon, an optional bold `title` over the copy, and message copy that may carry inline links, plus an optional secondary action button.
 
 - Import: `import Alert from '@aziontech/webkit/alert'`
 - Category: feedback · Surface: product · Structure: monolithic

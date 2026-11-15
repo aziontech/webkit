@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use DocFrame for a screenshot or clip inside documentation; to run live components use BrowserFrame, for third-party iframe content use Embed.
 - Any screenshot, diagram or screen recording inside documentation prose — every one of them, so the page's media all shares one border, radius and inset.
 - A composed panel or mock the page wants presented as a figure rather than as live UI: fill the default slot.
 - A clip that decorates a step (`autoplay`) or one the reader chooses to play (default, with controls).

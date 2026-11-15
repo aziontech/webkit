@@ -11,6 +11,7 @@
  "purpose": "A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.",
  "setup": null,
  "useWhen": [
+  "Use SettingsSection for a band of a settings page whose body is SettingRow rows; any other band heading is a SectionHeader.",
   "Every settings page and create page: a resource's Settings tab, Account Settings, a create form, a create drawer.",
   "An Advanced band that starts closed (`collapsible`)."
  ],

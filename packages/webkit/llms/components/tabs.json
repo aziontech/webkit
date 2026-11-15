@@ -11,6 +11,7 @@
  "purpose": "Switches between peer views of one page or panel, showing one at a time: Overview, Settings and Logs on a resource page. The tab row scrolls with edge fades when it outgrows its container, items can be closable or marked dirty, and the list follows the WAI-ARIA tabs pattern with arrow-key navigation.",
  "setup": null,
  "useWhen": [
+  "Use Tabs to switch between peer views of one page or panel; for the second-level navigation strip of a resource detail page use PageTabs.",
   "A page or panel holds several peer views and only one is shown at a time (Overview / Settings / Logs on a resource page).",
   "The tab row may outgrow its container — `Tabs.List` scrolls horizontally with edge fades instead of wrapping.",
   "Tabs that the user can close: set `closable` on the item and remove it from your data on `@close`.",
@@ -33,8 +34,8 @@
   "Drive the active tab with `v-model` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.",
   "closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.",
   "dirty` only marks the tab (a dot after the label, \"Unsaved changes\" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.",
-  "Inside a root the selection comes from the root's value. A standalone `Tabs.Item` with `selected`, outside any root, is a toggle button, not a tab: that mode is deprecated since 6.0 (use `ToggleGroup` for a row of pressed / unpressed pills) and is removed in 7.0.",
-  "Put spacing between the list and the panels on an element of your own around the panels (or on each `Tabs.Content`), not inside each panel. `Tabs.Content` without a `value` still renders the old wrapper `<div>` around the panels; that wrapper mode is deprecated since 6.0 (use a plain element, or give `Tabs.Content` a `value` to make it the panel) and is removed in 7.0, when `Tabs.Content` always renders the panel.",
+  "The selection always comes from the root's value. A row of pressed / unpressed pills outside a `Tabs` root is a `ToggleGroup`, not loose `Tabs.Item`s (6.0 removed the item's `selected` prop).",
+  "Put spacing between the list and the panels on an element of your own around the panels (or on each `Tabs.Content`), not inside each panel. `Tabs.Content` always renders the panel and needs a `value` (6.0 removed its wrapper mode).",
   "Centre the tab row with `<Tabs.List align=\"center\">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form."
  ],
  "props": [
@@ -80,8 +81,8 @@
    "sfc": "<script setup>\n  import Tabs from '@aziontech/webkit/tabs'\n  import { ref } from 'vue'\n\n  const active = ref('templates')\n</script>\n\n<template>\n  <Tabs.Root\n    v-model=\"active\"\n    class=\"w-full max-w-[40rem]\"\n  >\n    <Tabs.List align=\"center\">\n      <Tabs.Item\n        value=\"templates\"\n        label=\"Templates\"\n      />\n      <Tabs.Item\n        value=\"integrations\"\n        label=\"Integrations\"\n      />\n    </Tabs.List>\n    <div class=\"mt-(--spacing-lg) w-full\">\n      <Tabs.Content value=\"templates\">\n        <p class=\"text-center text-body-sm text-(--text-muted)\">\n          Start a project from a template built for the edge.\n        </p>\n      </Tabs.Content>\n      <Tabs.Content value=\"integrations\">\n        <p class=\"text-center text-body-sm text-(--text-muted)\">\n          Connect the services your applications already use.\n        </p>\n      </Tabs.Content>\n    </div>\n  </Tabs.Root>\n</template>"
   },
   {
-   "name": "Standalone",
-   "sfc": "<script setup>\n  import Tabs from '@aziontech/webkit/tabs'\n</script>\n\n<template>\n  <div class=\"flex items-center gap-(--spacing-xxs)\">\n    <Tabs.Item\n      label=\"Selected\"\n      selected\n    />\n    <Tabs.Item label=\"Idle\" />\n    <Tabs.Item\n      label=\"Disabled\"\n      disabled\n    />\n  </div>\n</template>"
+   "name": "Scrollable",
+   "sfc": "<script setup>\n  import Tabs from '@aziontech/webkit/tabs'\n  import { ref } from 'vue'\n\n  const tabs = [\n    {\n      value: 'tab-1',\n      label: 'Overview'\n    },\n    {\n      value: 'tab-2',\n      label: 'Metrics'\n    },\n    {\n      value: 'tab-3',\n      label: 'Logs'\n    },\n    {\n      value: 'tab-4',\n      label: 'Settings'\n    },\n    {\n      value: 'tab-5',\n      label: 'Security'\n    },\n    {\n      value: 'tab-6',\n      label: 'Integrations'\n    },\n    {\n      value: 'tab-7',\n      label: 'Billing'\n    },\n    {\n      value: 'tab-8',\n      label: 'Advanced'\n    }\n  ]\n  const active = ref('tab-1')\n</script>\n\n<template>\n  <Tabs.Root\n    v-model=\"active\"\n    class=\"w-full max-w-[20rem]\"\n  >\n    <Tabs.List>\n      <Tabs.Item\n        v-for=\"tab in tabs\"\n        :key=\"tab.value\"\n        :value=\"tab.value\"\n        :label=\"tab.label\"\n      />\n    </Tabs.List>\n    <div class=\"mt-(--spacing-4) w-full\">\n      <Tabs.Content\n        v-for=\"tab in tabs\"\n        :key=\"tab.value\"\n        :value=\"tab.value\"\n      >\n        <div class=\"rounded-(--shape-card) border border-(--border-default) p-(--spacing-4)\">\n          <p class=\"text-body-sm text-(--text-default)\">Content for {{ tab.label }}</p>\n        </div>\n      </Tabs.Content>\n    </div>\n  </Tabs.Root>\n</template>"
   }
  ],
  "docs": "components/tabs.md"

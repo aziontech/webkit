@@ -1,6 +1,6 @@
 # Card
 
-> A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default kind holds a settings block, a summary or a form section; `kind="integration"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.
+> Use Card for one bordered box of related content in product UI; for a collection of records shown as cards use CardList, and for the frame of a dashboard chart use ChartCard. A bordered surface that groups related content under a title, with a header, a body and an optional footer the consumer composes. The default kind holds a settings block, a summary or a form section; `kind="integration"` lays the card out as a catalog tile with a logo, a vendor, a description, badges and an installed state.
 
 - Import: `import Card from '@aziontech/webkit/card'`
 - Category: content · Surface: product · Structure: monolithic

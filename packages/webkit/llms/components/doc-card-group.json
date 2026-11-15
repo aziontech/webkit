@@ -32,16 +32,9 @@
   {
    "name": "columns",
    "type": "1 | 2 | 3 | 4",
-   "default": "undefined",
-   "required": "false",
-   "doc": "Column count at the large breakpoint. Unset falls back to the deprecated `cols`."
-  },
-  {
-   "name": "cols",
-   "type": "1 | 2 | 3 | 4",
    "default": "2",
    "required": "false",
-   "doc": "@deprecated since 6.0 — use `columns` instead. Removed in 7.0. The `cols` attribute of a Markdown `CardGroup` still maps here."
+   "doc": "Column count at the large breakpoint. A Markdown `CardGroup cols` attribute maps here (through DocMarkdown)."
   },
   {
    "name": "mobileColumns",

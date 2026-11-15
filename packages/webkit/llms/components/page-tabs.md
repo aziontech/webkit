@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use PageTabs for the second-level navigation strip of a resource detail page; to switch peer views inside a page or panel use Tabs.
 - The top of every resource detail page, under the global header.
 - An account page split into tabs, such as Billing.
 

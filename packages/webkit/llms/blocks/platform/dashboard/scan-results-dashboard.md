@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/scan-results-dashboard/scan-results-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/scan-results-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Card](../../../components/card.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), [Table](../../../components/table.md), `TableRoot`, `use-locale`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -175,6 +175,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Table from '@aziontech/webkit/table'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import type { TagSeverity } from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
   type Verdict = 'clean' | 'suspicious' | 'flagged' | 'pending'
@@ -615,15 +616,18 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     )
   )
 
-  const count = new Intl.NumberFormat('en-US')
+  const { formatNumber } = useLocale()
 
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
+  const count = (value: number) => formatNumber(value)
+
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
 
   const UNITS = ['B', 'KB', 'MB', 'GB']
 
   const formatters = {
-    count: (value: number) => count.format(value),
-    compact: (value: number) => compact.format(value),
+    count: (value: number) => count(value),
+    compact: (value: number) => compact(value),
     score: (value: number | null) => (value === null ? '—' : String(value)),
     size: (value: number) => {
       let size = value

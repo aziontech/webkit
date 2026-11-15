@@ -107,6 +107,8 @@
 | `dateRangePicker.outOfBounds`             | Choose a range inside the allowed dates.      | —                      |
 | `dateRangePicker.invalidAmount`           | Enter a whole number greater than 0.          | —                      |
 
+- Active locale: the nearest `WebkitProvider`'s `locale`, else the device locale (`navigator.language`); the server render and the hydrating client use `en-US`, and the device locale applies right after mount.
+- What the person sends stays unambiguous: an absolute `v-model` carries `start` and `end` as ISO 8601 instants (`2026-11-15T00:00:00.000Z`) and a relative one carries `amount` and `unit`, whatever the display format.
 - Formatting: the absolute range goes through `Intl.DateTimeFormat` in the active locale; the relative labels through the plural rules of the active locale; the grid, the date and time fields and the time zone selector use the `calendar` keys.
 
 ## Responsive

@@ -1,0 +1,128 @@
+import type { ComputedRef, InjectionKey, ShallowRef } from 'vue'
+
+/** How a sub reveals its children: expanded in place, or as a pushed level. */
+export type SidebarMenuSubKind = 'inline' | 'drill'
+
+/** Direction of the last drill-stack change; drives which level slide plays. */
+export type SidebarMenuMotion = 'push' | 'pop' | 'none'
+
+/** A single row of the data-driven navigation tree. */
+export type SidebarMenuNode = {
+  /** Stable identity of the row; also the entry this row contributes to the drill stack. */
+  id: string
+  /** Visible row text. */
+  label: string
+  /** Leading glyph class. */
+  icon?: string
+  /** The row's destination, and the only field SidebarMenu reads for one; renders the row as an anchor. With Vue Router put the route path here and call router.push in the navigate handler. */
+  href?: string
+  /** Link target when `href` is set. */
+  target?: '_self' | '_blank'
+  /** Short text rendered in the row's trailing badge. */
+  tagValue?: string
+  /** Blocks activation of the row. */
+  disabled?: boolean
+  /** Whether `children` expand in place or replace the menu. */
+  kind?: SidebarMenuSubKind
+  /** Initial state of an inline row that owns children. */
+  defaultOpen?: boolean
+  /** Nested rows; a row with children renders as a sub instead of a leaf. */
+  children?: SidebarMenuNode[]
+  /** Sections of a drilled level — same shape as the root's. Drill-only; wins over children. */
+  groups?: SidebarMenuGroupNode[]
+}
+
+/** A titled section of the tree; separates rows under a label without folding them. */
+export type SidebarMenuGroupNode = {
+  /** Header text; omit for an unlabeled block. */
+  label?: string
+  /** Rows of the section. */
+  items: SidebarMenuNode[]
+}
+
+/** One entry of the drill stack. */
+export interface SidebarMenuLevel {
+  /** Id of the sub that owns the level — its `SidebarMenuNode.id` in data-driven mode. */
+  id: string
+  /** Label of the trigger that pushed the level; names the level, and names it as the destination of a deeper level's Back button. */
+  label: string
+}
+
+export interface SidebarMenuContext {
+  /** Drill stack, outermost first. Empty at the root level. */
+  levels: ComputedRef<SidebarMenuLevel[]>
+  /** Direction of the last stack change; back to `none` once the slide has finished. */
+  motion: ComputedRef<SidebarMenuMotion>
+  /**
+   * Whether a level already on the stack at first render plays its entrance. Mirrors the
+   * root's `enterOnMount` — only the consumer can tell a just-entered restored stack from
+   * one the reader was already inside (both remount and restore the same stack).
+   */
+  enterOnMount: ComputedRef<boolean>
+  /** Element a pushed drill level teleports into, so it escapes the hidden root level. */
+  levelHost: ShallowRef<globalThis.HTMLElement | null>
+  /** Whether `id` is the deepest level on the stack — the one the user is looking at. */
+  isCurrentLevel: (id: string) => boolean
+  /** Whether `id` must stay in the DOM: on the stack, or sliding out after a pop. */
+  isLevelMounted: (id: string) => boolean
+  /** Pushes a drill level; `trigger` is refocused when that level is popped. */
+  push: (level: SidebarMenuLevel, trigger: globalThis.HTMLElement | null) => void
+  /**
+   * Announces a drill sub's label and trigger to the root as soon as the trigger registers,
+   * independently of any push: a stack seeded from `v-model:path` never pushed, so its
+   * restored level would have no Back label and no element to return focus to.
+   */
+  registerLevel: (id: string, label: string, trigger: globalThis.HTMLElement | null) => void
+  /** Pops the deepest level and restores focus to the trigger that pushed it. */
+  pop: () => void
+  /** Registers the Back button so a push can move focus to it. */
+  setBackElement: (el: globalThis.HTMLElement | null) => void
+  /**
+   * Anchor inside the CURRENT drill level that `SidebarMenu.Back` renders into: living in the
+   * level's own box it slides with it and takes no space in the root's flow, so popping
+   * cannot shift the menu it returns to.
+   */
+  backHost: ShallowRef<globalThis.HTMLElement | null>
+  /** Registers that anchor; only the level that is current may claim it. */
+  setBackHost: (el: globalThis.HTMLElement | null) => void
+  /** Whether the inline sub with this id is expanded. */
+  isExpanded: (id: string) => boolean
+  /** Expands or collapses the inline sub with this id. */
+  setExpanded: (id: string, open: boolean) => void
+  /** Seeds a sub's initial state from its `defaultOpen`, once per id. */
+  registerExpandable: (id: string, defaultOpen: boolean) => void
+}
+
+export const SidebarMenuInjectionKey: InjectionKey<SidebarMenuContext> = Symbol('SidebarMenu')
+
+export interface SidebarMenuSubContext {
+  /** Stable id of this sub — its `SidebarMenuNode.id` in data-driven mode, generated otherwise. */
+  id: string
+  /** Nesting depth: 0 directly inside a group, one more per ancestor sub. */
+  level: number
+  /** Id of the trigger button, for the content's `aria-labelledby`. */
+  triggerId: string
+  /** Id of the content list, for the trigger's `aria-controls`. */
+  contentId: string
+  /** Whether the children are revealed; follows the drill stack when `kind` is `drill`. */
+  open: ComputedRef<boolean>
+  /** How the children are revealed, taken from the registered trigger. */
+  kind: ComputedRef<SidebarMenuSubKind>
+  /** Visible label of the registered trigger. */
+  label: ComputedRef<string>
+  /** Registers the trigger's kind, label and element so the sub can drive both modes. */
+  registerTrigger: (
+    kind: SidebarMenuSubKind,
+    label: string,
+    el: globalThis.HTMLElement | null
+  ) => void
+  /** Toggles the inline disclosure. */
+  toggle: () => void
+  /** Sets the inline disclosure state explicitly, for the arrow keys. */
+  setOpen: (value: boolean) => void
+  /** Pushes this sub onto the root's drill stack. */
+  push: () => void
+}
+
+export const SidebarMenuSubInjectionKey: InjectionKey<SidebarMenuSubContext> =
+  Symbol('SidebarMenuSub')

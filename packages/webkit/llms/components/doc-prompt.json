@@ -11,6 +11,7 @@
  "purpose": "DocPrompt renders text the reader is meant to **run, not read** — the block a documentation page uses when the next step is \"say this to your agent\". It is the one component in this layer whose payload is addressed to a machine, so it is the one that ships an affordance for handing it to one: a copy control wired to the exact string on screen. It is deliberately **not** a code block — a prompt is a sentence, so it carries no language, no gutter, and no syntax highlighting, and it is set in the mono face only to say \"this is the literal text, copy it as it stands\".",
  "setup": null,
  "useWhen": [
+  "Use DocPrompt to show a prompt the reader pastes into an agent, with its copy control.",
   "A documentation step, onboarding screen, or empty state whose next action is \"paste this into your agent\".",
   "A short list of example prompts a reader can try, under a heading that has already said what they are.",
   "Anywhere a literal string must be copied verbatim and the reader is the one who decides where it goes."

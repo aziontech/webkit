@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use ToggleGroup (segmented control) to switch a view or mode in place (Table/Chart, 1h/24h), with two to five short segments; it is not a form field (pick one of a few in a form with RadioGroup).
 - Switch in place between two to five related modes, views or ranges (a time range, a list/grid view, a filter scope) where exactly one is always active.
 - Offer a compact single choice in a toolbar or a card header where a radio list would take too much room.
 - Show a choice that is currently unavailable as a disabled segment instead of hiding it; mark it `locked` when it is unavailable because of a plan or a permission.

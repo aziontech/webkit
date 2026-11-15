@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/composition-dashboard/composition-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/composition-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), `utils/csv`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), [DonutChart](../../../components/donut-chart.md), [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [Progress](../../../components/progress.md), [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), `use-locale`, `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -177,6 +177,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
@@ -481,22 +482,26 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     }
   ]
 
-  const spendFormat = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    notation: 'compact',
-    maximumFractionDigits: 1
-  })
+  const { formatNumber } = useLocale()
 
-  const amountFormat = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0
-  })
+  const spendFormat = (value: number) =>
+    formatNumber(value, {
+      style: 'currency',
+      currency: 'USD',
+      notation: 'compact',
+      maximumFractionDigits: 1
+    })
+
+  const amountFormat = (value: number) =>
+    formatNumber(value, {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0
+    })
 
   const formatters = {
-    spend: (value: number) => spendFormat.format(value),
-    amount: (value: number) => amountFormat.format(value),
+    spend: (value: number) => spendFormat(value),
+    amount: (value: number) => amountFormat(value),
     share: (value: number) => `${value.toFixed(1)}%`,
     change: (value: number) => `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
   }

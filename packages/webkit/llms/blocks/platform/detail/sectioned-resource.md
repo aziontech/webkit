@@ -1,11 +1,11 @@
 # SectionedResource (`platform/detail/sectioned-resource`)
 
-> A resource page whose tab holds more sibling pages than a tab row can carry: the third navigation level, and the only sanctioned home for a `MenuRoot` inside a page body. A full-bleed `PageTabs` row names the resource's sections (here a policy: Web security, Network security, Private access, Data protection, Objects, Settings, Versions); the Private access tab carries 16 sibling pages in 4 groups. From `@3xl` of the tab body the local navigation is a `MenuRoot` of groups in a fixed `--container-3xs` column, its rows `href` links with no glyphs, like rail sub-rows, and exactly one row marked current, derived from the route; below `@3xl` it folds into a medium `Select` labelled with the tab name through `Field`, its options grouped the same way. Beside it the current page is the TableView body: a small `PageHeader` with an outlined Documentation and an outlined Add action, the `PropertyFilter` controls row with Refresh, and a flush `Card` around `TableRoot` driven by `useCollection`, with an `EmptyState` inside the table that tells a page with no entries (Add) apart from a filter that matches nothing (Clear filters); another tab shows an `EmptyState` linking to that tab's route. The container query sits on the tab body wrapper and the queries on its children, so the content column never drops below the page column minus the navigation column. Use it only when the rail does not already list these pages and the tab has more than 7 siblings; with 7 or fewer, use a `ToggleGroup` (the FewSiblings variant), tabs or sections of one page. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> A resource page whose tab holds more sibling pages than a tab row can carry: the third navigation level, and the only sanctioned home for a `SidebarMenuRoot` inside a page body. A full-bleed `PageTabs` row names the resource's sections (here a policy: Web security, Network security, Private access, Data protection, Objects, Settings, Versions); the Private access tab carries 16 sibling pages in 4 groups. From `@3xl` of the tab body the local navigation is a `SidebarMenuRoot` of groups in a fixed `--container-3xs` column, its rows `href` links with no glyphs, like rail sub-rows, and exactly one row marked current, derived from the route; below `@3xl` it folds into a medium `Select` labelled with the tab name through `Field`, its options grouped the same way. Beside it the current page is the TableView body: a small `PageHeader` with an outlined Documentation and an outlined Add action, the `PropertyFilter` controls row with Refresh, and a flush `Card` around `TableRoot` driven by `useCollection`, with an `EmptyState` inside the table that tells a page with no entries (Add) apart from a filter that matches nothing (Clear filters); another tab shows an `EmptyState` linking to that tab's route. The container query sits on the tab body wrapper and the queries on its children, so the content column never drops below the page column minus the navigation column. Use it only when the rail does not already list these pages and the tab has more than 7 siblings; with 7 or fewer, use a `ToggleGroup` (the FewSiblings variant), tabs or sections of one page. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/detail/sectioned-resource/sectioned-resource.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/sectioned-resource")`
-- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), `MenuRoot`, [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [PropertyFilter](../../../components/property-filter.md), [Select](../../../components/select.md), [Table](../../../components/table.md), `TableRoot`, [Tabs](../../../components/tabs.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Button](../../../components/button.md), [Card](../../../components/card.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), [PropertyFilter](../../../components/property-filter.md), [Select](../../../components/select.md), `SidebarMenuRoot`, [Table](../../../components/table.md), `TableRoot`, [Tabs](../../../components/tabs.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-navigation`, `webkit-layout`, `webkit-tables`
 
 ## Asked as
@@ -33,9 +33,9 @@ The page of one resource whose tab holds more sibling pages than a tab row can c
 
 A full-bleed `PageTabs` with one `Tabs.Item` per section of the resource, in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. It is level 2; the breadcrumb names the resource and is not a level. Each tab is its own route: this block renders the open tab's page, and another tab shows an `EmptyState` with an Open link to that tab's route, so no tab is ever dead.
 
-### B. Local navigation — `MenuRoot` (required)
+### B. Local navigation — `SidebarMenuRoot` (required)
 
-From `@3xl` of the tab body, a `MenuRoot` with `groups` in a fixed `w-(--container-3xs)` column at the inline start. Its rows are `href` links with no glyphs, like the rail's sub-rows, grouped under short group labels. `active-id` comes from the route: the row whose `href` matches the current path is the one current row (`aria-current="page"`), and no row is current when the route is not one of them. Its `aria-label` is the tab name. `navigate` routes on a plain click and leaves modified clicks to the browser.
+From `@3xl` of the tab body, a `SidebarMenuRoot` with `groups` in a fixed `w-(--container-3xs)` column at the inline start. Its rows are `href` links with no glyphs, like the rail's sub-rows, grouped under short group labels. `active-id` comes from the route: the row whose `href` matches the current path is the one current row (`aria-current="page"`), and no row is current when the route is not one of them. Its `aria-label` is the tab name. `navigate` routes on a plain click and leaves modified clicks to the browser.
 
 ### C. Folded navigation — `Field`, `Select` (required)
 
@@ -64,7 +64,7 @@ The TableView controls row: a `PropertyFilter` that grows to fill the row, bound
 
 ## Don't
 
-- Don't render a `Menu` in a page body outside this block; local navigation is this block.
+- Don't render a `SidebarMenu` in a page body outside this block; local navigation is this block.
 - Don't repeat in the local navigation a page the rail already offers, and don't add rail rows that route into a resource, not even as a shortcut into a default one.
 - Don't use it for 7 or fewer siblings; a `ToggleGroup`, tabs or one page of sections carries them.
 - Don't add glyphs to the menu rows or nest a second level inside the local navigation.
@@ -118,12 +118,12 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
-  import type { MenuGroupNode, MenuNode } from '@aziontech/webkit/menu'
-  import MenuRoot from '@aziontech/webkit/menu-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Select from '@aziontech/webkit/select'
+  import type { SidebarMenuGroupNode, SidebarMenuNode } from '@aziontech/webkit/sidebar-menu'
+  import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
   import Table from '@aziontech/webkit/table'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
@@ -203,7 +203,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
 
   const hrefOf = (sibling: Sibling) => `${base}/${sibling.id}`
 
-  const groups: MenuGroupNode[] = sections.map((section) => ({
+  const groups: SidebarMenuGroupNode[] = sections.map((section) => ({
     label: section.label,
     items: section.items.map((sibling) => ({
       id: sibling.id,
@@ -272,7 +272,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
     clearFilters()
   }
 
-  const navigate = (event: MouseEvent, node: MenuNode) => {
+  const navigate = (event: MouseEvent, node: SidebarMenuNode) => {
     if (!node.href || event.metaKey || event.ctrlKey || event.shiftKey || event.button !== 0) return
     event.preventDefault()
     go(node.href)
@@ -321,7 +321,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
           class="flex min-w-0 flex-col gap-(--layout-group-gap) @3xl/tab:flex-row @3xl/tab:items-start @3xl/tab:gap-(--layout-section-gap)"
         >
           <div class="hidden w-(--container-3xs) shrink-0 @3xl/tab:block">
-            <MenuRoot
+            <SidebarMenuRoot
               :groups="groups"
               :active-id="match?.id ?? ''"
               :aria-label="tabLabel"

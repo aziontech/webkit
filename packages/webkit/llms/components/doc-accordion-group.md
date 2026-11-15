@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use DocAccordionGroup only inside documentation pages (Markdown AccordionGroup); product UI uses Accordion.
 - A list of questions with answers at the end of a guide.
 - Optional detail that would interrupt the main path of a page (edge cases, troubleshooting).
 

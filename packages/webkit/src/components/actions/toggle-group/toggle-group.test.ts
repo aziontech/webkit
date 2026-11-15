@@ -233,17 +233,14 @@ describe('ToggleGroup', () => {
     expect(emitted()['update:modelValue'][0]).toEqual(['three'])
   })
 
-  it('exposes the lock affordance only on disabled options', () => {
+  it('draws no lock on a disabled option without locked', () => {
     const { getAllByTestId, queryAllByTestId } = render(ToggleGroup, {
       props: { options: OPTIONS_WITH_DISABLED }
     })
 
-    const locks = queryAllByTestId('actions-toggle-group__option-lock')
-    expect(locks).toHaveLength(1)
-
+    expect(queryAllByTestId('actions-toggle-group__option-lock')).toHaveLength(0)
     const [, disabledOption] = getAllByTestId('actions-toggle-group__option')
     expect(disabledOption.getAttribute('data-disabled')).toBe('')
-    expect(disabledOption.contains(locks[0])).toBe(true)
   })
 
   it('reflects a controlled v-model value and reacts to updates', async () => {
@@ -297,7 +294,7 @@ describe('ToggleGroup', () => {
   it('renders the composed WithDisabledOption story', () => {
     const { getByTestId, queryAllByTestId } = render(WithDisabledOption)
     expect(getByTestId('actions-toggle-group')).toBeTruthy()
-    expect(queryAllByTestId('actions-toggle-group__option-lock').length).toBe(1)
+    expect(queryAllByTestId('actions-toggle-group__option-lock').length).toBe(0)
   })
 
   it('is named by a consumer aria-labelledby and forwards id', () => {
@@ -351,15 +348,12 @@ describe('ToggleGroup', () => {
       }
     })
     const locks = queryAllByTestId('actions-toggle-group__option-lock')
-    expect(locks.map((lock) => lock.closest('button')?.textContent?.trim())).toEqual([
-      'Pro',
-      'Legacy'
-    ])
+    expect(locks.map((lock) => lock.closest('button')?.textContent?.trim())).toEqual(['Pro'])
     expect(
       queryAllByTestId('actions-toggle-group__option').map((option) =>
         option.hasAttribute('data-locked')
       )
-    ).toEqual([false, true, false, true])
+    ).toEqual([false, true, false, false])
   })
 
   it('leaves the indicator transition to classes so reduced motion can turn it off', () => {

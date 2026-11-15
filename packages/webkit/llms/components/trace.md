@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use Trace for the timed span waterfall of one request or invocation; a nested data hierarchy without timing is a Tree.
 - The test run of a function or the detail of one invocation, to show where the time went.
 - A request that crossed several services, each with its own span, where the order and the overlap matter.
 - Next to the run's logs (`log-view`), on the same clock.
@@ -53,10 +54,10 @@
 
 ## v-model
 
-| Model              | Type     | Default | Emits             | Notes                                                                                                                                                                                                       |
-| ------------------ | -------- | ------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:selected` | `string` | `''`    | `update:selected` | Id of the span whose details show under the waterfall, via `defineModel('selected')`. A row was selected, selected again (empty: deselected), or Close used. Unbound, the trace keeps the selection itself. |
-| `v-model:range` | `TraceRange \| null` | `null`  | `update:range` | The visible window of the run clock, via `defineModel('range')`. `null` shows the whole run. Applied with or without `zoomable`; clamped to the run and widened to at least 1% of it. |
+| Model              | Type                 | Default | Emits             | Notes                                                                                                                                                                                                       |
+| ------------------ | -------------------- | ------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:selected` | `string`             | `''`    | `update:selected` | Id of the span whose details show under the waterfall, via `defineModel('selected')`. A row was selected, selected again (empty: deselected), or Close used. Unbound, the trace keeps the selection itself. |
+| `v-model:range`    | `TraceRange \| null` | `null`  | `update:range`    | The visible window of the run clock, via `defineModel('range')`. `null` shows the whole run. Applied with or without `zoomable`; clamped to the run and widened to at least 1% of it.                       |
 
 ## States
 

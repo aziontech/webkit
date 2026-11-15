@@ -29,7 +29,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 - Installing integrations or extensions into an existing resource: use `platform/view/marketplace`.
 - The resources a person already created, as cards: use `platform/view/card-view`.
 - Configuring and running the deploy of the chosen template: use `platform/create/deploy-template`.
-- Hundreds of items that need paging, sorting and saved preferences: use `platform/view/card-view` with `Cards`.
+- Hundreds of items that need paging, sorting and saved preferences: use `platform/view/card-view` with `CardList`.
 
 ## Building blocks
 

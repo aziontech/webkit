@@ -3,11 +3,11 @@ name: reasoning
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: eff37d2ecb1031d8cd71d20ab84c0791875fde9612bbfae93a353eb1561469a3
+checksum: ee6e8522b3ae813342933c5b46874a4a6d1cc53bfc57802831485bc9c829f53d
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Reasoning — Component Spec
@@ -28,7 +28,7 @@ for the response now.
 ## When NOT to use
 
 - Ordinary loading with no reasoning → `ai-loading`.
-- Agent actions with side effects (calls, commands) → `tool-call` and `action-confirmation`.
+- Agent actions with side effects (calls, commands) → `tool-call` and `tool-approval`.
 - Progressive steps of a long task → a `stepper` or a list of `tool-call`s.
 
 ## Related

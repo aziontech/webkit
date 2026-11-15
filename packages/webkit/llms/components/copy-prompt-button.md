@@ -8,6 +8,7 @@
 
 ## When to use
 
+- Use CopyPromptButton to copy a ready-made agent prompt without showing its text; a visible value gets a CopyButton.
 - The hero of a documentation home or a product landing, beside the primary action (`Get started`), when the page hands its reader a prompt for their agent.
 - Inside `DocAgentCard`, the "Your AI agent, fluent in Azion" card of a docs home (it renders this button by default).
 

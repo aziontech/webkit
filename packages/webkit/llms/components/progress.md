@@ -1,6 +1,6 @@
 # Progress
 
-> Communicates the progress of an ongoing task as a horizontal bar. Use it for a determinate value within a range (`value` / `max`) or, when progress can't be measured, as an indeterminate loading indicator. Unlike `skeleton` (placeholder geometry) or `status-indicator` (discrete state), it expresses a continuous quantity.
+> Use Progress when the work has a measurable amount (value/max), or for a long task with no layout to reserve (indeterminate). A region with a known shape loads with Skeleton, an inline busy mark is a Spinner, and a background file transfer is an UploadProgress. Communicates the progress of an ongoing task as a horizontal bar. Use it for a determinate value within a range (`value` / `max`) or, when progress can't be measured, as an indeterminate loading indicator. Unlike `skeleton` (placeholder geometry) or `status-indicator` (discrete state), it expresses a continuous quantity.
 
 - Import: `import Progress from '@aziontech/webkit/progress'`
 - Category: feedback · Surface: product · Structure: monolithic
@@ -37,15 +37,14 @@
 | --- | --- | --- | --- | --- |
 | `value` | `number` | `0` | false | Current progress, relative to `max`. |
 | `max` | `number` | `100` | false | Upper bound; percentage = `value / max * 100`. |
-| `kind` | `ProgressKind` (`'rounded' \| 'flat'`)` | `undefined` (resolves to `'flat'`)` | false | Track and fill corner-radius variant. |
-| `shape` | `ProgressShape` (`'rounded' \| 'flat'`)` | `undefined` | false | **@deprecated since 6.0 — use `kind`. Removed in 7.0.** Read only when `kind` is unset. |
+| `kind` | `ProgressKind` (`'rounded' \| 'flat'`)` | `'flat'` | false | Track and fill corner-radius variant. |
 | `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Bar height token. |
 | `indeterminate` | `boolean` | `false` | false | Loading state; animates a sliding segment and ignores `value`. |
 
 ## States
 
 - Visual states: `default`, `indeterminate`
-- `data-kind` mirrors the resolved `kind` (`kind`, else the deprecated `shape`, else `flat`): `rounded` | `flat`. The legacy `data-shape` carries the same value until 7.0.
+- `data-kind` mirrors `kind`: `rounded` | `flat`.
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
 - `data-indeterminate` is present while `indeterminate` is `true`
 
