@@ -3,11 +3,11 @@ name: attribute-editor
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 3b4f1649129947dca44eca79d84b3cef1937a51f57ef6fcb5641207446b65b6a
+checksum: 173f794ac96b0b713f8a74c77287dbe112051315fa6585ce11869f2a11ae2fe1
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # AttributeEditor — Component Spec
@@ -18,6 +18,7 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 
 ## When to use
 
+- Use AttributeEditor for a short list of same-field rows the person adds and removes inside a form (environment variables, headers).
 - Users add, edit and remove a variable number of pairs or tuples: environment variables, request headers, query arguments, labels, metadata.
 - Rule criteria: conditions inside a group must all match (and), groups are alternatives (or).
 - A bulk form where each row has the same two to four fields and a row-level error can occur.
@@ -27,7 +28,8 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 
 - Key and value tags with limits, reserved prefixes and removal of saved tags → use `tag-editor`, which is built on this component.
 - A fixed set of named settings on one resource → use `field` controls in a form.
-- Many records the user browses, filters and acts on → use `table` with row actions.
+- Many records the user browses, filters and acts on → use `data-table` with row actions.
+- Many cells of many records edited in place, spreadsheet-style → use `data-grid`.
 - An ordered list of actions whose argument fields change per type → compose it by hand as in the behaviors of the `platform/edit/rule-builder` block.
 
 ## Related
@@ -108,15 +110,15 @@ Types (exported from `@aziontech/webkit/attribute-editor`): `AttributeEditorItem
 
 | Model            | Type                     | Default     | Emits           | Notes                                                                                                                                                                         |
 | ---------------- | ------------------------ | ----------- | --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:items`  | `TItem[]`                | `[]`        | `update:items`  | Rows in list mode, via `defineModel('items')`. A row added, removed, edited or moved goes out as the new array; unbound, the editor keeps its own rows.                         |
+| `v-model:items`  | `TItem[]`                | `[]`        | `update:items`  | Rows in list mode, via `defineModel('items')`. A row added, removed, edited or moved goes out as the new array; unbound, the editor keeps its own rows.                       |
 | `v-model:groups` | `TItem[][] \| undefined` | `undefined` | `update:groups` | Rows in grouped mode, via `defineModel('groups')`: every inner array is an AND group, groups are joined by OR. Setting it (even to `[]`) switches the editor to grouped mode. |
 
 ## Events
 
-| Event           | Payload                                                                                             | Notes                                                               |
-| --------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| `add`           | `(event: MouseEvent, detail: { index: number; groupIndex?: number })`                               | After a row is added; `groupIndex` only in grouped mode.            |
-| `remove`        | `(event: MouseEvent \| KeyboardEvent, detail: { index: number; item: TItem; groupIndex?: number })` | After a row is removed.                                             |
+| Event    | Payload                                                                                             | Notes                                                    |
+| -------- | --------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `add`    | `(event: MouseEvent, detail: { index: number; groupIndex?: number })`                               | After a row is added; `groupIndex` only in grouped mode. |
+| `remove` | `(event: MouseEvent \| KeyboardEvent, detail: { index: number; item: TItem; groupIndex?: number })` | After a row is removed.                                  |
 
 ## Slots
 
