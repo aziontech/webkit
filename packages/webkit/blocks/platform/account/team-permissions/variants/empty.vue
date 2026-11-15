@@ -92,7 +92,7 @@
   const exportCsv = () => teamsTable.value?.exportCsv({ filename: 'teams.csv' })
 
   const statusSeverity = (value: TeamStatus): TagSeverity =>
-    value === 'Active' ? 'success' : 'secondary'
+    value === 'Active' ? 'success' : 'neutral'
 
   const loading = ref(false)
   const loadFailed = ref(false)

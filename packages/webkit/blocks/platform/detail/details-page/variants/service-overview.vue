@@ -434,7 +434,7 @@
               <template #tag>
                 <Tag
                   :label="option.policy"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </template>
@@ -542,7 +542,7 @@
                         <div class="shrink-0 cursor-pointer">
                           <Tag
                             label="+7"
-                            severity="secondary"
+                            severity="neutral"
                             size="small"
                           />
                         </div>
@@ -900,7 +900,7 @@
                         ? 'Ready for production'
                         : `${doneCount} of ${productionSteps.length}`
                     "
-                    :severity="complete ? 'success' : 'secondary'"
+                    :severity="complete ? 'success' : 'neutral'"
                     size="small"
                     class="shrink-0"
                   />
@@ -977,7 +977,7 @@
                               ? 'Ready for production'
                               : `${doneCount} of ${productionSteps.length}`
                           "
-                          :severity="complete ? 'success' : 'secondary'"
+                          :severity="complete ? 'success' : 'neutral'"
                           size="small"
                           class="shrink-0"
                         />
@@ -1024,7 +1024,7 @@
                             v-if="step.done"
                             icon="pi pi-check"
                             :label="step.doneNote || 'Done'"
-                            severity="secondary"
+                            severity="neutral"
                             size="medium"
                           />
                           <Button

@@ -265,7 +265,7 @@
                             <Tag
                               v-if="entry.shared || entry.managed"
                               :label="entry.shared ? 'Shared' : 'Managed'"
-                              :severity="entry.shared ? 'warning' : 'secondary'"
+                              :severity="entry.shared ? 'warning' : 'neutral'"
                               size="small"
                               class="shrink-0"
                             />
@@ -277,7 +277,7 @@
                             v-for="name in entry.environments.slice(0, ENVIRONMENT_LIMIT)"
                             :key="name"
                             :label="name"
-                            severity="secondary"
+                            severity="neutral"
                             size="small"
                           />
                           <OverflowCount
@@ -329,7 +329,7 @@
                     </span>
                     <Tag
                       label="Inactive"
-                      severity="secondary"
+                      severity="neutral"
                       size="small"
                       class="shrink-0"
                     />

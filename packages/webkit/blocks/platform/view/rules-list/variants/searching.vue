@@ -569,7 +569,7 @@
                           <Tag
                             v-if="row.locked"
                             label="Default"
-                            severity="secondary"
+                            severity="neutral"
                             size="small"
                           />
                         </div>

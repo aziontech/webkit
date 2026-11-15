@@ -154,7 +154,7 @@
     },
     pending: {
       label: 'Pending',
-      severity: 'secondary',
+      severity: 'neutral',
       color: 'other'
     }
   }

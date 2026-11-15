@@ -95,7 +95,7 @@
 
   const requestsFormat = new Intl.NumberFormat('en-US', { notation: 'compact' })
   const severityOf = (value: ApplicationStatus): TagSeverity =>
-    value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'secondary'
+    value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'neutral'
 
   const CONFIRM_WORD = 'delete'
   const deleteOpen = ref(false)

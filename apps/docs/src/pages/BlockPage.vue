@@ -175,12 +175,12 @@
           <div class="flex flex-wrap items-center gap-(--spacing-xs)">
             <Tag
               :label="block.surface"
-              severity="secondary"
+              severity="neutral"
               size="small"
             />
             <Tag
               :label="`${block.states.length} ${t.states.toLowerCase()}`"
-              severity="secondary"
+              severity="neutral"
               size="small"
             />
           </div>

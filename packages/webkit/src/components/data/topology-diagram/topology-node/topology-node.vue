@@ -48,10 +48,7 @@
   const status = computed<string>(
     () => props.node.status || (unbound.value ? t('topologyDiagram.notBound') : '')
   )
-  const tagSeverity = computed(() => {
-    const severity = props.node.severity ?? 'neutral'
-    return severity === 'neutral' ? 'secondary' : severity
-  })
+  const tagSeverity = computed(() => props.node.severity ?? 'neutral')
   const resourceType = computed<string>(() => props.node.type ?? '')
   const bound = computed<boolean>(() => !unbound.value && Boolean(props.node.boundValue))
   const options = computed(() => props.node.bindOptions ?? [])

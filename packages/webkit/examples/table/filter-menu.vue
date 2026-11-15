@@ -53,7 +53,7 @@
   ])
 
   const severityOf = (status) =>
-    ({ Active: 'success', Failed: 'danger', Pending: 'warning' })[status] ?? 'secondary'
+    ({ Active: 'success', Failed: 'danger', Pending: 'warning' })[status] ?? 'neutral'
 </script>
 
 <template>

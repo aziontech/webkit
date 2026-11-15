@@ -27,7 +27,7 @@ A data-driven `TableRoot :bordered="false"` given `:data`, `:columns` and `row-k
 
 ### C. Environment chip — `Tag` (optional)
 
-One chip per row, following `skills/webkit-tables`: Environment is a `Tag` with `severity="secondary"`, `size="medium"`, `rounded` and the layers glyph. Policy is plain text and Certificate is the verified glyph beside plain text, so the row keeps one chip. A record without an environment leaves its Environment and Policy cells empty instead of printing a placeholder.
+One chip per row, following `skills/webkit-tables`: Environment is a `Tag` with `severity="neutral"`, `size="medium"`, `rounded` and the layers glyph. Policy is plain text and Certificate is the verified glyph beside plain text, so the row keeps one chip. A record without an environment leaves its Environment and Policy cells empty instead of printing a placeholder.
 
 ### D. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
 

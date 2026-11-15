@@ -45,7 +45,7 @@
     if (status.value === 'running') return { label: 'Deploying', severity: 'info' }
     if (status.value === 'error') return { label: 'Failed', severity: 'danger' }
     if (status.value === 'success') return { label: 'Deployed', severity: 'success' }
-    return { label: 'Idle', severity: 'secondary' }
+    return { label: 'Idle', severity: 'neutral' }
   })
 
   const steps: DeployStep[] = [
@@ -268,7 +268,7 @@
       description: 'Repository wired and the deploy published',
       status: 'skipped',
       duration: '',
-      tag: { label: 'Skipped', severity: 'secondary' },
+      tag: { label: 'Skipped', severity: 'neutral' },
       lines: []
     }
   ]

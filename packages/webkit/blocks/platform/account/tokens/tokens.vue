@@ -113,7 +113,7 @@
   const tokens = ref<Token[]>(seedTokens)
 
   const statusOf = (token: Token): TokenStatus => {
-    if (token.revoked) return { label: 'Revoked', severity: 'secondary' }
+    if (token.revoked) return { label: 'Revoked', severity: 'neutral' }
     const left = Math.ceil((token.expiresAt.getTime() - referenceTime) / DAY)
     if (left <= 0) return { label: 'Expired', severity: 'danger' }
     if (left <= 7)

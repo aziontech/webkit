@@ -66,7 +66,7 @@
   const FAILURE = 'A rule points at an integration that does not exist, so it kept its version.'
 
   const STATUS_TAG: Record<DeployStatus, StatusMeta> = {
-    queued: { label: 'Queued', severity: 'secondary' },
+    queued: { label: 'Queued', severity: 'neutral' },
     deploying: { label: 'Deploying', severity: 'info' },
     done: { label: 'Done', severity: 'success' },
     failed: { label: 'Failed', severity: 'danger' }

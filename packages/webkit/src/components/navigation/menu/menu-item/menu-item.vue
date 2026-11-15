@@ -7,7 +7,7 @@
 
   export type MenuItemKind = 'option' | 'group'
   export type MenuItemTagSeverity =
-    'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'danger' | 'accent'
+    'primary' | 'neutral' | 'success' | 'info' | 'warning' | 'danger' | 'accent'
 
   defineOptions({
     name: 'MenuItem',

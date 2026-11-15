@@ -427,7 +427,7 @@
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -517,7 +517,7 @@
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -589,7 +589,7 @@
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />

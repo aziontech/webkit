@@ -385,7 +385,7 @@ legacy  IN HINFO "PC" "Linux"`
   ]
   const statusTag: Record<ZoneLine['status'], { label: string; severity: TagSeverity }> = {
     ready: { label: 'Ready', severity: 'success' },
-    skipped: { label: 'Skipped', severity: 'secondary' },
+    skipped: { label: 'Skipped', severity: 'neutral' },
     error: { label: 'Error', severity: 'danger' }
   }
 
@@ -800,7 +800,7 @@ legacy  IN HINFO "PC" "Linux"`
                   <template #cell-type="{ value }">
                     <Tag
                       :label="value"
-                      severity="secondary"
+                      severity="neutral"
                       size="medium"
                     />
                   </template>

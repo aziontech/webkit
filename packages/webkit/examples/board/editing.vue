@@ -78,7 +78,7 @@
             <ChartCard.Action v-if="editing">
               <Tag
                 :label="item.span + '/12'"
-                severity="secondary"
+                severity="neutral"
                 size="small"
                 icon="pi pi-arrows-h"
               />

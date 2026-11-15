@@ -533,7 +533,7 @@
                       :title="item.title"
                       :logo="[item.icon, item.markClass].filter(Boolean).join(' ')"
                       :description="item.description"
-                      :badges="[{ label: item.framework, severity: 'secondary' }]"
+                      :badges="[{ label: item.framework, severity: 'neutral' }]"
                       :href="`/marketplace/templates/${item.id}`"
                     />
                   </li>
@@ -625,7 +625,7 @@
                         :vendor="item.vendor"
                         :logo="item.logo"
                         :description="item.description"
-                        :badges="[{ label: item.category, severity: 'secondary' }]"
+                        :badges="[{ label: item.category, severity: 'neutral' }]"
                         :installed="item.status === 'installed'"
                         @select="openDetail(item.id)"
                       >

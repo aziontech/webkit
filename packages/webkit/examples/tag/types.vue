@@ -14,10 +14,6 @@
     />
     <Tag
       label="Label"
-      severity="secondary"
-    />
-    <Tag
-      label="Label"
       severity="accent"
     />
     <Tag

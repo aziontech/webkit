@@ -442,7 +442,7 @@
               <template #tag>
                 <Tag
                   :label="entry.policy"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </template>

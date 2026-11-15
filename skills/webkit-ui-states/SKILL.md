@@ -368,7 +368,7 @@ frees the user, and reports back wherever they are, on success and on failure.
 
 - **The run lives outside the page** (a module-scope store with its timer and toast id). Leaving the
   page never cancels it or loses its outcome.
-- **On the page that started it:** the run status as a `Tag` in the page heading (`Idle` `secondary`,
+- **On the page that started it:** the run status as a `Tag` in the page heading (`Idle` `neutral`,
   `Deploying` `info`, `Failed` `danger`, `Deployed` `success`); an `EmptyState` while idle; the logs
   while it runs; when it ends, the outcome `Alert`: danger with the reason over the stopped logs, or
   success naming where it is live. The trigger is `loading` and the controls that would change the run

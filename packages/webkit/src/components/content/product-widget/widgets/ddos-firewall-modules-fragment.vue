@@ -192,7 +192,7 @@
                 <Tag
                   label="Automatically enabled in all accounts"
                   icon="pi pi-lock"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </span>

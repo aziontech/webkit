@@ -356,7 +356,7 @@
                 <Tag
                   v-if="row.tag"
                   :label="row.tag"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   class="ms-(--spacing-xs) align-middle"
                 />

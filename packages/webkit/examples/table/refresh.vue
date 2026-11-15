@@ -15,7 +15,7 @@
     }))
 
   const severityOf = (status) =>
-    ({ Active: 'success', Failed: 'danger', Pending: 'warning' })[status] ?? 'secondary'
+    ({ Active: 'success', Failed: 'danger', Pending: 'warning' })[status] ?? 'neutral'
 
   const columns = [
     { accessorKey: 'name', header: 'Deployment', principal: true },

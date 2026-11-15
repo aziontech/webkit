@@ -393,7 +393,7 @@
                 v-for="fact in facts"
                 :key="fact"
                 :label="fact"
-                severity="secondary"
+                severity="neutral"
                 size="medium"
                 rounded
               />

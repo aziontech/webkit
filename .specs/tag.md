@@ -3,7 +3,7 @@ name: tag
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=476-940&vars=1
   node_id: 476:940
@@ -37,7 +37,7 @@ Compact status or category label with severity-based color coding. Supports opti
 ## Best practices
 
 - Severity comes from `severity`; the optional icon is decorative — keep it `aria-hidden`.
-- Pick the severity by meaning: `success` Active, `warning` Pending, `neutral` Inactive or a neutral category (Developer, Viewer; `secondary` is the same look), `info` a second role (Admin), `highlight` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
+- Pick the severity by meaning: `success` Active, `warning` Pending, `neutral` Inactive or a neutral category (Developer, Viewer), `info` a second role (Admin), `highlight` the one value to single out (Owner), `primary` a solid brand label. Do not use `danger` for a state that is only off (Inactive): it reads as an error.
 - Do not restyle a Tag with colour classes to get a tint; every tint is a `severity`.
 - Use `rounded` for the pill shape rather than a custom radius.
 
@@ -59,13 +59,13 @@ Compact status or category label with severity-based color coding. Supports opti
 
 ## Props
 
-| Prop       | Type                                                                            | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                       |
-| ---------- | ------------------------------------------------------------------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `label`    | `string`                                                                        | `''`        | false    | Fallback text when the default slot is empty.                                                                                                                                                                                                                                                                                                                               |
-| `severity` | `Severity \| 'primary' \| 'secondary' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false    | Color style for the tag surface and label: the shared `Severity` scale (`neutral`, `info`, `success`, `warning`, `danger`, exported from this component) plus `primary` (solid brand orange), `secondary` (bordered canvas, the same look as `neutral`), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
-| `size`     | `'small' \| 'medium'`                                                           | `'medium'`  | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                                                                                                                                                                                                                                                                                         |
-| `rounded`  | `boolean`                                                                       | `false`     | false    | Pill shape when true.                                                                                                                                                                                                                                                                                                                                                       |
-| `icon`     | `string`                                                                        | `''`        | false    | PrimeIcons class for the leading icon.                                                                                                                                                                                                                                                                                                                                      |
+| Prop       | Type                                                             | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                            |
+| ---------- | ---------------------------------------------------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`    | `string`                                                         | `''`        | false    | Fallback text when the default slot is empty.                                                                                                                                                                                                                                                                    |
+| `severity` | `Severity \| 'primary' \| 'accent' \| 'contrast' \| 'highlight'` | `'primary'` | false    | Color style for the tag surface and label: the shared `Severity` scale (`neutral`, `info`, `success`, `warning`, `danger`, exported from this component) plus `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`). |
+| `size`     | `'small' \| 'medium'`                                            | `'medium'`  | false    | Size token; `medium` is 24px tall, `small` is 20px.                                                                                                                                                                                                                                                              |
+| `rounded`  | `boolean`                                                        | `false`     | false    | Pill shape when true.                                                                                                                                                                                                                                                                                            |
+| `icon`     | `string`                                                         | `''`        | false    | PrimeIcons class for the leading icon.                                                                                                                                                                                                                                                                           |
 
 ## Events
 

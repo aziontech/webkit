@@ -288,7 +288,7 @@
                 <template #cell-status="{ value }">
                   <Tag
                     :label="value"
-                    :severity="value === 'Active' ? 'success' : 'secondary'"
+                    :severity="value === 'Active' ? 'success' : 'neutral'"
                     size="small"
                   />
                 </template>

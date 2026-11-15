@@ -21,10 +21,6 @@
       label="Status"
     />
     <StatusIndicator
-      severity="alt"
-      label="Status"
-    />
-    <StatusIndicator
       severity="danger"
       label="Status"
     />

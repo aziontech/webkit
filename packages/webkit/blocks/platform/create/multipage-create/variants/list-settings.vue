@@ -791,7 +791,7 @@
                                 >
                                   <Tag
                                     :label="entry"
-                                    severity="secondary"
+                                    severity="neutral"
                                     size="small"
                                   />
                                 </li>
@@ -835,7 +835,7 @@
                             <Item.Actions>
                               <Tag
                                 :label="row.as"
-                                severity="secondary"
+                                severity="neutral"
                                 size="small"
                               />
                             </Item.Actions>

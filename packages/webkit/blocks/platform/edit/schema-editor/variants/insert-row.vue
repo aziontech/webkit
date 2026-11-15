@@ -654,7 +654,7 @@
                 }}</span>
                 <Tag
                   :label="`${table?.rowCount ?? 0} ${table?.rowCount === 1 ? 'row' : 'rows'}`"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </div>
@@ -721,7 +721,7 @@
           <template #cell-type="{ value }">
             <Tag
               :label="value"
-              severity="secondary"
+              severity="neutral"
               size="medium"
             />
           </template>

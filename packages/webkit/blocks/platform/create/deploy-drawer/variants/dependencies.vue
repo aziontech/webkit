@@ -1033,7 +1033,7 @@
                               >
                                 <Tag
                                   :label="domainGroup.environment"
-                                  severity="secondary"
+                                  severity="neutral"
                                   size="small"
                                   class="shrink-0"
                                 />
@@ -1061,7 +1061,7 @@
                                     <div class="shrink-0 cursor-pointer">
                                       <Tag
                                         :label="`+${domainGroup.total - 1}`"
-                                        severity="secondary"
+                                        severity="neutral"
                                         size="small"
                                       />
                                     </div>
@@ -1253,7 +1253,7 @@
                                 <Tag
                                   v-if="target.selected"
                                   label="Selected"
-                                  severity="secondary"
+                                  severity="neutral"
                                   size="small"
                                   class="shrink-0"
                                 />
@@ -1268,7 +1268,7 @@
                                 >
                                   <Tag
                                     :label="domainGroup.environment"
-                                    severity="secondary"
+                                    severity="neutral"
                                     size="small"
                                     class="shrink-0"
                                   />
@@ -1296,7 +1296,7 @@
                                       <div class="shrink-0 cursor-pointer">
                                         <Tag
                                           :label="`+${domainGroup.total - 1}`"
-                                          severity="secondary"
+                                          severity="neutral"
                                           size="small"
                                         />
                                       </div>

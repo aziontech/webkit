@@ -70,9 +70,9 @@
     { value: 'Viewer', hint: 'Reads the resources their teams reach; changes nothing.' }
   ]
   const roleSeverity = (value: UserRole): TagSeverity =>
-    (({ Owner: 'highlight', Admin: 'info', Developer: 'secondary', Viewer: 'secondary' }) as const)[
+    (({ Owner: 'highlight', Admin: 'info', Developer: 'neutral', Viewer: 'neutral' }) as const)[
       value
-    ] ?? 'secondary'
+    ] ?? 'neutral'
 
   const DAY = 86_400_000
   const REFERENCE = Date.UTC(2026, 10, 10, 12)
@@ -148,8 +148,7 @@
 
   const displayName = (user: User): string => user.name || user.email
   const statusSeverity = (value: UserStatus): TagSeverity =>
-    (({ Active: 'success', Invited: 'warning', Inactive: 'secondary' }) as const)[value] ??
-    'secondary'
+    (({ Active: 'success', Invited: 'warning', Inactive: 'neutral' }) as const)[value] ?? 'neutral'
 
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', enableSorting: true, principal: true, hideable: false },

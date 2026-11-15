@@ -83,7 +83,7 @@
   ]
   const versionSeverity: Record<string, TagSeverity> = {
     Active: 'success',
-    Ready: 'secondary',
+    Ready: 'neutral',
     Draft: 'warning'
   }
 
@@ -599,7 +599,7 @@
                     />
                     <Tag
                       label="Production"
-                      severity="secondary"
+                      severity="neutral"
                       size="small"
                       class="shrink-0"
                     />
@@ -828,7 +828,7 @@
                 <dd class="m-0">
                   <Tag
                     label="Production"
-                    severity="secondary"
+                    severity="neutral"
                     size="small"
                   />
                 </dd>

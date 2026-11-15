@@ -140,10 +140,10 @@
   }
 
   const STEP_TAGS: Partial<
-    Record<DeploymentStepStatus, { label: string; severity: 'danger' | 'secondary' }>
+    Record<DeploymentStepStatus, { label: string; severity: 'danger' | 'neutral' }>
   > = {
     failed: { label: 'Failed', severity: 'danger' },
-    skipped: { label: 'Skipped', severity: 'secondary' }
+    skipped: { label: 'Skipped', severity: 'neutral' }
   }
   const stepTag = (i: number) => STEP_TAGS[stepStatus(i)] ?? null
 

@@ -162,7 +162,7 @@
   const versionStates: Record<string, { label: string; severity: TagSeverity }> = {
     active: { label: 'Deployed', severity: 'primary' },
     ready: { label: 'Ready', severity: 'success' },
-    archived: { label: 'Archived', severity: 'secondary' }
+    archived: { label: 'Archived', severity: 'neutral' }
   }
 
   const deployable = ['ready', 'active']

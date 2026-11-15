@@ -147,7 +147,7 @@ Behavior:
 ```vue
 <Popover v-model:open="open" placement="bottom-start" width="small">
   <Popover.Trigger @click.stop>
-    <Tag :label="`+${count}`" severity="secondary" size="small" class="shrink-0" />
+    <Tag :label="`+${count}`" severity="neutral" size="small" class="shrink-0" />
   </Popover.Trigger>
   <Popover.Content @click.stop>
     <div class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)">

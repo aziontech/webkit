@@ -230,7 +230,7 @@
   const accountTypes: Record<AccountType, AccountTypeMeta> = {
     organization: { label: 'Organization', icon: 'pi pi-building', severity: 'primary' },
     group: { label: 'Group', icon: 'pi pi-users', severity: 'info' },
-    workspace: { label: 'Workspace', icon: 'pi pi-th-large', severity: 'secondary' }
+    workspace: { label: 'Workspace', icon: 'pi pi-th-large', severity: 'neutral' }
   }
 
   const accounts: Account[] = [

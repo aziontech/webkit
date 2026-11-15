@@ -122,8 +122,8 @@
     )
   })
 
-  function severityOf(value: string): 'success' | 'secondary' {
-    return POSITIVE.has(value) ? 'success' : 'secondary'
+  function severityOf(value: string): 'success' | 'neutral' {
+    return POSITIVE.has(value) ? 'success' : 'neutral'
   }
 
   function bandDelay(index: number): Record<string, string> {

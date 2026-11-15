@@ -117,13 +117,13 @@
           <div class="flex flex-wrap items-center gap-(--spacing-xs)">
             <Tag
               :label="item.surface"
-              severity="secondary"
+              severity="neutral"
               size="small"
             />
             <Tag
               v-if="doc.structure"
               :label="doc.structure"
-              severity="secondary"
+              severity="neutral"
               size="small"
             />
           </div>

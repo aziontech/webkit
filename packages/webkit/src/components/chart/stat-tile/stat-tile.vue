@@ -74,7 +74,7 @@
   const TREND_SEVERITY: Record<StatTileTrend, TagSeverity> = {
     good: 'success',
     bad: 'danger',
-    flat: 'secondary'
+    flat: 'neutral'
   }
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-stat-tile')
@@ -210,7 +210,7 @@
       />
       <Separator class="absolute inset-x-0 top-0" />
       <Tag
-        severity="secondary"
+        severity="neutral"
         size="small"
         rounded
         :label="t('statTile.noData')"

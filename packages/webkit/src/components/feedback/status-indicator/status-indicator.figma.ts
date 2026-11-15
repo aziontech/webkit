@@ -11,7 +11,7 @@ const severity = instance.getEnum('severity', {
   info: 'info',
   neutral: 'neutral',
   warning: 'warning',
-  alt: 'alt',
+  alt: 'neutral',
   danger: 'danger'
 })
 const loading = instance.getEnum('loading', {

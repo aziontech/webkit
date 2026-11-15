@@ -25,11 +25,11 @@
   const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
   const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
 
-  const LEVEL_SEVERITY: Record<string, 'danger' | 'warning' | 'info' | 'secondary'> = {
+  const LEVEL_SEVERITY: Record<string, 'danger' | 'warning' | 'info' | 'neutral'> = {
     Error: 'danger',
     Warning: 'warning',
     Info: 'info',
-    Debug: 'secondary'
+    Debug: 'neutral'
   }
 
   const EVENTS = [

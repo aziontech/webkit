@@ -69,7 +69,7 @@
               <div class="shrink-0 cursor-pointer">
                 <Tag
                   label="+7"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </div>

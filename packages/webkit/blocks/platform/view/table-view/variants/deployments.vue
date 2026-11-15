@@ -45,7 +45,7 @@
     }
 
   const environmentSeverity = (environment: string): TagSeverity =>
-    environment === 'Production' ? 'info' : 'secondary'
+    environment === 'Production' ? 'info' : 'neutral'
 
   const authors = ['Jane Doe', 'John Smith', 'Alex Morgan', 'Sam Lee', 'Priya Patel']
 

@@ -511,11 +511,11 @@
     },
     approved: {
       label: 'Approved',
-      severity: 'secondary'
+      severity: 'neutral'
     },
     denied: {
       label: 'Denied',
-      severity: 'secondary'
+      severity: 'neutral'
     }
   }
 
@@ -804,7 +804,7 @@
               <Tag
                 v-if="!loading && filteredRows.length"
                 :label="filteredRows.length + ' requests'"
-                severity="secondary"
+                severity="neutral"
                 size="small"
               />
             </ChartCard.Action>

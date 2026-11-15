@@ -65,7 +65,7 @@
 
         <Tag
           :label="complete ? 'Ready for production' : `${doneCount} of ${steps.length}`"
-          :severity="complete ? 'success' : 'secondary'"
+          :severity="complete ? 'success' : 'neutral'"
           size="small"
           class="shrink-0"
         />
@@ -143,7 +143,7 @@
               <DrawerTitle>Ship to production</DrawerTitle>
               <Tag
                 :label="complete ? 'Ready for production' : `${doneCount} of ${steps.length}`"
-                :severity="complete ? 'success' : 'secondary'"
+                :severity="complete ? 'success' : 'neutral'"
                 size="small"
                 class="shrink-0"
               />
@@ -192,7 +192,7 @@
                   <Tag
                     icon="pi pi-check"
                     label="Done"
-                    severity="secondary"
+                    severity="neutral"
                     size="medium"
                   />
                   <span

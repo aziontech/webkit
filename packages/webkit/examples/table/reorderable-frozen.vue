@@ -58,7 +58,7 @@
     <template #cell-status="{ value }">
       <Table.CellStatus
         :label="value"
-        :severity="value === 'Active' ? 'success' : 'secondary'"
+        :severity="value === 'Active' ? 'success' : 'neutral'"
       />
     </template>
   </Table>

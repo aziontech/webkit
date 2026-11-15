@@ -1033,7 +1033,7 @@
                 <span class="hidden items-center gap-(--spacing-xs) sm:flex">
                   <Tag
                     :label="panel.aggregation"
-                    severity="secondary"
+                    severity="neutral"
                     size="small"
                     icon="pi pi-calculator"
                   />
@@ -1102,7 +1102,7 @@
                 <span class="hidden items-center gap-(--spacing-xs) sm:flex">
                   <Tag
                     label="Sum"
-                    severity="secondary"
+                    severity="neutral"
                     size="small"
                     icon="pi pi-calculator"
                   />

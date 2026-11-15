@@ -133,7 +133,7 @@
               <span class="text-label-sm text-(--text-muted)">Environment</span>
               <div class="flex min-w-0 items-center">
                 <Tag
-                  severity="secondary"
+                  severity="neutral"
                   size="medium"
                   label="Production"
                 />
@@ -178,7 +178,7 @@
               <div class="flex min-w-0 items-center">
                 <Tooltip text="platform deploy --auto --local">
                   <Tag
-                    severity="secondary"
+                    severity="neutral"
                     size="medium"
                     icon="pi pi-code"
                     label="CLI"
@@ -191,7 +191,7 @@
               <div class="flex min-w-0 items-center">
                 <Tooltip text="build.preset in platform.config.js">
                   <Tag
-                    severity="secondary"
+                    severity="neutral"
                     size="medium"
                     icon="pi pi-wrench"
                     label="vue"

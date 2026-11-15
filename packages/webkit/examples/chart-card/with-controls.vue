@@ -42,7 +42,7 @@
       <ChartCard.Action>
         <Tag
           label="Sum"
-          severity="secondary"
+          severity="neutral"
           icon="pi pi-calculator"
         />
         <Tag

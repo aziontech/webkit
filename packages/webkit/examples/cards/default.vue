@@ -31,7 +31,7 @@
         <dd>
           <Tag
             :label="item.status"
-            :severity="item.status === 'Active' ? 'success' : 'secondary'"
+            :severity="item.status === 'Active' ? 'success' : 'neutral'"
             size="small"
           />
         </dd>

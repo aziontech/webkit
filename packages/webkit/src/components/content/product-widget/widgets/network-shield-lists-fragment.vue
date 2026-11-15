@@ -64,7 +64,7 @@
               <span class="ms-auto flex shrink-0 items-center">
                 <Tag
                   :label="ROWS[index].type"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </span>

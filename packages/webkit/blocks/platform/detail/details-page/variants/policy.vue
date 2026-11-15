@@ -109,7 +109,7 @@
           <div class="flex min-h-7 min-w-0 items-center">
             <Tag
               label="Production"
-              severity="secondary"
+              severity="neutral"
               size="small"
               class="shrink-0"
             />
@@ -147,25 +147,25 @@
           <div class="flex min-h-7 min-w-0 flex-wrap items-center gap-(--spacing-xs)">
             <Tag
               label="Rate limiting"
-              severity="secondary"
+              severity="neutral"
               size="small"
               class="shrink-0"
             />
             <Tag
               label="Request inspection"
-              severity="secondary"
+              severity="neutral"
               size="small"
               class="shrink-0"
             />
             <Tag
               label="IP filtering"
-              severity="secondary"
+              severity="neutral"
               size="small"
               class="shrink-0"
             />
             <Tag
               label="Bot detection"
-              severity="secondary"
+              severity="neutral"
               size="small"
               class="shrink-0"
             />

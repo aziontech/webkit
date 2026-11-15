@@ -62,7 +62,7 @@
           <template #cell-environment="{ value }">
             <Tag
               v-if="value"
-              severity="secondary"
+              severity="neutral"
               size="medium"
               rounded
               icon="ai ai-layers"

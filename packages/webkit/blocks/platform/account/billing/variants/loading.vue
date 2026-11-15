@@ -154,8 +154,7 @@
   ]
 
   const statusSeverity = (status: InvoiceStatus): TagSeverity =>
-    (({ Paid: 'success', Refunded: 'secondary', Overdue: 'danger' }) as const)[status] ??
-    'secondary'
+    (({ Paid: 'success', Refunded: 'neutral', Overdue: 'danger' }) as const)[status] ?? 'neutral'
 
   const properties: FilteringProperty[] = [
     { key: 'id', label: 'Invoice ID' },
@@ -337,7 +336,7 @@
                         <span class="truncate text-label-lg text-(--text-default)">Pro</span>
                         <Tag
                           label="Current plan"
-                          severity="secondary"
+                          severity="neutral"
                           size="small"
                         />
                       </template>

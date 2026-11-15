@@ -283,7 +283,7 @@
                   :title="item.title"
                   :logo="[item.icon, MARKS[item.framework]].filter(Boolean).join(' ')"
                   :description="item.description"
-                  :badges="[{ label: FRAMEWORKS[item.framework], severity: 'secondary' }]"
+                  :badges="[{ label: FRAMEWORKS[item.framework], severity: 'neutral' }]"
                   @select="openPreview(item)"
                 />
               </li>

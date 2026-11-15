@@ -65,7 +65,7 @@
                 />
                 <Tag
                   label="TLS 1.3"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </span>

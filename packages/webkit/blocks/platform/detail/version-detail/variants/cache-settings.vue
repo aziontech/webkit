@@ -778,7 +778,7 @@
                             <template #cell-tieredCache="{ value }">
                               <Tag
                                 :label="value ? 'Enabled' : 'Disabled'"
-                                :severity="value ? 'success' : 'secondary'"
+                                :severity="value ? 'success' : 'neutral'"
                                 size="medium"
                               />
                             </template>
