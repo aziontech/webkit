@@ -2,7 +2,7 @@
 
 Shareable [Stylelint](https://stylelint.io/) config that forbids hardcoded colors in CSS/SCSS and Vue `<style>` blocks, steering authors to design tokens from [`@aziontech/theme`](https://www.npmjs.com/package/@aziontech/theme) referenced as `var(--*)`. It ships **inside** `@aziontech/webkit` as a subpath export — there is no separate config package.
 
-It is the styles-side complement to the [webkit ESLint plugin](./eslint-plugin.md), which owns JS/TS and Vue `<template>` class strings. Together they keep every color in your codebase pointing at a token instead of a literal.
+It is the styles-side complement to the [webkit ESLint plugin](./ESLINT_PLUGIN.md), which owns JS/TS and Vue `<template>` class strings. Together they keep every color in your codebase pointing at a token instead of a literal.
 
 ## What it enforces
 
