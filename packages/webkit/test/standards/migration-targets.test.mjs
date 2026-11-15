@@ -31,9 +31,9 @@ test('the codemod renames each type to its final name, never to a deprecated ali
   assert.deepEqual(stale, [])
 })
 
-const guide = readFileSync(join(PKG, 'MIGRATION-v6.md'), 'utf8')
+const guide = readFileSync(join(PKG, 'MIGRATION_V6.md'), 'utf8')
 
-test('MIGRATION-v6.md names every deprecated type and every retired illustration name', () => {
+test('MIGRATION_V6.md names every deprecated type and every retired illustration name', () => {
   const registry = readFileSync(join(PKG, 'src/assets/illustrations/registry.ts'), 'utf8')
   const aliases = registry
     .slice(registry.indexOf('illustrationAssetAliases'))
@@ -47,7 +47,7 @@ test('MIGRATION-v6.md names every deprecated type and every retired illustration
   )
 })
 
-test('MIGRATION-v6.md numbers its sections once each and has one heading per subject', () => {
+test('MIGRATION_V6.md numbers its sections once each and has one heading per subject', () => {
   const headings = [...guide.matchAll(/^(#{2,3}) (.+)$/gm)].map((match) => match[2])
   const numbers = headings.map((heading) => heading.match(/^(\d+)\./)?.[1]).filter(Boolean)
   assert.deepEqual(

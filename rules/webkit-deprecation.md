@@ -11,7 +11,7 @@ upheld in code review.
 ## WebKit's own parts: 6.0 is the clean break
 
 WebKit 6.0 removed every old WebKit name outright (no aliases, no "Removed in 7.0"). Migrate an
-app once: read `MIGRATION-v6.md` in `@aziontech/webkit` and run
+app once: read `MIGRATION_V6.md` in `@aziontech/webkit` and run
 `npx @aziontech/webkit migrate v6`, then `npx @aziontech/webkit doctor`. From 6.0 on, WebKit
 follows the same lifecycle this rule asks of you: a part is marked `@deprecated`, kept for at
 least one major, then removed, and `webkit/no-deprecated-component` tells you before it goes.

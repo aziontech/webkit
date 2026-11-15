@@ -484,7 +484,7 @@ Interactive sub-elements a test must reach get their own derived testid
 `@deprecated` **naming the replacement and the removal version**, ships at least one
 major in that state, and is removed in a subsequent major (`BREAKING CHANGE:`). This cycle
 applies from 6.0 on: 6.0 itself was the clean break that removed every older name outright
-(`MIGRATION-v6.md` + `webkit migrate v6`).
+(`MIGRATION_V6.md` + `webkit migrate v6`).
 
 <!-- prettier-ignore -->
 ```ts

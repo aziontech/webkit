@@ -406,7 +406,7 @@ function resolveSubpath(subpath, migration, legacy, fromMajor) {
       base,
       match,
       manual: true,
-      warning: `${PREFIX}${next} is not an export of v6: find its replacement in the catalog (MIGRATION-v6.md)`
+      warning: `${PREFIX}${next} is not an export of v6: find its replacement in the catalog (MIGRATION_V6.md)`
     }
   }
   return { next, base, match }

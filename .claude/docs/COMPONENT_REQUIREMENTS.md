@@ -578,7 +578,7 @@ Some components may require Vue Router for navigation or routing features.
 - [Vue 3 Composition API](https://vuejs.org/api/composition-api-setup.html)
 - [Vue Router Documentation](https://router.vuejs.org/)
 - [shadcn/ui Field](https://ui.shadcn.com/docs/components/field)
-- [`MIGRATION-v6.md`](../../packages/webkit/MIGRATION-v6.md)
+- [`MIGRATION_V6.md`](../../packages/webkit/MIGRATION_V6.md)
 
 ---
 

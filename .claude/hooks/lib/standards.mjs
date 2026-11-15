@@ -274,7 +274,7 @@ export const STANDARDS = [
       { surface: 'lint', by: 'require-authoring-standards' },
       { surface: 'ci', by: 'check-api-diff' }
     ],
-    note: 'check-api-diff diffs the public API of the base catalog.json with head: a removal or rename is breaking and needs "!" in the PR title plus a migration (a src/cli/migrations/ codemod entry or a new MIGRATION-v<N>.md line naming the component). 6.0 is the clean-break major: old names were removed outright (MIGRATION-v6.md + webkit migrate); the mark, one major, remove lifecycle applies from 6.0 on.'
+    note: 'check-api-diff diffs the public API of the base catalog.json with head: a removal or rename is breaking and needs "!" in the PR title plus a migration (a src/cli/migrations/ codemod entry or a new MIGRATION_V<N>.md line naming the component). 6.0 is the clean-break major: old names were removed outright (MIGRATION_V6.md + webkit migrate); the mark, one major, remove lifecycle applies from 6.0 on.'
   },
   {
     id: 'bundle-budget',
