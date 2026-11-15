@@ -93,6 +93,7 @@
    "--border-3",
    "--border-4",
    "--border-default",
+   "--border-input",
    "--border-muted",
    "--border-selected",
    "--border-strong",
@@ -320,18 +321,6 @@
    "--color-slate-800",
    "--color-slate-900",
    "--color-slate-950",
-   "--color-surface-0",
-   "--color-surface-100",
-   "--color-surface-200",
-   "--color-surface-300",
-   "--color-surface-400",
-   "--color-surface-50",
-   "--color-surface-500",
-   "--color-surface-600",
-   "--color-surface-700",
-   "--color-surface-800",
-   "--color-surface-900",
-   "--color-surface-950",
    "--color-violet-100",
    "--color-violet-200",
    "--color-violet-300",
@@ -398,34 +387,6 @@
    "--font-weight-normal",
    "--font-weight-semibold",
    "--font-weight-thin",
-   "--height-10",
-   "--height-11",
-   "--height-12",
-   "--height-14",
-   "--height-16",
-   "--height-2",
-   "--height-20",
-   "--height-24",
-   "--height-28",
-   "--height-3",
-   "--height-32",
-   "--height-36",
-   "--height-4",
-   "--height-40",
-   "--height-44",
-   "--height-48",
-   "--height-5",
-   "--height-52",
-   "--height-56",
-   "--height-6",
-   "--height-60",
-   "--height-64",
-   "--height-7",
-   "--height-72",
-   "--height-8",
-   "--height-80",
-   "--height-9",
-   "--height-96",
    "--illustration-accent",
    "--illustration-block",
    "--illustration-code-keyword",
@@ -594,24 +555,6 @@
    "--success",
    "--success-border",
    "--success-contrast",
-   "--surface-0",
-   "--surface-100",
-   "--surface-150",
-   "--surface-200",
-   "--surface-250",
-   "--surface-275",
-   "--surface-300",
-   "--surface-400",
-   "--surface-50",
-   "--surface-500",
-   "--surface-600",
-   "--surface-650",
-   "--surface-700",
-   "--surface-750",
-   "--surface-775",
-   "--surface-800",
-   "--surface-900",
-   "--surface-950",
    "--text-2xl",
    "--text-2xl--line-height",
    "--text-3xl",
@@ -823,22 +766,8 @@
    "--warning",
    "--warning-border",
    "--warning-contrast",
-   "--width-2xl",
-   "--width-2xs",
-   "--width-3xl",
-   "--width-3xs",
-   "--width-4xl",
-   "--width-5xl",
-   "--width-6xl",
-   "--width-7xl",
-   "--width-lg",
-   "--width-md",
-   "--width-sm",
-   "--width-xl",
-   "--width-xs",
    "--z-input-field",
-   "--z-input-overlay",
-   "--z-input-popup"
+   "--z-input-overlay"
   ],
   "typography": [
    "text-amount-lg",
@@ -944,6 +873,7 @@
     "--border-3",
     "--border-4",
     "--border-default",
+    "--border-input",
     "--border-muted",
     "--border-selected",
     "--border-strong",
@@ -1179,18 +1109,6 @@
     "--color-slate-800",
     "--color-slate-900",
     "--color-slate-950",
-    "--color-surface-0",
-    "--color-surface-100",
-    "--color-surface-200",
-    "--color-surface-300",
-    "--color-surface-400",
-    "--color-surface-50",
-    "--color-surface-500",
-    "--color-surface-600",
-    "--color-surface-700",
-    "--color-surface-800",
-    "--color-surface-900",
-    "--color-surface-950",
     "--color-violet-100",
     "--color-violet-200",
     "--color-violet-300",
@@ -1267,36 +1185,6 @@
     "--font-weight-normal",
     "--font-weight-semibold",
     "--font-weight-thin"
-   ],
-   "height": [
-    "--height-10",
-    "--height-11",
-    "--height-12",
-    "--height-14",
-    "--height-16",
-    "--height-2",
-    "--height-20",
-    "--height-24",
-    "--height-28",
-    "--height-3",
-    "--height-32",
-    "--height-36",
-    "--height-4",
-    "--height-40",
-    "--height-44",
-    "--height-48",
-    "--height-5",
-    "--height-52",
-    "--height-56",
-    "--height-6",
-    "--height-60",
-    "--height-64",
-    "--height-7",
-    "--height-72",
-    "--height-8",
-    "--height-80",
-    "--height-9",
-    "--height-96"
    ],
    "illustration": [
     "--illustration-accent",
@@ -1501,26 +1389,6 @@
     "--success",
     "--success-border",
     "--success-contrast"
-   ],
-   "surface": [
-    "--surface-0",
-    "--surface-100",
-    "--surface-150",
-    "--surface-200",
-    "--surface-250",
-    "--surface-275",
-    "--surface-300",
-    "--surface-400",
-    "--surface-50",
-    "--surface-500",
-    "--surface-600",
-    "--surface-650",
-    "--surface-700",
-    "--surface-750",
-    "--surface-775",
-    "--surface-800",
-    "--surface-900",
-    "--surface-950"
    ],
    "text": [
     "--text-2xl",
@@ -1741,25 +1609,9 @@
     "--warning-border",
     "--warning-contrast"
    ],
-   "width": [
-    "--width-2xl",
-    "--width-2xs",
-    "--width-3xl",
-    "--width-3xs",
-    "--width-4xl",
-    "--width-5xl",
-    "--width-6xl",
-    "--width-7xl",
-    "--width-lg",
-    "--width-md",
-    "--width-sm",
-    "--width-xl",
-    "--width-xs"
-   ],
    "z": [
     "--z-input-field",
-    "--z-input-overlay",
-    "--z-input-popup"
+    "--z-input-overlay"
    ]
   },
   "animations": [
@@ -2029,6 +1881,13 @@
     "xl"
    ]
   },
+  "closable": {
+   "defaultTrue": [
+    "dialog",
+    "drawer"
+   ],
+   "default": false
+  },
   "booleanPrefixes": {
    "banned": [
     "is",
@@ -2108,6 +1967,12 @@
    "target": "./catalog.json",
    "kind": "other",
    "treeShakeableImport": "@aziontech/webkit/catalog.json"
+  },
+  "catalog-queries": {
+   "import": "@aziontech/webkit/catalog-queries",
+   "target": "./src/catalog/index.js",
+   "kind": "other",
+   "treeShakeableImport": "@aziontech/webkit/catalog-queries"
   },
   "package.json": {
    "import": "@aziontech/webkit/package.json",
@@ -2385,7 +2250,7 @@
     },
     {
      "name": "copy",
-     "payload": "value: string",
+     "payload": "(event: MouseEvent, value: string)",
      "notes": ""
     }
    ],
@@ -2471,7 +2336,7 @@
     },
     {
      "name": "copy",
-     "payload": "string",
+     "payload": "(event: MouseEvent, value: string)",
      "notes": ""
     }
    ],
@@ -3599,7 +3464,7 @@
     {
      "name": "size",
      "type": "'small' | 'medium' | 'large'",
-     "default": "'small'",
+     "default": "'large'",
      "required": "false",
      "doc": "Size token forwarded to `IconButton`."
     },
@@ -3614,8 +3479,8 @@
    "events": [
     {
      "name": "copy",
-     "payload": "string",
-     "notes": "Emitted after a successful clipboard write with the copied value."
+     "payload": "(event: MouseEvent, value: string)",
+     "notes": "Emitted after a successful clipboard write; `value` is the copied text."
     }
    ],
    "surface": "product",
@@ -3734,8 +3599,8 @@
    "events": [
     {
      "name": "copy",
-     "payload": "string",
-     "notes": "Fires with `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead."
+     "payload": "(event: MouseEvent, value: string)",
+     "notes": "Fires with the click and `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead."
     },
     {
      "name": "close",
@@ -4029,6 +3894,7 @@
     "@aziontech/webkit/chart-grid",
     "@aziontech/webkit/chart-legend",
     "@aziontech/webkit/chart-line",
+    "@aziontech/webkit/chart-reference",
     "@aziontech/webkit/chart-scatter",
     "@aziontech/webkit/chart-tooltip"
    ],
@@ -4211,7 +4077,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order."
+     "notes": "The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Reference, Crosshair, Tooltip, Legend, in paint order."
     },
     {
      "name": "empty",
@@ -4418,7 +4284,7 @@
     {
      "name": "default",
      "scope": "—",
-     "notes": "The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order."
+     "notes": "The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Reference, Crosshair, Tooltip, Legend, in paint order."
     },
     {
      "name": "empty",
@@ -4501,6 +4367,14 @@
    "kind": "subcomponent",
    "parent": "chart",
    "treeShakeableImport": "@aziontech/webkit/chart-line",
+   "surface": "product"
+  },
+  "chart-reference": {
+   "import": "@aziontech/webkit/chart-reference",
+   "target": "./src/components/chart/chart/chart-reference/chart-reference.vue",
+   "kind": "subcomponent",
+   "parent": "chart",
+   "treeShakeableImport": "@aziontech/webkit/chart-reference",
    "surface": "product"
   },
   "chart-scatter": {
@@ -5599,10 +5473,10 @@
     },
     {
      "name": "severity",
-     "type": "Severity | 'primary' | 'secondary' | 'accent' | 'contrast' | 'highlight'",
+     "type": "Severity | 'primary' | 'accent' | 'contrast' | 'highlight'",
      "default": "'primary'",
      "required": "false",
-     "doc": "Color style for the tag surface and label: the shared `Severity` scale (`neutral`, `info`, `success`, `warning`, `danger`, exported from this component) plus `primary` (solid brand orange), `secondary` (bordered canvas, the same look as `neutral`), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`)."
+     "doc": "Color style for the tag surface and label: the shared `Severity` scale (`neutral`, `info`, `success`, `warning`, `danger`, exported from this component) plus `primary` (solid brand orange), `accent`, `highlight` (the brand orange as a tint) and `contrast` (`var(--bg-contrast)` / `var(--text-contrast)`)."
     },
     {
      "name": "size",
@@ -5677,6 +5551,74 @@
    "surface": "product",
    "examplesFile": "catalog/examples/severity-tag.json",
    "docsFile": "catalog/components/severity-tag.json"
+  },
+  "status-code": {
+   "import": "@aziontech/webkit/status-code",
+   "target": "./src/components/content/status-code/status-code.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/status-code",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "code",
+     "type": "number | string",
+     "default": "''",
+     "required": "false",
+     "doc": "HTTP status, as a number or a string (`404`, `'404'`). 1xx to 3xx render neutral, 4xx warning, 5xx danger; anything else renders muted as written, empty a dash."
+    },
+    {
+     "name": "method",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Request method shown before the code (`GET`, `POST`), upper-cased. Empty shows the code alone."
+    },
+    {
+     "name": "size",
+     "type": "'small' | 'medium'",
+     "default": "'medium'",
+     "required": "false",
+     "doc": "Size token forwarded to `Tag`; `medium` is 24px tall, `small` is 20px."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/status-code.json",
+   "docsFile": "catalog/components/status-code.json"
+  },
+  "timestamp": {
+   "import": "@aziontech/webkit/timestamp",
+   "target": "./src/components/content/timestamp/timestamp.vue",
+   "kind": "component",
+   "treeShakeableImport": "@aziontech/webkit/timestamp",
+   "category": "content",
+   "structure": "monolithic",
+   "props": [
+    {
+     "name": "value",
+     "type": "string | number | Date",
+     "default": "undefined",
+     "required": "false",
+     "doc": "The moment: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash with no panel."
+    },
+    {
+     "name": "format",
+     "type": "'relative' | 'local' | 'utc'",
+     "default": "'local'",
+     "required": "false",
+     "doc": "What the text shows: the relative phrase that updates every minute, the date and time in the time zone, or the date and time in UTC. The panel always lists every form."
+    },
+    {
+     "name": "timeZone",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "IANA time zone of the local time (`America/New_York`). Empty reads the nearest `WebkitProvider`'s `time-zone`, then the browser's zone."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/timestamp.json",
+   "docsFile": "catalog/components/timestamp.json"
   },
   "avatar": {
    "import": "@aziontech/webkit/avatar",
@@ -6920,7 +6862,7 @@
     {
      "name": "size",
      "type": "'small' | 'medium' | 'large'",
-     "default": "'small'",
+     "default": "'medium'",
      "required": "false",
      "doc": "Size token; affects typography and the gap between the figure and the suffix."
     }
@@ -7480,10 +7422,24 @@
     },
     {
      "name": "keyName",
-     "type": "'' | 'ctrl' | 'alt' | 'shift' | 'escape' | 'enter' | 'space' | 'tab' | 'backspace' | 'delete'",
+     "type": "'' | 'ctrl' | 'alt' | 'shift' | 'escape' | 'enter' | 'space' | 'tab' | 'backspace' | 'delete' | 'return' | 'arrow-up' | 'arrow-down' | 'arrow-left' | 'arrow-right'",
      "default": "''",
      "required": "false",
      "doc": "Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it."
+    },
+    {
+     "name": "keys",
+     "type": "string[]",
+     "default": "[]",
+     "required": "false",
+     "doc": "A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog, a single character is upper-cased, anything else prints as written."
+    },
+    {
+     "name": "kind",
+     "type": "'combined' | 'separate'",
+     "default": "'combined'",
+     "required": "false",
+     "doc": "Visual variant: one keycap holding every key, or one keycap per key."
     }
    ],
    "slots": [
@@ -7819,7 +7775,8 @@
    "kind": "component",
    "treeShakeableImport": "@aziontech/webkit/trace",
    "models": [
-    "selected"
+    "selected",
+    "range"
    ],
    "category": "code",
    "structure": "monolithic",
@@ -7853,11 +7810,32 @@
      "doc": "Shows placeholder rows while the spans load; search and selection wait."
     },
     {
+     "name": "zoomable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows a minimap under the axis to zoom the waterfall into a window of the run. Supports v-model:range."
+    },
+    {
+     "name": "highlightSlowest",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Flags the span that took longest, other than the root, in its row and its details."
+    },
+    {
      "name": "selected",
      "type": "string",
      "default": "''",
      "required": "false",
      "doc": "Two-way value (`v-model:selected`)."
+    },
+    {
+     "name": "range",
+     "type": "TraceRange | null",
+     "default": "null",
+     "required": "false",
+     "doc": "Two-way value (`v-model:range`)."
     }
    ],
    "surface": "product",
@@ -7971,7 +7949,7 @@
    "events": [
     {
      "name": "copy",
-     "payload": "string",
+     "payload": "(event: MouseEvent, value: string)",
      "notes": "Fires after a successful copy; payload is the copied plain text."
     }
    ],
@@ -8088,7 +8066,7 @@
    "events": [
     {
      "name": "copy",
-     "payload": "string",
+     "payload": "(event: MouseEvent, value: string)",
      "notes": "Fires after a successful copy; payload is the copied plain text."
     }
    ],
@@ -8229,6 +8207,13 @@
      "doc": "Draw the outer card border around the block. On by default; set `:bordered=\"false\"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected."
     },
     {
+     "name": "diffView",
+     "type": "'unified' | 'split'",
+     "default": "'unified'",
+     "required": "false",
+     "doc": "How a tab with an `original` draws the diff the block computes: `unified` (one column) or `split` (side by side)."
+    },
+    {
      "name": "modelValue",
      "type": "string | undefined",
      "default": "undefined",
@@ -8239,7 +8224,7 @@
    "events": [
     {
      "name": "copy",
-     "payload": "string",
+     "payload": "(event: MouseEvent, code: string)",
      "notes": "Fires after the active tab code is copied to the clipboard."
     }
    ],
@@ -8281,7 +8266,11 @@
     "@aziontech/webkit/table-applied-filters",
     "@aziontech/webkit/table-column-selector",
     "@aziontech/webkit/table-export",
-    "@aziontech/webkit/table-refresh-button"
+    "@aziontech/webkit/table-refresh-button",
+    "@aziontech/webkit/table-live-button"
+   ],
+   "models": [
+    "live"
    ],
    "category": "data",
    "structure": "composition",
@@ -8572,6 +8561,27 @@
      "default": "undefined",
      "required": "false",
      "doc": "v-model:expanded (TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }`). Uncontrolled it starts collapsed."
+    },
+    {
+     "name": "moreRows",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Data-driven mode: more rows exist after the last one. The table emits `load-more` as the end of the rows nears the viewport (also in `virtual` mode) and offers a Load more button; false shows the end-of-results line once more rows were requested."
+    },
+    {
+     "name": "loadingMore",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Data-driven mode: the next rows are loading; shows a loading line under the rows and holds further `load-more` requests."
+    },
+    {
+     "name": "live",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:live`)."
     }
    ],
    "events": [
@@ -8649,6 +8659,11 @@
      "name": "update:expanded",
      "payload": "value: ExpandedState",
      "notes": "Tree rows: v-model:expanded, after a toggle by pointer or keyboard."
+    },
+    {
+     "name": "load-more",
+     "payload": "—",
+     "notes": "moreRows`: the end of the rows neared the viewport, or the Load more button was pressed; the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true."
     }
    ],
    "slots": [
@@ -8703,6 +8718,9 @@
    "kind": "root",
    "rootOf": "table",
    "treeShakeableImport": "@aziontech/webkit/table-root",
+   "models": [
+    "live"
+   ],
    "category": "data",
    "structure": "composition",
    "props": [
@@ -8992,6 +9010,27 @@
      "default": "undefined",
      "required": "false",
      "doc": "v-model:expanded (TanStack ExpandedState: `true` for every row, or `{ [rowId]: true }`). Uncontrolled it starts collapsed."
+    },
+    {
+     "name": "moreRows",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Data-driven mode: more rows exist after the last one. The table emits `load-more` as the end of the rows nears the viewport (also in `virtual` mode) and offers a Load more button; false shows the end-of-results line once more rows were requested."
+    },
+    {
+     "name": "loadingMore",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Data-driven mode: the next rows are loading; shows a loading line under the rows and holds further `load-more` requests."
+    },
+    {
+     "name": "live",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Two-way value (`v-model:live`)."
     }
    ],
    "events": [
@@ -9069,6 +9108,11 @@
      "name": "update:expanded",
      "payload": "value: ExpandedState",
      "notes": "Tree rows: v-model:expanded, after a toggle by pointer or keyboard."
+    },
+    {
+     "name": "load-more",
+     "payload": "—",
+     "notes": "moreRows`: the end of the rows neared the viewport, or the Load more button was pressed; the app appends the next rows and sets `loadingMore` meanwhile. Not repeated while `loadingMore` is true."
     }
    ],
    "slots": [
@@ -9284,6 +9328,14 @@
    "treeShakeableImport": "@aziontech/webkit/table-refresh-button",
    "surface": "product"
   },
+  "table-live-button": {
+   "import": "@aziontech/webkit/table-live-button",
+   "target": "./src/components/data/table/table-live-button/table-live-button.vue",
+   "kind": "subcomponent",
+   "parent": "table",
+   "treeShakeableImport": "@aziontech/webkit/table-live-button",
+   "surface": "product"
+  },
   "property-filter": {
    "import": "@aziontech/webkit/property-filter",
    "target": "./src/components/data/property-filter/property-filter.vue",
@@ -9360,6 +9412,20 @@
      "doc": "Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions."
     },
     {
+     "name": "grouped",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one."
+    },
+    {
+     "name": "loadValues",
+     "type": "(property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>",
+     "default": "undefined",
+     "required": "false",
+     "doc": "Fetches the values of a property for the typed text, after the operator. Replaces its `options` in the suggestions."
+    },
+    {
      "name": "query",
      "type": "PropertyFilterQuery",
      "default": "—",
@@ -9379,6 +9445,13 @@
      "name": "submit",
      "payload": "(event: KeyboardEvent, payload: PropertyFilterSubmit)",
      "notes": "Enter with no active suggestion and a valid query; `event` is the Enter keydown. Query mode only."
+    }
+   ],
+   "slots": [
+    {
+     "name": "value",
+     "scope": "{ property: FilteringProperty, operator: PropertyFilterOperator, apply: (value: string) => void }",
+     "notes": "Tokens mode. Rendered under the field, in a named `group`, once the typed text has a property marked `customValue` and an operator; `apply` adds the token and returns focus to the field."
     }
    ],
    "surface": "product",
@@ -10118,7 +10191,8 @@
    "treeShakeableImport": "@aziontech/webkit/tree",
    "models": [
     "expanded",
-    "selected"
+    "selected",
+    "selectedIds"
    ],
    "category": "data",
    "structure": "monolithic",
@@ -10132,10 +10206,17 @@
     },
     {
      "name": "selectable",
+     "type": "boolean | TreeSelectable",
+     "default": "false",
+     "required": "false",
+     "doc": "Enables selection: `true` or `'single'` writes one id to `v-model:selected`; `'multiple'` writes ids to `v-model:selected-ids`. Every treeitem then carries `aria-selected`."
+    },
+    {
+     "name": "editable",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Enables single selection: activating a node writes its id to `v-model:selected` and marks it `aria-selected`."
+     "doc": "Lets the user rename a node in place with F2, or through the exposed `startRename(id)`; the result arrives as the `rename` event."
     },
     {
      "name": "loading",
@@ -10178,13 +10259,30 @@
      "default": "''",
      "required": "false",
      "doc": "Two-way value (`v-model:selected`)."
+    },
+    {
+     "name": "selectedIds",
+     "type": "string[]",
+     "default": "() => []",
+     "required": "false",
+     "doc": "Two-way value (`v-model:selectedIds`)."
     }
    ],
    "events": [
     {
      "name": "item-click",
      "payload": "(event: MouseEvent | KeyboardEvent, item: TreeItem)",
-     "notes": "A node activated: click on its row, or Enter / Space on the focused node. `item` is the consumer's own node object. Fires after `update:selected` when `selectable`. Not fired for a `disabled` node, nor for a click on the chevron or inside the `actions` region."
+     "notes": "A node activated: click on its row, or Enter / Space on the focused node. `item` is the consumer's own node object. Fires after `update:selected` when `selectable`. Not fired for a `disabled` node, nor for a click on the chevron, inside the `actions` region or in the rename field. With `selectable=\"multiple\"`, Space toggles selection without firing it."
+    },
+    {
+     "name": "item-dblclick",
+     "payload": "(event: MouseEvent, item: TreeItem)",
+     "notes": "A row was double-clicked, to open or preview the node. Not fired for a `disabled` node, the chevron, the `actions` region or the rename field. The two clicks before it still fire `item-click`."
+    },
+    {
+     "name": "rename",
+     "payload": "(event: KeyboardEvent | FocusEvent, payload: TreeRenamePayload)",
+     "notes": "An in-place rename was submitted (Enter, or the field losing focus) with a trimmed label that is non-empty and differs from `item.label`. `payload.item` is the consumer's node. Escape, an empty label or an unchanged one closes the field without emitting."
     }
    ],
    "slots": [
@@ -11022,7 +11120,7 @@
    "events": [
     {
      "name": "copy",
-     "payload": "string",
+     "payload": "(event: MouseEvent, value: string)",
      "notes": "Re-emitted from `CopyPromptButton` after a successful copy."
     },
     {
@@ -11447,6 +11545,13 @@
      "doc": "Fallback message copy when the default slot is empty."
     },
     {
+     "name": "title",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Bold heading above the message copy; hidden when empty."
+    },
+    {
      "name": "icon",
      "type": "string",
      "default": "''",
@@ -11473,13 +11578,6 @@
      "default": "0",
      "required": "false",
      "doc": "Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss."
-    },
-    {
-     "name": "title",
-     "type": "string",
-     "default": "''",
-     "required": "false",
-     "doc": "Optional bold first line above the copy (the AlertTitle of the shadcn anatomy); hidden when empty."
     }
    ],
    "events": [
@@ -11652,7 +11750,7 @@
    "props": [
     {
      "name": "severity",
-     "type": "Severity | 'alt'` (`'neutral' | 'info' | 'success' | 'warning' | 'danger' | 'alt'`)",
+     "type": "Severity` (`'neutral' | 'info' | 'success' | 'warning' | 'danger'`)",
      "default": "'success'",
      "required": "false",
      "doc": "Severity token driving the status dot color. `Severity` is the shared status scale, exported from this component (and from `badge` and `tag`)."
@@ -11732,7 +11830,7 @@
     {
      "name": "default",
      "scope": "{ toast, dismiss }",
-     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, type, message, description?, action?, actions?, duration }`; `type` is the deprecated mirror of `severity` with `error` for `danger`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`."
+     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, type, message, description?, action?, actions?, duration, progress? }`; `type` is the deprecated mirror of `severity` with `error` for `danger`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`."
     }
    ],
    "setup": "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region.",
@@ -11789,7 +11887,7 @@
     {
      "name": "default",
      "scope": "{ toast, dismiss }",
-     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, type, message, description?, action?, actions?, duration }`; `type` is the deprecated mirror of `severity` with `error` for `danger`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`."
+     "notes": "Optional override for a single toast's body. `toast` is the store entry (`{ id, severity, type, message, description?, action?, actions?, duration, progress? }`; `type` is the deprecated mirror of `severity` with `error` for `danger`); `dismiss` dismisses that entry. When omitted, the `Toaster` composes `ToastItem` + `Title`/`Description`/`Action`/`Close` from the entry, rendering one `Action` per entry of `actions` (the first two) or the single `action`, and a `Progress` row when the entry has `progress`."
     }
    ],
    "setup": "One-time app-level wiring before the first toast() call — service (recommended): import { ToastPlugin } from '@aziontech/webkit/toast' and chain .use(ToastPlugin) onto createApp() in the app entry; the plugin mounts the toast region automatically. Alternative: mount a Toaster component once near the app root. `webkit doctor` flags toast usage with no wired region.",
@@ -12039,7 +12137,7 @@
     {
      "name": "size",
      "type": "'small' | 'medium' | 'large'",
-     "default": "'small'",
+     "default": "'medium'",
      "required": "false",
      "doc": "Bar height token."
     },
@@ -14662,6 +14760,27 @@
      "doc": "Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`."
     },
     {
+     "name": "autoResize",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Grows the field with its content instead of a fixed height (`data-auto-resize`): CSS `field-sizing: content`, with a measured height where the browser lacks it. Turns the drag handle off."
+    },
+    {
+     "name": "minRows",
+     "type": "number",
+     "default": "1",
+     "required": "false",
+     "doc": "Lines the field shows when empty while `autoResize` is on. Ignored without `autoResize`."
+    },
+    {
+     "name": "maxRows",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "Lines the field grows to before it scrolls while `autoResize` is on (`data-max-rows`); `0` sets no limit. Ignored without `autoResize`."
+    },
+    {
      "name": "modelValue",
      "type": "string",
      "default": "''",
@@ -14673,6 +14792,120 @@
    "examplesFile": "catalog/examples/textarea.json",
    "docsFile": "catalog/components/textarea.json"
   },
+  "context-menu": {
+   "import": "@aziontech/webkit/context-menu",
+   "target": "./src/components/navigation/context-menu/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/context-menu-root",
+   "subcomponents": [
+    "@aziontech/webkit/context-menu-trigger"
+   ],
+   "models": [
+    "open"
+   ],
+   "category": "navigation",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Leaves the area to the browser's native context menu and never opens the panel."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the menu panel; when empty the panel has no name of its own."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "select",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
+     "notes": "Fires when an enabled option is activated, at any sub-menu depth. The panel closes and focus returns to the element that was focused in the area, except for checkbox and radio options."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Place `<ContextMenu.Trigger>` (the area) followed by one or more `<ContextMenu.Group>`."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/context-menu.json",
+   "docsFile": "catalog/components/context-menu.json"
+  },
+  "context-menu-root": {
+   "import": "@aziontech/webkit/context-menu-root",
+   "target": "./src/components/navigation/context-menu/context-menu.vue",
+   "kind": "root",
+   "rootOf": "context-menu",
+   "treeShakeableImport": "@aziontech/webkit/context-menu-root",
+   "models": [
+    "open"
+   ],
+   "category": "navigation",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Leaves the area to the browser's native context menu and never opens the panel."
+    },
+    {
+     "name": "ariaLabel",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Accessible name of the menu panel; when empty the panel has no name of its own."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "select",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
+     "notes": "Fires when an enabled option is activated, at any sub-menu depth. The panel closes and focus returns to the element that was focused in the area, except for checkbox and radio options."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Place `<ContextMenu.Trigger>` (the area) followed by one or more `<ContextMenu.Group>`."
+    }
+   ],
+   "surface": "product",
+   "docsFile": "catalog/components/context-menu-root.json"
+  },
+  "context-menu-trigger": {
+   "import": "@aziontech/webkit/context-menu-trigger",
+   "target": "./src/components/navigation/context-menu/context-menu-trigger/context-menu-trigger.vue",
+   "kind": "subcomponent",
+   "parent": "context-menu",
+   "treeShakeableImport": "@aziontech/webkit/context-menu-trigger",
+   "surface": "product"
+  },
   "dropdown-menu": {
    "import": "@aziontech/webkit/dropdown-menu",
    "target": "./src/components/navigation/dropdown-menu/index.ts",
@@ -14682,7 +14915,10 @@
    "subcomponents": [
     "@aziontech/webkit/dropdown-menu-trigger",
     "@aziontech/webkit/dropdown-menu-group",
-    "@aziontech/webkit/dropdown-menu-option"
+    "@aziontech/webkit/dropdown-menu-option",
+    "@aziontech/webkit/dropdown-menu-sub",
+    "@aziontech/webkit/dropdown-menu-sub-content",
+    "@aziontech/webkit/dropdown-menu-sub-trigger"
    ],
    "models": [
     "open"
@@ -14730,7 +14966,7 @@
     {
      "name": "select",
      "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
-     "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel."
+     "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `kind=\"checkbox\"` / `kind=\"radio\"` options, which keep it open. Options inside a sub-menu emit on the same root event."
     }
    ],
    "slots": [
@@ -14806,7 +15042,7 @@
     {
      "name": "select",
      "payload": "(event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue)",
-     "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel."
+     "notes": "Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `kind=\"checkbox\"` / `kind=\"radio\"` options, which keep it open. Options inside a sub-menu emit on the same root event."
     }
    ],
    "slots": [
@@ -14851,6 +15087,30 @@
    "kind": "subcomponent",
    "parent": "dropdown-menu",
    "treeShakeableImport": "@aziontech/webkit/dropdown-menu-option",
+   "surface": "product"
+  },
+  "dropdown-menu-sub": {
+   "import": "@aziontech/webkit/dropdown-menu-sub",
+   "target": "./src/components/navigation/dropdown-menu/dropdown-menu-sub/dropdown-menu-sub.vue",
+   "kind": "subcomponent",
+   "parent": "dropdown-menu",
+   "treeShakeableImport": "@aziontech/webkit/dropdown-menu-sub",
+   "surface": "product"
+  },
+  "dropdown-menu-sub-content": {
+   "import": "@aziontech/webkit/dropdown-menu-sub-content",
+   "target": "./src/components/navigation/dropdown-menu/dropdown-menu-sub-content/dropdown-menu-sub-content.vue",
+   "kind": "subcomponent",
+   "parent": "dropdown-menu",
+   "treeShakeableImport": "@aziontech/webkit/dropdown-menu-sub-content",
+   "surface": "product"
+  },
+  "dropdown-menu-sub-trigger": {
+   "import": "@aziontech/webkit/dropdown-menu-sub-trigger",
+   "target": "./src/components/navigation/dropdown-menu/dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue",
+   "kind": "subcomponent",
+   "parent": "dropdown-menu",
+   "treeShakeableImport": "@aziontech/webkit/dropdown-menu-sub-trigger",
    "surface": "product"
   },
   "multi-select": {
@@ -14936,6 +15196,62 @@
      "doc": "Form field name. Set, the root renders one hidden input per selected value so a native `form` and `FormData` submit every selection under that name; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the values out."
     },
     {
+     "name": "kind",
+     "type": "'summary' | 'chips'",
+     "default": "'summary'",
+     "required": "false",
+     "doc": "How the trigger shows the selection: `summary` joins the labels (or `displayValue`), `chips` renders one removable chip per value."
+    },
+    {
+     "name": "chipLimit",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "With `kind=\"chips\"`, the most chips shown before a `+N more` chip; `0` shows every chip and wraps."
+    },
+    {
+     "name": "searchable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Types in the trigger: the text filters the options, `Backspace` in an empty field removes the last value."
+    },
+    {
+     "name": "filter",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "With `searchable`, hides the options whose label does not contain the typed text. Turn off when the server filters on `search`."
+    },
+    {
+     "name": "allowCustom",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "With `searchable`, offers typed text that matches no option as an `Add \"…\"` row that emits `create`."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the loading row in place of the options while they are fetched."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Message shown in place of the options when they failed to load; empty shows the options."
+    },
+    {
+     "name": "emptyText",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the list when no option is visible. Empty uses the locale catalog."
+    },
+    {
      "name": "modelValue",
      "type": "TValue[]",
      "default": "() => []",
@@ -14948,6 +15264,18 @@
      "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "search",
+     "payload": "string",
+     "notes": "The typed text, on each keystroke (`searchable`), and `''` when the panel closes and the text is cleared. Value event: no DOM event."
+    },
+    {
+     "name": "create",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: string)",
+     "notes": "The `Add \"…\"` row was activated (`allowCustom`), by click or by `Enter` in the field or on the row; `value` is the trimmed typed text. The typed text is cleared; the consumer adds the option and the value."
     }
    ],
    "slots": [
@@ -15038,6 +15366,62 @@
      "doc": "Form field name. Set, the root renders one hidden input per selected value so a native `form` and `FormData` submit every selection under that name; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the values out."
     },
     {
+     "name": "kind",
+     "type": "'summary' | 'chips'",
+     "default": "'summary'",
+     "required": "false",
+     "doc": "How the trigger shows the selection: `summary` joins the labels (or `displayValue`), `chips` renders one removable chip per value."
+    },
+    {
+     "name": "chipLimit",
+     "type": "number",
+     "default": "0",
+     "required": "false",
+     "doc": "With `kind=\"chips\"`, the most chips shown before a `+N more` chip; `0` shows every chip and wraps."
+    },
+    {
+     "name": "searchable",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Types in the trigger: the text filters the options, `Backspace` in an empty field removes the last value."
+    },
+    {
+     "name": "filter",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "With `searchable`, hides the options whose label does not contain the typed text. Turn off when the server filters on `search`."
+    },
+    {
+     "name": "allowCustom",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "With `searchable`, offers typed text that matches no option as an `Add \"…\"` row that emits `create`."
+    },
+    {
+     "name": "loading",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Shows the loading row in place of the options while they are fetched."
+    },
+    {
+     "name": "error",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Message shown in place of the options when they failed to load; empty shows the options."
+    },
+    {
+     "name": "emptyText",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Text of the list when no option is visible. Empty uses the locale catalog."
+    },
+    {
      "name": "modelValue",
      "type": "TValue[]",
      "default": "() => []",
@@ -15050,6 +15434,18 @@
      "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
+    }
+   ],
+   "events": [
+    {
+     "name": "search",
+     "payload": "string",
+     "notes": "The typed text, on each keystroke (`searchable`), and `''` when the panel closes and the text is cleared. Value event: no DOM event."
+    },
+    {
+     "name": "create",
+     "payload": "(event: MouseEvent | KeyboardEvent, value: string)",
+     "notes": "The `Add \"…\"` row was activated (`allowCustom`), by click or by `Enter` in the field or on the row; `value` is the trimmed typed text. The typed text is cleared; the consumer adds the option and the value."
     }
    ],
    "slots": [
@@ -16575,6 +16971,26 @@
      "name": "actions",
      "scope": "—",
      "notes": "The actions the page owns, Documentation first and the create action on the outer edge."
+    },
+    {
+     "name": "breadcrumb",
+     "scope": "—",
+     "notes": "The trail back to the parent pages, above the title row; usually a `Breadcrumb` with `items`."
+    },
+    {
+     "name": "icon",
+     "scope": "—",
+     "notes": "A leading glyph or square avatar before the title, decorative (`aria-hidden`)."
+    },
+    {
+     "name": "meta",
+     "scope": "—",
+     "notes": "Short facts beside the title, such as a status `Tag`; wraps under the title when the row is narrow."
+    },
+    {
+     "name": "tabs",
+     "scope": "—",
+     "notes": "The tabs of the page's sections, across the full width under the title and actions."
     }
    ],
    "surface": "product",
@@ -16938,10 +17354,17 @@
     },
     {
      "name": "collapsible",
+     "type": "boolean | SidebarCollapsible",
+     "default": "false",
+     "required": "false",
+     "doc": "Adds the collapse trigger; `true` or `'offcanvas'` takes a collapsed sidebar out of the layout (with the edge affordance that brings it back), `'icon'` keeps an icon rail."
+    },
+    {
+     "name": "shortcut",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back."
+     "doc": "Lets Ctrl+B / Cmd+B toggle `open` while the sidebar is collapsible. Ignored while focus is in an editable field."
     },
     {
      "name": "minWidthToken",
@@ -17003,18 +17426,18 @@
    "slots": [
     {
      "name": "default",
-     "scope": "—",
-     "notes": "—"
+     "scope": "{ rail: boolean }",
+     "notes": "The navigation. `rail` is true while the sidebar is collapsed to its icon rail."
     },
     {
      "name": "header",
-     "scope": "—",
-     "notes": "Named slot."
+     "scope": "{ rail: boolean }",
+     "notes": "Named slot. Use `rail` to compact the content in the icon rail."
     },
     {
      "name": "footer",
-     "scope": "—",
-     "notes": "Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer."
+     "scope": "{ rail: boolean }",
+     "notes": "Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer. In the icon rail the row stacks and the trigger becomes the expand button."
     }
    ],
    "surface": "product",
@@ -17051,10 +17474,17 @@
     },
     {
      "name": "collapsible",
+     "type": "boolean | SidebarCollapsible",
+     "default": "false",
+     "required": "false",
+     "doc": "Adds the collapse trigger; `true` or `'offcanvas'` takes a collapsed sidebar out of the layout (with the edge affordance that brings it back), `'icon'` keeps an icon rail."
+    },
+    {
+     "name": "shortcut",
      "type": "boolean",
      "default": "false",
      "required": "false",
-     "doc": "Adds the collapse trigger at the bottom of the rail and the edge affordance that brings a collapsed rail back."
+     "doc": "Lets Ctrl+B / Cmd+B toggle `open` while the sidebar is collapsible. Ignored while focus is in an editable field."
     },
     {
      "name": "minWidthToken",
@@ -17116,18 +17546,18 @@
    "slots": [
     {
      "name": "default",
-     "scope": "—",
-     "notes": "—"
+     "scope": "{ rail: boolean }",
+     "notes": "The navigation. `rail` is true while the sidebar is collapsed to its icon rail."
     },
     {
      "name": "header",
-     "scope": "—",
-     "notes": "Named slot."
+     "scope": "{ rail: boolean }",
+     "notes": "Named slot. Use `rail` to compact the content in the icon rail."
     },
     {
      "name": "footer",
-     "scope": "—",
-     "notes": "Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer."
+     "scope": "{ rail: boolean }",
+     "notes": "Named slot. The collapse trigger renders after this content in the same row, under one full-width separator, so a profile block and the trigger read as one footer. In the icon rail the row stacks and the trigger becomes the expand button."
     }
    ],
    "surface": "product",
@@ -19830,10 +20260,12 @@
     "@aziontech/webkit/command-group",
     "@aziontech/webkit/command-item",
     "@aziontech/webkit/command-empty",
-    "@aziontech/webkit/command-separator"
+    "@aziontech/webkit/command-separator",
+    "@aziontech/webkit/command-page"
    ],
    "models": [
-    "open"
+    "open",
+    "page"
    ],
    "category": "overlay",
    "structure": "composition",
@@ -19865,6 +20297,13 @@
      "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
+    },
+    {
+     "name": "page",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model:page`)."
     }
    ],
    "events": [
@@ -19892,7 +20331,8 @@
    "rootOf": "command",
    "treeShakeableImport": "@aziontech/webkit/command-root",
    "models": [
-    "open"
+    "open",
+    "page"
    ],
    "category": "overlay",
    "structure": "composition",
@@ -19924,6 +20364,13 @@
      "default": "undefined as never",
      "required": "false",
      "doc": "Two-way value (`v-model:open`)."
+    },
+    {
+     "name": "page",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "Two-way value (`v-model:page`)."
     }
    ],
    "events": [
@@ -19991,6 +20438,14 @@
    "treeShakeableImport": "@aziontech/webkit/command-separator",
    "surface": "product"
   },
+  "command-page": {
+   "import": "@aziontech/webkit/command-page",
+   "target": "./src/components/overlay/command/command-page/command-page.vue",
+   "kind": "subcomponent",
+   "parent": "command",
+   "treeShakeableImport": "@aziontech/webkit/command-page",
+   "surface": "product"
+  },
   "dialog": {
    "import": "@aziontech/webkit/dialog",
    "target": "./src/components/overlay/dialog/index.ts",
@@ -20001,8 +20456,6 @@
     "@aziontech/webkit/dialog-close",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
     "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/dialog-trigger"
    ],
@@ -20022,9 +20475,9 @@
     {
      "name": "closable",
      "type": "boolean",
-     "default": "undefined",
+     "default": "true",
      "required": "false",
-     "doc": "Whether the close button (DialogClose) and the context close() close the dialog; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true)."
+     "doc": "Shows the close (X) button at the end of the dialog header. False removes it; Escape and overlay click still follow `dismissible`."
     },
     {
      "name": "dismissible",
@@ -20081,9 +20534,9 @@
     {
      "name": "closable",
      "type": "boolean",
-     "default": "undefined",
+     "default": "true",
      "required": "false",
-     "doc": "Whether the close button (DialogClose) and the context close() close the dialog; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true)."
+     "doc": "Shows the close (X) button at the end of the dialog header. False removes it; Escape and overlay click still follow `dismissible`."
     },
     {
      "name": "dismissible",
@@ -20139,22 +20592,6 @@
    "kind": "subcomponent",
    "parent": "dialog",
    "treeShakeableImport": "@aziontech/webkit/dialog-description",
-   "surface": "product"
-  },
-  "dialog-overlay": {
-   "import": "@aziontech/webkit/dialog-overlay",
-   "target": "./src/components/overlay/dialog/dialog-overlay.vue",
-   "kind": "subcomponent",
-   "parent": "dialog",
-   "treeShakeableImport": "@aziontech/webkit/dialog-overlay",
-   "surface": "product"
-  },
-  "dialog-portal": {
-   "import": "@aziontech/webkit/dialog-portal",
-   "target": "./src/components/overlay/dialog/dialog-portal.vue",
-   "kind": "subcomponent",
-   "parent": "dialog",
-   "treeShakeableImport": "@aziontech/webkit/dialog-portal",
    "surface": "product"
   },
   "dialog-title": {
@@ -20222,7 +20659,7 @@
     {
      "name": "size",
      "type": "'small' | 'medium'",
-     "default": "'small'",
+     "default": "'medium'",
      "required": "false",
      "doc": "Width of the dialog."
     },
@@ -20298,8 +20735,6 @@
     "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/drawer-trigger"
    ],
@@ -20319,9 +20754,9 @@
     {
      "name": "closable",
      "type": "boolean",
-     "default": "undefined",
+     "default": "true",
      "required": "false",
-     "doc": "Whether the close button (DrawerClose) and the context close() close the drawer; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true)."
+     "doc": "Shows the close (X) button at the end of the drawer header. False removes it; Escape and overlay click still follow `dismissible`."
     },
     {
      "name": "dismissible",
@@ -20329,6 +20764,13 @@
      "default": "true",
      "required": "false",
      "doc": "Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`."
+    },
+    {
+     "name": "modal",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, `aria-modal` false; Escape, the close button and focus restore still work."
     },
     {
      "name": "side",
@@ -20385,9 +20827,9 @@
     {
      "name": "closable",
      "type": "boolean",
-     "default": "undefined",
+     "default": "true",
      "required": "false",
-     "doc": "Whether the close button (DrawerClose) and the context close() close the drawer; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true)."
+     "doc": "Shows the close (X) button at the end of the drawer header. False removes it; Escape and overlay click still follow `dismissible`."
     },
     {
      "name": "dismissible",
@@ -20395,6 +20837,13 @@
      "default": "true",
      "required": "false",
      "doc": "Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`."
+    },
+    {
+     "name": "modal",
+     "type": "boolean",
+     "default": "true",
+     "required": "false",
+     "doc": "Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, `aria-modal` false; Escape, the close button and focus restore still work."
     },
     {
      "name": "side",
@@ -20450,22 +20899,6 @@
    "kind": "subcomponent",
    "parent": "drawer",
    "treeShakeableImport": "@aziontech/webkit/drawer-description",
-   "surface": "product"
-  },
-  "drawer-overlay": {
-   "import": "@aziontech/webkit/drawer-overlay",
-   "target": "./src/components/overlay/drawer/drawer-overlay.vue",
-   "kind": "subcomponent",
-   "parent": "drawer",
-   "treeShakeableImport": "@aziontech/webkit/drawer-overlay",
-   "surface": "product"
-  },
-  "drawer-portal": {
-   "import": "@aziontech/webkit/drawer-portal",
-   "target": "./src/components/overlay/drawer/drawer-portal.vue",
-   "kind": "subcomponent",
-   "parent": "drawer",
-   "treeShakeableImport": "@aziontech/webkit/drawer-portal",
    "surface": "product"
   },
   "drawer-title": {
@@ -20580,6 +21013,171 @@
    "kind": "subcomponent",
    "parent": "panel",
    "treeShakeableImport": "@aziontech/webkit/panel-header",
+   "surface": "product"
+  },
+  "hover-card": {
+   "import": "@aziontech/webkit/hover-card",
+   "target": "./src/components/overlay/hover-card/index.ts",
+   "kind": "component",
+   "compoundRoot": true,
+   "treeShakeableImport": "@aziontech/webkit/hover-card-root",
+   "subcomponents": [
+    "@aziontech/webkit/hover-card-trigger",
+    "@aziontech/webkit/hover-card-content"
+   ],
+   "models": [
+    "open"
+   ],
+   "category": "overlay",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "placement",
+     "type": "HoverCardPlacementInput` (a side with optional `-start` / `-end`, or `'auto'`)",
+     "default": "'bottom'",
+     "required": "false",
+     "doc": "Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room."
+    },
+    {
+     "name": "offset",
+     "type": "number",
+     "default": "8",
+     "required": "false",
+     "doc": "Pixel gap between the trigger and the card."
+    },
+    {
+     "name": "openDelay",
+     "type": "number",
+     "default": "500",
+     "required": "false",
+     "doc": "Milliseconds the pointer or focus must stay on the trigger before the card opens."
+    },
+    {
+     "name": "closeDelay",
+     "type": "number",
+     "default": "300",
+     "required": "false",
+     "doc": "Milliseconds after the pointer or focus leaves the trigger and the card before the card closes."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Never opens the card."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state while `v-model:open` is unbound."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Place one `<HoverCard.Trigger>` and one `<HoverCard.Content>`."
+    }
+   ],
+   "surface": "product",
+   "examplesFile": "catalog/examples/hover-card.json",
+   "docsFile": "catalog/components/hover-card.json"
+  },
+  "hover-card-root": {
+   "import": "@aziontech/webkit/hover-card-root",
+   "target": "./src/components/overlay/hover-card/hover-card.vue",
+   "kind": "root",
+   "rootOf": "hover-card",
+   "treeShakeableImport": "@aziontech/webkit/hover-card-root",
+   "models": [
+    "open"
+   ],
+   "category": "overlay",
+   "structure": "composition",
+   "props": [
+    {
+     "name": "placement",
+     "type": "HoverCardPlacementInput` (a side with optional `-start` / `-end`, or `'auto'`)",
+     "default": "'bottom'",
+     "required": "false",
+     "doc": "Side of the trigger the card opens on, flipped when it does not fit; `'auto'` picks the side with room."
+    },
+    {
+     "name": "offset",
+     "type": "number",
+     "default": "8",
+     "required": "false",
+     "doc": "Pixel gap between the trigger and the card."
+    },
+    {
+     "name": "openDelay",
+     "type": "number",
+     "default": "500",
+     "required": "false",
+     "doc": "Milliseconds the pointer or focus must stay on the trigger before the card opens."
+    },
+    {
+     "name": "closeDelay",
+     "type": "number",
+     "default": "300",
+     "required": "false",
+     "doc": "Milliseconds after the pointer or focus leaves the trigger and the card before the card closes."
+    },
+    {
+     "name": "disabled",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Never opens the card."
+    },
+    {
+     "name": "defaultOpen",
+     "type": "boolean",
+     "default": "false",
+     "required": "false",
+     "doc": "Initial open state while `v-model:open` is unbound."
+    },
+    {
+     "name": "open",
+     "type": "boolean",
+     "default": "undefined as never",
+     "required": "false",
+     "doc": "Two-way value (`v-model:open`)."
+    }
+   ],
+   "slots": [
+    {
+     "name": "default",
+     "scope": "—",
+     "notes": "Place one `<HoverCard.Trigger>` and one `<HoverCard.Content>`."
+    }
+   ],
+   "surface": "product",
+   "docsFile": "catalog/components/hover-card-root.json"
+  },
+  "hover-card-trigger": {
+   "import": "@aziontech/webkit/hover-card-trigger",
+   "target": "./src/components/overlay/hover-card/hover-card-trigger/hover-card-trigger.vue",
+   "kind": "subcomponent",
+   "parent": "hover-card",
+   "treeShakeableImport": "@aziontech/webkit/hover-card-trigger",
+   "surface": "product"
+  },
+  "hover-card-content": {
+   "import": "@aziontech/webkit/hover-card-content",
+   "target": "./src/components/overlay/hover-card/hover-card-content/hover-card-content.vue",
+   "kind": "subcomponent",
+   "parent": "hover-card",
+   "treeShakeableImport": "@aziontech/webkit/hover-card-content",
    "surface": "product"
   },
   "popover": {
@@ -20869,6 +21467,13 @@
      "default": "undefined",
      "required": "false",
      "doc": "Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute."
+    },
+    {
+     "name": "timeZone",
+     "type": "string",
+     "default": "''",
+     "required": "false",
+     "doc": "IANA time zone every `Timestamp` below the provider shows its local time in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone."
     }
    ],
    "slots": [
@@ -28433,7 +29038,7 @@
     {
      "name": "size",
      "type": "'small' | 'medium' | 'large'",
-     "default": "'medium'",
+     "default": "'large'",
      "required": "false",
      "doc": "Size token of every button."
     },
@@ -29567,10 +30172,7 @@
     "Card",
     "CollectionPreferences",
     "ConfirmDialog",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DropdownMenu",
@@ -29606,10 +30208,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
@@ -29696,11 +30295,8 @@
     "Card",
     "CardPricing",
     "Checkbox",
-    "DrawerClose",
     "DrawerContent",
     "DrawerDescription",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "FeatureList",
@@ -29722,11 +30318,8 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/card-pricing",
     "@aziontech/webkit/checkbox",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/feature-list",
@@ -29786,8 +30379,6 @@
     "ConfirmDialog",
     "DialogContent",
     "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
     "Dialog",
     "DialogTitle",
     "DropdownMenu",
@@ -29817,8 +30408,6 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
     "@aziontech/webkit/dialog-root",
     "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/dropdown-menu",
@@ -29976,10 +30565,7 @@
     "Button",
     "Card",
     "Checkbox",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "FeatureList",
@@ -30007,10 +30593,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/checkbox",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/feature-list",
@@ -30327,14 +30910,9 @@
     "CopyButton",
     "DialogContent",
     "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
     "Dialog",
     "DialogTitle",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DropdownMenu",
@@ -30366,14 +30944,9 @@
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
     "@aziontech/webkit/dialog-root",
     "@aziontech/webkit/dialog-title",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
@@ -30458,15 +31031,10 @@
     "ConfirmDialog",
     "DialogContent",
     "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
     "Dialog",
     "DialogTitle",
-    "DrawerClose",
     "DrawerContent",
     "DrawerDescription",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DropdownMenu",
@@ -30497,15 +31065,10 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
     "@aziontech/webkit/dialog-root",
     "@aziontech/webkit/dialog-title",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
@@ -30662,8 +31225,6 @@
     "Conversation",
     "CopyButton",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "EmptyState",
@@ -30685,8 +31246,6 @@
     "@aziontech/webkit/conversation",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
@@ -30722,7 +31281,7 @@
    "title": "Templates/Platform/AI/AiChatDrawer",
    "source": "blocks/platform/ai/ai-chat-drawer/ai-chat-drawer.vue",
    "surface": "product",
-   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValuePairs` with a `StatusIndicator`) beside a medium `Drawer` with no overlay, so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and `DrawerClose`. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerPortal`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
+   "summary": "The generative AI assistant in a right-side drawer over a resource page, so the reader asks about what they are looking at without leaving it: a workload page (`PageHeader` with an Agent `Button`, the name the console header gives the assistant, a `Card` of `KeyValuePairs` with a `StatusIndicator`) beside a medium `Drawer` with `:modal=\"false\"` (no overlay), so the page stays undimmed and readable whose `PanelHeader` holds `DrawerTitle`, a Preview `Tag`, New chat and the drawer's own close button. Inside, an `EmptyState` with support prompts about this workload (`SuggestionGroup`), then a `Conversation` with every message at the inline start, responses that think (`Reasoning`), stream (`StreamingResponse`), cite (`Sources`) and carry Copy, Regenerate and feedback, and a `PromptInput` pinned at the foot with the disclaimer. Built from `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `ChatMessage`, `Conversation`, `PromptInput`, `IconButton` and `CopyButton`. A page body for ConsoleLayout, rendered in its default slot; inside ConsoleLayout on a wide screen the same conversation can go in the layout's tools region (`v-model:tools-open`) instead.",
    "intents": [
     "ai assistant drawer",
     "ask ai about this page",
@@ -30748,9 +31307,7 @@
     "ChatMessage",
     "Conversation",
     "CopyButton",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "EmptyState",
@@ -30772,9 +31329,7 @@
     "@aziontech/webkit/chat-message",
     "@aziontech/webkit/conversation",
     "@aziontech/webkit/copy-button",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
@@ -30810,7 +31365,7 @@
    "title": "Templates/Platform/Auth",
    "source": "blocks/platform/auth/auth.vue",
    "surface": "product",
-   "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `kind=\"link\"`, never an anchor to `#`. Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.",
+   "summary": "The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `kind=\"link\"`, never an anchor to `#`. Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.",
    "intents": [
     "login",
     "log in",
@@ -30864,7 +31419,27 @@
     "código de autenticação",
     "loading sign-in providers",
     "providers loading",
-    "carregando provedores de login"
+    "carregando provedores de login",
+    "oauth consent",
+    "authorize app",
+    "authorize application",
+    "app authorization",
+    "consent screen",
+    "allow access",
+    "grant access",
+    "scopes",
+    "permissions requested",
+    "third-party app access",
+    "device authorization",
+    "device code",
+    "cli login",
+    "connect cli",
+    "device flow",
+    "autorizar aplicativo",
+    "tela de consentimento",
+    "conceder acesso",
+    "autorizar dispositivo",
+    "login pela cli"
    ],
    "skills": [
     "webkit-form",
@@ -30880,6 +31455,7 @@
    ],
    "components": [
     "Alert",
+    "Avatar",
     "Brand",
     "Button",
     "Card",
@@ -30889,6 +31465,8 @@
     "HelperText",
     "IconButton",
     "Input",
+    "Item",
+    "KeyValuePairs",
     "OtpInput",
     "PageHeader",
     "PasswordInput",
@@ -30901,6 +31479,7 @@
    ],
    "imports": [
     "@aziontech/webkit/alert",
+    "@aziontech/webkit/avatar",
     "@aziontech/webkit/brand",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
@@ -30910,6 +31489,8 @@
     "@aziontech/webkit/helper-text",
     "@aziontech/webkit/icon-button",
     "@aziontech/webkit/input",
+    "@aziontech/webkit/item",
+    "@aziontech/webkit/key-value-pairs",
     "@aziontech/webkit/otp-input",
     "@aziontech/webkit/page-header",
     "@aziontech/webkit/password-input",
@@ -30958,6 +31539,12 @@
     },
     {
      "name": "MfaCode"
+    },
+    {
+     "name": "OauthConsent"
+    },
+    {
+     "name": "DeviceAuthorization"
     }
    ],
    "file": "catalog/patterns/platform/auth.json"
@@ -31130,10 +31717,7 @@
     "Button",
     "Card",
     "CodeEditor",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DrawerTrigger",
@@ -31172,10 +31756,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-editor",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/drawer-trigger",
@@ -31273,10 +31854,7 @@
     "Avatar",
     "Button",
     "Card",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DrawerTrigger",
@@ -31306,10 +31884,7 @@
     "@aziontech/webkit/avatar",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/drawer-trigger",
@@ -31386,11 +31961,8 @@
    ],
    "components": [
     "Button",
-    "DialogClose",
     "DialogContent",
     "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
     "Dialog",
     "DialogTitle",
     "EmptyState",
@@ -31407,11 +31979,8 @@
    ],
    "imports": [
     "@aziontech/webkit/button",
-    "@aziontech/webkit/dialog-close",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
     "@aziontech/webkit/dialog-root",
     "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/empty-state",
@@ -32453,11 +33022,8 @@
     "Alert",
     "Chart",
     "ChartCard",
-    "DialogClose",
     "DialogContent",
     "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
     "Dialog",
     "DialogTitle",
     "DropdownMenu",
@@ -32484,11 +33050,8 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
-    "@aziontech/webkit/dialog-close",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
     "@aziontech/webkit/dialog-root",
     "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/dropdown-menu",
@@ -32782,11 +33345,8 @@
     "Alert",
     "Chart",
     "ChartCard",
-    "DialogClose",
     "DialogContent",
     "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
     "Dialog",
     "DialogTitle",
     "DropdownMenu",
@@ -32810,11 +33370,8 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
-    "@aziontech/webkit/dialog-close",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
     "@aziontech/webkit/dialog-root",
     "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/dropdown-menu",
@@ -33356,11 +33913,8 @@
     "Button",
     "Chart",
     "ChartCard",
-    "DialogClose",
     "DialogContent",
     "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
     "Dialog",
     "DialogTitle",
     "DropdownMenu",
@@ -33389,11 +33943,8 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/chart",
     "@aziontech/webkit/chart-card",
-    "@aziontech/webkit/dialog-close",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
     "@aziontech/webkit/dialog-root",
     "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/dropdown-menu",
@@ -33732,11 +34283,8 @@
     "ConfirmDialog",
     "ConsoleLayout",
     "CopyButton",
-    "DrawerClose",
     "DrawerContent",
     "DrawerDescription",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DropdownMenu",
@@ -33779,11 +34327,8 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/console-layout",
     "@aziontech/webkit/copy-button",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
@@ -34002,10 +34547,7 @@
    "components": [
     "Button",
     "Card",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "IconButton",
@@ -34019,10 +34561,7 @@
    "imports": [
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/icon-button",
@@ -34080,11 +34619,8 @@
     "Card",
     "CollectionPreferences",
     "CopyButton",
-    "DrawerClose",
     "DrawerContent",
     "DrawerDescription",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DropdownMenuGroup",
@@ -34122,11 +34658,8 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/copy-button",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu-group",
@@ -34299,11 +34832,8 @@
     "CodeEditor",
     "ConfirmDialog",
     "ConsoleLayout",
-    "DrawerClose",
     "DrawerContent",
     "DrawerDescription",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DropdownMenu",
@@ -34346,11 +34876,8 @@
     "@aziontech/webkit/code-editor",
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/console-layout",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
@@ -34475,10 +35002,7 @@
     "Checkbox",
     "CollectionPreferences",
     "ConfirmDialog",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DrawerTrigger",
@@ -34516,10 +35040,7 @@
     "@aziontech/webkit/checkbox",
     "@aziontech/webkit/collection-preferences",
     "@aziontech/webkit/confirm-dialog",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/drawer-trigger",
@@ -34775,11 +35296,8 @@
     "ConfirmDialog",
     "ConsoleLayout",
     "CopyButton",
-    "DrawerClose",
     "DrawerContent",
     "DrawerDescription",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DropdownMenu",
@@ -34819,11 +35337,8 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/console-layout",
     "@aziontech/webkit/copy-button",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
     "@aziontech/webkit/drawer-description",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
@@ -34922,10 +35437,7 @@
     "Button",
     "Card",
     "Combobox",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DrawerTrigger",
@@ -34948,10 +35460,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/combobox",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/drawer-trigger",
@@ -35016,10 +35525,7 @@
     "Checkbox",
     "CodeEditor",
     "ConfirmDialog",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DropdownMenu",
@@ -35049,10 +35555,7 @@
     "@aziontech/webkit/checkbox",
     "@aziontech/webkit/code-editor",
     "@aziontech/webkit/confirm-dialog",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
@@ -35760,8 +36263,6 @@
     "ConfirmDialog",
     "DialogContent",
     "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
     "Dialog",
     "DialogTitle",
     "DropdownMenuGroup",
@@ -35792,8 +36293,6 @@
     "@aziontech/webkit/confirm-dialog",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
     "@aziontech/webkit/dialog-root",
     "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/dropdown-menu-group",
@@ -35872,10 +36371,7 @@
     "Button",
     "Card",
     "DocProse",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "EmptyState",
@@ -35906,10 +36402,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/doc-prose",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
@@ -36025,10 +36518,7 @@
     "Card",
     "CodeBlock",
     "CodeEditor",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DropdownMenu",
@@ -36068,10 +36558,7 @@
     "@aziontech/webkit/card",
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/code-editor",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
@@ -36172,17 +36659,11 @@
     "Button",
     "Card",
     "Combobox",
-    "DialogClose",
     "DialogContent",
     "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
     "Dialog",
     "DialogTitle",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "EmptyState",
@@ -36213,17 +36694,11 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/combobox",
-    "@aziontech/webkit/dialog-close",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
     "@aziontech/webkit/dialog-root",
     "@aziontech/webkit/dialog-title",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
@@ -36326,10 +36801,7 @@
     "CodeBlock",
     "CopyButton",
     "DateRangePicker",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "DropdownMenu",
@@ -36361,10 +36833,7 @@
     "@aziontech/webkit/code-block",
     "@aziontech/webkit/copy-button",
     "@aziontech/webkit/date-range-picker",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/dropdown-menu",
@@ -36540,7 +37009,7 @@
    "title": "Templates/Platform/View/TemplateBrowser",
    "source": "blocks/platform/view/template-browser/template-browser.vue",
    "surface": "product",
-   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card kind=\"integration\"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
+   "summary": "The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card kind=\"integration\"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
    "intents": [
     "template browser",
     "template gallery",
@@ -36568,10 +37037,7 @@
     "Button",
     "Card",
     "DocProse",
-    "DrawerClose",
     "DrawerContent",
-    "DrawerOverlay",
-    "DrawerPortal",
     "Drawer",
     "DrawerTitle",
     "EmptyState",
@@ -36589,10 +37055,7 @@
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
     "@aziontech/webkit/doc-prose",
-    "@aziontech/webkit/drawer-close",
     "@aziontech/webkit/drawer-content",
-    "@aziontech/webkit/drawer-overlay",
-    "@aziontech/webkit/drawer-portal",
     "@aziontech/webkit/drawer-root",
     "@aziontech/webkit/drawer-title",
     "@aziontech/webkit/empty-state",
@@ -36654,11 +37117,8 @@
     "Alert",
     "Button",
     "Card",
-    "DialogClose",
     "DialogContent",
     "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
     "Dialog",
     "DialogTitle",
     "EmptyState",
@@ -36680,11 +37140,8 @@
     "@aziontech/webkit/alert",
     "@aziontech/webkit/button",
     "@aziontech/webkit/card",
-    "@aziontech/webkit/dialog-close",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
     "@aziontech/webkit/dialog-root",
     "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/empty-state",
@@ -36778,11 +37235,8 @@
     "Command",
     "ConsoleLayout",
     "ConsoleLayout",
-    "DialogClose",
     "DialogContent",
     "DialogDescription",
-    "DialogOverlay",
-    "DialogPortal",
     "Dialog",
     "DialogTitle",
     "DropdownMenu",
@@ -36815,11 +37269,8 @@
     "@aziontech/webkit/command",
     "@aziontech/webkit/console-layout",
     "@aziontech/webkit/console-layout-root",
-    "@aziontech/webkit/dialog-close",
     "@aziontech/webkit/dialog-content",
     "@aziontech/webkit/dialog-description",
-    "@aziontech/webkit/dialog-overlay",
-    "@aziontech/webkit/dialog-portal",
     "@aziontech/webkit/dialog-root",
     "@aziontech/webkit/dialog-title",
     "@aziontech/webkit/dropdown-menu",

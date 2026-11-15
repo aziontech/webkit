@@ -946,7 +946,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                 >
                                   <Tag
                                     :label="entry"
-                                    severity="secondary"
+                                    severity="neutral"
                                     size="small"
                                   />
                                 </li>
@@ -990,7 +990,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                             <Item.Actions>
                               <Tag
                                 :label="row.as"
-                                severity="secondary"
+                                severity="neutral"
                                 size="small"
                               />
                             </Item.Actions>

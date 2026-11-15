@@ -6,8 +6,6 @@
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
@@ -779,94 +777,91 @@
       v-model:open="uploadOpen"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DialogTitle>{{
-                uploadMode === 'folder' ? 'Upload folder' : 'Upload files'
-              }}</DialogTitle>
-              <DialogDescription>
-                {{ uploadMode === 'folder' ? 'The folder and its subfolders go' : 'Files go' }} to
-                {{ folderPath.length ? folderPath.join('') : rootName }}. A file with the same path
-                is replaced.
-              </DialogDescription>
-            </div>
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <FileDropzone
-                :directories="uploadMode === 'folder'"
-                :title="uploadMode === 'folder' ? 'Drop a folder to upload' : undefined"
-                description="Up to 300 MB per file."
-                @drop="(_event, files) => addPicked(files)"
-              >
-                <Button
-                  key="button-1"
-                  v-if="uploadMode === 'folder'"
-                  label="Browse folder"
-                  kind="secondary"
-                  size="medium"
-                  icon="pi pi-folder-open"
-                  @click="folderInput?.click()"
-                />
-                <Button
-                  key="button-2"
-                  v-else
-                  label="Browse files"
-                  kind="secondary"
-                  size="medium"
-                  @click="pickerInput?.click()"
-                />
-              </FileDropzone>
-              <input
-                ref="pickerInput"
-                type="file"
-                multiple
-                class="hidden"
-                aria-hidden="true"
-                tabindex="-1"
-                @change="onPick"
-              />
-              <input
-                ref="folderInput"
-                type="file"
-                webkitdirectory
-                class="hidden"
-                aria-hidden="true"
-                tabindex="-1"
-                @change="onPick"
-              />
-              <FileTokenGroup
-                v-if="picked.length"
-                :items="picked"
-                :limit="5"
-                aria-label="Files to upload"
-                @remove="(_event, { index }) => removePicked(index)"
-              />
-            </div>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DialogTitle>{{
+              uploadMode === 'folder' ? 'Upload folder' : 'Upload files'
+            }}</DialogTitle>
+            <DialogDescription>
+              {{ uploadMode === 'folder' ? 'The folder and its subfolders go' : 'Files go' }} to
+              {{ folderPath.length ? folderPath.join('') : rootName }}. A file with the same path is
+              replaced.
+            </DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <FileDropzone
+              :directories="uploadMode === 'folder'"
+              :title="uploadMode === 'folder' ? 'Drop a folder to upload' : undefined"
+              description="Up to 300 MB per file."
+              @drop="(_event, files) => addPicked(files)"
+            >
               <Button
-                label="Cancel"
-                kind="outlined"
+                key="button-1"
+                v-if="uploadMode === 'folder'"
+                label="Browse folder"
+                kind="secondary"
                 size="medium"
-                @click="uploadOpen = false"
+                icon="pi pi-folder-open"
+                @click="folderInput?.click()"
               />
               <Button
-                :label="pickable.length > 1 ? `Upload ${pickable.length} files` : 'Upload file'"
-                kind="primary"
+                key="button-2"
+                v-else
+                label="Browse files"
+                kind="secondary"
                 size="medium"
-                icon="pi pi-upload"
-                :disabled="!pickable.length"
-                @click="startUpload"
+                @click="pickerInput?.click()"
               />
-            </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+            </FileDropzone>
+            <input
+              ref="pickerInput"
+              type="file"
+              multiple
+              class="hidden"
+              aria-hidden="true"
+              tabindex="-1"
+              @change="onPick"
+            />
+            <input
+              ref="folderInput"
+              type="file"
+              webkitdirectory
+              class="hidden"
+              aria-hidden="true"
+              tabindex="-1"
+              @change="onPick"
+            />
+            <FileTokenGroup
+              v-if="picked.length"
+              :items="picked"
+              :limit="5"
+              aria-label="Files to upload"
+              @remove="(_event, { index }) => removePicked(index)"
+            />
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              size="medium"
+              @click="uploadOpen = false"
+            />
+            <Button
+              :label="pickable.length > 1 ? `Upload ${pickable.length} files` : 'Upload file'"
+              kind="primary"
+              size="medium"
+              icon="pi pi-upload"
+              :disabled="!pickable.length"
+              @click="startUpload"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
     <UploadProgress
       v-if="transfer.length"

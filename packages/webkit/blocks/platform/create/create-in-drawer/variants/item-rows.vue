@@ -1,10 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -122,153 +119,115 @@
       size="large"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            class="flex min-h-0 flex-1 flex-col"
-            aria-label="Add Origin"
-            novalidate
-            @submit.prevent="submit"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Add Origin</DrawerTitle>
-                <p class="text-body-sm text-(--text-muted)">
-                  An origin is a server storefront fetches content from. Name it, then say how to
-                  reach it.
-                </p>
-              </div>
-              <DrawerClose />
-            </PanelHeader>
+      <DrawerContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          aria-label="Add Origin"
+          novalidate
+          @submit.prevent="submit"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>Add Origin</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                An origin is a server storefront fetches content from. Name it, then say how to
+                reach it.
+              </p>
+            </div>
+          </PanelHeader>
 
-            <PanelContent>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
-                :disabled="submitting"
-              >
-                <legend class="sr-only">Add Origin</legend>
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
+              :disabled="submitting"
+            >
+              <legend class="sr-only">Add Origin</legend>
 
-                <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
-                  <Card :padded="false">
-                    <template #content>
-                      <Item.List>
-                        <SettingRow
-                          title="Name"
-                          description="A unique identifier. Lower-case letters, numbers, and hyphen."
-                        >
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <div class="contents font-code">
-                                <Input
-                                  v-model="form.name"
-                                  size="large"
-                                  :disabled="submitting"
-                                  class="w-full"
-                                  aria-label="Name"
-                                  placeholder="my-origin"
-                                  :required="!!errors.name && !form.name.trim()"
-                                  :invalid="!!errors.name && !!form.name.trim()"
-                                  :aria-describedby="errors.name ? 'origin-name-error' : undefined"
-                                  @update:model-value="errors.name = ''"
-                                />
-                              </div>
-                              <HelperText
-                                v-if="errors.name"
-                                id="origin-name-error"
-                                :kind="form.name.trim() ? 'invalid' : 'required'"
-                                :label="errors.name"
-                              />
-                            </div>
-                          </div>
-                        </SettingRow>
-                        <SettingRow
-                          title="Description"
-                          description="A short note about what this origin serves."
-                        >
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <Input
-                              v-model="form.description"
-                              size="large"
-                              :disabled="submitting"
-                              class="w-full"
-                              aria-label="Description"
-                              placeholder="Optional"
-                            />
-                          </div>
-                        </SettingRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </section>
-
-                <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Connection</p>
-                  <Card :padded="false">
-                    <template #content>
-                      <Item.List>
-                        <SettingRow
-                          title="Protocol"
-                          description="How storefront connects to the origin."
-                        >
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
-                            <div class="flex w-full flex-col gap-(--spacing-xs)">
-                              <Select
-                                v-model="form.protocol"
+              <section class="flex flex-col gap-(--layout-group-gap)">
+                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="Name"
+                        description="A unique identifier. Lower-case letters, numbers, and hyphen."
+                      >
+                        <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                          <div class="flex w-full flex-col gap-(--spacing-xs)">
+                            <div class="contents font-code">
+                              <Input
+                                v-model="form.name"
                                 size="large"
                                 :disabled="submitting"
                                 class="w-full"
-                                placeholder="Select a protocol"
-                                :required="!!errors.protocol"
-                                :display-value="protocolLabel"
-                                @update:model-value="errors.protocol = ''"
-                              >
-                                <Select.Trigger
-                                  id="origin-protocol"
-                                  aria-label="Protocol"
-                                  :aria-describedby="
-                                    errors.protocol ? 'origin-protocol-error' : undefined
-                                  "
-                                />
-                                <Select.Content>
-                                  <Select.Option
-                                    v-for="option in protocols"
-                                    :key="option.value"
-                                    :value="option.value"
-                                  >
-                                    {{ option.label }}
-                                  </Select.Option>
-                                </Select.Content>
-                              </Select>
-                              <HelperText
-                                v-if="errors.protocol"
-                                id="origin-protocol-error"
-                                kind="required"
-                                :label="errors.protocol"
+                                aria-label="Name"
+                                placeholder="my-origin"
+                                :required="!!errors.name && !form.name.trim()"
+                                :invalid="!!errors.name && !!form.name.trim()"
+                                :aria-describedby="errors.name ? 'origin-name-error' : undefined"
+                                @update:model-value="errors.name = ''"
                               />
                             </div>
+                            <HelperText
+                              v-if="errors.name"
+                              id="origin-name-error"
+                              :kind="form.name.trim() ? 'invalid' : 'required'"
+                              :label="errors.name"
+                            />
                           </div>
-                        </SettingRow>
-                        <SettingRow
-                          title="Region"
-                          description="Where the origin server runs."
-                        >
-                          <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                        </div>
+                      </SettingRow>
+                      <SettingRow
+                        title="Description"
+                        description="A short note about what this origin serves."
+                      >
+                        <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                          <Input
+                            v-model="form.description"
+                            size="large"
+                            :disabled="submitting"
+                            class="w-full"
+                            aria-label="Description"
+                            placeholder="Optional"
+                          />
+                        </div>
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </section>
+
+              <section class="flex flex-col gap-(--layout-group-gap)">
+                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Connection</p>
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="Protocol"
+                        description="How storefront connects to the origin."
+                      >
+                        <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                          <div class="flex w-full flex-col gap-(--spacing-xs)">
                             <Select
-                              v-model="form.region"
+                              v-model="form.protocol"
                               size="large"
                               :disabled="submitting"
                               class="w-full"
-                              :display-value="regionLabel"
+                              placeholder="Select a protocol"
+                              :required="!!errors.protocol"
+                              :display-value="protocolLabel"
+                              @update:model-value="errors.protocol = ''"
                             >
                               <Select.Trigger
-                                id="origin-region"
-                                aria-label="Region"
+                                id="origin-protocol"
+                                aria-label="Protocol"
+                                :aria-describedby="
+                                  errors.protocol ? 'origin-protocol-error' : undefined
+                                "
                               />
                               <Select.Content>
                                 <Select.Option
-                                  v-for="option in regions"
+                                  v-for="option in protocols"
                                   :key="option.value"
                                   :value="option.value"
                                 >
@@ -276,66 +235,100 @@
                                 </Select.Option>
                               </Select.Content>
                             </Select>
+                            <HelperText
+                              v-if="errors.protocol"
+                              id="origin-protocol-error"
+                              kind="required"
+                              :label="errors.protocol"
+                            />
                           </div>
-                        </SettingRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </section>
-
-                <section class="flex flex-col gap-(--layout-group-gap)">
-                  <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Options</p>
-                  <Card :padded="false">
-                    <template #content>
-                      <Item.List>
-                        <SettingRow
-                          title="Active"
-                          description="Send traffic to the origin as soon as it is added."
-                          kind="compact"
-                        >
-                          <Switch
-                            v-model="form.active"
-                            aria-label="Active"
+                        </div>
+                      </SettingRow>
+                      <SettingRow
+                        title="Region"
+                        description="Where the origin server runs."
+                      >
+                        <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
+                          <Select
+                            v-model="form.region"
+                            size="large"
                             :disabled="submitting"
-                          />
-                        </SettingRow>
-                        <SettingRow
-                          title="Request logging"
-                          description="Record the requests storefront sends to this origin."
-                          kind="compact"
-                        >
-                          <Switch
-                            v-model="form.logging"
-                            aria-label="Request logging"
-                            :disabled="submitting"
-                          />
-                        </SettingRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </section>
-              </fieldset>
-            </PanelContent>
+                            class="w-full"
+                            :display-value="regionLabel"
+                          >
+                            <Select.Trigger
+                              id="origin-region"
+                              aria-label="Region"
+                            />
+                            <Select.Content>
+                              <Select.Option
+                                v-for="option in regions"
+                                :key="option.value"
+                                :value="option.value"
+                              >
+                                {{ option.label }}
+                              </Select.Option>
+                            </Select.Content>
+                          </Select>
+                        </div>
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </section>
 
-            <PanelFooter>
-              <div
-                class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
-              >
-                <div class="w-full md:w-fit">
-                  <Button
-                    class="w-full"
-                    label="Add Origin"
-                    kind="primary"
-                    size="medium"
-                    :loading="submitting"
-                    type="submit"
-                  />
-                </div>
+              <section class="flex flex-col gap-(--layout-group-gap)">
+                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Options</p>
+                <Card :padded="false">
+                  <template #content>
+                    <Item.List>
+                      <SettingRow
+                        title="Active"
+                        description="Send traffic to the origin as soon as it is added."
+                        kind="compact"
+                      >
+                        <Switch
+                          v-model="form.active"
+                          aria-label="Active"
+                          :disabled="submitting"
+                        />
+                      </SettingRow>
+                      <SettingRow
+                        title="Request logging"
+                        description="Record the requests storefront sends to this origin."
+                        kind="compact"
+                      >
+                        <Switch
+                          v-model="form.logging"
+                          aria-label="Request logging"
+                          :disabled="submitting"
+                        />
+                      </SettingRow>
+                    </Item.List>
+                  </template>
+                </Card>
+              </section>
+            </fieldset>
+          </PanelContent>
+
+          <PanelFooter>
+            <div
+              class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
+            >
+              <div class="w-full md:w-fit">
+                <Button
+                  class="w-full"
+                  label="Add Origin"
+                  kind="primary"
+                  size="medium"
+                  :loading="submitting"
+                  type="submit"
+                />
               </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

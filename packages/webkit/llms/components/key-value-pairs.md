@@ -77,13 +77,13 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
   - Events: _none_.
   - Slots: `default` — the value (text or composed components); fallback is the empty-value marker (`<span aria-hidden="true">—</span><span class="sr-only">Not set</span>`), shown when the slot is omitted or renders nothing. `info` — optional affordance after the label text inside the `<dt>`, such as a `Hint`.
   - While the root is `loading`, the `<dd>` renders a `Skeleton` in place of the value; the label stays visible.
-  - `data-testid` fallback `${rootTestId}-item`; a consumer `data-testid` on the Item wins.
+  - `data-testid` fallback `${rootTestId}__item`; a consumer `data-testid` on the Item wins.
 - `key-value-pairs-group/key-value-pairs-group.vue` — a titled column: `<div>` → `<dt>` (title) + `<dd>` → nested `<dl>` stacking its Items in one column.
   - Props: `title: string` (required — the group's term, shown above its Items).
   - Events: _none_.
   - Slots: `default` — the group's `KeyValuePairs.Item` children.
   - Occupies one cell of the root grid, so `columns` sets how many groups sit side by side.
-  - `data-testid` fallback `${rootTestId}-group`; a consumer `data-testid` on the Group wins.
+  - `data-testid` fallback `${rootTestId}__group`; a consumer `data-testid` on the Group wins.
 
 ## States
 
@@ -127,6 +127,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
       <CopyButton
         value="1752167890"
         aria-label="Copy workload ID"
+        size="small"
       />
     </KeyValuePairs.Item>
     <KeyValuePairs.Item label="Status">
@@ -169,6 +170,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
         <CopyButton
           value="1752167890"
           aria-label="Copy workload ID"
+          size="small"
         />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Status">
@@ -196,6 +198,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
         <CopyButton
           value="1752167890"
           aria-label="Copy workload ID"
+          size="small"
         />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Status">
@@ -223,6 +226,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
         <CopyButton
           value="1752167890"
           aria-label="Copy workload ID"
+          size="small"
         />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Status">
@@ -267,6 +271,7 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
         <CopyButton
           value="1752167890"
           aria-label="Copy workload ID"
+          size="small"
         />
       </KeyValuePairs.Item>
       <KeyValuePairs.Item label="Status">

@@ -1,11 +1,8 @@
 <script setup lang="ts">
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -880,115 +877,111 @@
       v-model:open="expanded"
       size="large"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DialogTitle>{{ expandedReport.label }}</DialogTitle>
-              <DialogDescription>{{ expandedReport.description }}</DialogDescription>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DialogTitle>{{ expandedReport.label }}</DialogTitle>
+            <DialogDescription>{{ expandedReport.description }}</DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+            <div v-if="expandedId === 'requests' || expandedId === 'status-codes'">
+              <ToggleGroup
+                v-model="expandedForm"
+                :options="forms"
+                size="small"
+                :aria-label="`Chart form for ${expandedReport.label}`"
+              />
             </div>
-            <DialogClose />
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-              <div v-if="expandedId === 'requests' || expandedId === 'status-codes'">
-                <ToggleGroup
-                  v-model="expandedForm"
-                  :options="forms"
+            <Chart
+              key="chart-1"
+              v-if="expandedId === 'requests'"
+              :series="requests"
+              :labels="labels"
+              :format-value="formatters.count"
+              :height="420"
+              empty-title="No traffic yet"
+              empty-description="Metrics appear here once a service serves requests."
+              :aria-label="expandedReport.label"
+            >
+              <Chart.Grid />
+              <Chart.Axis kind="y" />
+              <Chart.Axis kind="x" />
+              <Chart.Bar v-if="requestsForm === 'bar'" />
+              <Chart.Area v-else />
+              <Chart.Crosshair />
+              <Chart.Tooltip />
+              <Chart.Legend total />
+            </Chart>
+            <Chart
+              key="chart-2"
+              v-else-if="expandedId === 'status-codes'"
+              :series="statusCodes"
+              :labels="labels"
+              :format-value="formatters.count"
+              :height="420"
+              empty-title="No traffic yet"
+              empty-description="Metrics appear here once a service serves requests."
+              :aria-label="expandedReport.label"
+            >
+              <Chart.Grid />
+              <Chart.Axis kind="y" />
+              <Chart.Axis kind="x" />
+              <Chart.Bar
+                v-if="statusForm === 'bar'"
+                stacked
+              />
+              <Chart.Line v-else />
+              <Chart.Crosshair />
+              <Chart.Tooltip />
+              <Chart.Legend total />
+            </Chart>
+            <Chart
+              key="chart-3"
+              v-else-if="expandedId === 'countries'"
+              :series="countryRequests"
+              :labels="countries"
+              orientation="horizontal"
+              :format-value="formatters.count"
+              :height="420"
+              empty-title="No traffic yet"
+              empty-description="Metrics appear here once a service serves requests."
+              :aria-label="expandedReport.label"
+            >
+              <Chart.Grid />
+              <Chart.Axis kind="y" />
+              <Chart.Axis kind="x" />
+              <Chart.Bar labeled />
+              <Chart.Tooltip />
+            </Chart>
+            <TableRoot
+              v-else
+              :data="hosts"
+              :columns="hostColumns"
+              row-key="id"
+              enable-sorting
+              paginated
+              :page-size="10"
+              density="compact"
+              bordered
+            >
+              <template #empty>
+                <EmptyState
                   size="small"
-                  :aria-label="`Chart form for ${expandedReport.label}`"
+                  icon="pi pi-chart-line"
+                  title="No traffic yet"
+                  description="Metrics appear here once a service serves requests."
                 />
-              </div>
-              <Chart
-                key="chart-1"
-                v-if="expandedId === 'requests'"
-                :series="requests"
-                :labels="labels"
-                :format-value="formatters.count"
-                :height="420"
-                empty-title="No traffic yet"
-                empty-description="Metrics appear here once a service serves requests."
-                :aria-label="expandedReport.label"
-              >
-                <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
-                <Chart.Bar v-if="requestsForm === 'bar'" />
-                <Chart.Area v-else />
-                <Chart.Crosshair />
-                <Chart.Tooltip />
-                <Chart.Legend total />
-              </Chart>
-              <Chart
-                key="chart-2"
-                v-else-if="expandedId === 'status-codes'"
-                :series="statusCodes"
-                :labels="labels"
-                :format-value="formatters.count"
-                :height="420"
-                empty-title="No traffic yet"
-                empty-description="Metrics appear here once a service serves requests."
-                :aria-label="expandedReport.label"
-              >
-                <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
-                <Chart.Bar
-                  v-if="statusForm === 'bar'"
-                  stacked
-                />
-                <Chart.Line v-else />
-                <Chart.Crosshair />
-                <Chart.Tooltip />
-                <Chart.Legend total />
-              </Chart>
-              <Chart
-                key="chart-3"
-                v-else-if="expandedId === 'countries'"
-                :series="countryRequests"
-                :labels="countries"
-                orientation="horizontal"
-                :format-value="formatters.count"
-                :height="420"
-                empty-title="No traffic yet"
-                empty-description="Metrics appear here once a service serves requests."
-                :aria-label="expandedReport.label"
-              >
-                <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
-                <Chart.Bar labeled />
-                <Chart.Tooltip />
-              </Chart>
-              <TableRoot
-                v-else
-                :data="hosts"
-                :columns="hostColumns"
-                row-key="id"
-                enable-sorting
-                paginated
-                :page-size="10"
-                density="compact"
-                bordered
-              >
-                <template #empty>
-                  <EmptyState
-                    size="small"
-                    icon="pi pi-chart-line"
-                    title="No traffic yet"
-                    description="Metrics appear here once a service serves requests."
-                  />
-                </template>
+              </template>
 
-                <template #cell-requests="{ row }">
-                  <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
-                </template>
-              </TableRoot>
-            </div>
-          </PanelContent>
-        </DialogContent>
-      </DialogPortal>
+              <template #cell-requests="{ row }">
+                <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
+              </template>
+            </TableRoot>
+          </div>
+        </PanelContent>
+      </DialogContent>
     </Dialog>
   </div>
 </template>

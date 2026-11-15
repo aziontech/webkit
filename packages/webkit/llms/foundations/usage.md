@@ -147,7 +147,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ PascalCase binding matching the last path segment: `@aziontech/webkit/mini-button` -> `MiniButton`.
 - ✅ One `WebkitProvider` at the app root with the user's locale and the catalogs of every language the app offers.
 - ✅ Color, spacing, radius, and typography from `@aziontech/theme` tokens (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`).
-- ✅ `import '@aziontech/theme'` and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
+- ✅ `import '@aziontech/theme'`, `import '@aziontech/theme/fonts.css'` (unless the app hosts its own fonts) and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
 - ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`kind`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, `pi pi-<name>`, and `ai-cor ai-<name>` for a colour brand icon.
@@ -253,6 +253,7 @@ site: your app does not serve it (lint `webkit/no-root-relative-asset`).
 ```ts
 // src/main.ts
 import '@aziontech/theme'
+import '@aziontech/theme/fonts.css' // the Azion font faces; leave out when the app hosts its own fonts
 import '@aziontech/icons'
 ```
 
@@ -290,7 +291,7 @@ export default [...webkit.configs.recommended]
 | **Tokens, not colors**    | `class="text-[#fff]"`                                   | `class="text-(--text-default)"`                          |
 | **Icons**                 | `import Icons from '@aziontech/icons'`                  | `import '@aziontech/icons'` (side-effect)                |
 
-**Discover the API before you write it:** the webkit MCP server (`npx webkit-mcp`, wired
+**Discover the API before you write it:** the webkit MCP server (`npx -y @aziontech/webkit-mcp`, wired
 into `.mcp.json` by `init`) answers
 `list_components`, `get_component`, `list_tokens`, `suggest_component`, `get_best_practices`,
 and `validate_usage` — so an AI (or you) gets the right import / token / prop _before_ the lint

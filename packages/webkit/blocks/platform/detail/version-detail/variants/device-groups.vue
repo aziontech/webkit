@@ -3,11 +3,8 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
@@ -737,104 +734,99 @@
                     size="medium"
                     side="right"
                   >
-                    <DrawerPortal>
-                      <DrawerOverlay />
-                      <DrawerContent>
-                        <form
-                          class="flex min-h-0 flex-1 flex-col"
-                          :aria-label="drawerTitle"
-                          novalidate
-                          @submit.prevent="submit"
-                        >
-                          <PanelHeader class="w-full">
-                            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                              <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
-                              <DrawerDescription>
-                                Requests whose User-Agent matches the expression belong to the
-                                group.
-                              </DrawerDescription>
-                            </div>
-                            <DrawerClose />
-                          </PanelHeader>
-                          <PanelContent>
-                            <fieldset
-                              class="m-0 flex min-w-0 flex-col border-0 p-0"
-                              :disabled="submitting"
+                    <DrawerContent>
+                      <form
+                        class="flex min-h-0 flex-1 flex-col"
+                        :aria-label="drawerTitle"
+                        novalidate
+                        @submit.prevent="submit"
+                      >
+                        <PanelHeader class="w-full">
+                          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                            <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
+                            <DrawerDescription>
+                              Requests whose User-Agent matches the expression belong to the group.
+                            </DrawerDescription>
+                          </div>
+                        </PanelHeader>
+                        <PanelContent>
+                          <fieldset
+                            class="m-0 flex min-w-0 flex-col border-0 p-0"
+                            :disabled="submitting"
+                          >
+                            <legend class="sr-only">{{ drawerTitle }}</legend>
+                            <SettingsSection
+                              title="General"
+                              hint="Names the group in the rules that reference it, so renaming it means revisiting those rules."
                             >
-                              <legend class="sr-only">{{ drawerTitle }}</legend>
-                              <SettingsSection
-                                title="General"
-                                hint="Names the group in the rules that reference it, so renaming it means revisiting those rules."
-                              >
-                                <Field
-                                  :invalid="!!errors.name"
-                                  :disabled="submitting"
-                                >
-                                  <Field.Label>Name</Field.Label>
-                                  <Input
-                                    v-model="form.name"
-                                    size="large"
-                                    class="w-full"
-                                    placeholder="mobile"
-                                    autocomplete="off"
-                                    monospace
-                                    :spellcheck="false"
-                                  />
-                                  <Field.Description
-                                    >Lowercase letters, numbers and hyphens.</Field.Description
-                                  >
-                                  <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
-                                </Field>
-                              </SettingsSection>
-                              <SettingsSection
-                                title="Match to User-Agent"
-                                hint="Every request whose User-Agent header matches this expression belongs to the group."
-                              >
-                                <Field
-                                  :invalid="!!errors.userAgent"
-                                  :disabled="submitting"
-                                >
-                                  <Field.Label>Regular expression</Field.Label>
-                                  <Textarea
-                                    v-model="form.userAgent"
-                                    class="w-full"
-                                    placeholder="(Mobile|iP(hone|od)|Android)"
-                                    monospace
-                                    :spellcheck="false"
-                                  />
-                                  <Field.Description>
-                                    Matched against the full header value, so anchor the pattern
-                                    when you need one.
-                                  </Field.Description>
-                                  <Field.Error v-if="errors.userAgent">{{
-                                    errors.userAgent
-                                  }}</Field.Error>
-                                </Field>
-                              </SettingsSection>
-                            </fieldset>
-                          </PanelContent>
-                          <PanelFooter>
-                            <div class="flex w-full justify-end gap-(--spacing-xs)">
-                              <Button
-                                type="button"
-                                label="Cancel"
-                                kind="outlined"
-                                size="medium"
+                              <Field
+                                :invalid="!!errors.name"
                                 :disabled="submitting"
-                                @click="drawerOpen = false"
-                              />
-                              <Button
-                                type="submit"
-                                :label="editingId ? 'Save' : 'Add Device Group'"
-                                kind="primary"
-                                size="medium"
-                                :loading="submitting"
-                              />
-                            </div>
-                          </PanelFooter>
-                        </form>
-                      </DrawerContent>
-                    </DrawerPortal>
+                              >
+                                <Field.Label>Name</Field.Label>
+                                <Input
+                                  v-model="form.name"
+                                  size="large"
+                                  class="w-full"
+                                  placeholder="mobile"
+                                  autocomplete="off"
+                                  monospace
+                                  :spellcheck="false"
+                                />
+                                <Field.Description
+                                  >Lowercase letters, numbers and hyphens.</Field.Description
+                                >
+                                <Field.Error v-if="errors.name">{{ errors.name }}</Field.Error>
+                              </Field>
+                            </SettingsSection>
+                            <SettingsSection
+                              title="Match to User-Agent"
+                              hint="Every request whose User-Agent header matches this expression belongs to the group."
+                            >
+                              <Field
+                                :invalid="!!errors.userAgent"
+                                :disabled="submitting"
+                              >
+                                <Field.Label>Regular expression</Field.Label>
+                                <Textarea
+                                  v-model="form.userAgent"
+                                  class="w-full"
+                                  placeholder="(Mobile|iP(hone|od)|Android)"
+                                  monospace
+                                  :spellcheck="false"
+                                />
+                                <Field.Description>
+                                  Matched against the full header value, so anchor the pattern when
+                                  you need one.
+                                </Field.Description>
+                                <Field.Error v-if="errors.userAgent">{{
+                                  errors.userAgent
+                                }}</Field.Error>
+                              </Field>
+                            </SettingsSection>
+                          </fieldset>
+                        </PanelContent>
+                        <PanelFooter>
+                          <div class="flex w-full justify-end gap-(--spacing-xs)">
+                            <Button
+                              type="button"
+                              label="Cancel"
+                              kind="outlined"
+                              size="medium"
+                              :disabled="submitting"
+                              @click="drawerOpen = false"
+                            />
+                            <Button
+                              type="submit"
+                              :label="editingId ? 'Save' : 'Add Device Group'"
+                              kind="primary"
+                              size="medium"
+                              :loading="submitting"
+                            />
+                          </div>
+                        </PanelFooter>
+                      </form>
+                    </DrawerContent>
                   </Drawer>
                 </div>
               </ScrollArea>

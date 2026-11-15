@@ -1,0 +1,77 @@
+{
+ "name": "timestamp",
+ "binding": "Timestamp",
+ "import": "@aziontech/webkit/timestamp",
+ "treeShakeableImport": "@aziontech/webkit/timestamp",
+ "category": "content",
+ "surface": "product",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates every minute. Activating it opens a small panel that lists the moment as UTC (ISO 8601), local time with its time zone, the reader's browser time when the app's time zone differs from it, the relative phrase and the raw value it was given, each with a copy button, so an operator can paste the exact value into a query or a ticket. It accepts a `Date`, an epoch in milliseconds or microseconds, or an ISO string, and reads the app-wide time zone from the nearest `WebkitProvider` (`time-zone`), so an app-level time zone picker changes every timestamp at once. Use it anywhere outside a table: log details, cards, side panels, activity lines. `Table.CellTime` keeps its own author-plus-relative-time layout and shares the parsing and the relative phrasing with Timestamp.",
+ "setup": null,
+ "useWhen": [
+  "A detail panel, card or log line shows when something happened and people may need the exact or UTC value.",
+  "An app lets people pick a display time zone and every absolute time must follow it.",
+  "A list outside `Table` shows relative times that should stay current."
+ ],
+ "avoidWhen": [
+  "A table column of modification times with the author → use `Table.CellTime` in a `#cell-<id>` slot.",
+  "A date the person edits → use `date-range-picker` or `calendar`.",
+  "A duration (`1.2 s`, `3 days`) → plain text formatted with `useLocale().formatNumber`; Timestamp is a point in time."
+ ],
+ "related": [
+  "webkit-provider` — `time-zone` sets the zone every Timestamp below it reads; `now` fixes the reference time of relative phrases.",
+  "table` — `Table.CellTime` is the table preset for modification times; it shares Timestamp's parsing and relative phrasing.",
+  "copy-button` — the copy control on every row of the panel.",
+  "popover` — the panel Timestamp opens."
+ ],
+ "bestPractices": [
+  "Pass the value from your data as it comes (`'2026-11-14T12:04:31Z'`, `1794657871000`, or the microseconds a log store returns); do not pre-format it.",
+  "Set the app's time zone once on `WebkitProvider` (`time-zone`) rather than on each Timestamp; use the `time-zone` prop only for a value that belongs to another zone (a schedule in the customer's zone).",
+  "Use `format=\"relative\"` for recent activity, `local` for audit records and logs, `utc` for values people compare across teams.",
+  "In an example, a test or a server render, fix `now` on the provider and give a time zone, so the text does not depend on when or where it renders."
+ ],
+ "props": [
+  {
+   "name": "value",
+   "type": "string | number | Date",
+   "default": "undefined",
+   "required": "false",
+   "doc": "The moment: a `Date`, an epoch in milliseconds (microseconds when the number has 15 digits or more), a numeric string, or an ISO string. Empty or unparseable renders a muted dash with no panel."
+  },
+  {
+   "name": "format",
+   "type": "'relative' | 'local' | 'utc'",
+   "default": "'local'",
+   "required": "false",
+   "doc": "What the text shows: the relative phrase that updates every minute, the date and time in the time zone, or the date and time in UTC. The panel always lists every form."
+  },
+  {
+   "name": "timeZone",
+   "type": "string",
+   "default": "''",
+   "required": "false",
+   "doc": "IANA time zone of the local time (`America/New_York`). Empty reads the nearest `WebkitProvider`'s `time-zone`, then the browser's zone."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import Timestamp from '@aziontech/webkit/timestamp'\n  import WebkitProvider from '@aziontech/webkit/webkit-provider'\n\n  const NOW = Date.UTC(2026, 10, 14, 12, 10)\n  const VALUE = '2026-11-14T12:04:31Z'\n</script>\n\n<template>\n  <WebkitProvider\n    :now=\"NOW\"\n    time-zone=\"America/New_York\"\n  >\n    <dl\n      class=\"grid grid-cols-[auto_1fr] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm) text-body-sm text-(--text-default)\"\n    >\n      <dt class=\"text-label-sm text-(--text-muted)\">Local</dt>\n      <dd><Timestamp :value=\"VALUE\" /></dd>\n      <dt class=\"text-label-sm text-(--text-muted)\">UTC</dt>\n      <dd>\n        <Timestamp\n          :value=\"VALUE\"\n          format=\"utc\"\n        />\n      </dd>\n      <dt class=\"text-label-sm text-(--text-muted)\">Relative</dt>\n      <dd>\n        <Timestamp\n          :value=\"VALUE\"\n          format=\"relative\"\n        />\n      </dd>\n    </dl>\n  </WebkitProvider>\n</template>"
+  },
+  {
+   "name": "Time zone",
+   "sfc": "<script setup>\n  import Select from '@aziontech/webkit/select'\n  import Timestamp from '@aziontech/webkit/timestamp'\n  import WebkitProvider from '@aziontech/webkit/webkit-provider'\n  import { ref } from 'vue'\n\n  const NOW = Date.UTC(2026, 10, 14, 12, 10)\n  const zone = ref('UTC')\n  const zones = [\n    { value: 'UTC', label: 'UTC' },\n    { value: 'America/Los_Angeles', label: 'Los Angeles' },\n    { value: 'America/New_York', label: 'New York' },\n    { value: 'Europe/London', label: 'London' },\n    { value: 'Asia/Tokyo', label: 'Tokyo' }\n  ]\n  const events = [\n    { id: 'e1', label: 'Deployment finished', at: '2026-11-14T12:04:31Z' },\n    { id: 'e2', label: 'Certificate renewed', at: '2026-11-14T03:15:00Z' },\n    { id: 'e3', label: 'API key created', at: 1794524400000000 }\n  ]\n</script>\n\n<template>\n  <WebkitProvider\n    :now=\"NOW\"\n    :time-zone=\"zone\"\n  >\n    <div class=\"flex max-w-(--container-sm) flex-col gap-(--spacing-md)\">\n      <Select\n        v-model=\"zone\"\n        aria-label=\"Time zone\"\n        size=\"medium\"\n      >\n        <Select.Trigger />\n        <Select.Content>\n          <Select.Option\n            v-for=\"option in zones\"\n            :key=\"option.value\"\n            :value=\"option.value\"\n            >{{ option.label }}</Select.Option\n          >\n        </Select.Content>\n      </Select>\n      <ul class=\"flex flex-col gap-(--spacing-xs) text-body-sm text-(--text-default)\">\n        <li\n          v-for=\"event in events\"\n          :key=\"event.id\"\n          class=\"flex flex-wrap items-baseline justify-between gap-(--spacing-sm)\"\n        >\n          <span>{{ event.label }}</span>\n          <Timestamp :value=\"event.at\" />\n        </li>\n      </ul>\n    </div>\n  </WebkitProvider>\n</template>"
+  },
+  {
+   "name": "Log details",
+   "sfc": "<script setup>\n  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'\n  import StatusCode from '@aziontech/webkit/status-code'\n  import Timestamp from '@aziontech/webkit/timestamp'\n  import WebkitProvider from '@aziontech/webkit/webkit-provider'\n\n  const NOW = Date.UTC(2026, 10, 14, 12, 10)\n</script>\n\n<template>\n  <WebkitProvider\n    :now=\"NOW\"\n    time-zone=\"UTC\"\n  >\n    <KeyValuePairs aria-label=\"Request details\">\n      <KeyValuePairs.Item label=\"Request\">\n        <StatusCode\n          :code=\"503\"\n          method=\"POST\"\n        />\n      </KeyValuePairs.Item>\n      <KeyValuePairs.Item label=\"Path\">/api/orders</KeyValuePairs.Item>\n      <KeyValuePairs.Item label=\"Started\">\n        <Timestamp :value=\"1794657871204000\" />\n      </KeyValuePairs.Item>\n      <KeyValuePairs.Item label=\"Received\">\n        <Timestamp\n          value=\"2026-11-14T12:04:31.204Z\"\n          format=\"relative\"\n        />\n      </KeyValuePairs.Item>\n      <KeyValuePairs.Item label=\"Host\">app.example.com</KeyValuePairs.Item>\n    </KeyValuePairs>\n  </WebkitProvider>\n</template>"
+  }
+ ],
+ "docs": "components/timestamp.md"
+}

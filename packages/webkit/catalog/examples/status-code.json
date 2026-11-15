@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "One code from each status class, with and without a method: 1xx to 3xx stay neutral, 4xx take the warning colour, 5xx the danger colour, and a value that is not a status renders muted.",
+   "sfc": "<script setup>\n  import StatusCode from '@aziontech/webkit/status-code'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-sm)\">\n    <StatusCode\n      :code=\"101\"\n      method=\"GET\"\n    />\n    <StatusCode\n      :code=\"200\"\n      method=\"GET\"\n    />\n    <StatusCode\n      :code=\"301\"\n      method=\"GET\"\n    />\n    <StatusCode\n      :code=\"404\"\n      method=\"POST\"\n    />\n    <StatusCode\n      :code=\"503\"\n      method=\"PUT\"\n    />\n    <StatusCode :code=\"201\" />\n    <StatusCode code=\"n/a\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "Sizes",
+   "summary": "Both sizes side by side on the same request.",
+   "sfc": "<script setup>\n  import StatusCode from '@aziontech/webkit/status-code'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-sm)\">\n    <StatusCode\n      :code=\"429\"\n      method=\"POST\"\n      size=\"small\"\n    />\n    <StatusCode\n      :code=\"429\"\n      method=\"POST\"\n      size=\"medium\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Request log",
+   "summary": "StatusCode in the status column of a request log, where the neutral 2xx rows let the client and server errors stand out.",
+   "sfc": "<script setup>\n  import StatusCode from '@aziontech/webkit/status-code'\n  import Table from '@aziontech/webkit/table'\n\n  const rows = [\n    { id: 'r1', time: '12:04:31', method: 'GET', status: 200, path: '/', duration: '38 ms' },\n    {\n      id: 'r2',\n      time: '12:04:29',\n      method: 'GET',\n      status: 304,\n      path: '/assets/app.js',\n      duration: '4 ms'\n    },\n    {\n      id: 'r3',\n      time: '12:04:27',\n      method: 'POST',\n      status: 503,\n      path: '/api/orders',\n      duration: '1.2 s'\n    },\n    {\n      id: 'r4',\n      time: '12:04:22',\n      method: 'GET',\n      status: 200,\n      path: '/api/products',\n      duration: '61 ms'\n    },\n    {\n      id: 'r5',\n      time: '12:04:19',\n      method: 'DELETE',\n      status: 404,\n      path: '/api/carts/42',\n      duration: '12 ms'\n    },\n    { id: 'r6', time: '12:04:15', method: 'GET', status: 200, path: '/docs', duration: '45 ms' }\n  ]\n\n  const columns = [\n    { accessorKey: 'time', header: 'Time', minWidth: 96 },\n    { accessorKey: 'status', header: 'Status', minWidth: 120 },\n    { accessorKey: 'path', header: 'Path', grow: 3, principal: true },\n    { accessorKey: 'duration', header: 'Duration', minWidth: 96, align: 'end' }\n  ]\n</script>\n\n<template>\n  <Table\n    :data=\"rows\"\n    :columns=\"columns\"\n    density=\"compact\"\n    aria-label=\"Requests to app.example.com\"\n  >\n    <template #cell-status=\"{ row }\">\n      <StatusCode\n        :code=\"row.status\"\n        :method=\"row.method\"\n      />\n    </template>\n  </Table>\n</template>"
+  }
+ ]
+}

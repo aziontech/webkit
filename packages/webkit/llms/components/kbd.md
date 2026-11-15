@@ -1,6 +1,6 @@
 # Kbd
 
-> Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, the catalog's `Ctrl` elsewhere), and named keys (`keyName`) print their localized name, so consumers never hardcode platform symbols or English key names. The platform is read once mounted: the server and the first client render print the non-Mac names, then a Mac swaps in its glyphs, so hydration never mismatches. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`).
+> Kbd renders keyboard input — a single key or a shortcut combination — as a compact, non-interactive keycap. It reads like a real key: a bordered surface with a thicker bottom edge for depth. Modifier keys are passed as boolean props (`meta`, `shift`, `alt`, `ctrl`) and rendered with the correct OS-aware glyph (⌘ on macOS, the catalog's `Ctrl` elsewhere), and named keys (`keyName`) print their localized name, so consumers never hardcode platform symbols or English key names. The platform is read once mounted: the server and the first client render print the non-Mac names, then a Mac swaps in its glyphs, so hydration never mismatches. Use it for shortcut hints in prose, menus, and control suffixes (e.g. the ⌘K hint in `command`). A sequence can also be passed as a `keys` list (`['meta', 'shift', 'p']`, `['arrow-up', 'arrow-down']`), drawn either as one keycap (`kind="combined"`, the default) or as one keycap per key (`kind="separate"`, each a nested `<kbd>` as HTML specifies for key combinations). Arrow keys and the Return glyph (`↵`) are named keys like `escape`.
 
 - Import: `import Kbd from '@aziontech/webkit/kbd'`
 - Category: content · Surface: product · Structure: monolithic
@@ -17,6 +17,8 @@
 - Pass modifiers as boolean props rather than hardcoding `⌘`/`⇧` so the glyph adapts to the OS.
 - Name a key with `key-name` (`<Kbd key-name="escape" />`) instead of typing `Esc` or `Enter`: the text comes from the locale catalog (`kbd.*`), so it follows `WebkitProvider` (`Espaço` in pt-BR, `Intro` in es) and a consumer renames it with `messages` (`{ kbd: { ctrl: 'Strg' } }`). The macOS symbols `⌘`, `⌃`, `⌥` and `⇧` are never translated.
 - Place surrounding punctuation outside the element, not inside the keycap.
+- Use `keys` when the shortcut comes from data (a command list, a settings table); use the boolean props when you write it by hand. Pick `kind="separate"` for a sequence pressed key by key or for arrow pairs (`↑` `↓` to navigate), `combined` for a chord pressed at once.
+- Name the Return key `return` (`↵`) in compact hints (a footer "↵ to select"); keep `enter` (`Enter`) where the word reads better.
 
 ## Don’t
 
@@ -38,7 +40,9 @@
 | `shift` | `boolean` | `false` | false | Prepend the Shift modifier glyph (⇧). |
 | `alt` | `boolean` | `false` | false | Prepend the Alt/Option modifier glyph (⌥ on macOS, Alt elsewhere). |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token; `small` is a denser keycap for menus, command bars, and table cells. |
-| `keyName` | `'' \| 'ctrl' \| 'alt' \| 'shift' \| 'escape' \| 'enter' \| 'space' \| 'tab' \| 'backspace' \| 'delete'` | `''` | false | Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. |
+| `keyName` | `'' \| 'ctrl' \| 'alt' \| 'shift' \| 'escape' \| 'enter' \| 'space' \| 'tab' \| 'backspace' \| 'delete' \| 'return' \| 'arrow-up' \| 'arrow-down' \| 'arrow-left' \| 'arrow-right'` | `''` | false | Named key printed from the locale catalog (`escape` → `Esc`, `enter` → `Enter`); the slot still renders after it. |
+| `keys` | `string[]` | `[]` | false | A key sequence drawn after the modifier props and `keyName`: `meta`/`ctrl`/`alt`/`shift` print their OS-aware glyph, a named key prints from the catalog, a single character is upper-cased, anything else prints as written. |
+| `kind` | `'combined' \| 'separate'` | `'combined'` | false | Visual variant: one keycap holding every key, or one keycap per key. |
 
 ## Slots
 
@@ -51,6 +55,7 @@
 Kbd is non-interactive: it has no hover, focus, active, or disabled states and emits no events. Variants are exposed as `data-*` attributes on the root for Tailwind variant styling and for test/Code-Connect hooks:
 
 - `data-size` mirrors the `size` prop (`small` | `medium`).
+- `data-kind` mirrors the `kind` prop (`combined` | `separate`). With `separate` the root drops its keycap chrome (border, surface, shadow, padding) and each key renders as a nested `<kbd>` keycap with the same size tokens, separated by `--spacing-xxs`.
 
 ## Accessibility
 
@@ -65,8 +70,25 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 
 - Layout: logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`, `text-start`), so the layout mirrors under `dir="rtl"`.
 - Icons: modifier symbols (`⌘`, `⌥`, `⇧`) never mirror.
-- Keyboard: no horizontal arrow-key logic.
+- Keyboard: no horizontal arrow-key logic. The arrow glyphs name physical keys, so `arrow-left` stays `←` under `dir="rtl"`.
 - Isolation: the keycap renders `dir="ltr"`, so a shortcut such as `Ctrl` `K` keeps its order inside right-to-left text; key names come from the locale catalog (`kbd.*`).
+
+## Internationalization
+
+| Key                                  | English source                                     | Override prop |
+| ------------------------------------ | -------------------------------------------------- | ------------- |
+| `kbd.ctrl` / `kbd.alt` / `kbd.shift` | `Ctrl` / `Alt` / `Shift`                           | —             |
+| `kbd.escape` … `kbd.delete`          | `Esc`, `Enter`, `Space`, `Tab`, `Backspace`, `Del` | —             |
+| `kbd.return`                         | `↵`                                                | —             |
+| `kbd.arrow-up` … `kbd.arrow-right`   | `↑` `↓` `←` `→`                                    | —             |
+
+- The glyph entries (`return`, arrows) are the same in every locale; they live in the catalog so a consumer can rename them with `messages` like any key name.
+- Literal `keys` entries and the slot are consumer copy.
+
+## Responsive
+
+- A keycap never wraps inside itself (`inline-flex`); a `separate` sequence wraps between keycaps only where the surrounding text wraps.
+- No touch target and no hover affordance: Kbd is non-interactive.
 
 ## Examples
 
@@ -105,7 +127,7 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 </template>
 ```
 
-### Combinations
+### Keys
 
 ```vue
 <script setup>
@@ -113,15 +135,39 @@ Kbd is non-interactive: it has no hover, focus, active, or disabled states and e
 </script>
 
 <template>
-  <div class="flex flex-wrap items-center gap-4">
-    <Kbd>/</Kbd>
-    <Kbd meta>K</Kbd>
-    <Kbd
-      meta
-      shift
-      >P</Kbd
-    >
-    <Kbd>Esc</Kbd>
+  <div class="flex flex-col gap-(--spacing-sm) text-body-sm text-(--text-default)">
+    <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+      <Kbd :keys="['meta', 'shift', 'p']" />
+      <Kbd
+        :keys="['meta', 'shift', 'p']"
+        kind="separate"
+      />
+    </div>
+    <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+      <Kbd
+        :keys="['arrow-up', 'arrow-down']"
+        kind="separate"
+        size="small"
+      />
+      <span>to navigate</span>
+      <Kbd
+        key-name="return"
+        size="small"
+      />
+      <span>to select</span>
+      <Kbd
+        key-name="escape"
+        size="small"
+      />
+      <span>to close</span>
+    </div>
+    <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+      <Kbd
+        :keys="['arrow-left', 'arrow-right']"
+        kind="separate"
+      />
+      <span>to switch tabs</span>
+    </div>
   </div>
 </template>
 ```

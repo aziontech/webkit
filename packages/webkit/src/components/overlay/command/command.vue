@@ -19,8 +19,6 @@
   import * as en from '../../../i18n/messages/en'
   import Dialog from '../dialog/dialog.vue'
   import DialogContent from '../dialog/dialog-content.vue'
-  import DialogOverlay from '../dialog/dialog-overlay.vue'
-  import DialogPortal from '../dialog/dialog-portal.vue'
   import DialogTitle from '../dialog/dialog-title.vue'
   import {
     CommandInjectionKey,
@@ -413,17 +411,14 @@
     :data-testid="testId"
     @update:open="(value) => setOpen(value)"
   >
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogContent>
-        <DialogTitle class="sr-only">{{ t('command.title') }}</DialogTitle>
-        <div
-          class="flex flex-col"
-          role="presentation"
-        >
-          <slot />
-        </div>
-      </DialogContent>
-    </DialogPortal>
+    <DialogContent>
+      <DialogTitle class="sr-only">{{ t('command.title') }}</DialogTitle>
+      <div
+        class="flex flex-col"
+        role="presentation"
+      >
+        <slot />
+      </div>
+    </DialogContent>
   </Dialog>
 </template>

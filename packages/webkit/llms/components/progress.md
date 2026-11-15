@@ -16,7 +16,7 @@
 - Pass `value` on the scale of `max`, for example `:value="3" :max="5"` for steps. Don't convert it to a percentage yourself.
 - Switch to `indeterminate` when progress is unknown. `value` is then ignored and `aria-valuenow` is dropped.
 - There is no label prop. Give the bar an accessible name with an `aria-label` or `aria-labelledby` attribute, and show the percentage in text next to it if users need the number.
-- The default is the thin `small` bar with `flat` corners. Use `kind="rounded"` and a larger `size` only when the bar stands alone. The `small` default is a deliberate exception to the house `medium` default: the bar is mostly a thin inline strip (table rows, upload rows, the top of a region).
+- The default is the `medium` bar with `flat` corners. Set `size="small"` for a thin inline strip (table rows, upload rows, the top of a region); use `kind="rounded"` and a larger `size` only when the bar stands alone.
 
 ## Don’t
 
@@ -39,7 +39,7 @@
 | `max` | `number` | `100` | false | Upper bound; percentage = `value / max * 100`. |
 | `kind` | `ProgressKind` (`'rounded' \| 'flat'`)` | `undefined` (resolves to `'flat'`)` | false | Track and fill corner-radius variant. |
 | `shape` | `ProgressShape` (`'rounded' \| 'flat'`)` | `undefined` | false | **@deprecated since 6.0 — use `kind`. Removed in 7.0.** Read only when `kind` is unset. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'small'` | false | Bar height token. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Bar height token. |
 | `indeterminate` | `boolean` | `false` | false | Loading state; animates a sliding segment and ignores `value`. |
 
 ## States

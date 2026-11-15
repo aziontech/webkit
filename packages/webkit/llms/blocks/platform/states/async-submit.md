@@ -140,7 +140,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
     if (status.value === 'running') return { label: 'Deploying', severity: 'info' }
     if (status.value === 'error') return { label: 'Failed', severity: 'danger' }
     if (status.value === 'success') return { label: 'Deployed', severity: 'success' }
-    return { label: 'Idle', severity: 'secondary' }
+    return { label: 'Idle', severity: 'neutral' }
   })
 
   const RUN_TOAST = 'async-submit-run'

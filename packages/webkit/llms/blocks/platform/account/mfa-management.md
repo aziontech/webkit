@@ -514,6 +514,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           : 'Everyone in the account already uses MFA. New people set it up at their first sign-in.'
       "
       confirm-label="Require MFA"
+      size="small"
       @confirm="confirmRequire"
     />
 
@@ -522,6 +523,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       title="Reset MFA"
       :description="`${pending?.name ?? ''} loses the second factor they set up and signs in with their password only until they set one up again. Use it when they lost their device.`"
       confirm-label="Reset MFA"
+      size="small"
       @confirm="reset"
     />
   </div>

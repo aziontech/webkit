@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/security-dashboard/security-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/security-dashboard")`
-- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `utils/csv`
+- Components: [Alert](../../../components/alert.md), [BarList](../../../components/bar-list.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [Skeleton](../../../components/skeleton.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -70,7 +70,7 @@ Only on `Matched requests over time`.
 
 Names Expand and More options.
 
-### H. Expand — `IconButton`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `DialogClose`, `PanelContent` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `PanelContent` (optional)
 
 Its `aria-label` names the card (`Expand Matched requests over time`). It opens one large `Dialog`
 with the card title, its Hint sentence as the description, and the region at full size: the matched
@@ -176,11 +176,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   import BarList from '@aziontech/webkit/bar-list'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -668,7 +665,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -751,7 +748,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             <ChartCard.Action>
               <Tag
                 :label="`${attention.length} open`"
-                severity="secondary"
+                severity="neutral"
                 size="small"
               />
             </ChartCard.Action>
@@ -806,7 +803,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -872,7 +869,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -939,7 +936,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -1036,83 +1033,79 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       v-model:open="expanded"
       size="large"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DialogTitle>{{ expandedReport.label }}</DialogTitle>
-              <DialogDescription>{{ expandedReport.description }}</DialogDescription>
-            </div>
-            <DialogClose />
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-              <template v-if="expandedId === 'matched'">
-                <div>
-                  <ToggleGroup
-                    v-model="form"
-                    :options="forms"
-                    size="small"
-                    :aria-label="`Chart form for ${expandedReport.label}`"
-                  />
-                </div>
-                <Chart
-                  :series="matchedRequests"
-                  :labels="labels"
-                  :format-value="formatCount"
-                  :height="420"
-                  empty-title="No matched requests in this period"
-                  empty-description="Nothing was recorded in this period."
-                  :aria-label="expandedReport.label"
-                >
-                  <Chart.Grid />
-                  <Chart.Axis kind="y" />
-                  <Chart.Axis kind="x" />
-                  <Chart.Bar
-                    v-if="form === 'bar'"
-                    stacked
-                  />
-                  <Chart.Line v-else />
-                  <Chart.Crosshair />
-                  <Chart.Tooltip />
-                  <Chart.Legend total />
-                </Chart>
-              </template>
-              <BarList
-                v-else-if="expandedId === 'categories' || expandedId === 'countries'"
-                :items="expandedId === 'categories' ? categories : countries"
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DialogTitle>{{ expandedReport.label }}</DialogTitle>
+            <DialogDescription>{{ expandedReport.description }}</DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+            <template v-if="expandedId === 'matched'">
+              <div>
+                <ToggleGroup
+                  v-model="form"
+                  :options="forms"
+                  size="small"
+                  :aria-label="`Chart form for ${expandedReport.label}`"
+                />
+              </div>
+              <Chart
+                :series="matchedRequests"
+                :labels="labels"
                 :format-value="formatCount"
-                empty-title="No blocked requests in this period"
+                :height="420"
+                empty-title="No matched requests in this period"
+                empty-description="Nothing was recorded in this period."
                 :aria-label="expandedReport.label"
-              />
-              <TableRoot
-                v-else
-                :data="ipRows"
-                :columns="ipColumns"
-                row-key="id"
-                enable-sorting
-                paginated
-                :page-size="10"
-                density="compact"
-                bordered
               >
-                <template #empty>
-                  <EmptyState
-                    size="small"
-                    icon="pi pi-shield"
-                    title="No blocked requests in this period"
-                    description="Nothing was recorded in this period."
-                  />
-                </template>
-                <template #cell-requests="{ row }">
-                  <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
-                </template>
-              </TableRoot>
-            </div>
-          </PanelContent>
-        </DialogContent>
-      </DialogPortal>
+                <Chart.Grid />
+                <Chart.Axis kind="y" />
+                <Chart.Axis kind="x" />
+                <Chart.Bar
+                  v-if="form === 'bar'"
+                  stacked
+                />
+                <Chart.Line v-else />
+                <Chart.Crosshair />
+                <Chart.Tooltip />
+                <Chart.Legend total />
+              </Chart>
+            </template>
+            <BarList
+              v-else-if="expandedId === 'categories' || expandedId === 'countries'"
+              :items="expandedId === 'categories' ? categories : countries"
+              :format-value="formatCount"
+              empty-title="No blocked requests in this period"
+              :aria-label="expandedReport.label"
+            />
+            <TableRoot
+              v-else
+              :data="ipRows"
+              :columns="ipColumns"
+              row-key="id"
+              enable-sorting
+              paginated
+              :page-size="10"
+              density="compact"
+              bordered
+            >
+              <template #empty>
+                <EmptyState
+                  size="small"
+                  icon="pi pi-shield"
+                  title="No blocked requests in this period"
+                  description="Nothing was recorded in this period."
+                />
+              </template>
+              <template #cell-requests="{ row }">
+                <span class="tabular-nums">{{ formatCount(row.requests) }}</span>
+              </template>
+            </TableRoot>
+          </div>
+        </PanelContent>
+      </DialogContent>
     </Dialog>
   </div>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { inject, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
@@ -28,8 +28,6 @@
   const handleClick = () => {
     ctx?.close()
   }
-
-  const isDisabled = computed(() => !ctx?.closable)
 </script>
 
 <template>
@@ -39,7 +37,6 @@
     kind="outlined"
     size="small"
     :ariaLabel="props.ariaLabel || t('dialog.close')"
-    :disabled="isDisabled"
     :data-testid="`${ctx.testId}__close`"
     :class="attrs.class"
     @click="handleClick"

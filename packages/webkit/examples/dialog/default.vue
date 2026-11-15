@@ -18,32 +18,28 @@
         kind="primary"
       />
     </Dialog.Trigger>
-    <Dialog.Portal>
-      <Dialog.Overlay />
-      <Dialog.Content>
-        <Dialog.Header class="w-full">
-          <Dialog.Title>Dialog Title</Dialog.Title>
-          <Dialog.Close />
-        </Dialog.Header>
-        <Dialog.Body>
-          <Dialog.Description>
-            Modal content. Uses the shared Panel header, body, and footer regions.
-          </Dialog.Description>
-        </Dialog.Body>
-        <Dialog.Footer>
-          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-            <Button
-              label="Cancel"
-              kind="outlined"
-              @click="open = false"
-            />
-            <Button
-              label="Save"
-              kind="primary"
-            />
-          </div>
-        </Dialog.Footer>
-      </Dialog.Content>
-    </Dialog.Portal>
+    <Dialog.Content>
+      <Dialog.Header class="w-full">
+        <Dialog.Title>Dialog Title</Dialog.Title>
+      </Dialog.Header>
+      <Dialog.Body>
+        <Dialog.Description>
+          Modal content. Uses the shared Panel header, body, and footer regions.
+        </Dialog.Description>
+      </Dialog.Body>
+      <Dialog.Footer>
+        <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+          <Button
+            label="Cancel"
+            kind="outlined"
+            @click="open = false"
+          />
+          <Button
+            label="Save"
+            kind="primary"
+          />
+        </div>
+      </Dialog.Footer>
+    </Dialog.Content>
   </Dialog>
 </template>

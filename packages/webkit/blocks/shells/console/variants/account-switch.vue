@@ -5,11 +5,8 @@
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
   import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
-  import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -636,153 +633,149 @@
       v-model:open="switchOpen"
       size="large"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <DialogTitle>Switch account</DialogTitle>
-            <DialogClose />
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-              <DialogDescription>
-                Pick the account to work in. Search matches a name, an ID or a client ID.
-              </DialogDescription>
-              <Input
-                :id="searchId"
-                v-model="accountQuery"
-                placeholder="Search accounts"
-                aria-label="Search accounts"
-              >
-                <template #prefix>
-                  <i
-                    class="pi pi-search"
-                    aria-hidden="true"
-                  />
-                </template>
-              </Input>
-              <Card :padded="false">
-                <template #content>
-                  <Table
-                    :data="accountRows"
-                    :columns="accountColumns"
-                    row-key="id"
-                    :bordered="false"
-                    paginated
-                    :page-size="10"
-                    :loading="accountsLoading"
-                    aria-label="Accounts"
-                  >
-                    <template #cell-name="{ row }">
-                      <div
-                        :data-depth="row.depth"
-                        class="flex w-full min-w-0 items-center gap-(--spacing-xxs) data-[depth=1]:ps-(--spacing-lg) data-[depth=2]:ps-(--spacing-xxl)"
-                      >
-                        <IconButton
-                          v-if="row.hasChildren"
-                          :icon="row.expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
-                          kind="transparent"
-                          size="small"
-                          :aria-label="row.expanded ? `Collapse ${row.name}` : `Expand ${row.name}`"
-                          :aria-expanded="row.expanded"
-                          :disabled="Boolean(accountQuery.trim())"
-                          @click="toggleAccount(row)"
-                        />
-                        <span
-                          v-else
-                          class="size-7 shrink-0"
-                          aria-hidden="true"
-                        />
-                        <i
-                          :class="row.typeIcon"
-                          class="shrink-0 text-body-sm text-(--text-muted)"
-                          aria-hidden="true"
-                        />
-                        <Button
-                          :label="row.name"
-                          kind="link"
-                          size="small"
-                          class="min-w-0"
-                          :aria-current="row.id === currentAccountId ? 'true' : undefined"
-                          @click="chooseAccount(row)"
-                        />
-                        <Tag
-                          v-if="row.id === currentAccountId"
-                          label="Current"
-                          severity="success"
-                          size="small"
-                        />
-                      </div>
-                    </template>
-                    <template #cell-typeLabel="{ row }">
-                      <Table.CellStatus
-                        :label="row.typeLabel"
-                        :icon="row.typeIcon"
-                        :severity="row.typeSeverity"
-                      />
-                    </template>
-                    <template #cell-id="{ value }">
-                      <Table.CellId
-                        :value="value"
-                        resource="account"
-                      />
-                    </template>
-                    <template #cell-clientId="{ value }">
-                      <Table.CellId
-                        :value="value"
-                        resource="client"
-                      />
-                    </template>
-                    <template #empty>
-                      <EmptyState
-                        size="small"
-                        icon="pi pi-search"
-                        title="No accounts match your search"
-                        :description="`Nothing in this tree matches “${accountQuery}”.`"
-                      >
-                        <template #actions>
-                          <Button
-                            label="Clear search"
-                            kind="outlined"
-                            size="small"
-                            @click="accountQuery = ''"
-                          />
-                        </template>
-                      </EmptyState>
-                    </template>
-                  </Table>
-                </template>
-              </Card>
-            </div>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full min-w-0 flex-wrap items-center gap-(--spacing-sm)">
-              <div class="flex min-w-0 flex-1 items-center gap-(--spacing-sm)">
-                <Avatar
-                  :label="currentAccount.name"
-                  size="medium"
-                  kind="square"
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <DialogTitle>Switch account</DialogTitle>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+            <DialogDescription>
+              Pick the account to work in. Search matches a name, an ID or a client ID.
+            </DialogDescription>
+            <Input
+              :id="searchId"
+              v-model="accountQuery"
+              placeholder="Search accounts"
+              aria-label="Search accounts"
+            >
+              <template #prefix>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
                 />
-                <div class="flex min-w-0 flex-col">
-                  <span class="truncate text-label-sm text-(--text-default)">{{
-                    currentAccount.name
-                  }}</span>
-                  <span class="text-body-xs text-(--text-muted)"
-                    >Current · ID {{ currentAccount.id }} · Client ID
-                    {{ currentAccount.clientId }}</span
-                  >
-                </div>
-              </div>
-              <Button
-                label="Account settings"
-                kind="outlined"
+              </template>
+            </Input>
+            <Card :padded="false">
+              <template #content>
+                <Table
+                  :data="accountRows"
+                  :columns="accountColumns"
+                  row-key="id"
+                  :bordered="false"
+                  paginated
+                  :page-size="10"
+                  :loading="accountsLoading"
+                  aria-label="Accounts"
+                >
+                  <template #cell-name="{ row }">
+                    <div
+                      :data-depth="row.depth"
+                      class="flex w-full min-w-0 items-center gap-(--spacing-xxs) data-[depth=1]:ps-(--spacing-lg) data-[depth=2]:ps-(--spacing-xxl)"
+                    >
+                      <IconButton
+                        v-if="row.hasChildren"
+                        :icon="row.expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                        kind="transparent"
+                        size="small"
+                        :aria-label="row.expanded ? `Collapse ${row.name}` : `Expand ${row.name}`"
+                        :aria-expanded="row.expanded"
+                        :disabled="Boolean(accountQuery.trim())"
+                        @click="toggleAccount(row)"
+                      />
+                      <span
+                        v-else
+                        class="size-7 shrink-0"
+                        aria-hidden="true"
+                      />
+                      <i
+                        :class="row.typeIcon"
+                        class="shrink-0 text-body-sm text-(--text-muted)"
+                        aria-hidden="true"
+                      />
+                      <Button
+                        :label="row.name"
+                        kind="link"
+                        size="small"
+                        class="min-w-0"
+                        :aria-current="row.id === currentAccountId ? 'true' : undefined"
+                        @click="chooseAccount(row)"
+                      />
+                      <Tag
+                        v-if="row.id === currentAccountId"
+                        label="Current"
+                        severity="success"
+                        size="small"
+                      />
+                    </div>
+                  </template>
+                  <template #cell-typeLabel="{ row }">
+                    <Table.CellStatus
+                      :label="row.typeLabel"
+                      :icon="row.typeIcon"
+                      :severity="row.typeSeverity"
+                    />
+                  </template>
+                  <template #cell-id="{ value }">
+                    <Table.CellId
+                      :value="value"
+                      resource="account"
+                    />
+                  </template>
+                  <template #cell-clientId="{ value }">
+                    <Table.CellId
+                      :value="value"
+                      resource="client"
+                    />
+                  </template>
+                  <template #empty>
+                    <EmptyState
+                      size="small"
+                      icon="pi pi-search"
+                      title="No accounts match your search"
+                      :description="`Nothing in this tree matches “${accountQuery}”.`"
+                    >
+                      <template #actions>
+                        <Button
+                          label="Clear search"
+                          kind="outlined"
+                          size="small"
+                          @click="accountQuery = ''"
+                        />
+                      </template>
+                    </EmptyState>
+                  </template>
+                </Table>
+              </template>
+            </Card>
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full min-w-0 flex-wrap items-center gap-(--spacing-sm)">
+            <div class="flex min-w-0 flex-1 items-center gap-(--spacing-sm)">
+              <Avatar
+                :label="currentAccount.name"
                 size="medium"
-                href="/settings"
+                kind="square"
               />
+              <div class="flex min-w-0 flex-col">
+                <span class="truncate text-label-sm text-(--text-default)">{{
+                  currentAccount.name
+                }}</span>
+                <span class="text-body-xs text-(--text-muted)"
+                  >Current · ID {{ currentAccount.id }} · Client ID
+                  {{ currentAccount.clientId }}</span
+                >
+              </div>
             </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+            <Button
+              label="Account settings"
+              kind="outlined"
+              size="medium"
+              href="/settings"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
 
     <Toaster position="bottom-right" />

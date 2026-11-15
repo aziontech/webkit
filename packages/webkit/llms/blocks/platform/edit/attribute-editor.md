@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/edit/attribute-editor/attribute-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/edit/attribute-editor")`
-- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [Drawer](../../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Checkbox](../../../components/checkbox.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupAddon`, `InputGroupInput`, `InputGroupRoot`, [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-create-surface`
 
 ## Asked as
@@ -45,9 +45,9 @@ The same controls row as `platform/view/table-view`, all bound to one client-mod
 
 `Table.CellActions`, named after the variable ("Actions for API_URL"), opens its menu of `DropdownMenu.Group`s placed `bottom-end`: Edit and Clone in the first group, Delete alone in the last. Edit opens the drawer on that variable; Clone inserts a copy right below it with `_COPY` appended to the key; Delete opens the confirmation dialog.
 
-### E. Create and edit drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent` (required)
+### E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent` (required)
 
-A right-side `Drawer` whose content is one `form` labeled Create Variable or Edit Variable. `PanelHeader` holds the `DrawerTitle` and `DrawerClose`; `PanelContent` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create Variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
+A right-side `Drawer` whose content is one `form` labeled Create Variable or Edit Variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelContent` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create Variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
 
 ### F. Variables section — `SettingsSection`, `Button`, `ToggleGroup` (required)
 
@@ -105,7 +105,7 @@ In the NetworkList state the same drawer recipe creates a network list for firew
 - Don't offer Remove on the last remaining pair.
 - Don't drop invalid pasted lines silently, and don't add duplicate keys from a paste: replace the existing value and say so.
 - Don't reveal a saved secret value in the table, a tooltip or the copy control.
-- Don't add a Cancel button beside Save; `DrawerClose` and the overlay close the drawer.
+- Don't add a Cancel button beside Save; the drawer's close button and the overlay close it.
 - Don't keep Global on together with a specific scope.
 
 ## Copy
@@ -174,10 +174,7 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
   import Checkbox from '@aziontech/webkit/checkbox'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
@@ -1053,356 +1050,350 @@ Each variant is the same screen in another state: `get_pattern("platform/edit/at
       size="medium"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            ref="formEl"
-            class="flex min-h-0 flex-1 flex-col"
-            :aria-label="drawerTitle"
-            novalidate
-            @submit.prevent="submit"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
-                <p class="text-body-sm text-(--text-muted)">
-                  {{ drawerDescription }}
-                </p>
-              </div>
-              <DrawerClose />
-            </PanelHeader>
+      <DrawerContent>
+        <form
+          ref="formEl"
+          class="flex min-h-0 flex-1 flex-col"
+          :aria-label="drawerTitle"
+          novalidate
+          @submit.prevent="submit"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                {{ drawerDescription }}
+              </p>
+            </div>
+          </PanelHeader>
 
-            <PanelContent>
-              <div
-                v-if="saveError"
-                class="mb-(--spacing-md)"
+          <PanelContent>
+            <div
+              v-if="saveError"
+              class="mb-(--spacing-md)"
+            >
+              <Alert
+                severity="danger"
+                :label="saveError"
+                data-testid="variables-save-error"
+              />
+            </div>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="submitting"
+            >
+              <legend class="sr-only">{{ drawerTitle }}</legend>
+              <SettingsSection
+                title="Variables"
+                hint="Store values your services read at runtime. Add one row per variable, or import a .env file."
               >
-                <Alert
-                  severity="danger"
-                  :label="saveError"
-                  data-testid="variables-save-error"
-                />
-              </div>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col border-0 p-0"
-                :disabled="submitting"
-              >
-                <legend class="sr-only">{{ drawerTitle }}</legend>
-                <SettingsSection
-                  title="Variables"
-                  hint="Store values your services read at runtime. Add one row per variable, or import a .env file."
-                >
-                  <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
-                    <div
-                      v-if="!editing"
-                      class="flex items-center gap-(--spacing-xs) self-end"
-                    >
-                      <Button
-                        label="Upload"
-                        icon="pi pi-upload"
-                        kind="outlined"
-                        size="medium"
-                        @click="fileInput?.click()"
-                      />
-                      <input
-                        ref="fileInput"
-                        type="file"
-                        accept=".env,.txt,text/plain"
-                        class="sr-only"
-                        tabindex="-1"
-                        aria-hidden="true"
-                        @change="onFilePicked"
-                      />
-                      <ToggleGroup
-                        v-model="view"
-                        :options="VIEW_OPTIONS"
-                        aria-label="Variables view"
-                        size="medium"
-                      />
-                    </div>
-
-                    <template v-if="view === 'Form'">
-                      <AttributeEditor
-                        v-model:items="entries"
-                        :new-item="createEntry"
-                        :min-items="1"
-                        :limit="editing ? 1 : undefined"
-                        :add-disabled="!canAdd"
-                        add-button-label="Add variable"
-                        remove-button-label="Remove variable"
-                        aria-label="Variables"
-                      >
-                        <template #row="{ index, remove, removable, removeLabel }">
-                          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                            <Field>
-                              <InputGroupRoot
-                                size="large"
-                                :required="keyError(entries[index])?.kind === 'required'"
-                                :invalid="keyError(entries[index])?.kind === 'invalid'"
-                              >
-                                <InputGroupAddon>
-                                  <span class="inline-block w-20">
-                                    <Field.Label :for="fieldId(entries[index], 'key')"
-                                      >Key</Field.Label
-                                    >
-                                  </span>
-                                </InputGroupAddon>
-                                <InputGroupInput
-                                  :id="fieldId(entries[index], 'key')"
-                                  :model-value="entries[index].key"
-                                  placeholder="MY_VARIABLE"
-                                  autocomplete="off"
-                                  spellcheck="false"
-                                  :invalid="!!keyError(entries[index])"
-                                  :aria-describedby="
-                                    keyError(entries[index])
-                                      ? messageId(entries[index], 'key')
-                                      : undefined
-                                  "
-                                  @update:model-value="(value) => setKey(entries[index], value)"
-                                  @paste="pasteIntoKey($event, index)"
-                                />
-                                <Tooltip
-                                  v-if="removable"
-                                  text="Remove variable"
-                                >
-                                  <IconButton
-                                    icon="pi pi-trash"
-                                    kind="outlined"
-                                    size="large"
-                                    :aria-label="removeLabel"
-                                    @click="remove"
-                                  />
-                                </Tooltip>
-                              </InputGroupRoot>
-                            </Field>
-
-                            <Field>
-                              <InputGroupRoot
-                                size="large"
-                                :required="!!valueError(entries[index])"
-                              >
-                                <InputGroupAddon>
-                                  <span class="inline-block w-20">
-                                    <Field.Label :for="fieldId(entries[index], 'value')"
-                                      >Value</Field.Label
-                                    >
-                                  </span>
-                                </InputGroupAddon>
-                                <InputGroupInput
-                                  :id="fieldId(entries[index], 'value')"
-                                  v-model="entries[index].value"
-                                  :type="
-                                    entries[index].secret && !entries[index].visible
-                                      ? 'password'
-                                      : 'text'
-                                  "
-                                  :placeholder="
-                                    entries[index].secret ? SECRET_MASK : 'my-variable-value'
-                                  "
-                                  autocomplete="off"
-                                  spellcheck="false"
-                                  :invalid="!!valueError(entries[index])"
-                                  :aria-describedby="
-                                    valueError(entries[index])
-                                      ? messageId(entries[index], 'value')
-                                      : undefined
-                                  "
-                                />
-                                <Tooltip
-                                  v-if="entries[index].secret"
-                                  :text="entries[index].visible ? 'Hide value' : 'Show value'"
-                                >
-                                  <IconButton
-                                    :icon="entries[index].visible ? 'pi pi-eye-slash' : 'pi pi-eye'"
-                                    kind="outlined"
-                                    size="large"
-                                    :aria-label="
-                                      entries[index].visible ? 'Hide value' : 'Show value'
-                                    "
-                                    :aria-pressed="entries[index].visible"
-                                    @click="entries[index].visible = !entries[index].visible"
-                                  />
-                                </Tooltip>
-                                <InputGroupAddon>
-                                  <Tooltip :text="secretTooltip(entries[index])">
-                                    <Field
-                                      orientation="horizontal"
-                                      :disabled="Boolean(editing?.secret)"
-                                    >
-                                      <Field.Label :for="fieldId(entries[index], 'secret')"
-                                        >Secret</Field.Label
-                                      >
-                                      <Checkbox
-                                        v-model="entries[index].secret"
-                                        :id="fieldId(entries[index], 'secret')"
-                                        :aria-label="secretAriaLabel(entries[index])"
-                                      />
-                                    </Field>
-                                  </Tooltip>
-                                </InputGroupAddon>
-                              </InputGroupRoot>
-                            </Field>
-                          </div>
-
-                          <HelperText
-                            v-if="keyError(entries[index])"
-                            key="key-error"
-                            :id="messageId(entries[index], 'key')"
-                            :kind="keyError(entries[index])?.kind"
-                            :label="keyError(entries[index])?.message"
-                          />
-                          <HelperText
-                            v-if="valueError(entries[index])"
-                            key="value-error"
-                            :id="messageId(entries[index], 'value')"
-                            :kind="valueError(entries[index])?.kind"
-                            :label="valueError(entries[index])?.message"
-                          />
-                        </template>
-                        <template #limit>Edit one variable at a time.</template>
-                        <template #info>
-                          <HelperText
-                            v-if="!editing"
-                            label="Paste JSON or .env contents into an empty key field to create one row per variable."
-                          />
-                        </template>
-                      </AttributeEditor>
-                    </template>
-
-                    <template v-else>
-                      <Textarea
-                        v-model="jsonText"
-                        aria-label="Variables JSON"
-                        :invalid="!!jsonError"
-                        :aria-describedby="jsonError ? formId + '-json-message' : undefined"
-                      />
-                      <HelperText>
-                        Use a JSON object format, for example:
-                        <code class="text-label-code-sm">{"API_URL":"https://example.com"}</code>
-                      </HelperText>
-                      <HelperText
-                        v-if="jsonError"
-                        :id="formId + '-json-message'"
-                        kind="invalid"
-                        :label="jsonError"
-                      />
-                    </template>
-
-                    <HelperText :label="SECRET_HINT" />
-                    <HelperText
-                      v-if="submitted && noVariables"
-                      kind="required"
-                      label="Add at least one variable."
+                <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+                  <div
+                    v-if="!editing"
+                    class="flex items-center gap-(--spacing-xs) self-end"
+                  >
+                    <Button
+                      label="Upload"
+                      icon="pi pi-upload"
+                      kind="outlined"
+                      size="medium"
+                      @click="fileInput?.click()"
+                    />
+                    <input
+                      ref="fileInput"
+                      type="file"
+                      accept=".env,.txt,text/plain"
+                      class="sr-only"
+                      tabindex="-1"
+                      aria-hidden="true"
+                      @change="onFilePicked"
+                    />
+                    <ToggleGroup
+                      v-model="view"
+                      :options="VIEW_OPTIONS"
+                      aria-label="Variables view"
+                      size="medium"
                     />
                   </div>
-                </SettingsSection>
 
-                <SettingsSection
-                  title="Scope"
-                  hint="Global covers the entire account and turns off when you enable a specific scope. Each scope starts with every resource selected. Scope cannot be changed after the variable is created."
-                >
-                  <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
-                    <div
-                      v-for="scope in scopes"
-                      :key="scope.type"
-                      class="flex min-w-0 flex-col gap-(--spacing-xs)"
+                  <template v-if="view === 'Form'">
+                    <AttributeEditor
+                      v-model:items="entries"
+                      :new-item="createEntry"
+                      :min-items="1"
+                      :limit="editing ? 1 : undefined"
+                      :add-disabled="!canAdd"
+                      add-button-label="Add variable"
+                      remove-button-label="Remove variable"
+                      aria-label="Variables"
                     >
-                      <InputGroupRoot
-                        size="large"
-                        :required="scopeError(scope)"
-                      >
-                        <InputGroupAddon>
-                          <span class="w-20">{{ scope.label }}</span>
-                        </InputGroupAddon>
-                        <span
-                          v-if="scope.type === 'global'"
-                          class="flex h-full min-w-0 flex-1 items-center bg-(--bg-canvas) px-(--spacing-md) text-label-sm text-(--text-default)"
-                        >
-                          The entire account
-                        </span>
-                        <div
-                          v-else
-                          class="h-full min-w-0 flex-1"
-                        >
-                          <MultiSelect
-                            v-model="scope.ids"
-                            size="large"
-                            :placeholder="scope.placeholder"
-                            :display-value="scopeDisplay(scope)"
-                            :disabled="!scope.enabled"
-                            :required="scopeError(scope)"
-                          >
-                            <MultiSelect.Trigger
-                              :aria-label="scope.placeholder"
-                              :aria-describedby="
-                                scopeError(scope) ? formId + '-scope-' + scope.type : undefined
-                              "
-                            />
-                            <MultiSelect.Content>
-                              <template #search>
-                                <Input
-                                  v-model="scope.query"
-                                  size="small"
-                                  placeholder="Search"
-                                  aria-label="Search"
-                                  @keydown.stop
-                                >
-                                  <template #prefix>
-                                    <i
-                                      class="pi pi-search"
-                                      aria-hidden="true"
-                                    />
-                                  </template>
-                                </Input>
-                              </template>
-                              <MultiSelect.Option
-                                v-for="option in visibleScopeOptions(scope)"
-                                :key="option.value"
-                                :value="option.value"
+                      <template #row="{ index, remove, removable, removeLabel }">
+                        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                          <Field>
+                            <InputGroupRoot
+                              size="large"
+                              :required="keyError(entries[index])?.kind === 'required'"
+                              :invalid="keyError(entries[index])?.kind === 'invalid'"
+                            >
+                              <InputGroupAddon>
+                                <span class="inline-block w-20">
+                                  <Field.Label :for="fieldId(entries[index], 'key')"
+                                    >Key</Field.Label
+                                  >
+                                </span>
+                              </InputGroupAddon>
+                              <InputGroupInput
+                                :id="fieldId(entries[index], 'key')"
+                                :model-value="entries[index].key"
+                                placeholder="MY_VARIABLE"
+                                autocomplete="off"
+                                spellcheck="false"
+                                :invalid="!!keyError(entries[index])"
+                                :aria-describedby="
+                                  keyError(entries[index])
+                                    ? messageId(entries[index], 'key')
+                                    : undefined
+                                "
+                                @update:model-value="(value) => setKey(entries[index], value)"
+                                @paste="pasteIntoKey($event, index)"
+                              />
+                              <Tooltip
+                                v-if="removable"
+                                text="Remove variable"
                               >
-                                {{ option.label }}
-                              </MultiSelect.Option>
-                            </MultiSelect.Content>
-                          </MultiSelect>
-                        </div>
-                        <InputGroupAddon>
-                          <Switch
-                            :model-value="scope.enabled"
-                            :disabled="scope.type === 'global'"
-                            :aria-label="'Enable ' + scope.label + ' scope'"
-                            @update:model-value="(value) => setScopeEnabled(scope, value)"
-                          />
-                        </InputGroupAddon>
-                      </InputGroupRoot>
-                      <HelperText
-                        v-if="scopeError(scope)"
-                        :id="formId + '-scope-' + scope.type"
-                        kind="required"
-                        label="Select at least one resource for this scope."
-                      />
-                    </div>
-                  </div>
-                </SettingsSection>
-              </fieldset>
-            </PanelContent>
+                                <IconButton
+                                  icon="pi pi-trash"
+                                  kind="outlined"
+                                  size="large"
+                                  :aria-label="removeLabel"
+                                  @click="remove"
+                                />
+                              </Tooltip>
+                            </InputGroupRoot>
+                          </Field>
 
-            <PanelFooter>
-              <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
-                <div class="flex min-w-0 items-center gap-(--spacing-sm)"></div>
-                <Button
-                  label="Save"
-                  kind="primary"
-                  size="medium"
-                  :loading="submitting"
-                  type="submit"
-                />
-              </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+                          <Field>
+                            <InputGroupRoot
+                              size="large"
+                              :required="!!valueError(entries[index])"
+                            >
+                              <InputGroupAddon>
+                                <span class="inline-block w-20">
+                                  <Field.Label :for="fieldId(entries[index], 'value')"
+                                    >Value</Field.Label
+                                  >
+                                </span>
+                              </InputGroupAddon>
+                              <InputGroupInput
+                                :id="fieldId(entries[index], 'value')"
+                                v-model="entries[index].value"
+                                :type="
+                                  entries[index].secret && !entries[index].visible
+                                    ? 'password'
+                                    : 'text'
+                                "
+                                :placeholder="
+                                  entries[index].secret ? SECRET_MASK : 'my-variable-value'
+                                "
+                                autocomplete="off"
+                                spellcheck="false"
+                                :invalid="!!valueError(entries[index])"
+                                :aria-describedby="
+                                  valueError(entries[index])
+                                    ? messageId(entries[index], 'value')
+                                    : undefined
+                                "
+                              />
+                              <Tooltip
+                                v-if="entries[index].secret"
+                                :text="entries[index].visible ? 'Hide value' : 'Show value'"
+                              >
+                                <IconButton
+                                  :icon="entries[index].visible ? 'pi pi-eye-slash' : 'pi pi-eye'"
+                                  kind="outlined"
+                                  size="large"
+                                  :aria-label="entries[index].visible ? 'Hide value' : 'Show value'"
+                                  :aria-pressed="entries[index].visible"
+                                  @click="entries[index].visible = !entries[index].visible"
+                                />
+                              </Tooltip>
+                              <InputGroupAddon>
+                                <Tooltip :text="secretTooltip(entries[index])">
+                                  <Field
+                                    orientation="horizontal"
+                                    :disabled="Boolean(editing?.secret)"
+                                  >
+                                    <Field.Label :for="fieldId(entries[index], 'secret')"
+                                      >Secret</Field.Label
+                                    >
+                                    <Checkbox
+                                      v-model="entries[index].secret"
+                                      :id="fieldId(entries[index], 'secret')"
+                                      :aria-label="secretAriaLabel(entries[index])"
+                                    />
+                                  </Field>
+                                </Tooltip>
+                              </InputGroupAddon>
+                            </InputGroupRoot>
+                          </Field>
+                        </div>
+
+                        <HelperText
+                          v-if="keyError(entries[index])"
+                          key="key-error"
+                          :id="messageId(entries[index], 'key')"
+                          :kind="keyError(entries[index])?.kind"
+                          :label="keyError(entries[index])?.message"
+                        />
+                        <HelperText
+                          v-if="valueError(entries[index])"
+                          key="value-error"
+                          :id="messageId(entries[index], 'value')"
+                          :kind="valueError(entries[index])?.kind"
+                          :label="valueError(entries[index])?.message"
+                        />
+                      </template>
+                      <template #limit>Edit one variable at a time.</template>
+                      <template #info>
+                        <HelperText
+                          v-if="!editing"
+                          label="Paste JSON or .env contents into an empty key field to create one row per variable."
+                        />
+                      </template>
+                    </AttributeEditor>
+                  </template>
+
+                  <template v-else>
+                    <Textarea
+                      v-model="jsonText"
+                      aria-label="Variables JSON"
+                      :invalid="!!jsonError"
+                      :aria-describedby="jsonError ? formId + '-json-message' : undefined"
+                    />
+                    <HelperText>
+                      Use a JSON object format, for example:
+                      <code class="text-label-code-sm">{"API_URL":"https://example.com"}</code>
+                    </HelperText>
+                    <HelperText
+                      v-if="jsonError"
+                      :id="formId + '-json-message'"
+                      kind="invalid"
+                      :label="jsonError"
+                    />
+                  </template>
+
+                  <HelperText :label="SECRET_HINT" />
+                  <HelperText
+                    v-if="submitted && noVariables"
+                    kind="required"
+                    label="Add at least one variable."
+                  />
+                </div>
+              </SettingsSection>
+
+              <SettingsSection
+                title="Scope"
+                hint="Global covers the entire account and turns off when you enable a specific scope. Each scope starts with every resource selected. Scope cannot be changed after the variable is created."
+              >
+                <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+                  <div
+                    v-for="scope in scopes"
+                    :key="scope.type"
+                    class="flex min-w-0 flex-col gap-(--spacing-xs)"
+                  >
+                    <InputGroupRoot
+                      size="large"
+                      :required="scopeError(scope)"
+                    >
+                      <InputGroupAddon>
+                        <span class="w-20">{{ scope.label }}</span>
+                      </InputGroupAddon>
+                      <span
+                        v-if="scope.type === 'global'"
+                        class="flex h-full min-w-0 flex-1 items-center bg-(--bg-canvas) px-(--spacing-md) text-label-sm text-(--text-default)"
+                      >
+                        The entire account
+                      </span>
+                      <div
+                        v-else
+                        class="h-full min-w-0 flex-1"
+                      >
+                        <MultiSelect
+                          v-model="scope.ids"
+                          size="large"
+                          :placeholder="scope.placeholder"
+                          :display-value="scopeDisplay(scope)"
+                          :disabled="!scope.enabled"
+                          :required="scopeError(scope)"
+                        >
+                          <MultiSelect.Trigger
+                            :aria-label="scope.placeholder"
+                            :aria-describedby="
+                              scopeError(scope) ? formId + '-scope-' + scope.type : undefined
+                            "
+                          />
+                          <MultiSelect.Content>
+                            <template #search>
+                              <Input
+                                v-model="scope.query"
+                                size="small"
+                                placeholder="Search"
+                                aria-label="Search"
+                                @keydown.stop
+                              >
+                                <template #prefix>
+                                  <i
+                                    class="pi pi-search"
+                                    aria-hidden="true"
+                                  />
+                                </template>
+                              </Input>
+                            </template>
+                            <MultiSelect.Option
+                              v-for="option in visibleScopeOptions(scope)"
+                              :key="option.value"
+                              :value="option.value"
+                            >
+                              {{ option.label }}
+                            </MultiSelect.Option>
+                          </MultiSelect.Content>
+                        </MultiSelect>
+                      </div>
+                      <InputGroupAddon>
+                        <Switch
+                          :model-value="scope.enabled"
+                          :disabled="scope.type === 'global'"
+                          :aria-label="'Enable ' + scope.label + ' scope'"
+                          @update:model-value="(value) => setScopeEnabled(scope, value)"
+                        />
+                      </InputGroupAddon>
+                    </InputGroupRoot>
+                    <HelperText
+                      v-if="scopeError(scope)"
+                      :id="formId + '-scope-' + scope.type"
+                      kind="required"
+                      label="Select at least one resource for this scope."
+                    />
+                  </div>
+                </div>
+              </SettingsSection>
+            </fieldset>
+          </PanelContent>
+
+          <PanelFooter>
+            <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
+              <div class="flex min-w-0 items-center gap-(--spacing-sm)"></div>
+              <Button
+                label="Save"
+                kind="primary"
+                size="medium"
+                :loading="submitting"
+                type="submit"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
 
     <ConfirmDialog

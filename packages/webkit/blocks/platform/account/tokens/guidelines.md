@@ -39,7 +39,7 @@ The table's `#empty` slot holds `No matching tokens` with Clear filters; an acco
 
 When the list does not load, a danger `Alert` with Retry takes the table's place and the heading stays.
 
-### G. Create drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `SettingsSection`, `PanelFooter` (required)
+### G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent`, `SettingsSection`, `PanelFooter` (required)
 
 A medium right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. The fields lock while it submits.
 
@@ -47,7 +47,7 @@ A medium right `Drawer` with one `form`: General (Name, Description) and Expirat
 
 Name is required and unique; the error sits under the field (`This field is required.`, `A token with this name already exists. Use another name.`) and focus moves to it. Expires in is a `Select` of 7, 30, 60 and 90 days and 1 year (default 30), and the `HelperText` under it says the exact date it stops working.
 
-### I. One-time reveal — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
+### I. One-time reveal — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
 
 After Create the drawer closes and a `Dialog` opens: the token's name, a warning `Alert` that this is the only time the secret is shown, the secret in a read-only `PasswordInput` (masked, with show) and a `CopyButton` beside it. The `CopyButton` announces `Token copied` (its `copied-label`), the only announcement; a muted line repeats `Copied to the clipboard.` for sighted users, hidden from assistive technology, and the footer button changes from `I copied the token` to `Done`. Closing clears the secret from memory.
 

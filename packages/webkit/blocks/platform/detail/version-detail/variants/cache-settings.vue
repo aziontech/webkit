@@ -3,11 +3,8 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
@@ -845,429 +842,421 @@
                     size="medium"
                     side="right"
                   >
-                    <DrawerPortal>
-                      <DrawerOverlay />
-                      <DrawerContent>
-                        <form
-                          class="flex min-h-0 flex-1 flex-col"
-                          :aria-label="drawerTitle"
-                          novalidate
-                          @submit.prevent="submit"
-                        >
-                          <PanelHeader class="w-full">
-                            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                              <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
-                              <DrawerDescription>
-                                How long browsers and the edge keep a response, and what makes two
-                                requests two cached objects.
-                              </DrawerDescription>
-                            </div>
-                            <DrawerClose />
-                          </PanelHeader>
-                          <PanelContent>
-                            <fieldset
-                              class="m-0 flex min-w-0 flex-col border-0 p-0"
-                              :disabled="submitting"
+                    <DrawerContent>
+                      <form
+                        class="flex min-h-0 flex-1 flex-col"
+                        :aria-label="drawerTitle"
+                        novalidate
+                        @submit.prevent="submit"
+                      >
+                        <PanelHeader class="w-full">
+                          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                            <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
+                            <DrawerDescription>
+                              How long browsers and the edge keep a response, and what makes two
+                              requests two cached objects.
+                            </DrawerDescription>
+                          </div>
+                        </PanelHeader>
+                        <PanelContent>
+                          <fieldset
+                            class="m-0 flex min-w-0 flex-col border-0 p-0"
+                            :disabled="submitting"
+                          >
+                            <legend class="sr-only">{{ drawerTitle }}</legend>
+                            <SettingsSection
+                              title="General"
+                              hint="Names the cache setting in the rules that reference it."
                             >
-                              <legend class="sr-only">{{ drawerTitle }}</legend>
-                              <SettingsSection
-                                title="General"
-                                hint="Names the cache setting in the rules that reference it."
-                              >
-                                <Card :padded="false">
-                                  <template #content>
-                                    <Item.List>
-                                      <SettingRow
-                                        title="Name"
-                                        description="What the Set cache policy behavior of a rule picks from its list."
-                                      >
-                                        <Input
-                                          v-model="form.name"
-                                          size="large"
-                                          class="w-full"
-                                          aria-label="Name"
-                                          placeholder="static-assets"
-                                          autocomplete="off"
-                                          :required="!!errors.name"
-                                          :aria-describedby="
-                                            errors.name ? 'cache-setting-name-message' : undefined
-                                          "
-                                        />
-                                        <HelperText
-                                          v-if="errors.name"
-                                          id="cache-setting-name-message"
-                                          kind="required"
-                                          :label="errors.name"
-                                        />
-                                      </SettingRow>
-                                    </Item.List>
-                                  </template>
-                                </Card>
-                              </SettingsSection>
-                              <SettingsSection
-                                title="Browser cache"
-                                hint="How long the visitor's browser may reuse a response before asking again."
-                              >
-                                <Card :padded="false">
-                                  <template #content>
-                                    <Item.List>
-                                      <SettingRow
-                                        key="browserBehavior"
-                                        title="Behavior"
-                                        description="Honoring the origin passes its Cache-Control through. Overriding replaces it with the time set here."
-                                      >
-                                        <Select
-                                          v-model="form.browserBehavior"
-                                          size="large"
-                                          class="w-full"
-                                          :display-value="labelOf(browserBehaviors)"
-                                        >
-                                          <Select.Trigger aria-label="Browser cache behavior" />
-                                          <Select.Content>
-                                            <Select.Option
-                                              v-for="option in browserBehaviors"
-                                              :key="option.value"
-                                              :value="option.value"
-                                            >
-                                              {{ option.label }}
-                                            </Select.Option>
-                                          </Select.Content>
-                                        </Select>
-                                      </SettingRow>
-                                      <SettingRow
-                                        v-if="form.browserBehavior === 'override'"
-                                        key="browserMaxAge"
-                                        title="Maximum TTL in seconds"
-                                        description="Up to 31536000 seconds, one year."
-                                        :level="1"
-                                      >
-                                        <NumberInput
-                                          v-model="form.browserMaxAge"
-                                          size="large"
-                                          class="w-full"
-                                          :min="0"
-                                          :max="31536000"
-                                          aria-label="Browser maximum TTL in seconds"
-                                        />
-                                      </SettingRow>
-                                    </Item.List>
-                                  </template>
-                                </Card>
-                              </SettingsSection>
-                              <SettingsSection
-                                title="Edge cache"
-                                hint="How long the edge may serve a stored response before it asks the origin again."
-                              >
-                                <Card :padded="false">
-                                  <template #content>
-                                    <Item.List>
-                                      <SettingRow
-                                        key="edgeBehavior"
-                                        title="Behavior"
-                                        description="Overriding sets the time the edge keeps each object, from 60 seconds up."
-                                      >
-                                        <Select
-                                          v-model="form.edgeBehavior"
-                                          size="large"
-                                          class="w-full"
-                                          :display-value="labelOf(edgeBehaviors)"
-                                        >
-                                          <Select.Trigger aria-label="Edge cache behavior" />
-                                          <Select.Content>
-                                            <Select.Option
-                                              v-for="option in edgeBehaviors"
-                                              :key="option.value"
-                                              :value="option.value"
-                                            >
-                                              {{ option.label }}
-                                            </Select.Option>
-                                          </Select.Content>
-                                        </Select>
-                                      </SettingRow>
-                                      <SettingRow
-                                        v-if="form.edgeBehavior === 'override'"
-                                        key="edgeMaxAge"
-                                        title="Maximum TTL in seconds"
-                                        description="From 60 to 31536000 seconds."
-                                        :level="1"
-                                      >
-                                        <NumberInput
-                                          v-model="form.edgeMaxAge"
-                                          size="large"
-                                          class="w-full"
-                                          :min="60"
-                                          :max="31536000"
-                                          aria-label="Edge maximum TTL in seconds"
-                                        />
-                                      </SettingRow>
-                                      <SettingRow
-                                        key="staleCache"
-                                        title="Stale cache"
-                                        description="Keep serving the expired object while the origin is unreachable, instead of answering with an error."
-                                        kind="compact"
-                                      >
-                                        <Switch
-                                          v-model="form.staleCache"
-                                          aria-label="Stale cache"
-                                        />
-                                      </SettingRow>
-                                      <SettingRow
-                                        key="largeFileCache"
-                                        title="Large file optimization"
-                                        description="Fetch and cache large objects in fragments, so a partial request does not wait for the whole file."
-                                        kind="compact"
-                                      >
-                                        <Switch
-                                          v-model="form.largeFileCache"
-                                          aria-label="Large file optimization"
-                                        />
-                                      </SettingRow>
-                                      <SettingRow
-                                        v-if="form.largeFileCache"
-                                        key="largeFileOffset"
-                                        title="Fragment size in kB"
-                                        description="Each fragment requested from the origin. 1024 kB is the default."
-                                        :level="1"
-                                      >
-                                        <NumberInput
-                                          v-model="form.largeFileOffset"
-                                          size="large"
-                                          class="w-full"
-                                          :min="1"
-                                          aria-label="Fragment size in kilobytes"
-                                        />
-                                      </SettingRow>
-                                      <SettingRow
-                                        key="tieredCache"
-                                        title="Tiered cache"
-                                        description="Add a second cache layer between the edge and your origin, so an edge miss can still be answered without reaching it."
-                                        kind="compact"
-                                      >
-                                        <Switch
-                                          v-model="form.tieredCache"
-                                          aria-label="Tiered cache"
-                                        />
-                                      </SettingRow>
-                                      <SettingRow
-                                        v-if="form.tieredCache"
-                                        key="tieredTopology"
-                                        title="Topology"
-                                        description="Where the second layer sits. Pin a region only when the origin is fixed to one."
-                                        :level="1"
-                                      >
-                                        <Select
-                                          v-model="form.tieredTopology"
-                                          size="large"
-                                          class="w-full"
-                                          :display-value="labelOf(topologies)"
-                                        >
-                                          <Select.Trigger aria-label="Tiered cache topology" />
-                                          <Select.Content>
-                                            <Select.Option
-                                              v-for="option in topologies"
-                                              :key="option.value"
-                                              :value="option.value"
-                                            >
-                                              {{ option.label }}
-                                            </Select.Option>
-                                          </Select.Content>
-                                        </Select>
-                                      </SettingRow>
-                                    </Item.List>
-                                  </template>
-                                </Card>
-                              </SettingsSection>
-                              <SettingsSection
-                                title="Advanced cache key"
-                                hint="Which parts of a request make two requests two different cached objects."
-                                collapsible
-                              >
-                                <Card :padded="false">
-                                  <template #content>
-                                    <Item.List>
-                                      <SettingRow
-                                        key="varyByMethod"
-                                        title="Cache by HTTP method"
-                                        description="GET and HEAD are always cached. Adding POST or OPTIONS puts the request body in the cache key."
-                                      >
-                                        <MultiSelect
-                                          v-model="form.varyByMethod"
-                                          size="large"
-                                          class="w-full"
-                                          placeholder="GET and HEAD only"
-                                          :display-value="methodsLabel"
-                                        >
-                                          <MultiSelect.Trigger aria-label="Cache by HTTP method" />
-                                          <MultiSelect.Content>
-                                            <MultiSelect.Option
-                                              v-for="option in methods"
-                                              :key="option.value"
-                                              :value="option.value"
-                                            >
-                                              {{ option.label }}
-                                            </MultiSelect.Option>
-                                          </MultiSelect.Content>
-                                        </MultiSelect>
-                                      </SettingRow>
-                                      <SettingRow
-                                        key="queryStringBehavior"
-                                        title="Cache by query string"
-                                      >
-                                        <Select
-                                          v-model="form.queryStringBehavior"
-                                          size="large"
-                                          class="w-full"
-                                          :display-value="labelOf(varyBehaviors)"
-                                        >
-                                          <Select.Trigger aria-label="Cache by query string" />
-                                          <Select.Content>
-                                            <Select.Option
-                                              v-for="option in varyBehaviors"
-                                              :key="option.value"
-                                              :value="option.value"
-                                            >
-                                              {{ option.label }}
-                                            </Select.Option>
-                                          </Select.Content>
-                                        </Select>
-                                      </SettingRow>
-                                      <SettingRow
-                                        v-if="
-                                          ['allowlist', 'denylist'].includes(
-                                            form.queryStringBehavior
-                                          )
+                              <Card :padded="false">
+                                <template #content>
+                                  <Item.List>
+                                    <SettingRow
+                                      title="Name"
+                                      description="What the Set cache policy behavior of a rule picks from its list."
+                                    >
+                                      <Input
+                                        v-model="form.name"
+                                        size="large"
+                                        class="w-full"
+                                        aria-label="Name"
+                                        placeholder="static-assets"
+                                        autocomplete="off"
+                                        :required="!!errors.name"
+                                        :aria-describedby="
+                                          errors.name ? 'cache-setting-name-message' : undefined
                                         "
-                                        key="queryStringFields"
-                                        title="Query string fields"
-                                        description="Comma separated and case sensitive: utm_source and UTM_SOURCE are two fields."
-                                        :level="1"
+                                      />
+                                      <HelperText
+                                        v-if="errors.name"
+                                        id="cache-setting-name-message"
+                                        kind="required"
+                                        :label="errors.name"
+                                      />
+                                    </SettingRow>
+                                  </Item.List>
+                                </template>
+                              </Card>
+                            </SettingsSection>
+                            <SettingsSection
+                              title="Browser cache"
+                              hint="How long the visitor's browser may reuse a response before asking again."
+                            >
+                              <Card :padded="false">
+                                <template #content>
+                                  <Item.List>
+                                    <SettingRow
+                                      key="browserBehavior"
+                                      title="Behavior"
+                                      description="Honoring the origin passes its Cache-Control through. Overriding replaces it with the time set here."
+                                    >
+                                      <Select
+                                        v-model="form.browserBehavior"
+                                        size="large"
+                                        class="w-full"
+                                        :display-value="labelOf(browserBehaviors)"
                                       >
-                                        <Input
-                                          v-model="form.queryStringFields"
-                                          size="large"
-                                          class="w-full"
-                                          aria-label="Query string fields"
-                                          placeholder="page, sort, lang"
-                                          autocomplete="off"
-                                        />
-                                      </SettingRow>
-                                      <SettingRow
-                                        key="cookieBehavior"
-                                        title="Cache by cookies"
+                                        <Select.Trigger aria-label="Browser cache behavior" />
+                                        <Select.Content>
+                                          <Select.Option
+                                            v-for="option in browserBehaviors"
+                                            :key="option.value"
+                                            :value="option.value"
+                                          >
+                                            {{ option.label }}
+                                          </Select.Option>
+                                        </Select.Content>
+                                      </Select>
+                                    </SettingRow>
+                                    <SettingRow
+                                      v-if="form.browserBehavior === 'override'"
+                                      key="browserMaxAge"
+                                      title="Maximum TTL in seconds"
+                                      description="Up to 31536000 seconds, one year."
+                                      :level="1"
+                                    >
+                                      <NumberInput
+                                        v-model="form.browserMaxAge"
+                                        size="large"
+                                        class="w-full"
+                                        :min="0"
+                                        :max="31536000"
+                                        aria-label="Browser maximum TTL in seconds"
+                                      />
+                                    </SettingRow>
+                                  </Item.List>
+                                </template>
+                              </Card>
+                            </SettingsSection>
+                            <SettingsSection
+                              title="Edge cache"
+                              hint="How long the edge may serve a stored response before it asks the origin again."
+                            >
+                              <Card :padded="false">
+                                <template #content>
+                                  <Item.List>
+                                    <SettingRow
+                                      key="edgeBehavior"
+                                      title="Behavior"
+                                      description="Overriding sets the time the edge keeps each object, from 60 seconds up."
+                                    >
+                                      <Select
+                                        v-model="form.edgeBehavior"
+                                        size="large"
+                                        class="w-full"
+                                        :display-value="labelOf(edgeBehaviors)"
                                       >
-                                        <Select
-                                          v-model="form.cookieBehavior"
-                                          size="large"
-                                          class="w-full"
-                                          :display-value="labelOf(varyBehaviors)"
-                                        >
-                                          <Select.Trigger aria-label="Cache by cookies" />
-                                          <Select.Content>
-                                            <Select.Option
-                                              v-for="option in varyBehaviors"
-                                              :key="option.value"
-                                              :value="option.value"
-                                            >
-                                              {{ option.label }}
-                                            </Select.Option>
-                                          </Select.Content>
-                                        </Select>
-                                      </SettingRow>
-                                      <SettingRow
-                                        v-if="
-                                          ['allowlist', 'denylist'].includes(form.cookieBehavior)
-                                        "
-                                        key="cookieNames"
-                                        title="Cookie names"
-                                        description="Comma separated. A name ending in * matches every cookie that starts with it."
-                                        :level="1"
+                                        <Select.Trigger aria-label="Edge cache behavior" />
+                                        <Select.Content>
+                                          <Select.Option
+                                            v-for="option in edgeBehaviors"
+                                            :key="option.value"
+                                            :value="option.value"
+                                          >
+                                            {{ option.label }}
+                                          </Select.Option>
+                                        </Select.Content>
+                                      </Select>
+                                    </SettingRow>
+                                    <SettingRow
+                                      v-if="form.edgeBehavior === 'override'"
+                                      key="edgeMaxAge"
+                                      title="Maximum TTL in seconds"
+                                      description="From 60 to 31536000 seconds."
+                                      :level="1"
+                                    >
+                                      <NumberInput
+                                        v-model="form.edgeMaxAge"
+                                        size="large"
+                                        class="w-full"
+                                        :min="60"
+                                        :max="31536000"
+                                        aria-label="Edge maximum TTL in seconds"
+                                      />
+                                    </SettingRow>
+                                    <SettingRow
+                                      key="staleCache"
+                                      title="Stale cache"
+                                      description="Keep serving the expired object while the origin is unreachable, instead of answering with an error."
+                                      kind="compact"
+                                    >
+                                      <Switch
+                                        v-model="form.staleCache"
+                                        aria-label="Stale cache"
+                                      />
+                                    </SettingRow>
+                                    <SettingRow
+                                      key="largeFileCache"
+                                      title="Large file optimization"
+                                      description="Fetch and cache large objects in fragments, so a partial request does not wait for the whole file."
+                                      kind="compact"
+                                    >
+                                      <Switch
+                                        v-model="form.largeFileCache"
+                                        aria-label="Large file optimization"
+                                      />
+                                    </SettingRow>
+                                    <SettingRow
+                                      v-if="form.largeFileCache"
+                                      key="largeFileOffset"
+                                      title="Fragment size in kB"
+                                      description="Each fragment requested from the origin. 1024 kB is the default."
+                                      :level="1"
+                                    >
+                                      <NumberInput
+                                        v-model="form.largeFileOffset"
+                                        size="large"
+                                        class="w-full"
+                                        :min="1"
+                                        aria-label="Fragment size in kilobytes"
+                                      />
+                                    </SettingRow>
+                                    <SettingRow
+                                      key="tieredCache"
+                                      title="Tiered cache"
+                                      description="Add a second cache layer between the edge and your origin, so an edge miss can still be answered without reaching it."
+                                      kind="compact"
+                                    >
+                                      <Switch
+                                        v-model="form.tieredCache"
+                                        aria-label="Tiered cache"
+                                      />
+                                    </SettingRow>
+                                    <SettingRow
+                                      v-if="form.tieredCache"
+                                      key="tieredTopology"
+                                      title="Topology"
+                                      description="Where the second layer sits. Pin a region only when the origin is fixed to one."
+                                      :level="1"
+                                    >
+                                      <Select
+                                        v-model="form.tieredTopology"
+                                        size="large"
+                                        class="w-full"
+                                        :display-value="labelOf(topologies)"
                                       >
-                                        <Input
-                                          v-model="form.cookieNames"
-                                          size="large"
-                                          class="w-full"
-                                          aria-label="Cookie names"
-                                          placeholder="session_id, ab_*"
-                                          autocomplete="off"
-                                        />
-                                      </SettingRow>
-                                      <SettingRow
-                                        key="deviceBehavior"
-                                        title="Adaptive delivery"
-                                        description="Vary the cached object by the device group a request belongs to, so a phone and a desktop get different content from the same URL."
+                                        <Select.Trigger aria-label="Tiered cache topology" />
+                                        <Select.Content>
+                                          <Select.Option
+                                            v-for="option in topologies"
+                                            :key="option.value"
+                                            :value="option.value"
+                                          >
+                                            {{ option.label }}
+                                          </Select.Option>
+                                        </Select.Content>
+                                      </Select>
+                                    </SettingRow>
+                                  </Item.List>
+                                </template>
+                              </Card>
+                            </SettingsSection>
+                            <SettingsSection
+                              title="Advanced cache key"
+                              hint="Which parts of a request make two requests two different cached objects."
+                              collapsible
+                            >
+                              <Card :padded="false">
+                                <template #content>
+                                  <Item.List>
+                                    <SettingRow
+                                      key="varyByMethod"
+                                      title="Cache by HTTP method"
+                                      description="GET and HEAD are always cached. Adding POST or OPTIONS puts the request body in the cache key."
+                                    >
+                                      <MultiSelect
+                                        v-model="form.varyByMethod"
+                                        size="large"
+                                        class="w-full"
+                                        placeholder="GET and HEAD only"
+                                        :display-value="methodsLabel"
                                       >
-                                        <Select
-                                          v-model="form.deviceBehavior"
-                                          size="large"
-                                          class="w-full"
-                                          :display-value="labelOf(deviceBehaviors)"
-                                        >
-                                          <Select.Trigger aria-label="Adaptive delivery" />
-                                          <Select.Content>
-                                            <Select.Option
-                                              v-for="option in deviceBehaviors"
-                                              :key="option.value"
-                                              :value="option.value"
-                                            >
-                                              {{ option.label }}
-                                            </Select.Option>
-                                          </Select.Content>
-                                        </Select>
-                                      </SettingRow>
-                                      <SettingRow
-                                        v-if="form.deviceBehavior === 'allowlist'"
-                                        key="deviceGroups"
-                                        title="Device groups"
-                                        description="Groups defined on this version's Device Groups tab."
-                                        :level="1"
+                                        <MultiSelect.Trigger aria-label="Cache by HTTP method" />
+                                        <MultiSelect.Content>
+                                          <MultiSelect.Option
+                                            v-for="option in methods"
+                                            :key="option.value"
+                                            :value="option.value"
+                                          >
+                                            {{ option.label }}
+                                          </MultiSelect.Option>
+                                        </MultiSelect.Content>
+                                      </MultiSelect>
+                                    </SettingRow>
+                                    <SettingRow
+                                      key="queryStringBehavior"
+                                      title="Cache by query string"
+                                    >
+                                      <Select
+                                        v-model="form.queryStringBehavior"
+                                        size="large"
+                                        class="w-full"
+                                        :display-value="labelOf(varyBehaviors)"
                                       >
-                                        <MultiSelect
-                                          v-model="form.deviceGroups"
-                                          size="large"
-                                          class="w-full"
-                                          placeholder="Select device groups"
-                                          :display-value="deviceGroupsLabel"
-                                        >
-                                          <MultiSelect.Trigger aria-label="Device groups" />
-                                          <MultiSelect.Content>
-                                            <MultiSelect.Option
-                                              v-for="option in deviceGroupOptions"
-                                              :key="option.value"
-                                              :value="option.value"
-                                            >
-                                              {{ option.label }}
-                                            </MultiSelect.Option>
-                                          </MultiSelect.Content>
-                                        </MultiSelect>
-                                      </SettingRow>
-                                    </Item.List>
-                                  </template>
-                                </Card>
-                              </SettingsSection>
-                            </fieldset>
-                          </PanelContent>
-                          <PanelFooter>
-                            <div class="flex w-full justify-end gap-(--spacing-xs)">
-                              <Button
-                                type="button"
-                                label="Cancel"
-                                kind="outlined"
-                                size="medium"
-                                :disabled="submitting"
-                                @click="drawerOpen = false"
-                              />
-                              <Button
-                                type="submit"
-                                :label="editingId ? 'Save' : 'Add Cache Settings'"
-                                kind="primary"
-                                size="medium"
-                                :loading="submitting"
-                              />
-                            </div>
-                          </PanelFooter>
-                        </form>
-                      </DrawerContent>
-                    </DrawerPortal>
+                                        <Select.Trigger aria-label="Cache by query string" />
+                                        <Select.Content>
+                                          <Select.Option
+                                            v-for="option in varyBehaviors"
+                                            :key="option.value"
+                                            :value="option.value"
+                                          >
+                                            {{ option.label }}
+                                          </Select.Option>
+                                        </Select.Content>
+                                      </Select>
+                                    </SettingRow>
+                                    <SettingRow
+                                      v-if="
+                                        ['allowlist', 'denylist'].includes(form.queryStringBehavior)
+                                      "
+                                      key="queryStringFields"
+                                      title="Query string fields"
+                                      description="Comma separated and case sensitive: utm_source and UTM_SOURCE are two fields."
+                                      :level="1"
+                                    >
+                                      <Input
+                                        v-model="form.queryStringFields"
+                                        size="large"
+                                        class="w-full"
+                                        aria-label="Query string fields"
+                                        placeholder="page, sort, lang"
+                                        autocomplete="off"
+                                      />
+                                    </SettingRow>
+                                    <SettingRow
+                                      key="cookieBehavior"
+                                      title="Cache by cookies"
+                                    >
+                                      <Select
+                                        v-model="form.cookieBehavior"
+                                        size="large"
+                                        class="w-full"
+                                        :display-value="labelOf(varyBehaviors)"
+                                      >
+                                        <Select.Trigger aria-label="Cache by cookies" />
+                                        <Select.Content>
+                                          <Select.Option
+                                            v-for="option in varyBehaviors"
+                                            :key="option.value"
+                                            :value="option.value"
+                                          >
+                                            {{ option.label }}
+                                          </Select.Option>
+                                        </Select.Content>
+                                      </Select>
+                                    </SettingRow>
+                                    <SettingRow
+                                      v-if="['allowlist', 'denylist'].includes(form.cookieBehavior)"
+                                      key="cookieNames"
+                                      title="Cookie names"
+                                      description="Comma separated. A name ending in * matches every cookie that starts with it."
+                                      :level="1"
+                                    >
+                                      <Input
+                                        v-model="form.cookieNames"
+                                        size="large"
+                                        class="w-full"
+                                        aria-label="Cookie names"
+                                        placeholder="session_id, ab_*"
+                                        autocomplete="off"
+                                      />
+                                    </SettingRow>
+                                    <SettingRow
+                                      key="deviceBehavior"
+                                      title="Adaptive delivery"
+                                      description="Vary the cached object by the device group a request belongs to, so a phone and a desktop get different content from the same URL."
+                                    >
+                                      <Select
+                                        v-model="form.deviceBehavior"
+                                        size="large"
+                                        class="w-full"
+                                        :display-value="labelOf(deviceBehaviors)"
+                                      >
+                                        <Select.Trigger aria-label="Adaptive delivery" />
+                                        <Select.Content>
+                                          <Select.Option
+                                            v-for="option in deviceBehaviors"
+                                            :key="option.value"
+                                            :value="option.value"
+                                          >
+                                            {{ option.label }}
+                                          </Select.Option>
+                                        </Select.Content>
+                                      </Select>
+                                    </SettingRow>
+                                    <SettingRow
+                                      v-if="form.deviceBehavior === 'allowlist'"
+                                      key="deviceGroups"
+                                      title="Device groups"
+                                      description="Groups defined on this version's Device Groups tab."
+                                      :level="1"
+                                    >
+                                      <MultiSelect
+                                        v-model="form.deviceGroups"
+                                        size="large"
+                                        class="w-full"
+                                        placeholder="Select device groups"
+                                        :display-value="deviceGroupsLabel"
+                                      >
+                                        <MultiSelect.Trigger aria-label="Device groups" />
+                                        <MultiSelect.Content>
+                                          <MultiSelect.Option
+                                            v-for="option in deviceGroupOptions"
+                                            :key="option.value"
+                                            :value="option.value"
+                                          >
+                                            {{ option.label }}
+                                          </MultiSelect.Option>
+                                        </MultiSelect.Content>
+                                      </MultiSelect>
+                                    </SettingRow>
+                                  </Item.List>
+                                </template>
+                              </Card>
+                            </SettingsSection>
+                          </fieldset>
+                        </PanelContent>
+                        <PanelFooter>
+                          <div class="flex w-full justify-end gap-(--spacing-xs)">
+                            <Button
+                              type="button"
+                              label="Cancel"
+                              kind="outlined"
+                              size="medium"
+                              :disabled="submitting"
+                              @click="drawerOpen = false"
+                            />
+                            <Button
+                              type="submit"
+                              :label="editingId ? 'Save' : 'Add Cache Settings'"
+                              kind="primary"
+                              size="medium"
+                              :loading="submitting"
+                            />
+                          </div>
+                        </PanelFooter>
+                      </form>
+                    </DrawerContent>
                   </Drawer>
                 </div>
               </ScrollArea>

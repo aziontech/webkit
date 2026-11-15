@@ -47,7 +47,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `copy` | `string` | Re-emitted from `CopyPromptButton` after a successful copy. |
+| `copy` | `(event: MouseEvent, value: string)` | Re-emitted from `CopyPromptButton` after a successful copy. |
 | `action` | `MouseEvent` | The guided action was activated. |
 
 ## Slots
@@ -74,12 +74,12 @@
 
 ## Internationalization
 
-| Key                       | English source                   | Override prop |
-| ------------------------- | -------------------------------- | ------------- |
-| `docAgentCard.title`      | `Your AI agent, fluent in Azion` | `title`       |
-| `docAgentCard.description`| `One prompt teaches any coding agent the platform: …` | `description` |
-| `docAgentCard.asideTitle` | `Prefer the guided route?`       | `asideTitle`  |
-| `docAgentCard.action`     | `Agent setup`                    | `actionLabel` |
+| Key                        | English source                                        | Override prop |
+| -------------------------- | ----------------------------------------------------- | ------------- |
+| `docAgentCard.title`       | `Your AI agent, fluent in Azion`                      | `title`       |
+| `docAgentCard.description` | `One prompt teaches any coding agent the platform: …` | `description` |
+| `docAgentCard.asideTitle`  | `Prefer the guided route?`                            | `asideTitle`  |
+| `docAgentCard.action`      | `Agent setup`                                         | `actionLabel` |
 
 ## Responsive
 

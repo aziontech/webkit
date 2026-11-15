@@ -101,7 +101,7 @@
   },
   {
    "name": "copy",
-   "payload": "value: string",
+   "payload": "(event: MouseEvent, value: string)",
    "notes": ""
   }
  ],

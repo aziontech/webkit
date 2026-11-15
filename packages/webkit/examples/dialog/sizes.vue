@@ -1,10 +1,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DialogTrigger from '@aziontech/webkit/dialog-trigger'
@@ -44,29 +41,25 @@
           kind="outlined"
         />
       </DialogTrigger>
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <DialogTitle>{{ sizeLabels[size] }}</DialogTitle>
-            <DialogClose />
-          </PanelHeader>
-          <PanelContent>
-            <DialogDescription>
-              Panel max-width preset for the {{ size }} dialog, applied from the md breakpoint up.
-            </DialogDescription>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-              <Button
-                label="Close"
-                kind="outlined"
-                @click="openBySize[size] = false"
-              />
-            </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <DialogTitle>{{ sizeLabels[size] }}</DialogTitle>
+        </PanelHeader>
+        <PanelContent>
+          <DialogDescription>
+            Panel max-width preset for the {{ size }} dialog, applied from the md breakpoint up.
+          </DialogDescription>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <Button
+              label="Close"
+              kind="outlined"
+              @click="openBySize[size] = false"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
   </div>
 </template>

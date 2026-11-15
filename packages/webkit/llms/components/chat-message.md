@@ -200,7 +200,10 @@ packages/webkit/src/components/ai/chat-message/
       <StreamingResponse :content="answer" />
       <template #actions>
         <ChatMessage.Actions>
-          <CopyButton :value="answer" />
+          <CopyButton
+            size="small"
+            :value="answer"
+          />
           <IconButton
             icon="pi pi-refresh"
             aria-label="Regenerate response"
@@ -270,7 +273,10 @@ packages/webkit/src/components/ai/chat-message/
       />
       <template #actions>
         <ChatMessage.Actions>
-          <CopyButton :value="full" />
+          <CopyButton
+            size="small"
+            :value="full"
+          />
         </ChatMessage.Actions>
       </template>
     </ChatMessage>

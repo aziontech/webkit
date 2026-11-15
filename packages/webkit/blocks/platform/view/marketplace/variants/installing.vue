@@ -3,10 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DocProse from '@aziontech/webkit/doc-prose'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -629,199 +626,195 @@
       size="medium"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            class="flex min-h-0 flex-1 flex-col"
-            :aria-label="`Install ${selected.name}`"
-            novalidate
-            @submit.prevent="install"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 items-center gap-(--spacing-sm)">
-                <span
-                  class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+      <DrawerContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          :aria-label="`Install ${selected.name}`"
+          novalidate
+          @submit.prevent="install"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+              <span
+                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+              >
+                <i
+                  :class="selected.logo"
+                  class="text-body-lg leading-none text-(--text-default)"
+                  aria-hidden="true"
+                />
+              </span>
+              <div class="flex min-w-0 flex-col">
+                <DrawerTitle>{{ selected.name }}</DrawerTitle>
+                <span class="text-body-xs text-(--text-muted)"
+                  >by <bdi>{{ selected.vendor }}</bdi></span
                 >
-                  <i
-                    :class="selected.logo"
-                    class="text-body-lg leading-none text-(--text-default)"
-                    aria-hidden="true"
-                  />
-                </span>
-                <div class="flex min-w-0 flex-col">
-                  <DrawerTitle>{{ selected.name }}</DrawerTitle>
-                  <span class="text-body-xs text-(--text-muted)"
-                    >by <bdi>{{ selected.vendor }}</bdi></span
-                  >
-                </div>
               </div>
-              <DrawerClose />
-            </PanelHeader>
+            </div>
+          </PanelHeader>
 
-            <PanelContent>
-              <div class="flex flex-col gap-(--layout-section-gap)">
-                <Alert
-                  key="alert-1"
-                  v-if="run.state === 'succeeded'"
-                  severity="success"
-                  :label="`${selected.name} is installed on ${run.application}. It runs from the next request.`"
-                />
-                <Alert
-                  key="alert-2"
-                  v-else-if="run.state === 'failed'"
-                  severity="danger"
-                  :label="`${selected.name} wasn't installed on ${run.application}. ${run.reason}`"
-                  action-label="Reinstall"
-                  @action="
-                    () => {
-                      form.application = run.application
-                      install()
-                    }
-                  "
-                />
+          <PanelContent>
+            <div class="flex flex-col gap-(--layout-section-gap)">
+              <Alert
+                key="alert-1"
+                v-if="run.state === 'succeeded'"
+                severity="success"
+                :label="`${selected.name} is installed on ${run.application}. It runs from the next request.`"
+              />
+              <Alert
+                key="alert-2"
+                v-else-if="run.state === 'failed'"
+                severity="danger"
+                :label="`${selected.name} wasn't installed on ${run.application}. ${run.reason}`"
+                action-label="Reinstall"
+                @action="
+                  () => {
+                    form.application = run.application
+                    install()
+                  }
+                "
+              />
 
-                <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
+              <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
 
-                <KeyValuePairs
-                  :columns="2"
-                  aria-label="Integration details"
+              <KeyValuePairs
+                :columns="2"
+                aria-label="Integration details"
+              >
+                <KeyValuePairs.Item label="Publisher"
+                  ><bdi>{{ selected.vendor }}</bdi></KeyValuePairs.Item
                 >
-                  <KeyValuePairs.Item label="Publisher"
-                    ><bdi>{{ selected.vendor }}</bdi></KeyValuePairs.Item
-                  >
-                  <KeyValuePairs.Item label="Category">{{ selected.category }}</KeyValuePairs.Item>
-                  <KeyValuePairs.Item label="Context">{{
-                    CONTEXTS[selected.context]
-                  }}</KeyValuePairs.Item>
-                  <KeyValuePairs.Item label="Version">{{ selected.version }}</KeyValuePairs.Item>
-                  <KeyValuePairs.Item label="Updated">{{ selected.updated }}</KeyValuePairs.Item>
-                  <KeyValuePairs.Item label="Installed on">{{
-                    selected.installedOn.length ? selected.installedOn.join(', ') : 'Not installed'
-                  }}</KeyValuePairs.Item>
-                </KeyValuePairs>
+                <KeyValuePairs.Item label="Category">{{ selected.category }}</KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Context">{{
+                  CONTEXTS[selected.context]
+                }}</KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Version">{{ selected.version }}</KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Updated">{{ selected.updated }}</KeyValuePairs.Item>
+                <KeyValuePairs.Item label="Installed on">{{
+                  selected.installedOn.length ? selected.installedOn.join(', ') : 'Not installed'
+                }}</KeyValuePairs.Item>
+              </KeyValuePairs>
 
-                <section
-                  class="flex flex-col gap-(--layout-group-gap)"
-                  aria-labelledby="integration-overview"
+              <section
+                class="flex flex-col gap-(--layout-group-gap)"
+                aria-labelledby="integration-overview"
+              >
+                <h3
+                  id="integration-overview"
+                  class="text-heading-xxs text-(--text-default)"
                 >
-                  <h3
-                    id="integration-overview"
-                    class="text-heading-xxs text-(--text-default)"
-                  >
-                    Overview
-                  </h3>
-                  <DocProse>
-                    <p>{{ selected.description }}</p>
-                    <p>
-                      Installing adds a function instance to the application you choose and one rule
-                      that runs it. Its settings can be changed at any time from Configure.
-                    </p>
-                  </DocProse>
-                </section>
-
-                <section
-                  class="flex flex-col gap-(--layout-group-gap)"
-                  aria-labelledby="integration-permissions"
-                >
-                  <h3
-                    id="integration-permissions"
-                    class="text-heading-xxs text-(--text-default)"
-                  >
-                    Permissions
-                  </h3>
-                  <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
-                    <li
-                      v-for="permission in [
-                        'Read the application’s rules',
-                        'Add a function instance to the application',
-                        'Add one rule that runs the function'
-                      ]"
-                      :key="permission"
-                      class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-muted)"
-                    >
-                      <i
-                        class="pi pi-check shrink-0 text-(--success-contrast)"
-                        aria-hidden="true"
-                      />
-                      {{ permission }}
-                    </li>
-                  </ul>
-                </section>
-
-                <section
-                  class="flex flex-col gap-(--layout-group-gap)"
-                  aria-labelledby="integration-install"
-                >
-                  <h3
-                    id="integration-install"
-                    class="text-heading-xxs text-(--text-default)"
-                  >
-                    {{ selected.installedOn.length ? 'Install on another application' : 'Install' }}
-                  </h3>
-                  <Field
-                    v-if="available.length"
-                    :invalid="applicationInvalid"
-                    :disabled="run.state === 'running'"
-                    required
-                  >
-                    <Field.Label>Application</Field.Label>
-                    <Select
-                      v-model="form.application"
-                      size="medium"
-                      placeholder="Select an application"
-                    >
-                      <Select.Trigger class="w-full" />
-                      <Select.Content>
-                        <Select.Option
-                          v-for="app in available"
-                          :key="app"
-                          :value="app"
-                          >{{ app }}</Select.Option
-                        >
-                      </Select.Content>
-                    </Select>
-                    <Field.Error v-if="applicationInvalid">
-                      Select the application to install {{ selected.name }} on.
-                    </Field.Error>
-                    <Field.Description v-else>
-                      The integration runs on every request to this application.
-                    </Field.Description>
-                  </Field>
-                  <p
-                    v-else
-                    class="m-0 text-body-sm text-(--text-muted)"
-                  >
-                    {{ selected.name }} is installed on every application.
+                  Overview
+                </h3>
+                <DocProse>
+                  <p>{{ selected.description }}</p>
+                  <p>
+                    Installing adds a function instance to the application you choose and one rule
+                    that runs it. Its settings can be changed at any time from Configure.
                   </p>
-                </section>
-              </div>
-            </PanelContent>
+                </DocProse>
+              </section>
 
-            <PanelFooter>
-              <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-                <Button
-                  v-if="selected.installedOn.length"
-                  label="Configure"
-                  icon="pi pi-cog"
-                  kind="outlined"
-                  size="medium"
-                  :href="`/marketplace/${selected.id}/configure`"
-                />
-                <Button
-                  key="button-2"
+              <section
+                class="flex flex-col gap-(--layout-group-gap)"
+                aria-labelledby="integration-permissions"
+              >
+                <h3
+                  id="integration-permissions"
+                  class="text-heading-xxs text-(--text-default)"
+                >
+                  Permissions
+                </h3>
+                <ul class="m-0 flex list-none flex-col gap-(--spacing-sm) p-0">
+                  <li
+                    v-for="permission in [
+                      'Read the application’s rules',
+                      'Add a function instance to the application',
+                      'Add one rule that runs the function'
+                    ]"
+                    :key="permission"
+                    class="flex items-center gap-(--spacing-sm) text-body-sm text-(--text-muted)"
+                  >
+                    <i
+                      class="pi pi-check shrink-0 text-(--success-contrast)"
+                      aria-hidden="true"
+                    />
+                    {{ permission }}
+                  </li>
+                </ul>
+              </section>
+
+              <section
+                class="flex flex-col gap-(--layout-group-gap)"
+                aria-labelledby="integration-install"
+              >
+                <h3
+                  id="integration-install"
+                  class="text-heading-xxs text-(--text-default)"
+                >
+                  {{ selected.installedOn.length ? 'Install on another application' : 'Install' }}
+                </h3>
+                <Field
                   v-if="available.length"
-                  label="Install"
-                  kind="primary"
-                  size="medium"
-                  type="submit"
-                  :loading="run.state === 'running'"
-                />
-              </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+                  :invalid="applicationInvalid"
+                  :disabled="run.state === 'running'"
+                  required
+                >
+                  <Field.Label>Application</Field.Label>
+                  <Select
+                    v-model="form.application"
+                    size="medium"
+                    placeholder="Select an application"
+                  >
+                    <Select.Trigger class="w-full" />
+                    <Select.Content>
+                      <Select.Option
+                        v-for="app in available"
+                        :key="app"
+                        :value="app"
+                        >{{ app }}</Select.Option
+                      >
+                    </Select.Content>
+                  </Select>
+                  <Field.Error v-if="applicationInvalid">
+                    Select the application to install {{ selected.name }} on.
+                  </Field.Error>
+                  <Field.Description v-else>
+                    The integration runs on every request to this application.
+                  </Field.Description>
+                </Field>
+                <p
+                  v-else
+                  class="m-0 text-body-sm text-(--text-muted)"
+                >
+                  {{ selected.name }} is installed on every application.
+                </p>
+              </section>
+            </div>
+          </PanelContent>
+
+          <PanelFooter>
+            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
+              <Button
+                v-if="selected.installedOn.length"
+                label="Configure"
+                icon="pi pi-cog"
+                kind="outlined"
+                size="medium"
+                :href="`/marketplace/${selected.id}/configure`"
+              />
+              <Button
+                key="button-2"
+                v-if="available.length"
+                label="Install"
+                kind="primary"
+                size="medium"
+                type="submit"
+                :loading="run.state === 'running'"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

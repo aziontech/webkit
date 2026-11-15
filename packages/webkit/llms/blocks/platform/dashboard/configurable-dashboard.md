@@ -451,7 +451,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <ChartCard.Action v-if="editing">
                 <Tag
                   :label="card.span + '/12'"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-arrows-h"
                 />

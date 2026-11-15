@@ -104,6 +104,7 @@
           :value="secret"
           aria-label="Copy setup key"
           copied-label="Setup key copied"
+          size="small"
         />
       </div>
     </div>

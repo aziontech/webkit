@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/ai/ai-chat/ai-chat.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/ai/ai-chat")`
-- Components: [ArtifactCanvas](../../../components/artifact-canvas.md), [ArtifactPreview](../../../components/artifact-preview.md), [Button](../../../components/button.md), [ChatMessage](../../../components/chat-message.md), [CodeBlock](../../../components/code-block.md), [Conversation](../../../components/conversation.md), [CopyButton](../../../components/copy-button.md), `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [PromptInput](../../../components/prompt-input.md), [Reasoning](../../../components/reasoning.md), [Resizable](../../../components/resizable.md), [Sources](../../../components/sources.md), [StreamingResponse](../../../components/streaming-response.md), [SuggestionGroup](../../../components/suggestion-group.md), [Tag](../../../components/tag.md)
+- Components: [ArtifactCanvas](../../../components/artifact-canvas.md), [ArtifactPreview](../../../components/artifact-preview.md), [Button](../../../components/button.md), [ChatMessage](../../../components/chat-message.md), [CodeBlock](../../../components/code-block.md), [Conversation](../../../components/conversation.md), [CopyButton](../../../components/copy-button.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [IconButton](../../../components/icon-button.md), [PromptInput](../../../components/prompt-input.md), [Reasoning](../../../components/reasoning.md), [Resizable](../../../components/resizable.md), [Sources](../../../components/sources.md), [StreamingResponse](../../../components/streaming-response.md), [SuggestionGroup](../../../components/suggestion-group.md), [Tag](../../../components/tag.md)
 - Skills: `webkit-genai`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -456,7 +456,10 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-c
             #actions
           >
             <ChatMessage.Actions>
-              <CopyButton :value="turn.content" />
+              <CopyButton
+                size="small"
+                :value="turn.content"
+              />
               <IconButton
                 icon="pi pi-refresh"
                 aria-label="Regenerate response"

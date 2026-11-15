@@ -41,7 +41,7 @@
 | `confirmLabel` | `string` | `''` | false | Label of the confirm button. Empty uses the locale catalog (`Confirm`). |
 | `cancelLabel` | `string` | `''` | false | Label of the cancel button. Empty uses the locale catalog (`Cancel`). |
 | `kind` | `'danger' \| 'primary'` | `'danger'` | false | Kind of the confirm button. |
-| `size` | `'small' \| 'medium'` | `'small'` | false | Width of the dialog. |
+| `size` | `'small' \| 'medium'` | `'medium'` | false | Width of the dialog. |
 | `loading` | `boolean` | `false` | false | Shows a spinner on the confirm button while the action runs; Cancel, `Esc` and the overlay stop closing the dialog until it clears. |
 | `disabled` | `boolean` | `false` | false | Disables the confirm button, for a confirmation that needs input first. |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |

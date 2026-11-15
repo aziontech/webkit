@@ -10,8 +10,6 @@
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import PromptInput, { type PromptInputState } from '@aziontech/webkit/prompt-input'
@@ -355,31 +353,28 @@
       side="right"
       size="large"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <div class="sr-only">
-            <DrawerTitle>Artifact</DrawerTitle>
-          </div>
-          <ArtifactCanvas
-            ref="drawerCanvas"
-            v-model:version="version"
-            :title="ARTIFACT"
-            :meta="`SQL · ${lines} lines`"
-            kind="code"
-            :versions="versions.length"
-            :streaming="generating"
-            :copy-value="versions[version]"
-            @close="closeCanvas"
-          >
-            <CodeBlock
-              :tabs="[{ label: 'SQL', value: 'sql', code: versions[version], language: 'sql' }]"
-              :copyable="false"
-              :bordered="false"
-            />
-          </ArtifactCanvas>
-        </DrawerContent>
-      </DrawerPortal>
+      <DrawerContent>
+        <div class="sr-only">
+          <DrawerTitle>Artifact</DrawerTitle>
+        </div>
+        <ArtifactCanvas
+          ref="drawerCanvas"
+          v-model:version="version"
+          :title="ARTIFACT"
+          :meta="`SQL · ${lines} lines`"
+          kind="code"
+          :versions="versions.length"
+          :streaming="generating"
+          :copy-value="versions[version]"
+          @close="closeCanvas"
+        >
+          <CodeBlock
+            :tabs="[{ label: 'SQL', value: 'sql', code: versions[version], language: 'sql' }]"
+            :copyable="false"
+            :bordered="false"
+          />
+        </ArtifactCanvas>
+      </DrawerContent>
     </Drawer>
   </section>
 </template>

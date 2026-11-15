@@ -9,7 +9,7 @@
 
 ## When to use
 
-- Laying out the regions inside `DialogContent` or `DrawerContent`: `PanelHeader` for the title and close control, `PanelContent` for the body that scrolls, `PanelFooter` for the actions.
+- Laying out the regions inside `DialogContent` or `DrawerContent`: `PanelHeader` for the title (the overlay adds its close control), `PanelContent` for the body that scrolls, `PanelFooter` for the actions.
 - A static preview of an overlay surface outside a live overlay, for example a frozen dialog on a docs or marketing page.
 
 ## Do
@@ -57,7 +57,7 @@
 - `index.ts` — the compound: `Panel` with `Panel.Header`, `Panel.Content` and `Panel.Footer` attached by `Object.assign`, exported at `@aziontech/webkit/panel`; the root alone is `@aziontech/webkit/panel-root`.
 - `panel-content.vue` — Public sub-component `panel-content`.
 - `panel-footer.vue` — Public sub-component `panel-footer`.
-- `panel-header.vue` — Public sub-component `panel-header`.
+- `panel-header.vue` — Public sub-component `panel-header`. Inside `DialogContent` / `DrawerContent` it appends the overlay's close button after its content (the content then sits in one flex row that keeps its own start/end spread), while the overlay's `closable` is true; a `PanelHeader` of a nested `Panel` gets nothing. Standalone it renders only its slot.
 
 ## States
 

@@ -54,7 +54,7 @@
 | Event | Payload | Notes |
 | --- | --- | --- |
 | `close` | `(event: MouseEvent \| KeyboardEvent)` |  |
-| `copy` | `value: string` |  |
+| `copy` | `(event: MouseEvent, value: string)` |  |
 
 ## Slots
 

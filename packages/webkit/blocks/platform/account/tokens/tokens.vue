@@ -7,14 +7,9 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
@@ -514,121 +509,116 @@
       size="medium"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create Personal Token"
-            novalidate
-            @submit.prevent="submit"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Create Personal Token</DrawerTitle>
-                <p class="text-body-sm text-(--text-muted)">
-                  The token acts as you, with your permissions, until it expires or you revoke it.
-                </p>
-              </div>
-              <DrawerClose />
-            </PanelHeader>
+      <DrawerContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          aria-label="Create Personal Token"
+          novalidate
+          @submit.prevent="submit"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>Create Personal Token</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                The token acts as you, with your permissions, until it expires or you revoke it.
+              </p>
+            </div>
+          </PanelHeader>
 
-            <PanelContent>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col border-0 p-0"
-                :disabled="submitting"
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="submitting"
+            >
+              <legend class="sr-only">Create Personal Token</legend>
+              <SettingsSection
+                title="General"
+                hint="How you will recognise the token in this list."
               >
-                <legend class="sr-only">Create Personal Token</legend>
-                <SettingsSection
-                  title="General"
-                  hint="How you will recognise the token in this list."
-                >
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-lg)">
-                    <Field
-                      :required="!!errors.name && !form.name.trim()"
-                      :invalid="!!errors.name && !!form.name.trim()"
-                    >
-                      <Field.Label for="token-name">Name</Field.Label>
-                      <Input
-                        id="token-name"
-                        v-model="form.name"
-                        placeholder="deploy-pipeline"
-                        autocomplete="off"
-                        @update:model-value="errors.name = ''"
-                      />
-                      <Field.Description>{{
-                        errors.name ||
-                        'Name it after where it is used, such as the job or the tool.'
-                      }}</Field.Description>
-                    </Field>
-                    <Field>
-                      <Field.Label for="token-description">Description</Field.Label>
-                      <Textarea
-                        id="token-description"
-                        v-model="form.description"
-                        :rows="3"
-                      />
-                    </Field>
-                  </div>
-                </SettingsSection>
-                <SettingsSection
-                  title="Expiration"
-                  hint="Shorter is safer. A token cannot be extended."
-                >
-                  <Field>
-                    <Field.Label for="token-expiry">Expires in</Field.Label>
-                    <Select
-                      v-model="form.expiresIn"
-                      size="large"
-                      class="w-full"
-                      :display-value="expiryLabel"
-                    >
-                      <Select.Trigger
-                        id="token-expiry"
-                        aria-describedby="token-expiry-hint"
-                      />
-                      <Select.Content>
-                        <Select.Option
-                          v-for="option in expiryOptions"
-                          :key="option.value"
-                          :value="option.value"
-                        >
-                          {{ option.label }}
-                        </Select.Option>
-                      </Select.Content>
-                    </Select>
-                    <HelperText
-                      id="token-expiry-hint"
-                      kind="helper"
-                      >{{ expiryHint }}</HelperText
-                    >
+                <div class="flex w-full min-w-0 flex-col gap-(--spacing-lg)">
+                  <Field
+                    :required="!!errors.name && !form.name.trim()"
+                    :invalid="!!errors.name && !!form.name.trim()"
+                  >
+                    <Field.Label for="token-name">Name</Field.Label>
+                    <Input
+                      id="token-name"
+                      v-model="form.name"
+                      placeholder="deploy-pipeline"
+                      autocomplete="off"
+                      @update:model-value="errors.name = ''"
+                    />
+                    <Field.Description>{{
+                      errors.name || 'Name it after where it is used, such as the job or the tool.'
+                    }}</Field.Description>
                   </Field>
-                </SettingsSection>
-              </fieldset>
-            </PanelContent>
+                  <Field>
+                    <Field.Label for="token-description">Description</Field.Label>
+                    <Textarea
+                      id="token-description"
+                      v-model="form.description"
+                      :rows="3"
+                    />
+                  </Field>
+                </div>
+              </SettingsSection>
+              <SettingsSection
+                title="Expiration"
+                hint="Shorter is safer. A token cannot be extended."
+              >
+                <Field>
+                  <Field.Label for="token-expiry">Expires in</Field.Label>
+                  <Select
+                    v-model="form.expiresIn"
+                    size="large"
+                    class="w-full"
+                    :display-value="expiryLabel"
+                  >
+                    <Select.Trigger
+                      id="token-expiry"
+                      aria-describedby="token-expiry-hint"
+                    />
+                    <Select.Content>
+                      <Select.Option
+                        v-for="option in expiryOptions"
+                        :key="option.value"
+                        :value="option.value"
+                      >
+                        {{ option.label }}
+                      </Select.Option>
+                    </Select.Content>
+                  </Select>
+                  <HelperText
+                    id="token-expiry-hint"
+                    kind="helper"
+                    >{{ expiryHint }}</HelperText
+                  >
+                </Field>
+              </SettingsSection>
+            </fieldset>
+          </PanelContent>
 
-            <PanelFooter>
-              <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-                <Button
-                  label="Cancel"
-                  kind="outlined"
-                  size="medium"
-                  type="button"
-                  :disabled="submitting"
-                  @click="createOpen = false"
-                />
-                <Button
-                  label="Create Personal Token"
-                  kind="primary"
-                  size="medium"
-                  type="submit"
-                  :loading="submitting"
-                />
-              </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+          <PanelFooter>
+            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
+              <Button
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+                type="button"
+                :disabled="submitting"
+                @click="createOpen = false"
+              />
+              <Button
+                label="Create Personal Token"
+                kind="primary"
+                size="medium"
+                type="submit"
+                :loading="submitting"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
 
     <Dialog
@@ -636,65 +626,62 @@
       size="medium"
       @update:open="(open) => !open && closeReveal()"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <DialogTitle>Copy your new token</DialogTitle>
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <DialogDescription>
-                “{{ revealed.name }}” is ready. This is the only time the token is shown.
-              </DialogDescription>
-              <Alert
-                severity="warning"
-                size="small"
-                label="Copy the token and store it somewhere safe, such as a secret manager. After you close this dialog, it cannot be shown again; create a new one if it is lost."
-              />
-              <Field>
-                <Field.Label for="token-secret">Token</Field.Label>
-                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <div class="min-w-0 grow">
-                    <PasswordInput
-                      id="token-secret"
-                      :model-value="revealed.secret"
-                      readonly
-                      autocomplete="off"
-                      class="w-full"
-                    />
-                  </div>
-                  <CopyButton
-                    :value="revealed.secret"
-                    kind="outlined"
-                    size="large"
-                    aria-label="Copy token"
-                    copied-label="Token copied"
-                    @copy="onCopied"
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <DialogTitle>Copy your new token</DialogTitle>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <DialogDescription>
+              “{{ revealed.name }}” is ready. This is the only time the token is shown.
+            </DialogDescription>
+            <Alert
+              severity="warning"
+              size="small"
+              label="Copy the token and store it somewhere safe, such as a secret manager. After you close this dialog, it cannot be shown again; create a new one if it is lost."
+            />
+            <Field>
+              <Field.Label for="token-secret">Token</Field.Label>
+              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                <div class="min-w-0 grow">
+                  <PasswordInput
+                    id="token-secret"
+                    :model-value="revealed.secret"
+                    readonly
+                    autocomplete="off"
+                    class="w-full"
                   />
                 </div>
-                <p
-                  v-if="copied"
-                  class="text-body-xs text-(--text-muted)"
-                  aria-hidden="true"
-                >
-                  Copied to the clipboard.
-                </p>
-              </Field>
-            </div>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end">
-              <Button
-                :label="copied ? 'Done' : 'I copied the token'"
-                kind="primary"
-                size="medium"
-                @click="closeReveal"
-              />
-            </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+                <CopyButton
+                  :value="revealed.secret"
+                  kind="outlined"
+                  size="large"
+                  aria-label="Copy token"
+                  copied-label="Token copied"
+                  @copy="onCopied"
+                />
+              </div>
+              <p
+                v-if="copied"
+                class="text-body-xs text-(--text-muted)"
+                aria-hidden="true"
+              >
+                Copied to the clipboard.
+              </p>
+            </Field>
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end">
+            <Button
+              :label="copied ? 'Done' : 'I copied the token'"
+              kind="primary"
+              size="medium"
+              @click="closeReveal"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
 
     <ConfirmDialog

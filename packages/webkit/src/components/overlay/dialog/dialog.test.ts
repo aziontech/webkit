@@ -5,16 +5,15 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/dialog/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import PanelHeader from '../panel/panel-header.vue'
 import Dialog from './dialog.vue'
 import DialogClose from './dialog-close.vue'
 import DialogContent from './dialog-content.vue'
 import DialogDescription from './dialog-description.vue'
-import DialogOverlay from './dialog-overlay.vue'
-import DialogPortal from './dialog-portal.vue'
 import DialogTitle from './dialog-title.vue'
 import DialogTrigger from './dialog-trigger.vue'
 
-// The panel + backdrop are Teleported to <body> by DialogPortal, so they escape
+// The panel + backdrop are Teleported to <body> by DialogContent, so they escape
 // the render container. Query them from document.body, not the utils container.
 // A frame or two lets onMounted (trigger registration) + the motion rAF settle.
 const settle = async () => {
@@ -29,21 +28,18 @@ const backdrop = () => byTestId('overlay-dialog__backdrop')
 
 /**
  * A realistic composed tree wired exactly like the Default example: Root >
- * Trigger (Button-like) + Portal > Overlay + Content (Title / Description /
- * Close). Slots take strings so we don't pull in Panel/Button, keeping the
- * assertions grounded purely in the dialog sub-components under test.
+ * Trigger (Button-like) + Content (header with the Title, Description). The
+ * Content renders the overlay and the header gets the close button on its own.
  */
 const composed = (props: Record<string, unknown> = {}) =>
   defineComponent({
     components: {
       Dialog,
       DialogTrigger,
-      DialogPortal,
-      DialogOverlay,
       DialogContent,
       DialogTitle,
       DialogDescription,
-      DialogClose
+      PanelHeader
     },
     setup() {
       const open = ref<boolean>(Boolean(props.defaultOpen ?? false))
@@ -54,14 +50,10 @@ const composed = (props: Record<string, unknown> = {}) =>
         <DialogTrigger>
           <button type="button">Open dialog</button>
         </DialogTrigger>
-        <DialogPortal>
-          <DialogOverlay />
-          <DialogContent>
-            <DialogTitle>Delete domain</DialogTitle>
-            <DialogDescription>This action cannot be undone.</DialogDescription>
-            <DialogClose />
-          </DialogContent>
-        </DialogPortal>
+        <DialogContent>
+          <PanelHeader><DialogTitle>Delete domain</DialogTitle></PanelHeader>
+          <DialogDescription>This action cannot be undone.</DialogDescription>
+        </DialogContent>
       </Dialog>
     `
   })
@@ -76,7 +68,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
       const { getByTestId } = render(composed())
       await settle()
 
-      // The Root + Trigger render in-place; DialogPortal renders nothing until open.
+      // The Root + Trigger render in-place; DialogContent teleports nothing until open.
       expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
       const trigger = getByTestId('overlay-dialog__trigger')
       expect(trigger.hasAttribute('role')).toBe(false)
@@ -147,7 +139,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
     it('a controlled parent drives open; DialogClose emits update:open(false)', async () => {
       const onUpdate = vi.fn()
       const Wrapper = defineComponent({
-        components: { Dialog, DialogTrigger, DialogPortal, DialogContent, DialogClose },
+        components: { Dialog, DialogTrigger, DialogContent, DialogClose },
         setup() {
           const open = ref(true)
           const onUpd = (v: boolean) => {
@@ -159,11 +151,9 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
         template: `
           <Dialog :open="open" @update:open="onUpd">
             <DialogTrigger><button>Open</button></DialogTrigger>
-            <DialogPortal>
-              <DialogContent>
-                <DialogClose />
-              </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+              <DialogClose />
+            </DialogContent>
           </Dialog>
         `
       })
@@ -243,7 +233,7 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
   })
 
   describe('dismissible=false suppresses dismissal', () => {
-    it('Escape and backdrop click do NOT close, and DialogClose is disabled', async () => {
+    it('Escape and backdrop click do NOT close; the close button still closes', async () => {
       const { getByTestId } = render(composed({ dismissible: false }))
       await settle()
 
@@ -261,9 +251,11 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
       await settle()
       expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('open')
 
-      // DialogClose reflects !dismissible via disabled.
       const close = byTestId('overlay-dialog__close')!
-      expect(close.hasAttribute('disabled')).toBe(true)
+      expect(close.hasAttribute('disabled')).toBe(false)
+      await fireEvent.click(close)
+      await settle()
+      expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
     })
   })
 
@@ -324,8 +316,6 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
         components: {
           Dialog,
           DialogTrigger,
-          DialogPortal,
-          DialogOverlay,
           DialogContent,
           DialogTitle,
           DialogDescription,
@@ -334,14 +324,11 @@ describe('Dialog (overlay: composition sub-components + provide/inject)', () => 
         template: `
           <Dialog default-open>
             <DialogTrigger>Open dialog</DialogTrigger>
-            <DialogPortal>
-              <DialogOverlay />
-              <DialogContent>
-                <DialogTitle>Delete domain</DialogTitle>
-                <DialogDescription>This action cannot be undone.</DialogDescription>
-                <DialogClose />
-              </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+              <DialogTitle>Delete domain</DialogTitle>
+              <DialogDescription>This action cannot be undone.</DialogDescription>
+              <DialogClose />
+            </DialogContent>
           </Dialog>
         `
       })
@@ -377,8 +364,6 @@ describe('keyboard map (spec)', () => {
     components: {
       Dialog,
       DialogTrigger,
-      DialogPortal,
-      DialogOverlay,
       DialogContent,
       DialogTitle
     },
@@ -391,14 +376,11 @@ describe('keyboard map (spec)', () => {
         <DialogTrigger>
           <button type="button">Open dialog</button>
         </DialogTrigger>
-        <DialogPortal>
-          <DialogOverlay />
-          <DialogContent>
-            <DialogTitle>Rename</DialogTitle>
-            <button type="button" data-testid="first-action">First</button>
-            <button type="button" data-testid="last-action">Last</button>
-          </DialogContent>
-        </DialogPortal>
+        <DialogContent>
+          <DialogTitle>Rename</DialogTitle>
+          <button type="button" data-testid="first-action">First</button>
+          <button type="button" data-testid="last-action">Last</button>
+        </DialogContent>
       </Dialog>
     `
   })
@@ -450,7 +432,7 @@ describe('keyboard map (spec)', () => {
 
   it('returns focus to the previously focused element when opened without a trigger', async () => {
     const controlled = defineComponent({
-      components: { Dialog, DialogPortal, DialogContent, DialogTitle },
+      components: { Dialog, DialogContent, DialogTitle },
       setup() {
         const open = ref(false)
         return { open }
@@ -459,12 +441,10 @@ describe('keyboard map (spec)', () => {
         <div>
           <button type="button" data-testid="opener" @click="open = true">Open</button>
           <Dialog v-model:open="open">
-            <DialogPortal>
-              <DialogContent>
-                <DialogTitle>Controlled</DialogTitle>
-                <button type="button">Inside</button>
-              </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+              <DialogTitle>Controlled</DialogTitle>
+              <button type="button">Inside</button>
+            </DialogContent>
           </Dialog>
         </div>
       `
@@ -484,31 +464,29 @@ describe('keyboard map (spec)', () => {
   })
 })
 
-describe('DialogPortal data-testid', () => {
-  it('derives the portal testid from the root and lets a consumer override it', async () => {
-    const { unmount } = render(composed({ defaultOpen: true }))
+describe('portal and overlay (rendered by DialogContent)', () => {
+  it('teleports the panel inside a portal wrapper derived from the root testid', async () => {
+    render(composed({ defaultOpen: true }))
     await settle()
     const portal = byTestId('overlay-dialog__portal')
     expect(portal).not.toBeNull()
+    expect(portal!.parentElement).toBe(document.body)
     expect(portal!.contains(panel())).toBe(true)
-    unmount()
-    await settle()
+  })
 
+  it('renders the overlay behind every open dialog with no hand-assembled parts', async () => {
     render(
       defineComponent({
-        components: { Dialog, DialogPortal, DialogContent, DialogTitle },
-        template: `
-          <Dialog default-open>
-            <DialogPortal data-testid="custom-portal">
-              <DialogContent><DialogTitle>Title</DialogTitle></DialogContent>
-            </DialogPortal>
-          </Dialog>
-        `
+        components: { Dialog, DialogContent, DialogTitle },
+        template: `<Dialog default-open><DialogContent><DialogTitle>Title</DialogTitle></DialogContent></Dialog>`
       })
     )
     await settle()
-    expect(byTestId('custom-portal')).not.toBeNull()
-    expect(byTestId('overlay-dialog__portal')).toBeNull()
+    const bd = backdrop()
+    expect(bd).not.toBeNull()
+    expect(bd!.getAttribute('aria-hidden')).toBe('true')
+    expect(byTestId('overlay-dialog__portal')!.contains(bd)).toBe(true)
+    expect(panel()!.getAttribute('aria-modal')).toBe('true')
   })
 })
 
@@ -555,13 +533,11 @@ describe('Dialog unmounted while open', () => {
 describe('audit fixes', () => {
   const bare = (props: Record<string, unknown> = {}) =>
     defineComponent({
-      components: { Dialog, DialogPortal, DialogContent, DialogTitle },
+      components: { Dialog, DialogContent, DialogTitle },
       setup: () => ({ props }),
       template: `
         <Dialog v-bind="props" :default-open="true">
-          <DialogPortal>
-            <DialogContent><DialogTitle>Title only</DialogTitle><button type="button">Act</button></DialogContent>
-          </DialogPortal>
+          <DialogContent><DialogTitle>Title only</DialogTitle><button type="button">Act</button></DialogContent>
         </Dialog>
       `
     })
@@ -584,9 +560,9 @@ describe('audit fixes', () => {
     const size = ref('small')
     render(
       defineComponent({
-        components: { Dialog, DialogPortal, DialogContent, DialogTitle },
+        components: { Dialog, DialogContent, DialogTitle },
         setup: () => ({ size }),
-        template: `<Dialog :size="size" :default-open="true"><DialogPortal><DialogContent><DialogTitle>T</DialogTitle></DialogContent></DialogPortal></Dialog>`
+        template: `<Dialog :size="size" :default-open="true"><DialogContent><DialogTitle>T</DialogTitle></DialogContent></Dialog>`
       })
     )
     await settle()
@@ -608,7 +584,7 @@ describe('audit fixes', () => {
 
 describe('nested overlays', () => {
   const nested = defineComponent({
-    components: { Dialog, DialogPortal, DialogContent, DialogTitle },
+    components: { Dialog, DialogContent, DialogTitle },
     setup() {
       const outer = ref(true)
       const inner = ref(false)
@@ -616,22 +592,18 @@ describe('nested overlays', () => {
     },
     template: `
       <Dialog v-model:open="outer" data-testid="outer">
-        <DialogPortal>
-          <DialogContent>
-            <DialogTitle>Outer</DialogTitle>
-            <button type="button" data-testid="outer-first">Outer first</button>
-            <button type="button" data-testid="open-inner" @click="inner = true">Open inner</button>
-          </DialogContent>
-        </DialogPortal>
+        <DialogContent>
+          <DialogTitle>Outer</DialogTitle>
+          <button type="button" data-testid="outer-first">Outer first</button>
+          <button type="button" data-testid="open-inner" @click="inner = true">Open inner</button>
+        </DialogContent>
       </Dialog>
       <Dialog v-model:open="inner" data-testid="inner">
-        <DialogPortal>
-          <DialogContent>
-            <DialogTitle>Inner</DialogTitle>
-            <button type="button" data-testid="inner-a">A</button>
-            <button type="button" data-testid="inner-b">B</button>
-          </DialogContent>
-        </DialogPortal>
+        <DialogContent>
+          <DialogTitle>Inner</DialogTitle>
+          <button type="button" data-testid="inner-a">A</button>
+          <button type="button" data-testid="inner-b">B</button>
+        </DialogContent>
       </Dialog>
     `
   })
@@ -664,11 +636,18 @@ describe('nested overlays', () => {
   })
 })
 
-describe('closable (explicit close, separate from light-dismiss)', () => {
-  it('dismissible false with closable true: Escape and overlay stay shut, the close button closes', async () => {
-    const { getByTestId } = render(
-      composed({ defaultOpen: true, dismissible: false, closable: true })
-    )
+describe('closable (the close button, separate from light-dismiss)', () => {
+  it('renders the close button at the end of the header by default', async () => {
+    render(composed({ defaultOpen: true }))
+    await settle()
+    const close = byTestId('overlay-dialog__close')!
+    expect(close).not.toBeNull()
+    expect(close.closest('header')).toBe(byTestId('overlay-dialog__panel-shell__header'))
+    expect(close.hasAttribute('disabled')).toBe(false)
+  })
+
+  it('dismissible false: Escape and overlay stay shut, the close button closes', async () => {
+    const { getByTestId } = render(composed({ defaultOpen: true, dismissible: false }))
     await settle()
     await settle()
 
@@ -677,43 +656,46 @@ describe('closable (explicit close, separate from light-dismiss)', () => {
     await settle()
     expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('open')
 
-    const close = byTestId('overlay-dialog__close')!
-    expect(close.hasAttribute('disabled')).toBe(false)
-    await fireEvent.click(close)
+    await fireEvent.click(byTestId('overlay-dialog__close')!)
     await settle()
     expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
   })
 
-  it('closable false keeps light-dismiss and disables the close button', async () => {
+  it('closable false removes the close button and keeps light-dismiss', async () => {
     const { getByTestId } = render(composed({ defaultOpen: true, closable: false }))
     await settle()
     await settle()
 
-    expect(byTestId('overlay-dialog__close')!.hasAttribute('disabled')).toBe(true)
+    expect(byTestId('overlay-dialog__close')).toBeNull()
+    expect(byTestId('overlay-dialog__panel-shell__header')).not.toBeNull()
     await fireEvent.keyDown(document, { key: 'Escape' })
     await settle()
     expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
   })
 
-  it('unset closable still follows dismissible (6.x compatibility)', async () => {
-    render(composed({ defaultOpen: true, dismissible: false }))
+  it('an explicit DialogClose in a custom header always closes', async () => {
+    const { getByTestId } = render(
+      defineComponent({
+        components: { Dialog, DialogContent, DialogTitle, DialogClose },
+        template: `<Dialog default-open :closable="false" :dismissible="false"><DialogContent><DialogTitle>T</DialogTitle><DialogClose /></DialogContent></Dialog>`
+      })
+    )
     await settle()
+    await fireEvent.click(byTestId('overlay-dialog__close')!)
     await settle()
-
-    expect(byTestId('overlay-dialog__close')!.hasAttribute('disabled')).toBe(true)
+    expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
   })
 })
 
 describe('compound API (index.ts)', () => {
   it('attaches every part and the Panel regions for dot-notation', async () => {
     const { default: Compound } = await import('./index')
-    const PanelHeader = (await import('../panel/panel-header.vue')).default
     const PanelContent = (await import('../panel/panel-content.vue')).default
     const PanelFooter = (await import('../panel/panel-footer.vue')).default
     expect(Compound).toBe(Dialog)
     expect(Compound.Trigger).toBe(DialogTrigger)
-    expect(Compound.Portal).toBe(DialogPortal)
-    expect(Compound.Overlay).toBe(DialogOverlay)
+    expect('Portal' in Compound).toBe(false)
+    expect('Overlay' in Compound).toBe(false)
     expect(Compound.Content).toBe(DialogContent)
     expect(Compound.Title).toBe(DialogTitle)
     expect(Compound.Description).toBe(DialogDescription)

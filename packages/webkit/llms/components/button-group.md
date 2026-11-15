@@ -48,7 +48,7 @@
 | `items` | `ButtonGroupItem[]` | `[]` | false | Actions, toggles and menus, in reading order. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the toolbar, written as the `aria-label` attribute. Empty only when `aria-labelledby` names the toolbar; then no `aria-label` renders. |
 | `kind` | `'transparent' \| 'outlined'` | `'transparent'` | false | Visual variant of every button. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Size token of every button. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token of every button. |
 | `visibleCount` | `number` | `undefined` | false | Items shown as buttons; the rest go into the More actions menu. Unset shows every item. |
 | `overflowLabel` | `string` | `''` | false | Label of the overflow button. Empty uses the locale catalog (`More actions`). |
 

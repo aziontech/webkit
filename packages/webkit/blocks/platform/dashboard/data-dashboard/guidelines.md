@@ -58,7 +58,7 @@ Only on the period comparison chart, labelled with its card.
 
 Names Expand and More options on hover and focus.
 
-### H. Expand — `IconButton`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `DialogClose`, `PanelContent` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `PanelContent` (optional)
 
 Its `aria-label` names the card (`Expand Data transferred by project`). It opens one large `Dialog`
 with the card title, its Hint sentence as the description, and the region at full size: the chart

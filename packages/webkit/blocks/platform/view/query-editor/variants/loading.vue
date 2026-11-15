@@ -4,10 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import CodeEditor, { type CodeEditorMarker } from '@aziontech/webkit/code-editor'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -1175,81 +1172,77 @@ LIMIT 3;`
       size="large"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>SQL quick templates</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                Pick a snippet to load it into the editor.
-              </p>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DrawerTitle>SQL quick templates</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              Pick a snippet to load it into the editor.
+            </p>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <Input
-                v-model="templateQuery"
-                size="large"
-                class="w-full"
-                placeholder="Search templates"
-                aria-label="Search templates"
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <Input
+              v-model="templateQuery"
+              size="large"
+              class="w-full"
+              placeholder="Search templates"
+              aria-label="Search templates"
+            >
+              <template #prefix>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+
+            <div
+              v-if="filteredTemplates.length"
+              class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2"
+            >
+              <Item
+                v-for="template in filteredTemplates"
+                :key="template.id"
+                kind="outlined"
+                clickable
+                @click="chooseTemplate(template)"
               >
-                <template #prefix>
+                <Item.Media>
                   <i
-                    class="pi pi-search"
+                    :class="template.icon"
+                    class="text-(--text-muted)"
                     aria-hidden="true"
                   />
-                </template>
-              </Input>
-
-              <div
-                v-if="filteredTemplates.length"
-                class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2"
-              >
-                <Item
-                  v-for="template in filteredTemplates"
-                  :key="template.id"
-                  kind="outlined"
-                  clickable
-                  @click="chooseTemplate(template)"
-                >
-                  <Item.Media>
-                    <i
-                      :class="template.icon"
-                      class="text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </Item.Media>
-                  <Item.Content>
-                    <Item.Title>{{ template.title }}</Item.Title>
-                    <Item.Description>{{ template.description }}</Item.Description>
-                  </Item.Content>
-                </Item>
-              </div>
-
-              <EmptyState
-                v-else
-                size="small"
-                icon="pi pi-search"
-                :title="`No templates match “${templateQuery}”`"
-                description="Try another name or statement."
-              >
-                <template #actions>
-                  <Button
-                    label="Clear search"
-                    kind="outlined"
-                    size="small"
-                    @click="templateQuery = ''"
-                  />
-                </template>
-              </EmptyState>
+                </Item.Media>
+                <Item.Content>
+                  <Item.Title>{{ template.title }}</Item.Title>
+                  <Item.Description>{{ template.description }}</Item.Description>
+                </Item.Content>
+              </Item>
             </div>
-          </PanelContent>
-        </DrawerContent>
-      </DrawerPortal>
+
+            <EmptyState
+              v-else
+              size="small"
+              icon="pi pi-search"
+              :title="`No templates match “${templateQuery}”`"
+              description="Try another name or statement."
+            >
+              <template #actions>
+                <Button
+                  label="Clear search"
+                  kind="outlined"
+                  size="small"
+                  @click="templateQuery = ''"
+                />
+              </template>
+            </EmptyState>
+          </div>
+        </PanelContent>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

@@ -1,6 +1,6 @@
 # Trace
 
-> A span waterfall: one row per span of a run (a function invocation, a request through several services), indented under the span it ran inside and drawn as a bar placed against the run's own clock. The rows form a tree grid that expands and collapses, a search narrows them to the spans whose name or service matches, and selecting a row opens its details (service, start, duration, share of the run, outcome message and attributes) under the waterfall. It reads a flat `spans` list with `parentId` links and never fetches anything.
+> A span waterfall: one row per span of a run (a function invocation, a request through several services), indented under the span it ran inside and drawn as a bar placed against the run's own clock. The rows form a tree grid that expands and collapses, a search narrows them to the spans whose name or service matches, and selecting a row opens its details (service, start, duration, share of the run, outcome message and attributes) under the waterfall. It reads a flat `spans` list with `parentId` links and never fetches anything. With `zoomable`, a minimap under the axis draws the whole run and a window the reader drags or resizes (or moves from the keyboard) to zoom the waterfall into part of it, through `v-model:range`. A span can carry `events` — moments inside it, drawn as markers on its bar and listed in its details — and `highlightSlowest` flags the span that took longest.
 
 - Import: `import Trace from '@aziontech/webkit/trace'`
 - Category: code · Surface: product · Structure: monolithic
@@ -17,6 +17,9 @@
 - Pass `start` and `duration` in milliseconds from the start of the run; the axis spans the latest end.
 - Link children with `parentId`; a span whose parent is missing becomes a root, so a partial trace still renders.
 - Set `status: 'error'` and a one-line `message` on the span that failed, and on its parents if the failure bubbled up.
+- Turn on `zoomable` for a run with many short spans next to one long one, so the short ones can be read; bind `v-model:range` when the logs or a chart beside the trace should follow the same window.
+- Use `events` for moments that have no duration of their own (a cache miss, a retry, the first byte), with `at` on the run's clock; keep the names short, they are listed in the details.
+- Turn on `highlightSlowest` where the question is where the time went; the flag goes to the longest span under the root, never to the root itself, which always spans the run.
 - Bind `v-model:selected` when another view (a request path, a log line) selects the same span.
 - Name the waterfall after the run (`aria-label="Trace of inv_7f21"`).
 
@@ -43,25 +46,33 @@
 | `ariaLabel` | `string` | `''` | false | Accessible name of the waterfall. Empty uses the locale catalog. |
 | `bordered` | `boolean` | `true` | false | Draws the outer border and radius. Off for a trace inside a card or panel that has its own. |
 | `loading` | `boolean` | `false` | false | Shows placeholder rows while the spans load; search and selection wait. |
+| `zoomable` | `boolean` | `false` | false | Shows a minimap under the axis to zoom the waterfall into a window of the run. Supports v-model:range. |
+| `highlightSlowest` | `boolean` | `false` | false | Flags the span that took longest, other than the root, in its row and its details. |
 | `selected` | `string` | `''` | false | Two-way value (`v-model:selected`). |
+| `range` | `TraceRange \| null` | `null` | false | Two-way value (`v-model:range`). |
 
 ## v-model
 
 | Model              | Type     | Default | Emits             | Notes                                                                                                                                                                                                       |
 | ------------------ | -------- | ------- | ----------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model:selected` | `string` | `''`    | `update:selected` | Id of the span whose details show under the waterfall, via `defineModel('selected')`. A row was selected, selected again (empty: deselected), or Close used. Unbound, the trace keeps the selection itself. |
+| `v-model:range` | `TraceRange \| null` | `null`  | `update:range` | The visible window of the run clock, via `defineModel('range')`. `null` shows the whole run. Applied with or without `zoomable`; clamped to the run and widened to at least 1% of it. |
 
 ## States
 
 - Visual states: `default`, `hover` (row), `focus-visible` (row), `selected` (row and details band), `collapsed` / `expanded` (parent rows), `searching` (rows narrowed, every match's ancestors shown), `loading` (placeholder rows in a `role="status"` region, `aria-busy` on the root, search disabled, no details), `empty` (the package `EmptyState`, small: no spans, or no match with a Clear search action).
 - Bar tones on `data-tone`: `root` (info), `ok` (success), `error` (danger), `running` (warning).
 - `data-selected` on the selected row; `aria-expanded` on parent rows; `data-bordered` and `data-loading` on the root mirror their props.
+- `zoomed` (a window narrower than the run): the axis, the bars and the event markers are placed against the window; a bar outside it is hidden (`data-outside`) while its row stays; the minimap shows the window and Reset zoom.
+- `data-slowest` on the slowest span's row (with `highlightSlowest`).
 
 ## Accessibility
 
 - Visible focus: a 2 px inset ring on the focused row.
 - Keyboard map: one row is in the tab order (roving `tabindex`); `ArrowDown`/`ArrowUp` move between visible rows; `Home`/`End` go to the first and last row; `ArrowRight` expands a collapsed parent, or moves into its first child; `ArrowLeft` collapses an expanded parent, or moves to the parent; `Enter` or `Space` selects the row (again: deselects). Close in the details returns focus to the row.
 - ARIA: the waterfall is a named `treegrid` of `row`s with `aria-level`, `aria-posinset`, `aria-setsize`, `aria-expanded` (parents only) and `aria-selected`; each row is named with its span, service, start, duration and outcome; the details band is a named `region` that describes the grid. The axis, the bars' duration labels and the expand glyph are decorative (`aria-hidden`).
+- Minimap: the two window edges are `role="slider"` thumbs named Zoom start and Zoom end, with `aria-valuemin` / `aria-valuemax` / `aria-valuenow` in milliseconds and the formatted time as `aria-valuetext`. `ArrowRight`/`ArrowUp` move an edge by 1% of the run, `ArrowLeft`/`ArrowDown` back, `PageUp`/`PageDown` by 10%, `Home`/`End` to its limits, `Escape` resets the zoom. Reset zoom is a button. The span lines drawn in the minimap are decorative.
+- Event markers are decorative; a row with events is named with their count, and the details list each event with its time. The slowest flag is named in the row (`Slowest`) and shown as a Tag in the details.
 - Rows are 36 px high (44 px on `pointer: coarse`).
 - Colour is never the only signal: a failed span also carries an icon in the row and a Failed tag in the details.
 - Contrast ≥4.5:1 from the semantic text tokens; duration labels use the `-contrast` tokens of their tone.
@@ -71,7 +82,8 @@
 - Layout: logical utilities only; bars sit at `inset-inline-start` with an inline size, so the waterfall runs from the inline start and mirrors; indentation is `padding-inline-start`.
 - Icons: the collapsed chevron is mirrored (`rtl:-scale-x-100`); span icons are not.
 - Keyboard: `ArrowRight` and `ArrowLeft` swap under `dir="rtl"` (expand is the inline-end arrow).
-- User data: span names, services and attribute values sit in `<bdi>`.
+- User data: span names, services, attribute values and event names sit in `<bdi>`.
+- Minimap: the run clock starts at the inline start, so the track mirrors; the pointer position is read from the inline start and the slider arrows swap with `logicalArrowKey`.
 
 ## Internationalization
 
@@ -91,6 +103,11 @@
 | `trace.failed` / `running`                           | Failed / Running                                 | —             |
 | `trace.attributes`                                   | Attributes                                       | —             |
 | `trace.milliseconds` / `seconds`                     | {value} ms / {value} s                           | —             |
+| `trace.zoom` / `resetZoom`                           | Zoom / Reset zoom                                | —             |
+| `trace.zoomStart` / `zoomEnd`                        | Zoom start / Zoom end                            | —             |
+| `trace.slowest`                                      | Slowest                                          | —             |
+| `trace.events`                                       | Events                                           | —             |
+| `trace.eventCount`                                   | {count} event / {count} events                   | —             |
 
 - Formatting: durations under one second print whole milliseconds, longer ones seconds with two decimals, both through `Intl.NumberFormat` of the active locale.
 
@@ -98,7 +115,7 @@
 
 - Container queries: `@container/trace`; the name column grows from 9 rem to 20 rem with the container, the service column and the grid lines appear from `@xl`/`@3xl`.
 - Narrow: names truncate, the duration labels stay on the bars, the details facts take two columns.
-- Touch: rows are 44 px high on `pointer: coarse`; nothing depends on hover.
+- Touch: rows are 44 px high on `pointer: coarse`; nothing depends on hover. The minimap track sets `touch-action: none` so a drag zooms instead of scrolling, and its thumbs widen to 24 px on `pointer: coarse`.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Examples

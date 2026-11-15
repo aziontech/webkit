@@ -1,5 +1,5 @@
 {
- "purpose": "Modal surface above the page, built on the shared Panel shell. The consumer composes a trigger, an overlay backdrop and the panel regions (header, body, footer); the body is the only region that scrolls. Below `md` it renders as a full-width bottom sheet.",
+ "purpose": "Modal surface above the page, built on the shared Panel shell. `Dialog.Content` is the whole modal: it teleports to `body`, renders the dimmed overlay behind the panel, traps focus and scroll-locks the page, so the page behind cannot be clicked, scrolled or tabbed to while the dialog is open. The consumer composes a trigger and the panel regions (header, body, footer); the header gets the close (X) button on its own unless `closable` is false; the body is the only region that scrolls. Below `md` it renders as a full-width bottom sheet.",
  "useWhen": [
   "A focused, blocking modal task or confirmation that should sit centered over the page and trap focus.",
   "The interaction must be completed or dismissed before returning to the page."
@@ -13,7 +13,8 @@
   "dropdown` — trigger-anchored menu for actions/options."
  ],
  "bestPractices": [
-  "Trap focus, restore it on close, and close on Escape and overlay click.",
+  "Do not add an overlay, a portal or a close button by hand: `Dialog.Content` renders the overlay and the portal, and the header renders the close button while `closable` is true (the default). Set `:closable=\"false\"` only when the dialog must be answered through its footer actions.",
+  "While an action is in flight, set `:dismissible=\"false\"` and `:closable=\"false\"` together so neither Escape, the overlay nor the close button can close it.",
   "One clear primary action; keep the body scannable.",
   "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`."
  ]

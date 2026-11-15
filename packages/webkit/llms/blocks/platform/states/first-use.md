@@ -226,6 +226,7 @@ Each variant is the same screen in another state: `get_pattern("platform/states/
                       value="azion deploy"
                       aria-label="Copy the Via CLI command"
                       copied-label="Command copied"
+                      size="small"
                     />
                   </InputGroupRoot>
                 </Item.Actions>

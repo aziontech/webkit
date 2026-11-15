@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/view/split-view/split-view.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/split-view")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [FilterMenu](../../../components/filter-menu.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelHeader`, [Popover](../../../components/popover.md), [PropertyFilter](../../../components/property-filter.md), [Resizable](../../../components/resizable.md), [Sidebar](../../../components/sidebar.md), [Skeleton](../../../components/skeleton.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Chart](../../../components/chart.md), [Checkbox](../../../components/checkbox.md), [Chip](../../../components/chip.md), [CodeBlock](../../../components/code-block.md), [CopyButton](../../../components/copy-button.md), [DateRangePicker](../../../components/date-range-picker.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [FilterMenu](../../../components/filter-menu.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), `PanelHeader`, [Popover](../../../components/popover.md), [PropertyFilter](../../../components/property-filter.md), [Resizable](../../../components/resizable.md), [Sidebar](../../../components/sidebar.md), [Skeleton](../../../components/skeleton.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -56,9 +56,9 @@ Above the table, a summary `dl` of Events, Errors and Avg request time, and the 
 
 Each row's detail cell is an `IconButton` named Open event <id> with `aria-expanded`, so a keyboard user opens an event with Tab and Enter; a row click does the same for a pointer. When the explorer is wide enough for the fields panel, the log and the document, the event opens in the end pane of a horizontal `Resizable` (`Resizable.Handle` named Resize the event panel, the pane 320 to 512 px, collapsed while no event is open), so the handle sits on the inner edge and dragging it inward widens the document. Its header holds the Event heading and a small Close `IconButton` in a `Tooltip`; the body shows the level and source as small `Tag`s, lists the fields and ends with the full event in a `CodeBlock` that copies it as JSON.
 
-### G. Narrow document — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `Tag`, `CodeBlock` (required)
+### G. Narrow document — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `Tag`, `CodeBlock` (required)
 
-Below that width the same document opens in a medium right `Drawer` titled Event, with `PanelHeader`, `DrawerTitle` and `DrawerClose`. Crossing the breakpoint moves an open event between the pane and the drawer instead of closing it.
+Below that width the same document opens in a medium right `Drawer` titled Event, with `PanelHeader`, `DrawerTitle` and the drawer's own close button. Crossing the breakpoint moves an open event between the pane and the drawer instead of closing it.
 
 The fields panel (D) is the `split-view#Fields` piece of the inventory; it lives in the primary and every variant, so it has no variant of its own.
 
@@ -181,10 +181,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
   } from '@aziontech/webkit/chart'
   import Checkbox from '@aziontech/webkit/checkbox'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -336,10 +333,10 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
     Error: 'danger',
     Warning: 'warning',
     Info: 'info',
-    Debug: 'secondary'
+    Debug: 'neutral'
   }
 
-  const eventLevelSeverity = (level: EventLevel) => eventLevels[level] ?? 'secondary'
+  const eventLevelSeverity = (level: EventLevel) => eventLevels[level] ?? 'neutral'
 
   const levelOrder = Object.keys(eventLevels) as EventLevel[]
 
@@ -1716,7 +1713,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
                         />
                         <Tag
                           :label="documentEvent.sourceLabel"
-                          severity="secondary"
+                          severity="neutral"
                           size="small"
                         />
                       </div>
@@ -1770,75 +1767,69 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
       size="medium"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <DrawerTitle>Event</DrawerTitle>
-            <DrawerClose />
-          </PanelHeader>
-          <div class="min-h-0 flex-1 overflow-auto">
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <DrawerTitle>Event</DrawerTitle>
+        </PanelHeader>
+        <div class="min-h-0 flex-1 overflow-auto">
+          <div
+            v-if="documentEvent"
+            class="flex min-w-0 flex-col"
+          >
             <div
-              v-if="documentEvent"
-              class="flex min-w-0 flex-col"
+              class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
             >
-              <div
-                class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
-              >
-                <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                  <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-                    <Tag
-                      :label="documentEvent.level"
-                      :severity="eventLevelSeverity(documentEvent.level)"
-                      size="small"
-                    />
-                    <Tag
-                      :label="documentEvent.sourceLabel"
-                      severity="secondary"
-                      size="small"
-                    />
-                  </div>
-                  <p class="text-body-md text-(--text-default)">
-                    {{ documentEvent.message }}
-                  </p>
-                  <p class="text-label-code-sm tabular-nums text-(--text-muted)">
-                    {{ documentEvent.time }}
-                  </p>
-                </div>
-
-                <dl
-                  class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
-                >
-                  <template
-                    v-for="row in documentRows"
-                    :key="row.id"
-                  >
-                    <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
-                    <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
-                      {{ row.value }}
-                    </dd>
-                  </template>
-                </dl>
-              </div>
-
               <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
-                  Event document
-                </h3>
-                <div class="min-w-0">
-                  <CodeBlock
-                    :tabs="documentTabs"
-                    :bordered="false"
-                    line-numbers
-                    copy-aria-label="Copy the event document as JSON"
-                    class="w-full"
+                <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                  <Tag
+                    :label="documentEvent.level"
+                    :severity="eventLevelSeverity(documentEvent.level)"
+                    size="small"
+                  />
+                  <Tag
+                    :label="documentEvent.sourceLabel"
+                    severity="neutral"
+                    size="small"
                   />
                 </div>
+                <p class="text-body-md text-(--text-default)">
+                  {{ documentEvent.message }}
+                </p>
+                <p class="text-label-code-sm tabular-nums text-(--text-muted)">
+                  {{ documentEvent.time }}
+                </p>
+              </div>
+
+              <dl
+                class="grid min-w-0 grid-cols-[minmax(0,8rem)_minmax(0,1fr)] items-baseline gap-x-(--spacing-md) gap-y-(--spacing-sm)"
+              >
+                <template
+                  v-for="row in documentRows"
+                  :key="row.id"
+                >
+                  <dt class="min-w-0 text-label-sm text-(--text-muted)">{{ row.label }}</dt>
+                  <dd class="m-0 min-w-0 break-words text-label-code-sm text-(--text-default)">
+                    {{ row.value }}
+                  </dd>
+                </template>
+              </dl>
+            </div>
+
+            <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Event document</h3>
+              <div class="min-w-0">
+                <CodeBlock
+                  :tabs="documentTabs"
+                  :bordered="false"
+                  line-numbers
+                  copy-aria-label="Copy the event document as JSON"
+                  class="w-full"
+                />
               </div>
             </div>
           </div>
-        </DrawerContent>
-      </DrawerPortal>
+        </div>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

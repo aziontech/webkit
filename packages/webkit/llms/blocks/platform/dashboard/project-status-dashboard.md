@@ -770,7 +770,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
             <ChartCard.Action>
               <Tag
                 label="Story points"
-                severity="secondary"
+                severity="neutral"
                 size="small"
                 icon="pi pi-chart-line"
               />
@@ -937,7 +937,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <Tag
                 v-if="atRisk.length && !loading"
                 :label="atRisk.length + ' open'"
-                severity="secondary"
+                severity="neutral"
                 size="small"
               />
               <DropdownMenu

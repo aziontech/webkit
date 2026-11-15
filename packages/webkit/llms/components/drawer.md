@@ -1,6 +1,6 @@
 # Drawer
 
-> A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row, a navigation list. It traps focus while open, closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger.
+> A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row, a navigation list. `Drawer.Content` is the whole modal: it teleports to `body`, renders the dimmed overlay, traps focus and scroll-locks the page, so the page behind cannot be clicked or tabbed to while it is open. The header gets the close (X) button on its own unless `closable` is false. It closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger. `:modal="false"` is the one opt-out: no overlay, no focus trap, no scroll lock, for a side panel that works next to the page it talks about (as Radix `modal={false}`).
 
 - Import: `import DrawerRoot from '@aziontech/webkit/drawer-root'`
 - Compound import (dot notation, not tree-shakeable): `import Drawer from '@aziontech/webkit/drawer'`
@@ -15,7 +15,9 @@
 ## Do
 
 - Pick the edge (side) intentionally and keep it consistent across the app.
-- Trap focus while open and provide an obvious close affordance.
+- Do not add an overlay, a portal or a close button by hand: `Drawer.Content` renders the overlay and the portal, and the header renders the close button while `closable` is true (the default).
+- Keep the drawer modal (the default). Use `:modal="false"` only when the reader must keep reading or using the page beside the drawer, such as an assistant that answers questions about the page.
+- While an action is in flight, set `:dismissible="false"` and `:closable="false"` together so nothing can close it.
 - Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 
 ## Don’t
@@ -34,8 +36,9 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
-| `closable` | `boolean` | `undefined` | false | Whether the close button (DrawerClose) and the context close() close the drawer; false renders the close button disabled. Escape and overlay click follow `dismissible`. Unset, it follows `dismissible` for 6.x compatibility (deprecated coupling: set it explicitly; from 7.0 unset means true). |
+| `closable` | `boolean` | `true` | false | Shows the close (X) button at the end of the drawer header. False removes it; Escape and overlay click still follow `dismissible`. |
 | `dismissible` | `boolean` | `true` | false | Light-dismiss: when true, overlay click and Escape close the drawer. It does not govern the close button; see `closable`. |
+| `modal` | `boolean` | `true` | false | Renders the overlay, traps focus and locks page scroll. False leaves the page beside the drawer usable: no overlay, no focus trap, no scroll lock, `aria-modal` false; Escape, the close button and focus restore still work. |
 | `side` | `DrawerSide` | `'right'` | false | Edge the drawer panel slides from. |
 | `size` | `DrawerSize` | `'medium'` | false | Panel max-width preset (`small` `--container-sm`, `medium` `--container-xl`, `large` `--container-4xl`). Height is always 100% viewport. |
 | `open` | `boolean` | `undefined as never` | false | Two-way value (`v-model:open`). |
@@ -51,19 +54,15 @@
 - `@aziontech/webkit/drawer-close`
 - `@aziontech/webkit/drawer-content`
 - `@aziontech/webkit/drawer-description`
-- `@aziontech/webkit/drawer-overlay`
-- `@aziontech/webkit/drawer-portal`
 - `@aziontech/webkit/drawer-title`
 - `@aziontech/webkit/drawer-trigger`
 
 ## Sub-components
 
-- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Portal`, `.Overlay`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header` (`panel-header`), `Drawer.Body` (`panel-content`) and `Drawer.Footer` (`panel-footer`). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat) for 6.x path stability; per-part export paths are unchanged.
-- `drawer-close.vue` — Public sub-component `drawer-close`.
-- `drawer-content.vue` — Public sub-component `drawer-content`.
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header` (`panel-header`), `Drawer.Body` (`panel-content`) and `Drawer.Footer` (`panel-footer`). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat).
+- `drawer-close.vue` — Public sub-component `drawer-close`: the close (X) `IconButton`. `Drawer.Content` puts one at the end of its `PanelHeader` while `closable` is true, so a consumer places it by hand only in a custom header with `:closable="false"`. It always closes the drawer.
+- `drawer-content.vue` — Public sub-component `drawer-content`: the drawer itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay while `modal` (`aria-hidden`, `__backdrop` test id; a click on it closes the drawer when `dismissible`) and the `role="dialog"` panel, traps focus and scroll-locks the page while `modal`, and restores focus on close.
 - `drawer-description.vue` — Public sub-component `drawer-description`.
-- `drawer-overlay.vue` — Public sub-component `drawer-overlay`.
-- `drawer-portal.vue` — Public sub-component `drawer-portal`.
 - `drawer-title.vue` — Public sub-component `drawer-title`.
 - `drawer-trigger.vue` — Public sub-component `drawer-trigger`. As-child trigger: a non-interactive inline wrapper (no `role`, no `tabindex`) that opens the drawer on the bubbling `click` and gives `aria-haspopup="dialog"` and `aria-expanded` to the slotted control, which is the one tab stop and the element focus returns to on close. When the first node in the slot is a WebKit `Button` / `IconButton` or a native control (`button`, `a[href]`, form controls, `[role=button]`, `[tabindex]` ≥ 0), or one of those as the first node inside a `Tooltip` (the trigger looks through the `Tooltip` to its slotted control), the ARIA and `id` are merged into that control at render, so server-rendered HTML already carries them on the control; for anything else (a control nested in another component) the trigger forwards them onto the first focusable element in its slot after mount and on every update. When the slot holds no focusable element (plain text, an icon, an `Avatar`, or a `Badge` / `Tag` / `SeverityTag` without slot content), the wrapper itself becomes the control: `role="button"`, `tabindex="0"`, opening on `Enter` / `Space`; for these and for native elements this is in the server HTML too.
 
@@ -86,11 +85,12 @@
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Enter`/`Space` on the trigger opens the drawer and moves focus to its first focusable control. Focus is trapped: `Tab` on the last control wraps to the first and `Shift+Tab` on the first wraps to the last. `Escape` closes it and focus returns to the trigger, or, when opened without a `Drawer.Trigger`, to the element that held focus when it opened. Tests: `drawer.test.ts` › keyboard map (spec).
-- ARIA: the panel is `role="dialog"` with `aria-modal="true"`, `aria-labelledby` on the `DrawerTitle` id, and `aria-describedby` on the `DrawerDescription` id only while a `DrawerDescription` is mounted.
+- ARIA: the panel is `role="dialog"` with `aria-modal="true"` (`false` with `:modal="false"`, where focus moves in on open but `Tab` is not trapped), `aria-labelledby` on the `DrawerTitle` id, and `aria-describedby` on the `DrawerDescription` id only while a `DrawerDescription` is mounted.
 - Nested overlays: every open `DrawerContent` joins the shared overlay layer stack, so only the top layer handles `Escape` and `Tab` trapping: `Escape` in a `ConfirmDialog` opened from the drawer closes the confirm and leaves the drawer open. Tests: `drawer.test.ts` › nested overlays.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on every animated element.
 - Touch target ≥40×40 px where the control is interactive.
+- Overlay: a modal drawer (the default) always renders its overlay, so the page behind is never clickable while it is open. Tests: `drawer.test.ts` › overlay.
 - Teleported content: the portal wraps its content (overlay and panel) in a `display: contents` element that binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
@@ -119,33 +119,29 @@
         kind="primary"
       />
     </Drawer.Trigger>
-    <Drawer.Portal>
-      <Drawer.Overlay />
-      <Drawer.Content>
-        <Drawer.Header class="w-full">
-          <Drawer.Title>Drawer Title</Drawer.Title>
-          <Drawer.Close />
-        </Drawer.Header>
-        <Drawer.Body>
-          <Drawer.Description>
-            Side panel content. Uses the same Panel header, body, and footer regions as Dialog.
-          </Drawer.Description>
-        </Drawer.Body>
-        <Drawer.Footer>
-          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-            <Button
-              label="Cancel"
-              kind="outlined"
-              @click="open = false"
-            />
-            <Button
-              label="Save"
-              kind="primary"
-            />
-          </div>
-        </Drawer.Footer>
-      </Drawer.Content>
-    </Drawer.Portal>
+    <Drawer.Content>
+      <Drawer.Header class="w-full">
+        <Drawer.Title>Drawer Title</Drawer.Title>
+      </Drawer.Header>
+      <Drawer.Body>
+        <Drawer.Description>
+          Side panel content. Uses the same Panel header, body, and footer regions as Dialog.
+        </Drawer.Description>
+      </Drawer.Body>
+      <Drawer.Footer>
+        <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+          <Button
+            label="Cancel"
+            kind="outlined"
+            @click="open = false"
+          />
+          <Button
+            label="Save"
+            kind="primary"
+          />
+        </div>
+      </Drawer.Footer>
+    </Drawer.Content>
   </Drawer>
 </template>
 ```
@@ -155,11 +151,8 @@
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
@@ -205,33 +198,29 @@
           kind="primary"
         />
       </DrawerTrigger>
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <DrawerTitle>{{ sizeLabels[size] }}</DrawerTitle>
-            <DrawerClose />
-          </PanelHeader>
-          <PanelContent>
-            <DrawerDescription>
-              Panel max-width preset for the {{ size }} drawer. Height is always 100% viewport.
-            </DrawerDescription>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-              <Button
-                label="Cancel"
-                kind="outlined"
-                @click="openBySize[size] = false"
-              />
-              <Button
-                label="Save"
-                kind="primary"
-              />
-            </div>
-          </PanelFooter>
-        </DrawerContent>
-      </DrawerPortal>
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <DrawerTitle>{{ sizeLabels[size] }}</DrawerTitle>
+        </PanelHeader>
+        <PanelContent>
+          <DrawerDescription>
+            Panel max-width preset for the {{ size }} drawer. Height is always 100% viewport.
+          </DrawerDescription>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              @click="openBySize[size] = false"
+            />
+            <Button
+              label="Save"
+              kind="primary"
+            />
+          </div>
+        </PanelFooter>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>
@@ -242,11 +231,8 @@
 ```vue
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
@@ -275,44 +261,40 @@
         kind="primary"
       />
     </DrawerTrigger>
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <PanelHeader class="w-full">
-          <DrawerTitle>Scrollable drawer</DrawerTitle>
-          <DrawerClose />
-        </PanelHeader>
-        <PanelContent>
-          <div class="flex flex-col gap-(--spacing-4)">
-            <DrawerDescription>
-              Place long forms, lists, or settings inside PanelContent. Only the body scrolls inside
-              ScrollArea while header and footer stay in the panel layout.
-            </DrawerDescription>
-            <section
-              v-for="section in scrollSections"
-              :key="section.title"
-              class="flex flex-col gap-(--spacing-2) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-4)"
-            >
-              <h3 class="m-0 text-body-md text-(--text-default)">{{ section.title }}</h3>
-              <p class="m-0 text-body-sm text-(--text-muted)">{{ section.body }}</p>
-            </section>
-          </div>
-        </PanelContent>
-        <PanelFooter>
-          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-            <Button
-              label="Cancel"
-              kind="outlined"
-              @click="open = false"
-            />
-            <Button
-              label="Save"
-              kind="primary"
-            />
-          </div>
-        </PanelFooter>
-      </DrawerContent>
-    </DrawerPortal>
+    <DrawerContent>
+      <PanelHeader class="w-full">
+        <DrawerTitle>Scrollable drawer</DrawerTitle>
+      </PanelHeader>
+      <PanelContent>
+        <div class="flex flex-col gap-(--spacing-4)">
+          <DrawerDescription>
+            Place long forms, lists, or settings inside PanelContent. Only the body scrolls inside
+            ScrollArea while header and footer stay in the panel layout.
+          </DrawerDescription>
+          <section
+            v-for="section in scrollSections"
+            :key="section.title"
+            class="flex flex-col gap-(--spacing-2) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-4)"
+          >
+            <h3 class="m-0 text-body-md text-(--text-default)">{{ section.title }}</h3>
+            <p class="m-0 text-body-sm text-(--text-muted)">{{ section.body }}</p>
+          </section>
+        </div>
+      </PanelContent>
+      <PanelFooter>
+        <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+          <Button
+            label="Cancel"
+            kind="outlined"
+            @click="open = false"
+          />
+          <Button
+            label="Save"
+            kind="primary"
+          />
+        </div>
+      </PanelFooter>
+    </DrawerContent>
   </Drawer>
 </template>
 ```

@@ -1,6 +1,6 @@
 # Page Header
 
-> The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. It replaces the header markup every list, detail, settings and create page used to copy by hand.
+> The heading that opens a console page: an h1 whose `size` picks the heading token by page level, a one-line description, and the actions the page owns on the right. When the row runs out of room the actions move below the copy together; on a phone they stack, each at full width. Four optional regions complete a detail page's header without local markup: a `breadcrumb` trail above the title, an `icon` before it, `meta` (a status tag, a version) beside it, and `tabs` across the bottom. It replaces the header markup every list, detail, settings and create page used to copy by hand.
 
 - Import: `import PageHeader from '@aziontech/webkit/page-header'`
 - Category: layout · Surface: product · Structure: monolithic
@@ -10,6 +10,7 @@
 
 - The top of any console page: a first-level list (`medium`), a detail tab or settings sub-page (`small`), a creation hub headline (`large`).
 - A page that owns actions (Documentation, a create action) that belong next to its title.
+- A resource detail page whose header carries the trail back to the list, the resource's icon, its status and the tabs of its sections (`breadcrumb`, `icon`, `meta`, `tabs`).
 
 ## Do
 
@@ -17,6 +18,10 @@
 - Put the Documentation link first and the create action on the outer edge, both outlined at the medium size.
 - Do not set `class="w-full"` on the action buttons; the header makes them full width on a phone.
 - Set `titleId` when a form or landmark names itself with `aria-labelledby`.
+- breadcrumb`: pass a `Breadcrumb` with `items`; its last entry is the current page and should match the title.
+- icon`: one decorative glyph or a square `Avatar`, at most 32 px; it is `aria-hidden` by default, since the title already names the page.
+- meta`: one or two small `Tag`s (status, environment). Longer facts (owner, created date) belong in the page body, not the header.
+- tabs`: a `Tabs` row of the page's sections. A page that already shows `PageTabs` above the header leaves this slot empty; never both.
 
 ## Don’t
 
@@ -28,7 +33,9 @@
 ## Related
 
 - [section-header](section-header.md) — the h2 band heading inside a page.
-- [page-tabs](page-tabs.md) — the second-level navigation strip that sits above a detail page's header.
+- [page-tabs](page-tabs.md) — the second-level navigation strip that sits above a detail page's header; a header-local tab row goes in the `tabs` slot.
+- [breadcrumb](breadcrumb.md) — the usual content of the `breadcrumb` slot.
+- [tag](tag.md) — the usual content of the `meta` slot (a status, an environment, a version).
 - [button](button.md) — the usual content of the `actions` slot (outlined, `size="medium"`).
 
 ## Props
@@ -46,20 +53,46 @@
 | --- | --- | --- |
 | `description` | — | Rich description content (links, inline buttons); replaces the `description` prop. |
 | `actions` | — | The actions the page owns, Documentation first and the create action on the outer edge. |
+| `breadcrumb` | — | The trail back to the parent pages, above the title row; usually a `Breadcrumb` with `items`. |
+| `icon` | — | A leading glyph or square avatar before the title, decorative (`aria-hidden`). |
+| `meta` | — | Short facts beside the title, such as a status `Tag`; wraps under the title when the row is narrow. |
+| `tabs` | — | The tabs of the page's sections, across the full width under the title and actions. |
 
 ## States
 
 - Visual states: `default`
 - `data-size` mirrors the `size` prop on the root and the h1
+- Each region renders only when its slot is filled: `__breadcrumb` (a full-width row above the title row), `__icon` (before the h1, `aria-hidden`), `__meta` (after the h1 on the same line, wrapping under it), `__tabs` (a full-width row after the copy and the actions). With no region slot the header renders exactly as before.
 - Responsive: the root is the `@container/page-header`. Below `@md` of its own box the actions drop under the copy and each one stretches to the full width; from `@md` they sit beside the title at their own width. A header inside a drawer or a split view lays out for that box, not the window.
 
 ## Accessibility
 
 - Visible focus: owned by the controls in the `actions` slot.
 - Keyboard map: `Tab` moves through the actions in DOM order; the header itself is not interactive.
-- ARIA: the root is a `header` element and the title is the page's only `h1`; `titleId` lets a form or landmark reference it with `aria-labelledby`.
+- ARIA: the root is a `header` element and the title is the page's only `h1`; `titleId` lets a form or landmark reference it with `aria-labelledby`. The breadcrumb comes first in reading order (its own `nav` landmark), then the h1, the meta, the description, the actions and the tabs. The icon wrapper is `aria-hidden`.
+- Keyboard map with regions: `Tab` reaches the breadcrumb links, then the actions, then the tabs (which own their arrow-key model).
 - Contrast ≥4.5:1 for the title and the muted description.
 - Touch target: the actions keep the Button sizes; on a phone they stretch to full width.
+
+## Right-to-left
+
+- Layout: flex order and logical utilities only, so the icon leads the title and the actions trail under `dir="rtl"`.
+- Icons: the `icon` region is consumer content; the header mirrors nothing itself.
+- Keyboard: no arrow-key logic in the header; the tabs in the `tabs` slot own theirs.
+- User data: the title is consumer text; a resource name in another script can be wrapped in `bdi` by the consumer.
+
+## Internationalization
+
+No built-in strings: the title, description and every region come from the consumer.
+
+- Formatting: none
+
+## Responsive
+
+- Container queries: the root is `@container/page-header`; below `@md` the actions drop under the copy at full width.
+- Narrow (≤ 640 px or a narrow container): the meta wraps under the title; the breadcrumb collapses on its own (`Breadcrumb` `items` mode); the tabs row scrolls inside `Tabs`.
+- Touch: the actions keep the Button sizes; no hover-only affordance.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom.
 
 ## Examples
 

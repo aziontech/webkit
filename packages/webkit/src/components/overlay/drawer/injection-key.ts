@@ -1,24 +1,17 @@
 import type { InjectionKey, Ref } from 'vue'
 
-import type { DrawerMotionState } from './presets/transitions'
-
 export type DrawerSize = 'small' | 'medium' | 'large'
 export type DrawerSide = 'left' | 'right'
-
-export interface DrawerMotionContext {
-  motionState: Readonly<Ref<DrawerMotionState>>
-}
-
-export const DrawerMotionInjectionKey: InjectionKey<DrawerMotionContext> =
-  Symbol('DrawerMotionContext')
 
 export interface DrawerContext {
   testId: string
   isOpen: Readonly<Ref<boolean>>
   /** Escape and overlay click close the overlay. */
   dismissible: boolean
-  /** The close button and close() close the overlay. */
+  /** Content renders the close (X) button at the end of its header. */
   closable: boolean
+  /** Overlay, focus trap and scroll lock; false leaves the page usable. */
+  modal: boolean
   size: Readonly<Ref<DrawerSize>>
   open: () => void
   close: () => void

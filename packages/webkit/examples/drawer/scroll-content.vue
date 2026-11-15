@@ -1,10 +1,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
@@ -33,43 +30,39 @@
         kind="primary"
       />
     </DrawerTrigger>
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <PanelHeader class="w-full">
-          <DrawerTitle>Scrollable drawer</DrawerTitle>
-          <DrawerClose />
-        </PanelHeader>
-        <PanelContent>
-          <div class="flex flex-col gap-(--spacing-4)">
-            <DrawerDescription>
-              Place long forms, lists, or settings inside PanelContent. Only the body scrolls inside
-              ScrollArea while header and footer stay in the panel layout.
-            </DrawerDescription>
-            <section
-              v-for="section in scrollSections"
-              :key="section.title"
-              class="flex flex-col gap-(--spacing-2) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-4)"
-            >
-              <h3 class="m-0 text-body-md text-(--text-default)">{{ section.title }}</h3>
-              <p class="m-0 text-body-sm text-(--text-muted)">{{ section.body }}</p>
-            </section>
-          </div>
-        </PanelContent>
-        <PanelFooter>
-          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-            <Button
-              label="Cancel"
-              kind="outlined"
-              @click="open = false"
-            />
-            <Button
-              label="Save"
-              kind="primary"
-            />
-          </div>
-        </PanelFooter>
-      </DrawerContent>
-    </DrawerPortal>
+    <DrawerContent>
+      <PanelHeader class="w-full">
+        <DrawerTitle>Scrollable drawer</DrawerTitle>
+      </PanelHeader>
+      <PanelContent>
+        <div class="flex flex-col gap-(--spacing-4)">
+          <DrawerDescription>
+            Place long forms, lists, or settings inside PanelContent. Only the body scrolls inside
+            ScrollArea while header and footer stay in the panel layout.
+          </DrawerDescription>
+          <section
+            v-for="section in scrollSections"
+            :key="section.title"
+            class="flex flex-col gap-(--spacing-2) rounded-(--shape-elements) border border-(length:--border-width-default) border-(--border-muted) p-(--spacing-4)"
+          >
+            <h3 class="m-0 text-body-md text-(--text-default)">{{ section.title }}</h3>
+            <p class="m-0 text-body-sm text-(--text-muted)">{{ section.body }}</p>
+          </section>
+        </div>
+      </PanelContent>
+      <PanelFooter>
+        <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+          <Button
+            label="Cancel"
+            kind="outlined"
+            @click="open = false"
+          />
+          <Button
+            label="Save"
+            kind="primary"
+          />
+        </div>
+      </PanelFooter>
+    </DrawerContent>
   </Drawer>
 </template>

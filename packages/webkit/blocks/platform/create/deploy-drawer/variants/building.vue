@@ -1,10 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
@@ -343,88 +340,328 @@
       />
     </DrawerTrigger>
 
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Build and deployment"
-          novalidate
-          @submit.prevent="open = false"
-        >
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>Build and deployment</DrawerTitle>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
+    <DrawerContent>
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Build and deployment"
+        novalidate
+        @submit.prevent="open = false"
+      >
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DrawerTitle>Build and deployment</DrawerTitle>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
-              <legend class="sr-only">Build and deployment</legend>
-              <SettingsSection
-                title="Resources"
-                hint="The service version this deployment sends live, and the version of every module and integration it references."
+        <PanelContent>
+          <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
+            <legend class="sr-only">Build and deployment</legend>
+            <SettingsSection
+              title="Resources"
+              hint="The service version this deployment sends live, and the version of every module and integration it references."
+            >
+              <Item
+                kind="outlined"
+                size="small"
+                aria-live="polite"
               >
-                <Item
-                  kind="outlined"
-                  size="small"
-                  aria-live="polite"
-                >
-                  <Item.Media>
-                    <span
-                      class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                    >
-                      <i
-                        class="pi pi-server text-body-xs text-(--text-default)"
-                        aria-hidden="true"
-                      />
-                    </span>
-                  </Item.Media>
-                  <Item.Content>
-                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                      <Item.Title>web-app</Item.Title>
-                      <Tag
-                        label="A77SA473"
-                        severity="neutral"
-                        size="small"
-                        class="shrink-0"
-                      />
-                    </span>
-                    <Item.Description>Building…</Item.Description>
-                  </Item.Content>
-                  <Item.Actions>
-                    <span
-                      class="font-(family-name:--font-code) text-label-sm tabular-nums text-(--text-muted)"
-                    >
-                      {{ elapsed }} s
-                    </span>
-                    <div class="contents text-(--text-default)">
-                      <Spinner class="shrink-0" />
-                    </div>
-                  </Item.Actions>
-                </Item>
-              </SettingsSection>
-
-              <SettingsSection
-                inert
-                data-pending="true"
-                title="Project"
-                hint="The project whose domains serve the service. Create one to deploy it on a new domain."
-              >
-                <Card :padded="false">
-                  <template #header>
-                    <ToggleGroup
-                      v-model="projectMode"
-                      :options="projectModes"
-                      size="medium"
-                      fluid
-                      aria-label="Project"
-                      class="w-full"
+                <Item.Media>
+                  <span
+                    class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                  >
+                    <i
+                      class="pi pi-server text-body-xs text-(--text-default)"
+                      aria-hidden="true"
                     />
-                  </template>
-                  <template #content>
-                    <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
+                  </span>
+                </Item.Media>
+                <Item.Content>
+                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                    <Item.Title>web-app</Item.Title>
+                    <Tag
+                      label="A77SA473"
+                      severity="neutral"
+                      size="small"
+                      class="shrink-0"
+                    />
+                  </span>
+                  <Item.Description>Building…</Item.Description>
+                </Item.Content>
+                <Item.Actions>
+                  <span
+                    class="font-(family-name:--font-code) text-label-sm tabular-nums text-(--text-muted)"
+                  >
+                    {{ elapsed }} s
+                  </span>
+                  <div class="contents text-(--text-default)">
+                    <Spinner class="shrink-0" />
+                  </div>
+                </Item.Actions>
+              </Item>
+            </SettingsSection>
+
+            <SettingsSection
+              inert
+              data-pending="true"
+              title="Project"
+              hint="The project whose domains serve the service. Create one to deploy it on a new domain."
+            >
+              <Card :padded="false">
+                <template #header>
+                  <ToggleGroup
+                    v-model="projectMode"
+                    :options="projectModes"
+                    size="medium"
+                    fluid
+                    aria-label="Project"
+                    class="w-full"
+                  />
+                </template>
+                <template #content>
+                  <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
+                    <Item
+                      kind="outlined"
+                      size="small"
+                    >
+                      <Item.Media>
+                        <span
+                          class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                        >
+                          <i
+                            class="pi pi-box text-body-xs text-(--text-default)"
+                            aria-hidden="true"
+                          />
+                        </span>
+                      </Item.Media>
+                      <Item.Content>
+                        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                          <Item.Title>{{ project.name }}</Item.Title>
+                          <Tag
+                            v-if="projectMode === 'new'"
+                            label="New"
+                            severity="success"
+                            size="small"
+                            class="shrink-0"
+                          />
+                        </span>
+                        <Item.Description v-if="projectMode === 'new'">
+                          Gets its domains on the first deploy.
+                        </Item.Description>
+                        <ul
+                          v-else
+                          class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xxs) p-0"
+                        >
+                          <li
+                            v-for="domainGroup in project.domains"
+                            :key="domainGroup.environment"
+                            class="flex min-w-0 items-center gap-(--spacing-xs)"
+                          >
+                            <Tag
+                              :label="domainGroup.environment"
+                              severity="neutral"
+                              size="small"
+                              class="shrink-0"
+                            />
+                            <div class="flex min-w-0">
+                              <Tooltip
+                                :text="`Open ${domainGroup.domains[0]} in a new tab`"
+                                class="w-full"
+                              >
+                                <Link
+                                  :label="domainGroup.domains[0]"
+                                  :href="`https://${domainGroup.domains[0]}`"
+                                  target="_blank"
+                                  size="small"
+                                />
+                              </Tooltip>
+                            </div>
+                            <Popover
+                              v-if="domainGroup.total > 1"
+                              placement="bottom-start"
+                              size="small"
+                            >
+                              <Popover.Trigger
+                                :aria-label="`${domainGroup.total - 1} more domains`"
+                              >
+                                <div class="shrink-0 cursor-pointer">
+                                  <Tag
+                                    :label="`+${domainGroup.total - 1}`"
+                                    severity="neutral"
+                                    size="small"
+                                  />
+                                </div>
+                              </Popover.Trigger>
+                              <Popover.Content>
+                                <div
+                                  class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
+                                >
+                                  <p class="text-label-sm text-(--text-muted)">
+                                    {{ domainGroup.summary }}
+                                  </p>
+                                  <Input
+                                    v-if="domainGroup.total > 10"
+                                    size="medium"
+                                    placeholder="Search domains"
+                                    aria-label="Search domains"
+                                  >
+                                    <template #prefix>
+                                      <i
+                                        class="pi pi-search"
+                                        aria-hidden="true"
+                                      />
+                                    </template>
+                                  </Input>
+                                </div>
+
+                                <div
+                                  class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
+                                >
+                                  <div
+                                    v-for="domain in domainGroup.domains"
+                                    :key="domain"
+                                    class="flex min-w-0 px-(--spacing-xs) py-(--spacing-xxs)"
+                                  >
+                                    <Link
+                                      :label="domain"
+                                      :href="`https://${domain}`"
+                                      target="_blank"
+                                      size="small"
+                                    />
+                                  </div>
+                                </div>
+
+                                <div
+                                  v-if="domainGroup.total > domainGroup.domains.length"
+                                  class="border-t border-(--border-default) p-(--spacing-xxs)"
+                                >
+                                  <Button
+                                    :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
+                                    kind="transparent"
+                                    size="small"
+                                    class="w-full"
+                                  />
+                                </div>
+
+                                <span
+                                  class="sr-only"
+                                  role="status"
+                                >
+                                  {{ domainGroup.summary }}
+                                </span>
+                              </Popover.Content>
+                            </Popover>
+                          </li>
+                        </ul>
+                      </Item.Content>
+                      <Item.Actions v-if="projectMode === 'existing'">
+                        <DropdownMenu
+                          placement="bottom-end"
+                          @select="(_event, id) => (projectId = String(id))"
+                        >
+                          <DropdownMenu.Trigger>
+                            <Button
+                              label="Change"
+                              kind="outlined"
+                              size="small"
+                              icon="pi pi-chevron-down"
+                              icon-position="trailing"
+                            />
+                          </DropdownMenu.Trigger>
+                          <DropdownMenu.Group
+                            v-for="group in projectGroups"
+                            :key="group.key"
+                            :label="group.label"
+                          >
+                            <DropdownMenu.Item
+                              v-for="entry in group.projects"
+                              :key="entry.id"
+                              :value="entry.id"
+                              :label="entry.name"
+                              :selected="entry.id === project.id"
+                            >
+                              <template #trailing>
+                                <span class="truncate text-body-xs text-(--text-muted)">
+                                  {{ entry.detail }}
+                                </span>
+                              </template>
+                            </DropdownMenu.Item>
+                          </DropdownMenu.Group>
+                        </DropdownMenu>
+                      </Item.Actions>
+                    </Item>
+                  </div>
+                </template>
+              </Card>
+            </SettingsSection>
+
+            <SettingsSection
+              inert
+              data-pending="true"
+              title="Environment"
+              hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
+            >
+              <div
+                role="radiogroup"
+                aria-label="Environment"
+                class="flex min-w-0 flex-col gap-(--spacing-xs)"
+              >
+                <div
+                  v-for="entry in environmentChoices"
+                  :key="entry.name"
+                  class="relative min-w-0"
+                >
+                  <Field.Label>
+                    <Field orientation="horizontal">
+                      <RadioButton
+                        v-model="environment"
+                        name="service-deploy-environment"
+                        :value="entry.name"
+                      />
+                      <Field.Content>
+                        <Field.Title>
+                          {{ entry.name }}
+                        </Field.Title>
+                        <Field.Description v-if="entry.description">
+                          {{ entry.description }}
+                        </Field.Description>
+                      </Field.Content>
+                    </Field>
+                  </Field.Label>
+                  <div
+                    v-if="entry.tag"
+                    class="pointer-events-none absolute end-(--spacing-sm) top-(--spacing-sm)"
+                  >
+                    <Tag
+                      :label="entry.tag"
+                      severity="info"
+                      size="small"
+                    />
+                  </div>
+                </div>
+              </div>
+            </SettingsSection>
+
+            <SettingsSection
+              inert
+              data-pending="true"
+              title="Projects impacted"
+              hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
+            >
+              <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+                <div
+                  v-for="group in impacted"
+                  :key="group.environment"
+                  class="flex min-w-0 flex-col gap-(--spacing-xs)"
+                >
+                  <ul
+                    class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xs) p-0"
+                    :aria-label="`Projects impacted in ${group.environment} (${group.projects.length})`"
+                  >
+                    <li
+                      v-for="target in group.projects"
+                      :key="target.id"
+                      class="min-w-0"
+                    >
                       <Item
                         kind="outlined"
                         size="small"
@@ -441,24 +678,18 @@
                         </Item.Media>
                         <Item.Content>
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                            <Item.Title>{{ project.name }}</Item.Title>
+                            <Item.Title>{{ target.name }}</Item.Title>
                             <Tag
-                              v-if="projectMode === 'new'"
-                              label="New"
-                              severity="success"
+                              v-if="target.selected"
+                              label="Selected"
+                              severity="neutral"
                               size="small"
                               class="shrink-0"
                             />
                           </span>
-                          <Item.Description v-if="projectMode === 'new'">
-                            Gets its domains on the first deploy.
-                          </Item.Description>
-                          <ul
-                            v-else
-                            class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xxs) p-0"
-                          >
+                          <ul class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xxs) p-0">
                             <li
-                              v-for="domainGroup in project.domains"
+                              v-for="domainGroup in target.domains"
                               :key="domainGroup.environment"
                               class="flex min-w-0 items-center gap-(--spacing-xs)"
                             >
@@ -559,271 +790,33 @@
                             </li>
                           </ul>
                         </Item.Content>
-                        <Item.Actions v-if="projectMode === 'existing'">
-                          <DropdownMenu
-                            placement="bottom-end"
-                            @select="(_event, id) => (projectId = String(id))"
-                          >
-                            <DropdownMenu.Trigger>
-                              <Button
-                                label="Change"
-                                kind="outlined"
-                                size="small"
-                                icon="pi pi-chevron-down"
-                                icon-position="trailing"
-                              />
-                            </DropdownMenu.Trigger>
-                            <DropdownMenu.Group
-                              v-for="group in projectGroups"
-                              :key="group.key"
-                              :label="group.label"
-                            >
-                              <DropdownMenu.Item
-                                v-for="entry in group.projects"
-                                :key="entry.id"
-                                :value="entry.id"
-                                :label="entry.name"
-                                :selected="entry.id === project.id"
-                              >
-                                <template #trailing>
-                                  <span class="truncate text-body-xs text-(--text-muted)">
-                                    {{ entry.detail }}
-                                  </span>
-                                </template>
-                              </DropdownMenu.Item>
-                            </DropdownMenu.Group>
-                          </DropdownMenu>
-                        </Item.Actions>
                       </Item>
-                    </div>
-                  </template>
-                </Card>
-              </SettingsSection>
-
-              <SettingsSection
-                inert
-                data-pending="true"
-                title="Environment"
-                hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
-              >
-                <div
-                  role="radiogroup"
-                  aria-label="Environment"
-                  class="flex min-w-0 flex-col gap-(--spacing-xs)"
-                >
-                  <div
-                    v-for="entry in environmentChoices"
-                    :key="entry.name"
-                    class="relative min-w-0"
-                  >
-                    <Field.Label>
-                      <Field orientation="horizontal">
-                        <RadioButton
-                          v-model="environment"
-                          name="service-deploy-environment"
-                          :value="entry.name"
-                        />
-                        <Field.Content>
-                          <Field.Title>
-                            {{ entry.name }}
-                          </Field.Title>
-                          <Field.Description v-if="entry.description">
-                            {{ entry.description }}
-                          </Field.Description>
-                        </Field.Content>
-                      </Field>
-                    </Field.Label>
-                    <div
-                      v-if="entry.tag"
-                      class="pointer-events-none absolute end-(--spacing-sm) top-(--spacing-sm)"
-                    >
-                      <Tag
-                        :label="entry.tag"
-                        severity="info"
-                        size="small"
-                      />
-                    </div>
-                  </div>
+                    </li>
+                  </ul>
                 </div>
-              </SettingsSection>
+              </div>
+            </SettingsSection>
 
-              <SettingsSection
-                inert
-                data-pending="true"
-                title="Projects impacted"
-                hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
-              >
-                <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-                  <div
-                    v-for="group in impacted"
-                    :key="group.environment"
-                    class="flex min-w-0 flex-col gap-(--spacing-xs)"
-                  >
-                    <ul
-                      class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xs) p-0"
-                      :aria-label="`Projects impacted in ${group.environment} (${group.projects.length})`"
-                    >
-                      <li
-                        v-for="target in group.projects"
-                        :key="target.id"
-                        class="min-w-0"
-                      >
-                        <Item
-                          kind="outlined"
-                          size="small"
-                        >
-                          <Item.Media>
-                            <span
-                              class="flex size-7 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-                            >
-                              <i
-                                class="pi pi-box text-body-xs text-(--text-default)"
-                                aria-hidden="true"
-                              />
-                            </span>
-                          </Item.Media>
-                          <Item.Content>
-                            <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                              <Item.Title>{{ target.name }}</Item.Title>
-                              <Tag
-                                v-if="target.selected"
-                                label="Selected"
-                                severity="neutral"
-                                size="small"
-                                class="shrink-0"
-                              />
-                            </span>
-                            <ul class="m-0 flex min-w-0 list-none flex-col gap-(--spacing-xxs) p-0">
-                              <li
-                                v-for="domainGroup in target.domains"
-                                :key="domainGroup.environment"
-                                class="flex min-w-0 items-center gap-(--spacing-xs)"
-                              >
-                                <Tag
-                                  :label="domainGroup.environment"
-                                  severity="neutral"
-                                  size="small"
-                                  class="shrink-0"
-                                />
-                                <div class="flex min-w-0">
-                                  <Tooltip
-                                    :text="`Open ${domainGroup.domains[0]} in a new tab`"
-                                    class="w-full"
-                                  >
-                                    <Link
-                                      :label="domainGroup.domains[0]"
-                                      :href="`https://${domainGroup.domains[0]}`"
-                                      target="_blank"
-                                      size="small"
-                                    />
-                                  </Tooltip>
-                                </div>
-                                <Popover
-                                  v-if="domainGroup.total > 1"
-                                  placement="bottom-start"
-                                  size="small"
-                                >
-                                  <Popover.Trigger
-                                    :aria-label="`${domainGroup.total - 1} more domains`"
-                                  >
-                                    <div class="shrink-0 cursor-pointer">
-                                      <Tag
-                                        :label="`+${domainGroup.total - 1}`"
-                                        severity="neutral"
-                                        size="small"
-                                      />
-                                    </div>
-                                  </Popover.Trigger>
-                                  <Popover.Content>
-                                    <div
-                                      class="flex flex-col gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-sm) pb-(--spacing-xs) pt-(--spacing-sm)"
-                                    >
-                                      <p class="text-label-sm text-(--text-muted)">
-                                        {{ domainGroup.summary }}
-                                      </p>
-                                      <Input
-                                        v-if="domainGroup.total > 10"
-                                        size="medium"
-                                        placeholder="Search domains"
-                                        aria-label="Search domains"
-                                      >
-                                        <template #prefix>
-                                          <i
-                                            class="pi pi-search"
-                                            aria-hidden="true"
-                                          />
-                                        </template>
-                                      </Input>
-                                    </div>
+            <span
+              class="sr-only"
+              role="status"
+            />
+          </fieldset>
+        </PanelContent>
 
-                                    <div
-                                      class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
-                                    >
-                                      <div
-                                        v-for="domain in domainGroup.domains"
-                                        :key="domain"
-                                        class="flex min-w-0 px-(--spacing-xs) py-(--spacing-xxs)"
-                                      >
-                                        <Link
-                                          :label="domain"
-                                          :href="`https://${domain}`"
-                                          target="_blank"
-                                          size="small"
-                                        />
-                                      </div>
-                                    </div>
-
-                                    <div
-                                      v-if="domainGroup.total > domainGroup.domains.length"
-                                      class="border-t border-(--border-default) p-(--spacing-xxs)"
-                                    >
-                                      <Button
-                                        :label="`Load ${Math.min(10, domainGroup.total - domainGroup.domains.length)} more`"
-                                        kind="transparent"
-                                        size="small"
-                                        class="w-full"
-                                      />
-                                    </div>
-
-                                    <span
-                                      class="sr-only"
-                                      role="status"
-                                    >
-                                      {{ domainGroup.summary }}
-                                    </span>
-                                  </Popover.Content>
-                                </Popover>
-                              </li>
-                            </ul>
-                          </Item.Content>
-                        </Item>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </SettingsSection>
-
-              <span
-                class="sr-only"
-                role="status"
-              />
-            </fieldset>
-          </PanelContent>
-
-          <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
-              <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
-              <Button
-                label="Deploy"
-                kind="primary"
-                size="medium"
-                disabled
-                type="submit"
-              />
-            </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </DrawerPortal>
+        <PanelFooter>
+          <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
+            <div class="flex min-w-0 items-center gap-(--spacing-sm)" />
+            <Button
+              label="Deploy"
+              kind="primary"
+              size="medium"
+              disabled
+              type="submit"
+            />
+          </div>
+        </PanelFooter>
+      </form>
+    </DrawerContent>
   </Drawer>
 </template>

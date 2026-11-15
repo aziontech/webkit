@@ -19,13 +19,13 @@ The drawer a platform deploys from, opened by Deploy on a service or a project. 
 
 ## Building blocks
 
-### A. Trigger and frame — `Drawer`, `DrawerTrigger`, `Button`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent` (required)
+### A. Trigger and frame — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent` (required)
 
 An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the service or project page. The `Drawer` is `size="medium"`, portals over the page with an overlay and holds one `form` with an `aria-label` equal to the title.
 
-### B. Panel header — `PanelHeader`, `DrawerTitle`, `DrawerClose` (required)
+### B. Panel header — `PanelHeader`, `DrawerTitle` (required)
 
-`DrawerTitle` reads Deploy, or Build and deployment while a version is being built first. `DrawerClose` on the right; no Cancel anywhere.
+`DrawerTitle` reads Deploy, or Build and deployment while a version is being built first. The drawer's own close button sits on the right; no Cancel anywhere.
 
 ### C. Sections — `PanelContent`, `SettingsSection` (required)
 

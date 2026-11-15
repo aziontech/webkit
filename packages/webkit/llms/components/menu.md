@@ -107,7 +107,7 @@ element instead of three.
   - **Two changes made to it**, both fixing drift against the rows around it:
     1. The leading icon box renders **only when `icon` is set**. An empty `size-8` box reserved a column the row did not use, pushing an icon-less row's label off the column its siblings hold and leaving the rail anchored to blank space.
     2. Its **two branches now share one label class**. The anchor branch was `.text-label-sm` (12 px) and the button branch `.text-body-sm` (14 px), so the same menu rendered two sizes depending on whether a row happened to carry an `href` — children came out _smaller than their parents_. Both are now `.text-label-md`.
-  - Props: `kind?: 'option' | 'group'` (default `'option'` — navigable row or section overline label; `kind="group"` is `@deprecated since 6.0 — use the Menu.Group label. Removed in 7.0.`), `label?: string` (default `''` — visible text for the row or group header), `selected?: boolean` (default `false` — applies the selected surface on option rows), `disabled?: boolean` (default `false` — blocks interaction on option rows), `icon?: string` (default `''` — PrimeIcons class for the leading glyph, option kind only; empty renders **no icon box at all**), `href?: string` (default `''` — renders an anchor instead of a button when set on an enabled option row), `target?: '_self' | '_blank'` (default `'_self'` — link target when `href` is set), `tagValue?: string` (default `''` — short text rendered in a trailing `Tag`; empty renders none), `tagSeverity?: MenuItemTagSeverity` (default `'info'` — severity token for that trailing `Tag`, one of `primary | secondary | success | info | warning | danger | accent`).
+  - Props: `kind?: 'option' | 'group'` (default `'option'` — navigable row or section overline label; `kind="group"` is `@deprecated since 6.0 — use the Menu.Group label. Removed in 7.0.`), `label?: string` (default `''` — visible text for the row or group header), `selected?: boolean` (default `false` — applies the selected surface on option rows), `disabled?: boolean` (default `false` — blocks interaction on option rows), `icon?: string` (default `''` — PrimeIcons class for the leading glyph, option kind only; empty renders **no icon box at all**), `href?: string` (default `''` — renders an anchor instead of a button when set on an enabled option row), `target?: '_self' | '_blank'` (default `'_self'` — link target when `href` is set), `tagValue?: string` (default `''` — short text rendered in a trailing `Tag`; empty renders none), `tagSeverity?: MenuItemTagSeverity` (default `'info'` — severity token for that trailing `Tag`, one of `primary | neutral | success | info | warning | danger | accent`).
   - Events: `click` — `(event: MouseEvent, item: { label: string; href: string })`. `item` carries the row's `label` and `href`, identifying which row was activated (event-first per `event-payloads.md`).
   - Slots: `default` — replaces the label text; `tag` — replaces the trailing `Tag` (its presence alone renders the tag region, with or without `tagValue`).
   - **This spec is menu-item's only spec.** It previously carried its own `.specs/menu-item.md`, which is removed with this change: a sub-component of a compound is documented in the compound's spec, the way `menu-sub` and `menu-group` already are. The `./menu-item` export path stays public, so its API lives here (that is what `build-catalog.mjs` reads to give the path an entry in `catalog.json`).
@@ -232,6 +232,14 @@ folder only). `./menu-item` already exists; its **key is unchanged** and only it
 - `data-node-id` on a `Sub` rendered from `groups` — carries the `MenuNode.id` so `update:path` reports real node ids rather than generated ones
 - Empty: `groups` is `[]` and the `default` slot is empty → the root renders nothing; the empty
   message belongs to the host shell, not the menu.
+- Icon rail: inside a `Sidebar` collapsed with `collapsible="icon"` (read from the sidebar context
+  with `inject(SidebarInjectionKey, null)`; a menu anywhere else is unaffected), `Menu.Item` carries
+  `data-rail`, centres its icon in a 32 px box, renders its label screen-reader-only and shows it in
+  a `Tooltip`, and drops its tag; a `Menu.Item` without an icon, a `kind="group"` overline and an
+  inline `SubTrigger` (which never has an icon) are hidden, an inline `SubContent` is hidden, a
+  `Group` title becomes screen-reader-only (it still names the section), and a drill `SubTrigger`
+  shows its icon in a `Tooltip` with no arrow — activating it expands the sidebar, then pushes its
+  level.
 
 ## Accessibility
 
@@ -244,6 +252,7 @@ folder only). `./menu-item` already exists; its **key is unchanged** and only it
   - A drill `SubTrigger` carries **no** `aria-expanded` on any control — it replaces the view rather than expanding one. An announced drill arrow is named `Open <label> menu`. On push, focus moves to the level's `Back` button and the pushed `<ul>` takes `aria-label` from the trigger's label; on pop, focus returns to whichever control pushed it. A level that is not current carries **both `aria-hidden` and `inert`** while it is still mounted for the slide, so it leaves the accessibility tree and the tab order together (the pattern Kumo's `SlidingViews` uses).
   - `Back` is a `<button>` whose **visible text** names its destination (`Back to Settings`, or a bare `Back` when that destination is the unnamed root) and is therefore also its accessible name — it renders no `aria-label`, so the two cannot disagree (2.5.3 Label in Name).
   - A selected `Menu.Item` rendered as an anchor carries `aria-current="page"`; a disabled row carries `aria-disabled` and is removed from the tab order.
+  - In a sidebar icon rail every visible row keeps its label as its accessible name (visually hidden, not removed); the `Tooltip` repeats it on hover and focus toward the inline end (`left` under `rtl`).
   - The connector rail and every chevron are `aria-hidden="true"` — decorative, and the indentation already conveys the hierarchy.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including the disabled state. The rail (`var(--border-default)`, ≈1.5:1) is exempt: it is decorative and carries no information the indentation does not, so 1.4.11 does not apply.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.

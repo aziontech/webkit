@@ -725,7 +725,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
         <Tag
           v-if="!loading && alerts.length"
           :label="String(alerts.length)"
-          severity="secondary"
+          severity="neutral"
           size="small"
         />
       </div>

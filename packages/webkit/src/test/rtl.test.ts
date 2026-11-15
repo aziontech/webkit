@@ -21,7 +21,6 @@ import TabsItem from '../components/navigation/tabs/tabs-item.vue'
 import TabsList from '../components/navigation/tabs/tabs-list.vue'
 import Dialog from '../components/overlay/dialog/dialog.vue'
 import DialogContent from '../components/overlay/dialog/dialog-content.vue'
-import DialogPortal from '../components/overlay/dialog/dialog-portal.vue'
 import DialogTitle from '../components/overlay/dialog/dialog-title.vue'
 import Popover from '../components/overlay/popover/popover.vue'
 import PopoverContent from '../components/overlay/popover/popover-content/popover-content.vue'
@@ -146,7 +145,7 @@ describe('arrow keys follow the reading direction', () => {
 
 const overlays = () => [
   h(Dialog, { open: true }, () =>
-    h(DialogPortal, null, () => h(DialogContent, null, () => h(DialogTitle, null, () => 'Dialog')))
+    h(DialogContent, null, () => h(DialogTitle, null, () => 'Dialog'))
   ),
   h(Popover, { open: true }, () => [
     h(PopoverTrigger, null, () => h('button', { type: 'button' }, 'Popover')),

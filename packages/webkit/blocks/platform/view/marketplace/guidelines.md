@@ -47,9 +47,9 @@ When `status` is `no-match`, the grid gives way to a medium `EmptyState` with th
 
 The first tab is the full template catalog. A second `useCollection` runs the templates: its `PropertyFilter` (placeholder and `aria-label` "Search templates") turns free text over the name, the framework and the description, and a Framework property, into tokens that live in the URL under the `templates` prefix, so they never collide with the integration filter. Under it a `ul` grid of `Card kind="integration"` tiles, two a row on a phone, then three, four and five as the page widens: the framework mark as the `logo` (`ai-cor` colour marks; the black Next.js mark inverts in dark), the name as an `h3` holding a stretched link to the template page (`/marketplace/templates/<id>`), two lines of description and the framework as a secondary badge. The tile markup is the `Card`'s, shared with `platform/view/template-browser`. When its `status` is `no-match`, the grid gives way to a bordered medium `EmptyState`, "No matching templates", with an outlined small Clear filters `Button` bound to the templates' `clearFilters`.
 
-### H. Integration drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
+### H. Integration drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
 
-A medium right `Drawer` controlled by `v-model:open`. Its content is a `form` named `Install <name>` with `novalidate`. `PanelHeader` holds the logo, the name as `DrawerTitle`, "by" the publisher and `DrawerClose`. `PanelContent` scrolls; `PanelFooter` holds, at the end, Configure (outlined, a link to the integration's settings) when it is installed somewhere, and the primary submit Install while an application is left.
+A medium right `Drawer` controlled by `v-model:open`. Its content is a `form` named `Install <name>` with `novalidate`. `PanelHeader` holds the logo, the name as `DrawerTitle`, "by" the publisher and the drawer's own close button. `PanelContent` scrolls; `PanelFooter` holds, at the end, Configure (outlined, a link to the integration's settings) when it is installed somewhere, and the primary submit Install while an application is left.
 
 ### I. Install outcome — `Alert` (required)
 

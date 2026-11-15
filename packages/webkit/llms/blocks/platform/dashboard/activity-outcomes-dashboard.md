@@ -692,11 +692,11 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     },
     approved: {
       label: 'Approved',
-      severity: 'secondary'
+      severity: 'neutral'
     },
     denied: {
       label: 'Denied',
-      severity: 'secondary'
+      severity: 'neutral'
     }
   }
 
@@ -985,7 +985,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <Tag
                 v-if="!loading && filteredRows.length"
                 :label="filteredRows.length + ' requests'"
-                severity="secondary"
+                severity="neutral"
                 size="small"
               />
             </ChartCard.Action>

@@ -65,7 +65,7 @@
   {
    "name": "size",
    "type": "'small' | 'medium' | 'large'",
-   "default": "'medium'",
+   "default": "'large'",
    "required": "false",
    "doc": "Size token of every button."
   },

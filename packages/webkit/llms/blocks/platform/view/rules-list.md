@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/view/rules-list/rules-list.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/rules-list")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, [Dialog](../../../components/dialog.md), `DialogTitle`, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [AttributeEditor](../../../components/attribute-editor.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [Combobox](../../../components/combobox.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), `TableRoot`, [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -50,7 +50,7 @@ A data-driven `TableRoot` per phase (`row-key="id"`, no sorting: order is the da
 
 The grip comes from `Table` `reorderable`: drag it, or focus it and press Arrow Up, Arrow Down, Home or End. `row-reorderable` returns false for a locked rule, while a search narrows the list and while saving, so those grips are disabled and no row can be dropped on or moved past a pinned rule. The Position cell starts with a small numeric `Input` showing the rule's position: type a number and press Enter (or leave the field) to move the rule there, clamped below the pinned rules and to the end of the phase; Escape or a value that is not a number keeps the rule in place, and after Enter focus stays in the field on the moved rule. On a locked rule, while searching and while saving the field is disabled and its name and `Tooltip` carry the reason ("Position 1 of Default rule in the Request phase. The default rule runs first and stays first."). Then the cell holds Move up and Move down `IconButton`s, the single-pointer way to reorder (WCAG 2.5.7); each is named after its rule and, when disabled, carries the reason ("Move Default rule down. The default rule runs first and stays first."), which its `Tooltip` repeats. After a move with them, focus returns to the same button on the moved rule (the other one, or the grip, when that one is now disabled) and the block's polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
 
-### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert` (required)
+### F. Save bar and review — `SaveBar`, `Button`, `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert` (required)
 
 Any move or status change raises a `SaveBar` counting the changes, with Discard (outlined, restores the saved order and announces it) and Review changes (primary). Review changes opens a medium `Dialog` titled "Review changes": a description of what saving does, then one section per phase with an `h3` and a list of lines such as "Docs rewrite moves from position 5 to 3." and "Maintenance page is turned on." The footer has Cancel and Save; Save shows its loading state and the dialog cannot be dismissed while saving. On success the dialog closes, focus moves to the rules region (the Review changes button is gone) and a success toast says "Rule order saved." On failure the dialog stays open with a danger `Alert` at the top saying the rules still run in the saved order, and Save becomes Save again. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shells/console` does), so the page never renders a `Toaster`.
 
@@ -142,11 +142,8 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -708,7 +705,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
                           <Tag
                             v-if="row.locked"
                             label="Default"
-                            severity="secondary"
+                            severity="neutral"
                             size="small"
                           />
                         </div>
@@ -818,78 +815,75 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ru
     <Dialog
       v-model:open="reviewOpen"
       :dismissible="!saving"
+      :closable="!saving"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <DialogTitle>Review changes</DialogTitle>
-            <DialogClose />
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-              <Alert
-                v-if="saveFailed"
-                severity="danger"
-                label="The new order wasn't saved. The rules still run in the saved order; save again to apply it."
-              />
-              <DialogDescription>
-                Rules run top to bottom within each phase. Saving applies this order to every
-                {{ SUBJECT === 'firewall' ? 'request' : 'request and response' }} the
-                {{ SUBJECT }} handles.
-              </DialogDescription>
-              <section
-                v-for="phase in changes"
-                :key="phase.value"
-                class="flex min-w-0 flex-col gap-(--spacing-xs)"
-                :aria-labelledby="`rules-review-${phase.value}`"
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <DialogTitle>Review changes</DialogTitle>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+            <Alert
+              v-if="saveFailed"
+              severity="danger"
+              label="The new order wasn't saved. The rules still run in the saved order; save again to apply it."
+            />
+            <DialogDescription>
+              Rules run top to bottom within each phase. Saving applies this order to every
+              {{ SUBJECT === 'firewall' ? 'request' : 'request and response' }} the
+              {{ SUBJECT }} handles.
+            </DialogDescription>
+            <section
+              v-for="phase in changes"
+              :key="phase.value"
+              class="flex min-w-0 flex-col gap-(--spacing-xs)"
+              :aria-labelledby="`rules-review-${phase.value}`"
+            >
+              <h3
+                :id="`rules-review-${phase.value}`"
+                class="m-0 text-label-sm text-(--text-muted)"
               >
-                <h3
-                  :id="`rules-review-${phase.value}`"
-                  class="m-0 text-label-sm text-(--text-muted)"
+                {{ phase.label }} phase
+              </h3>
+              <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0">
+                <li
+                  v-for="line in phase.items"
+                  :key="line.key"
+                  class="text-body-sm text-(--text-muted)"
                 >
-                  {{ phase.label }} phase
-                </h3>
-                <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0">
-                  <li
-                    v-for="line in phase.items"
-                    :key="line.key"
-                    class="text-body-sm text-(--text-muted)"
-                  >
-                    <span class="font-medium text-(--text-default)">{{ line.name }}</span>
-                    {{ line.text }}.
-                  </li>
-                </ul>
-              </section>
+                  <span class="font-medium text-(--text-default)">{{ line.name }}</span>
+                  {{ line.text }}.
+                </li>
+              </ul>
+            </section>
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                :disabled="saving"
+                @click="reviewOpen = false"
+              />
             </div>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  type="button"
-                  label="Cancel"
-                  kind="outlined"
-                  :disabled="saving"
-                  @click="reviewOpen = false"
-                />
-              </div>
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  type="button"
-                  :label="saveFailed ? 'Save again' : 'Save'"
-                  kind="primary"
-                  :loading="saving"
-                  @click="save"
-                />
-              </div>
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                type="button"
+                :label="saveFailed ? 'Save again' : 'Save'"
+                kind="primary"
+                :loading="saving"
+                @click="save"
+              />
             </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
   </div>
 </template>

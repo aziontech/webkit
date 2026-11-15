@@ -1,16 +1,16 @@
 # Auth (`platform/auth`)
 
-> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify. The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `kind="link"`, never an anchor to `#`. Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.
+> The signed-out screens of a platform app, frame included: a full-height page with the signed-out `GlobalHeader` (the product mark and a Documentation button) over a centred column that holds one `Card` and the prompt and terms under it. It serves /login, /signup and /signup/verify, and the signed-in hand-offs that share the frame: the OAuth authorize screen (scopes, Allow / Deny) and device or CLI authorization (compare the code, Confirm). The Google and GitHub buttons lead the card, over an “or” `Separator`. The card opens on a `PageHeader` and signs in in two steps: email, then password. Each field is a `Field` whose `Field.Label` sits over an `Input`, or over a `PasswordInput` with `PasswordRequirements`; a `HelperText` (email) or `Field.Error` (password) appears only after the primary action. While a request is in flight the primary `Button` shows its loading state and the step's fieldset is disabled. The rest is `Button`, `IconButton` in a `Tooltip`, a `Tag` and an `Alert`. Errors follow one rule: auth never toasts. Each error story is the primary flow with one endpoint response: the same two-step card on its password step, and the outcome in the same small `Alert` under the heading. What changes is the severity and what it carries: nothing after a 401, because the fields under it are the recovery; Retry when nobody can fix it (503, 500, timeout); the Sign in and reset-your-password links when the address is already registered (409). In-page actions (Forgot your password?, Resend email, Set a new password) are `Button` with `kind="link"`, never an anchor to `#`. Built from `PageHeader`, `GlobalHeader`, `Tag`, `Card`, `Alert`, `Input`, `Field`, `PasswordInput`, `PasswordRequirements`, `HelperText` and `Button`. The card column slides in from the inline start with a fade on mount (`starting:` styles, `duration-slow-01`, `ease-expressive-entrance`, none under reduced motion), and the card height eases between steps. A full page routed outside ConsoleLayout.
 
 - Surface: product
 - Source: `blocks/platform/auth/auth.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/auth")`
-- Components: [Alert](../../components/alert.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Skeleton](../../components/skeleton.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
+- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [Field](../../components/field.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [KeyValuePairs](../../components/key-value-pairs.md), [OtpInput](../../components/otp-input.md), [PageHeader](../../components/page-header.md), [PasswordInput](../../components/password-input.md), [PasswordRequirements](../../components/password-requirements.md), [QrCode](../../components/qr-code.md), [Separator](../../components/separator.md), [Skeleton](../../components/skeleton.md), [Tag](../../components/tag.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-form`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
 
-login; log in; sign in; signin; login page; authentication; auth; forgot password; reset password; new password; entrar; tela de login; acessar conta; esqueci a senha; redefinir senha; signup; sign up; register; registration; create account; new account; free account; cadastro; cadastrar; criar conta; tela de cadastro; registrar; check inbox; check your email; verify email; email verification; confirm email; verification sent; resend email; verificar e-mail; confirmar e-mail; confira seu e-mail; session expired; auth errors; sessão expirada; erro de login; mfa; authenticator app; one-time code; verification code; totp; recovery code; autenticação em dois fatores; código de verificação; código de autenticação; loading sign-in providers; providers loading; carregando provedores de login
+login; log in; sign in; signin; login page; authentication; auth; forgot password; reset password; new password; entrar; tela de login; acessar conta; esqueci a senha; redefinir senha; signup; sign up; register; registration; create account; new account; free account; cadastro; cadastrar; criar conta; tela de cadastro; registrar; check inbox; check your email; verify email; email verification; confirm email; verification sent; resend email; verificar e-mail; confirmar e-mail; confira seu e-mail; session expired; auth errors; sessão expirada; erro de login; mfa; authenticator app; one-time code; verification code; totp; recovery code; autenticação em dois fatores; código de verificação; código de autenticação; loading sign-in providers; providers loading; carregando provedores de login; oauth consent; authorize app; authorize application; app authorization; consent screen; allow access; grant access; scopes; permissions requested; third-party app access; device authorization; device code; cli login; connect cli; device flow; autorizar aplicativo; tela de consentimento; conceder acesso; autorizar dispositivo; login pela cli
 
 The signed-out screens of a platform app: sign in, sign up, reset password and check your inbox, frame included. The user has one job here, to get into their account, and one object on the page to do it with: a single card under the signed-out bar. Every step of the flow (`email`, `password`, `reset`, `sent`, `new-password`) swaps the contents of that card in place, and every answer the server gives, success included, lands in one `Alert` inside it. Auth never toasts. It is a full page with its own focused header: the app routes it outside `ConsoleLayout`, never into the layout's default slot.
 
@@ -19,6 +19,8 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 - `/login`, `/signup` and `/signup/verify`, and the reset-password link the user follows from their inbox.
 - Re-entering after a session expired: the same card opens on the password step with the address already filled.
 - Any signed-out step that asks for credentials (sign in, MFA, set a new password).
+- The OAuth authorize screen (`OauthConsent`): a third-party app asks to act on the signed-in account, and the person allows or denies the scopes it lists.
+- Device and CLI sign-in (`DeviceAuthorization`): a terminal or a device without a browser printed a code, and the person confirms it here.
 
 ## When not to use
 
@@ -26,6 +28,7 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 - Changing the password or email of a signed-in user: use `platform/account/profile`.
 - Signing out an expired session over a console page: the shell wire is `platform/states/page-wires` (Session); this block is where it lands.
 - Any signed-in form: use `platform/states/form-validation` for the submit states and `platform/settings/settings-form` for settings.
+- Listing or revoking the apps a person already authorized: that is a settings table, not this card.
 
 ## Building blocks
 
@@ -121,6 +124,11 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - On a code screen, put the code in one `OtpInput` (autofill reads `autocomplete="one-time-code"`), submit on `complete`, and keep a Verify button.
 - Give every QR code a typed alternative: the setup key with a copy button.
 
+- On the consent screen, name the app, its publisher and site in the heading block, the account it will act on (with Switch account), and every scope as a row with a glyph, a title that starts with a verb and one sentence of what it covers.
+- Say where Allow sends the person (the redirect URL as code text) and where to revoke access later.
+- Put Deny and Allow side by side at the foot of the card, Allow on the inline end; lock both while either answer is in flight, and keep both locked once the notice reports the outcome.
+- On device authorization, show the code the terminal printed in large mono type, grouped `XXXX-XXXX`, with the request details (application, device, IP address, time) so the person can spot a request they did not start.
+
 ## Don't
 
 - Don't toast. Not for errors, not for success, not for the session-expired notice.
@@ -133,6 +141,10 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 
 - Don't split a one-time code into separate inputs or move focus between them by hand; `OtpInput` is one field.
 - Don't toast a rejected code; it is the field's reason, and the field is cleared and focused.
+
+- Don't preselect or let the person untick single scopes on the consent screen; the app asked for a set, and Allow grants that set or Deny grants nothing.
+- Don't hide which account will be authorized; Switch account sits beside it before Allow.
+- Don't make the device code an input on the confirm step; it is text to compare. Typing it is the fallback, behind the link.
 
 ## Copy
 
@@ -149,6 +161,11 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - **Session expired:** `Your session expired. Sign in again to pick up where you left off.`
 - **Providers loading:** the status name says what is happening, no ellipsis: `Preparing sign-in providers`.
 - **Action in a notice:** `Retry`, never "Try again" (the console and assistant blocks use the same word).
+- **Consent heading:** `Authorize Acme Deploy`; the lead names publisher and site: `Acme Deploy by Acme Inc. (deploy.example.com) wants to access your account.`
+- **Scope rows:** title starts with a verb (`Read your workloads`, `Deploy your applications`), the description says what is in and, when it matters, what is not: `Names, domains and status. Not their settings or secrets.`
+- **Consent actions:** `Deny` and `Allow`. Outcomes: `Access granted. Returning to Acme Deploy.` / `Access denied. Returning to Acme Deploy with no access to your account.`
+- **Device actions:** `Cancel` and `Confirm`. Outcomes: `Device connected. Go back to your terminal; you can close this tab.` / `Request cancelled. The device was not connected.`
+- **Device code errors:** `Enter the code your terminal shows.`, `Enter all 8 characters of the code.`, `That code is not valid or has expired. Check your terminal, or start the sign-in again there.`
 
 ## Accessibility
 
@@ -164,6 +181,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Social buttons are `type="button"` so Enter in the email field submits the email, not a provider.
 
 - MFA: the code field is named by its label (`Authentication code`, `Recovery code`) and described by the reason when rejected; the QR code is an image named after the account, and the setup key is real text.
+- Consent and device authorization: the card body is a `section` named by its `h1` (`aria-labelledby`); the scope list is an `Item.List` named by its heading (`Acme Deploy will be able to`), each scope a `listitem` with a decorative glyph; the request details are a `KeyValuePairs` named `Request details`.
 
 ## States
 
@@ -180,6 +198,8 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
 - MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
 - MfaCode: the sign-in challenge after the password: a 6-digit `OtpInput`, focused when the challenge opens (not with `autofocus`), that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
+- OauthConsent: the authorize screen. The app (square `Avatar` with its initials, name, publisher, site), the signed-in account in an outlined `Item` with Switch account, the scopes in an `Item.List`, the redirect URL and where to revoke, then Deny / Allow. The pressed answer shows its loading state and locks the other; the outcome lands in the notice slot (`success` for Allow, `info` for Deny) and both stay locked.
+- DeviceAuthorization: device or CLI sign-in. The code the terminal printed (`WDJB-MJHT`) in large mono text, the request details in a split `KeyValuePairs`, the account and the two scopes, Cancel / Confirm. `The code does not match? Enter the code from your terminal` swaps to an 8-character alphanumeric `OtpInput` grouped by 4: a rejected code (`00000000` in the demo) is the field's reason, cleared and focused; no answer (`99999999`) is a warning notice with Retry; an accepted code returns to the confirm step showing it. Confirm reports `success`, Cancel `info`.
 
 ## Related
 
@@ -212,6 +232,8 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - `EmailAlreadyRegistered` — 409 on Sign up: a danger message carrying the two ways out as links, Sign in or reset your password, with the address left in the field.
 - `MfaSetup` — Turn on multi-factor authentication: steps, the QR code with a copyable setup key, and a 6-digit OtpInput that verifies on complete; wrong code on the field, no answer as a warning with Retry.
 - `MfaCode` — The sign-in MFA challenge: a 6-digit OtpInput, focused when the challenge opens, that submits when full, a recovery-code mode (8 characters, grouped), and Sign in with another account.
+- `OauthConsent` — The OAuth authorize screen: the requesting app with its publisher and site, the signed-in account with Switch account, the scopes it asks for as a list, where Allow sends you, and Deny / Allow, each settling in the card's notice.
+- `DeviceAuthorization` — Device or CLI authorization: the code the terminal printed, shown large to compare, the request details (application, device, IP address, time), the account and scopes, Cancel / Confirm, and a typed code entry (8 characters, grouped by 4) when the codes do not match.
 
 Each variant is the same screen in another state: `get_pattern("platform/auth", { variant })`, or the file under `blocks/platform/auth/variants/`.
 

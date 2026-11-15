@@ -57,7 +57,7 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `copy` | `string` | Fires after a successful copy; payload is the copied plain text. |
+| `copy` | `(event: MouseEvent, value: string)` | Fires after a successful copy; payload is the copied plain text. |
 
 ## Slots
 

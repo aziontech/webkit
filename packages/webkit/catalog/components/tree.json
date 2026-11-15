@@ -2,7 +2,9 @@
  "purpose": "A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron. It renders a nested `items` data structure on its own (recursively, through one internal row template) and follows the WAI-ARIA tree pattern, so it fits file and object browsers: the objects of a bucket, the source files of a deployment, the routes of an application. Unlike `menu` it navigates data, not the app, and unlike `accordion` its nodes are rows of the same kind at any depth, not panels of free content.",
  "useWhen": [
   "Browsing a hierarchy whose depth is not fixed: bucket objects under folders, the source tree of a deployment, functions grouped by application.",
-  "Picking one node out of a hierarchy (`selectable`) to show its detail beside the tree.",
+  "Picking one node out of a hierarchy (`selectable`) to show its detail beside the tree, or several (`selectable=\"multiple\"`) to act on them together (move, delete, download).",
+  "A hierarchy too large to send at once: mark unloaded parents `lazy` and fetch their children when they open.",
+  "A file browser where people rename nodes where they are (`editable`) and open a node with a double-click (`item-dblclick`).",
   "A hierarchy the user expands piece by piece, where showing every level at once would bury the node they are after."
  ],
  "avoidWhen": [
@@ -23,6 +25,9 @@
   "Seed `v-model:expanded` with the path to the node the user is most likely after (the open folder, the selected file), not with every parent.",
   "Keep labels short and put secondary detail (size, count, modified date) in `description` so rows scan as names first.",
   "Use `selectable` only when the selection drives something on the screen (a detail pane, a preview); for a tree whose rows only lead somewhere, listen to `item-click` instead.",
-  "Put per-row controls in the `actions` slot (an `IconButton` that opens a `dropdown`), never inside the `item` slot, so they do not take over the row's activation."
+  "Put per-row controls in the `actions` slot (an `IconButton` that opens a `dropdown`), never inside the `item` slot, so they do not take over the row's activation.",
+  "For children loaded on demand, mark the node `lazy`, listen to `update:expanded`, set `loading` on the node while the request runs, then patch `children` in (an empty array when it has none) and clear `loading`.",
+  "With `editable`, apply the new label from the `rename` event yourself (the tree does not mutate `items`); offer a `Rename` entry in the row actions that calls the exposed `startRename(id)` so the feature is discoverable beyond F2.",
+  "Use `item-dblclick` for a secondary \"open\" action only; single click and Enter stay `item-click`, so nothing requires a double-click."
  ]
 }

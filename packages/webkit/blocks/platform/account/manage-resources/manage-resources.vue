@@ -6,8 +6,6 @@
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
@@ -834,154 +832,148 @@
       v-model:open="moveOpen"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DialogTitle>{{
-                moving.length === 1
-                  ? `Move ${moving[0].name}`
-                  : `Move ${plural(moving.length, 'resource', 'resources')}`
-              }}</DialogTitle>
-              <DialogDescription>
-                Everything inside moves with it. Role bindings inherited from the old parent stop
-                applying; bindings set on the resource itself stay.
-              </DialogDescription>
-            </div>
-          </PanelHeader>
-          <PanelContent>
-            <form
-              class="flex flex-col gap-(--spacing-md)"
-              novalidate
-              @submit.prevent="confirmMove"
-            >
-              <Field :invalid="!!destinationError">
-                <Field.Label>New parent</Field.Label>
-                <Select
-                  v-model="destination"
-                  size="large"
-                  placeholder="Choose an organization or group"
-                  @update:model-value="destinationError = ''"
-                >
-                  <Select.Trigger />
-                  <Select.Content>
-                    <Select.Option
-                      v-for="option in destinationOptions"
-                      :key="option.value"
-                      :value="option.value"
-                      >{{ option.label }} · {{ types[option.type].label }}</Select.Option
-                    >
-                  </Select.Content>
-                </Select>
-                <Field.Description
-                  >A resource cannot move into itself or into anything inside it.</Field.Description
-                >
-                <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
-              </Field>
-            </form>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                label="Cancel"
-                kind="outlined"
-                size="medium"
-                @click="moveOpen = false"
-              />
-              <Button
-                label="Move"
-                kind="primary"
-                size="medium"
-                @click="confirmMove"
-              />
-            </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DialogTitle>{{
+              moving.length === 1
+                ? `Move ${moving[0].name}`
+                : `Move ${plural(moving.length, 'resource', 'resources')}`
+            }}</DialogTitle>
+            <DialogDescription>
+              Everything inside moves with it. Role bindings inherited from the old parent stop
+              applying; bindings set on the resource itself stay.
+            </DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelContent>
+          <form
+            class="flex flex-col gap-(--spacing-md)"
+            novalidate
+            @submit.prevent="confirmMove"
+          >
+            <Field :invalid="!!destinationError">
+              <Field.Label>New parent</Field.Label>
+              <Select
+                v-model="destination"
+                size="large"
+                placeholder="Choose an organization or group"
+                @update:model-value="destinationError = ''"
+              >
+                <Select.Trigger />
+                <Select.Content>
+                  <Select.Option
+                    v-for="option in destinationOptions"
+                    :key="option.value"
+                    :value="option.value"
+                    >{{ option.label }} · {{ types[option.type].label }}</Select.Option
+                  >
+                </Select.Content>
+              </Select>
+              <Field.Description
+                >A resource cannot move into itself or into anything inside it.</Field.Description
+              >
+              <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
+            </Field>
+          </form>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              size="medium"
+              @click="moveOpen = false"
+            />
+            <Button
+              label="Move"
+              kind="primary"
+              size="medium"
+              @click="confirmMove"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
 
     <Dialog
       v-model:open="labelsOpen"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DialogTitle>{{
-                labelling.length === 1
-                  ? `Labels of ${labelling[0].name}`
-                  : `Labels of ${plural(labelling.length, 'resource', 'resources')}`
-              }}</DialogTitle>
-              <DialogDescription>
-                Labels group resources for search, billing reports and policies. Changes apply to
-                every selected resource.
-              </DialogDescription>
-            </div>
-          </PanelHeader>
-          <PanelContent>
-            <form
-              class="flex flex-col gap-(--spacing-md)"
-              novalidate
-              @submit.prevent="confirmLabels"
-            >
-              <Field>
-                <Field.Label>Add labels</Field.Label>
-                <MultiSelect
-                  v-model="addLabels"
-                  placeholder="Choose labels"
-                >
-                  <MultiSelect.Trigger />
-                  <MultiSelect.Content>
-                    <MultiSelect.Option
-                      v-for="label in knownLabels"
-                      :key="label"
-                      :value="label"
-                      >{{ label }}</MultiSelect.Option
-                    >
-                  </MultiSelect.Content>
-                </MultiSelect>
-              </Field>
-              <Field v-if="presentLabels.length">
-                <Field.Label>Remove labels</Field.Label>
-                <MultiSelect
-                  v-model="removeLabels"
-                  placeholder="Choose labels"
-                >
-                  <MultiSelect.Trigger />
-                  <MultiSelect.Content>
-                    <MultiSelect.Option
-                      v-for="label in presentLabels"
-                      :key="label"
-                      :value="label"
-                      >{{ label }}</MultiSelect.Option
-                    >
-                  </MultiSelect.Content>
-                </MultiSelect>
-              </Field>
-            </form>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                label="Cancel"
-                kind="outlined"
-                size="medium"
-                @click="labelsOpen = false"
-              />
-              <Button
-                label="Save labels"
-                kind="primary"
-                size="medium"
-                :disabled="!addLabels.length && !removeLabels.length"
-                @click="confirmLabels"
-              />
-            </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DialogTitle>{{
+              labelling.length === 1
+                ? `Labels of ${labelling[0].name}`
+                : `Labels of ${plural(labelling.length, 'resource', 'resources')}`
+            }}</DialogTitle>
+            <DialogDescription>
+              Labels group resources for search, billing reports and policies. Changes apply to
+              every selected resource.
+            </DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelContent>
+          <form
+            class="flex flex-col gap-(--spacing-md)"
+            novalidate
+            @submit.prevent="confirmLabels"
+          >
+            <Field>
+              <Field.Label>Add labels</Field.Label>
+              <MultiSelect
+                v-model="addLabels"
+                placeholder="Choose labels"
+              >
+                <MultiSelect.Trigger />
+                <MultiSelect.Content>
+                  <MultiSelect.Option
+                    v-for="label in knownLabels"
+                    :key="label"
+                    :value="label"
+                    >{{ label }}</MultiSelect.Option
+                  >
+                </MultiSelect.Content>
+              </MultiSelect>
+            </Field>
+            <Field v-if="presentLabels.length">
+              <Field.Label>Remove labels</Field.Label>
+              <MultiSelect
+                v-model="removeLabels"
+                placeholder="Choose labels"
+              >
+                <MultiSelect.Trigger />
+                <MultiSelect.Content>
+                  <MultiSelect.Option
+                    v-for="label in presentLabels"
+                    :key="label"
+                    :value="label"
+                    >{{ label }}</MultiSelect.Option
+                  >
+                </MultiSelect.Content>
+              </MultiSelect>
+            </Field>
+          </form>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              size="medium"
+              @click="labelsOpen = false"
+            />
+            <Button
+              label="Save labels"
+              kind="primary"
+              size="medium"
+              :disabled="!addLabels.length && !removeLabels.length"
+              @click="confirmLabels"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
 
     <ConfirmDialog

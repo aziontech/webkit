@@ -13,16 +13,19 @@
  "useWhen": [
   "Read-only code in docs, API examples or configuration previews that readers copy from.",
   "The same snippet in several languages, switched by tabs (one `tabs` entry per language).",
-  "Showing a change as a diff (`lineChanges`) or pointing at one line (`highlightedLine`) on the active tab."
+  "Showing a change as a diff (`lineChanges`) or pointing at one line (`highlightedLine`) on the active tab.",
+  "Showing what changed between two versions of a file — a configuration before and after a deploy, the code a release replaces — by passing the previous version as the tab's `original`: the block computes the line diff itself and draws it unified or side by side (`diffView`)."
  ],
  "avoidWhen": [
   "The content is build or deploy output with timestamps and log levels → use `log-view`.",
   "It is a marketing band that pairs a claim with its code → use `code-split`, or `sticky-scroll-code` for several claims.",
   "It is a terminal session of CLI commands on a product page → use `cli-terminal`.",
-  "You only need to copy one short value (a token, an ID) without showing a block → use `copy-button`."
+  "You only need to copy one short value (a token, an ID) without showing a block → use `copy-button`.",
+  "The reader edits the new version beside the old one → use `code-editor` in diff mode. A read-only diff is always this block with `original`, never a read-only code editor."
  ],
  "related": [
   "copy-button` — the copy control CodeBlock embeds; use it alone for one-line values.",
+  "code-editor` — the editable surface; its diff mode is for editing beside an original, while a read-only diff is this block.",
   "log-view` — terminal-style viewer for CI and deploy logs.",
   "code-split` — page section built around one code sample.",
   "scroll-area` — the scroll container the code region runs in."
@@ -31,6 +34,7 @@
   "Put the source on each tab's `code`. There is no top-level `code` prop, and a tab without a `value` or a `code` is dropped.",
   "Set `language` on every tab. Only JavaScript/TypeScript, shell, HCL, GraphQL and Markdown are tokenised; anything else renders as flat text.",
   "Use `default-value` for the initial tab, and `v-model` only when something outside the block must follow the selected tab.",
+  "Prefer `original` to a hand-written `lineChanges` list whenever both versions are at hand: the diff stays right when either version changes. Keep `unified` in narrow columns and use `split` where the block has room for two columns of code.",
   "Set `:copyable=\"false\"` on decorative blocks, and `:bordered=\"false\"` when the block sits inside a surface that already frames it.",
   "Keep `animate-lines` for marketing layouts; leave it off in docs and console screens.",
   "Do: keep a command block to what the reader runs — the copy control copies exactly that. Put what it prints in a second block with `kind=\"output\"` (or in prose).",
@@ -130,6 +134,13 @@
    "doc": "Draw the outer card border around the block. On by default; set `:bordered=\"false\"` to render the block flush when it sits inside a surface that already frames it. Internal dividers (tab header, filename bar) are unaffected."
   },
   {
+   "name": "diffView",
+   "type": "'unified' | 'split'",
+   "default": "'unified'",
+   "required": "false",
+   "doc": "How a tab with an `original` draws the diff the block computes: `unified` (one column) or `split` (side by side)."
+  },
+  {
    "name": "modelValue",
    "type": "string | undefined",
    "default": "undefined",
@@ -140,7 +151,7 @@
  "events": [
   {
    "name": "copy",
-   "payload": "string",
+   "payload": "(event: MouseEvent, code: string)",
    "notes": "Fires after the active tab code is copied to the clipboard."
   }
  ],

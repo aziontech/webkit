@@ -1,11 +1,8 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import Field from '@aziontech/webkit/field'
@@ -682,91 +679,85 @@
       side="right"
       size="small"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            class="flex h-full min-h-0 flex-col"
-            novalidate
-            @submit.prevent="submitUpload"
-          >
-            <PanelHeader class="w-full">
-              <DrawerTitle>Upload certificate</DrawerTitle>
-              <DrawerClose />
-            </PanelHeader>
-            <PanelContent>
-              <div class="flex flex-col gap-(--spacing-md)">
-                <DrawerDescription>
-                  A trusted CA certificate in PEM format. It is added to the account and picked for
-                  this workload.
-                </DrawerDescription>
-                <Field>
-                  <Field.Label for="protocols-upload-name">
-                    <span class="text-label-md">Name</span>
-                  </Field.Label>
-                  <Input
-                    id="protocols-upload-name"
-                    v-model="upload.name"
-                    size="large"
-                    class="w-full"
-                    placeholder="partners-ca"
-                    autocomplete="off"
-                    :required="uploadErrors.name?.kind === 'required'"
-                    :invalid="uploadErrors.name?.kind === 'invalid'"
-                    :aria-describedby="
-                      uploadErrors.name ? 'protocols-upload-name-message' : undefined
-                    "
-                  />
-                  <HelperText
-                    v-if="uploadErrors.name"
-                    id="protocols-upload-name-message"
-                    :kind="uploadErrors.name.kind"
-                    :label="uploadErrors.name.message"
-                  />
-                </Field>
-                <Field>
-                  <Field.Label for="protocols-upload-pem">
-                    <span class="text-label-md">Certificate</span>
-                  </Field.Label>
-                  <Textarea
-                    id="protocols-upload-pem"
-                    v-model="upload.pem"
-                    class="w-full"
-                    :rows="8"
-                    placeholder="-----BEGIN CERTIFICATE-----"
-                    :required="uploadErrors.pem?.kind === 'required'"
-                    :invalid="uploadErrors.pem?.kind === 'invalid'"
-                    :aria-describedby="
-                      uploadErrors.pem ? 'protocols-upload-pem-message' : undefined
-                    "
-                  />
-                  <HelperText
-                    v-if="uploadErrors.pem"
-                    id="protocols-upload-pem-message"
-                    :kind="uploadErrors.pem.kind"
-                    :label="uploadErrors.pem.message"
-                  />
-                </Field>
-              </div>
-            </PanelContent>
-            <PanelFooter>
-              <div class="flex w-full justify-end gap-(--spacing-xs)">
-                <Button
-                  type="button"
-                  label="Cancel"
-                  kind="outlined"
-                  @click="uploadOpen = false"
+      <DrawerContent>
+        <form
+          class="flex h-full min-h-0 flex-col"
+          novalidate
+          @submit.prevent="submitUpload"
+        >
+          <PanelHeader class="w-full">
+            <DrawerTitle>Upload certificate</DrawerTitle>
+          </PanelHeader>
+          <PanelContent>
+            <div class="flex flex-col gap-(--spacing-md)">
+              <DrawerDescription>
+                A trusted CA certificate in PEM format. It is added to the account and picked for
+                this workload.
+              </DrawerDescription>
+              <Field>
+                <Field.Label for="protocols-upload-name">
+                  <span class="text-label-md">Name</span>
+                </Field.Label>
+                <Input
+                  id="protocols-upload-name"
+                  v-model="upload.name"
+                  size="large"
+                  class="w-full"
+                  placeholder="partners-ca"
+                  autocomplete="off"
+                  :required="uploadErrors.name?.kind === 'required'"
+                  :invalid="uploadErrors.name?.kind === 'invalid'"
+                  :aria-describedby="
+                    uploadErrors.name ? 'protocols-upload-name-message' : undefined
+                  "
                 />
-                <Button
-                  type="submit"
-                  label="Upload"
-                  kind="primary"
+                <HelperText
+                  v-if="uploadErrors.name"
+                  id="protocols-upload-name-message"
+                  :kind="uploadErrors.name.kind"
+                  :label="uploadErrors.name.message"
                 />
-              </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+              </Field>
+              <Field>
+                <Field.Label for="protocols-upload-pem">
+                  <span class="text-label-md">Certificate</span>
+                </Field.Label>
+                <Textarea
+                  id="protocols-upload-pem"
+                  v-model="upload.pem"
+                  class="w-full"
+                  :rows="8"
+                  placeholder="-----BEGIN CERTIFICATE-----"
+                  :required="uploadErrors.pem?.kind === 'required'"
+                  :invalid="uploadErrors.pem?.kind === 'invalid'"
+                  :aria-describedby="uploadErrors.pem ? 'protocols-upload-pem-message' : undefined"
+                />
+                <HelperText
+                  v-if="uploadErrors.pem"
+                  id="protocols-upload-pem-message"
+                  :kind="uploadErrors.pem.kind"
+                  :label="uploadErrors.pem.message"
+                />
+              </Field>
+            </div>
+          </PanelContent>
+          <PanelFooter>
+            <div class="flex w-full justify-end gap-(--spacing-xs)">
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                @click="uploadOpen = false"
+              />
+              <Button
+                type="submit"
+                label="Upload"
+                kind="primary"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

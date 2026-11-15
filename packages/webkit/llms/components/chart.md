@@ -1,6 +1,6 @@
 # Chart
 
-> A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.
+> A cartesian chart — lines, areas, stacked areas, bars, mixed bars and lines, and scatter dots over one category axis — composed from parts the consumer places by hand. The root owns the data model (series + labels), the scales, the hover/keyboard state and the loading / empty / error surface; each part (`Chart.Grid`, `Chart.Axis`, `Chart.Brush`, `Chart.Line`, `Chart.Area`, `Chart.Bar`, `Chart.Scatter`, `Chart.Reference`, `Chart.Crosshair`, `Chart.Tooltip`, `Chart.Legend`) reads that state through context, so the consumer wires nothing. Rendering is in-house SVG and every color comes from the `--chart-*` role, so a chart re-themes with no per-theme code and adds no charting dependency.
 
 - Import: `import ChartRoot from '@aziontech/webkit/chart-root'`
 - Compound import (dot notation, not tree-shakeable): `import Chart from '@aziontech/webkit/chart'`
@@ -16,6 +16,7 @@
 - Two measures of one unit where one is the total and one a part — requests as bars, cached requests as a line (mixed).
 - How one measure spreads against another — response time by object size — as scatter dots on a `linear` label scale.
 - A volume histogram that filters a log or a table to a time span: add `Chart.Brush` and read `v-model:range`.
+- A measure against the limit it must stay under or the range it should stay in — a quota, an SLO, an alert threshold, a normal band: add `Chart.Reference` with a `value` (a line) or `from` and `to` (a band).
 
 ## Do
 
@@ -28,6 +29,8 @@
 - While data reloads, set `refetching` so the previous marks hold at reduced opacity instead of flashing a skeleton. Only the SVG marks dim (`data-[refetching]:[&_svg]:opacity-60`); legend values and other text stay at full contrast, because text at 60% opacity drops `--text-muted` under 4.5:1 (2.78:1 light, 3.14:1 dark).
 - Place `Chart.Brush` before the marks so the selection band sits under them. The page owns what a range means: bind `range` to `null` and filter on `update:range` when the data changes with the selection.
 - Use `labelScale="linear"` only with numeric or Date labels; keep `category` for buckets that are evenly spaced.
+- Name every `Chart.Reference` with a `label` (`SLO 300 ms`, `Quota`): the label is drawn at the inline end of the line and read in the chart summary, so the limit never rests on a dashed line alone. Color it with a `severity` only when crossing it means that state (`danger` for a hard limit, `warning` for an alert threshold); a plain target stays `neutral`.
+- Place a band (`from` + `to`) before the marks so it sits under them, and a line after the marks so it stays readable over them.
 - Draw event volume over contiguous time buckets (a log's histogram, requests per minute) with `Chart.Bar kind="histogram"`: solid columns that touch, segments without gaps, the tallest column at the top. Keep the default bars for separate categories that are compared one against another.
 
 ## Don’t
@@ -85,7 +88,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order. |
+| `default` | — | The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Reference, Crosshair, Tooltip, Legend, in paint order. |
 | `empty` | — | Replaces the default EmptyState. |
 | `empty-actions` | — | Actions under the default EmptyState, such as a Clear filters button or a setup link. Ignored when `empty` replaces it. |
 | `error` | — | Replaces the default danger Alert. |
@@ -100,6 +103,7 @@
 - `@aziontech/webkit/chart-grid`
 - `@aziontech/webkit/chart-legend`
 - `@aziontech/webkit/chart-line`
+- `@aziontech/webkit/chart-reference`
 - `@aziontech/webkit/chart-scatter`
 - `@aziontech/webkit/chart-tooltip`
 
@@ -135,6 +139,10 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - `chart-brush/chart-brush.vue` — turns on range selection and paints the selected span as a band in `var(--bg-selected)` edged with `var(--border-selected)`. Drag across the plot, or Shift + arrows then Enter; the root reports the span through `v-model:range`.
   - Props: _none_.
   - Events: _none_ (the span flows through the root's `v-model:range`).
+  - Slots: _none_.
+- `chart-reference/chart-reference.vue` — a reference on the value axis: a dashed 1px line across the plot at `value`, or a band between `from` and `to` (a 12% wash of the tone with dashed edges). Horizontal in a vertical chart, vertical in a horizontal one. The `label` sits at the inline end of a line (above it, below it when the line is near the top) or inside the top of a band, in `.text-label-sm` on a `var(--bg-surface)` halo. The reference registers with the root, so the value axis extends to show a line or band above the data unless the root sets `max`, and the chart summary reads it (`Rate limit at 1.5K.`). A reference outside the axis domain is not drawn; a band is clipped to the plot.
+  - Props: `value?: number` (default `undefined` — the line position), `from?: number` and `to?: number` (default `undefined` — the band bounds, in either order; used when `value` is unset), `label?: string` (default `''`), `severity?: 'neutral' | 'success' | 'warning' | 'danger' | 'info'` (default `'neutral'` — `neutral` draws in `var(--chart-label)`, a status in its `var(--chart-status-*)` role).
+  - Events: _none_.
   - Slots: _none_.
 - `chart-crosshair/chart-crosshair.vue` — the hairline at the active index in `var(--chart-crosshair)`.
   - Props: _none_.
@@ -176,7 +184,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 - A polite live region announces the span while it is drawn (`Selecting from … to …`) and once committed (`Selected from … to …`).
 - A polite live region announces the label and every visible series value at the active index.
 - A data table twin (labels by series) is always rendered, visually hidden unless `tableView`; every value is reachable without hover. Above 1,000 categories the hidden twin keeps an even sample of at most 1,000 rows (the first and last category included) so a 10k-point chart mounts within its runtime budget; every value stays reachable with the arrow keys and the live region, and `tableView` shows every row.
-- Every SVG part is `aria-hidden`; identity never rests on color alone — the legend names each series and the tooltip pairs each value with its name.
+- Every SVG part is `aria-hidden`; a `Chart.Reference` reaches assistive tech through the chart summary, which appends each reference (`Rate limit at 1.5K.`, `Normal range from 200 to 400.`); identity never rests on color alone — the legend names each series and the tooltip pairs each value with its name.
 - Legend entries are buttons with `aria-pressed`, at least 24px tall.
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color)` on the plot and every legend button.
 - Series colors clear 3:1 on the chart surfaces and on the tooltip in both themes (pinned by `packages/theme/test/chart-role.test.mjs`).
@@ -204,6 +212,9 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 | `chart.rangeDraft`      | `Selecting from {from} to {to}`                | —                     |
 | `chart.rangeSelected`   | `Selected from {from} to {to}`                 | —                     |
 | `chart.total`           | `Total`                                        | —                     |
+| `chart.reference`       | `Reference`                                    | `label` (Reference)   |
+| `chart.referenceLine`   | `{label} at {value}.`                          | —                     |
+| `chart.referenceBand`   | `{label} from {from} to {to}.`                 | —                     |
 
 - Formatting: `Intl.NumberFormat` (compact values) and `Intl.DateTimeFormat` (Date labels, in `timeZone`) with the locale from `WebkitProvider`.
 

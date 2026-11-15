@@ -1,5 +1,5 @@
 {
- "purpose": "A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row, a navigation list. It traps focus while open, closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger.",
+ "purpose": "A panel that slides in from an edge of the screen and keeps the page behind it in view. It holds secondary work that is too large or too long-lived for a dialog: filters, a long form, the details of a row, a navigation list. `Drawer.Content` is the whole modal: it teleports to `body`, renders the dimmed overlay, traps focus and scroll-locks the page, so the page behind cannot be clicked or tabbed to while it is open. The header gets the close (X) button on its own unless `closable` is false. It closes on Escape and on an overlay click when `dismissible`, and returns focus to its trigger. `:modal=\"false\"` is the one opt-out: no overlay, no focus trap, no scroll lock, for a side panel that works next to the page it talks about (as Radix `modal={false}`).",
  "useWhen": [
   "A panel that slides in from a screen edge for secondary tasks, filters, long forms, or navigation, while keeping page context.",
   "The content is too large or persistent for a centered modal."
@@ -14,7 +14,9 @@
  ],
  "bestPractices": [
   "Pick the edge (side) intentionally and keep it consistent across the app.",
-  "Trap focus while open and provide an obvious close affordance.",
+  "Do not add an overlay, a portal or a close button by hand: `Drawer.Content` renders the overlay and the portal, and the header renders the close button while `closable` is true (the default).",
+  "Keep the drawer modal (the default). Use `:modal=\"false\"` only when the reader must keep reading or using the page beside the drawer, such as an assistant that answers questions about the page.",
+  "While an action is in flight, set `:dismissible=\"false\"` and `:closable=\"false\"` together so nothing can close it.",
   "Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`."
  ]
 }

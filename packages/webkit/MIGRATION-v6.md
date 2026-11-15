@@ -390,12 +390,7 @@ code. The codemod rewrites `popover` `width`, `progress` `shape` and `skeleton` 
 | `popover`    | `PopoverWidth`                 | `PopoverSize`                                             |
 | `progress`   | `ProgressShape`                | `ProgressKind`                                            |
 
-`Dialog` and `Drawer` gain `closable`, separate from `dismissible`: `dismissible` gates `Esc` and the
-overlay click, `closable` gates the close button and the context `close()`. Left unset, `closable`
-follows `dismissible`, so `:dismissible="false"` still disables the close button in 6.x; that coupling
-is deprecated and in 7.0 an unset `closable` means `true`. To keep a locked dialog locked in 7.0, write
-`:closable="false"` next to `:dismissible="false"`; to keep only the close button working, write
-`:closable="true"`. `ConfirmDialog` opens with focus on Cancel and has no close button (an alert
+`ConfirmDialog` opens with focus on Cancel and has no close button (an alert
 dialog is answered with Cancel, the confirm button or `Esc`). `Popover` moves focus to its first
 control on open, and `Tab` past its last control closes it and moves on.
 
@@ -404,6 +399,26 @@ no longer a `role="status"` live region (announce a change you need heard throug
 `Drawer` widths come from container tokens (`small` 408px, `medium` 644px, `large` 1024px instead of
 384 / 672 / 1024 px); `Alert` `close` and `ErrorBoundary` `retry` now pass the triggering event
 (handlers that take no argument keep working).
+
+### `Dialog` and `Drawer`: overlay and close button by default
+
+A dialog or drawer used to need four hand-assembled pieces (`DialogPortal`, `DialogOverlay`,
+`DialogContent`, `DialogClose`), and leaving out the overlay left the page behind clickable. In v6
+`DialogContent` / `DrawerContent` is the whole modal: it teleports to `body`, renders the dimmed
+overlay, traps focus and locks page scroll. `dialog-portal`, `dialog-overlay`, `drawer-portal` and
+`drawer-overlay` are removed (the codemod lists them as `MANUAL`), and so are `Dialog.Portal`,
+`Dialog.Overlay`, `Drawer.Portal` and `Drawer.Overlay` on the compounds.
+
+- Delete the `<DialogPortal>` / `<DrawerPortal>` wrapper (keep what it held) and the
+  `<DialogOverlay />` / `<DrawerOverlay />` element.
+- `closable` now defaults to `true` on `Dialog` and `Drawer` and means "show the close (X) button":
+  the content's `PanelHeader` gets it at its end on its own. Delete a `<DialogClose />` /
+  `<DrawerClose />` you placed in the header, or you get two. `:closable="false"` removes it;
+  `DialogClose` / `DrawerClose` stay for a custom header and always close.
+- `dismissible` gates only `Esc` and the overlay click; it no longer disables the close button. To
+  lock a dialog while it saves, write `:closable="!saving"` next to `:dismissible="!saving"`.
+- A drawer that must leave the page beside it usable (an assistant next to the page it talks about)
+  takes `:modal="false"`: no overlay, no focus trap, no scroll lock, `aria-modal="false"`.
 
 ### Test ids
 

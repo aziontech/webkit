@@ -52,13 +52,13 @@
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `copy` | `string` | Fires with `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead. |
+| `copy` | `(event: MouseEvent, value: string)` | Fires with the click and `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead. |
 | `close` | `MouseEvent` | Fires with the click on the dismiss button (`closable`), after the chip removes itself; whether it stays away is the page's decision. |
 
 ## v-model
 
-| Model          | Type      | Default | Emits         | Notes                                                                                                                                 |
-| -------------- | --------- | ------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| Model          | Type      | Default | Emits         | Notes                                                                                                                                                                             |
+| -------------- | --------- | ------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model:open` | `boolean` | `true`  | `update:open` | Whether the chip is shown, via `defineModel('open')`. The dismiss button sets it to `false`; set it back to `true` to show the chip again. Unbound, the chip keeps its own state. |
 
 ## States

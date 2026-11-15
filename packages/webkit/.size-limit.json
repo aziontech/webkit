@@ -1174,7 +1174,7 @@
   {
     "name": "confirm-dialog",
     "path": "src/components/overlay/confirm-dialog/confirm-dialog.vue",
-    "limit": "24.85 KB"
+    "limit": "25.05 KB"
   },
   {
     "name": "webkit-provider",
@@ -2369,22 +2369,12 @@
   {
     "name": "dialog-content",
     "path": "src/components/overlay/dialog/dialog-content.vue",
-    "limit": "16.55 KB"
+    "limit": "17.65 KB"
   },
   {
     "name": "dialog-description",
     "path": "src/components/overlay/dialog/dialog-description.vue",
     "limit": "11.55 KB"
-  },
-  {
-    "name": "dialog-overlay",
-    "path": "src/components/overlay/dialog/dialog-overlay.vue",
-    "limit": "14.1 KB"
-  },
-  {
-    "name": "dialog-portal",
-    "path": "src/components/overlay/dialog/dialog-portal.vue",
-    "limit": "2.1 KB"
   },
   {
     "name": "dialog-title",
@@ -2414,22 +2404,12 @@
   {
     "name": "drawer-content",
     "path": "src/components/overlay/drawer/drawer-content.vue",
-    "limit": "16.4 KB"
+    "limit": "17.75 KB"
   },
   {
     "name": "drawer-description",
     "path": "src/components/overlay/drawer/drawer-description.vue",
     "limit": "11.55 KB"
-  },
-  {
-    "name": "drawer-overlay",
-    "path": "src/components/overlay/drawer/drawer-overlay.vue",
-    "limit": "12.75 KB"
-  },
-  {
-    "name": "drawer-portal",
-    "path": "src/components/overlay/drawer/drawer-portal.vue",
-    "limit": "1.95 KB"
   },
   {
     "name": "drawer-title",
@@ -2444,7 +2424,7 @@
   {
     "name": "panel",
     "path": "src/components/overlay/panel/index.ts",
-    "limit": "14.4 KB"
+    "limit": "14.6 KB"
   },
   {
     "name": "panel-root",

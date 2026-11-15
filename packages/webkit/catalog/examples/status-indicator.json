@@ -8,7 +8,7 @@
   {
    "name": "Status",
    "summary": "All status variants side by side.",
-   "sfc": "<script setup>\n  import StatusIndicator from '@aziontech/webkit/status-indicator'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-3)\">\n    <StatusIndicator\n      severity=\"success\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"info\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"neutral\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"warning\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"alt\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"danger\"\n      label=\"Status\"\n    />\n  </div>\n</template>"
+   "sfc": "<script setup>\n  import StatusIndicator from '@aziontech/webkit/status-indicator'\n</script>\n\n<template>\n  <div class=\"flex flex-wrap items-center gap-(--spacing-3)\">\n    <StatusIndicator\n      severity=\"success\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"info\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"neutral\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"warning\"\n      label=\"Status\"\n    />\n    <StatusIndicator\n      severity=\"danger\"\n      label=\"Status\"\n    />\n  </div>\n</template>"
   },
   {
    "name": "Loading",

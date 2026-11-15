@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/dashboard/analytics-dashboard/analytics-dashboard.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/dashboard/analytics-dashboard")`
-- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `utils/csv`
+- Components: [Alert](../../../components/alert.md), [Chart](../../../components/chart.md), [ChartCard](../../../components/chart-card.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Hint](../../../components/hint.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Link](../../../components/link.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelHeader`, [Select](../../../components/select.md), [StatTile](../../../components/stat-tile.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md), `utils/csv`
 - Skills: `webkit-data-viz`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -77,7 +77,7 @@ Switches a time series between Line and Bar. Only on time series, never on a ran
 
 Names each icon-only control on hover and focus (`Expand`, `More options`).
 
-### H. Expand — `IconButton`, `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `DialogClose`, `PanelContent` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `PanelContent` (optional)
 
 Opens the card at full size. Icon-only, with an `aria-label` that names the card
 (`Expand Requests over time`). It opens one large `Dialog` for the page: the card title as the
@@ -220,11 +220,8 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
 <script setup lang="ts">
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
-  import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -740,7 +737,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -828,7 +825,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -919,7 +916,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -993,7 +990,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               >
                 <Tag
                   label="Sum"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                   icon="pi pi-calculator"
                 />
@@ -1099,115 +1096,111 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
       v-model:open="expanded"
       size="large"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DialogTitle>{{ expandedReport.label }}</DialogTitle>
-              <DialogDescription>{{ expandedReport.description }}</DialogDescription>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DialogTitle>{{ expandedReport.label }}</DialogTitle>
+            <DialogDescription>{{ expandedReport.description }}</DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex min-w-0 flex-col gap-(--spacing-md)">
+            <div v-if="expandedId === 'requests' || expandedId === 'status-codes'">
+              <ToggleGroup
+                v-model="expandedForm"
+                :options="forms"
+                size="small"
+                :aria-label="`Chart form for ${expandedReport.label}`"
+              />
             </div>
-            <DialogClose />
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex min-w-0 flex-col gap-(--spacing-md)">
-              <div v-if="expandedId === 'requests' || expandedId === 'status-codes'">
-                <ToggleGroup
-                  v-model="expandedForm"
-                  :options="forms"
+            <Chart
+              key="chart-1"
+              v-if="expandedId === 'requests'"
+              :series="requests"
+              :labels="labels"
+              :format-value="formatters.count"
+              :height="420"
+              empty-title="No traffic yet"
+              empty-description="Metrics appear here once a service serves requests."
+              :aria-label="expandedReport.label"
+            >
+              <Chart.Grid />
+              <Chart.Axis kind="y" />
+              <Chart.Axis kind="x" />
+              <Chart.Bar v-if="requestsForm === 'bar'" />
+              <Chart.Area v-else />
+              <Chart.Crosshair />
+              <Chart.Tooltip />
+              <Chart.Legend total />
+            </Chart>
+            <Chart
+              key="chart-2"
+              v-else-if="expandedId === 'status-codes'"
+              :series="statusCodes"
+              :labels="labels"
+              :format-value="formatters.count"
+              :height="420"
+              empty-title="No traffic yet"
+              empty-description="Metrics appear here once a service serves requests."
+              :aria-label="expandedReport.label"
+            >
+              <Chart.Grid />
+              <Chart.Axis kind="y" />
+              <Chart.Axis kind="x" />
+              <Chart.Bar
+                v-if="statusForm === 'bar'"
+                stacked
+              />
+              <Chart.Line v-else />
+              <Chart.Crosshair />
+              <Chart.Tooltip />
+              <Chart.Legend total />
+            </Chart>
+            <Chart
+              key="chart-3"
+              v-else-if="expandedId === 'countries'"
+              :series="countryRequests"
+              :labels="countries"
+              orientation="horizontal"
+              :format-value="formatters.count"
+              :height="420"
+              empty-title="No traffic yet"
+              empty-description="Metrics appear here once a service serves requests."
+              :aria-label="expandedReport.label"
+            >
+              <Chart.Grid />
+              <Chart.Axis kind="y" />
+              <Chart.Axis kind="x" />
+              <Chart.Bar labeled />
+              <Chart.Tooltip />
+            </Chart>
+            <TableRoot
+              v-else
+              :data="hosts"
+              :columns="hostColumns"
+              row-key="id"
+              enable-sorting
+              paginated
+              :page-size="10"
+              density="compact"
+              bordered
+            >
+              <template #empty>
+                <EmptyState
                   size="small"
-                  :aria-label="`Chart form for ${expandedReport.label}`"
+                  icon="pi pi-chart-line"
+                  title="No traffic yet"
+                  description="Metrics appear here once a service serves requests."
                 />
-              </div>
-              <Chart
-                key="chart-1"
-                v-if="expandedId === 'requests'"
-                :series="requests"
-                :labels="labels"
-                :format-value="formatters.count"
-                :height="420"
-                empty-title="No traffic yet"
-                empty-description="Metrics appear here once a service serves requests."
-                :aria-label="expandedReport.label"
-              >
-                <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
-                <Chart.Bar v-if="requestsForm === 'bar'" />
-                <Chart.Area v-else />
-                <Chart.Crosshair />
-                <Chart.Tooltip />
-                <Chart.Legend total />
-              </Chart>
-              <Chart
-                key="chart-2"
-                v-else-if="expandedId === 'status-codes'"
-                :series="statusCodes"
-                :labels="labels"
-                :format-value="formatters.count"
-                :height="420"
-                empty-title="No traffic yet"
-                empty-description="Metrics appear here once a service serves requests."
-                :aria-label="expandedReport.label"
-              >
-                <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
-                <Chart.Bar
-                  v-if="statusForm === 'bar'"
-                  stacked
-                />
-                <Chart.Line v-else />
-                <Chart.Crosshair />
-                <Chart.Tooltip />
-                <Chart.Legend total />
-              </Chart>
-              <Chart
-                key="chart-3"
-                v-else-if="expandedId === 'countries'"
-                :series="countryRequests"
-                :labels="countries"
-                orientation="horizontal"
-                :format-value="formatters.count"
-                :height="420"
-                empty-title="No traffic yet"
-                empty-description="Metrics appear here once a service serves requests."
-                :aria-label="expandedReport.label"
-              >
-                <Chart.Grid />
-                <Chart.Axis kind="y" />
-                <Chart.Axis kind="x" />
-                <Chart.Bar labeled />
-                <Chart.Tooltip />
-              </Chart>
-              <TableRoot
-                v-else
-                :data="hosts"
-                :columns="hostColumns"
-                row-key="id"
-                enable-sorting
-                paginated
-                :page-size="10"
-                density="compact"
-                bordered
-              >
-                <template #empty>
-                  <EmptyState
-                    size="small"
-                    icon="pi pi-chart-line"
-                    title="No traffic yet"
-                    description="Metrics appear here once a service serves requests."
-                  />
-                </template>
+              </template>
 
-                <template #cell-requests="{ row }">
-                  <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
-                </template>
-              </TableRoot>
-            </div>
-          </PanelContent>
-        </DialogContent>
-      </DialogPortal>
+              <template #cell-requests="{ row }">
+                <span class="tabular-nums">{{ formatters.count(row.requests) }}</span>
+              </template>
+            </TableRoot>
+          </div>
+        </PanelContent>
+      </DialogContent>
     </Dialog>
   </div>
 </template>

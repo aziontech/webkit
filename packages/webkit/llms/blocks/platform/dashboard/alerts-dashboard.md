@@ -101,7 +101,7 @@ Figures use tabular numbers.
 ### M. Alert status — `Table`, `Tag` (required)
 
 The status of an alert in the Open alerts table (`Open`, `Investigating`). It is a state,
-so it is a `Table.CellStatus` (one semantic `Tag`), separate from severity. The alert type beside it stays a plain secondary `Tag`: it is a category, not a state.
+so it is a `Table.CellStatus` (one semantic `Tag`), separate from severity. The alert type beside it stays a plain neutral `Tag`: it is a category, not a state.
 
 ## Do
 
@@ -660,7 +660,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
   ]
 
   const statusSeverity: Record<AlertStatus, TagSeverity> = {
-    Open: 'secondary',
+    Open: 'neutral',
     Investigating: 'info'
   }
 
@@ -855,7 +855,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <template #cell-type="{ row }">
                 <Tag
                   :label="row.type"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </template>

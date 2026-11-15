@@ -29,7 +29,7 @@
   "Localize `ariaLabel` and `copiedLabel`: each is both the accessible name and the tooltip text.",
   "Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.",
   "The click stops propagation, so it is safe inside clickable rows and cards.",
-  "Keep the `transparent` / `small` defaults in dense rows."
+  "Set `size=\"small\"` in dense rows; the default is `large`, the house size of an action."
  ],
  "props": [
   {
@@ -63,7 +63,7 @@
   {
    "name": "size",
    "type": "'small' | 'medium' | 'large'",
-   "default": "'small'",
+   "default": "'large'",
    "required": "false",
    "doc": "Size token forwarded to `IconButton`."
   },
@@ -78,8 +78,8 @@
  "events": [
   {
    "name": "copy",
-   "payload": "string",
-   "notes": "Emitted after a successful clipboard write with the copied value."
+   "payload": "(event: MouseEvent, value: string)",
+   "notes": "Emitted after a successful clipboard write; `value` is the copied text."
   }
  ],
  "slots": [],

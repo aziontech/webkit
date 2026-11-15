@@ -213,6 +213,7 @@ Each variant is the same screen in another state: `get_pattern("platform/delete/
           :value="name"
           :aria-label="`Copy ${name}`"
           copied-label="Copied"
+          size="small"
         />
         <span>to confirm.</span>
       </p>

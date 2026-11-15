@@ -1,8 +1,9 @@
 {
- "purpose": "A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Alert`](./alert.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface.",
+ "purpose": "A transient, non-blocking notification system: mount the `<Toaster>` region **once** near the application root, then raise notifications imperatively from anywhere via the exported `toast()` function (`toast('Saved')`) and its type shortcuts (`toast.success`, `toast.error`, `toast.info`, `toast.warning`, `toast.loading`, `toast.progress`, `toast.promise`, `toast.dismiss`). Each notification is a self-dismissing card that stacks in a corner, animates in and out, and is announced to assistive technology — without stealing focus. Unlike the sibling [`Alert`](./alert.md), which is an **inline** banner the consumer places in the document flow and controls with `v-model`-style props, Toast is a **transient overlay** stack driven by an imperative call and a shared reactive store, so the call site needs no local visibility state and no markup of its own. The card surface, typography, and severity icons follow the Figma design (see `figma` in the frontmatter). The interaction model follows the established mount-once toast pattern (a single anchored region + imperative trigger + auto-dismiss stack that groups collapsed and expands on hover), built on our tokens, our semantic animation utilities, and our composition/compound-API conventions per [`.claude/rules/migration.md`](../.claude/rules/migration.md); nothing is inherited from any external library. Each severity tints only its leading **icon** via the matching `-contrast` token (`var(--success-contrast)` / `var(--warning-contrast)` / `var(--danger-contrast)` / `var(--info-contrast)`) over the shared `var(--bg-surface-raised)` surface.",
  "useWhen": [
   "Confirming the result of an action that finished out of view or in the background: saved, deployed, copied.",
   "Following an async operation from start to finish with `toast.promise`, or `toast.loading` plus a dismiss by id.",
+  "Following an operation whose completion is known (an upload, an import, a migration) with `toast.progress`: a bar and its percentage, updated in place by id, with a Cancel action.",
   "A short notice that is not tied to one place on the page and can disappear on its own."
  ],
  "avoidWhen": [
@@ -13,7 +14,8 @@
  "related": [
   "message` — inline severity banner placed in the page flow; it stays until it is closed.",
   "dialog` — blocking modal for decisions and confirmations.",
-  "spinner` — rendered by the `loading` toast type."
+  "spinner` — rendered by the `loading` toast type.",
+  "progress` — rendered under the copy of a `toast.progress` toast."
  ],
  "bestPractices": [
   "Mount `Toaster` once at the app root (in `App.vue`, before the layout or `RouterView`), or install `ToastPlugin`. Never render a `Toaster` in a page, a view or a page-body block: only the first `Toaster` to mount is active and it gives the role up when it unmounts, so a page's copy is either inert or, when it mounted first, silences every toast in the app once the user leaves that page. A page only imports `toast`. A full page routed outside the console layout is still a route of the same app, not a root. `patterns:check` fails a block outside `blocks/shells/` that renders one.",
@@ -21,6 +23,7 @@
   "Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).",
   "A toast with an `action` (or `actions`) stays at least 10 s unless it sets its own `duration`, so a keyboard or screen-reader user has time to reach the action.",
   "duration: 0` keeps a toast until it is dismissed. Keep the returned id and call `toast.dismiss(id)`, or pass the same `id` to update the toast in place.",
+  "Use `toast.progress(message, value, { id })` when the percentage is known; keep calling it with the same `id` as the value moves (the card updates in place, no new announcement per step), and finish with `toast.success` or `toast.error` on that `id`. Use `toast.loading` when it is not known. Give a long operation a Cancel `action`.",
   "Don't make a toast the only path to an important action. It auto-dismisses and never takes focus."
  ]
 }

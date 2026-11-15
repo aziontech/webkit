@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/tokens/tokens.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/tokens")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, [Dialog](../../../components/dialog.md), `DialogTitle`, `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../../components/password-input.md), [PropertyFilter](../../../components/property-filter.md), [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), [CopyButton](../../../components/copy-button.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PasswordInput](../../../components/password-input.md), [PropertyFilter](../../../components/property-filter.md), [Select](../../../components/select.md), [SettingsSection](../../../components/settings-section.md), [Table](../../../components/table.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-form`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -51,7 +51,7 @@ The table's `#empty` slot holds `No matching tokens` with Clear filters; an acco
 
 When the list does not load, a danger `Alert` with Retry takes the table's place and the heading stays.
 
-### G. Create drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `SettingsSection`, `PanelFooter` (required)
+### G. Create drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent`, `SettingsSection`, `PanelFooter` (required)
 
 A medium right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. The fields lock while it submits.
 
@@ -59,7 +59,7 @@ A medium right `Drawer` with one `form`: General (Name, Description) and Expirat
 
 Name is required and unique; the error sits under the field (`This field is required.`, `A token with this name already exists. Use another name.`) and focus moves to it. Expires in is a `Select` of 7, 30, 60 and 90 days and 1 year (default 30), and the `HelperText` under it says the exact date it stops working.
 
-### I. One-time reveal — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
+### I. One-time reveal — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PasswordInput`, `CopyButton` (required)
 
 After Create the drawer closes and a `Dialog` opens: the token's name, a warning `Alert` that this is the only time the secret is shown, the secret in a read-only `PasswordInput` (masked, with show) and a `CopyButton` beside it. The `CopyButton` announces `Token copied` (its `copied-label`), the only announcement; a muted line repeats `Copied to the clipboard.` for sighted users, hidden from assistive technology, and the footer button changes from `I copied the token` to `Done`. Closing clears the secret from memory.
 
@@ -133,14 +133,9 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import CopyButton from '@aziontech/webkit/copy-button'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
@@ -239,7 +234,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const tokens = ref<Token[]>(seedTokens)
 
   const statusOf = (token: Token): TokenStatus => {
-    if (token.revoked) return { label: 'Revoked', severity: 'secondary' }
+    if (token.revoked) return { label: 'Revoked', severity: 'neutral' }
     const left = Math.ceil((token.expiresAt.getTime() - referenceTime) / DAY)
     if (left <= 0) return { label: 'Expired', severity: 'danger' }
     if (left <= 7)
@@ -640,121 +635,116 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       size="medium"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            class="flex min-h-0 flex-1 flex-col"
-            aria-label="Create Personal Token"
-            novalidate
-            @submit.prevent="submit"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>Create Personal Token</DrawerTitle>
-                <p class="text-body-sm text-(--text-muted)">
-                  The token acts as you, with your permissions, until it expires or you revoke it.
-                </p>
-              </div>
-              <DrawerClose />
-            </PanelHeader>
+      <DrawerContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          aria-label="Create Personal Token"
+          novalidate
+          @submit.prevent="submit"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>Create Personal Token</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                The token acts as you, with your permissions, until it expires or you revoke it.
+              </p>
+            </div>
+          </PanelHeader>
 
-            <PanelContent>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col border-0 p-0"
-                :disabled="submitting"
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="submitting"
+            >
+              <legend class="sr-only">Create Personal Token</legend>
+              <SettingsSection
+                title="General"
+                hint="How you will recognise the token in this list."
               >
-                <legend class="sr-only">Create Personal Token</legend>
-                <SettingsSection
-                  title="General"
-                  hint="How you will recognise the token in this list."
-                >
-                  <div class="flex w-full min-w-0 flex-col gap-(--spacing-lg)">
-                    <Field
-                      :required="!!errors.name && !form.name.trim()"
-                      :invalid="!!errors.name && !!form.name.trim()"
-                    >
-                      <Field.Label for="token-name">Name</Field.Label>
-                      <Input
-                        id="token-name"
-                        v-model="form.name"
-                        placeholder="deploy-pipeline"
-                        autocomplete="off"
-                        @update:model-value="errors.name = ''"
-                      />
-                      <Field.Description>{{
-                        errors.name ||
-                        'Name it after where it is used, such as the job or the tool.'
-                      }}</Field.Description>
-                    </Field>
-                    <Field>
-                      <Field.Label for="token-description">Description</Field.Label>
-                      <Textarea
-                        id="token-description"
-                        v-model="form.description"
-                        :rows="3"
-                      />
-                    </Field>
-                  </div>
-                </SettingsSection>
-                <SettingsSection
-                  title="Expiration"
-                  hint="Shorter is safer. A token cannot be extended."
-                >
-                  <Field>
-                    <Field.Label for="token-expiry">Expires in</Field.Label>
-                    <Select
-                      v-model="form.expiresIn"
-                      size="large"
-                      class="w-full"
-                      :display-value="expiryLabel"
-                    >
-                      <Select.Trigger
-                        id="token-expiry"
-                        aria-describedby="token-expiry-hint"
-                      />
-                      <Select.Content>
-                        <Select.Option
-                          v-for="option in expiryOptions"
-                          :key="option.value"
-                          :value="option.value"
-                        >
-                          {{ option.label }}
-                        </Select.Option>
-                      </Select.Content>
-                    </Select>
-                    <HelperText
-                      id="token-expiry-hint"
-                      kind="helper"
-                      >{{ expiryHint }}</HelperText
-                    >
+                <div class="flex w-full min-w-0 flex-col gap-(--spacing-lg)">
+                  <Field
+                    :required="!!errors.name && !form.name.trim()"
+                    :invalid="!!errors.name && !!form.name.trim()"
+                  >
+                    <Field.Label for="token-name">Name</Field.Label>
+                    <Input
+                      id="token-name"
+                      v-model="form.name"
+                      placeholder="deploy-pipeline"
+                      autocomplete="off"
+                      @update:model-value="errors.name = ''"
+                    />
+                    <Field.Description>{{
+                      errors.name || 'Name it after where it is used, such as the job or the tool.'
+                    }}</Field.Description>
                   </Field>
-                </SettingsSection>
-              </fieldset>
-            </PanelContent>
+                  <Field>
+                    <Field.Label for="token-description">Description</Field.Label>
+                    <Textarea
+                      id="token-description"
+                      v-model="form.description"
+                      :rows="3"
+                    />
+                  </Field>
+                </div>
+              </SettingsSection>
+              <SettingsSection
+                title="Expiration"
+                hint="Shorter is safer. A token cannot be extended."
+              >
+                <Field>
+                  <Field.Label for="token-expiry">Expires in</Field.Label>
+                  <Select
+                    v-model="form.expiresIn"
+                    size="large"
+                    class="w-full"
+                    :display-value="expiryLabel"
+                  >
+                    <Select.Trigger
+                      id="token-expiry"
+                      aria-describedby="token-expiry-hint"
+                    />
+                    <Select.Content>
+                      <Select.Option
+                        v-for="option in expiryOptions"
+                        :key="option.value"
+                        :value="option.value"
+                      >
+                        {{ option.label }}
+                      </Select.Option>
+                    </Select.Content>
+                  </Select>
+                  <HelperText
+                    id="token-expiry-hint"
+                    kind="helper"
+                    >{{ expiryHint }}</HelperText
+                  >
+                </Field>
+              </SettingsSection>
+            </fieldset>
+          </PanelContent>
 
-            <PanelFooter>
-              <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-                <Button
-                  label="Cancel"
-                  kind="outlined"
-                  size="medium"
-                  type="button"
-                  :disabled="submitting"
-                  @click="createOpen = false"
-                />
-                <Button
-                  label="Create Personal Token"
-                  kind="primary"
-                  size="medium"
-                  type="submit"
-                  :loading="submitting"
-                />
-              </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+          <PanelFooter>
+            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
+              <Button
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+                type="button"
+                :disabled="submitting"
+                @click="createOpen = false"
+              />
+              <Button
+                label="Create Personal Token"
+                kind="primary"
+                size="medium"
+                type="submit"
+                :loading="submitting"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
 
     <Dialog
@@ -762,65 +752,62 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       size="medium"
       @update:open="(open) => !open && closeReveal()"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <DialogTitle>Copy your new token</DialogTitle>
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <DialogDescription>
-                “{{ revealed.name }}” is ready. This is the only time the token is shown.
-              </DialogDescription>
-              <Alert
-                severity="warning"
-                size="small"
-                label="Copy the token and store it somewhere safe, such as a secret manager. After you close this dialog, it cannot be shown again; create a new one if it is lost."
-              />
-              <Field>
-                <Field.Label for="token-secret">Token</Field.Label>
-                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <div class="min-w-0 grow">
-                    <PasswordInput
-                      id="token-secret"
-                      :model-value="revealed.secret"
-                      readonly
-                      autocomplete="off"
-                      class="w-full"
-                    />
-                  </div>
-                  <CopyButton
-                    :value="revealed.secret"
-                    kind="outlined"
-                    size="large"
-                    aria-label="Copy token"
-                    copied-label="Token copied"
-                    @copy="onCopied"
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <DialogTitle>Copy your new token</DialogTitle>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <DialogDescription>
+              “{{ revealed.name }}” is ready. This is the only time the token is shown.
+            </DialogDescription>
+            <Alert
+              severity="warning"
+              size="small"
+              label="Copy the token and store it somewhere safe, such as a secret manager. After you close this dialog, it cannot be shown again; create a new one if it is lost."
+            />
+            <Field>
+              <Field.Label for="token-secret">Token</Field.Label>
+              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                <div class="min-w-0 grow">
+                  <PasswordInput
+                    id="token-secret"
+                    :model-value="revealed.secret"
+                    readonly
+                    autocomplete="off"
+                    class="w-full"
                   />
                 </div>
-                <p
-                  v-if="copied"
-                  class="text-body-xs text-(--text-muted)"
-                  aria-hidden="true"
-                >
-                  Copied to the clipboard.
-                </p>
-              </Field>
-            </div>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end">
-              <Button
-                :label="copied ? 'Done' : 'I copied the token'"
-                kind="primary"
-                size="medium"
-                @click="closeReveal"
-              />
-            </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+                <CopyButton
+                  :value="revealed.secret"
+                  kind="outlined"
+                  size="large"
+                  aria-label="Copy token"
+                  copied-label="Token copied"
+                  @copy="onCopied"
+                />
+              </div>
+              <p
+                v-if="copied"
+                class="text-body-xs text-(--text-muted)"
+                aria-hidden="true"
+              >
+                Copied to the clipboard.
+              </p>
+            </Field>
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end">
+            <Button
+              :label="copied ? 'Done' : 'I copied the token'"
+              kind="primary"
+              size="medium"
+              @click="closeReveal"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
 
     <ConfirmDialog
@@ -829,6 +816,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       :description="`Scripts and tools that use “${pending?.name ?? ''}” stop working right away. You cannot undo this.`"
       confirm-label="Revoke token"
       :loading="working"
+      size="small"
       @confirm="revoke"
     />
 
@@ -837,6 +825,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       title="Delete token"
       :description="`“${pending?.name ?? ''}” no longer works; deleting removes it from this list.`"
       confirm-label="Delete token"
+      size="small"
       @confirm="remove"
     />
   </div>

@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/create/deploy-progress-dialog/deploy-progress-dialog.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deploy-progress-dialog")`
-- Components: [Button](../../../components/button.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, [Dialog](../../../components/dialog.md), `DialogTitle`, [EmptyState](../../../components/empty-state.md), [Item](../../../components/item.md), [OutcomeMark](../../../components/outcome-mark.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Button](../../../components/button.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [EmptyState](../../../components/empty-state.md), [Item](../../../components/item.md), [OutcomeMark](../../../components/outcome-mark.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Progress](../../../components/progress.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -31,9 +31,9 @@ The modal progress of one deploy that sends several Deployment Settings live, ea
 
 ### A. Drop confirm — `Dialog`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `Tag`, `PanelFooter`, `Button` (required on the drop path)
 
-Titled "New production deployment" (the environment in lower case), with a `DialogClose` in the header. The service name with the environment as a secondary `Tag`, one sentence on what the files replace and how many Deployment Settings the environment deploys with, then the dropped folder: its file count and total size, and a scrollable list (focusable, named "Dropped files") of the first 100 paths in code type with their sizes, and an "and N more" line for the rest. Sizes go through `Intl.NumberFormat` with `style: 'unit'`. The footer has Cancel (transparent) and "Deploy to Production" (primary).
+Titled "New production deployment" (the environment in lower case), with the dialog's own close button in the header. The service name with the environment as a secondary `Tag`, one sentence on what the files replace and how many Deployment Settings the environment deploys with, then the dropped folder: its file count and total size, and a scrollable list (focusable, named "Dropped files") of the first 100 paths in code type with their sizes, and an "and N more" line for the rest. Sizes go through `Intl.NumberFormat` with `style: 'unit'`. The footer has Cancel (transparent) and "Deploy to Production" (primary).
 
-### B. Progress frame — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeMark` (required)
+### B. Progress frame — `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeMark` (required)
 
 `size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying 2 of 5…" while running, "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeMark` stands before the title: success when all deployed, warning when some failed.
 
@@ -116,8 +116,6 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Button from '@aziontech/webkit/button'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -180,7 +178,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   const FAILURE = 'A rule points at an integration that does not exist, so it kept its version.'
 
   const STATUS_TAG: Record<DeployStatus, StatusMeta> = {
-    queued: { label: 'Queued', severity: 'secondary' },
+    queued: { label: 'Queued', severity: 'neutral' },
     deploying: { label: 'Deploying', severity: 'info' },
     done: { label: 'Done', severity: 'success' },
     failed: { label: 'Failed', severity: 'danger' }
@@ -378,143 +376,141 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
       v-model:open="open"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 items-start gap-(--spacing-sm)">
-              <OutcomeMark
-                v-if="!running"
-                :severity="outcomeSeverity"
-                size="large"
-                :animated="settledOnce"
-                :aria-label="counts.failed ? 'Some failed' : 'Succeeded'"
-                class="shrink-0"
-              />
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DialogTitle>{{ title }}</DialogTitle>
-                <DialogDescription>
-                  {{ tally }}
-                </DialogDescription>
-              </div>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 items-start gap-(--spacing-sm)">
+            <OutcomeMark
+              v-if="!running"
+              :severity="outcomeSeverity"
+              size="large"
+              :animated="settledOnce"
+              :aria-label="counts.failed ? 'Some failed' : 'Succeeded'"
+              class="shrink-0"
+            />
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DialogTitle>{{ title }}</DialogTitle>
+              <DialogDescription>
+                {{ tally }}
+              </DialogDescription>
             </div>
-          </PanelHeader>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                <Progress
-                  :value="percent"
-                  aria-label="Deploy progress"
-                />
-                <p
-                  v-if="activeName"
-                  class="truncate text-body-sm text-(--text-muted)"
-                >
-                  Deploying {{ activeName }}
-                </p>
-              </div>
-
-              <ToggleGroup
-                v-model="filter"
-                :options="filterOptions"
-                aria-label="Filter deploys by status"
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+              <Progress
+                :value="percent"
+                aria-label="Deploy progress"
                 size="small"
-                class="self-start"
               />
-
-              <Item.List
-                v-if="visibleItems.length"
-                aria-label="Deployment Settings"
+              <p
+                v-if="activeName"
+                class="truncate text-body-sm text-(--text-muted)"
               >
-                <Item
-                  v-for="item in visibleItems"
-                  :key="item.id"
-                  kind="outlined"
-                  size="small"
-                >
-                  <Item.Media>
-                    <OutcomeMark
-                      v-if="MARK[item.status]"
-                      :severity="MARK[item.status]"
-                      size="small"
-                      :animated="settledOnce || running"
-                      :aria-label="STATUS_TAG[item.status].label"
-                    />
-                    <i
-                      v-else
-                      class="pi pi-sliders-h text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </Item.Media>
-                  <Item.Content>
-                    <Item.Title>{{ item.name }}</Item.Title>
-                    <Item.Description>{{ item.environments }}</Item.Description>
-                    <span
-                      v-if="item.message"
-                      class="text-body-xs text-(--danger-contrast)"
-                    >
-                      {{ item.message }}
-                    </span>
-                  </Item.Content>
-                  <Item.Actions>
-                    <span
-                      v-if="item.status === 'deploying'"
-                      class="flex size-4 shrink-0 text-(--text-muted)"
-                    >
-                      <Spinner class="w-full" />
-                    </span>
-                    <Tag
-                      :label="STATUS_TAG[item.status].label"
-                      :severity="STATUS_TAG[item.status].severity"
-                      size="small"
-                    />
-                  </Item.Actions>
-                </Item>
-              </Item.List>
-              <EmptyState
-                v-else
+                Deploying {{ activeName }}
+              </p>
+            </div>
+
+            <ToggleGroup
+              v-model="filter"
+              :options="filterOptions"
+              aria-label="Filter deploys by status"
+              size="small"
+              class="self-start"
+            />
+
+            <Item.List
+              v-if="visibleItems.length"
+              aria-label="Deployment Settings"
+            >
+              <Item
+                v-for="item in visibleItems"
+                :key="item.id"
+                kind="outlined"
                 size="small"
-                icon="pi pi-filter"
-                :title="emptyLabel"
-              />
-              <span
-                class="sr-only"
-                role="status"
               >
-                {{ running ? '' : title }}
-              </span>
-            </div>
-          </PanelContent>
+                <Item.Media>
+                  <OutcomeMark
+                    v-if="MARK[item.status]"
+                    :severity="MARK[item.status]"
+                    size="small"
+                    :animated="settledOnce || running"
+                    :aria-label="STATUS_TAG[item.status].label"
+                  />
+                  <i
+                    v-else
+                    class="pi pi-sliders-h text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </Item.Media>
+                <Item.Content>
+                  <Item.Title>{{ item.name }}</Item.Title>
+                  <Item.Description>{{ item.environments }}</Item.Description>
+                  <span
+                    v-if="item.message"
+                    class="text-body-xs text-(--danger-contrast)"
+                  >
+                    {{ item.message }}
+                  </span>
+                </Item.Content>
+                <Item.Actions>
+                  <span
+                    v-if="item.status === 'deploying'"
+                    class="flex size-4 shrink-0 text-(--text-muted)"
+                  >
+                    <Spinner class="w-full" />
+                  </span>
+                  <Tag
+                    :label="STATUS_TAG[item.status].label"
+                    :severity="STATUS_TAG[item.status].severity"
+                    size="small"
+                  />
+                </Item.Actions>
+              </Item>
+            </Item.List>
+            <EmptyState
+              v-else
+              size="small"
+              icon="pi pi-filter"
+              :title="emptyLabel"
+            />
+            <span
+              class="sr-only"
+              role="status"
+            >
+              {{ running ? '' : title }}
+            </span>
+          </div>
+        </PanelContent>
 
-          <PanelFooter>
-            <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-              <div
-                v-if="counts.failed && !running"
-                class="w-full md:w-fit"
-              >
-                <Button
-                  class="w-full"
-                  label="Retry failed"
-                  kind="outlined"
-                  size="medium"
-                  icon="pi pi-refresh"
-                  @click="retryFailed"
-                />
-              </div>
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  :label="running ? 'Hide' : 'Close'"
-                  kind="primary"
-                  size="medium"
-                  @click="open = false"
-                />
-              </div>
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <div
+              v-if="counts.failed && !running"
+              class="w-full md:w-fit"
+            >
+              <Button
+                class="w-full"
+                label="Retry failed"
+                kind="outlined"
+                size="medium"
+                icon="pi pi-refresh"
+                @click="retryFailed"
+              />
             </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                :label="running ? 'Hide' : 'Close'"
+                kind="primary"
+                size="medium"
+                @click="open = false"
+              />
+            </div>
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
   </div>
 </template>

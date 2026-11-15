@@ -19,32 +19,28 @@
         kind="primary"
       />
     </Drawer.Trigger>
-    <Drawer.Portal>
-      <Drawer.Overlay />
-      <Drawer.Content>
-        <Drawer.Header class="w-full">
-          <Drawer.Title>Drawer Title</Drawer.Title>
-          <Drawer.Close />
-        </Drawer.Header>
-        <Drawer.Body>
-          <Drawer.Description>
-            Side panel content. Uses the same Panel header, body, and footer regions as Dialog.
-          </Drawer.Description>
-        </Drawer.Body>
-        <Drawer.Footer>
-          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-            <Button
-              label="Cancel"
-              kind="outlined"
-              @click="open = false"
-            />
-            <Button
-              label="Save"
-              kind="primary"
-            />
-          </div>
-        </Drawer.Footer>
-      </Drawer.Content>
-    </Drawer.Portal>
+    <Drawer.Content>
+      <Drawer.Header class="w-full">
+        <Drawer.Title>Drawer Title</Drawer.Title>
+      </Drawer.Header>
+      <Drawer.Body>
+        <Drawer.Description>
+          Side panel content. Uses the same Panel header, body, and footer regions as Dialog.
+        </Drawer.Description>
+      </Drawer.Body>
+      <Drawer.Footer>
+        <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+          <Button
+            label="Cancel"
+            kind="outlined"
+            @click="open = false"
+          />
+          <Button
+            label="Save"
+            kind="primary"
+          />
+        </div>
+      </Drawer.Footer>
+    </Drawer.Content>
   </Drawer>
 </template>

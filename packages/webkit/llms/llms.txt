@@ -2,7 +2,7 @@
 
 > The Vue 3 design system of Azion (`@aziontech/webkit` 5.12.0): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.
 
-Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
+Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
 
 Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has a JSON API next to its page (`components/<name>.json`).
 
@@ -196,7 +196,9 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [QrCode](components/qr-code.md): A QR code drawn as SVG from a string, with no image request and no dependency: WebKit's own encoder (byte mode, UTF-8, versions 1–40, error correction L/M/Q/H) turns the value into modules, and the component draws the…
 - [SeverityTag](components/severity-tag.md): SeverityTag labels an item with its place on an ordered severity scale: critical, high, medium, low or info.
 - [ShellMockup](components/shell-mockup.md): A scaled, inert picture of an Azion Console screen, for marketing bands that show the product.
+- [StatusCode](components/status-code.md): StatusCode shows the HTTP status of a request, optionally preceded by its method, as one compact monospace pill whose colour comes from the status class: informational, success and redirect responses (1xx, 2xx, 3xx) s…
 - [Tag](components/tag.md): Compact status or category label with severity-based color coding.
+- [Timestamp](components/timestamp.md): Timestamp shows one moment — when a request ran, a deployment finished, a key was created — in the form the reader needs: the local date and time, the same in UTC, or a relative phrase (`5 minutes ago`) that updates e…
 - [TutorialPanel](components/tutorial-panel.md): The guide that runs tutorials beside the real product.
 
 ## Components: Data
@@ -342,6 +344,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 
 - [Breadcrumb](components/breadcrumb.md): Shows the page hierarchy so users can navigate back to parent views.
 - [BreadcrumbItem](components/breadcrumb-item.md): Single segment in a breadcrumb trail.
+- [ContextMenu](components/context-menu.md): Menu of actions that opens at the pointer when the user right-clicks an area, presses `Shift+F10` or the context-menu key inside it, or long-presses it on touch.
 - [DropdownMenu](components/dropdown-menu.md): Overlay menu that opens from a consumer-supplied trigger and renders a list of selectable options grouped into named sections.
 - [Link](components/link.md): Helps users move between views or sections.
 - [Menu](components/menu.md): A vertical, hierarchical navigation menu.
@@ -357,6 +360,7 @@ Installed copy: `node_modules/@aziontech/webkit/llms/`. Every component also has
 - [ConfirmDialog](components/confirm-dialog.md): A small confirmation dialog: a title, one sentence of description, and a Cancel plus a confirm button whose `kind` says how destructive the outcome is (`danger` for a removal or a discard, `primary` for a commit).
 - [Dialog](components/dialog.md): Modal surface above the page, built on the shared Panel shell.
 - [Drawer](components/drawer.md): A panel that slides in from an edge of the screen and keeps the page behind it in view.
+- [HoverCard](components/hover-card.md): Rich preview that appears beside a link or name when the pointer rests on it or keyboard focus reaches it, and goes away when both leave.
 - [Panel](components/panel.md): The shell inside an overlay: a sized surface with a header for the title and the close control, a body that scrolls and a footer for the actions.
 - [Popover](components/popover.md): Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a fl…
 - [Tooltip](components/tooltip.md): Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it.

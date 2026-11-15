@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/view/waf-tuning/waf-tuning.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/waf-tuning")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), `DialogClose`, `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, [Dialog](../../../components/dialog.md), `DialogTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [Table](../../../components/table.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [Table](../../../components/table.md), `TableRoot`, [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-tables`, `webkit-lists`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -42,7 +42,7 @@ A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours,
 
 A flush `Card` with a data-driven `TableRoot`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells are `Table.CellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
 
-### D. Allow dialog — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
+### D. Allow dialog — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 
 A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says requests these rules matched on their paths will no longer be blocked and how many allowed rules will be created (one per rule and path); a list of the selected rules with their threat and path count; and a required Reason `Textarea` with a description saying it is kept with the allowed rules. "Enter why these requests are legitimate." shows under it only after Allow rules is pressed with it empty, and focus moves to it. Footer: Cancel and primary Allow rules, which shows its loading state; the dialog cannot be dismissed while it runs.
 
@@ -118,11 +118,8 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -503,95 +500,92 @@ Each variant is the same screen in another state: `get_pattern("platform/view/wa
     <Dialog
       v-model:open="allowOpen"
       :dismissible="!allowing"
+      :closable="!allowing"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <form
-            class="flex min-h-0 flex-1 flex-col"
-            novalidate
-            aria-labelledby="waf-allow-title"
-            @submit.prevent="allow"
-          >
-            <PanelHeader class="w-full">
-              <DialogTitle id="waf-allow-title">
-                Allow {{ selected.length }} {{ selected.length === 1 ? 'rule' : 'rules' }}
-              </DialogTitle>
-              <DialogClose />
-            </PanelHeader>
-            <PanelContent>
-              <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                <Alert
-                  v-if="allowFailed"
-                  severity="danger"
-                  label="The allowed rules weren't created. Nothing changed in the rule set; try again."
-                />
-                <DialogDescription>
-                  Requests these rules matched on their paths will no longer be blocked. One allowed
-                  rule is created for each rule and path:
-                  {{ pathCount }} in all.
-                </DialogDescription>
-                <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0">
-                  <li
-                    v-for="row in selected"
-                    :key="row.ruleId"
-                    class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
+      <DialogContent>
+        <form
+          class="flex min-h-0 flex-1 flex-col"
+          novalidate
+          aria-labelledby="waf-allow-title"
+          @submit.prevent="allow"
+        >
+          <PanelHeader class="w-full">
+            <DialogTitle id="waf-allow-title">
+              Allow {{ selected.length }} {{ selected.length === 1 ? 'rule' : 'rules' }}
+            </DialogTitle>
+          </PanelHeader>
+          <PanelContent>
+            <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+              <Alert
+                v-if="allowFailed"
+                severity="danger"
+                label="The allowed rules weren't created. Nothing changed in the rule set; try again."
+              />
+              <DialogDescription>
+                Requests these rules matched on their paths will no longer be blocked. One allowed
+                rule is created for each rule and path:
+                {{ pathCount }} in all.
+              </DialogDescription>
+              <ul class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0">
+                <li
+                  v-for="row in selected"
+                  :key="row.ruleId"
+                  class="flex min-w-0 items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
+                >
+                  <span class="shrink-0 font-code text-(--text-default)">{{ row.ruleId }}</span>
+                  <span class="min-w-0 truncate"
+                    >{{ row.threat }} on {{ row.paths.length }}
+                    {{ row.paths.length === 1 ? 'path' : 'paths' }}</span
                   >
-                    <span class="shrink-0 font-code text-(--text-default)">{{ row.ruleId }}</span>
-                    <span class="min-w-0 truncate"
-                      >{{ row.threat }} on {{ row.paths.length }}
-                      {{ row.paths.length === 1 ? 'path' : 'paths' }}</span
-                    >
-                  </li>
-                </ul>
-                <div ref="reasonField">
-                  <Field
-                    required
-                    :invalid="reasonMissing"
-                    :disabled="allowing"
+                </li>
+              </ul>
+              <div ref="reasonField">
+                <Field
+                  required
+                  :invalid="reasonMissing"
+                  :disabled="allowing"
+                >
+                  <Field.Label>Reason</Field.Label>
+                  <Textarea
+                    v-model="reason"
+                    :rows="4"
+                    placeholder="Search accepts quotes in free-text queries."
+                  />
+                  <Field.Description
+                    >Kept with the allowed rules, so the next person knows why.</Field.Description
                   >
-                    <Field.Label>Reason</Field.Label>
-                    <Textarea
-                      v-model="reason"
-                      :rows="4"
-                      placeholder="Search accepts quotes in free-text queries."
-                    />
-                    <Field.Description
-                      >Kept with the allowed rules, so the next person knows why.</Field.Description
-                    >
-                    <Field.Error v-if="reasonMissing"
-                      >Enter why these requests are legitimate.</Field.Error
-                    >
-                  </Field>
-                </div>
+                  <Field.Error v-if="reasonMissing"
+                    >Enter why these requests are legitimate.</Field.Error
+                  >
+                </Field>
               </div>
-            </PanelContent>
-            <PanelFooter
-              ><div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-                <div class="w-full md:w-fit">
-                  <Button
-                    class="w-full"
-                    type="button"
-                    label="Cancel"
-                    kind="outlined"
-                    :disabled="allowing"
-                    @click="allowOpen = false"
-                  />
-                </div>
-                <div class="w-full md:w-fit">
-                  <Button
-                    class="w-full"
-                    type="submit"
-                    :label="allowFailed ? 'Try again' : 'Allow rules'"
-                    kind="primary"
-                    :loading="allowing"
-                  />
-                </div></div
-            ></PanelFooter>
-          </form>
-        </DialogContent>
-      </DialogPortal>
+            </div>
+          </PanelContent>
+          <PanelFooter
+            ><div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+              <div class="w-full md:w-fit">
+                <Button
+                  class="w-full"
+                  type="button"
+                  label="Cancel"
+                  kind="outlined"
+                  :disabled="allowing"
+                  @click="allowOpen = false"
+                />
+              </div>
+              <div class="w-full md:w-fit">
+                <Button
+                  class="w-full"
+                  type="submit"
+                  :label="allowFailed ? 'Try again' : 'Allow rules'"
+                  kind="primary"
+                  :loading="allowing"
+                />
+              </div></div
+          ></PanelFooter>
+        </form>
+      </DialogContent>
     </Dialog>
   </div>
 </template>

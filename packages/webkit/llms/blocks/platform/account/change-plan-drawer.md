@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/change-plan-drawer/change-plan-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/change-plan-drawer")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CardPricing](../../../components/card-pricing.md), [Checkbox](../../../components/checkbox.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [FeatureList](../../../components/feature-list.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CardPricing](../../../components/card-pricing.md), [Checkbox](../../../components/checkbox.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [FeatureList](../../../components/feature-list.md), [Field](../../../components/field.md), [Input](../../../components/input.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PaymentBrand](../../../components/payment-brand.md), [Select](../../../components/select.md), [Separator](../../../components/separator.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md)
 - Skills: `webkit-microcopy`, `webkit-ux-heuristics`, `webkit-form`, `webkit-errors`
 
 ## Asked as
@@ -34,87 +34,75 @@ The drawer the Billing page opens from its Subscription Plan card. The user want
 
 Two drawers, both `side="right"`, `size="large"`. The upgrade drawer opens on top of the plan drawer and, on success, closes both. Each reset to Yearly and to the account's address when reopened.
 
-### C. Drawer layer — `DrawerPortal` (required)
+### C. Drawer panel — `DrawerContent` (required)
 
-Mounts each drawer at the document root, so the upgrade drawer can stack over the plan drawer.
+The panel that holds header, body and footer, with an accessible name taken from its title. It mounts each drawer at the document root, so the upgrade drawer stacks over the plan drawer, and dims the page behind it with its own overlay.
 
-### D. Drawer backdrop — `DrawerOverlay` (required)
+### D. Drawer header — `PanelHeader` (required)
 
-Dims the page behind the open drawer.
+Holds the title at the top of each drawer, and the drawer adds its close button at the end, so the drawer can be left without scrolling to the footer.
 
-### E. Drawer panel — `DrawerContent` (required)
-
-The panel that holds header, body and footer, with an accessible name taken from its title.
-
-### F. Drawer header — `PanelHeader` (required)
-
-Holds the title and the close control at the top of each drawer.
-
-### G. Title — `DrawerTitle` (required)
+### E. Title — `DrawerTitle` (required)
 
 Names the task: `Change plan`, `Upgrade to Pro`. It labels the drawer for assistive technology.
 
-### H. Close — `DrawerClose` (required)
-
-Always present in the header, so the drawer can be left without scrolling to the footer.
-
-### I. Body — `PanelContent` (required)
+### F. Body — `PanelContent` (required)
 
 The scrolling body of each drawer, between header and footer.
 
-### J. Description — `DrawerDescription` (plan drawer)
+### G. Description — `DrawerDescription` (plan drawer)
 
 Says why the user is here before the cards: `Compare what each tier includes before moving the account onto it.`
 
-### K. Billing period — `ToggleGroup` (required)
+### H. Billing period — `ToggleGroup` (required)
 
 `Monthly` or `Yearly`, `aria-label="Billing period"`, defaulting to Yearly. In the plan drawer it reprices the cards; in the upgrade drawer it sits in the Charged card's header and switches the charge rows.
 
-### L. Plan — `CardPricing` (required)
+### I. Plan — `CardPricing` (required)
 
 One per tier, `kind="contained"`, aligned, actions at the bottom: price with prefix and suffix, details line, the `Current plan` tag on the current tier, a `FeatureList` headed by what it builds on (`All Free features, plus:`).
 
-### M. Divider — `Separator` (required)
+### J. Divider — `Separator` (required)
 
 Above the pricing links and above the Total row.
 
-### N. Pricing links — `Link` (required)
+### K. Pricing links — `Link` (required)
 
 `Learn more about pricing` and `Compare plans`, small, opening in a new tab.
 
-### O. Sections — `Card` (required)
+### L. Sections — `Card` (required)
 
 Flush cards for Charged (rows, then Total), Payment method and Address information.
 
-### P. Field — `Field` (required)
+### M. Field — `Field` (required)
 
 Each control of the card form (cardholder, country, number, expiry, security code) and of the address (country, postal code, state, city, line 2) sits in a `Field` with its `Field.Label`.
 
-### Q. Text value — `Input` (required)
+### N. Text value — `Input` (required)
 
 Cardholder, number, expiry, security code and the address lines, with `cc-*` autocomplete, `postal-code`, `address-line1` and `address-line2` on the address, and `inputmode="numeric"` on the card numbers.
 
-### R. Choice — `Select` (required)
+### O. Choice — `Select` (required)
 
 Country and state.
 
-### S. Notices — `Alert` (required)
+### P. Notices — `Alert` (required)
 
 `severity="info"`, `size="small"`, under the card fields: the data goes to a PCI-compliant partner. A declined card adds a `danger` `Alert` at the top of the Payment method card, and the number field takes the invalid state and focus.
 
-### T. Same address — `Checkbox` (required)
+### Q. Same address — `Checkbox` (required)
 
 `Use the same information as my account`, checked by default; unchecking clears the address fields for a different billing address.
 
-### U. Footer — `PanelFooter` (required)
+### R. Footer — `PanelFooter` (required)
 
 Cancel and Upgrade, side by side from `md`, full width below.
 
-### V. Card brand — `PaymentBrand` (required)
+### S. Card brand — `PaymentBrand` (required)
 
 The plate before the card on file in the Payment method section, named after the brand.
 
-### W. Included features — `FeatureList` (required)
+### T. Included features — `FeatureList` (required)
 
 What's included in the upgrade drawer, under its visible heading: one check per feature, with the usage allowance as the label and the overage price as its description. Do not hand-write the list with your own check icons. The pricing cards use the same `FeatureList` in their slot, so every feature list in the flow reads the same.
 
@@ -179,11 +167,8 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Card from '@aziontech/webkit/card'
   import CardPricing from '@aziontech/webkit/card-pricing'
   import Checkbox from '@aziontech/webkit/checkbox'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import FeatureList from '@aziontech/webkit/feature-list'
@@ -556,73 +541,69 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     side="right"
     size="large"
   >
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent aria-label="Change plan">
-        <PanelHeader class="w-full">
-          <DrawerTitle>Change plan</DrawerTitle>
-          <DrawerClose />
-        </PanelHeader>
-        <PanelContent>
-          <div class="flex flex-col items-center gap-(--spacing-md)">
-            <DrawerDescription class="w-full">
-              Compare what each tier includes before moving the account onto it.
-            </DrawerDescription>
-            <ToggleGroup
-              v-model="changePlanPeriod"
-              :options="billingPeriods"
-              aria-label="Billing period"
-            />
+    <DrawerContent aria-label="Change plan">
+      <PanelHeader class="w-full">
+        <DrawerTitle>Change plan</DrawerTitle>
+      </PanelHeader>
+      <PanelContent>
+        <div class="flex flex-col items-center gap-(--spacing-md)">
+          <DrawerDescription class="w-full">
+            Compare what each tier includes before moving the account onto it.
+          </DrawerDescription>
+          <ToggleGroup
+            v-model="changePlanPeriod"
+            :options="billingPeriods"
+            aria-label="Billing period"
+          />
+          <div
+            class="flex w-full min-w-0 flex-col items-stretch justify-center gap-(--spacing-md) lg:flex-row"
+          >
             <div
-              class="flex w-full min-w-0 flex-col items-stretch justify-center gap-(--spacing-md) lg:flex-row"
+              v-for="plan in pricedPlans"
+              :key="plan.id"
+              class="flex max-w-none min-w-0 flex-1"
             >
-              <div
-                v-for="plan in pricedPlans"
-                :key="plan.id"
-                class="flex max-w-none min-w-0 flex-1"
+              <CardPricing
+                aligned
+                class="w-full"
+                :title="plan.name"
+                :value="plan.value"
+                :prefix="plan.prefix"
+                :suffix="plan.suffix"
+                :show-prefix="plan.showPrefix"
+                :show-suffix="plan.showSuffix"
+                :pricing-details="plan.details"
+                :show-tag="plan.current"
+                tag-label="Current plan"
+                slot-position="bottom"
+                kind="contained"
+                action-label=""
               >
-                <CardPricing
-                  aligned
-                  class="w-full"
-                  :title="plan.name"
-                  :value="plan.value"
-                  :prefix="plan.prefix"
-                  :suffix="plan.suffix"
-                  :show-prefix="plan.showPrefix"
-                  :show-suffix="plan.showSuffix"
-                  :pricing-details="plan.details"
-                  :show-tag="plan.current"
-                  tag-label="Current plan"
-                  slot-position="bottom"
-                  kind="contained"
-                  action-label=""
-                >
-                  <div class="flex w-full flex-col gap-(--spacing-md)">
-                    <p
-                      v-if="plan.featuresTitle"
-                      class="m-0 text-body-sm text-(--text-muted)"
-                    >
-                      {{ plan.featuresTitle }}
-                    </p>
-                    <FeatureList :items="plan.features" />
-                  </div>
-                  <template #actions>
-                    <Button
-                      :label="plan.actionLabel"
-                      :kind="plan.action === 'upgrade' ? 'primary' : 'outlined'"
-                      :disabled="plan.current"
-                      size="large"
-                      class="w-full"
-                      @click="choosePlan(plan)"
-                    />
-                  </template>
-                </CardPricing>
-              </div>
+                <div class="flex w-full flex-col gap-(--spacing-md)">
+                  <p
+                    v-if="plan.featuresTitle"
+                    class="m-0 text-body-sm text-(--text-muted)"
+                  >
+                    {{ plan.featuresTitle }}
+                  </p>
+                  <FeatureList :items="plan.features" />
+                </div>
+                <template #actions>
+                  <Button
+                    :label="plan.actionLabel"
+                    :kind="plan.action === 'upgrade' ? 'primary' : 'outlined'"
+                    :disabled="plan.current"
+                    size="large"
+                    class="w-full"
+                    @click="choosePlan(plan)"
+                  />
+                </template>
+              </CardPricing>
             </div>
           </div>
-        </PanelContent>
-      </DrawerContent>
-    </DrawerPortal>
+        </div>
+      </PanelContent>
+    </DrawerContent>
   </Drawer>
 
   <Drawer
@@ -630,287 +611,154 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     size="large"
     side="right"
   >
-    <DrawerPortal>
-      <DrawerOverlay />
-      <DrawerContent>
-        <form
-          class="flex min-h-0 flex-1 flex-col"
-          aria-label="Upgrade to Pro"
-          novalidate
-          @submit.prevent="submitUpgrade"
-        >
-          <PanelHeader class="w-full">
-            <DrawerTitle>Upgrade to Pro</DrawerTitle>
-            <DrawerClose />
-          </PanelHeader>
-          <PanelContent>
-            <div
-              class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-(--spacing-xl)"
-            >
-              <aside class="flex flex-col gap-(--spacing-md)">
-                <div class="flex flex-col gap-(--spacing-xs)">
-                  <h3
-                    class="flex shrink-0 items-center px-(--spacing-xs) text-label-lg text-(--text-default) lg:py-(--spacing-sm)"
-                  >
-                    What's included
-                  </h3>
-                  <div class="px-(--spacing-xs)">
-                    <FeatureList :items="upgradeFeatures" />
-                  </div>
+    <DrawerContent>
+      <form
+        class="flex min-h-0 flex-1 flex-col"
+        aria-label="Upgrade to Pro"
+        novalidate
+        @submit.prevent="submitUpgrade"
+      >
+        <PanelHeader class="w-full">
+          <DrawerTitle>Upgrade to Pro</DrawerTitle>
+        </PanelHeader>
+        <PanelContent>
+          <div
+            class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-(--spacing-xl)"
+          >
+            <aside class="flex flex-col gap-(--spacing-md)">
+              <div class="flex flex-col gap-(--spacing-xs)">
+                <h3
+                  class="flex shrink-0 items-center px-(--spacing-xs) text-label-lg text-(--text-default) lg:py-(--spacing-sm)"
+                >
+                  What's included
+                </h3>
+                <div class="px-(--spacing-xs)">
+                  <FeatureList :items="upgradeFeatures" />
                 </div>
-                <div class="flex flex-col gap-(--spacing-xs)">
-                  <Separator />
-                  <div
-                    v-for="link in pricingLinks"
-                    :key="link.label"
-                    class="ms-(--spacing-xs) w-fit"
-                  >
-                    <Link
-                      :label="link.label"
-                      :href="link.href"
-                      target="_blank"
-                      size="small"
-                      class="w-full"
-                    />
-                  </div>
+              </div>
+              <div class="flex flex-col gap-(--spacing-xs)">
+                <Separator />
+                <div
+                  v-for="link in pricingLinks"
+                  :key="link.label"
+                  class="ms-(--spacing-xs) w-fit"
+                >
+                  <Link
+                    :label="link.label"
+                    :href="link.href"
+                    target="_blank"
+                    size="small"
+                    class="w-full"
+                  />
                 </div>
-              </aside>
-              <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                <Card :padded="false">
-                  <template #header>
-                    <p class="text-label-lg text-(--text-default)">Charged</p>
-                    <ToggleGroup
-                      v-model="upgradePeriod"
-                      :options="billingPeriods"
-                      aria-label="Billing period"
-                    />
-                  </template>
-                  <template #content>
-                    <div class="flex flex-col">
+              </div>
+            </aside>
+            <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+              <Card :padded="false">
+                <template #header>
+                  <p class="text-label-lg text-(--text-default)">Charged</p>
+                  <ToggleGroup
+                    v-model="upgradePeriod"
+                    :options="billingPeriods"
+                    aria-label="Billing period"
+                  />
+                </template>
+                <template #content>
+                  <div class="flex flex-col">
+                    <div
+                      class="flex flex-col gap-(--spacing-md) px-(--spacing-lg) py-(--spacing-lg)"
+                    >
                       <div
-                        class="flex flex-col gap-(--spacing-md) px-(--spacing-lg) py-(--spacing-lg)"
+                        v-for="row in charges[upgradePeriod].rows"
+                        :key="row.label"
+                        class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm)"
                       >
-                        <div
-                          v-for="row in charges[upgradePeriod].rows"
-                          :key="row.label"
-                          class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm)"
-                        >
-                          <span class="text-body-sm text-(--text-muted)">{{ row.label }}</span>
-                          <span class="flex items-baseline gap-(--spacing-xs)">
-                            <span class="text-label-md text-(--text-default)">{{ row.value }}</span>
-                            <span
-                              v-if="row.suffix"
-                              class="text-body-sm text-(--text-muted)"
-                              >{{ row.suffix }}</span
-                            >
-                          </span>
-                        </div>
-                      </div>
-                      <Separator />
-                      <div
-                        class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm) px-(--spacing-lg) py-(--spacing-lg)"
-                      >
-                        <span class="text-heading-xs text-(--text-default)">Total</span>
+                        <span class="text-body-sm text-(--text-muted)">{{ row.label }}</span>
                         <span class="flex items-baseline gap-(--spacing-xs)">
-                          <span class="text-heading-xs text-(--text-default)">{{
-                            charges[upgradePeriod].total.value
-                          }}</span>
-                          <span class="text-body-sm text-(--text-muted)">{{
-                            charges[upgradePeriod].total.suffix
-                          }}</span>
+                          <span class="text-label-md text-(--text-default)">{{ row.value }}</span>
+                          <span
+                            v-if="row.suffix"
+                            class="text-body-sm text-(--text-muted)"
+                            >{{ row.suffix }}</span
+                          >
                         </span>
                       </div>
                     </div>
-                  </template>
-                </Card>
-                <Card
-                  title="Payment method"
-                  :padded="false"
-                >
-                  <template #content>
+                    <Separator />
                     <div
-                      class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)"
+                      class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm) px-(--spacing-lg) py-(--spacing-lg)"
                     >
-                      <div
-                        v-if="!editingCard"
-                        class="flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
-                      >
-                        <PaymentBrand brand="visa" />
-                        <p class="min-w-0 flex-1 text-label-md text-(--text-default)">
-                          Ending in {{ cardLast4 }}
-                        </p>
-                        <Button
-                          id="card-change"
-                          label="Change"
-                          kind="outlined"
-                          size="small"
-                          :disabled="submitting"
-                          @click="startEditingCard"
-                        />
-                      </div>
-                      <template v-else>
-                        <Alert
-                          v-if="cardDeclined"
-                          severity="danger"
-                          size="small"
-                          label="The card was declined, so the account is still on Free. Check the number or use another card, then select Upgrade again."
-                        />
-                        <fieldset
-                          class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
-                          :disabled="submitting"
-                        >
-                          <legend class="sr-only">Payment method</legend>
-                          <Field v-bind="fieldState('holder')">
-                            <Field.Label :for="cardFieldIds.holder">Cardholder name</Field.Label>
-                            <Input
-                              :id="cardFieldIds.holder"
-                              v-model="cardForm.holder"
-                              name="cardholderName"
-                              size="large"
-                              placeholder="Jane A. Doe"
-                              autocomplete="cc-name"
-                              @update:model-value="cardErrors.holder = ''"
-                            />
-                            <Field.Description v-if="cardErrors.holder">{{
-                              cardErrors.holder
-                            }}</Field.Description>
-                          </Field>
-                          <Field>
-                            <Field.Label for="card-country">Country or region</Field.Label>
-                            <Select
-                              v-model="cardForm.country"
-                              placeholder="Select an option"
-                              size="large"
-                            >
-                              <Select.Trigger id="card-country" />
-                              <Select.Content>
-                                <Select.Option
-                                  v-for="option in countryOptions"
-                                  :key="String(option.value)"
-                                  :value="option.value"
-                                  :disabled="option.disabled"
-                                >
-                                  {{ option.label }}
-                                </Select.Option>
-                              </Select.Content>
-                            </Select>
-                          </Field>
-                          <Field v-bind="fieldState('number')">
-                            <Field.Label :for="cardFieldIds.number">Card number</Field.Label>
-                            <Input
-                              :id="cardFieldIds.number"
-                              v-model="cardForm.number"
-                              name="cardNumber"
-                              size="large"
-                              placeholder="1234 5678 9012 3456"
-                              autocomplete="cc-number"
-                              inputmode="numeric"
-                              @update:model-value="cardErrors.number = ''"
-                            />
-                            <Field.Description v-if="cardErrors.number">{{
-                              cardErrors.number
-                            }}</Field.Description>
-                          </Field>
-                          <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
-                            <Field v-bind="fieldState('expiry')">
-                              <Field.Label :for="cardFieldIds.expiry">Expiration date</Field.Label>
-                              <Input
-                                :id="cardFieldIds.expiry"
-                                v-model="cardForm.expiry"
-                                name="cardExpiry"
-                                size="large"
-                                placeholder="MM / YY"
-                                autocomplete="cc-exp"
-                                inputmode="numeric"
-                                @update:model-value="cardErrors.expiry = ''"
-                              />
-                              <Field.Description>{{
-                                cardErrors.expiry || 'Month and year, as MM/YY.'
-                              }}</Field.Description>
-                            </Field>
-                            <Field v-bind="fieldState('code')">
-                              <Field.Label :for="cardFieldIds.code">Security code</Field.Label>
-                              <Input
-                                :id="cardFieldIds.code"
-                                v-model="cardForm.code"
-                                name="cardSecurityCode"
-                                size="large"
-                                placeholder="123"
-                                autocomplete="cc-csc"
-                                inputmode="numeric"
-                                @update:model-value="cardErrors.code = ''"
-                              />
-                              <Field.Description>{{
-                                cardErrors.code || '3 or 4 digits on the back.'
-                              }}</Field.Description>
-                            </Field>
-                          </div>
-                          <Alert
-                            severity="info"
-                            size="small"
-                            label="Sensitive data is handled by a PCI-compliant payment partner."
-                          />
-                        </fieldset>
-                        <div class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:justify-end">
-                          <div class="w-full sm:w-fit">
-                            <Button
-                              class="w-full"
-                              type="button"
-                              label="Cancel"
-                              kind="outlined"
-                              size="medium"
-                              :disabled="submitting"
-                              @click="cancelEditingCard"
-                            />
-                          </div>
-                          <div class="w-full sm:w-fit">
-                            <Button
-                              class="w-full"
-                              type="button"
-                              label="Update"
-                              kind="primary"
-                              size="medium"
-                              :disabled="submitting"
-                              @click="updateCard"
-                            />
-                          </div>
-                        </div>
-                      </template>
+                      <span class="text-heading-xs text-(--text-default)">Total</span>
+                      <span class="flex items-baseline gap-(--spacing-xs)">
+                        <span class="text-heading-xs text-(--text-default)">{{
+                          charges[upgradePeriod].total.value
+                        }}</span>
+                        <span class="text-body-sm text-(--text-muted)">{{
+                          charges[upgradePeriod].total.suffix
+                        }}</span>
+                      </span>
                     </div>
-                  </template>
-                </Card>
-                <Card
-                  title="Address information"
-                  :padded="false"
-                >
-                  <template #content>
-                    <fieldset
-                      class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 px-(--spacing-lg) py-(--spacing-lg)"
-                      :disabled="submitting"
+                  </div>
+                </template>
+              </Card>
+              <Card
+                title="Payment method"
+                :padded="false"
+              >
+                <template #content>
+                  <div class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)">
+                    <div
+                      v-if="!editingCard"
+                      class="flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
                     >
-                      <legend class="sr-only">Address information</legend>
-                      <Field orientation="horizontal">
-                        <Checkbox
-                          v-model="address.useAccountInformation"
-                          name="useAccountInformation"
-                        />
-                        <Field.Content>
-                          <Field.Label>Use the same information as my account</Field.Label>
-                          <Field.Description
-                            >Uncheck to bill this organization at a different
-                            address.</Field.Description
-                          >
-                        </Field.Content>
-                      </Field>
-                      <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
+                      <PaymentBrand brand="visa" />
+                      <p class="min-w-0 flex-1 text-label-md text-(--text-default)">
+                        Ending in {{ cardLast4 }}
+                      </p>
+                      <Button
+                        id="card-change"
+                        label="Change"
+                        kind="outlined"
+                        size="small"
+                        :disabled="submitting"
+                        @click="startEditingCard"
+                      />
+                    </div>
+                    <template v-else>
+                      <Alert
+                        v-if="cardDeclined"
+                        severity="danger"
+                        size="small"
+                        label="The card was declined, so the account is still on Free. Check the number or use another card, then select Upgrade again."
+                      />
+                      <fieldset
+                        class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
+                        :disabled="submitting"
+                      >
+                        <legend class="sr-only">Payment method</legend>
+                        <Field v-bind="fieldState('holder')">
+                          <Field.Label :for="cardFieldIds.holder">Cardholder name</Field.Label>
+                          <Input
+                            :id="cardFieldIds.holder"
+                            v-model="cardForm.holder"
+                            name="cardholderName"
+                            size="large"
+                            placeholder="Jane A. Doe"
+                            autocomplete="cc-name"
+                            @update:model-value="cardErrors.holder = ''"
+                          />
+                          <Field.Description v-if="cardErrors.holder">{{
+                            cardErrors.holder
+                          }}</Field.Description>
+                        </Field>
                         <Field>
-                          <Field.Label>Country</Field.Label>
+                          <Field.Label for="card-country">Country or region</Field.Label>
                           <Select
-                            v-model="address.country"
+                            v-model="cardForm.country"
                             placeholder="Select an option"
                             size="large"
                           >
-                            <Select.Trigger />
+                            <Select.Trigger id="card-country" />
                             <Select.Content>
                               <Select.Option
                                 v-for="option in countryOptions"
@@ -923,111 +771,238 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                             </Select.Content>
                           </Select>
                         </Field>
-                        <Field>
-                          <Field.Label>Postal code</Field.Label>
+                        <Field v-bind="fieldState('number')">
+                          <Field.Label :for="cardFieldIds.number">Card number</Field.Label>
                           <Input
-                            v-model="address.postalCode"
-                            name="postalCode"
+                            :id="cardFieldIds.number"
+                            v-model="cardForm.number"
+                            name="cardNumber"
                             size="large"
-                            autocomplete="postal-code"
+                            placeholder="1234 5678 9012 3456"
+                            autocomplete="cc-number"
+                            inputmode="numeric"
+                            @update:model-value="cardErrors.number = ''"
                           />
+                          <Field.Description v-if="cardErrors.number">{{
+                            cardErrors.number
+                          }}</Field.Description>
                         </Field>
-                        <Field>
-                          <Field.Label>State or region</Field.Label>
-                          <Select
-                            v-model="address.state"
-                            placeholder="Select an option"
-                            size="large"
-                          >
-                            <Select.Trigger />
-                            <Select.Content>
-                              <Select.Option
-                                v-for="option in stateOptions"
-                                :key="String(option.value)"
-                                :value="option.value"
-                                :disabled="option.disabled"
-                              >
-                                {{ option.label }}
-                              </Select.Option>
-                            </Select.Content>
-                          </Select>
-                        </Field>
-                        <Field>
-                          <Field.Label>City</Field.Label>
-                          <Select
-                            v-model="address.city"
-                            placeholder="Select an option"
-                            size="large"
-                          >
-                            <Select.Trigger />
-                            <Select.Content>
-                              <Select.Option
-                                v-for="option in cityOptions"
-                                :key="String(option.value)"
-                                :value="option.value"
-                                :disabled="option.disabled"
-                              >
-                                {{ option.label }}
-                              </Select.Option>
-                            </Select.Content>
-                          </Select>
-                        </Field>
+                        <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
+                          <Field v-bind="fieldState('expiry')">
+                            <Field.Label :for="cardFieldIds.expiry">Expiration date</Field.Label>
+                            <Input
+                              :id="cardFieldIds.expiry"
+                              v-model="cardForm.expiry"
+                              name="cardExpiry"
+                              size="large"
+                              placeholder="MM / YY"
+                              autocomplete="cc-exp"
+                              inputmode="numeric"
+                              @update:model-value="cardErrors.expiry = ''"
+                            />
+                            <Field.Description>{{
+                              cardErrors.expiry || 'Month and year, as MM/YY.'
+                            }}</Field.Description>
+                          </Field>
+                          <Field v-bind="fieldState('code')">
+                            <Field.Label :for="cardFieldIds.code">Security code</Field.Label>
+                            <Input
+                              :id="cardFieldIds.code"
+                              v-model="cardForm.code"
+                              name="cardSecurityCode"
+                              size="large"
+                              placeholder="123"
+                              autocomplete="cc-csc"
+                              inputmode="numeric"
+                              @update:model-value="cardErrors.code = ''"
+                            />
+                            <Field.Description>{{
+                              cardErrors.code || '3 or 4 digits on the back.'
+                            }}</Field.Description>
+                          </Field>
+                        </div>
+                        <Alert
+                          severity="info"
+                          size="small"
+                          label="Sensitive data is handled by a PCI-compliant payment partner."
+                        />
+                      </fieldset>
+                      <div class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:justify-end">
+                        <div class="w-full sm:w-fit">
+                          <Button
+                            class="w-full"
+                            type="button"
+                            label="Cancel"
+                            kind="outlined"
+                            size="medium"
+                            :disabled="submitting"
+                            @click="cancelEditingCard"
+                          />
+                        </div>
+                        <div class="w-full sm:w-fit">
+                          <Button
+                            class="w-full"
+                            type="button"
+                            label="Update"
+                            kind="primary"
+                            size="medium"
+                            :disabled="submitting"
+                            @click="updateCard"
+                          />
+                        </div>
                       </div>
+                    </template>
+                  </div>
+                </template>
+              </Card>
+              <Card
+                title="Address information"
+                :padded="false"
+              >
+                <template #content>
+                  <fieldset
+                    class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 px-(--spacing-lg) py-(--spacing-lg)"
+                    :disabled="submitting"
+                  >
+                    <legend class="sr-only">Address information</legend>
+                    <Field orientation="horizontal">
+                      <Checkbox
+                        v-model="address.useAccountInformation"
+                        name="useAccountInformation"
+                      />
+                      <Field.Content>
+                        <Field.Label>Use the same information as my account</Field.Label>
+                        <Field.Description
+                          >Uncheck to bill this organization at a different
+                          address.</Field.Description
+                        >
+                      </Field.Content>
+                    </Field>
+                    <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
                       <Field>
-                        <Field.Label>Address</Field.Label>
-                        <Input
-                          v-model="address.line1"
-                          name="addressLine1"
+                        <Field.Label>Country</Field.Label>
+                        <Select
+                          v-model="address.country"
+                          placeholder="Select an option"
                           size="large"
-                          autocomplete="address-line1"
+                        >
+                          <Select.Trigger />
+                          <Select.Content>
+                            <Select.Option
+                              v-for="option in countryOptions"
+                              :key="String(option.value)"
+                              :value="option.value"
+                              :disabled="option.disabled"
+                            >
+                              {{ option.label }}
+                            </Select.Option>
+                          </Select.Content>
+                        </Select>
+                      </Field>
+                      <Field>
+                        <Field.Label>Postal code</Field.Label>
+                        <Input
+                          v-model="address.postalCode"
+                          name="postalCode"
+                          size="large"
+                          autocomplete="postal-code"
                         />
                       </Field>
                       <Field>
-                        <Field.Label>Address line 2</Field.Label>
-                        <Input
-                          v-model="address.line2"
-                          name="addressLine2"
+                        <Field.Label>State or region</Field.Label>
+                        <Select
+                          v-model="address.state"
+                          placeholder="Select an option"
                           size="large"
-                          autocomplete="address-line2"
-                        />
-                        <Field.Description>Optional. Apartment, suite or floor.</Field.Description>
+                        >
+                          <Select.Trigger />
+                          <Select.Content>
+                            <Select.Option
+                              v-for="option in stateOptions"
+                              :key="String(option.value)"
+                              :value="option.value"
+                              :disabled="option.disabled"
+                            >
+                              {{ option.label }}
+                            </Select.Option>
+                          </Select.Content>
+                        </Select>
                       </Field>
-                    </fieldset>
-                  </template>
-                </Card>
-              </div>
+                      <Field>
+                        <Field.Label>City</Field.Label>
+                        <Select
+                          v-model="address.city"
+                          placeholder="Select an option"
+                          size="large"
+                        >
+                          <Select.Trigger />
+                          <Select.Content>
+                            <Select.Option
+                              v-for="option in cityOptions"
+                              :key="String(option.value)"
+                              :value="option.value"
+                              :disabled="option.disabled"
+                            >
+                              {{ option.label }}
+                            </Select.Option>
+                          </Select.Content>
+                        </Select>
+                      </Field>
+                    </div>
+                    <Field>
+                      <Field.Label>Address</Field.Label>
+                      <Input
+                        v-model="address.line1"
+                        name="addressLine1"
+                        size="large"
+                        autocomplete="address-line1"
+                      />
+                    </Field>
+                    <Field>
+                      <Field.Label>Address line 2</Field.Label>
+                      <Input
+                        v-model="address.line2"
+                        name="addressLine2"
+                        size="large"
+                        autocomplete="address-line2"
+                      />
+                      <Field.Description>Optional. Apartment, suite or floor.</Field.Description>
+                    </Field>
+                  </fieldset>
+                </template>
+              </Card>
             </div>
-          </PanelContent>
-          <PanelFooter>
-            <div
-              class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
-            >
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  type="button"
-                  label="Cancel"
-                  kind="outlined"
-                  size="medium"
-                  :disabled="submitting"
-                  @click="upgradeOpen = false"
-                />
-              </div>
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  label="Upgrade"
-                  kind="primary"
-                  size="medium"
-                  :loading="submitting"
-                  type="submit"
-                />
-              </div>
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div
+            class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
+          >
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+                :disabled="submitting"
+                @click="upgradeOpen = false"
+              />
             </div>
-          </PanelFooter>
-        </form>
-      </DrawerContent>
-    </DrawerPortal>
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                label="Upgrade"
+                kind="primary"
+                size="medium"
+                :loading="submitting"
+                type="submit"
+              />
+            </div>
+          </div>
+        </PanelFooter>
+      </form>
+    </DrawerContent>
   </Drawer>
 </template>
 ```

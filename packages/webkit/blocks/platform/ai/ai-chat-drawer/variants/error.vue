@@ -7,9 +7,7 @@
   } from '@aziontech/webkit/chat-message'
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -300,139 +298,137 @@
       v-model:open="assistantOpen"
       side="right"
       size="medium"
+      :modal="false"
     >
-      <DrawerPortal>
-        <DrawerContent>
+      <DrawerContent>
+        <div class="flex min-h-0 flex-1 flex-col">
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+              <DrawerTitle>AI assistant</DrawerTitle>
+              <Tag
+                label="Preview"
+                severity="info"
+                size="small"
+              />
+            </div>
+            <div class="flex items-center gap-(--spacing-xxs)">
+              <IconButton
+                icon="pi pi-plus"
+                aria-label="New chat"
+                kind="transparent"
+                size="small"
+                :disabled="!turns.length"
+                @click="newChat"
+              />
+            </div>
+          </PanelHeader>
           <div class="flex min-h-0 flex-1 flex-col">
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                <DrawerTitle>AI assistant</DrawerTitle>
-                <Tag
-                  label="Preview"
-                  severity="info"
-                  size="small"
-                />
-              </div>
-              <div class="flex items-center gap-(--spacing-xxs)">
-                <IconButton
-                  icon="pi pi-plus"
-                  aria-label="New chat"
-                  kind="transparent"
-                  size="small"
-                  :disabled="!turns.length"
-                  @click="newChat"
-                />
-                <DrawerClose />
-              </div>
-            </PanelHeader>
-            <div class="flex min-h-0 flex-1 flex-col">
-              <div
-                v-if="!turns.length"
-                class="flex flex-1 flex-col justify-center gap-(--spacing-lg) p-(--spacing-md)"
+            <div
+              v-if="!turns.length"
+              class="flex flex-1 flex-col justify-center gap-(--spacing-lg) p-(--spacing-md)"
+            >
+              <EmptyState
+                title="Ask about storefront"
+                description="The assistant reads this workload’s settings and metrics to answer. It cites the documentation it uses."
+                icon="ai ai-ask-azion"
+                size="small"
+              />
+              <SuggestionGroup
+                :items="supportPrompts"
+                orientation="vertical"
+                @select="(_event, item) => send(item.label)"
+              />
+            </div>
+            <Conversation
+              v-else
+              alignment="start"
+              aria-label="Conversation with the AI assistant"
+            >
+              <ChatMessage
+                v-for="turn in turns"
+                :key="turn.id"
+                :from="turn.from"
+                :state="turn.from === 'user' ? 'complete' : turn.state"
+                :timestamp="turn.time"
+                :error-message="turn.error"
+                @retry="retry(turn)"
               >
-                <EmptyState
-                  title="Ask about storefront"
-                  description="The assistant reads this workload’s settings and metrics to answer. It cites the documentation it uses."
-                  icon="ai ai-ask-azion"
-                  size="small"
-                />
+                <template v-if="turn.from === 'user'">{{ turn.text }}</template>
+                <template v-else>
+                  <Reasoning
+                    :streaming="turn.thinking"
+                    :duration="turn.thinking ? undefined : 2"
+                  >
+                    <p>{{ turn.answer.reasoning }}</p>
+                  </Reasoning>
+                  <StreamingResponse
+                    :content="turn.content"
+                    :streaming="turn.state === 'streaming'"
+                    :sources="turn.answer.sources"
+                    :anchor="`answer-${turn.id}`"
+                  />
+                  <p
+                    v-if="turn.stopped"
+                    class="text-body-sm text-(--text-muted)"
+                  >
+                    You stopped this response.
+                  </p>
+                  <Sources
+                    v-if="turn.state === 'complete' && !turn.stopped"
+                    :items="turn.answer.sources"
+                    :anchor="`answer-${turn.id}`"
+                  />
+                </template>
+                <template
+                  v-if="turn.from === 'assistant'"
+                  #actions
+                >
+                  <ChatMessage.Actions>
+                    <CopyButton
+                      size="small"
+                      :value="turn.content"
+                    />
+                    <IconButton
+                      icon="pi pi-refresh"
+                      aria-label="Regenerate response"
+                      kind="transparent"
+                      size="small"
+                      :disabled="state !== 'ready'"
+                      @click="retry(turn)"
+                    />
+                    <ChatMessage.Feedback v-model="turn.feedback" />
+                  </ChatMessage.Actions>
+                </template>
+              </ChatMessage>
+              <div
+                v-if="lastAnswer"
+                class="ps-[calc(2rem+var(--spacing-sm))]"
+              >
                 <SuggestionGroup
-                  :items="supportPrompts"
-                  orientation="vertical"
+                  :items="lastAnswer.answer.followUps"
+                  aria-label="Follow-up questions"
                   @select="(_event, item) => send(item.label)"
                 />
               </div>
-              <Conversation
-                v-else
-                alignment="start"
-                aria-label="Conversation with the AI assistant"
-              >
-                <ChatMessage
-                  v-for="turn in turns"
-                  :key="turn.id"
-                  :from="turn.from"
-                  :state="turn.from === 'user' ? 'complete' : turn.state"
-                  :timestamp="turn.time"
-                  :error-message="turn.error"
-                  @retry="retry(turn)"
-                >
-                  <template v-if="turn.from === 'user'">{{ turn.text }}</template>
-                  <template v-else>
-                    <Reasoning
-                      :streaming="turn.thinking"
-                      :duration="turn.thinking ? undefined : 2"
-                    >
-                      <p>{{ turn.answer.reasoning }}</p>
-                    </Reasoning>
-                    <StreamingResponse
-                      :content="turn.content"
-                      :streaming="turn.state === 'streaming'"
-                      :sources="turn.answer.sources"
-                      :anchor="`answer-${turn.id}`"
-                    />
-                    <p
-                      v-if="turn.stopped"
-                      class="text-body-sm text-(--text-muted)"
-                    >
-                      You stopped this response.
-                    </p>
-                    <Sources
-                      v-if="turn.state === 'complete' && !turn.stopped"
-                      :items="turn.answer.sources"
-                      :anchor="`answer-${turn.id}`"
-                    />
-                  </template>
-                  <template
-                    v-if="turn.from === 'assistant'"
-                    #actions
-                  >
-                    <ChatMessage.Actions>
-                      <CopyButton
-                        size="small"
-                        :value="turn.content"
-                      />
-                      <IconButton
-                        icon="pi pi-refresh"
-                        aria-label="Regenerate response"
-                        kind="transparent"
-                        size="small"
-                        :disabled="state !== 'ready'"
-                        @click="retry(turn)"
-                      />
-                      <ChatMessage.Feedback v-model="turn.feedback" />
-                    </ChatMessage.Actions>
-                  </template>
-                </ChatMessage>
-                <div
-                  v-if="lastAnswer"
-                  class="ps-[calc(2rem+var(--spacing-sm))]"
-                >
-                  <SuggestionGroup
-                    :items="lastAnswer.answer.followUps"
-                    aria-label="Follow-up questions"
-                    @select="(_event, item) => send(item.label)"
-                  />
-                </div>
-              </Conversation>
-            </div>
-            <div class="border-t border-(--border-default) p-(--spacing-sm)">
-              <PromptInput
-                ref="composer"
-                v-model="prompt"
-                :state="state"
-                :max-rows="4"
-                placeholder="Ask about storefront"
-                @submit="(_event, { value }) => send(value)"
-                @stop="stop"
-              >
-                <template #hint
-                  >The AI assistant can make mistakes. Check important information.</template
-                >
-              </PromptInput>
-            </div>
+            </Conversation>
           </div>
-        </DrawerContent>
-      </DrawerPortal>
+          <div class="border-t border-(--border-default) p-(--spacing-sm)">
+            <PromptInput
+              ref="composer"
+              v-model="prompt"
+              :state="state"
+              :max-rows="4"
+              placeholder="Ask about storefront"
+              @submit="(_event, { value }) => send(value)"
+              @stop="stop"
+            >
+              <template #hint
+                >The AI assistant can make mistakes. Check important information.</template
+              >
+            </PromptInput>
+          </div>
+        </div>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

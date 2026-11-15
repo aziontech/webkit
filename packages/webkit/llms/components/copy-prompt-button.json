@@ -89,8 +89,8 @@
  "events": [
   {
    "name": "copy",
-   "payload": "string",
-   "notes": "Fires with `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead."
+   "payload": "(event: MouseEvent, value: string)",
+   "notes": "Fires with the click and `value` after the clipboard write succeeds. When the write is refused, the copy fallback popover opens instead."
   },
   {
    "name": "close",

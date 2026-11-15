@@ -24,46 +24,39 @@ export default {
   <DrawerTrigger>
     <Button label="Open drawer" />
   </DrawerTrigger>
-  <DrawerPortal>
-    <DrawerOverlay />
-    <DrawerContent>${
-      showHeader
+  <DrawerContent>${
+    showHeader
+      ? figma.code`
+    <PanelHeader>
+      <DrawerTitle>${title}</DrawerTitle>
+    </PanelHeader>`
+      : ''
+  }
+    <PanelContent>${
+      content
         ? figma.code`
-      <PanelHeader>
-        <DrawerTitle>${title}</DrawerTitle>
-        <DrawerClose />
-      </PanelHeader>`
+      ${content}`
         : ''
     }
-      <PanelContent>${
-        content
-          ? figma.code`
-        ${content}`
-          : ''
-      }
-      </PanelContent>${
-        showFooter
-          ? figma.code`
-      <PanelFooter>${
-        footer
-          ? figma.code`
-        ${footer}`
-          : ''
-      }
-      </PanelFooter>`
-          : ''
-      }
-    </DrawerContent>
-  </DrawerPortal>
+    </PanelContent>${
+      showFooter
+        ? figma.code`
+    <PanelFooter>${
+      footer
+        ? figma.code`
+      ${footer}`
+        : ''
+    }
+    </PanelFooter>`
+        : ''
+    }
+  </DrawerContent>
 </Drawer>`,
   imports: [
     "import Drawer from '@aziontech/webkit/drawer'",
     "import DrawerTrigger from '@aziontech/webkit/drawer-trigger'",
-    "import DrawerPortal from '@aziontech/webkit/drawer-portal'",
-    "import DrawerOverlay from '@aziontech/webkit/drawer-overlay'",
     "import DrawerContent from '@aziontech/webkit/drawer-content'",
     "import DrawerTitle from '@aziontech/webkit/drawer-title'",
-    "import DrawerClose from '@aziontech/webkit/drawer-close'",
     "import PanelHeader from '@aziontech/webkit/panel-header'",
     "import PanelContent from '@aziontech/webkit/panel-content'",
     "import PanelFooter from '@aziontech/webkit/panel-footer'",

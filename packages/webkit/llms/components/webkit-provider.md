@@ -43,6 +43,7 @@
 | `messages` | `PartialMessages` | `undefined` | false | Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`). |
 | `dir` | `'ltr' \| 'rtl' \| 'auto'` | `'auto'` | false | Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left). |
 | `now` | `string \| number \| Date` | `undefined` | false | Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute. |
+| `timeZone` | `string` | `''` | false | IANA time zone every `Timestamp` below the provider shows its local time in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone. |
 
 ## Slots
 
@@ -54,6 +55,7 @@
 
 - No visual states; the root carries `lang` (the locale) and `dir` (`ltr` | `rtl`).
 - `now` set: every relative time below reads it instead of the real clock; changing it re-renders them. An empty or unparseable value reads the real clock.
+- `timeZone` set: every `Timestamp` below shows its local time in that zone and renders it on the server too; `useLocale().formatDate` and the other formatters are unchanged. Empty reads the browser's zone after mount.
 
 ## Accessibility
 
@@ -94,6 +96,7 @@
         v-model:open="open"
         title="Remover domínio"
         description="shop.example.com deixa de responder por este recurso."
+        size="small"
         @confirm="open = false"
       >
         <template #trigger>

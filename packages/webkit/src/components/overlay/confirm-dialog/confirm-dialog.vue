@@ -7,8 +7,6 @@
   import Dialog from '../dialog/dialog.vue'
   import DialogContent from '../dialog/dialog-content.vue'
   import DialogDescription from '../dialog/dialog-description.vue'
-  import DialogOverlay from '../dialog/dialog-overlay.vue'
-  import DialogPortal from '../dialog/dialog-portal.vue'
   import DialogTitle from '../dialog/dialog-title.vue'
   import DialogTrigger from '../dialog/dialog-trigger.vue'
   import PanelContent from '../panel/panel-content.vue'
@@ -108,54 +106,52 @@
     :data-testid="testId"
     :size="size"
     :dismissible="!loading"
+    :closable="false"
   >
     <DialogTrigger v-if="$slots['trigger']">
       <slot name="trigger" />
     </DialogTrigger>
-    <DialogPortal>
-      <DialogOverlay />
-      <DialogContent
-        v-bind="contentAttrs"
-        role="alertdialog"
-      >
-        <PanelHeader class="w-full">
-          <DialogTitle>{{ title }}</DialogTitle>
-        </PanelHeader>
-        <PanelContent>
-          <DialogDescription v-if="description">{{ description }}</DialogDescription>
-          <slot />
-        </PanelContent>
-        <PanelFooter>
-          <div
-            :data-testid="`${testId}__actions`"
-            class="flex w-full flex-col-reverse gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
+    <DialogContent
+      v-bind="contentAttrs"
+      role="alertdialog"
+    >
+      <PanelHeader class="w-full">
+        <DialogTitle>{{ title }}</DialogTitle>
+      </PanelHeader>
+      <PanelContent>
+        <DialogDescription v-if="description">{{ description }}</DialogDescription>
+        <slot />
+      </PanelContent>
+      <PanelFooter>
+        <div
+          :data-testid="`${testId}__actions`"
+          class="flex w-full flex-col-reverse gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
+        >
+          <slot
+            name="actions"
+            :close="close"
           >
-            <slot
-              name="actions"
-              :close="close"
-            >
-              <Button
-                :data-testid="`${testId}__cancel`"
-                data-autofocus
-                :label="cancelLabel || t('confirmDialog.cancel')"
-                kind="transparent"
-                size="medium"
-                :disabled="loading"
-                @click="cancel"
-              />
-              <Button
-                :data-testid="`${testId}__confirm`"
-                :label="confirmLabel || t('confirmDialog.confirm')"
-                :kind="kind"
-                :loading="loading"
-                :disabled="disabled"
-                size="medium"
-                @click="confirm"
-              />
-            </slot>
-          </div>
-        </PanelFooter>
-      </DialogContent>
-    </DialogPortal>
+            <Button
+              :data-testid="`${testId}__cancel`"
+              data-autofocus
+              :label="cancelLabel || t('confirmDialog.cancel')"
+              kind="transparent"
+              size="medium"
+              :disabled="loading"
+              @click="cancel"
+            />
+            <Button
+              :data-testid="`${testId}__confirm`"
+              :label="confirmLabel || t('confirmDialog.confirm')"
+              :kind="kind"
+              :loading="loading"
+              :disabled="disabled"
+              size="medium"
+              @click="confirm"
+            />
+          </slot>
+        </div>
+      </PanelFooter>
+    </DialogContent>
   </Dialog>
 </template>

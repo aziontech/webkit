@@ -766,14 +766,12 @@ describe('text input as the trigger control', () => {
 describe('nested in a Dialog (overlay layer stack)', () => {
   it('Escape closes the popover only, and Tab past its last control stays inside the dialog', async () => {
     const { default: Dialog } = await import('../dialog/dialog.vue')
-    const { default: DialogPortal } = await import('../dialog/dialog-portal.vue')
     const { default: DialogContent } = await import('../dialog/dialog-content.vue')
     const { default: DialogTitle } = await import('../dialog/dialog-title.vue')
     render(
       defineComponent({
         components: {
           Dialog,
-          DialogPortal,
           DialogContent,
           DialogTitle,
           Popover,
@@ -782,19 +780,17 @@ describe('nested in a Dialog (overlay layer stack)', () => {
         },
         template: `
           <Dialog :default-open="true" data-testid="host-dialog">
-            <DialogPortal>
-              <DialogContent>
-                <DialogTitle>Settings</DialogTitle>
-                <button type="button" data-testid="dialog-first">First</button>
-                <Popover>
-                  <PopoverTrigger><button type="button">Filters</button></PopoverTrigger>
-                  <PopoverContent>
-                    <button type="button" data-testid="pop-a">A</button>
-                    <button type="button" data-testid="pop-b">B</button>
-                  </PopoverContent>
-                </Popover>
-              </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+              <DialogTitle>Settings</DialogTitle>
+              <button type="button" data-testid="dialog-first">First</button>
+              <Popover>
+                <PopoverTrigger><button type="button">Filters</button></PopoverTrigger>
+                <PopoverContent>
+                  <button type="button" data-testid="pop-a">A</button>
+                  <button type="button" data-testid="pop-b">B</button>
+                </PopoverContent>
+              </Popover>
+            </DialogContent>
           </Dialog>
         `
       })

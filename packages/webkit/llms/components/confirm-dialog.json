@@ -70,7 +70,7 @@
   {
    "name": "size",
    "type": "'small' | 'medium'",
-   "default": "'small'",
+   "default": "'medium'",
    "required": "false",
    "doc": "Width of the dialog."
   },

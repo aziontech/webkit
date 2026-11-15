@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/manage-resources/manage-resources.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/manage-resources")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), `DialogContent`, `DialogDescription`, `DialogOverlay`, `DialogPortal`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [Table](../../../components/table.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [ConfirmDialog](../../../components/confirm-dialog.md), `DialogContent`, `DialogDescription`, [Dialog](../../../components/dialog.md), `DialogTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [KeyValuePairs](../../../components/key-value-pairs.md), [Link](../../../components/link.md), [MultiSelect](../../../components/multi-select.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Select](../../../components/select.md), [Table](../../../components/table.md), [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -38,7 +38,7 @@ A `role="group"` row named `Resource actions`: Create Group (outlined), a divide
 
 ### C. Resource tree — `Input`, `Card`, `Table`, `Avatar`, `Tag`, `DropdownMenu`, `Link` (required)
 
-A search `Input` named `Search resources` over name, ID, type and labels sits above the tree. A match keeps its ancestors (so a workspace shows under its group and organization) and opens every branch while the search is on; clearing it restores the branches the person had open. No match shows a small `EmptyState` (`No matching resources`) with Clear search in the card. Then a flush `Card` holding `Table` (tree rows), `paginated` at 25 rows a page, with `:get-sub-rows="(row) => row.children"`, `v-model:expanded` (the first organization and its first group open) and `v-model:row-selection`. The table turns into a treegrid: chevrons in the Name column, one indent step per level, and `aria-level` and `aria-expanded` on rows. Name: a square `Avatar` for organizations and groups, the type glyph for workspaces, and a check for the current workspace. ID as `Table.CellId` with copy for workspaces. Type as a `Tag` with icon and severity (Organization accent, Group info, Workspace secondary). Last accessed, Status (`Table.CellStatus`: Active, Pending, Suspended), Charges right-aligned in tabular figures with a help tooltip on the header (an empty charge is a muted dash through `data-empty`, never a class ternary), Labels as `Table.CellTags` with `+N`, and `Table.CellActions` (View details, Move, Edit labels, then Delete on its own). A dash stands in for any empty value. Below the card, a `Link` to Resources pending deletion.
+A search `Input` named `Search resources` over name, ID, type and labels sits above the tree. A match keeps its ancestors (so a workspace shows under its group and organization) and opens every branch while the search is on; clearing it restores the branches the person had open. No match shows a small `EmptyState` (`No matching resources`) with Clear search in the card. Then a flush `Card` holding `Table` (tree rows), `paginated` at 25 rows a page, with `:get-sub-rows="(row) => row.children"`, `v-model:expanded` (the first organization and its first group open) and `v-model:row-selection`. The table turns into a treegrid: chevrons in the Name column, one indent step per level, and `aria-level` and `aria-expanded` on rows. Name: a square `Avatar` for organizations and groups, the type glyph for workspaces, and a check for the current workspace. ID as `Table.CellId` with copy for workspaces. Type as a `Tag` with icon and severity (Organization accent, Group info, Workspace neutral). Last accessed, Status (`Table.CellStatus`: Active, Pending, Suspended), Charges right-aligned in tabular figures with a help tooltip on the header (an empty charge is a muted dash through `data-empty`, never a class ternary), Labels as `Table.CellTags` with `+N`, and `Table.CellActions` (View details, Move, Edit labels, then Delete on its own). A dash stands in for any empty value. Below the card, a `Link` to Resources pending deletion.
 
 The data stays flat (`parentId`) and the page builds the tree for the table, so a move only changes one field.
 
@@ -46,7 +46,7 @@ The data stays flat (`parentId`) and the page builds the tree for the table, so 
 
 An `aside` beside the table from `2xl` and under it below that: next to the panel, the nine columns of the tree do not fit under 1536 px. Its heading says what is selected (`No resource selected`, `1 resource selected`, `3 resources selected`) and is polite live. Tabs: Permissions lists the role bindings of the one selected resource as split `KeyValuePairs` (role, member count); Labels shows its labels and an Edit labels button, or a small `No labels` `EmptyState`. With none or several selected, a small `EmptyState` (`Select a resource`, `Several resources selected`) says what to do.
 
-### E. Move — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Select` (required)
+### E. Move — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Select` (required)
 
 Title `Move <name>` or `Move 3 resources`. The description says that everything inside moves too and that inherited bindings stop applying. One `Select` of organizations and groups, excluding the moving resources and everything inside them. Move without a choice shows `Choose where to move the resources.` under the field. The new parent opens after the move.
 
@@ -136,8 +136,6 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
@@ -184,7 +182,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   const types: Record<ResourceType, ResourceTypeMeta> = {
     organization: { label: 'Organization', icon: 'pi pi-building', severity: 'accent' },
     group: { label: 'Group', icon: 'pi pi-users', severity: 'info' },
-    workspace: { label: 'Workspace', icon: 'pi pi-th-large', severity: 'secondary' }
+    workspace: { label: 'Workspace', icon: 'pi pi-th-large', severity: 'neutral' }
   }
 
   const seedResources: Resource[] = [
@@ -342,7 +340,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     Pending: 'warning'
   }
   const statusSeverity = (status?: ResourceStatus): TagSeverity =>
-    status ? statusSeverities[status] : 'secondary'
+    status ? statusSeverities[status] : 'neutral'
   const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
   const initials = (name: string) =>
     name
@@ -928,7 +926,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                             >
                               <Tag
                                 :label="label"
-                                severity="secondary"
+                                severity="neutral"
                                 size="medium"
                               />
                             </li>
@@ -964,154 +962,148 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       v-model:open="moveOpen"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DialogTitle>{{
-                moving.length === 1
-                  ? `Move ${moving[0].name}`
-                  : `Move ${plural(moving.length, 'resource', 'resources')}`
-              }}</DialogTitle>
-              <DialogDescription>
-                Everything inside moves with it. Role bindings inherited from the old parent stop
-                applying; bindings set on the resource itself stay.
-              </DialogDescription>
-            </div>
-          </PanelHeader>
-          <PanelContent>
-            <form
-              class="flex flex-col gap-(--spacing-md)"
-              novalidate
-              @submit.prevent="confirmMove"
-            >
-              <Field :invalid="!!destinationError">
-                <Field.Label>New parent</Field.Label>
-                <Select
-                  v-model="destination"
-                  size="large"
-                  placeholder="Choose an organization or group"
-                  @update:model-value="destinationError = ''"
-                >
-                  <Select.Trigger />
-                  <Select.Content>
-                    <Select.Option
-                      v-for="option in destinationOptions"
-                      :key="option.value"
-                      :value="option.value"
-                      >{{ option.label }} · {{ types[option.type].label }}</Select.Option
-                    >
-                  </Select.Content>
-                </Select>
-                <Field.Description
-                  >A resource cannot move into itself or into anything inside it.</Field.Description
-                >
-                <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
-              </Field>
-            </form>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                label="Cancel"
-                kind="outlined"
-                size="medium"
-                @click="moveOpen = false"
-              />
-              <Button
-                label="Move"
-                kind="primary"
-                size="medium"
-                @click="confirmMove"
-              />
-            </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DialogTitle>{{
+              moving.length === 1
+                ? `Move ${moving[0].name}`
+                : `Move ${plural(moving.length, 'resource', 'resources')}`
+            }}</DialogTitle>
+            <DialogDescription>
+              Everything inside moves with it. Role bindings inherited from the old parent stop
+              applying; bindings set on the resource itself stay.
+            </DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelContent>
+          <form
+            class="flex flex-col gap-(--spacing-md)"
+            novalidate
+            @submit.prevent="confirmMove"
+          >
+            <Field :invalid="!!destinationError">
+              <Field.Label>New parent</Field.Label>
+              <Select
+                v-model="destination"
+                size="large"
+                placeholder="Choose an organization or group"
+                @update:model-value="destinationError = ''"
+              >
+                <Select.Trigger />
+                <Select.Content>
+                  <Select.Option
+                    v-for="option in destinationOptions"
+                    :key="option.value"
+                    :value="option.value"
+                    >{{ option.label }} · {{ types[option.type].label }}</Select.Option
+                  >
+                </Select.Content>
+              </Select>
+              <Field.Description
+                >A resource cannot move into itself or into anything inside it.</Field.Description
+              >
+              <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
+            </Field>
+          </form>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              size="medium"
+              @click="moveOpen = false"
+            />
+            <Button
+              label="Move"
+              kind="primary"
+              size="medium"
+              @click="confirmMove"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
 
     <Dialog
       v-model:open="labelsOpen"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DialogTitle>{{
-                labelling.length === 1
-                  ? `Labels of ${labelling[0].name}`
-                  : `Labels of ${plural(labelling.length, 'resource', 'resources')}`
-              }}</DialogTitle>
-              <DialogDescription>
-                Labels group resources for search, billing reports and policies. Changes apply to
-                every selected resource.
-              </DialogDescription>
-            </div>
-          </PanelHeader>
-          <PanelContent>
-            <form
-              class="flex flex-col gap-(--spacing-md)"
-              novalidate
-              @submit.prevent="confirmLabels"
-            >
-              <Field>
-                <Field.Label>Add labels</Field.Label>
-                <MultiSelect
-                  v-model="addLabels"
-                  placeholder="Choose labels"
-                >
-                  <MultiSelect.Trigger />
-                  <MultiSelect.Content>
-                    <MultiSelect.Option
-                      v-for="label in knownLabels"
-                      :key="label"
-                      :value="label"
-                      >{{ label }}</MultiSelect.Option
-                    >
-                  </MultiSelect.Content>
-                </MultiSelect>
-              </Field>
-              <Field v-if="presentLabels.length">
-                <Field.Label>Remove labels</Field.Label>
-                <MultiSelect
-                  v-model="removeLabels"
-                  placeholder="Choose labels"
-                >
-                  <MultiSelect.Trigger />
-                  <MultiSelect.Content>
-                    <MultiSelect.Option
-                      v-for="label in presentLabels"
-                      :key="label"
-                      :value="label"
-                      >{{ label }}</MultiSelect.Option
-                    >
-                  </MultiSelect.Content>
-                </MultiSelect>
-              </Field>
-            </form>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                label="Cancel"
-                kind="outlined"
-                size="medium"
-                @click="labelsOpen = false"
-              />
-              <Button
-                label="Save labels"
-                kind="primary"
-                size="medium"
-                :disabled="!addLabels.length && !removeLabels.length"
-                @click="confirmLabels"
-              />
-            </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DialogTitle>{{
+              labelling.length === 1
+                ? `Labels of ${labelling[0].name}`
+                : `Labels of ${plural(labelling.length, 'resource', 'resources')}`
+            }}</DialogTitle>
+            <DialogDescription>
+              Labels group resources for search, billing reports and policies. Changes apply to
+              every selected resource.
+            </DialogDescription>
+          </div>
+        </PanelHeader>
+        <PanelContent>
+          <form
+            class="flex flex-col gap-(--spacing-md)"
+            novalidate
+            @submit.prevent="confirmLabels"
+          >
+            <Field>
+              <Field.Label>Add labels</Field.Label>
+              <MultiSelect
+                v-model="addLabels"
+                placeholder="Choose labels"
+              >
+                <MultiSelect.Trigger />
+                <MultiSelect.Content>
+                  <MultiSelect.Option
+                    v-for="label in knownLabels"
+                    :key="label"
+                    :value="label"
+                    >{{ label }}</MultiSelect.Option
+                  >
+                </MultiSelect.Content>
+              </MultiSelect>
+            </Field>
+            <Field v-if="presentLabels.length">
+              <Field.Label>Remove labels</Field.Label>
+              <MultiSelect
+                v-model="removeLabels"
+                placeholder="Choose labels"
+              >
+                <MultiSelect.Trigger />
+                <MultiSelect.Content>
+                  <MultiSelect.Option
+                    v-for="label in presentLabels"
+                    :key="label"
+                    :value="label"
+                    >{{ label }}</MultiSelect.Option
+                  >
+                </MultiSelect.Content>
+              </MultiSelect>
+            </Field>
+          </form>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              size="medium"
+              @click="labelsOpen = false"
+            />
+            <Button
+              label="Save labels"
+              kind="primary"
+              size="medium"
+              :disabled="!addLabels.length && !removeLabels.length"
+              @click="confirmLabels"
+            />
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
 
     <ConfirmDialog
@@ -1127,6 +1119,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
           : 'It stays in Resources pending deletion for 30 days, then is removed with its data.'
       "
       confirm-label="Delete"
+      size="small"
       @confirm="confirmDelete"
     />
   </div>

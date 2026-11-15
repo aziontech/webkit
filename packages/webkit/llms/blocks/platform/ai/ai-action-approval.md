@@ -232,7 +232,10 @@ Each variant is the same screen in another state: `get_pattern("platform/ai/ai-a
         <StreamingResponse :content="followUp" />
         <template #actions>
           <ChatMessage.Actions>
-            <CopyButton :value="followUp" />
+            <CopyButton
+              size="small"
+              :value="followUp"
+            />
             <Button
               v-if="run === 'error'"
               label="Retry"

@@ -17,7 +17,7 @@
 - Localize `ariaLabel` and `copiedLabel`: each is both the accessible name and the tooltip text.
 - Listen to `copy` for analytics or a toast; it fires only after the clipboard write succeeds.
 - The click stops propagation, so it is safe inside clickable rows and cards.
-- Keep the `transparent` / `small` defaults in dense rows.
+- Set `size="small"` in dense rows; the default is `large`, the house size of an action.
 
 ## Don’t
 
@@ -40,14 +40,14 @@
 | `ariaLabel` | `string` | `''` | false | Accessible name while idle. Empty uses the locale catalog (`Copy`). |
 | `copiedLabel` | `string` | `''` | false | Accessible name while the copied state is shown. Empty uses the locale catalog (`Copied`). |
 | `kind` | `'primary' \| 'secondary' \| 'outlined' \| 'transparent' \| 'danger'` | `'transparent'` | false | Visual variant forwarded to `IconButton`. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'small'` | false | Size token forwarded to `IconButton`. |
+| `size` | `'small' \| 'medium' \| 'large'` | `'large'` | false | Size token forwarded to `IconButton`. |
 | `disabled` | `boolean` | `false` | false | Disables interaction and applies disabled tokens. |
 
 ## Events
 
 | Event | Payload | Notes |
 | --- | --- | --- |
-| `copy` | `string` | Emitted after a successful clipboard write with the copied value. |
+| `copy` | `(event: MouseEvent, value: string)` | Emitted after a successful clipboard write; `value` is the copied text. |
 
 ## States
 

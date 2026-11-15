@@ -2140,7 +2140,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                                 <Item.Actions>
                                   <Tag
                                     label="Request phase"
-                                    severity="secondary"
+                                    severity="neutral"
                                     size="small"
                                   />
                                 </Item.Actions>
@@ -2157,7 +2157,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
                               >
                                 <Tag
                                   :label="behavior"
-                                  severity="secondary"
+                                  severity="neutral"
                                   size="small"
                                 />
                               </li>

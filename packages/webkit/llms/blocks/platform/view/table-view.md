@@ -465,7 +465,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/ta
                   <template #cell-status="{ value }">
                     <Table.CellStatus
                       :label="value"
-                      :severity="value === 'Live' ? 'success' : 'secondary'"
+                      :severity="value === 'Live' ? 'success' : 'neutral'"
                     />
                   </template>
                   <template #cell-modifiedAt="{ row }">

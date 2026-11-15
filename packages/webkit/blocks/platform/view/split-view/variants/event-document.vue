@@ -10,10 +10,7 @@
   import Chip from '@aziontech/webkit/chip'
   import CodeBlock from '@aziontech/webkit/code-block'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -1781,164 +1778,158 @@
       size="medium"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <DrawerTitle>Event</DrawerTitle>
-            <DrawerClose />
-          </PanelHeader>
-          <div class="min-h-0 flex-1 overflow-auto">
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <DrawerTitle>Event</DrawerTitle>
+        </PanelHeader>
+        <div class="min-h-0 flex-1 overflow-auto">
+          <div
+            v-if="documentEvent"
+            class="flex min-w-0 flex-col"
+          >
             <div
-              v-if="documentEvent"
-              class="flex min-w-0 flex-col"
+              class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
             >
-              <div
-                class="flex min-w-0 flex-col gap-(--spacing-md) p-(--spacing-md) pb-(--spacing-lg)"
-              >
-                <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                  <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-                    <Tag
-                      :label="documentEvent.level"
-                      :severity="eventLevelSeverity(documentEvent.level)"
-                      size="small"
-                    />
-                    <Tag
-                      :label="documentEvent.sourceLabel"
-                      severity="neutral"
-                      size="small"
-                    />
-                  </div>
-                  <p class="text-body-md text-(--text-default)">
-                    {{ documentEvent.message }}
-                  </p>
-                  <p class="text-label-code-sm tabular-nums text-(--text-muted)">
-                    {{ documentEvent.time }}
-                  </p>
+              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+                <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+                  <Tag
+                    :label="documentEvent.level"
+                    :severity="eventLevelSeverity(documentEvent.level)"
+                    size="small"
+                  />
+                  <Tag
+                    :label="documentEvent.sourceLabel"
+                    severity="neutral"
+                    size="small"
+                  />
                 </div>
-
-                <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                  <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-                    <div class="min-w-0 flex-1">
-                      <Input
-                        v-model="documentQuery"
-                        size="small"
-                        placeholder="Search in this event"
-                        aria-label="Search in this event"
-                        class="w-full"
-                        data-testid="document-search-drawer"
-                      >
-                        <template #prefix>
-                          <i
-                            class="pi pi-search"
-                            aria-hidden="true"
-                          />
-                        </template>
-                      </Input>
-                    </div>
-                    <Tooltip text="Copy the fields shown as JSON">
-                      <CopyButton
-                        :value="shownFieldsJson"
-                        kind="outlined"
-                        size="small"
-                        aria-label="Copy the fields shown as JSON"
-                        copied-label="Fields copied as JSON"
-                        data-testid="document-copy-drawer"
-                      />
-                    </Tooltip>
-                  </div>
-                  <p
-                    role="status"
-                    class="sr-only"
-                  >
-                    {{ documentStatus }}
-                  </p>
-                  <dl
-                    v-if="documentFields.length"
-                    class="flex min-w-0 flex-col"
-                    data-testid="document-fields-drawer"
-                  >
-                    <div
-                      v-for="row in documentFields"
-                      :key="row.id"
-                      class="group grid min-w-0 grid-cols-[minmax(0,7rem)_minmax(0,1fr)] items-center gap-x-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
-                    >
-                      <dt class="min-w-0 truncate text-label-sm text-(--text-muted)">
-                        {{ row.label }}
-                      </dt>
-                      <dd class="m-0 flex min-w-0 items-center gap-(--spacing-xs)">
-                        <span
-                          class="min-w-0 flex-1 break-words text-label-code-sm text-(--text-default)"
-                        >
-                          <template
-                            v-for="(part, index) in row.parts"
-                            :key="index"
-                          >
-                            <mark
-                              v-if="part.hit"
-                              class="rounded-(--shape-elements) bg-(--bg-selected) text-inherit"
-                              >{{ part.text }}</mark
-                            >
-                            <template v-else>{{ part.text }}</template>
-                          </template>
-                        </span>
-                        <span
-                          v-if="row.filterable"
-                          class="flex shrink-0 items-center gap-(--spacing-xxs)"
-                        >
-                          <Tooltip :text="`Filter by ${row.label} ${row.value}`">
-                            <IconButton
-                              icon="pi pi-search-plus"
-                              kind="transparent"
-                              size="small"
-                              :aria-label="`Filter by ${row.label} ${row.value}`"
-                              :aria-pressed="isIncluded(row.id, row.raw)"
-                              data-testid="document-include"
-                              @click="includeValue(row.id, row.raw)"
-                            />
-                          </Tooltip>
-                          <Tooltip :text="`Exclude ${row.label} ${row.value}`">
-                            <IconButton
-                              icon="pi pi-search-minus"
-                              kind="transparent"
-                              size="small"
-                              :aria-label="`Exclude ${row.label} ${row.value}`"
-                              :aria-pressed="isExcluded(row.id, row.raw)"
-                              data-testid="document-exclude"
-                              @click="excludeValue(row.id, row.raw)"
-                            />
-                          </Tooltip>
-                        </span>
-                      </dd>
-                    </div>
-                  </dl>
-                  <p
-                    v-else
-                    class="px-(--spacing-xs) text-body-sm text-(--text-muted)"
-                  >
-                    No field matches “{{ documentQuery }}”.
-                  </p>
-                </div>
+                <p class="text-body-md text-(--text-default)">
+                  {{ documentEvent.message }}
+                </p>
+                <p class="text-label-code-sm tabular-nums text-(--text-muted)">
+                  {{ documentEvent.time }}
+                </p>
               </div>
 
               <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">
-                  Event document
-                </h3>
-                <div class="min-w-0">
-                  <CodeBlock
-                    :tabs="documentTabs"
-                    :bordered="false"
-                    line-numbers
-                    copy-aria-label="Copy the event document as JSON"
-                    class="w-full"
-                  />
+                <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                  <div class="min-w-0 flex-1">
+                    <Input
+                      v-model="documentQuery"
+                      size="small"
+                      placeholder="Search in this event"
+                      aria-label="Search in this event"
+                      class="w-full"
+                      data-testid="document-search-drawer"
+                    >
+                      <template #prefix>
+                        <i
+                          class="pi pi-search"
+                          aria-hidden="true"
+                        />
+                      </template>
+                    </Input>
+                  </div>
+                  <Tooltip text="Copy the fields shown as JSON">
+                    <CopyButton
+                      :value="shownFieldsJson"
+                      kind="outlined"
+                      size="small"
+                      aria-label="Copy the fields shown as JSON"
+                      copied-label="Fields copied as JSON"
+                      data-testid="document-copy-drawer"
+                    />
+                  </Tooltip>
                 </div>
+                <p
+                  role="status"
+                  class="sr-only"
+                >
+                  {{ documentStatus }}
+                </p>
+                <dl
+                  v-if="documentFields.length"
+                  class="flex min-w-0 flex-col"
+                  data-testid="document-fields-drawer"
+                >
+                  <div
+                    v-for="row in documentFields"
+                    :key="row.id"
+                    class="group grid min-w-0 grid-cols-[minmax(0,7rem)_minmax(0,1fr)] items-center gap-x-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                  >
+                    <dt class="min-w-0 truncate text-label-sm text-(--text-muted)">
+                      {{ row.label }}
+                    </dt>
+                    <dd class="m-0 flex min-w-0 items-center gap-(--spacing-xs)">
+                      <span
+                        class="min-w-0 flex-1 break-words text-label-code-sm text-(--text-default)"
+                      >
+                        <template
+                          v-for="(part, index) in row.parts"
+                          :key="index"
+                        >
+                          <mark
+                            v-if="part.hit"
+                            class="rounded-(--shape-elements) bg-(--bg-selected) text-inherit"
+                            >{{ part.text }}</mark
+                          >
+                          <template v-else>{{ part.text }}</template>
+                        </template>
+                      </span>
+                      <span
+                        v-if="row.filterable"
+                        class="flex shrink-0 items-center gap-(--spacing-xxs)"
+                      >
+                        <Tooltip :text="`Filter by ${row.label} ${row.value}`">
+                          <IconButton
+                            icon="pi pi-search-plus"
+                            kind="transparent"
+                            size="small"
+                            :aria-label="`Filter by ${row.label} ${row.value}`"
+                            :aria-pressed="isIncluded(row.id, row.raw)"
+                            data-testid="document-include"
+                            @click="includeValue(row.id, row.raw)"
+                          />
+                        </Tooltip>
+                        <Tooltip :text="`Exclude ${row.label} ${row.value}`">
+                          <IconButton
+                            icon="pi pi-search-minus"
+                            kind="transparent"
+                            size="small"
+                            :aria-label="`Exclude ${row.label} ${row.value}`"
+                            :aria-pressed="isExcluded(row.id, row.raw)"
+                            data-testid="document-exclude"
+                            @click="excludeValue(row.id, row.raw)"
+                          />
+                        </Tooltip>
+                      </span>
+                    </dd>
+                  </div>
+                </dl>
+                <p
+                  v-else
+                  class="px-(--spacing-xs) text-body-sm text-(--text-muted)"
+                >
+                  No field matches “{{ documentQuery }}”.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+              <h3 class="px-(--spacing-md) text-label-sm text-(--text-default)">Event document</h3>
+              <div class="min-w-0">
+                <CodeBlock
+                  :tabs="documentTabs"
+                  :bordered="false"
+                  line-numbers
+                  copy-aria-label="Copy the event document as JSON"
+                  class="w-full"
+                />
               </div>
             </div>
           </div>
-        </DrawerContent>
-      </DrawerPortal>
+        </div>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

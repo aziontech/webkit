@@ -15,7 +15,7 @@
  "purpose": "The shell inside an overlay: a sized surface with a header for the title and the close control, a body that scrolls and a footer for the actions. `DialogContent` and `DrawerContent` lay their regions out with it, and a page can render it on its own as a static preview of an overlay.",
  "setup": null,
  "useWhen": [
-  "Laying out the regions inside `DialogContent` or `DrawerContent`: `PanelHeader` for the title and close control, `PanelContent` for the body that scrolls, `PanelFooter` for the actions.",
+  "Laying out the regions inside `DialogContent` or `DrawerContent`: `PanelHeader` for the title (the overlay adds its close control), `PanelContent` for the body that scrolls, `PanelFooter` for the actions.",
   "A static preview of an overlay surface outside a live overlay, for example a frozen dialog on a docs or marketing page."
  ],
  "avoidWhen": [

@@ -2,8 +2,6 @@
   import Button from '@aziontech/webkit/button'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
-  import DialogOverlay from '@aziontech/webkit/dialog-overlay'
-  import DialogPortal from '@aziontech/webkit/dialog-portal'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -264,144 +262,141 @@
       v-model:open="open"
       size="medium"
     >
-      <DialogPortal>
-        <DialogOverlay />
-        <DialogContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 items-start gap-(--spacing-sm)">
-              <OutcomeMark
-                v-if="!running"
-                :severity="outcomeSeverity"
-                size="large"
-                :animated="settledOnce"
-                :aria-label="counts.failed ? 'Some failed' : 'Succeeded'"
-                class="shrink-0"
-              />
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DialogTitle>{{ title }}</DialogTitle>
-                <DialogDescription>
-                  {{ tally }}
-                </DialogDescription>
-              </div>
+      <DialogContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 items-start gap-(--spacing-sm)">
+            <OutcomeMark
+              v-if="!running"
+              :severity="outcomeSeverity"
+              size="large"
+              :animated="settledOnce"
+              :aria-label="counts.failed ? 'Some failed' : 'Succeeded'"
+              class="shrink-0"
+            />
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DialogTitle>{{ title }}</DialogTitle>
+              <DialogDescription>
+                {{ tally }}
+              </DialogDescription>
             </div>
-          </PanelHeader>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
-                <Progress
-                  :value="percent"
-                  aria-label="Deploy progress"
-                  size="small"
-                />
-                <p
-                  v-if="activeName"
-                  class="truncate text-body-sm text-(--text-muted)"
-                >
-                  Deploying {{ activeName }}
-                </p>
-              </div>
-
-              <ToggleGroup
-                v-model="filter"
-                :options="filterOptions"
-                aria-label="Filter deploys by status"
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
+              <Progress
+                :value="percent"
+                aria-label="Deploy progress"
                 size="small"
-                class="self-start"
               />
-
-              <Item.List
-                v-if="visibleItems.length"
-                aria-label="Deployment Settings"
+              <p
+                v-if="activeName"
+                class="truncate text-body-sm text-(--text-muted)"
               >
-                <Item
-                  v-for="item in visibleItems"
-                  :key="item.id"
-                  kind="outlined"
-                  size="small"
-                >
-                  <Item.Media>
-                    <OutcomeMark
-                      v-if="MARK[item.status]"
-                      :severity="MARK[item.status]"
-                      size="small"
-                      :animated="settledOnce || running"
-                      :aria-label="STATUS_TAG[item.status].label"
-                    />
-                    <i
-                      v-else
-                      class="pi pi-sliders-h text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </Item.Media>
-                  <Item.Content>
-                    <Item.Title>{{ item.name }}</Item.Title>
-                    <Item.Description>{{ item.environments }}</Item.Description>
-                    <span
-                      v-if="item.message"
-                      class="text-body-xs text-(--danger-contrast)"
-                    >
-                      {{ item.message }}
-                    </span>
-                  </Item.Content>
-                  <Item.Actions>
-                    <span
-                      v-if="item.status === 'deploying'"
-                      class="flex size-4 shrink-0 text-(--text-muted)"
-                    >
-                      <Spinner class="w-full" />
-                    </span>
-                    <Tag
-                      :label="STATUS_TAG[item.status].label"
-                      :severity="STATUS_TAG[item.status].severity"
-                      size="small"
-                    />
-                  </Item.Actions>
-                </Item>
-              </Item.List>
-              <EmptyState
-                v-else
+                Deploying {{ activeName }}
+              </p>
+            </div>
+
+            <ToggleGroup
+              v-model="filter"
+              :options="filterOptions"
+              aria-label="Filter deploys by status"
+              size="small"
+              class="self-start"
+            />
+
+            <Item.List
+              v-if="visibleItems.length"
+              aria-label="Deployment Settings"
+            >
+              <Item
+                v-for="item in visibleItems"
+                :key="item.id"
+                kind="outlined"
                 size="small"
-                icon="pi pi-filter"
-                :title="emptyLabel"
-              />
-              <span
-                class="sr-only"
-                role="status"
               >
-                {{ running ? '' : title }}
-              </span>
-            </div>
-          </PanelContent>
+                <Item.Media>
+                  <OutcomeMark
+                    v-if="MARK[item.status]"
+                    :severity="MARK[item.status]"
+                    size="small"
+                    :animated="settledOnce || running"
+                    :aria-label="STATUS_TAG[item.status].label"
+                  />
+                  <i
+                    v-else
+                    class="pi pi-sliders-h text-(--text-muted)"
+                    aria-hidden="true"
+                  />
+                </Item.Media>
+                <Item.Content>
+                  <Item.Title>{{ item.name }}</Item.Title>
+                  <Item.Description>{{ item.environments }}</Item.Description>
+                  <span
+                    v-if="item.message"
+                    class="text-body-xs text-(--danger-contrast)"
+                  >
+                    {{ item.message }}
+                  </span>
+                </Item.Content>
+                <Item.Actions>
+                  <span
+                    v-if="item.status === 'deploying'"
+                    class="flex size-4 shrink-0 text-(--text-muted)"
+                  >
+                    <Spinner class="w-full" />
+                  </span>
+                  <Tag
+                    :label="STATUS_TAG[item.status].label"
+                    :severity="STATUS_TAG[item.status].severity"
+                    size="small"
+                  />
+                </Item.Actions>
+              </Item>
+            </Item.List>
+            <EmptyState
+              v-else
+              size="small"
+              icon="pi pi-filter"
+              :title="emptyLabel"
+            />
+            <span
+              class="sr-only"
+              role="status"
+            >
+              {{ running ? '' : title }}
+            </span>
+          </div>
+        </PanelContent>
 
-          <PanelFooter>
-            <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
-              <div
-                v-if="counts.failed && !running"
-                class="w-full md:w-fit"
-              >
-                <Button
-                  class="w-full"
-                  label="Retry failed"
-                  kind="outlined"
-                  size="medium"
-                  icon="pi pi-refresh"
-                  @click="retryFailed"
-                />
-              </div>
-              <div class="w-full md:w-fit">
-                <Button
-                  class="w-full"
-                  :label="running ? 'Hide' : 'Close'"
-                  kind="primary"
-                  size="medium"
-                  @click="open = false"
-                />
-              </div>
+        <PanelFooter>
+          <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
+            <div
+              v-if="counts.failed && !running"
+              class="w-full md:w-fit"
+            >
+              <Button
+                class="w-full"
+                label="Retry failed"
+                kind="outlined"
+                size="medium"
+                icon="pi pi-refresh"
+                @click="retryFailed"
+              />
             </div>
-          </PanelFooter>
-        </DialogContent>
-      </DialogPortal>
+            <div class="w-full md:w-fit">
+              <Button
+                class="w-full"
+                :label="running ? 'Hide' : 'Close'"
+                kind="primary"
+                size="medium"
+                @click="open = false"
+              />
+            </div>
+          </div>
+        </PanelFooter>
+      </DialogContent>
     </Dialog>
   </div>
 </template>

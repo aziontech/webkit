@@ -1,6 +1,6 @@
 # Alert
 
-> Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon and a single line of message copy that may carry inline links, plus an optional secondary action button.
+> Inline feedback banner that communicates status, alerts, or progress. Presents a severity-colored surface with a leading icon, an optional bold `title` over the copy, and message copy that may carry inline links, plus an optional secondary action button.
 
 - Import: `import Alert from '@aziontech/webkit/alert'`
 - Category: feedback · Surface: product · Structure: monolithic
@@ -10,11 +10,13 @@
 
 - A status, warning or error that belongs to a page, section or form and should stay visible in context.
 - A notice with an inline link, or with one follow-up action (`actionLabel` or the `action` slot).
+- A notice that needs a short headline and a sentence of detail (`title` over the copy): "Maintenance scheduled" over the window and what changes.
 
 ## Do
 
 - Pick `severity` by meaning. `danger` and `warning` render with `role="alert"`.
 - Use `label` for plain copy and the default slot when the copy needs inline links.
+- Set `title` when the alert says two things: what happened (the title, a few words, no end period) and what it means or what to do (the copy). A one-sentence alert needs no title. A title alone, with no copy, is allowed for a short notice that still wants the heading weight.
 - Use either the built-in action (`actionLabel` with `@action`) or the `action` slot, not both. The slot replaces the button.
 - Once `closable` or `life` dismisses the message, it stays hidden until it is remounted. Listen to `close` to keep your own state in sync.
 - Use `size="small"` inside dense surfaces such as cards and drawers.
@@ -41,11 +43,11 @@
 | `severity` | `'info' \| 'success' \| 'warning' \| 'danger'` | `'info'` | false | Visual severity variant. |
 | `size` | `'small' \| 'medium'` | `'medium'` | false | Size token. Drives the banner height, inline padding, copy scale, and the trailing control sizes. |
 | `label` | `string` | `''` | false | Fallback message copy when the default slot is empty. |
+| `title` | `string` | `''` | false | Bold heading above the message copy; hidden when empty. |
 | `icon` | `string` | `''` | false | PrimeIcons class override for the leading icon. |
 | `actionLabel` | `string` | `''` | false | Label for the built-in secondary action button; hidden when empty. |
 | `closable` | `boolean` | `false` | false | When true, shows a close control that dismisses the message. |
 | `life` | `number` | `0` | false | Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss. |
-| `title` | `string` | `''` | false | Optional bold first line above the copy (the AlertTitle of the shadcn anatomy); hidden when empty. |
 
 ## Events
 
@@ -68,17 +70,40 @@
 ## States
 
 - Visual states: default (per severity)
+- `data-titled` on the root mirrors a non-empty `title`: the title renders above the copy in `.text-heading-xxs` (`__title`), and the copy keeps its size below it. With a title and no copy (no default slot, empty `label`), only the title renders.
 - Responsive: the root is the `@container/alert`. Below `@sm` of its box the action (built-in or the `action` slot, wrapped in `[data-slot=alert-action]`) moves to its own line under the message while the close button stays on the message line.
 
 ## Accessibility
 
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map: `Tab` focuses inline links in the message copy, then the action and close controls when present; `Enter` follows a link, `Enter`/`Space` activates the controls; `Escape` dismisses when `closable` is true.
-- ARIA: root uses `role="alert"` for danger/warning severities and `role="status"` for info/success.
+- ARIA: root uses `role="alert"` for danger/warning severities and `role="status"` for info/success. The title is text inside the live region, read before the copy; it is not a document heading, so it does not enter the page outline.
 - Inline links are underlined, not colour-only, so they stay distinguishable against every severity surface (WCAG 1.4.1); the `.text-link` token supplies the focus outline.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on the dismiss fade; nothing sets the transition inline.
 - Touch target ≥40×40 px where the control is interactive.
+
+## Right-to-left
+
+- Layout: logical utilities only (`pe-`, `gap`, flex order), so the icon leads and the controls trail under `dir="rtl"`.
+- Icons: severity glyphs and the close `×` are not mirrored.
+- Keyboard: no horizontal arrow-key logic.
+- User data: none.
+
+## Internationalization
+
+| Key           | English source  | Override prop |
+| ------------- | --------------- | ------------- |
+| `alert.close` | `Close message` | —             |
+
+- Formatting: none; `title`, `label` and the slot copy come from the consumer.
+
+## Responsive
+
+- Container queries: the root is `@container/alert`; below `@sm` the action moves to its own line under the message.
+- Narrow (≤ 640 px or a narrow container): the title and copy wrap; the close button stays on the first line.
+- Touch: the action and close take Button / IconButton sizes (28 or 32 px); no hover-only affordance.
+- Reflow: no horizontal scroll at 320 px and 200 % zoom; long words break (`break-words`).
 
 ## Examples
 

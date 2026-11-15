@@ -6,10 +6,7 @@
   import Card from '@aziontech/webkit/card'
   import Checkbox from '@aziontech/webkit/checkbox'
   import Drawer from '@aziontech/webkit/drawer-root'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
@@ -373,319 +370,182 @@
                           side="right"
                           @update:open="onOpenChange"
                         >
-                          <DrawerPortal>
-                            <DrawerOverlay />
-                            <DrawerContent>
-                              <form
-                                class="flex min-h-0 flex-1 flex-col"
-                                :aria-label="upgrade ? 'Upgrade to ' + upgrade.name : 'Upgrade'"
-                                novalidate
-                                @submit.prevent="confirmUpgrade"
-                              >
-                                <PanelHeader class="w-full">
-                                  <DrawerTitle>Upgrade to {{ upgrade?.name }}</DrawerTitle>
-                                  <DrawerClose />
-                                </PanelHeader>
+                          <DrawerContent>
+                            <form
+                              class="flex min-h-0 flex-1 flex-col"
+                              :aria-label="upgrade ? 'Upgrade to ' + upgrade.name : 'Upgrade'"
+                              novalidate
+                              @submit.prevent="confirmUpgrade"
+                            >
+                              <PanelHeader class="w-full">
+                                <DrawerTitle>Upgrade to {{ upgrade?.name }}</DrawerTitle>
+                              </PanelHeader>
 
-                                <PanelContent>
-                                  <div
-                                    class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-(--spacing-xl)"
+                              <PanelContent>
+                                <div
+                                  class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-(--spacing-xl)"
+                                >
+                                  <aside
+                                    v-if="upgrade"
+                                    class="flex flex-col gap-(--spacing-md)"
                                   >
-                                    <aside
-                                      v-if="upgrade"
-                                      class="flex flex-col gap-(--spacing-md)"
-                                    >
-                                      <div class="flex flex-col gap-(--spacing-xs)">
-                                        <h3
-                                          class="flex shrink-0 items-center px-(--spacing-xs) text-label-lg text-(--text-default) lg:min-h-[calc(var(--spacing-sm)*2+var(--spacing-10)+1px)] lg:border-t lg:border-t-transparent lg:py-(--spacing-sm)"
+                                    <div class="flex flex-col gap-(--spacing-xs)">
+                                      <h3
+                                        class="flex shrink-0 items-center px-(--spacing-xs) text-label-lg text-(--text-default) lg:min-h-[calc(var(--spacing-sm)*2+var(--spacing-10)+1px)] lg:border-t lg:border-t-transparent lg:py-(--spacing-sm)"
+                                      >
+                                        What's included
+                                      </h3>
+
+                                      <ul class="m-0 flex list-none flex-col p-0">
+                                        <li
+                                          v-for="feature in upgrade.features"
+                                          :key="feature.title"
+                                          class="flex items-start gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xs) odd:bg-(--bg-mask)"
                                         >
-                                          What's included
-                                        </h3>
+                                          <i
+                                            class="pi pi-check mt-0.5 shrink-0 text-body-xs leading-none text-(--success-contrast)"
+                                            aria-hidden="true"
+                                          />
+                                          <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                                            <span class="text-label-md text-(--text-default)">{{
+                                              feature.title
+                                            }}</span>
+                                            <span
+                                              v-if="feature.detail"
+                                              class="text-body-xs text-(--text-muted)"
+                                              >{{ feature.detail }}</span
+                                            >
+                                          </span>
+                                        </li>
+                                      </ul>
+                                    </div>
 
-                                        <ul class="m-0 flex list-none flex-col p-0">
-                                          <li
-                                            v-for="feature in upgrade.features"
-                                            :key="feature.title"
-                                            class="flex items-start gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xs) odd:bg-(--bg-mask)"
-                                          >
-                                            <i
-                                              class="pi pi-check mt-0.5 shrink-0 text-body-xs leading-none text-(--success-contrast)"
-                                              aria-hidden="true"
-                                            />
-                                            <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                                              <span class="text-label-md text-(--text-default)">{{
-                                                feature.title
-                                              }}</span>
-                                              <span
-                                                v-if="feature.detail"
-                                                class="text-body-xs text-(--text-muted)"
-                                                >{{ feature.detail }}</span
-                                              >
-                                            </span>
-                                          </li>
-                                        </ul>
+                                    <div class="flex flex-col gap-(--spacing-xs)">
+                                      <Separator />
+                                      <div
+                                        v-for="link in pricingLinks"
+                                        :key="link.label"
+                                        class="ms-(--spacing-xs) w-fit"
+                                      >
+                                        <Link
+                                          :label="link.label"
+                                          :href="link.href"
+                                          target="_blank"
+                                          size="small"
+                                          class="w-full"
+                                        />
                                       </div>
+                                    </div>
+                                  </aside>
 
-                                      <div class="flex flex-col gap-(--spacing-xs)">
-                                        <Separator />
+                                  <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
+                                    <Card :padded="false">
+                                      <template #header>
+                                        <p class="text-label-lg text-(--text-default)">Charged</p>
+                                        <ToggleGroup
+                                          v-model="period"
+                                          :options="periods"
+                                          aria-label="Billing period"
+                                        />
+                                      </template>
+
+                                      <template #content>
                                         <div
-                                          v-for="link in pricingLinks"
-                                          :key="link.label"
-                                          class="ms-(--spacing-xs) w-fit"
+                                          v-if="charge"
+                                          class="flex flex-col"
                                         >
-                                          <Link
-                                            :label="link.label"
-                                            :href="link.href"
-                                            target="_blank"
-                                            size="small"
-                                            class="w-full"
-                                          />
-                                        </div>
-                                      </div>
-                                    </aside>
-
-                                    <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
-                                      <Card :padded="false">
-                                        <template #header>
-                                          <p class="text-label-lg text-(--text-default)">Charged</p>
-                                          <ToggleGroup
-                                            v-model="period"
-                                            :options="periods"
-                                            aria-label="Billing period"
-                                          />
-                                        </template>
-
-                                        <template #content>
                                           <div
-                                            v-if="charge"
-                                            class="flex flex-col"
+                                            class="flex flex-col gap-(--spacing-md) px-(--spacing-lg) py-(--spacing-lg)"
                                           >
                                             <div
-                                              class="flex flex-col gap-(--spacing-md) px-(--spacing-lg) py-(--spacing-lg)"
+                                              v-for="row in charge.rows"
+                                              :key="row.label"
+                                              class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm)"
                                             >
-                                              <div
-                                                v-for="row in charge.rows"
-                                                :key="row.label"
-                                                class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm)"
-                                              >
-                                                <span class="text-body-sm text-(--text-muted)">{{
-                                                  row.label
-                                                }}</span>
-                                                <span
-                                                  class="flex items-baseline gap-(--spacing-xs)"
-                                                >
-                                                  <span
-                                                    class="text-label-md text-(--text-default)"
-                                                    >{{ row.value }}</span
-                                                  >
-                                                  <span
-                                                    v-if="row.suffix"
-                                                    class="text-body-sm text-(--text-muted)"
-                                                    >{{ row.suffix }}</span
-                                                  >
-                                                </span>
-                                              </div>
-                                            </div>
-
-                                            <Separator />
-
-                                            <div
-                                              class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm) px-(--spacing-lg) py-(--spacing-lg)"
-                                            >
-                                              <span class="text-heading-xs text-(--text-default)"
-                                                >Total</span
-                                              >
+                                              <span class="text-body-sm text-(--text-muted)">{{
+                                                row.label
+                                              }}</span>
                                               <span class="flex items-baseline gap-(--spacing-xs)">
-                                                <span
-                                                  class="text-heading-xs text-(--text-default)"
-                                                  >{{ charge.total.value }}</span
-                                                >
-                                                <span class="text-body-sm text-(--text-muted)">{{
-                                                  charge.total.suffix
+                                                <span class="text-label-md text-(--text-default)">{{
+                                                  row.value
                                                 }}</span>
+                                                <span
+                                                  v-if="row.suffix"
+                                                  class="text-body-sm text-(--text-muted)"
+                                                  >{{ row.suffix }}</span
+                                                >
                                               </span>
                                             </div>
                                           </div>
-                                        </template>
-                                      </Card>
 
-                                      <Card
-                                        title="Payment method"
-                                        :padded="false"
-                                      >
-                                        <template #content>
+                                          <Separator />
+
                                           <div
-                                            class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)"
+                                            class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm) px-(--spacing-lg) py-(--spacing-lg)"
                                           >
-                                            <div
-                                              v-if="!editing"
-                                              class="flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
+                                            <span class="text-heading-xs text-(--text-default)"
+                                              >Total</span
                                             >
-                                              <PaymentBrand brand="visa" />
-                                              <p
-                                                class="min-w-0 flex-1 text-label-md text-(--text-default)"
-                                              >
-                                                Ending in {{ card.last4 }}
-                                              </p>
-                                              <Button
-                                                label="Change"
-                                                kind="outlined"
-                                                size="small"
-                                                @click="startEditing"
-                                              />
-                                            </div>
-
-                                            <template v-else>
-                                              <fieldset
-                                                class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
-                                              >
-                                                <legend class="sr-only">Payment method</legend>
-
-                                                <Field>
-                                                  <Field.Label>Cardholder name</Field.Label>
-                                                  <Input
-                                                    v-model="card.holder"
-                                                    name="cardholderName"
-                                                    size="large"
-                                                    placeholder="Jane A. Doe"
-                                                    autocomplete="cc-name"
-                                                  />
-                                                </Field>
-
-                                                <Field>
-                                                  <Field.Label>Country or region</Field.Label>
-                                                  <Select
-                                                    v-model="card.country"
-                                                    placeholder="Select an option"
-                                                    size="large"
-                                                  >
-                                                    <Select.Trigger />
-                                                    <Select.Content>
-                                                      <Select.Option
-                                                        v-for="option in countryOptions"
-                                                        :key="String(option.value)"
-                                                        :value="option.value"
-                                                        :disabled="option.disabled"
-                                                      >
-                                                        {{ option.label }}
-                                                      </Select.Option>
-                                                    </Select.Content>
-                                                  </Select>
-                                                </Field>
-
-                                                <Field>
-                                                  <Field.Label>Card number</Field.Label>
-                                                  <Input
-                                                    v-model="card.number"
-                                                    name="cardNumber"
-                                                    size="large"
-                                                    placeholder="1234 5678 9012 3456"
-                                                    autocomplete="cc-number"
-                                                    inputmode="numeric"
-                                                  />
-                                                </Field>
-
-                                                <div
-                                                  class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2"
-                                                >
-                                                  <Field>
-                                                    <Field.Label>Expiration date</Field.Label>
-                                                    <Input
-                                                      v-model="card.expiry"
-                                                      name="cardExpiry"
-                                                      size="large"
-                                                      placeholder="MM / YY"
-                                                      autocomplete="cc-exp"
-                                                      inputmode="numeric"
-                                                    />
-                                                    <Field.Description
-                                                      >Month and year, as MM/YY.</Field.Description
-                                                    >
-                                                  </Field>
-                                                  <Field>
-                                                    <Field.Label>Security code</Field.Label>
-                                                    <Input
-                                                      v-model="card.code"
-                                                      name="cardSecurityCode"
-                                                      size="large"
-                                                      placeholder="123"
-                                                      autocomplete="cc-csc"
-                                                      inputmode="numeric"
-                                                    />
-                                                    <Field.Description
-                                                      >3 or 4 digits on the back.</Field.Description
-                                                    >
-                                                  </Field>
-                                                </div>
-
-                                                <Alert
-                                                  severity="info"
-                                                  size="small"
-                                                  label="Sensitive data is handled by a PCI-compliant payment partner."
-                                                />
-                                              </fieldset>
-
-                                              <div
-                                                class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:justify-end"
-                                              >
-                                                <div class="w-full sm:w-fit">
-                                                  <Button
-                                                    class="w-full"
-                                                    label="Cancel"
-                                                    kind="outlined"
-                                                    size="medium"
-                                                    @click="editing = false"
-                                                  />
-                                                </div>
-                                                <div class="w-full sm:w-fit">
-                                                  <Button
-                                                    class="w-full"
-                                                    label="Update"
-                                                    kind="primary"
-                                                    size="medium"
-                                                    @click="updateCard"
-                                                  />
-                                                </div>
-                                              </div>
-                                            </template>
+                                            <span class="flex items-baseline gap-(--spacing-xs)">
+                                              <span class="text-heading-xs text-(--text-default)">{{
+                                                charge.total.value
+                                              }}</span>
+                                              <span class="text-body-sm text-(--text-muted)">{{
+                                                charge.total.suffix
+                                              }}</span>
+                                            </span>
                                           </div>
-                                        </template>
-                                      </Card>
+                                        </div>
+                                      </template>
+                                    </Card>
 
-                                      <Card
-                                        title="Address information"
-                                        :padded="false"
-                                      >
-                                        <template #content>
-                                          <fieldset
-                                            class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 px-(--spacing-lg) py-(--spacing-lg)"
+                                    <Card
+                                      title="Payment method"
+                                      :padded="false"
+                                    >
+                                      <template #content>
+                                        <div
+                                          class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)"
+                                        >
+                                          <div
+                                            v-if="!editing"
+                                            class="flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
                                           >
-                                            <legend class="sr-only">Address information</legend>
-
-                                            <Field orientation="horizontal">
-                                              <Checkbox
-                                                v-model="address.useAccountInformation"
-                                                name="useAccountInformation"
-                                              />
-                                              <Field.Content>
-                                                <Field.Label
-                                                  >Use the same information as my
-                                                  account</Field.Label
-                                                >
-                                                <Field.Description
-                                                  >Uncheck to bill this organization at a different
-                                                  address.</Field.Description
-                                                >
-                                              </Field.Content>
-                                            </Field>
-
-                                            <div
-                                              class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2"
+                                            <PaymentBrand brand="visa" />
+                                            <p
+                                              class="min-w-0 flex-1 text-label-md text-(--text-default)"
                                             >
+                                              Ending in {{ card.last4 }}
+                                            </p>
+                                            <Button
+                                              label="Change"
+                                              kind="outlined"
+                                              size="small"
+                                              @click="startEditing"
+                                            />
+                                          </div>
+
+                                          <template v-else>
+                                            <fieldset
+                                              class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
+                                            >
+                                              <legend class="sr-only">Payment method</legend>
+
                                               <Field>
-                                                <Field.Label>Country</Field.Label>
+                                                <Field.Label>Cardholder name</Field.Label>
+                                                <Input
+                                                  v-model="card.holder"
+                                                  name="cardholderName"
+                                                  size="large"
+                                                  placeholder="Jane A. Doe"
+                                                  autocomplete="cc-name"
+                                                />
+                                              </Field>
+
+                                              <Field>
+                                                <Field.Label>Country or region</Field.Label>
                                                 <Select
-                                                  v-model="address.country"
+                                                  v-model="card.country"
                                                   placeholder="Select an option"
                                                   size="large"
                                                 >
@@ -702,114 +562,242 @@
                                                   </Select.Content>
                                                 </Select>
                                               </Field>
+
                                               <Field>
-                                                <Field.Label>Postal code</Field.Label>
+                                                <Field.Label>Card number</Field.Label>
                                                 <Input
-                                                  v-model="address.postalCode"
-                                                  name="postalCode"
+                                                  v-model="card.number"
+                                                  name="cardNumber"
                                                   size="large"
-                                                  autocomplete="postal-code"
+                                                  placeholder="1234 5678 9012 3456"
+                                                  autocomplete="cc-number"
+                                                  inputmode="numeric"
                                                 />
                                               </Field>
-                                              <Field>
-                                                <Field.Label>State or region</Field.Label>
-                                                <Select
-                                                  v-model="address.state"
-                                                  placeholder="Select an option"
-                                                  size="large"
-                                                >
-                                                  <Select.Trigger />
-                                                  <Select.Content>
-                                                    <Select.Option
-                                                      v-for="option in stateOptions"
-                                                      :key="String(option.value)"
-                                                      :value="option.value"
-                                                      :disabled="option.disabled"
-                                                    >
-                                                      {{ option.label }}
-                                                    </Select.Option>
-                                                  </Select.Content>
-                                                </Select>
-                                              </Field>
-                                              <Field>
-                                                <Field.Label>City</Field.Label>
-                                                <Select
-                                                  v-model="address.city"
-                                                  placeholder="Select an option"
-                                                  size="large"
-                                                >
-                                                  <Select.Trigger />
-                                                  <Select.Content>
-                                                    <Select.Option
-                                                      v-for="option in cityOptions"
-                                                      :key="String(option.value)"
-                                                      :value="option.value"
-                                                      :disabled="option.disabled"
-                                                    >
-                                                      {{ option.label }}
-                                                    </Select.Option>
-                                                  </Select.Content>
-                                                </Select>
-                                              </Field>
-                                            </div>
 
-                                            <Field>
-                                              <Field.Label>Address</Field.Label>
-                                              <Input
-                                                v-model="address.line1"
-                                                name="addressLine1"
-                                                size="large"
-                                                autocomplete="address-line1"
-                                              />
-                                            </Field>
-                                            <Field>
-                                              <Field.Label>Address line 2</Field.Label>
-                                              <Input
-                                                v-model="address.line2"
-                                                name="addressLine2"
-                                                size="large"
-                                                autocomplete="address-line2"
-                                              />
-                                              <Field.Description
-                                                >Optional. Apartment, suite or
-                                                floor.</Field.Description
+                                              <div
+                                                class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2"
                                               >
-                                            </Field>
-                                          </fieldset>
-                                        </template>
-                                      </Card>
-                                    </div>
-                                  </div>
-                                </PanelContent>
+                                                <Field>
+                                                  <Field.Label>Expiration date</Field.Label>
+                                                  <Input
+                                                    v-model="card.expiry"
+                                                    name="cardExpiry"
+                                                    size="large"
+                                                    placeholder="MM / YY"
+                                                    autocomplete="cc-exp"
+                                                    inputmode="numeric"
+                                                  />
+                                                  <Field.Description
+                                                    >Month and year, as MM/YY.</Field.Description
+                                                  >
+                                                </Field>
+                                                <Field>
+                                                  <Field.Label>Security code</Field.Label>
+                                                  <Input
+                                                    v-model="card.code"
+                                                    name="cardSecurityCode"
+                                                    size="large"
+                                                    placeholder="123"
+                                                    autocomplete="cc-csc"
+                                                    inputmode="numeric"
+                                                  />
+                                                  <Field.Description
+                                                    >3 or 4 digits on the back.</Field.Description
+                                                  >
+                                                </Field>
+                                              </div>
 
-                                <PanelFooter>
-                                  <div
-                                    class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
-                                  >
-                                    <div class="w-full md:w-fit">
-                                      <Button
-                                        class="w-full"
-                                        type="button"
-                                        label="Cancel"
-                                        kind="outlined"
-                                        size="medium"
-                                        @click="onOpenChange(false)"
-                                      />
-                                    </div>
-                                    <div class="w-full md:w-fit">
-                                      <Button
-                                        class="w-full"
-                                        label="Upgrade"
-                                        kind="primary"
-                                        size="medium"
-                                        type="submit"
-                                      />
-                                    </div>
+                                              <Alert
+                                                severity="info"
+                                                size="small"
+                                                label="Sensitive data is handled by a PCI-compliant payment partner."
+                                              />
+                                            </fieldset>
+
+                                            <div
+                                              class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:justify-end"
+                                            >
+                                              <div class="w-full sm:w-fit">
+                                                <Button
+                                                  class="w-full"
+                                                  label="Cancel"
+                                                  kind="outlined"
+                                                  size="medium"
+                                                  @click="editing = false"
+                                                />
+                                              </div>
+                                              <div class="w-full sm:w-fit">
+                                                <Button
+                                                  class="w-full"
+                                                  label="Update"
+                                                  kind="primary"
+                                                  size="medium"
+                                                  @click="updateCard"
+                                                />
+                                              </div>
+                                            </div>
+                                          </template>
+                                        </div>
+                                      </template>
+                                    </Card>
+
+                                    <Card
+                                      title="Address information"
+                                      :padded="false"
+                                    >
+                                      <template #content>
+                                        <fieldset
+                                          class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 px-(--spacing-lg) py-(--spacing-lg)"
+                                        >
+                                          <legend class="sr-only">Address information</legend>
+
+                                          <Field orientation="horizontal">
+                                            <Checkbox
+                                              v-model="address.useAccountInformation"
+                                              name="useAccountInformation"
+                                            />
+                                            <Field.Content>
+                                              <Field.Label
+                                                >Use the same information as my account</Field.Label
+                                              >
+                                              <Field.Description
+                                                >Uncheck to bill this organization at a different
+                                                address.</Field.Description
+                                              >
+                                            </Field.Content>
+                                          </Field>
+
+                                          <div
+                                            class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2"
+                                          >
+                                            <Field>
+                                              <Field.Label>Country</Field.Label>
+                                              <Select
+                                                v-model="address.country"
+                                                placeholder="Select an option"
+                                                size="large"
+                                              >
+                                                <Select.Trigger />
+                                                <Select.Content>
+                                                  <Select.Option
+                                                    v-for="option in countryOptions"
+                                                    :key="String(option.value)"
+                                                    :value="option.value"
+                                                    :disabled="option.disabled"
+                                                  >
+                                                    {{ option.label }}
+                                                  </Select.Option>
+                                                </Select.Content>
+                                              </Select>
+                                            </Field>
+                                            <Field>
+                                              <Field.Label>Postal code</Field.Label>
+                                              <Input
+                                                v-model="address.postalCode"
+                                                name="postalCode"
+                                                size="large"
+                                                autocomplete="postal-code"
+                                              />
+                                            </Field>
+                                            <Field>
+                                              <Field.Label>State or region</Field.Label>
+                                              <Select
+                                                v-model="address.state"
+                                                placeholder="Select an option"
+                                                size="large"
+                                              >
+                                                <Select.Trigger />
+                                                <Select.Content>
+                                                  <Select.Option
+                                                    v-for="option in stateOptions"
+                                                    :key="String(option.value)"
+                                                    :value="option.value"
+                                                    :disabled="option.disabled"
+                                                  >
+                                                    {{ option.label }}
+                                                  </Select.Option>
+                                                </Select.Content>
+                                              </Select>
+                                            </Field>
+                                            <Field>
+                                              <Field.Label>City</Field.Label>
+                                              <Select
+                                                v-model="address.city"
+                                                placeholder="Select an option"
+                                                size="large"
+                                              >
+                                                <Select.Trigger />
+                                                <Select.Content>
+                                                  <Select.Option
+                                                    v-for="option in cityOptions"
+                                                    :key="String(option.value)"
+                                                    :value="option.value"
+                                                    :disabled="option.disabled"
+                                                  >
+                                                    {{ option.label }}
+                                                  </Select.Option>
+                                                </Select.Content>
+                                              </Select>
+                                            </Field>
+                                          </div>
+
+                                          <Field>
+                                            <Field.Label>Address</Field.Label>
+                                            <Input
+                                              v-model="address.line1"
+                                              name="addressLine1"
+                                              size="large"
+                                              autocomplete="address-line1"
+                                            />
+                                          </Field>
+                                          <Field>
+                                            <Field.Label>Address line 2</Field.Label>
+                                            <Input
+                                              v-model="address.line2"
+                                              name="addressLine2"
+                                              size="large"
+                                              autocomplete="address-line2"
+                                            />
+                                            <Field.Description
+                                              >Optional. Apartment, suite or
+                                              floor.</Field.Description
+                                            >
+                                          </Field>
+                                        </fieldset>
+                                      </template>
+                                    </Card>
                                   </div>
-                                </PanelFooter>
-                              </form>
-                            </DrawerContent>
-                          </DrawerPortal>
+                                </div>
+                              </PanelContent>
+
+                              <PanelFooter>
+                                <div
+                                  class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:items-center md:justify-end"
+                                >
+                                  <div class="w-full md:w-fit">
+                                    <Button
+                                      class="w-full"
+                                      type="button"
+                                      label="Cancel"
+                                      kind="outlined"
+                                      size="medium"
+                                      @click="onOpenChange(false)"
+                                    />
+                                  </div>
+                                  <div class="w-full md:w-fit">
+                                    <Button
+                                      class="w-full"
+                                      label="Upgrade"
+                                      kind="primary"
+                                      size="medium"
+                                      type="submit"
+                                    />
+                                  </div>
+                                </div>
+                              </PanelFooter>
+                            </form>
+                          </DrawerContent>
                         </Drawer>
                       </div>
                     </div>

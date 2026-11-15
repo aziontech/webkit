@@ -804,7 +804,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <template #cell-category="{ row }">
                 <Tag
                   :label="row.category"
-                  severity="secondary"
+                  severity="neutral"
                   size="small"
                 />
               </template>
@@ -829,7 +829,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
               <template #cell-change="{ row }">
                 <Tag
                   :label="formatters.change(row.change)"
-                  :severity="row.change > 0 ? 'danger' : row.change < 0 ? 'success' : 'secondary'"
+                  :severity="row.change > 0 ? 'danger' : row.change < 0 ? 'success' : 'neutral'"
                   :icon="
                     row.change > 0
                       ? 'pi pi-arrow-up-right'

@@ -76,7 +76,7 @@ drags and resizes go to the board. `ChartCard` keeps working on its own outside 
 - `board-item/board-item.vue` — One cell of the grid, an `<li>` that spans the entry's columns (capped at the grid's current column count) and, when the entry has a `height`, that many pixels. It is the drop target while another item is dragged (`data-over` while hovered), registers its `label` for announcements, and returns focus to the handle that moved it.
   - Props: `itemId: string` (required — the `id` of its layout entry), `label?: string` (default `''` — the name the live region announces; empty uses `Item <position>` from the locale catalog).
   - Slot: `default` — the item's content, normally one `ChartCard`.
-  - `data-testid` fallback: `layout-board-item`.
+  - `data-testid` fallback: `layout-board__item`.
 
 Resulting layout:
 
@@ -314,7 +314,7 @@ Exported types: `BoardLayoutItem = { id: string; span: number; height?: number }
             <ChartCard.Action v-if="editing">
               <Tag
                 :label="item.span + '/12'"
-                severity="secondary"
+                severity="neutral"
                 size="small"
                 icon="pi pi-arrows-h"
               />

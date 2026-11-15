@@ -1,11 +1,11 @@
 # TemplateBrowser (`platform/view/template-browser`)
 
-> The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card kind="integration"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The template catalog people start a project from: a medium page heading with the outlined Documentation action, one `PropertyFilter` that searches the name and the description and filters by Category and Framework, then one section per category (Frameworks, Starters, Functions) with a grid of template tiles. Each tile is a `Card kind="integration"` with the framework mark, the name as a button that opens the preview, two lines of description and the framework as a badge; the whole tile is the target, and the grid follows the content width through container queries. The preview is a medium right `Drawer`: the mark and the name in the header, the description, a `KeyValuePairs` of framework, category, repository and last update, and the template's README in a `Card` through `DocProse`; its footer holds View repository and the primary Deploy, which leads to the deploy template flow (`platform/create/deploy-template`), where the deploy runs and reports by toast. The filter lives in the URL through `useCollection`. A search that matches nothing shows No matching templates with Clear filters; while the catalog loads the tiles are skeletons; a catalog that fails to load shows a danger `Alert` with Retry and an Import from Git way out. Built from `PageHeader`, `Button`, `PropertyFilter`, `Card`, `EmptyState`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter`, `KeyValuePairs` and `DocProse`. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: product
 - Source: `blocks/platform/view/template-browser/template-browser.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/template-browser")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [DocProse](../../../components/doc-prose.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [Skeleton](../../../components/skeleton.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [DocProse](../../../components/doc-prose.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [EmptyState](../../../components/empty-state.md), [KeyValuePairs](../../../components/key-value-pairs.md), [PageHeader](../../../components/page-header.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [Skeleton](../../../components/skeleton.md), `use-collection`
 - Skills: `webkit-lists`, `webkit-create-surface`, `webkit-ui-states`
 
 ## Asked as
@@ -49,9 +49,9 @@ One `section` per category that still has matches, labelled by its `h2` in the m
 
 When `status` is `no-match`, the sections give way to a medium `EmptyState` with the filter-slash glyph, "No matching templates", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`. The filter keeps its tokens, so the person can see what hid the tiles.
 
-### E. Preview drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
+### E. Preview drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
 
-A medium right `Drawer` controlled by `v-model:open`, opened by the tile. `PanelHeader` carries the mark, the template name as `DrawerTitle` and `DrawerClose`; `PanelContent` scrolls; `PanelFooter` holds the actions at the end: View repository (outlined, trailing external-link icon, new tab) and the primary Deploy. Deploy is a link to the deploy template flow with the template's id; the drawer never runs the deploy itself.
+A medium right `Drawer` controlled by `v-model:open`, opened by the tile. `PanelHeader` carries the mark, the template name as `DrawerTitle` and the drawer's own close button; `PanelContent` scrolls; `PanelFooter` holds the actions at the end: View repository (outlined, trailing external-link icon, new tab) and the primary Deploy. Deploy is a link to the deploy template flow with the template's id; the drawer never runs the deploy itself.
 
 ### F. Template facts — `KeyValuePairs` (required)
 
@@ -134,10 +134,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DocProse from '@aziontech/webkit/doc-prose'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -415,7 +412,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
                   :title="item.title"
                   :logo="[item.icon, MARKS[item.framework]].filter(Boolean).join(' ')"
                   :description="item.description"
-                  :badges="[{ label: FRAMEWORKS[item.framework], severity: 'secondary' }]"
+                  :badges="[{ label: FRAMEWORKS[item.framework], severity: 'neutral' }]"
                   @select="openPreview(item)"
                 />
               </li>
@@ -430,101 +427,97 @@ Each variant is the same screen in another state: `get_pattern("platform/view/te
       size="medium"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 items-center gap-(--spacing-sm)">
-              <span
-                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
-              >
-                <i
-                  :class="[selected.icon, MARKS[selected.framework]]"
-                  class="text-body-lg leading-none text-(--text-default)"
-                  aria-hidden="true"
-                />
-              </span>
-              <DrawerTitle>{{ selected.title }}</DrawerTitle>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+            <span
+              class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+            >
+              <i
+                :class="[selected.icon, MARKS[selected.framework]]"
+                class="text-body-lg leading-none text-(--text-default)"
+                aria-hidden="true"
+              />
+            </span>
+            <DrawerTitle>{{ selected.title }}</DrawerTitle>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <div class="flex flex-col gap-(--layout-section-gap)">
-              <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
+        <PanelContent>
+          <div class="flex flex-col gap-(--layout-section-gap)">
+            <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
 
-              <KeyValuePairs
-                :columns="2"
-                aria-label="Template details"
+            <KeyValuePairs
+              :columns="2"
+              aria-label="Template details"
+            >
+              <KeyValuePairs.Item label="Framework">{{
+                FRAMEWORKS[selected.framework]
+              }}</KeyValuePairs.Item>
+              <KeyValuePairs.Item label="Category">{{
+                categoryLabel(selected.category)
+              }}</KeyValuePairs.Item>
+              <KeyValuePairs.Item label="Repository"
+                ><bdi>{{ selected.repository }}</bdi></KeyValuePairs.Item
               >
-                <KeyValuePairs.Item label="Framework">{{
-                  FRAMEWORKS[selected.framework]
-                }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Category">{{
-                  categoryLabel(selected.category)
-                }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Repository"
-                  ><bdi>{{ selected.repository }}</bdi></KeyValuePairs.Item
-                >
-                <KeyValuePairs.Item label="Updated">{{ selected.updated }}</KeyValuePairs.Item>
-              </KeyValuePairs>
+              <KeyValuePairs.Item label="Updated">{{ selected.updated }}</KeyValuePairs.Item>
+            </KeyValuePairs>
 
-              <section
-                class="flex flex-col gap-(--layout-group-gap)"
-                aria-labelledby="template-readme"
+            <section
+              class="flex flex-col gap-(--layout-group-gap)"
+              aria-labelledby="template-readme"
+            >
+              <h3
+                id="template-readme"
+                class="text-heading-xxs text-(--text-default)"
               >
-                <h3
-                  id="template-readme"
-                  class="text-heading-xxs text-(--text-default)"
-                >
-                  README
-                </h3>
-                <Card>
-                  <template #content>
-                    <DocProse>
-                      <p>{{ selected.description }}</p>
-                      <h4>Deploy</h4>
-                      <p>
-                        Deploy creates a copy of this repository in your Git account, builds it and
-                        publishes it. Every push to the main branch deploys again.
-                      </p>
-                      <h4>Run it locally</h4>
-                      <pre><code>npm install
+                README
+              </h3>
+              <Card>
+                <template #content>
+                  <DocProse>
+                    <p>{{ selected.description }}</p>
+                    <h4>Deploy</h4>
+                    <p>
+                      Deploy creates a copy of this repository in your Git account, builds it and
+                      publishes it. Every push to the main branch deploys again.
+                    </p>
+                    <h4>Run it locally</h4>
+                    <pre><code>npm install
 npm run dev</code></pre>
-                      <h4>Settings</h4>
-                      <ul>
-                        <li>The build command and the output folder are read from the project.</li>
-                        <li>Environment variables can be added after the first deploy.</li>
-                      </ul>
-                    </DocProse>
-                  </template>
-                </Card>
-              </section>
-            </div>
-          </PanelContent>
+                    <h4>Settings</h4>
+                    <ul>
+                      <li>The build command and the output folder are read from the project.</li>
+                      <li>Environment variables can be added after the first deploy.</li>
+                    </ul>
+                  </DocProse>
+                </template>
+              </Card>
+            </section>
+          </div>
+        </PanelContent>
 
-          <PanelFooter>
-            <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
-              <Button
-                label="View repository"
-                icon="pi pi-external-link"
-                icon-position="trailing"
-                kind="outlined"
-                size="medium"
-                :href="`https://example.com/${selected.repository}`"
-                target="_blank"
-              />
-              <Button
-                label="Deploy"
-                icon="pi pi-cloud-upload"
-                kind="primary"
-                size="medium"
-                :href="`/create/deploy?template=${selected.id}`"
-              />
-            </div>
-          </PanelFooter>
-        </DrawerContent>
-      </DrawerPortal>
+        <PanelFooter>
+          <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
+            <Button
+              label="View repository"
+              icon="pi pi-external-link"
+              icon-position="trailing"
+              kind="outlined"
+              size="medium"
+              :href="`https://example.com/${selected.repository}`"
+              target="_blank"
+            />
+            <Button
+              label="Deploy"
+              icon="pi pi-cloud-upload"
+              kind="primary"
+              size="medium"
+              :href="`/create/deploy?template=${selected.id}`"
+            />
+          </div>
+        </PanelFooter>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

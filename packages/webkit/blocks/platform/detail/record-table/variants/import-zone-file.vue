@@ -4,11 +4,8 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
@@ -908,174 +905,168 @@ legacy  IN HINFO "PC" "Linux"`
       side="right"
       size="large"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <DrawerTitle>Import zone file</DrawerTitle>
-            <DrawerClose />
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-lg)">
-              <DrawerDescription>
-                Records in BIND format are added to example.com. Nothing changes until you import,
-                and lines that cannot be read are left out.
-              </DrawerDescription>
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <DrawerTitle>Import zone file</DrawerTitle>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-lg)">
+            <DrawerDescription>
+              Records in BIND format are added to example.com. Nothing changes until you import, and
+              lines that cannot be read are left out.
+            </DrawerDescription>
 
-              <section
-                aria-labelledby="zone-import-source"
-                class="flex flex-col gap-(--spacing-sm)"
+            <section
+              aria-labelledby="zone-import-source"
+              class="flex flex-col gap-(--spacing-sm)"
+            >
+              <h3
+                id="zone-import-source"
+                class="m-0 text-label-md text-(--text-default)"
               >
+                Zone file
+              </h3>
+              <FileDropzone
+                title="Drop a zone file"
+                description="One .zone or .txt file in BIND format."
+                accept=".zone,.txt,.db,text/plain"
+                :multiple="false"
+                icon="pi pi-file-import"
+                :invalid="Boolean(dropError)"
+                @drop="onDrop"
+                @reject="onReject"
+              >
+                <Button
+                  label="Browse files"
+                  kind="secondary"
+                  size="medium"
+                  @click="fileInput?.click()"
+                />
+              </FileDropzone>
+              <input
+                ref="fileInput"
+                type="file"
+                accept=".zone,.txt,.db,text/plain"
+                class="hidden"
+                aria-hidden="true"
+                tabindex="-1"
+                @change="onPicked"
+              />
+              <HelperText
+                v-if="dropError"
+                kind="invalid"
+                :label="dropError"
+              />
+              <Field>
+                <Field.Label for="zone-import-text">
+                  <span class="text-(--text-muted)">Or paste it</span>
+                </Field.Label>
+                <Textarea
+                  id="zone-import-text"
+                  v-model="zoneText"
+                  class="w-full"
+                  :rows="8"
+                  placeholder="www IN CNAME example.com."
+                  @paste="onPaste"
+                />
+              </Field>
+            </section>
+
+            <section
+              aria-labelledby="zone-import-preview"
+              class="flex flex-col gap-(--spacing-sm)"
+            >
+              <div class="flex flex-wrap items-baseline justify-between gap-(--spacing-xs)">
                 <h3
-                  id="zone-import-source"
+                  id="zone-import-preview"
                   class="m-0 text-label-md text-(--text-default)"
                 >
-                  Zone file
+                  Preview
                 </h3>
-                <FileDropzone
-                  title="Drop a zone file"
-                  description="One .zone or .txt file in BIND format."
-                  accept=".zone,.txt,.db,text/plain"
-                  :multiple="false"
-                  icon="pi pi-file-import"
-                  :invalid="Boolean(dropError)"
-                  @drop="onDrop"
-                  @reject="onReject"
+                <p
+                  role="status"
+                  class="m-0 text-body-sm text-(--text-muted)"
                 >
-                  <Button
-                    label="Browse files"
-                    kind="secondary"
-                    size="medium"
-                    @click="fileInput?.click()"
-                  />
-                </FileDropzone>
-                <input
-                  ref="fileInput"
-                  type="file"
-                  accept=".zone,.txt,.db,text/plain"
-                  class="hidden"
-                  aria-hidden="true"
-                  tabindex="-1"
-                  @change="onPicked"
-                />
-                <HelperText
-                  v-if="dropError"
-                  kind="invalid"
-                  :label="dropError"
-                />
-                <Field>
-                  <Field.Label for="zone-import-text">
-                    <span class="text-(--text-muted)">Or paste it</span>
-                  </Field.Label>
-                  <Textarea
-                    id="zone-import-text"
-                    v-model="zoneText"
-                    class="w-full"
-                    :rows="8"
-                    placeholder="www IN CNAME example.com."
-                    @paste="onPaste"
-                  />
-                </Field>
-              </section>
-
-              <section
-                aria-labelledby="zone-import-preview"
-                class="flex flex-col gap-(--spacing-sm)"
+                  {{ readyLines.length }} ready, {{ skippedLines.length }} skipped,
+                  {{ errorLines.length }} {{ errorLines.length === 1 ? 'error' : 'errors' }}
+                </p>
+              </div>
+              <Alert
+                v-if="errorLines.length"
+                severity="danger"
               >
-                <div class="flex flex-wrap items-baseline justify-between gap-(--spacing-xs)">
-                  <h3
-                    id="zone-import-preview"
-                    class="m-0 text-label-md text-(--text-default)"
+                {{
+                  errorLines.length === 1
+                    ? `Line ${errorLines[0].line} cannot be imported.`
+                    : `${errorLines.length} lines cannot be imported.`
+                }}
+                The ready records still import; fix the rest in the file and import it again.
+              </Alert>
+              <Card :padded="false">
+                <template #content>
+                  <TableRoot
+                    :data="parsed.lines"
+                    :columns="previewColumns"
+                    row-key="line"
+                    paginated
+                    :page-size="10"
+                    :bordered="false"
+                    aria-label="Zone file preview"
                   >
-                    Preview
-                  </h3>
-                  <p
-                    role="status"
-                    class="m-0 text-body-sm text-(--text-muted)"
-                  >
-                    {{ readyLines.length }} ready, {{ skippedLines.length }} skipped,
-                    {{ errorLines.length }} {{ errorLines.length === 1 ? 'error' : 'errors' }}
-                  </p>
-                </div>
-                <Alert
-                  v-if="errorLines.length"
-                  severity="danger"
-                >
-                  {{
-                    errorLines.length === 1
-                      ? `Line ${errorLines[0].line} cannot be imported.`
-                      : `${errorLines.length} lines cannot be imported.`
-                  }}
-                  The ready records still import; fix the rest in the file and import it again.
-                </Alert>
-                <Card :padded="false">
-                  <template #content>
-                    <TableRoot
-                      :data="parsed.lines"
-                      :columns="previewColumns"
-                      row-key="line"
-                      paginated
-                      :page-size="10"
-                      :bordered="false"
-                      aria-label="Zone file preview"
-                    >
-                      <template #cell-name="{ value }">
-                        <span class="font-(family-name:--font-code) text-body-sm">{{
-                          value ?? '—'
-                        }}</span>
-                      </template>
-                      <template #cell-value="{ row }">
-                        <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                          <span
-                            v-if="row.value"
-                            class="truncate font-(family-name:--font-code) text-body-sm"
-                            >{{ row.value }}</span
-                          >
-                          <span
-                            v-if="row.reason"
-                            class="text-body-xs"
-                            :class="
-                              row.status === 'error' ? 'text-(--danger)' : 'text-(--text-muted)'
-                            "
-                            >{{ row.reason }}</span
-                          >
-                        </span>
-                      </template>
-                      <template #cell-status="{ value }">
-                        <Tag
-                          :label="statusTag[value].label"
-                          :severity="statusTag[value].severity"
-                          size="small"
-                        />
-                      </template>
-                    </TableRoot>
-                  </template>
-                </Card>
-              </section>
-            </div>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                label="Cancel"
-                kind="outlined"
-                @click="importOpen = false"
-              />
-              <Button
-                :label="
-                  readyLines.length === 1
-                    ? 'Import 1 record'
-                    : `Import ${readyLines.length} records`
-                "
-                kind="primary"
-                :disabled="!readyLines.length"
-                :loading="importing"
-                @click="runImport"
-              />
-            </div>
-          </PanelFooter>
-        </DrawerContent>
-      </DrawerPortal>
+                    <template #cell-name="{ value }">
+                      <span class="font-(family-name:--font-code) text-body-sm">{{
+                        value ?? '—'
+                      }}</span>
+                    </template>
+                    <template #cell-value="{ row }">
+                      <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                        <span
+                          v-if="row.value"
+                          class="truncate font-(family-name:--font-code) text-body-sm"
+                          >{{ row.value }}</span
+                        >
+                        <span
+                          v-if="row.reason"
+                          class="text-body-xs"
+                          :class="
+                            row.status === 'error' ? 'text-(--danger)' : 'text-(--text-muted)'
+                          "
+                          >{{ row.reason }}</span
+                        >
+                      </span>
+                    </template>
+                    <template #cell-status="{ value }">
+                      <Tag
+                        :label="statusTag[value].label"
+                        :severity="statusTag[value].severity"
+                        size="small"
+                      />
+                    </template>
+                  </TableRoot>
+                </template>
+              </Card>
+            </section>
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              @click="importOpen = false"
+            />
+            <Button
+              :label="
+                readyLines.length === 1 ? 'Import 1 record' : `Import ${readyLines.length} records`
+              "
+              kind="primary"
+              :disabled="!readyLines.length"
+              :loading="importing"
+              @click="runImport"
+            />
+          </div>
+        </PanelFooter>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/account/build-deployment/build-deployment.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/build-deployment")`
-- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Pagination](../../../components/pagination.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [ConfirmDialog](../../../components/confirm-dialog.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [Pagination](../../../components/pagination.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [RadioButton](../../../components/radio-button.md), [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-form`, `webkit-tables`, `webkit-lists`, `webkit-ui-states`, `webkit-microcopy`
 
 ## Asked as
@@ -52,7 +52,7 @@ The table-view controls row (`platform/view/table-view`): a `PropertyFilter` ove
 
 `Table` with `v-bind="tableProps"` in a flush `Card`, newest change first. Name, with a `System` `Tag` on Default; Services, the count with a `Shared` `Tag` when more than one service uses it and the service names on a `Tooltip`; Type (System or Custom, hidden by default); Binding policy; Deployment policy; Status as `Table.CellStatus`; Last modified as `Table.CellTime` with the author. `Table.CellActions` named after the setting, absent on Default: Edit, Clone (a copy named `<name>-copy` with no environment), then Delete in its own group, which asks in a `ConfirmDialog` that says how many services fall back to Default. `No matching Deployment Settings` with Clear filters sits in the table's `#empty` slot.
 
-### G. Create and edit drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `DrawerTitle`, `DrawerClose`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Textarea`, `RadioButton` (required)
+### G. Create and edit drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Textarea`, `RadioButton` (required)
 
 This page owns the Deployment Setting form, in a medium right `Drawer` (`platform/create/create-in-drawer#DeploymentSettings` should match it field for field): General (Name, required and unique; Description; Active `Switch`) and Routing and policy (binding policy and deployment policy as `RadioButton` groups with a description each, starting from the saved defaults). Edit opens the same form filled, titled `Edit Deployment Setting`, with the deployment policy locked because it cannot change after creation. Cancel and the primary `Create Deployment Setting` or `Save changes`, which spins; the drawer cannot be dismissed while it saves. A missing or taken name shows on the field after submit and focus moves to it.
 
@@ -130,10 +130,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
@@ -894,7 +891,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                             >
                               <Tag
                                 :label="environment.name"
-                                severity="secondary"
+                                severity="neutral"
                                 size="small"
                               />
                               <Tag
@@ -927,7 +924,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                                 v-if="environment.auto"
                                 key="auto"
                                 label="Linked automatically"
-                                severity="secondary"
+                                severity="neutral"
                                 size="small"
                               />
                               <Tag
@@ -1017,7 +1014,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                         <Tag
                           v-if="row.system"
                           label="System"
-                          severity="secondary"
+                          severity="neutral"
                           size="small"
                           class="shrink-0"
                         />
@@ -1066,7 +1063,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                     <template #cell-status="{ value }">
                       <Table.CellStatus
                         :label="value"
-                        :severity="value === 'Active' ? 'success' : 'secondary'"
+                        :severity="value === 'Active' ? 'success' : 'neutral'"
                       />
                     </template>
                     <template #cell-updatedAt="{ row }">
@@ -1161,166 +1158,163 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       size="medium"
       side="right"
       :dismissible="!submitting"
+      :closable="!submitting"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <form
-            ref="formEl"
-            class="flex min-h-0 flex-1 flex-col"
-            :aria-label="drawerTitle"
-            novalidate
-            @submit.prevent="submit"
-          >
-            <PanelHeader class="w-full">
-              <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
-                <p class="text-body-sm text-(--text-muted)">
-                  A Deployment Setting says how a deploy routes: whether versions lock the resource
-                  IDs they shipped with, and how many of them take traffic. An environment publishes
-                  with exactly one.
-                </p>
-              </div>
-              <DrawerClose />
-            </PanelHeader>
+      <DrawerContent>
+        <form
+          ref="formEl"
+          class="flex min-h-0 flex-1 flex-col"
+          :aria-label="drawerTitle"
+          novalidate
+          @submit.prevent="submit"
+        >
+          <PanelHeader class="w-full">
+            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
+              <p class="text-body-sm text-(--text-muted)">
+                A Deployment Setting says how a deploy routes: whether versions lock the resource
+                IDs they shipped with, and how many of them take traffic. An environment publishes
+                with exactly one.
+              </p>
+            </div>
+          </PanelHeader>
 
-            <PanelContent>
-              <fieldset
-                class="m-0 flex min-w-0 flex-col border-0 p-0"
-                :disabled="submitting"
+          <PanelContent>
+            <fieldset
+              class="m-0 flex min-w-0 flex-col border-0 p-0"
+              :disabled="submitting"
+            >
+              <legend class="sr-only">{{ drawerTitle }}</legend>
+              <SettingsSection
+                title="General"
+                hint="How this setting reads in this list and in the field that applies it."
               >
-                <legend class="sr-only">{{ drawerTitle }}</legend>
-                <SettingsSection
-                  title="General"
-                  hint="How this setting reads in this list and in the field that applies it."
-                >
-                  <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                    <Field
-                      :required="Boolean(nameError) && !draft.name.trim()"
-                      :invalid="Boolean(nameError) && Boolean(draft.name.trim())"
+                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                  <Field
+                    :required="Boolean(nameError) && !draft.name.trim()"
+                    :invalid="Boolean(nameError) && Boolean(draft.name.trim())"
+                  >
+                    <Field.Label for="deployment-settings-name">Name</Field.Label>
+                    <Input
+                      id="deployment-settings-name"
+                      v-model="draft.name"
+                      size="large"
+                      placeholder="production-hardened"
+                      autocomplete="off"
+                      @update:model-value="nameError = ''"
+                    />
+                    <Field.Description>{{
+                      nameError || 'Name it after the services or the traffic it serves.'
+                    }}</Field.Description>
+                  </Field>
+                  <Field>
+                    <Field.Label for="deployment-settings-description">Description</Field.Label>
+                    <Textarea
+                      id="deployment-settings-description"
+                      v-model="draft.description"
+                      :rows="3"
+                    />
+                    <Field.Description
+                      >Optional. Used for internal identification.</Field.Description
                     >
-                      <Field.Label for="deployment-settings-name">Name</Field.Label>
-                      <Input
-                        id="deployment-settings-name"
-                        v-model="draft.name"
-                        size="large"
-                        placeholder="production-hardened"
-                        autocomplete="off"
-                        @update:model-value="nameError = ''"
-                      />
-                      <Field.Description>{{
-                        nameError || 'Name it after the services or the traffic it serves.'
-                      }}</Field.Description>
-                    </Field>
-                    <Field>
-                      <Field.Label for="deployment-settings-description">Description</Field.Label>
-                      <Textarea
-                        id="deployment-settings-description"
-                        v-model="draft.description"
-                        :rows="3"
-                      />
+                  </Field>
+                  <Field orientation="horizontal">
+                    <Switch
+                      id="deployment-settings-active"
+                      v-model="draft.active"
+                    />
+                    <Field.Content>
+                      <Field.Label for="deployment-settings-active">Active</Field.Label>
                       <Field.Description
-                        >Optional. Used for internal identification.</Field.Description
+                        >When off, the setting stays in the list but no environment can choose
+                        it.</Field.Description
                       >
-                    </Field>
-                    <Field orientation="horizontal">
-                      <Switch
-                        id="deployment-settings-active"
-                        v-model="draft.active"
+                    </Field.Content>
+                  </Field>
+                </div>
+              </SettingsSection>
+
+              <SettingsSection
+                title="Routing and policy"
+                hint="How versions bind to the resources they ship with, and how traffic reaches them."
+              >
+                <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
+                  <fieldset
+                    class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
+                  >
+                    <Field.Legend kind="label">Binding policy</Field.Legend>
+                    <Field
+                      v-for="policy in BINDING_POLICIES"
+                      :key="policy.value"
+                      orientation="horizontal"
+                    >
+                      <RadioButton
+                        v-model="draft.bindingPolicy"
+                        :value="policy.value"
+                        name="deployment-settings-binding"
+                        :id="`deployment-settings-binding-${policy.value}`"
                       />
                       <Field.Content>
-                        <Field.Label for="deployment-settings-active">Active</Field.Label>
-                        <Field.Description
-                          >When off, the setting stays in the list but no environment can choose
-                          it.</Field.Description
-                        >
+                        <Field.Label :for="`deployment-settings-binding-${policy.value}`">{{
+                          policy.label
+                        }}</Field.Label>
+                        <Field.Description>{{ policy.description }}</Field.Description>
                       </Field.Content>
                     </Field>
-                  </div>
-                </SettingsSection>
-
-                <SettingsSection
-                  title="Routing and policy"
-                  hint="How versions bind to the resources they ship with, and how traffic reaches them."
-                >
-                  <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
-                    <fieldset
-                      class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
+                  </fieldset>
+                  <fieldset
+                    class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
+                    :disabled="Boolean(editingId)"
+                  >
+                    <Field.Legend kind="label">Deployment policy</Field.Legend>
+                    <Field
+                      v-for="policy in DEPLOYMENT_POLICIES"
+                      :key="policy.value"
+                      orientation="horizontal"
                     >
-                      <Field.Legend kind="label">Binding policy</Field.Legend>
-                      <Field
-                        v-for="policy in BINDING_POLICIES"
-                        :key="policy.value"
-                        orientation="horizontal"
-                      >
-                        <RadioButton
-                          v-model="draft.bindingPolicy"
-                          :value="policy.value"
-                          name="deployment-settings-binding"
-                          :id="`deployment-settings-binding-${policy.value}`"
-                        />
-                        <Field.Content>
-                          <Field.Label :for="`deployment-settings-binding-${policy.value}`">{{
-                            policy.label
-                          }}</Field.Label>
-                          <Field.Description>{{ policy.description }}</Field.Description>
-                        </Field.Content>
-                      </Field>
-                    </fieldset>
-                    <fieldset
-                      class="m-0 flex w-full min-w-0 flex-col gap-(--spacing-xs) border-0 p-0"
-                      :disabled="Boolean(editingId)"
+                      <RadioButton
+                        v-model="draft.deploymentPolicy"
+                        :value="policy.value"
+                        name="deployment-settings-policy"
+                        :id="`deployment-settings-policy-${policy.value}`"
+                      />
+                      <Field.Content>
+                        <Field.Label :for="`deployment-settings-policy-${policy.value}`">{{
+                          policy.label
+                        }}</Field.Label>
+                        <Field.Description>{{ policy.description }}</Field.Description>
+                      </Field.Content>
+                    </Field>
+                    <Field.Description
+                      >Cannot be changed after the setting is created.</Field.Description
                     >
-                      <Field.Legend kind="label">Deployment policy</Field.Legend>
-                      <Field
-                        v-for="policy in DEPLOYMENT_POLICIES"
-                        :key="policy.value"
-                        orientation="horizontal"
-                      >
-                        <RadioButton
-                          v-model="draft.deploymentPolicy"
-                          :value="policy.value"
-                          name="deployment-settings-policy"
-                          :id="`deployment-settings-policy-${policy.value}`"
-                        />
-                        <Field.Content>
-                          <Field.Label :for="`deployment-settings-policy-${policy.value}`">{{
-                            policy.label
-                          }}</Field.Label>
-                          <Field.Description>{{ policy.description }}</Field.Description>
-                        </Field.Content>
-                      </Field>
-                      <Field.Description
-                        >Cannot be changed after the setting is created.</Field.Description
-                      >
-                    </fieldset>
-                  </div>
-                </SettingsSection>
-              </fieldset>
-            </PanelContent>
+                  </fieldset>
+                </div>
+              </SettingsSection>
+            </fieldset>
+          </PanelContent>
 
-            <PanelFooter>
-              <div class="flex w-full justify-end gap-(--spacing-xs)">
-                <Button
-                  type="button"
-                  label="Cancel"
-                  kind="outlined"
-                  size="medium"
-                  :disabled="submitting"
-                  @click="drawerOpen = false"
-                />
-                <Button
-                  type="submit"
-                  :label="editingId ? 'Save changes' : 'Create Deployment Setting'"
-                  kind="primary"
-                  size="medium"
-                  :loading="submitting"
-                />
-              </div>
-            </PanelFooter>
-          </form>
-        </DrawerContent>
-      </DrawerPortal>
+          <PanelFooter>
+            <div class="flex w-full justify-end gap-(--spacing-xs)">
+              <Button
+                type="button"
+                label="Cancel"
+                kind="outlined"
+                size="medium"
+                :disabled="submitting"
+                @click="drawerOpen = false"
+              />
+              <Button
+                type="submit"
+                :label="editingId ? 'Save changes' : 'Create Deployment Setting'"
+                kind="primary"
+                size="medium"
+                :loading="submitting"
+              />
+            </div>
+          </PanelFooter>
+        </form>
+      </DrawerContent>
     </Drawer>
 
     <ConfirmDialog
@@ -1328,6 +1322,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
       title="Delete Deployment Setting"
       :description="deleteDescription"
       confirm-label="Delete"
+      size="small"
       @confirm="remove"
     />
   </div>

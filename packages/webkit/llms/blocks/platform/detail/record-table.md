@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/detail/record-table/record-table.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/detail/record-table")`
-- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [CopyButton](../../../components/copy-button.md), `DrawerClose`, `DrawerContent`, `DrawerDescription`, `DrawerOverlay`, `DrawerPortal`, [Drawer](../../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [FileDropzone](../../../components/file-dropzone.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
+- Components: [Alert](../../../components/alert.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CollectionPreferences](../../../components/collection-preferences.md), [CopyButton](../../../components/copy-button.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../../components/drawer.md), `DrawerTitle`, `DropdownMenuGroup`, `DropdownMenuOption`, [EmptyState](../../../components/empty-state.md), [Field](../../../components/field.md), [FileDropzone](../../../components/file-dropzone.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), `InputGroupRoot`, `ItemList`, [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [PropertyFilter](../../../components/property-filter.md), [SaveBar](../../../components/save-bar.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Switch](../../../components/switch.md), [Table](../../../components/table.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Textarea](../../../components/textarea.md), [Toast](../../../components/toast.md), [Tooltip](../../../components/tooltip.md), `use-collection`
 - Skills: `webkit-tables`, `webkit-form`, `webkit-navigation`
 
 ## Asked as
@@ -444,6 +444,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                               kind="transparent"
                               :value="ns"
                               :aria-label="'Copy nameserver ' + (index + 1)"
+                              size="small"
                             />
                           </InputGroupRoot>
                         </div>
@@ -501,6 +502,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                               kind="transparent"
                               :value="key.value"
                               :aria-label="'Copy ' + key.label"
+                              size="small"
                             />
                           </InputGroupRoot>
                         </SettingRow>
@@ -661,7 +663,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   <template #cell-type="{ value }">
                     <Tag
                       :label="value"
-                      severity="secondary"
+                      severity="neutral"
                       size="medium"
                     />
                   </template>

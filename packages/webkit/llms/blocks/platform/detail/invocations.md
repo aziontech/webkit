@@ -542,6 +542,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   :value="run.id"
                   aria-label="Copy invocation ID"
                   class="shrink-0"
+                  size="small"
                 />
                 <StatusIndicator
                   :severity="severity"
@@ -669,6 +670,7 @@ Each variant is the same screen in another state: `get_pattern("platform/detail/
                   :value="run.trigger"
                   aria-label="Copy the request that triggered this invocation"
                   class="shrink-0"
+                  size="small"
                 />
               </div>
               <span

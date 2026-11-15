@@ -28,7 +28,7 @@
 ## Related
 
 - DocProse` — the contract around it: `data-doc-block` takes the block rung of the spacing ladder, and `data-doc-chrome` keeps prose rules off the label column.
-- Tag` — renders the entry's tags row (`severity="secondary"`): small and rounded in the label column, medium with the default shape under a `title`.
+- Tag` — renders the entry's tags row (`severity="neutral"`): small and rounded in the label column, medium with the default shape under a `title`.
 - use-heading-nav` — the composable the label anchor calls. A page that owns its scroll container provides a scroller-aware handler with `provideHeadingNav`; rendered outside a provider, the injected default is a no-op — never a throw — and the browser's native hash navigation takes over.
 
 ## Props

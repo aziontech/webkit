@@ -352,7 +352,7 @@ The root `chart-card.vue` renders a `div` with `role="group"` and the card surfa
       <ChartCard.Action>
         <Tag
           label="Sum"
-          severity="secondary"
+          severity="neutral"
           icon="pi pi-calculator"
         />
         <Tag

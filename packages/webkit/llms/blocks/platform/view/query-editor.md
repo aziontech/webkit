@@ -5,7 +5,7 @@
 - Surface: product
 - Source: `blocks/platform/view/query-editor/query-editor.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/view/query-editor")`
-- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [CodeEditor](../../../components/code-editor.md), `DrawerClose`, `DrawerContent`, `DrawerOverlay`, `DrawerPortal`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
+- Components: [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Brand](../../../components/brand.md), [Breadcrumb](../../../components/breadcrumb.md), [Button](../../../components/button.md), [Card](../../../components/card.md), [CodeBlock](../../../components/code-block.md), [CodeEditor](../../../components/code-editor.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [FileDropzone](../../../components/file-dropzone.md), [FileTokenGroup](../../../components/file-token-group.md), [GlobalHeader](../../../components/global-header.md), [HelperText](../../../components/helper-text.md), [IconButton](../../../components/icon-button.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [PageHeader](../../../components/page-header.md), [PageTabs](../../../components/page-tabs.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [SaveBar](../../../components/save-bar.md), [Select](../../../components/select.md), [SettingRow](../../../components/setting-row.md), [SettingsSection](../../../components/settings-section.md), [Sidebar](../../../components/sidebar.md), [Skeleton](../../../components/skeleton.md), [Switch](../../../components/switch.md), `TableRoot`, [Tabs](../../../components/tabs.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-tables`, `webkit-ui-states`
 
 ## Asked as
@@ -64,7 +64,7 @@ A toolbar with the primary Run query `Button` (`:loading` while it runs) and out
 
 A Results band with its own search `Input`, a `ToggleGroup` switching Table and JSON, and Refresh, Download and Columns `IconButton`s named by `Tooltip`s. A SELECT shows its rows in a `TableRoot` paged at 50 (10, 25, 50 and 100 per page), and JSON shows them in a copyable `CodeBlock`; any other statement shows a success `Alert` with what ran; a statement the database rejects shows a danger `Alert` with the reason and what to do (`The statement wasn't executed: near "SELEC", a syntax error. Check the statement and run it again.`), and the statement stays in the editor; before anything runs an `EmptyState` reads Ready to execute, and while a query runs `Skeleton` lines hold the band. A visually hidden `role="status"` announces the outcome (`3 rows returned.` or the error).
 
-### I. Templates drawer — `Drawer`, `DrawerPortal`, `DrawerOverlay`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `DrawerClose`, `PanelContent`, `Input`, `Item` (optional)
+### I. Templates drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent`, `Input`, `Item` (optional)
 
 Templates opens a large right `Drawer` titled SQL quick templates with a one-line description, a Search templates `Input` and one outlined clickable `Item` per snippet (a small `EmptyState` with Clear search when none matches). Choosing a card loads its SQL into the editor and closes the drawer.
 
@@ -178,10 +178,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/qu
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import CodeEditor, { type CodeEditorMarker } from '@aziontech/webkit/code-editor'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -1044,7 +1041,7 @@ LIMIT 3;`
                   <template #cell-type="{ value }">
                     <Tag
                       :label="value"
-                      severity="secondary"
+                      severity="neutral"
                       size="medium"
                     />
                   </template>
@@ -1335,81 +1332,77 @@ LIMIT 3;`
       size="large"
       side="right"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-              <DrawerTitle>SQL quick templates</DrawerTitle>
-              <p class="text-body-sm text-(--text-muted)">
-                Pick a snippet to load it into the editor.
-              </p>
-            </div>
-            <DrawerClose />
-          </PanelHeader>
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <DrawerTitle>SQL quick templates</DrawerTitle>
+            <p class="text-body-sm text-(--text-muted)">
+              Pick a snippet to load it into the editor.
+            </p>
+          </div>
+        </PanelHeader>
 
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <Input
-                v-model="templateQuery"
-                size="large"
-                class="w-full"
-                placeholder="Search templates"
-                aria-label="Search templates"
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <Input
+              v-model="templateQuery"
+              size="large"
+              class="w-full"
+              placeholder="Search templates"
+              aria-label="Search templates"
+            >
+              <template #prefix>
+                <i
+                  class="pi pi-search"
+                  aria-hidden="true"
+                />
+              </template>
+            </Input>
+
+            <div
+              v-if="filteredTemplates.length"
+              class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2"
+            >
+              <Item
+                v-for="template in filteredTemplates"
+                :key="template.id"
+                kind="outlined"
+                clickable
+                @click="chooseTemplate(template)"
               >
-                <template #prefix>
+                <Item.Media>
                   <i
-                    class="pi pi-search"
+                    :class="template.icon"
+                    class="text-(--text-muted)"
                     aria-hidden="true"
                   />
-                </template>
-              </Input>
-
-              <div
-                v-if="filteredTemplates.length"
-                class="grid grid-cols-1 gap-(--spacing-sm) md:grid-cols-2"
-              >
-                <Item
-                  v-for="template in filteredTemplates"
-                  :key="template.id"
-                  kind="outlined"
-                  clickable
-                  @click="chooseTemplate(template)"
-                >
-                  <Item.Media>
-                    <i
-                      :class="template.icon"
-                      class="text-(--text-muted)"
-                      aria-hidden="true"
-                    />
-                  </Item.Media>
-                  <Item.Content>
-                    <Item.Title>{{ template.title }}</Item.Title>
-                    <Item.Description>{{ template.description }}</Item.Description>
-                  </Item.Content>
-                </Item>
-              </div>
-
-              <EmptyState
-                v-else
-                size="small"
-                icon="pi pi-search"
-                :title="`No templates match “${templateQuery}”`"
-                description="Try another name or statement."
-              >
-                <template #actions>
-                  <Button
-                    label="Clear search"
-                    kind="outlined"
-                    size="small"
-                    @click="templateQuery = ''"
-                  />
-                </template>
-              </EmptyState>
+                </Item.Media>
+                <Item.Content>
+                  <Item.Title>{{ template.title }}</Item.Title>
+                  <Item.Description>{{ template.description }}</Item.Description>
+                </Item.Content>
+              </Item>
             </div>
-          </PanelContent>
-        </DrawerContent>
-      </DrawerPortal>
+
+            <EmptyState
+              v-else
+              size="small"
+              icon="pi pi-search"
+              :title="`No templates match “${templateQuery}”`"
+              description="Try another name or statement."
+            >
+              <template #actions>
+                <Button
+                  label="Clear search"
+                  kind="outlined"
+                  size="small"
+                  @click="templateQuery = ''"
+                />
+              </template>
+            </EmptyState>
+          </div>
+        </PanelContent>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>

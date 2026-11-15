@@ -127,7 +127,7 @@
  "events": [
   {
    "name": "copy",
-   "payload": "string",
+   "payload": "(event: MouseEvent, value: string)",
    "notes": "Fires after a successful copy; payload is the copied plain text."
   }
  ],

@@ -15,7 +15,6 @@ import PasswordRequirements from '../../inputs/password-requirements/password-re
 import Dialog from '../../overlay/dialog/dialog.vue'
 import DialogClose from '../../overlay/dialog/dialog-close.vue'
 import DialogContent from '../../overlay/dialog/dialog-content.vue'
-import DialogPortal from '../../overlay/dialog/dialog-portal.vue'
 import DialogTitle from '../../overlay/dialog/dialog-title.vue'
 import WebkitProvider from './webkit-provider.vue'
 
@@ -104,16 +103,14 @@ describe('WebkitProvider', () => {
 
     it('with locale="pt-BR", the Dialog close button is named "Fechar"', async () => {
       const Tree = defineComponent({
-        components: { Dialog, DialogPortal, DialogContent, DialogTitle, DialogClose },
+        components: { Dialog, DialogContent, DialogTitle, DialogClose },
         setup: () => ({ open: ref(true) }),
         template: `
           <Dialog v-model:open="open">
-            <DialogPortal>
-              <DialogContent>
-                <DialogTitle>Excluir domínio</DialogTitle>
-                <DialogClose />
-              </DialogContent>
-            </DialogPortal>
+            <DialogContent>
+              <DialogTitle>Excluir domínio</DialogTitle>
+              <DialogClose />
+            </DialogContent>
           </Dialog>
         `
       })

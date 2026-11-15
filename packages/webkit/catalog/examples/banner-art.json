@@ -3,7 +3,7 @@
   {
    "name": "Default",
    "summary": "The map backdrop in a hero's `background` slot: the world map inset beside the copy, washed toward the copy and into the canvas below.",
-   "sfc": "<script setup>\n  import BannerArt from '@aziontech/webkit/banner-art'\n  import Hero from '@aziontech/webkit/hero-root'\n  import HeroTitle from '@aziontech/webkit/hero-title'\n</script>\n\n<template>\n  <Hero\n    kind=\"band\"\n    size=\"large\"\n    max-width=\"site\"\n  >\n    <template #background>\n      <BannerArt kind=\"map\" />\n    </template>\n    <HeroTitle\n      eyebrow=\"Network\"\n      eyebrow-prefix=\"//\"\n      title=\"Close to every user, by default\"\n      description=\"Requests land on the nearest location and stay there.\"\n    />\n  </Hero>\n</template>"
+   "sfc": "<script setup>\n  import BannerArt from '@aziontech/webkit/banner-art'\n  import Hero from '@aziontech/webkit/hero-root'\n  import HeroTitle from '@aziontech/webkit/hero-title'\n</script>\n\n<template>\n  <Hero\n    kind=\"band\"\n    size=\"large\"\n    max-width=\"site\"\n  >\n    <template #background>\n      <BannerArt kind=\"map\" />\n    </template>\n    <HeroTitle\n      eyebrow=\"Network\"\n      eyebrow-prefix=\"//\"\n      title=\"Close to every user, by default\"\n      description=\"Requests land on the nearest location and stay there.\"\n      size=\"large\"\n    />\n  </Hero>\n</template>"
   },
   {
    "name": "Arts",

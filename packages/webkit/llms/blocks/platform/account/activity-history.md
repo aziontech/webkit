@@ -238,10 +238,10 @@ Each variant is the same screen in another state: `get_pattern("platform/account
         'Sign-in': 'info',
         Security: 'warning',
         Deploy: 'success',
-        Users: 'secondary',
+        Users: 'neutral',
         Billing: 'primary'
       }) as const
-    )[category] ?? 'secondary'
+    )[category] ?? 'neutral'
 
   const range = ref<DateRangeValue>({
     type: 'relative',
@@ -498,6 +498,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
                     kind="outlined"
                     :value="value"
                     aria-label="Copy IP address"
+                    size="small"
                   />
                 </div>
               </template>

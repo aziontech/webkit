@@ -200,7 +200,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
               You deployed a new resource. Source:
               <Tag
                 label="acme"
-                severity="secondary"
+                severity="neutral"
                 icon="ai ai-github"
               />
             </p>

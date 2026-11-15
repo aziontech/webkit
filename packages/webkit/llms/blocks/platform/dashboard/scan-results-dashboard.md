@@ -313,7 +313,7 @@ Each variant is the same screen in another state: `get_pattern("platform/dashboa
     },
     pending: {
       label: 'Pending',
-      severity: 'secondary',
+      severity: 'neutral',
       color: 'other'
     }
   }

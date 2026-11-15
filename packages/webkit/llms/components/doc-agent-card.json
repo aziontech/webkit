@@ -84,7 +84,7 @@
  "events": [
   {
    "name": "copy",
-   "payload": "string",
+   "payload": "(event: MouseEvent, value: string)",
    "notes": "Re-emitted from `CopyPromptButton` after a successful copy."
   },
   {

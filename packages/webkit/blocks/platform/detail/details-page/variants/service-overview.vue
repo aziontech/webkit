@@ -6,11 +6,8 @@
   import Card from '@aziontech/webkit/card'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
-  import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
-  import DrawerPortal from '@aziontech/webkit/drawer-portal'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
@@ -965,95 +962,89 @@
               size="large"
               side="right"
             >
-              <DrawerPortal>
-                <DrawerOverlay />
-                <DrawerContent>
-                  <PanelHeader class="w-full">
-                    <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
-                      <div class="flex min-w-0 items-center gap-(--spacing-sm)">
-                        <DrawerTitle>Ship to production</DrawerTitle>
-                        <Tag
-                          :label="
-                            complete
-                              ? 'Ready for production'
-                              : `${doneCount} of ${productionSteps.length}`
-                          "
-                          :severity="complete ? 'success' : 'neutral'"
-                          size="small"
-                          class="shrink-0"
-                        />
-                      </div>
-                      <p class="text-body-sm text-(--text-muted)">
-                        The create put this service live on a generated hostname. These are the
-                        gates between that and production.
-                      </p>
-                    </div>
-                    <DrawerClose />
-                  </PanelHeader>
-
-                  <PanelContent>
-                    <div class="flex flex-col gap-(--spacing-sm)">
-                      <Item
-                        v-for="step in productionSteps"
-                        :key="`${step.id}:${step.done ? 'done' : 'todo'}`"
-                        size="medium"
-                        :data-done="step.done || null"
-                      >
-                        <Item.Media>
-                          <span
-                            class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-data-done/item:border-(--primary) group-data-done/item:bg-transparent group-data-done/item:text-(--primary) motion-reduce:transition-none"
-                            aria-hidden="true"
-                          >
-                            <i
-                              :class="step.done ? 'pi pi-check' : step.icon"
-                              class="text-body-sm leading-none"
-                            />
-                          </span>
-                        </Item.Media>
-
-                        <Item.Content>
-                          <Item.Title>
-                            {{ step.title }}
-                          </Item.Title>
-                          <Item.Description>
-                            {{ step.description }}
-                          </Item.Description>
-                        </Item.Content>
-
-                        <Item.Footer>
-                          <Tag
-                            v-if="step.done"
-                            icon="pi pi-check"
-                            :label="step.doneNote || 'Done'"
-                            severity="neutral"
-                            size="medium"
-                          />
-                          <Button
-                            v-else
-                            :label="step.actionLabel || step.title"
-                            kind="outlined"
-                            size="small"
-                            @click="
-                              step.id in targets ? showTopology(step.id) : (detailOpen = false)
-                            "
-                          />
-                        </Item.Footer>
-                      </Item>
-                    </div>
-                  </PanelContent>
-
-                  <PanelFooter>
-                    <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
-                      <Button
-                        label="Done"
-                        kind="primary"
-                        size="medium"
-                        @click="detailOpen = false"
+              <DrawerContent>
+                <PanelHeader class="w-full">
+                  <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+                    <div class="flex min-w-0 items-center gap-(--spacing-sm)">
+                      <DrawerTitle>Ship to production</DrawerTitle>
+                      <Tag
+                        :label="
+                          complete
+                            ? 'Ready for production'
+                            : `${doneCount} of ${productionSteps.length}`
+                        "
+                        :severity="complete ? 'success' : 'neutral'"
+                        size="small"
+                        class="shrink-0"
                       />
                     </div>
-                  </PanelFooter>
-                </DrawerContent>
-              </DrawerPortal>
+                    <p class="text-body-sm text-(--text-muted)">
+                      The create put this service live on a generated hostname. These are the gates
+                      between that and production.
+                    </p>
+                  </div>
+                </PanelHeader>
+
+                <PanelContent>
+                  <div class="flex flex-col gap-(--spacing-sm)">
+                    <Item
+                      v-for="step in productionSteps"
+                      :key="`${step.id}:${step.done ? 'done' : 'todo'}`"
+                      size="medium"
+                      :data-done="step.done || null"
+                    >
+                      <Item.Media>
+                        <span
+                          class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-data-done/item:border-(--primary) group-data-done/item:bg-transparent group-data-done/item:text-(--primary) motion-reduce:transition-none"
+                          aria-hidden="true"
+                        >
+                          <i
+                            :class="step.done ? 'pi pi-check' : step.icon"
+                            class="text-body-sm leading-none"
+                          />
+                        </span>
+                      </Item.Media>
+
+                      <Item.Content>
+                        <Item.Title>
+                          {{ step.title }}
+                        </Item.Title>
+                        <Item.Description>
+                          {{ step.description }}
+                        </Item.Description>
+                      </Item.Content>
+
+                      <Item.Footer>
+                        <Tag
+                          v-if="step.done"
+                          icon="pi pi-check"
+                          :label="step.doneNote || 'Done'"
+                          severity="neutral"
+                          size="medium"
+                        />
+                        <Button
+                          v-else
+                          :label="step.actionLabel || step.title"
+                          kind="outlined"
+                          size="small"
+                          @click="step.id in targets ? showTopology(step.id) : (detailOpen = false)"
+                        />
+                      </Item.Footer>
+                    </Item>
+                  </div>
+                </PanelContent>
+
+                <PanelFooter>
+                  <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
+                    <Button
+                      label="Done"
+                      kind="primary"
+                      size="medium"
+                      @click="detailOpen = false"
+                    />
+                  </div>
+                </PanelFooter>
+              </DrawerContent>
             </Drawer>
 
             <div
@@ -1134,70 +1125,66 @@
       side="right"
       size="medium"
     >
-      <DrawerPortal>
-        <DrawerOverlay />
-        <DrawerContent>
-          <PanelHeader class="w-full">
-            <DrawerTitle>Deploy {{ SERVICE.name }}</DrawerTitle>
-            <DrawerClose />
-          </PanelHeader>
-          <PanelContent>
-            <div class="flex flex-col gap-(--spacing-md)">
-              <DrawerDescription>
-                The service goes to Production with the changes below. The deployment that is live
-                keeps serving until the new one is ready.
-              </DrawerDescription>
-              <section
-                aria-labelledby="service-deploy-changes"
-                class="flex flex-col gap-(--spacing-xs)"
+      <DrawerContent>
+        <PanelHeader class="w-full">
+          <DrawerTitle>Deploy {{ SERVICE.name }}</DrawerTitle>
+        </PanelHeader>
+        <PanelContent>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <DrawerDescription>
+              The service goes to Production with the changes below. The deployment that is live
+              keeps serving until the new one is ready.
+            </DrawerDescription>
+            <section
+              aria-labelledby="service-deploy-changes"
+              class="flex flex-col gap-(--spacing-xs)"
+            >
+              <h3
+                id="service-deploy-changes"
+                class="m-0 text-label-md text-(--text-default)"
               >
-                <h3
-                  id="service-deploy-changes"
-                  class="m-0 text-label-md text-(--text-default)"
+                Topology changes
+              </h3>
+              <ul
+                v-if="stagedChanges.length"
+                class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
+              >
+                <li
+                  v-for="change in stagedChanges"
+                  :key="change.key"
+                  class="flex flex-wrap items-center justify-between gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
                 >
-                  Topology changes
-                </h3>
-                <ul
-                  v-if="stagedChanges.length"
-                  class="m-0 flex list-none flex-col gap-(--spacing-xs) p-0"
-                >
-                  <li
-                    v-for="change in stagedChanges"
-                    :key="change.key"
-                    class="flex flex-wrap items-center justify-between gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
+                  <span class="text-body-sm text-(--text-default)">{{ change.kind }}</span>
+                  <span class="text-body-sm text-(--text-muted)"
+                    >{{ change.from }} to {{ change.to }}</span
                   >
-                    <span class="text-body-sm text-(--text-default)">{{ change.kind }}</span>
-                    <span class="text-body-sm text-(--text-muted)"
-                      >{{ change.from }} to {{ change.to }}</span
-                    >
-                  </li>
-                </ul>
-                <p
-                  v-else
-                  class="m-0 text-body-sm text-(--text-muted)"
-                >
-                  No topology change is staged. The deploy publishes the service as it is.
-                </p>
-              </section>
-            </div>
-          </PanelContent>
-          <PanelFooter>
-            <div class="flex w-full justify-end gap-(--spacing-xs)">
-              <Button
-                label="Cancel"
-                kind="outlined"
-                @click="deployOpen = false"
-              />
-              <Button
-                label="Deploy"
-                kind="primary"
-                icon="pi pi-cloud-upload"
-                @click="runDeploy"
-              />
-            </div>
-          </PanelFooter>
-        </DrawerContent>
-      </DrawerPortal>
+                </li>
+              </ul>
+              <p
+                v-else
+                class="m-0 text-body-sm text-(--text-muted)"
+              >
+                No topology change is staged. The deploy publishes the service as it is.
+              </p>
+            </section>
+          </div>
+        </PanelContent>
+        <PanelFooter>
+          <div class="flex w-full justify-end gap-(--spacing-xs)">
+            <Button
+              label="Cancel"
+              kind="outlined"
+              @click="deployOpen = false"
+            />
+            <Button
+              label="Deploy"
+              kind="primary"
+              icon="pi pi-cloud-upload"
+              @click="runDeploy"
+            />
+          </div>
+        </PanelFooter>
+      </DrawerContent>
     </Drawer>
   </div>
 </template>
