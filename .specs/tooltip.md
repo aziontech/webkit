@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: be270c4495c8c6016f0be3788a9bb09a35f114d22d423cfdf591a88a59407865
+checksum: e30aae76f59d7f55d31b5ddf699de46533e91017b872ddb3178280fba918ed65
 created: 2026-06-02
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Tooltip — Component Spec
@@ -28,14 +28,14 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 
 - The content has links, buttons or more than one line of structure → use `popover`.
 - An info glyph beside a field label or column header → use `hint`.
-- A glossed term inside documentation prose → use `doc-tooltip`.
+- A read-only rich preview (a definition, a glossed term in documentation prose) → use `hover-card`.
 - Guidance or errors the user needs to complete a field → use `helper-text`.
 
 ## Related
 
 - `popover` — click-opened, interactive, with a header, body and footer.
 - `hint` — the focusable info glyph that renders a `Tooltip` for you.
-- `doc-tooltip` — inline glossed term for docs pages.
+- `hover-card` — read-only rich preview on hover or focus; DocMarkdown's `<Tooltip>` tag renders one.
 - `icon-button` — the most common trigger; it still needs its own `ariaLabel`.
 
 ## Best practices

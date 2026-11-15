@@ -3,10 +3,10 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: f1504481d8a9b25326f574818f69e267c16b56abb07b8daa9ed8e4350cd2c343
+checksum: adccd868224ac0ec85e1b9f3cfb467f7a2e40d66a95ae6c038ee7bafc5a1005e
 spec_version: 1
 created: 2026-11-10
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # HelpPanel — Component Spec
@@ -31,7 +31,7 @@ so a topic can omit the links, carry one section or five, or be a tutorial with 
 
 ## When NOT to use
 
-- A one-line hint attached to a single control → use `doc-tooltip` or the field's `helper-text`.
+- A one-line hint attached to a single control → use `tooltip` or the field's `helper-text`.
 - The region itself (overlay, slide-in, close button, focus trap) → use `drawer`; put `help-panel` inside it.
 - Ordered steps the reader navigates between, with the step's form filling the column beside it → use `stepper`.
 - Numbered instructions inside a documentation page, read all at once → use `doc-steps` + `doc-step`.

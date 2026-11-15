@@ -124,6 +124,36 @@ describe('DocMarkdown', () => {
     expect(container.querySelector('p')?.textContent).toContain('key is required.')
   })
 
+  it('opens the inline Tooltip as a HoverCard with its title, definition and link on focus', async () => {
+    const { getByRole } = mount(
+      'An <Tooltip title="API" tip="Application programming interface" linkLabel="Read more" href="/docs/api">API</Tooltip> key.'
+    )
+    const term = getByRole('button', { name: 'API' })
+    await userEvent.tab()
+    expect(document.activeElement).toBe(term)
+    await vi.waitFor(() => {
+      const card = document.body.querySelector(
+        '[data-testid="documentation-doc-markdown__tooltip__content"]'
+      )
+      expect(card?.textContent).toContain('Application programming interface')
+      expect(term.getAttribute('aria-describedby')).toBe(card?.id)
+    })
+    const card = document.body.querySelector(
+      '[data-testid="documentation-doc-markdown__tooltip__content"]'
+    ) as HTMLElement
+    expect(
+      within(card)
+        .getByRole('link', { name: /Read more/ })
+        .getAttribute('href')
+    ).toBe('/docs/api')
+    await userEvent.keyboard('{Escape}')
+    await vi.waitFor(() =>
+      expect(
+        document.body.querySelector('[data-testid="documentation-doc-markdown__tooltip__content"]')
+      ).toBeNull()
+    )
+  })
+
   it('keeps unknown tags and unsafe links as text', () => {
     const { container, queryByRole, getByText } = mount(
       '<Banner>Hi</Banner>\n\nA [bad link](javascript:alert(1)) here.'

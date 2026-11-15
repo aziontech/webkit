@@ -70,7 +70,6 @@ The `field-*` wrappers are not in it: v6 replaces them with a single `Field`.
 | `shell-mockup` | `still` | `animated` (inverted) |
 | `doc-card` | `overline`, `link` | `eyebrow`, `linkLabel` |
 | `doc-card-group` | `mobileCols` | `mobileColumns` |
-| `doc-tooltip` | `headline`, `cta` | `title`, `linkLabel` |
 
 † Added in v6. [`_lib/prop-vocabulary.mjs`](../hooks/_lib/prop-vocabulary.mjs) enforces them: the aliases are in `CONCEPTS` and the banned values of the shared-values table are in `VALUES` (checked against a `kind` / `severity` union). `error` stays allowed as a prop name (a message string or a send-failed state is a different concept), and `v-model:value` cannot be blocked by name because `value` is a legitimate prop, so those two are review-only.
 
