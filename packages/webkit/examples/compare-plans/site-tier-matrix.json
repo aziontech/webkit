@@ -1,5 +1,5 @@
 {
-  "_id": "compare-support-tiers",
+  "_id": "compare-plans",
   "props": {
     "anchor": "tiers",
     "caption": "Support and Professional Services comparison across the Developer, Business, Enterprise and Mission-Critical tiers.",
@@ -7,7 +7,7 @@
     "pickerAriaLabel": "Tier being compared",
     "includedLabel": "Included",
     "excludedLabel": "Not included",
-    "tiers": [
+    "plans": [
       {
         "id": "developer",
         "name": "Developer",

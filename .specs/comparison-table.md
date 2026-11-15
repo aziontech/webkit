@@ -3,11 +3,11 @@ name: comparison-table
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 649322eb99c4f144ee96f6875298ad67f944120a433165dcc6a969e04e085c11
+last_updated: 2026-11-15
+checksum: e90f10157fb8b2484c353bf8829773ae93847eb0590549271842ce493009e48b
 ---
 
 # ComparisonTable — Component Spec
@@ -18,12 +18,12 @@ The capability-by-capability comparison of Azion with one competitor on a migrat
 
 ## When to use
 
-- On a "Azion vs X" page, to lay one competitor against Azion across a few categories of capabilities.
+- Use ComparisonTable to compare Azion with one competitor, on an "Azion vs X" page, across a few categories of capabilities.
 
 ## When NOT to use
 
-- To compare Azion's own plans → use `compare-plans`.
-- To compare support tiers → use `compare-support-tiers`.
+- To compare Azion's own plans or support tiers → use `compare-plans`.
+- For price cards with a billing-period toggle → use `pricing-plans`.
 
 ## Related
 

@@ -1,5 +1,7 @@
 <script setup>
-  import CompareSupportTiers from '@aziontech/webkit/compare-support-tiers'
+  import ComparePlans from '@aziontech/webkit/compare-plans'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
 
   const tiers = [
     {
@@ -164,14 +166,20 @@
 </script>
 
 <template>
-  <CompareSupportTiers
-    anchor="tiers"
-    caption="Support and Professional Services comparison across the Developer, Business, Enterprise and Mission-Critical tiers."
-    column-label="Support"
-    picker-aria-label="Tier being compared"
-    included-label="Included"
-    excluded-label="Not included"
-    :tiers="tiers"
-    :sections="sections"
-  />
+  <SectionContainer max-width="site">
+    <SectionGap hatch />
+
+    <ComparePlans
+      anchor="tiers"
+      caption="Support and Professional Services comparison across the Developer, Business, Enterprise and Mission-Critical tiers."
+      column-label="Support"
+      picker-aria-label="Tier being compared"
+      included-label="Included"
+      excluded-label="Not included"
+      :plans="tiers"
+      :sections="sections"
+    />
+
+    <SectionGap hatch />
+  </SectionContainer>
 </template>

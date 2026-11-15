@@ -4,10 +4,10 @@ category: sections
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 212b3e70d68476d0b4be64aa8eac8374af8c2cd43dc7b22622919862b2580067
+last_updated: 2026-11-15
+checksum: c13ac3a393e7d721805a87952d92ab39005aefc7ae74cd19fd616695915994e7
 ---
 
 # PricingPlans — Component Spec
@@ -18,11 +18,12 @@ The plan cards at the top of Pricing: a billing-period toggle over a framed row 
 
 ## When to use
 
-- At the top of Pricing, to lay the plans side by side with a price per billing period.
+- Use PricingPlans for price cards with a billing-period toggle on the public pricing page, the plans side by side at the top of Pricing.
 
 ## When NOT to use
 
-- To compare plans feature by feature → use `compare-plans`.
+- To compare plans or support tiers feature by feature → use `compare-plans`.
+- To compare Azion with one competitor → use `comparison-table`.
 
 ## Related
 
