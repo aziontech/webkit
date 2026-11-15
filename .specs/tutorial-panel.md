@@ -3,9 +3,9 @@ name: tutorial-panel
 category: content
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 7998e6a380d5c2b967a0b9ed6606c0cbe1ea6caaab03439d7b78a51a7ca19476
+checksum: d13cd7e34f36145cf70a1e5204621d642d4bc0c217a9b4304c95b3f368225d89
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -143,8 +143,8 @@ the optional variant, which returns null so a hotspot outside a provider renders
   - Events: `update:active` (`string \| null`) and `update:step` (`number`) from the models; `start` (`(event: Event, id: string)` — the tutorial id, on Start and Restart), `exit` (`(event: Event, id: string)` — on Exit or Back to tutorials), `complete` (`(event: Event, id: string)` — on Finish of the last step). Each fires from a button the reader activated (in the panel or a `Hotspot` popover, through the context), so the DOM event comes first and the tutorial id second.
   - Slot: `default` — the page, with the panel and every hotspot inside.
 
-- `tutorial-panel-tasks/tutorial-panel-tasks.vue` — internal, not exported: a tutorial's title, description, a progress line derived from the registered tasks (`2 of 3 complete`, `aria-live="polite"`), the ordered task `<ol>` and an actions row. Provides the task registry (`TutorialTasksInjectionKey`) to its tasks. `data-testid` fallback `content-tutorial-panel-tasks`; the panel passes `<testId>__tutorial`. `data-completed` mirrors its `completed` prop.
-- `tutorial-panel-task/tutorial-panel-task.vue` — internal, not exported: one task, a numbered marker, a title and its steps. An `<li>` that registers with the task list on mount (ordinal + `status`), `data-status` mirrors `status` (`pending` / `success`), the `active` task (boolean prop) carries `data-active` and `aria-current="step"`, and an `sr-only` status word (`Not started`, `Current task`, `Complete`). Throws outside the task list. `data-testid` fallback `content-tutorial-panel-task`.
+- `parts/tutorial-panel-tasks.vue` — internal, not exported: a tutorial's title, description, a progress line derived from the registered tasks (`2 of 3 complete`, `aria-live="polite"`), the ordered task `<ol>` and an actions row. Provides the task registry (`TutorialTasksInjectionKey`) to its tasks. `data-testid` fallback `content-tutorial-panel-tasks`; the panel passes `<testId>__tutorial`. `data-completed` mirrors its `completed` prop.
+- `parts/tutorial-panel-task.vue` — internal, not exported: one task, a numbered marker, a title and its steps. An `<li>` that registers with the task list on mount (ordinal + `status`), `data-status` mirrors `status` (`pending` / `success`), the `active` task (boolean prop) carries `data-active` and `aria-current="step"`, and an `sr-only` status word (`Not started`, `Current task`, `Complete`). Throws outside the task list. `data-testid` fallback `content-tutorial-panel-task`.
 
 Exported types: `Tutorial` (`id`, `title`, `description?`, `completed?`, `tasks`), `TutorialTask` (`title`, `steps`), `TutorialStep` (`title`, `content`, `hotspotId`).
 
@@ -159,10 +159,9 @@ packages/webkit/src/components/content/tutorial-panel/
 │   └── use-tutorial-panel-tasks-context.ts     (task registry; throws outside the task list)
 ├── tutorial-panel-provider/
 │   └── tutorial-panel-provider.vue
-├── tutorial-panel-tasks/
-│   └── tutorial-panel-tasks.vue          (internal)
-└── tutorial-panel-task/
-    └── tutorial-panel-task.vue           (internal)
+└── parts/                                (internal, not exported)
+    ├── tutorial-panel-tasks.vue
+    └── tutorial-panel-task.vue
 ```
 
 Exports:

@@ -14,7 +14,6 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import DropdownMenu, {
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuOption,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -24,7 +23,7 @@ import DropdownMenu, {
 /**
  * A realistic composed tree mirroring how a consumer wires the compound:
  * <DropdownMenu> with a <DropdownMenuTrigger>, one or two <DropdownMenuGroup>s each holding
- * <DropdownMenuOption>s. The root Teleports its panel to document.body and each
+ * <DropdownMenuItem>s. The root Teleports its panel to document.body and each
  * group Teleports its options into the panel body (also in body), so all open
  * content is queried through document.body — not the render container.
  */
@@ -53,21 +52,21 @@ const Host = defineComponent({
             ? [
                 h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
                 h(DropdownMenuGroup, { label: 'Account' }, () => [
-                  h(DropdownMenuOption, { value: 'profile', label: 'Profile' }),
-                  h(DropdownMenuOption, { value: 'settings', label: 'Settings' })
+                  h(DropdownMenuItem, { value: 'profile', label: 'Profile' }),
+                  h(DropdownMenuItem, { value: 'settings', label: 'Settings' })
                 ]),
                 h(DropdownMenuGroup, { label: 'Workspace' }, () => [
-                  h(DropdownMenuOption, { value: 'invite', label: 'Invite members' }),
-                  h(DropdownMenuOption, { value: 'logs', label: 'Audit log', selected: true }),
-                  h(DropdownMenuOption, { value: 'archived', label: 'Archived', disabled: true })
+                  h(DropdownMenuItem, { value: 'invite', label: 'Invite members' }),
+                  h(DropdownMenuItem, { value: 'logs', label: 'Audit log', selected: true }),
+                  h(DropdownMenuItem, { value: 'archived', label: 'Archived', disabled: true })
                 ])
               ]
             : [
                 h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
                 h(DropdownMenuGroup, null, () => [
-                  h(DropdownMenuOption, { value: 'profile', label: 'Profile' }),
-                  h(DropdownMenuOption, { value: 'settings', label: 'Settings' }),
-                  h(DropdownMenuOption, { value: 'signout', label: 'Sign out' })
+                  h(DropdownMenuItem, { value: 'profile', label: 'Profile' }),
+                  h(DropdownMenuItem, { value: 'settings', label: 'Settings' }),
+                  h(DropdownMenuItem, { value: 'signout', label: 'Sign out' })
                 ])
               ]
       )
@@ -110,7 +109,7 @@ describe('DropdownMenu', () => {
     it('attaches every sub-component to the compound root for dot-notation', () => {
       expect(DropdownMenu.Trigger).toBe(DropdownMenuTrigger)
       expect(DropdownMenu.Group).toBe(DropdownMenuGroup)
-      expect(DropdownMenu.Item).toBe(DropdownMenuOption)
+      expect(DropdownMenu.Item).toBe(DropdownMenuItem)
     })
 
     it('renders the root header and footer slots outside the scrolling menu', async () => {
@@ -182,7 +181,7 @@ describe('DropdownMenu', () => {
             h(DropdownMenu, null, () => [
               h(DropdownMenuTrigger, null, () => h('span', 'Menu')),
               h(DropdownMenuGroup, null, () => [
-                h(DropdownMenuOption, { value: 'profile', label: 'Profile' })
+                h(DropdownMenuItem, { value: 'profile', label: 'Profile' })
               ])
             ])
         })
@@ -224,7 +223,7 @@ describe('DropdownMenu', () => {
       expect(control().getAttribute('aria-expanded')).toBe('false')
     })
 
-    it('renders one role=menuitem per DropdownMenuOption through the injected panel body', async () => {
+    it('renders one role=menuitem per DropdownMenuItem through the injected panel body', async () => {
       const { getByTestId } = render(Host)
 
       await fireEvent.click(getByTestId('navigation-dropdown-menu__trigger'))
@@ -417,7 +416,7 @@ describe('DropdownMenu', () => {
               h(DropdownMenu, { open: true }, () => [
                 h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
                 h(DropdownMenuGroup, null, () => [
-                  h(DropdownMenuOption, { value: 'profile', label: 'Profile', command: '⌘P' })
+                  h(DropdownMenuItem, { value: 'profile', label: 'Profile', command: '⌘P' })
                 ])
               ])
           }
@@ -581,7 +580,7 @@ describe('DropdownMenu', () => {
             h(DropdownMenu, { defaultOpen: true }, () => [
               h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
               h(DropdownMenuGroup, null, () => [
-                h(DropdownMenuOption, { value: 'profile', label: 'Profile' })
+                h(DropdownMenuItem, { value: 'profile', label: 'Profile' })
               ])
             ])
         })
@@ -602,8 +601,8 @@ describe('DropdownMenu', () => {
       })
 
     it('exposes DropdownMenu.Item and the DropdownMenuItem export as the row', () => {
-      expect(DropdownMenu.Item).toBe(DropdownMenuOption)
-      expect(DropdownMenuItem).toBe(DropdownMenuOption)
+      expect(DropdownMenu.Item).toBe(DropdownMenuItem)
+      expect(DropdownMenuItem.name).toBe('DropdownMenuItem')
       expect('Option' in DropdownMenu).toBe(false)
     })
 
@@ -818,13 +817,13 @@ describe('DropdownMenu', () => {
         h(DropdownMenu, { onSelect: props.onSelect }, () => [
           h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
           h(DropdownMenuGroup, null, () => [
-            h(DropdownMenuOption, { value: 'edit', label: 'Edit' }),
+            h(DropdownMenuItem, { value: 'edit', label: 'Edit' }),
             h(DropdownMenuSub, null, () => [
               h(DropdownMenuSubTrigger, { label: 'Move to' }),
               h(DropdownMenuSubContent, null, () => [
                 h(DropdownMenuGroup, null, () => [
-                  h(DropdownMenuOption, { value: 'production', label: 'production' }),
-                  h(DropdownMenuOption, { value: 'staging', label: 'staging' })
+                  h(DropdownMenuItem, { value: 'production', label: 'production' }),
+                  h(DropdownMenuItem, { value: 'staging', label: 'staging' })
                 ])
               ])
             ]),
@@ -832,11 +831,11 @@ describe('DropdownMenu', () => {
               h(DropdownMenuSubTrigger, { label: 'Share', disabled: true }),
               h(DropdownMenuSubContent, null, () => [
                 h(DropdownMenuGroup, null, () => [
-                  h(DropdownMenuOption, { value: 'copy', label: 'Copy link' })
+                  h(DropdownMenuItem, { value: 'copy', label: 'Copy link' })
                 ])
               ])
             ]),
-            h(DropdownMenuOption, { value: 'delete', label: 'Delete' })
+            h(DropdownMenuItem, { value: 'delete', label: 'Delete' })
           ])
         ])
     }

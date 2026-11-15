@@ -65,9 +65,9 @@ export default {
   <Select.Trigger />`
   }
   <Select.Content>
-    <Select.Option v-for="option in options" :key="option.value" :value="option.value">
+    <Select.Item v-for="option in options" :key="option.value" :value="option.value">
       {{ option.label }}
-    </Select.Option>
+    </Select.Item>
   </Select.Content>
 </Select>`,
   imports: ["import Select from '@aziontech/webkit/select'"],

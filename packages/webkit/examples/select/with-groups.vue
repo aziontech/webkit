@@ -35,11 +35,11 @@
           :key="g.label"
           :label="g.label"
         >
-          <Select.Option
+          <Select.Item
             v-for="o in g.options"
             :key="o.value"
             :value="o.value"
-            >{{ o.label }}</Select.Option
+            >{{ o.label }}</Select.Item
           >
         </Select.Group>
       </Select.Content>

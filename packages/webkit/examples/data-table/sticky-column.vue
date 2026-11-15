@@ -1,7 +1,7 @@
 <script setup>
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -113,7 +113,7 @@
           v-for="(group, gi) in rowActionGroups"
           :key="gi"
         >
-          <DropdownMenuOption
+          <DropdownMenuItem
             v-for="option in group"
             :key="option.value"
             :value="option.value"
@@ -124,7 +124,7 @@
                 :class="option.icon"
                 aria-hidden="true"
             /></template>
-          </DropdownMenuOption>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuRoot>
     </template>

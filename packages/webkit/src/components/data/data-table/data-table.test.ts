@@ -1067,11 +1067,11 @@ describe('DataTable', () => {
         },
         slots: {
           toolbar: () => h(Table.Filter, { kind }),
-          filters: () => h(FilterMenu.Chips)
+          filters: () => h(FilterMenu.ChipGroup)
         }
       })
     const chipRemove = async (view: ReturnType<typeof renderFiltered>): Promise<HTMLElement> => {
-      const chip = await view.findByTestId('data-filter-menu-chips__chip-status')
+      const chip = await view.findByTestId('data-filter-menu-chip-group__chip-status')
       return [...chip.querySelectorAll<HTMLElement>('button')].at(-1) as HTMLElement
     }
 
@@ -1113,7 +1113,7 @@ describe('DataTable', () => {
     })
   })
 
-  describe('Table.Filter (menu) and FilterMenu.Chips in a DataTable', () => {
+  describe('Table.Filter (menu) and FilterMenu.ChipGroup in a DataTable', () => {
     const panel = (): HTMLElement | null =>
       document.body.querySelector<HTMLElement>('[data-testid="data-data-table__filter__panel"]')
     const menuTrigger = (): HTMLButtonElement =>
@@ -1137,7 +1137,7 @@ describe('DataTable', () => {
         () => {
           expect(menuTrigger()).toBeTruthy()
           expect(
-            document.body.querySelector('[data-testid^="data-filter-menu-chips"]')
+            document.body.querySelector('[data-testid^="data-filter-menu-chip-group"]')
           ).toBeTruthy()
         },
         { timeout: 3000 }
@@ -1162,7 +1162,7 @@ describe('DataTable', () => {
       await ready()
       expect(menuTrigger().getAttribute('aria-label')).toBe('Filter, 1 applied')
       expect(getByTestId('data-data-table__filter__count')).toHaveTextContent('1')
-      const chip = getByTestId('data-filter-menu-chips__chip-region')
+      const chip = getByTestId('data-filter-menu-chip-group__chip-region')
       expect(chip).toHaveTextContent('Region')
       expect(chip).toHaveTextContent('us-east')
       expect(chip).toHaveTextContent('+1')
@@ -1249,19 +1249,21 @@ describe('DataTable', () => {
     it('reopens the menu at the chip field and removes the field filter from its chip', async () => {
       const { getByTestId, queryByTestId } = render(FilterMenuExample)
       await ready()
-      const chip = getByTestId('data-filter-menu-chips__chip-region')
+      const chip = getByTestId('data-filter-menu-chip-group__chip-region')
       await settle()
       await fireEvent.click(chip.querySelector<HTMLElement>('[role="button"], button') ?? chip)
       await waitFor(() =>
         expect(panel()?.querySelector('[data-level="values:region"]')).not.toBeNull()
       )
       const remove = [
-        ...getByTestId('data-filter-menu-chips__chip-region').querySelectorAll<HTMLElement>(
+        ...getByTestId('data-filter-menu-chip-group__chip-region').querySelectorAll<HTMLElement>(
           'button'
         )
       ].at(-1)!
       await fireEvent.click(remove)
-      await waitFor(() => expect(queryByTestId('data-filter-menu-chips__chip-region')).toBeNull())
+      await waitFor(() =>
+        expect(queryByTestId('data-filter-menu-chip-group__chip-region')).toBeNull()
+      )
       expect(menuTrigger().getAttribute('aria-label')).toBe('Filter')
     })
 

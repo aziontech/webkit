@@ -6,12 +6,12 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, {
-    type DropdownMenuOptionValue,
+    type DropdownMenuItemValue,
     type TableColumn,
     type TableExposed
   } from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -135,7 +135,7 @@
     () => pending.value !== null && confirmation.value.trim() === pending.value.name
   )
 
-  const onRowAction = (value: DropdownMenuOptionValue, row: FileRow) => {
+  const onRowAction = (value: DropdownMenuItemValue, row: FileRow) => {
     if (value === 'open') enterFolder(row.name)
     if (value !== 'delete') return
     pending.value = row
@@ -405,7 +405,7 @@
                   @select="(_event, value) => onRowAction(value, row)"
                 >
                   <DropdownMenuGroup>
-                    <DropdownMenuOption
+                    <DropdownMenuItem
                       v-if="row.kind === 'folder'"
                       key="open"
                       value="open"
@@ -416,8 +416,8 @@
                           class="ai ai-folder-open"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenuOption>
-                    <DropdownMenuOption
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
                       v-else
                       key="download"
                       value="download"
@@ -428,10 +428,10 @@
                           class="ai ai-download"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenuOption>
+                    </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuGroup>
-                    <DropdownMenuOption
+                    <DropdownMenuItem
                       value="delete"
                       label="Delete"
                     >
@@ -440,7 +440,7 @@
                           class="ai ai-trash"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenuOption>
+                    </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </Table.CellActions>
               </template>

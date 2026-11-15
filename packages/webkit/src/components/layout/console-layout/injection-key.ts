@@ -12,7 +12,7 @@ export interface ConsoleLayoutContext {
   searchOpen: Readonly<Ref<boolean>>
 }
 
-/** One page's trail, registered by `ConsoleLayout.Breadcrumbs`. */
+/** One page's trail, registered by `ConsoleLayout.Breadcrumb`. */
 export interface ConsoleLayoutTrail {
   /** The page's crumbs. */
   items: () => ConsoleLayoutCrumb[]

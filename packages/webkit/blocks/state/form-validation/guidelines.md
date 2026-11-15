@@ -49,7 +49,7 @@ Key and Value. A placeholder may show the expected shape (`API_TOKEN`); the rule
 
 ### E. Choice — `Select` (required)
 
-Environment, with `placeholder="Select an environment"`, `Select.Trigger` carrying the id the label points at, and `Select.Option` per value. Empty on submit takes `required`.
+Environment, with `placeholder="Select an environment"`, `Select.Trigger` carrying the id the label points at, and `Select.Item` per value. Empty on submit takes `required`.
 
 ### F. Long text — `Textarea` (optional)
 

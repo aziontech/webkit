@@ -207,13 +207,13 @@
                     >
                       <Select.Trigger />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="option in presets"
                           :key="String(option.value)"
                           :value="option.value"
                         >
                           {{ option.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                     <Field.Description>{{ presetHelper }}</Field.Description>
@@ -290,13 +290,13 @@
                     >
                       <Select.Trigger />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="option in rootOptions"
                           :key="option.value"
                           :value="option.value"
                         >
                           {{ option.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                     <Field.Description>

@@ -21,7 +21,7 @@ The settings page of one existing resource. The user comes here to change how th
 
 ### A. Resource tabs — `PageTabs`, `Tabs` (optional)
 
-A full-bleed `PageTabs` with one `Tabs.Item` per tab, Settings last, in a `sticky top-0` wrapper on the canvas fill so it stays in view while the layout scrolls. A first-level resource with no tabs drops this bar and renders the page at its own settings route.
+A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Settings last, in a `sticky top-0` wrapper on the canvas fill so it stays in view while the layout scrolls. A first-level resource with no tabs drops this bar and renders the page at its own settings route.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -53,7 +53,7 @@ A setting with a side effect beyond this resource carries a warning `Alert` abov
 
 ### I. Leave guard — `Tabs`, `SaveBar` (optional)
 
-`useUnsavedChanges(() => form)` keeps the saved baseline: `isDirty` drives the save bar and the `dirty` mark on the Settings `Tabs.Item` (a dot after the label, "Unsaved changes" for screen readers), `commit()` moves the baseline after a save and `discard()` restores it. Leaving while dirty (another tab, another route through `onBeforeRouteLeave(() => confirmLeave())`, a reload) asks first: the composable warns on `beforeunload` and drives one `ConfirmDialog` bound with `v-bind="dialogProps"`, whose actions are Keep editing, Discard changes and, when `onSave` is given, Save changes, which saves and then leaves. See `skills/webkit-form`.
+`useUnsavedChanges(() => form)` keeps the saved baseline: `isDirty` drives the save bar and the `dirty` mark on the Settings `Tabs.Trigger` (a dot after the label, "Unsaved changes" for screen readers), `commit()` moves the baseline after a save and `discard()` restores it. Leaving while dirty (another tab, another route through `onBeforeRouteLeave(() => confirmLeave())`, a reload) asks first: the composable warns on `beforeunload` and drives one `ConfirmDialog` bound with `v-bind="dialogProps"`, whose actions are Keep editing, Discard changes and, when `onSave` is given, Save changes, which saves and then leaves. See `skills/webkit-form`.
 
 ### J. Changed elsewhere — `Button`, `SaveBar` (optional)
 
@@ -149,7 +149,7 @@ Some settings only take effect once the resource is deployed (cache settings of 
 
 ## Related
 
-- `shell/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is set by the page with `ConsoleLayout.Breadcrumbs` (the module and the resource as `items`, a `Select` with `kind="transparent"` and `size="small"` in its slot).
+- `shell/console` — the `ConsoleLayout` this page body renders in; a crumb that is a control (DeployableSettings' environment) is set by the page with `ConsoleLayout.Breadcrumb` (the module and the resource as `items`, a `Select` with `kind="transparent"` and `size="small"` in its slot).
 - `create/create-page` — the create page that shares this field list.
 - `detail/attached-resources` — the Domains section body in DeployableSettings.
 - `edit/delete-dialog` — the dialog behind the Danger zone action.

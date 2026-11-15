@@ -3,8 +3,8 @@ name: drawer
 category: overlay
 structure: composition
 status: implemented
-spec_version: 6
-checksum: 13c83d0072cec17355a804886a7762112ffdd139969c400396729985cbb3b404
+spec_version: 7
+checksum: 4bb565e0073f41433349094aaf3c98799bb19d49b026098cbb8d09b4b2ff6241
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -93,11 +93,11 @@ The compound import leads: every part hangs off the root (`Drawer.Trigger`, `Dra
 </template>
 ```
 
-Tree-shaking: `@aziontech/webkit/drawer-root` is the root alone (nothing attached), and every part keeps its own path (`@aziontech/webkit/drawer-trigger`, `-content`, `-title`, `-description`, `-close`, and `@aziontech/webkit/panel-header`, `panel-content`, `panel-footer` for the regions). There is no portal or overlay part: `drawer-content` renders both.
+Tree-shaking: `@aziontech/webkit/drawer-root` is the root alone (nothing attached), and every part keeps its own path (`@aziontech/webkit/drawer-trigger`, `-content`, `-title`, `-description`, `-close`, and `@aziontech/webkit/drawer-header`, `drawer-body`, `drawer-footer` for the regions, which resolve to the shared Panel files). There is no portal or overlay part: `drawer-content` renders both.
 
 ## Sub-components
 
-- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header` (`panel-header`), `Drawer.Body` (`panel-content`) and `Drawer.Footer` (`panel-footer`). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat).
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Drawer.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Drawer.Header`, `Drawer.Body` and `Drawer.Footer`, each importable on its own as `@aziontech/webkit/drawer-header`, `drawer-body` and `drawer-footer` (the same `panel-header`, `panel-body` and `panel-footer` files). It adds no component of its own. Exported at `@aziontech/webkit/drawer`; the root alone is `@aziontech/webkit/drawer-root`. The parts stay in the root folder (flat).
 - `drawer-close.vue` — Public sub-component `drawer-close`: the close (X) `IconButton`. `Drawer.Content` puts one at the end of its `PanelHeader` while `closable` is true, so a consumer places it by hand only in a custom header with `:closable="false"`. It always closes the drawer.
 - `drawer-content.vue` — Public sub-component `drawer-content`: the drawer itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay while `modal` (`aria-hidden`, `__backdrop` test id; a click on it closes the drawer when `dismissible`) and the `role="dialog"` panel, traps focus and scroll-locks the page while `modal`, and restores focus on close.
 - `drawer-description.vue` — Public sub-component `drawer-description`.
@@ -187,7 +187,7 @@ No element sets an inline `transition`, so `motion-reduce:transition-none` wins 
 
 - Default
 - Sizes
-- ScrollContent — long `PanelContent` scrolls inside `ScrollArea`; header and footer stay in the panel flex layout (not sticky).
+- ScrollContent — long `PanelBody` scrolls inside `ScrollArea`; header and footer stay in the panel flex layout (not sticky).
 
 ## Constraints — DO NOT
 

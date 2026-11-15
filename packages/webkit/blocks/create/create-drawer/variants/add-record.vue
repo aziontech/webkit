@@ -10,7 +10,7 @@
   import InputGroup from '@aziontech/webkit/input-group'
   import Link from '@aziontech/webkit/link'
   import NumberInput from '@aziontech/webkit/number-input'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
@@ -145,7 +145,7 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <fieldset
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
@@ -192,13 +192,13 @@
                       aria-label="Record type"
                     />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="type in recordTypes"
                         :key="type.value"
                         :value="type.value"
                       >
                         {{ type.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                   <HelperText
@@ -286,13 +286,13 @@
                       aria-label="Policy type"
                     />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="policy in policyTypes"
                         :key="policy.value"
                         :value="policy.value"
                       >
                         {{ policy.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                   <HelperText
@@ -327,7 +327,7 @@
               </div>
             </SettingsSection>
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">

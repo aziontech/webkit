@@ -6,17 +6,17 @@ import Pagination from '../components/data/pagination/pagination.vue'
 import PhoneInput from '../components/inputs/phone-input/phone-input.vue'
 import Select from '../components/inputs/select/select.vue'
 import SelectContent from '../components/inputs/select/select-content/select-content.vue'
-import SelectOption from '../components/inputs/select/select-option/select-option.vue'
+import SelectItem from '../components/inputs/select/select-item/select-item.vue'
 import SelectTrigger from '../components/inputs/select/select-trigger/select-trigger.vue'
 import Slider from '../components/inputs/slider/slider.vue'
 import DropdownMenu, {
   DropdownMenuGroup,
-  DropdownMenuOption,
+  DropdownMenuItem,
   DropdownMenuTrigger
 } from '../components/navigation/dropdown-menu/index'
 import Tabs from '../components/navigation/tabs/index'
-import TabsItem from '../components/navigation/tabs/tabs-item.vue'
 import TabsList from '../components/navigation/tabs/tabs-list.vue'
+import TabsTrigger from '../components/navigation/tabs/tabs-trigger.vue'
 import Dialog from '../components/overlay/dialog/dialog.vue'
 import DialogContent from '../components/overlay/dialog/dialog-content.vue'
 import DialogTitle from '../components/overlay/dialog/dialog-title.vue'
@@ -68,9 +68,9 @@ const TabsTree = defineComponent({
     return () =>
       h(Tabs, { defaultValue: 'one', 'data-testid': 'tv' }, () =>
         h(TabsList, null, () => [
-          h(TabsItem, { value: 'one', label: 'One' }),
-          h(TabsItem, { value: 'two', label: 'Two' }),
-          h(TabsItem, { value: 'three', label: 'Three' })
+          h(TabsTrigger, { value: 'one', label: 'One' }),
+          h(TabsTrigger, { value: 'two', label: 'Two' }),
+          h(TabsTrigger, { value: 'three', label: 'Three' })
         ])
       )
   }
@@ -152,11 +152,11 @@ const overlays = () => [
   h(Tooltip, { open: true, content: 'Tip' }, () => h('button', { type: 'button' }, 'Tooltip')),
   h(Select, { open: true, modelValue: 'a' }, () => [
     h(SelectTrigger, { 'aria-label': 'Pick' }),
-    h(SelectContent, null, () => h(SelectOption, { value: 'a', label: 'Alpha' }))
+    h(SelectContent, null, () => h(SelectItem, { value: 'a', label: 'Alpha' }))
   ]),
   h(DropdownMenu, { open: true }, () => [
     h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
-    h(DropdownMenuGroup, null, () => h(DropdownMenuOption, { value: 'one', label: 'One' }))
+    h(DropdownMenuGroup, null, () => h(DropdownMenuItem, { value: 'one', label: 'One' }))
   ])
 ]
 
@@ -220,7 +220,7 @@ describe('values keep their own direction inside an rtl trigger', () => {
         setup: () => () =>
           h(Select, { modelValue: 'Alpha' }, () => [
             h(SelectTrigger, { 'aria-label': 'Pick' }),
-            h(SelectContent, null, () => h(SelectOption, { value: 'Alpha', label: 'Alpha' }))
+            h(SelectContent, null, () => h(SelectItem, { value: 'Alpha', label: 'Alpha' }))
           ])
       }),
       { container: rtlContainer('rtl') }

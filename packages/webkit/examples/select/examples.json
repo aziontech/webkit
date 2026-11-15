@@ -34,7 +34,7 @@
     },
     {
       "name": "WithOptionExtras",
-      "summary": "Per-option affordances on `<Select.Option>`: the `icon` prop, the `#left` slot, and the trailing `#tag` slot.",
+      "summary": "Per-option affordances on `<Select.Item>`: the `icon` prop, the `#left` slot, and the trailing `#tag` slot.",
       "file": "with-option-extras.vue"
     },
     {

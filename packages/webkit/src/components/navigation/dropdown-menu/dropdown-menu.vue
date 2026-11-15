@@ -6,15 +6,15 @@
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale } from '../../../composables/use-translate'
   import type {
-    DropdownMenuOptionValue,
+    DropdownMenuItemValue,
     DropdownMenuPlacement,
     DropdownMenuPlacementInput
   } from './injection-key'
   import { DropdownMenuInjectionKey } from './injection-key'
 
   export type {
-    DropdownMenuOptionKind,
-    DropdownMenuOptionValue,
+    DropdownMenuItemKind,
+    DropdownMenuItemValue,
     DropdownMenuPlacement,
     DropdownMenuPlacementInput
   } from './injection-key'
@@ -49,10 +49,7 @@
   })
 
   const emit = defineEmits<{
-    select: [
-      event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-      value: DropdownMenuOptionValue
-    ]
+    select: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, value: DropdownMenuItemValue]
   }>()
 
   /** Controlled open state. Use with v-model:open; while unbound the menu is uncontrolled and starts at defaultOpen. */

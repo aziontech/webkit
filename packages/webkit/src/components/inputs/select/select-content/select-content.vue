@@ -29,7 +29,7 @@
   }
 
   const slots = defineSlots<{
-    /** The options (SelectOption, SelectGroup). */
+    /** The options (SelectItem, SelectGroup). */
     default(): unknown
     /** Pinned above the list, for a search field. */
     search(): unknown

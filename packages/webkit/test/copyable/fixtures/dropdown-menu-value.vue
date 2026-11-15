@@ -1,11 +1,11 @@
 <script setup lang="ts">
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
-  import Table, { type DropdownMenuOptionValue as TableActionValue } from '@aziontech/webkit/table'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
+  import Table, { type DropdownMenuItemValue as TableActionValue } from '@aziontech/webkit/table'
   import { ref } from 'vue'
 
-  const chosen = ref<DropdownMenuOptionValue>('')
+  const chosen = ref<DropdownMenuItemValue>('')
   const lastAction = ref<TableActionValue>(0)
-  const onSelect = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue): void => {
+  const onSelect = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue): void => {
     chosen.value = value
   }
   const onAction = (_event: MouseEvent | KeyboardEvent, value: TableActionValue): void => {

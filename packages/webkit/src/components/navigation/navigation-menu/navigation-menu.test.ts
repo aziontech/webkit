@@ -149,7 +149,7 @@ describe('NavigationMenu', () => {
       })
     })
 
-    describe('root landmark rendering (navigation-menu-root.vue)', () => {
+    describe('root landmark rendering (navigation-menu.vue)', () => {
       it('renders as a nav with the default aria-label, orientation and testid', () => {
         const { getByTestId } = renderTree(
           `<NavigationMenu><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
@@ -444,7 +444,7 @@ describe('NavigationMenu', () => {
       })
     })
 
-    describe('events on real user actions (navigation-menu-root.vue emits)', () => {
+    describe('events on real user actions (navigation-menu.vue emits)', () => {
       it('emits update:modelValue with the item value when a submenu opens', async () => {
         const updateValues: Array<unknown> = []
 

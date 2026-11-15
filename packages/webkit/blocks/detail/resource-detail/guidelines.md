@@ -22,7 +22,7 @@ The second-level page of one resource. The user arrives from a list row or a dep
 
 ### A. Tab bar — `PageTabs`, `Tabs`, `EmptyState` (required)
 
-A full-bleed `PageTabs` with one `Tabs.Item` per concern: Overview, Versions, Build, Deployments, first in the body and in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. On a tabbed page the primary action (an outlined Deploy) sits on the tab row at medium size. Each tab is its own route: a variant renders the open tab's panel (Application renders all of its panels), and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it, so no tab is dead.
+A full-bleed `PageTabs` with one `Tabs.Trigger` per concern: Overview, Versions, Build, Deployments, first in the body and in a `sticky top-0` wrapper on the canvas fill, so it stays in view while the layout's content region scrolls the tab under it. On a tabbed page the primary action (an outlined Deploy) sits on the tab row at medium size. Each tab is its own route: a variant renders the open tab's panel (Application renders all of its panels), and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it, so no tab is dead.
 
 ### B. Summary subject band — `Card`, `Tooltip`, `Button`, `DropdownMenu`, `IconButton` (required)
 
@@ -42,8 +42,8 @@ For a resource made from the CLI, the `detail/get-started` section follows the s
 
 ## Breadcrumb and environment
 
-- The trail is in the layout's header: `breadcrumbs` from the route meta (`module › resource name`, e.g. Resources › analytics-app), or the page's own `ConsoleLayout.Breadcrumbs`. A page body never renders `Breadcrumb`, `GlobalHeader` or a `<main>`.
-- A service ends the trail on its environment. That crumb is a control, so the page sets the trail itself: `ConsoleLayout.Breadcrumbs` with the module and the service as `items` and, in its default slot, a `Select` with `kind="transparent"` and `size="small"` (no `w-full`: it sizes to its value like a crumb), labelled `Switch environment`, with a search `Input`, each environment tagged with its deployment policy and Add Environment at its foot. The environment is part of the route, so picking one navigates and the page reads it. ServiceOverview and `shell/console` (DetailPage) show it.
+- The trail is in the layout's header: `breadcrumbs` from the route meta (`module › resource name`, e.g. Resources › analytics-app), or the page's own `ConsoleLayout.Breadcrumb`. A page body never renders `Breadcrumb`, `GlobalHeader` or a `<main>`.
+- A service ends the trail on its environment. That crumb is a control, so the page sets the trail itself: `ConsoleLayout.Breadcrumb` with the module and the service as `items` and, in its default slot, a `Select` with `kind="transparent"` and `size="small"` (no `w-full`: it sizes to its value like a crumb), labelled `Switch environment`, with a search `Input`, each environment tagged with its deployment policy and Add Environment at its foot. The environment is part of the route, so picking one navigates and the page reads it. ServiceOverview and `shell/console` (DetailPage) show it.
 - The layout hides its breadcrumbs while compact, so below md the service summary's Deployment Settings band carries its own environment menu.
 
 ## Topology tab
@@ -108,7 +108,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 ### Service
 
 - Service: the service summary with its domains, environment menu, ID and the Deployment Settings band.
-- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumbs`), Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
+- ServiceOverview: a service (its environment crumb is the page's `ConsoleLayout.Breadcrumb`), Deploy on the tab row, the production checklist and the deployment topology on `TopologyDiagram` (policy, error page and origin slots staged until Deploy).
 
 ### Policy
 

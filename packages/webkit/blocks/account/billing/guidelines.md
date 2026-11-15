@@ -22,15 +22,15 @@ Title `Billing` and one sentence on what the page holds. Actions: the time of th
 
 ### B. Tabs — `PageTabs`, `Tabs` (required)
 
-`PageTabs` with one `Tabs.Item` per tab: `Bills` and `Payment methods`. Only the active tab's content renders; the heading and the load state are shared.
+`PageTabs` with one `Tabs.Trigger` per tab: `Bills` and `Payment methods`. Only the active tab's content renders; the heading and the load state are shared.
 
 ### C. Load failure — `Alert` (conditional)
 
 When the billing data fails to load, a danger `Alert` with Retry takes the tab's place and says that nothing was charged or changed.
 
-### D. Subscription plan — `Card`, `Skeleton`, `Tag`, `KeyValuePairs`, `Currency`, `PaymentBrand` (required)
+### D. Subscription plan — `Card`, `Skeleton`, `Tag`, `KeyValueList`, `Currency`, `PaymentBrand` (required)
 
-A `Card` whose header holds the `Subscription plan` heading and the outlined `Change plan`, which opens `account/change-plan-drawer` (the copyable SFC links to the plans route so it stands alone). The body shows the plan name with a small secondary `Current plan` `Tag` (a `Skeleton` while loading), then split `KeyValuePairs` with Plan start date, Next charge date, Next charge value as `Currency`, and the default card as a decorative `PaymentBrand` plate and its brand and last four. The footer says what an invoice includes. On wide containers it takes about half the row.
+A `Card` whose header holds the `Subscription plan` heading and the outlined `Change plan`, which opens `account/change-plan-drawer` (the copyable SFC links to the plans route so it stands alone). The body shows the plan name with a small secondary `Current plan` `Tag` (a `Skeleton` while loading), then split `KeyValueList` with Plan start date, Next charge date, Next charge value as `Currency`, and the default card as a decorative `PaymentBrand` plate and its brand and last four. The footer says what an invoice includes. On wide containers it takes about half the row.
 
 ### E. Upgrade card — `Card` (required)
 
@@ -50,7 +50,7 @@ An account with no invoice yet replaces the table with `No invoices yet` and a l
 
 ### I. Payment information — `StatusIndicator` (required on the Payment methods tab)
 
-A `SectionHeader` with Update over a `Card` of four-column `KeyValuePairs`: Billing email, Auto-renewal as a `StatusIndicator` (On or Off, never colour alone), Billing address and Tax ID (empty shows the empty-value marker).
+A `SectionHeader` with Update over a `Card` of four-column `KeyValueList`: Billing email, Auto-renewal as a `StatusIndicator` (On or Off, never colour alone), Billing address and Tax ID (empty shows the empty-value marker).
 
 ### J. Payment methods — `DropdownMenu`, `ConfirmDialog` (required on the Payment methods tab)
 

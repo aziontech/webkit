@@ -3,9 +3,9 @@ name: trace
 category: code
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: d1918fd9f31467da9d8ad411db14b8d978ec2cd5f778f35b8b8a9720d51ef41c
+checksum: 61add433cf9ae1c49b0d370cbc07f96278632c67922832b667d51bd71e1658b3
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -35,7 +35,7 @@ A span waterfall: one row per span of a run (a function invocation, a request th
 - `log-view` — the run's log lines, shown under the trace on the same clock.
 - `tree` — the same expand and collapse model without the time axis.
 - `bar-list` — ranked durations without nesting.
-- `key-value-pairs` — the facts of the run above the trace.
+- `key-value-list` — the facts of the run above the trace.
 
 ## Best practices
 

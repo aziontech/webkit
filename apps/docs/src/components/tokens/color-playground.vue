@@ -78,13 +78,13 @@
         >
           <Select.Trigger :aria-label="t.token" />
           <Select.Content>
-            <Select.Option
+            <Select.Item
               v-for="item in options"
               :key="item.name"
               :value="item.name"
             >
               {{ item.name }}
-            </Select.Option>
+            </Select.Item>
           </Select.Content>
         </Select>
       </div>

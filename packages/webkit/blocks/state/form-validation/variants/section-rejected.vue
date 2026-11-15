@@ -337,13 +337,13 @@
                               "
                             />
                             <MultiSelect.Content>
-                              <MultiSelect.Option
+                              <MultiSelect.Item
                                 v-for="option in httpPortOptions"
                                 :key="option.value"
                                 :value="option.value"
                               >
                                 {{ option.label }}
-                              </MultiSelect.Option>
+                              </MultiSelect.Item>
                             </MultiSelect.Content>
                           </MultiSelect>
                           <HelperText
@@ -498,13 +498,13 @@
                                 :aria-describedby="errors.originId ? 'ev-origin-error' : undefined"
                               />
                               <Select.Content>
-                                <Select.Option
+                                <Select.Item
                                   v-for="origin in origins"
                                   :key="origin.value"
                                   :value="origin.value"
                                 >
                                   {{ origin.label }}
-                                </Select.Option>
+                                </Select.Item>
                               </Select.Content>
                             </Select>
                             <HelperText

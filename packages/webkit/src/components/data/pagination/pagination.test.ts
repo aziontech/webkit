@@ -8,7 +8,7 @@ import DataDriven from '../../../../examples/pagination/data-driven.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Pagination from './index'
 import PaginationButton from './pagination-button/pagination-button.vue'
-import PaginationInfo from './pagination-info/pagination-info.vue'
+import PaginationDescription from './pagination-description/pagination-description.vue'
 import PaginationPageSize from './pagination-page-size/pagination-page-size.vue'
 
 // Default/Buttons are string-template stories whose Pagination.Button dot-notation
@@ -19,7 +19,7 @@ describe('Pagination', () => {
     describe('compound API — dot-notation resolves to the sub-components', () => {
       it('attaches Button / Info / PageSize to the root (Object.assign in index.ts)', () => {
         expect(Pagination.Button).toBe(PaginationButton)
-        expect(Pagination.Info).toBe(PaginationInfo)
+        expect(Pagination.Description).toBe(PaginationDescription)
         expect(Pagination.PageSize).toBe(PaginationPageSize)
       })
     })
@@ -73,8 +73,8 @@ describe('Pagination', () => {
         expect(getByTestId('ctx-paginator')).toBeTruthy()
       })
 
-      it('a standalone PaginationInfo (no root) falls back to the default testid', () => {
-        const { getByTestId } = render(PaginationInfo, { slots: { default: 'hello' } })
+      it('a standalone PaginationDescription (no root) falls back to the default testid', () => {
+        const { getByTestId } = render(PaginationDescription, { slots: { default: 'hello' } })
         const el = getByTestId('data-pagination__info')
         expect(el.tagName).toBe('SPAN')
         expect(el.textContent).toContain('hello')
@@ -417,11 +417,11 @@ describe('Pagination', () => {
       // Prev/Next render slot content only for kind=number, so their accessible
       // name must come from aria-label (the data-driven root does the same).
       const Composed = {
-        components: { Pagination, PaginationButton, PaginationInfo, PaginationPageSize },
+        components: { Pagination, PaginationButton, PaginationDescription, PaginationPageSize },
         template: `
         <Pagination>
           <template #info>
-            <PaginationInfo>Showing 1 to 10 of 20 entries</PaginationInfo>
+            <PaginationDescription>Showing 1 to 10 of 20 entries</PaginationDescription>
           </template>
           <PaginationButton kind="previous" aria-label="Previous page" disabled />
           <PaginationButton kind="number" active>1</PaginationButton>
@@ -481,11 +481,11 @@ describe('Pagination', () => {
       it('the hand-composed compound tree has no violations', async () => {
         // Icon-only prev/next need aria-label or axe trips button-name.
         const Composed = {
-          components: { Pagination, PaginationButton, PaginationInfo, PaginationPageSize },
+          components: { Pagination, PaginationButton, PaginationDescription, PaginationPageSize },
           template: `
           <Pagination>
             <template #info>
-              <PaginationInfo>Showing 1 to 10 of 20 entries</PaginationInfo>
+              <PaginationDescription>Showing 1 to 10 of 20 entries</PaginationDescription>
             </template>
             <PaginationButton kind="previous" aria-label="Previous page" />
             <PaginationButton kind="number" active>1</PaginationButton>

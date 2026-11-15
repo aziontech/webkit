@@ -669,19 +669,19 @@
                           </template>
                         </Select.Trigger>
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="account in accounts"
                             :key="account.value"
                             :value="account.value"
                           >
                             {{ account.label }}
-                          </Select.Option>
-                          <Select.Option
+                          </Select.Item>
+                          <Select.Item
                             value="__add-account__"
                             icon="ai ai-circle-plus"
                           >
                             Add GitHub account
-                          </Select.Option>
+                          </Select.Item>
                         </Select.Content>
                       </Select>
                     </div>

@@ -9,7 +9,7 @@ export type SelectKind = 'outlined' | 'transparent'
 
 export type SelectValue = string | number | undefined
 
-/** One entry of an options list a consumer renders as Select.Option rows: the value, the label text and the option's own props. */
+/** One entry of an options list a consumer renders as Select.Item rows: the value, the label text and the option's own props. */
 export interface SelectOptionItem<TValue = string> {
   /** Value the option writes to the model. */
   value: TValue

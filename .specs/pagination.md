@@ -3,11 +3,11 @@ name: pagination
 category: data
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: 26682ab667b20bd897c308769886879ada9d97597006087834db5173ea5d5212
+checksum: adcc5749618d6af9e43586f55a2cdebdd6f6cf26338269f435bf90975a1e227c
 created: 2026-06-16
 last_updated: 2026-11-15
 ---
@@ -23,7 +23,7 @@ Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. 
 - Use Pagination to page through the rows of a table or list; alternative versions of one AI response use ResponseBranches.
 - A list or table outside `table`'s own footer needs page navigation and a rows-per-page selector.
 - You know the item count — pass `total` and bind `v-model:page` / `v-model:page-size`; the component renders the info text, the windowed page numbers and the selector.
-- The page strip needs custom content (a different info line, extra controls) — compose `Pagination.Info`, `Pagination.Button` and `Pagination.PageSize` through the slots.
+- The page strip needs custom content (a different info line, extra controls) — compose `Pagination.Description`, `Pagination.Button` and `Pagination.PageSize` through the slots.
 
 ## When NOT to use
 
@@ -46,7 +46,7 @@ Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. 
 
 ## Usage
 
-Composition mode — one import of the root; every part is reached via dot-notation (`<Pagination.Button>`, `<Pagination.Info>`, `<Pagination.PageSize>`). The root binding must be PascalCase (`Pagination`).
+Composition mode — one import of the root; every part is reached via dot-notation (`<Pagination.Button>`, `<Pagination.Description>`, `<Pagination.PageSize>`). The root binding must be PascalCase (`Pagination`).
 
 ```vue
 <script setup>
@@ -56,7 +56,7 @@ Composition mode — one import of the root; every part is reached via dot-notat
 <template>
   <Pagination>
     <template #info>
-      <Pagination.Info>Showing 1 to 10 of 20 entries</Pagination.Info>
+      <Pagination.Description>Showing 1 to 10 of 20 entries</Pagination.Description>
     </template>
 
     <Pagination.Button
@@ -113,12 +113,12 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
      Per-sub-component props/events are listed here (the root Props/Events/Slots tables
      below describe ONLY the root Pagination element).
      Compound API: index.ts (Object.assign; vue-tsc emits the adjacent index.d.ts at publish time) attaches the sub-components
-     to the root as `Pagination.Button` (PaginationButton) / `Pagination.Info` / `Pagination.PageSize`
+     to the root as `Pagination.Button` (PaginationButton) / `Pagination.Description` / `Pagination.PageSize`
      (PascalCase root required). No per-component package.json — the root packages/webkit/package.json#exports
      map points each public path directly at its source file. See `.claude/rules/compound-api.md`. -->
 
 - `pagination-button/pagination-button.vue` — one segment of the numbers strip, 28px tall with a 28px minimum width and no horizontal padding; it carries no radius of its own except the outer corners at the two ends of the strip (`var(--shape-control)`). Props `kind?: 'previous' | 'next' | 'number' | 'more'`, `active?: boolean` (current-page treatment), `disabled?: boolean`. Emits `click: [event: MouseEvent]`. `previous` renders `ai ai-chevron-left`; `next` renders `ai ai-chevron-right`; `more` renders `ai ai-ellipsis`; only `number` renders the default slot — `previous` / `next` are icon-only and take their accessible name from `aria-label`; `more` renders as an inert `span` with `aria-hidden="true"` (not focusable, no state layers, never emits `click`). `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own and read against the strip. Hover/active use the DESIGN.md ghost-layer surfaces and are mutually exclusive (pressing replaces the hover layer rather than stacking on it); `active` uses `var(--bg-selected)` + border; `disabled` keeps the kind's own surface and mutes the foreground to `var(--text-disabled)`.
-- `pagination-info/pagination-info.vue` — muted page-info text container (default slot), `.text-body-xs` / `var(--text-muted)`.
+- `pagination-description/pagination-description.vue` — muted page-info text container (default slot), `.text-body-xs` / `var(--text-muted)`.
 - `pagination-page-size/pagination-page-size.vue` — rows-per-page selector (native `<select>`), 64×28 (same height as the numbers strip), `var(--shape-control)` radius, `var(--bg-canvas)` frame over a `var(--bg-surface)` field with `var(--border-default)` border, value `.text-label-sm` muted, `ai ai-chevron-down`. Props `modelValue?: number`, `options?: number[]` (default `[10, 25, 50, 100]`). Emits `update:modelValue: [value: number]`. Placed in the Pagination `controls` slot.
 
 <!-- Resulting layout:
@@ -128,10 +128,10 @@ Data-driven mode — pass `total` and bind state; the Pagination renders the con
   ├── index.ts              (compound: Object.assign attaches sub-components; vue-tsc emits index.d.ts at publish)
   ├── injection-key.ts
   ├── pagination-button/    { pagination-button.vue }
-  ├── pagination-info/       { pagination-info.vue }
+  ├── pagination-description/       { pagination-description.vue }
   └── pagination-page-size/  { pagination-page-size.vue }
 
-  No per-component package.json. Public exports stay flat: ./pagination (→ index.ts), ./pagination-button, ./pagination-info, ./pagination-page-size -->
+  No per-component package.json. Public exports stay flat: ./pagination (→ index.ts), ./pagination-button, ./pagination-description, ./pagination-page-size -->
 
 ## Props
 

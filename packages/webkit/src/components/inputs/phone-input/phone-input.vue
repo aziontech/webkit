@@ -11,7 +11,7 @@
   import { FormValue } from '../parts/form-value'
   import Select from '../select/select.vue'
   import SelectContent from '../select/select-content/select-content.vue'
-  import SelectOption from '../select/select-option/select-option.vue'
+  import SelectItem from '../select/select-item/select-item.vue'
   import SelectTrigger from '../select/select-trigger/select-trigger.vue'
   import {
     type Country,
@@ -256,7 +256,7 @@
             </template>
           </Input>
         </template>
-        <SelectOption
+        <SelectItem
           v-for="(c, index) in filteredCountries"
           :id="optionId(c.code)"
           :key="c.code"
@@ -285,7 +285,7 @@
               {{ c.dialCode }}
             </span>
           </template>
-        </SelectOption>
+        </SelectItem>
         <p
           v-if="filteredCountries.length === 0"
           role="status"

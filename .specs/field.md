@@ -3,8 +3,8 @@ name: field
 category: inputs
 structure: composition
 status: implemented
-spec_version: 5
-checksum: a717055e6d39ed37db5e2b9291151e684dc647b7950a62e49b1bb9e7add6aa3f
+spec_version: 6
+checksum: add484810152357201b91d17eaf8279f104eeb6d927bb4892043d08a63fcb689
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -27,7 +27,7 @@ One composable form field that wraps **any** control — `Input`, `Textarea`, `S
 
 - A control with no visible label inside a toolbar or a table cell → render the control alone with an `aria-label`.
 - A group of mutually exclusive cards with icons → use `radio-group` with `kind="card"`.
-- A static key/value read-out → use `key-value-pairs`.
+- A static key/value read-out → use `key-value-list`.
 
 ## Related
 

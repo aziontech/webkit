@@ -18,7 +18,7 @@ import InputGroup from '../input-group/input-group.vue'
 import InputGroupInput from '../input-group/input-group-input/input-group-input.vue'
 import Select from '../select/select.vue'
 import SelectContent from '../select/select-content/select-content.vue'
-import SelectOption from '../select/select-option/select-option.vue'
+import SelectItem from '../select/select-item/select-item.vue'
 import SelectTrigger from '../select/select-trigger/select-trigger.vue'
 import Switch from '../switch/switch.vue'
 import Textarea from '../textarea/textarea.vue'
@@ -54,7 +54,7 @@ const components = {
   Select,
   SelectTrigger,
   SelectContent,
-  SelectOption
+  SelectItem
 }
 
 const mount = (template: string, setup: () => Record<string, unknown> = () => ({})) =>
@@ -218,7 +218,7 @@ describe('Field', () => {
 
   it('wires the Select trigger as the control and isolates its inner parts', async () => {
     const { getByLabelText } = mount(
-      '<Field invalid><FieldLabel>Region</FieldLabel><Select><SelectTrigger /><SelectContent><SelectOption value="a">a</SelectOption></SelectContent></Select><FieldDescription>Pick one</FieldDescription></Field>'
+      '<Field invalid><FieldLabel>Region</FieldLabel><Select><SelectTrigger /><SelectContent><SelectItem value="a">a</SelectItem></SelectContent></Select><FieldDescription>Pick one</FieldDescription></Field>'
     )
     await nextTick()
     const trigger = getByLabelText('Region')

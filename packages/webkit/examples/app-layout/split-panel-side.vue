@@ -1,6 +1,6 @@
 <script setup>
   import AppLayout from '@aziontech/webkit/app-layout'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
   import { computed, ref } from 'vue'
@@ -59,18 +59,18 @@
       </main>
 
       <template #split-panel>
-        <KeyValuePairs
+        <KeyValueList
           v-if="selected"
           aria-label="Service details"
         >
-          <KeyValuePairs.Item label="Status">
+          <KeyValueList.Item label="Status">
             <StatusIndicator
               :severity="selected.status"
               :label="selected.label"
             />
-          </KeyValuePairs.Item>
-          <KeyValuePairs.Item label="Domain">{{ selected.domain }}</KeyValuePairs.Item>
-        </KeyValuePairs>
+          </KeyValueList.Item>
+          <KeyValueList.Item label="Domain">{{ selected.domain }}</KeyValueList.Item>
+        </KeyValueList>
       </template>
     </AppLayout>
   </div>

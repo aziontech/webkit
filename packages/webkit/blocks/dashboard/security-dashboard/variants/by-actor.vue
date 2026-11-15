@@ -629,13 +629,13 @@
             >
               <Select.Trigger aria-label="Time range" />
               <Select.Content>
-                <Select.Option
+                <Select.Item
                   v-for="option in timeRanges"
                   :key="String(option.value)"
                   :value="option.value"
                 >
                   {{ option.label }}
-                </Select.Option>
+                </Select.Item>
               </Select.Content>
             </Select>
           </div>
@@ -668,7 +668,7 @@
             />
           </div>
         </div>
-        <FilterMenu.Chips
+        <FilterMenu.ChipGroup
           v-model="filters"
           :fields="filterFields"
         />

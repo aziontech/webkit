@@ -10,8 +10,8 @@ import Spec from '../../../../examples/diagram/spec.vue'
 import { diagrams } from '../../../assets/diagrams/registry'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Diagram, { type DiagramName } from './diagram.vue'
-import DiagramLayout from './diagram-layout/diagram-layout.vue'
-import DiagramNode from './diagram-node/diagram-node.vue'
+import DiagramLayout from './parts/diagram-layout.vue'
+import DiagramNode from './parts/diagram-node.vue'
 import type { DiagramSpec } from './types'
 
 const NAMES = Object.keys(diagrams) as DiagramName[]

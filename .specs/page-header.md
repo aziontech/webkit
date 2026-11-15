@@ -3,8 +3,8 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 749c0501db00e5e60287746b417b1f334e7be8ed394ed524c683e23778d66b4b
-spec_version: 5
+checksum: 6bdf229d56127a17cb69fd104ca3704a51880fad4c481a05d19dc78d4c478d4a
+spec_version: 6
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -104,18 +104,18 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
       />
     </template>
     <template #tabs>
-      <Tabs.Root v-model="tab">
+      <Tabs v-model="tab">
         <Tabs.List>
-          <Tabs.Item
+          <Tabs.Trigger
             value="overview"
             label="Overview"
           />
-          <Tabs.Item
+          <Tabs.Trigger
             value="settings"
             label="Settings"
           />
         </Tabs.List>
-      </Tabs.Root>
+      </Tabs>
     </template>
   </PageHeader>
 </template>

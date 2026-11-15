@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import TabsItem from '../../navigation/tabs/tabs-item.vue'
+  import TabsRoot from '../../navigation/tabs/tabs.vue'
+  import TabsContent from '../../navigation/tabs/tabs-content.vue'
   import TabsList from '../../navigation/tabs/tabs-list.vue'
-  import TabsPanel from '../../navigation/tabs/tabs-panel.vue'
-  import TabsRoot from '../../navigation/tabs/tabs-root.vue'
+  import TabsTrigger from '../../navigation/tabs/tabs-trigger.vue'
   import { flattenSlot } from '../doc-frame/flatten-slot'
 
   defineOptions({ name: 'DocTabs', inheritAttrs: false })
@@ -42,7 +42,7 @@
   >
     <TabsRoot :default-value="defaultValue">
       <TabsList data-doc-chrome>
-        <TabsItem
+        <TabsTrigger
           v-for="panel in panels"
           :key="panel.value"
           :value="panel.value"
@@ -50,13 +50,13 @@
         />
       </TabsList>
       <div class="relative isolate w-full">
-        <TabsPanel
+        <TabsContent
           v-for="panel in panels"
           :key="panel.value"
           :value="panel.value"
         >
           <component :is="panel.node" />
-        </TabsPanel>
+        </TabsContent>
       </div>
     </TabsRoot>
   </div>

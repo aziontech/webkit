@@ -21,7 +21,7 @@
   import Input from '../../inputs/input/input.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
-  import SelectOption from '../../inputs/select/select-option/select-option.vue'
+  import SelectItem from '../../inputs/select/select-item/select-item.vue'
   import SelectTrigger from '../../inputs/select/select-trigger/select-trigger.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
@@ -410,14 +410,14 @@
                     </template>
                   </Input>
                 </template>
-                <SelectOption value="">{{ facet.allLabel }}</SelectOption>
-                <SelectOption
+                <SelectItem value="">{{ facet.allLabel }}</SelectItem>
+                <SelectItem
                   v-for="option in narrowed(facet.id, facet.options)"
                   :key="option.value"
                   :value="option.value"
                 >
                   {{ option.label }}
-                </SelectOption>
+                </SelectItem>
                 <p
                   v-if="narrowed(facet.id, facet.options).length === 0"
                   role="status"
@@ -458,13 +458,13 @@
                     </template>
                   </Input>
                 </template>
-                <SelectOption
+                <SelectItem
                   v-for="option in narrowed(SORT_KEY, sorts)"
                   :key="option.value"
                   :value="option.value"
                 >
                   {{ option.label }}
-                </SelectOption>
+                </SelectItem>
                 <p
                   v-if="narrowed(SORT_KEY, sorts).length === 0"
                   role="status"

@@ -3,9 +3,9 @@ name: stat-tile-group
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 159f27012418d777eb7dd2cbfb70fcdc5ff58a88040edc066bdc06fae946e5a9
+checksum: 91624ba3f980ac3e00a4f3ab0fa1510ac01a51cc4fb4ee7206a5ec7c9b75531b
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -27,13 +27,13 @@ One card split into cells, one `StatTile` per cell: the KPI strip at the top of 
 
 - Figures that stand alone or carry their own sparkline history at different periods → separate `StatTile`s in a grid.
 - Marketing figures on a site band → use `big-numbers`.
-- Label/value details of one resource → use `key-value-pairs`.
+- Label/value details of one resource → use `key-value-list`.
 
 ## Related
 
 - `stat-tile` — the cell; the group changes its chrome through an injected context, so the tiles take no extra prop.
 - `card` — a plain surface; do not hand-build a strip by putting tiles in a `Card` grid.
-- `key-value-pairs` — static label/value details.
+- `key-value-list` — static label/value details.
 
 ## Best practices
 

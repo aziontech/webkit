@@ -50,11 +50,11 @@
             </template>
           </Input>
         </template>
-        <Select.Option
+        <Select.Item
           v-for="o in filtered"
           :key="o.value"
           :value="o.value"
-          >{{ o.label }}</Select.Option
+          >{{ o.label }}</Select.Item
         >
         <template #footer>
           <Button

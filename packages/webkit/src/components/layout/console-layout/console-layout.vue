@@ -41,7 +41,7 @@
   import BreadcrumbSeparator from '../../navigation/breadcrumb/breadcrumb-separator.vue'
   import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuTrigger from '../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
-  import type { DropdownMenuOptionValue } from '../../navigation/dropdown-menu/injection-key'
+  import type { DropdownMenuItemValue } from '../../navigation/dropdown-menu/injection-key'
   import type { SidebarMenuNode } from '../../navigation/sidebar-menu/injection-key'
   import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
   import SidebarMenuBack from '../../navigation/sidebar-menu/sidebar-menu-back/sidebar-menu-back.vue'
@@ -134,7 +134,7 @@
     /** An option of the `account-menu` slot was chosen, by pointer or keyboard. */
     'account-select': [
       event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-      value: DropdownMenuOptionValue
+      value: DropdownMenuItemValue
     ]
   }>()
 
@@ -397,7 +397,7 @@
 
   const onAccountSelect = (
     event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-    value: DropdownMenuOptionValue
+    value: DropdownMenuItemValue
   ) => {
     emit('account-select', event, value)
   }

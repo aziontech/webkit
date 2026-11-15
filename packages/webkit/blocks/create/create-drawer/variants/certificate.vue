@@ -6,8 +6,8 @@
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SettingsSection from '@aziontech/webkit/settings-section'
@@ -281,7 +281,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <fieldset
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
@@ -371,20 +371,20 @@ mr+L2DBwFXtW2qJfNedf/9rU
                   aria-label="Certificate details"
                   data-testid="certificate-details"
                 >
-                  <KeyValuePairs
+                  <KeyValueList
                     :columns="2"
                     aria-label="Certificate details"
                   >
-                    <KeyValuePairs.Item label="Issued to">{{
+                    <KeyValueList.Item label="Issued to">{{
                       parsed.subject || 'No common name'
-                    }}</KeyValuePairs.Item>
-                    <KeyValuePairs.Item label="Issued by">{{
+                    }}</KeyValueList.Item>
+                    <KeyValueList.Item label="Issued by">{{
                       parsed.issuer || 'No common name'
-                    }}</KeyValuePairs.Item>
-                    <KeyValuePairs.Item label="Valid from">{{
+                    }}</KeyValueList.Item>
+                    <KeyValueList.Item label="Valid from">{{
                       formatDate(parsed.notBefore)
-                    }}</KeyValuePairs.Item>
-                    <KeyValuePairs.Item label="Expires">
+                    }}</KeyValueList.Item>
+                    <KeyValueList.Item label="Expires">
                       <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
                         <span>{{ formatDate(parsed.notAfter) }}</span>
                         <StatusIndicator
@@ -392,8 +392,8 @@ mr+L2DBwFXtW2qJfNedf/9rU
                           :label="expiry?.label"
                         />
                       </span>
-                    </KeyValuePairs.Item>
-                  </KeyValuePairs>
+                    </KeyValueList.Item>
+                  </KeyValueList>
                   <p
                     v-if="parsed.chain > 1"
                     class="m-0 text-body-sm text-(--text-muted)"
@@ -433,7 +433,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
               </div>
             </SettingsSection>
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter
           ><div class="flex w-full justify-end">

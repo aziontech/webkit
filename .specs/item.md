@@ -3,17 +3,17 @@ name: item
 category: content
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-05-24
 last_updated: 2026-11-15
-checksum: ef16d004b2ba7caef96b04c8b6a49555f8846a487b5dedc1861c32de1dc44cbe
+checksum: c819fb941667e593ef1df6795ff578ced5a01fe282d9180054b74253a6293f4d
 ---
 
 # Item — Component Spec
 
 ## Purpose
 
-Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValuePairs, records compared across columns are a Table, and what a plan includes is a FeatureList.
+Use Item rows for a short list of mixed rows (title, description, actions) that do not share columns; read-only label/value facts about one resource are KeyValueList, records compared across columns are a Table, and what a plan includes is a FeatureList.
 
 Versatile flex row for title, description, media, and actions. Mirrors the shadcn-vue Item anatomy so consumers can reorder or omit regions. Compose with `ItemGroup` for gapped off-card lists, `ItemList` for divided in-card lists (inside a `Card`), and `ItemSeparator` between rows. Reference: https://www.shadcn-vue.com/docs/components/item (adapted to Webkit tokens and naming).
 

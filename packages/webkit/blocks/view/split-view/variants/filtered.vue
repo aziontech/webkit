@@ -1024,7 +1024,7 @@
         </div>
       </header>
 
-      <FilterMenu.Chips
+      <FilterMenu.ChipGroup
         v-model="filters"
         :fields="menuFields"
         data-testid="filter-chips"

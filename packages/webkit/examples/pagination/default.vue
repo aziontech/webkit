@@ -5,7 +5,7 @@
 <template>
   <Pagination>
     <template #info>
-      <Pagination.Info>Showing 1 to 10 of 20 entries</Pagination.Info>
+      <Pagination.Description>Showing 1 to 10 of 20 entries</Pagination.Description>
     </template>
 
     <Pagination.Button

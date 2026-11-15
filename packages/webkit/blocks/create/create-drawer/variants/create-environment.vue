@@ -8,7 +8,7 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import InputGroup from '@aziontech/webkit/input-group'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
@@ -348,7 +348,7 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <fieldset
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
@@ -378,20 +378,20 @@
                 >
                   <Select.Trigger id="domain-environment" />
                   <Select.Content>
-                    <Select.Option
+                    <Select.Item
                       v-for="option in environmentOptions"
                       :key="option.value"
                       :value="option.value"
                     >
                       {{ option.label }}
-                    </Select.Option>
+                    </Select.Item>
                     <template #footer>
-                      <Select.Option
+                      <Select.Item
                         :value="CREATE_ENVIRONMENT"
                         class="w-full"
                       >
                         Create Environment
-                      </Select.Option>
+                      </Select.Item>
                     </template>
                   </Select.Content>
                 </Select>
@@ -459,13 +459,13 @@
                         aria-describedby="domain-certificate-helper"
                       />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="option in certificateOptions"
                           :key="option.value"
                           :value="option.value"
                         >
                           {{ option.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                     <HelperText
@@ -483,7 +483,7 @@
               </div>
             </SettingsSection>
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
@@ -521,7 +521,7 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <fieldset
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="environmentSubmitting"
@@ -579,13 +579,13 @@
                       aria-describedby="environment-deployment-policy-helper"
                     />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="option in DEPLOYMENT_POLICIES"
                         :key="option.value"
                         :value="option.value"
                       >
                         {{ option.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                   <HelperText
@@ -610,13 +610,13 @@
                       aria-describedby="environment-robots-policy-helper"
                     />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="option in ROBOTS_POLICIES"
                         :key="option.value"
                         :value="option.value"
                       >
                         {{ option.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                   <HelperText
@@ -710,13 +710,13 @@
                         aria-describedby="environment-branch-mode-helper"
                       />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="option in BRANCH_MODES"
                           :key="option.value"
                           :value="option.value"
                         >
                           {{ option.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                     <HelperText
@@ -744,7 +744,7 @@
               </div>
             </SettingsSection>
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">

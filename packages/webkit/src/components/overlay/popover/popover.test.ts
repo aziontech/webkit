@@ -873,7 +873,7 @@ describe('Popover', () => {
       const {
         default: Select,
         SelectContent,
-        SelectOption,
+        SelectItem,
         SelectTrigger
       } = await import('../../inputs/select/index')
       render(
@@ -881,11 +881,11 @@ describe('Popover', () => {
           `<Select v-model="value" aria-label="Status">
            <SelectTrigger />
            <SelectContent>
-             <SelectOption value="active">Active</SelectOption>
-             <SelectOption value="paused">Paused</SelectOption>
+             <SelectItem value="active">Active</SelectItem>
+             <SelectItem value="paused">Paused</SelectItem>
            </SelectContent>
          </Select>`,
-          { Select, SelectContent, SelectOption, SelectTrigger }
+          { Select, SelectContent, SelectItem, SelectTrigger }
         )
       )
       await openPopover()
@@ -911,17 +911,17 @@ describe('Popover', () => {
     it('picking a DropdownMenu option keeps the popover open', async () => {
       const {
         default: DropdownMenu,
-        DropdownMenuOption,
+        DropdownMenuItem,
         DropdownMenuTrigger
       } = await import('../../navigation/dropdown-menu/index')
       render(
         inPopover(
           `<DropdownMenu>
            <DropdownMenuTrigger><button type="button">Sort</button></DropdownMenuTrigger>
-           <DropdownMenuOption value="name">Name</DropdownMenuOption>
-           <DropdownMenuOption value="date">Date</DropdownMenuOption>
+           <DropdownMenuItem value="name">Name</DropdownMenuItem>
+           <DropdownMenuItem value="date">Date</DropdownMenuItem>
          </DropdownMenu>`,
-          { DropdownMenu, DropdownMenuOption, DropdownMenuTrigger }
+          { DropdownMenu, DropdownMenuItem, DropdownMenuTrigger }
         )
       )
       await openPopover()

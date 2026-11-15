@@ -3,7 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -177,7 +177,7 @@
     versions.filter((entry) => entry.name.toLowerCase().includes(query.value.trim().toLowerCase()))
   )
 
-  const openHistory = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue) => {
+  const openHistory = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue) => {
     if (value === 'history' && historyExpanded.value) {
       historyExpanded.value = false
       return
@@ -193,7 +193,7 @@
     data-layout-fill
     class="flex h-dvh min-h-0 flex-col"
   >
-    <ConsoleLayout.Breadcrumbs
+    <ConsoleLayout.Breadcrumb
       :items="[
         { label: 'Resources', href: '/resources' },
         { label: 'web-app', href: '/resources/1784552864' }
@@ -229,7 +229,7 @@
             </Input>
           </template>
           <Select.Group label="Versions">
-            <Select.Option
+            <Select.Item
               v-for="entry in matches"
               :key="entry.id"
               :value="entry.id"
@@ -244,7 +244,7 @@
                   size="small"
                 />
               </template>
-            </Select.Option>
+            </Select.Item>
             <p
               v-if="!matches.length"
               class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
@@ -253,7 +253,7 @@
             </p>
           </Select.Group>
           <template #footer>
-            <Select.Option
+            <Select.Item
               value="__create-version__"
               class="w-full"
             >
@@ -264,11 +264,11 @@
                 />
                 Add Version
               </span>
-            </Select.Option>
+            </Select.Item>
           </template>
         </Select.Content>
       </Select>
-    </ConsoleLayout.Breadcrumbs>
+    </ConsoleLayout.Breadcrumb>
     <nav
       aria-label="Breadcrumb"
       class="flex min-w-0 items-center gap-(--spacing-xs) border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-xs) md:hidden"
@@ -314,7 +314,7 @@
               </Input>
             </template>
             <Select.Group label="Versions">
-              <Select.Option
+              <Select.Item
                 v-for="entry in matches"
                 :key="entry.id"
                 :value="entry.id"
@@ -329,7 +329,7 @@
                     size="small"
                   />
                 </template>
-              </Select.Option>
+              </Select.Item>
               <p
                 v-if="!matches.length"
                 class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
@@ -338,7 +338,7 @@
               </p>
             </Select.Group>
             <template #footer>
-              <Select.Option
+              <Select.Item
                 value="__create-version__"
                 class="w-full"
               >
@@ -349,7 +349,7 @@
                   />
                   Add Version
                 </span>
-              </Select.Option>
+              </Select.Item>
             </template>
           </Select.Content>
         </Select>
@@ -363,7 +363,7 @@
         <Resizable.Pane aria-label="Version settings">
           <div class="flex min-h-0 min-w-0 flex-1 flex-col">
             <PageTabs v-model="activeTab">
-              <Tabs.Item
+              <Tabs.Trigger
                 v-for="tab in tabs"
                 :key="tab.value"
                 :value="tab.value"

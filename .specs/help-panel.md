@@ -3,8 +3,8 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: 82702536e6ab70fbee1b138da64969833dfaabf20c5ce8ca2d6aa8a5055ccfae
-spec_version: 2
+checksum: 1ce339b75310d6d090c6521686880985e12b1c61cb7ce2713391a7a7311d0c81
+spec_version: 3
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -41,7 +41,7 @@ the links or carry one section or five.
 
 - `drawer` — the host that opens, closes and traps focus around a help panel shown as an overlay.
 - `tutorial-panel` — guided tutorials, drawn with these parts plus its own task list.
-- `link` — the standalone link each `HelpPanel.Links` row is composed from.
+- `link` — the standalone link each `HelpPanel.Footer` row is composed from.
 - `skeleton` — what the panel renders in place of its content while `loading`.
 - `doc-prose` — long-form documentation prose; a help section is a few short paragraphs, not an article.
 
@@ -50,7 +50,7 @@ the links or carry one section or five.
 - One topic per panel. When the reader moves to another part of the page, swap the panel's content — do not stack two headers.
 - Keep each `Section` to a short paragraph or a short list. If the reader has to scroll a section, the content belongs in the docs and the panel should link to it.
 - Title sections with the question the reader is asking (`What is a workload?`), not with a noun (`Overview`).
-- Put links to the documentation in `HelpPanel.Links`, at the end, not inline in every section.
+- Put links to the documentation in `HelpPanel.Footer`, at the end, not inline in every section.
 - Close affordances belong to the host. Do not put a close button in `HelpPanel.Header`; the `Drawer` or side rail already has one.
 
 ## Usage
@@ -68,11 +68,11 @@ the links or carry one section or five.
       description="Where your domains meet the applications that answer them."
     />
 
-    <HelpPanel.Section title="What is a workload?">
+    <HelpPanel.Group title="What is a workload?">
       <p>A workload binds one or more domains to an application and a firewall.</p>
-    </HelpPanel.Section>
+    </HelpPanel.Group>
 
-    <HelpPanel.Links>
+    <HelpPanel.Footer>
       <Link
         label="Workloads documentation"
         href="https://www.azion.com/en/documentation/"
@@ -83,7 +83,7 @@ the links or carry one section or five.
         href="https://www.azion.com/en/documentation/"
         target="_blank"
       />
-    </HelpPanel.Links>
+    </HelpPanel.Footer>
   </HelpPanel>
 </template>
 ```
@@ -95,15 +95,15 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 <script setup>
   import HelpPanel from '@aziontech/webkit/help-panel-root'
   import HelpPanelHeader from '@aziontech/webkit/help-panel-header'
-  import HelpPanelSection from '@aziontech/webkit/help-panel-section'
-  import HelpPanelLinks from '@aziontech/webkit/help-panel-links'
+  import HelpPanelGroup from '@aziontech/webkit/help-panel-group'
+  import HelpPanelFooter from '@aziontech/webkit/help-panel-footer'
 </script>
 ```
 
 ## Sub-components
 
 The root ships a **compound API**: an `index.ts` (beside `help-panel.vue`) attaches every sub-component
-to the root so `<HelpPanel.Header>`, `<HelpPanel.Section>` and `<HelpPanel.Links>` resolve from one
+to the root so `<HelpPanel.Header>`, `<HelpPanel.Group>` and `<HelpPanel.Footer>` resolve from one
 import; the standalone imports remain the tree-shaking path. The panel has no open/closed state, so
 there is no `Trigger` / `Content` — every member is named after a part of a help page. 6.0 removed the
 tutorial mode (`HelpPanel.Tutorial`, `HelpPanel.Task`): `TutorialPanel` owns tutorials.
@@ -112,14 +112,14 @@ tutorial mode (`HelpPanel.Tutorial`, `HelpPanel.Task`): `TutorialPanel` owns tut
   - Props: `title?: string` (default `''` — the topic's name, rendered as the panel's heading), `description?: string` (default `''` — one line under the title saying what the topic covers; not rendered when empty).
   - Slot: `default` — optional extra content under the description (a `Tag` naming the product state, for example).
   - `data-testid` fallback: `content-help-panel-header`.
-- `help-panel-section/help-panel-section.vue` — One block of guidance with its own heading. Renders a `<section aria-labelledby>` holding an `<h3>` (only when `title` is non-empty) and the slot, in `text-body-sm`, with a fixed vertical rhythm between paragraphs and lists inside it.
+- `help-panel-group/help-panel-group.vue` — One block of guidance with its own heading. Renders a `<section aria-labelledby>` holding an `<h3>` (only when `title` is non-empty) and the slot, in `text-body-sm`, with a fixed vertical rhythm between paragraphs and lists inside it.
   - Props: `title?: string` (default `''` — the question this section answers; the section renders no heading when empty).
   - Slot: `default` — the section's prose: paragraphs, short lists, inline `text-link` anchors.
-  - `data-testid` fallback: `content-help-panel-section`.
-- `help-panel-links/help-panel-links.vue` — The "Learn more" footer: a heading over a column of `Link` items the consumer composes. Renders a `<section aria-labelledby>` holding an `<h3>` and a vertical flex column of the slot, separated from the content above by a `Separator`.
+  - `data-testid` fallback: `content-help-panel-group`.
+- `help-panel-footer/help-panel-footer.vue` — The "Learn more" footer: a heading over a column of `Link` items the consumer composes. Renders a `<section aria-labelledby>` holding an `<h3>` and a vertical flex column of the slot, separated from the content above by a `Separator`.
   - Props: `title?: string` (default `undefined` — the heading over the links; absent uses the locale catalog, `Learn more` in English, and an empty string renders no heading).
   - Slot: `default` — `Link` items, one per destination.
-  - `data-testid` fallback: `content-help-panel-links`.
+  - `data-testid` fallback: `content-help-panel-footer`.
     Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports`
     resolves every path, and `.d.ts` is generated at publish time):
 
@@ -130,10 +130,10 @@ packages/webkit/src/components/content/help-panel/
 ├── index.ts                               (compound: attaches the three parts to the root)
 ├── help-panel-header/
 │   └── help-panel-header.vue
-├── help-panel-section/
-│   └── help-panel-section.vue
-└── help-panel-links/
-    └── help-panel-links.vue
+├── help-panel-group/
+│   └── help-panel-group.vue
+└── help-panel-footer/
+    └── help-panel-footer.vue
 ```
 
 Exports to add to `packages/webkit/package.json#exports` (flat public names; category lives in the
@@ -143,8 +143,8 @@ folder only):
 "./help-panel": "./src/components/content/help-panel/index.ts",
 "./help-panel-root": "./src/components/content/help-panel/help-panel.vue",
 "./help-panel-header": "./src/components/content/help-panel/help-panel-header/help-panel-header.vue",
-"./help-panel-section": "./src/components/content/help-panel/help-panel-section/help-panel-section.vue",
-"./help-panel-links": "./src/components/content/help-panel/help-panel-links/help-panel-links.vue"
+"./help-panel-group": "./src/components/content/help-panel/help-panel-group/help-panel-group.vue",
+"./help-panel-footer": "./src/components/content/help-panel/help-panel-footer/help-panel-footer.vue"
 ```
 
 Composed DS components (all present in `packages/webkit/package.json#exports`, imported by relative path
@@ -164,9 +164,9 @@ _No events — the panel is content; opening and closing belong to the host and 
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                                                            |
-| --------- | ----- | -------------------------------------------------------------------------------------------------------------------------------- |
-| `default` | —     | The panel's parts — `HelpPanel.Header`, `HelpPanel.Section`, `HelpPanel.Links` — in reading order. Not rendered while `loading`. |
+| Slot      | Scope | Notes                                                                                                                           |
+| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | The panel's parts — `HelpPanel.Header`, `HelpPanel.Group`, `HelpPanel.Footer` — in reading order. Not rendered while `loading`. |
 
 ## States
 
@@ -218,14 +218,14 @@ name.
 
 ## Examples
 
-- Default — a help topic: `HelpPanel.Header`, two `HelpPanel.Section`s, and `HelpPanel.Links` with two `Link`s.
+- Default — a help topic: `HelpPanel.Header`, two `HelpPanel.Group`s, and `HelpPanel.Footer` with two `Link`s.
 - Loading — the root with `loading` set; the args delta is `loading` only.
 
 ## Open questions
 
 - **Heading levels are fixed (`h2` header, `h3` parts).** Inside a `Drawer` whose own title is an `h2`, the panel's header should arguably be an `h3`. A heading-level prop was not added (not in the brief); revisit if a host needs it.
 - **Root padding.** The root owns `p-(--spacing-md)` so it reads correctly in a bare side rail; inside a `Drawer` whose content area already pads, that doubles. Confirm against the Drawer's content padding during scaffold.
-- **`HelpPanel.Links` is a column, not a list.** Wrapping each consumer-composed `Link` in an `<li>` needs slot-vnode iteration; the draft renders a flex column under a labelled `<section>` instead. Revisit if a11y review wants list semantics.
+- **`HelpPanel.Footer` is a column, not a list.** Wrapping each consumer-composed `Link` in an `<li>` needs slot-vnode iteration; the draft renders a flex column under a labelled `<section>` instead. Revisit if a11y review wants list semantics.
 
 ## Constraints — DO NOT
 

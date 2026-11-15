@@ -76,13 +76,13 @@
                 >
                   <Select.Trigger id="tb-preprod" />
                   <Select.Content>
-                    <Select.Option
+                    <Select.Item
                       v-for="option in toolbarOptions"
                       :key="option.value"
                       :value="option.value"
                     >
                       {{ option.label }}
-                    </Select.Option>
+                    </Select.Item>
                   </Select.Content>
                 </Select>
               </Field>
@@ -96,13 +96,13 @@
                 >
                   <Select.Trigger id="tb-prod" />
                   <Select.Content>
-                    <Select.Option
+                    <Select.Item
                       v-for="option in toolbarOptions"
                       :key="option.value"
                       :value="option.value"
                     >
                       {{ option.label }}
-                    </Select.Option>
+                    </Select.Item>
                   </Select.Content>
                 </Select>
               </Field>
@@ -153,13 +153,13 @@
                 >
                   <Select.Trigger id="dp-level" />
                   <Select.Content>
-                    <Select.Option
+                    <Select.Item
                       v-for="option in protectionOptions"
                       :key="option.value"
                       :value="option.value"
                     >
                       {{ option.label }}
-                    </Select.Option>
+                    </Select.Item>
                   </Select.Content>
                 </Select>
               </div>

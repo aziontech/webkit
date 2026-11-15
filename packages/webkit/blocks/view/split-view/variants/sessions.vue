@@ -11,7 +11,7 @@
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import FilterMenu, { type FilterMenuField } from '@aziontech/webkit/filter-menu'
@@ -710,7 +710,7 @@
     }
   }
 
-  const onSessionAction = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue) => {
+  const onSessionAction = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue) => {
     const id = activeSession.value
     if (value === 'rename') startRename(id)
     if (value === 'duplicate') duplicateSession(id)
@@ -1137,7 +1137,7 @@
         >
           <Tabs v-model="activeSession">
             <Tabs.List>
-              <Tabs.Item
+              <Tabs.Trigger
                 v-for="session in sessions"
                 :key="session.id"
                 :value="session.id"
@@ -1277,7 +1277,7 @@
         </div>
       </header>
 
-      <FilterMenu.Chips
+      <FilterMenu.ChipGroup
         v-model="filters"
         :fields="menuFields"
         data-testid="filter-chips"

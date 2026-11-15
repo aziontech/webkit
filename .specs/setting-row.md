@@ -3,8 +3,8 @@ name: setting-row
 category: layout
 structure: monolithic
 status: implemented
-checksum: 3df5a80e7db5211ae448bf430fe42087c8fe05649487949ef8343860ec86057d
-spec_version: 4
+checksum: 58d81425d898f1d5b5e80b82db70b037bd44948a95199f996c12cff2c8509873
+spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -23,7 +23,7 @@ One setting inside a flush `Card`: an `Item` whose content carries the title and
 ## When NOT to use
 
 - A stand-alone form field with a visible label above it → use `field` around the control (`Field`, `FieldLabel`, `FieldDescription`).
-- A read-only list of label and value pairs → use `key-value-pairs`.
+- A read-only list of label and value pairs → use `key-value-list`.
 - A navigable list row → use `item` directly.
 
 ## Related

@@ -3,9 +3,9 @@ name: filter-menu
 category: data
 structure: composition
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
-checksum: 8daaf41826bf148f8653fab212eb953fbf333c8fa41aac76cc59a11c5351c1ec
+checksum: 7efd2d7d85a52bfda7eda27ddb4f4049d58a35d74636fba678c275106f81181c
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -19,11 +19,11 @@ opens a drill-in menu. The first level lists the fields, each with a summary of 
 it; picking a field slides to its values (check rows for a `multiple` field, radio rows for a `single`
 one, an optional avatar per value, a search box and a no-match line), and a `date` field offers
 periods plus a custom whole-day range on a `DateRangePicker` (`range-selector-mode="absolute-only"`, no times, no zone selector). Back returns to the fields, Clear removes the field's
-filter, and the panel's height follows each level. `FilterMenu.Chips` shows the applied fields as
+filter, and the panel's height follows each level. `FilterMenu.ChipGroup` shows the applied fields as
 chips under the controls row: the field label in muted ink, an avatar stack, the first value and
 `+N`; activating a chip reopens the menu at that field, removing it clears the field. The value is a
 `Record<fieldId, values[]>` bound with `v-model`; the menu never filters anything itself.
-Inside a DataTable, `Table.Filter kind="menu"` renders it and `FilterMenu.Chips` with no `fields`
+Inside a DataTable, `Table.Filter kind="menu"` renders it and `FilterMenu.ChipGroup` with no `fields`
 renders its chips, both mapped onto the table's `filters` model.
 
 It differs from `property-filter` (one text field that builds `property operator value` tokens and
@@ -45,15 +45,15 @@ combines them with operators and and/or): this menu offers only the values a fie
 
 ## Related
 
-- `data-table` — `Table.Filter kind="menu"` and `FilterMenu.Chips` (no `fields`) render this menu and its chips over the table's `filters` model.
+- `data-table` — `Table.Filter kind="menu"` and `FilterMenu.ChipGroup` (no `fields`) render this menu and its chips over the table's `filters` model.
 - `property-filter` — the token-based filter field for typed queries.
 - `popover` — the overlay the menu opens in.
 - `date-range-picker` — the range picker the custom date period uses.
-- `chip` — each applied filter in `FilterMenu.Chips`.
+- `chip` — each applied filter in `FilterMenu.ChipGroup`.
 
 ## Best practices
 
-- Put the Filter button first in the controls row, before the search field, and `FilterMenu.Chips` on its own row below the controls.
+- Put the Filter button first in the controls row, before the search field, and `FilterMenu.ChipGroup` on its own row below the controls.
 - Pass the same `fields` array and the same `v-model` to the menu and to its chips: chips reopen the menu that shares their `fields`.
 - Give people-like values an `avatar` (an image URL, or `''` for initials) so the chip shows who is filtered.
 - Keep each field to the values that exist in the data; a field with no values is noise.
@@ -94,7 +94,7 @@ combines them with operators and and/or): this menu offers only the values a fie
     v-model="filters"
     :fields="fields"
   />
-  <FilterMenu.Chips
+  <FilterMenu.ChipGroup
     v-model="filters"
     :fields="fields"
   />
@@ -106,7 +106,7 @@ Tree-shaking alternative — the standalone root and the chips from their own en
 ```vue
 <script setup>
   import FilterMenu from '@aziontech/webkit/filter-menu-root'
-  import FilterMenuChips from '@aziontech/webkit/filter-menu-chips'
+  import FilterMenuChipGroup from '@aziontech/webkit/filter-menu-chip-group'
 </script>
 ```
 
@@ -119,19 +119,19 @@ per-array channel (`composables/use-filter-menu-channel.ts`, module scope, keyed
 so activating a chip opens that menu at the chip's field with no wiring. The link is the array's
 identity: an inline `:fields="[...]"` literal or a computed that rebuilds the array gives the menu
 and the chips two arrays, so a chip that finds no listening menu warns once per activation in the
-console (`FilterMenu.Chips: no FilterMenu has these fields.`). When the arrays differ
+console (`FilterMenu.ChipGroup: no FilterMenu has these fields.`). When the arrays differ
 on purpose, the consumer calls the root's exposed `open(fieldId)`. **Inside a DataTable**, chips
 with no `fields` read the table context instead: their fields come from the table's
 `filterFields`, their value from its `filters` model, removing a chip removes that field's filter
 through the table (`filter-remove`), and activating one reopens `Table.Filter kind="menu"` at the
 field. That is the one applied-filters row of a table.
 
-- `filter-menu-chips/filter-menu-chips.vue` — One filled, clickable, removable `Chip` per applied field, in `fields` order, inside a `role="group"` named `Applied filters`. Each chip reads `<field label>` (muted) + up to three option avatars (when the picked options carry `avatar`) + the first value's label + `+N` (muted) when more values are picked. Chips enter, leave and reflow with a `TransitionGroup`. Renders nothing when no field is applied.
+- `filter-menu-chip-group/filter-menu-chip-group.vue` — One filled, clickable, removable `Chip` per applied field, in `fields` order, inside a `role="group"` named `Applied filters`. Each chip reads `<field label>` (muted) + up to three option avatars (when the picked options carry `avatar`) + the first value's label + `+N` (muted) when more values are picked. Chips enter, leave and reflow with a `TransitionGroup`. Renders nothing when no field is applied.
   - Props: `fields?: FilterMenuField[]` (default `[]` — the same array the menu receives; empty inside a DataTable reads the table's filter fields and filters).
   - v-model: `Record<string, FilterMenuValue[]>` (default `{}`); removing a chip deletes the field's key.
   - Events: `edit: [event: MouseEvent | KeyboardEvent, field: FilterMenuField]` (a chip was activated; the linked menu opens at the field), `remove: [event: MouseEvent, field: FilterMenuField]` (a chip's remove button was pressed; the model loses the field).
   - Slots: none.
-  - `data-testid` fallback: `data-filter-menu-chips`; each chip `<testid>__chip-<fieldId>`.
+  - `data-testid` fallback: `data-filter-menu-chip-group`; each chip `<testid>__chip-<fieldId>`.
 
 Resulting layout:
 
@@ -146,8 +146,8 @@ packages/webkit/src/components/data/filter-menu/
 │   ├── use-filter-menu-channel.ts   (open requests from chips to the menu sharing their fields)
 │   ├── use-filter-menu-labels.ts    (period options, range and summary text from the locale)
 │   └── use-animated-height.ts       (height transition between levels; cleans up on scope dispose)
-└── filter-menu-chips/
-    └── filter-menu-chips.vue
+└── filter-menu-chip-group/
+    └── filter-menu-chip-group.vue
 ```
 
 Exports:
@@ -155,7 +155,7 @@ Exports:
 ```jsonc
 "./filter-menu": "./src/components/data/filter-menu/index.ts",
 "./filter-menu-root": "./src/components/data/filter-menu/filter-menu.vue",
-"./filter-menu-chips": "./src/components/data/filter-menu/filter-menu-chips/filter-menu-chips.vue"
+"./filter-menu-chip-group": "./src/components/data/filter-menu/filter-menu-chip-group/filter-menu-chip-group.vue"
 ```
 
 Exported types (from `index.ts`):
@@ -294,7 +294,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ## Performance
 
-- Bundle budget: 22.1 KB gzip for `./filter-menu-root` and 24.9 KB for `./filter-menu` (root and chips), both measured on the initial chunk (`entryOnly`) because the `DateRangePicker` loads only when a custom range is opened (`defineAsyncComponent`); 20 KB for `./filter-menu-chips`, most of it `Chip` and `Avatar`. All in `.size-limit.json`.
+- Bundle budget: 22.1 KB gzip for `./filter-menu-root` and 24.9 KB for `./filter-menu` (root and chips), both measured on the initial chunk (`entryOnly`) because the `DateRangePicker` loads only when a custom range is opened (`defineAsyncComponent`); 20 KB for `./filter-menu-chip-group`, most of it `Chip` and `Avatar`. All in `.size-limit.json`.
 - Runtime budget: a level renders at most 100 values however many a field has, so the `FilterMenu field with 1k options` scenario of `performance.test.ts` (open the field, then search) holds its budget in `perf-budgets.json`; a pick re-renders only the open level.
 - Heavy parts: `DateRangePicker`, lazy-loaded.
 
@@ -303,7 +303,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 - Default — a menu with an author field (avatars), a status field (`single`) and a date field, with its chips below and one filter applied.
 - Sizes — composite example rendering the trigger at every `size` side by side.
 
-The table pairing (`Table.Filter kind="menu"` with `FilterMenu.Chips` in the `filters` slot) is shown by the DataTable's Filter Menu example.
+The table pairing (`Table.Filter kind="menu"` with `FilterMenu.ChipGroup` in the `filters` slot) is shown by the DataTable's Filter Menu example.
 
 ## Constraints — DO NOT
 

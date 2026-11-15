@@ -11,7 +11,7 @@
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
@@ -281,13 +281,13 @@
                           aria-label="HTTP ports"
                         />
                         <MultiSelect.Content>
-                          <MultiSelect.Option
+                          <MultiSelect.Item
                             v-for="option in httpPorts"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </MultiSelect.Option>
+                          </MultiSelect.Item>
                         </MultiSelect.Content>
                       </MultiSelect>
                       <HelperText
@@ -336,13 +336,13 @@
                           aria-label="HTTPS ports"
                         />
                         <MultiSelect.Content>
-                          <MultiSelect.Option
+                          <MultiSelect.Item
                             v-for="option in httpsPorts"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </MultiSelect.Option>
+                          </MultiSelect.Item>
                         </MultiSelect.Content>
                       </MultiSelect>
                       <HelperText
@@ -391,13 +391,13 @@
                           aria-label="HTTP/3 ports"
                         />
                         <MultiSelect.Content>
-                          <MultiSelect.Option
+                          <MultiSelect.Item
                             v-for="option in http3Ports"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </MultiSelect.Option>
+                          </MultiSelect.Item>
                         </MultiSelect.Content>
                       </MultiSelect>
                       <HelperText
@@ -422,13 +422,13 @@
                       >
                         <Select.Trigger aria-label="Minimum TLS version" />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="option in tlsVersions"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </Select.Option>
+                          </Select.Item>
                         </Select.Content>
                       </Select>
                     </SettingRow>
@@ -447,13 +447,13 @@
                       >
                         <Select.Trigger aria-label="Cipher suite" />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="option in cipherSuites"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </Select.Option>
+                          </Select.Item>
                         </Select.Content>
                       </Select>
                     </SettingRow>
@@ -556,7 +556,7 @@
                             </Input>
                           </template>
                           <Select.Group label="Trusted CA certificates">
-                            <Select.Option
+                            <Select.Item
                               v-for="option in caMatches"
                               :key="option.value"
                               :value="option.value"
@@ -567,7 +567,7 @@
                                   option.expires
                                 }}</span>
                               </template>
-                            </Select.Option>
+                            </Select.Item>
                             <p
                               v-if="!caMatches.length"
                               class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
@@ -576,7 +576,7 @@
                             </p>
                           </Select.Group>
                           <template #footer>
-                            <Select.Option
+                            <Select.Item
                               value="__upload__"
                               class="w-full"
                             >
@@ -587,7 +587,7 @@
                                 />
                                 Upload certificate
                               </span>
-                            </Select.Option>
+                            </Select.Item>
                           </template>
                         </Select.Content>
                       </Select>
@@ -618,13 +618,13 @@
                           aria-label="Certificate revocation lists"
                         />
                         <MultiSelect.Content>
-                          <MultiSelect.Option
+                          <MultiSelect.Item
                             v-for="option in revocationLists"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </MultiSelect.Option>
+                          </MultiSelect.Item>
                         </MultiSelect.Content>
                       </MultiSelect>
                     </SettingRow>
@@ -681,7 +681,7 @@
           <PanelHeader class="w-full">
             <DrawerTitle>Upload certificate</DrawerTitle>
           </PanelHeader>
-          <PanelContent>
+          <PanelBody>
             <div class="flex flex-col gap-(--spacing-md)">
               <DrawerDescription>
                 A trusted CA certificate in PEM format. It is added to the account and picked for
@@ -733,7 +733,7 @@
                 />
               </Field>
             </div>
-          </PanelContent>
+          </PanelBody>
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">
               <Button

@@ -11,10 +11,10 @@ export type DropdownMenuPlacement = MenuPlacement
 /** Prop-level placement; `'auto'` lets the dropdown pick the best fit at open time. */
 export type DropdownMenuPlacementInput = DropdownMenuPlacement | 'auto'
 
-export type DropdownMenuOptionValue = MenuOptionValue
+export type DropdownMenuItemValue = MenuOptionValue
 
 /** Item role of an option: a plain action, an on/off setting, or one choice of a group. */
-export type DropdownMenuOptionKind = 'default' | 'checkbox' | 'radio'
+export type DropdownMenuItemKind = 'default' | 'checkbox' | 'radio'
 
 export type DropdownMenuContext = MenuContext
 

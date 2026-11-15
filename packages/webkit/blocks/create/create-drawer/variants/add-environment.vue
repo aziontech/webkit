@@ -5,15 +5,15 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot, {
-    type DropdownMenuOptionValue
+    type DropdownMenuItemValue
   } from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import InputGroup from '@aziontech/webkit/input-group'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
@@ -179,7 +179,7 @@
 
   const ADD_ENVIRONMENT = '__add-environment__'
   const selectedEnvironment = ref('Production')
-  const onSelect = (value: DropdownMenuOptionValue) => {
+  const onSelect = (value: DropdownMenuItemValue) => {
     if (typeof value !== 'string') return
     if (value === ADD_ENVIRONMENT) {
       open.value = true
@@ -205,7 +205,7 @@
         />
       </DropdownMenuTrigger>
       <DropdownMenuGroup label="Environments">
-        <DropdownMenuOption
+        <DropdownMenuItem
           v-for="name in resourceEnvironments"
           :key="name"
           :value="name"
@@ -214,7 +214,7 @@
         />
       </DropdownMenuGroup>
       <DropdownMenuGroup>
-        <DropdownMenuOption
+        <DropdownMenuItem
           :value="ADD_ENVIRONMENT"
           label="Add Environment"
         >
@@ -223,7 +223,7 @@
               class="ai ai-plus"
               aria-hidden="true"
           /></template>
-        </DropdownMenuOption>
+        </DropdownMenuItem>
       </DropdownMenuGroup>
     </DropdownMenuRoot>
   </Tooltip>
@@ -250,7 +250,7 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <fieldset
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
@@ -280,20 +280,20 @@
                 >
                   <Select.Trigger id="domain-environment" />
                   <Select.Content>
-                    <Select.Option
+                    <Select.Item
                       v-for="option in environmentOptions"
                       :key="option.value"
                       :value="option.value"
                     >
                       {{ option.label }}
-                    </Select.Option>
+                    </Select.Item>
                     <template #footer>
-                      <Select.Option
+                      <Select.Item
                         :value="CREATE_ENVIRONMENT"
                         class="w-full"
                       >
                         Create Environment
-                      </Select.Option>
+                      </Select.Item>
                     </template>
                   </Select.Content>
                 </Select>
@@ -361,13 +361,13 @@
                         aria-describedby="domain-certificate-helper"
                       />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="option in certificateOptions"
                           :key="option.value"
                           :value="option.value"
                         >
                           {{ option.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                     <HelperText
@@ -385,7 +385,7 @@
               </div>
             </SettingsSection>
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">

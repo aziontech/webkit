@@ -33,7 +33,7 @@
       v-model="filters"
       :fields="fields"
     />
-    <FilterMenu.Chips
+    <FilterMenu.ChipGroup
       v-model="filters"
       :fields="fields"
     />

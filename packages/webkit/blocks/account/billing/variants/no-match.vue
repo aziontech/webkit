@@ -6,10 +6,10 @@
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import Currency from '@aziontech/webkit/currency'
   import DataTable from '@aziontech/webkit/data-table'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
@@ -227,7 +227,7 @@
   const pendingRemoval = ref<PaymentMethod | null>(null)
   const removeOpen = ref(false)
 
-  const onMethodAction = (value: DropdownMenuOptionValue, method: PaymentMethod) => {
+  const onMethodAction = (value: DropdownMenuItemValue, method: PaymentMethod) => {
     if (value === 'default') {
       paymentMethods.value = paymentMethods.value.map((item) => ({
         ...item,
@@ -289,7 +289,7 @@
       </PageHeader>
 
       <PageTabs v-model="activeTab">
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
           :value="tab.value"
@@ -350,20 +350,20 @@
                         />
                       </template>
                     </div>
-                    <KeyValuePairs
+                    <KeyValueList
                       kind="split"
                       :loading="loading"
                       aria-label="Subscription details"
                     >
-                      <KeyValuePairs.Item label="Plan start date">Jan 25, 2023</KeyValuePairs.Item>
-                      <KeyValuePairs.Item label="Next charge date">Dec 1, 2026</KeyValuePairs.Item>
-                      <KeyValuePairs.Item label="Next charge value">
+                      <KeyValueList.Item label="Plan start date">Jan 25, 2023</KeyValueList.Item>
+                      <KeyValueList.Item label="Next charge date">Dec 1, 2026</KeyValueList.Item>
+                      <KeyValueList.Item label="Next charge value">
                         <Currency
                           value="184.20"
                           size="small"
                         />
-                      </KeyValuePairs.Item>
-                      <KeyValuePairs.Item label="Payment method">
+                      </KeyValueList.Item>
+                      <KeyValueList.Item label="Payment method">
                         <template v-if="defaultMethod">
                           <PaymentBrand
                             :brand="defaultMethod.brand"
@@ -372,8 +372,8 @@
                           />
                           <span>{{ methodLabel(defaultMethod) }}</span>
                         </template>
-                      </KeyValuePairs.Item>
-                    </KeyValuePairs>
+                      </KeyValueList.Item>
+                    </KeyValueList>
                   </div>
                 </template>
                 <template #footer>
@@ -621,25 +621,25 @@
             </SectionHeader>
             <Card>
               <template #default>
-                <KeyValuePairs
+                <KeyValueList
                   :columns="4"
                   :loading="loading"
                   aria-label="Payment information"
                 >
-                  <KeyValuePairs.Item label="Billing email">
+                  <KeyValueList.Item label="Billing email">
                     <span dir="ltr">billing@example.com</span>
-                  </KeyValuePairs.Item>
-                  <KeyValuePairs.Item label="Auto-renewal">
+                  </KeyValueList.Item>
+                  <KeyValueList.Item label="Auto-renewal">
                     <StatusIndicator
                       severity="success"
                       label="On"
                     />
-                  </KeyValuePairs.Item>
-                  <KeyValuePairs.Item label="Billing address"
-                    >100 Market Street, Suite 400, San Francisco, CA 94105</KeyValuePairs.Item
+                  </KeyValueList.Item>
+                  <KeyValueList.Item label="Billing address"
+                    >100 Market Street, Suite 400, San Francisco, CA 94105</KeyValueList.Item
                   >
-                  <KeyValuePairs.Item label="Tax ID" />
-                </KeyValuePairs>
+                  <KeyValueList.Item label="Tax ID" />
+                </KeyValueList>
               </template>
             </Card>
           </div>

@@ -33,9 +33,9 @@ An outlined medium `Button` where the list lives: under the section on the resou
 
 `DrawerTitle` with the action and object, a muted one-line description under it, and the drawer's own close button on the right. The close button, the overlay and Escape are the dismissal; there is no Cancel.
 
-### D. Sections — `PanelContent`, `SettingsSection` (required)
+### D. Sections — `PanelBody`, `SettingsSection` (required)
 
-`PanelContent` holds one `fieldset` disabled while saving, and inside it one `SettingsSection` per topic, each a title with a `hint` glyph rather than a paragraph. Order them by what the user decides first: here Environment, then Domain.
+`PanelBody` holds one `fieldset` disabled while saving, and inside it one `SettingsSection` per topic, each a title with a `hint` glyph rather than a paragraph. Order them by what the user decides first: here Environment, then Domain.
 
 ### E. Environment select — `Field`, `Select` (required)
 
@@ -63,7 +63,7 @@ One info `Alert` at the end of the last section for a fact that governs the whol
 
 ### K. Certificate import — `SettingsSection`, `Field`, `Button`, `PanelFooter` (optional)
 
-In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` picks Server certificate (certificate and private key) or Trusted CA (certificate only), and the section hint follows it. The certificate is a required `Field` with a code-font `Textarea` for the PEM text and an outlined Upload file `Button` beside its label that reads a .pem, .crt or .cer file into the same field and announces the file it loaded. As soon as the text holds a certificate, a details panel reads it in the browser: Issued to, Issued by, Valid from and Expires in a two-column `KeyValuePairs`, the expiry carrying a `StatusIndicator` (success with the days left, warning within 30 days with a line saying to renew it, danger once expired), and a note when intermediate certificates follow. Text that is not a PEM certificate, an expired certificate and a missing or malformed private key are errors under their fields, shown only after Save, with focus on the first. The private key's description says it is stored encrypted and never shown again. Save closes the drawer and raises a success toast with the expiry date.
+In the Certificate state the drawer imports a TLS certificate. A `ToggleGroup` picks Server certificate (certificate and private key) or Trusted CA (certificate only), and the section hint follows it. The certificate is a required `Field` with a code-font `Textarea` for the PEM text and an outlined Upload file `Button` beside its label that reads a .pem, .crt or .cer file into the same field and announces the file it loaded. As soon as the text holds a certificate, a details panel reads it in the browser: Issued to, Issued by, Valid from and Expires in a two-column `KeyValueList`, the expiry carrying a `StatusIndicator` (success with the days left, warning within 30 days with a line saying to renew it, danger once expired), and a note when intermediate certificates follow. Text that is not a PEM certificate, an expired certificate and a missing or malformed private key are errors under their fields, shown only after Save, with focus on the first. The private key's description says it is stored encrypted and never shown again. Save closes the drawer and raises a success toast with the expiry date.
 
 ## Do
 

@@ -1078,13 +1078,13 @@
                                   :aria-describedby="'origin-' + field.name + '-helper'"
                                 />
                                 <Select.Content>
-                                  <Select.Option
+                                  <Select.Item
                                     v-for="option in field.options"
                                     :key="option.value"
                                     :value="option.value"
                                   >
                                     {{ option.label }}
-                                  </Select.Option>
+                                  </Select.Item>
                                 </Select.Content>
                               </Select>
                               <HelperText
@@ -1318,13 +1318,13 @@
                               aria-label="Certificate"
                             />
                             <Select.Content>
-                              <Select.Option
+                              <Select.Item
                                 v-for="option in certificates"
                                 :key="option.value"
                                 :value="option.value"
                               >
                                 {{ option.label }}
-                              </Select.Option>
+                              </Select.Item>
                             </Select.Content>
                           </Select>
                         </Field>
@@ -1542,13 +1542,13 @@
                             aria-label="Minimum TLS version"
                           />
                           <Select.Content>
-                            <Select.Option
+                            <Select.Item
                               v-for="option in tlsVersions"
                               :key="option.value"
                               :value="option.value"
                             >
                               {{ option.label }}
-                            </Select.Option>
+                            </Select.Item>
                           </Select.Content>
                         </Select>
                       </Field>
@@ -1564,14 +1564,14 @@
                         >
                           <Select.Trigger />
                           <Select.Content>
-                            <Select.Option
+                            <Select.Item
                               v-for="option in errorPages"
                               :key="String(option.value)"
                               :value="option.value"
                               :disabled="option.disabled"
                             >
                               {{ option.label }}
-                            </Select.Option>
+                            </Select.Item>
                           </Select.Content>
                         </Select>
                         <Field.Description

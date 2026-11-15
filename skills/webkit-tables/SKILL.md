@@ -1,6 +1,6 @@
 ---
 name: webkit-tables
-description: Data tables on @aziontech/webkit — one data-driven <DataTable> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, sortable, kind:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · CollectionPreferences) + FilterMenu.Chips and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — Table.CellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), Table.CellId, Table.CellStatus (one chip per row), Table.CellTags, Table.CellTime (avatar + relative time) and Table.CellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
+description: Data tables on @aziontech/webkit — one data-driven <DataTable> bound to `useCollection` (`v-bind="tableProps"`, client or server mode) or given :data :columns row-key directly, with virtual rows for thousands of records, reorderable rows (drag or keyboard, `v-model:data`) when the order is the data, and the density / wrap / stripe preferences, with a column model (principal, grow, sortable, kind:'action', hideable), a fixed toolbar (Filter · Search · RefreshButton · Export · CollectionPreferences) + FilterMenu.ChipGroup and the refresh pattern (keep rows while refreshing, an Updated time, auto-refresh rules), scrolling its body internally via the h-full/min-h-0 chain. Ships the cell presets every table shares — Table.CellLink (cross-resource link with its destination tooltip; the domain cell with `+N` OverflowCount and an end-pinned copy button), Table.CellId, Table.CellStatus (one chip per row), Table.CellTags, Table.CellTime (avatar + relative time) and Table.CellActions (row menu named after the row). The tabular companion to /webkit-form and /webkit-ui-states.
 status: active
 last_updated: 2026-11-15
 scope: general
@@ -177,7 +177,7 @@ A list page puts its `PropertyFilter` and `CollectionPreferences` **above** the 
 surface (a drawer, a panel) and does not page through a collection.
 
 The toolbar is a fixed, ordered set of context-aware controls in the `#toolbar` slot; the
-applied-filter chips render in `#filters` via `FilterMenu.Chips` (with no `fields`, it reads the
+applied-filter chips render in `#filters` via `FilterMenu.ChipGroup` (with no `fields`, it reads the
 table). `filterFields` (`{ id, label, type, options? }`) drives `Table.Filter`, which hosts one of the
 two filters, picked by data shape: `kind="menu"` (the default) is the `FilterMenu` of facets picked
 from known values, and `kind="property"` is a `PropertyFilter` for typed conditions with operators
@@ -204,7 +204,7 @@ An applied filter is a `Chip` of the default `kind="filled"` (the grey `--bg-sel
 </template>
 
 <template #filters>
-  <FilterMenu.Chips />
+  <FilterMenu.ChipGroup />
 </template>
 ```
 
@@ -594,7 +594,7 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 - [ ] Density, wrap and stripes come from the saved preferences, not hard-coded per page.
 - [ ] Exactly one `principal: true` column; the actions column is `{ kind: 'action', hideable: false }`.
 - [ ] `grow: N` on long columns (repository, domain, timestamps); no fixed pixel widths.
-- [ ] Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · CollectionPreferences; `#filters` → `FilterMenu.Chips` (menu kind).
+- [ ] Toolbar order: Filter · Search (`flex-1`) · Refresh · Export · CollectionPreferences; `#filters` → `FilterMenu.ChipGroup` (menu kind).
 - [ ] Body scrolls internally: `min-h-0 flex-1` parent → `Card h-full` → `Table max-height="100%" class="h-full"` — the page doesn't scroll.
 - [ ] Principal column names the **whole** (the unit a reader owns and opens), not an artifact inside it with a second column chipping that artifact's kind.
 - [ ] Every name that leaves the screen is `Table.CellLink` (12px `ai-external-link`, a tooltip naming the destination, underline on hover, **no mark** without a destination); no hand-made copy.

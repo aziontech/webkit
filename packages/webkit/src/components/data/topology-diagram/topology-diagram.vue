@@ -7,7 +7,7 @@
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { useFlowConnectors } from '../flow/connectors'
-  import TopologyDiagramNode from './topology-node/topology-node.vue'
+  import TopologyDiagramNode from './parts/topology-node.vue'
   import type { TopologyLevel, TopologyNode } from './types'
 
   export type {

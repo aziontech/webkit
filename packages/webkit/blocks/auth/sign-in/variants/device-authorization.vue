@@ -7,7 +7,7 @@
   import Field from '@aziontech/webkit/field'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import Item from '@aziontech/webkit/item'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import OtpInput from '@aziontech/webkit/otp-input'
   import PageHeader from '@aziontech/webkit/page-header'
   import { computed, nextTick, ref } from 'vue'
@@ -229,21 +229,21 @@
                         <span class="text-label-code-lg text-(--text-default)">{{ grouped }}</span>
                       </div>
 
-                      <KeyValuePairs
+                      <KeyValueList
                         kind="split"
                         aria-label="Request details"
                       >
-                        <KeyValuePairs.Item label="Application">{{
+                        <KeyValueList.Item label="Application">{{
                           request.client
-                        }}</KeyValuePairs.Item>
-                        <KeyValuePairs.Item label="Device">{{ request.device }}</KeyValuePairs.Item>
-                        <KeyValuePairs.Item label="IP address">{{
+                        }}</KeyValueList.Item>
+                        <KeyValueList.Item label="Device">{{ request.device }}</KeyValueList.Item>
+                        <KeyValueList.Item label="IP address">{{
                           request.address
-                        }}</KeyValuePairs.Item>
-                        <KeyValuePairs.Item label="Requested">{{
+                        }}</KeyValueList.Item>
+                        <KeyValueList.Item label="Requested">{{
                           request.requested
-                        }}</KeyValuePairs.Item>
-                      </KeyValuePairs>
+                        }}</KeyValueList.Item>
+                      </KeyValueList>
 
                       <div class="flex flex-col gap-(--spacing-xs)">
                         <h2 class="text-label-md text-(--text-muted)">Signed in as</h2>

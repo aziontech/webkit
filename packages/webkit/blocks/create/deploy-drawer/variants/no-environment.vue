@@ -6,7 +6,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SettingsSection from '@aziontech/webkit/settings-section'
@@ -46,7 +46,7 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <SettingsSection
             title="Resources"
             hint="Everything this project serves, at the version this deployment sends live, with the version of every dependency they reference."
@@ -76,7 +76,7 @@
               </template>
             </EmptyState>
           </SettingsSection>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">

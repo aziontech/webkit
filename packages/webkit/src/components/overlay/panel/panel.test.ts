@@ -6,7 +6,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import { DrawerPanelScrollInjectionKey } from '../drawer/injection-key'
 import type { PanelSize } from './injection-key'
 import Panel from './panel.vue'
-import PanelContent from './panel-content.vue'
+import PanelBody from './panel-body.vue'
 import PanelFooter from './panel-footer.vue'
 import PanelHeader from './panel-header.vue'
 
@@ -20,16 +20,16 @@ import PanelHeader from './panel-header.vue'
 /** Realistic composed tree: shell + all three regions with real slot content. */
 const composed = (props: Record<string, unknown> = {}, testId?: string) =>
   defineComponent({
-    components: { Panel, PanelHeader, PanelContent, PanelFooter },
+    components: { Panel, PanelHeader, PanelBody, PanelFooter },
     setup: () => ({ props, testId }),
     template: `
       <Panel v-bind="props" :data-testid="testId">
         <PanelHeader>
           <h2>Edit domain</h2>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <p>Adjust the domain configuration below.</p>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <button type="button">Cancel</button>
           <button type="button">Save</button>
@@ -103,7 +103,7 @@ describe('Panel', () => {
 
   it('wraps content in a ScrollArea when a drawer scroll host is injected', () => {
     // drawer-content provides DrawerPanelScrollInjectionKey=true; simulate that
-    // ancestor so PanelContent takes its ScrollArea branch.
+    // ancestor so PanelBody takes its ScrollArea branch.
     const DrawerScrollHost = defineComponent({
       setup(_, { slots }) {
         provide(DrawerPanelScrollInjectionKey, true)
@@ -112,13 +112,13 @@ describe('Panel', () => {
     })
 
     const Tree = defineComponent({
-      components: { DrawerScrollHost, Panel, PanelContent },
+      components: { DrawerScrollHost, Panel, PanelBody },
       template: `
         <DrawerScrollHost>
           <Panel>
-            <PanelContent>
+            <PanelBody>
               <p>Scrollable region</p>
-            </PanelContent>
+            </PanelBody>
           </Panel>
         </DrawerScrollHost>
       `
@@ -156,7 +156,7 @@ describe('Panel', () => {
       defineComponent({
         setup: () => () =>
           h(Panel, null, () =>
-            h(PanelContent, null, () => [
+            h(PanelBody, null, () => [
               ...Array.from({ length: lines.value }, (_, i) => h('p', { key: i }, `Line ${i}`)),
               withButton.value ? h('button', { type: 'button' }, 'Act') : null
             ])
@@ -182,12 +182,13 @@ describe('Panel', () => {
   })
 
   describe('compound API (index.ts)', () => {
-    it('attaches Header, Content and Footer for dot-notation', async () => {
+    it('attaches Header, Body and Footer for dot-notation', async () => {
       const { default: Compound } = await import('./index')
       expect(Compound).toBe(Panel)
       expect(Compound.Header).toBe(PanelHeader)
-      expect(Compound.Content).toBe(PanelContent)
+      expect(Compound.Body).toBe(PanelBody)
       expect(Compound.Footer).toBe(PanelFooter)
+      expect('Content' in Compound).toBe(false)
     })
   })
 })

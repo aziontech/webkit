@@ -2,15 +2,14 @@ import type { App, Plugin } from 'vue'
 import { createVNode, render } from 'vue'
 
 import { toast, toastStore, useToast, useToastStore } from './composables/use-toast-store'
+import Toaster from './toast.vue'
 import ToastAction from './toast-action/toast-action.vue'
 import ToastClose from './toast-close/toast-close.vue'
 import ToastDescription from './toast-description/toast-description.vue'
 import ToastItem from './toast-item/toast-item.vue'
 import ToastTitle from './toast-title/toast-title.vue'
-import Toaster from './toaster.vue'
 
 type CompoundToast = typeof Toaster & {
-  Toaster: typeof Toaster
   Item: typeof ToastItem
   Title: typeof ToastTitle
   Description: typeof ToastDescription
@@ -19,7 +18,6 @@ type CompoundToast = typeof Toaster & {
 }
 
 const Toast = Object.assign(Toaster, {
-  Toaster,
   Item: ToastItem,
   Title: ToastTitle,
   Description: ToastDescription,
@@ -38,8 +36,8 @@ export type {
   ToastSeverity,
   ToastStore
 } from './composables/use-toast-store'
-export type { ToastPosition } from './toaster.vue'
-export { default as Toaster } from './toaster.vue'
+export type { ToastPosition } from './toast.vue'
+export { default as Toaster } from './toast.vue'
 type ToasterProps = InstanceType<typeof Toaster>['$props']
 
 export const ToastPlugin: Plugin = {

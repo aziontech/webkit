@@ -14,15 +14,15 @@
   import DrawerDescription from '@aziontech/webkit/drawer-description'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -251,7 +251,7 @@
   const editOnStart = users.value.find((user) => user.id === EDIT_ROLE_ON_START)
   if (editOnStart) openRole(editOnStart)
 
-  const onAction = (value: DropdownMenuOptionValue, user: User) => {
+  const onAction = (value: DropdownMenuItemValue, user: User) => {
     if (value === 'view') {
       pending.value = user
       profileOpen.value = true
@@ -485,13 +485,13 @@
                   >
                     <MultiSelect.Trigger :aria-label="`Teams of ${displayName(row)}`" />
                     <MultiSelect.Content>
-                      <MultiSelect.Option
+                      <MultiSelect.Item
                         v-for="team in TEAMS"
                         :key="team.value"
                         :value="team.value"
                       >
                         {{ team.label }}
-                      </MultiSelect.Option>
+                      </MultiSelect.Item>
                     </MultiSelect.Content>
                   </MultiSelect>
                 </Tooltip>
@@ -613,7 +613,7 @@
           <PanelHeader class="w-full">
             <DrawerTitle>Invite User</DrawerTitle>
           </PanelHeader>
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
               :disabled="sending"
@@ -655,13 +655,13 @@
                     aria-label="Teams"
                   />
                   <MultiSelect.Content>
-                    <MultiSelect.Option
+                    <MultiSelect.Item
                       v-for="team in TEAMS"
                       :key="team.value"
                       :value="team.value"
                     >
                       {{ team.label }}
-                    </MultiSelect.Option>
+                    </MultiSelect.Item>
                   </MultiSelect.Content>
                 </MultiSelect>
                 <Field.Description v-if="!errors.teams"
@@ -671,7 +671,7 @@
                 <Field.Error v-else>{{ errors.teams }}</Field.Error>
               </Field>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">
               <Button
@@ -709,39 +709,39 @@
             <DialogTitle>{{ pending ? displayName(pending) : '' }}</DialogTitle>
           </div>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <DialogDescription>
               What this person can do comes from their role and their teams.
             </DialogDescription>
-            <KeyValuePairs
+            <KeyValueList
               v-if="pending"
               :columns="2"
               aria-label="Profile"
             >
-              <KeyValuePairs.Item label="Email">
+              <KeyValueList.Item label="Email">
                 <span dir="ltr">{{ pending.email }}</span>
-              </KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Role">
+              </KeyValueList.Item>
+              <KeyValueList.Item label="Role">
                 <Tag
                   :label="pending.role"
                   :variant="roleVariant(pending.role)"
                   :severity="roleSeverity(pending.role)"
                   size="small"
                 />
-              </KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Teams">{{ teamsLabel(pending.teams) }}</KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Status">{{ pending.status }}</KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Last active">
+              </KeyValueList.Item>
+              <KeyValueList.Item label="Teams">{{ teamsLabel(pending.teams) }}</KeyValueList.Item>
+              <KeyValueList.Item label="Status">{{ pending.status }}</KeyValueList.Item>
+              <KeyValueList.Item label="Last active">
                 <Table.CellTime
                   v-if="pending.lastActive"
                   :value="pending.lastActive"
                 />
                 <span v-else>Not signed in yet</span>
-              </KeyValuePairs.Item>
-            </KeyValuePairs>
+              </KeyValueList.Item>
+            </KeyValueList>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
@@ -776,7 +776,7 @@
           <PanelHeader class="w-full">
             <DialogTitle>Edit role</DialogTitle>
           </PanelHeader>
-          <PanelContent>
+          <PanelBody>
             <div class="flex flex-col gap-(--spacing-md)">
               <DialogDescription>
                 Choose what {{ pending ? displayName(pending) : '' }} can do on the account. Their
@@ -791,19 +791,19 @@
                 >
                   <Select.Trigger id="user-role" />
                   <Select.Content>
-                    <Select.Option
+                    <Select.Item
                       v-for="role in ROLES"
                       :key="role.value"
                       :value="role.value"
                     >
                       {{ role.value }}
-                    </Select.Option>
+                    </Select.Item>
                   </Select.Content>
                 </Select>
                 <Field.Description>{{ roleHint }}</Field.Description>
               </Field>
             </div>
-          </PanelContent>
+          </PanelBody>
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">
               <Button

@@ -97,12 +97,12 @@ describe('forced colors (Windows high contrast)', () => {
 
   it('a selected tab and a pressed chip carry a selection outline', async () => {
     const Host = defineComponent({
-      components: { Tabs, TabsList: Tabs.List, TabsItem: Tabs.Item },
+      components: { Tabs, TabsList: Tabs.List, TabsTrigger: Tabs.Trigger },
       template: `
         <Tabs model-value="a">
           <TabsList>
-            <TabsItem value="a" label="Alpha" />
-            <TabsItem value="b" label="Beta" />
+            <TabsTrigger value="a" label="Alpha" />
+            <TabsTrigger value="b" label="Beta" />
           </TabsList>
         </Tabs>
       `

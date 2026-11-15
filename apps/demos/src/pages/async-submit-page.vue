@@ -55,7 +55,7 @@
 
 <template>
   <div class="layout-boundary">
-    <ConsoleLayout.Breadcrumbs :items="breadcrumb" />
+    <ConsoleLayout.Breadcrumb :items="breadcrumb" />
     <div class="layout-column-focused flex min-h-full flex-col">
       <PageHeader
         title="Deploy"

@@ -61,14 +61,14 @@
           <Select v-model="region">
             <Select.Trigger />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in regions"
                 :key="String(option.value)"
                 :value="option.value"
                 :disabled="option.disabled"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </Field>
@@ -83,14 +83,14 @@
         <Select v-model="environment">
           <Select.Trigger />
           <Select.Content>
-            <Select.Option
+            <Select.Item
               v-for="option in environments"
               :key="String(option.value)"
               :value="option.value"
               :disabled="option.disabled"
             >
               {{ option.label }}
-            </Select.Option>
+            </Select.Item>
           </Select.Content>
         </Select>
       </Field>

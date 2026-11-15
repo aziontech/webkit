@@ -11,7 +11,7 @@ const top = instance.getSlot('slotTop')
 const bottom = instance.getSlot('slotBottom')
 
 const rows = instance
-  .findConnectedInstances((node) => node.codeConnectId() === 'dropdown-menu-option')
+  .findConnectedInstances((node) => node.codeConnectId() === 'dropdown-menu-item')
   .filter((node) => node.type === 'INSTANCE')
 
 const header = rows.find((node) => node.getPropertyValue('type') === 'Group')

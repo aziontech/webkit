@@ -20,11 +20,11 @@
   >
     <Select.Trigger />
     <Select.Content>
-      <Select.Option
+      <Select.Item
         v-for="o in options"
         :key="o.value"
         :value="o.value"
-        >{{ o.label }}</Select.Option
+        >{{ o.label }}</Select.Item
       >
     </Select.Content>
   </Select>

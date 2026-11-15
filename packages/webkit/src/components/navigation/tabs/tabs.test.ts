@@ -8,16 +8,15 @@ import Default from '../../../../examples/tabs/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Tabs from './index'
 import { getTabViewPanelTransitionStyle } from './presets/transitions'
+import TabsRoot from './tabs.vue'
 import TabsContent from './tabs-content.vue'
-import TabsItem from './tabs-item.vue'
 import TabsList from './tabs-list.vue'
-import TabsPanel from './tabs-panel.vue'
-import TabsRoot from './tabs-root.vue'
+import TabsTrigger from './tabs-trigger.vue'
 
 // A realistic composed tab tree wired through the dot-notation sub-components.
 // Uncontrolled (default-value) unless a test overrides via v-model.
 const Tree = defineComponent({
-  components: { Tabs, TabsList, TabsItem, TabsContent, TabsPanel },
+  components: { Tabs, TabsList, TabsTrigger, TabsContent },
   props: {
     defaultValue: { type: String, default: 'tab-1' },
     disableSecond: { type: Boolean, default: false }
@@ -25,13 +24,13 @@ const Tree = defineComponent({
   template: `
     <Tabs :default-value="defaultValue" data-testid="tv">
       <TabsList>
-        <TabsItem value="tab-1" label="First" />
-        <TabsItem value="tab-2" label="Second" :disabled="disableSecond" />
-        <TabsItem value="tab-3" label="Third" />
+        <TabsTrigger value="tab-1" label="First" />
+        <TabsTrigger value="tab-2" label="Second" :disabled="disableSecond" />
+        <TabsTrigger value="tab-3" label="Third" />
       </TabsList>
       <TabsContent value="tab-1">Content one</TabsContent>
-      <TabsPanel value="tab-2">Content two</TabsPanel>
-      <TabsPanel value="tab-3">Content three</TabsPanel>
+      <TabsContent value="tab-2">Content two</TabsContent>
+      <TabsContent value="tab-3">Content three</TabsContent>
     </Tabs>
   `
 })
@@ -67,16 +66,17 @@ describe('Tabs', () => {
       })
     })
 
-    describe('compound API (index.js dot-notation)', () => {
+    describe('compound API (index.ts dot-notation)', () => {
       it('attaches every public sub-component to the root compound', () => {
-        // Grounded in index.js: Tabs === TabsRoot with Root/List/Item/
-        // Content/Panel assigned onto it.
         expect(Tabs).toBe(TabsRoot)
-        expect(Tabs.Root).toBe(TabsRoot)
         expect(Tabs.List).toBe(TabsList)
-        expect(Tabs.Item).toBe(TabsItem)
+        expect(Tabs.Trigger).toBe(TabsTrigger)
         expect(Tabs.Content).toBe(TabsContent)
-        expect(Tabs.Panel).toBe(TabsPanel)
+      })
+
+      it('attaches only List, Trigger and Content (no synonyms)', () => {
+        const members = Object.keys(Tabs).filter((key) => /^[A-Z]/.test(key))
+        expect(members.sort()).toEqual(['Content', 'List', 'Trigger'])
       })
     })
 
@@ -131,12 +131,12 @@ describe('Tabs', () => {
       it('leaves aria-controls off a tab whose panel is rendered elsewhere', () => {
         const { getAllByRole } = render(
           defineComponent({
-            components: { TabsRoot, TabsList, TabsItem },
+            components: { TabsRoot, TabsList, TabsTrigger },
             template: `
             <TabsRoot default-value="a">
               <TabsList>
-                <TabsItem value="a" label="A" />
-                <TabsItem value="b" label="B" />
+                <TabsTrigger value="a" label="A" />
+                <TabsTrigger value="b" label="B" />
               </TabsList>
             </TabsRoot>
           `
@@ -147,7 +147,7 @@ describe('Tabs', () => {
       })
     })
 
-    describe('provide/inject — selection state flows from Root to Item and Panel', () => {
+    describe('provide/inject — selection state flows from the root to Trigger and Content', () => {
       it('auto-selects the default-value tab on mount and reflects it in tab + panel state', () => {
         const { getByText, getAllByRole } = render(Tree)
 
@@ -193,9 +193,9 @@ describe('Tabs', () => {
       })
     })
 
-    describe('a standalone Item', () => {
+    describe('a standalone Trigger', () => {
       it('has no selection of its own: a removed selected attribute does not press it', () => {
-        const { getByRole } = render(TabsItem, {
+        const { getByRole } = render(TabsTrigger, {
           props: { value: 'a', label: 'Alpha' },
           attrs: { selected: true }
         })
@@ -206,10 +206,10 @@ describe('Tabs', () => {
       })
     })
 
-    describe('events on the Item', () => {
+    describe('events on the Trigger', () => {
       it('emits click with the native MouseEvent when an enabled tab is activated', async () => {
         // Render a single standalone Item (no context) to observe its own emits.
-        const { getByRole, emitted } = render(TabsItem, {
+        const { getByRole, emitted } = render(TabsTrigger, {
           props: { value: 'a', label: 'Alpha' }
         })
 
@@ -221,7 +221,7 @@ describe('Tabs', () => {
       })
 
       it('does not emit click when the Item is disabled', async () => {
-        const { getByRole, emitted } = render(TabsItem, {
+        const { getByRole, emitted } = render(TabsTrigger, {
           props: { value: 'a', label: 'Alpha', disabled: true }
         })
 
@@ -231,11 +231,11 @@ describe('Tabs', () => {
       })
 
       it('renders a close affordance and emits close (not click) when it is clicked', async () => {
-        const { getByTestId, emitted } = render(TabsItem, {
+        const { getByTestId, emitted } = render(TabsTrigger, {
           props: { value: 'a', label: 'Alpha', closable: true }
         })
 
-        const close = getByTestId('navigation-tabs-item__close')
+        const close = getByTestId('navigation-tabs-trigger__close')
         expect(close.getAttribute('aria-hidden')).toBe('true')
         expect(close.getAttribute('role')).toBeNull()
         expect(close.getAttribute('title')).toBe('Close tab')
@@ -249,10 +249,10 @@ describe('Tabs', () => {
         expect(emitted().click).toBeUndefined()
       })
       it('emits close on Delete from a closable tab, and nothing from a plain one', async () => {
-        const { getByTestId, emitted, rerender } = render(TabsItem, {
+        const { getByTestId, emitted, rerender } = render(TabsTrigger, {
           props: { value: 'a', label: 'Alpha', closable: true }
         })
-        const tab = getByTestId('navigation-tabs-item')
+        const tab = getByTestId('navigation-tabs-trigger')
         expect(tab.getAttribute('aria-keyshortcuts')).toBe('Delete')
 
         await fireEvent.keyDown(tab, { key: 'Delete' })
@@ -266,17 +266,19 @@ describe('Tabs', () => {
       })
 
       it('marks a dirty tab with a dot and a hidden "Unsaved changes"', async () => {
-        const { getByRole, getByTestId, queryByTestId, rerender } = render(TabsItem, {
+        const { getByRole, getByTestId, queryByTestId, rerender } = render(TabsTrigger, {
           props: { value: 'a', label: 'Alpha', dirty: true }
         })
 
         const tab = getByRole('button')
         expect(tab.hasAttribute('data-dirty')).toBe(true)
-        expect(getByTestId('navigation-tabs-item__dirty').getAttribute('aria-hidden')).toBe('true')
+        expect(getByTestId('navigation-tabs-trigger__dirty').getAttribute('aria-hidden')).toBe(
+          'true'
+        )
         expect(tab.textContent).toContain('Unsaved changes')
 
         await rerender({ dirty: false })
-        expect(queryByTestId('navigation-tabs-item__dirty')).toBeNull()
+        expect(queryByTestId('navigation-tabs-trigger__dirty')).toBeNull()
         expect(tab.hasAttribute('data-dirty')).toBe(false)
       })
     })
@@ -286,7 +288,7 @@ describe('Tabs', () => {
         const updates: Array<string | number | null> = []
 
         const Host = defineComponent({
-          components: { Tabs, TabsList, TabsItem },
+          components: { Tabs, TabsList, TabsTrigger },
           setup() {
             return {
               onUpdate: (v: string | number | null) => updates.push(v)
@@ -295,8 +297,8 @@ describe('Tabs', () => {
           template: `
           <Tabs default-value="tab-1" @update:modelValue="onUpdate">
             <TabsList>
-              <TabsItem value="tab-1" label="First" />
-              <TabsItem value="tab-2" label="Second" />
+              <TabsTrigger value="tab-1" label="First" />
+              <TabsTrigger value="tab-2" label="Second" />
             </TabsList>
           </Tabs>
         `
@@ -310,19 +312,19 @@ describe('Tabs', () => {
 
       it('round-trips v-model — external change selects the matching tab and content', async () => {
         const Host = defineComponent({
-          components: { Tabs, TabsList, TabsItem, TabsContent, TabsPanel },
+          components: { Tabs, TabsList, TabsTrigger, TabsContent },
           setup: () => ({ active: ref<string>('tab-1') }),
           template: `
           <div>
             <button data-testid="ext" type="button" @click="active = 'tab-3'">go</button>
             <Tabs v-model="active">
               <TabsList>
-                <TabsItem value="tab-1" label="First" />
-                <TabsItem value="tab-2" label="Second" />
-                <TabsItem value="tab-3" label="Third" />
+                <TabsTrigger value="tab-1" label="First" />
+                <TabsTrigger value="tab-2" label="Second" />
+                <TabsTrigger value="tab-3" label="Third" />
               </TabsList>
               <TabsContent value="tab-1">One</TabsContent>
-              <TabsPanel value="tab-3">Three</TabsPanel>
+              <TabsContent value="tab-3">Three</TabsContent>
             </Tabs>
           </div>
         `
@@ -357,13 +359,13 @@ describe('Tabs', () => {
       it('manual activation moves focus with the arrows and selects only on Enter', async () => {
         const { getByText } = render(
           defineComponent({
-            components: { Tabs, TabsList, TabsItem },
+            components: { Tabs, TabsList, TabsTrigger },
             template: `
             <Tabs default-value="tab-1" activation-mode="manual">
               <TabsList>
-                <TabsItem value="tab-1" label="First" />
-                <TabsItem value="tab-2" label="Second" />
-                <TabsItem value="tab-3" label="Third" />
+                <TabsTrigger value="tab-1" label="First" />
+                <TabsTrigger value="tab-2" label="Second" />
+                <TabsTrigger value="tab-3" label="Third" />
               </TabsList>
             </Tabs>
           `
@@ -443,17 +445,17 @@ describe('Tabs', () => {
 
     describe('Item label prop and slot', () => {
       it('renders the label prop and lets the default slot override it', () => {
-        const withProp = render(TabsItem, { props: { value: 'a', label: 'FromProp' } })
-        expect(withProp.getByTestId('navigation-tabs-item__label').textContent?.trim()).toBe(
+        const withProp = render(TabsTrigger, { props: { value: 'a', label: 'FromProp' } })
+        expect(withProp.getByTestId('navigation-tabs-trigger__label').textContent?.trim()).toBe(
           'FromProp'
         )
         withProp.unmount()
 
-        const withSlot = render(TabsItem, {
+        const withSlot = render(TabsTrigger, {
           props: { value: 'a', label: 'FromProp' },
           slots: { default: 'FromSlot' }
         })
-        const label = withSlot.getByTestId('navigation-tabs-item__label')
+        const label = withSlot.getByTestId('navigation-tabs-trigger__label')
         expect(label.textContent).toContain('FromSlot')
         expect(label.textContent).not.toContain('FromProp')
       })
@@ -547,10 +549,10 @@ describe('Tabs', () => {
     it('forwards consumer attributes to the root, the wrapper, the tab and the panel', () => {
       const { getByTestId, getByRole } = render(
         defineComponent({
-          components: { Tabs, TabsList, TabsItem, TabsContent, TabsPanel },
+          components: { Tabs, TabsList, TabsTrigger, TabsContent },
           template: `
           <Tabs id="tabs-root" dir="ltr" aria-describedby="hint" data-track="tabs" default-value="a">
-            <TabsList><TabsItem value="a" label="A" data-track="tab-a" /></TabsList>
+            <TabsList><TabsTrigger value="a" label="A" data-track="tab-a" /></TabsList>
             <TabsContent value="a" data-track="panel-a">Panel A</TabsContent>
           </Tabs>
         `
@@ -567,15 +569,15 @@ describe('Tabs', () => {
     })
 
     it('renders Tabs.Content with a value as the tabpanel, and exposes Tabs.Trigger', async () => {
-      expect(Tabs.Trigger).toBe(TabsItem)
+      expect(Tabs.Trigger).toBe(TabsTrigger)
       const { getByRole, getAllByRole } = render(
         defineComponent({
-          components: { Tabs, TabsList, TabsItem, TabsContent },
+          components: { Tabs, TabsList, TabsTrigger, TabsContent },
           template: `
           <Tabs default-value="a">
             <TabsList>
-              <TabsItem value="a" label="A" />
-              <TabsItem value="b" label="B" />
+              <TabsTrigger value="a" label="A" />
+              <TabsTrigger value="b" label="B" />
             </TabsList>
             <TabsContent value="a">Panel A</TabsContent>
             <TabsContent value="b">Panel B</TabsContent>
@@ -595,11 +597,11 @@ describe('Tabs', () => {
     it('builds valid id tokens from values with spaces', async () => {
       const { getByRole } = render(
         defineComponent({
-          components: { Tabs, TabsList, TabsItem, TabsPanel },
+          components: { Tabs, TabsList, TabsTrigger, TabsContent },
           template: `
           <Tabs default-value="api keys">
-            <TabsList><TabsItem value="api keys" label="API keys" /></TabsList>
-            <TabsPanel value="api keys">Keys</TabsPanel>
+            <TabsList><TabsTrigger value="api keys" label="API keys" /></TabsList>
+            <TabsContent value="api keys">Keys</TabsContent>
           </Tabs>
         `
         })
@@ -617,14 +619,14 @@ describe('Tabs', () => {
       const showMiddle = ref(false)
       const { getByRole } = render(
         defineComponent({
-          components: { Tabs, TabsList, TabsItem },
+          components: { Tabs, TabsList, TabsTrigger },
           setup: () => ({ showMiddle }),
           template: `
           <Tabs default-value="a">
             <TabsList>
-              <TabsItem value="a" label="A" />
-              <TabsItem v-if="showMiddle" value="m" label="M" />
-              <TabsItem value="z" label="Z" />
+              <TabsTrigger value="a" label="A" />
+              <TabsTrigger v-if="showMiddle" value="m" label="M" />
+              <TabsTrigger value="z" label="Z" />
             </TabsList>
           </Tabs>
         `
@@ -642,14 +644,14 @@ describe('Tabs', () => {
       const off = ref(false)
       const { getByRole } = render(
         defineComponent({
-          components: { Tabs, TabsList, TabsItem },
+          components: { Tabs, TabsList, TabsTrigger },
           setup: () => ({ off }),
           template: `
           <Tabs default-value="a">
             <TabsList>
-              <TabsItem value="a" label="A" />
-              <TabsItem value="b" label="B" :disabled="off" />
-              <TabsItem value="c" label="C" />
+              <TabsTrigger value="a" label="A" />
+              <TabsTrigger value="b" label="B" :disabled="off" />
+              <TabsTrigger value="c" label="C" />
             </TabsList>
           </Tabs>
         `
@@ -663,8 +665,8 @@ describe('Tabs', () => {
     })
 
     it('renders an empty label by default instead of placeholder text', () => {
-      const { getByTestId } = render(TabsItem)
-      expect(getByTestId('navigation-tabs-item__label').textContent?.trim()).toBe('')
+      const { getByTestId } = render(TabsTrigger)
+      expect(getByTestId('navigation-tabs-trigger__label').textContent?.trim()).toBe('')
     })
   })
 })

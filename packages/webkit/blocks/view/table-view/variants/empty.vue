@@ -5,11 +5,11 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, {
-    type DropdownMenuOptionValue,
+    type DropdownMenuItemValue,
     type TableColumn
   } from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -119,7 +119,7 @@
     () => pending.value !== null && confirmation.value.trim() === pending.value.name
   )
 
-  const onRowAction = (value: DropdownMenuOptionValue, row: Resource) => {
+  const onRowAction = (value: DropdownMenuItemValue, row: Resource) => {
     if (value !== 'delete') return
     pending.value = row
     confirmation.value = ''
@@ -288,7 +288,7 @@
                       @select="(_event, value) => onRowAction(value, row)"
                     >
                       <DropdownMenuGroup>
-                        <DropdownMenuOption
+                        <DropdownMenuItem
                           value="deploy"
                           label="Deploy"
                         >
@@ -297,8 +297,8 @@
                               class="ai ai-cloud-upload"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
-                        <DropdownMenuOption
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                           value="view"
                           label="View details"
                         >
@@ -307,8 +307,8 @@
                               class="ai ai-eye"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
-                        <DropdownMenuOption
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                           value="duplicate"
                           label="Clone"
                         >
@@ -317,10 +317,10 @@
                               class="ai ai-copy"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
+                        </DropdownMenuItem>
                       </DropdownMenuGroup>
                       <DropdownMenuGroup>
-                        <DropdownMenuOption
+                        <DropdownMenuItem
                           value="delete"
                           label="Delete"
                         >
@@ -329,7 +329,7 @@
                               class="ai ai-trash"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
+                        </DropdownMenuItem>
                       </DropdownMenuGroup>
                     </Table.CellActions>
                   </template>

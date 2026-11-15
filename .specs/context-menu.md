@@ -3,9 +3,9 @@ name: context-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: eaceee457245228ba2e4292665b0d1137829cf1f5047bb43dc46046aa3c1615e
+checksum: 65ba0224cb3ba6d9064b35bdb7823c64b207013d400afa8008dc7ac7e4751bde
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -103,7 +103,7 @@ Tree-shaking alternative — the root and trigger as standalone imports, with th
   import ContextMenu from '@aziontech/webkit/context-menu-root'
   import ContextMenuTrigger from '@aziontech/webkit/context-menu-trigger'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
 </script>
 ```
 
@@ -113,7 +113,7 @@ Tree-shaking alternative — the root and trigger as standalone imports, with th
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the area's content.
-- Item parts, shared with `DropdownMenu` and attached to the compound under the same names: `ContextMenu.Group` (`dropdown-menu-group`), `ContextMenu.Item` (`dropdown-menu-option`, including `kind="checkbox"` / `kind="radio"` and `command`), `ContextMenu.Sub`, `ContextMenu.SubTrigger` and `ContextMenu.SubContent` (`dropdown-menu-sub*`). Their props, slots and behaviour are specified in `.specs/dropdown-menu.md`; inside a `ContextMenu` they emit through this root's `select`.
+- Item parts, shared with `DropdownMenu` and attached to the compound under the same names: `ContextMenu.Group` (`dropdown-menu-group`), `ContextMenu.Item` (`dropdown-menu-item`, including `kind="checkbox"` / `kind="radio"` and `command`), `ContextMenu.Sub`, `ContextMenu.SubTrigger` and `ContextMenu.SubContent` (`dropdown-menu-sub*`). Their props, slots and behaviour are specified in `.specs/dropdown-menu.md`; inside a `ContextMenu` they emit through this root's `select`.
 
 ## Props
 
@@ -130,9 +130,9 @@ Tree-shaking alternative — the root and trigger as standalone imports, with th
 
 ## Events
 
-| Event    | Payload                                                                | Notes                                                                                                                                                                                    |
-| -------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated, at any sub-menu depth. The panel closes and focus returns to the element that was focused in the area, except for checkbox and radio options. |
+| Event    | Payload                                                              | Notes                                                                                                                                                                                    |
+| -------- | -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuItemValue)` | Fires when an enabled option is activated, at any sub-menu depth. The panel closes and focus returns to the element that was focused in the area, except for checkbox and radio options. |
 
 ## Slots
 

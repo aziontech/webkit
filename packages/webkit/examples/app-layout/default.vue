@@ -7,7 +7,7 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelpPanel from '@aziontech/webkit/help-panel'
   import IconButton from '@aziontech/webkit/icon-button'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
@@ -143,16 +143,16 @@
       </main>
 
       <template #split-panel>
-        <KeyValuePairs aria-label="Service details">
-          <KeyValuePairs.Item label="Status">
+        <KeyValueList aria-label="Service details">
+          <KeyValueList.Item label="Status">
             <StatusIndicator
               severity="success"
               label="Active"
             />
-          </KeyValuePairs.Item>
-          <KeyValuePairs.Item label="Domain">shop.example.com</KeyValuePairs.Item>
-          <KeyValuePairs.Item label="Last deploy">Nov 10, 2026, 14:32</KeyValuePairs.Item>
-        </KeyValuePairs>
+          </KeyValueList.Item>
+          <KeyValueList.Item label="Domain">shop.example.com</KeyValueList.Item>
+          <KeyValueList.Item label="Last deploy">Nov 10, 2026, 14:32</KeyValueList.Item>
+        </KeyValueList>
       </template>
 
       <template #tools>
@@ -161,16 +161,16 @@
             title="Services"
             description="Where your domains meet the code that answers them."
           />
-          <HelpPanel.Section title="What is a service?">
+          <HelpPanel.Group title="What is a service?">
             <p>A service binds one or more domains to the code and rules that answer them.</p>
-          </HelpPanel.Section>
-          <HelpPanel.Links>
+          </HelpPanel.Group>
+          <HelpPanel.Footer>
             <Link
               label="Services documentation"
               href="https://example.com/docs"
               target="_blank"
             />
-          </HelpPanel.Links>
+          </HelpPanel.Footer>
         </HelpPanel>
       </template>
     </AppLayout>

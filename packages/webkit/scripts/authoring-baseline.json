@@ -291,7 +291,7 @@
   "packages/webkit/src/components/marketing/sticky-stack/sticky-stack.vue::token:zero-with-unit",
   "packages/webkit/src/components/marketing/sticky-stack/sticky-stack.vue::token:zero-with-unit",
   "packages/webkit/src/components/navigation/tabs/presets/transitions.ts::token:js-class-preset",
-  "packages/webkit/src/components/navigation/tabs/tabs-root.vue::spec:defineOptions.name \"TabsRoot\" must equal \"Tabs\"",
-  "packages/webkit/src/components/overlay/panel/panel-content.vue::token:js-class-preset",
-  "packages/webkit/src/components/overlay/panel/panel-content.vue::token:js-class-preset"
+  "packages/webkit/src/components/navigation/tabs/tabs.vue::spec:defineOptions.name \"TabsRoot\" must equal \"Tabs\"",
+  "packages/webkit/src/components/overlay/panel/panel-body.vue::token:js-class-preset",
+  "packages/webkit/src/components/overlay/panel/panel-body.vue::token:js-class-preset"
 ]

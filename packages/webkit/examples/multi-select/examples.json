@@ -24,7 +24,7 @@
     },
     {
       "name": "WithOptionExtras",
-      "summary": "Per-option extras on MultiSelectOption: a leading icon, a custom left slot, and a trailing tag.",
+      "summary": "Per-option extras on MultiSelectItem: a leading icon, a custom left slot, and a trailing tag.",
       "file": "with-option-extras.vue"
     },
     {

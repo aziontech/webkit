@@ -44,7 +44,7 @@ A `Breadcrumb` of the folder path starts at the storage name; each crumb jumps b
 
 Folders sort first with a link-coloured folder glyph; the folder name is a `Button kind="link"` that opens it (a row click does the same for a pointer), and the `..` name is a link button named Go up to the parent folder; a `..` row leads back up once inside a folder; files take a glyph by extension. Size is muted. Last modified is `Table.CellTime`: the editor's avatar and a relative time that updates every minute, with the absolute time in its tooltip.
 
-### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
+### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
 `Table.CellActions`, named after the file ("Actions for logo.svg"), opens a menu placed `bottom-end`: Open for a folder or Download for a file in the first group, Delete alone in the last group. The `..` row has no menu.
 
@@ -58,7 +58,7 @@ When the search is set, the table's `#empty` slot holds a medium `EmptyState`, N
 
 ### J. Upload — `SplitButton` (optional)
 
-Variant Uploading only; it adds `Dialog` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `FileDropzone` and `FileTokenGroup` to the page.
+Variant Uploading only; it adds `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `FileDropzone` and `FileTokenGroup` to the page.
 
 Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` wired to a hidden `<input type="file" multiple>`, then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload closes the dialog and starts the transfer; the dialog does not wait for it. In the Uploading variant Add to files also offers Upload folder: the same dialog titled Upload folder, a `FileDropzone` with `directories` (a dropped folder is walked) and a Browse folder `Button` wired to a hidden `<input type="file" webkitdirectory>`; the tokens and the transfer rows name each file by its path inside the folder (`site/css/main.css`), and as files finish their folders appear in the table under the folder in view.
 
@@ -72,7 +72,7 @@ Every transfer (upload, move) runs in one floating `UploadProgress` at the inlin
 
 When a transfer finishes the page reports it with a toast as well as the card, because the card may be collapsed or the person may be elsewhere. Its actions fit the files, never a deploy action: after a clean upload or move, `Open folder` (goes to the destination); after a partial upload, a danger toast `1 of 5 files weren't uploaded.` that says where the rest went and offers `Retry failed`. Storage objects are not deployed, so the async-submit Edit and Redeploy pair does not apply. Each of these toasts passes `position: 'top-right'` so it never covers the transfer card, whatever corner the app's region defaults to.
 
-### L. Selection and Move — `DataTable`, `DropdownMenuOption` (optional)
+### L. Selection and Move — `DataTable`, `DropdownMenuItem` (optional)
 
 Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 

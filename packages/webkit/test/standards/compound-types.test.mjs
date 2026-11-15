@@ -126,7 +126,7 @@ test('exportedTypes reads declarations and type-only lists, and skips value list
       'export interface TableColumn { id?: string }',
       "  export type SelectKind = 'a' | 'b'",
       "export type { SelectValue, Inner as Outer } from './injection-key'",
-      "export { SelectOption } from './select-option.vue'"
+      "export { SelectItem } from './select-item.vue'"
     ].join('\n')
   )
   assert.deepEqual([...names].sort(), ['Outer', 'SelectKind', 'SelectValue', 'TableColumn'])

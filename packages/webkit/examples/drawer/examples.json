@@ -14,7 +14,7 @@
     },
     {
       "name": "ScrollContent",
-      "summary": "Long content in `PanelContent` scrolls inside `ScrollArea`. The header and footer stay in the panel flex layout at the top and bottom; only the body scrolls.",
+      "summary": "Long content in `PanelBody` scrolls inside `ScrollArea`. The header and footer stay in the panel flex layout at the top and bottom; only the body scrolls.",
       "file": "scroll-content.vue"
     }
   ]

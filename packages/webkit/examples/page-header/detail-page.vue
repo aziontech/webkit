@@ -50,22 +50,22 @@
       />
     </template>
     <template #tabs>
-      <Tabs.Root v-model="tab">
+      <Tabs v-model="tab">
         <Tabs.List>
-          <Tabs.Item
+          <Tabs.Trigger
             value="overview"
             label="Overview"
           />
-          <Tabs.Item
+          <Tabs.Trigger
             value="settings"
             label="Settings"
           />
-          <Tabs.Item
+          <Tabs.Trigger
             value="logs"
             label="Logs"
           />
         </Tabs.List>
-      </Tabs.Root>
+      </Tabs>
     </template>
   </PageHeader>
 </template>

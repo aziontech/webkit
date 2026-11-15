@@ -12,7 +12,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PromptInput, { type PromptInputStatus } from '@aziontech/webkit/prompt-input'
@@ -306,24 +306,24 @@
         <Card>
           <template #default>
             <div class="p-(--spacing-md)">
-              <KeyValuePairs
+              <KeyValueList
                 :columns="3"
                 aria-label="Workload details"
               >
-                <KeyValuePairs.Item label="Status">
+                <KeyValueList.Item label="Status">
                   <StatusIndicator
                     severity="danger"
                     label="Errors above 30%"
                   />
-                </KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Domains"
-                  >www.example.com, shop.example.com</KeyValuePairs.Item
+                </KeyValueList.Item>
+                <KeyValueList.Item label="Domains"
+                  >www.example.com, shop.example.com</KeyValueList.Item
                 >
-                <KeyValuePairs.Item label="Origin">api.example.com</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Cache hit ratio">91%</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Last deployment">Today, 13:58</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Region">US East (Washington)</KeyValuePairs.Item>
-              </KeyValuePairs>
+                <KeyValueList.Item label="Origin">api.example.com</KeyValueList.Item>
+                <KeyValueList.Item label="Cache hit ratio">91%</KeyValueList.Item>
+                <KeyValueList.Item label="Last deployment">Today, 13:58</KeyValueList.Item>
+                <KeyValueList.Item label="Region">US East (Washington)</KeyValueList.Item>
+              </KeyValueList>
             </div>
           </template>
         </Card>

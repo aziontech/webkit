@@ -32,8 +32,8 @@ Two scales, documented in `@aziontech/theme` ("Breakpoints and container sizes")
 These components are box-aware and need nothing from the page: `Table` (scrolls sideways
 inside its viewport, opt-in `stackable` rows, toolbar), `PageHeader`, `SectionHeader`, `SettingRow`, `SettingsSection`,
 `SaveBar`, `Card` (its content is `@container/card`), `Alert`, `EmptyState`, `Pagination`,
-`Wizard`, `HelpPanel`, `ChartCard`, `StatTile`, and the dialog and drawer body (`PanelContent`,
-`@container/panel`). `KeyValuePairs` and `Item` reflow by themselves; `Field orientation="responsive"`
+`Wizard`, `HelpPanel`, `ChartCard`, `StatTile`, and the dialog and drawer body (`PanelBody`,
+`@container/panel`). `KeyValueList` and `Item` reflow by themselves; `Field orientation="responsive"`
 follows the nearest container.
 
 - Write `@md:` (container) for a layout inside a band; write `md:` (viewport) only for the shell.

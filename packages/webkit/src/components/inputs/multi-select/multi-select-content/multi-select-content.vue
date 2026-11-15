@@ -33,7 +33,7 @@
   }
 
   const slots = defineSlots<{
-    /** The options (MultiSelectOption). */
+    /** The options (MultiSelectItem). */
     default(): unknown
     /** Pinned above the list, for a search field. */
     search(): unknown

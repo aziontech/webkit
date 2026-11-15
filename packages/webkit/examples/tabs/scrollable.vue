@@ -40,12 +40,12 @@
 </script>
 
 <template>
-  <Tabs.Root
+  <Tabs
     v-model="active"
     class="w-full max-w-[20rem]"
   >
     <Tabs.List>
-      <Tabs.Item
+      <Tabs.Trigger
         v-for="tab in tabs"
         :key="tab.value"
         :value="tab.value"
@@ -63,5 +63,5 @@
         </div>
       </Tabs.Content>
     </div>
-  </Tabs.Root>
+  </Tabs>
 </template>

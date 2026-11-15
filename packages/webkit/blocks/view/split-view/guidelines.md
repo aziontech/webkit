@@ -28,9 +28,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 A medium search `Input` across events, hosts, paths and addresses, then outlined medium `IconButton`s for Refresh and Download CSV, each named by a `Tooltip` and an `aria-label` with the same words.
 
-### C. Applied filters — `FilterMenu.Chips` (optional)
+### C. Applied filters — `FilterMenu.ChipGroup` (optional)
 
-`FilterMenu.Chips` shares the model and the fields with the menu: one chip per applied field under the controls row, which summarizes its values, reopens the menu on its field and can be removed. The row wraps; it never scrolls sideways.
+`FilterMenu.ChipGroup` shares the model and the fields with the menu: one chip per applied field under the controls row, which summarizes its values, reopens the menu on its field and can be removed. The row wraps; it never scrolls sideways.
 
 ### D. Fields panel — `Sidebar`, `Input`, `Field`, `Checkbox`, `Popover`, `Item`, `Accordion`, `Tag` (optional)
 
@@ -79,7 +79,7 @@ The document lists every field of the event. Search in this event narrows the li
 - Drive the summary, the chart and the table from one filtered set, so every number agrees.
 - Let a click or drag on the chart set the period, and show the period as a filter the user can clear.
 - Keep the row selected while its document is open, and switch between pane and drawer by the explorer's width, not the viewport's.
-- Let `FilterMenu` count the applied fields on its trigger and `FilterMenu.Chips` show each one in field order.
+- Let `FilterMenu` count the applied fields on its trigger and `FilterMenu.ChipGroup` show each one in field order.
 - Pick the empty message that matches why the log is empty.
 - In query mode, keep the applied query text as the user typed it, and save and list that text.
 - Keep each investigation tab self-contained: its own filters, search and period.
@@ -128,7 +128,7 @@ The document lists every field of the event. Search in this event narrows the li
 
 - Default: live traffic with the summary, the chart and the log filled, and no filters applied; while Refresh runs the summary values and the chart show `Skeleton`s and the table its loading rows.
 - Loading: the first load; `Skeleton`s hold the summary values and the chart band and the table shows its loading rows.
-- Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a `FilterMenu.Chips` chip.
+- Filtered: errors from the Security and Access Control sources; the Filter button counts three fields and each shows as a `FilterMenu.ChipGroup` chip.
 - Empty: a workspace with no traffic yet; the summary reads zero, the chart is flat and the log shows No events yet.
 - Error: the event request failed; the fields panel stays and the log pane shows a danger `Alert` that says the events did not load, with Retry, which reruns the request like Refresh.
 - Query: `level = Error AND host = api.example.com` over the last 24 hours, with two saved and two recent queries.

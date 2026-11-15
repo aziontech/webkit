@@ -26,13 +26,13 @@ export default {
     </PanelHeader>`
       : ''
   }
-    <PanelContent>${
+    <PanelBody>${
       content
         ? figma.code`
       ${content}`
         : ''
     }
-    </PanelContent>${
+    </PanelBody>${
       showFooter
         ? figma.code`
     <PanelFooter>${
@@ -52,7 +52,7 @@ export default {
     "import DialogContent from '@aziontech/webkit/dialog-content'",
     "import DialogTitle from '@aziontech/webkit/dialog-title'",
     "import PanelHeader from '@aziontech/webkit/panel-header'",
-    "import PanelContent from '@aziontech/webkit/panel-content'",
+    "import PanelBody from '@aziontech/webkit/panel-body'",
     "import PanelFooter from '@aziontech/webkit/panel-footer'",
     "import Button from '@aziontech/webkit/button'"
   ],

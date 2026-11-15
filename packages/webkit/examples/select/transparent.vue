@@ -33,11 +33,11 @@
           <Select.Trigger aria-label="Switch environment" />
           <Select.Content>
             <Select.Group label="Environments">
-              <Select.Option
+              <Select.Item
                 v-for="name in environments"
                 :key="name"
                 :value="name"
-                >{{ name }}</Select.Option
+                >{{ name }}</Select.Item
               >
             </Select.Group>
           </Select.Content>

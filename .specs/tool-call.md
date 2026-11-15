@@ -3,9 +3,9 @@ name: tool-call
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 89f6919feceb2a17cffe91fef2b83325a92f0a9cd91d3fff05b7093fb223945c
+checksum: 2032da60059a45785c85d36b56bb3227c0edcc66f661db6191b9b4769c797882
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -34,7 +34,7 @@ collapsible panel. It is the record of what the agent did; authorization before 
 
 - `tool-approval` — the authorization step before a sensitive call.
 - `status-indicator` — the status the row shows.
-- `code-block`, `key-value-pairs` — what goes in the input and output slots.
+- `code-block`, `key-value-list` — what goes in the input and output slots.
 
 ## Best practices
 
@@ -93,10 +93,10 @@ _No events._
 
 ## Slots
 
-| Slot     | Scope | Notes                                                                  |
-| -------- | ----- | ---------------------------------------------------------------------- |
-| `input`  | —     | The parameters the tool is called with (`CodeBlock`, `KeyValuePairs`). |
-| `output` | —     | What the tool returned, or the error it failed with.                   |
+| Slot     | Scope | Notes                                                                 |
+| -------- | ----- | --------------------------------------------------------------------- |
+| `input`  | —     | The parameters the tool is called with (`CodeBlock`, `KeyValueList`). |
+| `output` | —     | What the tool returned, or the error it failed with.                  |
 
 ## States
 

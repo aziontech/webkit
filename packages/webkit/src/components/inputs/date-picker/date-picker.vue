@@ -7,8 +7,6 @@
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
-  import DatePickerFields from './date-picker-fields/date-picker-fields.vue'
-  import DatePickerGrid from './date-picker-grid/date-picker-grid.vue'
   import { asSingle, formatValueLabel, withTime } from './format'
   import {
     DatePickerInjectionKey,
@@ -18,6 +16,8 @@
     type DatePickerSize,
     type DatePickerValue
   } from './injection-key'
+  import DatePickerFields from './parts/date-picker-fields.vue'
+  import DatePickerGrid from './parts/date-picker-grid.vue'
 
   defineOptions({
     name: 'DatePicker',

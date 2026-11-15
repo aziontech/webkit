@@ -1010,13 +1010,13 @@
                   :key="group.label"
                   :label="group.label"
                 >
-                  <Select.Option
+                  <Select.Item
                     v-for="option in group.views"
                     :key="option.value"
                     :value="option.value"
                   >
                     {{ option.label }}
-                  </Select.Option>
+                  </Select.Item>
                 </Select.Group>
               </Select.Content>
             </Select>
@@ -1052,7 +1052,7 @@
           </div>
         </div>
 
-        <FilterMenu.Chips
+        <FilterMenu.ChipGroup
           v-if="!active.ownPeriod"
           v-model="filters"
           :fields="filterFields"

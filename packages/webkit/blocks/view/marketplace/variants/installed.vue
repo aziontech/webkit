@@ -8,9 +8,9 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -450,7 +450,7 @@
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <div class="flex flex-col gap-(--layout-section-gap)">
               <Alert
                 key="alert-1"
@@ -474,23 +474,23 @@
 
               <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
 
-              <KeyValuePairs
+              <KeyValueList
                 :columns="2"
                 aria-label="Integration details"
               >
-                <KeyValuePairs.Item label="Publisher"
-                  ><bdi>{{ selected.vendor }}</bdi></KeyValuePairs.Item
+                <KeyValueList.Item label="Publisher"
+                  ><bdi>{{ selected.vendor }}</bdi></KeyValueList.Item
                 >
-                <KeyValuePairs.Item label="Category">{{ selected.category }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Context">{{
+                <KeyValueList.Item label="Category">{{ selected.category }}</KeyValueList.Item>
+                <KeyValueList.Item label="Context">{{
                   CONTEXTS[selected.context]
-                }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Version">{{ selected.version }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Updated">{{ selected.updated }}</KeyValuePairs.Item>
-                <KeyValuePairs.Item label="Installed on">{{
+                }}</KeyValueList.Item>
+                <KeyValueList.Item label="Version">{{ selected.version }}</KeyValueList.Item>
+                <KeyValueList.Item label="Updated">{{ selected.updated }}</KeyValueList.Item>
+                <KeyValueList.Item label="Installed on">{{
                   selected.installedOn.length ? selected.installedOn.join(', ') : 'Not installed'
-                }}</KeyValuePairs.Item>
-              </KeyValuePairs>
+                }}</KeyValueList.Item>
+              </KeyValueList>
 
               <section
                 class="flex flex-col gap-(--layout-group-gap)"
@@ -564,11 +564,11 @@
                   >
                     <Select.Trigger class="w-full" />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="app in available"
                         :key="app"
                         :value="app"
-                        >{{ app }}</Select.Option
+                        >{{ app }}</Select.Item
                       >
                     </Select.Content>
                   </Select>
@@ -587,7 +587,7 @@
                 </p>
               </section>
             </div>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">

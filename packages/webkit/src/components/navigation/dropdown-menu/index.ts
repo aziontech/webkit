@@ -1,6 +1,6 @@
 import DropdownMenuRoot from './dropdown-menu.vue'
 import DropdownMenuGroup from './dropdown-menu-group/dropdown-menu-group.vue'
-import DropdownMenuOption from './dropdown-menu-option/dropdown-menu-option.vue'
+import DropdownMenuItem from './dropdown-menu-item/dropdown-menu-item.vue'
 import DropdownMenuSub from './dropdown-menu-sub/dropdown-menu-sub.vue'
 import DropdownMenuSubContent from './dropdown-menu-sub-content/dropdown-menu-sub-content.vue'
 import DropdownMenuSubTrigger from './dropdown-menu-sub-trigger/dropdown-menu-sub-trigger.vue'
@@ -9,7 +9,7 @@ import DropdownMenuTrigger from './dropdown-menu-trigger/dropdown-menu-trigger.v
 interface DropdownMenuStatic {
   Trigger: typeof DropdownMenuTrigger
   Group: typeof DropdownMenuGroup
-  Item: typeof DropdownMenuOption
+  Item: typeof DropdownMenuItem
   Sub: typeof DropdownMenuSub
   SubTrigger: typeof DropdownMenuSubTrigger
   SubContent: typeof DropdownMenuSubContent
@@ -18,7 +18,7 @@ interface DropdownMenuStatic {
 const DropdownMenu = DropdownMenuRoot as typeof DropdownMenuRoot & DropdownMenuStatic
 DropdownMenu.Trigger = DropdownMenuTrigger
 DropdownMenu.Group = DropdownMenuGroup
-DropdownMenu.Item = DropdownMenuOption
+DropdownMenu.Item = DropdownMenuItem
 DropdownMenu.Sub = DropdownMenuSub
 DropdownMenu.SubTrigger = DropdownMenuSubTrigger
 DropdownMenu.SubContent = DropdownMenuSubContent
@@ -26,16 +26,15 @@ DropdownMenu.SubContent = DropdownMenuSubContent
 export default DropdownMenu
 export {
   DropdownMenuGroup,
-  DropdownMenuOption as DropdownMenuItem,
-  DropdownMenuOption,
+  DropdownMenuItem,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger
 }
 export type {
-  DropdownMenuOptionKind,
-  DropdownMenuOptionValue,
+  DropdownMenuItemKind,
+  DropdownMenuItemValue,
   DropdownMenuPlacement,
   DropdownMenuPlacementInput
 } from './dropdown-menu.vue'

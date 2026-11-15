@@ -10,7 +10,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
@@ -407,13 +407,13 @@
           >
             <Select.Trigger aria-label="Period" />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in periodOptions"
                 :key="option.value"
                 :value="option.value"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
           <Tooltip content="Refresh">
@@ -563,7 +563,7 @@
             <DialogDescription>{{ expandedCard?.hint }}</DialogDescription>
           </div>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div
             v-if="expandedCard"
             class="flex min-w-0 flex-col gap-(--spacing-md)"
@@ -599,7 +599,7 @@
               <Chart.Legend total />
             </Chart>
           </div>
-        </PanelContent>
+        </PanelBody>
       </DialogContent>
     </Dialog>
   </div>

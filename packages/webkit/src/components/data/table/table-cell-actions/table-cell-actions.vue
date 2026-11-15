@@ -6,7 +6,7 @@
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import DropdownMenu from '../../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuTrigger from '../../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
-  import type { DropdownMenuOptionValue } from '../../../navigation/dropdown-menu/injection-key'
+  import type { DropdownMenuItemValue } from '../../../navigation/dropdown-menu/injection-key'
   import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -29,7 +29,7 @@
 
   const emit = defineEmits<{
     /** An option was chosen; `value` is the option's `value`. */
-    select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue]
+    select: [event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue]
   }>()
 
   defineSlots<{

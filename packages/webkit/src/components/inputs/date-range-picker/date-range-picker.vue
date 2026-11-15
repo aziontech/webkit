@@ -22,9 +22,6 @@
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
-  import DatePickerFields from '../date-picker/date-picker-fields/date-picker-fields.vue'
-  import DatePickerGrid from '../date-picker/date-picker-grid/date-picker-grid.vue'
-  import DatePickerTimezone from '../date-picker/date-picker-timezone/date-picker-timezone.vue'
   import {
     asRange,
     formatValueLabel,
@@ -37,6 +34,9 @@
     DatePickerInjectionKey,
     type DatePickerRange
   } from '../date-picker/injection-key'
+  import DatePickerFields from '../date-picker/parts/date-picker-fields.vue'
+  import DatePickerGrid from '../date-picker/parts/date-picker-grid.vue'
+  import DatePickerTimezone from '../date-picker/parts/date-picker-timezone.vue'
   import Input from '../input/input.vue'
   import {
     DATE_RANGE_UNITS,

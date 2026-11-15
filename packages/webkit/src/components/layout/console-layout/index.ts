@@ -1,19 +1,19 @@
 import ConsoleLayoutRoot from './console-layout.vue'
-import ConsoleLayoutBreadcrumbs from './console-layout-breadcrumbs/console-layout-breadcrumbs.vue'
+import ConsoleLayoutBreadcrumb from './console-layout-breadcrumb/console-layout-breadcrumb.vue'
 
 interface ConsoleLayoutStatic {
-  Breadcrumbs: typeof ConsoleLayoutBreadcrumbs
+  Breadcrumb: typeof ConsoleLayoutBreadcrumb
 }
 
 const ConsoleLayout = Object.assign(ConsoleLayoutRoot, {
-  Breadcrumbs: ConsoleLayoutBreadcrumbs
+  Breadcrumb: ConsoleLayoutBreadcrumb
 }) as typeof ConsoleLayoutRoot & ConsoleLayoutStatic
 
 export default ConsoleLayout
 
-export { ConsoleLayoutBreadcrumbs }
+export { ConsoleLayoutBreadcrumb }
 
-export type { DropdownMenuOptionValue } from '../../navigation/dropdown-menu/injection-key'
+export type { DropdownMenuItemValue } from '../../navigation/dropdown-menu/injection-key'
 export type {
   ConsoleLayoutAccount,
   ConsoleLayoutCrumb,

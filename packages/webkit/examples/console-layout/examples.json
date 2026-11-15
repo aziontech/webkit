@@ -19,7 +19,7 @@
     },
     {
       "name": "PageBreadcrumbs",
-      "summary": "A detail page body sets its own trail with `ConsoleLayout.Breadcrumbs`: Applications and the application as crumbs, then the environment as a control crumb, a `Select` with `kind=\"transparent\"` and `size=\"small\"`. While the page is mounted its trail replaces the layout's `breadcrumbs`; it is cleared when the page unmounts.",
+      "summary": "A detail page body sets its own trail with `ConsoleLayout.Breadcrumb`: Applications and the application as crumbs, then the environment as a control crumb, a `Select` with `kind=\"transparent\"` and `size=\"small\"`. While the page is mounted its trail replaces the layout's `breadcrumbs`; it is cleared when the page unmounts.",
       "file": "page-breadcrumbs.vue"
     },
     {

@@ -10,8 +10,8 @@
   import Tag from '../tag/tag.vue'
   import { useTutorialPanelContext } from './composables/use-tutorial-panel-context'
   import type { Tutorial, TutorialTaskStatus } from './injection-key'
-  import TutorialPanelTask from './tutorial-panel-task/tutorial-panel-task.vue'
-  import TutorialPanelTasks from './tutorial-panel-tasks/tutorial-panel-tasks.vue'
+  import TutorialPanelTask from './parts/tutorial-panel-task.vue'
+  import TutorialPanelTasks from './parts/tutorial-panel-tasks.vue'
 
   defineOptions({
     name: 'TutorialPanel',

@@ -297,13 +297,13 @@
                   </template>
                 </Select.Trigger>
                 <Select.Content>
-                  <Select.Option
+                  <Select.Item
                     v-for="option in languages"
                     :key="option"
                     :value="option"
                   >
                     {{ option }}
-                  </Select.Option>
+                  </Select.Item>
                 </Select.Content>
               </Select>
             </div>

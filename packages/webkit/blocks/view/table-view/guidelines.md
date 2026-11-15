@@ -47,7 +47,7 @@ The last control of the row. `CollectionPreferences` bound with `v-bind="prefere
 
 Every cell is a preset from `@aziontech/webkit/table`, so the list reads like every other WebKit list. Name is `Table.CellLink` with `to` and `destination="Resources"` (the tooltip says where it leads). ID is `Table.CellId` (copy button named after the resource). The domain is `Table.CellLink` with `href` (opens in a new tab, external mark, copy button) and the other domains as `more`: a `+N` `OverflowCount` whose popover counts them and searches once the list is long. Status is `Table.CellStatus`. Last modified is `Table.CellTime` on the `modifiedAt` timestamp: the author's avatar and a relative time that updates every minute, the absolute time in its tooltip.
 
-### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
+### G. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
 `Table.CellActions` (an ellipsis button named after the row, e.g. "Actions for resource-01") opens a menu: the everyday actions (Deploy, View details, Clone) in one group, Delete alone in the last group. The root's `select` event hands the option value and the row to the page; Delete opens the confirmation below.
 

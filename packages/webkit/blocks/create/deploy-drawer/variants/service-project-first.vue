@@ -10,7 +10,7 @@
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
@@ -319,7 +319,7 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
             <legend class="sr-only">Deploy</legend>
             <SettingsSection
@@ -765,7 +765,7 @@
               </RadioGroup>
             </SettingsSection>
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">

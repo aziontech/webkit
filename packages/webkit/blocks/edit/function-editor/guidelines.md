@@ -21,7 +21,7 @@ The editing page of a service whose behavior lives in source code. The user writ
 
 ### A. Page tabs — `PageTabs`, `Tabs` (required)
 
-A full-bleed `PageTabs` with Code and Settings as `Tabs.Item`s. Each tab keeps its state when the user switches away, so unsaved code survives a visit to Settings.
+A full-bleed `PageTabs` with Code and Settings as `Tabs.Trigger`s. Each tab keeps its state when the user switches away, so unsaved code survives a visit to Settings.
 
 ### B. Editor toolbar — `ToggleGroup`, `Button` (required)
 
@@ -33,13 +33,13 @@ A `CodeEditor` with `fill` and `pad-line-numbers` takes the pane: zero-padded li
 
 ### D. Test run — `ResizableRoot`, `ResizablePane`, `ResizableHandle` (optional)
 
-Variant TestRun only; it adds `StatusIndicator`, `CopyButton`, `KeyValuePairs`, `Trace`, `LogView` and `LogViewContent` to the page.
+Variant TestRun only; it adds `StatusIndicator`, `CopyButton`, `KeyValueList`, `Trace`, `LogView` and `LogViewContent` to the page.
 
 In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is the flexible pane, and the Test run pane under it has a `basis`, a minimum and a maximum height and collapses past its minimum, so the editor can take the whole height back. The pane scrolls on its own and reads top to bottom like the invocation page of the design sample:
 
 1. The heading Test run, a `StatusIndicator` (Completed, or Running with its loading dot), the run ID in code type with a `CopyButton`.
 2. The request that triggered the run and one line on its outcome (the status code and what happened).
-3. A four-column `KeyValuePairs` of Started, Duration, Edge location and Memory, in skeletons while the run is in flight.
+3. A four-column `KeyValueList` of Started, Duration, Edge location and Memory, in skeletons while the run is in flight.
 4. Trace: one sentence on how to read it, then the `Trace` waterfall bound with `v-model:selected`, so the selected span's details (service, start, duration, share, attributes) open under it. While running, a status line says the trace appears when the run finishes.
 5. Logs: a `LogView` with `LogViewContent` on the same clock as the trace, `copyable`, and its loading state while running.
 

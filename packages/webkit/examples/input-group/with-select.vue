@@ -15,9 +15,9 @@
     >
       <Select.Trigger />
       <Select.Content>
-        <Select.Option value="USD">USD</Select.Option>
-        <Select.Option value="EUR">EUR</Select.Option>
-        <Select.Option value="GBP">GBP</Select.Option>
+        <Select.Item value="USD">USD</Select.Item>
+        <Select.Item value="EUR">EUR</Select.Item>
+        <Select.Item value="GBP">GBP</Select.Item>
       </Select.Content>
     </Select>
     <input

@@ -19,7 +19,7 @@ One version of a resource, opened from its Versions tab. The user is here to cha
 
 ### A. Version switcher — `ConsoleLayout`, `Select`, `Input`, `Tag`, `IconButton`, `Tooltip` (required)
 
-The page sets the trail with `ConsoleLayout.Breadcrumbs`: `items` are the module and the resource, and the slot holds the version, a `Select` with `kind="transparent"`, `size="small"` and `aria-label="Switch version"`, no `w-full`. The version is part of the route, so picking one navigates. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
+The page sets the trail with `ConsoleLayout.Breadcrumb`: `items` are the module and the resource, and the slot holds the version, a `Select` with `kind="transparent"`, `size="small"` and `aria-label="Switch version"`, no `w-full`. The version is part of the route, so picking one navigates. Its content has a small search `Input`, a Versions group where each option carries its state `Tag` (Draft, Deployed, Ready), a no-match line, and a footer option that creates a new version. The version is never a page title.
 
 The layout hides its breadcrumbs while compact, so the body opens on a row (`md:hidden`, its own `nav` named Breadcrumb) that carries a Back `IconButton` to the resource's Versions tab and the same `Select` crumbs, full width: the version, and in EnvironmentCrumb the environment before it. A phone keeps every switch the desktop breadcrumb offers.
 
@@ -29,7 +29,7 @@ A horizontal `Resizable` named "Version workspace": the version settings pane, a
 
 ### C. Version tab bar — `PageTabs`, `Tabs`, `Tag`, `DropdownMenu`, `IconButton`, `EmptyState` (required)
 
-`PageTabs` with one `Tabs.Item` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: a variant renders the open tab's panel, and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it.
+`PageTabs` with one `Tabs.Trigger` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: a variant renders the open tab's panel, and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it.
 
 ### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Switch`, `Tooltip` (required)
 
@@ -60,7 +60,7 @@ While Add Version copies a built version into a new draft, the workspace is draw
 - Keep one primary action on the page, in the version bar; the tabs share it.
 - Lock the settings fieldset, not each control one by one, when the version is built.
 - Let the user switch versions from the breadcrumb without going back to the list.
-- Set the trail from the page with `ConsoleLayout.Breadcrumbs`, and mark the root with `data-layout-fill`.
+- Set the trail from the page with `ConsoleLayout.Breadcrumb`, and mark the root with `data-layout-fill`.
 - Show the state in three places that agree: the breadcrumb option, the tab row tag and the version bar.
 - Keep the history pane collapsible and resizable so the settings keep their width when it is closed.
 - Show what a revert changes before it runs: the settings with old and new values, and the rules added and removed.
@@ -111,7 +111,7 @@ While Add Version copies a built version into a new draft, the workspace is draw
 - Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
 - Revert: an earlier Ready version, read-only, with history open, Revert to <id> in the bar, a confirmation with the diff, and the revert reported by a toast with Edit and Redeploy.
 - VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
-- EnvironmentCrumb: a resource that is deployed to several environments. The page's `ConsoleLayout.Breadcrumbs` ends on two control crumbs, environment then version, each a small transparent `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
+- EnvironmentCrumb: a resource that is deployed to several environments. The page's `ConsoleLayout.Breadcrumb` ends on two control crumbs, environment then version, each a small transparent `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
 - Creating: Add Version copying AEO25I38 into a new draft, the workspace as `Skeleton` wires and the version bar busy.
 - NotFound: a version that does not exist, a bordered `EmptyState` with View Versions.
 - Source: the draft on its Source tab, the file list of the version bucket with its folder path and Open in Object Storage.

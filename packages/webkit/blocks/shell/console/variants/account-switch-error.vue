@@ -17,7 +17,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -636,7 +636,7 @@
         <PanelHeader class="w-full">
           <DialogTitle>Switch account</DialogTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
             <DialogDescription>
               Pick the account to work in. Search matches a name, an ID or a client ID.
@@ -758,7 +758,7 @@
               </template>
             </Card>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full min-w-0 flex-wrap items-center gap-(--spacing-sm)">
             <div class="flex min-w-0 flex-1 items-center gap-(--spacing-sm)">

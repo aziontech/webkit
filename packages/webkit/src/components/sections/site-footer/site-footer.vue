@@ -8,7 +8,7 @@
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
   import Select from '../../inputs/select/select.vue'
   import SelectContent from '../../inputs/select/select-content/select-content.vue'
-  import SelectOption from '../../inputs/select/select-option/select-option.vue'
+  import SelectItem from '../../inputs/select/select-item/select-item.vue'
   import SelectTrigger from '../../inputs/select/select-trigger/select-trigger.vue'
   import Footer from '../../layout/footer/footer.vue'
   import FooterColumn from '../../layout/footer/footer-column/footer-column.vue'
@@ -188,13 +188,13 @@
               </template>
             </SelectTrigger>
             <SelectContent>
-              <SelectOption
+              <SelectItem
                 v-for="option in languages"
                 :key="option"
                 :value="option"
               >
                 {{ option }}
-              </SelectOption>
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>

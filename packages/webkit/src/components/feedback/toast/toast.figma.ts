@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/feedback/toast/toaster.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/feedback/toast/toast.vue
 // component=Toast
 import figma from 'figma'
 

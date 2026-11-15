@@ -443,13 +443,13 @@
                             :aria-label="question.label"
                           />
                           <Select.Content>
-                            <Select.Option
+                            <Select.Item
                               v-for="option in question.options"
                               :key="option.value"
                               :value="option.value"
                             >
                               {{ option.label }}
-                            </Select.Option>
+                            </Select.Item>
                           </Select.Content>
                         </Select>
                       </SettingRow>

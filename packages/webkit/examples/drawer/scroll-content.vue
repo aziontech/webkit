@@ -5,7 +5,7 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import { ref } from 'vue'
@@ -13,7 +13,7 @@
   const open = ref(false)
   const scrollSections = Array.from({ length: 12 }, (_, index) => ({
     title: `Section ${index + 1}`,
-    body: `Scrollable drawer body copy for section ${index + 1}. Only PanelContent scrolls; header and footer stay in the panel layout.`
+    body: `Scrollable drawer body copy for section ${index + 1}. Only PanelBody scrolls; header and footer stay in the panel layout.`
   }))
 </script>
 
@@ -34,10 +34,10 @@
       <PanelHeader class="w-full">
         <DrawerTitle>Scrollable drawer</DrawerTitle>
       </PanelHeader>
-      <PanelContent>
+      <PanelBody>
         <div class="flex flex-col gap-(--spacing-4)">
           <DrawerDescription>
-            Place long forms, lists, or settings inside PanelContent. Only the body scrolls inside
+            Place long forms, lists, or settings inside PanelBody. Only the body scrolls inside
             ScrollArea while header and footer stay in the panel layout.
           </DrawerDescription>
           <section
@@ -49,7 +49,7 @@
             <p class="m-0 text-body-sm text-(--text-muted)">{{ section.body }}</p>
           </section>
         </div>
-      </PanelContent>
+      </PanelBody>
       <PanelFooter>
         <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
           <Button

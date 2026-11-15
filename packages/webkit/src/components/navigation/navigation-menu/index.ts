@@ -1,3 +1,4 @@
+import NavigationMenuRoot from './navigation-menu.vue'
 import NavigationMenuArrow from './navigation-menu-arrow.vue'
 import NavigationMenuBackdrop from './navigation-menu-backdrop.vue'
 import NavigationMenuContent from './navigation-menu-content.vue'
@@ -8,7 +9,6 @@ import NavigationMenuList from './navigation-menu-list.vue'
 import NavigationMenuPopup from './navigation-menu-popup.vue'
 import NavigationMenuPortal from './navigation-menu-portal.vue'
 import NavigationMenuPositioner from './navigation-menu-positioner.vue'
-import NavigationMenuRoot from './navigation-menu-root.vue'
 import NavigationMenuTrigger from './navigation-menu-trigger.vue'
 import NavigationMenuViewport from './navigation-menu-viewport.vue'
 
@@ -43,6 +43,7 @@ const NavigationMenu = Object.assign(NavigationMenuRoot, {
 }) as CompoundNavigationMenu
 
 export default NavigationMenu
+export type { NavigationMenuOrientation, NavigationMenuValue } from './navigation-menu.vue'
 export type { NavigationMenuItemLayout } from './navigation-menu-item.vue'
 export type { NavigationMenuPopupKind } from './navigation-menu-popup.vue'
 export type {
@@ -50,4 +51,3 @@ export type {
   NavigationMenuCollisionPadding,
   NavigationMenuSide
 } from './navigation-menu-positioner.vue'
-export type { NavigationMenuOrientation, NavigationMenuValue } from './navigation-menu-root.vue'

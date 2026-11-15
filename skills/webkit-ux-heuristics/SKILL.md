@@ -178,7 +178,7 @@ shows a search box **when it holds more than 7 options**, and **hides it at 7 or
 search box is only noise.
 
 - `Select`: put the `Input` in `Select.Content`'s `#search` slot behind the same
-  `v-if`, and filter the `Select.Option` list by it.
+  `v-if`, and filter the `Select.Item` list by it.
 - An inline picker in a create flow: the `Input` sits above the rows, inside the band.
 - An overlay list you compose (Popover, DropdownMenu content): an `Input` with a leading
   `ai ai-search` above the list.

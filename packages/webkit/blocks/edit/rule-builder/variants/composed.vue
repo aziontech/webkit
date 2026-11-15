@@ -12,7 +12,7 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
@@ -559,7 +559,7 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <div
             v-if="saveError"
             class="mb-(--spacing-md)"
@@ -690,13 +690,13 @@
                   >
                     <Select.Trigger />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="op in OPERATORS"
                         :key="op.value"
                         :value="op.value"
                       >
                         {{ op.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                 </template>
@@ -783,13 +783,13 @@
                                   </template>
                                 </Input>
                               </template>
-                              <Select.Option
+                              <Select.Item
                                 v-for="option in behaviorMatches(item.id)"
                                 :key="option.value"
                                 :value="option.value"
                               >
                                 {{ option.label }}
-                              </Select.Option>
+                              </Select.Item>
                               <p
                                 v-if="!behaviorMatches(item.id).length"
                                 class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
@@ -830,13 +830,13 @@
                               >
                                 <Select.Trigger :aria-label="argument.label" />
                                 <Select.Content>
-                                  <Select.Option
+                                  <Select.Item
                                     v-for="option in optionsFor(argument.source)"
                                     :key="option.value"
                                     :value="option.value"
                                   >
                                     {{ option.label }}
-                                  </Select.Option>
+                                  </Select.Item>
                                 </Select.Content>
                               </Select>
                               <HelperText v-if="behaviorArgumentNote(argument.source, form.phase)">
@@ -907,7 +907,7 @@
               </Card>
             </SettingsSection>
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">

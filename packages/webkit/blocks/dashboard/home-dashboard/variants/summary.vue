@@ -2,7 +2,7 @@
   import Card from '@aziontech/webkit/card'
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
@@ -306,17 +306,17 @@
                     @select="(_event, value) => onZoneAction(value, row)"
                   >
                     <DropdownMenuGroup>
-                      <DropdownMenuOption
+                      <DropdownMenuItem
                         value="view"
                         label="View details"
                       />
-                      <DropdownMenuOption
+                      <DropdownMenuItem
                         value="edit"
                         label="Edit"
                       />
                     </DropdownMenuGroup>
                     <DropdownMenuGroup>
-                      <DropdownMenuOption
+                      <DropdownMenuItem
                         value="delete"
                         label="Delete"
                       />

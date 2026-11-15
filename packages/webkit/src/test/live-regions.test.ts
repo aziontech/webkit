@@ -11,7 +11,7 @@ import type { LogViewLine } from '../components/code/log-view/injection-key'
 import LogView from '../components/code/log-view/log-view.vue'
 import LogViewContent from '../components/code/log-view/log-view-content.vue'
 import StatusIndicator from '../components/feedback/status-indicator/status-indicator.vue'
-import Toaster from '../components/feedback/toast/toaster.vue'
+import Toaster from '../components/feedback/toast/toast.vue'
 
 const LIVE = '[aria-live]:not([aria-live="off"]),[role="status"],[role="alert"],[role="log"]'
 

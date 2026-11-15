@@ -4,7 +4,7 @@
   import type { TableColumn } from '@aziontech/webkit/data-table'
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import Table from '@aziontech/webkit/table'
   import Tag from '@aziontech/webkit/tag'
   import { computed } from 'vue'
@@ -87,7 +87,7 @@
               :name="row.domain"
             >
               <DropdownMenuGroup>
-                <DropdownMenuOption
+                <DropdownMenuItem
                   value="edit"
                   label="Edit"
                 >
@@ -96,10 +96,10 @@
                       class="ai ai-pencil"
                       aria-hidden="true"
                   /></template>
-                </DropdownMenuOption>
+                </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuGroup>
-                <DropdownMenuOption
+                <DropdownMenuItem
                   value="delete"
                   label="Delete"
                 >
@@ -108,7 +108,7 @@
                       class="ai ai-trash"
                       aria-hidden="true"
                   /></template>
-                </DropdownMenuOption>
+                </DropdownMenuItem>
               </DropdownMenuGroup>
             </Table.CellActions>
           </template>

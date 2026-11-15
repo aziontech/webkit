@@ -9,16 +9,16 @@
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import Link from '@aziontech/webkit/link'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
@@ -356,7 +356,7 @@
     toast.success(`Labels updated on ${plural(ids.size, 'resource', 'resources')}.`)
   }
 
-  const onRowAction = (value: DropdownMenuOptionValue, row: Resource) => {
+  const onRowAction = (value: DropdownMenuItemValue, row: Resource) => {
     const item = resources.value.find((entry) => entry.id === row.id)
     if (!item) return
     if (value === 'details') {
@@ -716,20 +716,20 @@
                   {{ detailsTitle }}
                 </h2>
 
-                <Tabs.Root v-model="detailsTab">
+                <Tabs v-model="detailsTab">
                   <div class="flex w-full flex-col gap-(--spacing-md)">
                     <Tabs.List aria-label="Details">
-                      <Tabs.Item
+                      <Tabs.Trigger
                         value="permissions"
                         label="Permissions"
                       />
-                      <Tabs.Item
+                      <Tabs.Trigger
                         value="labels"
                         label="Labels"
                       />
                     </Tabs.List>
                     <div class="relative isolate w-full">
-                      <Tabs.Panel value="permissions">
+                      <Tabs.Content value="permissions">
                         <EmptyState
                           v-if="!focused"
                           size="small"
@@ -759,22 +759,20 @@
                               focused.name
                             }}</span>
                           </div>
-                          <KeyValuePairs
+                          <KeyValueList
                             kind="split"
                             aria-label="Role bindings"
                           >
-                            <KeyValuePairs.Item
+                            <KeyValueList.Item
                               v-for="binding in roleBindings"
                               :key="binding.role"
                               :label="binding.role"
-                              >{{
-                                plural(binding.members, 'member', 'members')
-                              }}</KeyValuePairs.Item
+                              >{{ plural(binding.members, 'member', 'members') }}</KeyValueList.Item
                             >
-                          </KeyValuePairs>
+                          </KeyValueList>
                         </div>
-                      </Tabs.Panel>
-                      <Tabs.Panel value="labels">
+                      </Tabs.Content>
+                      <Tabs.Content value="labels">
                         <EmptyState
                           v-if="!focused"
                           size="small"
@@ -824,10 +822,10 @@
                             @click="openLabels([focused])"
                           />
                         </div>
-                      </Tabs.Panel>
+                      </Tabs.Content>
                     </div>
                   </div>
-                </Tabs.Root>
+                </Tabs>
               </div>
             </template>
           </Card>
@@ -853,7 +851,7 @@
             </DialogDescription>
           </div>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <form
             class="flex flex-col gap-(--spacing-md)"
             novalidate
@@ -869,11 +867,11 @@
               >
                 <Select.Trigger />
                 <Select.Content>
-                  <Select.Option
+                  <Select.Item
                     v-for="option in destinationOptions"
                     :key="option.value"
                     :value="option.value"
-                    >{{ option.label }} · {{ types[option.type].label }}</Select.Option
+                    >{{ option.label }} · {{ types[option.type].label }}</Select.Item
                   >
                 </Select.Content>
               </Select>
@@ -883,7 +881,7 @@
               <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
             </Field>
           </form>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button
@@ -921,7 +919,7 @@
             </DialogDescription>
           </div>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <form
             class="flex flex-col gap-(--spacing-md)"
             novalidate
@@ -935,11 +933,11 @@
               >
                 <MultiSelect.Trigger />
                 <MultiSelect.Content>
-                  <MultiSelect.Option
+                  <MultiSelect.Item
                     v-for="label in knownLabels"
                     :key="label"
                     :value="label"
-                    >{{ label }}</MultiSelect.Option
+                    >{{ label }}</MultiSelect.Item
                   >
                 </MultiSelect.Content>
               </MultiSelect>
@@ -952,17 +950,17 @@
               >
                 <MultiSelect.Trigger />
                 <MultiSelect.Content>
-                  <MultiSelect.Option
+                  <MultiSelect.Item
                     v-for="label in presentLabels"
                     :key="label"
                     :value="label"
-                    >{{ label }}</MultiSelect.Option
+                    >{{ label }}</MultiSelect.Item
                   >
                 </MultiSelect.Content>
               </MultiSelect>
             </Field>
           </form>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button

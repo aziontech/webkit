@@ -1,7 +1,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -28,15 +28,15 @@
     </template>
 
     <DropdownMenuGroup label="Suggestions">
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="profile"
         label="Profile"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="settings"
         label="Settings"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="billing"
         label="Billing"
       />

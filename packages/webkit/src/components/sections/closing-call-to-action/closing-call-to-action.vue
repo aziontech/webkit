@@ -118,7 +118,7 @@
   )
 
   const ClosingCallToActionAudiences = defineAsyncComponent(
-    () => import('./closing-call-to-action-audiences/closing-call-to-action-audiences.vue')
+    () => import('./parts/closing-call-to-action-audiences.vue')
   )
 
   const attrs = useAttrs()

@@ -2,7 +2,7 @@
   import Chart from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import Hint from '@aziontech/webkit/hint'
@@ -59,15 +59,15 @@
             />
           </DropdownMenuTrigger>
           <DropdownMenuGroup>
-            <DropdownMenuOption
+            <DropdownMenuItem
               value="copy-query"
               label="Copy query"
             />
-            <DropdownMenuOption
+            <DropdownMenuItem
               value="export-csv"
               label="Export CSV"
             />
-            <DropdownMenuOption
+            <DropdownMenuItem
               value="mean-line"
               label="Show mean line"
             />

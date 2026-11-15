@@ -14,7 +14,7 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
@@ -620,7 +620,7 @@
                                   <DrawerTitle>Upgrade to {{ upgrade?.name }}</DrawerTitle>
                                 </PanelHeader>
 
-                                <PanelContent>
+                                <PanelBody>
                                   <div
                                     class="grid grid-cols-1 gap-(--spacing-lg) lg:grid-cols-[minmax(0,18rem)_minmax(0,1fr)] lg:gap-(--spacing-xl)"
                                   >
@@ -775,14 +775,14 @@
                                                   >
                                                     <Select.Trigger />
                                                     <Select.Content>
-                                                      <Select.Option
+                                                      <Select.Item
                                                         v-for="option in countryOptions"
                                                         :key="String(option.value)"
                                                         :value="option.value"
                                                         :disabled="option.disabled"
                                                       >
                                                         {{ option.label }}
-                                                      </Select.Option>
+                                                      </Select.Item>
                                                     </Select.Content>
                                                   </Select>
                                                 </Field>
@@ -905,14 +905,14 @@
                                                 >
                                                   <Select.Trigger />
                                                   <Select.Content>
-                                                    <Select.Option
+                                                    <Select.Item
                                                       v-for="option in countryOptions"
                                                       :key="String(option.value)"
                                                       :value="option.value"
                                                       :disabled="option.disabled"
                                                     >
                                                       {{ option.label }}
-                                                    </Select.Option>
+                                                    </Select.Item>
                                                   </Select.Content>
                                                 </Select>
                                               </Field>
@@ -934,14 +934,14 @@
                                                 >
                                                   <Select.Trigger />
                                                   <Select.Content>
-                                                    <Select.Option
+                                                    <Select.Item
                                                       v-for="option in stateOptions"
                                                       :key="String(option.value)"
                                                       :value="option.value"
                                                       :disabled="option.disabled"
                                                     >
                                                       {{ option.label }}
-                                                    </Select.Option>
+                                                    </Select.Item>
                                                   </Select.Content>
                                                 </Select>
                                               </Field>
@@ -954,14 +954,14 @@
                                                 >
                                                   <Select.Trigger />
                                                   <Select.Content>
-                                                    <Select.Option
+                                                    <Select.Item
                                                       v-for="option in cityOptions"
                                                       :key="String(option.value)"
                                                       :value="option.value"
                                                       :disabled="option.disabled"
                                                     >
                                                       {{ option.label }}
-                                                    </Select.Option>
+                                                    </Select.Item>
                                                   </Select.Content>
                                                 </Select>
                                               </Field>
@@ -994,7 +994,7 @@
                                       </Card>
                                     </div>
                                   </div>
-                                </PanelContent>
+                                </PanelBody>
 
                                 <PanelFooter>
                                   <div

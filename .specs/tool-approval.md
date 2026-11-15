@@ -3,9 +3,9 @@ name: tool-approval
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 8c3aa136610b4c69c07c31d509275882cbe096c9b8759040d59d20bf9f16462a
+checksum: 75548764b5de0a6bdcafad4ded76937951e84decf04a77a866293e93a0656184
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -18,7 +18,7 @@ A user-authorized action in a conversation (Cloudscape user-authorized actions, 
 Confirmation): the agent proposes something with consequences — call a tool, run a command, deploy,
 delete — and the reader approves or denies it before anything runs. The card states the action as a
 question (``Allow `npm test`?``), says what will happen, shows exactly what will run in its body (a
-`CodeBlock` with the command, `KeyValuePairs` with parameters), and offers Deny and Approve. Once
+`CodeBlock` with the command, `KeyValueList` with parameters), and offers Deny and Approve. Once
 decided, the buttons give way to the outcome in text (`Approved`, `Denied`, `Request expired`) so the
 decision stays in the thread. Irreversible actions (`kind="danger"`) turn Approve destructive and can
 require typing a phrase first.
@@ -42,7 +42,7 @@ focus; `focus()` moves focus to its heading when the owner wants to bring the re
 
 - `tool-call` — the record of the call after it is approved (or `denied`).
 - `confirm-dialog` — confirmation of the reader's own destructive action.
-- `code-block`, `key-value-pairs` — what will run, in the body.
+- `code-block`, `key-value-list` — what will run, in the body.
 - `chat-message` — the assistant acknowledges the decision in the next message.
 
 ## Best practices
@@ -111,9 +111,9 @@ Composed DS components: `button`, `status-indicator`; the title and description 
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                     |
-| --------- | ----- | ------------------------------------------------------------------------- |
-| `default` | —     | What exactly will run: a `CodeBlock`, or `KeyValuePairs` with parameters. |
+| Slot      | Scope | Notes                                                                    |
+| --------- | ----- | ------------------------------------------------------------------------ |
+| `default` | —     | What exactly will run: a `CodeBlock`, or `KeyValueList` with parameters. |
 
 ## States
 

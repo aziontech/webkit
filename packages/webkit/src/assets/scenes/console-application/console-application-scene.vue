@@ -21,11 +21,11 @@
   import Textarea from '../../../components/inputs/textarea/textarea.vue'
   import SaveBar from '../../../components/layout/save-bar/save-bar.vue'
   import SettingRow from '../../../components/layout/setting-row/setting-row.vue'
-  import TabsItem from '../../../components/navigation/tabs/tabs-item.vue'
+  import TabsRoot from '../../../components/navigation/tabs/tabs.vue'
   import TabsList from '../../../components/navigation/tabs/tabs-list.vue'
-  import TabsRoot from '../../../components/navigation/tabs/tabs-root.vue'
+  import TabsTrigger from '../../../components/navigation/tabs/tabs-trigger.vue'
   import Panel from '../../../components/overlay/panel/panel.vue'
-  import PanelContent from '../../../components/overlay/panel/panel-content.vue'
+  import PanelBody from '../../../components/overlay/panel/panel-body.vue'
   import PanelFooter from '../../../components/overlay/panel/panel-footer.vue'
   import PanelHeader from '../../../components/overlay/panel/panel-header.vue'
   import {
@@ -178,7 +178,7 @@
       <div class="shrink-0 border-b border-(--border-default) px-(--spacing-md)">
         <TabsRoot :model-value="step.value">
           <TabsList>
-            <TabsItem
+            <TabsTrigger
               v-for="entry in CONSOLE_APPLICATION_STEPS"
               :key="entry.value"
               :value="entry.value"
@@ -358,7 +358,7 @@
               class="shrink-0"
             />
           </PanelHeader>
-          <PanelContent>
+          <PanelBody>
             <div class="flex flex-col gap-(--spacing-xl)">
               <section
                 v-for="section in drawer.sections"
@@ -437,7 +437,7 @@
                 </div>
               </section>
             </div>
-          </PanelContent>
+          </PanelBody>
           <PanelFooter>
             <Button
               :label="drawer.action"

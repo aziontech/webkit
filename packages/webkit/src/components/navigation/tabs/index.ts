@@ -1,29 +1,21 @@
+import TabsRoot from './tabs.vue'
 import TabsContent from './tabs-content.vue'
-import TabsItem from './tabs-item.vue'
 import TabsList from './tabs-list.vue'
-import TabsPanel from './tabs-panel.vue'
-import TabsRoot from './tabs-root.vue'
+import TabsTrigger from './tabs-trigger.vue'
 
 type CompoundTabs = typeof TabsRoot & {
-  Root: typeof TabsRoot
   List: typeof TabsList
-  Item: typeof TabsItem
-  Trigger: typeof TabsItem
+  Trigger: typeof TabsTrigger
   Content: typeof TabsContent
-  Panel: typeof TabsPanel
 }
 
 const Tabs = Object.assign(TabsRoot, {
-  Root: TabsRoot,
   List: TabsList,
-  Item: TabsItem,
-  Trigger: TabsItem,
-  Content: TabsContent,
-  Panel: TabsPanel
+  Trigger: TabsTrigger,
+  Content: TabsContent
 }) as CompoundTabs
 
 export default Tabs
 export type { TabsValue } from './injection-key'
+export type { TabsActivationMode, TabsProps } from './tabs.vue'
 export type { TabsListAlign } from './tabs-list.vue'
-export type { TabsActivationMode } from './tabs-root.vue'
-export type { TabsRootProps } from './tabs-root.vue'

@@ -14,7 +14,7 @@
   import InputGroupInput from '@aziontech/webkit/input-group-input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import MultiSelect from '@aziontech/webkit/multi-select'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SettingsSection from '@aziontech/webkit/settings-section'
@@ -446,7 +446,7 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <fieldset
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
@@ -784,13 +784,13 @@
                               </template>
                             </Input>
                           </template>
-                          <MultiSelect.Option
+                          <MultiSelect.Item
                             v-for="option in visibleScopeOptions(scope)"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </MultiSelect.Option>
+                          </MultiSelect.Item>
                         </MultiSelect.Content>
                       </MultiSelect>
                     </div>
@@ -813,7 +813,7 @@
               </div>
             </SettingsSection>
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">

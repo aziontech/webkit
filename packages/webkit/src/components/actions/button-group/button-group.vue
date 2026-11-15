@@ -6,7 +6,7 @@
   import * as en from '../../../i18n/messages/en'
   import DropdownMenu from '../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuGroup from '../../navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue'
-  import DropdownMenuOption from '../../navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue'
+  import DropdownMenuItem from '../../navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue'
   import DropdownMenuTrigger from '../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import IconButton from '../icon-button/icon-button.vue'
@@ -246,7 +246,7 @@
           </DropdownMenuTrigger>
         </Tooltip>
         <DropdownMenuGroup>
-          <DropdownMenuOption
+          <DropdownMenuItem
             v-for="option in item.options"
             :key="option.id"
             :value="option.id"
@@ -308,7 +308,7 @@
           :key="item.id"
         >
           <template v-if="isMenu(item)">
-            <DropdownMenuOption
+            <DropdownMenuItem
               v-for="option in item.options"
               :key="option.id"
               :value="option.id"
@@ -316,7 +316,7 @@
               :disabled="item.disabled || option.disabled"
             />
           </template>
-          <DropdownMenuOption
+          <DropdownMenuItem
             v-else
             :value="item.id"
             :label="item.label"
@@ -339,7 +339,7 @@
               />
               <span class="sr-only">{{ t('buttonGroup.pressed') }}</span>
             </template>
-          </DropdownMenuOption>
+          </DropdownMenuItem>
         </template>
       </DropdownMenuGroup>
     </DropdownMenu>

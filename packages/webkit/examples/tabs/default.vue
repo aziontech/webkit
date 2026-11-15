@@ -6,20 +6,20 @@
 </script>
 
 <template>
-  <Tabs.Root
+  <Tabs
     v-model="active"
     class="w-full max-w-[40rem]"
   >
     <Tabs.List>
-      <Tabs.Item
+      <Tabs.Trigger
         value="tab-1"
         label="Tab Item"
       />
-      <Tabs.Item
+      <Tabs.Trigger
         value="tab-2"
         label="Tab Item"
       />
-      <Tabs.Item
+      <Tabs.Trigger
         value="tab-3"
         label="Tab Item"
       />
@@ -41,5 +41,5 @@
         </div>
       </Tabs.Content>
     </div>
-  </Tabs.Root>
+  </Tabs>
 </template>

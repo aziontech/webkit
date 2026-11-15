@@ -1,7 +1,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -22,12 +22,12 @@
         <span class="text-label-sm text-(--text-muted)">Signed in as jordan.silva@example.com</span>
       </template>
 
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="profile"
         label="Profile"
         command="⌘P"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="settings"
         label="Settings"
       />
@@ -48,11 +48,11 @@
         <span class="text-label-sm text-(--text-muted)">Azion · 12 members</span>
       </template>
 
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="invite"
         label="Invite members"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="logs"
         label="Audit log"
       />

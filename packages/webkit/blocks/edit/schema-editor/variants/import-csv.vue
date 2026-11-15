@@ -11,14 +11,14 @@
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup from '@aziontech/webkit/file-token-group'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
@@ -633,11 +633,11 @@
     }, 700)
   }
 
-  const onTableAction = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuOptionValue) => {
+  const onTableAction = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue) => {
     if (value === 'truncate') openTruncate()
     if (value === 'create') createOpen.value = true
   }
-  const onColumnAction = (value: DropdownMenuOptionValue, row: { name: string }) => {
+  const onColumnAction = (value: DropdownMenuItemValue, row: { name: string }) => {
     if (value === 'alter') openAlter(row.name)
   }
 </script>
@@ -784,7 +784,7 @@
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="createSubmitting"
@@ -934,7 +934,7 @@
                             />
                           </template>
                           <Select.Group label="Data types">
-                            <Select.Option
+                            <Select.Item
                               v-for="type in filteredTypes"
                               :key="type.value"
                               :value="type.value"
@@ -945,7 +945,7 @@
                                   type.description
                                 }}</span>
                               </span>
-                            </Select.Option>
+                            </Select.Item>
                           </Select.Group>
                         </Select.Content>
                       </Select>
@@ -997,11 +997,11 @@
                       >
                         <Select.Trigger />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="column in namedColumns"
                             :key="column.key"
                             :value="column.name.trim()"
-                            >{{ column.name.trim() }}</Select.Option
+                            >{{ column.name.trim() }}</Select.Item
                           >
                         </Select.Content>
                       </Select>
@@ -1017,11 +1017,11 @@
                       >
                         <Select.Trigger />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="item in tables"
                             :key="item.name"
                             :value="item.name"
-                            >{{ item.name }}</Select.Option
+                            >{{ item.name }}</Select.Item
                           >
                         </Select.Content>
                       </Select>
@@ -1037,11 +1037,11 @@
                       >
                         <Select.Trigger />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="column in referenceColumns(item)"
                             :key="column.name"
                             :value="column.name"
-                            >{{ column.name }}</Select.Option
+                            >{{ column.name }}</Select.Item
                           >
                         </Select.Content>
                       </Select>
@@ -1054,11 +1054,11 @@
                       >
                         <Select.Trigger />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="option in ON_DELETE"
                             :key="option.value"
                             :value="option.value"
-                            >{{ option.label }}</Select.Option
+                            >{{ option.label }}</Select.Item
                           >
                         </Select.Content>
                       </Select>
@@ -1067,7 +1067,7 @@
                 </div>
               </SettingsSection>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">
@@ -1112,7 +1112,7 @@
               </p>
             </div>
           </PanelHeader>
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="columnSubmitting"
@@ -1162,7 +1162,7 @@
                           />
                         </template>
                         <Select.Group label="Data types">
-                          <Select.Option
+                          <Select.Item
                             v-for="type in filteredTypes"
                             :key="type.value"
                             :value="type.value"
@@ -1173,7 +1173,7 @@
                                 type.description
                               }}</span>
                             </span>
-                          </Select.Option>
+                          </Select.Item>
                         </Select.Group>
                       </Select.Content>
                     </Select>
@@ -1226,7 +1226,7 @@
                 </div>
               </SettingsSection>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">
               <Button
@@ -1270,7 +1270,7 @@
               </p>
             </div>
           </PanelHeader>
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col gap-(--spacing-md) border-0 p-0"
               :disabled="rowSubmitting"
@@ -1303,7 +1303,7 @@
                 <Field.Error v-if="rowError(column)">{{ rowError(column) }}</Field.Error>
               </Field>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">
               <Button
@@ -1355,7 +1355,7 @@
             </Select.Trigger>
             <Select.Content>
               <Select.Group label="Data types">
-                <Select.Option
+                <Select.Item
                   v-for="type in TYPES"
                   :key="type.value"
                   :value="type.value"
@@ -1366,7 +1366,7 @@
                       type.description
                     }}</span>
                   </span>
-                </Select.Option>
+                </Select.Item>
               </Select.Group>
             </Select.Content>
           </Select>

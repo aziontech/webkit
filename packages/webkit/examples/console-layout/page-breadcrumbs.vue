@@ -36,7 +36,7 @@
     :breadcrumbs="[{ label: 'Applications', href: '/applications' }]"
     active-id="applications"
   >
-    <ConsoleLayout.Breadcrumbs
+    <ConsoleLayout.Breadcrumb
       :items="[
         { label: 'Applications', href: '/applications' },
         { label: 'azion-site', href: '/applications/azion-site' }
@@ -51,7 +51,7 @@
         <Select.Trigger aria-label="Switch environment" />
         <Select.Content>
           <Select.Group label="Environments">
-            <Select.Option
+            <Select.Item
               v-for="entry in environments"
               :key="entry.value"
               :value="entry.value"
@@ -64,18 +64,18 @@
                   size="small"
                 />
               </template>
-            </Select.Option>
+            </Select.Item>
           </Select.Group>
         </Select.Content>
       </Select>
-    </ConsoleLayout.Breadcrumbs>
+    </ConsoleLayout.Breadcrumb>
 
     <PageTabs v-model="tab">
-      <Tabs.Item
+      <Tabs.Trigger
         value="overview"
         label="Overview"
       />
-      <Tabs.Item
+      <Tabs.Trigger
         value="settings"
         label="Settings"
       />

@@ -24,11 +24,11 @@
     >
       <MultiSelect.Trigger />
       <MultiSelect.Content>
-        <MultiSelect.Option
+        <MultiSelect.Item
           v-for="region in regions"
           :key="region.value"
           :value="region.value"
-          >{{ region.label }}</MultiSelect.Option
+          >{{ region.label }}</MultiSelect.Item
         >
       </MultiSelect.Content>
     </MultiSelect>

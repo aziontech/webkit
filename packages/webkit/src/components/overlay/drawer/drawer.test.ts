@@ -708,7 +708,7 @@ describe('Drawer', () => {
   describe('compound API (index.ts)', () => {
     it('attaches every part and the Panel regions for dot-notation', async () => {
       const { default: Compound } = await import('./index')
-      const PanelContent = (await import('../panel/panel-content.vue')).default
+      const PanelBody = (await import('../panel/panel-body.vue')).default
       const PanelFooter = (await import('../panel/panel-footer.vue')).default
       expect(Compound).toBe(Drawer)
       expect(Compound.Trigger).toBe(DrawerTrigger)
@@ -719,7 +719,7 @@ describe('Drawer', () => {
       expect(Compound.Description).toBe(DrawerDescription)
       expect(Compound.Close).toBe(DrawerClose)
       expect(Compound.Header).toBe(PanelHeader)
-      expect(Compound.Body).toBe(PanelContent)
+      expect(Compound.Body).toBe(PanelBody)
       expect(Compound.Footer).toBe(PanelFooter)
     })
 

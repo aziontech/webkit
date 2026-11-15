@@ -157,13 +157,13 @@
                     >
                       <Select.Trigger />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="option in scopes"
                           :key="String(option.value)"
                           :value="option.value"
                         >
                           {{ option.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                   </Field>

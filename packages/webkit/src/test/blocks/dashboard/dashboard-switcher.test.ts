@@ -24,14 +24,14 @@ describe('dashboard/dashboard-switcher', () => {
     const trigger = byTestId('data-filter-menu', view.container)
     expect(trigger).not.toBeNull()
     expect(view.container.querySelector('[aria-label="Filter, 1 applied"]')).not.toBeNull()
-    const chip = byTestId('data-filter-menu-chips__chip-period', view.container)!
+    const chip = byTestId('data-filter-menu-chip-group__chip-period', view.container)!
     expect(chip.textContent).toContain('Last 24 hours')
     const remove =
       chip.querySelector<HTMLElement>('[data-testid$="__remove"]') ??
       [...chip.querySelectorAll<HTMLElement>('button')].at(-1)!
     await fireEvent.click(remove)
     await waitFor(() =>
-      expect(byTestId('data-filter-menu-chips__chip-period', view.container)).toBeNull()
+      expect(byTestId('data-filter-menu-chip-group__chip-period', view.container)).toBeNull()
     )
     expect(view.container.textContent).toContain('vs previous 24 hours')
   })

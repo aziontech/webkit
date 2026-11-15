@@ -14,7 +14,7 @@
     },
     {
       "name": "ScrollContent",
-      "summary": "A body taller than the dialog, centered above the page (from `md` up). Open it from the trigger: the panel bounds the surface and `PanelContent` is the only region that scrolls, so the title and the footer actions stay put while the body moves.",
+      "summary": "A body taller than the dialog, centered above the page (from `md` up). Open it from the trigger: the panel bounds the surface and `PanelBody` is the only region that scrolls, so the title and the footer actions stay put while the body moves.",
       "file": "scroll-content.vue"
     },
     {
