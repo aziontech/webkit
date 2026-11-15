@@ -9,12 +9,15 @@
 
 ## When to use
 
-- A panel that slides in from a screen edge for secondary tasks, filters, long forms, or navigation, while keeping page context.
+- A panel that slides in from a screen edge to add or edit one item of the screen behind it (a rule, an origin, a record inside a resource), while keeping that screen in view.
+- The reader already stands on the screen that owns the item: the drawer is the last step of the path (rail, list, resource page, tab), never the first.
+- A form needs a resource that does not exist yet (the certificate of a workload being created): the field offers to create it, and the drawer holds that resource's create form over the form, then selects it. Use it every time; never send the reader away to create it.
 - The content is too large or persistent for a centered modal.
 
 ## Do
 
 - Pick the edge (side) intentionally and keep it consistent across the app.
+- Set `size="large"` on the first drawer of a flow. A nested drawer stacked on it is `size="medium"`, at most one, never a third. The AI assistant drawer is the one `medium` first drawer.
 - Do not add an overlay, a portal or a close button by hand: `Drawer.Content` renders the overlay and the portal, and the header renders the close button while `closable` is true (the default).
 - Keep the drawer modal (the default). Use `:modal="false"` only when the reader must keep reading or using the page beside the drawer, such as an assistant that answers questions about the page.
 - While an action is in flight, set `:dismissible="false"` and `:closable="false"` together so nothing can close it.
@@ -24,6 +27,8 @@
 
 - It is a short, focused confirmation/task best centered and fully blocking → use `dialog`.
 - It is a small overlay anchored to a trigger → use a popover / `dropdown`.
+- It opens, configures or edits a product or a resource (Configure, Settings, Edit) → navigate to the resource's page, on its settings tab.
+- It needs tabs, a breadcrumb or its own navigation, or a third drawer would stack → it is a page.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -111,7 +116,7 @@
     v-model:open="open"
     dismissible
     side="right"
-    size="medium"
+    size="large"
   >
     <Drawer.Trigger>
       <Button
@@ -253,7 +258,7 @@
     v-model:open="open"
     dismissible
     side="right"
-    size="medium"
+    size="large"
   >
     <DrawerTrigger>
       <Button

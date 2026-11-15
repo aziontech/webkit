@@ -6,7 +6,7 @@
 - Source: `blocks/platform/create/deploy-drawer/deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deploy-drawer")`
 - Components: [Accordion](../../../components/accordion.md), [Alert](../../../components/alert.md), [Avatar](../../../components/avatar.md), [Button](../../../components/button.md), [Card](../../../components/card.md), `DrawerContent`, [Drawer](../../../components/drawer.md), `DrawerTitle`, `DrawerTrigger`, [DropdownMenu](../../../components/dropdown-menu.md), [EmptyState](../../../components/empty-state.md), [Input](../../../components/input.md), [Item](../../../components/item.md), [Link](../../../components/link.md), `PanelContent`, `PanelFooter`, `PanelHeader`, [Popover](../../../components/popover.md), [RadioGroup](../../../components/radio-group.md), [Separator](../../../components/separator.md), [SettingsSection](../../../components/settings-section.md), [Skeleton](../../../components/skeleton.md), [Spinner](../../../components/spinner.md), [Tag](../../../components/tag.md), [Toast](../../../components/toast.md), [ToggleGroup](../../../components/toggle-group.md), [Tooltip](../../../components/tooltip.md)
-- Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`
+- Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
 
@@ -33,7 +33,7 @@ The drawer a platform deploys from, opened by Deploy on a service or a project. 
 
 ### A. Trigger and frame — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent` (required)
 
-An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the service or project page. The `Drawer` is `size="medium"`, portals over the page with an overlay and holds one `form` with an `aria-label` equal to the title.
+An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the service or project page. The `Drawer` is `size="large"`, portals over the page with an overlay and holds one `form` with an `aria-label` equal to the title.
 
 ### B. Panel header — `PanelHeader`, `DrawerTitle` (required)
 
@@ -706,7 +706,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
 <template>
   <Drawer
     v-model:open="open"
-    size="medium"
+    size="large"
     side="right"
   >
     <DrawerTrigger>

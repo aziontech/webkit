@@ -1,6 +1,6 @@
 # Azion WebKit
 
-> The Vue 3 design system of Azion (`@aziontech/webkit` 5.12.0): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.
+> The Vue 3 design system of Azion (`@aziontech/webkit` 5.12.3): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.
 
 Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.
 
@@ -1347,7 +1347,8 @@ Structure and states first, polish last:
 
 - **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (loading,
   empty, error, async) · `/webkit-form` · `/webkit-create-surface` (page vs drawer) · `/webkit-errors`
-  (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation`
+  (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation` (shells,
+  levels, breadcrumb, and drawers: never the way into a resource; `large`, then at most one `medium`)
 - **Layout:** `/webkit-layout` · **Words:** `/webkit-microcopy`
 - **Foundation:** `/webkit-baseline-ui` (tokens, typography, spacing rhythm)
 - **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-genai` (AI chat
@@ -1950,7 +1951,7 @@ What each part takes: [blocks/platform/account/build-deployment.md](blocks/platf
 - Source: `blocks/platform/account/change-plan-drawer/change-plan-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/account/change-plan-drawer")`
 - Components: Alert, Button, Card, CardPricing, Checkbox, `DrawerContent`, `DrawerDescription`, Drawer, `DrawerTitle`, FeatureList, Field, Input, Link, `PanelContent`, `PanelFooter`, `PanelHeader`, PaymentBrand, Select, Separator, Toast, ToggleGroup
-- Skills: `webkit-microcopy`, `webkit-ux-heuristics`, `webkit-form`, `webkit-errors`
+- Skills: `webkit-navigation`, `webkit-microcopy`, `webkit-ux-heuristics`, `webkit-form`, `webkit-errors`
 
 ## Asked as
 
@@ -3291,7 +3292,7 @@ What each part takes: [blocks/platform/create/create-hub.md](blocks/platform/cre
 - Source: `blocks/platform/create/create-in-drawer/create-in-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/create-in-drawer")`
 - Components: Alert, Button, Card, CodeEditor, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, `DropdownMenuGroup`, `DropdownMenuOption`, `DropdownMenuRoot`, `DropdownMenuTrigger`, Field, HelperText, Hint, IconButton, Input, InputGroup, Item, KeyValuePairs, Link, NumberInput, PageHeader, `PanelContent`, `PanelFooter`, `PanelHeader`, RadioGroup, SchemaForm, Select, SettingRow, SettingsSection, StatusIndicator, Switch, Textarea, Toast, ToggleGroup, Tooltip, `use-locale`
-- Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`
+- Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-errors`
 
 ## Asked as
 
@@ -3305,6 +3306,7 @@ The right-side drawer that adds or edits something that only exists inside anoth
 - Editing that same item from its row menu; the drawer opens on its values and saves them.
 - A first-level tuple normally created in bulk, such as variables, the one exception the surface rule allows.
 - A select needs another item of the same resource that may not exist yet, such as the origin a new rule sends requests to: the NestedDrawer shape creates it in a second drawer and selects it back.
+- A form needs a resource that does not exist yet, first-level ones included, such as the digital certificate of a workload being created: offer `Create certificate` in the field, and the drawer holds that resource's own create form (`large` over a page, `medium` over a drawer) and selects it back. The reader never leaves the form to create it.
 
 ## When not to use
 
@@ -3312,7 +3314,7 @@ The right-side drawer that adds or edits something that only exists inside anoth
 - A blocking yes or no question, or a destructive guard: use `platform/delete/delete-with-confirmation`.
 - Deploying what exists: use `platform/create/deploy-drawer`, which commits a deployment rather than a record.
 - Binding a whole resource that may be reused or created in a create flow: use `platform/create/resource-picker`.
-- A select that needs a missing first-level resource, such as a service or a function: the stacked drawer would create on the wrong surface. Link to that resource's create page, or bind it with `platform/create/resource-picker`.
+- A missing resource whose creation takes several steps, such as a project imported from a repository: open its create page in a new tab and give the field a `Refresh` option.
 - Editing the settings of the resource itself: use `platform/edit/edit-resource`.
 
 ## Building blocks
@@ -3381,7 +3383,7 @@ What each part takes: [blocks/platform/create/create-in-drawer.md](blocks/platfo
 - NestedDrawer: Add Rule on the storefront resource's Rules Engine, with an Origin select whose Create Origin option opens a second, medium drawer and selects the new origin back.
 - DeploymentSettings: the drawer that creates a Deployment Setting, with General and Routing and policy sections.
 - Certificate: Create Certificate opened with shop.example.com pasted as a server certificate: the details panel reads Issued to shop.example.com, Issued by Example Test CA and the expiry with the days left; the private key is empty, so Save flags it.
-- CreateEnvironment: Create Environment with General, Settings, Protection and Branch tracking sections; the IP allowlist and Branch tracking switches each reveal their fields, a duplicate name or an invalid address is flagged only after Create Environment. Opened from Add Domain's Environment select it stacks at small size above that drawer and selects the new environment back.
+- CreateEnvironment: Create Environment with General, Settings, Protection and Branch tracking sections; the IP allowlist and Branch tracking switches each reveal their fields, a duplicate name or an invalid address is flagged only after Create Environment. Opened from Add Domain's Environment select it stacks at medium size above that drawer and selects the new environment back.
 - SaveFailed: Add Domain after a failed save: the drawer stays open with acme-store and Production kept, the fieldset released, and a danger Alert with Retry above the footer.
 - FunctionInstance: Add Function Instance (or Edit from a row) with a Function `Select`, a Name, and the arguments as a `SchemaForm` of the chosen function's schema with a Fields or JSON `ToggleGroup`; the JSON `CodeEditor` marks a parse error, and required arguments are flagged only after submit.
 
@@ -3410,7 +3412,7 @@ What each part takes: [blocks/platform/create/create-in-drawer.md](blocks/platfo
 - Source: `blocks/platform/create/deploy-drawer/deploy-drawer.vue` in `@aziontech/webkit`
 - MCP: `get_pattern("platform/create/deploy-drawer")`
 - Components: Accordion, Alert, Avatar, Button, Card, `DrawerContent`, Drawer, `DrawerTitle`, `DrawerTrigger`, DropdownMenu, EmptyState, Input, Item, Link, `PanelContent`, `PanelFooter`, `PanelHeader`, Popover, RadioGroup, Separator, SettingsSection, Skeleton, Spinner, Tag, Toast, ToggleGroup, Tooltip
-- Skills: `webkit-create-surface`, `webkit-form`, `webkit-ui-states`
+- Skills: `webkit-create-surface`, `webkit-navigation`, `webkit-form`, `webkit-ui-states`
 
 ## Asked as
 
@@ -4095,7 +4097,7 @@ The band a create flow uses when the resource being created needs another resour
 - A single field that references an existing resource (a certificate, an environment, a function): use a select row inside the form, as `platform/create/multipage-create` (CreateAndDeploy) does for Environment.
 - Choosing where a resource runs as a step of its own, with module tags and an inline create row: use the chooser in `platform/create/multipage-create` or `platform/create/deploy-template` (WhereItRuns).
 - Browsing or managing the resources themselves: use `platform/view/table-view`.
-- Creating the bound resource needs its own full form: link to its create page (`platform/create/single-page-create`) instead of nesting it here.
+- Creating the bound resource needs its own full form: New opens that form in a drawer over the page (`platform/create/create-in-drawer`) instead of nesting it in the band. Only a create of several steps opens its page in a new tab.
 
 ## Building blocks
 
@@ -37616,12 +37618,15 @@ packages/webkit/src/components/overlay/command/
 
 ## When to use
 
-- A panel that slides in from a screen edge for secondary tasks, filters, long forms, or navigation, while keeping page context.
+- A panel that slides in from a screen edge to add or edit one item of the screen behind it (a rule, an origin, a record inside a resource), while keeping that screen in view.
+- The reader already stands on the screen that owns the item: the drawer is the last step of the path (rail, list, resource page, tab), never the first.
+- A form needs a resource that does not exist yet (the certificate of a workload being created): the field offers to create it, and the drawer holds that resource's create form over the form, then selects it. Use it every time; never send the reader away to create it.
 - The content is too large or persistent for a centered modal.
 
 ## Do
 
 - Pick the edge (side) intentionally and keep it consistent across the app.
+- Set `size="large"` on the first drawer of a flow. A nested drawer stacked on it is `size="medium"`, at most one, never a third. The AI assistant drawer is the one `medium` first drawer.
 - Do not add an overlay, a portal or a close button by hand: `Drawer.Content` renders the overlay and the portal, and the header renders the close button while `closable` is true (the default).
 - Keep the drawer modal (the default). Use `:modal="false"` only when the reader must keep reading or using the page beside the drawer, such as an assistant that answers questions about the page.
 - While an action is in flight, set `:dismissible="false"` and `:closable="false"` together so nothing can close it.
@@ -37631,6 +37636,8 @@ packages/webkit/src/components/overlay/command/
 
 - It is a short, focused confirmation/task best centered and fully blocking → use `dialog`.
 - It is a small overlay anchored to a trigger → use a popover / `dropdown`.
+- It opens, configures or edits a product or a resource (Configure, Settings, Edit) → navigate to the resource's page, on its settings tab.
+- It needs tabs, a breadcrumb or its own navigation, or a third drawer would stack → it is a page.
 
 ## Related
 
@@ -37717,7 +37724,7 @@ packages/webkit/src/components/overlay/command/
     v-model:open="open"
     dismissible
     side="right"
-    size="medium"
+    size="large"
   >
     <Drawer.Trigger>
       <Button

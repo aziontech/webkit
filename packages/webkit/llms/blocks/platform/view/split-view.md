@@ -58,7 +58,7 @@ Each row's detail cell is an `IconButton` named Open event <id> with `aria-expan
 
 ### G. Narrow document — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `Tag`, `CodeBlock` (required)
 
-Below that width the same document opens in a medium right `Drawer` titled Event, with `PanelHeader`, `DrawerTitle` and the drawer's own close button. Crossing the breakpoint moves an open event between the pane and the drawer instead of closing it.
+Below that width the same document opens in a large right `Drawer` titled Event, with `PanelHeader`, `DrawerTitle` and the drawer's own close button. Crossing the breakpoint moves an open event between the pane and the drawer instead of closing it.
 
 The fields panel (D) is the `split-view#Fields` piece of the inventory; it lives in the primary and every variant, so it has no variant of its own.
 
@@ -1774,7 +1774,7 @@ Each variant is the same screen in another state: `get_pattern("platform/view/sp
 
     <Drawer
       v-model:open="documentDrawerOpen"
-      size="medium"
+      size="large"
       side="right"
     >
       <DrawerContent>

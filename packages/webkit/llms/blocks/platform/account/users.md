@@ -1,6 +1,6 @@
 # Users (`platform/account/users`)
 
-> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over the table-view controls row (`PropertyFilter` over name, email, role and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email), Email, Role as a `Tag` (Owner, Admin, Developer, Viewer), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with View profile (a `Dialog` with `KeyValuePairs`), Edit role (a `Dialog` with a role `Select` and an Undo toast), Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a medium `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `DropdownMenu`, `Dialog` and its parts, `KeyValuePairs`, `Select`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `EmptyState`, `Alert`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
+> The people who can sign in to an account. A `PageHeader` with Documentation and the primary Invite User over the table-view controls row (`PropertyFilter` over name, email, role and status, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) and a flush `Card` holding a `Table` on one `useCollection`: Name (square `Avatar`, the name or the invited email), Email, Role as a `Tag` (Owner, Admin, Developer, Viewer), Teams as an inline `MultiSelect` per person that applies at once with an Undo toast (disabled for the owner and inactive people), Status as `Table.CellStatus` (Active, Invited, Inactive), Last active as `Table.CellTime` or `Not signed in yet`, and `Table.CellActions` with View profile (a `Dialog` with `KeyValuePairs`), Edit role (a `Dialog` with a role `Select` and an Undo toast), Resend invitation for invited people and Remove from account (or Cancel invitation) behind a `ConfirmDialog`. Invite User opens a large `Drawer` form with Email and a Teams `MultiSelect`, errors after Send, and a toast that names the teams. Built from `PageHeader`, `Button`, `PropertyFilter`, `IconButton`, `Tooltip`, `CollectionPreferences`, `Card`, `Table`, `Avatar`, `Tag`, `MultiSelect`, `DropdownMenu`, `Dialog` and its parts, `KeyValuePairs`, `Select`, `ConfirmDialog`, `Drawer` and its parts, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `EmptyState`, `Alert`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: product
 - Source: `blocks/platform/account/users/users.vue` in `@aziontech/webkit`
@@ -54,7 +54,7 @@ View profile opens a medium `Dialog` titled with the person's name and `Avatar`:
 
 ### G. Invite drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `DrawerDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Field`, `Input`, `MultiSelect`, `Button` (required)
 
-A medium right `Drawer` around a `form`: a description of what the invitation does, a required Email `Field` and a required Teams `Field` with Developers preselected and a description saying permissions add up. Footer: Cancel and the primary `Send invitation`, which shows its loading state; the drawer cannot be dismissed while it sends. Errors follow `platform/states/form-validation` (SectionRejected): nothing is red before the first Send; after it each field shows its own `Field.Error` and focus moves to the first invalid one.
+A large right `Drawer` around a `form`: a description of what the invitation does, a required Email `Field` and a required Teams `Field` with Developers preselected and a description saying permissions add up. Footer: Cancel and the primary `Send invitation`, which shows its loading state; the drawer cannot be dismissed while it sends. Errors follow `platform/states/form-validation` (SectionRejected): nothing is red before the first Send; after it each field shows its own `Field.Error` and focus moves to the first invalid one.
 
 ### H. Only the owner, no match and load failure — `EmptyState`, `Alert` (conditional)
 
@@ -724,7 +724,7 @@ Each variant is the same screen in another state: `get_pattern("platform/account
     <Drawer
       v-model:open="inviteOpen"
       side="right"
-      size="medium"
+      size="large"
       :dismissible="!sending"
       :closable="!sending"
     >
