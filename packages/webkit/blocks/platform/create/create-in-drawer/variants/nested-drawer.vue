@@ -230,7 +230,7 @@
                                 <template #footer>
                                   <Select.Option
                                     :value="CREATE_ORIGIN"
-                                    icon="ai ai-plus-circle"
+                                    icon="ai ai-circle-plus"
                                     class="w-full"
                                   >
                                     Create Origin

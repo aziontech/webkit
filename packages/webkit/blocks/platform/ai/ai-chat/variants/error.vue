@@ -52,7 +52,7 @@
     {
       id: 'errors',
       label: 'Why is storefront answering with 502 errors?',
-      icon: 'ai ai-exclamation-triangle'
+      icon: 'ai ai-triangle-alert'
     },
     { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'ai ai-github' },
     { id: 'waf', label: 'Protect my site with a WAF', icon: 'ai ai-shield' }

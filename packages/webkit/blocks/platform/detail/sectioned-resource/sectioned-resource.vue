@@ -345,7 +345,7 @@
                         key="empty-state-2"
                         v-else
                         size="medium"
-                        icon="ai ai-filter-slash"
+                        icon="ai ai-filter-off"
                         :title="`No matching ${current.label.toLowerCase()}`"
                         description="Nothing matches these filters."
                       >

@@ -59,7 +59,7 @@ addEventListener("fetch", (event) => {
       value: 'code',
       language: 'javascript',
       fileName: 'JavaScript',
-      fileIcon: 'ai-cor ai-js',
+      fileIcon: 'ai-color ai-javascript',
       code: CODE,
       highlightedLine: CACHE_LINE
     }

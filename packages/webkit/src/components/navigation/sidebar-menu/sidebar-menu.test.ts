@@ -378,7 +378,7 @@ describe('SidebarMenu (composition, drill stack + data mode)', () => {
               {
                 id: 'settings',
                 label: 'Settings',
-                icon: 'ai ai-cog',
+                icon: 'ai ai-settings',
                 kind: 'drill',
                 children: [{ id: 'general', label: 'General', href: '/settings/general' }]
               },

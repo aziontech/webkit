@@ -287,7 +287,7 @@
                 {
                   label: 'Join our community',
                   description: 'Developers and the Azion team on Discord',
-                  icon: 'ai-cor ai-discord',
+                  icon: 'ai-color ai-discord',
                   href: 'https://discord.gg/azion'
                 }
               ]
@@ -425,7 +425,7 @@
         label: 'Azion on YouTube',
         href: 'https://www.youtube.com/aziontech'
       },
-      { icon: 'ai ai-x', label: 'Azion on X', href: 'https://x.com/aziontech' },
+      { icon: 'ai ai-x-brand', label: 'Azion on X', href: 'https://x.com/aziontech' },
       {
         icon: 'ai ai-instagram',
         label: 'Azion on Instagram',

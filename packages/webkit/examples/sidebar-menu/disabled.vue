@@ -13,7 +13,7 @@
       <SidebarMenuGroup label="Azion platform">
         <SidebarMenuItem
           label="Applications"
-          icon="ai ai-th-large"
+          icon="ai ai-layout-grid"
           href="/applications"
         />
         <SidebarMenuItem

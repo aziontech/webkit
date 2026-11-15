@@ -56,7 +56,7 @@
       id: 'ADA8FMMR',
       name: 'ADA8FMMR',
       state: 'draft',
-      tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-edit' },
+      tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-pen' },
       comment: 'Cache static assets for 30 days',
       author: 'John Smith',
       createdAgo: '14 hours ago'
@@ -120,7 +120,7 @@
     id: 'ADA8FMMR',
     name: 'ADA8FMMR',
     state: 'draft',
-    tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-edit' },
+    tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-pen' },
     comment: 'Cache static assets for 30 days',
     author: 'John Smith',
     createdAgo: '14 hours ago'
@@ -509,7 +509,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-plus-circle"
+                  class="ai ai-circle-plus"
                   aria-hidden="true"
                 />
                 Add Version
@@ -593,7 +593,7 @@
               >
                 <span class="flex items-center gap-(--spacing-xs)">
                   <i
-                    class="ai ai-plus-circle"
+                    class="ai ai-circle-plus"
                     aria-hidden="true"
                   />
                   Add Version
@@ -622,7 +622,7 @@
                 <Tag
                   label="Draft"
                   severity="warning"
-                  icon="ai ai-file-edit"
+                  icon="ai ai-file-pen"
                   size="medium"
                 />
                 <DropdownMenu
@@ -631,7 +631,7 @@
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="ai ai-ellipsis-h"
+                      icon="ai ai-ellipsis"
                       kind="transparent"
                       size="small"
                       aria-label="Version actions"
@@ -783,7 +783,7 @@
                               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                                 <Tooltip text="JavaScript">
                                   <i
-                                    class="ai-cor ai-js shrink-0 text-body-lg"
+                                    class="ai-color ai-javascript shrink-0 text-body-lg"
                                     role="img"
                                     aria-label="JavaScript"
                                   />
@@ -956,7 +956,7 @@
                                         >
                                           <span class="flex items-center gap-(--spacing-xs)">
                                             <i
-                                              class="ai ai-plus-circle"
+                                              class="ai ai-circle-plus"
                                               aria-hidden="true"
                                             />
                                             Create Function
@@ -1069,7 +1069,7 @@
                     class="hidden size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) md:flex"
                     aria-hidden="true"
                   >
-                    <i class="ai ai-file-edit text-body-sm text-(--text-default)" />
+                    <i class="ai ai-file-pen text-body-sm text-(--text-default)" />
                   </span>
                   <div
                     class="flex min-w-0 flex-1 flex-col"
@@ -1137,7 +1137,7 @@
                 Version history
               </h2>
               <IconButton
-                icon="ai ai-times"
+                icon="ai ai-x"
                 kind="transparent"
                 size="small"
                 aria-label="Close version history"
@@ -1155,7 +1155,7 @@
                     class="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-(--accent) text-(--accent-contrast)"
                     aria-hidden="true"
                   >
-                    <i class="ai ai-file-edit text-body-xs" />
+                    <i class="ai ai-file-pen text-body-xs" />
                   </span>
                   <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) pt-0.5">
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">

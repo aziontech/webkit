@@ -1945,7 +1945,7 @@
                     :class="stacked ? 'static! before:hidden! after:hidden!' : undefined"
                   >
                     <IconButton
-                      icon="ai ai-bars"
+                      icon="ai ai-menu"
                       kind="outlined"
                       size="small"
                       :ariaLabel="handleLabelOf(row.id, windowStart + index)"
@@ -2101,7 +2101,7 @@
           >
             <EmptyState
               size="small"
-              icon="ai ai-exclamation-triangle"
+              icon="ai ai-triangle-alert"
               :title="t('table.errorTitle')"
               :description="error"
             />

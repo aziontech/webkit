@@ -258,7 +258,7 @@ describe('IconButton accessible name', () => {
       template: `
         <div>
           <span id="close-name">Close panel</span>
-          <IconButton icon="ai ai-times" aria-labelledby="close-name" />
+          <IconButton icon="ai ai-x" aria-labelledby="close-name" />
         </div>
       `
     })
@@ -272,7 +272,7 @@ describe('IconButton accessible name', () => {
 
 describe('IconButton touch target', () => {
   it('adds a 44px hit area on coarse pointers without changing the drawn size', () => {
-    const view = render(IconButton, { props: { icon: 'ai ai-times', ariaLabel: 'Close' } })
+    const view = render(IconButton, { props: { icon: 'ai ai-x', ariaLabel: 'Close' } })
     const target = view.getByRole('button').querySelector('[data-slot="touch-target"]')
 
     expect(target?.className).toContain('pointer-coarse:block')

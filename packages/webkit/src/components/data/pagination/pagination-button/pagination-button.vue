@@ -74,7 +74,7 @@
       />
       <i
         v-if="kind === 'more'"
-        class="ai ai-ellipsis-h text-[length:inherit] leading-none"
+        class="ai ai-ellipsis text-[length:inherit] leading-none"
         aria-hidden="true"
       />
       <slot v-if="kind === 'number'" />

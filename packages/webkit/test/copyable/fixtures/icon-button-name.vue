@@ -11,18 +11,18 @@
     aria-label="Delete domain"
   />
   <IconButton
-    :icon="revealed ? 'ai ai-eye-slash' : 'ai ai-eye'"
+    :icon="revealed ? 'ai ai-eye-off' : 'ai ai-eye'"
     :aria-label="revealed ? 'Hide password' : 'Show password'"
     @click="revealed = !revealed"
   />
   <span id="close-name">Close panel</span>
   <IconButton
-    icon="ai ai-times"
+    icon="ai ai-x"
     aria-labelledby="close-name"
   />
   <!-- @vue-expect-error the accessible name is a string -->
   <IconButton
-    icon="ai ai-times"
+    icon="ai ai-x"
     :ariaLabel="3"
   />
 </template>

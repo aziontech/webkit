@@ -59,10 +59,10 @@
   }>()
 
   const defaultIcons = {
-    info: 'ai ai-info-circle',
+    info: 'ai ai-circle-info',
     success: 'ai ai-check',
-    warning: 'ai ai-exclamation-triangle',
-    danger: 'ai ai-exclamation-circle'
+    warning: 'ai ai-triangle-alert',
+    danger: 'ai ai-circle-alert'
   } as const
 
   const attrs = useAttrs()
@@ -219,7 +219,7 @@
       </div>
       <IconButton
         v-if="closable"
-        icon="ai ai-times"
+        icon="ai ai-x"
         kind="transparent"
         :size="size"
         :ariaLabel="t('alert.close')"

@@ -37,7 +37,7 @@ const spec: DiagramSpec = {
       kind: 'item',
       eyebrow: 'MX record',
       title: 'Mail provider',
-      icon: 'ai ai-envelope'
+      icon: 'ai ai-mail'
     },
     {
       key: 'txt',

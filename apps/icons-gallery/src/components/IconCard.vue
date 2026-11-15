@@ -49,7 +49,7 @@
     return sizeClass
   }
 
-  // Carrega o SVG raw do ícone pelo nome (ex: "ai-ai-pillar" ou "pi-address-book")
+  // Carrega o SVG raw do ícone pelo nome (ex: "ai-ai-pillar" ou "ai-x")
   async function loadSvg(iconName) {
     const targetFile = `/${iconName}.svg`
     const key = Object.keys(svgModules).find((k) => k.endsWith(targetFile))
@@ -246,11 +246,11 @@
         >
           <i
             v-if="!showCheckIcon"
-            class="pi pi-code"
+            class="ai ai-code"
           ></i>
           <i
             v-if="showCheckIcon"
-            class="pi pi-check text-green-500 dark:text-green-400"
+            class="ai ai-check text-green-500 dark:text-green-400"
           ></i>
         </button>
         <button
@@ -260,11 +260,11 @@
         >
           <i
             v-if="!showImageCheckIcon"
-            class="pi pi-copy"
+            class="ai ai-copy"
           ></i>
           <i
             v-if="showImageCheckIcon"
-            class="pi pi-check text-green-500 dark:text-green-400"
+            class="ai ai-check text-green-500 dark:text-green-400"
           ></i>
         </button>
         <button
@@ -272,7 +272,7 @@
           @click="downloadIcon"
           class="rounded-none border-none bg-transparent h-10 w-10 text-xs"
         >
-          <i class="pi pi-download"></i>
+          <i class="ai ai-download"></i>
         </button>
       </div>
     </div>

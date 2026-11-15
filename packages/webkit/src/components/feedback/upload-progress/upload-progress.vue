@@ -105,7 +105,7 @@
   const DONE_KEY = { upload: 'uploaded', move: 'moved', delete: 'deleted' } as const
   const GLYPH = {
     upload: 'ai ai-upload',
-    move: 'ai ai-arrow-right-arrow-left',
+    move: 'ai ai-arrow-right-left',
     delete: 'ai ai-trash'
   } as const
 
@@ -201,7 +201,7 @@
       />
       <IconButton
         v-if="state !== 'running'"
-        icon="ai ai-times"
+        icon="ai ai-x"
         kind="transparent"
         size="small"
         :ariaLabel="t('uploadProgress.close')"
@@ -257,7 +257,7 @@
                   class="flex items-center gap-(--spacing-xxs) text-label-sm text-(--danger-contrast)"
                 >
                   <i
-                    class="ai ai-times-circle shrink-0"
+                    class="ai ai-circle-x shrink-0"
                     aria-hidden="true"
                   />
                   <span class="min-w-0">{{ item.error }}</span>
@@ -278,7 +278,7 @@
               <IconButton
                 key="icon-button-2"
                 v-if="cancelable && (item.status === 'queued' || item.status === 'running')"
-                icon="ai ai-times"
+                icon="ai ai-x"
                 kind="transparent"
                 size="small"
                 :ariaLabel="t('uploadProgress.cancelItem', { name: item.name })"

@@ -69,7 +69,7 @@
           <div class="flex min-w-0 items-center gap-(--spacing-xs)">
             <div class="shrink-0 lg:hidden">
               <IconButton
-                icon="ai ai-bars"
+                icon="ai ai-menu"
                 kind="outlined"
                 size="medium"
                 :aria-label="t.openNavigation"

@@ -8,7 +8,7 @@
   const items = [
     { id: 'copy', label: 'Copy code', icon: 'ai ai-copy' },
     { id: 'format', label: 'Format document', icon: 'ai ai-align-left' },
-    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'ai ai-arrows-h' },
+    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'ai ai-move-horizontal' },
     {
       id: 'download',
       type: 'menu',

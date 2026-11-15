@@ -142,7 +142,7 @@
       href: 'https://www.youtube.com/aziontech'
     },
     {
-      icon: 'ai ai-x',
+      icon: 'ai ai-x-brand',
       label: 'Azion on X',
       href: 'https://x.com/aziontech'
     },

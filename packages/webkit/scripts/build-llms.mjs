@@ -288,7 +288,7 @@ function assetUsage(kind) {
     )
   if (kind === 'icons')
     return code(
-      '<script setup>\n  import \'@aziontech/icons\'\n  import Button from \'@aziontech/webkit/button\'\n</script>\n\n<template>\n  <i class="ai ai-edge-firewall" aria-hidden="true"></i>\n  <i class="ai ai-trash" aria-hidden="true"></i>\n  <i class="ai-cor ai-react" aria-hidden="true"></i>\n  <Button icon="ai ai-plus">Create</Button>\n</template>'
+      '<script setup>\n  import \'@aziontech/icons\'\n  import Button from \'@aziontech/webkit/button\'\n</script>\n\n<template>\n  <i class="ai ai-edge-firewall" aria-hidden="true"></i>\n  <i class="ai ai-trash" aria-hidden="true"></i>\n  <i class="ai-color ai-react" aria-hidden="true"></i>\n  <Button icon="ai ai-plus">Create</Button>\n</template>'
     )
   return ''
 }

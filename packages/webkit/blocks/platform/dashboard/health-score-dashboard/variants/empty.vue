@@ -391,7 +391,7 @@
           >
             <EmptyState
               size="small"
-              icon="ai ai-check-circle"
+              icon="ai ai-circle-check"
               :title="'No open incidents in ' + phrase"
               description="An incident opens when an application or a location stays poor for several samples in a row."
             />

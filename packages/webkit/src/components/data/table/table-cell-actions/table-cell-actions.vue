@@ -60,7 +60,7 @@
   >
     <DropdownMenuTrigger>
       <IconButton
-        icon="ai ai-ellipsis-h"
+        icon="ai ai-ellipsis"
         kind="outlined"
         size="small"
         :ariaLabel="label"

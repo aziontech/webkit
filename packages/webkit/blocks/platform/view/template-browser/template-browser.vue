@@ -74,7 +74,7 @@
       'Next.js Starter',
       'frameworks',
       'next',
-      'ai-cor ai-next',
+      'ai-color ai-nextjs',
       'A Next.js app with server rendering and static pages, ready to deploy.',
       'Oct 28, 2026'
     ),
@@ -83,7 +83,7 @@
       'Astro Blog',
       'frameworks',
       'astro',
-      'ai-cor ai-astro',
+      'ai-color ai-astro',
       'A content-first blog with Markdown posts, an RSS feed and a sitemap.',
       'Oct 21, 2026'
     ),
@@ -92,7 +92,7 @@
       'Nuxt Storefront',
       'frameworks',
       'nuxt',
-      'ai-cor ai-nuxt',
+      'ai-color ai-nuxt',
       'A product catalog with a cart, rendered on the server and cached close to buyers.',
       'Oct 14, 2026'
     ),
@@ -101,7 +101,7 @@
       'Angular Dashboard',
       'frameworks',
       'angular',
-      'ai-cor ai-angular',
+      'ai-color ai-angular',
       'A single-page admin dashboard with routing and lazy-loaded modules.',
       'Sep 30, 2026'
     ),
@@ -239,7 +239,7 @@
         <EmptyState
           v-if="status === 'no-match'"
           size="medium"
-          icon="ai ai-filter-slash"
+          icon="ai ai-filter-off"
           title="No matching templates"
           description="No template matches this search. Remove a filter to widen the results."
         >

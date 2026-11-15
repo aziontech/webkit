@@ -1517,7 +1517,7 @@
                 title="Advanced"
                 hint="Every field here already carries the endpoint's own default, and all of them can be changed once the service exists."
                 v-model:open="advancedOpen"
-                icon="ai ai-cog"
+                icon="ai ai-settings"
                 collapsible
               >
                 <Card :padded="false">

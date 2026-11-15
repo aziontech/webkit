@@ -64,7 +64,7 @@
       <DropdownMenuRoot @select="({ value }) => onRowAction({ id: row.id, action: { value } })">
         <DropdownMenuTrigger>
           <IconButton
-            icon="ai ai-ellipsis-v"
+            icon="ai ai-ellipsis-vertical"
             aria-label="Row actions"
             kind="transparent"
             size="small"

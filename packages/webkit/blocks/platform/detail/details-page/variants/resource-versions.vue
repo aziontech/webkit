@@ -354,7 +354,7 @@
                         <DropdownMenu.Trigger>
                           <Tooltip text="Version actions">
                             <IconButton
-                              icon="ai ai-ellipsis-h"
+                              icon="ai ai-ellipsis"
                               kind="outlined"
                               size="small"
                               aria-label="Version actions"

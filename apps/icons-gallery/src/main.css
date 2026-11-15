@@ -86,6 +86,3 @@ button {
 .color-cube {
   @apply pt-1.5;
 }
-.color-cube {
-  @apply text-xs before:content-['\e957'] font-[primeicons] text-white before:active:content-['\e909'];
-}

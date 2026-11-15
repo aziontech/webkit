@@ -47,7 +47,7 @@
         class="absolute inset-[min(0rem,calc(50%-12px))] pointer-coarse:inset-[min(0rem,calc(50%-22px))]"
       />
       <i
-        class="ai ai-info-circle text-body-xs"
+        class="ai ai-circle-info text-body-xs"
         aria-hidden="true"
       />
     </button>

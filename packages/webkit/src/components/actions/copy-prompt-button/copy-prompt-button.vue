@@ -37,7 +37,7 @@
     copiedLabel: '',
     agents: () => [
       { name: 'Claude', icon: 'ai ai-claude' },
-      { name: 'ChatGPT', icon: 'ai ai-open' },
+      { name: 'ChatGPT', icon: 'ai ai-openai' },
       { name: 'Gemini', icon: 'ai ai-gemini' },
       { name: 'Cursor', icon: 'ai ai-cursor' }
     ],
@@ -212,7 +212,7 @@
       placement="top"
     >
       <IconButton
-        icon="ai ai-times"
+        icon="ai ai-x"
         kind="transparent"
         size="small"
         :aria-label="t('copyPromptButton.dismiss')"

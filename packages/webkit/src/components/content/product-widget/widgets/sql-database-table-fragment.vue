@@ -153,7 +153,7 @@
                       class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted)"
                     >
                       <i
-                        class="ai ai-bars"
+                        class="ai ai-menu"
                         aria-hidden="true"
                       />
                     </span>
@@ -195,7 +195,7 @@
                       />
                     </span>
                     <IconButton
-                      icon="ai ai-times"
+                      icon="ai ai-x"
                       kind="outlined"
                       size="large"
                       ariaLabel="Remove column"
@@ -220,7 +220,7 @@
                         class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-button) text-(--text-muted)"
                       >
                         <i
-                          class="ai ai-bars"
+                          class="ai ai-menu"
                           aria-hidden="true"
                         />
                       </span>
@@ -267,7 +267,7 @@
                         />
                       </span>
                       <IconButton
-                        icon="ai ai-times"
+                        icon="ai ai-x"
                         kind="outlined"
                         size="large"
                         ariaLabel="Remove column"

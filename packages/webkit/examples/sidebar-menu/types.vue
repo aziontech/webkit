@@ -42,7 +42,7 @@
             <SidebarMenuSubTrigger
               label="Settings"
               kind="drill"
-              icon="ai ai-cog"
+              icon="ai ai-settings"
             />
             <SidebarMenuSubContent>
               <SidebarMenuItem

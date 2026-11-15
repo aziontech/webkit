@@ -263,14 +263,14 @@
               label="And"
               kind="outlined"
               size="small"
-              icon="ai ai-plus-circle"
+              icon="ai ai-circle-plus"
             />
           </span>
           <Button
             label="Or"
             kind="outlined"
             size="small"
-            icon="ai ai-plus-circle"
+            icon="ai ai-circle-plus"
           />
         </span>
       </ShellMockupPart>

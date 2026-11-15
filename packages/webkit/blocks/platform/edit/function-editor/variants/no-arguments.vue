@@ -374,7 +374,7 @@ export async function handleRequest(request) {
                           label="Remove form"
                           kind="outlined"
                           size="medium"
-                          icon="ai ai-times"
+                          icon="ai ai-x"
                           :disabled="saving"
                           @click="removeForm"
                         />
@@ -419,7 +419,7 @@ export async function handleRequest(request) {
                             <div class="flex min-h-0 flex-1">
                               <EmptyState
                                 bordered
-                                icon="ai ai-plus-circle"
+                                icon="ai ai-circle-plus"
                                 title="This form has no fields"
                                 description="Add the first argument the service reads."
                                 class="w-full"
@@ -523,7 +523,7 @@ export async function handleRequest(request) {
                                               />
                                               <Tooltip text="Duplicate this field">
                                                 <IconButton
-                                                  icon="ai ai-clone"
+                                                  icon="ai ai-copy"
                                                   kind="outlined"
                                                   size="small"
                                                   :aria-label="

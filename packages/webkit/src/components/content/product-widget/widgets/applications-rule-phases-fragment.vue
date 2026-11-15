@@ -185,7 +185,7 @@
                             />
                           </span>
                           <IconButton
-                            icon="ai ai-bars"
+                            icon="ai ai-menu"
                             kind="outlined"
                             size="small"
                             :disabled="index === 0"

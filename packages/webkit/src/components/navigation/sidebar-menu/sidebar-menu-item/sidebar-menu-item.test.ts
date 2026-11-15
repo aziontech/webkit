@@ -168,7 +168,7 @@ describe('SidebarMenuItem', () => {
 
   it('renders the leading icon element hidden from a11y with the provided class', () => {
     const { getByTestId } = render(SidebarMenuItem, {
-      props: { label: 'Home', icon: 'ai ai-cog' }
+      props: { label: 'Home', icon: 'ai ai-settings' }
     })
 
     const iconBox = getByTestId('navigation-sidebar-menu-item__icon')
@@ -176,7 +176,7 @@ describe('SidebarMenuItem', () => {
     const glyph = iconBox.querySelector('i')
     expect(glyph).toBeTruthy()
     expect(glyph?.classList.contains('ai')).toBe(true)
-    expect(glyph?.classList.contains('ai-cog')).toBe(true)
+    expect(glyph?.classList.contains('ai-settings')).toBe(true)
   })
 
   it('renders no icon box at all when icon is empty', () => {

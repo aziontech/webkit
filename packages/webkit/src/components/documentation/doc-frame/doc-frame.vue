@@ -192,7 +192,7 @@
           :data-testid="`${testId}__zoom-hint`"
           class="pointer-events-none absolute top-(--spacing-xs) end-(--spacing-xs) inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-default) opacity-0 transition-opacity duration-fast-02 ease-productive-entrance group-hover:opacity-100 group-focus-visible:opacity-100 motion-reduce:transition-none"
         >
-          <i class="ai ai-search-plus text-body-xs"></i>
+          <i class="ai ai-zoom-in text-body-xs"></i>
           {{ t('docFrame.fullScreen') }}
         </span>
       </button>

@@ -321,7 +321,7 @@
                 >
                   <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                     <i
-                      class="ai ai-exclamation-circle shrink-0 text-(--warning-contrast)"
+                      class="ai ai-circle-alert shrink-0 text-(--warning-contrast)"
                       aria-hidden="true"
                     />
                     <span class="truncate text-label-md text-(--text-default)">

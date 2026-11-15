@@ -1,6 +1,6 @@
 # Icons Gallery
 
-> Visual showcase and documentation for **@aziontech/icons** — Azion's icon font library featuring azionicons (`ai`) and primeicons (`pi`).
+> Visual showcase and documentation for **@aziontech/icons** — Azion's icon font library featuring azionicons (`ai`) and colored brand icons (`ai-color`).
 
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Vue 3](https://img.shields.io/badge/Vue-3.x-4FC08D?logo=vue.js)](https://vuejs.org/)
@@ -275,7 +275,7 @@ Azion-specific product and platform icons organized by category:
 | Angular | `ai ai-angular` | Angular framework |
 | React   | `ai ai-react`   | React framework   |
 | Vue     | `ai ai-vue`     | Vue framework     |
-| Next.js | `ai ai-next`    | Next.js framework |
+| Next.js | `ai ai-nextjs`  | Next.js framework |
 | Nuxt    | `ai ai-nuxt`    | Nuxt framework    |
 | Astro   | `ai ai-astro`   | Astro framework   |
 | Vite    | `ai ai-vite`    | Vite build tool   |
@@ -289,45 +289,45 @@ Azion-specific product and platform icons organized by category:
 | Ask Azion   | `ai ai-ask-azion`   | AI assistant         |
 | Marketplace | `ai ai-marketplace` | Marketplace services |
 
-### PrimeIcons (`pi`) — 314 icons
+#### UI glyphs
 
-General-purpose UI icons from the PrimeIcons library. Some commonly used icons:
+General-purpose UI glyphs, named after [Lucide](https://lucide.dev/icons). Some commonly used icons:
 
-#### Navigation & Arrows
+##### Navigation & Arrows
 
-| Icon        | Class               | Usage           |
-| ----------- | ------------------- | --------------- |
-| Home        | `pi pi-home`        | Home navigation |
-| Arrow Right | `pi pi-arrow-right` | Right direction |
-| Arrow Left  | `pi pi-arrow-left`  | Left direction  |
-| Arrow Up    | `pi pi-arrow-up`    | Up direction    |
-| Arrow Down  | `pi pi-arrow-down`  | Down direction  |
-| Angle Right | `pi pi-angle-right` | Chevron right   |
-| Angle Left  | `pi pi-angle-left`  | Chevron left    |
+| Icon          | Class                 | Usage           |
+| ------------- | --------------------- | --------------- |
+| Home          | `ai ai-home`          | Home navigation |
+| Arrow Right   | `ai ai-arrow-right`   | Right direction |
+| Arrow Left    | `ai ai-arrow-left`    | Left direction  |
+| Arrow Up      | `ai ai-arrow-up`      | Up direction    |
+| Arrow Down    | `ai ai-arrow-down`    | Down direction  |
+| Chevron Right | `ai ai-chevron-right` | Chevron right   |
+| Chevron Left  | `ai ai-chevron-left`  | Chevron left    |
 
-#### Actions
+##### Actions
 
 | Icon     | Class            | Usage           |
 | -------- | ---------------- | --------------- |
-| Search   | `pi pi-search`   | Search action   |
-| Plus     | `pi pi-plus`     | Add/create      |
-| Times    | `pi pi-times`    | Close/cancel    |
-| Check    | `pi pi-check`    | Confirm/success |
-| Edit     | `pi pi-pencil`   | Edit action     |
-| Delete   | `pi pi-trash`    | Delete action   |
-| Download | `pi pi-download` | Download action |
-| Copy     | `pi pi-copy`     | Copy action     |
-| Cog      | `pi pi-cog`      | Settings        |
+| Search   | `ai ai-search`   | Search action   |
+| Plus     | `ai ai-plus`     | Add/create      |
+| X        | `ai ai-x`        | Close/cancel    |
+| Check    | `ai ai-check`    | Confirm/success |
+| Edit     | `ai ai-pencil`   | Edit action     |
+| Delete   | `ai ai-trash`    | Delete action   |
+| Download | `ai ai-download` | Download action |
+| Copy     | `ai ai-copy`     | Copy action     |
+| Settings | `ai ai-settings` | Settings        |
 
-#### Status & Feedback
+##### Status & Feedback
 
-| Icon                 | Class                        | Usage             |
-| -------------------- | ---------------------------- | ----------------- |
-| Info Circle          | `pi pi-info-circle`          | Information       |
-| Exclamation Triangle | `pi pi-exclamation-triangle` | Warning           |
-| Ban                  | `pi pi-ban`                  | Forbidden/blocked |
-| Bell                 | `pi pi-bell`                 | Notifications     |
-| Spinner              | `pi pi-spinner`              | Loading state     |
+| Icon           | Class                  | Usage             |
+| -------------- | ---------------------- | ----------------- |
+| Circle Info    | `ai ai-circle-info`    | Information       |
+| Triangle Alert | `ai ai-triangle-alert` | Warning           |
+| Ban            | `ai ai-ban`            | Forbidden/blocked |
+| Bell           | `ai ai-bell`           | Notifications     |
+| Spinner        | `ai ai-spinner`        | Loading state     |
 
 ---
 
@@ -426,9 +426,9 @@ Tests live in `tests/unit/` and run on **Vitest** with the **jsdom** environment
 
 ## Related Packages
 
-| Package                                              | Description                                 |
-| ---------------------------------------------------- | ------------------------------------------- |
-| [`@aziontech/icons`](../../packages/icons/README.md) | Icon font library (azionicons + primeicons) |
+| Package                                              | Description                                          |
+| ---------------------------------------------------- | ---------------------------------------------------- |
+| [`@aziontech/icons`](../../packages/icons/README.md) | Icon font library (azionicons + colored brand icons) |
 
 ---
 

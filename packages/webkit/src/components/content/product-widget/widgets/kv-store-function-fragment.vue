@@ -51,7 +51,7 @@ await client.incr('api:calls:today', 1);`
       value: 'code',
       language: 'typescript',
       fileName: 'kv-store.ts',
-      fileIcon: 'ai-cor ai-ts',
+      fileIcon: 'ai-color ai-typescript',
       code: CODE,
       highlightedLine: SET_LINE
     }

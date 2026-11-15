@@ -62,7 +62,7 @@
           @click="toggleBottombar"
           class="z-20 flex items-center justify-center h-12 w-12 md:hidden"
         >
-          <i :class="[openBottombar ? 'pi pi-times' : 'pi pi-ellipsis-v']"></i>
+          <i :class="[openBottombar ? 'ai ai-x' : 'ai ai-ellipsis-vertical']"></i>
         </button>
       </div>
       <div
@@ -131,7 +131,7 @@
             class="text-neutral-700 dark:text-neutral-200 opacity-40 gap-2 w-full text-center justify-center items-center min-h-28 border border-neutral-200 dark:border-neutral-700 bg-neutral-100/60 dark:bg-neutral-800/60 rounded-md text-xs flex px-4 py-8"
           >
             <p>Not found your icon? Try another keyword.</p>
-            <i class="pi pi-face-smile"></i>
+            <i class="ai ai-face-smile"></i>
           </div>
         </div>
         <!-- Comandos -->
@@ -141,7 +141,9 @@
           <div
             class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
           >
-            <i class="pi pi-arrows-h text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
+            <i
+              class="ai ai-move-horizontal text-xs ml-1 text-neutral-700 dark:text-neutral-400"
+            ></i>
             <!-- Slider -->
             <div class="flex flex-row w-full items-center gap-2">
               <input
@@ -162,13 +164,13 @@
           <div
             class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
           >
-            <i class="pi pi-palette text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
+            <i class="ai ai-palette text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
             <color-picker v-model:pureColor="pureColor" />
           </div>
           <div
             class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
           >
-            <i class="pi pi-cog text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
+            <i class="ai ai-settings text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
             <div class="radio-group">
               <label class="w-full">
                 <input
@@ -207,7 +209,7 @@
       <div
         class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
       >
-        <i class="pi pi-arrows-h text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
+        <i class="ai ai-move-horizontal text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
         <!-- Slider for mobile -->
         <div class="flex flex-row w-full items-center gap-2">
           <input
@@ -227,13 +229,13 @@
       <div
         class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
       >
-        <i class="pi pi-palette text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
+        <i class="ai ai-palette text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
         <color-picker v-model:pureColor="pureColor" />
       </div>
       <div
         class="flex items-center gap-4 bg-neutral-100/60 py-2 border border-neutral-200 rounded-lg px-2.5 dark:bg-neutral-800/60 dark:border-neutral-700"
       >
-        <i class="pi pi-cog text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
+        <i class="ai ai-settings text-xs ml-1 text-neutral-700 dark:text-neutral-400"></i>
         <div class="radio-group">
           <label class="w-full">
             <input

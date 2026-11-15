@@ -239,7 +239,7 @@
       <slot name="empty">
         <EmptyState
           size="small"
-          icon="ai ai-th-large"
+          icon="ai ai-layout-grid"
           :title="t('cardList.emptyTitle')"
           :description="t('cardList.emptyDescription')"
         />

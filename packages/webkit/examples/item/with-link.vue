@@ -14,7 +14,7 @@
       </Item.Content>
       <Item.Actions>
         <i
-          class="ai ai-angle-right text-[length:inherit] leading-none"
+          class="ai ai-chevron-right text-[length:inherit] leading-none"
           aria-hidden="true"
         />
       </Item.Actions>
@@ -35,7 +35,7 @@
       </Item.Content>
       <Item.Actions>
         <i
-          class="ai ai-angle-right text-[length:inherit] leading-none"
+          class="ai ai-chevron-right text-[length:inherit] leading-none"
           aria-hidden="true"
         />
       </Item.Actions>

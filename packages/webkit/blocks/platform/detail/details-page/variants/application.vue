@@ -384,7 +384,7 @@
                     <DropdownMenu.Trigger>
                       <Tooltip text="Application actions">
                         <IconButton
-                          icon="ai ai-ellipsis-h"
+                          icon="ai ai-ellipsis"
                           kind="outlined"
                           size="medium"
                           aria-label="Application actions"

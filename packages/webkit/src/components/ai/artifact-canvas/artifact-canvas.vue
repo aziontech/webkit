@@ -123,7 +123,7 @@
         </p>
       </div>
       <IconButton
-        icon="ai ai-times"
+        icon="ai ai-x"
         kind="transparent"
         size="small"
         :ariaLabel="t('artifactCanvas.close', { title })"

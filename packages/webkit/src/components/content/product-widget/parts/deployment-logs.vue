@@ -361,12 +361,12 @@
             <span class="flex size-5 shrink-0 items-center justify-center">
               <i
                 v-if="stepStatus(i) === 'done'"
-                class="ai ai-check-circle text-(--success-contrast)"
+                class="ai ai-circle-check text-(--success-contrast)"
                 aria-hidden="true"
               />
               <i
                 v-else-if="stepStatus(i) === 'failed'"
-                class="ai ai-times-circle text-(--danger-contrast)"
+                class="ai ai-circle-x text-(--danger-contrast)"
                 aria-hidden="true"
               />
               <i

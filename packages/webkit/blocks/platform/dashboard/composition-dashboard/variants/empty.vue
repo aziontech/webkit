@@ -275,7 +275,7 @@
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Spend by category"
@@ -328,7 +328,7 @@
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Current split"
@@ -369,7 +369,7 @@
               <DropdownMenu placement="bottom-end">
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top contributors"

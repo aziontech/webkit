@@ -14,8 +14,8 @@
       pressedIcon: 'ai ai-star-fill',
       pressed: pinned.value
     },
-    { id: 'share', label: 'Share', icon: 'ai ai-share-alt' },
-    { id: 'duplicate', label: 'Duplicate', icon: 'ai ai-clone' },
+    { id: 'share', label: 'Share', icon: 'ai ai-share' },
+    { id: 'duplicate', label: 'Duplicate', icon: 'ai ai-copy' },
     { id: 'archive', label: 'Archive', icon: 'ai ai-inbox', disabled: true },
     {
       id: 'export',

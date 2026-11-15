@@ -450,7 +450,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-plus-circle"
+                  class="ai ai-circle-plus"
                   aria-hidden="true"
                 />
                 Add Environment
@@ -649,7 +649,7 @@
                       <DropdownMenu.Trigger>
                         <Tooltip text="Service actions">
                           <IconButton
-                            icon="ai ai-ellipsis-h"
+                            icon="ai ai-ellipsis"
                             kind="outlined"
                             size="medium"
                             aria-label="Service actions"
@@ -689,7 +689,7 @@
                         >
                           <template #leading>
                             <i
-                              class="ai ai-cog"
+                              class="ai ai-settings"
                               aria-hidden="true"
                             />
                           </template>
@@ -707,7 +707,7 @@
                       <span class="text-label-sm text-(--text-muted)">Custom domains</span>
                       <Tooltip text="Add a custom domain">
                         <IconButton
-                          icon="ai ai-plus-circle"
+                          icon="ai ai-circle-plus"
                           kind="transparent"
                           size="small"
                           aria-label="Add a custom domain"

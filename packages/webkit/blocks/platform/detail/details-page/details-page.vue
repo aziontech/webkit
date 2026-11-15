@@ -215,7 +215,7 @@ jobs:
                         <DropdownMenu.Trigger>
                           <Tooltip text="Resource actions">
                             <IconButton
-                              icon="ai ai-ellipsis-h"
+                              icon="ai ai-ellipsis"
                               kind="outlined"
                               size="medium"
                               aria-label="Resource actions"
@@ -244,7 +244,7 @@ jobs:
                           >
                             <template #leading>
                               <i
-                                class="ai ai-cog"
+                                class="ai ai-settings"
                                 aria-hidden="true"
                               />
                             </template>
@@ -350,7 +350,7 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Framework</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <i
-                          class="ai-cor ai-next shrink-0 text-body-lg"
+                          class="ai-color ai-nextjs shrink-0 text-body-lg"
                           aria-hidden="true"
                         />
                         <span class="truncate text-body-sm text-(--text-default)"> Next.js </span>

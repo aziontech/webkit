@@ -29,7 +29,7 @@
         'Create the application now and push to it from your own terminal. Azion links the local project, builds it with your framework preset, and keeps azion.json in sync. No repository required.'
     },
     {
-      icon: 'ai ai-objects-column',
+      icon: 'ai ai-layout-grid',
       title: 'Start from a template',
       description:
         'Clone a framework starter already wired to build and deploy on Azion. Next, Astro, Vue, Nuxt, and more.'

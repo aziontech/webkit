@@ -341,7 +341,7 @@
             @click="clearCommitted"
           >
             <i
-              class="ai ai-times text-[length:inherit] leading-none"
+              class="ai ai-x text-[length:inherit] leading-none"
               aria-hidden="true"
             />
           </button>

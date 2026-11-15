@@ -60,7 +60,7 @@
           type: 'projects',
           typeLabel: 'Project',
           name: 'marketing-site',
-          presetIcon: 'ai-cor ai-astro',
+          presetIcon: 'ai-color ai-astro',
           presetLabel: 'Astro'
         },
         {
@@ -68,7 +68,7 @@
           type: 'projects',
           typeLabel: 'Project',
           name: 'docs-site',
-          presetIcon: 'ai-cor ai-next',
+          presetIcon: 'ai-color ai-nextjs',
           presetLabel: 'Next.js'
         },
         {
@@ -76,7 +76,7 @@
           type: 'projects',
           typeLabel: 'Project',
           name: 'black-friday-2026',
-          presetIcon: 'ai-cor ai-next',
+          presetIcon: 'ai-color ai-nextjs',
           presetLabel: 'Next.js'
         },
         {
@@ -84,7 +84,7 @@
           type: 'projects',
           typeLabel: 'Project',
           name: 'hello-world',
-          presetIcon: 'ai-cor ai-js',
+          presetIcon: 'ai-color ai-javascript',
           presetLabel: 'JavaScript'
         },
         {
@@ -92,7 +92,7 @@
           type: 'projects',
           typeLabel: 'Project',
           name: 'web-app',
-          presetIcon: 'ai-cor ai-vue',
+          presetIcon: 'ai-color ai-vue',
           presetLabel: 'Vue'
         }
       ]
@@ -141,7 +141,7 @@
           type: 'projects',
           typeLabel: 'Project',
           name: 'marketing-site',
-          presetIcon: 'ai-cor ai-astro',
+          presetIcon: 'ai-color ai-astro',
           presetLabel: 'Astro'
         },
         {
@@ -149,7 +149,7 @@
           type: 'projects',
           typeLabel: 'Project',
           name: 'docs-site',
-          presetIcon: 'ai-cor ai-next',
+          presetIcon: 'ai-color ai-nextjs',
           presetLabel: 'Next.js'
         },
         {
@@ -157,7 +157,7 @@
           type: 'projects',
           typeLabel: 'Project',
           name: 'black-friday-2026',
-          presetIcon: 'ai-cor ai-next',
+          presetIcon: 'ai-color ai-nextjs',
           presetLabel: 'Next.js'
         }
       ]
@@ -278,7 +278,7 @@
                 placement="top"
               >
                 <IconButton
-                  icon="ai ai-times"
+                  icon="ai ai-x"
                   kind="transparent"
                   size="small"
                   aria-label="Dismiss agent setup"

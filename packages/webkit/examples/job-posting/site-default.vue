@@ -14,7 +14,7 @@
       },
       {
         label: 'San Francisco, California',
-        icon: 'ai ai-map-marker'
+        icon: 'ai ai-map-pin'
       },
       {
         label: 'Hybrid',

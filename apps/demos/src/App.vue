@@ -76,7 +76,7 @@
             placement="bottom"
           >
             <IconButton
-              icon="ai ai-plus-circle"
+              icon="ai ai-circle-plus"
               kind="primary"
               size="medium"
               ariaLabel="Create"
@@ -101,7 +101,7 @@
             label="Create"
             kind="primary"
             size="medium"
-            icon="ai ai-plus-circle"
+            icon="ai ai-circle-plus"
             @click="router.push('/resources/new')"
           />
           <ButtonHighlight
@@ -139,7 +139,7 @@
           <Command.Item value="action:create">
             <template #prefix>
               <i
-                class="ai ai-plus-circle"
+                class="ai ai-circle-plus"
                 aria-hidden="true"
               />
             </template>
@@ -171,7 +171,7 @@
           >
             <template #trailing>
               <i
-                class="ai ai-cog"
+                class="ai ai-settings"
                 aria-hidden="true"
               />
             </template>
@@ -219,7 +219,7 @@
           >
             <template #trailing>
               <i
-                class="ai ai-sign-out"
+                class="ai ai-log-out"
                 aria-hidden="true"
               />
             </template>

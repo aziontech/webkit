@@ -16,13 +16,13 @@ const templates = [
   {
     title: 'Astro Odyssey',
     description: 'A marketing website starter built with Astro.',
-    icon: 'ai-cor ai-astro',
+    icon: 'ai-color ai-astro',
     href: '/templates/astro-odyssey'
   },
   {
     title: 'Next.js Commerce',
     description: 'Ecommerce template built with Next.js.',
-    icon: 'ai-cor ai-next',
+    icon: 'ai-color ai-nextjs',
     invertInDark: true,
     href: '/templates/nextjs-commerce'
   }
@@ -91,7 +91,7 @@ describe('TemplateGallery', () => {
   it('flags only the marks that invert in dark', () => {
     const { container } = band()
 
-    const marks = Array.from(container.querySelectorAll('i.ai-cor'))
+    const marks = Array.from(container.querySelectorAll('i.ai-color'))
     expect(marks.map((mark) => mark.hasAttribute('data-invert'))).toEqual([false, true])
   })
 

@@ -33,7 +33,7 @@ test('passes catalog reads, bound props, empty defaults, brand names and non-tex
   const found = scanBuiltInStrings(
     sfc(
       "  const props = withDefaults(defineProps<Props>(), {\n    ariaLabel: '',\n    size: 'medium'\n  })",
-      '  <button :aria-label="ariaLabel || t(\'dialog.close\')" kind="outlined" icon="ai ai-times" />\n  <a aria-label="Azion" />\n  <Input placeholder="00:00" />'
+      '  <button :aria-label="ariaLabel || t(\'dialog.close\')" kind="outlined" icon="ai ai-x" />\n  <a aria-label="Azion" />\n  <Input placeholder="00:00" />'
     )
   )
   assert.deepEqual(found, [])

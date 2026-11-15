@@ -197,7 +197,7 @@
             class="ms-auto flex shrink-0"
           >
             <IconButton
-              icon="ai ai-times"
+              icon="ai ai-x"
               kind="transparent"
               size="small"
               :ariaLabel="t('fileTokenGroup.remove', { name: relativePathOf(item.file) })"
@@ -223,7 +223,7 @@
           class="m-0 flex items-center gap-(--spacing-xxs) text-label-sm text-(--warning-contrast) data-[status=error]:text-(--danger-contrast)"
         >
           <i
-            :class="item.error ? 'ai ai-times-circle' : 'ai ai-exclamation-triangle'"
+            :class="item.error ? 'ai ai-circle-x' : 'ai ai-triangle-alert'"
             class="shrink-0"
             aria-hidden="true"
           />

@@ -497,7 +497,7 @@
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="ai ai-ellipsis-h"
+                      icon="ai ai-ellipsis"
                       kind="transparent"
                       size="small"
                       :aria-label="`More options for ${card.title}`"

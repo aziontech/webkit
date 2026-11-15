@@ -12,7 +12,7 @@ describe('directional icons', () => {
   it('mirrors arrows and chevrons, never external links, media or logos', () => {
     expect(isDirectionalIcon('ai ai-chevron-right')).toBe(true)
     expect(isDirectionalIcon('ai ai-arrow-left')).toBe(true)
-    expect(isDirectionalIcon('ai ai-sign-out')).toBe(true)
+    expect(isDirectionalIcon('ai ai-log-out')).toBe(true)
     for (const icon of [
       'ai ai-external-link',
       'ai ai-arrow-up-right',
@@ -24,7 +24,7 @@ describe('directional icons', () => {
     ]) {
       expect(isDirectionalIcon(icon)).toBe(false)
     }
-    expect(directionalIconClass('ai ai-angle-left')).toBe(MIRROR_CLASS)
+    expect(directionalIconClass('ai ai-chevron-left')).toBe(MIRROR_CLASS)
     expect(directionalIconClass('ai ai-box')).toBe('')
   })
 
@@ -41,9 +41,12 @@ describe('directional icons', () => {
     }
     for (const icon of [
       'ai-arrow-up-left',
-      'ai-arrow-circle-up',
+      'ai-circle-arrow-up',
       'pi-chevron-left',
-      'ai-chevron-double-left'
+      'ai-chevron-double-left',
+      'ai-angle-left',
+      'ai-sign-in',
+      'ai-circle-chevron-up'
     ]) {
       expect(isDirectionalIcon(icon)).toBe(false)
     }

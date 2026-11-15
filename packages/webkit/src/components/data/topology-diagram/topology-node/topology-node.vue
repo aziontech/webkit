@@ -189,7 +189,7 @@
             :text="removeLabel"
           >
             <IconButton
-              icon="ai ai-times"
+              icon="ai ai-x"
               kind="outlined"
               size="small"
               :ariaLabel="removeLabel"

@@ -514,7 +514,7 @@
                     <div class="ms-auto flex items-center gap-(--spacing-xs)">
                       <Button
                         label="Move"
-                        icon="ai ai-arrow-right-arrow-left"
+                        icon="ai ai-arrow-right-left"
                         kind="outlined"
                         size="small"
                         :disabled="!hasSelectedFiles(selectedRows)"
@@ -636,7 +636,7 @@
                     >
                       <template #leading
                         ><i
-                          class="ai ai-arrow-right-arrow-left"
+                          class="ai ai-arrow-right-left"
                           aria-hidden="true"
                       /></template>
                     </DropdownMenuOption>

@@ -56,7 +56,7 @@
         >
           <Tag
             severity="warning"
-            icon="ai ai-exclamation-triangle"
+            icon="ai ai-triangle-alert"
             :label="ctx.warningTagLabel.value"
           />
         </button>

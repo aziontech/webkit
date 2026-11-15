@@ -29,7 +29,7 @@
     {
       to: '/components',
       label: t.value.components,
-      icon: 'ai ai-th-large',
+      icon: 'ai ai-layout-grid',
       text: t.value.exploreComponents
     },
     {

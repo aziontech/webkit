@@ -173,7 +173,7 @@
       >
         <span class="inline-flex items-center gap-(--spacing-xs)">
           <i
-            class="ai ai-exclamation-circle"
+            class="ai ai-circle-alert"
             aria-hidden="true"
           />
           {{ errorMessage || t('chatMessage.error') }}

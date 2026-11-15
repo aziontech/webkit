@@ -325,7 +325,7 @@
               <DropdownMenu.Trigger>
                 <Tooltip text="Deployment actions">
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="outlined"
                     size="medium"
                     aria-label="Deployment actions"
@@ -350,7 +350,7 @@
                 >
                   <template #leading>
                     <i
-                      class="ai ai-arrow-right-arrow-left"
+                      class="ai ai-arrow-right-left"
                       aria-hidden="true"
                     />
                   </template>

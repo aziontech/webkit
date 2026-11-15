@@ -38,7 +38,7 @@
             <EmptyState
               title="This chart failed to load"
               description="The rest of the dashboard still works."
-              icon="ai ai-exclamation-triangle"
+              icon="ai ai-triangle-alert"
               size="small"
             >
               <template #actions>

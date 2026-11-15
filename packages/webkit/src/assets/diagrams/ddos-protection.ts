@@ -8,7 +8,7 @@ const spec: DiagramSpec = {
       key: 'user',
       kind: 'pill',
       title: 'Users and attackers',
-      icon: 'ai ai-exclamation-triangle',
+      icon: 'ai ai-triangle-alert',
       active: true
     },
     {

@@ -273,7 +273,7 @@
       :open="openPanel"
     >
       <IconButton
-        icon="ai ai-cog"
+        icon="ai ai-settings"
         kind="outlined"
         size="medium"
         :ariaLabel="heading"

@@ -168,7 +168,7 @@
                           label="Add custom domain"
                           kind="link"
                           size="small"
-                          icon="ai ai-plus-circle"
+                          icon="ai ai-circle-plus"
                           href="/services/1482736015?name=web-app&tab=settings"
                         />
                       </li>
@@ -194,7 +194,7 @@
                         </span>
                         <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
                           <i
-                            class="ai ai-branch shrink-0 text-(--text-muted)"
+                            class="ai ai-git-branch shrink-0 text-(--text-muted)"
                             aria-hidden="true"
                           />
                           <span class="truncate text-body-sm text-(--text-default)">main</span>

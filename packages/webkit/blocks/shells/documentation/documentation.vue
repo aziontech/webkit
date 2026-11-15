@@ -78,7 +78,7 @@
       label: 'Community',
       links: [
         { label: 'Discord', href: 'https://discord.gg/azion', icon: 'ai ai-discord' },
-        { label: 'X', href: 'https://x.com/aziontech', icon: 'ai ai-x' }
+        { label: 'X', href: 'https://x.com/aziontech', icon: 'ai ai-x-brand' }
       ]
     }
   ]
@@ -128,7 +128,7 @@
       label: 'Azion on YouTube',
       href: 'https://www.youtube.com/aziontech'
     },
-    { icon: 'ai ai-x', label: 'Azion on X', href: 'https://x.com/aziontech' },
+    { icon: 'ai ai-x-brand', label: 'Azion on X', href: 'https://x.com/aziontech' },
     {
       icon: 'ai ai-instagram',
       label: 'Azion on Instagram',

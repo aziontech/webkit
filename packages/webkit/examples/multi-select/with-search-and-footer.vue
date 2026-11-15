@@ -62,7 +62,7 @@
         <template #footer>
           <Button
             label="Create new item"
-            icon="ai ai-plus-circle"
+            icon="ai ai-circle-plus"
             kind="transparent"
             size="small"
             class="w-full"

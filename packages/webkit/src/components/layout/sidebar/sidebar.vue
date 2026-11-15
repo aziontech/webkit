@@ -369,7 +369,7 @@
             :placement="rail ? railPlacement : 'top'"
           >
             <IconButton
-              :icon="rail ? 'ai ai-angle-double-right' : 'ai ai-angle-double-left'"
+              :icon="rail ? 'ai ai-chevrons-right' : 'ai ai-chevrons-left'"
               :ariaLabel="rail ? labels.expand : labels.collapse"
               :aria-keyshortcuts="keyShortcuts"
               kind="outlined"
@@ -445,7 +445,7 @@
           :placement="dir === 'rtl' ? 'left' : 'right'"
         >
           <IconButton
-            icon="ai ai-angle-double-right"
+            icon="ai ai-chevrons-right"
             :ariaLabel="labels.expand"
             kind="outlined"
             size="medium"

@@ -420,7 +420,7 @@
                 v-model:open="advancedOpen"
                 title="Advanced"
                 hint="Stored with the organization and used to shape what we recommend inside it."
-                icon="ai ai-cog"
+                icon="ai ai-settings"
                 collapsible
               >
                 <Card :padded="false">

@@ -22,7 +22,7 @@
     <template #trigger="{ open }">
       <Button
         label="Table settings"
-        icon="ai ai-cog"
+        icon="ai ai-settings"
         kind="outlined"
         size="medium"
         @click="open"

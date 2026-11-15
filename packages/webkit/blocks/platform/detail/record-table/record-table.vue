@@ -574,7 +574,7 @@
                       key="empty-state-1"
                       v-if="status === 'no-match'"
                       size="medium"
-                      icon="ai ai-filter-slash"
+                      icon="ai ai-filter-off"
                       title="No matching records"
                       description="No record matches these filters."
                     >

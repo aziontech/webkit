@@ -22,7 +22,7 @@
       <EmptyState
         title="Something went wrong on our side"
         description="This page could not load. Nothing you saved was lost. Retry in a moment; if it keeps failing, check the system status."
-        icon="ai ai-exclamation-triangle"
+        icon="ai ai-triangle-alert"
       >
         <template #actions>
           <div class="flex flex-wrap items-center justify-center gap-(--spacing-xs)">

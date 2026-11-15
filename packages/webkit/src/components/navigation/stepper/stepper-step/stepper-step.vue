@@ -114,7 +114,7 @@
           />
           <span
             v-else-if="dataState === 'error'"
-            class="ai ai-exclamation-triangle text-label-sm"
+            class="ai ai-triangle-alert text-label-sm"
           />
           <span v-else-if="dataState !== 'current'">{{ index }}</span>
         </span>

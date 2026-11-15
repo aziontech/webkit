@@ -329,7 +329,7 @@
         >
           <h2 class="mb-(--spacing-sm) flex items-center gap-(--spacing-xs) text-heading-xs">
             <i
-              class="ai ai-check-circle text-(--success)"
+              class="ai ai-circle-check text-(--success)"
               aria-hidden="true"
             />{{ t.bestPractices }}
           </h2>
@@ -343,7 +343,7 @@
         >
           <h2 class="mb-(--spacing-sm) flex items-center gap-(--spacing-xs) text-heading-xs">
             <i
-              class="ai ai-times-circle text-(--danger)"
+              class="ai ai-circle-x text-(--danger)"
               aria-hidden="true"
             />{{ t.constraints }}
           </h2>

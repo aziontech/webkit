@@ -19,14 +19,14 @@
   const canHover = useMediaQuery('(hover: hover)', true)
 
   const EVENTS = [
-    { icon: 'ai ai-cog', label: 'Build started', note: 'vue preset' },
+    { icon: 'ai ai-settings', label: 'Build started', note: 'vue preset' },
     { icon: 'ai ai-box', label: 'Bundle produced', note: '1.4 MB' },
     { icon: 'ai ai-cloud-upload', label: 'Assets uploaded', note: '214 objects' },
     { icon: 'ai ai-edge-functions', label: 'Functions bundled', note: '2 functions' },
     { icon: 'ai ai-globe', label: 'Propagating', note: '100+ locations' },
     { icon: 'ai ai-lock', label: 'Certificates verified', note: 'TLS 1.3' },
     { icon: 'ai ai-bolt', label: 'Cache warmed', note: 'storefront-prod' },
-    { icon: 'ai ai-check-circle', label: 'Live everywhere', note: '18s total' }
+    { icon: 'ai ai-circle-check', label: 'Live everywhere', note: '18s total' }
   ]
 </script>
 

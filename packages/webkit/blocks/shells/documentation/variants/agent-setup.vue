@@ -285,7 +285,7 @@
     },
     {
       title: 'Extension',
-      icon: 'ai ai-th-large',
+      icon: 'ai ai-layout-grid',
       description: 'Plugs into the editor you already use. Lightest install, keeps your setup.'
     },
     {
@@ -310,7 +310,7 @@
     },
     {
       title: 'Model flexibility',
-      icon: 'ai ai-sliders-h',
+      icon: 'ai ai-sliders-horizontal',
       description:
         'Locked ties you to the maker’s own models. BYOK takes your provider key. Multi-provider switches between several.'
     },

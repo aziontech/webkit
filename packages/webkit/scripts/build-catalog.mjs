@@ -526,7 +526,7 @@ const ASSET_KINDS = {
   icons: {
     title: 'Icons',
     summary:
-      'Every icon class of `@aziontech/icons` with search keywords. A monochrome icon is `ai ai-<name>`, coloured by the text colour; a colour brand icon is `ai-cor ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.',
+      'Every icon class of `@aziontech/icons` with search keywords. A monochrome icon is `ai ai-<name>`, coloured by the text colour; a colour brand icon is `ai-color ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.',
     unknown: 'An unknown class renders nothing.'
   }
 }
@@ -596,7 +596,7 @@ function reaches(graph, from, markers) {
 function iconItems() {
   const sets = [
     ['ai', 'azionicons', (n) => `ai ${n}`],
-    ['ai-cor', 'color', (n) => `ai-cor ${n}`]
+    ['ai-color', 'color', (n) => `ai-color ${n}`]
   ]
   const items = []
   for (const [folder, set, cls] of sets) {

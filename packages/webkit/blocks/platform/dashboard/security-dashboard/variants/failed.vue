@@ -255,7 +255,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Matched requests over time"
@@ -347,7 +347,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Blocked requests by attack category"
@@ -414,7 +414,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Blocked requests by country"
@@ -482,7 +482,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top source IPs by blocked requests"

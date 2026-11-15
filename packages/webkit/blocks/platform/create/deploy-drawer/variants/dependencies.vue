@@ -1355,7 +1355,7 @@
                   class="flex min-w-0 items-start gap-(--spacing-xs) text-body-sm text-(--warning-contrast)"
                 >
                   <i
-                    class="ai ai-exclamation-triangle mt-0.5 shrink-0 text-body-xs"
+                    class="ai ai-triangle-alert mt-0.5 shrink-0 text-body-xs"
                     aria-hidden="true"
                   />
                   <span>{{ blocker }}</span>

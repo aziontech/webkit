@@ -322,7 +322,7 @@
                               label="Continue with Google"
                               kind="outlined"
                               size="large"
-                              icon="ai-cor ai-google"
+                              icon="ai-color ai-google"
                               class="w-full"
                             />
                             <Button

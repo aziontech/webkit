@@ -351,7 +351,7 @@
                         >
                           <template #leading
                             ><i
-                              class="ai ai-clone"
+                              class="ai ai-copy"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -373,7 +373,7 @@
                   <template #empty>
                     <EmptyState
                       size="medium"
-                      icon="ai ai-filter-slash"
+                      icon="ai ai-filter-off"
                       title="No matching resources"
                       description="No resource matches these filters."
                     >

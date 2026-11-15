@@ -379,7 +379,7 @@
                         </Item.Content>
                         <Item.Actions>
                           <IconButton
-                            icon="ai ai-times"
+                            icon="ai ai-x"
                             kind="transparent"
                             size="medium"
                             :aria-label="`Remove ${record.type} record ${record.name}`"
@@ -418,7 +418,7 @@
               <SettingsSection
                 title="Advanced"
                 v-model:open="advancedOpen"
-                icon="ai ai-cog"
+                icon="ai ai-settings"
                 collapsible
               >
                 <Card :padded="false">

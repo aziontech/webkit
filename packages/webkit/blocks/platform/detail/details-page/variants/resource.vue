@@ -60,7 +60,7 @@
             <DropdownMenu.Trigger>
               <Tooltip text="Resource actions">
                 <IconButton
-                  icon="ai ai-ellipsis-h"
+                  icon="ai ai-ellipsis"
                   kind="outlined"
                   size="medium"
                   aria-label="Resource actions"
@@ -89,7 +89,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-cog"
+                    class="ai ai-settings"
                     aria-hidden="true"
                   />
                 </template>
@@ -215,7 +215,7 @@
             </div>
             <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
               <i
-                class="ai ai-branch shrink-0 text-(--text-muted)"
+                class="ai ai-git-branch shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
               <span class="truncate text-body-sm text-(--text-default)">develop</span>
@@ -227,7 +227,7 @@
           <span class="text-label-sm text-(--text-muted)">Framework</span>
           <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
             <i
-              class="ai-cor ai-nuxt shrink-0 text-body-lg"
+              class="ai-color ai-nuxt shrink-0 text-body-lg"
               aria-hidden="true"
             />
             <span class="truncate text-body-sm text-(--text-default)"> Nuxt </span>

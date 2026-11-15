@@ -182,7 +182,7 @@
           <EmptyState
             :title="t('barList.errorTitle')"
             :description="error"
-            icon="ai ai-exclamation-triangle"
+            icon="ai ai-triangle-alert"
             size="small"
             bordered
             :data-testid="`${testId}__error`"

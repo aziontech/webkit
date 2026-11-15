@@ -8,7 +8,7 @@
     <DropdownMenu.Trigger>
       <Button
         kind="secondary"
-        icon="ai ai-ellipsis-h"
+        icon="ai ai-ellipsis"
         label="Actions"
       />
     </DropdownMenu.Trigger>

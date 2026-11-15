@@ -20,7 +20,7 @@
     <DropdownMenu.Trigger>
       <Button
         kind="secondary"
-        icon="ai ai-sliders-h"
+        icon="ai ai-sliders-horizontal"
         label="View"
       />
     </DropdownMenu.Trigger>

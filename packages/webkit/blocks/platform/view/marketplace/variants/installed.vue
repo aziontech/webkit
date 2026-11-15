@@ -128,7 +128,7 @@
       'rate-guard',
       'Rate Guard',
       'Acme',
-      'ai ai-sliders-h',
+      'ai ai-sliders-horizontal',
       'Access control',
       'firewall',
       'Limit how many requests one client can make in a window, per path or per key.'
@@ -146,7 +146,7 @@
       'request-id',
       'Request ID',
       'Azion',
-      'ai ai-hashtag',
+      'ai ai-hash',
       'Observability',
       'application',
       'Add a unique identifier header to every request, to trace it across services.'
@@ -173,7 +173,7 @@
       'schedule-block',
       'Scheduled Block',
       'Azion',
-      'ai ai-calendar-times',
+      'ai ai-calendar-x',
       'Access control',
       'firewall',
       'Close an application to traffic on a schedule, such as outside business hours.'
@@ -367,7 +367,7 @@
             <EmptyState
               v-if="status === 'no-match'"
               size="medium"
-              icon="ai ai-filter-slash"
+              icon="ai ai-filter-off"
               title="No matching integrations"
               description="No integration matches this search. Remove a filter to widen the results."
             >
@@ -594,7 +594,7 @@
               <Button
                 v-if="selected.installedOn.length"
                 label="Configure"
-                icon="ai ai-cog"
+                icon="ai ai-settings"
                 kind="outlined"
                 size="medium"
                 :href="`/marketplace/${selected.id}/configure`"

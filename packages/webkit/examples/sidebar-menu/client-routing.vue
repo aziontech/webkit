@@ -9,7 +9,7 @@
         {
           id: 'applications',
           label: 'Applications',
-          icon: 'ai ai-th-large',
+          icon: 'ai ai-layout-grid',
           href: '/applications'
         },
         { id: 'functions', label: 'Functions', icon: 'ai ai-code', href: '/functions' }

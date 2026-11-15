@@ -831,7 +831,7 @@
                       >
                         <template #leading>
                           <i
-                            class="ai ai-clone"
+                            class="ai ai-copy"
                             aria-hidden="true"
                           />
                         </template>
@@ -857,7 +857,7 @@
                 <template #empty>
                   <EmptyState
                     size="medium"
-                    icon="ai ai-filter-slash"
+                    icon="ai ai-filter-off"
                     title="No matching variables"
                     description="No variable matches these filters."
                   >
@@ -1042,7 +1042,7 @@
                                 :text="entries[index].visible ? 'Hide value' : 'Show value'"
                               >
                                 <IconButton
-                                  :icon="entries[index].visible ? 'ai ai-eye-slash' : 'ai ai-eye'"
+                                  :icon="entries[index].visible ? 'ai ai-eye-off' : 'ai ai-eye'"
                                   kind="outlined"
                                   size="large"
                                   :aria-label="entries[index].visible ? 'Hide value' : 'Show value'"

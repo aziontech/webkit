@@ -212,7 +212,7 @@
       <GlobalHeaderStart class="justify-start!">
         <IconButton
           ref="opener"
-          icon="ai ai-bars"
+          icon="ai ai-menu"
           kind="outlined"
           size="medium"
           :ariaLabel="t('siteNav.open')"

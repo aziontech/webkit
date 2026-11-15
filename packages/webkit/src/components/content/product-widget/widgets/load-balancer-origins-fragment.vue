@@ -193,7 +193,7 @@
               label="Add Address"
               kind="outlined"
               size="small"
-              icon="ai ai-plus-circle"
+              icon="ai ai-circle-plus"
             />
           </span>
         </span>

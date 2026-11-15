@@ -779,7 +779,7 @@
                         >
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <i
-                              class="ai ai-sliders-h shrink-0 text-(--text-muted)"
+                              class="ai ai-sliders-horizontal shrink-0 text-(--text-muted)"
                               aria-hidden="true"
                             />
                             <span class="truncate text-label-md text-(--text-default)">
@@ -867,7 +867,7 @@
                         >
                           <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                             <i
-                              class="ai ai-sliders-h shrink-0 text-(--text-muted)"
+                              class="ai ai-sliders-horizontal shrink-0 text-(--text-muted)"
                               aria-hidden="true"
                             />
                             <span class="truncate text-label-md text-(--text-default)">
@@ -961,7 +961,7 @@
             class="flex items-center gap-(--spacing-xs) text-body-sm text-(--warning-contrast)"
           >
             <i
-              class="ai ai-exclamation-triangle shrink-0"
+              class="ai ai-triangle-alert shrink-0"
               aria-hidden="true"
             />
             {{ blocker }}

@@ -107,7 +107,7 @@
       label: 'Community',
       links: [
         { label: 'Discord', href: 'https://discord.gg/azion', icon: 'ai ai-discord' },
-        { label: 'X', href: 'https://x.com/aziontech', icon: 'ai ai-x' }
+        { label: 'X', href: 'https://x.com/aziontech', icon: 'ai ai-x-brand' }
       ]
     }
   ]
@@ -136,7 +136,7 @@
   const related = [
     {
       title: 'Applications',
-      icon: 'ai ai-th-large',
+      icon: 'ai ai-layout-grid',
       href: '/docs/applications',
       text: 'Route requests, cache responses and run code with rules.'
     },
@@ -189,7 +189,7 @@
         <DocCardGroup :columns="3">
           <DocCard
             title="Deploy a template"
-            icon="ai ai-th-large"
+            icon="ai ai-layout-grid"
             href="#deploy-a-template"
             >A ready-made project, live in a few clicks.</DocCard
           >

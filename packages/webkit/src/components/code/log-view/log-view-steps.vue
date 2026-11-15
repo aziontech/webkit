@@ -156,11 +156,11 @@
             >
               <i
                 v-if="step.status === 'done'"
-                class="ai ai-check-circle text-(--success-contrast)"
+                class="ai ai-circle-check text-(--success-contrast)"
               />
               <i
                 v-else-if="step.status === 'failed'"
-                class="ai ai-times-circle text-(--danger-contrast)"
+                class="ai ai-circle-x text-(--danger-contrast)"
               />
               <i
                 v-else-if="step.status === 'skipped'"

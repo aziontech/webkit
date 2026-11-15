@@ -28,7 +28,7 @@
 <template>
   <IconButton
     v-bind="attrs"
-    icon="ai ai-times"
+    icon="ai ai-x"
     :ariaLabel="t('popover.close')"
     kind="outlined"
     size="small"

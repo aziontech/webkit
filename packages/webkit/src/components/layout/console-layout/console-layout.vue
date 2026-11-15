@@ -548,7 +548,7 @@
                 <DropdownMenuTrigger>
                   <Tooltip :text="t('consoleLayout.accountMenu')">
                     <IconButton
-                      icon="ai ai-ellipsis-v"
+                      icon="ai ai-ellipsis-vertical"
                       :ariaLabel="t('consoleLayout.accountMenu')"
                       kind="outlined"
                       size="small"
@@ -573,7 +573,7 @@
                     placement="bottom"
                   >
                     <IconButton
-                      icon="ai ai-bars"
+                      icon="ai ai-menu"
                       :ariaLabel="t('consoleLayout.openNavigation')"
                       kind="outlined"
                       size="medium"

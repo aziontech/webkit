@@ -54,7 +54,7 @@
   const types: Record<ResourceType, ResourceTypeMeta> = {
     organization: { label: 'Organization', icon: 'ai ai-building', severity: 'accent' },
     group: { label: 'Group', icon: 'ai ai-users', severity: 'info' },
-    workspace: { label: 'Workspace', icon: 'ai ai-th-large', severity: 'neutral' }
+    workspace: { label: 'Workspace', icon: 'ai ai-layout-grid', severity: 'neutral' }
   }
 
   const seedResources: Resource[] = [
@@ -404,7 +404,7 @@
         />
         <Button
           label="Move"
-          icon="ai ai-arrow-right-arrow-left"
+          icon="ai ai-arrow-right-left"
           kind="outlined"
           size="medium"
           :disabled="!selectedCount"
@@ -439,7 +439,7 @@
           </Tooltip>
           <Button
             :label="detailsOpen ? 'Hide details' : 'Show details'"
-            :icon="detailsOpen ? 'ai ai-eye-slash' : 'ai ai-eye'"
+            :icon="detailsOpen ? 'ai ai-eye-off' : 'ai ai-eye'"
             kind="transparent"
             size="medium"
             :aria-expanded="detailsOpen"
@@ -639,7 +639,7 @@
                       Charges
                       <Tooltip text="Estimated month-to-date charges.">
                         <i
-                          class="ai ai-question-circle text-body-xs text-(--text-muted)"
+                          class="ai ai-circle-help text-body-xs text-(--text-muted)"
                           role="img"
                           aria-label="About charges"
                           tabindex="0"

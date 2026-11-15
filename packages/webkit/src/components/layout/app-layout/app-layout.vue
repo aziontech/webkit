@@ -395,7 +395,7 @@
                 @click="togglePosition"
               />
               <IconButton
-                icon="ai ai-times"
+                icon="ai ai-x"
                 :ariaLabel="t('appLayout.closeSplitPanel')"
                 kind="transparent"
                 size="small"
@@ -456,7 +456,7 @@
               @click="togglePosition"
             />
             <IconButton
-              icon="ai ai-times"
+              icon="ai ai-x"
               :ariaLabel="t('appLayout.closeSplitPanel')"
               kind="transparent"
               size="small"
@@ -491,7 +491,7 @@
               {{ toolsLabel || t('appLayout.tools') }}
             </h2>
             <IconButton
-              icon="ai ai-times"
+              icon="ai ai-x"
               :ariaLabel="t('appLayout.closeTools')"
               kind="transparent"
               size="small"

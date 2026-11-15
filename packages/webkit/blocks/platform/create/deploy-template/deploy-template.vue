@@ -68,7 +68,7 @@
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-cor ai-nuxt text-body-lg leading-none text-(--text-default)"
+                  class="ai-color ai-nuxt text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>

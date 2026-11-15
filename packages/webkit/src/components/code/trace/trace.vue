@@ -760,7 +760,7 @@
               />
               <i
                 v-if="row.span.status === 'error'"
-                class="ai ai-exclamation-circle text-(--danger-contrast)"
+                class="ai ai-circle-alert text-(--danger-contrast)"
               />
             </span>
           </span>
