@@ -156,7 +156,7 @@ Each variant is the same screen in another state: `get_pattern("platform/create/
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import RadioGroup from '@aziontech/webkit/radio-group'
+  import RadioGroup from '@aziontech/webkit/radio-group-root'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import SettingRow from '@aziontech/webkit/setting-row'

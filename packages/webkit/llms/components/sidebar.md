@@ -441,7 +441,6 @@ with `defineModel`, so their `update:*` events are not hand-declared.
 ```vue
 <script setup>
   import Avatar from '@aziontech/webkit/avatar'
-  import Sidebar from '@aziontech/webkit/sidebar'
   import SidebarFooter from '@aziontech/webkit/sidebar-footer'
   import SidebarMenuBack from '@aziontech/webkit/sidebar-menu-back'
   import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
@@ -450,6 +449,7 @@ with `defineModel`, so their `update:*` events are not hand-declared.
   import SidebarMenuSub from '@aziontech/webkit/sidebar-menu-sub'
   import SidebarMenuSubContent from '@aziontech/webkit/sidebar-menu-sub-content'
   import SidebarMenuSubTrigger from '@aziontech/webkit/sidebar-menu-sub-trigger'
+  import Sidebar from '@aziontech/webkit/sidebar-root'
   import { ref } from 'vue'
 
   const open = ref(false)
