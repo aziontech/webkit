@@ -12,6 +12,7 @@
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { ref } from 'vue'
 
   const loading = false
@@ -134,9 +135,12 @@
 
   const rows: unknown[] = []
 
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
+  const { formatNumber } = useLocale()
 
-  const formatCount = (value: number) => compact.format(value)
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
+
+  const formatCount = (value: number) => compact(value)
 
   const emit = defineEmits<{ retry: [event: MouseEvent]; refresh: [event: MouseEvent] }>()
 </script>

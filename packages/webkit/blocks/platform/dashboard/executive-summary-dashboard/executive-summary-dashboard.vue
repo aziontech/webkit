@@ -14,6 +14,7 @@
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { ref } from 'vue'
 
@@ -378,18 +379,22 @@
     }
   ]
 
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
+  const { formatNumber } = useLocale()
 
-  const money = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    notation: 'compact',
-    maximumFractionDigits: 2
-  })
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
+
+  const money = (value: number) =>
+    formatNumber(value, {
+      style: 'currency',
+      currency: 'USD',
+      notation: 'compact',
+      maximumFractionDigits: 2
+    })
 
   const formatters: Record<MetricFormat, (value: number) => string> = {
-    currency: (value) => money.format(value),
-    count: (value) => compact.format(value),
+    currency: (value) => money(value),
+    count: (value) => compact(value),
     percentage: (value) => `${value.toFixed(0)}%`,
     uptime: (value) => `${value.toFixed(2)}%`,
     score: (value) => value.toFixed(0),

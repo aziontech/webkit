@@ -15,6 +15,7 @@
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
@@ -742,11 +743,14 @@
     }
   ]
 
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
-  const decimal = new Intl.NumberFormat('en-US', { maximumFractionDigits: 1 })
+  const { formatNumber } = useLocale()
+
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
+  const decimal = (value: number) => formatNumber(value, { maximumFractionDigits: 1 })
 
   const formatters: Record<MetricFormat, (value: number) => string> = {
-    count: (value) => compact.format(value),
+    count: (value) => compact(value),
     bytes: (value) => {
       const steps = ['B', 'KB', 'MB', 'GB', 'TB']
       let current = value
@@ -758,8 +762,8 @@
       return `${current.toFixed(current >= 100 || index === 0 ? 0 : 1)} ${steps[index]}`
     },
     percentage: (value) => `${value.toFixed(1)}%`,
-    ms: (value) => `${decimal.format(value)} ms`,
-    seconds: (value) => `${compact.format(value)} s`
+    ms: (value) => `${decimal(value)} ms`,
+    seconds: (value) => `${compact(value)} s`
   }
 
   const seeded = (seed: string, length: number) => {

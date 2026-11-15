@@ -23,6 +23,7 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, ref } from 'vue'
 
   interface Match {
@@ -131,7 +132,9 @@
   })
   const selected = computed(() => rows.value.filter((row) => selection.value[row.ruleId]))
   const pathCount = computed(() => selected.value.reduce((sum, row) => sum + row.paths.length, 0))
-  const formatHits = (value: number) => new Intl.NumberFormat('en-US').format(value)
+  const { formatNumber } = useLocale()
+
+  const formatHits = (value: number) => formatNumber(value)
 
   const tuningTable = ref<TableExposed<Match> | null>(null)
   const resultsEl = ref<HTMLElement | null>(null)

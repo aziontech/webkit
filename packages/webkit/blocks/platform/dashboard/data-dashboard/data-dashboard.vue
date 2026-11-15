@@ -23,6 +23,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
@@ -45,7 +46,10 @@
   const periodComparison = computed(() => currentPeriod.value.comparison)
   const periodSlug = computed(() => currentPeriod.value.label.toLowerCase().replaceAll(' ', '-'))
 
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
+  const { formatNumber } = useLocale()
+
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
 
   interface ProjectRow {
     id: string
@@ -59,7 +63,7 @@
     series: ChartSeries[]
   }
 
-  const formatCount = (value: number) => compact.format(value)
+  const formatCount = (value: number) => compact(value)
 
   const formatBytes = (value: number) => {
     const steps = ['B', 'KB', 'MB', 'GB', 'TB', 'PB']

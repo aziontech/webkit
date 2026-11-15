@@ -6,6 +6,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { ref } from 'vue'
 
   const loading = false
@@ -65,10 +66,13 @@
     }
   ]
 
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
+  const { formatNumber } = useLocale()
+
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
 
   const formatters: Record<string, (value: number) => string> = {
-    count: (value: number) => compact.format(value),
+    count: (value: number) => compact(value),
     percentage: (value: number) => `${value.toFixed(0)}%`
   }
 

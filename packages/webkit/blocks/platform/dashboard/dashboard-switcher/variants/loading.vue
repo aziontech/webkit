@@ -14,6 +14,7 @@
   import StatTile from '@aziontech/webkit/stat-tile'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   type Period = '1h' | '24h' | '7d' | '30d'
@@ -877,8 +878,10 @@
 
   const refresh = () => settle(refetching, 600)
 
+  const { formatNumber } = useLocale()
+
   const formatCount = (value: number) =>
-    new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 }).format(value)
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
 
   const formatters: Record<Format, (value: number) => string> = {
     count: formatCount,
@@ -895,12 +898,12 @@
     ms: (value) => `${Math.round(value)} ms`,
     percent: (value) => `${value.toFixed(value < 1 ? 2 : 1)}%`,
     usd: (value) =>
-      new Intl.NumberFormat('en-US', {
+      formatNumber(value, {
         style: 'currency',
         currency: 'USD',
         notation: 'compact',
         maximumFractionDigits: 1
-      }).format(value)
+      })
   }
 
   const scalesWithPeriod: ReadonlySet<Format> = new Set(['count', 'bytes', 'usd'])

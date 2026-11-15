@@ -14,6 +14,7 @@
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup, { type SuggestionItem } from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onBeforeUnmount, reactive, ref } from 'vue'
 
   interface Answer {
@@ -128,10 +129,10 @@
     return /error|502|5xx|fail/i.test(text) ? knowledge.errors : knowledge.cache
   }
 
+  const { formatDate } = useLocale()
+
   function clock(): string {
-    return new Intl.DateTimeFormat(undefined, { hour: '2-digit', minute: '2-digit' }).format(
-      new Date()
-    )
+    return formatDate(new Date(), { hour: '2-digit', minute: '2-digit' })
   }
 
   let nextId = turns.value.length + 1

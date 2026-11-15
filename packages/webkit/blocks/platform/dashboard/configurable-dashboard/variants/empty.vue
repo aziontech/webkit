@@ -8,6 +8,7 @@
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Tag from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
   const loading = false
@@ -112,9 +113,10 @@
     }
   ]
 
+  const { formatNumber } = useLocale()
+
   const formatters: Record<CardFormat, (value: number) => string> = {
-    count: (value) =>
-      new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(value),
+    count: (value) => formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 }),
     bytes: (value) => {
       const steps = ['B', 'KB', 'MB', 'GB', 'TB']
       let current = value

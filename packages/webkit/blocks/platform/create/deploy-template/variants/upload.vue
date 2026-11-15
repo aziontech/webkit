@@ -9,6 +9,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
   interface ProjectFile {
@@ -40,33 +41,38 @@
   const FILE_LIMIT = 100
   const folderName = 'acme-landing'
 
-  const byteFormat = new Intl.NumberFormat('en-US', {
-    style: 'unit',
-    unit: 'byte',
-    unitDisplay: 'narrow'
-  })
-  const kilobyteFormat = new Intl.NumberFormat('en-US', {
-    style: 'unit',
-    unit: 'kilobyte',
-    unitDisplay: 'short',
-    maximumFractionDigits: 1
-  })
-  const megabyteFormat = new Intl.NumberFormat('en-US', {
-    style: 'unit',
-    unit: 'megabyte',
-    unitDisplay: 'short',
-    maximumFractionDigits: 1
-  })
-  const countFormat = new Intl.NumberFormat('en-US')
+  const { formatNumber } = useLocale()
+
+  const byteFormat = (value: number) =>
+    formatNumber(value, {
+      style: 'unit',
+      unit: 'byte',
+      unitDisplay: 'narrow'
+    })
+  const kilobyteFormat = (value: number) =>
+    formatNumber(value, {
+      style: 'unit',
+      unit: 'kilobyte',
+      unitDisplay: 'short',
+      maximumFractionDigits: 1
+    })
+  const megabyteFormat = (value: number) =>
+    formatNumber(value, {
+      style: 'unit',
+      unit: 'megabyte',
+      unitDisplay: 'short',
+      maximumFractionDigits: 1
+    })
+  const countFormat = (value: number) => formatNumber(value)
 
   function formatSize(bytes: number): string {
-    if (bytes < 1024) return byteFormat.format(bytes)
-    if (bytes < 1024 * 1024) return kilobyteFormat.format(bytes / 1024)
-    return megabyteFormat.format(bytes / (1024 * 1024))
+    if (bytes < 1024) return byteFormat(bytes)
+    if (bytes < 1024 * 1024) return kilobyteFormat(bytes / 1024)
+    return megabyteFormat(bytes / (1024 * 1024))
   }
 
   const totalBytes = files.reduce((sum, file) => sum + file.bytes, 0)
-  const folderSummary = `${folderName} · ${countFormat.format(files.length)} ${
+  const folderSummary = `${folderName} · ${countFormat(files.length)} ${
     files.length === 1 ? 'file' : 'files'
   } · ${formatSize(totalBytes)}`
   const shownFiles = files.slice(0, FILE_LIMIT)
@@ -267,7 +273,7 @@
                         v-if="hiddenFileCount > 0"
                         class="px-(--spacing-sm) py-(--spacing-xs) text-body-xs text-(--text-muted)"
                       >
-                        and {{ countFormat.format(hiddenFileCount) }} more
+                        and {{ countFormat(hiddenFileCount) }} more
                       </p>
                     </div>
                   </div>

@@ -26,6 +26,7 @@
     type PropertyFilterQuery,
     useCollection
   } from '@aziontech/webkit/use-collection'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
   type BillingTab = 'bills' | 'payment-methods'
@@ -60,22 +61,26 @@
   const WITH_INVOICES = true
 
   const UPDATED_AT = new Date(Date.UTC(2026, 10, 10, 12))
-  const dateFormat = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    timeZone: 'UTC'
-  })
-  const updatedFormat = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZone: 'UTC',
-    timeZoneName: 'short'
-  })
-  const formatDate = (value: Date): string => dateFormat.format(value)
+  const { formatDate: formatLocaleDate } = useLocale()
+
+  const dateFormat = (value: Date | number | string) =>
+    formatLocaleDate(value, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      timeZone: 'UTC'
+    })
+  const updatedFormat = (value: Date | number | string) =>
+    formatLocaleDate(value, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'UTC',
+      timeZoneName: 'short'
+    })
+  const formatDate = (value: Date): string => dateFormat(value)
   const formatAmount = (value: number): string => value.toFixed(2)
 
   const seedMethods: PaymentMethod[] = [
@@ -254,7 +259,7 @@
       >
         <template #actions>
           <span class="text-body-sm text-(--text-muted)"
-            >Updated {{ updatedFormat.format(UPDATED_AT) }}</span
+            >Updated {{ updatedFormat(UPDATED_AT) }}</span
           >
           <Tooltip
             text="Refresh"

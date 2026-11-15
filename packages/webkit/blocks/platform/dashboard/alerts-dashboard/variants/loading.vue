@@ -13,6 +13,7 @@
   import Table from '@aziontech/webkit/table'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
   type FigureFormat = 'count' | 'percentage'
@@ -503,10 +504,13 @@
     Investigating: 'info'
   }
 
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
+  const { formatNumber } = useLocale()
+
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
 
   const formatters: Record<FigureFormat, (value: number) => string> = {
-    count: (value) => compact.format(value),
+    count: (value) => compact(value),
     percentage: (value) => `${value.toFixed(0)}%`
   }
 </script>

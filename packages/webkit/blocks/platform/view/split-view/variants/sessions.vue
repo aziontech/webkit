@@ -29,6 +29,7 @@
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   type EventSource = 'http' | 'security' | 'services' | 'access'
@@ -129,31 +130,36 @@
 
   const minutesAgo = (minutes: number) => new Date(referenceNow - minutes * 60 * 1000)
 
-  const dayFormat = new Intl.DateTimeFormat('en-US', {
-    month: 'short',
-    day: '2-digit',
-    timeZone: 'UTC'
-  })
-  const clockFormat = new Intl.DateTimeFormat('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false,
-    timeZone: 'UTC'
-  })
-  const axisFormat = new Intl.DateTimeFormat('en-US', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: false,
-    timeZone: 'UTC'
-  })
+  const { formatDate, formatNumber } = useLocale()
+
+  const dayFormat = (value: Date | number | string) =>
+    formatDate(value, {
+      month: 'short',
+      day: '2-digit',
+      timeZone: 'UTC'
+    })
+  const clockFormat = (value: Date | number | string) =>
+    formatDate(value, {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false,
+      timeZone: 'UTC'
+    })
+  const axisFormat = (value: Date | number | string) =>
+    formatDate(value, {
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+      timeZone: 'UTC'
+    })
   const isDate = (value: unknown): value is Date =>
     value instanceof Date && !Number.isNaN(value.getTime())
 
   const formatEventTime = (date: Date) =>
-    isDate(date) ? `${dayFormat.format(date)}, ${clockFormat.format(date)}` : ''
+    isDate(date) ? `${dayFormat(date)}, ${clockFormat(date)}` : ''
 
-  const formatEventClock = (date: unknown) => (isDate(date) ? axisFormat.format(date) : '')
+  const formatEventClock = (date: unknown) => (isDate(date) ? axisFormat(date) : '')
 
   const eventSources: Record<EventSource, string> = {
     http: 'HTTP Requests',
@@ -230,12 +236,12 @@
     if (!value || typeof value !== 'object') return ''
     const { start, end } = value
     if (!start) return end ? `Until ${formatEventClock(end)}` : ''
-    const sameDay = end && dayFormat.format(start) === dayFormat.format(end)
-    const from = `${dayFormat.format(start)}, ${formatEventClock(start)}`
+    const sameDay = end && dayFormat(start) === dayFormat(end)
+    const from = `${dayFormat(start)}, ${formatEventClock(start)}`
     if (!end) return `Since ${from}`
     return sameDay
       ? `${from} to ${formatEventClock(end)}`
-      : `${from} to ${dayFormat.format(end)}, ${formatEventClock(end)}`
+      : `${from} to ${dayFormat(end)}, ${formatEventClock(end)}`
   }
 
   const eventFieldCategories: { id: EventFieldCategory; label: string }[] = [
@@ -273,7 +279,7 @@
       category: 'response',
       align: 'end',
       minWidth: 80,
-      format: (value) => value.toLocaleString('en-US')
+      format: (value) => formatNumber(value)
     },
     { id: 'cacheStatus', label: 'Cache status', category: 'cache', minWidth: 80, mono: true },
     { id: 'country', label: 'Country', category: 'geolocation', minWidth: 80 },
@@ -1566,7 +1572,7 @@
                     <div class="flex flex-col">
                       <dt class="text-label-sm text-(--text-muted)">Events</dt>
                       <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-                        {{ summary.total.toLocaleString('en-US') }}
+                        {{ formatNumber(summary.total) }}
                       </dd>
                     </div>
                     <div class="flex flex-col">
@@ -1576,7 +1582,7 @@
                         :data-raised="summary.errors ? true : null"
                         :aria-label="`${summary.errors} errors, ${errorShareLabel}`"
                       >
-                        {{ summary.errors.toLocaleString('en-US') }}
+                        {{ formatNumber(summary.errors) }}
                       </dd>
                     </div>
                     <div class="flex flex-col">

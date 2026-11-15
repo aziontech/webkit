@@ -8,6 +8,7 @@
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { ref } from 'vue'
 
   const loading = false
@@ -146,18 +147,22 @@
     }
   ]
 
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
+  const { formatNumber } = useLocale()
 
-  const money = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    notation: 'compact',
-    maximumFractionDigits: 2
-  })
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
+
+  const money = (value: number) =>
+    formatNumber(value, {
+      style: 'currency',
+      currency: 'USD',
+      notation: 'compact',
+      maximumFractionDigits: 2
+    })
 
   const formatters: Record<string, (value: number) => string> = {
-    currency: (value: number) => money.format(value),
-    count: (value: number) => compact.format(value),
+    currency: (value: number) => money(value),
+    count: (value: number) => compact(value),
     percentage: (value: number) => `${value.toFixed(0)}%`,
     uptime: (value: number) => `${value.toFixed(2)}%`,
     score: (value: number) => value.toFixed(0),

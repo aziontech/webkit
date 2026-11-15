@@ -14,6 +14,7 @@
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { ref } from 'vue'
 
   interface Contributor {
@@ -164,22 +165,26 @@
     }
   ]
 
-  const spendFormat = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    notation: 'compact',
-    maximumFractionDigits: 1
-  })
+  const { formatNumber } = useLocale()
 
-  const amountFormat = new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0
-  })
+  const spendFormat = (value: number) =>
+    formatNumber(value, {
+      style: 'currency',
+      currency: 'USD',
+      notation: 'compact',
+      maximumFractionDigits: 1
+    })
+
+  const amountFormat = (value: number) =>
+    formatNumber(value, {
+      style: 'currency',
+      currency: 'USD',
+      maximumFractionDigits: 0
+    })
 
   const formatters = {
-    spend: (value: number) => spendFormat.format(value),
-    amount: (value: number) => amountFormat.format(value),
+    spend: (value: number) => spendFormat(value),
+    amount: (value: number) => amountFormat(value),
     share: (value: number) => `${value.toFixed(1)}%`,
     change: (value: number) => `${value > 0 ? '+' : ''}${value.toFixed(1)}%`
   }
