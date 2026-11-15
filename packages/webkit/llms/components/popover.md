@@ -1,6 +1,6 @@
 # Popover
 
-> Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.
+> Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `dropdown-menu`, which renders a menu of selectable options rather than free-form content.
 
 - Import: `import PopoverRoot from '@aziontech/webkit/popover-root'`
 - Compound import (dot notation, not tree-shakeable): `import Popover from '@aziontech/webkit/popover'`
@@ -36,7 +36,7 @@
 ## Related
 
 - [tooltip](tooltip.md) — plain text only and non-interactive; opens on hover and focus, not on click.
-- dropdown` — same trigger and anchoring model, but renders option rows and emits `select`.
+- [dropdown-menu](dropdown-menu.md) — same trigger and anchoring model, but renders option rows and emits `select`.
 - [dialog](dialog.md) — modal and centered, traps focus and locks scroll; the popover does neither.
 - [drawer](drawer.md) — edge-anchored modal panel for longer content.
 

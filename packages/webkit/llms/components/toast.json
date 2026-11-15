@@ -28,7 +28,7 @@
   "Validation feedback for a single field → use `helper-text`."
  ],
  "related": [
-  "message` — inline severity banner placed in the page flow; it stays until it is closed.",
+  "alert` — inline severity banner placed in the page flow; it stays until it is closed.",
   "dialog` — blocking modal for decisions and confirmations.",
   "spinner` — rendered by the `loading` toast type.",
   "progress` — rendered under the copy of a `toast.progress` toast."

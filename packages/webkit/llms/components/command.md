@@ -33,7 +33,7 @@
 
 - [dialog](dialog.md) — the overlay primitive Command Menu wraps for panel, backdrop, focus trap, and Escape.
 - [kbd](kbd.md) — renders each item's keyboard-shortcut hint and the ⌘K affordance.
-- dropdown` — trigger-anchored menu; reach for it when the list is short and positioned by a trigger.
+- [dropdown-menu](dropdown-menu.md) — trigger-anchored menu; reach for it when the list is short and positioned by a trigger.
 
 ## Props
 

@@ -16,7 +16,7 @@
   "@aziontech/webkit/popover-close",
   "@aziontech/webkit/popover-footer"
  ],
- "purpose": "Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.",
+ "purpose": "Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `dropdown-menu`, which renders a menu of selectable options rather than free-form content.",
  "setup": null,
  "useWhen": [
   "Use Popover for rich or interactive content (a form, actions) opened by a click and closed on purpose; a one-line hint is a Tooltip and a read-only hover preview is a HoverCard.",
@@ -32,7 +32,7 @@
  ],
  "related": [
   "tooltip` — plain text only and non-interactive; opens on hover and focus, not on click.",
-  "dropdown` — same trigger and anchoring model, but renders option rows and emits `select`.",
+  "dropdown-menu` — same trigger and anchoring model, but renders option rows and emits `select`.",
   "dialog` — modal and centered, traps focus and locks scroll; the popover does neither.",
   "drawer` — edge-anchored modal panel for longer content."
  ],

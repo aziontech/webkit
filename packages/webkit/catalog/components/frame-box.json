@@ -14,7 +14,7 @@
   "section-gap` — an empty `frame-box` that holds the air between two sections.",
   "section-title` — a `frame-box` around a centered section header.",
   "card` — a padded surface with header/content/footer regions; a card, not a frame.",
-  "divider` — one hairline with optional centered label; no corners, no content."
+  "separator` — one hairline with optional centered label; no corners, no content."
  ],
  "bestPractices": [
   "Stack or abut frames with `flush` so a shared edge reads as one hairline instead of two. It subtracts the named sides from this frame's own set, so it works vertically (`flush`, i.e. `top`) and horizontally (`flush=\"left\"`) with the same mechanic.",

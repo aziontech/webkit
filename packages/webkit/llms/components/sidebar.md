@@ -37,7 +37,7 @@
 - [sidebar-menu](sidebar-menu.md) — the navigation rows, groups and drill levels that go in the sidebar's default slot.
 - [resizable](resizable.md) — draggable splits between content regions; the sidebar's rail gesture is for navigation only.
 - [global-header](global-header.md) — the top bar that usually sits above the sidebar in an app shell.
-- platform-shell` — the console layout template that composes the header, the sidebar and the page.
+- [console-layout](console-layout.md) — the console layout template that composes the header, the sidebar and the page.
 
 ## Props
 

@@ -13,7 +13,7 @@
  "related": [
   "Field.Label` — sits above the input; HelperText sits below it.",
   "field` — `Field.Description` switches the helper `kind` from the Field's `disabled`, `invalid` and `required` state.",
-  "message` — banner-level feedback with severity and an optional action."
+  "alert` — banner-level feedback with severity and an optional action."
  ],
  "bestPractices": [
   "Give it an `id` and point the input's `aria-describedby` at it so screen readers read it with the field.",

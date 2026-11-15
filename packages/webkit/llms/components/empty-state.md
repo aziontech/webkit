@@ -29,7 +29,7 @@
 ## Related
 
 - [skeleton](skeleton.md) — the loading placeholder shown before the empty state is known.
-- message` — inline severity banner, not a zero-data block.
+- [alert](alert.md) — inline severity banner, not a zero-data block.
 - [table](table.md) — renders an empty-state block in its `empty` slot.
 - [button](button.md) — the usual content of the `actions` slot.
 

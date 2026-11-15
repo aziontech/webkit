@@ -35,7 +35,7 @@
 
 - [field](field.md) — label, this select, and description/error, with the wiring done.
 - [multi-select](multi-select.md) — multi-only variant with checkbox rows and an array model.
-- dropdown` — action menu that reports the chosen option as an event and holds no form value.
+- [dropdown-menu](dropdown-menu.md) — action menu that reports the chosen option as an event and holds no form value.
 - [input-group](input-group.md) — joins a select to an input, such as currency plus amount.
 
 ## Props

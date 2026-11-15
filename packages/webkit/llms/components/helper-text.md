@@ -29,7 +29,7 @@
 
 - Field.Label` — sits above the input; HelperText sits below it.
 - [field](field.md) — `Field.Description` switches the helper `kind` from the Field's `disabled`, `invalid` and `required` state.
-- message` — banner-level feedback with severity and an optional action.
+- [alert](alert.md) — banner-level feedback with severity and an optional action.
 
 ## Props
 
