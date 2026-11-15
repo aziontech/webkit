@@ -77,16 +77,17 @@ test('the server answers over stdio from the installed @aziontech/webkit catalog
   const list = await server.request('tools/list')
   const names = list.result.tools.map((tool) => tool.name)
   for (const name of [
+    'get_block',
     'get_component',
     'get_import',
-    'get_pattern',
+    'search_blocks',
     'search_components',
-    'search_patterns',
     'suggest_component',
     'validate_usage'
   ]) {
     assert.ok(names.includes(name), `missing tool ${name}`)
   }
+  assert.ok(!names.some((name) => /pattern/.test(name)), 'no tool keeps the old pattern name')
 
   const validate = list.result.tools.find((tool) => tool.name === 'validate_usage')
   const componentDoc = validate.inputSchema.properties.component.description

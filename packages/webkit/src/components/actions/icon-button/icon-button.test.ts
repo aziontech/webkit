@@ -222,59 +222,59 @@ describe('IconButton', () => {
     const { getByTestId } = render(Default)
     expect(getByTestId('actions-icon-button')).toBeInTheDocument()
   })
-})
 
-describe('IconButton accessible name', () => {
-  it('takes its name from the kebab aria-label attribute a template writes', () => {
-    const { getByRole } = render({
-      components: { IconButton },
-      template: '<IconButton icon="ai ai-trash" aria-label="Delete domain" />'
+  describe('accessible name', () => {
+    it('takes its name from the kebab aria-label attribute a template writes', () => {
+      const { getByRole } = render({
+        components: { IconButton },
+        template: '<IconButton icon="ai ai-trash" aria-label="Delete domain" />'
+      })
+
+      const button = getByRole('button', { name: 'Delete domain' })
+      expect(button).toHaveAttribute('aria-label', 'Delete domain')
     })
 
-    const button = getByRole('button', { name: 'Delete domain' })
-    expect(button).toHaveAttribute('aria-label', 'Delete domain')
-  })
-
-  it('takes a bound :aria-label and follows its changes', async () => {
-    const { getByRole, getByTestId } = render({
-      components: { IconButton },
-      data: () => ({ label: 'Show password' }),
-      template: `
+    it('takes a bound :aria-label and follows its changes', async () => {
+      const { getByRole, getByTestId } = render({
+        components: { IconButton },
+        data: () => ({ label: 'Show password' }),
+        template: `
         <div>
           <IconButton icon="ai ai-eye" :aria-label="label" />
           <button type="button" data-testid="toggle" @click="label = 'Hide password'">toggle</button>
         </div>
       `
+      })
+
+      expect(getByRole('button', { name: 'Show password' })).toBeTruthy()
+      await fireEvent.click(getByTestId('toggle'))
+      expect(getByRole('button', { name: 'Hide password' })).toBeTruthy()
     })
 
-    expect(getByRole('button', { name: 'Show password' })).toBeTruthy()
-    await fireEvent.click(getByTestId('toggle'))
-    expect(getByRole('button', { name: 'Hide password' })).toBeTruthy()
-  })
-
-  it('renders no empty aria-label when aria-labelledby names it', async () => {
-    const { getByTestId, container } = render({
-      components: { IconButton },
-      template: `
+    it('renders no empty aria-label when aria-labelledby names it', async () => {
+      const { getByTestId, container } = render({
+        components: { IconButton },
+        template: `
         <div>
           <span id="close-name">Close panel</span>
           <IconButton icon="ai ai-x" aria-labelledby="close-name" />
         </div>
       `
+      })
+
+      const button = getByTestId('actions-icon-button')
+      expect(button).not.toHaveAttribute('aria-label')
+      expect(button).toHaveAttribute('aria-labelledby', 'close-name')
+      await expectNoA11yViolations(container)
     })
-
-    const button = getByTestId('actions-icon-button')
-    expect(button).not.toHaveAttribute('aria-label')
-    expect(button).toHaveAttribute('aria-labelledby', 'close-name')
-    await expectNoA11yViolations(container)
   })
-})
 
-describe('IconButton touch target', () => {
-  it('adds a 44px hit area on coarse pointers without changing the drawn size', () => {
-    const view = render(IconButton, { props: { icon: 'ai ai-x', ariaLabel: 'Close' } })
-    const target = view.getByRole('button').querySelector('[data-slot="touch-target"]')
+  describe('touch target', () => {
+    it('adds a 44px hit area on coarse pointers without changing the drawn size', () => {
+      const view = render(IconButton, { props: { icon: 'ai ai-x', ariaLabel: 'Close' } })
+      const target = view.getByRole('button').querySelector('[data-slot="touch-target"]')
 
-    expect(target?.className).toContain('pointer-coarse:block')
+      expect(target?.className).toContain('pointer-coarse:block')
+    })
   })
 })

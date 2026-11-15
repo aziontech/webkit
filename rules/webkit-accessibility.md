@@ -6,7 +6,7 @@ you build around them — custom components, views, composed overlays — must h
 contract. In this project accessibility is **convention + code review**; two parts are
 mechanically enforced: color — raw colors (including focus rings) are blocked by the
 stylelint config and the `webkit/no-hardcoded-color` ESLint rule — and the accessible name of
-an icon-only control, which `webkit/accessible-name` requires on every `IconButton`.
+an icon-only control, which `webkit/require-accessible-name` requires on every `IconButton`.
 
 ## Do
 
@@ -18,7 +18,7 @@ an icon-only control, which `webkit/accessible-name` requires on every `IconButt
 - Name a webkit control in the template with the **kebab attribute**: `aria-label="Delete domain"`
   (`:aria-label` when it changes, `aria-labelledby` when visible text already names it). Vue maps
   it onto the component's `ariaLabel` prop. An `IconButton` (or `ButtonGroup`) with no name is
-  flagged by `webkit/accessible-name`.
+  flagged by `webkit/require-accessible-name`.
 - On your own components, name the accessible-name prop **`ariaLabel`** (prefixed
   `xAriaLabel` for sub-parts), make it **optional with a `''` default**, and bind it to the
   `aria-label` attribute internally (`ariaLabel || undefined`). vue-tsc does not camelize

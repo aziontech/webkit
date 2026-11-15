@@ -3,7 +3,7 @@ import { existsSync, readFileSync } from 'node:fs'
 import { createRequire } from 'node:module'
 import { dirname, join, relative } from 'node:path'
 
-import { loadCatalog } from '../eslint-plugin/catalog.js'
+import { loadCatalog } from '../eslint-plugin/lib/catalog.js'
 
 export const UI_EXTENSIONS = ['vue', 'astro']
 
@@ -13,7 +13,7 @@ export const RULE_PURPOSE = {
     'page height hand-computed from the viewport (calc(100dvh - …)) instead of data-layout-fill',
   'no-root-relative-asset':
     'site-only /marketing-components or /media URL a copied app does not serve',
-  'valid-import-path': 'import path that does not exist in the installed version',
+  'no-unknown-import': 'import path that does not exist in the installed version',
   'no-deep-internal-import': 'reaches into the package internals instead of a published entry',
   'no-barrel-import': 'bare-package barrel import (there is no barrel entry)',
   'no-whole-icon-set-import': 'pulls the whole icon set instead of one icon',
@@ -26,24 +26,24 @@ export const RULE_PURPOSE = {
   'prefer-define-model': 'hand-rolled modelValue + update:modelValue pair',
   'no-style-override': 'class/style on a webkit component — restyling it',
   'authoring-standards': 'shared authoring standards (typed slots, comments, deprecation)',
-  'container-needs-width': 'Card, StatTile or ChartCard as a flex item with no width',
-  'header-search-trigger': 'app header without SearchTrigger, or a hand-rolled ⌘K field',
+  'require-container-width': 'Card, StatTile or ChartCard as a flex item with no width',
+  'require-header-search': 'app header without SearchTrigger, or a hand-rolled ⌘K field',
   'no-wrapped-page-chrome': 'SiteFooter or SiteNav inside a bordered or padded wrapper',
   'no-output-in-command': 'shell code sample that mixes the command with what it prints',
-  'menu-node-href': 'navigation node naming its destination path/to/url instead of href',
+  'prefer-href-in-menu-node': 'navigation node naming its destination path/to/url instead of href',
   'no-gap-after-closing-section':
     'SectionGap or closing frame after a section that draws its own close',
-  'accessible-name': 'IconButton or ButtonGroup with no aria-label or aria-labelledby',
+  'require-accessible-name': 'IconButton or ButtonGroup with no aria-label or aria-labelledby',
   'no-dropped-children': 'content inside a webkit component with no default slot, never rendered'
 }
 
 const TEMPLATE_ONLY_RULES = [
   'no-style-override',
-  'container-needs-width',
-  'header-search-trigger',
+  'require-container-width',
+  'require-header-search',
   'no-wrapped-page-chrome',
   'no-gap-after-closing-section',
-  'accessible-name',
+  'require-accessible-name',
   'no-dropped-children'
 ]
 

@@ -1,4 +1,4 @@
-import { getComponent, getPattern, searchComponents, searchPatterns } from '../catalog/queries.js'
+import { getBlock, getComponent, searchBlocks, searchComponents } from '../catalog/queries.js'
 import { PACKAGE_NAME } from './source.js'
 
 const words = (s) =>
@@ -33,7 +33,7 @@ export function searchExamples(catalog, query, limit = 8) {
 }
 
 export function runSearch(catalog, query) {
-  const blocks = searchPatterns(catalog, query)
+  const blocks = searchBlocks(catalog, query)
   const components = searchComponents(catalog, query)
   return {
     ok: true,
@@ -103,7 +103,7 @@ export function runView(catalog, id, { variant, example } = {}) {
       example: chosen ? { name: chosen.name, sfc: chosen.sfc } : null
     }
   }
-  const block = getPattern(catalog, key, variant ? { variant } : {})
+  const block = getBlock(catalog, key, variant ? { variant } : {})
   if (block.found) return { kind: 'block', ...block }
   if (component && !looksLikeBlock) {
     return {

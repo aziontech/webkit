@@ -262,7 +262,7 @@ Components do **not** have a per-folder `package.json`. Module resolution goes t
 
 ## TypeScript Declarations
 
-TypeScript declaration files (`.d.ts`) are **auto-generated** using Vue TSC. They are emitted at publish time by the publish workflow (`.github/workflows/package-webkit.yml` runs `vue-tsc --declaration --emitDeclarationOnly` right before `npm publish`, on release-please's `release: published`) and ship to npm consumers; declaration-emit is validated in CI by `type-check` (`vue-tsc --noEmit`).
+TypeScript declaration files (`.d.ts`) are **auto-generated** using Vue TSC. They are emitted at publish time by the publish workflow (`.github/workflows/publish-webkit.yml` runs `vue-tsc --declaration --emitDeclarationOnly` right before `npm publish`, on release-please's `release: published`) and ship to npm consumers; declaration-emit is validated in CI by `type-check` (`vue-tsc --noEmit`).
 
 **DO NOT manually edit `.d.ts` or `.d.ts.map` files.**
 
@@ -536,7 +536,7 @@ Some components may require Vue Router for navigation or routing features.
 
 **Problem:** `.d.ts` files are missing or outdated
 
-**Solution:** Declarations are generated at publish time by the publish workflow (`.github/workflows/package-webkit.yml`, `vue-tsc --declaration --emitDeclarationOnly`); declaration-emit is validated locally and in CI by `type-check` (`vue-tsc --noEmit`). Run `pnpm webkit:type-check` to surface declaration errors.
+**Solution:** Declarations are generated at publish time by the publish workflow (`.github/workflows/publish-webkit.yml`, `vue-tsc --declaration --emitDeclarationOnly`); declaration-emit is validated locally and in CI by `type-check` (`vue-tsc --noEmit`). Run `pnpm typecheck:webkit` to surface declaration errors.
 
 ### Export Not Found
 
@@ -873,16 +873,16 @@ For every new component, generate `<name>.figma.ts` next to the `.vue` mapping F
 
 CLI scripts (in `packages/webkit/package.json`):
 
-- `pnpm --filter webkit run figma:parse` — verify all `.figma.ts` files parse.
-- `pnpm --filter webkit run figma:publish` — publish mappings to Figma. **Requires `FIGMA_ACCESS_TOKEN`** in the environment.
-- `pnpm --filter webkit run figma:unpublish` — remove published mappings.
+- `pnpm --filter @aziontech/webkit run parse:figma` — verify all `.figma.ts` files parse.
+- `pnpm --filter @aziontech/webkit run publish:figma` — publish mappings to Figma. **Requires `FIGMA_ACCESS_TOKEN`** in the environment.
+- `pnpm --filter @aziontech/webkit run unpublish:figma` — remove published mappings.
 
 Authoring the `.figma.ts` file works without the token; only publishing needs it.
 
 **Where to put `FIGMA_ACCESS_TOKEN`:**
 
-- **Locally:** copy [`packages/webkit/.env.example`](../../packages/webkit/.env.example) to `packages/webkit/.env` (gitignored) and fill `FIGMA_ACCESS_TOKEN=...`. Alternatively, `export FIGMA_ACCESS_TOKEN=...` in your shell or pass it inline: `FIGMA_ACCESS_TOKEN=... pnpm --filter webkit run figma:publish`. Generate the token at <https://www.figma.com/developers/api#access-tokens> (requires a Dev Mode seat with Code Connect enabled on the Figma org).
-- **CI (GitHub Actions):** add `FIGMA_ACCESS_TOKEN` as a repository secret (`Settings → Secrets and variables → Actions`) and reference it via `env: { FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }} }` in the workflow step that calls `figma:publish`.
+- **Locally:** copy [`packages/webkit/.env.example`](../../packages/webkit/.env.example) to `packages/webkit/.env` (gitignored) and fill `FIGMA_ACCESS_TOKEN=...`. Alternatively, `export FIGMA_ACCESS_TOKEN=...` in your shell or pass it inline: `FIGMA_ACCESS_TOKEN=... pnpm --filter @aziontech/webkit run publish:figma`. Generate the token at <https://www.figma.com/developers/api#access-tokens> (requires a Dev Mode seat with Code Connect enabled on the Figma org).
+- **CI (GitHub Actions):** add `FIGMA_ACCESS_TOKEN` as a repository secret (`Settings → Secrets and variables → Actions`) and reference it via `env: { FIGMA_ACCESS_TOKEN: ${{ secrets.FIGMA_ACCESS_TOKEN }} }` in the workflow step that calls `publish:figma`.
 - **Never** commit the token. `.env` and `.env.*` are gitignored at the repo root; only [`.env.example`](../../packages/webkit/.env.example) is versioned.
 
 ### 13. Examples — canonical pattern
@@ -892,7 +892,7 @@ Every component documents itself through copyable SFCs in `packages/webkit/examp
 - `examples.json`: `{ "component": "<name>", "title": "Components/<Category>/<PascalName>", "examples": [{ "name", "summary", "file" }] }`. The first example is the default view and is the one the styled visual suite screenshots.
 - One `.vue` per example: `<script setup>` with the real `@aziontech/webkit/<subpath>` imports (binding = `PascalCase` of the subpath), a `<template>` with PascalCase tags and concrete props. It stands alone: copy the file and it runs.
 - Set: `default.vue` + one composite example per multi-option axis (`types.vue` for `kind`, `sizes.vue` for `size`) + one example per mutually-exclusive state the component declares (`loading.vue`, `disabled.vue`). Nothing else unless the spec's `## Examples` section lists and justifies it.
-- The docs site renders each example on `/components/<name>` beside its source and alone at `/example?path=<name>/<file>`; the catalog (`catalog.json`), the MCP (`get_component`) and the harnesses (copyable, hydration, server render, a11y) read the same files.
+- The docs site renders each example on `/components/<name>` beside its source and alone at `/frame/example/<name>/<file>`; the catalog (`catalog.json`), the MCP (`get_component`) and the harnesses (copyable, hydration, server render, a11y) read the same files.
 
 ### 13.w Styling discipline (mandatory for new components)
 
@@ -1091,7 +1091,7 @@ The spec lists which `kind` / `size` examples exist. Do **not** add visual permu
 #### Validação
 
 - [ ] `<name>.figma.ts` created next to the `.vue` (Code Connect available — see § 12).
-- [ ] `pnpm webkit:lint && webkit:type-check && webkit:type-coverage && pnpm --filter @aziontech/webkit test:ssr` all pass.
+- [ ] `pnpm lint:webkit && typecheck:webkit && type-coverage:webkit && pnpm --filter @aziontech/webkit test:ssr` all pass.
 
 ---
 

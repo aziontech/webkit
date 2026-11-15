@@ -1,4 +1,4 @@
-import { templateBodyVisitorFactory } from '../util.js'
+import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const VIEWPORT_MINUS = String.raw`calc\((?:\s|_)*100[dsl]?vh(?:\s|_)*-`
 

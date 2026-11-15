@@ -20,39 +20,39 @@ const root = (): HTMLElement =>
 
 const URI = 'otpauth://totp/Azion:ana%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=Azion'
 
-describe('encodeQr', () => {
-  it('picks the smallest version for the length and level', () => {
-    expect(encodeQr('hi', 'L')).toHaveLength(21)
-    expect(encodeQr(URI, 'M')).toHaveLength(37)
-    expect(encodeQr('x'.repeat(300), 'M')).toHaveLength(69)
-  })
-
-  it('draws the three finder patterns and the timing lines', () => {
-    const grid = encodeQr(URI)
-    const n = grid.length
-    for (const [x, y] of [
-      [0, 0],
-      [n - 7, 0],
-      [0, n - 7]
-    ]) {
-      expect(grid[y].slice(x, x + 7)).toEqual(Array(7).fill(true))
-      expect(grid[y + 1].slice(x, x + 7)).toEqual([true, false, false, false, false, false, true])
-      expect(grid[y + 3].slice(x, x + 7)).toEqual([true, false, true, true, true, false, true])
-    }
-    for (let i = 8; i < n - 8; i++) {
-      expect(grid[6][i]).toBe(i % 2 === 0)
-      expect(grid[i][6]).toBe(i % 2 === 0)
-    }
-    expect(grid[n - 8][8]).toBe(true)
-  })
-
-  it('is deterministic and throws past version 40', () => {
-    expect(encodeQr(URI)).toEqual(encodeQr(URI))
-    expect(() => encodeQr('z'.repeat(1300), 'H')).toThrow(RangeError)
-  })
-})
-
 describe('QrCode', () => {
+  describe('encodeQr', () => {
+    it('picks the smallest version for the length and level', () => {
+      expect(encodeQr('hi', 'L')).toHaveLength(21)
+      expect(encodeQr(URI, 'M')).toHaveLength(37)
+      expect(encodeQr('x'.repeat(300), 'M')).toHaveLength(69)
+    })
+
+    it('draws the three finder patterns and the timing lines', () => {
+      const grid = encodeQr(URI)
+      const n = grid.length
+      for (const [x, y] of [
+        [0, 0],
+        [n - 7, 0],
+        [0, n - 7]
+      ]) {
+        expect(grid[y].slice(x, x + 7)).toEqual(Array(7).fill(true))
+        expect(grid[y + 1].slice(x, x + 7)).toEqual([true, false, false, false, false, false, true])
+        expect(grid[y + 3].slice(x, x + 7)).toEqual([true, false, true, true, true, false, true])
+      }
+      for (let i = 8; i < n - 8; i++) {
+        expect(grid[6][i]).toBe(i % 2 === 0)
+        expect(grid[i][6]).toBe(i % 2 === 0)
+      }
+      expect(grid[n - 8][8]).toBe(true)
+    })
+
+    it('is deterministic and throws past version 40', () => {
+      expect(encodeQr(URI)).toEqual(encodeQr(URI))
+      expect(() => encodeQr('z'.repeat(1300), 'H')).toThrow(RangeError)
+    })
+  })
+
   it('is an image named by the aria-label, with the code dark on a light plate', () => {
     const view = render(QrCode, { props: { value: URI, ariaLabel: 'QR code to add ana' } })
     const img = view.getByRole('img', { name: 'QR code to add ana' })

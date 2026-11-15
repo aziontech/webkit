@@ -13,7 +13,7 @@ concurrency:
 
 jobs:
   release-please:
-    name: Maintain Release PR / cut releases
+    name: Maintain the release PR and cut releases
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -62,9 +62,9 @@ jobs:
             fi
           }
 
-          [ "$WEBKIT_RELEASED" = "true" ] && dispatch package-webkit.yml "$WEBKIT_TAG"
-          [ "$THEME_RELEASED" = "true" ] && dispatch package-theme.yml "$THEME_TAG"
-          [ "$ICONS_RELEASED" = "true" ] && dispatch package-icons.yml "$ICONS_TAG"
-          [ "$WEBKIT_MCP_RELEASED" = "true" ] && dispatch package-webkit-mcp.yml "$WEBKIT_MCP_TAG"
+          [ "$WEBKIT_RELEASED" = "true" ] && dispatch publish-webkit.yml "$WEBKIT_TAG"
+          [ "$THEME_RELEASED" = "true" ] && dispatch publish-theme.yml "$THEME_TAG"
+          [ "$ICONS_RELEASED" = "true" ] && dispatch publish-icons.yml "$ICONS_TAG"
+          [ "$WEBKIT_MCP_RELEASED" = "true" ] && dispatch publish-webkit-mcp.yml "$WEBKIT_MCP_TAG"
 
           exit "$failed"

@@ -136,272 +136,273 @@ afterEach(async () => {
   await settle()
 })
 
-describe('Command (overlay: wraps Dialog, composition + provide/inject)', () => {
-  describe('closed state', () => {
-    it('renders no Teleported panel while closed', async () => {
-      const { getByTestId } = render(composed())
-      await settle()
+describe('Command', () => {
+  describe('overlay: wraps Dialog, composition and provide/inject', () => {
+    describe('closed state', () => {
+      it('renders no Teleported panel while closed', async () => {
+        const { getByTestId } = render(composed())
+        await settle()
 
-      expect(getByTestId('overlay-command').getAttribute('data-state')).toBe('closed')
-      expect(panel()).toBeNull()
-    })
-  })
-
-  describe('opening via v-model:open', () => {
-    it('mounts the role=dialog panel Teleported to document.body when open', async () => {
-      const { getByTestId } = render(composed({ defaultOpen: true }))
-      await settle()
-
-      expect(getByTestId('overlay-command').getAttribute('data-state')).toBe('open')
-
-      const dialog = panel()
-      expect(dialog).not.toBeNull()
-      expect(dialog!.getAttribute('role')).toBe('dialog')
-
-      // The input is a combobox wired to the list's id.
-      const input = byTestId('overlay-command__input')!.querySelector('input')!
-      expect(input.getAttribute('role')).toBe('combobox')
-      expect(input.getAttribute('aria-expanded')).toBe('true')
-      expect(input.getAttribute('aria-controls')).toBe(byTestId('overlay-command__list')!.id)
-    })
-  })
-
-  describe('search field accessible name', () => {
-    it('names the field with its placeholder text when no ariaLabel is given', async () => {
-      render(composed({ defaultOpen: true }))
-      await settle()
-
-      const input = byTestId('overlay-command__input')!.querySelector('input')!
-      expect(screen.getByLabelText('Search commands…')).toBe(input)
-      expect(input.getAttribute('aria-label')).toBe('Search commands…')
+        expect(getByTestId('overlay-command').getAttribute('data-state')).toBe('closed')
+        expect(panel()).toBeNull()
+      })
     })
 
-    it('an explicit ariaLabel wins over the placeholder', async () => {
-      render(composed({ defaultOpen: true }, { ariaLabel: 'Search actions' }))
-      await settle()
+    describe('opening via v-model:open', () => {
+      it('mounts the role=dialog panel Teleported to document.body when open', async () => {
+        const { getByTestId } = render(composed({ defaultOpen: true }))
+        await settle()
 
-      const input = byTestId('overlay-command__input')!.querySelector('input')!
-      expect(screen.getByLabelText('Search actions')).toBe(input)
-      expect(input.getAttribute('placeholder')).toBe('Search commands…')
-    })
-  })
+        expect(getByTestId('overlay-command').getAttribute('data-state')).toBe('open')
 
-  describe('data-testid derivation', () => {
-    it('uses the overlay-command fallback on the root', async () => {
-      const { getByTestId } = render(composed())
-      await settle()
-      expect(getByTestId('overlay-command')).toBeTruthy()
-    })
+        const dialog = panel()
+        expect(dialog).not.toBeNull()
+        expect(dialog!.getAttribute('role')).toBe('dialog')
 
-    it('a consumer-supplied data-testid wins', async () => {
-      render(composed({ defaultOpen: true, 'data-testid': 'palette' }))
-      await settle()
-      expect(byTestId('palette__panel')).not.toBeNull()
-      expect(byTestId('overlay-command__panel')).toBeNull()
-    })
-  })
-
-  describe('substring filtering', () => {
-    it('filters items by the typed query and shows Empty when nothing matches', async () => {
-      render(composed({ defaultOpen: true }))
-      await settle()
-
-      const deploy = screen.getByText('Deploy Project')
-      const createApp = screen.getByText('Create Application')
-      const empty = screen.getByText('No commands found.')
-
-      // Everything visible, Empty hidden.
-      expect(empty.style.display).toBe('none')
-
-      const input = byTestId('overlay-command__input')!.querySelector('input')!
-      await fireEvent.update(input, 'deploy')
-      await settle()
-
-      // Only "Deploy Project" survives the filter.
-      const deployRow = deploy.closest('[role="option"]') as HTMLElement
-      const createRow = createApp.closest('[role="option"]') as HTMLElement
-      expect(deployRow.style.display).not.toBe('none')
-      expect(createRow.style.display).toBe('none')
-      expect(empty.style.display).toBe('none')
-
-      // A query that matches nothing surfaces the Empty state.
-      await fireEvent.update(input, 'zzzzzzz')
-      await settle()
-      expect(empty.style.display).not.toBe('none')
-      expect(byTestId('overlay-command__list')).not.toHaveAttribute('role')
-
-      await fireEvent.update(input, '')
-      await settle()
-      expect(byTestId('overlay-command__list')).toHaveAttribute('role', 'listbox')
-    })
-  })
-
-  describe('roving navigation + activation', () => {
-    it('ArrowDown + Enter activates the active item, emits select(event, value), and closes', async () => {
-      const onSelect = vi.fn()
-      render(composed({ defaultOpen: true, onSelect }))
-      await settle()
-
-      // Narrow to a single enabled item so the active target is deterministic.
-      const input = byTestId('overlay-command__input')!.querySelector('input')!
-      await fireEvent.update(input, 'new-app')
-      await settle()
-
-      await fireEvent.keyDown(input, { key: 'ArrowDown' })
-      await fireEvent.keyDown(input, { key: 'Enter' })
-      await settle()
-
-      expect(onSelect).toHaveBeenCalledTimes(1)
-      const [event, value] = onSelect.mock.calls[0]
-      expect(event).toBeInstanceOf(KeyboardEvent)
-      expect(value).toBe('new-app')
-
-      // Selecting closes the palette. DialogPortal keeps the panel mounted for
-      // the exit animation, so assert the closed state on the root (as dialog does).
-      expect(byTestId('overlay-command')?.getAttribute('data-state')).toBe('closed')
+        // The input is a combobox wired to the list's id.
+        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        expect(input.getAttribute('role')).toBe('combobox')
+        expect(input.getAttribute('aria-expanded')).toBe('true')
+        expect(input.getAttribute('aria-controls')).toBe(byTestId('overlay-command__list')!.id)
+      })
     })
 
-    it('emits update:open(false) once when activation closes the palette', async () => {
-      const onOpen = vi.fn()
-      render(composed({ defaultOpen: true, 'onUpdate:open': onOpen }))
-      await settle()
+    describe('search field accessible name', () => {
+      it('names the field with its placeholder text when no ariaLabel is given', async () => {
+        render(composed({ defaultOpen: true }))
+        await settle()
 
-      const input = byTestId('overlay-command__input')!.querySelector('input')!
-      await fireEvent.update(input, 'new-app')
-      await settle()
-      await fireEvent.keyDown(input, { key: 'ArrowDown' })
-      await fireEvent.keyDown(input, { key: 'Enter' })
-      await settle()
+        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        expect(screen.getByLabelText('Search commands…')).toBe(input)
+        expect(input.getAttribute('aria-label')).toBe('Search commands…')
+      })
 
-      expect(onOpen).toHaveBeenCalledTimes(1)
-      expect(onOpen).toHaveBeenCalledWith(false)
-    })
-  })
+      it('an explicit ariaLabel wins over the placeholder', async () => {
+        render(composed({ defaultOpen: true }, { ariaLabel: 'Search actions' }))
+        await settle()
 
-  describe('a group rendered on the query roves where it renders', () => {
-    // The consumer's `@update:model-value` on the Input reaches the field alongside the
-    // context's own handler (Vue merges both), which is how a consumer learns the query
-    // without the root exposing it.
-    it('highlights the first row of the conditional group on the first keystroke', async () => {
-      render(conditionalResults())
-      await settle()
-
-      const input = byTestId('overlay-command__input')!.querySelector('input')!
-      await fireEvent.update(input, 'sto')
-      await settle()
-
-      // Both rows match "sto" — the conditional one renders first, so it is the one the
-      // highlight (and therefore Enter) lands on, even though it registered last.
-      const rows = Array.from(
-        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
-      )
-      expect(rows.map((row) => row.textContent?.trim())).toEqual(['storefront', 'Object Storage'])
-      expect(rows[0].getAttribute('data-active')).toBe('true')
-      expect(rows[1].getAttribute('data-active')).toBeNull()
+        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        expect(screen.getByLabelText('Search actions')).toBe(input)
+        expect(input.getAttribute('placeholder')).toBe('Search commands…')
+      })
     })
 
-    it('ArrowDown walks the rows in DOM order, not registration order', async () => {
-      render(conditionalResults())
-      await settle()
+    describe('data-testid derivation', () => {
+      it('uses the overlay-command fallback on the root', async () => {
+        const { getByTestId } = render(composed())
+        await settle()
+        expect(getByTestId('overlay-command')).toBeTruthy()
+      })
 
-      const input = byTestId('overlay-command__input')!.querySelector('input')!
-      await fireEvent.update(input, 'sto')
-      await settle()
-
-      await fireEvent.keyDown(input, { key: 'ArrowDown' })
-      await settle()
-
-      const rows = Array.from(
-        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
-      )
-      expect(rows[1].getAttribute('data-active')).toBe('true')
-    })
-  })
-
-  describe('disabled item', () => {
-    it('does not activate or emit select on click', async () => {
-      const onSelect = vi.fn()
-      render(composed({ defaultOpen: true, onSelect }))
-      await settle()
-
-      const settings = screen.getByText('Go to Settings')
-      const row = settings.closest('[role="option"]') as HTMLElement
-      expect(row.getAttribute('aria-disabled')).toBe('true')
-
-      await fireEvent.click(row)
-      await settle()
-
-      expect(onSelect).not.toHaveBeenCalled()
-      expect(panel()).not.toBeNull()
-    })
-  })
-
-  // Vitest browser mode compiles no Tailwind, so an emitted `px` cannot be
-  // measured here. These assert the structural mechanism instead: the box is in
-  // the DOM only for the row that supplies a glyph. Geometry is verified in the
-  // browser against the story.
-  describe('the prefix box belongs to the item that has a prefix', () => {
-    it('renders the box only on the item that carries a prefix', async () => {
-      render(mixedPrefixes())
-      await settle()
-
-      const items = Array.from(
-        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
-      )
-      expect(items).toHaveLength(2)
-
-      const iconed = items[0].querySelector('[data-testid="overlay-command__item__prefix"]')
-      expect(iconed).not.toBeNull()
-      expect(items[0].querySelector('i.ai-cloud-upload')).not.toBeNull()
-
-      // The icon-less row puts no empty box in the DOM, so it carries no indent.
-      expect(items[1].querySelector('[data-testid="overlay-command__item__prefix"]')).toBeNull()
-      expect(items[1].querySelector('i')).toBeNull()
+      it('a consumer-supplied data-testid wins', async () => {
+        render(composed({ defaultOpen: true, 'data-testid': 'palette' }))
+        await settle()
+        expect(byTestId('palette__panel')).not.toBeNull()
+        expect(byTestId('overlay-command__panel')).toBeNull()
+      })
     })
 
-    it('renders no box at all when no item carries a prefix', async () => {
-      render(composed({ defaultOpen: true }))
-      await settle()
+    describe('substring filtering', () => {
+      it('filters items by the typed query and shows Empty when nothing matches', async () => {
+        render(composed({ defaultOpen: true }))
+        await settle()
 
-      const items = Array.from(
-        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
-      )
-      expect(items.length).toBeGreaterThan(0)
-      for (const item of items) {
-        expect(item.querySelector('[data-testid="overlay-command__item__prefix"]')).toBeNull()
-      }
+        const deploy = screen.getByText('Deploy Project')
+        const createApp = screen.getByText('Create Application')
+        const empty = screen.getByText('No commands found.')
+
+        // Everything visible, Empty hidden.
+        expect(empty.style.display).toBe('none')
+
+        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        await fireEvent.update(input, 'deploy')
+        await settle()
+
+        // Only "Deploy Project" survives the filter.
+        const deployRow = deploy.closest('[role="option"]') as HTMLElement
+        const createRow = createApp.closest('[role="option"]') as HTMLElement
+        expect(deployRow.style.display).not.toBe('none')
+        expect(createRow.style.display).toBe('none')
+        expect(empty.style.display).toBe('none')
+
+        // A query that matches nothing surfaces the Empty state.
+        await fireEvent.update(input, 'zzzzzzz')
+        await settle()
+        expect(empty.style.display).not.toBe('none')
+        expect(byTestId('overlay-command__list')).not.toHaveAttribute('role')
+
+        await fireEvent.update(input, '')
+        await settle()
+        expect(byTestId('overlay-command__list')).toHaveAttribute('role', 'listbox')
+      })
     })
-  })
 
-  describe('active option is announced and kept in view', () => {
-    it('points aria-activedescendant at the active item id as ArrowDown moves', async () => {
-      render(composed({ defaultOpen: true }))
-      await settle()
-      const input = byTestId('overlay-command__input')!.querySelector('input')!
-      const items = Array.from(
-        document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
-      )
-      expect(items[0]!.id).not.toBe('')
+    describe('roving navigation + activation', () => {
+      it('ArrowDown + Enter activates the active item, emits select(event, value), and closes', async () => {
+        const onSelect = vi.fn()
+        render(composed({ defaultOpen: true, onSelect }))
+        await settle()
 
-      await fireEvent.keyDown(input, { key: 'Home' })
-      await settle()
-      expect(input.getAttribute('aria-activedescendant')).toBe(items[0]!.id)
+        // Narrow to a single enabled item so the active target is deterministic.
+        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        await fireEvent.update(input, 'new-app')
+        await settle()
 
-      await fireEvent.keyDown(input, { key: 'ArrowDown' })
-      await settle()
-      expect(input.getAttribute('aria-activedescendant')).toBe(items[1]!.id)
-      expect(document.getElementById(input.getAttribute('aria-activedescendant')!)).toBe(items[1])
+        await fireEvent.keyDown(input, { key: 'ArrowDown' })
+        await fireEvent.keyDown(input, { key: 'Enter' })
+        await settle()
+
+        expect(onSelect).toHaveBeenCalledTimes(1)
+        const [event, value] = onSelect.mock.calls[0]
+        expect(event).toBeInstanceOf(KeyboardEvent)
+        expect(value).toBe('new-app')
+
+        // Selecting closes the palette. DialogPortal keeps the panel mounted for
+        // the exit animation, so assert the closed state on the root (as dialog does).
+        expect(byTestId('overlay-command')?.getAttribute('data-state')).toBe('closed')
+      })
+
+      it('emits update:open(false) once when activation closes the palette', async () => {
+        const onOpen = vi.fn()
+        render(composed({ defaultOpen: true, 'onUpdate:open': onOpen }))
+        await settle()
+
+        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        await fireEvent.update(input, 'new-app')
+        await settle()
+        await fireEvent.keyDown(input, { key: 'ArrowDown' })
+        await fireEvent.keyDown(input, { key: 'Enter' })
+        await settle()
+
+        expect(onOpen).toHaveBeenCalledTimes(1)
+        expect(onOpen).toHaveBeenCalledWith(false)
+      })
     })
 
-    it('scrolls the active row into view in a scrolling list', async () => {
-      render(
-        defineComponent({
-          components: { Command, CommandInput, CommandList, CommandItem },
-          setup: () => ({
-            open: ref(true),
-            rows: Array.from({ length: 40 }, (_, i) => `row-${i}`)
-          }),
-          template: `
+    describe('a group rendered on the query roves where it renders', () => {
+      // The consumer's `@update:model-value` on the Input reaches the field alongside the
+      // context's own handler (Vue merges both), which is how a consumer learns the query
+      // without the root exposing it.
+      it('highlights the first row of the conditional group on the first keystroke', async () => {
+        render(conditionalResults())
+        await settle()
+
+        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        await fireEvent.update(input, 'sto')
+        await settle()
+
+        // Both rows match "sto" — the conditional one renders first, so it is the one the
+        // highlight (and therefore Enter) lands on, even though it registered last.
+        const rows = Array.from(
+          document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
+        )
+        expect(rows.map((row) => row.textContent?.trim())).toEqual(['storefront', 'Object Storage'])
+        expect(rows[0].getAttribute('data-active')).toBe('true')
+        expect(rows[1].getAttribute('data-active')).toBeNull()
+      })
+
+      it('ArrowDown walks the rows in DOM order, not registration order', async () => {
+        render(conditionalResults())
+        await settle()
+
+        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        await fireEvent.update(input, 'sto')
+        await settle()
+
+        await fireEvent.keyDown(input, { key: 'ArrowDown' })
+        await settle()
+
+        const rows = Array.from(
+          document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
+        )
+        expect(rows[1].getAttribute('data-active')).toBe('true')
+      })
+    })
+
+    describe('disabled item', () => {
+      it('does not activate or emit select on click', async () => {
+        const onSelect = vi.fn()
+        render(composed({ defaultOpen: true, onSelect }))
+        await settle()
+
+        const settings = screen.getByText('Go to Settings')
+        const row = settings.closest('[role="option"]') as HTMLElement
+        expect(row.getAttribute('aria-disabled')).toBe('true')
+
+        await fireEvent.click(row)
+        await settle()
+
+        expect(onSelect).not.toHaveBeenCalled()
+        expect(panel()).not.toBeNull()
+      })
+    })
+
+    // Vitest browser mode compiles no Tailwind, so an emitted `px` cannot be
+    // measured here. These assert the structural mechanism instead: the box is in
+    // the DOM only for the row that supplies a glyph. Geometry is verified in the
+    // browser against the story.
+    describe('the prefix box belongs to the item that has a prefix', () => {
+      it('renders the box only on the item that carries a prefix', async () => {
+        render(mixedPrefixes())
+        await settle()
+
+        const items = Array.from(
+          document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
+        )
+        expect(items).toHaveLength(2)
+
+        const iconed = items[0].querySelector('[data-testid="overlay-command__item__prefix"]')
+        expect(iconed).not.toBeNull()
+        expect(items[0].querySelector('i.ai-cloud-upload')).not.toBeNull()
+
+        // The icon-less row puts no empty box in the DOM, so it carries no indent.
+        expect(items[1].querySelector('[data-testid="overlay-command__item__prefix"]')).toBeNull()
+        expect(items[1].querySelector('i')).toBeNull()
+      })
+
+      it('renders no box at all when no item carries a prefix', async () => {
+        render(composed({ defaultOpen: true }))
+        await settle()
+
+        const items = Array.from(
+          document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
+        )
+        expect(items.length).toBeGreaterThan(0)
+        for (const item of items) {
+          expect(item.querySelector('[data-testid="overlay-command__item__prefix"]')).toBeNull()
+        }
+      })
+    })
+
+    describe('active option is announced and kept in view', () => {
+      it('points aria-activedescendant at the active item id as ArrowDown moves', async () => {
+        render(composed({ defaultOpen: true }))
+        await settle()
+        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        const items = Array.from(
+          document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
+        )
+        expect(items[0]!.id).not.toBe('')
+
+        await fireEvent.keyDown(input, { key: 'Home' })
+        await settle()
+        expect(input.getAttribute('aria-activedescendant')).toBe(items[0]!.id)
+
+        await fireEvent.keyDown(input, { key: 'ArrowDown' })
+        await settle()
+        expect(input.getAttribute('aria-activedescendant')).toBe(items[1]!.id)
+        expect(document.getElementById(input.getAttribute('aria-activedescendant')!)).toBe(items[1])
+      })
+
+      it('scrolls the active row into view in a scrolling list', async () => {
+        render(
+          defineComponent({
+            components: { Command, CommandInput, CommandList, CommandItem },
+            setup: () => ({
+              open: ref(true),
+              rows: Array.from({ length: 40 }, (_, i) => `row-${i}`)
+            }),
+            template: `
             <Command v-model:open="open">
               <CommandInput placeholder="Search" />
               <CommandList style="max-height: 120px; overflow-y: auto">
@@ -409,37 +410,37 @@ describe('Command (overlay: wraps Dialog, composition + provide/inject)', () => 
               </CommandList>
             </Command>
           `
-        })
-      )
-      await settle()
-      const input = byTestId('overlay-command__input')!.querySelector('input')!
-      await fireEvent.keyDown(input, { key: 'End' })
-      await settle()
-      await new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
-      const last = document.getElementById(input.getAttribute('aria-activedescendant')!)!
-      const list = byTestId('overlay-command__list')!
-      expect(last.textContent).toContain('row-39')
-      expect(list.scrollTop).toBeGreaterThan(0)
+          })
+        )
+        await settle()
+        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        await fireEvent.keyDown(input, { key: 'End' })
+        await settle()
+        await new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
+        const last = document.getElementById(input.getAttribute('aria-activedescendant')!)!
+        const list = byTestId('overlay-command__list')!
+        expect(last.textContent).toContain('row-39')
+        expect(list.scrollTop).toBeGreaterThan(0)
+      })
+    })
+
+    describe('accessibility (axe on the open, Teleported palette)', () => {
+      it('has no WCAG violations while open', async () => {
+        render(composed({ defaultOpen: true }))
+        await settle()
+
+        expect(panel()).not.toBeNull()
+        await expectNoA11yViolations(document.body)
+      })
     })
   })
 
-  describe('accessibility (axe on the open, Teleported palette)', () => {
-    it('has no WCAG violations while open', async () => {
-      render(composed({ defaultOpen: true }))
-      await settle()
-
-      expect(panel()).not.toBeNull()
-      await expectNoA11yViolations(document.body)
-    })
-  })
-})
-
-describe('Command key names follow the locale', () => {
-  const localized = (locale: string) =>
-    defineComponent({
-      components: { WebkitProvider, Command, CommandInput, CommandList, CommandItem },
-      setup: () => ({ open: ref(true), locale, catalogs: LOCALES }),
-      template: `
+  describe('key names follow the locale', () => {
+    const localized = (locale: string) =>
+      defineComponent({
+        components: { WebkitProvider, Command, CommandInput, CommandList, CommandItem },
+        setup: () => ({ open: ref(true), locale, catalogs: LOCALES }),
+        template: `
         <WebkitProvider :locale="locale" :catalogs="catalogs">
           <Command v-model:open="open">
             <CommandInput placeholder="Search" />
@@ -450,102 +451,102 @@ describe('Command key names follow the locale', () => {
           </Command>
         </WebkitProvider>
       `
+      })
+
+    it('prints Esc, Enter and Space from the catalog', async () => {
+      const view = render(localized('pt-BR'))
+      await settle()
+      const keycaps = [...document.body.querySelectorAll('[data-testid="content-kbd"]')].map(
+        (node) => node.textContent?.trim()
+      )
+      expect(keycaps).toContain('Esc')
+      expect(keycaps.some((text) => text?.endsWith('Enter'))).toBe(true)
+      expect(keycaps).toContain('Espaço')
+      view.unmount()
+    })
+  })
+
+  describe('keyboard map (spec)', () => {
+    const activeText = () =>
+      document.body.querySelector('[role="option"][aria-selected="true"]')?.textContent?.trim()
+    const input = () => byTestId('overlay-command__input')!.querySelector('input')!
+
+    const withOpener = defineComponent({
+      components: { Palette: composed() },
+      template: `<div><button type="button" data-testid="opener">Opener</button><Palette /></div>`
     })
 
-  it('prints Esc, Enter and Space from the catalog', async () => {
-    const view = render(localized('pt-BR'))
-    await settle()
-    const keycaps = [...document.body.querySelectorAll('[data-testid="content-kbd"]')].map((node) =>
-      node.textContent?.trim()
-    )
-    expect(keycaps).toContain('Esc')
-    expect(keycaps.some((text) => text?.endsWith('Enter'))).toBe(true)
-    expect(keycaps).toContain('Espaço')
-    view.unmount()
-  })
-})
+    const openPalette = async () => {
+      const view = render(withOpener)
+      await settle()
+      view.getByTestId('opener').focus()
+      await userEvent.keyboard('{Control>}k{/Control}')
+      await settle()
+      await vi.waitFor(() => expect(document.activeElement).toBe(input()))
+      return view
+    }
 
-describe('keyboard map (spec)', () => {
-  const activeText = () =>
-    document.body.querySelector('[role="option"][aria-selected="true"]')?.textContent?.trim()
-  const input = () => byTestId('overlay-command__input')!.querySelector('input')!
+    it('Ctrl+K (Cmd+K on macOS) opens the palette and focuses the search field', async () => {
+      await openPalette()
+      expect(panel()).not.toBeNull()
+      expect(activeText()).toBe('Deploy Project')
+    })
 
-  const withOpener = defineComponent({
-    components: { Palette: composed() },
-    template: `<div><button type="button" data-testid="opener">Opener</button><Palette /></div>`
-  })
+    it('ArrowDown moves to the next enabled item and wraps, skipping disabled ones', async () => {
+      await openPalette()
+      await userEvent.keyboard('{ArrowDown}')
+      expect(activeText()).toBe('Create Application')
+      await userEvent.keyboard('{ArrowDown}')
+      expect(activeText()).toBe('Deploy Project')
+    })
 
-  const openPalette = async () => {
-    const view = render(withOpener)
-    await settle()
-    view.getByTestId('opener').focus()
-    await userEvent.keyboard('{Control>}k{/Control}')
-    await settle()
-    await vi.waitFor(() => expect(document.activeElement).toBe(input()))
-    return view
-  }
+    it('ArrowUp from the first item wraps to the last enabled item', async () => {
+      await openPalette()
+      await userEvent.keyboard('{ArrowUp}')
+      expect(activeText()).toBe('Create Application')
+    })
 
-  it('Ctrl+K (Cmd+K on macOS) opens the palette and focuses the search field', async () => {
-    await openPalette()
-    expect(panel()).not.toBeNull()
-    expect(activeText()).toBe('Deploy Project')
-  })
+    it('End and Home jump to the last and first enabled items', async () => {
+      await openPalette()
+      await userEvent.keyboard('{End}')
+      expect(activeText()).toBe('Create Application')
+      await userEvent.keyboard('{Home}')
+      expect(activeText()).toBe('Deploy Project')
+    })
 
-  it('ArrowDown moves to the next enabled item and wraps, skipping disabled ones', async () => {
-    await openPalette()
-    await userEvent.keyboard('{ArrowDown}')
-    expect(activeText()).toBe('Create Application')
-    await userEvent.keyboard('{ArrowDown}')
-    expect(activeText()).toBe('Deploy Project')
-  })
+    it('Enter activates the active item, closes, and returns focus to the opener', async () => {
+      const { getByTestId } = await openPalette()
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(byTestId('overlay-command')?.getAttribute('data-state')).toBe('closed')
+      await vi.waitFor(() => expect(document.activeElement).toBe(getByTestId('opener')))
+    })
 
-  it('ArrowUp from the first item wraps to the last enabled item', async () => {
-    await openPalette()
-    await userEvent.keyboard('{ArrowUp}')
-    expect(activeText()).toBe('Create Application')
-  })
+    it('Escape closes and returns focus to the element focused before opening', async () => {
+      const { getByTestId } = await openPalette()
+      await userEvent.keyboard('{Escape}')
+      await settle()
+      expect(byTestId('overlay-command')?.getAttribute('data-state')).toBe('closed')
+      await vi.waitFor(() => expect(document.activeElement).toBe(getByTestId('opener')))
+    })
 
-  it('End and Home jump to the last and first enabled items', async () => {
-    await openPalette()
-    await userEvent.keyboard('{End}')
-    expect(activeText()).toBe('Create Application')
-    await userEvent.keyboard('{Home}')
-    expect(activeText()).toBe('Deploy Project')
-  })
-
-  it('Enter activates the active item, closes, and returns focus to the opener', async () => {
-    const { getByTestId } = await openPalette()
-    await userEvent.keyboard('{Enter}')
-    await settle()
-    expect(byTestId('overlay-command')?.getAttribute('data-state')).toBe('closed')
-    await vi.waitFor(() => expect(document.activeElement).toBe(getByTestId('opener')))
+    it('Tab stays inside the palette', async () => {
+      await openPalette()
+      await userEvent.keyboard('{Tab}')
+      expect(panel()!.contains(document.activeElement)).toBe(true)
+    })
   })
 
-  it('Escape closes and returns focus to the element focused before opening', async () => {
-    const { getByTestId } = await openPalette()
-    await userEvent.keyboard('{Escape}')
-    await settle()
-    expect(byTestId('overlay-command')?.getAttribute('data-state')).toBe('closed')
-    await vi.waitFor(() => expect(document.activeElement).toBe(getByTestId('opener')))
-  })
-
-  it('Tab stays inside the palette', async () => {
-    await openPalette()
-    await userEvent.keyboard('{Tab}')
-    expect(panel()!.contains(document.activeElement)).toBe(true)
-  })
-})
-
-describe('Command at scale', () => {
-  it('moving the active item re-renders only the items whose state changed', async () => {
-    let itemUpdates = 0
-    const Many = defineComponent({
-      components: { Command, CommandInput, CommandList, CommandGroup, CommandItem },
-      setup() {
-        const values = Array.from({ length: 60 }, (_, i) => `page-${i}`)
-        return { values }
-      },
-      template: `
+  describe('at scale', () => {
+    it('moving the active item re-renders only the items whose state changed', async () => {
+      let itemUpdates = 0
+      const Many = defineComponent({
+        components: { Command, CommandInput, CommandList, CommandGroup, CommandItem },
+        setup() {
+          const values = Array.from({ length: 60 }, (_, i) => `page-${i}`)
+          return { values }
+        },
+        template: `
         <Command default-open shortcut="">
           <CommandInput placeholder="Search" />
           <CommandList>
@@ -555,36 +556,36 @@ describe('Command at scale', () => {
           </CommandList>
         </Command>
       `
-    })
-    render(Many, {
-      global: {
-        mixins: [
-          {
-            updated(this: { $options: { name?: string } }) {
-              if (this.$options.name === 'CommandItem') itemUpdates += 1
+      })
+      render(Many, {
+        global: {
+          mixins: [
+            {
+              updated(this: { $options: { name?: string } }) {
+                if (this.$options.name === 'CommandItem') itemUpdates += 1
+              }
             }
-          }
-        ]
-      }
+          ]
+        }
+      })
+      await settle()
+      const input = document.body.querySelector<HTMLInputElement>('input')!
+      await fireEvent.keyDown(input, { key: 'ArrowDown' })
+      await settle()
+      itemUpdates = 0
+      await fireEvent.keyDown(input, { key: 'ArrowDown' })
+      await settle()
+      expect(document.body.querySelector('[data-active]')).toHaveTextContent('page-1')
+      expect(itemUpdates).toBeLessThanOrEqual(2)
     })
-    await settle()
-    const input = document.body.querySelector<HTMLInputElement>('input')!
-    await fireEvent.keyDown(input, { key: 'ArrowDown' })
-    await settle()
-    itemUpdates = 0
-    await fireEvent.keyDown(input, { key: 'ArrowDown' })
-    await settle()
-    expect(document.body.querySelector('[data-active]')).toHaveTextContent('page-1')
-    expect(itemUpdates).toBeLessThanOrEqual(2)
-  })
 
-  it('keeps DOM order when a group mounts after the palette opened', async () => {
-    const late = ref(false)
-    const onSelect = vi.fn()
-    const Late = defineComponent({
-      components: { Command, CommandInput, CommandList, CommandGroup, CommandItem },
-      setup: () => ({ late, onSelect }),
-      template: `
+    it('keeps DOM order when a group mounts after the palette opened', async () => {
+      const late = ref(false)
+      const onSelect = vi.fn()
+      const Late = defineComponent({
+        components: { Command, CommandInput, CommandList, CommandGroup, CommandItem },
+        setup: () => ({ late, onSelect }),
+        template: `
         <Command default-open shortcut="" @select="onSelect">
           <CommandInput placeholder="Search" />
           <CommandList>
@@ -593,35 +594,35 @@ describe('Command at scale', () => {
           </CommandList>
         </Command>
       `
+      })
+      render(Late)
+      await settle()
+      late.value = true
+      await settle()
+      const input = document.body.querySelector<HTMLInputElement>('input')!
+      await fireEvent.keyDown(input, { key: 'Home' })
+      await fireEvent.keyDown(input, { key: 'Enter' })
+      expect(onSelect).toHaveBeenCalledWith(expect.anything(), 'early')
     })
-    render(Late)
-    await settle()
-    late.value = true
-    await settle()
-    const input = document.body.querySelector<HTMLInputElement>('input')!
-    await fireEvent.keyDown(input, { key: 'Home' })
-    await fireEvent.keyDown(input, { key: 'Enter' })
-    expect(onSelect).toHaveBeenCalledWith(expect.anything(), 'early')
   })
-})
 
-describe('ranked search', () => {
-  const input = () => byTestId('overlay-command__input')!.querySelector('input')!
-  const activeText = () =>
-    document.body.querySelector('[role="option"][aria-selected="true"]')?.textContent?.trim()
+  describe('ranked search', () => {
+    const input = () => byTestId('overlay-command__input')!.querySelector('input')!
+    const activeText = () =>
+      document.body.querySelector('[role="option"][aria-selected="true"]')?.textContent?.trim()
 
-  const ranked = (onSelect?: (...args: unknown[]) => void) =>
-    defineComponent({
-      components: {
-        Command,
-        CommandInput,
-        CommandList,
-        CommandGroup,
-        CommandItem,
-        CommandSeparator
-      },
-      setup: () => ({ open: ref(true), onSelect }),
-      template: `
+    const ranked = (onSelect?: (...args: unknown[]) => void) =>
+      defineComponent({
+        components: {
+          Command,
+          CommandInput,
+          CommandList,
+          CommandGroup,
+          CommandItem,
+          CommandSeparator
+        },
+        setup: () => ({ open: ref(true), onSelect }),
+        template: `
         <Command v-model:open="open" shortcut="" @select="onSelect">
           <CommandInput placeholder="Search" />
           <CommandList>
@@ -637,82 +638,82 @@ describe('ranked search', () => {
           </CommandList>
         </Command>
       `
+      })
+
+    it('ranks prefix over word over substring over abbreviation, and rejects scattered letters', () => {
+      const prefix = matchCommand('set', 'Settings Domains').score
+      const word = matchCommand('set', 'Go to Settings').score
+      const inner = matchCommand('set', 'Reset').score
+      const abbreviation = matchCommand('dpl', 'Deploy Project').score
+      expect(prefix).toBeGreaterThan(word)
+      expect(word).toBeGreaterThan(inner)
+      expect(inner).toBeGreaterThan(abbreviation)
+      expect(abbreviation).toBeGreaterThan(0)
+      expect(matchCommand('xyz', 'Deploy Project').score).toBe(0)
+      expect(matchCommand('osj', 'Go to Settings Project').score).toBe(0)
+      expect(matchCommand('team', 'Invite', ['team']).score).toBeGreaterThan(0)
     })
 
-  it('ranks prefix over word over substring over abbreviation, and rejects scattered letters', () => {
-    const prefix = matchCommand('set', 'Settings Domains').score
-    const word = matchCommand('set', 'Go to Settings').score
-    const inner = matchCommand('set', 'Reset').score
-    const abbreviation = matchCommand('dpl', 'Deploy Project').score
-    expect(prefix).toBeGreaterThan(word)
-    expect(word).toBeGreaterThan(inner)
-    expect(inner).toBeGreaterThan(abbreviation)
-    expect(abbreviation).toBeGreaterThan(0)
-    expect(matchCommand('xyz', 'Deploy Project').score).toBe(0)
-    expect(matchCommand('osj', 'Go to Settings Project').score).toBe(0)
-    expect(matchCommand('team', 'Invite', ['team']).score).toBeGreaterThan(0)
-  })
+    it('keyboard order follows the rank: the best group and item lead', async () => {
+      const onSelect = vi.fn()
+      render(ranked(onSelect))
+      await settle()
+      input().focus()
+      await fireEvent.update(input(), 'set')
+      await settle()
 
-  it('keyboard order follows the rank: the best group and item lead', async () => {
-    const onSelect = vi.fn()
-    render(ranked(onSelect))
-    await settle()
-    input().focus()
-    await fireEvent.update(input(), 'set')
-    await settle()
+      const groups = document.body.querySelectorAll('[role="group"]')
+      expect(byTestId('overlay-command__list')).toHaveAttribute('data-ranked')
+      expect(groups[1]).toHaveAttribute('data-leading')
+      expect((groups[0] as HTMLElement).style.display).toBe('none')
+      const rows = [...groups[1].querySelectorAll('[role="option"]')] as HTMLElement[]
+      expect(Number(rows[0].style.order)).toBeLessThan(Number(rows[1].style.order))
+      expect(byTestId('overlay-command__separator')!.style.display).toBe('none')
+      expect(activeText()).toBe('Settings Domains')
 
-    const groups = document.body.querySelectorAll('[role="group"]')
-    expect(byTestId('overlay-command__list')).toHaveAttribute('data-ranked')
-    expect(groups[1]).toHaveAttribute('data-leading')
-    expect((groups[0] as HTMLElement).style.display).toBe('none')
-    const rows = [...groups[1].querySelectorAll('[role="option"]')] as HTMLElement[]
-    expect(Number(rows[0].style.order)).toBeLessThan(Number(rows[1].style.order))
-    expect(byTestId('overlay-command__separator')!.style.display).toBe('none')
-    expect(activeText()).toBe('Settings Domains')
+      await userEvent.keyboard('{Enter}')
+      expect(onSelect).toHaveBeenCalledWith(expect.any(KeyboardEvent), 'domains')
+    })
 
-    await userEvent.keyboard('{Enter}')
-    expect(onSelect).toHaveBeenCalledWith(expect.any(KeyboardEvent), 'domains')
-  })
+    it('matches keywords that are not in the label', async () => {
+      render(ranked())
+      await settle()
+      await fireEvent.update(input(), 'team')
+      await settle()
+      const prefs = screen.getByText('Go to Preferences').closest('[role="option"]') as HTMLElement
+      const usage = screen.getByText('Go to Usage').closest('[role="option"]') as HTMLElement
+      expect(prefs.style.display).not.toBe('none')
+      expect(usage.style.display).toBe('none')
+    })
 
-  it('matches keywords that are not in the label', async () => {
-    render(ranked())
-    await settle()
-    await fireEvent.update(input(), 'team')
-    await settle()
-    const prefs = screen.getByText('Go to Preferences').closest('[role="option"]') as HTMLElement
-    const usage = screen.getByText('Go to Usage').closest('[role="option"]') as HTMLElement
-    expect(prefs.style.display).not.toBe('none')
-    expect(usage.style.display).toBe('none')
-  })
+    it('emphasizes the matched characters of a plain label and keeps its accessible name', async () => {
+      render(ranked())
+      await settle()
+      await fireEvent.update(input(), 'dpl')
+      await settle()
+      const row = [...document.body.querySelectorAll('[role="option"]')].find(
+        (node) => node.textContent?.trim() === 'Deploy Project'
+      ) as HTMLElement
+      const marks = [...row.querySelectorAll('mark')].map((node) => node.textContent)
+      expect(marks.join('')).toBe('dpl'.replace('d', 'D'))
+      await fireEvent.update(input(), '')
+      await settle()
+      expect(row.querySelector('mark')).toBeNull()
+    })
 
-  it('emphasizes the matched characters of a plain label and keeps its accessible name', async () => {
-    render(ranked())
-    await settle()
-    await fireEvent.update(input(), 'dpl')
-    await settle()
-    const row = [...document.body.querySelectorAll('[role="option"]')].find(
-      (node) => node.textContent?.trim() === 'Deploy Project'
-    ) as HTMLElement
-    const marks = [...row.querySelectorAll('mark')].map((node) => node.textContent)
-    expect(marks.join('')).toBe('dpl'.replace('d', 'D'))
-    await fireEvent.update(input(), '')
-    await settle()
-    expect(row.querySelector('mark')).toBeNull()
-  })
-
-  it('stays fast with 1k items in 10 groups', async () => {
-    const groups = Array.from({ length: 10 }, (_, g) => ({
-      id: `g${g}`,
-      heading: `Group ${g}`,
-      items: Array.from({ length: 100 }, (_, i) => ({
-        value: `g${g}-i${i}`,
-        label: `Resource ${g * 100 + i} production`
+    it('stays fast with 1k items in 10 groups', async () => {
+      const groups = Array.from({ length: 10 }, (_, g) => ({
+        id: `g${g}`,
+        heading: `Group ${g}`,
+        items: Array.from({ length: 100 }, (_, i) => ({
+          value: `g${g}-i${i}`,
+          label: `Resource ${g * 100 + i} production`
+        }))
       }))
-    }))
-    const Big = defineComponent({
-      components: { Command, CommandInput, CommandList, CommandGroup, CommandItem },
-      setup: () => ({ open: ref(true), groups }),
-      template: `
+      const Big = defineComponent({
+        components: { Command, CommandInput, CommandList, CommandGroup, CommandItem },
+        setup: () => ({ open: ref(true), groups }),
+        template: `
         <Command v-model:open="open" shortcut="">
           <CommandInput placeholder="Search" />
           <CommandList>
@@ -722,34 +723,34 @@ describe('ranked search', () => {
           </CommandList>
         </Command>
       `
+      })
+      render(Big)
+      await settle()
+      const t0 = performance.now()
+      await fireEvent.update(input(), 'rs 99')
+      await settle()
+      const elapsed = performance.now() - t0
+      const visible = [...document.body.querySelectorAll('[role="option"]')].filter(
+        (node) => (node as HTMLElement).style.display !== 'none'
+      )
+      expect(visible.length).toBeGreaterThan(0)
+      expect(visible.length).toBeLessThan(1000)
+      expect(elapsed).toBeLessThan(1000)
     })
-    render(Big)
-    await settle()
-    const t0 = performance.now()
-    await fireEvent.update(input(), 'rs 99')
-    await settle()
-    const elapsed = performance.now() - t0
-    const visible = [...document.body.querySelectorAll('[role="option"]')].filter(
-      (node) => (node as HTMLElement).style.display !== 'none'
-    )
-    expect(visible.length).toBeGreaterThan(0)
-    expect(visible.length).toBeLessThan(1000)
-    expect(elapsed).toBeLessThan(1000)
   })
-})
 
-describe('nested pages', () => {
-  const input = () => byTestId('overlay-command__input')!.querySelector('input')!
-  const visibleTexts = () =>
-    [...document.body.querySelectorAll('[role="option"]')]
-      .filter((node) => (node as HTMLElement).style.display !== 'none')
-      .map((node) => node.textContent?.trim())
+  describe('nested pages', () => {
+    const input = () => byTestId('overlay-command__input')!.querySelector('input')!
+    const visibleTexts = () =>
+      [...document.body.querySelectorAll('[role="option"]')]
+        .filter((node) => (node as HTMLElement).style.display !== 'none')
+        .map((node) => node.textContent?.trim())
 
-  const paged = (onSelect?: (...args: unknown[]) => void, initialPage = '') =>
-    defineComponent({
-      components: { Command, CommandInput, CommandList, CommandGroup, CommandItem, CommandPage },
-      setup: () => ({ open: ref(true), page: ref(initialPage), onSelect }),
-      template: `
+    const paged = (onSelect?: (...args: unknown[]) => void, initialPage = '') =>
+      defineComponent({
+        components: { Command, CommandInput, CommandList, CommandGroup, CommandItem, CommandPage },
+        setup: () => ({ open: ref(true), page: ref(initialPage), onSelect }),
+        template: `
         <div>
           <span data-testid="page-value">{{ page }}</span>
           <Command v-model:open="open" v-model:page="page" shortcut="" @select="onSelect">
@@ -767,61 +768,62 @@ describe('nested pages', () => {
           </Command>
         </div>
       `
+      })
+
+    it('an item with page opens the page without selecting, and shows a named back control', async () => {
+      const onSelect = vi.fn()
+      const view = render(paged(onSelect))
+      await settle()
+      expect(visibleTexts()).toEqual(['Switch Project', 'Create Project'])
+      expect(byTestId('overlay-command__item__page')).not.toBeNull()
+
+      input().focus()
+      await userEvent.keyboard('{ArrowDown}{Enter}')
+      await settle()
+      expect(onSelect).not.toHaveBeenCalled()
+      expect(view.getByTestId('page-value').textContent).toBe('projects')
+      expect(visibleTexts()).toEqual(['acme-store', 'docs-site'])
+      const back = byTestId('overlay-command__input__back')!
+      expect(back).toHaveAccessibleName('Back from Switch project')
+      expect(byTestId('overlay-command__input')).toHaveAttribute('data-page', 'projects')
+
+      await userEvent.keyboard('{Enter}')
+      expect(onSelect).toHaveBeenCalledWith(expect.any(KeyboardEvent), 'acme-store')
     })
 
-  it('an item with page opens the page without selecting, and shows a named back control', async () => {
-    const onSelect = vi.fn()
-    const view = render(paged(onSelect))
-    await settle()
-    expect(visibleTexts()).toEqual(['Switch Project', 'Create Project'])
-    expect(byTestId('overlay-command__item__page')).not.toBeNull()
+    it('Backspace in an empty field and the back control return to the previous page', async () => {
+      const view = render(paged())
+      await settle()
+      input().focus()
+      await userEvent.keyboard('{ArrowDown}{Enter}')
+      await settle()
+      await userEvent.keyboard('{Backspace}')
+      await settle()
+      expect(view.getByTestId('page-value').textContent).toBe('')
+      expect(visibleTexts()).toEqual(['Switch Project', 'Create Project'])
 
-    input().focus()
-    await userEvent.keyboard('{ArrowDown}{Enter}')
-    await settle()
-    expect(onSelect).not.toHaveBeenCalled()
-    expect(view.getByTestId('page-value').textContent).toBe('projects')
-    expect(visibleTexts()).toEqual(['acme-store', 'docs-site'])
-    const back = byTestId('overlay-command__input__back')!
-    expect(back).toHaveAccessibleName('Back from Switch project')
-    expect(byTestId('overlay-command__input')).toHaveAttribute('data-page', 'projects')
+      await userEvent.keyboard('{Enter}')
+      await settle()
+      expect(view.getByTestId('page-value').textContent).toBe('projects')
+      await userEvent.click(byTestId('overlay-command__input__back')!)
+      await settle()
+      expect(view.getByTestId('page-value').textContent).toBe('')
+    })
 
-    await userEvent.keyboard('{Enter}')
-    expect(onSelect).toHaveBeenCalledWith(expect.any(KeyboardEvent), 'acme-store')
-  })
+    it('Escape on a nested page goes back instead of closing', async () => {
+      render(paged(undefined, 'projects'))
+      await settle()
+      input().focus()
+      await userEvent.keyboard('{Escape}')
+      await settle()
+      expect(panel()).not.toBeNull()
+      expect(visibleTexts()).toEqual(['Switch Project', 'Create Project'])
+    })
 
-  it('Backspace in an empty field and the back control return to the previous page', async () => {
-    const view = render(paged())
-    await settle()
-    input().focus()
-    await userEvent.keyboard('{ArrowDown}{Enter}')
-    await settle()
-    await userEvent.keyboard('{Backspace}')
-    await settle()
-    expect(view.getByTestId('page-value').textContent).toBe('')
-    expect(visibleTexts()).toEqual(['Switch Project', 'Create Project'])
-
-    await userEvent.keyboard('{Enter}')
-    await settle()
-    expect(view.getByTestId('page-value').textContent).toBe('projects')
-    await userEvent.click(byTestId('overlay-command__input__back')!)
-    await settle()
-    expect(view.getByTestId('page-value').textContent).toBe('')
-  })
-
-  it('Escape on a nested page goes back instead of closing', async () => {
-    render(paged(undefined, 'projects'))
-    await settle()
-    input().focus()
-    await userEvent.keyboard('{Escape}')
-    await settle()
-    expect(panel()).not.toBeNull()
-    expect(visibleTexts()).toEqual(['Switch Project', 'Create Project'])
-  })
-
-  it('has no WCAG violations on a nested page', async () => {
-    render(paged(undefined, 'projects'))
-    await settle()
-    await expectNoA11yViolations(panel()!)
+    it('has no WCAG violations on a nested page', async () => {
+      render(paged(undefined, 'projects'))
+      await settle()
+      await expectNoA11yViolations(panel()!)
+    })
   })
 })

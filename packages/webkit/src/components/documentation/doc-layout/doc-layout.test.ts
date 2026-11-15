@@ -201,93 +201,93 @@ describe('DocLayout', () => {
     const { container } = mount({}, {}, undefined, 'rtl')
     await expectNoA11yViolations(container)
   })
-})
 
-describe('DocLayout — resizable, collapsible rail', () => {
-  const rail = (view: ReturnType<typeof mount>) =>
-    within(view.getByTestId('documentation-doc-layout__navigation'))
+  describe('resizable, collapsible rail', () => {
+    const rail = (view: ReturnType<typeof mount>) =>
+      within(view.getByTestId('documentation-doc-layout__navigation'))
 
-  it('names the resize handle and the collapse button from the locale catalog', () => {
-    const view = mount()
-    expect(rail(view).getByRole('separator', { name: 'Resize navigation' })).toBeTruthy()
-    expect(rail(view).getByRole('button', { name: 'Collapse navigation' })).toBeTruthy()
+    it('names the resize handle and the collapse button from the locale catalog', () => {
+      const view = mount()
+      expect(rail(view).getByRole('separator', { name: 'Resize navigation' })).toBeTruthy()
+      expect(rail(view).getByRole('button', { name: 'Collapse navigation' })).toBeTruthy()
+    })
+
+    it('collapses the rail and emits update:navigationExpanded', async () => {
+      const onExpanded = vi.fn()
+      const view = mount({ 'onUpdate:navigationExpanded': onExpanded })
+      await userEvent.click(rail(view).getByRole('button', { name: 'Collapse navigation' }))
+      expect(onExpanded).toHaveBeenLastCalledWith(false)
+    })
+
+    it('brings a collapsed rail back from the edge affordance', async () => {
+      const onExpanded = vi.fn()
+      const view = mount({ navigationExpanded: false, 'onUpdate:navigationExpanded': onExpanded })
+      expect(view.getByTestId('documentation-doc-layout__navigation').hasAttribute('inert')).toBe(
+        true
+      )
+      await userEvent.click(view.getByRole('button', { name: 'Expand navigation' }))
+      expect(onExpanded).toHaveBeenLastCalledWith(true)
+    })
+
+    it('emits update:navigationWidth when the handle is moved with the keyboard', async () => {
+      const onWidth = vi.fn()
+      const view = mount({ navigationWidth: 300, 'onUpdate:navigationWidth': onWidth })
+      rail(view).getByRole('separator', { name: 'Resize navigation' }).focus()
+      await userEvent.keyboard('{ArrowRight}')
+      expect(onWidth).toHaveBeenCalled()
+      expect(onWidth.mock.calls.at(-1)![0]).toBeGreaterThan(300)
+    })
+
+    it('has no axe violations with the rail collapsed', async () => {
+      const { container } = mount({ navigationExpanded: false })
+      await expectNoA11yViolations(container)
+    })
   })
 
-  it('collapses the rail and emits update:navigationExpanded', async () => {
-    const onExpanded = vi.fn()
-    const view = mount({ 'onUpdate:navigationExpanded': onExpanded })
-    await userEvent.click(rail(view).getByRole('button', { name: 'Collapse navigation' }))
-    expect(onExpanded).toHaveBeenLastCalledWith(false)
-  })
+  describe('Back in the rail', () => {
+    const drill: DocLayoutNavGroup[] = [
+      {
+        label: 'Legal',
+        items: [
+          { id: 'overview', label: 'Overview', href: '/docs' },
+          {
+            id: 'agreements',
+            label: 'Agreements and Policies',
+            kind: 'drill',
+            children: [
+              { id: 'privacy', label: 'Privacy Policy', href: '/docs/privacy' },
+              {
+                id: 'versions',
+                label: 'Previous versions',
+                kind: 'drill',
+                children: [{ id: 'privacy-2024', label: 'Privacy Policy 2024', href: '/docs/p24' }]
+              }
+            ]
+          }
+        ]
+      }
+    ]
 
-  it('brings a collapsed rail back from the edge affordance', async () => {
-    const onExpanded = vi.fn()
-    const view = mount({ navigationExpanded: false, 'onUpdate:navigationExpanded': onExpanded })
-    expect(view.getByTestId('documentation-doc-layout__navigation').hasAttribute('inert')).toBe(
-      true
-    )
-    await userEvent.click(view.getByRole('button', { name: 'Expand navigation' }))
-    expect(onExpanded).toHaveBeenLastCalledWith(true)
-  })
+    const back = (view: ReturnType<typeof mount>) =>
+      within(view.getByTestId('documentation-doc-layout__navigation')).getByTestId(
+        'navigation-sidebar-menu-back'
+      )
 
-  it('emits update:navigationWidth when the handle is moved with the keyboard', async () => {
-    const onWidth = vi.fn()
-    const view = mount({ navigationWidth: 300, 'onUpdate:navigationWidth': onWidth })
-    rail(view).getByRole('separator', { name: 'Resize navigation' }).focus()
-    await userEvent.keyboard('{ArrowRight}')
-    expect(onWidth).toHaveBeenCalled()
-    expect(onWidth.mock.calls.at(-1)![0]).toBeGreaterThan(300)
-  })
+    it('names the docs root on the first drill level', async () => {
+      const view = mount({ navigation: drill, activeId: 'privacy' })
+      await waitFor(() => expect(back(view).textContent?.trim()).toBe('Back to Docs'))
+    })
 
-  it('has no axe violations with the rail collapsed', async () => {
-    const { container } = mount({ navigationExpanded: false })
-    await expectNoA11yViolations(container)
-  })
-})
+    it('takes rootLabel over the locale default', async () => {
+      const view = mount({ navigation: drill, activeId: 'privacy', rootLabel: 'API reference' })
+      await waitFor(() => expect(back(view).textContent?.trim()).toBe('Back to API reference'))
+    })
 
-describe('DocLayout — Back in the rail', () => {
-  const drill: DocLayoutNavGroup[] = [
-    {
-      label: 'Legal',
-      items: [
-        { id: 'overview', label: 'Overview', href: '/docs' },
-        {
-          id: 'agreements',
-          label: 'Agreements and Policies',
-          kind: 'drill',
-          children: [
-            { id: 'privacy', label: 'Privacy Policy', href: '/docs/privacy' },
-            {
-              id: 'versions',
-              label: 'Previous versions',
-              kind: 'drill',
-              children: [{ id: 'privacy-2024', label: 'Privacy Policy 2024', href: '/docs/p24' }]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  const back = (view: ReturnType<typeof mount>) =>
-    within(view.getByTestId('documentation-doc-layout__navigation')).getByTestId(
-      'navigation-sidebar-menu-back'
-    )
-
-  it('names the docs root on the first drill level', async () => {
-    const view = mount({ navigation: drill, activeId: 'privacy' })
-    await waitFor(() => expect(back(view).textContent?.trim()).toBe('Back to Docs'))
-  })
-
-  it('takes rootLabel over the locale default', async () => {
-    const view = mount({ navigation: drill, activeId: 'privacy', rootLabel: 'API reference' })
-    await waitFor(() => expect(back(view).textContent?.trim()).toBe('Back to API reference'))
-  })
-
-  it('names the parent row on a deeper level', async () => {
-    const view = mount({ navigation: drill, activeId: 'privacy-2024' })
-    await waitFor(() =>
-      expect(back(view).textContent?.trim()).toBe('Back to Agreements and Policies')
-    )
+    it('names the parent row on a deeper level', async () => {
+      const view = mount({ navigation: drill, activeId: 'privacy-2024' })
+      await waitFor(() =>
+        expect(back(view).textContent?.trim()).toBe('Back to Agreements and Policies')
+      )
+    })
   })
 })

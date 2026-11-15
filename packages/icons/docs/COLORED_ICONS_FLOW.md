@@ -8,11 +8,11 @@
 
 ## TL;DR — the three answers
 
-| Question                                 | Answer                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| ---------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Question                                 | Answer                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Is it duplicated compilation?**        | The two colored steps aren't _redundant_ (they serve different consumption modes), **but the colored SVG payload is duplicated across two `dist` files** — `azionicons-color.css` (~32 KB) and `color-catalog.json` (~32 KB) both embed the same 35 SVGs. Each script also re-reads `ai-color/` from disk independently. The **monochrome** catalog embeds _no_ SVG (names only), so this duplication is unique to the colored path. |
-| **How is the SVG used in the icon?**     | Two delivery modes. **(a) CSS class** — the SVG becomes a `background-image` data-URI on `.ai-color.ai-<name>`, sized to `1em`, used as `<i class="ai-color ai-google"></i>`. **(b) Inline SVG string** — `color-catalog.json` stores the raw `<svg>` markup, which a consumer injects into the DOM (e.g. `ColoredIcon.vue` via a render function + `innerHTML`).                                                                    |
-| **Compiled to `font-family` or base64?** | **Neither, for colored.** Colored icons are **percent-encoded (URL-encoded) UTF-8 SVG data-URIs** (`data:image/svg+xml,%3Csvg…`) — _not_ base64 — plus raw inline SVG in the catalog. **`font-family` is the _monochrome_ path only** (woff2 glyphs via `@font-face` + `content: '\fXXX'`).                                                                                                                                          |
+| **How is the SVG used in the icon?**     | Two delivery modes. **(a) CSS class** — the SVG becomes a `background-image` data-URI on `.ai-color.ai-<name>`, sized to `1em`, used as `<i class="ai-color ai-google"></i>`. **(b) Inline SVG string** — `color-catalog.json` stores the raw `<svg>` markup, which a consumer injects into the DOM (e.g. `colored-icon.vue` via a render function + `innerHTML`).                                                                            |
+| **Compiled to `font-family` or base64?** | **Neither, for colored.** Colored icons are **percent-encoded (URL-encoded) UTF-8 SVG data-URIs** (`data:image/svg+xml,%3Csvg…`) — _not_ base64 — plus raw inline SVG in the catalog. **`font-family` is the _monochrome_ path only** (woff2 glyphs via `@font-face` + `content: '\fXXX'`).                                                                                                                                        |
 
 ---
 
@@ -36,7 +36,7 @@ So the package splits by _colorability_:
 
 ## The build flow
 
-`npm run build` → `node scripts/build.mjs`, a 7-step orchestrator:
+`npm run build` → `node scripts/build-icons.mjs`, a 7-step orchestrator:
 
 ```mermaid
 flowchart TD
@@ -45,8 +45,8 @@ flowchart TD
         COR["ai-color/ — 35 colored<br/>hex fills + gradients"]
     end
 
-    BUILD["scripts/build.mjs<br/>(orchestrator, 7 steps)"]
-    VAL["validate-svg.mjs<br/>(step 1 — gate)"]
+    BUILD["scripts/build-icons.mjs<br/>(orchestrator, 7 steps)"]
+    VAL["check-svg.mjs<br/>(step 1 — gate)"]
 
     subgraph MONO["MONOCHROME → FONT"]
         FANT["build-woff2.mjs → fantasticon<br/>(fantasticon.config.mjs)<br/>step 3"]
@@ -86,9 +86,9 @@ flowchart TD
 > readers (`read #1`, `read #2`), each serializing the same SVGs into a different `dist` file —
 > this is the "duplication" the questions ask about.
 
-### Step-by-step (`build.mjs`)
+### Step-by-step (`build-icons.mjs`)
 
-1. **Validate** — `validate-svg.mjs` gates the build; failure aborts.
+1. **Validate** — `check-svg.mjs` gates the build; failure aborts.
 2. **Clean** — wipe & recreate `dist/`.
 3. **Fonts** — `build-woff2.mjs` runs **fantasticon** for `ai` (per `fantasticon.config.mjs`): emits `azionicons.woff2` + `azionicons.css` from the `templates/css.hbs` Handlebars template. **Colored icons are not touched here.**
 4. **Barrel** — write `index.css` = `@import` of `azionicons.css` + **`azionicons-color.css`**.
@@ -177,7 +177,7 @@ Usage — identical ergonomics to a font icon:
 }
 ```
 
-The consumer injects the markup as **real DOM `<svg>`**. Example — the gallery's `ColoredIcon.vue`:
+The consumer injects the markup as **real DOM `<svg>`**. Example — the gallery's `colored-icon.vue`:
 
 ```js
 render() {
@@ -252,7 +252,7 @@ This keeps gradients, `clipPath`, and multiple fills as inspectable nodes — wh
 | `./catalog`          | `catalog.json`         | mono list (name + class, no SVG)        |
 | `./color-catalog`    | `color-catalog.json`   | colored list (name + inline SVG)        |
 
-**Consumers**: `apps/icons-gallery` (`ColoredIcon.vue`, `App.vue`) read the catalogs; any app importing `@aziontech/icons/azionicons-color` gets the `<i class="ai-color ai-<name>">` classes.
+**Consumers**: `apps/icons-gallery` (`colored-icon.vue`, `app.vue`) read the catalogs; any app importing `@aziontech/icons/azionicons-color` gets the `<i class="ai-color ai-<name>">` classes.
 
 ---
 

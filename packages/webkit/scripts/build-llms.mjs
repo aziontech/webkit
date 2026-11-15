@@ -226,8 +226,8 @@ export function catalogView(catalog, part) {
   return {
     ...catalog,
     imports,
-    pattern(id) {
-      const { file, ...meta } = catalog.patterns[id]
+    block(id) {
+      const { file, ...meta } = catalog.blocks[id]
       return file ? { ...meta, ...part(file) } : meta
     },
     assetItems(kind) {
@@ -533,7 +533,7 @@ function componentPage(catalog, name, { full = true } = {}) {
 }
 
 function blockPage(catalog, id, { full = true } = {}) {
-  const p = catalog.pattern(id)
+  const p = catalog.block(id)
   const path = `blocks/${id}.md`
   const names = new Set(componentNames(catalog))
   const out = [`# ${p.name} (\`${id}\`)`, '']
@@ -544,7 +544,7 @@ function blockPage(catalog, id, { full = true } = {}) {
   const facts = [
     `Surface: ${p.surface ?? 'product'}`,
     `Source: \`${p.source}\` in \`@aziontech/webkit\``,
-    `MCP: \`get_pattern("${id}")\``
+    `MCP: \`get_block("${id}")\``
   ]
   if (p.components?.length) {
     facts.push(
@@ -590,7 +590,7 @@ function blockPage(catalog, id, { full = true } = {}) {
     out.push(
       '## Variants',
       '',
-      `\`${p.primary}\` (primary)${variants.map((v) => ` · \`${v.name}\``).join('')}. Code: [blocks/${id}.md](blocks/${id}.md), \`get_pattern("${id}", { variant })\`.`,
+      `\`${p.primary}\` (primary)${variants.map((v) => ` · \`${v.name}\``).join('')}. Code: [blocks/${id}.md](blocks/${id}.md), \`get_block("${id}", { variant })\`.`,
       ''
     )
   } else {
@@ -602,7 +602,7 @@ function blockPage(catalog, id, { full = true } = {}) {
         ...variants.map((v) => `\`${v.name}\` — ${v.summary || ''}`.trim())
       ]),
       '',
-      `Each variant is the same screen in another state: \`get_pattern("${id}", { variant })\`, or the file under \`blocks/${id}/variants/\`.`,
+      `Each variant is the same screen in another state: \`get_block("${id}", { variant })\`, or the file under \`blocks/${id}/variants/\`.`,
       '',
       `## Code (\`${p.primary}\`)`,
       '',
@@ -742,8 +742,8 @@ function foundations(catalog) {
       ]
     },
     {
-      slug: 'i18n',
-      title: 'Languages (i18n)',
+      slug: 'internationalization',
+      title: 'Languages (internationalization)',
       summary:
         'Built-in strings in en, pt-BR and es, the provider, useLocale and locale-aware formatting.',
       body: [
@@ -753,7 +753,7 @@ function foundations(catalog) {
       ]
     },
     {
-      slug: 'rtl',
+      slug: 'right-to-left',
       title: 'Right-to-left',
       summary:
         'Logical sides only, so every screen mirrors under dir="rtl"; what mirrors and what does not.',
@@ -800,7 +800,7 @@ function header(catalog) {
     '',
     `> The Vue 3 design system of Azion (\`${catalog.package}\` ${catalog.webkitVersion}): components, screen blocks with guidelines, and the design foundations, written for agents that build Azion product, marketing and docs screens.`,
     '',
-    'Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_patterns`, `get_pattern`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.',
+    'Start every screen from a block (a reviewed, copyable screen), then fill gaps with components. Import each component from its own subpath (`@aziontech/webkit/<name>`), style only through tokens, and keep strings in the locale catalogs. These pages are generated from `catalog.json`; agents with MCP get the same data from `@aziontech/webkit-mcp` (`search_blocks`, `get_block`, `suggest_component`, `get_component`, `list_assets`). The names a component takes for its artwork (illustrations, diagrams, line figures, brand marks, icon classes) are listed in the asset foundation pages below; never guess one from a file in `src/`.',
     '',
     `Installed copy: \`node_modules/${catalog.package}/llms/\`. Every component also has a JSON API next to its page (\`components/<name>.json\`).`,
     ''
@@ -828,13 +828,13 @@ export function buildLlms(catalog = loadCatalog()) {
   }
   index.push('')
 
-  const ids = Object.keys(catalog.patterns).sort()
+  const ids = Object.keys(catalog.blocks).sort()
   const blockGroups = {}
   for (const id of ids) (blockGroups[id.split('/')[0]] ||= []).push(id)
   for (const [group, list] of Object.entries(blockGroups)) {
     index.push(`## Blocks: ${titleOf(group)}`, '')
     for (const id of list) {
-      const p = catalog.pattern(id)
+      const p = catalog.block(id)
       files[`blocks/${id}.md`] = blockPage(catalog, id)
       index.push(
         `- [${p.name} (${id})](blocks/${id}.md): ${firstSentence(p.guidelinesSummary || p.summary)}`
@@ -933,7 +933,7 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
     const drift = checkLlms(files)
     if (drift.length) {
       process.stderr.write(
-        `✖ llms/ out of sync (${drift.length}):\n  ${drift.slice(0, 20).join('\n  ')}\nRun: node scripts/build-llms.mjs (or catalog:build)\n`
+        `✖ llms/ out of sync (${drift.length}):\n  ${drift.slice(0, 20).join('\n  ')}\nRun: node scripts/build-llms.mjs (or build:catalog)\n`
       )
       process.exit(1)
     }

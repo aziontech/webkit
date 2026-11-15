@@ -3,7 +3,7 @@ name: file-dropzone
 category: inputs
 structure: monolithic
 status: implemented
-checksum: 44eb94c8a0083aa85be52fe0fefd6038636a81ecdadc939f1ee894e02c4b1ab3
+checksum: 3bb6f673f654a2e31161e7213d61f6f2fad49394c025412d708949ead453d802
 spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -18,7 +18,7 @@ A FileDropzone is the target a user drags files from the operating system onto. 
 `kind` covers the two places a drop target lives:
 
 - **`inline`**: a dashed region that is always visible (icon, title, description, plus a default slot for the "Browse files" action the consumer composes). It switches to the active look while files are dragged over it. This is the Cloudscape FileDropzone / Cloudflare Pages "Upload assets" shape.
-- **`overlay`**: invisible at rest. When files are dragged into the window it fades in over its nearest positioned ancestor (`absolute inset-0`), and it fades out on window drag-leave, drop or `Escape`. This is the Vercel "drag and drop a folder to deploy" shape, and it replaces the sample app's page-level `ProjectDropZone` and the drop target in the `Templates/Platform/States/ProjectIntake` story.
+- **`overlay`**: invisible at rest. When files are dragged into the window it fades in over its nearest positioned ancestor (`absolute inset-0`), and it fades out on window drag-leave, drop or `Escape`. This is the Vercel "drag and drop a folder to deploy" shape, and it replaces the sample app's page-level `ProjectDropZone` and the drop target in the project intake block (`Blocks/State/ProjectIntake`).
 
 The drop target itself is pointer-only. It is never a keyboard control. The keyboard (and screen-reader) path to the same outcome is a real button the consumer puts in the default slot (`inline`), or elsewhere on the page (`overlay`).
 

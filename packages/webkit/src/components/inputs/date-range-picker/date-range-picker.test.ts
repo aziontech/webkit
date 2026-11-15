@@ -45,33 +45,35 @@ afterEach(() => {
   document.body.innerHTML = ''
 })
 
-describe('date-range helpers', () => {
-  it('converts wall-clock time in a zone to instants and back', () => {
-    const wall = new Date(2026, 10, 10, 9, 30)
-    expect(fromWallClock(wall, 'America/Sao_Paulo').toISOString()).toBe('2026-11-10T12:30:00.000Z')
-    expect(fromWallClock(wall, 'Asia/Tokyo').toISOString()).toBe('2026-11-10T00:30:00.000Z')
-    expect(fromWallClock(new Date(2026, 6, 1, 10, 0), 'America/New_York').toISOString()).toBe(
-      '2026-07-01T14:00:00.000Z'
-    )
-    const back = toWallClock(new Date('2026-11-10T00:30:00.000Z'), 'Asia/Tokyo')
-    expect([back.getDate(), back.getHours(), back.getMinutes()]).toEqual([10, 9, 30])
-  })
+describe('DateRangePicker', () => {
+  describe('date-range helpers', () => {
+    it('converts wall-clock time in a zone to instants and back', () => {
+      const wall = new Date(2026, 10, 10, 9, 30)
+      expect(fromWallClock(wall, 'America/Sao_Paulo').toISOString()).toBe(
+        '2026-11-10T12:30:00.000Z'
+      )
+      expect(fromWallClock(wall, 'Asia/Tokyo').toISOString()).toBe('2026-11-10T00:30:00.000Z')
+      expect(fromWallClock(new Date(2026, 6, 1, 10, 0), 'America/New_York').toISOString()).toBe(
+        '2026-07-01T14:00:00.000Z'
+      )
+      const back = toWallClock(new Date('2026-11-10T00:30:00.000Z'), 'Asia/Tokyo')
+      expect([back.getDate(), back.getHours(), back.getMinutes()]).toEqual([10, 9, 30])
+    })
 
-  it('resolves relative ranges against now and steps by the range length', () => {
-    const range = resolveDateRange({ type: 'relative', amount: 15, unit: 'minute' }, NOW)
-    expect(range?.end.toISOString()).toBe(NOW.toISOString())
-    expect(range?.start.toISOString()).toBe('2026-11-10T15:45:00.000Z')
-    const month = resolveDateRange({ type: 'relative', amount: 1, unit: 'month' }, NOW)
-    expect(month?.start.toISOString()).toBe('2026-10-10T16:00:00.000Z')
-    expect(stepDateRange({ type: 'relative', amount: 1, unit: 'hour' }, -1, NOW)).toEqual({
-      type: 'absolute',
-      start: new Date(NOW.getTime() - 2 * HOUR).toISOString(),
-      end: new Date(NOW.getTime() - HOUR).toISOString()
+    it('resolves relative ranges against now and steps by the range length', () => {
+      const range = resolveDateRange({ type: 'relative', amount: 15, unit: 'minute' }, NOW)
+      expect(range?.end.toISOString()).toBe(NOW.toISOString())
+      expect(range?.start.toISOString()).toBe('2026-11-10T15:45:00.000Z')
+      const month = resolveDateRange({ type: 'relative', amount: 1, unit: 'month' }, NOW)
+      expect(month?.start.toISOString()).toBe('2026-10-10T16:00:00.000Z')
+      expect(stepDateRange({ type: 'relative', amount: 1, unit: 'hour' }, -1, NOW)).toEqual({
+        type: 'absolute',
+        start: new Date(NOW.getTime() - 2 * HOUR).toISOString(),
+        end: new Date(NOW.getTime() - HOUR).toISOString()
+      })
     })
   })
-})
 
-describe('DateRangePicker', () => {
   it('opens from defaultOpen and reports and follows v-model:open', async () => {
     const seeded = render(DateRangePicker, { props: { now: NOW, defaultOpen: true } })
     await waitFor(() => expect(panel()).toBeTruthy())
@@ -410,100 +412,100 @@ describe('DateRangePicker', () => {
     expect(within(popover).getByRole('button', { name: 'Aplicar' })).toBeTruthy()
     await expectNoA11yViolations(popover)
   })
-})
 
-describe('DateRangePicker — reference clock from WebkitProvider', () => {
-  const host = (pickerProps: Record<string, unknown>) => {
-    const values: (DateRangeValue | null)[] = []
-    const view = render(
-      defineComponent({
-        setup: () => () =>
-          h(
-            WebkitProvider,
-            { catalogs: LOCALES, now: NOW },
-            {
-              default: () =>
-                h(DateRangePicker, {
-                  timeZone: 'UTC',
-                  showStep: true,
-                  modelValue: { type: 'relative', amount: 15, unit: 'minute' },
-                  'onUpdate:modelValue': (value: DateRangeValue | null) => values.push(value),
-                  ...pickerProps
-                })
-            }
-          )
+  describe('reference clock from WebkitProvider', () => {
+    const host = (pickerProps: Record<string, unknown>) => {
+      const values: (DateRangeValue | null)[] = []
+      const view = render(
+        defineComponent({
+          setup: () => () =>
+            h(
+              WebkitProvider,
+              { catalogs: LOCALES, now: NOW },
+              {
+                default: () =>
+                  h(DateRangePicker, {
+                    timeZone: 'UTC',
+                    showStep: true,
+                    modelValue: { type: 'relative', amount: 15, unit: 'minute' },
+                    'onUpdate:modelValue': (value: DateRangeValue | null) => values.push(value),
+                    ...pickerProps
+                  })
+              }
+            )
+        })
+      )
+      return { view, values }
+    }
+
+    it('formats in the provider time zone when no time zone is bound', () => {
+      const view = render(
+        defineComponent({
+          setup: () => () =>
+            h(
+              WebkitProvider,
+              { timeZone: 'Asia/Tokyo' },
+              {
+                default: () =>
+                  h(DateRangePicker, {
+                    now: NOW,
+                    modelValue: {
+                      type: 'absolute',
+                      start: '2026-11-10T12:00:00.000Z',
+                      end: '2026-11-10T18:30:00.000Z'
+                    }
+                  })
+              }
+            )
+        })
+      )
+      expect(view.getByTestId(`${TEST_ID}__trigger`).textContent).toContain('UTC+09:00')
+    })
+
+    it('steps a relative range from the provider now when the now prop is unset', async () => {
+      const { view, values } = host({})
+      await fireEvent.click(view.getByRole('button', { name: 'Previous range' }))
+      expect(values.at(-1)).toEqual({
+        type: 'absolute',
+        start: '2026-11-10T15:30:00.000Z',
+        end: '2026-11-10T15:45:00.000Z'
       })
-    )
-    return { view, values }
-  }
+    })
 
-  it('formats in the provider time zone when no time zone is bound', () => {
-    const view = render(
-      defineComponent({
-        setup: () => () =>
-          h(
-            WebkitProvider,
-            { timeZone: 'Asia/Tokyo' },
-            {
-              default: () =>
-                h(DateRangePicker, {
-                  now: NOW,
-                  modelValue: {
-                    type: 'absolute',
-                    start: '2026-11-10T12:00:00.000Z',
-                    end: '2026-11-10T18:30:00.000Z'
-                  }
-                })
-            }
-          )
+    it('lets the now prop override the provider', async () => {
+      const { view, values } = host({ now: new Date('2026-11-10T18:00:00.000Z') })
+      await fireEvent.click(view.getByRole('button', { name: 'Previous range' }))
+      expect(values.at(-1)).toEqual({
+        type: 'absolute',
+        start: '2026-11-10T17:30:00.000Z',
+        end: '2026-11-10T17:45:00.000Z'
       })
-    )
-    expect(view.getByTestId(`${TEST_ID}__trigger`).textContent).toContain('UTC+09:00')
-  })
-
-  it('steps a relative range from the provider now when the now prop is unset', async () => {
-    const { view, values } = host({})
-    await fireEvent.click(view.getByRole('button', { name: 'Previous range' }))
-    expect(values.at(-1)).toEqual({
-      type: 'absolute',
-      start: '2026-11-10T15:30:00.000Z',
-      end: '2026-11-10T15:45:00.000Z'
     })
   })
 
-  it('lets the now prop override the provider', async () => {
-    const { view, values } = host({ now: new Date('2026-11-10T18:00:00.000Z') })
-    await fireEvent.click(view.getByRole('button', { name: 'Previous range' }))
-    expect(values.at(-1)).toEqual({
-      type: 'absolute',
-      start: '2026-11-10T17:30:00.000Z',
-      end: '2026-11-10T17:45:00.000Z'
+  describe('in a Field', () => {
+    it('takes the Field label, description, invalid and disabled state on its trigger', async () => {
+      const { getByTestId, getByRole } = render({
+        components: { Field, FieldLabel, FieldDescription, DateRangePicker },
+        template:
+          '<Field invalid disabled><FieldLabel>Events window</FieldLabel><DateRangePicker /><FieldDescription>Times are UTC.</FieldDescription></Field>'
+      })
+      const trigger = getByTestId('input-date-range-picker__trigger') as HTMLButtonElement
+      expect(getByRole('button', { name: 'Events window' })).toBe(trigger)
+      expect(trigger.getAttribute('aria-invalid')).toBe('true')
+      expect(trigger.disabled).toBe(true)
+      await waitFor(() =>
+        expect(
+          document.getElementById(trigger.getAttribute('aria-describedby') ?? '')?.textContent
+        ).toContain('Times are UTC.')
+      )
     })
-  })
-})
 
-describe('DateRangePicker in a Field', () => {
-  it('takes the Field label, description, invalid and disabled state on its trigger', async () => {
-    const { getByTestId, getByRole } = render({
-      components: { Field, FieldLabel, FieldDescription, DateRangePicker },
-      template:
-        '<Field invalid disabled><FieldLabel>Events window</FieldLabel><DateRangePicker /><FieldDescription>Times are UTC.</FieldDescription></Field>'
+    it('renders the Disabled example with a disabled trigger', () => {
+      const { getByTestId } = render(Disabled)
+      expect((getByTestId('input-date-range-picker__trigger') as HTMLButtonElement).disabled).toBe(
+        true
+      )
     })
-    const trigger = getByTestId('input-date-range-picker__trigger') as HTMLButtonElement
-    expect(getByRole('button', { name: 'Events window' })).toBe(trigger)
-    expect(trigger.getAttribute('aria-invalid')).toBe('true')
-    expect(trigger.disabled).toBe(true)
-    await waitFor(() =>
-      expect(
-        document.getElementById(trigger.getAttribute('aria-describedby') ?? '')?.textContent
-      ).toContain('Times are UTC.')
-    )
-  })
-
-  it('renders the Disabled example with a disabled trigger', () => {
-    const { getByTestId } = render(Disabled)
-    expect((getByTestId('input-date-range-picker__trigger') as HTMLButtonElement).disabled).toBe(
-      true
-    )
   })
 })

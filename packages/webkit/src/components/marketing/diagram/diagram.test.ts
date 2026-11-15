@@ -267,39 +267,39 @@ describe('Diagram', () => {
       expect(await findByRole('img')).toHaveAccessibleName()
     })
   })
-})
 
-describe('Diagram parts data-testid', () => {
-  it('gives every node and layout container a derived testid', async () => {
-    const { container, getAllByTestId } = render(Diagram, { props: { spec } })
-    await ready(container)
+  describe('parts data-testid', () => {
+    it('gives every node and layout container a derived testid', async () => {
+      const { container, getAllByTestId } = render(Diagram, { props: { spec } })
+      await ready(container)
 
-    const nodes = getAllByTestId(`${TESTID}__node`)
-    expect(nodes.map((node) => node.getAttribute('data-diagram-node'))).toEqual([
-      'user',
-      'workload',
-      'cache',
-      'origin'
-    ])
-    expect(getAllByTestId(`${TESTID}__layout`).length).toBeGreaterThan(0)
-  })
-
-  it('lets a consumer override the node and layout testids', () => {
-    const node = render(DiagramNode, {
-      props: { node: { key: 'user', kind: 'pill', title: 'User' } },
-      attrs: { 'data-testid': 'custom-node' }
+      const nodes = getAllByTestId(`${TESTID}__node`)
+      expect(nodes.map((node) => node.getAttribute('data-diagram-node'))).toEqual([
+        'user',
+        'workload',
+        'cache',
+        'origin'
+      ])
+      expect(getAllByTestId(`${TESTID}__layout`).length).toBeGreaterThan(0)
     })
-    expect(node.getByTestId('custom-node').getAttribute('data-diagram-node')).toBe('user')
-    node.unmount()
 
-    const layout = render(DiagramLayout, {
-      props: {
-        item: { row: [{ node: 'user' }] },
-        nodes: { user: { key: 'user', kind: 'pill', title: 'User' } }
-      },
-      attrs: { 'data-testid': 'custom-layout' }
+    it('lets a consumer override the node and layout testids', () => {
+      const node = render(DiagramNode, {
+        props: { node: { key: 'user', kind: 'pill', title: 'User' } },
+        attrs: { 'data-testid': 'custom-node' }
+      })
+      expect(node.getByTestId('custom-node').getAttribute('data-diagram-node')).toBe('user')
+      node.unmount()
+
+      const layout = render(DiagramLayout, {
+        props: {
+          item: { row: [{ node: 'user' }] },
+          nodes: { user: { key: 'user', kind: 'pill', title: 'User' } }
+        },
+        attrs: { 'data-testid': 'custom-layout' }
+      })
+      expect(layout.getByTestId('custom-layout')).toBeTruthy()
+      expect(layout.getByTestId(`${TESTID}__node`)).toBeTruthy()
     })
-    expect(layout.getByTestId('custom-layout')).toBeTruthy()
-    expect(layout.getByTestId(`${TESTID}__node`)).toBeTruthy()
   })
 })

@@ -9,9 +9,8 @@ export const MARKET_ALIASES = {
   breadcrumbs: 'breadcrumb',
   callout: 'alert',
   'command-palette': 'command',
-  comparison: 'compare-plans',
   'config-provider': 'webkit-provider',
-  cta: 'closing-call-to-action',
+  cta: 'call-to-action',
   datatable: 'data-table',
   'feature-grid': 'capability-grid',
   'input-otp': 'otp-input',
@@ -33,7 +32,6 @@ export const MARKET_ALIASES = {
   testimonial: 'client-quotes',
   testimonials: 'client-quotes',
   'text-field': 'input',
-  tiles: 'radio-group',
   transfer: 'transfer-list'
 }
 
@@ -81,10 +79,17 @@ export function removedNames(subpaths, migration) {
   )
 }
 
+export const RENAMED_OVERRIDES = {
+  menu: null,
+  'radio-button': 'radio-group'
+}
+
 export function buildRenamed(subpaths, retired) {
   const exported = new Set(subpaths)
   return Object.fromEntries(
     Object.entries(retired)
+      .map(([from, to]) => [from, from in RENAMED_OVERRIDES ? RENAMED_OVERRIDES[from] : to])
+      .filter(([, to]) => to !== null)
       .filter(([from, to]) => !exported.has(from) && exported.has(to))
       .sort(([a], [b]) => a.localeCompare(b))
   )
@@ -166,5 +171,71 @@ export function readBlockIds(blocksRoot) {
     }
   }
   walk(blocksRoot)
+  return out
+}
+
+const pascalCase = (kebab) =>
+  kebab
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join('')
+
+export function suiteName({ dir, stem, vueSource, hasModule }) {
+  if (vueSource !== null)
+    return (
+      vueSource.match(/defineOptions\(\s*\{[^}]*?name:\s*['"]([^'"]+)['"]/s)?.[1] ??
+      pascalCase(stem)
+    )
+  if (hasModule) {
+    const name = pascalCase(stem)
+    return name.charAt(0).toLowerCase() + name.slice(1)
+  }
+  return pascalCase(dir.split('/').at(-1))
+}
+
+export function topLevelSuites(source) {
+  return [...source.matchAll(/^describe\b(\S*)\((['"`])((?:\\.|(?!\2).)*)\2/gm)].map((m) =>
+    m[3].replace(/\\(.)/g, '$1')
+  )
+}
+
+export function checkSuites(suites) {
+  const errors = []
+  for (const { file, expected, titles } of suites) {
+    if (titles.length === 1 && titles[0] === expected) continue
+    const found = titles.map((t) => `"${t}"`).join(', ') || 'none'
+    errors.push(
+      `${file}: one top-level describe named "${expected}" expected, found ${found}; nest the scenarios inside it`
+    )
+  }
+  return errors
+}
+
+export function readSuites(packageRoot) {
+  const out = []
+  const walk = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true }).sort((a, b) =>
+      a.name.localeCompare(b.name)
+    )) {
+      const path = join(dir, e.name)
+      if (e.isDirectory()) walk(path)
+      else if (e.name.endsWith('.test.ts')) {
+        const stem = e.name.slice(0, -'.test.ts'.length)
+        const vue = join(dir, `${stem}.vue`)
+        const rel = relative(packageRoot, dir).split('\\').join('/')
+        out.push({
+          file: `${rel}/${e.name}`,
+          expected: suiteName({
+            dir: rel,
+            stem,
+            vueSource: existsSync(vue) ? readFileSync(vue, 'utf8') : null,
+            hasModule: existsSync(join(dir, `${stem}.ts`))
+          }),
+          titles: topLevelSuites(readFileSync(path, 'utf8'))
+        })
+      }
+    }
+  }
+  walk(join(packageRoot, 'src/components'))
   return out
 }

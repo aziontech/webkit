@@ -215,26 +215,26 @@ describe('DocPrompt', () => {
       await expectNoA11yViolations(container)
     })
   })
-})
 
-describe('DocPrompt slot presence', () => {
-  it('follows a v-if slot that appears and disappears after mount', async () => {
-    const shown = ref(false)
-    const { queryByTestId } = render({
-      components: { DocPrompt },
-      setup: () => ({ shown }),
-      template: `<DocPrompt><template v-if="shown" #default><span data-testid="probe">Slotted</span></template></DocPrompt>`
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { DocPrompt },
+        setup: () => ({ shown }),
+        template: `<DocPrompt><template v-if="shown" #default><span data-testid="probe">Slotted</span></template></DocPrompt>`
+      })
+      expect(queryByTestId('actions-copy-button')).toBeNull()
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('actions-copy-button')).not.toBeNull()
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('actions-copy-button')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
     })
-    expect(queryByTestId('actions-copy-button')).toBeNull()
-
-    shown.value = true
-    await nextTick()
-    expect(queryByTestId('actions-copy-button')).not.toBeNull()
-    expect(queryByTestId('probe')).not.toBeNull()
-
-    shown.value = false
-    await nextTick()
-    expect(queryByTestId('actions-copy-button')).toBeNull()
-    expect(queryByTestId('probe')).toBeNull()
   })
 })

@@ -294,47 +294,49 @@ describe('ComparePlans', () => {
 
     await expectNoA11yViolations(container)
   })
-})
 
-describe('ComparePlans — plan description and band links', () => {
-  it('shows each plan description and closes a band with its link', async () => {
-    const { default: BandLinks } = await import('../../../../examples/compare-plans/band-links.vue')
-    const { getByText, getByRole } = render(BandLinks)
-    expect(getByText('For teams in production.')).toBeInTheDocument()
-    expect(getByRole('link', { name: /See compute rates/ })).toHaveAttribute(
-      'href',
-      '/pricing/compute'
-    )
-    expect(getByRole('link', { name: /See storage rates/ })).toHaveAttribute('target', '_blank')
-  })
-
-  it('has no axe violations with band links', async () => {
-    const { default: BandLinks } = await import('../../../../examples/compare-plans/band-links.vue')
-    const { container } = render(BandLinks)
-    await expectNoA11yViolations(container)
-  })
-})
-
-describe('ComparePlans — support tiers', () => {
-  it('lays the support tiers out as plan columns, opening the picker on the highlighted tier', async () => {
-    const { default: SupportTiers } =
-      await import('../../../../examples/compare-plans/support-tiers.vue')
-    const { container, getByText } = render(SupportTiers)
-    const heads = Array.from(container.querySelectorAll('thead th[scope="col"]')).slice(1)
-    expect(
-      heads.map(
-        (th) => th.textContent?.match(/Developer|Business|Enterprise|Mission-Critical/)?.[0]
+  describe('plan description and band links', () => {
+    it('shows each plan description and closes a band with its link', async () => {
+      const { default: BandLinks } =
+        await import('../../../../examples/compare-plans/band-links.vue')
+      const { getByText, getByRole } = render(BandLinks)
+      expect(getByText('For teams in production.')).toBeInTheDocument()
+      expect(getByRole('link', { name: /See compute rates/ })).toHaveAttribute(
+        'href',
+        '/pricing/compute'
       )
-    ).toEqual(['Developer', 'Business', 'Enterprise', 'Mission-Critical'])
-    expect(heads.filter((th) => !th.hasAttribute('data-folded'))).toHaveLength(1)
-    expect(heads[2]).not.toHaveAttribute('data-folded')
-    expect(getByText('Ideal for teams that need support from specialists.')).toBeInTheDocument()
+      expect(getByRole('link', { name: /See storage rates/ })).toHaveAttribute('target', '_blank')
+    })
+
+    it('has no axe violations with band links', async () => {
+      const { default: BandLinks } =
+        await import('../../../../examples/compare-plans/band-links.vue')
+      const { container } = render(BandLinks)
+      await expectNoA11yViolations(container)
+    })
   })
 
-  it('has no axe violations with support tiers', async () => {
-    const { default: SupportTiers } =
-      await import('../../../../examples/compare-plans/support-tiers.vue')
-    const { container } = render(SupportTiers)
-    await expectNoA11yViolations(container)
+  describe('support tiers', () => {
+    it('lays the support tiers out as plan columns, opening the picker on the highlighted tier', async () => {
+      const { default: SupportTiers } =
+        await import('../../../../examples/compare-plans/support-tiers.vue')
+      const { container, getByText } = render(SupportTiers)
+      const heads = Array.from(container.querySelectorAll('thead th[scope="col"]')).slice(1)
+      expect(
+        heads.map(
+          (th) => th.textContent?.match(/Developer|Business|Enterprise|Mission-Critical/)?.[0]
+        )
+      ).toEqual(['Developer', 'Business', 'Enterprise', 'Mission-Critical'])
+      expect(heads.filter((th) => !th.hasAttribute('data-folded'))).toHaveLength(1)
+      expect(heads[2]).not.toHaveAttribute('data-folded')
+      expect(getByText('Ideal for teams that need support from specialists.')).toBeInTheDocument()
+    })
+
+    it('has no axe violations with support tiers', async () => {
+      const { default: SupportTiers } =
+        await import('../../../../examples/compare-plans/support-tiers.vue')
+      const { container } = render(SupportTiers)
+      await expectNoA11yViolations(container)
+    })
   })
 })

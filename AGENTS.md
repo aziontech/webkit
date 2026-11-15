@@ -22,12 +22,12 @@ fails the build when the two mix.
 
 1. Read [`.claude/AGENTS.md`](./.claude/AGENTS.md) — monorepo rules, commands, conventions.
 2. New component or block: the AI flow, from a request issue to a PR —
-   [`/webkit-new`](./.claude/commands/webkit-new.md) (component) or
-   [`/webkit-new-block`](./.claude/commands/webkit-new-block.md) (block). It runs these steps in
+   [`/component-new`](./.claude/commands/component-new.md) (component) or
+   [`/block-new`](./.claude/commands/block-new.md) (block). It runs these steps in
    order and stops on the first failure:
    1. read the issue (`.github/ISSUE_TEMPLATE/new-component.yml` / `new-block.yml`);
    2. research the benchmarks (Cloudscape `index.html.md`, shadcn) and the catalog for reuse
-      (`reuse-audit`, MCP `search_components` / `search_patterns`, `catalog.json#aliases`);
+      (`reuse-audit`, MCP `search_components` / `search_blocks`, `catalog.json#aliases`);
    3. write the spec as `draft` (`spec-create`, template 2) or the block brief;
    4. spec review by a second agent ([`spec-reviewer`](./.claude/agents/spec-reviewer.md)); on
       approval `spec-validate` flips it to `approved` with a checksum;
@@ -36,7 +36,7 @@ fails the build when the two mix.
    6. machine gates (`pnpm --filter @aziontech/webkit run gates`, lint, types, size, Vitest);
    7. `ui-craft` review ([`.claude/skills/ui-craft/SKILL.md`](./.claude/skills/ui-craft/SKILL.md)),
       findings fixed or listed;
-   8. usage check (`packages/webkit/scripts/usage-check.mjs`): a fresh agent must pick the new
+   8. usage check (`packages/webkit/scripts/check-usage.mjs`): a fresh agent must pick the new
       piece through the MCP and pass `webkit doctor`;
    9. PR from [`.github/pull_request_template.md`](./.github/pull_request_template.md).
 

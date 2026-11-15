@@ -16,7 +16,7 @@ export function runLogged(cmd, args, cwd, extraEnv = {}) {
 export function buildWorkspace(root) {
   runLogged('pnpm', ['--filter', '@aziontech/theme', 'run', 'build:tokens'], root)
   runLogged('pnpm', ['--filter', '@aziontech/icons', 'run', 'build'], root)
-  runLogged('pnpm', ['--filter', '@aziontech/webkit', 'run', 'catalog:build'], root)
+  runLogged('pnpm', ['--filter', '@aziontech/webkit', 'run', 'build:catalog'], root)
 }
 
 function pack(pkgDir, packDir) {

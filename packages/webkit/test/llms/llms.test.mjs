@@ -59,7 +59,7 @@ test('every component has a page and a JSON API, and every block and foundation 
     assert.ok(Array.isArray(api.props) && Array.isArray(api.examples))
     assert.match(files['llms.txt'], new RegExp(`\\(components/${n}\\.md\\)`))
   }
-  for (const id of Object.keys(catalog.patterns)) {
+  for (const id of Object.keys(catalog.blocks)) {
     assert.ok(files[`blocks/${id}.md`], id)
     assert.match(files['llms.txt'], new RegExp(`\\(blocks/${id}\\.md\\)`))
   }
@@ -69,8 +69,8 @@ test('every component has a page and a JSON API, and every block and foundation 
     'typography',
     'spacing',
     'motion',
-    'i18n',
-    'rtl',
+    'internationalization',
+    'right-to-left',
     'devices'
   ]) {
     assert.ok(files[`foundations/${slug}.md`], slug)

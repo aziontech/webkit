@@ -177,26 +177,26 @@ describe('UploadProgress', () => {
       view.unmount()
     }
   })
-})
 
-describe('UploadProgress slot presence', () => {
-  it('follows a v-if slot that appears and disappears after mount', async () => {
-    const shown = ref(false)
-    const { queryByTestId } = render({
-      components: { UploadProgress },
-      setup: () => ({ shown }),
-      template: `<UploadProgress><template v-if="shown" #actions><span data-testid="probe">Slotted</span></template></UploadProgress>`
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { UploadProgress },
+        setup: () => ({ shown }),
+        template: `<UploadProgress><template v-if="shown" #actions><span data-testid="probe">Slotted</span></template></UploadProgress>`
+      })
+      expect(queryByTestId('probe')).toBeNull()
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('probe')).not.toBeNull()
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('probe')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
     })
-    expect(queryByTestId('probe')).toBeNull()
-
-    shown.value = true
-    await nextTick()
-    expect(queryByTestId('probe')).not.toBeNull()
-    expect(queryByTestId('probe')).not.toBeNull()
-
-    shown.value = false
-    await nextTick()
-    expect(queryByTestId('probe')).toBeNull()
-    expect(queryByTestId('probe')).toBeNull()
   })
 })

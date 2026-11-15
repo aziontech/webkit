@@ -59,7 +59,7 @@ const walk = (dir) =>
   )
 
 // The theme's JS entry points (`@aziontech/theme/animations`, …) get their declarations from
-// the theme's `build:dts`, which runs on prepack, so a published theme carries them but a fresh
+// the theme's `build:types`, which runs on prepack, so a published theme carries them but a fresh
 // checkout does not. Emit them into a temp dir on the same filesystem and rename each file into place: renames are
 // atomic, so test files running in parallel never read a half-written declaration.
 export function ensureThemeTypes() {
@@ -86,7 +86,7 @@ export function ensureThemeTypes() {
       { cwd: THEME_DIR, encoding: 'utf8', timeout: 120_000 }
     )
     if (run.error) throw run.error
-    if (run.status !== 0) throw new Error(`theme build:dts failed\n${run.stdout}${run.stderr}`)
+    if (run.status !== 0) throw new Error(`theme build:types failed\n${run.stdout}${run.stderr}`)
     for (const file of walk(out).filter((path) => path.endsWith('.d.ts'))) {
       const target = join(THEME_DIR, relative(out, file))
       mkdirSync(dirname(target), { recursive: true })

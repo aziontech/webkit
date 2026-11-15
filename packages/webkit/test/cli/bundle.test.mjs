@@ -326,7 +326,7 @@ test('classify: unstamped-different for an unmarked copy that diverged from the 
 
 test('the bundle is read from the repo-root layout: skills/, rules/, adapters/', () => {
   assert.ok(agentsDir(CLAUDE_TEMPLATES).endsWith(join('adapters', 'claude', 'agents')))
-  assert.ok(fragmentFile(CLAUDE_TEMPLATES).endsWith(join('adapters', 'AGENTS.fragment.md')))
+  assert.ok(fragmentFile(CLAUDE_TEMPLATES).endsWith(join('adapters', 'AGENTS_FRAGMENT.md')))
   const bundle = listBundle()
   assert.ok(bundle.includes('rules/webkit-sections.md'))
   assert.ok(bundle.includes('rules/webkit-page-layout.md'))
@@ -356,7 +356,7 @@ test('the CLI never falls back to the legacy agents/ or CLAUDE.fragment.md layou
     writeFileSync(join(dir, 'agents', 'old.md'), '# old')
     writeFileSync(join(dir, 'CLAUDE.fragment.md'), '# old')
     assert.equal(agentsDir(dir), join(dir, 'adapters', 'claude', 'agents'))
-    assert.equal(fragmentFile(dir), join(dir, 'adapters', 'AGENTS.fragment.md'))
+    assert.equal(fragmentFile(dir), join(dir, 'adapters', 'AGENTS_FRAGMENT.md'))
     assert.deepEqual(listBundle(dir), [])
   } finally {
     rmSync(dir, { recursive: true, force: true })

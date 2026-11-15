@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 
-import { templateBodyVisitorFactory } from '../util.js'
+import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const DEFAULT_PREFIXES = ['/marketing-components/', '/media/']
 

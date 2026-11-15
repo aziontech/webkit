@@ -155,7 +155,7 @@ The same rule applies to each sub-component. Each renders its own root with its 
 
 ## Token values: the canonical `prop-(--token)` syntax
 
-A design-token value on a utility is written with Tailwind v4's **paren shorthand** — `bg-(--primary)`, not `bg-[var(--primary)]`. This is the **single canonical form** (ENG-47001, decision A): it is what upstream v4 canonicalizes to, so Tailwind IntelliSense no longer flags every styled line with `suggestCanonicalClasses`, and it is what every rule, spec, story, scaffolder output and consumer skill or rule (`skills/`, `rules/`) now teaches. The two spellings compile to byte-identical CSS; we standardize on one so the codebase reads one way.
+A design-token value on a utility is written with Tailwind v4's **paren shorthand** — `bg-(--primary)`, not `bg-[var(--primary)]`. This is the **single canonical form** (ENG-47001, decision A): it is what upstream v4 canonicalizes to, so Tailwind IntelliSense no longer flags every styled line with `suggestCanonicalClasses`, and it is what every rule, spec, story, component-scaffolder output and consumer skill or rule (`skills/`, `rules/`) now teaches. The two spellings compile to byte-identical CSS; we standardize on one so the codebase reads one way.
 
 ```html
 <!-- ✅ canonical — paren shorthand -->
@@ -327,7 +327,7 @@ The Vue HTML parser runs **before** JavaScript. **Do not** pass multiline templa
 1. **Plain multiline `class` on the root** (no JS quotes) + optional `:class="attrs.class"` for consumer overrides.
 2. **Single-quoted `ROOT_CLASS` in `<script setup>`** + `:class="cn(ROOT_CLASS, attrs.class)"` — one flat literal string, not a `kindClasses` / `sizeClasses` map.
 
-`pnpm webkit:lint` and `vue-tsc` may still pass; only the SFC template compiler (`pnpm docs:dev`, `pnpm docs:build`) catches this.
+`pnpm lint:webkit` and `vue-tsc` may still pass; only the SFC template compiler (`pnpm dev:docs`, `pnpm build:docs`) catches this.
 
 ## Vue SFC pitfall — no HTML-like tags in `<script>` comments
 
@@ -351,7 +351,7 @@ A tool that runs `@vitejs/plugin-vue` twice (as some consumer setups do) may cal
 | 2    | Confirm raw SFC parses: `node -e "require('vue/compiler-sfc').parse(fs.readFileSync('…vue','utf8'),{filename:'…'})"` → `errors: []` |
 | 3    | Grep script for `` `<…>` ``, `<template`, `</…>` in comments and JSDoc                                                              |
 | 4    | Remove backtick multiline literals from `<template> :class="cn(\`…\`)"`(move class string to script`ROOT_CLASS`)                    |
-| 5    | Restart `pnpm docs:dev` after fixing (clear stale HMR descriptor if needed)                                                         |
+| 5    | Restart `pnpm dev:docs` after fixing (clear stale HMR descriptor if needed)                                                         |
 
 ## When you legitimately need conditional styling
 
@@ -376,7 +376,7 @@ Use a `data-*` attribute + a Tailwind variant. The decision lives in HTML, not i
 
 ## Enforcement
 
-- `scaffolder` (agent) refuses to emit the `kindClasses`/`sizeClasses`/`sharedClasses`/`rootClasses` pattern. The skeleton in [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md) uses inline classes + `data-*` variants.
+- `component-scaffolder` (agent) refuses to emit the `kindClasses`/`sizeClasses`/`sharedClasses`/`rootClasses` pattern. The skeleton in [`.claude/skills/component-scaffold/SKILL.md`](../skills/component-scaffold/SKILL.md) uses inline classes + `data-*` variants.
 - `validate-tokens.mjs` (PreToolUse hook) already blocks HEX/palette/raw typography regardless of where they appear.
 - **`container-query-on-container`** (same engine, write-time hook and CI ratchet) blocks a class string that declares `@container/<name>` and also uses an `@…/<name>:` variant; pinned both ways in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).
 - **`dead-token-shorthand`** (same shared token-checks engine, so write-time hook **and** the `check-authoring` CI ratchet) blocks a malformed shorthand — whitespace inside the parens, or the inverted `[--(token)]`. It is the only gate that sees this class of defect: the utility never exists, so nothing else in the pipeline has anything to complain about, and the unit suite runs unstyled. Pinned both directions (fires / stays silent on ordinary subtraction and on a nested `var()` fallback) in [`token-checks.test.mjs`](../../packages/webkit/test/eslint-plugin/token-checks.test.mjs).

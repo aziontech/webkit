@@ -9,7 +9,7 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 67b089f1059b0e6b97f11a6fdbd73c0a28eb53c8220576a3b9bd03686b3cdfe8
+checksum: b48c4a3eed546887e051b9411651bbf8c294f866904f0eead1e038a2072cd22b
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -46,7 +46,7 @@ The card surface, typography, and severity icons follow the Figma design (see `f
 
 ## Best practices
 
-- Mount `Toaster` once at the app root (in `App.vue`, before the layout or `RouterView`), or install `ToastPlugin`. Never render a `Toaster` in a page, a view or a page-body block: only the first `Toaster` to mount is active and it gives the role up when it unmounts, so a page's copy is either inert or, when it mounted first, silences every toast in the app once the user leaves that page. A page only imports `toast`. A full page routed outside the console layout is still a route of the same app, not a root. `patterns:check` fails a block outside `blocks/shells/` that renders one.
+- Mount `Toaster` once at the app root (in `App.vue`, before the layout or `RouterView`), or install `ToastPlugin`. Never render a `Toaster` in a page, a view or a page-body block: only the first `Toaster` to mount is active and it gives the role up when it unmounts, so a page's copy is either inert or, when it mounted first, silences every toast in the app once the user leaves that page. A page only imports `toast`. A full page routed outside the console layout is still a route of the same app, not a root. `check:blocks` fails a block outside `blocks/shells/` that renders one.
 - Use the typed shortcuts (`toast.success`, `toast.error`, …). The type sets the icon and how it is announced: `toast.error` (severity `danger`) interrupts the screen reader through the Toaster's assertive live region, every other type waits its turn in the polite one. Both regions are fixed, so no region ever switches between polite and assertive (switching made screen readers drop or repeat the stack).
 - Keep the message text to one line and move detail to `description`. Offer at most two actions: one `action`, or `actions` with two entries when a failure has two ways forward (**Edit** and **Redeploy**).
 - A toast with an `action` (or `actions`) stays at least 10 s unless it sets its own `duration`, so a keyboard or screen-reader user has time to reach the action.

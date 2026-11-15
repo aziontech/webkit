@@ -20,8 +20,10 @@ function staticRoutes(): string[] {
     ...FOUNDATION_SLUGS.map((slug) => `/foundations/${slug}`),
     ...components.map((item) => `/components/${item.name}`),
     ...blocks.map((block) => `/blocks/${block.id}`),
-    ...blocks.flatMap((block) => block.states.map((state) => `/frame/${state.slug}/${block.id}`)),
-    '/example',
+    ...blocks.flatMap((block) =>
+      block.states.map((state) => `/frame/block/${block.id}/${state.slug}`)
+    ),
+    '/frame/example',
     '/404'
   ]
 }

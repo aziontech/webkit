@@ -26,7 +26,7 @@ test('every rule ships in recommended or strict, never as warn except the layout
   const heuristics = new Set(HEURISTIC_RULES.map((rule) => `webkit/${rule}`))
   assert.deepEqual(
     [...HEURISTIC_RULES],
-    ['container-needs-width', 'no-output-in-command', 'no-page-navigation-menu']
+    ['require-container-width', 'no-output-in-command', 'no-page-navigation-menu']
   )
   for (const preset of [recommended, strict, performance]) {
     for (const [key, severity] of Object.entries(preset.rules)) {
@@ -89,9 +89,9 @@ const label = 'hi'
   }
 })
 
-test('menu-node-href is an error in recommended and strict', () => {
+test('prefer-href-in-menu-node is an error in recommended and strict', () => {
   for (const name of ['recommended', 'strict']) {
     const [config] = webkitPlugin.configs[name]
-    assert.equal(config.rules['webkit/menu-node-href'], 'error', name)
+    assert.equal(config.rules['webkit/prefer-href-in-menu-node'], 'error', name)
   }
 })

@@ -168,7 +168,7 @@ function parseArgs(argv) {
     format: values['--format'],
     failOn: values['--fail-on'],
     from: values['--from'],
-    patterns: positionals,
+    args: positionals,
     check: flags.has('--check'),
     force: flags.has('--force'),
     json: flags.has('--json'),
@@ -505,7 +505,7 @@ function runDiff(projectDir, target, parsed) {
 }
 
 function runQuery(projectDir, command, parsed) {
-  const query = parsed.patterns.join(' ').trim()
+  const query = parsed.args.join(' ').trim()
   if (!query) {
     process.stderr.write(
       `Usage: npx @aziontech/webkit ${command} <${command === 'view' ? 'id' : 'query'}>\n`
@@ -580,8 +580,8 @@ async function run(argv) {
     return runDoctor(projectDir)
   }
 
-  if (command === 'add') return runAdd(projectDir, parsed.patterns[0], parsed)
-  if (command === 'diff') return runDiff(projectDir, parsed.patterns[0], parsed)
+  if (command === 'add') return runAdd(projectDir, parsed.args[0], parsed)
+  if (command === 'diff') return runDiff(projectDir, parsed.args[0], parsed)
   if (command === 'search' || command === 'view') return runQuery(projectDir, command, parsed)
   if (command === 'check') return runCheckCommand(projectDir, parsed)
 
@@ -596,7 +596,7 @@ async function run(argv) {
       process.stderr.write(`Unknown --fail-on value: ${failOn} (expected never or any)\n`)
       return 1
     }
-    const patterns = parsed.patterns.length ? parsed.patterns : ['.']
+    const patterns = parsed.args.length ? parsed.args : ['.']
     const result = runReport(projectDir, {
       format,
       failOn,
@@ -618,7 +618,7 @@ async function run(argv) {
   }
 
   if (command === 'migrate') {
-    return runMigrate(projectDir, parsed.patterns[0], { dryRun, from: parsed.from })
+    return runMigrate(projectDir, parsed.args[0], { dryRun, from: parsed.from })
   }
 
   if (command === 'sync') {

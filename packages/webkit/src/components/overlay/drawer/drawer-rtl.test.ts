@@ -26,13 +26,15 @@ afterEach(() => {
   document.documentElement.removeAttribute('dir')
 })
 
-describe('Drawer in a right-to-left document (styled)', () => {
-  it('slides a side drawer out through the edge it is anchored to', async () => {
-    await page.viewport(1280, 900)
-    expect(await closedTranslate('left')).toBe('-100%')
+describe('Drawer', () => {
+  describe('in a right-to-left document (styled)', () => {
+    it('slides a side drawer out through the edge it is anchored to', async () => {
+      await page.viewport(1280, 900)
+      expect(await closedTranslate('left')).toBe('-100%')
 
-    document.documentElement.setAttribute('dir', 'rtl')
-    expect(await closedTranslate('left')).toBe('100%')
-    expect(await closedTranslate('right')).toBe('-100%')
+      document.documentElement.setAttribute('dir', 'rtl')
+      expect(await closedTranslate('left')).toBe('100%')
+      expect(await closedTranslate('right')).toBe('-100%')
+    })
   })
 })

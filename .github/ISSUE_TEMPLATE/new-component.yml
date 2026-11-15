@@ -1,12 +1,12 @@
 name: New component
-description: Request a new WebKit component. An agent builds it through /webkit-new from this issue.
+description: Request a new WebKit component. An agent builds it through /component-new from this issue.
 title: 'component: <name>'
 labels: ['new-component', 'ai-flow']
 body:
   - type: markdown
     attributes:
       value: |
-        This issue is the input of `/webkit-new <issue number>` (`.claude/commands/webkit-new.md`).
+        This issue is the input of `/component-new <issue number>` (`.claude/commands/component-new.md`).
         An agent researches the benchmarks, writes the spec, has it reviewed by a second agent,
         builds the component, runs the gates, the `ui-craft` review and the usage check, and opens
         the PR. Write what the component is for; do not design its API here.

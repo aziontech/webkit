@@ -44,7 +44,7 @@ typography) are **blocked** by lint and hooks — the token is always the answer
 
 Tokens are light/dark aware — using them is what makes a component theme correctly for free.
 The full catalog lives in the theme package (`@aziontech/theme`) and renders on the docs
-site's **Foundations** pages (`pnpm docs:dev`).
+site's **Foundations** pages (`pnpm dev:docs`).
 
 ---
 

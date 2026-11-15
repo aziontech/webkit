@@ -1,7 +1,7 @@
 {
   "id": "platform/detail/deployment-logs",
   "name": "DeploymentLogs",
-  "title": "Templates/Platform/Detail/DeploymentLogs",
+  "title": "Blocks/Detail/DeploymentLogs",
   "surface": "product",
   "summary": "The deploy logs of a build or deploy run with known steps, wherever it is shown: `LogView.Steps` lists the pipeline as an Accordion of steps, each with its status glyph and the status in words for assistive technology, its title and sentence, its time and its own LogView, or every line as one continuous LogView in the Complete view, with a flush Progress on the bottom edge while it runs. On its own its toolbar row reports the step count and the step in flight, or the outcome Tag, the time and the Phased or Complete switch once it has settled. In a create flow (InCreateFlow) it sits in a Card titled Deployment that opens on a cloning splash (a source tile, a marching dashed connector and a large destination tile) with a Cloning StatusIndicator, and once a run fails the card header carries the view switch and its footer Edit and Redeploy. On a deployment page (DeploymentDetail, DeploymentFailed, DeploymentQueued) it is the Deployment logs card under a status banner and the Deployment details card. Built from `LogView` (`LogView.Steps`), `Tag`, `Card`, `StatusIndicator`, `ToggleGroup` and `Button`; the deployment pages add `Alert`, `Accordion`, `Avatar`, `CopyButton`, `DropdownMenu`, `IconButton`, `EmptyState` and `Tooltip`. The deployment pages are page bodies for ConsoleLayout.",
   "preview": {

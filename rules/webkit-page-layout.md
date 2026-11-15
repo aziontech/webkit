@@ -64,7 +64,7 @@ follows the nearest container.
 - Size cards, dialogs and side columns with the container scale: `max-w-(--container-sm)` …
   `max-w-(--container-7xl)`.
 - Start a screen from its block (`npx @aziontech/webkit search <words>` → `npx @aziontech/webkit add
-<block-id>`, or `search_patterns` → `get_pattern` in the webkit MCP): the block already carries
+<block-id>`, or `search_blocks` → `get_block` in the webkit MCP): the block already carries
   the right container and rhythm.
 
 ## Do not

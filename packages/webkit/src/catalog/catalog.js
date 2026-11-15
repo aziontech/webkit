@@ -63,8 +63,8 @@ function readPart(baseDir, file) {
 
 function build(json, baseDir) {
   const imports = json.imports || {}
-  const patterns = json.patterns || {}
-  const patternCache = new Map()
+  const blocks = json.blocks || {}
+  const blockCache = new Map()
   const exampleCache = new Map()
   const detailCache = new Map()
   const assetCache = new Map()
@@ -94,8 +94,8 @@ function build(json, baseDir) {
     removed: json.removed || {},
     subpaths,
     imports,
-    patterns,
-    patternAliases: json.patternAliases || {},
+    blocks,
+    blockAliases: json.blockAliases || {},
     assets,
     assetItems(kind) {
       const meta = assets[kind]
@@ -116,15 +116,15 @@ function build(json, baseDir) {
       }
       return detailCache.get(sub)
     },
-    pattern(id) {
-      const meta = patterns[id]
+    block(id) {
+      const meta = blocks[id]
       if (!meta) return null
       if (!meta.file) return meta
-      if (!patternCache.has(id)) {
+      if (!blockCache.has(id)) {
         const { file, ...rest } = meta
-        patternCache.set(id, { ...rest, ...(readPart(baseDir, file) || {}) })
+        blockCache.set(id, { ...rest, ...(readPart(baseDir, file) || {}) })
       }
-      return patternCache.get(id)
+      return blockCache.get(id)
     },
     examples(sub) {
       const e = imports[sub]
@@ -173,14 +173,14 @@ function empty() {
     removed: {},
     subpaths: [],
     imports: {},
-    patterns: {},
-    patternAliases: {},
+    blocks: {},
+    blockAliases: {},
     assets: {},
     assetItems: () => [],
     has: () => false,
     getEntry: () => null,
     getDetails: () => null,
-    pattern: () => null,
+    block: () => null,
     examples: () => [],
     nearestPublishedPrefix: () => null,
     suggestSubpaths: () => []

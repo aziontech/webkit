@@ -1,4 +1,4 @@
-import { CONTENT_CHECKS, isJsComposable, MESSAGES } from '../authoring-checks.js'
+import { CONTENT_CHECKS, isJsComposable, MESSAGES } from '../lib/authoring-checks.js'
 
 export default {
   meta: {

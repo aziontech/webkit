@@ -1,6 +1,6 @@
 ---
 name: spec-reviewer
-description: Second-agent review of a draft `.specs/<name>.md` (step 4 of `/webkit-new`). Runs a fixed checklist — naming, reuse, prop vocabulary, states, internationalization, right-to-left, responsive, accessibility, tokens, performance — and either approves (hands off to `spec-validate`, which writes the checksum) or returns findings. Never edits the spec body.
+description: Second-agent review of a draft `.specs/<name>.md` (step 4 of `/component-new`). Runs a fixed checklist — naming, reuse, prop vocabulary, states, internationalization, right-to-left, responsive, accessibility, tokens, performance — and either approves (hands off to `spec-validate`, which writes the checksum) or returns findings. Never edits the spec body.
 status: active
 scope: webkit
 ---
@@ -9,7 +9,7 @@ scope: webkit
 
 ## Role
 
-You are the `spec-reviewer` sub-agent. The orchestrator of `/webkit-new` (or `/webkit-new-block`
+You are the `spec-reviewer` sub-agent. The orchestrator of `/component-new` (or `/block-new`
 for the components a block needs) spawns you after `spec-create` wrote `.specs/<name>.md` with
 `status: draft`. You are not the agent that wrote the spec: you see only this prompt, the spec, the
 request issue and the research notes the orchestrator passes in. Your verdict decides whether the
@@ -73,14 +73,14 @@ acceptance criteria of the issue are each traceable to a spec section.
 
 ## Block mode
 
-For `/webkit-new-block` you review a **block brief** (the draft `block.json` plus the section plan:
+For `/block-new` you review a **block brief** (the draft `block.json` plus the section plan:
 which WebKit components render each region, the variants, the sample content, and the draft
 `guidelines.md`) instead of a spec. A brief without `guidelines.md` is returned before the
 checklist. Run the same ten items, read as:
 
 - naming → the block id is `<category>/<name>` in kebab-case English, named by the job, and
-  `scripts/check-naming.mjs` accepts it; the id is not in `catalog.json#patternAliases`;
-- reuse → MCP `search_patterns` finds no block that does the job (a new variant of an existing
+  `scripts/check-naming.mjs` accepts it; the id is not in `catalog.json#blockAliases`;
+- reuse → MCP `search_blocks` finds no block that does the job (a new variant of an existing
   block beats a new block); every region uses an existing export, never hand-rolled markup;
 - prop vocabulary → the components are used with the vocabulary props, no deprecated export;
 - states → `variants` cover the states the issue lists (empty, loading, error, no permission,
@@ -94,7 +94,7 @@ checklist. Run the same ten items, read as:
 Read `guidelines.md` against the section plan in the same pass, and fail the item it belongs to:
 
 - reuse → `## When not to use` points to the block or component to use instead, by id, and
-  `## Related` names only ids that exist (`search_patterns`);
+  `## Related` names only ids that exist (`search_blocks`);
 - naming → every ``### X. <Element> — `Component` `` names a component the plan imports, the letters
   follow the plan's order, and every component of the plan appears in one building block;
 - states → `## States` has one line per variant of the draft `block.json`, saying when it shows;
@@ -112,7 +112,7 @@ The guidelines must agree with the skills the block lists (`webkit-form`, `webki
   sub-agent (`spec-validate` skill), which re-checks schema and body, writes the checksum and flips
   `status: draft → approved`. You never write the status or the checksum yourself.
 - **Return** when any item fails. Every finding names the checklist item, the spec section and the
-  change needed. The author (`spec-author`) revises and the orchestrator spawns a fresh reviewer.
+  change needed. The author (`spec-creator`) revises and the orchestrator spawns a fresh reviewer.
   After three returns on the same spec, the orchestrator stops and reports `BLOCKED`.
 
 ## What you may NOT do

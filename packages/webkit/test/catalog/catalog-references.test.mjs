@@ -9,7 +9,7 @@ import {
 
 const catalog = {
   aliases: { sheet: 'drawer' },
-  patterns: { 'platform/create/deploy-success': {} },
+  blocks: { 'platform/create/deploy-success': {} },
   imports: {
     drawer: { kind: 'component', purpose: 'Use `drawer`, a `sheet` or `deploy-success`.' },
     tooltip: {
@@ -28,7 +28,7 @@ const catalog = {
 
 const retired = retiredReferenceNames({ removed: { 'field-text': 'Field', 'field-password': 'x' } })
 
-test('a reference to an export, an alias or a pattern id resolves', () => {
+test('a reference to an export, an alias or a block id resolves', () => {
   const refs = staleReferences(catalog, { retired }).map((p) => p.ref)
   for (const ok of ['drawer', 'sheet', 'deploy-success', 'platform/create/deploy-success']) {
     assert.ok(!refs.includes(ok), ok)

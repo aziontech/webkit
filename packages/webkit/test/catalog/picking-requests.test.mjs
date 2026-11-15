@@ -17,7 +17,7 @@ const { requests } = JSON.parse(
 function first(tool, query) {
   if (tool === 'components') return searchComponents(catalog, query).matches[0]?.name ?? null
   const r = suggestComponent(catalog, query)
-  return r.recommendation === 'pattern' ? r.pattern.id : (r.best?.name ?? null)
+  return r.recommendation === 'block' ? r.block.id : (r.best?.name ?? null)
 }
 
 test('every request is well formed', () => {

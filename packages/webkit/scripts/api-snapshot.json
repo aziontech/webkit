@@ -864,7 +864,7 @@
     "wizard-root",
     "wizard-step"
   ],
-  "patterns": [
+  "blocks": [
     "platform/account/activity-history",
     "platform/account/billing",
     "platform/account/build-deployment",

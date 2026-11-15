@@ -315,33 +315,33 @@ describe('Combobox', () => {
     await expectNoA11yViolations(listbox as HTMLElement)
     view.unmount()
   })
-})
 
-describe('Combobox long lists', () => {
-  it('mounts a long list in chunks and still reaches the last option by keyboard', async () => {
-    const options = Array.from({ length: 600 }, (_, i) => ({
-      value: `v${i}`,
-      label: `Origin ${i}`
-    }))
-    const view = render(Combobox, { props: { options, ariaLabel: 'Origin', allowCustom: false } })
-    const input = view.getByRole('combobox')
-    await fireEvent.focus(input)
-    await waitFor(() => expect(document.body.querySelector('[role="listbox"]')).not.toBeNull())
-    expect(document.body.querySelectorAll('[role="option"]').length).toBeLessThan(600)
-    await fireEvent.keyDown(input, { key: 'ArrowUp' })
-    await waitFor(() => {
-      const id = input.getAttribute('aria-activedescendant')
-      expect(id && document.getElementById(id)?.textContent).toContain('Origin 599')
+  describe('long lists', () => {
+    it('mounts a long list in chunks and still reaches the last option by keyboard', async () => {
+      const options = Array.from({ length: 600 }, (_, i) => ({
+        value: `v${i}`,
+        label: `Origin ${i}`
+      }))
+      const view = render(Combobox, { props: { options, ariaLabel: 'Origin', allowCustom: false } })
+      const input = view.getByRole('combobox')
+      await fireEvent.focus(input)
+      await waitFor(() => expect(document.body.querySelector('[role="listbox"]')).not.toBeNull())
+      expect(document.body.querySelectorAll('[role="option"]').length).toBeLessThan(600)
+      await fireEvent.keyDown(input, { key: 'ArrowUp' })
+      await waitFor(() => {
+        const id = input.getAttribute('aria-activedescendant')
+        expect(id && document.getElementById(id)?.textContent).toContain('Origin 599')
+      })
     })
   })
-})
 
-describe('Combobox States example', () => {
-  it('renders a disabled, an invalid and a loading field', async () => {
-    const view = render(States)
-    const fields = view.getAllByRole('combobox') as HTMLInputElement[]
-    expect(fields[0]!.disabled).toBe(true)
-    expect(fields[1]!.getAttribute('aria-invalid')).toBe('true')
-    await expectNoA11yViolations(view.container)
+  describe('States example', () => {
+    it('renders a disabled, an invalid and a loading field', async () => {
+      const view = render(States)
+      const fields = view.getAllByRole('combobox') as HTMLInputElement[]
+      expect(fields[0]!.disabled).toBe(true)
+      expect(fields[1]!.getAttribute('aria-invalid')).toBe('true')
+      await expectNoA11yViolations(view.container)
+    })
   })
 })

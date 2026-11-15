@@ -41,7 +41,7 @@ export const FOUNDATIONS: FoundationPage[] = [
     tokens: 'radius'
   },
   {
-    slug: 'shadows',
+    slug: 'shadow',
     title: 'Shadows',
     summary: 'Elevation, drop and inset shadows.',
     tokens: 'shadows'
@@ -60,20 +60,20 @@ export const FOUNDATIONS: FoundationPage[] = [
     tokens: 'z-index'
   },
   {
-    slug: 'icons',
+    slug: 'icon',
     title: 'Icons',
     summary: 'Every class of @aziontech/icons: Azion and colored. Select one to copy it.',
     view: 'icons'
   },
   {
-    slug: 'i18n',
+    slug: 'internationalization',
     title: 'Languages',
     summary: 'Built-in strings in English, Portuguese and Spanish through WebkitProvider.',
     markdown: 'rules/webkit-strings.md',
     demo: 'locale'
   },
   {
-    slug: 'rtl',
+    slug: 'right-to-left',
     title: 'Right-to-left',
     summary: 'Logical sides only, so every screen mirrors under dir="rtl".',
     markdown: 'rules/webkit-direction.md',

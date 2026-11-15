@@ -57,237 +57,243 @@ const host = (props: Record<string, unknown> = {}) =>
 const area = (view: ReturnType<typeof render>, testId = 'layout-scroll-area') =>
   view.getByTestId(testId)
 
-describe('ScrollArea (layout viewport + keyboard scrolling)', () => {
-  // ---- Anatomy ----------------------------------------------------------------
-  it('renders a focusable viewport with the default testid and vertical orientation', () => {
-    const view = render(host())
+describe('ScrollArea', () => {
+  describe('layout viewport and keyboard scrolling', () => {
+    // ---- Anatomy ----------------------------------------------------------------
+    it('renders a focusable viewport with the default testid and vertical orientation', () => {
+      const view = render(host())
 
-    const viewport = area(view)
-    expect(viewport.getAttribute('tabindex')).toBe('0')
-    expect(viewport.getAttribute('data-orientation')).toBe('vertical')
-    expect(viewport.hasAttribute('aria-label')).toBe(false)
-    expect(viewport.textContent).toContain('Deployment log output')
-  })
-
-  it('a consumer data-testid override wins over the fallback', () => {
-    const view = render(host({ 'data-testid': 'build-log' }))
-    expect(area(view, 'build-log')).toBeTruthy()
-  })
-
-  it('a consumer tabindex override wins over the default tab stop', () => {
-    const view = render(host({ tabindex: '-1' }))
-    expect(area(view).getAttribute('tabindex')).toBe('-1')
-  })
-
-  it('forwards consumer role and aria attributes to the viewport', () => {
-    const view = render(host({ role: 'log', 'aria-live': 'polite', id: 'build-log' }))
-    const viewport = area(view)
-    expect(viewport.getAttribute('role')).toBe('log')
-    expect(viewport.getAttribute('aria-live')).toBe('polite')
-    expect(viewport.id).toBe('build-log')
-  })
-
-  it('forwards consumer listeners: a scroll handler fires when the viewport scrolls', async () => {
-    const onScroll = vi.fn()
-    const view = render(host({ onScroll }))
-    const viewport = area(view)
-
-    viewport.scrollTop = 60
-    await vi.waitFor(() => expect(onScroll).toHaveBeenCalled())
-  })
-
-  it('keeps its own keyboard handling alongside a consumer keydown listener', async () => {
-    const onKeydown = vi.fn()
-    const view = render(host({ onKeydown }))
-    const viewport = area(view)
-
-    await fireEvent.keyDown(viewport, { key: 'ArrowDown' })
-    expect(onKeydown).toHaveBeenCalledTimes(1)
-    expectOffset(viewport.scrollTop, 40)
-  })
-
-  it('merges a consumer class onto the viewport without losing the component classes', () => {
-    const view = render(host({ class: 'consumer-class' }))
-    const viewport = area(view)
-    expect(viewport.classList.contains('consumer-class')).toBe(true)
-    expect(viewport.classList.contains('scroll-fixture')).toBe(true)
-    expect(viewport.classList.contains('relative')).toBe(true)
-  })
-
-  it.each(['vertical', 'horizontal', 'both'] as const)(
-    'mirrors orientation=%s onto data-orientation',
-    (orientation) => {
-      const view = render(host({ orientation }))
-      expect(area(view).getAttribute('data-orientation')).toBe(orientation)
-    }
-  )
-
-  it('sets aria-label from the prop when provided', () => {
-    const view = render(host({ ariaLabel: 'Deployment log' }))
-    expect(area(view).getAttribute('aria-label')).toBe('Deployment log')
-  })
-
-  // ---- Keyboard scrolling: vertical ----------------------------------------------
-  it('ArrowDown / ArrowUp scroll the viewport by the 40px step and prevent default', async () => {
-    const view = render(host())
-    const viewport = area(view)
-    expect(viewport.scrollTop).toBe(0)
-
-    const down = new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true })
-    viewport.dispatchEvent(down)
-    expectOffset(viewport.scrollTop, 40)
-    // A handled key claims the event so the page does not double-scroll.
-    expect(down.defaultPrevented).toBe(true)
-
-    await fireEvent.keyDown(viewport, { key: 'ArrowDown' })
-    expectOffset(viewport.scrollTop, 80)
-
-    const up = new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true })
-    viewport.dispatchEvent(up)
-    expectOffset(viewport.scrollTop, 40)
-    expect(up.defaultPrevented).toBe(true)
-  })
-
-  it('PageDown / PageUp scroll by one viewport height', async () => {
-    const view = render(host())
-    const viewport = area(view)
-    const page = viewport.clientHeight
-    expect(page).toBeGreaterThan(0)
-
-    await fireEvent.keyDown(viewport, { key: 'PageDown' })
-    expectOffset(viewport.scrollTop, page)
-
-    await fireEvent.keyDown(viewport, { key: 'PageUp' })
-    expect(viewport.scrollTop).toBe(0)
-  })
-
-  it('End jumps to the maximum scroll offset and Home returns to the top', async () => {
-    const view = render(host())
-    const viewport = area(view)
-    const maxScroll = viewport.scrollHeight - viewport.clientHeight
-    expect(maxScroll).toBeGreaterThan(0)
-
-    await fireEvent.keyDown(viewport, { key: 'End' })
-    // The browser clamps scrollTop = scrollHeight to the real maximum.
-    expectOffset(viewport.scrollTop, maxScroll)
-
-    await fireEvent.keyDown(viewport, { key: 'Home' })
-    expect(viewport.scrollTop).toBe(0)
-  })
-
-  // ---- Orientation gating -----------------------------------------------------------
-  it('vertical orientation ignores horizontal keys: no scroll, default not prevented', async () => {
-    const view = render(host())
-    const viewport = area(view)
-
-    const right = new KeyboardEvent('keydown', {
-      key: 'ArrowRight',
-      bubbles: true,
-      cancelable: true
+      const viewport = area(view)
+      expect(viewport.getAttribute('tabindex')).toBe('0')
+      expect(viewport.getAttribute('data-orientation')).toBe('vertical')
+      expect(viewport.hasAttribute('aria-label')).toBe(false)
+      expect(viewport.textContent).toContain('Deployment log output')
     })
-    viewport.dispatchEvent(right)
-    expect(viewport.scrollLeft).toBe(0)
-    // The handler returned early: the event keeps its default for the page.
-    expect(right.defaultPrevented).toBe(false)
-  })
 
-  it('horizontal orientation scrolls on ArrowRight / ArrowLeft and ignores vertical keys', async () => {
-    const view = render(host({ orientation: 'horizontal' }))
-    const viewport = area(view)
-
-    await fireEvent.keyDown(viewport, { key: 'ArrowRight' })
-    expectOffset(viewport.scrollLeft, 40)
-
-    await fireEvent.keyDown(viewport, { key: 'ArrowLeft' })
-    expect(viewport.scrollLeft).toBe(0)
-
-    const downInHorizontal = new KeyboardEvent('keydown', {
-      key: 'ArrowDown',
-      bubbles: true,
-      cancelable: true
+    it('a consumer data-testid override wins over the fallback', () => {
+      const view = render(host({ 'data-testid': 'build-log' }))
+      expect(area(view, 'build-log')).toBeTruthy()
     })
-    viewport.dispatchEvent(downInHorizontal)
-    expect(viewport.scrollTop).toBe(0)
-    expect(downInHorizontal.defaultPrevented).toBe(false)
-  })
 
-  it('both orientation scrolls on both axes', async () => {
-    const view = render(host({ orientation: 'both' }))
-    const viewport = area(view)
+    it('a consumer tabindex override wins over the default tab stop', () => {
+      const view = render(host({ tabindex: '-1' }))
+      expect(area(view).getAttribute('tabindex')).toBe('-1')
+    })
 
-    await fireEvent.keyDown(viewport, { key: 'ArrowDown' })
-    await fireEvent.keyDown(viewport, { key: 'ArrowRight' })
-    expectOffset(viewport.scrollTop, 40)
-    expectOffset(viewport.scrollLeft, 40)
-  })
+    it('forwards consumer role and aria attributes to the viewport', () => {
+      const view = render(host({ role: 'log', 'aria-live': 'polite', id: 'build-log' }))
+      const viewport = area(view)
+      expect(viewport.getAttribute('role')).toBe('log')
+      expect(viewport.getAttribute('aria-live')).toBe('polite')
+      expect(viewport.id).toBe('build-log')
+    })
 
-  // ---- Fade ---------------------------------------------------------------------------
-  const fadeVar = (el: globalThis.HTMLElement, edge: string) =>
-    el.style.getPropertyValue(`--scroll-area-fade-${edge}`)
+    it('forwards consumer listeners: a scroll handler fires when the viewport scrolls', async () => {
+      const onScroll = vi.fn()
+      const view = render(host({ onScroll }))
+      const viewport = area(view)
 
-  const nextFrame = () => new Promise((resolve) => globalThis.requestAnimationFrame(resolve))
+      viewport.scrollTop = 60
+      await vi.waitFor(() => expect(onScroll).toHaveBeenCalled())
+    })
 
-  it('without fade, an overflowing viewport carries no data-fade', async () => {
-    const view = render(host())
-    await nextFrame()
-    expect(area(view).hasAttribute('data-fade')).toBe(false)
-  })
+    it('keeps its own keyboard handling alongside a consumer keydown listener', async () => {
+      const onKeydown = vi.fn()
+      const view = render(host({ onKeydown }))
+      const viewport = area(view)
 
-  it('fade marks only the edge that still has content: bottom at the top, top at the end', async () => {
-    const view = render(host({ fade: true }))
-    const viewport = area(view)
-    await vi.waitFor(() => expect(viewport.hasAttribute('data-fade')).toBe(true))
-    expect(fadeVar(viewport, 'top')).toBe('0px')
-    expect(Number.parseFloat(fadeVar(viewport, 'bottom'))).toBeGreaterThan(0)
+      await fireEvent.keyDown(viewport, { key: 'ArrowDown' })
+      expect(onKeydown).toHaveBeenCalledTimes(1)
+      expectOffset(viewport.scrollTop, 40)
+    })
 
-    await fireEvent.keyDown(viewport, { key: 'End' })
-    await vi.waitFor(() => expect(fadeVar(viewport, 'bottom')).toBe('0px'))
-    expect(Number.parseFloat(fadeVar(viewport, 'top'))).toBeGreaterThan(0)
-  })
+    it('merges a consumer class onto the viewport without losing the component classes', () => {
+      const view = render(host({ class: 'consumer-class' }))
+      const viewport = area(view)
+      expect(viewport.classList.contains('consumer-class')).toBe(true)
+      expect(viewport.classList.contains('scroll-fixture')).toBe(true)
+      expect(viewport.classList.contains('relative')).toBe(true)
+    })
 
-  it('fade ramps with the distance left to scroll, capped at a sixth of the viewport', async () => {
-    const view = render(host({ fade: true }))
-    const viewport = area(view)
-    const maxScroll = viewport.scrollHeight - viewport.clientHeight
-    const cap = Math.round(viewport.clientHeight / 6)
-
-    await vi.waitFor(() => expect(fadeVar(viewport, 'bottom')).toBe(`${cap}px`))
-
-    viewport.scrollTop = maxScroll - 5
-    await vi.waitFor(() => expect(fadeVar(viewport, 'bottom')).toBe('5px'))
-    expect(fadeVar(viewport, 'top')).toBe(`${cap}px`)
-  })
-
-  it('horizontal fade tracks the inline edges only', async () => {
-    const view = render(host({ fade: true, orientation: 'horizontal' }))
-    const viewport = area(view)
-    await vi.waitFor(() => expect(viewport.hasAttribute('data-fade')).toBe(true))
-    expect(Number.parseFloat(fadeVar(viewport, 'right'))).toBeGreaterThan(0)
-    expect(fadeVar(viewport, 'left')).toBe('0px')
-    expect(fadeVar(viewport, 'bottom')).toBe('0px')
-  })
-
-  it('fade stays off when the content fits the viewport', async () => {
-    const view = render(
-      defineComponent({
-        components: { ScrollArea },
-        template: `<ScrollArea class="scroll-fixture" fade><p>Short</p></ScrollArea>`
-      })
+    it.each(['vertical', 'horizontal', 'both'] as const)(
+      'mirrors orientation=%s onto data-orientation',
+      (orientation) => {
+        const view = render(host({ orientation }))
+        expect(area(view).getAttribute('data-orientation')).toBe(orientation)
+      }
     )
-    await nextFrame()
-    await nextFrame()
-    expect(area(view).hasAttribute('data-fade')).toBe(false)
-  })
 
-  // ---- Accessibility -------------------------------------------------------------------
-  it('has no axe violations with an accessible name on the scroll region', async () => {
-    const view = render(host({ ariaLabel: 'Deployment log' }))
-    await expectNoA11yViolations(view.container)
-  })
+    it('sets aria-label from the prop when provided', () => {
+      const view = render(host({ ariaLabel: 'Deployment log' }))
+      expect(area(view).getAttribute('aria-label')).toBe('Deployment log')
+    })
 
-  it('has no axe violations while fading', async () => {
-    const view = render(host({ ariaLabel: 'Deployment log', fade: true }))
-    await vi.waitFor(() => expect(area(view).hasAttribute('data-fade')).toBe(true))
-    await expectNoA11yViolations(view.container)
+    // ---- Keyboard scrolling: vertical ----------------------------------------------
+    it('ArrowDown / ArrowUp scroll the viewport by the 40px step and prevent default', async () => {
+      const view = render(host())
+      const viewport = area(view)
+      expect(viewport.scrollTop).toBe(0)
+
+      const down = new KeyboardEvent('keydown', {
+        key: 'ArrowDown',
+        bubbles: true,
+        cancelable: true
+      })
+      viewport.dispatchEvent(down)
+      expectOffset(viewport.scrollTop, 40)
+      // A handled key claims the event so the page does not double-scroll.
+      expect(down.defaultPrevented).toBe(true)
+
+      await fireEvent.keyDown(viewport, { key: 'ArrowDown' })
+      expectOffset(viewport.scrollTop, 80)
+
+      const up = new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true })
+      viewport.dispatchEvent(up)
+      expectOffset(viewport.scrollTop, 40)
+      expect(up.defaultPrevented).toBe(true)
+    })
+
+    it('PageDown / PageUp scroll by one viewport height', async () => {
+      const view = render(host())
+      const viewport = area(view)
+      const page = viewport.clientHeight
+      expect(page).toBeGreaterThan(0)
+
+      await fireEvent.keyDown(viewport, { key: 'PageDown' })
+      expectOffset(viewport.scrollTop, page)
+
+      await fireEvent.keyDown(viewport, { key: 'PageUp' })
+      expect(viewport.scrollTop).toBe(0)
+    })
+
+    it('End jumps to the maximum scroll offset and Home returns to the top', async () => {
+      const view = render(host())
+      const viewport = area(view)
+      const maxScroll = viewport.scrollHeight - viewport.clientHeight
+      expect(maxScroll).toBeGreaterThan(0)
+
+      await fireEvent.keyDown(viewport, { key: 'End' })
+      // The browser clamps scrollTop = scrollHeight to the real maximum.
+      expectOffset(viewport.scrollTop, maxScroll)
+
+      await fireEvent.keyDown(viewport, { key: 'Home' })
+      expect(viewport.scrollTop).toBe(0)
+    })
+
+    // ---- Orientation gating -----------------------------------------------------------
+    it('vertical orientation ignores horizontal keys: no scroll, default not prevented', async () => {
+      const view = render(host())
+      const viewport = area(view)
+
+      const right = new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        bubbles: true,
+        cancelable: true
+      })
+      viewport.dispatchEvent(right)
+      expect(viewport.scrollLeft).toBe(0)
+      // The handler returned early: the event keeps its default for the page.
+      expect(right.defaultPrevented).toBe(false)
+    })
+
+    it('horizontal orientation scrolls on ArrowRight / ArrowLeft and ignores vertical keys', async () => {
+      const view = render(host({ orientation: 'horizontal' }))
+      const viewport = area(view)
+
+      await fireEvent.keyDown(viewport, { key: 'ArrowRight' })
+      expectOffset(viewport.scrollLeft, 40)
+
+      await fireEvent.keyDown(viewport, { key: 'ArrowLeft' })
+      expect(viewport.scrollLeft).toBe(0)
+
+      const downInHorizontal = new KeyboardEvent('keydown', {
+        key: 'ArrowDown',
+        bubbles: true,
+        cancelable: true
+      })
+      viewport.dispatchEvent(downInHorizontal)
+      expect(viewport.scrollTop).toBe(0)
+      expect(downInHorizontal.defaultPrevented).toBe(false)
+    })
+
+    it('both orientation scrolls on both axes', async () => {
+      const view = render(host({ orientation: 'both' }))
+      const viewport = area(view)
+
+      await fireEvent.keyDown(viewport, { key: 'ArrowDown' })
+      await fireEvent.keyDown(viewport, { key: 'ArrowRight' })
+      expectOffset(viewport.scrollTop, 40)
+      expectOffset(viewport.scrollLeft, 40)
+    })
+
+    // ---- Fade ---------------------------------------------------------------------------
+    const fadeVar = (el: globalThis.HTMLElement, edge: string) =>
+      el.style.getPropertyValue(`--scroll-area-fade-${edge}`)
+
+    const nextFrame = () => new Promise((resolve) => globalThis.requestAnimationFrame(resolve))
+
+    it('without fade, an overflowing viewport carries no data-fade', async () => {
+      const view = render(host())
+      await nextFrame()
+      expect(area(view).hasAttribute('data-fade')).toBe(false)
+    })
+
+    it('fade marks only the edge that still has content: bottom at the top, top at the end', async () => {
+      const view = render(host({ fade: true }))
+      const viewport = area(view)
+      await vi.waitFor(() => expect(viewport.hasAttribute('data-fade')).toBe(true))
+      expect(fadeVar(viewport, 'top')).toBe('0px')
+      expect(Number.parseFloat(fadeVar(viewport, 'bottom'))).toBeGreaterThan(0)
+
+      await fireEvent.keyDown(viewport, { key: 'End' })
+      await vi.waitFor(() => expect(fadeVar(viewport, 'bottom')).toBe('0px'))
+      expect(Number.parseFloat(fadeVar(viewport, 'top'))).toBeGreaterThan(0)
+    })
+
+    it('fade ramps with the distance left to scroll, capped at a sixth of the viewport', async () => {
+      const view = render(host({ fade: true }))
+      const viewport = area(view)
+      const maxScroll = viewport.scrollHeight - viewport.clientHeight
+      const cap = Math.round(viewport.clientHeight / 6)
+
+      await vi.waitFor(() => expect(fadeVar(viewport, 'bottom')).toBe(`${cap}px`))
+
+      viewport.scrollTop = maxScroll - 5
+      await vi.waitFor(() => expect(fadeVar(viewport, 'bottom')).toBe('5px'))
+      expect(fadeVar(viewport, 'top')).toBe(`${cap}px`)
+    })
+
+    it('horizontal fade tracks the inline edges only', async () => {
+      const view = render(host({ fade: true, orientation: 'horizontal' }))
+      const viewport = area(view)
+      await vi.waitFor(() => expect(viewport.hasAttribute('data-fade')).toBe(true))
+      expect(Number.parseFloat(fadeVar(viewport, 'right'))).toBeGreaterThan(0)
+      expect(fadeVar(viewport, 'left')).toBe('0px')
+      expect(fadeVar(viewport, 'bottom')).toBe('0px')
+    })
+
+    it('fade stays off when the content fits the viewport', async () => {
+      const view = render(
+        defineComponent({
+          components: { ScrollArea },
+          template: `<ScrollArea class="scroll-fixture" fade><p>Short</p></ScrollArea>`
+        })
+      )
+      await nextFrame()
+      await nextFrame()
+      expect(area(view).hasAttribute('data-fade')).toBe(false)
+    })
+
+    // ---- Accessibility -------------------------------------------------------------------
+    it('has no axe violations with an accessible name on the scroll region', async () => {
+      const view = render(host({ ariaLabel: 'Deployment log' }))
+      await expectNoA11yViolations(view.container)
+    })
+
+    it('has no axe violations while fading', async () => {
+      const view = render(host({ ariaLabel: 'Deployment log', fade: true }))
+      await vi.waitFor(() => expect(area(view).hasAttribute('data-fade')).toBe(true))
+      await expectNoA11yViolations(view.container)
+    })
   })
 })

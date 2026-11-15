@@ -49,7 +49,7 @@ Events are declared with the **type-only `defineEmits`** form, named in **kebab-
 
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** blocks events not in the spec, camelCase event names, and redundant `<x>-change` echoes.
 - [`event-payloads.md`](./event-payloads.md) governs the payload order for activation events; its enforcement covers the `(event, item)` shape.
-- The scaffolder emits the typed `defineEmits` form from the spec's Events table.
+- The component-scaffolder emits the typed `defineEmits` form from the spec's Events table.
 
 ## Why this rule exists
 

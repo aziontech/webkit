@@ -2,7 +2,7 @@
 
 > Icon font library for Azion — **azionicons** (`ai`) delivered as CSS + woff2, plus colored brand icons (`ai-color`).
 
-[![Package Icons](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/package-icons.yml)
+[![Publish Icons](https://github.com/aziontech/webkit/actions/workflows/publish-icons.yml/badge.svg?branch=main)](https://github.com/aziontech/webkit/actions/workflows/publish-icons.yml)
 [![npm version](https://badge.fury.io/js/%40aziontech%2Ficons.svg)](https://badge.fury.io/js/%40aziontech%2Ficons)
 [![npm downloads](https://img.shields.io/npm/dm/@aziontech/icons)](https://www.npmjs.com/package/@aziontech/icons)
 [![npm unpacked size](https://img.shields.io/npm/unpacked-size/@aziontech/icons)](https://www.npmjs.com/package/@aziontech/icons)
@@ -321,12 +321,12 @@ Here's how that your SVG needs to looks in code:
 │       ├── ai/               # Azion SVG source files (421 icons, monochrome → font)
 │       └── ai-color/         # Azion colored brand icons (inline SVG, NOT fonted)
 ├── scripts/
-│   ├── build.mjs             # Build orchestrator: validate → fonts → catalogs → assemble
+│   ├── build-icons.mjs       # Build orchestrator: validate → fonts → catalogs → assemble
 │   ├── build-woff2.mjs       # Font generation via fantasticon
 │   ├── build-catalog.mjs     # Generates dist/catalog.json (font icons only)
 │   ├── build-color-catalog.mjs # Generates dist/color-catalog.json (colored SVGs)
 │   ├── build-color-css.mjs   # Generates dist/azionicons-color.css (colored classes)
-│   └── validate-svg.mjs      # SVG validation script
+│   └── check-svg.mjs         # SVG validation script
 ├── fantasticon.config.mjs    # Font generation configuration (two font configs)
 ├── templates/
 │   └── css.hbs               # Handlebars CSS template for generated font files
@@ -408,9 +408,9 @@ npm run build
 
 ### Build pipeline (`build`)
 
-The [`scripts/build.mjs`](scripts/build.mjs) orchestrator runs 7 steps:
+The [`scripts/build-icons.mjs`](scripts/build-icons.mjs) orchestrator runs 7 steps:
 
-1. **Validate SVGs** — runs `scripts/validate-svg.mjs` (blocks on errors)
+1. **Validate SVGs** — runs `scripts/check-svg.mjs` (blocks on errors)
 2. **Clean `dist/`** — removes and recreates the output directory
 3. **Generate fonts** — runs `scripts/build-woff2.mjs` (fantasticon for `ai`; the colored `ai-color` folder is not a font input)
 4. **Create `index.css`** — barrel file importing `azionicons.css` and `azionicons-color.css`

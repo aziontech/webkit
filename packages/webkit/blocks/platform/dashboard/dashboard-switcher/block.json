@@ -1,7 +1,7 @@
 {
   "id": "platform/dashboard/dashboard-switcher",
   "name": "DashboardSwitcher",
-  "title": "Templates/Platform/Dashboard/DashboardSwitcher",
+  "title": "Blocks/Dashboard/DashboardSwitcher",
   "surface": "product",
   "summary": "The dashboards hub: one page that switches between every dashboard of the account. A `PageHeader` named Dashboards sits over the controls row: a grouped `Select` of the dashboards (Platform, Security, Business and Yours) with a chart icon, a `FilterMenu` that sets the shared Period and counts it on its Filter button, and a Refresh `IconButton` in a `Tooltip` at the end. The applied period shows as a removable chip in `FilterMenu.Chips`. Under the controls, a placeholder body for the chosen dashboard (in an app, render the real dashboard block there, and `configurable-dashboard` for Custom): four `StatTile`s with a `Hint` each and the comparison period, a `ChartCard` with the dashboard's `Chart` and its tooltip total, and a `ChartCard` with a ranked `BarList`. Switching the dashboard loads its body (Skeletons in place); changing the period or pressing Refresh refetches it, holding the previous render. A dashboard that owns its period (Executive summary, Spend, Project status) hides the shared filter and its chip and shows its own quarter `ToggleGroup` instead. A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.",
   "preview": {

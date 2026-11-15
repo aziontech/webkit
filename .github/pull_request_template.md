@@ -22,7 +22,7 @@
 - [ ] Budget raise justified: a `Budget-raise` line in this body, in the format of CONTRIBUTING.md (only when a `.size-limit.json` limit goes up)
 
 <!--
-  Component or block PRs (the AI flow: /webkit-new, /webkit-new-block) fill every section below;
+  Component or block PRs (the AI flow: /component-new, /block-new) fill every section below;
   the orchestrator generates them. Other PRs delete everything from here down.
 -->
 
@@ -49,14 +49,14 @@
 
 <!-- Paste the table printed by `pnpm --filter @aziontech/webkit run gates`. -->
 
-| Command                                                          | Result |
-| ---------------------------------------------------------------- | ------ |
-| `pnpm --filter @aziontech/webkit run gates`                      |        |
-| `pnpm --filter @aziontech/webkit lint` and `lint:style`          |        |
-| `pnpm --filter @aziontech/webkit type-check` and `type-coverage` |        |
-| `pnpm --filter @aziontech/webkit format:check`                   |        |
-| `pnpm --filter @aziontech/webkit run size`                       |        |
-| `vitest run <name>.test copyable-sfcs`                           |        |
+| Command                                                         | Result |
+| --------------------------------------------------------------- | ------ |
+| `pnpm --filter @aziontech/webkit run gates`                     |        |
+| `pnpm --filter @aziontech/webkit lint` and `lint:style`         |        |
+| `pnpm --filter @aziontech/webkit typecheck` and `type-coverage` |        |
+| `pnpm --filter @aziontech/webkit check:format`                  |        |
+| `pnpm --filter @aziontech/webkit run check:size`                |        |
+| `vitest run <name>.test copyable-sfcs`                          |        |
 
 ## `ui-craft` review
 
@@ -64,7 +64,7 @@
 
 ## Usage check
 
-<!-- Paste usage-report.md (scripts/usage-check.mjs or the usage-check.yml run): prompt, checks, turns and cost. -->
+<!-- Paste usage-report.md (scripts/check-usage.mjs or the usage-check.yml run): prompt, checks, turns and cost. -->
 
 ## Screenshots
 

@@ -31,7 +31,7 @@ happened to match.
 
 Related: `/webkit-lists` (the index page this shape carries) · `/webkit-create-surface` (page vs
 drawer, and the commit bar that must align with its form) · `/webkit-navigation` (the shell that owns
-the boundary on a padded page) · `/webkit-baseline-ui` (tokens, typography, spacing scale).
+the boundary on a padded page) · `/webkit-quick-cleanup` (tokens, typography, spacing scale).
 
 ## When to invoke
 
@@ -441,8 +441,8 @@ Close with `Layout sound` or `N gaps — fix before polish`.
 - `/webkit-lists` — the index page this shape carries, and the controls-row band.
 - `/webkit-create-surface` — where a create lives, and the commit bar that must align with its form.
 - `/webkit-navigation` — the app layout (`ConsoleLayout`) and the focused creation shell, and the page body inside them.
-- `/webkit-baseline-ui` — tokens, typography hierarchy, the spacing scale these derive from.
-- **Foundations → Layout and devices** on the docs site (`pnpm docs:dev`) — every measure and utility.
+- `/webkit-quick-cleanup` — tokens, typography hierarchy, the spacing scale these derive from.
+- **Foundations → Layout and devices** on the docs site (`pnpm dev:docs`) — every measure and utility.
 - `semantic/layouts` in `@aziontech/theme` — the tokens and utilities themselves, with the reasoning
   for each decision recorded beside it.
 

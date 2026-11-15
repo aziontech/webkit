@@ -14,7 +14,7 @@ import {
 const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 
 const none = { components: {}, removed: {}, props: {}, blocks: {} }
-const api = (exports, props = {}, patterns = []) => ({ exports, props, patterns })
+const api = (exports, props = {}, blocks = []) => ({ exports, props, blocks })
 
 test('literalValues reads closed string unions only', () => {
   assert.deepEqual(literalValues("'small' | 'large'"), ['large', 'small'])
@@ -23,16 +23,16 @@ test('literalValues reads closed string unions only', () => {
   assert.equal(literalValues(undefined), null)
 })
 
-test('apiFromCatalog keeps export ids, pattern ids and component props', () => {
+test('apiFromCatalog keeps export ids, block ids and component props', () => {
   const out = apiFromCatalog({
     imports: {
       button: { kind: 'component', props: [{ name: 'kind', type: "'primary' | 'danger'" }] },
       'assets/logo.svg': { kind: 'asset' }
     },
-    patterns: { 'platform/auth': {} }
+    blocks: { 'platform/auth': {} }
   })
   assert.deepEqual(out.exports, ['assets/logo.svg', 'button'])
-  assert.deepEqual(out.patterns, ['platform/auth'])
+  assert.deepEqual(out.blocks, ['platform/auth'])
   assert.deepEqual(out.props, { button: { kind: ['danger', 'primary'] } })
 })
 
@@ -49,12 +49,12 @@ test('a removed export fails unless a migration renames or retires it', () => {
   assert.match(uncovered[0], /export gone was removed/)
 })
 
-test('a removed pattern fails unless v<N>-blocks.json maps it', () => {
+test('a removed block fails unless v<N>-blocks.json maps it', () => {
   const before = api([], {}, ['platform/a', 'platform/b'])
   const after = api([], {}, ['platform/c'])
   const { uncovered } = diffApi(before, after, { ...none, blocks: { 'platform/a': 'platform/c' } })
   assert.deepEqual(uncovered, [
-    'pattern platform/b was removed or renamed (add it to v<N>-blocks.json)'
+    'block platform/b was removed or renamed (add it to v<N>-blocks.json)'
   ])
 })
 

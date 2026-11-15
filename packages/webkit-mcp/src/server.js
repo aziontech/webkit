@@ -5,9 +5,9 @@ import { fileURLToPath, URL } from 'node:url'
 
 import {
   getBestPractices,
+  getBlock,
   getComponent,
   getImport,
-  getPattern,
   getUsageExample,
   LAYOUT_CLASS_FAMILIES,
   listAssets,
@@ -15,8 +15,8 @@ import {
   listComponents,
   listTokens,
   loadCatalog,
+  searchBlocks,
   searchComponents,
-  searchPatterns,
   suggestComponent,
   validateUsage
 } from '@aziontech/webkit/catalog-queries'
@@ -45,7 +45,7 @@ async function main() {
     {
       instructions:
         'Azion webkit design system. For a whole screen (login, signup, settings, list, create, ' +
-        'detail), call search_patterns, then get_pattern, and start from that SFC — never build ' +
+        'detail), call search_blocks, then get_block, and start from that SFC — never build ' +
         'the screen from scratch. For a single piece, use suggest_component and get_component. ' +
         'For a marketing band, suggest_component returns the page section to import.'
     }
@@ -212,7 +212,7 @@ async function main() {
       description:
         'Given a plain-language need, suggest the single best-fitting component (plus runners-up) so ' +
         'the AI uses a real webkit component instead of reinventing one or reaching for PrimeVue. ' +
-        'When the need is a whole screen it returns the pattern first (recommendation "pattern"); ' +
+        'When the need is a whole screen it returns the block first (recommendation "block"); ' +
         'for a marketing band it returns the page section (recommendation "section").',
       inputSchema: {
         need: z
@@ -228,15 +228,15 @@ async function main() {
   )
 
   tool(
-    'search_patterns',
+    'search_blocks',
     {
-      title: 'Search webkit screen patterns',
+      title: 'Search webkit blocks',
       description:
-        'Find the reviewed screen pattern for an intent ("login", "sign up", "account settings", ' +
-        '"delete dialog", "tela de login"). Patterns are whole screens built from WebKit ' +
-        'blocks: start every screen from one. Returns ranked ids with their intents, components, ' +
+        'Find the reviewed block for an intent ("login", "sign up", "account settings", ' +
+        '"delete dialog", "tela de login"). Blocks are whole screens built from WebKit ' +
+        'components: start every screen from one. Returns ranked ids with their intents, components, ' +
         'skills, steps and `guidelinesSummary` (the job the screen serves). An empty query lists ' +
-        'every pattern.',
+        'every block.',
       inputSchema: {
         query: z
           .string()
@@ -256,30 +256,28 @@ async function main() {
       }
     },
     async ({ query, surface, fragments }) =>
-      json(searchPatterns(catalog, query, { surface, fragments }))
+      json(searchBlocks(catalog, query, { surface, fragments }))
   )
 
   tool(
-    'get_pattern',
+    'get_block',
     {
-      title: 'Get a webkit screen pattern',
+      title: 'Get a webkit block',
       description:
-        'The whole pattern: a runnable SFC (script setup + template) with the webkit imports, the ' +
+        'The whole block: a runnable SFC (script setup + template) with the webkit imports, the ' +
         'components it uses, the skills to follow, its steps, the other variants (states) of ' +
         "the same screen and its `guidelines` (when to use, building blocks, do and don't, copy, " +
         'accessibility). Read the guidelines, copy the SFC and change only the content. A pre-v6 id (e.g. ' +
         '"platform/lists/table-view") resolves to its new block and carries a `note`.',
       inputSchema: {
-        id: z
-          .string()
-          .describe('Pattern id from search_patterns, e.g. "platform/view/table-view".'),
+        id: z.string().describe('Block id from search_blocks, e.g. "platform/view/table-view".'),
         variant: z
           .string()
           .optional()
-          .describe('A variant name from the pattern, e.g. "IncorrectCredentials".')
+          .describe('A variant name from the block, e.g. "IncorrectCredentials".')
       }
     },
-    async ({ id, variant }) => json(getPattern(catalog, id, { variant }))
+    async ({ id, variant }) => json(getBlock(catalog, id, { variant }))
   )
 
   tool(

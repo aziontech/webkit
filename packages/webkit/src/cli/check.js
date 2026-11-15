@@ -1,7 +1,7 @@
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative, sep } from 'node:path'
 
-import { physicalDirectionClasses } from '../eslint-plugin/direction-classes.js'
+import { physicalDirectionClasses } from '../eslint-plugin/lib/direction-classes.js'
 import { blockDrift } from './blocks.js'
 import { cssScanFindings, stylelintFindings } from './css-check.js'
 import { planDoctor } from './doctor.js'

@@ -396,129 +396,133 @@ describe('HeroBand', () => {
       await expectNoA11yViolations(container)
     }
   )
-})
 
-describe('HeroBand — sample opening bands', () => {
-  it.each(['centered-band', 'compact-band'] as const)(
-    'renders %s as a band, not a screen',
-    (kind) => {
-      const { getByTestId } = render(HeroBand, { props: { kind, title: TITLE } })
-      expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
-      expect(getByTestId(HERO_TESTID)).toHaveAttribute('data-kind', 'band')
-    }
-  )
+  describe('sample opening bands', () => {
+    it.each(['centered-band', 'compact-band'] as const)(
+      'renders %s as a band, not a screen',
+      (kind) => {
+        const { getByTestId } = render(HeroBand, { props: { kind, title: TITLE } })
+        expect(getByTestId(TESTID)).toHaveAttribute('data-kind', kind)
+        expect(getByTestId(HERO_TESTID)).toHaveAttribute('data-kind', 'band')
+      }
+    )
 
-  it('renders the top and bottom scene slots', () => {
-    const { getByText } = render(HeroBand, {
-      props: { kind: 'centered', title: TITLE },
-      slots: { top: '<p>Top scene</p>', bottom: '<p>Bottom scene</p>' }
-    })
-    expect(getByText('Top scene')).toBeInTheDocument()
-    expect(getByText('Bottom scene')).toBeInTheDocument()
-  })
-
-  it('has no axe violations in the sample bands example', async () => {
-    const { default: Bands } = await import('../../../../examples/hero-band/bands.vue')
-    const { container } = render(Bands)
-    await expectNoA11yViolations(container)
-  })
-
-  describe('levels topology', () => {
-    const topology = (props: Record<string, unknown> = {}) =>
-      band({ kind: 'copy-on-top-art', levels, ...props })
-
-    it('draws one column per level and one card per node, in order', async () => {
-      const { container, findAllByTestId } = topology()
-      const nodes = await findAllByTestId(NODE_TESTID)
-
-      expect(
-        container.querySelectorAll('[role="listitem"][data-flow-kind="parallel"]')
-      ).toHaveLength(levels.length)
-      expect(nodes.map((node) => node.textContent?.includes('shop-prod'))).toEqual([
-        false,
-        false,
-        true,
-        false
-      ])
-    })
-
-    it('renders each card with its eyebrow, title and status, and marks only the lit card', async () => {
-      const { findAllByTestId, container } = topology()
-
-      const first = (await findAllByTestId(NODE_TESTID))[0]
-      expect(first?.textContent).toContain('Domain')
-      expect(first?.textContent).toContain('shop.example.com')
-      expect(first?.textContent).toContain('Public')
-      const lit = container.querySelectorAll('[data-lit]')
-      expect(lit).toHaveLength(1)
-      expect(lit[0]?.textContent?.trim()).toBe('shop-prod')
-    })
-
-    it('skips a card without a title and a level left empty', async () => {
-      const { container, findAllByTestId } = topology({
-        levels: [
-          ...levels,
-          { nodes: [{ eyebrow: 'Firewall', icon: '', title: '', label: '', severity: 'success' }] }
-        ]
+    it('renders the top and bottom scene slots', () => {
+      const { getByText } = render(HeroBand, {
+        props: { kind: 'centered', title: TITLE },
+        slots: { top: '<p>Top scene</p>', bottom: '<p>Bottom scene</p>' }
       })
-
-      expect(await findAllByTestId(NODE_TESTID)).toHaveLength(4)
-      expect(container.querySelectorAll('[data-flow-kind="parallel"]')).toHaveLength(levels.length)
+      expect(getByText('Top scene')).toBeInTheDocument()
+      expect(getByText('Bottom scene')).toBeInTheDocument()
     })
 
-    it('draws nothing in other layouts or when a scene slot is given', () => {
-      const other = band({ kind: 'centered', levels })
-      expect(other.queryAllByTestId(NODE_TESTID)).toHaveLength(0)
-      other.unmount()
-
-      const slotted = render(HeroBand, {
-        props: { kind: 'copy-on-top-art', title: TITLE, levels },
-        slots: { bottom: '<div>scene</div>' }
-      })
-      expect(slotted.getByText('scene')).toBeInTheDocument()
-      expect(slotted.queryAllByTestId(NODE_TESTID)).toHaveLength(0)
-      slotted.unmount()
-
-      const top = render(HeroBand, {
-        props: { kind: 'copy-on-top-art', title: TITLE, levels },
-        slots: { top: '<div>top scene</div>' }
-      })
-      expect(top.queryAllByTestId(NODE_TESTID)).toHaveLength(0)
-    })
-
-    it('has no a11y violations with the topology', async () => {
-      const { container, findAllByTestId } = topology()
-      await findAllByTestId(NODE_TESTID)
-
+    it('has no axe violations in the sample bands example', async () => {
+      const { default: Bands } = await import('../../../../examples/hero-band/bands.vue')
+      const { container } = render(Bands)
       await expectNoA11yViolations(container)
     })
-  })
 
-  describe('items grid', () => {
-    it('renders one cell per item, in order, each with an h2', async () => {
-      const { findAllByTestId, getAllByRole } = band({ items })
+    describe('levels topology', () => {
+      const topology = (props: Record<string, unknown> = {}) =>
+        band({ kind: 'copy-on-top-art', levels, ...props })
 
-      expect(await findAllByTestId(CELL_TESTID)).toHaveLength(items.length)
-      expect(
-        getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent?.trim())
-      ).toEqual(items.map((item) => item.title))
+      it('draws one column per level and one card per node, in order', async () => {
+        const { container, findAllByTestId } = topology()
+        const nodes = await findAllByTestId(NODE_TESTID)
+
+        expect(
+          container.querySelectorAll('[role="listitem"][data-flow-kind="parallel"]')
+        ).toHaveLength(levels.length)
+        expect(nodes.map((node) => node.textContent?.includes('shop-prod'))).toEqual([
+          false,
+          false,
+          true,
+          false
+        ])
+      })
+
+      it('renders each card with its eyebrow, title and status, and marks only the lit card', async () => {
+        const { findAllByTestId, container } = topology()
+
+        const first = (await findAllByTestId(NODE_TESTID))[0]
+        expect(first?.textContent).toContain('Domain')
+        expect(first?.textContent).toContain('shop.example.com')
+        expect(first?.textContent).toContain('Public')
+        const lit = container.querySelectorAll('[data-lit]')
+        expect(lit).toHaveLength(1)
+        expect(lit[0]?.textContent?.trim()).toBe('shop-prod')
+      })
+
+      it('skips a card without a title and a level left empty', async () => {
+        const { container, findAllByTestId } = topology({
+          levels: [
+            ...levels,
+            {
+              nodes: [{ eyebrow: 'Firewall', icon: '', title: '', label: '', severity: 'success' }]
+            }
+          ]
+        })
+
+        expect(await findAllByTestId(NODE_TESTID)).toHaveLength(4)
+        expect(container.querySelectorAll('[data-flow-kind="parallel"]')).toHaveLength(
+          levels.length
+        )
+      })
+
+      it('draws nothing in other layouts or when a scene slot is given', () => {
+        const other = band({ kind: 'centered', levels })
+        expect(other.queryAllByTestId(NODE_TESTID)).toHaveLength(0)
+        other.unmount()
+
+        const slotted = render(HeroBand, {
+          props: { kind: 'copy-on-top-art', title: TITLE, levels },
+          slots: { bottom: '<div>scene</div>' }
+        })
+        expect(slotted.getByText('scene')).toBeInTheDocument()
+        expect(slotted.queryAllByTestId(NODE_TESTID)).toHaveLength(0)
+        slotted.unmount()
+
+        const top = render(HeroBand, {
+          props: { kind: 'copy-on-top-art', title: TITLE, levels },
+          slots: { top: '<div>top scene</div>' }
+        })
+        expect(top.queryAllByTestId(NODE_TESTID)).toHaveLength(0)
+      })
+
+      it('has no a11y violations with the topology', async () => {
+        const { container, findAllByTestId } = topology()
+        await findAllByTestId(NODE_TESTID)
+
+        await expectNoA11yViolations(container)
+      })
     })
 
-    it('omits the grid and its gap when items is empty, and everything without a title', () => {
-      const empty = band()
-      expect(empty.queryAllByTestId(CELL_TESTID)).toHaveLength(0)
-      expect(empty.queryByTestId('marketing-section-gap')).toBeNull()
-      empty.unmount()
+    describe('items grid', () => {
+      it('renders one cell per item, in order, each with an h2', async () => {
+        const { findAllByTestId, getAllByRole } = band({ items })
 
-      const untitled = band({ items, title: '' })
-      expect(untitled.getByTestId(TESTID).children).toHaveLength(0)
-    })
+        expect(await findAllByTestId(CELL_TESTID)).toHaveLength(items.length)
+        expect(
+          getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent?.trim())
+        ).toEqual(items.map((item) => item.title))
+      })
 
-    it('has no a11y violations with the grid', async () => {
-      const { container, findAllByTestId } = band({ items })
-      await findAllByTestId(CELL_TESTID)
+      it('omits the grid and its gap when items is empty, and everything without a title', () => {
+        const empty = band()
+        expect(empty.queryAllByTestId(CELL_TESTID)).toHaveLength(0)
+        expect(empty.queryByTestId('marketing-section-gap')).toBeNull()
+        empty.unmount()
 
-      await expectNoA11yViolations(container)
+        const untitled = band({ items, title: '' })
+        expect(untitled.getByTestId(TESTID).children).toHaveLength(0)
+      })
+
+      it('has no a11y violations with the grid', async () => {
+        const { container, findAllByTestId } = band({ items })
+        await findAllByTestId(CELL_TESTID)
+
+        await expectNoA11yViolations(container)
+      })
     })
   })
 })

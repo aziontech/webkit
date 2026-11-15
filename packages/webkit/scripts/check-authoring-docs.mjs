@@ -12,7 +12,7 @@ import {
 
 const SCRIPT_DIR = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(SCRIPT_DIR, '../../..')
-const BASELINE = join(SCRIPT_DIR, 'doc-standards-baseline.json')
+const BASELINE = join(SCRIPT_DIR, 'authoring-docs-baseline.json')
 const DIRS = ['.claude/skills', '.claude/agents', 'skills', 'adapters/claude/agents']
 
 function walk(dir) {
@@ -44,7 +44,7 @@ const current = currentViolations()
 
 if (update) {
   writeFileSync(BASELINE, JSON.stringify(current, null, 2) + '\n')
-  console.log(`doc-standards-baseline.json updated: ${current.length} known violations recorded.`)
+  console.log(`authoring-docs-baseline.json updated: ${current.length} known violations recorded.`)
   process.exit(0)
 }
 
@@ -53,7 +53,7 @@ try {
   baseline = JSON.parse(readFileSync(BASELINE, 'utf-8'))
 } catch {
   console.error(
-    'No doc-standards-baseline.json — run `node scripts/check-authoring-docs.mjs --update` once.'
+    'No authoring-docs-baseline.json — run `node scripts/check-authoring-docs.mjs --update` once.'
   )
   process.exit(1)
 }
@@ -77,7 +77,7 @@ for (const [k, n] of baseCounts) {
 }
 
 if (fixed.length) {
-  console.log(`\n↓ ${fixed.length} baseline violation(s) fixed — prune with doc-standards:update:`)
+  console.log(`\n↓ ${fixed.length} baseline violation(s) fixed — prune with update:authoring-docs:`)
   for (const k of fixed) console.log(`  - ${k}`)
 }
 
@@ -93,5 +93,5 @@ if (introduced.length) {
   process.exit(1)
 }
 
-console.log(`✓ doc-standards ratchet: ${current.length} known violations, 0 new.`)
+console.log(`✓ authoring-docs ratchet: ${current.length} known violations, 0 new.`)
 process.exit(0)

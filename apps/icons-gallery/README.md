@@ -34,7 +34,7 @@ The application is deployed on **Azion's Edge Platform** for low-latency global 
 | **Styling**      | Tailwind CSS                              | Utility-first CSS framework                |
 | **Icons**        | `@aziontech/icons`                        | Icon font + catalog (workspace dependency) |
 | **Color Picker** | `vue3-colorpicker`                        | Color selection widget                     |
-| **Testing**      | Vitest + jsdom                            | Unit testing                               |
+| **Testing**      | Vitest + happy-dom                        | Unit testing                               |
 | **Deployment**   | Azion Edge Platform                       | Global edge deployment                     |
 
 ### Application Flow
@@ -62,18 +62,18 @@ flowchart TD
 
 ```mermaid
 flowchart TB
-    subgraph App.vue
-        A[SearchBar.vue] --> B[Filter icons]
-        C[IconCard.vue] --> D[Display icon]
+    subgraph app.vue
+        A[search-bar.vue] --> B[Filter icons]
+        C[icon-card.vue] --> D[Display icon]
         D --> E[Copy/Download actions]
         F[ColorPicker] --> G[Update color state]
         H[Size Slider] --> I[Update size state]
         J[Theme Toggle] --> K[Dark/Light mode]
     end
     L["@aziontech/icons/catalog"] --> M[Icon metadata]
-    M --> App.vue
+    M --> app.vue
     N["@aziontech/icons"] --> O[Icon fonts CSS]
-    O --> App.vue
+    O --> app.vue
 ```
 
 ---
@@ -86,23 +86,22 @@ apps/icons-gallery/
 │   └── favicon.ico          # Site favicon
 ├── src/
 │   ├── components/
-│   │   ├── IconCard.vue     # Individual icon display card
-│   │   └── SearchBar.vue    # Search input with filtering
-│   ├── App.vue              # Main application component
-│   ├── main.css             # Global styles and Tailwind imports
-│   ├── main.js              # Application entry point
-│   └── theme.js             # Dark/light theme management
-├── tests/
-│   └── unit/
-│       ├── __mocks__/
-│       ├── iconDownload.spec.js  # Download functionality tests
-│       └── jest.setup.js         # Vitest setup file (legacy filename)
+│   │   ├── colored-icon.vue    # Colored icon preview
+│   │   ├── icon-card.vue       # Individual icon display card
+│   │   ├── icon-card.test.ts   # Icon card tests
+│   │   └── search-bar.vue      # Search input with filtering
+│   ├── lib/
+│   │   └── theme.js         # Dark/light theme management
+│   ├── styles/
+│   │   └── main.css         # Global styles and Tailwind imports
+│   ├── app.vue              # Main application component
+│   └── main.js              # Application entry point
 ├── azion/
 │   ├── args.json            # Build arguments for Azion CLI
 │   └── azion.json           # Edge application manifest
 ├── azion.config.cjs         # Azion project configuration
 ├── index.html               # Vite HTML entry point
-├── jsconfig.json            # JavaScript/IDE configuration
+├── tsconfig.json            # Editor configuration (JavaScript allowed)
 ├── package.json             # Dependencies and scripts
 ├── postcss.config.js        # PostCSS configuration
 ├── tailwind.config.js       # Tailwind CSS configuration
@@ -112,15 +111,15 @@ apps/icons-gallery/
 
 ### Key Files Explained
 
-| File                                                           | Purpose                                                                      |
-| -------------------------------------------------------------- | ---------------------------------------------------------------------------- |
-| [`src/App.vue`](src/App.vue)                                   | Main component containing icon grid, controls, and state management          |
-| [`src/components/IconCard.vue`](src/components/IconCard.vue)   | Renders individual icon with hover actions (copy code, copy image, download) |
-| [`src/components/SearchBar.vue`](src/components/SearchBar.vue) | Search input with real-time filtering                                        |
-| [`src/theme.js`](src/theme.js)                                 | Theme initialization and toggle functionality                                |
-| [`vite.config.js`](vite.config.js)                             | Vite dev server (port 3333) and build config                                 |
-| [`vitest.config.js`](vitest.config.js)                         | Vitest config (jsdom environment, setup file)                                |
-| [`azion.config.cjs`](azion.config.cjs)                         | Edge deployment configuration with caching rules                             |
+| File                                                             | Purpose                                                                      |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| [`src/app.vue`](src/app.vue)                                     | Main component containing icon grid, controls, and state management          |
+| [`src/components/icon-card.vue`](src/components/icon-card.vue)   | Renders individual icon with hover actions (copy code, copy image, download) |
+| [`src/components/search-bar.vue`](src/components/search-bar.vue) | Search input with real-time filtering                                        |
+| [`src/lib/theme.js`](src/lib/theme.js)                           | Theme initialization and toggle functionality                                |
+| [`vite.config.js`](vite.config.js)                               | Vite dev server (port 3333) and build config                                 |
+| [`vitest.config.js`](vitest.config.js)                           | Vitest config (happy-dom environment, co-located tests)                      |
+| [`azion.config.cjs`](azion.config.cjs)                           | Edge deployment configuration with caching rules                             |
 
 Icon metadata is **not** stored locally — it is imported at runtime from `@aziontech/icons/catalog` (resolved to `packages/icons/dist/catalog.json`).
 
@@ -149,7 +148,7 @@ pnpm install
 pnpm serve
 
 # Or from workspace root
-pnpm --filter icons-gallery serve
+pnpm --filter @aziontech/icons-gallery serve
 ```
 
 The app will be available at `http://localhost:3333` with HMR enabled (configured in `vite.config.js`).
@@ -209,10 +208,8 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   plugins: [vue()],
   test: {
-    environment: 'jsdom',
-    setupFiles: ['./tests/unit/jest.setup.js'],
-    include: ['tests/unit/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
-    globals: true
+    environment: 'happy-dom',
+    include: ['src/**/*.test.ts']
   }
 })
 ```
@@ -389,13 +386,13 @@ pnpm test:unit
 pnpm test:unit:watch
 ```
 
-Tests live in `tests/unit/` and run on **Vitest** with the **jsdom** environment. The setup file is `tests/unit/jest.setup.js` (filename kept for git-history continuity after the Jest → Vitest migration).
+Tests sit next to the source as `<name>.test.ts` and run on **Vitest** with the **happy-dom** environment.
 
 ### Current Coverage
 
-| Module        | Tests                                             |
-| ------------- | ------------------------------------------------- |
-| Icon Download | PNG/SVG download helpers (`iconDownload.spec.js`) |
+| Module    | Tests                                                                    |
+| --------- | ------------------------------------------------------------------------ |
+| Icon card | Renders the name and its copy and download actions (`icon-card.test.ts`) |
 
 ---
 

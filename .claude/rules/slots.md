@@ -46,7 +46,7 @@ Slots are the **anatomy** surface of a component (where the consumer puts conten
 ## Enforcement
 
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** counts top-level `defineSlots` entries and blocks slots not in the spec's Slots table (scoped-slot props are correctly skipped).
-- The scaffolder emits `defineSlots` from the spec's Slots table with the declared scoped payloads.
+- The component-scaffolder emits `defineSlots` from the spec's Slots table with the declared scoped payloads.
 
 ## Why this rule exists
 

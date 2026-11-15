@@ -36,102 +36,103 @@ const Tree = defineComponent({
   `
 })
 
-describe('Tabs (composition)', () => {
-  // The panel slide offset is a Tailwind `translate-x-*` utility, which in v4 compiles to
-  // the standalone `translate` property — NOT to `transform`. If `translate` is dropped
-  // from this list the offset stops interpolating and the swap pops instead of sliding,
-  // in this component and in Calendar's month strip, which shares the preset. <Transition>
-  // is stubbed by Vue Test Utils, so the rendered animation cannot be asserted; this
-  // guards the css contract behind it. Verified in real Chromium: with only
-  // `transform, opacity`, a mid-flight sample is already at its final value.
-  describe('panel motion contract', () => {
-    it('transitions translate (not just transform) so translate-x offsets interpolate', () => {
-      const { transition } = getTabViewPanelTransitionStyle()
-      expect(transition).toContain('translate ')
-      expect(transition).toContain('opacity ')
+describe('Tabs', () => {
+  describe('composition', () => {
+    // The panel slide offset is a Tailwind `translate-x-*` utility, which in v4 compiles to
+    // the standalone `translate` property — NOT to `transform`. If `translate` is dropped
+    // from this list the offset stops interpolating and the swap pops instead of sliding,
+    // in this component and in Calendar's month strip, which shares the preset. <Transition>
+    // is stubbed by Vue Test Utils, so the rendered animation cannot be asserted; this
+    // guards the css contract behind it. Verified in real Chromium: with only
+    // `transform, opacity`, a mid-flight sample is already at its final value.
+    describe('panel motion contract', () => {
+      it('transitions translate (not just transform) so translate-x offsets interpolate', () => {
+        const { transition } = getTabViewPanelTransitionStyle()
+        expect(transition).toContain('translate ')
+        expect(transition).toContain('opacity ')
+      })
+
+      it('renders the initially active panel visible and runs the enter motion only on a change', async () => {
+        const { getByText } = render(Tree)
+        const first = getByText('Content one') as HTMLElement
+        expect(first).not.toHaveAttribute('data-motion')
+
+        await fireEvent.click(getByText('Second'))
+        const second = getByText('Content two') as HTMLElement
+        expect(second).toHaveAttribute('data-motion', 'enter')
+        expect(second).toHaveAttribute('data-slide', 'end')
+        await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)))
+        await nextTick()
+        expect(second).not.toHaveAttribute('data-motion')
+      })
     })
 
-    it('renders the initially active panel visible and runs the enter motion only on a change', async () => {
-      const { getByText } = render(Tree)
-      const first = getByText('Content one') as HTMLElement
-      expect(first).not.toHaveAttribute('data-motion')
-
-      await fireEvent.click(getByText('Second'))
-      const second = getByText('Content two') as HTMLElement
-      expect(second).toHaveAttribute('data-motion', 'enter')
-      expect(second).toHaveAttribute('data-slide', 'end')
-      await new Promise((resolve) => requestAnimationFrame(() => setTimeout(resolve, 0)))
-      await nextTick()
-      expect(second).not.toHaveAttribute('data-motion')
-    })
-  })
-
-  describe('compound API (index.js dot-notation)', () => {
-    it('attaches every public sub-component to the root compound', () => {
-      // Grounded in index.js: Tabs === TabsRoot with Root/List/Item/
-      // Content/Panel assigned onto it.
-      expect(Tabs).toBe(TabsRoot)
-      expect(Tabs.Root).toBe(TabsRoot)
-      expect(Tabs.List).toBe(TabsList)
-      expect(Tabs.Item).toBe(TabsItem)
-      expect(Tabs.Content).toBe(TabsContent)
-      expect(Tabs.Panel).toBe(TabsPanel)
-    })
-  })
-
-  describe('structure, roles, and context-derived ids', () => {
-    it('renders root/list/content with their testids and tablist role', () => {
-      const { getByTestId, getAllByTestId } = render(Tree)
-
-      // Root testid supplied by the consumer (data-testid="tv"); List/Content
-      // derive their testids from the injected context.testId.
-      expect(getByTestId('tv')).toBeTruthy()
-      const list = getByTestId('tv__list')
-      expect(list.getAttribute('role')).toBe('tablist')
-      expect(getAllByTestId('tv__panel')[0]?.getAttribute('role')).toBe('tabpanel')
+    describe('compound API (index.js dot-notation)', () => {
+      it('attaches every public sub-component to the root compound', () => {
+        // Grounded in index.js: Tabs === TabsRoot with Root/List/Item/
+        // Content/Panel assigned onto it.
+        expect(Tabs).toBe(TabsRoot)
+        expect(Tabs.Root).toBe(TabsRoot)
+        expect(Tabs.List).toBe(TabsList)
+        expect(Tabs.Item).toBe(TabsItem)
+        expect(Tabs.Content).toBe(TabsContent)
+        expect(Tabs.Panel).toBe(TabsPanel)
+      })
     })
 
-    // The horizontal-scroll affordance (overflow-x + edge-fade overlays) is a
-    // visual-layer behavior: it depends on Tailwind utilities applying and on real
-    // layout-driven overflow measurement. This unit env deliberately runs no Tailwind
-    // and loads no theme CSS (see src/test/setup.ts), so overflow/scroll cannot be
-    // asserted here — that behavior is covered by the `Scrollable` story's visual
-    // regression snapshots (per .claude/rules/testing.md: pixels & layout live in
-    // the styled visual suite, not the unit suite).
+    describe('structure, roles, and context-derived ids', () => {
+      it('renders root/list/content with their testids and tablist role', () => {
+        const { getByTestId, getAllByTestId } = render(Tree)
 
-    it('renders each tab as role=tab and each panel as role=tabpanel', () => {
-      const { getAllByRole } = render(Tree)
+        // Root testid supplied by the consumer (data-testid="tv"); List/Content
+        // derive their testids from the injected context.testId.
+        expect(getByTestId('tv')).toBeTruthy()
+        const list = getByTestId('tv__list')
+        expect(list.getAttribute('role')).toBe('tablist')
+        expect(getAllByTestId('tv__panel')[0]?.getAttribute('role')).toBe('tabpanel')
+      })
 
-      const tabs = getAllByRole('tab')
-      expect(tabs).toHaveLength(3)
-      // Only the active panel is exposed; inactive panels carry the hidden
-      // attribute (role=tabpanel still present in DOM).
-      const panels = getAllByRole('tabpanel', { hidden: true })
-      expect(panels).toHaveLength(3)
-    })
+      // The horizontal-scroll affordance (overflow-x + edge-fade overlays) is a
+      // visual-layer behavior: it depends on Tailwind utilities applying and on real
+      // layout-driven overflow measurement. This unit env deliberately runs no Tailwind
+      // and loads no theme CSS (see src/test/setup.ts), so overflow/scroll cannot be
+      // asserted here — that behavior is covered by the `Scrollable` story's visual
+      // regression snapshots (per .claude/rules/testing.md: pixels & layout live in
+      // the styled visual suite, not the unit suite).
 
-    it('wires aria-controls / aria-labelledby between the active tab and its panel', async () => {
-      const { getAllByRole } = render(Tree)
-      await nextTick()
+      it('renders each tab as role=tab and each panel as role=tabpanel', () => {
+        const { getAllByRole } = render(Tree)
 
-      const activeTab = getAllByRole('tab').find(
-        (t) => t.getAttribute('aria-selected') === 'true'
-      ) as HTMLElement
-      const panelId = activeTab.getAttribute('aria-controls')
-      const tabId = activeTab.getAttribute('id')
-      expect(panelId).toBeTruthy()
-      expect(tabId).toBeTruthy()
+        const tabs = getAllByRole('tab')
+        expect(tabs).toHaveLength(3)
+        // Only the active panel is exposed; inactive panels carry the hidden
+        // attribute (role=tabpanel still present in DOM).
+        const panels = getAllByRole('tabpanel', { hidden: true })
+        expect(panels).toHaveLength(3)
+      })
 
-      const panel = document.getElementById(panelId as string) as HTMLElement
-      expect(panel.getAttribute('role')).toBe('tabpanel')
-      expect(panel.getAttribute('aria-labelledby')).toBe(tabId)
-    })
+      it('wires aria-controls / aria-labelledby between the active tab and its panel', async () => {
+        const { getAllByRole } = render(Tree)
+        await nextTick()
 
-    it('leaves aria-controls off a tab whose panel is rendered elsewhere', () => {
-      const { getAllByRole } = render(
-        defineComponent({
-          components: { TabsRoot, TabsList, TabsItem },
-          template: `
+        const activeTab = getAllByRole('tab').find(
+          (t) => t.getAttribute('aria-selected') === 'true'
+        ) as HTMLElement
+        const panelId = activeTab.getAttribute('aria-controls')
+        const tabId = activeTab.getAttribute('id')
+        expect(panelId).toBeTruthy()
+        expect(tabId).toBeTruthy()
+
+        const panel = document.getElementById(panelId as string) as HTMLElement
+        expect(panel.getAttribute('role')).toBe('tabpanel')
+        expect(panel.getAttribute('aria-labelledby')).toBe(tabId)
+      })
+
+      it('leaves aria-controls off a tab whose panel is rendered elsewhere', () => {
+        const { getAllByRole } = render(
+          defineComponent({
+            components: { TabsRoot, TabsList, TabsItem },
+            template: `
             <TabsRoot default-value="a">
               <TabsList>
                 <TabsItem value="a" label="A" />
@@ -139,159 +140,159 @@ describe('Tabs (composition)', () => {
               </TabsList>
             </TabsRoot>
           `
+          })
+        )
+
+        expect(getAllByRole('tab').every((tab) => !tab.hasAttribute('aria-controls'))).toBe(true)
+      })
+    })
+
+    describe('provide/inject — selection state flows from Root to Item and Panel', () => {
+      it('auto-selects the default-value tab on mount and reflects it in tab + panel state', () => {
+        const { getByText, getAllByRole } = render(Tree)
+
+        const firstTab = getByText('First').closest('[role="tab"]') as HTMLElement
+        expect(firstTab.getAttribute('aria-selected')).toBe('true')
+        expect(firstTab.getAttribute('data-state')).toBe('active')
+        // Active tab is the only one in the tab order.
+        expect(firstTab.getAttribute('tabindex')).toBe('0')
+
+        // The others are inactive and removed from the tab order.
+        const inactive = getAllByRole('tab').filter(
+          (t) => t.getAttribute('aria-selected') === 'false'
+        )
+        expect(inactive).toHaveLength(2)
+        inactive.forEach((t) => expect(t.getAttribute('tabindex')).toBe('-1'))
+      })
+
+      it('only renders the active panel content; inactive panels are hidden', () => {
+        const { getByText, queryByText } = render(Tree)
+
+        // tab-1 active by default → its content is rendered.
+        expect(getByText('Content one')).toBeTruthy()
+        // Inactive panels do not render their inner content (v-if isActive).
+        expect(queryByText('Content two')).toBeNull()
+        expect(queryByText('Content three')).toBeNull()
+      })
+
+      it('moves selection and panel content when a different Item is clicked (context.setValue)', async () => {
+        const { getByText, queryByText } = render(Tree)
+
+        await fireEvent.click(getByText('Second'))
+
+        const secondTab = getByText('Second').closest('[role="tab"]') as HTMLElement
+        expect(secondTab.getAttribute('aria-selected')).toBe('true')
+        expect(secondTab.getAttribute('data-state')).toBe('active')
+
+        const firstTab = getByText('First').closest('[role="tab"]') as HTMLElement
+        expect(firstTab.getAttribute('aria-selected')).toBe('false')
+
+        // Panel content follows the injected active value.
+        expect(getByText('Content two')).toBeTruthy()
+        expect(queryByText('Content one')).toBeNull()
+      })
+    })
+
+    describe('a standalone Item', () => {
+      it('has no selection of its own: a removed selected attribute does not press it', () => {
+        const { getByRole } = render(TabsItem, {
+          props: { value: 'a', label: 'Alpha' },
+          attrs: { selected: true }
         })
-      )
 
-      expect(getAllByRole('tab').every((tab) => !tab.hasAttribute('aria-controls'))).toBe(true)
-    })
-  })
-
-  describe('provide/inject — selection state flows from Root to Item and Panel', () => {
-    it('auto-selects the default-value tab on mount and reflects it in tab + panel state', () => {
-      const { getByText, getAllByRole } = render(Tree)
-
-      const firstTab = getByText('First').closest('[role="tab"]') as HTMLElement
-      expect(firstTab.getAttribute('aria-selected')).toBe('true')
-      expect(firstTab.getAttribute('data-state')).toBe('active')
-      // Active tab is the only one in the tab order.
-      expect(firstTab.getAttribute('tabindex')).toBe('0')
-
-      // The others are inactive and removed from the tab order.
-      const inactive = getAllByRole('tab').filter(
-        (t) => t.getAttribute('aria-selected') === 'false'
-      )
-      expect(inactive).toHaveLength(2)
-      inactive.forEach((t) => expect(t.getAttribute('tabindex')).toBe('-1'))
+        const button = getByRole('button')
+        expect(button.getAttribute('aria-pressed')).toBeNull()
+        expect(button.getAttribute('data-state')).toBe('inactive')
+      })
     })
 
-    it('only renders the active panel content; inactive panels are hidden', () => {
-      const { getByText, queryByText } = render(Tree)
+    describe('events on the Item', () => {
+      it('emits click with the native MouseEvent when an enabled tab is activated', async () => {
+        // Render a single standalone Item (no context) to observe its own emits.
+        const { getByRole, emitted } = render(TabsItem, {
+          props: { value: 'a', label: 'Alpha' }
+        })
 
-      // tab-1 active by default → its content is rendered.
-      expect(getByText('Content one')).toBeTruthy()
-      // Inactive panels do not render their inner content (v-if isActive).
-      expect(queryByText('Content two')).toBeNull()
-      expect(queryByText('Content three')).toBeNull()
-    })
+        await fireEvent.click(getByRole('button'))
 
-    it('moves selection and panel content when a different Item is clicked (context.setValue)', async () => {
-      const { getByText, queryByText } = render(Tree)
-
-      await fireEvent.click(getByText('Second'))
-
-      const secondTab = getByText('Second').closest('[role="tab"]') as HTMLElement
-      expect(secondTab.getAttribute('aria-selected')).toBe('true')
-      expect(secondTab.getAttribute('data-state')).toBe('active')
-
-      const firstTab = getByText('First').closest('[role="tab"]') as HTMLElement
-      expect(firstTab.getAttribute('aria-selected')).toBe('false')
-
-      // Panel content follows the injected active value.
-      expect(getByText('Content two')).toBeTruthy()
-      expect(queryByText('Content one')).toBeNull()
-    })
-  })
-
-  describe('a standalone Item', () => {
-    it('has no selection of its own: a removed selected attribute does not press it', () => {
-      const { getByRole } = render(TabsItem, {
-        props: { value: 'a', label: 'Alpha' },
-        attrs: { selected: true }
+        const events = emitted().click
+        expect(events).toHaveLength(1)
+        expect(events[0][0]).toBeInstanceOf(MouseEvent)
       })
 
-      const button = getByRole('button')
-      expect(button.getAttribute('aria-pressed')).toBeNull()
-      expect(button.getAttribute('data-state')).toBe('inactive')
-    })
-  })
+      it('does not emit click when the Item is disabled', async () => {
+        const { getByRole, emitted } = render(TabsItem, {
+          props: { value: 'a', label: 'Alpha', disabled: true }
+        })
 
-  describe('events on the Item', () => {
-    it('emits click with the native MouseEvent when an enabled tab is activated', async () => {
-      // Render a single standalone Item (no context) to observe its own emits.
-      const { getByRole, emitted } = render(TabsItem, {
-        props: { value: 'a', label: 'Alpha' }
+        await fireEvent.click(getByRole('button'))
+
+        expect(emitted().click).toBeUndefined()
       })
 
-      await fireEvent.click(getByRole('button'))
+      it('renders a close affordance and emits close (not click) when it is clicked', async () => {
+        const { getByTestId, emitted } = render(TabsItem, {
+          props: { value: 'a', label: 'Alpha', closable: true }
+        })
 
-      const events = emitted().click
-      expect(events).toHaveLength(1)
-      expect(events[0][0]).toBeInstanceOf(MouseEvent)
-    })
+        const close = getByTestId('navigation-tabs-item__close')
+        expect(close.getAttribute('aria-hidden')).toBe('true')
+        expect(close.getAttribute('role')).toBeNull()
+        expect(close.getAttribute('title')).toBe('Close tab')
 
-    it('does not emit click when the Item is disabled', async () => {
-      const { getByRole, emitted } = render(TabsItem, {
-        props: { value: 'a', label: 'Alpha', disabled: true }
+        await fireEvent.click(close)
+
+        const closeEvents = emitted().close
+        expect(closeEvents).toHaveLength(1)
+        expect(closeEvents[0][0]).toBeInstanceOf(MouseEvent)
+        // @click.stop on the close box stops propagation → the tab click is not emitted.
+        expect(emitted().click).toBeUndefined()
+      })
+      it('emits close on Delete from a closable tab, and nothing from a plain one', async () => {
+        const { getByTestId, emitted, rerender } = render(TabsItem, {
+          props: { value: 'a', label: 'Alpha', closable: true }
+        })
+        const tab = getByTestId('navigation-tabs-item')
+        expect(tab.getAttribute('aria-keyshortcuts')).toBe('Delete')
+
+        await fireEvent.keyDown(tab, { key: 'Delete' })
+        expect(emitted().close).toHaveLength(1)
+        expect(emitted().close[0][0]).toBeInstanceOf(KeyboardEvent)
+
+        await rerender({ value: 'a', label: 'Alpha', closable: false })
+        await fireEvent.keyDown(tab, { key: 'Delete' })
+        expect(emitted().close).toHaveLength(1)
+        expect(tab.hasAttribute('aria-keyshortcuts')).toBe(false)
       })
 
-      await fireEvent.click(getByRole('button'))
+      it('marks a dirty tab with a dot and a hidden "Unsaved changes"', async () => {
+        const { getByRole, getByTestId, queryByTestId, rerender } = render(TabsItem, {
+          props: { value: 'a', label: 'Alpha', dirty: true }
+        })
 
-      expect(emitted().click).toBeUndefined()
-    })
+        const tab = getByRole('button')
+        expect(tab.hasAttribute('data-dirty')).toBe(true)
+        expect(getByTestId('navigation-tabs-item__dirty').getAttribute('aria-hidden')).toBe('true')
+        expect(tab.textContent).toContain('Unsaved changes')
 
-    it('renders a close affordance and emits close (not click) when it is clicked', async () => {
-      const { getByTestId, emitted } = render(TabsItem, {
-        props: { value: 'a', label: 'Alpha', closable: true }
+        await rerender({ dirty: false })
+        expect(queryByTestId('navigation-tabs-item__dirty')).toBeNull()
+        expect(tab.hasAttribute('data-dirty')).toBe(false)
       })
-
-      const close = getByTestId('navigation-tabs-item__close')
-      expect(close.getAttribute('aria-hidden')).toBe('true')
-      expect(close.getAttribute('role')).toBeNull()
-      expect(close.getAttribute('title')).toBe('Close tab')
-
-      await fireEvent.click(close)
-
-      const closeEvents = emitted().close
-      expect(closeEvents).toHaveLength(1)
-      expect(closeEvents[0][0]).toBeInstanceOf(MouseEvent)
-      // @click.stop on the close box stops propagation → the tab click is not emitted.
-      expect(emitted().click).toBeUndefined()
-    })
-    it('emits close on Delete from a closable tab, and nothing from a plain one', async () => {
-      const { getByTestId, emitted, rerender } = render(TabsItem, {
-        props: { value: 'a', label: 'Alpha', closable: true }
-      })
-      const tab = getByTestId('navigation-tabs-item')
-      expect(tab.getAttribute('aria-keyshortcuts')).toBe('Delete')
-
-      await fireEvent.keyDown(tab, { key: 'Delete' })
-      expect(emitted().close).toHaveLength(1)
-      expect(emitted().close[0][0]).toBeInstanceOf(KeyboardEvent)
-
-      await rerender({ value: 'a', label: 'Alpha', closable: false })
-      await fireEvent.keyDown(tab, { key: 'Delete' })
-      expect(emitted().close).toHaveLength(1)
-      expect(tab.hasAttribute('aria-keyshortcuts')).toBe(false)
     })
 
-    it('marks a dirty tab with a dot and a hidden "Unsaved changes"', async () => {
-      const { getByRole, getByTestId, queryByTestId, rerender } = render(TabsItem, {
-        props: { value: 'a', label: 'Alpha', dirty: true }
-      })
+    describe('v-model round-trip and update:modelValue', () => {
+      it('emits update:modelValue with the new value on activation', async () => {
+        const updates: Array<string | number | null> = []
 
-      const tab = getByRole('button')
-      expect(tab.hasAttribute('data-dirty')).toBe(true)
-      expect(getByTestId('navigation-tabs-item__dirty').getAttribute('aria-hidden')).toBe('true')
-      expect(tab.textContent).toContain('Unsaved changes')
-
-      await rerender({ dirty: false })
-      expect(queryByTestId('navigation-tabs-item__dirty')).toBeNull()
-      expect(tab.hasAttribute('data-dirty')).toBe(false)
-    })
-  })
-
-  describe('v-model round-trip and update:modelValue', () => {
-    it('emits update:modelValue with the new value on activation', async () => {
-      const updates: Array<string | number | null> = []
-
-      const Host = defineComponent({
-        components: { Tabs, TabsList, TabsItem },
-        setup() {
-          return {
-            onUpdate: (v: string | number | null) => updates.push(v)
-          }
-        },
-        template: `
+        const Host = defineComponent({
+          components: { Tabs, TabsList, TabsItem },
+          setup() {
+            return {
+              onUpdate: (v: string | number | null) => updates.push(v)
+            }
+          },
+          template: `
           <Tabs default-value="tab-1" @update:modelValue="onUpdate">
             <TabsList>
               <TabsItem value="tab-1" label="First" />
@@ -299,19 +300,19 @@ describe('Tabs (composition)', () => {
             </TabsList>
           </Tabs>
         `
+        })
+
+        const { getByText } = render(Host)
+        await fireEvent.click(getByText('Second'))
+
+        expect(updates.at(-1)).toBe('tab-2')
       })
 
-      const { getByText } = render(Host)
-      await fireEvent.click(getByText('Second'))
-
-      expect(updates.at(-1)).toBe('tab-2')
-    })
-
-    it('round-trips v-model — external change selects the matching tab and content', async () => {
-      const Host = defineComponent({
-        components: { Tabs, TabsList, TabsItem, TabsContent, TabsPanel },
-        setup: () => ({ active: ref<string>('tab-1') }),
-        template: `
+      it('round-trips v-model — external change selects the matching tab and content', async () => {
+        const Host = defineComponent({
+          components: { Tabs, TabsList, TabsItem, TabsContent, TabsPanel },
+          setup: () => ({ active: ref<string>('tab-1') }),
+          template: `
           <div>
             <button data-testid="ext" type="button" @click="active = 'tab-3'">go</button>
             <Tabs v-model="active">
@@ -325,39 +326,39 @@ describe('Tabs (composition)', () => {
             </Tabs>
           </div>
         `
+        })
+
+        const { getByText, getByTestId, queryByText } = render(Host)
+
+        // Initial controlled value = tab-1.
+        expect(getByText('One')).toBeTruthy()
+        expect(
+          (getByText('First').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
+        ).toBe('true')
+
+        // External model mutation propagates in.
+        await fireEvent.click(getByTestId('ext'))
+
+        expect(
+          (getByText('Third').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
+        ).toBe('true')
+        expect(getByText('Three')).toBeTruthy()
+        expect(queryByText('One')).toBeNull()
+
+        // Clicking a tab writes back to the model (tab-2 selects, updates v-model).
+        await fireEvent.click(getByText('Second'))
+        expect(
+          (getByText('Second').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
+        ).toBe('true')
       })
-
-      const { getByText, getByTestId, queryByText } = render(Host)
-
-      // Initial controlled value = tab-1.
-      expect(getByText('One')).toBeTruthy()
-      expect(
-        (getByText('First').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
-      ).toBe('true')
-
-      // External model mutation propagates in.
-      await fireEvent.click(getByTestId('ext'))
-
-      expect(
-        (getByText('Third').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
-      ).toBe('true')
-      expect(getByText('Three')).toBeTruthy()
-      expect(queryByText('One')).toBeNull()
-
-      // Clicking a tab writes back to the model (tab-2 selects, updates v-model).
-      await fireEvent.click(getByText('Second'))
-      expect(
-        (getByText('Second').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
-      ).toBe('true')
     })
-  })
 
-  describe('keyboard navigation on the tablist (context.onListKeydown)', () => {
-    it('manual activation moves focus with the arrows and selects only on Enter', async () => {
-      const { getByText } = render(
-        defineComponent({
-          components: { Tabs, TabsList, TabsItem },
-          template: `
+    describe('keyboard navigation on the tablist (context.onListKeydown)', () => {
+      it('manual activation moves focus with the arrows and selects only on Enter', async () => {
+        const { getByText } = render(
+          defineComponent({
+            components: { Tabs, TabsList, TabsItem },
+            template: `
             <Tabs default-value="tab-1" activation-mode="manual">
               <TabsList>
                 <TabsItem value="tab-1" label="First" />
@@ -366,211 +367,211 @@ describe('Tabs (composition)', () => {
               </TabsList>
             </Tabs>
           `
+          })
+        )
+        const tab = (label: string) => getByText(label).closest('[role="tab"]') as HTMLElement
+        tab('First').focus()
+        await keyboardUser.keyboard('{ArrowRight}')
+        expect(document.activeElement).toBe(tab('Second'))
+        expect(tab('First').getAttribute('aria-selected')).toBe('true')
+        await keyboardUser.keyboard('{ArrowRight}')
+        expect(document.activeElement).toBe(tab('Third'))
+        expect(tab('Third').getAttribute('aria-selected')).toBe('false')
+        await keyboardUser.keyboard('{Enter}')
+        expect(tab('Third').getAttribute('aria-selected')).toBe('true')
+      })
+
+      it('ArrowRight/ArrowLeft move selection across enabled tabs and wrap around', async () => {
+        const { getByTestId, getByText } = render(Tree)
+        const list = getByTestId('tv__list')
+
+        // Start on tab-1 (default). ArrowRight → tab-2.
+        await fireEvent.keyDown(list, { key: 'ArrowRight' })
+        expect(
+          (getByText('Second').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
+        ).toBe('true')
+
+        // ArrowRight → tab-3.
+        await fireEvent.keyDown(list, { key: 'ArrowRight' })
+        expect(
+          (getByText('Third').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
+        ).toBe('true')
+
+        // ArrowRight wraps back to tab-1.
+        await fireEvent.keyDown(list, { key: 'ArrowRight' })
+        expect(
+          (getByText('First').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
+        ).toBe('true')
+
+        // ArrowLeft wraps to the last tab (tab-3).
+        await fireEvent.keyDown(list, { key: 'ArrowLeft' })
+        expect(
+          (getByText('Third').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
+        ).toBe('true')
+      })
+
+      it('Home selects the first enabled tab and End selects the last', async () => {
+        const { getByTestId, getByText } = render(Tree, { props: { defaultValue: 'tab-2' } })
+        const list = getByTestId('tv__list')
+
+        await fireEvent.keyDown(list, { key: 'End' })
+        expect(
+          (getByText('Third').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
+        ).toBe('true')
+
+        await fireEvent.keyDown(list, { key: 'Home' })
+        expect(
+          (getByText('First').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
+        ).toBe('true')
+      })
+
+      it('ArrowRight skips a disabled tab (only enabled tabs participate)', async () => {
+        // tab-2 disabled → from tab-1, ArrowRight lands on tab-3.
+        const { getByTestId, getByText } = render(Tree, { props: { disableSecond: true } })
+        const list = getByTestId('tv__list')
+
+        await fireEvent.keyDown(list, { key: 'ArrowRight' })
+
+        expect(
+          (getByText('Third').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
+        ).toBe('true')
+        expect(
+          (getByText('Second').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
+        ).toBe('false')
+      })
+    })
+
+    describe('Item label prop and slot', () => {
+      it('renders the label prop and lets the default slot override it', () => {
+        const withProp = render(TabsItem, { props: { value: 'a', label: 'FromProp' } })
+        expect(withProp.getByTestId('navigation-tabs-item__label').textContent?.trim()).toBe(
+          'FromProp'
+        )
+        withProp.unmount()
+
+        const withSlot = render(TabsItem, {
+          props: { value: 'a', label: 'FromProp' },
+          slots: { default: 'FromSlot' }
         })
-      )
-      const tab = (label: string) => getByText(label).closest('[role="tab"]') as HTMLElement
-      tab('First').focus()
-      await keyboardUser.keyboard('{ArrowRight}')
+        const label = withSlot.getByTestId('navigation-tabs-item__label')
+        expect(label.textContent).toContain('FromSlot')
+        expect(label.textContent).not.toContain('FromProp')
+      })
+    })
+
+    describe('accessibility', () => {
+      it('has no a11y violations for the composed tab tree', async () => {
+        const { container } = render(Tree)
+
+        await expectNoA11yViolations(container)
+      })
+
+      it('renders the Default story fixture cleanly with no a11y violations', async () => {
+        const { getByTestId, container } = render(Default)
+
+        expect(getByTestId('navigation-tabs')).toBeTruthy()
+        await expectNoA11yViolations(container)
+      })
+    })
+
+    describe('list alignment', () => {
+      it('starts the tabs by default and centres them with align="center"', async () => {
+        const start = render(Tree)
+        expect(start.getByRole('tablist').getAttribute('data-align')).toBe('start')
+        start.unmount()
+
+        const { getByRole, getAllByRole, container } = render(Centered)
+        expect(getByRole('tablist').getAttribute('data-align')).toBe('center')
+        await fireEvent.click(getAllByRole('tab')[1]!)
+        expect(getAllByRole('tab')[1]!.getAttribute('aria-selected')).toBe('true')
+        await expectNoA11yViolations(container)
+      })
+    })
+  })
+
+  describe('keyboard map (spec)', () => {
+    const setup = async (props: Record<string, unknown> = {}) => {
+      const view = render(Tree, { props })
+      const tab = (label: string) => view.getByText(label).closest('[role="tab"]') as HTMLElement
+      const before = document.createElement('button')
+      before.textContent = 'Before'
+      document.body.prepend(before)
+      before.focus()
+      await keyboardUser.keyboard('{Tab}')
+      before.remove()
+      return { ...view, tab }
+    }
+
+    it('Tab enters the tab list on the selected tab only', async () => {
+      const { tab } = await setup({ defaultValue: 'tab-2' })
       expect(document.activeElement).toBe(tab('Second'))
-      expect(tab('First').getAttribute('aria-selected')).toBe('true')
+      expect(tab('First').getAttribute('tabindex')).toBe('-1')
+    })
+
+    it('ArrowRight selects and focuses the next tab, wrapping at the end', async () => {
+      const { tab } = await setup({ defaultValue: 'tab-3' })
       await keyboardUser.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(tab('First'))
+      expect(tab('First').getAttribute('aria-selected')).toBe('true')
+    })
+
+    it('ArrowLeft selects and focuses the previous tab, wrapping at the start', async () => {
+      const { tab } = await setup()
+      await keyboardUser.keyboard('{ArrowLeft}')
       expect(document.activeElement).toBe(tab('Third'))
-      expect(tab('Third').getAttribute('aria-selected')).toBe('false')
-      await keyboardUser.keyboard('{Enter}')
       expect(tab('Third').getAttribute('aria-selected')).toBe('true')
     })
 
-    it('ArrowRight/ArrowLeft move selection across enabled tabs and wrap around', async () => {
-      const { getByTestId, getByText } = render(Tree)
-      const list = getByTestId('tv__list')
-
-      // Start on tab-1 (default). ArrowRight → tab-2.
-      await fireEvent.keyDown(list, { key: 'ArrowRight' })
-      expect(
-        (getByText('Second').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
-      ).toBe('true')
-
-      // ArrowRight → tab-3.
-      await fireEvent.keyDown(list, { key: 'ArrowRight' })
-      expect(
-        (getByText('Third').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
-      ).toBe('true')
-
-      // ArrowRight wraps back to tab-1.
-      await fireEvent.keyDown(list, { key: 'ArrowRight' })
-      expect(
-        (getByText('First').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
-      ).toBe('true')
-
-      // ArrowLeft wraps to the last tab (tab-3).
-      await fireEvent.keyDown(list, { key: 'ArrowLeft' })
-      expect(
-        (getByText('Third').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
-      ).toBe('true')
+    it('Home and End select the first and last enabled tabs', async () => {
+      const { tab } = await setup({ defaultValue: 'tab-2' })
+      await keyboardUser.keyboard('{End}')
+      expect(document.activeElement).toBe(tab('Third'))
+      await keyboardUser.keyboard('{Home}')
+      expect(document.activeElement).toBe(tab('First'))
     })
 
-    it('Home selects the first enabled tab and End selects the last', async () => {
-      const { getByTestId, getByText } = render(Tree, { props: { defaultValue: 'tab-2' } })
-      const list = getByTestId('tv__list')
-
-      await fireEvent.keyDown(list, { key: 'End' })
-      expect(
-        (getByText('Third').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
-      ).toBe('true')
-
-      await fireEvent.keyDown(list, { key: 'Home' })
-      expect(
-        (getByText('First').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
-      ).toBe('true')
+    it('arrows skip disabled tabs', async () => {
+      const { tab } = await setup({ disableSecond: true })
+      await keyboardUser.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(tab('Third'))
     })
 
-    it('ArrowRight skips a disabled tab (only enabled tabs participate)', async () => {
-      // tab-2 disabled → from tab-1, ArrowRight lands on tab-3.
-      const { getByTestId, getByText } = render(Tree, { props: { disableSecond: true } })
-      const list = getByTestId('tv__list')
-
-      await fireEvent.keyDown(list, { key: 'ArrowRight' })
-
-      expect(
-        (getByText('Third').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
-      ).toBe('true')
-      expect(
-        (getByText('Second').closest('[role="tab"]') as HTMLElement).getAttribute('aria-selected')
-      ).toBe('false')
+    it('Tab from the selected tab moves into its panel', async () => {
+      const { getByText } = await setup()
+      await keyboardUser.keyboard('{Tab}')
+      expect(document.activeElement).toBe(getByText('Content one').closest('[role="tabpanel"]'))
     })
   })
 
-  describe('Item label prop and slot', () => {
-    it('renders the label prop and lets the default slot override it', () => {
-      const withProp = render(TabsItem, { props: { value: 'a', label: 'FromProp' } })
-      expect(withProp.getByTestId('navigation-tabs-item__label').textContent?.trim()).toBe(
-        'FromProp'
-      )
-      withProp.unmount()
-
-      const withSlot = render(TabsItem, {
-        props: { value: 'a', label: 'FromProp' },
-        slots: { default: 'FromSlot' }
-      })
-      const label = withSlot.getByTestId('navigation-tabs-item__label')
-      expect(label.textContent).toContain('FromSlot')
-      expect(label.textContent).not.toContain('FromProp')
-    })
-  })
-
-  describe('accessibility', () => {
-    it('has no a11y violations for the composed tab tree', async () => {
-      const { container } = render(Tree)
-
-      await expectNoA11yViolations(container)
-    })
-
-    it('renders the Default story fixture cleanly with no a11y violations', async () => {
-      const { getByTestId, container } = render(Default)
-
-      expect(getByTestId('navigation-tabs')).toBeTruthy()
-      await expectNoA11yViolations(container)
-    })
-  })
-
-  describe('list alignment', () => {
-    it('starts the tabs by default and centres them with align="center"', async () => {
-      const start = render(Tree)
-      expect(start.getByRole('tablist').getAttribute('data-align')).toBe('start')
-      start.unmount()
-
-      const { getByRole, getAllByRole, container } = render(Centered)
-      expect(getByRole('tablist').getAttribute('data-align')).toBe('center')
-      await fireEvent.click(getAllByRole('tab')[1]!)
-      expect(getAllByRole('tab')[1]!.getAttribute('aria-selected')).toBe('true')
-      await expectNoA11yViolations(container)
-    })
-  })
-})
-
-describe('keyboard map (spec)', () => {
-  const setup = async (props: Record<string, unknown> = {}) => {
-    const view = render(Tree, { props })
-    const tab = (label: string) => view.getByText(label).closest('[role="tab"]') as HTMLElement
-    const before = document.createElement('button')
-    before.textContent = 'Before'
-    document.body.prepend(before)
-    before.focus()
-    await keyboardUser.keyboard('{Tab}')
-    before.remove()
-    return { ...view, tab }
-  }
-
-  it('Tab enters the tab list on the selected tab only', async () => {
-    const { tab } = await setup({ defaultValue: 'tab-2' })
-    expect(document.activeElement).toBe(tab('Second'))
-    expect(tab('First').getAttribute('tabindex')).toBe('-1')
-  })
-
-  it('ArrowRight selects and focuses the next tab, wrapping at the end', async () => {
-    const { tab } = await setup({ defaultValue: 'tab-3' })
-    await keyboardUser.keyboard('{ArrowRight}')
-    expect(document.activeElement).toBe(tab('First'))
-    expect(tab('First').getAttribute('aria-selected')).toBe('true')
-  })
-
-  it('ArrowLeft selects and focuses the previous tab, wrapping at the start', async () => {
-    const { tab } = await setup()
-    await keyboardUser.keyboard('{ArrowLeft}')
-    expect(document.activeElement).toBe(tab('Third'))
-    expect(tab('Third').getAttribute('aria-selected')).toBe('true')
-  })
-
-  it('Home and End select the first and last enabled tabs', async () => {
-    const { tab } = await setup({ defaultValue: 'tab-2' })
-    await keyboardUser.keyboard('{End}')
-    expect(document.activeElement).toBe(tab('Third'))
-    await keyboardUser.keyboard('{Home}')
-    expect(document.activeElement).toBe(tab('First'))
-  })
-
-  it('arrows skip disabled tabs', async () => {
-    const { tab } = await setup({ disableSecond: true })
-    await keyboardUser.keyboard('{ArrowRight}')
-    expect(document.activeElement).toBe(tab('Third'))
-  })
-
-  it('Tab from the selected tab moves into its panel', async () => {
-    const { getByText } = await setup()
-    await keyboardUser.keyboard('{Tab}')
-    expect(document.activeElement).toBe(getByText('Content one').closest('[role="tabpanel"]'))
-  })
-})
-
-describe('Tabs audit fixes', () => {
-  it('forwards consumer attributes to the root, the wrapper, the tab and the panel', () => {
-    const { getByTestId, getByRole } = render(
-      defineComponent({
-        components: { Tabs, TabsList, TabsItem, TabsContent, TabsPanel },
-        template: `
+  describe('audit fixes', () => {
+    it('forwards consumer attributes to the root, the wrapper, the tab and the panel', () => {
+      const { getByTestId, getByRole } = render(
+        defineComponent({
+          components: { Tabs, TabsList, TabsItem, TabsContent, TabsPanel },
+          template: `
           <Tabs id="tabs-root" dir="ltr" aria-describedby="hint" data-track="tabs" default-value="a">
             <TabsList><TabsItem value="a" label="A" data-track="tab-a" /></TabsList>
             <TabsContent value="a" data-track="panel-a">Panel A</TabsContent>
           </Tabs>
         `
-      })
-    )
-    const root = getByTestId('navigation-tabs')
-    expect(root.id).toBe('tabs-root')
-    expect(root).toHaveAttribute('dir', 'ltr')
-    expect(root).toHaveAttribute('aria-describedby', 'hint')
-    expect(root).toHaveAttribute('data-track', 'tabs')
-    expect(root).toHaveAttribute('data-tabs-root', '')
-    expect(getByRole('tab')).toHaveAttribute('data-track', 'tab-a')
-    expect(getByRole('tabpanel')).toHaveAttribute('data-track', 'panel-a')
-  })
+        })
+      )
+      const root = getByTestId('navigation-tabs')
+      expect(root.id).toBe('tabs-root')
+      expect(root).toHaveAttribute('dir', 'ltr')
+      expect(root).toHaveAttribute('aria-describedby', 'hint')
+      expect(root).toHaveAttribute('data-track', 'tabs')
+      expect(root).toHaveAttribute('data-tabs-root', '')
+      expect(getByRole('tab')).toHaveAttribute('data-track', 'tab-a')
+      expect(getByRole('tabpanel')).toHaveAttribute('data-track', 'panel-a')
+    })
 
-  it('renders Tabs.Content with a value as the tabpanel, and exposes Tabs.Trigger', async () => {
-    expect(Tabs.Trigger).toBe(TabsItem)
-    const { getByRole, getAllByRole } = render(
-      defineComponent({
-        components: { Tabs, TabsList, TabsItem, TabsContent },
-        template: `
+    it('renders Tabs.Content with a value as the tabpanel, and exposes Tabs.Trigger', async () => {
+      expect(Tabs.Trigger).toBe(TabsItem)
+      const { getByRole, getAllByRole } = render(
+        defineComponent({
+          components: { Tabs, TabsList, TabsItem, TabsContent },
+          template: `
           <Tabs default-value="a">
             <TabsList>
               <TabsItem value="a" label="A" />
@@ -580,45 +581,45 @@ describe('Tabs audit fixes', () => {
             <TabsContent value="b">Panel B</TabsContent>
           </Tabs>
         `
-      })
-    )
-    await nextTick()
-    const panels = getAllByRole('tabpanel', { hidden: true })
-    expect(panels).toHaveLength(2)
-    const tab = getByRole('tab', { name: 'A' })
-    expect(tab.getAttribute('aria-controls')).toBe(panels[0]?.id)
-    expect(panels[0]?.getAttribute('aria-labelledby')).toBe(tab.id)
-    expect(panels[0]?.textContent).toContain('Panel A')
-  })
+        })
+      )
+      await nextTick()
+      const panels = getAllByRole('tabpanel', { hidden: true })
+      expect(panels).toHaveLength(2)
+      const tab = getByRole('tab', { name: 'A' })
+      expect(tab.getAttribute('aria-controls')).toBe(panels[0]?.id)
+      expect(panels[0]?.getAttribute('aria-labelledby')).toBe(tab.id)
+      expect(panels[0]?.textContent).toContain('Panel A')
+    })
 
-  it('builds valid id tokens from values with spaces', async () => {
-    const { getByRole } = render(
-      defineComponent({
-        components: { Tabs, TabsList, TabsItem, TabsPanel },
-        template: `
+    it('builds valid id tokens from values with spaces', async () => {
+      const { getByRole } = render(
+        defineComponent({
+          components: { Tabs, TabsList, TabsItem, TabsPanel },
+          template: `
           <Tabs default-value="api keys">
             <TabsList><TabsItem value="api keys" label="API keys" /></TabsList>
             <TabsPanel value="api keys">Keys</TabsPanel>
           </Tabs>
         `
-      })
-    )
-    await nextTick()
-    const tab = getByRole('tab')
-    expect(tab.id).not.toMatch(/\s/)
-    const panel = getByRole('tabpanel')
-    expect(panel.id).not.toMatch(/\s/)
-    expect(tab.getAttribute('aria-controls')).toBe(panel.id)
-    expect(document.getElementById(panel.getAttribute('aria-labelledby') as string)).toBe(tab)
-  })
+        })
+      )
+      await nextTick()
+      const tab = getByRole('tab')
+      expect(tab.id).not.toMatch(/\s/)
+      const panel = getByRole('tabpanel')
+      expect(panel.id).not.toMatch(/\s/)
+      expect(tab.getAttribute('aria-controls')).toBe(panel.id)
+      expect(document.getElementById(panel.getAttribute('aria-labelledby') as string)).toBe(tab)
+    })
 
-  it('moves with the arrows in DOM order, including a tab inserted later', async () => {
-    const showMiddle = ref(false)
-    const { getByRole } = render(
-      defineComponent({
-        components: { Tabs, TabsList, TabsItem },
-        setup: () => ({ showMiddle }),
-        template: `
+    it('moves with the arrows in DOM order, including a tab inserted later', async () => {
+      const showMiddle = ref(false)
+      const { getByRole } = render(
+        defineComponent({
+          components: { Tabs, TabsList, TabsItem },
+          setup: () => ({ showMiddle }),
+          template: `
           <Tabs default-value="a">
             <TabsList>
               <TabsItem value="a" label="A" />
@@ -627,23 +628,23 @@ describe('Tabs audit fixes', () => {
             </TabsList>
           </Tabs>
         `
-      })
-    )
-    showMiddle.value = true
-    await nextTick()
-    const first = getByRole('tab', { name: 'A' })
-    first.focus()
-    await keyboardUser.keyboard('{ArrowRight}')
-    expect(document.activeElement).toBe(getByRole('tab', { name: 'M' }))
-  })
+        })
+      )
+      showMiddle.value = true
+      await nextTick()
+      const first = getByRole('tab', { name: 'A' })
+      first.focus()
+      await keyboardUser.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(getByRole('tab', { name: 'M' }))
+    })
 
-  it('reads disabled reactively for the arrow path', async () => {
-    const off = ref(false)
-    const { getByRole } = render(
-      defineComponent({
-        components: { Tabs, TabsList, TabsItem },
-        setup: () => ({ off }),
-        template: `
+    it('reads disabled reactively for the arrow path', async () => {
+      const off = ref(false)
+      const { getByRole } = render(
+        defineComponent({
+          components: { Tabs, TabsList, TabsItem },
+          setup: () => ({ off }),
+          template: `
           <Tabs default-value="a">
             <TabsList>
               <TabsItem value="a" label="A" />
@@ -652,17 +653,18 @@ describe('Tabs audit fixes', () => {
             </TabsList>
           </Tabs>
         `
-      })
-    )
-    off.value = true
-    await nextTick()
-    getByRole('tab', { name: 'A' }).focus()
-    await keyboardUser.keyboard('{ArrowRight}')
-    expect(document.activeElement).toBe(getByRole('tab', { name: 'C' }))
-  })
+        })
+      )
+      off.value = true
+      await nextTick()
+      getByRole('tab', { name: 'A' }).focus()
+      await keyboardUser.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(getByRole('tab', { name: 'C' }))
+    })
 
-  it('renders an empty label by default instead of placeholder text', () => {
-    const { getByTestId } = render(TabsItem)
-    expect(getByTestId('navigation-tabs-item__label').textContent?.trim()).toBe('')
+    it('renders an empty label by default instead of placeholder text', () => {
+      const { getByTestId } = render(TabsItem)
+      expect(getByTestId('navigation-tabs-item__label').textContent?.trim()).toBe('')
+    })
   })
 })

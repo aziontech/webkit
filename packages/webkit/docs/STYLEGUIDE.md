@@ -525,7 +525,7 @@ import Chip from '@aziontech/webkit/chips'             // binding ≠ subpath
   dot-notation — the compound path retains every sub-component.
 - Icons: side-effect import only (`import '@aziontech/icons'`), never a whole-set binding.
 
-**Enforced by:** `webkit/valid-import-path` (autofixes typos) · `no-barrel-import` ·
+**Enforced by:** `webkit/no-unknown-import` (autofixes typos) · `no-barrel-import` ·
 `no-deep-internal-import` · `prefer-tree-shakeable-root` · `no-whole-icon-set-import` —
 all error · `validate-references` (write-time).
 
@@ -621,7 +621,7 @@ Internal to the webkit repo — how its own components come to exist.
 - Example set: Default + one composite example per multi-option axis + one example per
   mutually-exclusive state — never one-example-per-variant.
 - No Figma links in examples — the example documents API and behavior.
-- Adding an example is enough: the docs page (`/components/<name>`, `/example?path=<name>/<file>`)
+- Adding an example is enough: the docs page (`/components/<name>`, `/frame/example/<name>/<file>`)
   and the styled visual test of the first example follow from the files.
 
 **Enforced by:** the catalog drift gate (`examples.json` against the exports) · the copyable,
@@ -650,7 +650,7 @@ visual suite (`apps/visual`, CI).
 ## 22. Enforcement map
 
 One definition, three surfaces — the same engine
-(`packages/webkit/src/eslint-plugin/authoring-checks.js`) runs in the design system's
+(`packages/webkit/src/eslint-plugin/lib/authoring-checks.js`) runs in the design system's
 write-time hook, its CI ratchet, and the consumer's lint; an invariant test fails CI if a
 standard loses its gate.
 

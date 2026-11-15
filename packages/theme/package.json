@@ -15,9 +15,9 @@
     "format": "prettier --write scripts/ src/",
     "build": "pnpm build:tokens",
     "build:tokens": "node scripts/build-tokens.mjs",
-    "clean:dts": "find src -name '*.d.ts' -delete && find src -name '*.d.ts.map' -delete",
-    "build:dts": "pnpm clean:dts && vue-tsc --declaration --emitDeclarationOnly",
-    "prepack": "pnpm build:tokens && pnpm build:dts"
+    "clean:types": "find src -name '*.d.ts' -delete && find src -name '*.d.ts.map' -delete",
+    "build:types": "pnpm clean:types && vue-tsc --declaration --emitDeclarationOnly",
+    "prepack": "pnpm build:tokens && pnpm build:types"
   },
   "publishConfig": {
     "access": "public"

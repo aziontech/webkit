@@ -38,7 +38,7 @@ function makeTemplatesDir(overrides = {}) {
       '---\nname: webkit-sample\ndescription: A sample skill.\n---\n\n# Skill: webkit-sample\nBody.\n'
   )
   writeFileSync(
-    join(dir, 'adapters/AGENTS.fragment.md'),
+    join(dir, 'adapters/AGENTS_FRAGMENT.md'),
     overrides.fragment ?? '## @aziontech/webkit design system\n\nFollow the rules.\n'
   )
   return dir
@@ -260,7 +260,7 @@ test('planSync: CLAUDE.md fragment states — missing, legacy (deduped), stale, 
 
     // stale — the fragment template changed upstream.
     writeFileSync(
-      join(templatesDir, 'adapters/AGENTS.fragment.md'),
+      join(templatesDir, 'adapters/AGENTS_FRAGMENT.md'),
       '## @aziontech/webkit design system\n\nFollow the rules, updated.\n'
     )
     plan = planSync(project, { templatesDir, version: VERSION })
@@ -341,13 +341,13 @@ test('planSync fences the same fragment into AGENTS.md and CLAUDE.md', () => {
   }
 })
 
-test('planSync reads the adapters layout (adapters/claude/agents, adapters/AGENTS.fragment.md)', () => {
+test('planSync reads the adapters layout (adapters/claude/agents, adapters/AGENTS_FRAGMENT.md)', () => {
   const project = makeProject()
   const templatesDir = makeTemplatesDir()
   try {
     mkdirSync(join(templatesDir, 'adapters/claude/agents'), { recursive: true })
     writeFileSync(join(templatesDir, 'adapters/claude/agents/webkit-expert.md'), '# Agent\n')
-    writeFileSync(join(templatesDir, 'adapters/AGENTS.fragment.md'), '## webkit\n\nNew layout.\n')
+    writeFileSync(join(templatesDir, 'adapters/AGENTS_FRAGMENT.md'), '## webkit\n\nNew layout.\n')
     applyPlan(project, planSync(project, { templatesDir, version: VERSION }).actions)
     assert.ok(existsSync(join(project, '.claude/agents/webkit-expert.md')))
     assert.match(readFileSync(join(project, 'AGENTS.md'), 'utf8'), /New layout\./)

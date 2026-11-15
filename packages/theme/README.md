@@ -295,12 +295,12 @@ The full reference — supported `tokenRef` prefixes, the build pipeline, how to
 
 ```bash
 pnpm build:tokens # node scripts/build-tokens.mjs → dist/globals.{css,scss}
-pnpm build:dts    # vue-tsc --declaration (emit .d.ts next to sources)
+pnpm build:types    # vue-tsc --declaration (emit .d.ts next to sources)
 pnpm format       # prettier over scripts/ and src/
 pnpm pack:dry     # inspect the tarball contents
 ```
 
-`dist/` is committed, and `prepack` reruns `build:tokens` + `build:dts` — every publish rebuilds the artifact from source, so a stale or hand-edited `dist/` can never ship.
+`dist/` is committed, and `prepack` reruns `build:tokens` + `build:types` — every publish rebuilds the artifact from source, so a stale or hand-edited `dist/` can never ship.
 
 ### Project structure
 

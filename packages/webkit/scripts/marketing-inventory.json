@@ -123,8 +123,8 @@
     "assets/todocartoes-extended-reversed.svg": "assets/todo-cartoes-extended-reversed.svg"
   },
   "removed": {
-    "pattern:headers/docs-header": "DocLayout already renders the documentation bar; the shells/documentation block shows it (dup plan BL-8)",
-    "pattern:headers/site-header": "SiteLayout and SiteNav already render the marketing bar; the shells/website block shows it (dup plan BL-8)",
+    "block:headers/docs-header": "DocLayout already renders the documentation bar; the shells/documentation block shows it (dup plan BL-8)",
+    "block:headers/site-header": "SiteLayout and SiteNav already render the marketing bar; the shells/website block shows it (dup plan BL-8)",
     "doc-tooltip": "HoverCard; DocMarkdown renders the MDX <Tooltip> tag as one (dup plan DO-1)",
     "sample:shared/ui/banners/map-framing": "the deck slide crop; decks are product tooling and are not ported (m2.9-inventory section 6)",
     "sample:shared/ui/line-figure/LineFigureBench": "a development bench for tuning figures; the line-figure examples (default, play, gallery) replace it"
@@ -1959,19 +1959,19 @@
       "surface": "marketing"
     },
     {
-      "id": "pattern:headers/docs-header",
+      "id": "block:headers/docs-header",
       "surface": "docs"
     },
     {
-      "id": "pattern:headers/site-header",
+      "id": "block:headers/site-header",
       "surface": "marketing"
     },
     {
-      "id": "pattern:shells/documentation",
+      "id": "block:shells/documentation",
       "surface": "docs"
     },
     {
-      "id": "pattern:shells/website",
+      "id": "block:shells/website",
       "surface": "marketing"
     },
     {

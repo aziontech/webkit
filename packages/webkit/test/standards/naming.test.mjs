@@ -8,8 +8,12 @@ import {
   MARKET_ALIASES,
   buildAliases,
   buildRenamed,
+  checkSuites,
   readBlockIds,
-  retiredNames
+  readSuites,
+  retiredNames,
+  suiteName,
+  topLevelSuites
 } from '../../scripts/lib/naming.mjs'
 
 const read = (path) => JSON.parse(readFileSync(new URL(path, import.meta.url), 'utf8'))
@@ -84,7 +88,9 @@ test('catalog aliases carry market words only, never retired names', () => {
   assert.equal(aliases.sheet, 'drawer')
   assert.equal(aliases.kebab, 'dropdown-menu')
   assert.equal(aliases.notice, 'alert')
-  assert.equal(aliases.tiles, 'radio-group')
+  assert.equal(aliases.tiles, undefined)
+  assert.equal(aliases.comparison, undefined)
+  assert.equal(aliases.cta, 'call-to-action')
   assert.equal(aliases['segmented-control'], 'toggle-group')
   assert.equal(aliases['config-provider'], 'webkit-provider')
   assert.equal(aliases['alert-dialog'], 'confirm-dialog')
@@ -106,6 +112,8 @@ test('retired v6 names map to their new export in catalog.renamed', () => {
   assert.equal(renamed.calendar, 'date-picker')
   assert.equal(renamed['pick-list'], 'transfer-list')
   assert.equal(renamed['radio-cards'], 'radio-group')
+  assert.equal(renamed['radio-button'], 'radio-group')
+  assert.equal(renamed.menu, undefined)
   for (const to of Object.values(renamed)) assert.ok(subpaths.includes(to), to)
 })
 
@@ -113,4 +121,44 @@ test('every market alias resolves and catalog.json carries it', { skip: waitForL
   const aliases = buildAliases(subpaths)
   assert.ok(Object.keys(MARKET_ALIASES).every((name) => name in aliases))
   assert.deepEqual(read('../../catalog.json').aliases, aliases)
+})
+
+test('every component test file has one top-level describe named after its component', () => {
+  const suites = readSuites(fileURLToPath(new URL('../..', import.meta.url)))
+  assert.ok(suites.length > 100)
+  assert.deepEqual(checkSuites(suites), [])
+})
+
+test('a suite is named after the root defineOptions name, the helper, or the folder', () => {
+  const vueSource = "defineOptions({ name: 'SplitButton', inheritAttrs: false })"
+  assert.equal(suiteName({ dir: 'a/split-button', stem: 'split-button', vueSource }), 'SplitButton')
+  assert.equal(
+    suiteName({ dir: 'a/date-picker', stem: 'parse-period', vueSource: null, hasModule: true }),
+    'parsePeriod'
+  )
+  assert.equal(
+    suiteName({ dir: 'a/data-table', stem: 'data-table-tree', vueSource: null, hasModule: false }),
+    'DataTable'
+  )
+})
+
+test('a free-form or second top-level describe fails', () => {
+  const source = [
+    "describe('SplitButton (joined command + menu overlay)', () => {})",
+    "describe('SplitButton touch target', () => {",
+    "  describe('nested is fine', () => {})",
+    '})'
+  ].join('\n')
+  const titles = topLevelSuites(source)
+  assert.deepEqual(titles, [
+    'SplitButton (joined command + menu overlay)',
+    'SplitButton touch target'
+  ])
+  assert.deepEqual(checkSuites([{ file: 'x.test.ts', expected: 'SplitButton', titles }]), [
+    'x.test.ts: one top-level describe named "SplitButton" expected, found "SplitButton (joined command + menu overlay)", "SplitButton touch target"; nest the scenarios inside it'
+  ])
+  assert.deepEqual(
+    checkSuites([{ file: 'x.test.ts', expected: 'SplitButton', titles: ['SplitButton'] }]),
+    []
+  )
 })

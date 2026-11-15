@@ -3,7 +3,7 @@ name: chart
 category: chart
 structure: composition
 status: implemented
-checksum: d1c0fa1e77d8e6671b883942adce225c33c4692d99b4d88f33ca3b915df97c88
+checksum: e0d8af835ae438b0020ab2be44d122234e40be7987d2c103e8fe25edff92212b
 spec_version: 9
 template: 2
 created: 2026-10-20
@@ -255,7 +255,7 @@ The root `chart.vue` renders a `<figure>` with a CSS grid: the plot cell (every 
 | crosshair and tooltip follow      | `transition-[translate,opacity] duration-fast-02 ease-productive-entrance`                                                                                                             | `fast-02` · `productive-entrance`                 | `motion-reduce:transition-none`                 |
 | legend emphasis dim, refetch hold | `transition-opacity duration-moderate-01`                                                                                                                                              | `moderate-01`                                     | `motion-reduce:transition-none`                 |
 
-The entrance is a composition assembling on first paint with a per-series stagger, so it is the `data-entered` transition recipe from the add-animation skill, not a catalog keyframe. No component-local `@keyframes`.
+The entrance is a composition assembling on first paint with a per-series stagger, so it is the `data-entered` transition recipe from the animation-add skill, not a catalog keyframe. No component-local `@keyframes`.
 
 ## Tokens
 

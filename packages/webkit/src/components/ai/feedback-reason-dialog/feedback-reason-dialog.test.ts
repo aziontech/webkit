@@ -120,41 +120,41 @@ describe('FeedbackReasonDialog', () => {
     await fireEvent.click(view.getByRole('button', { name: 'Send feedback' }))
     await waitFor(() => expect(dialog()).toBeNull(), { timeout: 2000 })
   })
-})
 
-describe('FeedbackReasonDialog test ids and focus', () => {
-  it('lets a consumer data-testid win over the fallback', async () => {
-    render(FeedbackReasonDialog, { props: { open: true }, attrs: { 'data-testid': 'reason' } })
-    await waitFor(() =>
-      expect(document.body.querySelector('[data-testid="reason__form"]')).not.toBeNull()
-    )
-    expect(
-      document.body.querySelector('[data-testid="ai-feedback-reason-dialog__form"]')
-    ).toBeNull()
-  })
-
-  it('closes on Escape and returns focus to the trigger', async () => {
-    const Host = defineComponent({
-      setup() {
-        const open = ref(false)
-        return () =>
-          h('div', [
-            h('button', { type: 'button', onClick: () => (open.value = true) }, 'Report'),
-            h(FeedbackReasonDialog, {
-              open: open.value,
-              'onUpdate:open': (value: boolean) => (open.value = value)
-            })
-          ])
-      }
+  describe('test ids and focus', () => {
+    it('lets a consumer data-testid win over the fallback', async () => {
+      render(FeedbackReasonDialog, { props: { open: true }, attrs: { 'data-testid': 'reason' } })
+      await waitFor(() =>
+        expect(document.body.querySelector('[data-testid="reason__form"]')).not.toBeNull()
+      )
+      expect(
+        document.body.querySelector('[data-testid="ai-feedback-reason-dialog__form"]')
+      ).toBeNull()
     })
-    const { getByRole } = render(Host)
-    const trigger = getByRole('button', { name: 'Report' })
-    trigger.focus()
-    await userEvent.click(trigger)
-    await waitFor(() => expect(dialog()).not.toBeNull())
-    await waitFor(() => expect(dialog()!.contains(document.activeElement)).toBe(true))
-    await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(dialog()).toBeNull())
-    await waitFor(() => expect(document.activeElement).toBe(trigger))
+
+    it('closes on Escape and returns focus to the trigger', async () => {
+      const Host = defineComponent({
+        setup() {
+          const open = ref(false)
+          return () =>
+            h('div', [
+              h('button', { type: 'button', onClick: () => (open.value = true) }, 'Report'),
+              h(FeedbackReasonDialog, {
+                open: open.value,
+                'onUpdate:open': (value: boolean) => (open.value = value)
+              })
+            ])
+        }
+      })
+      const { getByRole } = render(Host)
+      const trigger = getByRole('button', { name: 'Report' })
+      trigger.focus()
+      await userEvent.click(trigger)
+      await waitFor(() => expect(dialog()).not.toBeNull())
+      await waitFor(() => expect(dialog()!.contains(document.activeElement)).toBe(true))
+      await userEvent.keyboard('{Escape}')
+      await waitFor(() => expect(dialog()).toBeNull())
+      await waitFor(() => expect(document.activeElement).toBe(trigger))
+    })
   })
 })

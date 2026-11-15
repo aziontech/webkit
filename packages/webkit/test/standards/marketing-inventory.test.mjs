@@ -9,7 +9,7 @@ import {
   updateInventory
 } from '../../scripts/check-marketing-inventory.mjs'
 
-const catalogWith = (imports, patterns = {}) => ({ imports, patterns })
+const catalogWith = (imports, blocks = {}) => ({ imports, blocks })
 
 test('an item that leaves the catalog is lost unless renamed or removed is recorded', () => {
   const inventory = {
@@ -19,7 +19,7 @@ test('an item that leaves the catalog is lost unless renamed or removed is recor
       { id: 'old-band', surface: 'marketing' },
       { id: 'dead-band', surface: 'marketing' },
       { id: 'gone-band', surface: 'marketing' },
-      { id: 'pattern:shells/website', surface: 'marketing' }
+      { id: 'block:shells/website', surface: 'marketing' }
     ]
   }
   const catalog = catalogWith(

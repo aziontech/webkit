@@ -36,7 +36,7 @@ Never guess a duration, curve, or utility name. Resolve them the same way every 
 
 ## When to invoke
 
-- After structure (`webkit-ux-heuristics`) and baseline (`webkit-baseline-ui`) are sound.
+- After structure (`webkit-ux-heuristics`) and baseline (`webkit-quick-cleanup`) are sound.
 - Adding entrances/exits, hover/active feedback, or overlay open/close motion.
 - The user asks to "make it smooth", "add a transition", "animate this".
 

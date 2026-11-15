@@ -1,7 +1,7 @@
 {
   "id": "platform/states/page-wires",
   "name": "PageWires",
-  "title": "Templates/Platform/States/PageWires",
+  "title": "Blocks/State/PageWires",
   "surface": "product",
   "summary": "The skeleton wires an app paints while a page is still arriving: the Home overview (Overview), the first-access Home (Onboarding), the whole shell while an expired session signs out (Session, with one body per family of page it covers: Session for a list, SessionDetail, SessionForm and SessionHome), and the version page (VersionDetail), sectioned cards whose rows end in a switch band. Each one is the real page’s grid drawn with Skeleton bands inside the same Card frames, so nothing shifts when the content lands. In the app the session wire is a fixed full-viewport layer sized to the measured header and rail; here it fills the canvas at the header’s 56px and the rail’s `--container-2xs`. Built from Skeleton, Card and Item; layout differences between rows switch on `data-*` attributes, never on a class ternary. Overview, Onboarding and VersionDetail are page bodies for the default slot of ConsoleLayout; the Session wires stand in for the whole app, layout included.",
   "preview": {

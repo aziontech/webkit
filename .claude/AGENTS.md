@@ -41,11 +41,11 @@ pnpm install
 Prefer root scripts when available:
 
 ```bash
-pnpm docs:dev
-pnpm docs:build
-pnpm demos:dev
-pnpm visual:test
-pnpm icons:build
+pnpm dev:docs
+pnpm build:docs
+pnpm dev:demos
+pnpm test:visual
+pnpm build:icons
 ```
 
 ## 4) Where to change what
@@ -57,10 +57,10 @@ pnpm icons:build
 - Docs site, demos, visual suite: `apps/docs`, `apps/demos`, `apps/visual`
 
 When changing UI components in `packages/webkit`, update or add examples in the same branch. An
-example is enough: the docs page (`/components/<name>`, `/example?path=<name>/<file>`) and the styled
-visual test of the first example follow from the files; refresh baselines with `/regen-baselines`.
+example is enough: the docs page (`/components/<name>`, `/frame/example/<name>/<file>`) and the styled
+visual test of the first example follow from the files; refresh baselines with `/baselines-regenerate`.
 
-Changed a block in `packages/webkit/blocks/` (its `.vue`, `variants/`, `block.json` or `guidelines.md`) or an example in `packages/webkit/examples/`? They are what the AI copies: keep `block.json` intents and skills and `guidelines.md` current, run `pnpm --filter @aziontech/webkit catalog:build`, then commit `catalog.json` and `catalog/` (`catalog:check` compares them). The docs pages and visual tests follow from the files. Consumer skills and rules live at the repo root in `skills/` and `rules/` (agents in `adapters/claude/agents/`); `.claude/` is for people who maintain WebKit. The full table is in CONTRIBUTING, "What to update when WebKit changes".
+Changed a block in `packages/webkit/blocks/` (its `.vue`, `variants/`, `block.json` or `guidelines.md`) or an example in `packages/webkit/examples/`? They are what the AI copies: keep `block.json` intents and skills and `guidelines.md` current, run `pnpm --filter @aziontech/webkit build:catalog`, then commit `catalog.json` and `catalog/` (`check:catalog` compares them). The docs pages and visual tests follow from the files. Consumer skills and rules live at the repo root in `skills/` and `rules/` (agents in `adapters/claude/agents/`); `.claude/` is for people who maintain WebKit. The full table is in CONTRIBUTING, "What to update when WebKit changes".
 
 ## 5) Component and styling standards
 
@@ -96,13 +96,13 @@ For `@aziontech/webkit`, its examples and blocks:
 Run the minimum relevant validations for the scope of your change.
 
 - Docs, examples or demos change:
-  - `pnpm docs:build`, `pnpm demos:build`, `pnpm visual:test`
+  - `pnpm build:docs`, `pnpm build:demos`, `pnpm test:visual`
 - Icons change:
-  - `pnpm icons:build`
+  - `pnpm build:icons`
 - Any change in `packages/webkit/src/components/**`:
-  - `pnpm webkit:lint`
-  - `pnpm webkit:type-check`
-  - `pnpm webkit:type-coverage`
+  - `pnpm lint:webkit`
+  - `pnpm typecheck:webkit`
+  - `pnpm type-coverage:webkit`
   - `pnpm --filter @aziontech/webkit test:ssr`
 
 If a full validation is too expensive, run targeted checks and document what was/was not validated.
@@ -125,7 +125,7 @@ For onboarding content, prioritize the docs site's `Foundations` pages.
 
 ## 11) Webkit Layer Components (mandatory for agents)
 
-**Scope:** any file under `packages/webkit/src/components/<category>/<name>/` (categories `actions`, `ai`, `chart`, `code`, `content`, `data`, `documentation`, `feedback`, `inputs`, `layout`, `marketing`, `navigation`, `overlay`, `sections`, `templates`, `utils` — the registry is [`.claude/hooks/component-categories.mjs`](./hooks/component-categories.mjs)).
+**Scope:** any file under `packages/webkit/src/components/<category>/<name>/` (categories `actions`, `ai`, `chart`, `code`, `content`, `data`, `documentation`, `feedback`, `inputs`, `layout`, `marketing`, `navigation`, `overlay`, `sections`, `utils` — the registry is [`.claude/hooks/_lib/component-categories.mjs`](./hooks/_lib/component-categories.mjs)).
 
 ### 11.1) Sources of truth (read first)
 
@@ -140,12 +140,12 @@ The legacy monolithic skill `skills/component-create.md` has been **removed**. N
 
 **Entry point — the AI flow (M1.3).** A new component or block starts from a GitHub issue
 (`.github/ISSUE_TEMPLATE/new-component.yml`, `new-block.yml`) and is built end to end by
-[`/webkit-new`](commands/webkit-new.md) or [`/webkit-new-block`](commands/webkit-new-block.md):
+[`/component-new`](commands/component-new.md) or [`/block-new`](commands/block-new.md):
 read the issue → research benchmarks and reuse → `spec-create` (draft, `template: 2`) →
 `spec-reviewer` (second agent, fixed checklist) → `spec-validate` (approved + checksum) →
 `/component-create` (component, test, examples) → machine gates
 (`pnpm --filter @aziontech/webkit run gates`, the same commands as the `toolkit` CI job) →
-`ui-craft` review → usage check (`packages/webkit/scripts/usage-check.mjs`) → PR from
+`ui-craft` review → usage check (`packages/webkit/scripts/check-usage.mjs`) → PR from
 `.github/pull_request_template.md`. Any failure stops the run. The two commands below are the
 building blocks it calls.
 
@@ -164,8 +164,8 @@ building blocks it calls.
 | Per-component contract                     | [`.specs/<name>.md`](../.specs/) (one file per component, reviewed BEFORE code)                                                                                                                                                                                                                  |
 | Frontmatter schema                         | [`.specs/_schema.json`](../.specs/_schema.json)                                                                                                                                                                                                                                                  |
 | Spec template                              | [`.specs/_template.md`](../.specs/_template.md)                                                                                                                                                                                                                                                  |
-| Slash commands                             | [`.claude/commands/`](commands/) (`webkit-new`, `webkit-new-block`, `spec-create`, `component-create`, `component-verify`, `add-animation`, `create-branch`, `open-pr`, `include-icons`, `regen-baselines`)                                                                                      |
-| Focused skills (one per phase)             | [`.claude/skills/`](skills/) — `spec-create`, `spec-validate`, `figma-discover`, `token-map`, `reuse-audit`, `structure-decide`, `component-scaffold`, `code-connect-write`, `validate-component`, `echo-report`, plus `ui-craft` (review gate), `add-animation`, `audit-fix`, `regen-baselines` |
+| Slash commands                             | [`.claude/commands/`](commands/) (`component-new`, `block-new`, `spec-create`, `component-create`, `component-verify`, `animation-add`, `branch-create`, `pr-open`, `icons-add`, `baselines-regenerate`)                                                                                      |
+| Focused skills (one per phase)             | [`.claude/skills/`](skills/) — `spec-create`, `spec-validate`, `figma-extract`, `token-map`, `reuse-audit`, `structure-decide`, `component-scaffold`, `code-connect-write`, `component-validate`, `echo-report`, plus `ui-craft` (review gate), `animation-add`, `audit-fix`, `baselines-regenerate` |
 | Isolated sub-agent prompts                 | [`.claude/agents/`](agents/) — one per skill, plus `spec-reviewer` (second-agent spec review); no chat history, no cross-talk                                                                                                                                                                    |
 | Construction standards (injected verbatim) | [`.claude/rules/`](rules/) — 27 rules, indexed in [`rules/README.md`](rules/README.md) and registered in [`standards.mjs`](hooks/_lib/standards.mjs)                                                                                                                                             |
 | Centralized design docs (sources of truth) | [`.claude/docs/`](docs/) — `DESIGN.md` (tokens + animations + forbidden list), `COMPONENT_REQUIREMENTS.md` (component pattern + examples discipline)                                                                                                                                             |
@@ -177,11 +177,11 @@ building blocks it calls.
 2. **spec-validator** (blocking) — schema, body, Constraints block, animation table.
 3. **Parallel discovery** — `figma-extractor`, `reuse-auditor`, then `token-mapper`.
 4. **Reconciliation** (blocking) — every token in spec exists in DESIGN.md; every Figma region is covered by the spec.
-5. **scaffolder** — writes the `.vue` (plus `index.ts` and the `-root` export for composition) and the flat entry in `packages/webkit/package.json#exports`; components ship no `package.json` of their own. Hooks fire on each Write.
+5. **component-scaffolder** — writes the `.vue` (plus `index.ts` and the `-root` export for composition) and the flat entry in `packages/webkit/package.json#exports`; components ship no `package.json` of their own. Hooks fire on each Write.
 6. **test + examples** — the co-located `<name>.test.ts` and `examples/<name>/` with the examples the spec lists (Default + per kind + per size + Disabled).
 7. **code-connect-writer** — skips if `@figma/code-connect` missing.
 8. **echo-reporter** (cross-check) — independent parser; disagreement with the hook marks the run degraded.
-9. **validate-component** — `pnpm webkit:lint && type-check && type-coverage && test:ssr`.
+9. **component-validate** — `pnpm lint:webkit && type-check && type-coverage && test:ssr`.
 10. **Finalize** — `status: approved → implemented`, refresh checksum, close log.
 
 **Why this is mandatory:** the previous workflow gave a single 749-line skill creative latitude — it sometimes added props, variants, or imports the user did not request. The new pipeline removes that latitude structurally: sub-agents see only the spec + their narrow rules; two hooks (`enforce-spec-exists`, `validate-spec-compliance`) verify the `.vue` matches the spec 1-to-1.
@@ -230,9 +230,9 @@ renders each beside its source; the first is screenshotted in light and dark by 
 ### 11.6) Validation gate (must pass before reporting done)
 
 ```bash
-pnpm webkit:lint
-pnpm webkit:type-check
-pnpm webkit:type-coverage
+pnpm lint:webkit
+pnpm typecheck:webkit
+pnpm type-coverage:webkit
 pnpm --filter @aziontech/webkit test:ssr
 ```
 

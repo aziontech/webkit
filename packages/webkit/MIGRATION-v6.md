@@ -38,7 +38,10 @@ It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `d
   `--primary-contrast` → `--primary-foreground`, `--spacing-xxs` → `--spacing-2xs`,
   `text-heading-xxs` → `text-heading-2xs`, `animate-slide-in-left` → `animate-slide-in-start`, and
   the `@aziontech/theme/texts` / `layouts` imports (the map is `src/cli/migrations/v6-tokens.json`).
-  A removed token (`--line-height-*`, `.azion-dark`, …) is listed to fix by hand.
+  A removed token (`--line-height-*`, `.azion-dark`, …) is listed to fix by hand;
+- renamed WebKit lint rule ids, in every source file (ESLint configs and `eslint-disable` comments):
+  `webkit/valid-import-path` → `webkit/no-unknown-import`, … (section 4, "Lint rules renamed"; the
+  map is `src/cli/migrations/v6-lint.json`).
 
 It prints `MANUAL` for anything it cannot rewrite safely (section 4), and for any import that v6
 does not export.
@@ -381,7 +384,9 @@ v5 shipped the MCP server inside `@aziontech/webkit` (bin `webkit-mcp`), so ever
 `@aziontech/webkit-mcp`; `@aziontech/webkit` no longer has the `webkit-mcp` bin. Point `.mcp.json`
 at the new package: `{ "command": "npx", "args": ["-y", "@aziontech/webkit-mcp"] }` (re-running
 `npx @aziontech/webkit init` rewrites the v5 entry for you; `webkit doctor` fails until it is fixed).
-The tools and their answers are unchanged.
+The block tools are renamed, with no alias: `search_patterns` → `search_blocks`, `get_pattern` →
+`get_block`, and `suggest_component` answers a screen with `recommendation: "block"` and `block` /
+`blockAlternatives` (was `"pattern"`, `pattern`, `patternAlternatives`). The other tools are unchanged.
 
 ### Form fields: one `Field` replaces the `field-*` family
 
@@ -817,7 +822,7 @@ One block per job (6.0):
   `attached-resources` carry `kind: "fragment"`: cards placed inside a page, not screens.
 
 Every old id, and every renamed state of a removed block, is in
-[`src/cli/migrations/v6-blocks.json`](./src/cli/migrations/v6-blocks.json); `get_pattern` still
+[`src/cli/migrations/v6-blocks.json`](./src/cli/migrations/v6-blocks.json); `get_block` still
 answers an old id with the new block and a `note`. Code you already copied does not change.
 
 ### Marketing section defaults
@@ -1138,6 +1143,33 @@ bindings and prints `MANUAL` for everything below that it cannot rewrite.
   `data-transfer-list`, the catalog group `transferList`; `dataKey` is gone (the
   codemod writes `trackBy`).
 
+### AI skills renamed
+
+Four skills in the AI bundle have plain names. `npx @aziontech/webkit sync` writes them under the
+new folders and reports the old ones as orphans; delete the old folders in `.claude/skills/`.
+
+| 5.x skill                  | 6.0 skill              |
+| -------------------------- | ---------------------- |
+| `webkit-ds-adoption`       | `webkit-adoption`      |
+| `webkit-genai`             | `webkit-ai-surfaces`   |
+| `webkit-baseline-ui`       | `webkit-quick-cleanup` |
+| `webkit-impeccable-polish` | `webkit-final-polish`  |
+
+### Lint rules renamed
+
+Every rule of `@aziontech/webkit/eslint-plugin` starts with a `no-`, `prefer-` or `require-` verb.
+The old ids are gone, so a config or `eslint-disable` comment that names one reports an unknown rule;
+`migrate v6` rewrites them. Only `valid-import-path` shipped in 5.x; the other four existed only in
+6.0 previews.
+
+| Old rule                       | 6.0 rule                          |
+| ------------------------------ | --------------------------------- |
+| `webkit/accessible-name`       | `webkit/require-accessible-name`  |
+| `webkit/container-needs-width` | `webkit/require-container-width`  |
+| `webkit/header-search-trigger` | `webkit/require-header-search`    |
+| `webkit/menu-node-href`        | `webkit/prefer-href-in-menu-node` |
+| `webkit/valid-import-path`     | `webkit/no-unknown-import`        |
+
 ## 5. Field report: Azion Console
 
 The codemod ran on a copy of `azion-console-kit` (November 2026). The console declares
@@ -1201,16 +1233,18 @@ The MCP server, the ESLint plugin and the CLI read the new layout; this section 
 own scripts that open `node_modules/@aziontech/webkit/catalog.json`. The file is now metadata only
 (1.0 MB, was 7.5 MB); the source code and the component prose moved next to it into `catalog/`:
 
-| v5 field                                                                       | v6 location                                                                                             |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------- |
-| `patterns[id].sfc`                                                             | `catalog/patterns/<id>.json` → `sfc` (the path is in `patterns[id].file`)                               |
-| `patterns[id].variants[i].sfc`                                                 | `catalog/patterns/<id>.json` → `variants[i].sfc`; `catalog.json` keeps each variant's `name`, `summary` |
-| `patterns[id].guidelines`                                                      | `catalog/patterns/<id>.json` → `guidelines`                                                             |
-| `imports[subpath].examples`                                                    | `catalog/examples/<subpath>.json` → `examples` (the path is in `imports[subpath].examplesFile`)         |
-| `imports[subpath].purpose`, `useWhen`, `avoidWhen`, `related`, `bestPractices` | `catalog/components/<subpath>.json` (the path is in `imports[subpath].docsFile`)                        |
+| v5 field                                                                       | v6 location                                                                                           |
+| ------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| `patterns`, `patternAliases`                                                   | `blocks`, `blockAliases` (same shape)                                                                 |
+| `patterns[id].sfc`                                                             | `catalog/blocks/<id>.json` → `sfc` (the path is in `blocks[id].file`)                                 |
+| `patterns[id].variants[i].sfc`                                                 | `catalog/blocks/<id>.json` → `variants[i].sfc`; `catalog.json` keeps each variant's `name`, `summary` |
+| `patterns[id].guidelines`                                                      | `catalog/blocks/<id>.json` → `guidelines`                                                             |
+| `imports[subpath].examples`                                                    | `catalog/examples/<subpath>.json` → `examples` (the path is in `imports[subpath].examplesFile`)       |
+| `imports[subpath].purpose`, `useWhen`, `avoidWhen`, `related`, `bestPractices` | `catalog/components/<subpath>.json` (the path is in `imports[subpath].docsFile`)                      |
 
 Paths in `file`, `examplesFile` and `docsFile` are relative to the folder that holds `catalog.json`. The MCP tools
-(`get_pattern`, `get_component`, `get_usage_example`) return the same answers as before.
+(`get_block`, `get_component`, `get_usage_example`) return the same answers as before. The asset
+lists are `catalog/assets/<kind>.json` in kebab-case (`line-figures.json`, `brand-marks.json`).
 
 ### Performance
 
@@ -1272,7 +1306,7 @@ in a `computed` and rewound the page in a `watch` becomes one call:
   checkbox above the rows instead of a screen-reader-only header cell.
 - The `platform/view/table-view` block runs on `useCollection` with `PropertyFilter` and
   `CollectionPreferences`; `platform/view/card-view` is new. Copy them again through the MCP
-  (`get_pattern`) to pick the change up.
+  (`get_block`) to pick the change up.
 
 ## 7. Unchanged
 

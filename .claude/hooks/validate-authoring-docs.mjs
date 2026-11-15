@@ -3,7 +3,7 @@
 // internal (.claude/skills, .claude/agents) or consumer bundle
 // (skills/ and adapters/claude/agents/ at the repo root) — re-read the file and verify
 // its frontmatter + body match .claude/rules/authoring-docs.md. Blocks (exit 2) on any
-// NEW violation; pre-existing debt is grandfathered via doc-standards-baseline.json,
+// NEW violation; pre-existing debt is grandfathered via authoring-docs-baseline.json,
 // exactly like validate-spec-compliance reads authoring-baseline.json. Same engine
 // (_lib/authoring-docs-checks.mjs) as the CI ratchet. Fail-open on any error.
 
@@ -18,7 +18,7 @@ function baselinedKeys() {
   try {
     const entries = JSON.parse(
       readFileSync(
-        resolve(ROOT, 'packages/webkit/scripts/doc-standards-baseline.json'),
+        resolve(ROOT, 'packages/webkit/scripts/authoring-docs-baseline.json'),
         'utf-8'
       )
     )

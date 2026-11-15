@@ -244,17 +244,17 @@ describe('BreadcrumbItem', () => {
       expect(root.getAttribute('data-disabled')).toBe('')
     })
   })
-})
 
-describe('BreadcrumbItem defaults', () => {
-  it('renders no placeholder label and links to # when href is empty', () => {
-    const { getByTestId } = render(BreadcrumbItem)
-    expect(getByTestId(`${TESTID}__label`).textContent?.trim()).toBe('')
-    expect(getByTestId(TESTID).getAttribute('href')).toBe('#')
-  })
+  describe('defaults', () => {
+    it('renders no placeholder label and links to # when href is empty', () => {
+      const { getByTestId } = render(BreadcrumbItem)
+      expect(getByTestId(`${TESTID}__label`).textContent?.trim()).toBe('')
+      expect(getByTestId(TESTID).getAttribute('href')).toBe('#')
+    })
 
-  it('keeps the box glyph for show-icon without an icon', () => {
-    const { getByTestId } = render(BreadcrumbItem, { props: { label: 'Home', showIcon: true } })
-    expect(getByTestId(`${TESTID}__icon`).classList.contains('ai-box')).toBe(true)
+    it('keeps the box glyph for show-icon without an icon', () => {
+      const { getByTestId } = render(BreadcrumbItem, { props: { label: 'Home', showIcon: true } })
+      expect(getByTestId(`${TESTID}__icon`).classList.contains('ai-box')).toBe(true)
+    })
   })
 })

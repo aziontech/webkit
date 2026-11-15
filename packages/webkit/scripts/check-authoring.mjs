@@ -4,15 +4,15 @@ import { readFileSync, readdirSync, writeFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { dirname, join, relative, resolve } from 'node:path'
 
-import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/authoring-checks.js'
-import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plugin/token-checks.js'
-import { scanSignatures } from './lib/signature-checks.mjs'
+import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/lib/authoring-checks.js'
+import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plugin/lib/token-checks.js'
+import { scanSignatures } from '../src/eslint-plugin/lib/signature-checks.js'
 import {
   EXAMPLE_DATA_DIRS,
   EXAMPLE_DATA_MESSAGES,
   exampleDataApplies,
   scanExampleData
-} from '../src/eslint-plugin/example-data.js'
+} from '../src/eslint-plugin/lib/example-data.js'
 import noClockInSetup from '../src/eslint-plugin/rules/no-clock-in-setup.js'
 import noPhysicalDirection from '../src/eslint-plugin/rules/no-physical-direction.js'
 import noViewportHeightCalc from '../src/eslint-plugin/rules/no-viewport-height-calc.js'
@@ -23,7 +23,7 @@ import {
   appliesToBuiltInStrings,
   scanBuiltInStrings,
   STRING_MESSAGES
-} from './lib/built-in-strings.mjs'
+} from '../src/eslint-plugin/lib/built-in-strings.js'
 import { collectSpecViolations } from '../../../.claude/hooks/_lib/spec-compliance-checks.mjs'
 
 const ALL_MESSAGES = { ...MESSAGES, ...TOKEN_MESSAGES, ...STRING_MESSAGES }

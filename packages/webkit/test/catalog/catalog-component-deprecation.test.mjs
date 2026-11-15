@@ -70,7 +70,7 @@ test('a component the catalog marks deprecated trips no-deprecated-component', a
   const path = join(dir, 'catalog.json')
   writeFileSync(path, JSON.stringify(catalog))
   process.env.WEBKIT_CATALOG_PATH = path
-  const { _resetCatalogCache } = await import('../../src/eslint-plugin/catalog.js')
+  const { _resetCatalogCache } = await import('../../src/eslint-plugin/lib/catalog.js')
   _resetCatalogCache()
   const rule = (await import('../../src/eslint-plugin/rules/no-deprecated-component.js')).default
   const linter = new Linter({ configType: 'flat' })

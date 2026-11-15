@@ -136,12 +136,12 @@ describe('HelpPanel', () => {
       await expectNoA11yViolations(container)
     })
   })
-})
 
-describe('HelpPanel on devices', () => {
-  it('is a named container for the content of the panel it sits in', () => {
-    const view = render(HelpPanel)
+  describe('on devices', () => {
+    it('is a named container for the content of the panel it sits in', () => {
+      const view = render(HelpPanel)
 
-    expect(view.getByTestId('content-help-panel').className).toContain('@container/help-panel')
+      expect(view.getByTestId('content-help-panel').className).toContain('@container/help-panel')
+    })
   })
 })

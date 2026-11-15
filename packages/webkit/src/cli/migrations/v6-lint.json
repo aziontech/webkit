@@ -1,0 +1,7 @@
+{
+  "webkit/accessible-name": "webkit/require-accessible-name",
+  "webkit/container-needs-width": "webkit/require-container-width",
+  "webkit/header-search-trigger": "webkit/require-header-search",
+  "webkit/menu-node-href": "webkit/prefer-href-in-menu-node",
+  "webkit/valid-import-path": "webkit/no-unknown-import"
+}

@@ -186,41 +186,41 @@ Comprehensive npm scripts for local development and CI/CD.
 | **`lint:fix`**                                            | Auto-fixes ESLint issues where possible. Saves developer time for formatting, import sorting, etc.                       |
 | **`lint:style`**                                          | Runs Stylelint on CSS/SCSS/Vue files. Validates styles against standards.                                                |
 | **`format`**                                              | Auto-formats all code with Prettier. Ensures consistent code style across team.                                          |
-| **`format:check`**                                        | Checks formatting without modifying files. Used in CI to fail if code isn't formatted.                                   |
-| **`type-check`**                                          | Runs `vue-tsc --noEmit`. Validates TypeScript types without generating declaration files. Faster than full build for CI. |
-| **`type-coverage`**                                       | Reports type coverage percentage. Enforces 95% threshold. Gives measurable type safety metric.                           |
+| **`check:format`**                                        | Checks formatting without modifying files. Used in CI to fail if code isn't formatted.                                   |
+| **`typecheck`**                                           | Runs `vue-tsc --noEmit`. Validates TypeScript types without generating declaration files. Faster than full build for CI. |
+| **`check:type-coverage`**                                 | Reports type coverage percentage. Enforces 95% threshold. Gives measurable type safety metric.                           |
 | **`test`** (+ `test:watch` / `test:coverage` / `test:ui`) | Vitest **browser mode** (Playwright Chromium) — the functional per-component suites required by the testing standard.    |
 
 #### Webkit Package Scripts — governance gates
 
-| Script              | Reason                                                                                                                                 |
-| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **`catalog:check`** | Rebuilds `catalog.json` and fails on any diff — the catalog can never drift from the exports map and specs.                            |
-| **`size`**          | Bundle budget gate (`scripts/check-size.mjs`): builds each budgeted entry with Vite and compares gzipped output to `.size-limit.json`. |
-| **`pack:check`**    | Fails if any `*.test.ts` / `src/test/**` file would ship in the npm tarball (publish safety).                                          |
-| **`test:gate`**     | Fails if any root component lacks its co-located `<name>.test.ts` (test-existence gate; never grandfathered).                          |
-| **`test:toolkit`**  | Unit tests for the adoption toolkit itself (ESLint rules, MCP, CLI, stylelint config).                                                 |
-| **`authoring`**     | Construction-standard ratchet — no **new** authoring violations against the baseline (`authoring:update` re-baselines).                |
-| **`doc-standards`** | Skill/agent doc-standards ratchet — no new out-of-standard `.claude` docs (`doc-standards:update` re-baselines).                       |
-| **`smoke:consume`** | Scaffolds and builds a bare consumer app against the local package — proves `init` + a consumer build still work.                      |
+| Script                     | Reason                                                                                                                                 |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **`check:catalog`**        | Rebuilds `catalog.json` and fails on any diff — the catalog can never drift from the exports map and specs.                            |
+| **`check:size`**           | Bundle budget gate (`scripts/check-size.mjs`): builds each budgeted entry with Vite and compares gzipped output to `.size-limit.json`. |
+| **`check:pack`**           | Fails if any `*.test.ts` / `src/test/**` file would ship in the npm tarball (publish safety).                                          |
+| **`check:tests`**          | Fails if any root component lacks its co-located `<name>.test.ts` (test-existence gate; never grandfathered).                          |
+| **`test:toolkit`**         | Unit tests for the adoption toolkit itself (ESLint rules, MCP, CLI, stylelint config).                                                 |
+| **`check:authoring`**      | Construction-standard ratchet — no **new** authoring violations against the baseline (`update:authoring` re-baselines).                |
+| **`check:authoring-docs`** | Authoring-docs ratchet — no new out-of-standard `.claude` docs (`update:authoring-docs` re-baselines).                                 |
+| **`test:consume`**         | Scaffolds and builds a bare consumer app against the local package — proves `init` + a consumer build still work.                      |
 
 #### Root Package Scripts
 
-| Script               | Reason                                                                                                                                                                                                            |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **`prepare`**        | Runs `husky` to initialize Git hooks after `pnpm install`. Ensures hooks are set up on every machine.                                                                                                             |
-| **`webkit:*`**       | Delegation scripts (`webkit:lint`, `webkit:type-check`, `webkit:format:check`, `webkit:test`, …) via `pnpm --filter webkit`, so any check runs from the repo root — these are the entry points CI calls.          |
-| **`governance`**     | Unified command running all static checks: `webkit:lint` + `webkit:lint:style` + `webkit:format:check` + `webkit:type-check` + `webkit:type-coverage` + `security:audit`. Single command to reproduce CI locally. |
-| **`security:audit`** | Runs plain **`pnpm audit`** — any severity fails (deliberately stricter than `--audit-level=high`). Accepted-risk overrides live in `pnpm-workspace.yaml`, not in a lowered threshold.                            |
+| Script              | Reason                                                                                                                                                                                                             |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **`prepare`**       | Runs `husky` to initialize Git hooks after `pnpm install`. Ensures hooks are set up on every machine.                                                                                                              |
+| **`<verb>:webkit`** | Delegation scripts (`lint:webkit`, `typecheck:webkit`, `check-format:webkit`, `test:webkit`, …) via `pnpm --filter @aziontech/webkit`, so any check runs from the repo root — these are the entry points CI calls. |
+| **`gates`**         | Unified command running all static checks: `lint:webkit` + `lint-style:webkit` + `check-format:webkit` + `typecheck:webkit` + `type-coverage:webkit` + `audit`. Single command to reproduce CI locally.            |
+| **`audit`**         | Runs plain **`pnpm audit`** — any severity fails (deliberately stricter than `--audit-level=high`). Accepted-risk overrides live in `pnpm-workspace.yaml`, not in a lowered threshold.                             |
 
 ### Design Decisions
 
 1. **Separate commands vs. unified**:
    - Individual commands allow targeted fixes (e.g., just run `lint:fix`)
-   - `governance` command provides one-stop validation for CI parity
+   - `gates` command provides one-stop validation for CI parity
 
 2. **Root vs. package scripts**:
-   - Root scripts use `pnpm --filter webkit` to delegate
+   - Root scripts use `pnpm --filter @aziontech/webkit` to delegate
    - Allows running governance from any directory in monorepo
 
 ---
@@ -267,20 +267,20 @@ Comprehensive CI/CD pipeline with path-filtered gating, parallel execution, and 
 
 #### Job Structure
 
-| Job                  | Purpose                                                                                              | Runs                                  |
-| -------------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| **changes**          | `dorny/paths-filter` gate — computes `webkit` / `toolkit` / `tests` / `visual` / `canary` outputs    | always, first                         |
-| **security**         | Dependency audit, secret detection, unused deps                                                      | `webkit` changes, parallel            |
-| **lint-canary**      | Every deliberately-broken fixture in `lint-canaries/` must **still fail** its lint rule              | `canary` changes (lint configs moved) |
-| **lint**             | ESLint (zero warnings), Stylelint, Prettier check                                                    | `webkit` changes, parallel            |
-| **types**            | `vue-tsc --noEmit` + type coverage ≥ 95%                                                             | `webkit` changes, parallel            |
-| **build**            | Publish-safety (`pack:check`) + bundle budget (`size`)                                               | after lint + types                    |
-| **site**             | Docs site + demos build, uploaded for the visual shards                                              | after lint + types                    |
-| **toolkit**          | Catalog drift, toolkit unit tests, authoring **ratchet**, test-existence gate, doc-standards ratchet | `toolkit` changes, parallel           |
-| **smoke**            | Consumer smoke test — `init` + build a bare consumer app                                             | `visual`-scope changes                |
-| **tests**            | **Vitest browser mode** (Playwright Chromium), 4 shards                                              | after lint + types                    |
-| **visual**           | Styled Playwright screenshots (`apps/visual`) in the Playwright image, 4 shards, report on failure   | after all build/test jobs             |
-| **governance-check** | Summary gate ensuring all jobs passed (or cleanly skipped)                                           | `always()`, last                      |
+| Job               | Purpose                                                                                              | Runs                                  |
+| ----------------- | ---------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| **changes**       | `dorny/paths-filter` gate — computes `webkit` / `toolkit` / `tests` / `visual` / `canary` outputs    | always, first                         |
+| **security**      | Dependency audit, secret detection, unused deps                                                      | `webkit` changes, parallel            |
+| **lint-canaries** | Every deliberately-broken fixture in `lint-canaries/` must **still fail** its lint rule              | `canary` changes (lint configs moved) |
+| **lint**          | ESLint (zero warnings), Stylelint, Prettier check                                                    | `webkit` changes, parallel            |
+| **types**         | `vue-tsc --noEmit` + type coverage ≥ 95%                                                             | `webkit` changes, parallel            |
+| **build**         | Publish-safety (`check:pack`) + bundle budget (`check:size`)                                         | after lint + types                    |
+| **site**          | Docs site + demos build, uploaded for the visual shards                                              | after lint + types                    |
+| **toolkit**       | Catalog drift, toolkit unit tests, authoring **ratchet**, test-existence gate, authoring-docs ratchet | `toolkit` changes, parallel           |
+| **smoke**         | Consumer smoke test — `init` + build a bare consumer app                                             | `visual`-scope changes                |
+| **tests**         | **Vitest browser mode** (Playwright Chromium), 4 shards                                              | after lint + types                    |
+| **visual**        | Styled Playwright screenshots (`apps/visual`) in the Playwright image, 4 shards, report on failure   | after all build/test jobs             |
+| **gates**         | Summary gate ensuring all jobs passed (or cleanly skipped)                                           | `always()`, last                      |
 
 #### Security Job Details
 
@@ -314,8 +314,8 @@ The `lint-canaries/` fixtures each violate exactly one lint rule on purpose. The
 | Step                              | Reason                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | **Depends on lint + types**       | Only builds if linting and type checking pass. Prevents wasting CI time on broken code.                                                                                                                                                                                                                                                                                                                                               |
-| **Publish safety (`pack:check`)** | `npm pack --dry-run` must list **no** `*.test.ts` / `src/test/**` files — tests never ship to npm. `.d.ts` declarations are **not** built in this job: they are generated at publish time by the release workflow ([`package-webkit.yml`](../../.github/workflows/package-webkit.yml) runs `vue-tsc --declaration --emitDeclarationOnly` immediately before `npm publish`, triggered by release-please's `release: published` event). |
-| **Bundle budget (`size`)**        | Every budgeted export entry is compiled (Vite + plugin-vue, vue externalized) and its gzipped size compared against `.size-limit.json`. Budgets only ratchet down.                                                                                                                                                                                                                                                                    |
+| **Publish safety (`check:pack`)** | `npm pack --dry-run` must list **no** `*.test.ts` / `src/test/**` files — tests never ship to npm. `.d.ts` declarations are **not** built in this job: they are generated at publish time by the release workflow ([`publish-webkit.yml`](../../.github/workflows/publish-webkit.yml) runs `vue-tsc --declaration --emitDeclarationOnly` immediately before `npm publish`, triggered by release-please's `release: published` event). |
+| **Bundle budget (`check:size`)**  | Every budgeted export entry is compiled (Vite + plugin-vue, vue externalized) and its gzipped size compared against `.size-limit.json`. Budgets only ratchet down.                                                                                                                                                                                                                                                                    |
 
 #### Tests Job Details (Vitest browser mode)
 
@@ -337,8 +337,8 @@ The `lint-canaries/` fixtures each violate exactly one lint rule on purpose. The
 
 | Step                    | Reason                                                                                                 |
 | ----------------------- | ------------------------------------------------------------------------------------------------------ |
-| **Build the docs site** | `docs:build` prerenders every route (components, examples, blocks, frames); a broken example fails it. |
-| **Build the demos**     | `demos:build` proves the blocks copied with `webkit add` still build together.                         |
+| **Build the docs site** | `build:docs` prerenders every route (components, examples, blocks, frames); a broken example fails it. |
+| **Build the demos**     | `build:demos` proves the blocks copied with `webkit add` still build together.                         |
 | **Upload for visual**   | The four visual shards download the built sites instead of rebuilding them.                            |
 
 #### Governance Gate Job
@@ -420,7 +420,7 @@ The migration from `.eslintrc.*` to `eslint.config.js` was required because:
 
 ### Release Automation (2026-07)
 
-The release pipeline moved from semantic-release (per-package `.releaserc` files) to **release-please** (Release-PR model): merging `feat`/`fix` PRs updates a pending Release PR; merging the Release PR tags versions and triggers the `package-*.yml` publish workflows, which build the `.d.ts` declarations and publish to npm. The type→bump mapping this implies is documented in `CONTRIBUTING.md` and enforced identically across commitlint, `release-please-config.json`, and the PR flows.
+The release pipeline moved from semantic-release (per-package `.releaserc` files) to **release-please** (Release-PR model): merging `feat`/`fix` PRs updates a pending Release PR; merging the Release PR tags versions and triggers the `publish-*.yml` publish workflows, which build the `.d.ts` declarations and publish to npm. The type→bump mapping this implies is documented in `CONTRIBUTING.md` and enforced identically across commitlint, `release-please-config.json`, and the PR flows.
 
 ### Known Issues After Implementation (historical)
 
@@ -434,20 +434,20 @@ The initial ESLint run identified issues that needed manual fixing — missing p
 
 ```bash
 # Run the full static governance suite (mirrors the lint/types/security jobs)
-pnpm run governance
+pnpm run gates
 
 # Individual checks
-pnpm run webkit:lint
-pnpm run webkit:type-check
-pnpm run webkit:format:check
-pnpm run security:audit
+pnpm run lint:webkit
+pnpm run typecheck:webkit
+pnpm run check-format:webkit
+pnpm run audit
 
 # Functional tests (Vitest browser mode)
-pnpm run webkit:test
+pnpm run test:browser-webkit
 
 # Auto-fix issues
-pnpm run webkit:lint:fix
-pnpm run webkit:format
+pnpm run lint:webkit:fix
+pnpm run format:webkit
 ```
 
 ### Pre-commit Hook Test
@@ -469,11 +469,11 @@ git commit -m "test: pre-commit hook"
 3. Verify the jobs run:
    - changes (first — path-filter gate)
    - security, lint, types, toolkit (✅ parallel)
-   - lint-canary (when lint configs / canaries moved)
+   - lint-canaries (when lint configs / canaries moved)
    - build, site, tests ×4 (⏳ after lint + types)
    - smoke (when visual-scope paths moved)
    - visual ×4 (⏳ after all build/test jobs)
-   - governance-check (⏳ after all)
+   - gates (⏳ after all)
 
 ---
 
@@ -481,12 +481,12 @@ git commit -m "test: pre-commit hook"
 
 ### Shipped Since First Write
 
-| Improvement                 | Where it landed                                                      |
-| --------------------------- | -------------------------------------------------------------------- |
-| **Bundle size limits**      | `size` gate in the build job (`check-size.mjs` + `.size-limit.json`) |
-| **Visual regression tests** | the sharded `visual` job                                             |
-| **Functional test gate**    | the sharded `tests` job + `test:gate` existence check                |
-| **Lint-config regression**  | the `lint-canary` job                                                |
+| Improvement                 | Where it landed                                                            |
+| --------------------------- | -------------------------------------------------------------------------- |
+| **Bundle size limits**      | `check:size` gate in the build job (`check-size.mjs` + `.size-limit.json`) |
+| **Visual regression tests** | the sharded `visual` job                                                   |
+| **Functional test gate**    | the sharded `tests` job + `check:tests` existence check                    |
+| **Lint-config regression**  | the `lint-canaries` job                                                    |
 
 ### Still Open
 
@@ -518,13 +518,13 @@ pnpm run prepare  # Re-initialize hooks
 #### Type Coverage Too Low
 
 ```bash
-pnpm run webkit:type-coverage  # See detailed report
+pnpm run type-coverage:webkit  # See detailed report
 ```
 
 #### CI Job Failing Locally
 
 ```bash
-pnpm run governance  # Reproduce locally before pushing
+pnpm run gates  # Reproduce locally before pushing
 ```
 
 ---

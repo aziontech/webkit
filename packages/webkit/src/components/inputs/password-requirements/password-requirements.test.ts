@@ -87,14 +87,14 @@ describe('PasswordRequirements', () => {
     const { container } = render(Default)
     await expectNoA11yViolations(container)
   })
-})
 
-describe('PasswordRequirements test ids', () => {
-  it('falls back to input-password-requirements and lets a passed data-testid win', () => {
-    const view = render(PasswordRequirements)
-    expect(view.getByTestId('input-password-requirements')).toBeTruthy()
-    view.unmount()
-    const custom = render(PasswordRequirements, { attrs: { 'data-testid': 'signup-rules' } })
-    expect(custom.getByTestId('signup-rules')).toBeTruthy()
+  describe('test ids', () => {
+    it('falls back to input-password-requirements and lets a passed data-testid win', () => {
+      const view = render(PasswordRequirements)
+      expect(view.getByTestId('input-password-requirements')).toBeTruthy()
+      view.unmount()
+      const custom = render(PasswordRequirements, { attrs: { 'data-testid': 'signup-rules' } })
+      expect(custom.getByTestId('signup-rules')).toBeTruthy()
+    })
   })
 })

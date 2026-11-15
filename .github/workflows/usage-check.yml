@@ -1,4 +1,4 @@
-name: Usage check (AI flow, step 8)
+name: Usage check
 
 # Opt-in and paid: a fresh Claude Code session in a clean Vite + Vue app gets an intent-only
 # prompt and must pick the new component or block through the webkit MCP; the app must then
@@ -60,7 +60,7 @@ jobs:
           MAX_TURNS: ${{ inputs.max_turns }}
         run: |
           test -n "$ANTHROPIC_API_KEY" || { echo "::error::ANTHROPIC_API_KEY secret is not set"; exit 1; }
-          node scripts/usage-check.mjs "$TARGET" "$PROMPT" --max-turns "$MAX_TURNS" --report usage-report.md
+          node scripts/check-usage.mjs "$TARGET" "$PROMPT" --max-turns "$MAX_TURNS" --report usage-report.md
 
       - name: Publish the report
         if: always()

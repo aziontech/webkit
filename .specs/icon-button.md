@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: c80e71030fefdb8149db4db3fba0673a6bba44fe311269bfc06251c0ec9fcf90
+checksum: 29c5a99e230efb7e1dfd9ac399fc57d8bd78b50cd802f27612d74eea32b668a3
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -38,7 +38,7 @@ A square control that triggers an action with a glyph and no visible text: close
 ## Best practices
 
 - Always name it with the kebab attribute `aria-label="Delete domain"` (`:aria-label` when the name changes, `aria-labelledby` when visible text already names it). Describe the action ("Delete domain"), not the glyph ("Trash"). Write `aria-label`, never the camelCase `ariaLabel` attribute: Vue maps the kebab attribute onto the `ariaLabel` prop, and it is the form every other attribute takes in a template.
-- The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `webkit/accessible-name` keeps the name required instead: it flags an `IconButton` with neither `aria-label` nor `aria-labelledby`.
+- The `ariaLabel` prop is optional in the types on purpose: vue-tsc does not camelize `aria-*` attributes onto props, so a required `ariaLabel` made the obvious `aria-label="…"` fail to type-check in a fresh create-vue app. The lint rule `webkit/require-accessible-name` keeps the name required instead: it flags an `IconButton` with neither `aria-label` nor `aria-labelledby`.
 - Wrap it in `tooltip` when the glyph is not self-evident, so pointer users see the name screen readers hear.
 - Use `kind="transparent"` in dense rows and toolbars; keep `primary` for a lone emphasized action.
 - Set `iconTransition` only when `icon` changes at runtime; with a static icon it adds nothing.
@@ -136,7 +136,7 @@ A square control that triggers an action with a glyph and no visible text: close
 - ARIA: root uses appropriate roles (`button`, `dialog`, `status`, etc.) per sub-component.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state.
 - `motion-reduce:transition-none` on animated states; the icon swap also starts from `scale-100` under reduced motion.
-- Accessible name: `aria-label` (static or bound) or `aria-labelledby` is mandatory; `webkit/accessible-name` flags an IconButton with neither, and an empty name renders no `aria-label` attribute.
+- Accessible name: `aria-label` (static or bound) or `aria-labelledby` is mandatory; `webkit/require-accessible-name` flags an IconButton with neither, and an empty name renders no `aria-label` attribute.
 - Touch target ≥40×40 px where the control is interactive.
 
 ## Right-to-left

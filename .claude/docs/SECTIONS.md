@@ -104,7 +104,7 @@ One export per block in `packages/webkit/package.json`, and one `.size-limit.jso
   `placeholder-clip.webm`) for editorial media WebKit does not ship; the `webkit/no-root-relative-asset`
   lint blocks `/marketing-components/…` and `/media/…` URLs. The site JSON (`site-*.json`) keeps the
   site's own URLs because it is the marketing site's data; `src/assets/site-assets.json` maps them.
-- The docs page (`/components/<name>`), the bare frame (`/example?path=<name>/<file>`) and the styled
+- The docs page (`/components/<name>`), the bare frame (`/frame/example/<name>/<file>`) and the styled
   visual test of the first example follow from these files.
 
 ## Authoring a section through the pipeline

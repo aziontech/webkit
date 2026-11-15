@@ -1,4 +1,4 @@
-name: Governance Pipeline
+name: Governance
 
 on:
   pull_request:
@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   changes:
-    name: Detect Changes
+    name: Detect changes
     runs-on: ubuntu-latest
     outputs:
       webkit: ${{ steps.filter.outputs.webkit }}
@@ -61,7 +61,7 @@ jobs:
               - '.github/workflows/governance.yml'
 
   security:
-    name: Security Scans
+    name: Security scans
     needs: changes
     if: needs.changes.outputs.webkit == 'true'
     runs-on: ubuntu-latest
@@ -81,7 +81,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Audit dependencies
-        run: pnpm run security:audit
+        run: pnpm run audit
 
       - name: Run TruffleHog (secret detection)
         uses: trufflesecurity/trufflehog@20652fbbdefffcdaa493a5bf57ab2ac6b1db715b # main
@@ -95,8 +95,8 @@ jobs:
         working-directory: packages/webkit
         continue-on-error: true
 
-  lint-canary:
-    name: Lint Canary (broken samples must stay broken)
+  lint-canaries:
+    name: Lint canaries (broken samples must stay broken)
     needs: changes
     if: needs.changes.outputs.canary == 'true'
     runs-on: ubuntu-latest
@@ -119,7 +119,7 @@ jobs:
         run: node lint-canaries/index.js
 
   lint:
-    name: Linting & Formatting
+    name: Lint and format
     needs: changes
     if: needs.changes.outputs.webkit == 'true'
     runs-on: ubuntu-latest
@@ -139,16 +139,16 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run ESLint (zero warnings policy)
-        run: pnpm run webkit:lint
+        run: pnpm run lint:webkit
 
       - name: Run Stylelint
-        run: pnpm run webkit:lint:style
+        run: pnpm run lint-style:webkit
 
       - name: Prettier check (fail on diff)
-        run: pnpm run webkit:format:check
+        run: pnpm run check-format:webkit
 
   types:
-    name: TypeScript & Type Coverage
+    name: Types and type coverage
     needs: changes
     if: needs.changes.outputs.webkit == 'true'
     runs-on: ubuntu-latest
@@ -168,16 +168,16 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: TypeScript check
-        run: pnpm run webkit:type-check
+        run: pnpm run typecheck:webkit
 
       - name: Docs site TypeScript check
-        run: pnpm run docs:type-check
+        run: pnpm run typecheck:docs
 
       - name: Type coverage (enforce 95% threshold)
-        run: pnpm run webkit:type-coverage
+        run: pnpm run type-coverage:webkit
 
   build:
-    name: Build Verification
+    name: Build
     runs-on: ubuntu-latest
     needs: [changes, lint, types]
     if: needs.changes.outputs.webkit == 'true'
@@ -197,15 +197,15 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Assert no test files leak into the tarball
-        run: pnpm pack:check
+        run: pnpm check:pack
         working-directory: packages/webkit
 
-      - name: Bundle budget (size gate)
-        run: pnpm run size
+      - name: Bundle budget
+        run: pnpm run check:size
         working-directory: packages/webkit
 
   site:
-    name: Docs site and demos build
+    name: Build docs site and demos
     runs-on: ubuntu-latest
     needs: [changes, lint, types]
     if: needs.changes.outputs.visual == 'true'
@@ -226,10 +226,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build the docs site (every route prerendered)
-        run: pnpm docs:build
+        run: pnpm build:docs
 
       - name: Build the demos
-        run: pnpm demos:build
+        run: pnpm build:demos
 
       - name: Upload the built sites for the visual shards
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
@@ -241,10 +241,10 @@ jobs:
           retention-days: 3
 
   # Runs on every PR (no path filter): these gates are the machine half of the AI flow
-  # (.claude/commands/webkit-new.md) and finish in under a minute. Locally:
+  # (.claude/commands/component-new.md) and finish in under a minute. Locally:
   # pnpm --filter @aziontech/webkit run gates
   toolkit:
-    name: Adoption Toolkit (tests + catalog drift)
+    name: Toolkit tests and catalog drift
     needs: changes
     runs-on: ubuntu-latest
     steps:
@@ -271,48 +271,48 @@ jobs:
         run: printf '%s\n' "$PR_TITLE" | pnpm exec commitlint --verbose
 
       - name: Catalog is in sync (no drift from exports/specs)
-        run: pnpm --filter @aziontech/webkit catalog:check
+        run: pnpm --filter @aziontech/webkit check:catalog
 
       - name: No spec in status draft (.specs/_template.md excepted)
-        run: pnpm --filter @aziontech/webkit run spec-status
+        run: pnpm --filter @aziontech/webkit run check:spec-status
 
       - name: Spec integrity — every spec approved or beyond, shipped components implemented, body checksum matches
-        run: pnpm --filter @aziontech/webkit run spec-integrity
+        run: pnpm --filter @aziontech/webkit run check:spec-integrity
 
       - name: Spec template — specs on template 2 fill Internationalization, Right-to-left, Responsive and Performance
-        run: pnpm --filter @aziontech/webkit run spec-template:check
+        run: pnpm --filter @aziontech/webkit run check:spec-template
 
-      - name: Patterns (G1) — every template story is a pattern with intents, real skills and a lint-clean SFC
-        run: pnpm --filter @aziontech/webkit run patterns:check
+      - name: Blocks — every block has intents, real skills and a lint-clean SFC
+        run: pnpm --filter @aziontech/webkit run check:blocks
 
       - name: Examples — every example passes the lint `webkit init` installs (strict preset), ratcheted by a baseline
-        run: pnpm --filter @aziontech/webkit run examples:lint
+        run: pnpm --filter @aziontech/webkit run check:examples-lint
 
-      - name: Cited names (G2) — skills, rules and patterns only cite exports that exist
-        run: pnpm --filter @aziontech/webkit run cited-names
+      - name: Cited names — skills, rules and blocks only cite exports that exist
+        run: pnpm --filter @aziontech/webkit run check:cited-names
 
-      - name: Naming (2.7) — kebab-case English ids, block ids match folders, no synonyms or retired v6 names
-        run: pnpm --filter @aziontech/webkit run naming:check
+      - name: Naming — kebab-case English ids, block ids match folders, no synonyms or retired v6 names
+        run: pnpm --filter @aziontech/webkit run check:naming
 
       - name: Declarations for the runtime .js modules are in sync
-        run: pnpm --filter @aziontech/webkit run js-dts:check
+        run: pnpm --filter @aziontech/webkit run check:js-dts
 
       - name: Every source export declares types (types condition into types/)
-        run: pnpm --filter @aziontech/webkit run exports:check
+        run: pnpm --filter @aziontech/webkit run check:exports
 
       - name: Marketing and docs inventory — no marketing or docs item leaves unrecorded
-        run: pnpm --filter @aziontech/webkit run marketing:check
+        run: pnpm --filter @aziontech/webkit run check:marketing-inventory
 
-      - name: Public API changes have a codemod entry (removed or renamed export, pattern, prop or value)
-        run: pnpm --filter @aziontech/webkit run migrations:check
+      - name: Public API changes have a codemod entry (removed or renamed export, block, prop or value)
+        run: pnpm --filter @aziontech/webkit run check:migrations
 
       - name: Public API diff against the base branch — breaking needs "!" in the PR title and a migration, any change bumps spec_version
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
-        run: pnpm --filter @aziontech/webkit run api-diff
+        run: pnpm --filter @aziontech/webkit run check:api-diff
 
       - name: Hook tests (spec, authoring and reference hooks)
-        run: pnpm --filter @aziontech/webkit run hooks:test
+        run: pnpm --filter @aziontech/webkit run test:hooks
 
       - name: Toolkit unit tests (ESLint rules, catalog queries, CLI, stylelint config)
         run: pnpm --filter @aziontech/webkit test:toolkit
@@ -327,24 +327,24 @@ jobs:
         run: pnpm --filter @aziontech/webkit test:ssr
 
       - name: Construction-standard ratchet (no new authoring violations)
-        run: pnpm --filter @aziontech/webkit run authoring
+        run: pnpm --filter @aziontech/webkit run check:authoring
 
       - name: Every component has its test (testing.md)
-        run: pnpm --filter @aziontech/webkit run test:gate
+        run: pnpm --filter @aziontech/webkit run check:tests
 
       - name: Every component is complete — exports, -root, size budget, examples, visual baseline, spec status (ratcheted by a baseline)
-        run: pnpm --filter @aziontech/webkit run complete:check
+        run: pnpm --filter @aziontech/webkit run check:complete
 
       - name: Size budgets only ratchet down (a raise needs a Budget-raise line in the PR body)
-        run: pnpm --filter @aziontech/webkit run size:ratchet
+        run: pnpm --filter @aziontech/webkit run check:size-ratchet
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
 
-      - name: Skill/agent doc standards ratchet (no new out-of-standard docs)
-        run: pnpm --filter @aziontech/webkit run doc-standards
+      - name: Authoring docs ratchet (no new out-of-standard skill or agent docs)
+        run: pnpm --filter @aziontech/webkit run check:authoring-docs
 
   smoke:
-    name: Consumer smoke test (init + build)
+    name: Consumer smoke test (init and build)
     needs: changes
     if: needs.changes.outputs.visual == 'true'
     runs-on: ubuntu-latest
@@ -365,7 +365,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Init + build a bare consumer app
-        run: pnpm --filter @aziontech/webkit run smoke:consume
+        run: pnpm --filter @aziontech/webkit run test:consume
 
   consumer-types:
     name: Consumer TypeScript build (fresh vue-ts app, packed tarballs)
@@ -389,7 +389,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Pack, install into a fresh vue-ts app, run its npm run build
-        run: pnpm --filter @aziontech/webkit run consumer:types
+        run: pnpm --filter @aziontech/webkit run check:consumer-types
 
   tests:
     name: Vitest browser (shard ${{ matrix.shard }}/4)
@@ -433,7 +433,7 @@ jobs:
   visual:
     name: Visual tests, styled (shard ${{ matrix.shard }}/4)
     runs-on: ubuntu-latest
-    needs: [changes, security, lint-canary, lint, types, build, site, tests]
+    needs: [changes, security, lint-canaries, lint, types, build, site, tests]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') && needs.changes.outputs.visual == 'true' }}
     timeout-minutes: 30
     container:
@@ -494,7 +494,7 @@ jobs:
               echo "No report was uploaded; read the job log."
             fi
             echo "Download it, unzip, and run \`npx playwright show-report playwright-report\` (or open \`playwright-report/index.html\`)."
-            echo "An intended change: regenerate the baselines with the \`regen-baselines\` skill."
+            echo "An intended change: regenerate the baselines with the \`baselines-regenerate\` skill."
           } >> "$GITHUB_STEP_SUMMARY"
 
   visual-review:
@@ -521,7 +521,7 @@ jobs:
           base="$(git merge-base "$BASE_SHA" HEAD)"
           mkdir -p "$RUNNER_TEMP/before"
           git archive "$base" apps/visual/baselines | tar -x -C "$RUNNER_TEMP/before" || true
-          node apps/visual/scripts/baseline-review.mjs \
+          node apps/visual/scripts/review-baselines.mjs \
             --before "$RUNNER_TEMP/before/apps/visual/baselines" \
             --after apps/visual/baselines \
             --out "$REVIEW_DIR" \
@@ -548,10 +548,10 @@ jobs:
             cat "$REVIEW_DIR/summary.md"
           } >> "$GITHUB_STEP_SUMMARY"
 
-  governance-check:
+  gates:
     name: Governance Gate
     runs-on: ubuntu-latest
-    needs: [changes, security, lint-canary, lint, types, build, site, toolkit, smoke, tests, visual]
+    needs: [changes, security, lint-canaries, lint, types, build, site, toolkit, smoke, tests, visual]
     if: always()
     steps:
       - name: Check all jobs passed or skipped
@@ -559,7 +559,7 @@ jobs:
           declare -A results=(
             [changes]="${{ needs.changes.result }}"
             [security]="${{ needs.security.result }}"
-            [lint-canary]="${{ needs.lint-canary.result }}"
+            [lint-canaries]="${{ needs.lint-canaries.result }}"
             [lint]="${{ needs.lint.result }}"
             [types]="${{ needs.types.result }}"
             [build]="${{ needs.build.result }}"

@@ -1,10 +1,6 @@
-import accessibleName from './rules/accessible-name.js'
 import authoringStandards from './rules/authoring-standards.js'
 import composableReadonlyReturn from './rules/composable-readonly-return.js'
 import composableScopeCleanup from './rules/composable-scope-cleanup.js'
-import containerNeedsWidth from './rules/container-needs-width.js'
-import headerSearchTrigger from './rules/header-search-trigger.js'
-import menuNodeHref from './rules/menu-node-href.js'
 import noBarrelImport from './rules/no-barrel-import.js'
 import noDeepInternalImport from './rules/no-deep-internal-import.js'
 import noDeprecatedComponent from './rules/no-deprecated-component.js'
@@ -19,16 +15,20 @@ import noPhysicalDirection from './rules/no-physical-direction.js'
 import noPolymorphicAsProp from './rules/no-polymorphic-as-prop.js'
 import noRootRelativeAsset from './rules/no-root-relative-asset.js'
 import noStyleOverride from './rules/no-style-override.js'
+import noUnknownImport from './rules/no-unknown-import.js'
 import noViewportHeightCalc from './rules/no-viewport-height-calc.js'
 import noWholeIconSetImport from './rules/no-whole-icon-set-import.js'
 import noWrappedPageChrome from './rules/no-wrapped-page-chrome.js'
 import preferDefineModel from './rules/prefer-define-model.js'
+import preferHrefInMenuNode from './rules/prefer-href-in-menu-node.js'
 import preferTreeShakeableRoot from './rules/prefer-tree-shakeable-root.js'
 import preferWebkitComponent from './rules/prefer-webkit-component.js'
-import validImportPath from './rules/valid-import-path.js'
+import requireAccessibleName from './rules/require-accessible-name.js'
+import requireContainerWidth from './rules/require-container-width.js'
+import requireHeaderSearch from './rules/require-header-search.js'
 
 const rules = {
-  'valid-import-path': validImportPath,
+  'no-unknown-import': noUnknownImport,
   'no-deep-internal-import': noDeepInternalImport,
   'no-barrel-import': noBarrelImport,
   'no-whole-icon-set-import': noWholeIconSetImport,
@@ -41,14 +41,14 @@ const rules = {
   'prefer-define-model': preferDefineModel,
   'no-style-override': noStyleOverride,
   'authoring-standards': authoringStandards,
-  'container-needs-width': containerNeedsWidth,
-  'header-search-trigger': headerSearchTrigger,
+  'require-container-width': requireContainerWidth,
+  'require-header-search': requireHeaderSearch,
   'no-wrapped-page-chrome': noWrappedPageChrome,
   'no-output-in-command': noOutputInCommand,
   'no-root-relative-asset': noRootRelativeAsset,
-  'menu-node-href': menuNodeHref,
+  'prefer-href-in-menu-node': preferHrefInMenuNode,
   'no-gap-after-closing-section': noGapAfterClosingSection,
-  'accessible-name': accessibleName,
+  'require-accessible-name': requireAccessibleName,
   'no-dropped-children': noDroppedChildren,
   'no-viewport-height-calc': noViewportHeightCalc,
   'no-link-in-sentence': noLinkInSentence,
@@ -88,7 +88,7 @@ function preset(name, severities) {
 }
 
 const RECOMMENDED = {
-  'valid-import-path': 'error',
+  'no-unknown-import': 'error',
   'no-deep-internal-import': 'error',
   'no-barrel-import': 'error',
   'no-deprecated-component': 'error',
@@ -101,14 +101,14 @@ const RECOMMENDED = {
   'prefer-define-model': 'error',
   'no-style-override': 'error',
   'authoring-standards': 'error',
-  'container-needs-width': 'warn',
-  'header-search-trigger': 'error',
+  'require-container-width': 'warn',
+  'require-header-search': 'error',
   'no-wrapped-page-chrome': 'error',
   'no-output-in-command': 'warn',
   'no-root-relative-asset': 'error',
-  'menu-node-href': 'error',
+  'prefer-href-in-menu-node': 'error',
   'no-gap-after-closing-section': 'error',
-  'accessible-name': 'error',
+  'require-accessible-name': 'error',
   'no-dropped-children': 'error',
   'no-viewport-height-calc': 'error',
   'no-link-in-sentence': 'error',
@@ -119,7 +119,7 @@ const RECOMMENDED = {
 }
 
 export const HEURISTIC_RULES = Object.freeze([
-  'container-needs-width',
+  'require-container-width',
   'no-output-in-command',
   'no-page-navigation-menu'
 ])
@@ -142,5 +142,9 @@ plugin.configs = {
 
 export default plugin
 export { rules }
-export { logicalClass, mirroredGradient, physicalDirectionClasses } from './direction-classes.js'
-export { isLayoutClass, LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from './layout-classes.js'
+export {
+  logicalClass,
+  mirroredGradient,
+  physicalDirectionClasses
+} from './lib/direction-classes.js'
+export { isLayoutClass, LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from './lib/layout-classes.js'

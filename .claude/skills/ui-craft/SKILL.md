@@ -1,6 +1,6 @@
 ---
 name: ui-craft
-description: Contributor review gate for WebKit itself — required on every new or changed component, example and block before its PR opens. Umbrella for UI taste and PRO UX on @aziontech/webkit. Explains the 3 principles and the non-negotiable rules, then routes to the focused skills — mechanics (usage), structure (ux-heuristics, ui-states, form, create-surface, errors, tables, lists, navigation, microcopy), layout (the page container system), foundation (baseline-ui), cross-cutting quality (theming-dark-mode, data-viz), polish (motion-polish, impeccable-polish), verification (ui-verify), and adoption (ds-adoption).
+description: Contributor review gate for WebKit itself — required on every new or changed component, example and block before its PR opens. Umbrella for UI taste and PRO UX on @aziontech/webkit. Explains the 3 principles and the non-negotiable rules, then routes to the focused skills — mechanics (usage), structure (ux-heuristics, ui-states, form, create-surface, errors, tables, lists, navigation, microcopy), layout (the page container system), foundation (quick-cleanup), cross-cutting quality (theming-dark-mode, data-viz), polish (motion-polish, final-polish), verification (ui-verify), and adoption.
 status: active
 last_updated: 2026-11-14
 scope: webkit
@@ -21,14 +21,14 @@ consuming projects (they start from `webkit-usage`). Every new or changed compon
 runs the full progression below before its PR opens; the findings go into the PR description. The
 child skills are the consumer skills at the repository root: read them from `skills/<name>/SKILL.md`.
 
-## Start here: a screen begins from a pattern
+## Start here: a screen begins from a block
 
-Before any phase below, find out whether the screen already exists as a webkit pattern. Ask the
-`webkit` MCP: `search_patterns` with the screen in plain words ("login", "account settings",
-"delete confirmation"), then `get_pattern` with the best id. Copy that SFC and change only the
-content; the routing below then reviews what you built. Only when no pattern fits, compose the screen
+Before any phase below, find out whether the screen already exists as a webkit block. Ask the
+`webkit` MCP: `search_blocks` with the screen in plain words ("login", "account settings",
+"delete confirmation"), then `get_block` with the best id. Copy that SFC and change only the
+content; the routing below then reviews what you built. Only when no block fits, compose the screen
 from components (`suggest_component`, `get_component`). A marketing band is a page section, not a
-pattern (rule `webkit-sections`).
+block (rule `webkit-sections`).
 
 ## How to use
 
@@ -39,9 +39,9 @@ pattern (rule `webkit-sections`).
   `/webkit-ui-states` → `/webkit-form` → `/webkit-create-surface` → `/webkit-errors` →
   `/webkit-tables` → `/webkit-lists` → `/webkit-navigation` → `/webkit-layout` →
   `/webkit-microcopy`) →
-  foundation (`/webkit-baseline-ui`) →
+  foundation (`/webkit-quick-cleanup`) →
   cross-cutting quality (`/webkit-theming-dark-mode`, `/webkit-data-viz`) → polish
-  (`/webkit-motion-polish` → `/webkit-impeccable-polish`) → verify (`/webkit-ui-verify`). Output each
+  (`/webkit-motion-polish` → `/webkit-final-polish`) → verify (`/webkit-ui-verify`). Output each
   child skill's findings under its own heading.
 
 ## The 3 principles
@@ -57,12 +57,12 @@ pattern (rule `webkit-sections`).
 
 1. **Components only** — compose from `@aziontech/webkit`; never hand-roll a button/input/modal/
    dropdown the system ships. (Find them via the webkit MCP `suggest_component` or
-   `node_modules/@aziontech/webkit/catalog.json`.) See `/webkit-usage`, `/webkit-ds-adoption`.
+   `node_modules/@aziontech/webkit/catalog.json`.) See `/webkit-usage`, `/webkit-adoption`.
 2. **Tokens only** — color, typography, shape, spacing, shadow come from `@aziontech/theme`; no hex,
-   `rgb`, `hsl`, or Tailwind palette. See `/webkit-baseline-ui`.
+   `rgb`, `hsl`, or Tailwind palette. See `/webkit-quick-cleanup`.
 3. **Typography hierarchy** — only the `text-*` tokens, never inverted (`text-heading-* >
-text-body-* > text-label-* > text-overline-*`). See `/webkit-baseline-ui`.
-4. **Spacing rhythm** — one `--spacing-*` step, applied consistently. See `/webkit-baseline-ui`.
+text-body-* > text-label-* > text-overline-*`). See `/webkit-quick-cleanup`.
+4. **Spacing rhythm** — one `--spacing-*` step, applied consistently. See `/webkit-quick-cleanup`.
 5. **One content column** — inside a vertical list (nav rail, menu, settings list, any stack of rows),
    **every row's content starts on the same x**, whatever the row is. A section title's text, a row's
    leading glyph, and a row with no glyph at all all begin on that one column; a row that reserves a
@@ -114,7 +114,7 @@ Run roughly in this order; polish amplifies a sound structure, it can't rescue a
 
 | Phase      | Goal                                                                                                                                      | Skill                       |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| Start      | The whole screen from its pattern: `search_patterns` → `get_pattern`, change only the content                                             | `webkit` MCP                |
+| Start      | The whole screen from its block: `search_blocks` → `get_block`, change only the content                                             | `webkit` MCP                |
 | Mechanics  | Import path, tokens, tree-shaking                                                                                                         | `/webkit-usage`             |
 | Structure  | Right component + Nielsen heuristics; the 3 states must exist                                                                             | `/webkit-ux-heuristics`     |
 | Structure  | Full loading/empty/error/partial state surface + async scope-lock & toasts                                                                | `/webkit-ui-states`         |
@@ -126,13 +126,13 @@ Run roughly in this order; polish amplifies a sound structure, it can't rescue a
 | Structure  | The two console shells; one GlobalHeader; user always visible; one navigation per level                                                   | `/webkit-navigation`        |
 | Structure  | Every string: punctuation, sentence case, label vs message, one word per concept                                                          | `/webkit-microcopy`         |
 | Layout     | The page container system: measure, boundary, rhythm, the site frame                                                                      | `/webkit-layout`            |
-| Foundation | Deslop: components-only, tokens-only, typography hierarchy, spacing rhythm                                                                | `/webkit-baseline-ui`       |
+| Foundation | Deslop: components-only, tokens-only, typography hierarchy, spacing rhythm                                                                | `/webkit-quick-cleanup`       |
 | Quality    | Both themes work with zero per-theme edits                                                                                                | `/webkit-theming-dark-mode` |
 | Quality    | Charts mapped to tokens: form by question, palette, anatomy                                                                               | `/webkit-data-viz`          |
 | Polish     | Smooth motion with tokens only                                                                                                            | `/webkit-motion-polish`     |
-| Polish     | The "feels finished" cross-screen sign-off, incl. an earned delight moment                                                                | `/webkit-impeccable-polish` |
+| Polish     | The "feels finished" cross-screen sign-off, incl. an earned delight moment                                                                | `/webkit-final-polish` |
 | Verify     | Drive the screen: both themes, widths, console, axe/a11y, states                                                                          | `/webkit-ui-verify`         |
-| Migrate    | Adopt webkit incrementally in an existing app; coverage scorecard                                                                         | `/webkit-ds-adoption`       |
+| Migrate    | Adopt webkit incrementally in an existing app; coverage scorecard                                                                         | `/webkit-adoption`       |
 
 ## When to invoke
 

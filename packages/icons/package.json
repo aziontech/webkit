@@ -13,9 +13,9 @@
   },
   "scripts": {
     "clean": "rm -rf dist/",
-    "build": "npm run clean; node scripts/build.mjs",
-    "validate": "node scripts/validate-svg.mjs",
-    "publish": "cd dist && npm publish && cd ..",
+    "build": "npm run clean; node scripts/build-icons.mjs",
+    "check:svg": "node scripts/check-svg.mjs",
+    "release": "cd dist && npm publish && cd ..",
     "pack:dry": "cd dist && npm pack --dry-run && cd ..",
     "format": "prettier --write scripts/ src/"
   },

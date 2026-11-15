@@ -32,7 +32,7 @@ Every non-test source file (`.vue`, `.ts`, `.tsx`, `.js`, `.jsx`, `.mjs`, `.cjs`
 
 ## Enforcement
 
-- **`prose-comment`** in the shared authoring-checks engine ([`authoring-checks.js`](../../packages/webkit/src/eslint-plugin/authoring-checks.js), scanner in [`comment-scan.js`](../../packages/webkit/src/eslint-plugin/comment-scan.js)) — one key per comment, so the count can only fall. Enforced write-time by [`validate-authoring.mjs`](../hooks/validate-authoring.mjs) over all of `packages/`, in CI by the [`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs) ratchet over all of `packages/`, and for consumers by the `webkit/authoring-standards` ESLint rule, which reports each comment at its line.
+- **`prose-comment`** in the shared authoring-checks engine ([`authoring-checks.js`](../../packages/webkit/src/eslint-plugin/lib/authoring-checks.js), scanner in [`comment-scan.js`](../../packages/webkit/src/eslint-plugin/lib/comment-scan.js)) — one key per comment, so the count can only fall. Enforced write-time by [`validate-authoring.mjs`](../hooks/validate-authoring.mjs) over all of `packages/`, in CI by the [`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs) ratchet over all of `packages/`, and for consumers by the `webkit/authoring-standards` ESLint rule, which reports each comment at its line.
 
 ## Why this rule exists
 

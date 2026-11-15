@@ -30,8 +30,8 @@ Agents of any vendor start at the root [`AGENTS.md`](./AGENTS.md).
 ```bash
 # Node >= 24, pnpm 11.x (corepack will install the pinned version)
 pnpm install
-pnpm docs:dev      # components, blocks, foundations from the files
-pnpm demos:dev     # routed flows assembled from blocks
+pnpm dev:docs      # components, blocks, foundations from the files
+pnpm dev:demos     # routed flows assembled from blocks
 ```
 
 ## Component lifecycle
@@ -42,7 +42,7 @@ spec at `.specs/<name>.md` is the contract at every stage: it changes first, and
 
 ### Add
 
-An issue from **New component** (`.github/ISSUE_TEMPLATE/new-component.yml`) → `/webkit-new <issue>`
+An issue from **New component** (`.github/ISSUE_TEMPLATE/new-component.yml`) → `/component-new <issue>`
 → spec as `draft` → review by a second agent (`spec-reviewer`), which flips it to `approved` with a
 checksum → build (component, test, examples) → machine gates → `ui-craft` review → usage check →
 PR. Each step stops the run on failure. The steps, owners and commands are in
@@ -82,7 +82,7 @@ break: it removed every old name outright, and apps migrate once with `MIGRATION
    /** @deprecated since 6.2 — use `kind` instead. Removed in 7.0. */
    ```
 2. For a whole component, set `deprecated: true` and `replaced_by: <name>` in the spec frontmatter.
-   `catalog:build` carries the flag to `catalog.json`, the MCP steers agents off it, and the
+   `build:catalog` carries the flag to `catalog.json`, the MCP steers agents off it, and the
    `webkit/no-deprecated-component` lint flags consumers that still import it.
 3. Keep the part working, unchanged, for at least one major cycle. Marking is a `feat` or `fix`,
    never a major.
@@ -116,7 +116,7 @@ Two more gates hold the Change and Remove stages to their rules:
   migration: a codemod entry, or a new line naming the component in
   `packages/webkit/MIGRATION-v<N>.md`. Any API change, breaking or not, fails without a
   `spec_version` bump in that component's spec. Run it locally with
-  `PR_TITLE='feat(webkit)!: …' pnpm --filter @aziontech/webkit run api-diff`.
+  `PR_TITLE='feat(webkit)!: …' pnpm --filter @aziontech/webkit run check:api-diff`.
 - The PR title must pass commitlint; CI checks it.
 - A `locked` spec passes CI but blocks edits to its component: bump `spec_version`, set it back
   to `approved`, re-validate, then edit. A shipped component's spec never goes back to `draft`.
@@ -140,7 +140,7 @@ You do not need to write code or run anything. You file an issue, and you review
 3. **Where to review.**
    - The **Screenshots** section of the PR: light, dark, right to left, 320 px and 1920 px.
    - The docs site of the branch: the component page and each example, in light and dark. Run
-     `pnpm docs:dev` on the branch, or ask on the PR for the pages you want to see; a hosted
+     `pnpm dev:docs` on the branch, or ask on the PR for the pages you want to see; a hosted
      preview per PR is not set up yet.
    - The visual baselines. When the PR changes them, its checks include **Visual baseline
      review**: open the job summary and download `visual-baseline-review`, a page with every
@@ -159,21 +159,21 @@ design opens the request and approves the merge, and nobody edits the code by ha
 1. **Request.** Open an issue from **New component** or **New block**
    (`.github/ISSUE_TEMPLATE/`): intent, benchmark links (Cloudscape `index.html.md`, shadcn page),
    where it is used, surface (product / marketing / docs), acceptance criteria.
-2. **Run the flow.** An agent runs `/webkit-new <issue>` (`.claude/commands/webkit-new.md`) or
-   `/webkit-new-block <issue>` (`.claude/commands/webkit-new-block.md`). Each step stops the run on
+2. **Run the flow.** An agent runs `/component-new <issue>` (`.claude/commands/component-new.md`) or
+   `/block-new <issue>` (`.claude/commands/block-new.md`). Each step stops the run on
    failure:
 
-   | Step | What happens                                                                                                                              | Owner                             |
-   | ---- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
-   | 1    | Read the issue                                                                                                                            | orchestrator                      |
-   | 2    | Research the benchmarks; check the catalog for reuse (`reuse-audit`, MCP `search_components` / `search_patterns`, `catalog.json#aliases`) | orchestrator, `reuse-auditor`     |
-   | 3    | Spec as `draft` (`spec-create`, template 2) or, for a block, the block brief                                                              | `spec-author`                     |
-   | 4    | Review by a second agent with a fixed checklist; approval flips the spec to `approved` with a checksum                                    | `spec-reviewer`, `spec-validator` |
-   | 5    | Build: component, test, examples (`packages/webkit/examples/<name>/`) — or `block.json` + `.vue` + `variants/`                            | `/component-create` sub-agents    |
-   | 6    | Machine gates (below)                                                                                                                     | orchestrator                      |
-   | 7    | `ui-craft` review on the component, its examples and every block that uses it                                                             | orchestrator                      |
-   | 8    | Usage check: a fresh agent session must pick the new piece through the MCP                                                                | `usage-check.mjs`                 |
-   | 9    | PR from `.github/pull_request_template.md`: gate table, `ui-craft` report, usage report, screenshots                                      | `/open-pr`                        |
+   | Step | What happens                                                                                                                            | Owner                             |
+   | ---- | --------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+   | 1    | Read the issue                                                                                                                          | orchestrator                      |
+   | 2    | Research the benchmarks; check the catalog for reuse (`reuse-audit`, MCP `search_components` / `search_blocks`, `catalog.json#aliases`) | orchestrator, `reuse-auditor`     |
+   | 3    | Spec as `draft` (`spec-create`, template 2) or, for a block, the block brief                                                            | `spec-creator`                    |
+   | 4    | Review by a second agent with a fixed checklist; approval flips the spec to `approved` with a checksum                                  | `spec-reviewer`, `spec-validator` |
+   | 5    | Build: component, test, examples (`packages/webkit/examples/<name>/`) — or `block.json` + `.vue` + `variants/`                          | `/component-create` sub-agents    |
+   | 6    | Machine gates (below)                                                                                                                   | orchestrator                      |
+   | 7    | `ui-craft` review on the component, its examples and every block that uses it                                                           | orchestrator                      |
+   | 8    | Usage check: a fresh agent session must pick the new piece through the MCP                                                              | `check-usage.mjs`                 |
+   | 9    | PR from `.github/pull_request_template.md`: gate table, `ui-craft` report, usage report, screenshots                                    | `/pr-open`                        |
 
 3. **Review.** The head of design approves the PR; a rejection goes back to step 3 or 5 with the
    comments, never to a human fix.
@@ -185,17 +185,17 @@ pnpm --filter @aziontech/webkit run gates            # all fast gates, in order,
 pnpm --filter @aziontech/webkit run gates -- --only naming,catalog --bail
 ```
 
-It runs `catalog:check`, `naming:check`, `marketing:check`, `patterns:check`, `cited-names`,
-`spec-status` (no draft spec), `spec-template:check` (template-2 sections), `authoring`,
-`doc-standards`, `test:gate`, `size` (the bundle budget, about 15 s), the hook tests and
+It runs `check:catalog`, `check:naming`, `check:marketing-inventory`, `check:blocks`, `check:cited-names`,
+`check:spec-status` (no draft spec), `check:spec-template` (template-2 sections), `check:authoring`,
+`check:authoring-docs`, `check:tests`, `check:size` (the bundle budget, about 15 s), the hook tests and
 `test:toolkit`. The `toolkit` job of `.github/workflows/governance.yml` runs the same commands on
-**every** PR, except `size`, which runs in the `build` job; the lint, type, size, Vitest browser
+**every** PR, except `check:size`, which runs in the `build` job; the lint, type, size, Vitest browser
 (including `src/test/copyable-sfcs.test.ts`, which mounts every block and example) jobs run
 when `packages/webkit` changes; the docs/demos build and the styled visual job run when
 `packages/` or `apps/docs`, `apps/demos`, `apps/visual` change.
 
 **Spec template 2.** New specs carry `template: 2` and four more sections: `Internationalization`,
-`Right-to-left`, `Responsive` and `Performance`. `spec-template:check`, `spec-validate` and the
+`Right-to-left`, `Responsive` and `Performance`. `check:spec-template`, `spec-validate` and the
 `enforce-spec-exists` hook require them on template-2 specs and on every spec created on or after
 2026-11-12; the specs that predate it stay valid.
 
@@ -203,8 +203,8 @@ when `packages/webkit` changes; the docs/demos build and the styled visual job r
 finds it:
 
 ```bash
-pnpm --filter @aziontech/webkit run usage-check -- date-picker "Let users pick the start and end of a billing period" --report usage-report.md
-pnpm --filter @aziontech/webkit run usage-check -- platform/auth "A sign-in screen for the console" --dry-run
+pnpm --filter @aziontech/webkit run check:usage -- date-picker "Let users pick the start and end of a billing period" --report usage-report.md
+pnpm --filter @aziontech/webkit run check:usage -- platform/auth "A sign-in screen for the console" --dry-run
 ```
 
 It packs the three packages, creates a clean Vite + Vue app in a temp dir, runs
@@ -241,55 +241,55 @@ Components in [`.claude/hooks/_lib/legacy-components.json`](./.claude/hooks/_lib
 
 ## What to update when WebKit changes
 
-You only write the source. `catalog:build` and the package's `prepack` generate what AI agents read
-(`catalog.json`, its `patterns`, the packaged `skills/` and `rules/`), and CI fails the PR when the
+You only write the source. `build:catalog` and the package's `prepack` generate what AI agents read
+(`catalog.json`, its `blocks`, the packaged `skills/` and `rules/`), and CI fails the PR when the
 source and the generated files disagree. Nobody rewrites the AI files by hand.
 
 | When you…                                             | You write                                                                                    | Generated                                      | CI gate                                                             |
 | ----------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------------------------------------------------------------------- |
-| Create or change a component or a section             | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and its examples | `catalog.json` imports, with docs and examples | `catalog:check` (fails on a missing doc section), hooks             |
-| Create or change a block in `packages/webkit/blocks/` | `block.json` (with `intents` and `skills`), the `.vue`, `variants/`, `guidelines.md`         | `catalog.json` `patterns`                      | `patterns:check` (G1)                                               |
+| Create or change a component or a section             | `.specs/<name>.md` (with Purpose, When to use, When NOT to use), the `.vue` and its examples | `catalog.json` imports, with docs and examples | `check:catalog` (fails on a missing doc section), hooks             |
+| Create or change a block in `packages/webkit/blocks/` | `block.json` (with `intents` and `skills`), the `.vue`, `variants/`, `guidelines.md`         | `catalog.json` `blocks`                        | `check:blocks` (G1)                                                 |
 | Rename, deprecate or remove a component               | The spec, with `deprecated: true` / `replaced_by`                                            | The catalog                                    | `cited-names` (G2)                                                  |
 | Create or change a skill or a rule                    | `skills/<name>/SKILL.md` or `rules/<name>.md` at the repo root                               | The copy in the package (`prepack`)            | `cited-names` (G2), `doc-standards`, invariant tests                |
 | Change a token                                        | `packages/theme`                                                                             | Tokens in the catalog                          | `validate-tokens`                                                   |
-| Open a new spec                                       | The spec in `status: draft`, `template: 2`, only on your branch                              | —                                              | `spec-status` (G3): no draft lands on `main`; `spec-template:check` |
+| Open a new spec                                       | The spec in `status: draft`, `template: 2`, only on your branch                              | —                                              | `spec-status` (G3): no draft lands on `main`; `check:spec-template` |
 | Release a version                                     | Nothing                                                                                      | The release, by release-please                 | —                                                                   |
 
-After any of these, run `pnpm --filter @aziontech/webkit catalog:build` and commit `catalog.json` and `catalog/`.
-A pattern's SFC must pass the consumer lint; legacy findings are frozen in
-`packages/webkit/scripts/patterns-lint-baseline.json` and can only go down
-(`pnpm --filter @aziontech/webkit run patterns:check --update` after fixing some).
+After any of these, run `pnpm --filter @aziontech/webkit build:catalog` and commit `catalog.json` and `catalog/`.
+A block's SFC must pass the consumer lint; legacy findings are frozen in
+`packages/webkit/scripts/blocks-baseline.json` and can only go down
+(`pnpm --filter @aziontech/webkit run check:blocks --update` after fixing some).
 
 ## Quality gates
 
 Before opening a PR, all of these must pass:
 
 ```bash
-pnpm webkit:lint            # ESLint, max-warnings 0
-pnpm webkit:lint:style      # Stylelint
-pnpm webkit:type-check      # vue-tsc --noEmit
-pnpm webkit:type-coverage   # type-coverage >= 95%
-pnpm webkit:format:check    # Prettier
+pnpm lint:webkit            # ESLint, max-warnings 0
+pnpm lint-style:webkit      # Stylelint
+pnpm typecheck:webkit      # vue-tsc --noEmit
+pnpm type-coverage:webkit   # type-coverage >= 95%
+pnpm check-format:webkit    # Prettier
 pnpm --filter @aziontech/webkit test:ssr   # renders every block and example (SFC compile errors invisible to vue-tsc)
-pnpm docs:build             # the docs site, every route prerendered
+pnpm build:docs             # the docs site, every route prerendered
 ```
 
 Or the aggregate:
 
 ```bash
-pnpm governance             # lint + type-check + format:check + security:audit
+pnpm gates             # lint + typecheck + format check + audit
 ```
 
 The `governance` workflow runs on every push to `main` — its status is the badge at the top of the README.
 
-The `complete` gate (`pnpm --filter @aziontech/webkit run complete:check`) fails when a root component lacks an export (or a `-root` export for an `index.ts` compound), a `.size-limit.json` entry, its examples, a visual baseline for its first example, or still has a spec in `status: approved`; current debt lives in `packages/webkit/scripts/complete-baseline.json`, which only shrinks. `size:ratchet` fails a PR that raises a size limit unless its body has a line starting `Budget-raise:`.
+The `complete` gate (`pnpm --filter @aziontech/webkit run check:complete`) fails when a root component lacks an export (or a `-root` export for an `index.ts` compound), a `.size-limit.json` entry, its examples, a visual baseline for its first example, or still has a spec in `status: approved`; current debt lives in `packages/webkit/scripts/complete-baseline.json`, which only shrinks. `check:size-ratchet` fails a PR that raises a size limit unless its body has a line starting `Budget-raise:`.
 
 ## Testing
 
 Webkit ships a co-located `*.test.ts` per component, run in **Vitest browser mode** (real Chromium — never jsdom). See [`.claude/rules/testing.md`](./.claude/rules/testing.md).
 
 ```bash
-pnpm webkit:test                              # whole suite (headless Chromium)
+pnpm test:browser-webkit                              # whole suite (headless Chromium)
 pnpm --filter @aziontech/webkit test:ui       # interactive UI (headed browser)
 pnpm --filter @aziontech/webkit test:coverage # v8 coverage report
 ```
@@ -299,24 +299,24 @@ The first run installs the browser: `pnpm --filter @aziontech/webkit exec playwr
 If pnpm aborts with a deps-verify error (common when `node_modules` is symlinked, e.g. a git worktree), prefix the command:
 
 ```bash
-PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false pnpm webkit:test
+PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false pnpm test:browser-webkit
 ```
 
-Tests never ship to npm — `packages/webkit/package.json#files` excludes them, asserted in CI by `pnpm pack:check`.
+Tests never ship to npm — `packages/webkit/package.json#files` excludes them, asserted in CI by `pnpm check:pack`.
 
 ### Visual regression (styled, Playwright)
 
 The unit suite above runs on an **unstyled** DOM (no Tailwind) and owns behavior/structure/ARIA.
 Pixels are owned by [`apps/visual`](./apps/visual/README.md): Playwright serves the built docs
 site and demos and screenshots them **with the real theme CSS** — the first example of every
-component (`/example?path=<dir>/<file>`) in light and dark at 1280 px and light at 390 px, the primary
-state of every block (`/frame/<state>/<id>`) in light and dark at 1280 px and dark at 390 px, every
+component (`/frame/example/<dir>/<file>`) in light and dark at 1280 px and light at 390 px, the primary
+state of every block (`/frame/block/<id>/<state>`) in light and dark at 1280 px and dark at 390 px, every
 state of the AI blocks (light, dark, 320 px, right to left), every demo route (plus the demo flows
 end to end) and the geometry checks in `tests/geometry.spec.ts`.
 
 ```bash
-pnpm docs:build && pnpm demos:build
-pnpm visual:test             # compare with apps/visual/baselines
+pnpm build:docs && pnpm build:demos
+pnpm test:visual             # compare with apps/visual/baselines
 ```
 
 **Add an example and you are done**: the docs page and its visual test follow from
@@ -324,8 +324,8 @@ pnpm visual:test             # compare with apps/visual/baselines
 step is the baseline. Baselines are committed and are valid only when taken in
 `mcr.microsoft.com/playwright:v1.62.0-noble` (the image the CI `visual` job runs in): dispatch
 `.github/workflows/visual-baselines.yml` with `update_baselines=true`
-(`pnpm visual:update:baseline`), review the `visual-baselines` artifact and commit it
-(`/regen-baselines`). Failed comparisons upload the Playwright report (with diffs) as an artifact.
+(`pnpm regenerate:baselines`), review the `visual-baselines` artifact and commit it
+(`/baselines-regenerate`). Failed comparisons upload the Playwright report (with diffs) as an artifact.
 
 ## Commit convention
 
@@ -470,10 +470,10 @@ Open an [issue](https://github.com/aziontech/webkit/issues/new) with:
 
 Releases are automated by [release-please](https://github.com/googleapis/release-please) ([`release-please.yml`](./.github/workflows/release-please.yml)) — the Release PR model. Merging `feat` / `fix` / breaking commits to `main` creates or updates a pending **Release PR** (version bumps + changelogs); merging that Release PR creates the per-package tags and GitHub Releases, which trigger the publish workflows via `release: published`:
 
-- [`package-icons.yml`](./.github/workflows/package-icons.yml) → `@aziontech/icons`
-- [`package-theme.yml`](./.github/workflows/package-theme.yml) → `@aziontech/theme`
-- [`package-webkit.yml`](./.github/workflows/package-webkit.yml) → `@aziontech/webkit`
-- [`package-webkit-mcp.yml`](./.github/workflows/package-webkit-mcp.yml) → `@aziontech/webkit-mcp`
+- [`publish-icons.yml`](./.github/workflows/publish-icons.yml) → `@aziontech/icons`
+- [`publish-theme.yml`](./.github/workflows/publish-theme.yml) → `@aziontech/theme`
+- [`publish-webkit.yml`](./.github/workflows/publish-webkit.yml) → `@aziontech/webkit`
+- [`publish-webkit-mcp.yml`](./.github/workflows/publish-webkit-mcp.yml) → `@aziontech/webkit-mcp`
 
 There is no manual release step. If you need a merge that does not produce a release, use `chore:` or `docs:` (no version bump).
 

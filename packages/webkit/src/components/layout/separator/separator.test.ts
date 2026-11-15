@@ -130,46 +130,46 @@ describe('Separator', () => {
       expect(vertical).toHaveAttribute('data-orientation', 'vertical')
     })
   })
-})
 
-describe('Separator slot presence', () => {
-  it('follows a v-if slot that appears and disappears after mount', async () => {
-    const shown = ref(false)
-    const { queryByTestId } = render({
-      components: { Separator },
-      setup: () => ({ shown }),
-      template: `<Separator><template v-if="shown" #default><span data-testid="probe">Slotted</span></template></Separator>`
+  describe('slot presence', () => {
+    it('follows a v-if slot that appears and disappears after mount', async () => {
+      const shown = ref(false)
+      const { queryByTestId } = render({
+        components: { Separator },
+        setup: () => ({ shown }),
+        template: `<Separator><template v-if="shown" #default><span data-testid="probe">Slotted</span></template></Separator>`
+      })
+      expect(queryByTestId('layout-separator__label')).toBeNull()
+
+      shown.value = true
+      await nextTick()
+      expect(queryByTestId('layout-separator__label')).not.toBeNull()
+      expect(queryByTestId('probe')).not.toBeNull()
+
+      shown.value = false
+      await nextTick()
+      expect(queryByTestId('layout-separator__label')).toBeNull()
+      expect(queryByTestId('probe')).toBeNull()
     })
-    expect(queryByTestId('layout-separator__label')).toBeNull()
-
-    shown.value = true
-    await nextTick()
-    expect(queryByTestId('layout-separator__label')).not.toBeNull()
-    expect(queryByTestId('probe')).not.toBeNull()
-
-    shown.value = false
-    await nextTick()
-    expect(queryByTestId('layout-separator__label')).toBeNull()
-    expect(queryByTestId('probe')).toBeNull()
-  })
-})
-
-describe('Separator decorative', () => {
-  it('renders role none and drops aria-orientation when decorative and unlabelled', () => {
-    const { getByTestId, queryByRole } = render(Separator, { props: { decorative: true } })
-    const root = getByTestId('layout-separator')
-    expect(root.getAttribute('role')).toBe('none')
-    expect(root.hasAttribute('aria-orientation')).toBe(false)
-    expect(queryByRole('separator')).toBeNull()
   })
 
-  it('keeps a labelled divider a named separator even when decorative', () => {
-    const { getByRole } = render(Separator, { props: { decorative: true, label: 'Or' } })
-    expect(getByRole('separator', { name: 'Or' })).toBeTruthy()
-  })
+  describe('decorative', () => {
+    it('renders role none and drops aria-orientation when decorative and unlabelled', () => {
+      const { getByTestId, queryByRole } = render(Separator, { props: { decorative: true } })
+      const root = getByTestId('layout-separator')
+      expect(root.getAttribute('role')).toBe('none')
+      expect(root.hasAttribute('aria-orientation')).toBe(false)
+      expect(queryByRole('separator')).toBeNull()
+    })
 
-  it('stays a separator by default', () => {
-    const { getByRole } = render(Separator)
-    expect(getByRole('separator')).toBeTruthy()
+    it('keeps a labelled divider a named separator even when decorative', () => {
+      const { getByRole } = render(Separator, { props: { decorative: true, label: 'Or' } })
+      expect(getByRole('separator', { name: 'Or' })).toBeTruthy()
+    })
+
+    it('stays a separator by default', () => {
+      const { getByRole } = render(Separator)
+      expect(getByRole('separator')).toBeTruthy()
+    })
   })
 })

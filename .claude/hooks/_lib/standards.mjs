@@ -26,7 +26,7 @@ export const STANDARDS = [
     enforce: [
       { surface: 'write-time', by: 'validate-spec-compliance' },
       { surface: 'ci', by: 'check-authoring' },
-      { surface: 'lint', by: 'menu-node-href' }
+      { surface: 'lint', by: 'prefer-href-in-menu-node' }
     ]
   },
   {
@@ -44,7 +44,7 @@ export const STANDARDS = [
     scope: 'webkit',
     enforce: [
       { surface: 'write-time', by: 'validate-references' },
-      { surface: 'lint', by: 'valid-import-path' },
+      { surface: 'lint', by: 'no-unknown-import' },
       { surface: 'lint', by: 'no-barrel-import' },
       { surface: 'lint', by: 'no-deep-internal-import' },
       { surface: 'lint', by: 'prefer-tree-shakeable-root' },
@@ -61,7 +61,7 @@ export const STANDARDS = [
       { surface: 'ci', by: 'check-complete' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'scaffolder emits the compound + -root; check-complete fails a compound whose index.ts export has no ./<name>-root pointing at the root .vue (ratcheted by complete-baseline.json); catalog drift check + review confirm.'
+    note: 'component-scaffolder emits the compound + -root; check-complete fails a compound whose index.ts export has no ./<name>-root pointing at the root .vue (ratcheted by complete-baseline.json); catalog drift check + review confirm.'
   },
   {
     id: 'styling',
@@ -74,7 +74,7 @@ export const STANDARDS = [
       { surface: 'lint', by: 'no-hardcoded-motion' },
       { surface: 'lint', by: 'no-style-override' },
       { surface: 'lint', by: 'no-physical-direction' },
-      { surface: 'lint', by: 'container-needs-width' },
+      { surface: 'lint', by: 'require-container-width' },
       { surface: 'lint', by: 'no-wrapped-page-chrome' },
       { surface: 'lint', by: 'no-gap-after-closing-section' },
       { surface: 'lint', by: 'no-viewport-height-calc' },
@@ -240,7 +240,7 @@ export const STANDARDS = [
     scope: 'general',
     enforce: [
       { surface: 'ci', by: 'vuejs-accessibility' },
-      { surface: 'lint', by: 'accessible-name' },
+      { surface: 'lint', by: 'require-accessible-name' },
       { surface: 'review', by: 'required-approval' }
     ],
     note: 'Static a11y via eslint-plugin-vuejs-accessibility (error); behavioural via axe once the test layer lands; review in the meantime.'
@@ -291,7 +291,7 @@ export const STANDARDS = [
       { surface: 'ci', by: 'vitest' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'Every component ships a co-located <name>.test.ts — you cannot create or land a component without its test. enforce-test-exists blocks a component .vue write/edit whose <name>.test.ts is missing; check-tests fails CI when any component lacks a test (existence — never grandfathered); the sharded Vitest browser CI job (Playwright Chromium, the component mounted with its examples as fixtures, axe-core on the tree) runs the suite; validate-references blocks a test with unresolved imports (incl. a mistaken @stories alias); package.json#files + pack:check keep tests out of the published tarball. Review confirms the behavioral surface is actually covered and that a behavior change updates the test (style-only changes need no test touch — deliberately no diff-freshness gate). check-complete fails a component whose example group (the test fixtures) is missing or ships fewer examples than its spec lists, or whose first example has no visual baseline, ratcheted by complete-baseline.json.'
+    note: 'Every component ships a co-located <name>.test.ts — you cannot create or land a component without its test. enforce-test-exists blocks a component .vue write/edit whose <name>.test.ts is missing; check-tests fails CI when any component lacks a test (existence — never grandfathered); the sharded Vitest browser CI job (Playwright Chromium, the component mounted with its examples as fixtures, axe-core on the tree) runs the suite; validate-references blocks a test with unresolved imports (incl. a mistaken @stories alias); package.json#files + check:pack keep tests out of the published tarball. Review confirms the behavioral surface is actually covered and that a behavior change updates the test (style-only changes need no test touch — deliberately no diff-freshness gate). check-complete fails a component whose example group (the test fixtures) is missing or ships fewer examples than its spec lists, or whose first example has no visual baseline, ratcheted by complete-baseline.json.'
   },
   {
     id: 'comments',
@@ -313,7 +313,7 @@ export const STANDARDS = [
       { surface: 'ci', by: 'check-authoring' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'Sample data uses example.com/.org/.net (RFC 2606), Acme as the one sample company, fictional US-format people, phones and addresses, and no national ID formats or masks. example-data:domain, :regional-format and :invented-brand in the check-authoring ratchet (src/eslint-plugin/example-data.js) over src, blocks, examples, skills and rules; defaults and preselected options are held in review.'
+    note: 'Sample data uses example.com/.org/.net (RFC 2606), Acme as the one sample company, fictional US-format people, phones and addresses, and no national ID formats or masks. example-data:domain, :regional-format and :invented-brand in the check-authoring ratchet (src/eslint-plugin/lib/example-data.js) over src, blocks, examples, skills and rules; defaults and preselected options are held in review.'
   },
   {
     id: 'authoring-docs',

@@ -15,7 +15,7 @@
  * EXACT rule it guards, so a parse error or an unrelated finding cannot fake a
  * pass.
  *
- * Runs in CI (governance.yml → lint-canary job).  Locally:
+ * Runs in CI (governance.yml → lint-canaries job).  Locally:
  *   node lint-canaries/index.js
  *
  * Docs: lint-canaries/README.md · .claude/docs/DOC_LINTS.md

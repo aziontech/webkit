@@ -35,7 +35,7 @@ flowchart TB
     end
 
     subgraph L2["Layer 2 — Visual regression (apps/visual)"]
-        BUILD["docs:build + demos:build → static dist/"]
+        BUILD["build:docs + build:demos → static dist/"]
         SNAP["Playwright screenshots, real theme CSS<br/>/example · /frame · demo routes"]
         COMPARE["toHaveScreenshot<br/>vs committed baselines (Playwright image)"]
         BUILD --> SNAP --> COMPARE
@@ -165,8 +165,8 @@ screenshots with the real theme CSS. Specs and matrix:
 
 | Spec               | Pages                                                                                                                                                      | Modes                                                                                    |
 | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| `examples.spec.ts` | `/example?path=<dir>/<file>`, the first example of every component                                                                                         | light 1280, dark 1280, light 390                                                         |
-| `blocks.spec.ts`   | `/frame/<state>/<id>`, the primary state of every block; every state of `platform/ai/*`                                                                    | light 1280, dark 1280, dark 390; AI blocks light/dark at 320 and 1280 plus right to left |
+| `examples.spec.ts` | `/frame/example/<dir>/<file>`, the first example of every component                                                                                         | light 1280, dark 1280, light 390                                                         |
+| `blocks.spec.ts`   | `/frame/block/<id>/<state>`, the primary state of every block; every state of `platform/ai/*`                                                                    | light 1280, dark 1280, dark 390; AI blocks light/dark at 320 and 1280 plus right to left |
 | `demos.spec.ts`    | every demo route, plus the flows end to end                                                                                                                | light 1280, dark 1280, dark 390; resource routes also right to left in pt-BR             |
 | `geometry.spec.ts` | styled geometry the unit layer cannot see (table presets, reorder mid-drag beside frozen columns, `OverflowCount` open, `OtpInput` at 320, account pieces) | per test                                                                                 |
 
@@ -177,7 +177,7 @@ to `localhost` aborted; `streaming` states run on a fake clock advanced 1.5 s. `
 Baselines (`apps/visual/baselines/`) are committed and valid only when rendered in
 `mcr.microsoft.com/playwright:v1.62.0-noble`, the image the CI job runs in. New examples, blocks
 and demo routes are picked up from the files; only their baseline is a manual step
-(`visual-baselines.yml`, `/regen-baselines`).
+(`visual-baselines.yml`, `/baselines-regenerate`).
 
 ---
 
@@ -225,7 +225,7 @@ Two mechanisms, verified in CI (`governance.yml` → build job):
    ```json
    "files": ["src", "!src/**/*.test.{ts,js}", "!src/test/**", "package.json"]
    ```
-2. `pack:check` asserts it:
+2. `check:pack` asserts it:
    ```bash
    ! npm pack --dry-run 2>&1 | grep -E '\.test\.(ts|js)|src/test/'
    ```
@@ -248,15 +248,15 @@ Two mechanisms, verified in CI (`governance.yml` → build job):
 
 ## 7. Command cheat sheet
 
-| Command (repo root)               | What it runs                                                         |
-| --------------------------------- | -------------------------------------------------------------------- |
-| `pnpm webkit:test`                | full browser-mode suite, headless                                    |
-| `pnpm webkit:test:watch`          | watch mode                                                           |
-| `pnpm webkit:test:ui`             | Vitest UI with a **headed** browser (debugging)                      |
-| `pnpm webkit:test:coverage`       | suite + V8 coverage report (`text` + `lcov`)                         |
-| `pnpm visual:test`                | styled screenshots vs baselines (after `docs:build` + `demos:build`) |
-| `pnpm visual:update:baseline`     | dispatch the baseline workflow for this branch                       |
-| `pnpm --filter webkit pack:check` | assert no test file leaks into the npm tarball                       |
+| Command (repo root)                          | What it runs                                                         |
+| -------------------------------------------- | -------------------------------------------------------------------- |
+| `pnpm test:browser-webkit`                   | full browser-mode suite, headless                                    |
+| `pnpm test:webkit:watch`                     | watch mode                                                           |
+| `pnpm test:webkit:ui`                        | Vitest UI with a **headed** browser (debugging)                      |
+| `pnpm test:webkit:coverage`                  | suite + V8 coverage report (`text` + `lcov`)                         |
+| `pnpm test:visual`                           | styled screenshots vs baselines (after `build:docs` + `build:demos`) |
+| `pnpm regenerate:baselines`                  | dispatch the baseline workflow for this branch                       |
+| `pnpm --filter @aziontech/webkit check:pack` | assert no test file leaks into the npm tarball                       |
 
 ---
 
@@ -272,4 +272,4 @@ Two mechanisms, verified in CI (`governance.yml` → build job):
 | **Sampled matrix** (first example per component, primary block state, all AI-block states, demo routes) | every example × every mode                      | ~900 screenshots keep the run CI-sized; the geometry spec adds targeted shots where layout is fragile             |
 | **4-shard CI matrix** + retry 2                                                                         | single job                                      | ~150-component suite parallelizes; retries absorb browser-launch flakes without hiding real failures              |
 | Coverage **reporting-only**                                                                             | coverage gate                                   | signal first, ratchet later — the functional floor (10 surfaces) is the real gate                                 |
-| Tests co-located, published-excluded                                                                    | separate `__tests__/` tree                      | test lives with the component it proves; `files` negation + `pack:check` keep npm clean                           |
+| Tests co-located, published-excluded                                                                    | separate `__tests__/` tree                      | test lives with the component it proves; `files` negation + `check:pack` keep npm clean                           |

@@ -6,19 +6,19 @@ suite (`packages/webkit`, Vitest) runs without CSS and owns behavior, structure 
 suite owns pixels: layout, color, contrast in context, focus rings, overflow.
 
 ```bash
-pnpm docs:build && pnpm demos:build   # the suite serves apps/docs/dist and apps/demos/dist
-pnpm visual:test                      # compare with apps/visual/baselines
-pnpm visual:update                    # rewrite the baselines (only inside the Playwright image)
+pnpm build:docs && pnpm build:demos   # the suite serves apps/docs/dist and apps/demos/dist
+pnpm test:visual                      # compare with apps/visual/baselines
+pnpm update:visual                    # rewrite the baselines (only inside the Playwright image)
 ```
 
 ## What it covers
 
-| Spec                     | Pages                                                               | Matrix                                                                                                                                                                                                                     |
-| ------------------------ | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `tests/examples.spec.ts` | `/example?path=<dir>/<file>` — the first example of every component | light 1280, dark 1280, light 390                                                                                                                                                                                           |
-| `tests/blocks.spec.ts`   | `/frame/<state>/<id>` — the primary state of every block            | light 1280, dark 1280, dark 390; every state of `platform/ai/*` in light and dark at 320 and 1280 and right to left                                                                                                        |
-| `tests/demos.spec.ts`    | every demo route, plus the flows end to end                         | light 1280, dark 1280, dark 390; resource routes also light 1280 right to left in pt-BR                                                                                                                                    |
-| `tests/geometry.spec.ts` | styled geometry that the unstyled unit suite cannot see             | `Table` cell presets at 360 / 768 / 1280, a reorder mid-drag beside frozen columns, the open `OverflowCount`, `OtpInput` at 320, team permissions, the token reveal and the account switcher at 320 / 1920 / right to left |
+| Spec                     | Pages                                                                | Matrix                                                                                                                                                                                                                     |
+| ------------------------ | -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `tests/examples.spec.ts` | `/frame/example/<dir>/<file>` — the first example of every component | light 1280, dark 1280, light 390                                                                                                                                                                                           |
+| `tests/blocks.spec.ts`   | `/frame/block/<id>/<state>` — the primary state of every block       | light 1280, dark 1280, dark 390; every state of `platform/ai/*` in light and dark at 320 and 1280 and right to left                                                                                                        |
+| `tests/demos.spec.ts`    | every demo route, plus the flows end to end                          | light 1280, dark 1280, dark 390; resource routes also light 1280 right to left in pt-BR                                                                                                                                    |
+| `tests/geometry.spec.ts` | styled geometry that the unstyled unit suite cannot see              | `Table` cell presets at 360 / 768 / 1280, a reorder mid-drag beside frozen columns, the open `OverflowCount`, `OtpInput` at 320, team permissions, the token reveal and the account switcher at 320 / 1920 / right to left |
 
 New examples, blocks and demo routes are picked up from the files: add an example to
 `packages/webkit/examples/<name>/` and the docs page and its visual test exist; the only manual
@@ -36,8 +36,8 @@ enough to catch a legend swatch.
 `baselines/` is committed and is the CI contract. Screenshots differ between machines (font
 rasterization), so baselines are generated only in `mcr.microsoft.com/playwright:v1.62.0-noble`,
 the image the `visual` job in `.github/workflows/governance.yml` runs in. To regenerate them for a
-branch, dispatch `.github/workflows/visual-baselines.yml` (`pnpm visual:update:baseline`) and
-commit the artifact after reviewing it; the `regen-baselines` skill describes the flow. Locally,
+branch, dispatch `.github/workflows/visual-baselines.yml` (`pnpm regenerate:baselines`) and
+commit the artifact after reviewing it; the `baselines-regenerate` skill describes the flow. Locally,
 run the suite inside the same image:
 
 ```bash
@@ -57,11 +57,11 @@ Each place the suite runs leaves a page to review, linked from the run's job sum
 | `visual-baselines.yml` with `update_baselines=true`        | `visual-baseline-review`  | The committed and the regenerated baselines, side by side, for the files that changed |
 
 Download the artifact, unzip it, and open `index.html` (for the Playwright report, run
-`npx playwright show-report playwright-report`). The page comes from `scripts/baseline-review.mjs`,
+`npx playwright show-report playwright-report`). The page comes from `scripts/review-baselines.mjs`,
 which compares two folders of images; locally, after mirroring new baselines:
 
 ```bash
 mkdir -p /tmp/before && git archive HEAD apps/visual/baselines | tar -x -C /tmp/before
-node apps/visual/scripts/baseline-review.mjs --before /tmp/before/apps/visual/baselines \
+node apps/visual/scripts/review-baselines.mjs --before /tmp/before/apps/visual/baselines \
   --after apps/visual/baselines --out apps/visual/baseline-review
 ```

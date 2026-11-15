@@ -75,7 +75,7 @@ groups go in their `search` slot; a page opens the console palette with
 
 ## Enforced
 
-`webkit/header-search-trigger` (ESLint, in the recommended preset and in `webkit check`) flags a
+`webkit/require-header-search` (ESLint, in the recommended preset and in `webkit check`) flags a
 `GlobalHeader` with navigation (`GlobalHeader.Center`, `NavigationMenu`, or a `Sidebar` in the same
 template) and no `SearchTrigger`, any `aria-keyshortcuts="Meta+K"` / `Control+K` outside
 `SearchTrigger`, and a `ai-search` button inside a `GlobalHeader`.

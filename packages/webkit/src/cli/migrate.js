@@ -32,7 +32,8 @@ export function loadMigration(version) {
     exports: exportList(),
     props: readJson(join(MIGRATIONS_DIR, `v${version}-props.json`)),
     icons: readJson(join(MIGRATIONS_DIR, `v${version}-icons.json`)),
-    tokens: readJson(join(MIGRATIONS_DIR, `v${version}-tokens.json`))
+    tokens: readJson(join(MIGRATIONS_DIR, `v${version}-tokens.json`)),
+    lint: readJson(join(MIGRATIONS_DIR, `v${version}-lint.json`))
   }
 }
 
@@ -113,6 +114,20 @@ export function migrateIcons(source, icons = {}, { fromMajor = null, declaredMaj
     )
   }
   return done()
+}
+
+const LINT_RULE = /(?<![\w@/.-])webkit\/[a-z][a-z0-9-]*(?![\w-])/g
+
+export function migrateLintRules(source, lint = {}) {
+  const changes = []
+  if (!source.includes('webkit/')) return { source, changes }
+  const out = source.replace(LINT_RULE, (id) => {
+    const next = lint[id]
+    if (typeof next !== 'string') return id
+    changes.push(`${id} → ${next}`)
+    return next
+  })
+  return { source: out, changes: [...new Set(changes)] }
 }
 
 const kebab = (s) =>
@@ -312,9 +327,10 @@ export function referencedSubpaths(source) {
 export function migrateSource(input, migration, { fromMajor = null, declaredMajor = null } = {}) {
   const { props, types } = migration
   const tokenPass = migrateTokens(input, migration.tokens)
-  const iconPass = migrateIcons(tokenPass.source, migration.icons, { fromMajor, declaredMajor })
+  const lintPass = migrateLintRules(tokenPass.source, migration.lint)
+  const iconPass = migrateIcons(lintPass.source, migration.icons, { fromMajor, declaredMajor })
   const source = iconPass.source
-  const changes = [...tokenPass.changes, ...iconPass.changes]
+  const changes = [...tokenPass.changes, ...lintPass.changes, ...iconPass.changes]
   const warnings = [...tokenPass.warnings, ...iconPass.warnings]
   const subpaths = referencedSubpaths(source)
   if (!subpaths.size) return { source, changes, warnings }

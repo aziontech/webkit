@@ -15,7 +15,7 @@ import {
   sortCounts,
   total
 } from '../../scripts/check-examples-lint.mjs'
-import { GATES } from '../../scripts/gates.mjs'
+import { GATES } from '../../scripts/run-gates.mjs'
 import { _internals } from '../../src/cli/plan.js'
 
 const baseline = JSON.parse(
@@ -35,7 +35,7 @@ test('the gate lints with the exact config `webkit init` writes (strict preset)'
   assert.equal([rules['vuejs-accessibility/label-has-for']].flat()[0], 'error')
 })
 
-test('the gate is wired into gates.mjs', () => {
+test('the gate is wired into run-gates.mjs', () => {
   const gate = GATES.find((g) => g.id === 'examples-lint')
   assert.ok(gate)
   assert.deepEqual(gate.steps, [['node', 'scripts/check-examples-lint.mjs']])

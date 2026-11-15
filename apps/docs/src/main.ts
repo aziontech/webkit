@@ -6,9 +6,9 @@ import '@aziontech/webkit/styles/country-flags'
 
 import { ViteSSG } from 'vite-ssg'
 
-import App from './App.vue'
+import App from './app.vue'
 import { preloadRoute } from './lib/data'
-import { routes } from './routes'
+import { routes } from './router'
 
 export const createApp = ViteSSG(
   App,

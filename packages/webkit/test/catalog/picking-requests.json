@@ -1,5 +1,5 @@
 {
-  "description": "The AI-picking auditor battery (v6 duplicate audit): console-builder requests and the component (or pattern) that must come FIRST. tool: components = search_components, suggest = suggest_component (its pattern id when it recommends a pattern, else its best component or section). accept lists other answers that are equally right. pending: the right answer is a name another v6 lane is still adding or renaming; the case is skipped until the catalog is regenerated.",
+  "description": "The AI-picking auditor battery (v6 duplicate audit): console-builder requests and the component (or block) that must come FIRST. tool: components = search_components, suggest = suggest_component (its block id when it recommends a block, else its best component or section). accept lists other answers that are equally right. pending: the right answer is a name another v6 lane is still adding or renaming; the case is skipped until the catalog is regenerated.",
   "requests": [
     {
       "tool": "components",
@@ -700,7 +700,8 @@
     {
       "tool": "suggest",
       "query": "cta",
-      "top1": "closing-call-to-action"
+      "top1": "call-to-action",
+      "accept": ["call-to-action", "closing-call-to-action"]
     },
     {
       "tool": "suggest",
@@ -720,7 +721,8 @@
     {
       "tool": "suggest",
       "query": "comparison",
-      "top1": "compare-plans"
+      "top1": "compare-plans",
+      "accept": ["compare-plans", "comparison-table"]
     },
     {
       "tool": "suggest",

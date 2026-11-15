@@ -1,6 +1,6 @@
-import { loadCatalog } from '../catalog.js'
-import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../layout-classes.js'
-import { ctxCwd, templateBodyVisitorFactory } from '../util.js'
+import { loadCatalog } from '../lib/catalog.js'
+import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../lib/layout-classes.js'
+import { ctxCwd, templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const WEBKIT_TAG_KINDS = new Set(['component', 'root', 'subcomponent'])
 

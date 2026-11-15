@@ -3,7 +3,7 @@ import assert from 'node:assert/strict'
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs'
 import { join, relative } from 'node:path'
 
-import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../../src/eslint-plugin/layout-classes.js'
+import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../../src/eslint-plugin/lib/layout-classes.js'
 import { PKG_ROOT } from './_helpers/cli-project.mjs'
 
 const REPO_ROOT = join(PKG_ROOT, '..', '..')
@@ -130,7 +130,7 @@ test('the docs that list the allowed layout classes list all of LAYOUT_CLASS_FAM
   for (const rel of [
     'rules/webkit-style-override.md',
     'skills/webkit-usage/SKILL.md',
-    'adapters/AGENTS.fragment.md'
+    'adapters/AGENTS_FRAGMENT.md'
   ]) {
     const text = readFileSync(join(REPO_ROOT, rel), 'utf8').replace(/\s*\n\s*/g, ' ')
     if (!text.includes(full)) stale.push(rel)

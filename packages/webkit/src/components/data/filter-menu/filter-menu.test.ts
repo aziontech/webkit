@@ -278,164 +278,166 @@ describe('FilterMenu', () => {
     await openField('owner')
     await expectNoA11yViolations(panel()!)
   })
-})
 
-describe('FilterMenu.Chips', () => {
-  it('renders one chip per applied field with its label, first value and +N, in a named group', () => {
-    mount({ owner: ['jane', 'john', 'priya'], status: ['live'] }, true)
-    const group = byTestId('data-filter-menu-chips')!
-    expect(group.getAttribute('role')).toBe('group')
-    expect(group.getAttribute('aria-label')).toBe('Applied filters')
-    const owner = byTestId('data-filter-menu-chips__chip-owner')!
-    expect(owner.textContent).toContain('Author')
-    expect(owner.textContent).toContain('Jane Doe')
-    expect(owner.textContent).toContain('+2')
-    expect(byTestId('data-filter-menu-chips__chip-status')?.textContent).toContain('Live')
-    expect(byTestId('data-filter-menu-chips__chip-modified')).toBeNull()
+  describe('FilterMenu.Chips', () => {
+    it('renders one chip per applied field with its label, first value and +N, in a named group', () => {
+      mount({ owner: ['jane', 'john', 'priya'], status: ['live'] }, true)
+      const group = byTestId('data-filter-menu-chips')!
+      expect(group.getAttribute('role')).toBe('group')
+      expect(group.getAttribute('aria-label')).toBe('Applied filters')
+      const owner = byTestId('data-filter-menu-chips__chip-owner')!
+      expect(owner.textContent).toContain('Author')
+      expect(owner.textContent).toContain('Jane Doe')
+      expect(owner.textContent).toContain('+2')
+      expect(byTestId('data-filter-menu-chips__chip-status')?.textContent).toContain('Live')
+      expect(byTestId('data-filter-menu-chips__chip-modified')).toBeNull()
+    })
+
+    it('renders nothing when no field is applied', () => {
+      mount({}, true)
+      expect(byTestId('data-filter-menu-chips')).toBeNull()
+    })
+
+    it('reopens the menu that shares its fields at the chip field, emitting edit with the event first', async () => {
+      const { edits } = mount({ status: ['live'] }, true)
+      await settle()
+      const chip = byTestId('data-filter-menu-chips__chip-status')!
+      const body = chip.querySelector<HTMLElement>('[role="button"], button') ?? chip
+      await fireEvent.click(body)
+      expect(edits.length).toBe(1)
+      expect(edits[0]![0]).toBeInstanceOf(Event)
+      expect((edits[0]![1] as FilterMenuField).id).toBe('status')
+      await waitFor(() =>
+        expect(panel()?.querySelector('[data-level="values:status"]')).not.toBeNull()
+      )
+    })
+
+    it('removes a field from the model with the remove button, emitting remove with the event first', async () => {
+      const { removes, updates } = mount({ owner: ['jane'], status: ['live'] }, true)
+      const chip = byTestId('data-filter-menu-chips__chip-owner')!
+      const remove =
+        chip.querySelector<HTMLElement>('[data-testid$="__remove"]') ??
+        [...chip.querySelectorAll<HTMLElement>('button')].at(-1)!
+      await fireEvent.click(remove)
+      expect(removes.length).toBe(1)
+      expect(removes[0]![0]).toBeInstanceOf(MouseEvent)
+      expect((removes[0]![1] as FilterMenuField).id).toBe('owner')
+      expect(updates.at(-1)).toEqual({ status: ['live'] })
+      await nextTick()
+    })
+
+    it('has no a11y violations', async () => {
+      const { view } = mount({ owner: ['jane', 'john'] }, true)
+      await expectNoA11yViolations(view.container)
+    })
   })
 
-  it('renders nothing when no field is applied', () => {
-    mount({}, true)
-    expect(byTestId('data-filter-menu-chips')).toBeNull()
+  describe('examples', () => {
+    it('render the Default and Sizes examples', async () => {
+      const first = render(Default)
+      expect(first.getByTestId('data-filter-menu')).toBeTruthy()
+      expect(first.getByTestId('data-filter-menu-chips')).toBeTruthy()
+      await expectNoA11yViolations(first.container)
+      first.unmount()
+      const sizes = render(Sizes)
+      expect(sizes.getAllByTestId('data-filter-menu__count')).toHaveLength(3)
+    })
   })
 
-  it('reopens the menu that shares its fields at the chip field, emitting edit with the event first', async () => {
-    const { edits } = mount({ status: ['live'] }, true)
-    await settle()
-    const chip = byTestId('data-filter-menu-chips__chip-status')!
-    const body = chip.querySelector<HTMLElement>('[role="button"], button') ?? chip
-    await fireEvent.click(body)
-    expect(edits.length).toBe(1)
-    expect(edits[0]![0]).toBeInstanceOf(Event)
-    expect((edits[0]![1] as FilterMenuField).id).toBe('status')
-    await waitFor(() =>
-      expect(panel()?.querySelector('[data-level="values:status"]')).not.toBeNull()
-    )
-  })
+  describe('open state, disabled and long value lists', () => {
+    it('opens from defaultOpen and reports and follows v-model:open', async () => {
+      const seeded = render(FilterMenu, { props: { fields, defaultOpen: true } })
+      await waitFor(() => expect(panel()).not.toBeNull(), WAIT)
+      seeded.unmount()
+      document.body.innerHTML = ''
 
-  it('removes a field from the model with the remove button, emitting remove with the event first', async () => {
-    const { removes, updates } = mount({ owner: ['jane'], status: ['live'] }, true)
-    const chip = byTestId('data-filter-menu-chips__chip-owner')!
-    const remove =
-      chip.querySelector<HTMLElement>('[data-testid$="__remove"]') ??
-      [...chip.querySelectorAll<HTMLElement>('button')].at(-1)!
-    await fireEvent.click(remove)
-    expect(removes.length).toBe(1)
-    expect(removes[0]![0]).toBeInstanceOf(MouseEvent)
-    expect((removes[0]![1] as FilterMenuField).id).toBe('owner')
-    expect(updates.at(-1)).toEqual({ status: ['live'] })
-    await nextTick()
-  })
+      const view = render(FilterMenu, { props: { fields, open: false, 'onUpdate:open': () => {} } })
+      await settle()
+      await fireEvent.click(trigger())
+      expect(view.emitted()['update:open']).toEqual([[true]])
+      expect(trigger().getAttribute('aria-expanded')).toBe('false')
+      await view.rerender({ open: true })
+      await waitFor(() => expect(panel()).not.toBeNull(), WAIT)
+    })
 
-  it('has no a11y violations', async () => {
-    const { view } = mount({ owner: ['jane', 'john'] }, true)
-    await expectNoA11yViolations(view.container)
-  })
-})
+    it('opens and closes through v-model:open', async () => {
+      const open = ref(false)
+      const opens: boolean[] = []
+      render(
+        defineComponent({
+          setup: () => () =>
+            h(FilterMenu, {
+              fields,
+              open: open.value,
+              'onUpdate:open': (value: boolean) => {
+                opens.push(value)
+                open.value = value
+              }
+            })
+        })
+      )
+      await settle()
+      open.value = true
+      await waitFor(() => expect(panel()).not.toBeNull(), WAIT)
+      await fireEvent.click(trigger())
+      expect(opens.at(-1)).toBe(false)
+      await waitFor(() => expect(panel()).toBeNull(), WAIT)
+    })
 
-describe('FilterMenu examples', () => {
-  it('render the Default and Sizes examples', async () => {
-    const first = render(Default)
-    expect(first.getByTestId('data-filter-menu')).toBeTruthy()
-    expect(first.getByTestId('data-filter-menu-chips')).toBeTruthy()
-    await expectNoA11yViolations(first.container)
-    first.unmount()
-    const sizes = render(Sizes)
-    expect(sizes.getAllByTestId('data-filter-menu__count')).toHaveLength(3)
-  })
-})
+    it('does not open while disabled', async () => {
+      render(FilterMenu, { props: { fields, disabled: true } })
+      await settle()
+      expect(trigger().disabled).toBe(true)
+      await fireEvent.click(trigger())
+      await settle()
+      expect(panel()).toBeNull()
+    })
 
-describe('FilterMenu open state, disabled and long value lists', () => {
-  it('opens from defaultOpen and reports and follows v-model:open', async () => {
-    const seeded = render(FilterMenu, { props: { fields, defaultOpen: true } })
-    await waitFor(() => expect(panel()).not.toBeNull(), WAIT)
-    seeded.unmount()
-    document.body.innerHTML = ''
+    it('renders at most 100 values and says how many more there are', async () => {
+      const hosts: FilterMenuField[] = [
+        {
+          id: 'host',
+          label: 'Host',
+          options: Array.from({ length: 1000 }, (_, i) => ({
+            value: `h${i}`,
+            label: `host-${i}.example.com`
+          }))
+        }
+      ]
+      render(FilterMenu, { props: { fields: hosts } })
+      await openField('host')
+      expect(panel()!.querySelectorAll('[data-filter-row][role="checkbox"]')).toHaveLength(100)
+      expect(byTestId('data-filter-menu__more-values')?.textContent).toContain('900 more values')
+    })
 
-    const view = render(FilterMenu, { props: { fields, open: false, 'onUpdate:open': () => {} } })
-    await settle()
-    await fireEvent.click(trigger())
-    expect(view.emitted()['update:open']).toEqual([[true]])
-    expect(trigger().getAttribute('aria-expanded')).toBe('false')
-    await view.rerender({ open: true })
-    await waitFor(() => expect(panel()).not.toBeNull(), WAIT)
-  })
+    it('warns when FilterMenu.Chips has no FilterMenu with the same fields array', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      render(
+        defineComponent({
+          setup: () => () =>
+            h('div', null, [
+              h(FilterMenu, { fields: [...fields], modelValue: { status: ['live'] } }),
+              h(FilterMenuChips, { fields: [...fields], modelValue: { status: ['live'] } })
+            ])
+        })
+      )
+      await settle()
+      const chip = byTestId('data-filter-menu-chips__chip-status')!
+      await fireEvent.click(chip.querySelector<HTMLElement>('[role="button"], button') ?? chip)
+      expect(warn).toHaveBeenCalledWith(expect.stringContaining('no FilterMenu has these fields'))
+      warn.mockRestore()
+    })
 
-  it('opens and closes through v-model:open', async () => {
-    const open = ref(false)
-    const opens: boolean[] = []
-    render(
-      defineComponent({
-        setup: () => () =>
-          h(FilterMenu, {
-            fields,
-            open: open.value,
-            'onUpdate:open': (value: boolean) => {
-              opens.push(value)
-              open.value = value
-            }
-          })
-      })
-    )
-    await settle()
-    open.value = true
-    await waitFor(() => expect(panel()).not.toBeNull(), WAIT)
-    await fireEvent.click(trigger())
-    expect(opens.at(-1)).toBe(false)
-    await waitFor(() => expect(panel()).toBeNull(), WAIT)
-  })
-
-  it('does not open while disabled', async () => {
-    render(FilterMenu, { props: { fields, disabled: true } })
-    await settle()
-    expect(trigger().disabled).toBe(true)
-    await fireEvent.click(trigger())
-    await settle()
-    expect(panel()).toBeNull()
-  })
-
-  it('renders at most 100 values and says how many more there are', async () => {
-    const hosts: FilterMenuField[] = [
-      {
-        id: 'host',
-        label: 'Host',
-        options: Array.from({ length: 1000 }, (_, i) => ({
-          value: `h${i}`,
-          label: `host-${i}.example.com`
-        }))
-      }
-    ]
-    render(FilterMenu, { props: { fields: hosts } })
-    await openField('host')
-    expect(panel()!.querySelectorAll('[data-filter-row][role="checkbox"]')).toHaveLength(100)
-    expect(byTestId('data-filter-menu__more-values')?.textContent).toContain('900 more values')
-  })
-
-  it('warns when FilterMenu.Chips has no FilterMenu with the same fields array', async () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    render(
-      defineComponent({
-        setup: () => () =>
-          h('div', null, [
-            h(FilterMenu, { fields: [...fields], modelValue: { status: ['live'] } }),
-            h(FilterMenuChips, { fields: [...fields], modelValue: { status: ['live'] } })
-          ])
-      })
-    )
-    await settle()
-    const chip = byTestId('data-filter-menu-chips__chip-status')!
-    await fireEvent.click(chip.querySelector<HTMLElement>('[role="button"], button') ?? chip)
-    expect(warn).toHaveBeenCalledWith(expect.stringContaining('no FilterMenu has these fields'))
-    warn.mockRestore()
-  })
-
-  it('does not warn when both share one fields array', async () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
-    mount({ status: ['live'] }, true)
-    await settle()
-    const chip = byTestId('data-filter-menu-chips__chip-status')!
-    await fireEvent.click(chip.querySelector<HTMLElement>('[role="button"], button') ?? chip)
-    expect(warn).not.toHaveBeenCalledWith(expect.stringContaining('no FilterMenu has these fields'))
-    warn.mockRestore()
+    it('does not warn when both share one fields array', async () => {
+      const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+      mount({ status: ['live'] }, true)
+      await settle()
+      const chip = byTestId('data-filter-menu-chips__chip-status')!
+      await fireEvent.click(chip.querySelector<HTMLElement>('[role="button"], button') ?? chip)
+      expect(warn).not.toHaveBeenCalledWith(
+        expect.stringContaining('no FilterMenu has these fields')
+      )
+      warn.mockRestore()
+    })
   })
 })

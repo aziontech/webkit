@@ -1,7 +1,7 @@
 {
   "id": "platform/account/team-permissions",
   "name": "TeamPermissions",
-  "title": "Templates/Platform/Account/TeamPermissions",
+  "title": "Blocks/Account/TeamPermissions",
   "surface": "product",
   "summary": "Teams and their permissions. The primary is the Teams and permissions list: a `PageHeader` with Create Team, the table-view controls row (`PropertyFilter`, Refresh and Download CSV as `IconButton`s, `CollectionPreferences`) over a `Table` of teams (name as `Table.CellLink` with a square `Avatar` and the description, permissions as `Table.CellTags` with `+N`, members, `Table.CellStatus`, and `Table.CellActions` with Edit, Duplicate and Delete behind a `ConfirmDialog`), on one `useCollection`. The CreateTeam variant is the permission matrix: General (name, description), a Permissions table grouped by area with View and Edit columns, a group `Checkbox` that is indeterminate when partly checked, filter, Select all and Clear, Edit implying View, and a `SaveBar`. The EditTeam variant fills it with a saved team and adds Members (add from the account's users, remove) and Delete team. The list and its states are a page body for ConsoleLayout, rendered in its default slot; CreateTeam and EditTeam are full pages in the creation frame of `platform/create/single-page-create` (a `GlobalHeader` with Back to Teams and permissions, no rail).",
   "preview": {

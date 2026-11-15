@@ -140,14 +140,14 @@ describe('StatTile', () => {
       view.unmount()
     }
   })
-})
 
-describe('StatTile on devices', () => {
-  it('is a named container that tightens its padding in a very narrow tile', () => {
-    const view = mount()
-    const root = view.getByTestId('chart-stat-tile')
+  describe('on devices', () => {
+    it('is a named container that tightens its padding in a very narrow tile', () => {
+      const view = mount()
+      const root = view.getByTestId('chart-stat-tile')
 
-    expect(root.className).toContain('@container/stat-tile')
-    expect(root.firstElementChild?.className).toContain('@max-3xs/stat-tile:p-(--spacing-sm)')
+      expect(root.className).toContain('@container/stat-tile')
+      expect(root.firstElementChild?.className).toContain('@max-3xs/stat-tile:p-(--spacing-sm)')
+    })
   })
 })

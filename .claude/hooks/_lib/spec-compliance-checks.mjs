@@ -230,13 +230,13 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
     if (!catalogAnims) {
       violations.push(
         'Cannot validate animate-* classes: packages/webkit/catalog.json is missing or unreadable. ' +
-          'Run `pnpm --filter @aziontech/webkit catalog:build`.'
+          'Run `pnpm --filter @aziontech/webkit build:catalog`.'
       )
     } else {
       for (const nameOnly of usedAnims) {
         if (!catalogAnims.has(nameOnly)) {
           violations.push(
-            `Animation "animate-${nameOnly}" is not in the theme catalog. Run /add-animation ${nameOnly} ` +
+            `Animation "animate-${nameOnly}" is not in the theme catalog. Run /animation-add ${nameOnly} ` +
               `to add it to packages/theme/src/tokens/primitives/animations/animate.js (keyframes.js) + record a Theme gap.`
           )
         }

@@ -8,7 +8,7 @@ import tsParser from '@typescript-eslint/parser'
 // Point every rule's catalog loader at the fixture (version-locked, deterministic).
 process.env.WEBKIT_CATALOG_PATH = fileURLToPath(new URL('./fixtures/catalog.json', import.meta.url))
 
-const validImportPath = (await import('../../src/eslint-plugin/rules/valid-import-path.js')).default
+const noUnknownImport = (await import('../../src/eslint-plugin/rules/no-unknown-import.js')).default
 const noDeepInternalImport = (
   await import('../../src/eslint-plugin/rules/no-deep-internal-import.js')
 ).default
@@ -23,7 +23,7 @@ const noHardcodedMotion = (await import('../../src/eslint-plugin/rules/no-hardco
 const noPhysicalDirection = (await import('../../src/eslint-plugin/rules/no-physical-direction.js'))
   .default
 const { logicalClass, mirroredGradient, physicalDirectionClasses } =
-  await import('../../src/eslint-plugin/direction-classes.js')
+  await import('../../src/eslint-plugin/lib/direction-classes.js')
 const preferTreeShakeableRoot = (
   await import('../../src/eslint-plugin/rules/prefer-tree-shakeable-root.js')
 ).default
@@ -35,14 +35,15 @@ const preferWebkitComponent = (
 ).default
 const noStyleOverride = (await import('../../src/eslint-plugin/rules/no-style-override.js')).default
 const { LAYOUT_CLASS_FAMILIES: ALLOWED_LAYOUT } =
-  await import('../../src/eslint-plugin/layout-classes.js')
+  await import('../../src/eslint-plugin/lib/layout-classes.js')
 const preferDefineModel = (await import('../../src/eslint-plugin/rules/prefer-define-model.js'))
   .default
 const authoringStandards = (await import('../../src/eslint-plugin/rules/authoring-standards.js'))
   .default
-const containerNeedsWidth = (await import('../../src/eslint-plugin/rules/container-needs-width.js'))
-  .default
-const headerSearchTrigger = (await import('../../src/eslint-plugin/rules/header-search-trigger.js'))
+const requireContainerWidth = (
+  await import('../../src/eslint-plugin/rules/require-container-width.js')
+).default
+const requireHeaderSearch = (await import('../../src/eslint-plugin/rules/require-header-search.js'))
   .default
 const noWrappedPageChrome = (
   await import('../../src/eslint-plugin/rules/no-wrapped-page-chrome.js')
@@ -52,7 +53,9 @@ const noOutputInCommand = (await import('../../src/eslint-plugin/rules/no-output
 const noRootRelativeAsset = (
   await import('../../src/eslint-plugin/rules/no-root-relative-asset.js')
 ).default
-const menuNodeHref = (await import('../../src/eslint-plugin/rules/menu-node-href.js')).default
+const preferHrefInMenuNode = (
+  await import('../../src/eslint-plugin/rules/prefer-href-in-menu-node.js')
+).default
 const noGapAfterClosingSection = (
   await import('../../src/eslint-plugin/rules/no-gap-after-closing-section.js')
 ).default
@@ -77,8 +80,8 @@ const vueTs = new RuleTester({
   }
 })
 
-test('valid-import-path', () => {
-  js.run('valid-import-path', validImportPath, {
+test('no-unknown-import', () => {
+  js.run('no-unknown-import', noUnknownImport, {
     valid: [
       "import Button from '@aziontech/webkit/button'",
       "import Table from '@aziontech/webkit/table'",
@@ -108,7 +111,7 @@ test('no-deep-internal-import', () => {
   js.run('no-deep-internal-import', noDeepInternalImport, {
     valid: [
       "import Button from '@aziontech/webkit/button'",
-      // unknown-but-not-deep is valid-import-path's job:
+      // unknown-but-not-deep is no-unknown-import's job:
       "import X from '@aziontech/webkit/buton'"
     ],
     invalid: [
@@ -552,10 +555,10 @@ test('no-wrapped-page-chrome', () => {
   })
 })
 
-test('container-needs-width', () => {
+test('require-container-width', () => {
   const sfc = (template, from = '@aziontech/webkit/card', name = 'Card') =>
     `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
-  vue.run('container-needs-width', containerNeedsWidth, {
+  vue.run('require-container-width', requireContainerWidth, {
     valid: [
       {
         code: sfc('<div class="flex gap-4"><Card class="w-full">a</Card></div>'),
@@ -615,11 +618,11 @@ test('container-needs-width', () => {
   })
 })
 
-test('header-search-trigger', () => {
+test('require-header-search', () => {
   const header = (right, extra = '') =>
     `<template><div class="@container"><GlobalHeader><NavigationMenu />` +
     `<GlobalHeader.End>${right}</GlobalHeader.End></GlobalHeader></div>${extra}</template>`
-  vue.run('header-search-trigger', headerSearchTrigger, {
+  vue.run('require-header-search', requireHeaderSearch, {
     valid: [
       { code: header('<SearchTrigger collapsible />'), filename: 'a.vue' },
       {
@@ -1453,8 +1456,8 @@ test('no-root-relative-asset', () => {
   })
 })
 
-test('menu-node-href', () => {
-  js.run('menu-node-href', menuNodeHref, {
+test('prefer-href-in-menu-node', () => {
+  js.run('prefer-href-in-menu-node', preferHrefInMenuNode, {
     valid: [
       "const nav = [{ id: 'home', label: 'Home', href: '/home' }]",
       "const nav = [{ id: 'home', label: 'Home', href: '/home', path: '/home' }]",
@@ -1478,7 +1481,7 @@ test('menu-node-href', () => {
       }
     ]
   })
-  vue.run('menu-node-href', menuNodeHref, {
+  vue.run('prefer-href-in-menu-node', preferHrefInMenuNode, {
     valid: [
       {
         code: `<template><Menu :groups="[{ items: [{ id: 'a', label: 'A', href: '/a' }] }]" /></template>`,

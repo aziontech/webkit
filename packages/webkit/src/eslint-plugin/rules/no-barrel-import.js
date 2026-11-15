@@ -1,5 +1,5 @@
-import { isWebkitBare, loadCatalog } from '../catalog.js'
-import { ctxCwd } from '../util.js'
+import { isWebkitBare, loadCatalog } from '../lib/catalog.js'
+import { ctxCwd } from '../lib/rule-utils.js'
 
 function kebab(name) {
   return name

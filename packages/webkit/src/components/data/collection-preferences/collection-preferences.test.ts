@@ -238,41 +238,45 @@ describe('CollectionPreferences', () => {
     await settle()
     await expectNoA11yViolations(dialog())
   })
-})
 
-describe('CollectionPreferences inside a DataTable', () => {
-  it('reads the table columns when it has none and writes visibility and order on Confirm', async () => {
-    const view = render(
-      defineComponent({
-        setup: () => () =>
-          h(
-            DataTable,
-            {
-              data: [{ id: '1', name: 'storefront', status: 'Active', region: 'us-east' }],
-              columns: [
-                { accessorKey: 'name', header: 'Name', hideable: false },
-                { accessorKey: 'status', header: 'Status' },
-                { accessorKey: 'region', header: 'Region' }
-              ],
-              rowKey: 'id',
-              'aria-label': 'Workloads'
-            },
-            { toolbar: () => h(CollectionPreferences, { sections: ['columns'] }) }
-          )
-      })
-    )
-    const headers = () =>
-      [...view.container.querySelectorAll('[role="columnheader"]')].map((c) =>
-        c.textContent?.trim()
+  describe('inside a DataTable', () => {
+    it('reads the table columns when it has none and writes visibility and order on Confirm', async () => {
+      const view = render(
+        defineComponent({
+          setup: () => () =>
+            h(
+              DataTable,
+              {
+                data: [{ id: '1', name: 'storefront', status: 'Active', region: 'us-east' }],
+                columns: [
+                  { accessorKey: 'name', header: 'Name', hideable: false },
+                  { accessorKey: 'status', header: 'Status' },
+                  { accessorKey: 'region', header: 'Region' }
+                ],
+                rowKey: 'id',
+                'aria-label': 'Workloads'
+              },
+              { toolbar: () => h(CollectionPreferences, { sections: ['columns'] }) }
+            )
+        })
       )
-    await fireEvent.click(view.getByTestId('data-collection-preferences__trigger'))
-    const columns = await within(document.body).findByTestId('data-collection-preferences__columns')
-    const rows = within(columns).getAllByTestId('data-collection-preferences__column')
-    expect(rows.map((row) => row.textContent?.includes('Name'))).toContain(true)
-    expect(columns.querySelector('[data-locked]')?.textContent).toContain('Name')
-    const region = rows.find((row) => row.textContent?.includes('Region')) as HTMLElement
-    await userEvent.click(within(region).getByRole('switch'))
-    await userEvent.click(within(document.body).getByTestId('data-collection-preferences__confirm'))
-    await vi.waitFor(() => expect(headers()).toEqual(['Name', 'Status']))
+      const headers = () =>
+        [...view.container.querySelectorAll('[role="columnheader"]')].map((c) =>
+          c.textContent?.trim()
+        )
+      await fireEvent.click(view.getByTestId('data-collection-preferences__trigger'))
+      const columns = await within(document.body).findByTestId(
+        'data-collection-preferences__columns'
+      )
+      const rows = within(columns).getAllByTestId('data-collection-preferences__column')
+      expect(rows.map((row) => row.textContent?.includes('Name'))).toContain(true)
+      expect(columns.querySelector('[data-locked]')?.textContent).toContain('Name')
+      const region = rows.find((row) => row.textContent?.includes('Region')) as HTMLElement
+      await userEvent.click(within(region).getByRole('switch'))
+      await userEvent.click(
+        within(document.body).getByTestId('data-collection-preferences__confirm')
+      )
+      await vi.waitFor(() => expect(headers()).toEqual(['Name', 'Status']))
+    })
   })
 })

@@ -115,7 +115,7 @@ export function foundationGroups(labels: {
         { label: labels.brand, to: '/assets#brand' },
         { label: labels.illustrations, to: '/assets#illustrations' },
         { label: labels.lineFigures, to: '/assets#line-figures' },
-        { label: labels.icons, to: '/foundations/icons' }
+        { label: labels.icons, to: '/foundations/icon' }
       ]
     }
   ]

@@ -1,4 +1,4 @@
-import { COMPONENT_CATEGORIES } from '../../../../.claude/hooks/component-categories.mjs'
+import { COMPONENT_CATEGORIES } from '../../../../.claude/hooks/_lib/component-categories.mjs'
 
 const PROSE_KEYS = ['purpose', 'useWhen', 'avoidWhen', 'bestPractices']
 const KEBAB = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/
@@ -30,8 +30,8 @@ export function staleReferences(catalog, { retired = new Set(), details = (_, e)
   const known = new Set([
     ...Object.keys(catalog.imports || {}),
     ...Object.keys(catalog.aliases || {}),
-    ...Object.keys(catalog.patterns || {}),
-    ...Object.keys(catalog.patterns || {}).map((id) => id.split('/').pop())
+    ...Object.keys(catalog.blocks || {}),
+    ...Object.keys(catalog.blocks || {}).map((id) => id.split('/').pop())
   ])
   const roots = new Set([...COMPONENT_CATEGORIES, ...BLOCK_ROOTS])
   const problems = []
@@ -43,11 +43,11 @@ export function staleReferences(catalog, { retired = new Set(), details = (_, e)
     const check = (field, ref) => {
       if (known.has(ref) || ATTRIBUTE.test(ref)) return
       if (PATH.test(ref) && roots.has(ref.split('/')[0])) {
-        report(name, field, ref, 'is a folder path, not an import or a pattern id')
+        report(name, field, ref, 'is a folder path, not an import or a block id')
       } else if (ref.includes('-') && KEBAB.test(ref) && retired.has(ref)) {
         report(name, field, ref, 'was renamed or removed in v6')
       } else if (KEBAB.test(ref) && ref.endsWith('-block')) {
-        report(name, field, ref, 'names a pattern that does not exist')
+        report(name, field, ref, 'names a block that does not exist')
       }
     }
     for (const field of PROSE_KEYS) {
@@ -60,7 +60,7 @@ export function staleReferences(catalog, { retired = new Set(), details = (_, e)
       const text = typeof item === 'string' ? item : JSON.stringify(item)
       const lead = relatedName(text)
       if (lead && !known.has(lead)) {
-        report(name, 'related', lead, 'is not an export, a catalog alias or a pattern id')
+        report(name, 'related', lead, 'is not an export, a catalog alias or a block id')
       }
       for (const ref of backticked(text.startsWith('`') ? text : `\`${text}`).slice(1)) {
         check('related', ref)

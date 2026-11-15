@@ -20,7 +20,7 @@ export function agentsDir(templatesDir = AI_TEMPLATES) {
 }
 
 export function fragmentFile(templatesDir = AI_TEMPLATES) {
-  return join(templatesDir, 'adapters/AGENTS.fragment.md')
+  return join(templatesDir, 'adapters/AGENTS_FRAGMENT.md')
 }
 
 export function templateFile(templatesDir, rel) {

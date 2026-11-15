@@ -55,7 +55,7 @@ Before scaffolding, prove whatever logic the new component needs does not alread
 ## Rules
 
 - **Do not** suggest a path that does not exist. If `composables/use-toast` is not in the filesystem, do not name it.
-- **Do not** invent new utility locations. If a need cannot be satisfied by what exists, omit the row — the scaffolder will write the logic inline, and a follow-up PR can extract it.
+- **Do not** invent new utility locations. If a need cannot be satisfied by what exists, omit the row — the component-scaffolder will write the logic inline, and a follow-up PR can extract it.
 - **Do not** edit any file. This is read-only.
 
 ## Fallbacks

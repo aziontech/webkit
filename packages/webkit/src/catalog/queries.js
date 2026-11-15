@@ -1,4 +1,4 @@
-import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../eslint-plugin/layout-classes.js'
+import { LAYOUT_CLASS_FAMILIES, nonLayoutClasses } from '../eslint-plugin/lib/layout-classes.js'
 import {
   COMPONENT_TERMS,
   MARKETING_PAGE_FRAME,
@@ -542,7 +542,7 @@ export function searchComponents(catalog, query, { surface } = {}) {
       ...(wantedSurface ? { surface: wantedSurface } : {}),
       count: matches.length,
       matches,
-      hint: 'A marketing page is the shells/website block (get_pattern("shells/website")) filled with page sections: import each from its flat subpath, bind it with v-bind="section.props" and place it inside SectionContainer and SectionGap (rule webkit-sections).'
+      hint: 'A marketing page is the shells/website block (get_block("shells/website")) filled with page sections: import each from its flat subpath, bind it with v-bind="section.props" and place it inside SectionContainer and SectionGap (rule webkit-sections).'
     }
   }
   const aliases = aliasHits(catalog, q)
@@ -616,7 +616,7 @@ const popularityCache = new WeakMap()
 function popularity(catalog) {
   if (popularityCache.has(catalog)) return popularityCache.get(catalog)
   const counts = new Map()
-  for (const p of Object.values(catalog.patterns || {})) {
+  for (const p of Object.values(catalog.blocks || {})) {
     for (const imp of p.imports || []) {
       const sub = subpathOf(catalog, imp)
       counts.set(sub, (counts.get(sub) ?? 0) + 1)
@@ -883,7 +883,7 @@ export function expandQuery(query) {
   return { q, groups, generic, phrases: [q, ...groups.flat()], words }
 }
 
-function patternCard(id, p, score) {
+function blockCard(id, p, score) {
   return {
     id,
     name: p.name,
@@ -902,19 +902,19 @@ function patternCard(id, p, score) {
 }
 
 const FRAGMENT_NOTE =
-  'A card, not a page: drop this fragment into the page pattern that needs it; it is never a whole screen.'
+  'A card, not a page: drop this fragment into the page block that needs it; it is never a whole screen.'
 
 function screenIntentOf(nq) {
   return SCREEN_WORDS.some((w) => hasPhrase(nq, normalize(w)))
 }
 
-const EXACT_PATTERN_SCORE = 1000
+const EXACT_BLOCK_SCORE = 1000
 
-function isExactPattern(id, p, q) {
+function isExactBlock(id, p, q) {
   return [id, id.split('/').pop(), p.name].some((s) => normalize(s) === q)
 }
 
-function scorePattern(id, p, { q, groups, generic, words }) {
+function scoreBlock(id, p, { q, groups, generic, words }) {
   const intents = (p.intents || []).map(normalize)
   const nameText = normalize(`${id} ${p.name}`)
   const components = normalize((p.components || []).join(' '))
@@ -931,7 +931,7 @@ function scorePattern(id, p, { q, groups, generic, words }) {
   }
   const genericScreen = (phrase) =>
     NORMALIZED_SCREEN_WORDS.some((w) => intents.includes(`${phrase} ${w}`))
-  let score = isExactPattern(id, p, q) ? EXACT_PATTERN_SCORE : 0
+  let score = isExactBlock(id, p, q) ? EXACT_BLOCK_SCORE : 0
   score += phraseScore(q, 160)
   for (const group of groups) {
     score += 0.8 * Math.max(0, ...group.map((t) => phraseScore(t)))
@@ -950,15 +950,15 @@ function surfaceOf(wanted) {
   return wanted ? String(wanted).toLowerCase().trim() : null
 }
 
-export function searchPatterns(catalog, query, { surface, fragments } = {}) {
+export function searchBlocks(catalog, query, { surface, fragments } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
   const wantedSurface = surfaceOf(surface)
   const raw = String(query || '').trim()
   const nq = normalize(raw)
   const hideFragments = fragments === false || (fragments !== true && screenIntentOf(nq))
-  const entries = Object.entries(catalog.patterns || {})
+  const entries = Object.entries(catalog.blocks || {})
     .filter(([, p]) => !wantedSurface || (p.surface ?? 'product') === wantedSurface)
-    .filter(([id, p]) => !hideFragments || p.kind !== 'fragment' || isExactPattern(id, p, nq))
+    .filter(([id, p]) => !hideFragments || p.kind !== 'fragment' || isExactBlock(id, p, nq))
   const scope = wantedSurface ? { surface: wantedSurface } : {}
   if (!raw) {
     return {
@@ -967,7 +967,7 @@ export function searchPatterns(catalog, query, { surface, fragments } = {}) {
       query: raw,
       ...scope,
       count: entries.length,
-      matches: entries.map(([id, p]) => patternCard(id, p))
+      matches: entries.map(([id, p]) => blockCard(id, p))
     }
   }
   const expanded = expandQuery(raw)
@@ -975,11 +975,11 @@ export function searchPatterns(catalog, query, { surface, fragments } = {}) {
   const pageBoost = (id, p) =>
     page && (p.surface ?? 'product') === 'marketing' ? 120 + (id.startsWith('shells/') ? 40 : 0) : 0
   const matches = entries
-    .map(([id, p]) => ({ id, p, score: scorePattern(id, p, expanded) + pageBoost(id, p) }))
+    .map(([id, p]) => ({ id, p, score: scoreBlock(id, p, expanded) + pageBoost(id, p) }))
     .filter((r) => r.score > 0)
     .sort((a, b) => b.score - a.score || a.id.localeCompare(b.id))
     .slice(0, 5)
-    .map((r) => patternCard(r.id, r.p, r.score))
+    .map((r) => blockCard(r.id, r.p, r.score))
   return {
     ok: true,
     available: true,
@@ -988,13 +988,13 @@ export function searchPatterns(catalog, query, { surface, fragments } = {}) {
     count: matches.length,
     matches,
     hint: matches.length
-      ? 'Call get_pattern with the best id, read its guidelines, copy its SFC and change only the content (copy, data, handlers). Keep the components, their order and the classes.'
-      : 'No pattern matches. Build from components: suggest_component, then get_component.'
+      ? 'Call get_block with the best id, read its guidelines, copy its SFC and change only the content (copy, data, handlers). Keep the components, their order and the classes.'
+      : 'No block matches. Build from components: suggest_component, then get_component.'
   }
 }
 
-function movedPattern(catalog, key, variant) {
-  const aliases = catalog.patternAliases || {}
+function movedBlock(catalog, key, variant) {
+  const aliases = catalog.blockAliases || {}
   const n = normalize(key)
   const from = aliases[key]
     ? key
@@ -1009,38 +1009,38 @@ function movedPattern(catalog, key, variant) {
 
 function movedNote(moved, p) {
   const state = moved.variant && moved.variant !== p.primary ? `, state "${moved.variant}"` : ''
-  return `Pattern "${moved.from}" was renamed in WebKit v6: it is now "${moved.id}"${state}. Use the new id.`
+  return `Block "${moved.from}" was renamed in WebKit v6: it is now "${moved.id}"${state}. Use the new id.`
 }
 
-export function getPattern(catalog, id, { variant } = {}) {
+export function getBlock(catalog, id, { variant } = {}) {
   if (!catalog.available) return NOT_AVAILABLE
-  const patterns = catalog.patterns || {}
+  const blocks = catalog.blocks || {}
   const key = String(id || '').trim()
-  let resolved = patterns[key] ? key : null
+  let resolved = blocks[key] ? key : null
   if (!resolved) {
     const n = normalize(key)
     resolved =
-      Object.keys(patterns).find((pid) => normalize(pid.split('/').pop()) === n) ||
-      Object.keys(patterns).find((pid) => normalize(patterns[pid].name) === n) ||
+      Object.keys(blocks).find((pid) => normalize(pid.split('/').pop()) === n) ||
+      Object.keys(blocks).find((pid) => normalize(blocks[pid].name) === n) ||
       null
   }
-  const moved = resolved ? null : movedPattern(catalog, key, variant)
-  if (moved && patterns[moved.id]) {
+  const moved = resolved ? null : movedBlock(catalog, key, variant)
+  if (moved && blocks[moved.id]) {
     resolved = moved.id
     variant = moved.variant || undefined
   }
   if (!resolved) {
-    const search = searchPatterns(catalog, key)
+    const search = searchBlocks(catalog, key)
     return {
       ok: false,
       available: true,
       found: false,
       id: key,
       suggestions: (search.matches || []).slice(0, 3).map((m) => m.id),
-      message: `No pattern "${key}". Use search_patterns to find one by intent.`
+      message: `No block "${key}". Use search_blocks to find one by intent.`
     }
   }
-  const p = catalog.pattern(resolved)
+  const p = catalog.block(resolved)
   const isPrimary = variant === p.primary
   const chosen = variant && !isPrimary ? (p.variants || []).find((v) => v.name === variant) : null
   if (variant && !isPrimary && !chosen) {
@@ -1050,7 +1050,7 @@ export function getPattern(catalog, id, { variant } = {}) {
       found: false,
       id: resolved,
       variants: [p.primary, ...(p.variants || []).map((v) => v.name)],
-      message: `Pattern "${resolved}" has no variant "${variant}".`
+      message: `Block "${resolved}" has no variant "${variant}".`
     }
   }
   return {
@@ -1122,18 +1122,18 @@ export function suggestComponent(catalog, need, { surface } = {}) {
 
   const page = marketingPageIntent(q, wantedSurface)
   if (page && !page.words.length) {
-    const patterns = searchPatterns(catalog, q, opts)
-    const topPattern = patterns.matches?.[0]
-    if (topPattern) {
+    const blocks = searchBlocks(catalog, q, opts)
+    const topBlock = blocks.matches?.[0]
+    if (topBlock) {
       return {
         ok: true,
         available: true,
         need: q,
         found: true,
-        recommendation: 'pattern',
-        pattern: topPattern,
-        patternAlternatives: patterns.matches.slice(1, 3),
-        hint: `A marketing page starts from the website shell: call get_pattern("${topPattern.id}") and copy its SFC, then fill the frame with page sections (the components below, in page order: the hero band first, the closing call to action last).`,
+        recommendation: 'block',
+        block: topBlock,
+        blockAlternatives: blocks.matches.slice(1, 3),
+        hint: `A marketing page starts from the website shell: call get_block("${topBlock.id}") and copy its SFC, then fill the frame with page sections (the components below, in page order: the hero band first, the closing call to action last).`,
         best: component.best,
         alternatives: component.alternatives
       }
@@ -1157,32 +1157,32 @@ export function suggestComponent(catalog, need, { surface } = {}) {
     }
   }
 
-  const patterns = searchPatterns(catalog, q, opts)
-  const topPattern = patterns.matches?.[0]
+  const blocks = searchBlocks(catalog, q, opts)
+  const topBlock = blocks.matches?.[0]
   const screenIntent = screenIntentOf(nq)
   const exactComponent =
     component.best &&
     (component.best.exact === true ||
       normalize(component.best.name) === nq ||
       normalize(component.best.aliasOf ?? component.best.renamedFrom ?? '') === nq)
-  const exactPattern = topPattern && topPattern.score >= EXACT_PATTERN_SCORE
+  const exactBlock = topBlock && topBlock.score >= EXACT_BLOCK_SCORE
   if (
-    topPattern &&
-    (exactPattern || !exactComponent) &&
-    (screenIntent ? topPattern.score >= 25 : topPattern.score >= 60)
+    topBlock &&
+    (exactBlock || !exactComponent) &&
+    (screenIntent ? topBlock.score >= 25 : topBlock.score >= 60)
   ) {
     return {
       ok: true,
       available: true,
       need: q,
       found: true,
-      recommendation: 'pattern',
-      pattern: topPattern,
-      patternAlternatives: patterns.matches.slice(1, 3),
+      recommendation: 'block',
+      block: topBlock,
+      blockAlternatives: blocks.matches.slice(1, 3),
       hint:
-        topPattern.kind === 'fragment'
-          ? `This is a card, not a page: call get_pattern("${topPattern.id}") and drop its SFC into the page pattern that needs it.`
-          : `This is a screen: start from the pattern. Call get_pattern("${topPattern.id}") and copy its SFC; use the components below only for pieces the pattern does not cover.`,
+        topBlock.kind === 'fragment'
+          ? `This is a card, not a page: call get_block("${topBlock.id}") and drop its SFC into the page block that needs it.`
+          : `This is a screen: start from the block. Call get_block("${topBlock.id}") and copy its SFC; use the components below only for pieces the block does not cover.`,
       best: component.best,
       alternatives: component.alternatives
     }

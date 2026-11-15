@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { appliesToBuiltInStrings, scanBuiltInStrings } from '../../scripts/lib/built-in-strings.mjs'
+import { appliesToBuiltInStrings, scanBuiltInStrings } from '../../src/eslint-plugin/lib/built-in-strings.js'
 
 const sfc = (script, template) =>
   `<script setup lang="ts">\n${script}\n</script>\n\n<template>\n${template}\n</template>\n`

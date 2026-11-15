@@ -1,4 +1,4 @@
-import { templateBodyVisitorFactory } from '../util.js'
+import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const SHELL = new Set(['bash', 'sh', 'shell', 'zsh', 'console'])
 

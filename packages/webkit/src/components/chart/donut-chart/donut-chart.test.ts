@@ -163,25 +163,25 @@ describe('DonutChart', () => {
       view.unmount()
     }
   })
-})
 
-describe('DonutChart table twin on devices', () => {
-  it('clips the twin inside a visually hidden box so it adds no horizontal overflow', () => {
-    const twin = mount().getByTestId('chart-donut-chart__twin')
+  describe('table twin on devices', () => {
+    it('clips the twin inside a visually hidden box so it adds no horizontal overflow', () => {
+      const twin = mount().getByTestId('chart-donut-chart__twin')
 
-    expect(twin.parentElement?.className).toBe('sr-only')
-  })
-})
-
-describe('DonutChart right-to-left keys', () => {
-  it('swaps ArrowLeft and ArrowRight under dir="rtl"', async () => {
-    const view = render({
-      render: () =>
-        h('div', { dir: 'rtl' }, [h(DonutChart, { series: countries, ariaLabel: 'Countries' })])
+      expect(twin.parentElement?.className).toBe('sr-only')
     })
-    const ring = view.getByTestId('chart-donut-chart__ring')
-    ring.focus()
-    await fireEvent.keyDown(ring, { key: 'ArrowLeft' })
-    expect(view.getByTestId('chart-donut-chart__center').textContent).toContain('Brazil')
+  })
+
+  describe('right-to-left keys', () => {
+    it('swaps ArrowLeft and ArrowRight under dir="rtl"', async () => {
+      const view = render({
+        render: () =>
+          h('div', { dir: 'rtl' }, [h(DonutChart, { series: countries, ariaLabel: 'Countries' })])
+      })
+      const ring = view.getByTestId('chart-donut-chart__ring')
+      ring.focus()
+      await fireEvent.keyDown(ring, { key: 'ArrowLeft' })
+      expect(view.getByTestId('chart-donut-chart__center').textContent).toContain('Brazil')
+    })
   })
 })

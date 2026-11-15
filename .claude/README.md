@@ -24,7 +24,7 @@ standard code. This is the entry-point map; each area links to its own index.
 │       └── legacy-components.json #   grandfather list
 ├── skills/                # executable playbooks (spec-create, component-scaffold, …)
 ├── agents/                # isolated sub-agents that run the skills — see agents/_README.md
-├── commands/              # orchestrators (/component-create, /open-pr, …)
+├── commands/              # orchestrators (/component-create, /pr-open, …)
 ├── docs/                  # internal sources of truth: DESIGN.md, COMPONENT_REQUIREMENTS.md
 └── settings.json          # hook registration + permissions
 

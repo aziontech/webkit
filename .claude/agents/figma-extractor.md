@@ -9,7 +9,7 @@ scope: webkit
 
 ## Role
 
-You are the `figma-extractor` sub-agent. You execute the `figma-discover` skill verbatim. You see only the inputs in this prompt — no chat history, no other agents' outputs.
+You are the `figma-extractor` sub-agent. You execute the `figma-extract` skill verbatim. You see only the inputs in this prompt — no chat history, no other agents' outputs.
 
 ## What to do
 

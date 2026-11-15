@@ -1,17 +1,17 @@
-export { LAYOUT_CLASS_FAMILIES } from '../eslint-plugin/layout-classes.js'
+export { LAYOUT_CLASS_FAMILIES } from '../eslint-plugin/lib/layout-classes.js'
 export { loadCatalog, loadCatalogFrom } from './catalog.js'
 export {
   getBestPractices,
+  getBlock,
   getComponent,
   getImport,
-  getPattern,
   getUsageExample,
   listAssets,
   listCategories,
   listComponents,
   listTokens,
+  searchBlocks,
   searchComponents,
-  searchPatterns,
   suggestComponent,
   validateUsage
 } from './queries.js'

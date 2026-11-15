@@ -15,18 +15,20 @@ const arrowIn = (dir: 'ltr' | 'rtl') => {
   return { arrow, host }
 }
 
-describe('NavigationMenu.Arrow in a right-to-left subtree (styled)', () => {
-  it('keeps its visible corner pointing at the trigger by flipping on the inline axis', () => {
-    const ltr = arrowIn('ltr')
-    const ltrStyle = getComputedStyle(ltr.arrow)
-    expect(ltrStyle.borderRightWidth).toBe('0px')
-    expect(ltrStyle.scale).toBe('none')
-    ltr.host.remove()
+describe('NavigationMenu', () => {
+  describe('NavigationMenu.Arrow in a right-to-left subtree (styled)', () => {
+    it('keeps its visible corner pointing at the trigger by flipping on the inline axis', () => {
+      const ltr = arrowIn('ltr')
+      const ltrStyle = getComputedStyle(ltr.arrow)
+      expect(ltrStyle.borderRightWidth).toBe('0px')
+      expect(ltrStyle.scale).toBe('none')
+      ltr.host.remove()
 
-    const rtl = arrowIn('rtl')
-    const rtlStyle = getComputedStyle(rtl.arrow)
-    expect(rtlStyle.borderLeftWidth).toBe('0px')
-    expect(rtlStyle.scale).toBe('-1 1')
-    rtl.host.remove()
+      const rtl = arrowIn('rtl')
+      const rtlStyle = getComputedStyle(rtl.arrow)
+      expect(rtlStyle.borderLeftWidth).toBe('0px')
+      expect(rtlStyle.scale).toBe('-1 1')
+      rtl.host.remove()
+    })
   })
 })

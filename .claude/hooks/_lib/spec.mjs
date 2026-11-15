@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto'
 import { existsSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import { COMPONENT_CATEGORIES } from '../component-categories.mjs'
+import { COMPONENT_CATEGORIES } from './component-categories.mjs'
 
 export const STRUCTURES = ['monolithic', 'composition']
 export const STATUSES = ['draft', 'approved', 'implemented', 'locked']

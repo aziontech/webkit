@@ -29,7 +29,7 @@ If `--figma` is absent, you are in **Mode B** — do not quietly infer from inte
 
 3. **Refuse to overwrite** any existing `.specs/<name>.md` whose `status ∈ {approved, implemented, locked}`.
 
-4. **Invoke the `spec-author` sub-agent** with the universal envelope from `.claude/agents/_README.md`. Pass it the user's arguments, the **mode** (A or B), and ask it to:
+4. **Invoke the `spec-creator` sub-agent** with the universal envelope from `.claude/agents/_README.md`. Pass it the user's arguments, the **mode** (A or B), and ask it to:
    - **Mode A (Figma):** run `figma-extractor` + `token-mapper` to pre-fill Tokens/regions/states; confirm the extracted values with the user; ask only about behavior/a11y/stories the frame cannot express. Derive the component **name** from the frame's `component_name` (normalize to kebab, confirm) unless `<name>` was passed (which overrides); **if the frame has no usable name, ask the user for it.** Infer the category from the frame + confirm.
    - **Mode B (Name + Category):** ask about **every** section, one at a time — Purpose / Props / Events / Slots / Sub-components (only when composition) / States / Motion & Animations / Accessibility / Stories — and **map each token to DESIGN.md with the user, never infer**. Confirm the category first. If the user leaves any mandatory section unanswered, emit `BLOCKED:` and write nothing (**no silent `TBD`** in this mode).
    - Write `.specs/<name>.md` with `status: draft`.
