@@ -28,7 +28,7 @@ const composed = (props: Record<string, unknown> = {}) =>
       return { props }
     },
     template: `
-      <Tooltip v-bind="props" text="Delete domain">
+      <Tooltip v-bind="props" content="Delete domain">
         <button type="button">Trigger</button>
       </Tooltip>
     `
@@ -49,7 +49,7 @@ describe('Tooltip', () => {
         expect(trigger.getAttribute('data-state')).toBe('closed')
         // aria-describedby is only wired while open.
         expect(trigger.getAttribute('aria-describedby')).toBeNull()
-        // The panel (v-if="isOpen && text") is not mounted while closed.
+        // The panel (v-if="isOpen && content") is not mounted while closed.
         expect(panel()).toBeNull()
       })
     })
@@ -126,7 +126,7 @@ describe('Tooltip', () => {
             <Dialog :default-open="true" data-testid="host-dialog">
               <DialogContent>
                 <DialogTitle>Settings</DialogTitle>
-                <Tooltip text="Delete domain"><button type="button">Delete</button></Tooltip>
+                <Tooltip content="Delete domain"><button type="button">Delete</button></Tooltip>
               </DialogContent>
             </Dialog>
           `
@@ -251,7 +251,7 @@ describe('Tooltip', () => {
       it('emits update:open(true) when focus opens it', async () => {
         const onUpdate = vi.fn()
         const { getByTestId } = render(Tooltip, {
-          props: { text: 'Hint', 'onUpdate:open': onUpdate },
+          props: { content: 'Hint', 'onUpdate:open': onUpdate },
           slots: { default: () => h('button', { type: 'button' }, 'Trigger') }
         })
         await settle()
@@ -265,7 +265,7 @@ describe('Tooltip', () => {
 
       it('emits no show or hide echo, only update:open', async () => {
         const { getByTestId, emitted } = render(Tooltip, {
-          props: { text: 'Hint', defaultOpen: true },
+          props: { content: 'Hint', defaultOpen: true },
           slots: { default: () => h('button', { type: 'button' }, 'Trigger') }
         })
         await settle()
@@ -289,7 +289,7 @@ describe('Tooltip', () => {
             return { open, onUpd }
           },
           template: `
-          <Tooltip text="Hint" :open="open" @update:open="onUpd">
+          <Tooltip content="Hint" :open="open" @update:open="onUpd">
             <button type="button">Trigger</button>
           </Tooltip>
         `
@@ -337,16 +337,16 @@ describe('Tooltip', () => {
       })
     })
 
-    describe('empty text never surfaces a panel', () => {
-      it('focus does not open when text is empty', async () => {
+    describe('empty content never surfaces a panel', () => {
+      it('focus does not open when content is empty', async () => {
         const { getByTestId } = render(Tooltip, {
-          props: { text: '' },
+          props: { content: '' },
           slots: { default: () => h('button', { type: 'button' }, 'Trigger') }
         })
         await settle()
 
         const trigger = getByTestId('overlay-tooltip')
-        // setOpen guards `if (!props.text && next) return`.
+        // setOpen guards `if (!props.content && next) return`.
         await fireEvent.focusIn(trigger)
         await settle()
 
@@ -443,7 +443,7 @@ describe('Tooltip', () => {
       template: `
       <div>
         <button type="button" data-testid="before">Before</button>
-        <Tooltip text="Delete domain">
+        <Tooltip content="Delete domain">
           <button type="button" data-testid="target">Trigger</button>
         </Tooltip>
         <button type="button" data-testid="after">After</button>

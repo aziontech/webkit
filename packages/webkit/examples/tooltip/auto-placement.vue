@@ -14,7 +14,7 @@
 
     <div class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2">
       <Tooltip
-        text="auto placement"
+        content="auto placement"
         placement="auto"
         :default-open="true"
       >
@@ -29,7 +29,7 @@
 
     <div class="absolute bottom-(--spacing-md) left-1/2 -translate-x-1/2">
       <Tooltip
-        text="auto placement"
+        content="auto placement"
         placement="auto"
         :default-open="true"
       >
@@ -44,7 +44,7 @@
 
     <div class="absolute start-(--spacing-md) top-1/2 -translate-y-1/2">
       <Tooltip
-        text="auto placement"
+        content="auto placement"
         placement="auto"
         :default-open="true"
       >
@@ -59,7 +59,7 @@
 
     <div class="absolute end-(--spacing-md) top-1/2 -translate-y-1/2">
       <Tooltip
-        text="auto placement"
+        content="auto placement"
         placement="auto"
         :default-open="true"
       >

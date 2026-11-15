@@ -13,10 +13,10 @@
       /** Identifier an item opens with its `page` prop. */
       name: string
       /** Page title shown in the back control. Empty falls back to `name`. */
-      heading?: string
+      title?: string
     }>(),
     {
-      heading: ''
+      title: ''
     }
   )
 
@@ -35,7 +35,7 @@
 
   const isActive = computed(() => ctx.page.value === props.name)
 
-  const unregister = ctx.registerPage(props.name, toRef(props, 'heading'))
+  const unregister = ctx.registerPage(props.name, toRef(props, 'title'))
 
   onBeforeUnmount(() => unregister())
 </script>

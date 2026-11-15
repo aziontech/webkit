@@ -7,7 +7,7 @@
     <CodeBlock
       code="npx azion deploy --local"
       language="bash"
-      :line-numbers="false"
+      :show-line-numbers="false"
     />
   </div>
 </template>

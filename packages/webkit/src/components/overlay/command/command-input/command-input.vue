@@ -93,13 +93,13 @@
       @update:model-value="ctx.setQuery"
       @keydown="ctx.onInputKeydown"
     >
-      <template #prefix>
+      <template #leading>
         <span
           class="ai ai-search"
           aria-hidden="true"
         />
       </template>
-      <template #suffix>
+      <template #trailing>
         <Kbd
           size="small"
           key-name="escape"

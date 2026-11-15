@@ -5,7 +5,7 @@
 
 <template>
   <Tooltip
-    text="This tooltip contains a longer message that wraps across multiple lines when it exceeds the maximum width of the panel."
+    content="This tooltip contains a longer message that wraps across multiple lines when it exceeds the maximum width of the panel."
     placement="top"
   >
     <IconButton

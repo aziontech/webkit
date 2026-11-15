@@ -6,7 +6,7 @@
 <template>
   <div class="flex flex-wrap items-center justify-center gap-(--spacing-8) p-(--spacing-8)">
     <Tooltip
-      text="top placement"
+      content="top placement"
       placement="top"
     >
       <IconButton
@@ -17,7 +17,7 @@
       />
     </Tooltip>
     <Tooltip
-      text="right placement"
+      content="right placement"
       placement="right"
     >
       <IconButton
@@ -28,7 +28,7 @@
       />
     </Tooltip>
     <Tooltip
-      text="bottom placement"
+      content="bottom placement"
       placement="bottom"
     >
       <IconButton
@@ -39,7 +39,7 @@
       />
     </Tooltip>
     <Tooltip
-      text="left placement"
+      content="left placement"
       placement="left"
     >
       <IconButton

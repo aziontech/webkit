@@ -22,7 +22,7 @@
     <CodeBlock
       :tabs="tabs"
       default-value="shell"
-      :line-numbers="false"
+      :show-line-numbers="false"
     />
   </div>
 </template>

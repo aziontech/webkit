@@ -485,7 +485,7 @@ describe('CodeEditor', () => {
     ])
   })
 
-  it('registers the JSON schema for its model and emits validate when its markers change', async () => {
+  it('registers the JSON schema for its model and emits markers-change when its markers change', async () => {
     const fake = fakeMonaco()
     let options: CodeEditorMonacoJsonDiagnostics = {
       validate: true,
@@ -516,7 +516,7 @@ describe('CodeEditor', () => {
       type: 'object',
       required: ['greeting']
     })
-    const onValidate = vi.fn()
+    const onMarkersChange = vi.fn()
     const view = render(
       defineComponent({
         setup: () => () =>
@@ -526,7 +526,7 @@ describe('CodeEditor', () => {
             language: 'json',
             schema: schema.value,
             ariaLabel: 'Arguments',
-            onValidate
+            onMarkersChange
           })
       })
     )
@@ -549,9 +549,9 @@ describe('CodeEditor', () => {
       endColumn: 3
     })
     listeners.forEach((listener) => listener([{ toString: () => 'inmemory://elsewhere.json' }]))
-    expect(onValidate).not.toHaveBeenCalled()
+    expect(onMarkersChange).not.toHaveBeenCalled()
     listeners.forEach((listener) => listener([{ toString: () => mine?.fileMatch?.[0] }]))
-    expect(onValidate).toHaveBeenLastCalledWith([
+    expect(onMarkersChange).toHaveBeenLastCalledWith([
       {
         line: 1,
         column: 1,

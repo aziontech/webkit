@@ -3,5 +3,5 @@
 </script>
 
 <template>
-  <Hint text="Values are encrypted at rest and never displayed again after saving." />
+  <Hint content="Values are encrypted at rest and never displayed again after saving." />
 </template>

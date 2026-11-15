@@ -5,7 +5,7 @@
 
 <template>
   <Tooltip
-    text="This is a Tooltip"
+    content="This is a Tooltip"
     disabled
   >
     <Button

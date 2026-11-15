@@ -12,7 +12,7 @@
 
   interface Props {
     /** Guidance text revealed on hover or focus; also the trigger's accessible name. */
-    text: string
+    content: string
     /** Anchor side of the tooltip relative to the glyph. */
     placement?: HintPlacement
   }
@@ -31,13 +31,13 @@
   <Tooltip
     v-bind="$attrs"
     :data-testid="testId"
-    :text="text"
+    :content="content"
     :placement="placement"
   >
     <button
       type="button"
       :data-testid="`${testId}__trigger`"
-      :aria-label="text"
+      :aria-label="content"
       class="relative inline-flex size-5 items-center justify-center rounded-(--shape-button) text-(--text-muted) transition-colors duration-150 ease-out hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
       @click.prevent
     >

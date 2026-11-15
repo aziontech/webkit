@@ -24,7 +24,7 @@
     <CodeBlock
       :tabs="tabs"
       default-value="js"
-      line-numbers
+      show-line-numbers
       :copyable="false"
     />
   </div>

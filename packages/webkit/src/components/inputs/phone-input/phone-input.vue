@@ -34,7 +34,7 @@
   /** Size token; heights match the sibling field primitives. */
   export type PhoneInputSize = 'small' | 'medium' | 'large'
 
-  /** Snapshot of the number emitted by update:phone. */
+  /** Snapshot of the number emitted by phone-change. */
   export interface PhoneNumber {
     /** ISO 3166-1 alpha-2 code of the selected country. */
     country: string
@@ -86,7 +86,7 @@
   })
 
   const emit = defineEmits<{
-    'update:phone': [value: PhoneNumber]
+    'phone-change': [value: PhoneNumber]
   }>()
 
   const model = defineModel<string>({ default: '' })
@@ -147,7 +147,7 @@
     }
   })
 
-  watch(phone, (value) => emit('update:phone', value), { immediate: true })
+  watch(phone, (value) => emit('phone-change', value), { immediate: true })
 
   const onInput = (event: Event) => {
     const target = event.target as HTMLInputElement
@@ -251,7 +251,7 @@
             :data-testid="`${testId}__search`"
             @keydown="onSearchKeydown"
           >
-            <template #prefix>
+            <template #leading>
               <i class="ai ai-search" />
             </template>
           </Input>
@@ -265,7 +265,7 @@
           class="data-[active]:bg-(--bg-hover)"
           @mousemove="setActive(index)"
         >
-          <template #left>
+          <template #leading>
             <i
               v-if="hasFlag(c.code)"
               :style="flagStyle(c.code, flagSprite)"

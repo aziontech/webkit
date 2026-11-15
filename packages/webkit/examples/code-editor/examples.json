@@ -29,7 +29,7 @@
     },
     {
       "name": "Schema",
-      "summary": "A JSON document checked against a JSON Schema: with Monaco loaded and `language=\"json\"`, `schema` registers the schema for this editor's model only (no remote fetch), Monaco underlines what breaks it, and `validate` hands back the problems as markers so the `Field` turns invalid and `Field.Error` shows the first one. The plain editor does not validate.",
+      "summary": "A JSON document checked against a JSON Schema: with Monaco loaded and `language=\"json\"`, `schema` registers the schema for this editor's model only (no remote fetch), Monaco underlines what breaks it, and `markers-change` hands back the problems as markers so the `Field` turns invalid and `Field.Error` shows the first one. The plain editor does not validate.",
       "file": "schema.vue"
     },
     {

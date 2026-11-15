@@ -93,7 +93,7 @@
     /** Draws the frame: border, corner radius and an offset focus ring. Off, the editor sits flush in its pane. */
     bordered?: boolean
     /** Shows the line-number gutter. */
-    lineNumbers?: boolean
+    showLineNumbers?: boolean
     /** Zero-pads line numbers to two digits (01, 02…), as the console's full-page function and arguments editors do. */
     padLineNumbers?: boolean
     /** Model path for Monaco language services (`index.ts`, `args.json`). */
@@ -116,7 +116,7 @@
     height: '16rem',
     fill: false,
     bordered: true,
-    lineNumbers: true,
+    showLineNumbers: true,
     padLineNumbers: false,
     path: '',
     schema: undefined,
@@ -128,7 +128,7 @@
   const emit = defineEmits<{
     ready: [editor: unknown]
     'load-error': [error: unknown]
-    validate: [markers: CodeEditorMarker[]]
+    'markers-change': [markers: CodeEditorMarker[]]
   }>()
 
   defineSlots<{
@@ -384,7 +384,7 @@
   const editorOptions = () => ({
     readOnly: isReadonly.value,
     domReadOnly: isReadonly.value,
-    lineNumbers: props.lineNumbers ? (props.padLineNumbers ? padLineNumber : 'on') : 'off',
+    lineNumbers: props.showLineNumbers ? (props.padLineNumbers ? padLineNumber : 'on') : 'off',
     minimap: { enabled: false },
     automaticLayout: true,
     scrollBeyondLastLine: false,
@@ -453,7 +453,7 @@
     if (!api || !mainModel) return
     const resource = mainModel.uri
     const markers = resource ? (api.editor.getModelMarkers?.({ resource }) ?? []) : []
-    emit('validate', toCodeEditorMarkers(markers, api.MarkerSeverity, MARKER_OWNER))
+    emit('markers-change', toCodeEditorMarkers(markers, api.MarkerSeverity, MARKER_OWNER))
   }
 
   const watchMarkers = () => {
@@ -590,7 +590,7 @@
   watch(() => props.schema, applySchema, { deep: true })
 
   watch(
-    [isReadonly, () => props.lineNumbers, () => props.padLineNumbers, () => props.ariaLabel],
+    [isReadonly, () => props.showLineNumbers, () => props.padLineNumbers, () => props.ariaLabel],
     () => {
       ;(diffEditor ?? editor)?.updateOptions(editorOptions())
       labelDiffSides()
@@ -679,7 +679,7 @@
           >
             <div class="flex min-h-full w-max min-w-full">
               <ol
-                v-if="lineNumbers"
+                v-if="showLineNumbers"
                 v-memo="[
                   pane.lines.length,
                   pane.main && markerByLine,

@@ -15,10 +15,10 @@
   const props = withDefaults(
     defineProps<{
       /** Section label rendered above the items. Omit for an unlabeled group. */
-      heading?: string
+      label?: string
     }>(),
     {
-      heading: ''
+      label: ''
     }
   )
 
@@ -26,7 +26,7 @@
   const ctx = useCommandMenuContext()
 
   const uid = useId()
-  const headingId = `${uid}-heading`
+  const labelId = `${uid}-label`
   const groupId = uid
 
   provide(CommandGroupIdKey, groupId)
@@ -35,7 +35,7 @@
     () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__group`
   )
 
-  const hasHeading = computed(() => props.heading.length > 0)
+  const hasLabel = computed(() => props.label.length > 0)
 </script>
 
 <template>
@@ -43,7 +43,7 @@
     v-show="ctx.groupHasVisibleItems(groupId)"
     v-bind="attrs"
     role="group"
-    :aria-labelledby="hasHeading ? headingId : undefined"
+    :aria-labelledby="hasLabel ? labelId : undefined"
     :data-testid="testId"
     :data-ranked="ctx.ranking.value || undefined"
     :data-leading="ctx.leadingGroupId.value === groupId || undefined"
@@ -51,12 +51,12 @@
     class="flex flex-col [:not([role=separator])+&]:mt-(--spacing-sm) [&[data-ranked]]:mt-(--spacing-sm) [&[data-ranked][data-leading]]:mt-0"
   >
     <div
-      v-if="hasHeading"
-      :id="headingId"
-      :data-testid="`${testId}__heading`"
+      v-if="hasLabel"
+      :id="labelId"
+      :data-testid="`${testId}__label`"
       class="px-(--spacing-sm) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
     >
-      {{ heading }}
+      {{ label }}
     </div>
     <slot />
   </div>

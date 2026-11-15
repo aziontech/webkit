@@ -3,11 +3,11 @@ name: tooltip
 category: overlay
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 469be1cc91da530907cfef5de0e7d9f0b507753cceaddb236784ca99e2d8f979
+checksum: 12c4acf5a61c24fbf2835c93aa1668db328905383177dbb1b881f8e4bc361893
 created: 2026-06-02
 last_updated: 2026-11-15
 ---
@@ -42,9 +42,9 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 ## Best practices
 
 - Wrap a focusable element. The tooltip opens on the wrapper's `focusin`, and the wrapper itself is not focusable.
-- Keep `text` to a few words. It renders as plain text, with no markup.
+- Keep `content` to a few words. It renders as plain text, with no markup.
 - The tooltip describes its trigger (`aria-describedby`) but does not name it. Icon-only triggers still need their own accessible name.
-- Use `disabled` to suppress the tooltip. An empty `text` also blocks opening, but it reads as a bug.
+- Use `disabled` to suppress the tooltip. An empty `content` also blocks opening, but it reads as a bug.
 - Keep the default `delay` (200 ms) unless a dense toolbar needs a longer one.
 - Bind the open state with `v-model:open`, or `:open` plus an `@update:open` handler typed `(open: boolean) => void`. The payload is always a `boolean`, so the handler needs no cast and no `Boolean(...)`.
 
@@ -58,7 +58,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 
 <template>
   <Tooltip
-    text="Delete"
+    content="Delete"
     placement="top"
   >
     <IconButton
@@ -73,7 +73,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 
 | Prop          | Type                                               | Default | Required | JSDoc                                                                 |
 | ------------- | -------------------------------------------------- | ------- | -------- | --------------------------------------------------------------------- |
-| `text`        | `string`                                           | —       | true     | Plain text shown inside the tooltip.                                  |
+| `content`     | `string`                                           | —       | true     | Plain text shown inside the tooltip.                                  |
 | `placement`   | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false    | Anchor side relative to the trigger; `auto` picks the side with room. |
 | `delay`       | `number`                                           | `200`   | false    | Hover-open delay in milliseconds.                                     |
 | `disabled`    | `boolean`                                          | `false` | false    | Disables tooltip activation.                                          |

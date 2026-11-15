@@ -17,7 +17,7 @@
     <CodeBlock
       :tabs="tabs"
       default-value="js"
-      line-numbers
+      show-line-numbers
       animate-lines
     />
   </div>
