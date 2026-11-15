@@ -39,7 +39,7 @@ for (const block of blocks()) {
       test(`block ${block.id} ${state.slug} ${label(mode)}`, async ({ page }) => {
         const timed = TIMED.has(state.slug)
         await prepare(page, mode, { freeze: timed })
-        await page.goto(`${DOCS}/frame/${state.slug}/${block.id}${query(mode)}`)
+        await page.goto(`${DOCS}/frame/block/${block.id}/${state.slug}${query(mode)}`)
         if (timed) await advance(page, 1500)
         else await settle(page)
         await expect(page).toHaveScreenshot(
@@ -53,7 +53,7 @@ for (const block of blocks()) {
 for (const mode of DOCS_MODES) {
   test(`block shells/documentation landing agent card ${label(mode)}`, async ({ page }) => {
     await prepare(page, mode)
-    await page.goto(`${DOCS}/frame/landing/shells/documentation${query(mode)}`)
+    await page.goto(`${DOCS}/frame/block/shells/documentation/landing${query(mode)}`)
     await settle(page)
     await page.getByTestId('documentation-doc-agent-card').scrollIntoViewIfNeeded()
     await settle(page)

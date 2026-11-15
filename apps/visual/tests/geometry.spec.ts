@@ -5,7 +5,7 @@ import { DOCS, label, type Mode, prepare, query, settle, shot } from './lib'
 const THEMES = ['light', 'dark'] as const
 
 async function openExample(page: Page, example: string, mode: Mode) {
-  await page.goto(`${DOCS}/example${query(mode)}&path=${example}`)
+  await page.goto(`${DOCS}/frame/example/${example}${query(mode)}`)
   await page.locator('[data-example][data-ready]').waitFor()
   await settle(page)
   return page.locator('[data-example]')
@@ -118,7 +118,7 @@ for (const theme of THEMES) {
     ] as Mode[]) {
       test(`geometry ${id} ${state} ${label(mode)}`, async ({ page }) => {
         await prepare(page, mode)
-        await page.goto(`${DOCS}/frame/${state}/${id}${query(mode)}`)
+        await page.goto(`${DOCS}/frame/block/${id}/${state}${query(mode)}`)
         await settle(page)
         if (state === 'account-switch') {
           await page
@@ -152,7 +152,7 @@ for (const example of [
     await page.emulateMedia({ forcedColors: 'active', colorScheme: 'dark' })
     const preview = await openExample(page, example, mode)
     await expect(preview).toHaveScreenshot(
-      shot(`forced-colors/${example.replace('/', '-')}--${label(mode)}.png`)
+      shot(`forced-colors/${example}--forced-${mode.width}.png`)
     )
   })
 }

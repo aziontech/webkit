@@ -25,7 +25,7 @@ const { values } = parseArgs({
 
 if (!values.before || !values.after) {
   process.stderr.write(
-    'usage: baseline-review.mjs --before <dir> --after <dir> [--out <dir>] [--title <text>]\n'
+    'usage: review-baselines.mjs --before <dir> --after <dir> [--out <dir>] [--title <text>]\n'
   )
   process.exit(2)
 }
