@@ -3,7 +3,7 @@
 > One cell of the grid a documentation page scans across: a leading glyph, an optional eyebrow, the title, the copy, and an optional call-to-action row at the foot. It renders as an anchor when it has an `href` and as a plain block when it does not, so a card is either a destination or a statement — never a dead link.
 
 - Import: `import DocCard from '@aziontech/webkit/doc-card'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-card.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-card.json)
 
 ## When to use

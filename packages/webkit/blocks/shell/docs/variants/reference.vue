@@ -10,7 +10,7 @@
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocPrevNext from '@aziontech/webkit/doc-prev-next'
+  import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocProse from '@aziontech/webkit/doc-prose'
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -220,7 +220,7 @@
           >
         </DocCardGroup>
       </DocProse>
-      <DocPrevNext :next="{ label: 'Quickstart', href: '/docs/applications/quickstart' }" />
+      <DocPreviousNext :next="{ label: 'Quickstart', href: '/docs/applications/quickstart' }" />
     </article>
 
     <template #actions>

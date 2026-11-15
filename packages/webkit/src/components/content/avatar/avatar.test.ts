@@ -19,14 +19,14 @@ describe('Avatar', () => {
       props: { src: SAMPLE_SRC, alt: 'Portrait', label: 'AB' }
     })
 
-    const img = getByTestId('content-avatar__image')
+    const img = getByTestId('avatar__image')
     expect(img.tagName).toBe('IMG')
     expect(img).toHaveAttribute('src', SAMPLE_SRC)
     expect(img).toHaveAttribute('alt', 'Portrait')
 
     // src takes precedence: label and icon branches are suppressed
-    expect(queryByTestId('content-avatar__label')).toBeNull()
-    expect(queryByTestId('content-avatar__icon')).toBeNull()
+    expect(queryByTestId('avatar__label')).toBeNull()
+    expect(queryByTestId('avatar__icon')).toBeNull()
   })
 
   it('does not put role="img"/aria-label on the root when an image is present (the <img> alt carries it)', () => {
@@ -34,7 +34,7 @@ describe('Avatar', () => {
       props: { src: SAMPLE_SRC, alt: 'Portrait' }
     })
 
-    const root = getByTestId('content-avatar')
+    const root = getByTestId('avatar')
     expect(root).not.toHaveAttribute('role')
     expect(root).not.toHaveAttribute('aria-label')
   })
@@ -45,32 +45,32 @@ describe('Avatar', () => {
     })
 
     // imageAlt = alt || normalizedLabel || 'Avatar' ; normalizedLabel('jd') = 'JD'
-    expect(getByTestId('content-avatar__image')).toHaveAttribute('alt', 'JD')
+    expect(getByTestId('avatar__image')).toHaveAttribute('alt', 'JD')
   })
 
   it('falls back the image alt to "Avatar" when neither alt nor label are set', () => {
     const { getByTestId } = render(Avatar, { props: { src: SAMPLE_SRC } })
 
-    expect(getByTestId('content-avatar__image')).toHaveAttribute('alt', 'Avatar')
+    expect(getByTestId('avatar__image')).toHaveAttribute('alt', 'Avatar')
   })
 
   // --- label branch: normalized to two uppercase chars --------------------
   it('renders the initials, normalized to two uppercase characters, when there is a label but no src', () => {
     const { getByTestId, queryByTestId } = render(Avatar, { props: { label: 'herbert' } })
 
-    const labelEl = getByTestId('content-avatar__label')
+    const labelEl = getByTestId('avatar__label')
     // slice(0,2).toUpperCase() => 'HE'
     expect(labelEl).toHaveTextContent('HE')
 
     // no image, no icon
-    expect(queryByTestId('content-avatar__image')).toBeNull()
-    expect(queryByTestId('content-avatar__icon')).toBeNull()
+    expect(queryByTestId('avatar__image')).toBeNull()
+    expect(queryByTestId('avatar__icon')).toBeNull()
   })
 
   it('exposes role="img" and an aria-label equal to the initials on the root when showing a label', () => {
     const { getByTestId } = render(Avatar, { props: { label: 'AB' } })
 
-    const root = getByTestId('content-avatar')
+    const root = getByTestId('avatar')
     expect(root).toHaveAttribute('role', 'img')
     // accessibleLabel = normalizedLabel when no image => 'AB'
     expect(root).toHaveAttribute('aria-label', 'AB')
@@ -78,42 +78,42 @@ describe('Avatar', () => {
 
   it('names the initials and icon fallbacks with alt when it is given', () => {
     const initials = render(Avatar, { props: { label: 'JD', alt: 'Jane Doe' } })
-    expect(initials.getByTestId('content-avatar')).toHaveAttribute('aria-label', 'Jane Doe')
+    expect(initials.getByTestId('avatar')).toHaveAttribute('aria-label', 'Jane Doe')
     initials.unmount()
     const icon = render(Avatar, { props: { alt: 'Jane Doe' } })
-    expect(icon.getByTestId('content-avatar')).toHaveAttribute('aria-label', 'Jane Doe')
+    expect(icon.getByTestId('avatar')).toHaveAttribute('aria-label', 'Jane Doe')
   })
 
   it('treats a whitespace-only label as empty and falls through to the icon branch', () => {
     const { getByTestId, queryByTestId } = render(Avatar, { props: { label: '   ' } })
 
-    expect(queryByTestId('content-avatar__label')).toBeNull()
-    expect(getByTestId('content-avatar__icon')).toBeInTheDocument()
+    expect(queryByTestId('avatar__label')).toBeNull()
+    expect(getByTestId('avatar__icon')).toBeInTheDocument()
   })
 
   // --- icon branch: default fallback --------------------------------------
   it('renders the default icon fallback with aria-hidden when no src and no label', () => {
     const { getByTestId, queryByTestId } = render(Avatar, { props: {} })
 
-    const icon = getByTestId('content-avatar__icon')
+    const icon = getByTestId('avatar__icon')
     expect(icon).toBeInTheDocument()
     expect(icon).toHaveClass('ai', 'ai-user')
     expect(icon).toHaveAttribute('aria-hidden', 'true')
 
-    expect(queryByTestId('content-avatar__image')).toBeNull()
-    expect(queryByTestId('content-avatar__label')).toBeNull()
+    expect(queryByTestId('avatar__image')).toBeNull()
+    expect(queryByTestId('avatar__label')).toBeNull()
   })
 
   it('applies a custom icon class on the icon fallback element', () => {
     const { getByTestId } = render(Avatar, { props: { icon: 'ai ai-star' } })
 
-    expect(getByTestId('content-avatar__icon')).toHaveClass('ai', 'ai-star')
+    expect(getByTestId('avatar__icon')).toHaveClass('ai', 'ai-star')
   })
 
   it('labels the icon-only root as "User avatar" via role="img" + aria-label', () => {
     const { getByTestId } = render(Avatar, { props: {} })
 
-    const root = getByTestId('content-avatar')
+    const root = getByTestId('avatar')
     expect(root).toHaveAttribute('role', 'img')
     // accessibleLabel = 'User avatar' when no image and no label
     expect(root).toHaveAttribute('aria-label', 'User avatar')
@@ -132,18 +132,19 @@ describe('Avatar', () => {
 
   it.each(VARIANTS)('mirrors variant=%s on data-variant', (variant) => {
     const { getByTestId } = render(Avatar, { props: { label: 'AB', variant: variant } })
-    expect(getByTestId('content-avatar')).toHaveAttribute('data-variant', variant)
+    expect(getByTestId('avatar')).toHaveAttribute('data-variant', variant)
   })
 
   it.each(SIZES)('mirrors size=%s on data-size', (size) => {
     const { getByTestId } = render(Avatar, { props: { label: 'AB', size } })
-    expect(getByTestId('content-avatar')).toHaveAttribute('data-size', size)
+    expect(getByTestId('avatar')).toHaveAttribute('data-size', size)
   })
 
   it('names the rendered content on data-content', () => {
-    expect(
-      render(Avatar, { props: { label: 'AB' } }).getByTestId('content-avatar')
-    ).toHaveAttribute('data-content', 'label')
+    expect(render(Avatar, { props: { label: 'AB' } }).getByTestId('avatar')).toHaveAttribute(
+      'data-content',
+      'label'
+    )
   })
 
   it('forwards consumer attributes and listeners to the root', async () => {
@@ -152,7 +153,7 @@ describe('Avatar', () => {
       props: { label: 'AB' },
       attrs: { id: 'owner', title: 'Jane Doe', 'aria-describedby': 'hint', onClick: () => clicks++ }
     })
-    const root = getByTestId('content-avatar')
+    const root = getByTestId('avatar')
     expect(root).toHaveAttribute('id', 'owner')
     expect(root).toHaveAttribute('title', 'Jane Doe')
     expect(root).toHaveAttribute('aria-describedby', 'hint')
@@ -164,9 +165,9 @@ describe('Avatar', () => {
     const { getByTestId, findByTestId, queryByTestId } = render(Avatar, {
       props: { src: 'data:image/png;base64,broken', alt: 'Jane Doe', label: 'JD' }
     })
-    expect(await findByTestId('content-avatar__label')).toHaveTextContent('JD')
-    expect(queryByTestId('content-avatar__image')).toBeNull()
-    const root = getByTestId('content-avatar')
+    expect(await findByTestId('avatar__label')).toHaveTextContent('JD')
+    expect(queryByTestId('avatar__image')).toBeNull()
+    const root = getByTestId('avatar')
     expect(root).toHaveAttribute('role', 'img')
     expect(root).toHaveAttribute('aria-label', 'Jane Doe')
     expect(root).toHaveAttribute('data-content', 'label')
@@ -176,10 +177,10 @@ describe('Avatar', () => {
     const { findByTestId, rerender } = render(Avatar, {
       props: { src: 'data:image/png;base64,broken', label: 'JD' }
     })
-    await findByTestId('content-avatar__label')
+    await findByTestId('avatar__label')
     const pixel = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7'
     await rerender({ src: pixel, label: 'JD' })
-    expect(await findByTestId('content-avatar__image')).toHaveAttribute('src', pixel)
+    expect(await findByTestId('avatar__image')).toHaveAttribute('src', pixel)
   })
 
   // --- accessibility ------------------------------------------------------
@@ -204,10 +205,10 @@ describe('Avatar', () => {
   it('renders the composed Default story fixture (initials AB, circle, medium)', () => {
     const { getByTestId } = render(Default)
 
-    const root = getByTestId('content-avatar')
+    const root = getByTestId('avatar')
     expect(root).toHaveAttribute('role', 'img')
     expect(root).toHaveAttribute('aria-label', 'AB')
-    expect(getByTestId('content-avatar__label')).toHaveTextContent('AB')
+    expect(getByTestId('avatar__label')).toHaveTextContent('AB')
   })
 
   it('draws the marble pattern in place of the initials and names it with the full label', async () => {
@@ -215,13 +216,13 @@ describe('Avatar', () => {
       props: { label: 'Acme Inc.', pattern: 'marble' }
     })
 
-    const root = getByTestId('content-avatar')
+    const root = getByTestId('avatar')
     expect(root).toHaveAttribute('data-pattern', 'marble')
     expect(root).toHaveAttribute('role', 'img')
     expect(root).toHaveAttribute('aria-label', 'Acme Inc.')
-    expect(await findByTestId('content-avatar__pattern')).toHaveAttribute('aria-hidden', 'true')
-    expect(queryByTestId('content-avatar__label')).toBeNull()
-    expect(queryByTestId('content-avatar__icon')).toBeNull()
+    expect(await findByTestId('avatar__pattern')).toHaveAttribute('aria-hidden', 'true')
+    expect(queryByTestId('avatar__label')).toBeNull()
+    expect(queryByTestId('avatar__icon')).toBeNull()
   })
 
   it('lets src win over the pattern', () => {
@@ -229,9 +230,9 @@ describe('Avatar', () => {
       props: { src: SAMPLE_SRC, alt: 'Acme Inc.', label: 'Acme Inc.', pattern: 'marble' }
     })
 
-    expect(getByTestId('content-avatar__image')).toBeTruthy()
-    expect(queryByTestId('content-avatar__pattern')).toBeNull()
-    expect(getByTestId('content-avatar')).not.toHaveAttribute('data-pattern')
+    expect(getByTestId('avatar__image')).toBeTruthy()
+    expect(queryByTestId('avatar__pattern')).toBeNull()
+    expect(getByTestId('avatar')).not.toHaveAttribute('data-pattern')
   })
 
   it('paints the pattern only with the given colors and draws the same mark for the same name', async () => {
@@ -241,7 +242,7 @@ describe('Avatar', () => {
         (
           await within(
             render(Avatar, { props: { label, pattern: 'marble', colors } }).container
-          ).findByTestId('content-avatar__pattern')
+          ).findByTestId('avatar__pattern')
         ).querySelectorAll<SVGElement>('rect, path')
       ).map((node) => [node.style.fill, node.getAttribute('transform')])
 
@@ -254,7 +255,7 @@ describe('Avatar', () => {
 
   it('points every blurred layer at its own filter', async () => {
     const { findByTestId } = render(Avatar, { props: { label: 'Acme Inc.', pattern: 'marble' } })
-    const svg = await findByTestId('content-avatar__pattern')
+    const svg = await findByTestId('avatar__pattern')
     const id = svg.querySelector('filter')!.id
 
     expect(id).not.toBe('')
@@ -266,7 +267,7 @@ describe('Avatar', () => {
   it('has no accessibility violations for the pattern example', async () => {
     const { container, getAllByTestId } = render(Pattern)
 
-    await waitFor(() => expect(getAllByTestId('content-avatar__pattern')).toHaveLength(6))
+    await waitFor(() => expect(getAllByTestId('avatar__pattern')).toHaveLength(6))
     await expectNoA11yViolations(container)
   })
 })

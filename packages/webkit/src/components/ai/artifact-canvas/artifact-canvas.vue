@@ -3,8 +3,8 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import CopyButton from '../../actions/copy-button/copy-button.vue'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import CopyButton from '../../action/copy-button/copy-button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import ResponseBranches from '../response-branches/response-branches.vue'
 
   export type ArtifactCanvasType = 'code' | 'table' | 'document'
@@ -62,7 +62,7 @@
   const headingEl = ref<HTMLElement | null>(null)
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-artifact-canvas'
+    () => (attrs['data-testid'] as string | undefined) ?? 'artifact-canvas'
   )
   const icon = computed<string>(
     () =>

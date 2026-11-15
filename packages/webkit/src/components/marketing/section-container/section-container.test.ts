@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionContainer from './section-container.vue'
 
-const TESTID = 'marketing-section-container'
+const TESTID = 'section-container'
 
 describe('SectionContainer', () => {
   it('renders with the default testid and the default frame configuration', () => {

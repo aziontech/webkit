@@ -1,6 +1,6 @@
 {
   "component": "help-panel",
-  "title": "Components/Primitives/Content/HelpPanel",
+  "title": "Components/Content/HelpPanel",
   "examples": [
     {
       "name": "Default",

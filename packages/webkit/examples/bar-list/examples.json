@@ -1,6 +1,6 @@
 {
   "component": "bar-list",
-  "title": "Components/Primitives/Chart/BarList",
+  "title": "Components/Chart/BarList",
   "examples": [
     {
       "name": "Default",

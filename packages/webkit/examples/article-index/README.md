@@ -4,7 +4,7 @@ Every article of the Blog, or every resource of the Resource Hub, as one list, w
 
 Every entry is a ruled row: its cover on the left; on the right its overline, headline and deck, and the writers pinned to the foot when it has them. With `category-search` the rows use the byline layout and a two-line deck; with `facets` they centre their copy. Each row is one link, named by its headline, and from `lg` up a "Read article" cue rises into its end on hover or keyboard focus. The controls combine, and when nothing matches the list and its button are left out. Below `lg` the controls stack and the cover sits over the copy.
 
-The list is the `ArticleIndex` component from `@aziontech/webkit/article-index`; it composes `SectionModule`, `FrameBox`, `ToggleGroup`, `Select`, `Input`, `Avatar` and `Button`. The selections and the search are local state. For a card grid of customer stories use `StoryLibrary`; for job rows use `ListingBrowser`.
+The list is the `ArticleIndex` component from `@aziontech/webkit/article-index`; it composes `SectionModule`, `RegistrationFrame`, `ToggleGroup`, `Select`, `Input`, `Avatar` and `Button`. The selections and the search are local state. For a card grid of customer stories use `StoryIndex`; for job rows use `ListingIndex`.
 
 ## Examples
 

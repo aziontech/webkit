@@ -10,7 +10,7 @@ const arrowIn = (dir: 'ltr' | 'rtl') => {
   host.setAttribute('dir', dir)
   document.body.appendChild(host)
   const view = render(NavigationMenuArrow, { container: host })
-  const arrow = view.getByTestId('navigation-navigation-menu__arrow')
+  const arrow = view.getByTestId('navigation-menu-arrow')
   arrow.setAttribute('data-side', 'bottom')
   return { arrow, host }
 }

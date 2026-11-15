@@ -8,7 +8,7 @@ import WithLabel from '../../../../examples/separator/with-label.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Separator from './separator.vue'
 
-const TESTID = 'layout-separator'
+const TESTID = 'separator'
 
 describe('Separator', () => {
   it('renders a separator with the default testid and horizontal semantics by default', () => {
@@ -139,16 +139,16 @@ describe('Separator', () => {
         setup: () => ({ shown }),
         template: `<Separator><template v-if="shown" #default><span data-testid="probe">Slotted</span></template></Separator>`
       })
-      expect(queryByTestId('layout-separator__label')).toBeNull()
+      expect(queryByTestId('separator__label')).toBeNull()
 
       shown.value = true
       await nextTick()
-      expect(queryByTestId('layout-separator__label')).not.toBeNull()
+      expect(queryByTestId('separator__label')).not.toBeNull()
       expect(queryByTestId('probe')).not.toBeNull()
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('layout-separator__label')).toBeNull()
+      expect(queryByTestId('separator__label')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
     })
   })
@@ -156,7 +156,7 @@ describe('Separator', () => {
   describe('decorative', () => {
     it('renders role none and drops aria-orientation when decorative and unlabelled', () => {
       const { getByTestId, queryByRole } = render(Separator, { props: { decorative: true } })
-      const root = getByTestId('layout-separator')
+      const root = getByTestId('separator')
       expect(root.getAttribute('role')).toBe('none')
       expect(root.hasAttribute('aria-orientation')).toBe(false)
       expect(queryByRole('separator')).toBeNull()

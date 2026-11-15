@@ -1,11 +1,11 @@
 # CreatePage (`create/create-page`)
 
-> The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsSection`, `SettingRow`, `SaveBar`, `GlobalHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `HelperText`, `Switch`, `RadioGroup` (`variant="card"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.
+> The page a first-level resource is created on in one screen: its own creation header with no sidebar, a centred form column opening with a small page heading, then stacked sections, each a heading with a Hint over a flush Card of field rows, and a raised commit card centred at the bottom that the form scrolls under, carrying an optional leading slot plus Cancel and the submit Button. The same page covers a resource with a General section and a collapsed Advanced section, and an action whose submit label follows what it does (Save, Purge, Create). A long create such as Create Service groups `Item` rows under small headings under the same centred bar. Fields flag required or invalid only after the submit Button is pressed, and each error clears as soon as its field is edited. CreateZone imports a zone file into a Records section with Remove per row and Discard import, and CreateOrganization picks the organization's marble mark color and shows its owner and first workspace. Built from `PageHeader`, `SettingsSection`, `SettingsRow`, `SaveBar`, `AppHeader`, `IconButton`, `Breadcrumb`, `Avatar`, `Card`, `Item`, `Input`, `FieldError`, `Switch`, `RadioGroup` (`variant="card"`), `Textarea`, `Alert`, `MultiSelect`, `NumberInput`, `Select`, `Tag`, `toast` and `Button`.
 
 - Surface: app
 - Source: `blocks/create/create-page/create-page.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/create-page")`
-- Components: [Alert](../../components/alert.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [GlobalHeader](../../components/global-header.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md)
+- Components: [Alert](../../components/alert.md), [AppHeader](../../components/app-header.md), [Avatar](../../components/avatar.md), [Brand](../../components/brand.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), `FieldDescription`, `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [RadioGroup](../../components/radio-group.md), [RadioGroup](../../components/radio-group.md), [SaveBar](../../components/save-bar.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Switch](../../components/switch.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md)
 - Skills: `webkit-create-surface`, `webkit-form`, `webkit-errors`, `webkit-layout`
 
 ## Asked as
@@ -32,9 +32,9 @@ The page a first-level resource is created on when everything it needs fits on o
 
 ## Building blocks
 
-### A. Creation header — `GlobalHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
+### A. Creation header — `AppHeader`, `IconButton`, `Brand`, `Breadcrumb`, `Avatar` (required)
 
-`GlobalHeader` with no sidebar: a small outlined `IconButton` back to the module ("Back to Domains"), the `Brand` linking home, a `Breadcrumb` of the module and the page title, and the account `Avatar` on the right. The breadcrumb's last item repeats the create button's label exactly.
+`AppHeader` with no sidebar: a small outlined `IconButton` back to the module ("Back to Domains"), the `Brand` linking home, a `Breadcrumb` of the module and the page title, and the account `Avatar` on the right. The breadcrumb's last item repeats the create button's label exactly.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -44,13 +44,13 @@ The page a first-level resource is created on when everything it needs fits on o
 
 Each band is a `SettingsSection` with a title and a `hint` (the glyph that reveals guidance on hover or focus) over a flush `Card :padded="false"` whose content is an `Item.List` of rows. Required fields go in the first band, General. The last band is Advanced: `collapsible`, `icon="ai ai-settings"`, closed by default (`v-model:open`), holding only fields the endpoint does not require, that already carry its default and that are not the point of the form.
 
-### D. Field rows — `SettingRow`, `Input`, `HelperText` (required)
+### D. Field rows — `SettingsRow`, `Input`, `FieldError` (required)
 
-A `SettingRow` per field: its title names the field and its description carries the guidance, so the control takes an `aria-label` instead of a separate label. A large `Input` sits right at the fixed cell width. On submit, an empty required field gets `:required` and a `HelperText type="required"`; a value the endpoint rejects gets `:invalid` and `type="invalid"`, never both. Editing the field clears its own message. A wide control (textarea, radio choice cards) uses `variant="stacked"` so it takes the full measure below the name.
+A `SettingsRow` per field: its title names the field and its description carries the guidance, so the control takes an `aria-label` instead of a separate label. A large `Input` sits right at the fixed cell width. On submit, an empty required field gets `:required` and a `FieldError type="required"`; a value the endpoint rejects gets `:invalid` and `type="invalid"`, never both. Editing the field clears its own message. A wide control (textarea, radio choice cards) uses `variant="stacked"` so it takes the full measure below the name.
 
 ### E. Switch rows — `Switch` (optional)
 
-On/off settings use `SettingRow variant="compact"` with a `Switch` hard right at its natural size, named by an `aria-label` that matches the row title, e.g. "Enable DNSSEC".
+On/off settings use `SettingsRow variant="compact"` with a `Switch` hard right at its natural size, named by an `aria-label` that matches the row title, e.g. "Enable DNSSEC".
 
 ### F. Commit bar — `SaveBar`, `Button` (required)
 
@@ -111,7 +111,7 @@ On/off settings use `SettingRow variant="compact"` with a `Switch` hard right at
 - `settings/settings-form` — the edit page that reuses these sections.
 - `state/form-validation` — required and invalid states on submit.
 - `view/table-view` — the list whose `Create <Object>` button opens this page.
-- `SettingRow` — the field row every section is built from; see `skills/webkit-form`.
+- `SettingsRow` — the field row every section is built from; see `skills/webkit-form`.
 
 ## Variants
 
@@ -128,19 +128,19 @@ Each variant is the same screen in another state: `get_block("create/create-page
 
 ```vue
 <script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
@@ -148,9 +148,9 @@ Each variant is the same screen in another state: `get_block("create/create-page
 
   interface FormErrors {
     name: string
-    nameKind: HelperTextType
+    nameKind: 'helper' | 'invalid' | 'required'
     domain: string
-    domainKind: HelperTextType
+    domainKind: 'helper' | 'invalid' | 'required'
   }
 
   const breadcrumb = [{ label: 'Domains', href: '/domains' }, { label: 'Create Domain' }]
@@ -228,15 +228,15 @@ Each variant is the same screen in another state: `get_block("create/create-page
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Console">
-      <GlobalHeader.Start>
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Domains"
           variant="outline"
           size="small"
         />
-        <GlobalHeader.Brand>
+        <AppHeader.Brand>
           <a
             href="/home"
             aria-label="Azion home"
@@ -247,11 +247,11 @@ Each variant is the same screen in another state: `get_block("create/create-page
               size="small"
             />
           </a>
-        </GlobalHeader.Brand>
+        </AppHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Start>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -263,8 +263,8 @@ Each variant is the same screen in another state: `get_block("create/create-page
             variant="square"
           />
         </button>
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
       <form
@@ -297,7 +297,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="Identifies the domain in this list. It is not the hostname."
                       >
@@ -313,14 +313,13 @@ Each variant is the same screen in another state: `get_block("create/create-page
                           :aria-describedby="errors.name ? 'create-domain-name-message' : undefined"
                           @update:model-value="errors.name = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.name"
                           id="create-domain-name-message"
-                          :type="errors.nameKind"
-                          :label="errors.name"
-                        />
-                      </SettingRow>
-                      <SettingRow
+                          >{{ errors.name }}</FieldError
+                        >
+                      </SettingsRow>
+                      <SettingsRow
                         title="Domain name"
                         description="The root hostname this domain answers for, without a subdomain."
                       >
@@ -338,13 +337,12 @@ Each variant is the same screen in another state: `get_block("create/create-page
                           "
                           @update:model-value="errors.domain = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.domain"
                           id="create-domain-domain-message"
-                          :type="errors.domainKind"
-                          :label="errors.domain"
-                        />
-                      </SettingRow>
+                          >{{ errors.domain }}</FieldError
+                        >
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -359,7 +357,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="DNSSEC"
                         description="Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
                         variant="compact"
@@ -368,8 +366,8 @@ Each variant is the same screen in another state: `get_block("create/create-page
                           v-model="form.dnssec"
                           aria-label="Enable DNSSEC"
                         />
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Active"
                         description="When active, the domain answers authoritative DNS queries for its hostname."
                         variant="compact"
@@ -378,7 +376,7 @@ Each variant is the same screen in another state: `get_block("create/create-page
                           v-model="form.active"
                           aria-label="Active"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

@@ -24,7 +24,7 @@
   const headingId = useId()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-help-panel-group'
+    () => (attrs['data-testid'] as string | undefined) ?? 'help-panel-group'
   )
 </script>
 

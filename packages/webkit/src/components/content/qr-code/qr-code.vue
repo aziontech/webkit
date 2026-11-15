@@ -35,9 +35,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ qrCode: en.qrCode })
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-qr-code'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'qr-code')
 
   const grid = computed<boolean[][] | null>(() => {
     if (!props.value) return null

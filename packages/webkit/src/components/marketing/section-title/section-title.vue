@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Overline from '../../content/overline/overline.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import Eyebrow from '../../content/eyebrow/eyebrow.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({
     name: 'SectionTitle',
@@ -69,13 +69,11 @@
 
   const EYEBROW_PREFIX = '//' as const
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-section-title'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'section-title')
 
   const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
-  const frame = computed(() => (props.framed ? FrameBox : 'div'))
+  const frame = computed(() => (props.framed ? RegistrationFrame : 'div'))
   const frameProps = computed(() =>
     props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
   )
@@ -100,11 +98,11 @@
         v-if="variant === 'split'"
         class="flex w-full flex-col gap-(--spacing-lg)"
       >
-        <Overline
+        <Eyebrow
           v-if="eyebrow"
           :prefix="EYEBROW_PREFIX"
           cursor
-          >{{ eyebrow }}</Overline
+          >{{ eyebrow }}</Eyebrow
         >
         <div class="grid gap-(--spacing-xl) md:grid-cols-3">
           <h2
@@ -125,11 +123,11 @@
         v-else
         class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-lg) group-data-[variant=center]:items-center group-data-[variant=center]:text-center"
       >
-        <Overline
+        <Eyebrow
           v-if="eyebrow"
           :prefix="EYEBROW_PREFIX"
           cursor
-          >{{ eyebrow }}</Overline
+          >{{ eyebrow }}</Eyebrow
         >
         <h2
           class="m-0 text-balance text-(--text-default) group-data-[size=small]:text-heading-lg group-data-[size=medium]:text-heading-xl group-data-[size=large]:text-heading-2xl"

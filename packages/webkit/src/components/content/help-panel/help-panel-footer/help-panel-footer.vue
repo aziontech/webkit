@@ -30,7 +30,7 @@
   const headingId = useId()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-help-panel-footer'
+    () => (attrs['data-testid'] as string | undefined) ?? 'help-panel-footer'
   )
 </script>
 

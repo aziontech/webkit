@@ -105,7 +105,7 @@ describe('DataTable', () => {
 
     it('expands and collapses with the pointer toggle and emits update:expanded', async () => {
       const { view, expanded } = mountTree()
-      const toggles = view.getAllByTestId('data-data-table__expand-toggle')
+      const toggles = view.getAllByTestId('data-table__expand-toggle')
       expect(toggles).toHaveLength(1)
       expect(toggles[0].closest('[data-slot="tree-gutter"]')?.getAttribute('aria-hidden')).toBe(
         'true'
@@ -124,7 +124,7 @@ describe('DataTable', () => {
       expect(zulu.getAttribute('aria-posinset')).toBe('1')
       expect(zulu.getAttribute('data-depth')).toBe('1')
       expect(rowOf('a').getAttribute('aria-expanded')).toBe('true')
-      await fireEvent.click(view.getAllByTestId('data-data-table__expand-toggle')[0])
+      await fireEvent.click(view.getAllByTestId('data-table__expand-toggle')[0])
       await waitFor(() => expect(ids()).toEqual(['a', 'b']))
     })
 
@@ -159,10 +159,10 @@ describe('DataTable', () => {
 
     it('moves focus to the row that collapses over a focused descendant', async () => {
       const { view } = mountTree()
-      await fireEvent.click(view.getAllByTestId('data-data-table__expand-toggle')[0])
+      await fireEvent.click(view.getAllByTestId('data-table__expand-toggle')[0])
       await waitFor(() => expect(ids()).toContain('a2'))
       rowOf('a2').focus()
-      await fireEvent.click(view.getAllByTestId('data-data-table__expand-toggle')[0])
+      await fireEvent.click(view.getAllByTestId('data-table__expand-toggle')[0])
       await waitFor(() => expect(ids()).toEqual(['a', 'b']))
       await waitFor(() => expect(focusedId()).toBe('a'))
     })

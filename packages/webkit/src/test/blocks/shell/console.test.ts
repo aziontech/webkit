@@ -30,11 +30,11 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
 describe('shell/console#AccountSwitch placement', () => {
   it('puts the switcher in the rail under the wordmark on a wide layout', () => {
     const view = at(AccountSwitch, 1280)
-    const rail = view.getByTestId('layout-console-layout__sidebar-header')
+    const rail = view.getByTestId('console-layout__sidebar-header')
 
     expect(within(rail).getByRole('button', { name: /Account: Storefront EU/ })).toBeTruthy()
     expect(
-      within(view.getByTestId('layout-console-layout__header')).queryByRole('button', {
+      within(view.getByTestId('console-layout__header')).queryByRole('button', {
         name: /Switch account/
       })
     ).toBeNull()
@@ -42,7 +42,7 @@ describe('shell/console#AccountSwitch placement', () => {
 
   it('moves the switcher to the header start on a compact layout', async () => {
     const view = at(AccountSwitch, 480)
-    const header = view.getByTestId('layout-console-layout__header')
+    const header = view.getByTestId('console-layout__header')
 
     await waitFor(() =>
       expect(within(header).getByRole('button', { name: /Account: Storefront EU/ })).toBeTruthy()

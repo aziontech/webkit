@@ -43,7 +43,7 @@
   const container = inject(ItemContainerInjectionKey, null)
   const isListMember = inject(ItemListMemberInjectionKey, false)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-item')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'item')
 
   const variant = computed<ItemVariant>(() => container?.forceVariant ?? props.variant)
 

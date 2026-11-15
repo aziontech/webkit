@@ -168,29 +168,26 @@ for (const theme of THEMES) {
     test(`geometry card grid balanced rows ${label(mode)}`, async ({ page }) => {
       await prepare(page, mode)
       const preview = await openExample(page, 'card-grid/balanced', mode)
-      const grids = await preview
-        .locator('[data-testid="marketing-card-grid"]')
-        .evaluateAll((nodes) =>
-          nodes.map((grid) => {
-            const box = grid.getBoundingClientRect()
-            const rows = new Map<number, DOMRect[]>()
-            for (const cell of Array.from(grid.children)) {
-              const rect = cell.getBoundingClientRect()
-              const top = Math.round(rect.top)
-              rows.set(top, [...(rows.get(top) ?? []), rect])
-            }
-            return [...rows.values()].map((cells) => ({
-              count: cells.length,
-              start: Math.min(...cells.map((c) => c.left)) - box.left,
-              end: box.right - Math.max(...cells.map((c) => c.right)),
-              cellWidth: cells[0]?.width ?? 0,
-              spread:
-                Math.max(...cells.map((c) => c.width)) - Math.min(...cells.map((c) => c.width)),
-              heights:
-                Math.max(...cells.map((c) => c.height)) - Math.min(...cells.map((c) => c.height))
-            }))
-          })
-        )
+      const grids = await preview.locator('[data-testid="card-grid"]').evaluateAll((nodes) =>
+        nodes.map((grid) => {
+          const box = grid.getBoundingClientRect()
+          const rows = new Map<number, DOMRect[]>()
+          for (const cell of Array.from(grid.children)) {
+            const rect = cell.getBoundingClientRect()
+            const top = Math.round(rect.top)
+            rows.set(top, [...(rows.get(top) ?? []), rect])
+          }
+          return [...rows.values()].map((cells) => ({
+            count: cells.length,
+            start: Math.min(...cells.map((c) => c.left)) - box.left,
+            end: box.right - Math.max(...cells.map((c) => c.right)),
+            cellWidth: cells[0]?.width ?? 0,
+            spread: Math.max(...cells.map((c) => c.width)) - Math.min(...cells.map((c) => c.width)),
+            heights:
+              Math.max(...cells.map((c) => c.height)) - Math.min(...cells.map((c) => c.height))
+          }))
+        })
+      )
       expect(grids.map((rows) => rows.map((row) => row.count))).toEqual(BALANCED_ROWS[width])
       for (const rows of grids) {
         const full = rows[0]
@@ -214,9 +211,9 @@ for (const theme of THEMES) {
     test(`geometry site footer ends on its bottom bar ${label(mode)}`, async ({ page }) => {
       await prepare(page, mode)
       const preview = await openExample(page, 'site-footer/default', mode)
-      const footer = preview.locator('footer[data-testid="layout-footer"]')
-      const signature = footer.locator('[data-testid="layout-footer__signature"]')
-      const social = footer.locator('[data-testid="layout-footer__social"]')
+      const footer = preview.locator('footer[data-testid="footer"]')
+      const signature = footer.locator('[data-testid="footer__signature"]')
+      const social = footer.locator('[data-testid="footer__social"]')
       const home = 'a[aria-label="Azion home"]'
       if (width >= 1024) {
         await expect(signature).toBeHidden()
@@ -246,7 +243,7 @@ for (const theme of THEMES) {
     test(`geometry diagram flow centred connectors ${label(mode)}`, async ({ page }) => {
       await prepare(page, mode)
       const preview = await openExample(page, 'diagram/flow', mode)
-      const canvas = preview.locator('[data-testid="marketing-diagram__canvas"]')
+      const canvas = preview.locator('[data-testid="diagram__canvas"]')
       await canvas.locator('path').nth(3).waitFor({ state: 'attached' })
       const report = await canvas.evaluate((el) => {
         const frame = el.getBoundingClientRect()
@@ -301,8 +298,8 @@ for (const theme of THEMES) {
     const mode: Mode = { theme, width: 1280 }
     await prepare(page, mode)
     const preview = await openExample(page, 'doc-code-group/with-output', mode)
-    const code = preview.locator('[data-testid="documentation-doc-code-group__code"]')
-    const output = preview.locator('[data-testid="documentation-doc-code-group__output"]')
+    const code = preview.locator('[data-testid="doc-code-group__code"]')
+    const output = preview.locator('[data-testid="doc-code-group__output"]')
     await expect(code.locator('[data-testid$="__label-text"]')).toHaveText('Shell')
     await expect(output.locator('[data-testid$="__label-text"]')).toHaveText('Output')
     await expect(output.locator('[data-testid$="__copy"]')).toHaveCount(0)

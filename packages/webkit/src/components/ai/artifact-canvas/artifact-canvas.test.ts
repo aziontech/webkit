@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/artifact-canvas/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import ArtifactCanvas from './artifact-canvas.vue'
 
 afterEach(() => cleanup())
@@ -58,7 +58,7 @@ describe('ArtifactCanvas', () => {
     expect(view.getByRole('button', { name: 'Copy top-orders.sql' })).toBeTruthy()
     const content = view.getByRole('region', { name: 'top-orders.sql content' })
     expect(content).toHaveAttribute('tabindex', '0')
-    expect(view.getByTestId('ai-artifact-canvas')).toBeTruthy()
+    expect(view.getByTestId('artifact-canvas')).toBeTruthy()
   })
 
   it('pages through versions and renders the slot with the version shown', async () => {
@@ -74,7 +74,7 @@ describe('ArtifactCanvas', () => {
   it('hides the pager with one version and the toolbar when nothing goes in it', () => {
     const view = harness({ versions: 1, copyValue: '' })
     expect(view.queryByRole('group', { name: 'Artifact versions' })).toBeNull()
-    expect(view.queryByTestId('ai-artifact-canvas__toolbar')).toBeNull()
+    expect(view.queryByTestId('artifact-canvas__toolbar')).toBeNull()
   })
 
   it('offers Download with the title as file name', () => {
@@ -106,7 +106,7 @@ describe('ArtifactCanvas', () => {
       'aria-busy',
       'true'
     )
-    expect(view.getByTestId('ai-artifact-canvas__status').textContent).toContain(
+    expect(view.getByTestId('artifact-canvas__status').textContent).toContain(
       'Generating a new version'
     )
   })
@@ -164,16 +164,16 @@ describe('ArtifactCanvas', () => {
         setup: () => ({ shown }),
         template: `<ArtifactCanvas title="Report"><template v-if="shown" #actions><span data-testid="probe">Slotted</span></template></ArtifactCanvas>`
       })
-      expect(queryByTestId('ai-artifact-canvas__toolbar')).toBeNull()
+      expect(queryByTestId('artifact-canvas__toolbar')).toBeNull()
 
       shown.value = true
       await nextTick()
-      expect(queryByTestId('ai-artifact-canvas__toolbar')).not.toBeNull()
+      expect(queryByTestId('artifact-canvas__toolbar')).not.toBeNull()
       expect(queryByTestId('probe')).not.toBeNull()
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('ai-artifact-canvas__toolbar')).toBeNull()
+      expect(queryByTestId('artifact-canvas__toolbar')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
     })
   })
@@ -186,7 +186,7 @@ describe('ArtifactCanvas', () => {
       })
       expect(getByTestId('canvas')).toBeInTheDocument()
       expect(getByTestId('canvas__title')).toBeInTheDocument()
-      expect(queryByTestId('ai-artifact-canvas')).toBeNull()
+      expect(queryByTestId('artifact-canvas')).toBeNull()
     })
   })
 })

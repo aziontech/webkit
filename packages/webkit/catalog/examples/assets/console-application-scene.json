@@ -2,8 +2,8 @@
  "examples": [
   {
    "name": "Default",
-   "summary": "The console Application page in a `ConsolePanel` `#scene` slot: each tab plays its page, then opens the create drawer (list tabs) or raises the save bar (form tabs).",
-   "sfc": "<script setup>\n  import ConsoleApplicationScene from '@aziontech/webkit/assets/console-application-scene'\n  import ConsolePanel from '@aziontech/webkit/console-panel'\n\n  const tabs = [\n    { value: 'build', title: 'Build' },\n    { value: 'device-groups', title: 'Devices' },\n    { value: 'rules-engine', title: 'Rules' },\n    { value: 'main-settings', title: 'Settings' }\n  ]\n</script>\n\n<template>\n  <ConsolePanel\n    eyebrow=\"Azion Console\"\n    title=\"The Application, tab by tab\"\n    description=\"Every tab owns its own list, its own create drawer and its own save.\"\n    :tabs=\"tabs\"\n  >\n    <template #scene=\"{ tab }\">\n      <ConsoleApplicationScene :tab=\"tab\" />\n    </template>\n  </ConsolePanel>\n</template>"
+   "summary": "The console Application page in a `ConsoleShowcase` `#scene` slot: each tab plays its page, then opens the create drawer (list tabs) or raises the save bar (form tabs).",
+   "sfc": "<script setup>\n  import ConsoleApplicationScene from '@aziontech/webkit/assets/console-application-scene'\n  import ConsoleShowcase from '@aziontech/webkit/console-showcase'\n\n  const tabs = [\n    { value: 'build', title: 'Build' },\n    { value: 'device-groups', title: 'Devices' },\n    { value: 'rules-engine', title: 'Rules' },\n    { value: 'main-settings', title: 'Settings' }\n  ]\n</script>\n\n<template>\n  <ConsoleShowcase\n    eyebrow=\"Azion Console\"\n    title=\"The Application, tab by tab\"\n    description=\"Every tab owns its own list, its own create drawer and its own save.\"\n    :tabs=\"tabs\"\n  >\n    <template #scene=\"{ tab }\">\n      <ConsoleApplicationScene :tab=\"tab\" />\n    </template>\n  </ConsoleShowcase>\n</template>"
   },
   {
    "name": "Band",

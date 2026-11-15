@@ -22,7 +22,7 @@
 
 - A permanent tip on a control → use `hint` or `popover`.
 - A new feature announcement with no tutorial behind it → use `popover` or an `alert`.
-- Help text for a form field → use the field's `helper-text`.
+- Help text for a form field → use the field's `field-description`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

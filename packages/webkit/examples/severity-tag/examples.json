@@ -1,6 +1,6 @@
 {
   "component": "severity-tag",
-  "title": "Components/Primitives/Content/SeverityTag",
+  "title": "Components/Content/SeverityTag",
   "examples": [
     {
       "name": "Default",

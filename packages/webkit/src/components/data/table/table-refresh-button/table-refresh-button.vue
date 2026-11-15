@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import { TableInjectionKey } from '../injection-key'
 
@@ -29,9 +29,7 @@
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__refresh-button` : 'data-table__refresh-button')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-refresh-button'
   )
 
   const isDisabled = computed<boolean>(() => props.disabled || (ctx?.loading.value ?? false))

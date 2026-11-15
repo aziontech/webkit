@@ -1,11 +1,11 @@
 ---
 name: doc-agent-card
-category: documentation
+category: docs
 structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 217b60e80ceb86ec098f413ef12f589ce7a501298c6e834a9bb67794e1f6194a
+checksum: f9b841ab4a9f6e74cbca42e12deaf44110e3534c28b24e9a854f0f32af78283d
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -30,8 +30,8 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 
 - `CopyPromptButton` — the left column's action.
 - `DocHero` — the masthead above it on a docs home.
-- `DocCardGroup` — the Console / CLI / API cards that follow it; both share `FrameBox`'s corner marks.
-- `TextureMaterial` — the `dither` halftone behind the guided action.
+- `DocCardGroup` — the Console / CLI / API cards that follow it; both share `RegistrationFrame`'s corner marks.
+- `Texture` — the `dither` halftone behind the guided action.
 
 ## Best practices
 
@@ -96,12 +96,12 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 
 | Region  | Token (DESIGN.md)                                                                   |
 | ------- | ----------------------------------------------------------------------------------- |
-| card    | `var(--bg-surface)` inside `FrameBox` (borders and corner marks)                    |
+| card    | `var(--bg-surface)` inside `RegistrationFrame` (borders and corner marks)           |
 | divider | `var(--border-default)`                                                             |
 | title   | `.text-heading-lg`, `var(--text-default)`                                           |
 | text    | `.text-body-md`, `var(--text-muted)`                                                |
 | aside   | `.text-heading-md`, `var(--text-default)`                                           |
-| art     | `TextureMaterial variant="dither"` inked with `var(--primary)` at 70 %              |
+| art     | `Texture variant="dither"` inked with `var(--primary)` at 70 %                      |
 | spacing | `var(--spacing-xl)` padding, `var(--spacing-sm)` / `var(--spacing-md)` inner rhythm |
 
 ## Theme gaps
@@ -136,7 +136,7 @@ The "Your AI agent, fluent in Azion" card that opens the first section of a docu
 
 ## Performance
 
-- Bundle budget: 7 KB gzip for `./doc-agent-card` in `.size-limit.json`, initial chunk only (6.79 KB measured; includes `Button`, `CopyPromptButton`, `FrameBox` and `TextureMaterial`).
+- Bundle budget: 7 KB gzip for `./doc-agent-card` in `.size-limit.json`, initial chunk only (6.79 KB measured; includes `Button`, `CopyPromptButton`, `RegistrationFrame` and `Texture`).
 - Runtime budget: none; static apart from the copy button's timer.
 
 ## Examples

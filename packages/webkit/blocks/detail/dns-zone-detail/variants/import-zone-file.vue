@@ -14,8 +14,9 @@
   import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
+  import FieldDescription from '@aziontech/webkit/field-description'
+  import FieldError from '@aziontech/webkit/field-error'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
-  import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
@@ -27,7 +28,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
@@ -491,7 +492,7 @@ legacy  IN HINFO "PC" "Linux"`
                 <Card :padded="false">
                   <template #default>
                     <ItemList>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="Give a unique and descriptive name to identify your zone."
                       >
@@ -506,15 +507,14 @@ legacy  IN HINFO "PC" "Linux"`
                           :disabled="saving"
                           @update:model-value="errors.name = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.name"
                           :id="nameMessageId"
-                          type="required"
-                          :label="errors.name"
-                        />
-                      </SettingRow>
+                          >{{ errors.name }}</FieldError
+                        >
+                      </SettingsRow>
 
-                      <SettingRow
+                      <SettingsRow
                         title="Domain name"
                         description="Provide the domain name you want to host. Example: example.com."
                       >
@@ -529,13 +529,12 @@ legacy  IN HINFO "PC" "Linux"`
                           :disabled="saving"
                           @update:model-value="errors.domain = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.domain"
                           :id="domainMessageId"
-                          type="required"
-                          :label="errors.domain"
-                        />
-                      </SettingRow>
+                          >{{ errors.domain }}</FieldError
+                        >
+                      </SettingsRow>
                     </ItemList>
                   </template>
                 </Card>
@@ -549,7 +548,7 @@ legacy  IN HINFO "PC" "Linux"`
                 <Card :padded="false">
                   <template #default>
                     <ItemList>
-                      <SettingRow
+                      <SettingsRow
                         title="Nameservers"
                         description="Make this zone the authoritative DNS for the domain by copying the nameserver values."
                         stackable
@@ -577,12 +576,10 @@ legacy  IN HINFO "PC" "Linux"`
                             />
                           </InputGroupRoot>
                         </div>
-                        <HelperText
-                          :id="nameserverMessageId"
-                          type="helper"
-                          label="Add the nameservers in your domain provider."
-                        />
-                      </SettingRow>
+                        <FieldDescription :id="nameserverMessageId"
+                          >Add the nameservers in your domain provider.</FieldDescription
+                        >
+                      </SettingsRow>
                     </ItemList>
                   </template>
                 </Card>
@@ -596,7 +593,7 @@ legacy  IN HINFO "PC" "Linux"`
                 <Card :padded="false">
                   <template #default>
                     <ItemList>
-                      <SettingRow
+                      <SettingsRow
                         title="Enable DNSSEC"
                         description="Enable DNSSEC to secure your DNS zone against cache poisoning and spoofing attacks. Configure the key tag and digest values in your domain provider to complete the setup."
                         variant="compact"
@@ -606,10 +603,10 @@ legacy  IN HINFO "PC" "Linux"`
                           aria-label="Enable DNSSEC"
                           :disabled="saving"
                         />
-                      </SettingRow>
+                      </SettingsRow>
 
                       <template v-if="settings.dnssec">
-                        <SettingRow
+                        <SettingsRow
                           v-for="key in dnssecKeys"
                           :key="key.label"
                           :title="key.label"
@@ -634,7 +631,7 @@ legacy  IN HINFO "PC" "Linux"`
                               size="small"
                             />
                           </InputGroupRoot>
-                        </SettingRow>
+                        </SettingsRow>
                       </template>
                     </ItemList>
                   </template>
@@ -649,7 +646,7 @@ legacy  IN HINFO "PC" "Linux"`
                 <Card :padded="false">
                   <template #default>
                     <ItemList>
-                      <SettingRow
+                      <SettingsRow
                         title="Active"
                         description="When active, the zone answers authoritative DNS queries for the domain."
                         variant="compact"
@@ -659,7 +656,7 @@ legacy  IN HINFO "PC" "Linux"`
                           aria-label="Active"
                           :disabled="saving"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </ItemList>
                   </template>
                 </Card>
@@ -952,11 +949,7 @@ legacy  IN HINFO "PC" "Linux"`
                 tabindex="-1"
                 @change="onPicked"
               />
-              <HelperText
-                v-if="dropError"
-                type="invalid"
-                :label="dropError"
-              />
+              <FieldError v-if="dropError">{{ dropError }}</FieldError>
               <Field>
                 <Field.Label for="zone-import-text">
                   <span class="text-(--text-muted)">Or paste it</span>

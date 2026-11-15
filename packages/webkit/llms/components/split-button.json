@@ -3,7 +3,7 @@
  "binding": "SplitButton",
  "import": "@aziontech/webkit/split-button",
  "treeShakeableImport": "@aziontech/webkit/split-button",
- "category": "actions",
+ "category": "action",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

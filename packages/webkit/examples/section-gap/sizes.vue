@@ -1,17 +1,17 @@
 <script setup>
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionGap from '@aziontech/webkit/section-gap'
 </script>
 
 <template>
   <div>
-    <FrameBox borders="y">
+    <RegistrationFrame borders="y">
       <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
         size="small" — one --spacing-2xl below
       </div>
-    </FrameBox>
+    </RegistrationFrame>
     <SectionGap size="small" />
-    <FrameBox
+    <RegistrationFrame
       flush
       marks="bottom"
       borders="y"
@@ -19,9 +19,9 @@
       <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
         size="medium" — two below
       </div>
-    </FrameBox>
+    </RegistrationFrame>
     <SectionGap size="medium" />
-    <FrameBox
+    <RegistrationFrame
       flush
       marks="bottom"
       borders="y"
@@ -29,14 +29,14 @@
       <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
         size="large" — three below
       </div>
-    </FrameBox>
+    </RegistrationFrame>
     <SectionGap size="large" />
-    <FrameBox
+    <RegistrationFrame
       flush
       marks="bottom"
       borders="y"
     >
       <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">End</div>
-    </FrameBox>
+    </RegistrationFrame>
   </div>
 </template>

@@ -3,7 +3,7 @@
 > Single-line text input for forms and inline editing. Renders a bordered field with optional leading/trailing icon slots. Visual states (hover, focus, filled) are driven by native CSS pseudo-classes, not props. The component is the field only — labels, helper text, and error messages live in the wrapping form-field layer. Aligned with Figma frame `562:6774` (Webkit / Input).
 
 - Import: `import Input from '@aziontech/webkit/input'`
-- Category: inputs · Surface: app · Structure: monolithic
+- Category: input · Surface: app · Structure: monolithic
 - API as JSON: [input.json](https://github.com/aziontech/webkit/blob/main/.specs/input.json)
 
 ## When to use

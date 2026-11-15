@@ -56,9 +56,7 @@
 
   const tabIndex = computed(() => (isSelected.value && !isDisabled.value ? 0 : -1))
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-tabs-trigger'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tabs-trigger')
 
   const tabId = computed(() =>
     context ? context.tabId(resolvedValue.value) : `${testId.value}__tab`

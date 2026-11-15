@@ -77,7 +77,7 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 - The run status is text in the heading's `Tag`, not color alone.
 - Toasts are announced by the app's `Toaster`, politely except the failure toast (`danger`), which interrupts; the progress toast must not steal focus.
 - The failure toast's actions and close button are reachable by keyboard, and it stays until closed.
-- The logs card (Running and Error) streams into a `LogView`; do not announce every log line.
+- The logs card (Running and Error) streams into a `LogViewer`; do not announce every log line.
 - Page entrance and the outcome `Alert` animate with `motion-reduce:animate-none`.
 
 ## States
@@ -90,6 +90,6 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 ## Related
 
 - `state/form-validation` — the synchronous counterpart: field, section and toast placement for a save that answers right away.
-- `detail/deployment-logs` — the deployment logs card (`LogView.Steps`) the Running and Error states reuse, and the full logs of a run the page Edit or a failure leads into.
+- `detail/deployment-logs` — the deployment logs card (`LogViewer.Steps`) the Running and Error states reuse, and the full logs of a run the page Edit or a failure leads into.
 - `create/deploy-success` — the confirmation page after a deploy completes.
 - `shell/console` — the layout this body renders in, which the user moves through while the run reports back.

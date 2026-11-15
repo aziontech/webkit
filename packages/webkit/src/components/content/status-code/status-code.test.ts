@@ -11,12 +11,12 @@ describe('StatusCode', () => {
   it('renders the fallback data-testid with a dash and the invalid class when empty', () => {
     const { getByTestId, queryByTestId } = render(StatusCode)
 
-    const root = getByTestId('content-status-code')
+    const root = getByTestId('status-code')
     expect(root).toHaveAttribute('data-status-class', 'invalid')
     expect(root).toHaveAttribute('data-severity', 'neutral')
     expect(root).toHaveAttribute('data-size', 'medium')
-    expect(getByTestId('content-status-code__code')).toHaveTextContent('—')
-    expect(queryByTestId('content-status-code__method')).toBeNull()
+    expect(getByTestId('status-code__code')).toHaveTextContent('—')
+    expect(queryByTestId('status-code__method')).toBeNull()
   })
 
   it('lets a consumer data-testid win and derives the part ids from it', () => {
@@ -28,7 +28,7 @@ describe('StatusCode', () => {
     expect(getByTestId('request-status')).toBeInTheDocument()
     expect(getByTestId('request-status__method')).toHaveTextContent('GET')
     expect(getByTestId('request-status__code')).toHaveTextContent('200')
-    expect(queryByTestId('content-status-code')).toBeNull()
+    expect(queryByTestId('status-code')).toBeNull()
   })
 
   it.each([
@@ -45,31 +45,31 @@ describe('StatusCode', () => {
   ] as const)('maps %s to the %s class and the %s severity', (code, statusClass, severity) => {
     const { getByTestId } = render(StatusCode, { props: { code } })
 
-    const root = getByTestId('content-status-code')
+    const root = getByTestId('status-code')
     expect(root).toHaveAttribute('data-status-class', statusClass)
     expect(root).toHaveAttribute('data-severity', severity)
-    expect(getByTestId('content-status-code__code')).toHaveTextContent(String(code))
+    expect(getByTestId('status-code__code')).toHaveTextContent(String(code))
   })
 
   it('marks only an invalid code as invalid', () => {
     const valid = render(StatusCode, { props: { code: 404 } })
-    expect(valid.getByTestId('content-status-code__code')).not.toHaveAttribute('data-invalid')
+    expect(valid.getByTestId('status-code__code')).not.toHaveAttribute('data-invalid')
     valid.unmount()
 
     const invalid = render(StatusCode, { props: { code: 'n/a' } })
-    expect(invalid.getByTestId('content-status-code__code')).toHaveAttribute('data-invalid')
+    expect(invalid.getByTestId('status-code__code')).toHaveAttribute('data-invalid')
   })
 
   it.each(['small', 'medium'] as const)('forwards size %s to the tag', (size) => {
     const { getByTestId } = render(StatusCode, { props: { code: 200, size } })
 
-    expect(getByTestId('content-status-code')).toHaveAttribute('data-size', size)
+    expect(getByTestId('status-code')).toHaveAttribute('data-size', size)
   })
 
   it('reads as method then code, isolated left to right', () => {
     const { getByTestId } = render(StatusCode, { props: { code: 503, method: ' post ' } })
 
-    const root = getByTestId('content-status-code')
+    const root = getByTestId('status-code')
     expect(root).toHaveAttribute('dir', 'ltr')
     expect(root).toHaveTextContent(/^POST\s*503$/)
   })
@@ -87,7 +87,7 @@ describe('StatusCode', () => {
     const { getAllByTestId } = render(List)
     const elapsed = performance.now() - started
 
-    expect(getAllByTestId('content-status-code')).toHaveLength(1000)
+    expect(getAllByTestId('status-code')).toHaveLength(1000)
     expect(elapsed).toBeLessThan(2000)
   })
 

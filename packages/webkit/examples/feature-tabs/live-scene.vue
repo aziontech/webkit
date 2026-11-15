@@ -29,7 +29,7 @@
     title="Three ways to ship your first function"
     description="The same function, written and deployed from wherever you already work."
     :tabs="tabs"
-    :scene="{ component: 'ProductWidget', props: { name: 'functions-start' } }"
+    :scene="{ component: 'ConsoleMockup', props: { name: 'functions-start' } }"
     :autoplay-interval="6000"
   />
 </template>

@@ -1,11 +1,11 @@
 ---
 name: job-posting
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: faacb8f96cfcaac3f3bb998165285a30895003d67f4c894c6ff46face36cc870
+checksum: 4c4269da5a57a28bfde58d2d4b4b8f4e7f20f9f495791570874e7d9ae914165f
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -14,22 +14,22 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The body of a careers posting page, under the posting's title band: the description in rows, one per section of the posting (a heading, then its paragraphs and bullet lists), beside a sticky rail that restates the posting (its area, its title and its facets such as department, location and contract) with the link to the application; then the application form, and a dialog that confirms a sent application with a way back to the open positions. From the design sample's careers job page. It is a page section — the site places it from a `{ _id: 'job-posting', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `section-title`, `overline`, `button`, `field`, `label`, `input`, `phone-input`, `file-dropzone`, `file-token-group`, `alert`, `dialog` and `panel`. It collects data, so it follows the forms exception of the page-section contract: it validates on submit only and emits `submit`; the site sends the application and hands the outcome back through `loading`, `submitted` and `failed`.
+The body of a careers posting page, under the posting's title band: the description in rows, one per section of the posting (a heading, then its paragraphs and bullet lists), beside a sticky rail that restates the posting (its area, its title and its facets such as department, location and contract) with the link to the application; then the application form, and a dialog that confirms a sent application with a way back to the open positions. From the design sample's careers job page. It is a page section — the site places it from a `{ _id: 'job-posting', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `section-title`, `eyebrow`, `button`, `field`, `label`, `input`, `phone-input`, `file-dropzone`, `file-token-group`, `alert`, `dialog` and `panel`. It collects data, so it follows the forms exception of the page-section contract: it validates on submit only and emits `submit`; the site sends the application and hands the outcome back through `loading`, `submitted` and `failed`.
 
 ## When to use
 
-- On the page of one open position, under a `hero-band` (`variant: 'title-band'`) that carries the posting's title and its apply link.
+- On the page of one open position, under a `hero-section` (`variant: 'title-band'`) that carries the posting's title and its apply link.
 
 ## When NOT to use
 
-- For the list of open positions → use `listing-browser`.
-- For a lead or contact form at the top of a landing page → use `hero-form`.
-- For a newsletter sign-up at the end of a page → use `closing-call-to-action-newsletter`.
+- For the list of open positions → use `listing-index`.
+- For a lead or contact form at the top of a landing page → use `hero-form-section`.
+- For a newsletter sign-up at the end of a page → use `newsletter-section`.
 
 ## Related
 
-- `hero-band` — the title band above the posting; its action links to `#` plus `form.anchor`.
-- `hero-form` — the sibling page section that also emits `submit` and takes `loading`, `submitted` and `failed`.
+- `hero-section` — the title band above the posting; its action links to `#` plus `form.anchor`.
+- `hero-form-section` — the sibling page section that also emits `submit` and takes `loading`, `submitted` and `failed`.
 
 ## Best practices
 
@@ -204,7 +204,7 @@ No built-in strings: every visible string and accessible name comes from the pro
 
 ## Performance
 
-- Bundle budget: 50 KB gzip for `./job-posting` in `.size-limit.json` (`entryOnly`, like `hero-form`: `phone-input` carries its country list and `dialog` its motion; measured 49.1 KB).
+- Bundle budget: 50 KB gzip for `./job-posting` in `.size-limit.json` (`entryOnly`, like `hero-form-section`: `phone-input` carries its country list and `dialog` its motion; measured 49.1 KB).
 - Runtime budget: none: static content and one form.
 - Heavy parts: none; the dialog renders only while open.
 

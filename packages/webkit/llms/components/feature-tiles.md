@@ -1,9 +1,9 @@
 # Feature Tiles
 
-> The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
+> The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
 
 - Import: `import FeatureTiles from '@aziontech/webkit/feature-tiles'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [feature-tiles.json](https://github.com/aziontech/webkit/blob/main/.specs/feature-tiles.json)
 
 ## When to use
@@ -34,7 +34,7 @@
 | --- | --- | --- | --- | --- |
 | `variant` | `FeatureTilesVariant` | `'artwork'` | false | Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule. |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
+| `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence under the headline. |
 | `tiles` | `FeatureTilesTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, image?, alt?, illustration?, scale? }` where `image` is a picture URL, `alt` its alternative text (empty keeps the picture decorative), `illustration` a registry name drawn fluid, and `scale` its media scale. |

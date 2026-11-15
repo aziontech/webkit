@@ -5,7 +5,7 @@
   import { intlLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
-  import Checkbox from '../../inputs/checkbox/checkbox.vue'
+  import Checkbox from '../../input/checkbox/checkbox.vue'
   import type { DataGridCellEdit, DataGridColumn } from './types'
 
   defineOptions({
@@ -71,9 +71,7 @@
   const { t, locale } = useTranslate({ dataGrid: en.dataGrid })
   const uid = useId()
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-data-grid'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'data-grid')
   const GRID_ATTRS = ['aria-labelledby', 'aria-describedby']
   const rootAttrs = computed(() =>
     Object.fromEntries(

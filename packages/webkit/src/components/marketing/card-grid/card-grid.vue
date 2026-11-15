@@ -50,7 +50,7 @@
 
   const attrs = useAttrs()
   const slots = useSlots()
-  const testId = computed(() => (attrs['data-testid'] as string) ?? 'marketing-card-grid')
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'card-grid')
 
   const cellCount = computed(() => countRenderedNodes(slots['default']?.() ?? []))
 

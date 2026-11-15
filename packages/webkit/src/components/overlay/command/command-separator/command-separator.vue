@@ -14,9 +14,7 @@
 
   const isVisible = computed(() => !ctx.ranking.value && ctx.page.value === separatorPage)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__separator`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'command-separator')
 </script>
 
 <template>

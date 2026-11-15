@@ -3,7 +3,7 @@
  "binding": "AttributeEditor",
  "import": "@aziontech/webkit/attribute-editor",
  "treeShakeableImport": "@aziontech/webkit/attribute-editor",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

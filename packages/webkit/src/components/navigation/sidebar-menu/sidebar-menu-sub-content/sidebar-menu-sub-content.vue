@@ -36,7 +36,7 @@
   const sidebar = inject(SidebarInjectionKey, null)
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu-sub-content'
+    () => (attrs['data-testid'] as string | undefined) ?? 'sidebar-menu-sub-content'
   )
 
   const isDrill = computed(() => sub.type.value === 'drill')

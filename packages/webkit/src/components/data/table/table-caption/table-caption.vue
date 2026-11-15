@@ -16,9 +16,7 @@
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__caption` : 'data-table__caption')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-caption'
   )
 
   const id = computed<string | undefined>(

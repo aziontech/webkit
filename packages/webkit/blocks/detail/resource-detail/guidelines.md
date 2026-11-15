@@ -42,7 +42,7 @@ For a resource made from the CLI, the `detail/get-started` section follows the s
 
 ## Breadcrumb and environment
 
-- The trail is in the layout's header: `breadcrumbs` from the route meta (`module › resource name`, e.g. Resources › analytics-app), or the page's own `ConsoleLayout.Breadcrumb`. A page body never renders `Breadcrumb`, `GlobalHeader` or a `<main>`.
+- The trail is in the layout's header: `breadcrumbs` from the route meta (`module › resource name`, e.g. Resources › analytics-app), or the page's own `ConsoleLayout.Breadcrumb`. A page body never renders `Breadcrumb`, `AppHeader` or a `<main>`.
 - A service ends the trail on its environment. That crumb is a control, so the page sets the trail itself: `ConsoleLayout.Breadcrumb` with the module and the service as `items` and, in its default slot, a `Select` with `variant="ghost"` and `size="small"` (no `w-full`: it sizes to its value like a crumb), labelled `Switch environment`, with a search `Input`, each environment tagged with its deployment policy and Add Environment at its foot. The environment is part of the route, so picking one navigates and the page reads it. ServiceOverview and `shell/console` (DetailPage) show it.
 - The layout hides its breadcrumbs while compact, so below md the service summary's Deployment Settings band carries its own environment menu.
 

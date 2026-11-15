@@ -33,9 +33,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-accordion-trigger'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'accordion-trigger')
 
   const headingTag = computed(() => `h${props.headingLevel}` as const)
 

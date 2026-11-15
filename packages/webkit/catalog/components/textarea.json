@@ -1,5 +1,5 @@
 {
- "purpose": "Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`). With `autoResize` the field instead grows with its content between `minRows` and `maxRows` lines. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.",
+ "purpose": "Collects multi-line free-form text from the user. Sibling of `input` in the `input` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`). With `autoResize` the field instead grows with its content between `minRows` and `maxRows` lines. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.",
  "useWhen": [
   "Capture multiple lines of free-form text (descriptions, comments, messages)."
  ],

@@ -47,7 +47,7 @@
   const { t } = useTranslate({ suggestionGroup: en.suggestionGroup })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-suggestion-group'
+    () => (attrs['data-testid'] as string | undefined) ?? 'suggestion-group'
   )
 
   function choose(event: MouseEvent, item: SuggestionGroupItem): void {

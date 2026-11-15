@@ -1,6 +1,6 @@
 {
   "component": "console-layout",
-  "title": "Components/Primitives/Layout/ConsoleLayout",
+  "title": "Components/Layout/ConsoleLayout",
   "examples": [
     {
       "name": "Default",

@@ -63,7 +63,7 @@
   const { t } = useTranslate({ errorBoundary: en.errorBoundary })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-error-boundary'
+    () => (attrs['data-testid'] as string | undefined) ?? 'error-boundary'
   )
 
   const failure = shallowRef<{ error: unknown } | null>(null)

@@ -19,9 +19,9 @@ Multi-factor authentication for a whole account. An admin sees who signs in with
 
 Title `Multi-factor authentication` and one sentence on what the page holds. Action: Documentation.
 
-### B. Require MFA — `Card`, `Item`, `SettingRow`, `Switch`, `ConfirmDialog` (required)
+### B. Require MFA — `Card`, `Item`, `SettingsRow`, `Switch`, `ConfirmDialog` (required)
 
-One compact `SettingRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`variant="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once with a toast. While data loads or failed, the switch is disabled.
+One compact `SettingsRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`variant="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once with a toast. While data loads or failed, the switch is disabled.
 
 ### C. Password-only warning — `Alert` (conditional)
 

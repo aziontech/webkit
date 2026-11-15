@@ -3,10 +3,10 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
+  import Button from '../../action/button/button.vue'
   import Avatar from '../../content/avatar/avatar.vue'
-  import AiLoading from '../ai-loading/ai-loading.vue'
   import { ConversationInjectionKey } from '../conversation/injection-key'
+  import ResponseLoading from '../response-loading/response-loading.vue'
   import type { ChatMessageFrom, ChatMessageStatus } from './injection-key'
   import { ChatMessageInjectionKey } from './injection-key'
 
@@ -30,7 +30,7 @@
     grouped?: boolean
     /** Error text shown while `status` is `error`. Empty uses the locale catalog. */
     errorMessage?: string
-    /** Loading text shown while `status` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`). */
+    /** Loading text shown while `status` is `pending`. Empty uses `ResponseLoading`'s own (`Generating a response`). */
     loadingLabel?: string
   }
 
@@ -63,7 +63,7 @@
   const conversation = inject(ConversationInjectionKey, null)
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-chat-message'
+    () => (attrs['data-testid'] as string | undefined) ?? 'chat-message'
   )
   const name = computed<string>(() => props.author || t(`chatMessage.${props.from}`))
   const accessibleName = computed<string>(() =>
@@ -151,7 +151,7 @@
           {{ timestamp }}
         </span>
       </p>
-      <AiLoading
+      <ResponseLoading
         v-if="status === 'pending'"
         :label="loadingLabel"
         :delay="0"

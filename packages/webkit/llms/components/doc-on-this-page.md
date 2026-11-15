@@ -3,7 +3,7 @@
 > The "On this page" rail: the page's own headings, the active one lit, nested headings indented under their parent — followed by the rail's complementary groups (the repository, the community). The rail is a single path that bends inward as the outline nests, and the active marker is a dash cut from that same path, so moving between headings slides the marker **along** the line, through the bends, rather than jumping a separate bar between two positions.
 
 - Import: `import DocOnThisPage from '@aziontech/webkit/doc-on-this-page'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-on-this-page.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-on-this-page.json)
 
 ## When to use
@@ -20,15 +20,15 @@
 ## Don’t
 
 - Expecting it to track scroll. It is presentation only: `activeId` is a prop, because the page owns the scroll container and therefore owns which heading is active.
-- For navigation _between_ pages — that is `DocPrevNext` at the foot, or the sidebar.
+- For navigation _between_ pages — that is `DocPreviousNext` at the foot, or the sidebar.
 - For an outline deeper than a couple of levels; the indent is legible for two, not for five.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - DocPageHeader` — the masthead above the body, whose `h1` is chrome, so the outline starts at `h2`.
-- DocPrevNext` — navigation between documents, where this is navigation within one.
-- use-heading-nav` — the composable a page uses to receive a rail activation and scroll its own container.
+- DocPreviousNext` — navigation between documents, where this is navigation within one.
+- use-heading-navigation` — the composable a page uses to receive a rail activation and scroll its own container.
 
 ## Props
 

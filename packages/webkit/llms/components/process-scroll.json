@@ -3,7 +3,7 @@
  "binding": "ProcessScroll",
  "import": "@aziontech/webkit/process-scroll",
  "treeShakeableImport": "@aziontech/webkit/process-scroll",
- "category": "sections",
+ "category": "section",
  "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
@@ -18,7 +18,7 @@
   "For more than five stages or stages with art — use `FeatureScroll`."
  ],
  "related": [
-  "TextureMaterial`, `FrameBox`, `SectionTitle`."
+  "Texture`, `RegistrationFrame`, `SectionTitle`."
  ],
  "bestPractices": [
   "Name each stage with a verb.",
@@ -38,7 +38,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Overline above the title."
+   "doc": "Eyebrow above the title."
   },
   {
    "name": "titleVariant",
@@ -94,7 +94,7 @@
    "type": "string",
    "default": "'var(--layout-header-height)'",
    "required": "false",
-   "doc": "Height of the sticky site header a pinned band sticks under; defaults to the SiteNav bar's token, any CSS length."
+   "doc": "Height of the sticky site header a pinned band sticks under; defaults to the SiteHeader bar's token, any CSS length."
   }
  ],
  "events": [],

@@ -18,14 +18,14 @@
  ],
  "avoidWhen": [
   "For the page's leading band and its `h1` → use `hero` instead.",
-  "For the top bar of an application shell → use `global-header` instead.",
-  "For a plain framed container with arbitrary content → use `frame-box` instead."
+  "For the top bar of an application shell → use `app-header` instead.",
+  "For a plain framed container with arbitrary content → use `registration-frame` instead."
  ],
  "related": [
   "hero` — the opening band; its `Hero.Title` renders the page's `h1` at hero scale.",
-  "frame-box` — the frame this component composes.",
+  "registration-frame` — the frame this component composes.",
   "section-gap` — the empty frame that sets the air before and after a section header; this component holds no vertical air of its own beyond its padding.",
-  "overline` — the eyebrow treatment rendered above the headline."
+  "eyebrow` — the eyebrow treatment rendered above the headline."
  ],
  "bestPractices": [
   "Leave `framed` on when the header is a brick of its own in a page column; turn it off when a band composes the header inside a frame it already draws, so the rule and the padding are not drawn twice.",

@@ -265,9 +265,7 @@
     { flush: 'post' }
   )
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-network-map'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'network-map')
 </script>
 
 <template>

@@ -1,15 +1,15 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import LogView from '../../../components/code/log-view/log-view.vue'
-  import LogViewContent from '../../../components/code/log-view/log-view-content.vue'
-  import LogViewHeader from '../../../components/code/log-view/log-view-header.vue'
+  import LogViewer from '../../../components/code/log-viewer/log-viewer.vue'
+  import LogViewerContent from '../../../components/code/log-viewer/log-viewer-content.vue'
+  import LogViewerHeader from '../../../components/code/log-viewer/log-viewer-header.vue'
   import Trace from '../../../components/code/trace/trace.vue'
-  import ShellMockup from '../../../components/content/product-widget/shell-mockup/shell-mockup.vue'
+  import ConsoleMockupShell from '../../../components/content/console-mockup/console-mockup-shell/console-mockup-shell.vue'
   import Tag from '../../../components/content/tag/tag.vue'
-  import Flow from '../../../components/data/flow/flow.vue'
-  import FlowAnchor from '../../../components/data/flow/flow-anchor/flow-anchor.vue'
-  import FlowNode from '../../../components/data/flow/flow-node/flow-node.vue'
+  import FlowDiagram from '../../../components/data/flow-diagram/flow-diagram.vue'
+  import FlowDiagramAnchor from '../../../components/data/flow-diagram/flow-diagram-anchor/flow-diagram-anchor.vue'
+  import FlowDiagramNode from '../../../components/data/flow-diagram/flow-diagram-node/flow-diagram-node.vue'
   import StatusIndicator from '../../../components/feedback/status-indicator/status-indicator.vue'
   import TabsRoot from '../../../components/navigation/tabs/tabs.vue'
   import TabsList from '../../../components/navigation/tabs/tabs-list.vue'
@@ -71,7 +71,7 @@
 </script>
 
 <template>
-  <ShellMockup
+  <ConsoleMockupShell
     v-bind="$attrs"
     :data-testid="testId"
     :data-tab="step.value"
@@ -131,29 +131,29 @@
           class="min-h-0"
         />
 
-        <LogView
+        <LogViewer
           v-else-if="step.value === 'logs'"
           :lines="lines"
           :copyable="false"
           class="min-h-0"
         >
-          <LogViewHeader />
-          <LogViewContent />
-        </LogView>
+          <LogViewerHeader />
+          <LogViewerContent />
+        </LogViewer>
 
-        <Flow
+        <FlowDiagram
           v-else
           align="start"
           class="[&>div]:w-full"
         >
-          <FlowNode
+          <FlowDiagramNode
             v-for="node in CONSOLE_TRACE_PATH"
             :key="node.key"
             unstyled
             :terminal="Boolean(node.terminal)"
             class="flex min-w-44 flex-1 flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs)"
           >
-            <FlowAnchor>
+            <FlowDiagramAnchor>
               <div
                 class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
               >
@@ -170,7 +170,7 @@
                   size="small"
                 />
               </div>
-            </FlowAnchor>
+            </FlowDiagramAnchor>
             <span
               class="min-w-0 truncate px-(--spacing-md) pb-(--spacing-sm) text-label-sm text-(--text-default)"
               >{{ node.title }}</span
@@ -187,9 +187,9 @@
                 <span class="truncate text-body-xs text-(--text-default)">{{ field.value }}</span>
               </div>
             </div>
-          </FlowNode>
-        </Flow>
+          </FlowDiagramNode>
+        </FlowDiagram>
       </div>
     </div>
-  </ShellMockup>
+  </ConsoleMockupShell>
 </template>

@@ -2,14 +2,14 @@ import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const WEBKIT_PREFIX = '@aziontech/webkit/'
 
-const CLOSING = new Set(['closing-call-to-action', 'closing-call-to-action-newsletter'])
+const CLOSING = new Set(['closing-call-to-action', 'newsletter-section'])
 
 const CLOSING_WHEN_SET = new Set(['template-gallery'])
 
 const CLOSE_PARTS = new Map([
   ['section-gap', 'gap'],
-  ['frame-box', 'frame'],
-  ['texture-material', 'texture']
+  ['registration-frame', 'frame'],
+  ['texture', 'texture']
 ])
 
 const kebab = (name) =>
@@ -28,7 +28,7 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow a SectionGap or a closing FrameBox right after a closing section (ClosingCallToAction, its newsletter variant, or a TemplateGallery set as closing): the section draws the hatched closing frame itself, so a trailing one doubles it. A section bound with :hatch="false" draws no frame and is skipped.'
+        'Disallow a SectionGap or a closing RegistrationFrame right after a closing section (ClosingCallToAction, its newsletter variant, or a TemplateGallery set as closing): the section draws the hatched closing frame itself, so a trailing one doubles it. A section bound with :hatch="false" draws no frame and is skipped.'
     },
     schema: [],
     messages: {

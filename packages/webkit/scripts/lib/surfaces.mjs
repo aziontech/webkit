@@ -6,12 +6,12 @@ export const SURFACES = {
 
 const BY_COMPONENT_FOLDER = {
   marketing: 'site',
-  sections: 'site',
-  documentation: 'docs'
+  section: 'site',
+  docs: 'docs'
 }
 
 const BY_COMPONENT = {
-  'layout/frame-box': 'site',
+  'layout/registration-frame': 'site',
   'layout/site-layout': 'site'
 }
 

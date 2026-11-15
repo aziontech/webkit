@@ -1,0 +1,214 @@
+import { render } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
+
+import { expectNoA11yViolations } from '../../../test/axe'
+import ContactHub from './contact-hub.vue'
+
+const TESTID = 'contact-hub'
+const TOPIC_TESTID = 'feature-item'
+
+const lanes = [
+  {
+    icon: 'ai ai-briefcase',
+    title: 'Sales',
+    description: 'Discuss your requirements, get custom pricing, or see the platform running.',
+    action: { label: 'Talk to sales', href: '/contact/sales' }
+  },
+  {
+    icon: 'ai ai-headphones',
+    title: 'Support',
+    description: 'Log in with your Azion account to open a ticket.',
+    action: {
+      label: 'Log in to open a ticket',
+      href: 'https://console.azion.com/login',
+      trailing: true
+    },
+    statusLink: { label: 'System status', href: 'https://status.azion.com/', target: '_blank' }
+  }
+]
+
+const channels = [
+  {
+    icon: 'ai ai-shield',
+    title: 'Under a cyberattack?',
+    description: 'Get emergency mitigation for an attack in progress.',
+    href: 'https://www.azion.com/en/lp/under-attack-mitigation/',
+    target: '_blank'
+  },
+  {
+    icon: 'ai ai-discord',
+    title: 'Join the community',
+    description: 'Ask developers and the Azion team on Discord.',
+    href: 'https://discord.com/invite/pM8ANzztuB',
+    target: '_blank'
+  },
+  {
+    icon: 'ai ai-book',
+    title: 'Read the docs',
+    description: 'Guides, API reference, and troubleshooting.',
+    href: '/en/documentation/'
+  }
+]
+
+const band = (props: Record<string, unknown> = {}) =>
+  render(ContactHub, { props: { lanes, channels, ...props } })
+
+describe('ContactHub', () => {
+  it('renders the band under the default testid', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId(TESTID)).toBeInTheDocument()
+  })
+
+  it('lets a consumer data-testid win over the fallback', () => {
+    const { getByTestId, queryByTestId } = render(ContactHub, {
+      props: { lanes, channels },
+      attrs: { 'data-testid': 'contact' }
+    })
+
+    expect(getByTestId('contact')).toBeInTheDocument()
+    expect(queryByTestId(TESTID)).toBeNull()
+  })
+
+  it('renders one h2 per lane and channel, in order', () => {
+    const { getAllByRole } = band()
+
+    expect(
+      getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent?.trim())
+    ).toEqual([...lanes, ...channels].map((entry) => entry.title))
+  })
+
+  it('renders each lane action as a link to its team', () => {
+    const { getByRole } = band()
+
+    expect(getByRole('link', { name: 'Talk to sales' }).getAttribute('href')).toBe('/contact/sales')
+    expect(getByRole('link', { name: 'Log in to open a ticket' }).getAttribute('href')).toBe(
+      'https://console.azion.com/login'
+    )
+  })
+
+  it('renders the status link in a new tab with a safe rel', () => {
+    const { getByRole } = band()
+
+    const status = getByRole('link', { name: 'System status' })
+    expect(status.getAttribute('href')).toBe('https://status.azion.com/')
+    expect(status.getAttribute('target')).toBe('_blank')
+    expect(status.getAttribute('rel')).toBe('noopener noreferrer')
+  })
+
+  it('draws the status link with a success status indicator carrying its label', () => {
+    const { getByRole } = band()
+
+    const indicator = getByRole('link', { name: 'System status' }).querySelector(
+      '[data-testid="status-indicator"]'
+    )
+    expect(indicator).not.toBeNull()
+    expect(indicator).toHaveAttribute('data-severity', 'success')
+    expect(indicator).toHaveTextContent('System status')
+  })
+
+  it('renders a secondary action after the lead action of its lane', () => {
+    const { getAllByRole } = band({
+      lanes: [
+        {
+          ...lanes[0],
+          secondaryAction: { label: 'See pricing', href: '/pricing' }
+        }
+      ],
+      channels: []
+    })
+
+    const links = getAllByRole('link')
+    expect(links.map((link) => link.textContent?.trim())).toEqual(['Talk to sales', 'See pricing'])
+    expect(links[1]).toHaveAttribute('href', '/pricing')
+  })
+
+  it('sets the anchor as the band id, and no id without one', () => {
+    const { getByTestId, unmount } = band({ anchor: 'contact' })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'contact')
+    unmount()
+
+    expect(band().getByTestId(TESTID).hasAttribute('id')).toBe(false)
+  })
+
+  it('draws the lanes and the channels in one frame', () => {
+    const { getAllByTestId } = band()
+
+    const [laneGrid, channelGrid] = getAllByTestId('card-grid')
+    expect(laneGrid?.parentElement).toBe(channelGrid?.parentElement)
+  })
+
+  it('renders no status link or action when a lane carries none', () => {
+    const { queryByRole } = band({
+      lanes: [{ icon: 'ai ai-briefcase', title: 'Sales', description: 'Talk to us.' }],
+      channels: []
+    })
+
+    expect(queryByRole('link')).toBeNull()
+  })
+
+  it('renders each channel as a linked topic, honouring its target', () => {
+    const { getAllByTestId } = band()
+
+    const topics = getAllByTestId(TOPIC_TESTID)
+    expect(topics.map((topic) => topic.getAttribute('href'))).toEqual(
+      channels.map((channel) => channel.href)
+    )
+    expect(topics[0]?.getAttribute('target')).toBe('_blank')
+    expect(topics[0]?.getAttribute('rel')).toBe('noopener noreferrer')
+    expect(topics[2]?.hasAttribute('target')).toBe(false)
+    expect(topics[2]?.hasAttribute('rel')).toBe(false)
+  })
+
+  it('renders only the root when lanes and channels are empty', () => {
+    const { getByTestId, queryByRole, queryByTestId } = band({ lanes: [], channels: [] })
+
+    expect(getByTestId(TESTID)).toBeInTheDocument()
+    expect(queryByRole('heading')).toBeNull()
+    expect(queryByTestId('registration-frame')).toBeNull()
+  })
+
+  it('renders only the channels when no lane is set', () => {
+    const { getAllByRole, getAllByTestId } = band({ lanes: [] })
+
+    expect(getAllByTestId(TOPIC_TESTID)).toHaveLength(channels.length)
+    expect(
+      getAllByRole('heading', { level: 2 }).map((heading) => heading.textContent?.trim())
+    ).toEqual(channels.map((channel) => channel.title))
+  })
+
+  it.each([
+    [1, '1'],
+    [2, '2'],
+    [3, '3'],
+    [4, '2'],
+    [5, '3']
+  ])('splits %i channels into rows of %s, leaving no empty cell', (count, perRow) => {
+    const many = Array.from({ length: count }, (_, i) => ({
+      ...channels[0],
+      title: `Channel ${i}`
+    }))
+    const { getAllByTestId } = band({ channels: many })
+    const grids = getAllByTestId('card-grid')
+    const grid = grids[grids.length - 1]
+
+    expect(grid).toHaveAttribute('data-layout', 'balanced')
+    expect(grid).toHaveAttribute('data-count', String(count))
+    expect(grid?.style.getPropertyValue('--card-grid-columns-lg')).toBe(perRow)
+  })
+
+  it('has no a11y violations', async () => {
+    const { container } = band()
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('has no a11y violations with a secondary action', async () => {
+    const { container } = band({
+      lanes: [{ ...lanes[0], secondaryAction: { label: 'See pricing', href: '/pricing' } }]
+    })
+
+    await expectNoA11yViolations(container)
+  })
+})

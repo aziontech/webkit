@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import CopyButton from '../../actions/copy-button/copy-button.vue'
+  import CopyButton from '../../action/copy-button/copy-button.vue'
 
   /** Heading scale: medium for a band heading, small for the smallest heading, a band nested inside another. */
   export type SectionHeaderSize = 'small' | 'medium'
@@ -40,9 +40,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ sectionHeader: en.sectionHeader })
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-section-header'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'section-header')
 
   const anchorUrl = computed(() =>
     props.anchor ? `${globalThis.location?.href.split('#')[0] ?? ''}#${props.anchor}` : ''

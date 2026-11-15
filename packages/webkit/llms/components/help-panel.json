@@ -20,7 +20,7 @@
   "The help content is loaded asynchronously and the region must reserve its space while it arrives (`loading`)."
  ],
  "avoidWhen": [
-  "A one-line hint attached to a single control → use `tooltip` or `hint`, or the field's `helper-text`.",
+  "A one-line hint attached to a single control → use `tooltip` or `hint`, or the field's `field-description`.",
   "A guided tutorial with tasks, progress and hotspots on the real controls → use `tutorial-panel`.",
   "The region itself (overlay, slide-in, close button, focus trap) → use `drawer`; put `help-panel` inside it.",
   "Ordered steps the reader navigates between, with the step's form filling the column beside it → use `stepper`.",

@@ -48,12 +48,12 @@ describe('Conversation', () => {
   beforeAll(() => {
     const style = document.createElement('style')
     style.textContent =
-      '[data-testid="ai-conversation"]{display:flex;flex-direction:column;min-height:0;flex:1}[data-testid="ai-conversation__viewport"]{overflow-y:auto;min-height:0;flex:1}'
+      '[data-testid="conversation"]{display:flex;flex-direction:column;min-height:0;flex:1}[data-testid="conversation__viewport"]{overflow-y:auto;min-height:0;flex:1}'
     document.head.append(style)
   })
 
   it('renders the fallback data-testid and lets a consumer override it', () => {
-    expect(render(Conversation).getByTestId('ai-conversation')).toBeTruthy()
+    expect(render(Conversation).getByTestId('conversation')).toBeTruthy()
     expect(
       render(Conversation, { attrs: { 'data-testid': 'mine' } }).getByTestId('mine')
     ).toBeTruthy()
@@ -68,7 +68,7 @@ describe('Conversation', () => {
 
   it('hands its layout to its messages', () => {
     const { getAllByTestId } = thread(many(2), { layout: 'start' })
-    for (const message of getAllByTestId('ai-chat-message')) {
+    for (const message of getAllByTestId('chat-message')) {
       expect(message).toHaveAttribute('data-alignment', 'start')
     }
   })
@@ -76,14 +76,14 @@ describe('Conversation', () => {
   it('does not announce the history it mounts with', async () => {
     const { getByTestId } = thread(many(2))
     await nextTick()
-    expect(getByTestId('ai-conversation__announcer')).toHaveTextContent('')
+    expect(getByTestId('conversation__announcer')).toHaveTextContent('')
   })
 
   it('announces an assistant message once it finishes, never while streaming', async () => {
     const { getByTestId, turns } = thread([{ id: 0, from: 'user', text: 'Hi', status: 'success' }])
     turns.value = [...turns.value, { id: 1, from: 'assistant', text: 'Hel', status: 'streaming' }]
     await frame()
-    const announcer = getByTestId('ai-conversation__announcer')
+    const announcer = getByTestId('conversation__announcer')
     expect(announcer).toHaveTextContent('')
     turns.value = turns.value.map((t) =>
       t.id === 1 ? { ...t, text: 'Hello there.', status: 'success' } : t
@@ -96,7 +96,7 @@ describe('Conversation', () => {
     const { getByTestId, turns } = thread([])
     turns.value = [{ id: 0, from: 'user', text: 'Purge one URL', status: 'success' }]
     await frame()
-    expect(getByTestId('ai-conversation__announcer')).toHaveTextContent('')
+    expect(getByTestId('conversation__announcer')).toHaveTextContent('')
   })
 
   it('follows the newest message, stops when the reader scrolls up, and returns on demand', async () => {
@@ -106,13 +106,13 @@ describe('Conversation', () => {
     const atEnd = () => log.scrollHeight - log.scrollTop - log.clientHeight <= 32
     expect(log.scrollHeight).toBeGreaterThan(log.clientHeight)
     expect(atEnd()).toBe(true)
-    expect(queryByTestId('ai-conversation__scroll-to-latest')).toBeNull()
+    expect(queryByTestId('conversation__scroll-to-latest')).toBeNull()
 
     log.dispatchEvent(new WheelEvent('wheel', { deltaY: -400 }))
     log.scrollTop = 0
     log.dispatchEvent(new Event('scroll'))
     await frame()
-    expect(getByTestId('ai-conversation')).not.toHaveAttribute('data-pinned')
+    expect(getByTestId('conversation')).not.toHaveAttribute('data-pinned')
     turns.value = [
       ...turns.value,
       ...many(14)
@@ -121,11 +121,11 @@ describe('Conversation', () => {
     ]
     await frame()
     expect(log.scrollTop).toBe(0)
-    expect(getByTestId('ai-conversation__scroll-to-latest')).toBeTruthy()
+    expect(getByTestId('conversation__scroll-to-latest')).toBeTruthy()
 
-    await userEvent.click(getByTestId('ai-conversation__scroll-to-latest'))
+    await userEvent.click(getByTestId('conversation__scroll-to-latest'))
     await vi.waitFor(() => expect(atEnd()).toBe(true), { timeout: 2000 })
-    expect(getByTestId('ai-conversation')).toHaveAttribute('data-pinned')
+    expect(getByTestId('conversation')).toHaveAttribute('data-pinned')
   })
 
   it('names the scroll button and has no axe violations', async () => {
@@ -136,7 +136,7 @@ describe('Conversation', () => {
     log.scrollTop = 0
     log.dispatchEvent(new Event('scroll'))
     await frame()
-    expect(getByTestId('ai-conversation__scroll-to-latest')).toHaveAccessibleName(
+    expect(getByTestId('conversation__scroll-to-latest')).toHaveAccessibleName(
       'Scroll to the latest message'
     )
     await expectNoA11yViolations(container)

@@ -47,9 +47,7 @@
   useResizeObserver(contentEl, measure)
   useMutationObserver(contentEl, measure, { childList: true, subtree: true })
 
-  const scrollTestId = computed(
-    () => `${drawerCtx?.testId ?? ctx?.testId ?? 'overlay-panel'}__scroll`
-  )
+  const scrollTestId = computed(() => `${drawerCtx?.testId ?? ctx?.testId ?? 'panel'}__scroll`)
 </script>
 
 <template>

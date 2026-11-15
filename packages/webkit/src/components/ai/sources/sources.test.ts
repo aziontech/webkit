@@ -16,21 +16,21 @@ const items = [
 
 describe('Sources', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
-    expect(render(Sources, { props: { items } }).getByTestId('ai-sources')).toBeTruthy()
+    expect(render(Sources, { props: { items } }).getByTestId('sources')).toBeTruthy()
     expect(
       render(Sources, { props: { items }, attrs: { 'data-testid': 'mine' } }).getByTestId('mine')
     ).toBeTruthy()
   })
 
   it('renders nothing without items', () => {
-    expect(render(Sources).queryByTestId('ai-sources')).toBeNull()
+    expect(render(Sources).queryByTestId('sources')).toBeNull()
   })
 
   it('titles the disclosure with the count and starts collapsed', () => {
     const { getByRole, getByTestId } = render(Sources, { props: { items } })
     const trigger = getByRole('button', { name: /2 sources/ })
     expect(trigger).toHaveAttribute('aria-expanded', 'false')
-    expect(getByTestId('ai-sources__list')).not.toBeVisible()
+    expect(getByTestId('sources__list')).not.toBeVisible()
   })
 
   it('toggles with the keyboard and emits update:open', async () => {
@@ -39,7 +39,7 @@ describe('Sources', () => {
     trigger.focus()
     await userEvent.keyboard('{Enter}')
     expect(trigger).toHaveAttribute('aria-expanded', 'true')
-    expect(getByTestId('ai-sources')).toHaveAttribute('data-state', 'open')
+    expect(getByTestId('sources')).toHaveAttribute('data-state', 'open')
     expect(emitted('update:open')?.[0]).toEqual([true])
     await userEvent.keyboard(' ')
     expect(trigger).toHaveAttribute('aria-expanded', 'false')
@@ -49,7 +49,7 @@ describe('Sources', () => {
     const { getAllByTestId, getByRole } = render(Sources, {
       props: { items, anchor: 'answer', defaultOpen: true }
     })
-    const rows = getAllByTestId('ai-sources__item')
+    const rows = getAllByTestId('sources__item')
     expect(rows[0]).toHaveAttribute('id', 'answer-source-1')
     expect(rows[1]).toHaveAttribute('id', 'answer-source-2')
     expect(getByRole('link', { name: 'Real-Time Purge' })).toHaveAttribute('target', '_blank')
@@ -80,9 +80,9 @@ describe('Sources', () => {
     })
     await userEvent.click(getByRole('button'))
     expect(emitted('update:open')?.[0]).toEqual([true])
-    expect(getByTestId('ai-sources__list')).not.toBeVisible()
+    expect(getByTestId('sources__list')).not.toBeVisible()
     await rerender({ items, open: true, 'onUpdate:open': () => undefined })
-    expect(getByTestId('ai-sources__list')).toBeVisible()
+    expect(getByTestId('sources__list')).toBeVisible()
   })
 
   it('has no axe violations when open', async () => {

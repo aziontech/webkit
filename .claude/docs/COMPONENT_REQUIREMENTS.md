@@ -48,7 +48,7 @@ Prop vocabulary ([`rules/prop-vocabulary.md`](../rules/prop-vocabulary.md)):
 - `Button` variants are `primary`, `secondary`, `outline`, `ghost` and `danger` (`variant="ghost"`, never `variant="ghost"`); `Item` uses `variant="outline"`;
 - severities are `info`, `success`, `warning` and `danger` (`severity="danger"`, never `error`); `SeverityTag` takes `severity`, not `level`.
 
-Page fragments are components, not copied markup: `PageHeader`, `SectionHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `SaveBar` and `ConfirmDialog`. Use them instead of hand-building the h1 row, a section heading, the tab strip under a resource header, a settings band or row, the save / discard bar or a confirm dialog.
+Page fragments are components, not copied markup: `PageHeader`, `SectionHeader`, `PageTabs`, `SettingsSection`, `SettingsRow`, `SaveBar` and `ConfirmDialog`. Use them instead of hand-building the h1 row, a section heading, the tab strip under a resource header, a settings band or row, the save / discard bar or a confirm dialog.
 
 ---
 
@@ -65,12 +65,12 @@ packages/webkit/src/components/<category>/<name>/
 └── <name>.test.ts    # browser test (rules/testing.md)
 ```
 
-Categories: `actions`, `chart`, `code`, `content`, `data`, `documentation`, `feedback`, `inputs`, `layout`, `marketing`, `navigation`, `overlay`, `sections`, `utils`. The spec is `.specs/<name>.md`, and runnable examples are `packages/webkit/examples/<export>/` (folder named after the export it documents). The full layout and script order are [`rules/component-structure.md`](../rules/component-structure.md).
+Categories: `action`, `ai`, `chart`, `code`, `content`, `data`, `docs`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`, `provider`, `section`. The spec is `.specs/<name>.md`, and runnable examples are `packages/webkit/examples/<export>/` (folder named after the export it documents). The full layout and script order are [`rules/component-structure.md`](../rules/component-structure.md).
 
 **Example:**
 
 ```
-packages/webkit/src/components/inputs/field/
+packages/webkit/src/components/input/field/
 ├── field.vue
 ├── index.ts
 ├── field-label/field-label.vue
@@ -204,7 +204,7 @@ There are no `field-*` wrappers in v6. A labelled control is `Field` around the 
 
 ### 5. Data-testid Attributes (Required)
 
-The root reads `data-testid` from its attributes and falls back to `<category>-<name>` of the v6 name (`actions-button`, `feedback-alert`, `layout-separator`); parts derive BEM-style ids from it ([`rules/testid.md`](../rules/testid.md)):
+The root reads `data-testid` from its attributes and falls back to the component's own kebab name (`button`, `alert`, `separator`); a sub-component uses its own name (`dialog-header`) and inner parts are `${testId}__<part>` ([`rules/testid.md`](../rules/testid.md)):
 
 ```vue
 <script setup lang="ts">
@@ -212,7 +212,7 @@ The root reads `data-testid` from its attributes and falls back to `<category>-<
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-alert')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'alert')
 </script>
 
 <template>
@@ -309,8 +309,8 @@ After creating a component, add it to the package exports:
 ```json
 {
   "exports": {
-    "./field": "./src/components/inputs/field/index.ts",
-    "./field-label": "./src/components/inputs/field/field-label/field-label.vue"
+    "./field": "./src/components/input/field/index.ts",
+    "./field-label": "./src/components/input/field/field-label/field-label.vue"
   }
 }
 ```
@@ -441,7 +441,7 @@ Some components may require Vue Router for navigation or routing features.
 - [ ] Create directory: `src/components/<category>/<name>/`
 - [ ] Create Vue component: `<name>.vue` with `<script setup lang="ts">`
 - [ ] Type props (with JSDoc) and events; primary value through `defineModel`
-- [ ] Add the `data-testid` fallback `<category>-<name>`
+- [ ] Add the `data-testid` fallback: the component's own name
 - [ ] Add the export to `package.json`
 - [ ] Add the browser test `<name>.test.ts`
 - [ ] Add `examples/<name>/`
@@ -584,7 +584,7 @@ Some components may require Vue Router for navigation or routing features.
 
 ## Webkit Layer Pattern (in-depth)
 
-This section describes the canonical pattern enforced for components living under `packages/webkit/src/components/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../../packages/webkit/src/components/actions/button/button.vue), [icon-button.vue](../../packages/webkit/src/components/actions/icon-button/icon-button.vue), [card-pricing.vue](../../packages/webkit/src/components/content/card-pricing/card-pricing.vue).
+This section describes the canonical pattern enforced for components living under `packages/webkit/src/components/<category>/<name>/`. It complements the structure rules above with the visual, behavioral, and quality requirements derived from the canonical implementations: [button.vue](../../packages/webkit/src/components/action/button/button.vue), [icon-button.vue](../../packages/webkit/src/components/action/icon-button/icon-button.vue), [pricing-card.vue](../../packages/webkit/src/components/content/pricing-card/pricing-card.vue).
 
 > **No hallucination — only reference things that exist.** Before importing any module, calling any function, mentioning any file path, or referencing any package/export in generated code, verify it exists: `@aziontech/webkit/<subpath>` must appear in [`package.json#exports`](../../packages/webkit/package.json); relative imports must resolve on disk; npm packages must be installed; workspaces must have a `package.json`. If a needed module is missing, install it, create the file, or annotate the gap as a pending item in the report — never invent imports. The `validate-references.mjs` hook physically blocks Writes whose new imports do not resolve. Sub-sections marked `— pending` below describe patterns that depend on dependencies not yet installed; do not emulate them with phantom paths.
 
@@ -784,22 +784,22 @@ Conventions:
 ### 3. Composition Pattern — só quando faz sentido
 
 - **Composition Pattern (YES):** the consumer needs to swap order, omit, or replace parts. Examples: `Dialog` + `DialogTrigger` + `DialogPortal` + `DialogOverlay` + `DialogContent` + `DialogTitle` + `DialogDescription` + `DialogClose`; `Card` + `CardHeader` + `CardTitle` + `CardDescription` + `CardContent` + `CardFooter`; `Tabs` + `Tabs.List` + `Tabs.Trigger` + `Tabs.Content`; Accordion; DropdownMenu; Sheet/Drawer; Form fields. Ship the complete anatomy (see § 2.9). **Each sub-component lives in its own folder** under the root component (`<root>/<root>-<part>/<root>-<part>.vue`); the shared `InjectionKey<T>` is a sibling of the root `.vue` (`./injection-key`, imported as `../injection-key` from each sub-component); each public sub-component has its own entry in `packages/webkit/package.json#exports`.
-- **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [card-pricing.vue](../../packages/webkit/src/components/content/card-pricing/card-pricing.vue) — props `slotPosition`/`cardStyle`/`showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
-- **Atomic** (Button, IconButton, Tag, Spinner, Badge, Currency) — always monolithic, no slots.
+- **Monolithic with props + slots (NOT Composition):** fixed layout with variations driven by configuration and limited inversion via slots. Real example: [pricing-card.vue](../../packages/webkit/src/components/content/pricing-card/pricing-card.vue) — props `slotPosition`/`cardStyle`/`showTag`/`showPricingDetails` plus a `default` and a named `actions` slot. The internal structure is fixed.
+- **Atomic** (Button, IconButton, Tag, Spinner, Badge, CurrencyAmount) — always monolithic, no slots.
 - **Decision rule:** "does the consumer need to change the ORDER or OMIT parts exposed by the root?" If yes, use Composition Pattern. If no, stay monolithic. When in doubt, **start monolithic** and refactor only when a real use case appears.
 
 ### 3.1. `data-testid` hierárquico (BEM-style)
 
-Convention established by [card-pricing.vue](../../packages/webkit/src/components/content/card-pricing/card-pricing.vue):
+Convention established by [pricing-card.vue](../../packages/webkit/src/components/content/pricing-card/pricing-card.vue):
 
-- **Root:** fallback derived from the component name — `const testId = computed(() => attrs['data-testid'] ?? '<category>-<name>')`. Examples: `'action-button'`, `'content-card-pricing'`, `'overlay-dialog'`.
+- **Root:** the component's own name — `const testId = computed(() => attrs['data-testid'] ?? '<name>')`. Examples: `'button'`, `'pricing-card'`, `'dialog'`.
 - **Children:** `${testId}__<part>` with **two underscores**. Common parts: `__header`, `__title`, `__description`, `__content`, `__footer`, `__actions`, `__action`, `__close`, `__loading`, `__icon`, `__panel`, `__backdrop`, `__error-message`.
 - The consumer can override the root via `data-testid="custom-id"`; all children inherit the new prefix automatically.
-- Composition Pattern sub-components inject the parent's `testId` through the context.
+- Composition Pattern sub-components use their own name (`'dialog-header'`), not the parent's id.
 
 ### 4. Class structure (sharedClasses/variantClasses/sizeClasses/disabledClasses/rootClasses)
 
-For interactive components with variants (button-like), follow [button.vue](../../packages/webkit/src/components/actions/button/button.vue) with typed maps:
+For interactive components with variants (button-like), follow [button.vue](../../packages/webkit/src/components/action/button/button.vue) with typed maps:
 
 - `sharedClasses` (array) with base layout, transitions, focus-visible, pseudo-element setup.
 - `variantClasses: Record<Kind, string>` mapping each variant to its token combination.
@@ -807,7 +807,7 @@ For interactive components with variants (button-like), follow [button.vue](../.
 - `disabledClasses` (string) overriding interactive state.
 - `rootClasses` computed merges all of the above with `attrs.class`.
 
-For monolithic components with variable layout (card-like), inline class arrays in the template are acceptable when the conditional is short and local — see [card-pricing.vue](../../packages/webkit/src/components/content/card-pricing/card-pricing.vue). The root element still uses a computed `rootClass` that includes `attrs.class`.
+For monolithic components with variable layout (card-like), inline class arrays in the template are acceptable when the conditional is short and local — see [pricing-card.vue](../../packages/webkit/src/components/content/pricing-card/pricing-card.vue). The root element still uses a computed `rootClass` that includes `attrs.class`.
 
 ### 5. Estados via pseudo-elements `before:`
 
@@ -819,11 +819,11 @@ before:opacity-0 before:transition-opacity before:content-['']
 hover:before:opacity-100 active:before:opacity-100
 ```
 
-And `variantClasses` sets `before:bg-(--bg-hover)` / `active:before:bg-(--bg-active)`. See [button.vue:65-69](../../packages/webkit/src/components/actions/button/button.vue#L65-L69).
+And `variantClasses` sets `before:bg-(--bg-hover)` / `active:before:bg-(--bg-active)`. See [button.vue:65-69](../../packages/webkit/src/components/action/button/button.vue#L65-L69).
 
 ### 6. Polimorfismo `<a>` / `<button>`
 
-When the component is interactive and accepts `href`, derive `isAnchor` and render `<a>` or `<button>`. Always set `rel="noopener noreferrer"` when `target="_blank"`. Example: [button.vue:111-161](../../packages/webkit/src/components/actions/button/button.vue#L111-L161).
+When the component is interactive and accepts `href`, derive `isAnchor` and render `<a>` or `<button>`. Always set `rel="noopener noreferrer"` when `target="_blank"`. Example: [button.vue:111-161](../../packages/webkit/src/components/action/button/button.vue#L111-L161).
 
 ### 7. Capturando tokens do Figma
 
@@ -834,7 +834,7 @@ Before creating or updating a component, invoke the `/component-create` skill wh
 Reusable utilities never live inline:
 
 - **Logic:** composables in [packages/webkit/src/composables/](../../packages/webkit/src/composables/) (`use-controllable`, `use-locale`, `use-direction`).
-- **Utility sub-components:** [packages/webkit/src/components/utils/](../../packages/webkit/src/components/utils/) (`spinner`, reused in button and icon-button).
+- **Utility sub-components:** [packages/webkit/src/components/feedback/spinner/](../../packages/webkit/src/components/feedback/spinner/) (`spinner`, reused in button and icon-button).
 - **Global CSS / animations:** `packages/theme/src/`.
 
 Sweep these locations before implementing. Create a new utility only when nothing existing fits, and always in a shared location.
@@ -946,7 +946,7 @@ The webkit layer applies styles **inline on the template root element's `class` 
   })
 
   const attrs = useAttrs()
-  const testId = computed(() => (attrs['data-testid'] as string) ?? 'actions-button')
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'button')
 </script>
 
 <template>
@@ -1062,7 +1062,7 @@ The spec lists which `variant` / `size` examples exist. Do **not** add visual pe
 
 #### DRY
 
-- [ ] Reusable utilities extracted to `composables/`, `components/utils/`, or `packages/theme/`.
+- [ ] Reusable utilities extracted to `composables/`, a component's `lib/`, or `packages/theme/`.
 - [ ] No inline custom animation/class when a shared alternative exists.
 
 #### Acessibilidade

@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import Input from '../../../inputs/input/input.vue'
+  import Input from '../../../input/input/input.vue'
   import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -28,9 +28,7 @@
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__search` : 'data-table__search')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-search'
   )
 
   const globalFilter = computed<string>(() => {

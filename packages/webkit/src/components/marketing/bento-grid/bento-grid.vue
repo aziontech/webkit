@@ -39,9 +39,7 @@
   const attrs = useAttrs()
   const slots = useSlots()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-bento-grid'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'bento-grid')
 
   const hasCells = computed(() => hasRenderedContent(slots['default']?.() ?? []))
 </script>

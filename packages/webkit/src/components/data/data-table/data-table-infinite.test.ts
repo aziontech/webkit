@@ -53,9 +53,9 @@ describe('DataTable', () => {
       await waitFor(() => expect(host.calls.value).toBe(1))
       expect(host.events[0]?.type).toBe('load-more')
       await nextTick()
-      expect(getByTestId('data-data-table__more-loading')).toHaveTextContent('Loading more rows')
-      expect(getByTestId('data-data-table__table')).toHaveAttribute('aria-busy', 'true')
-      expect(queryByTestId('data-data-table__more-sentinel')).toBeNull()
+      expect(getByTestId('data-table__more-loading')).toHaveTextContent('Loading more rows')
+      expect(getByTestId('data-table__table')).toHaveAttribute('aria-busy', 'true')
+      expect(queryByTestId('data-table__more-sentinel')).toBeNull()
 
       host.data.value = [...host.data.value, ...make(5, 5)]
       host.loadingMore.value = false
@@ -70,26 +70,26 @@ describe('DataTable', () => {
       host.loadingMore.value = false
       host.moreRows.value = false
       await nextTick()
-      expect(queryByTestId('data-data-table__more-button')).toBeNull()
-      expect(getByTestId('data-data-table__more-end')).toHaveTextContent('No more rows')
-      expect(getByTestId('data-data-table__more').querySelector('[role="status"]')).not.toBeNull()
+      expect(queryByTestId('data-table__more-button')).toBeNull()
+      expect(getByTestId('data-table__more-end')).toHaveTextContent('No more rows')
+      expect(getByTestId('data-table__more').querySelector('[role="status"]')).not.toBeNull()
 
       host.moreRows.value = true
       await nextTick()
-      await fireEvent.click(getByTestId('data-data-table__more-button'))
+      await fireEvent.click(getByTestId('data-table__more-button'))
       expect(host.calls.value).toBeGreaterThanOrEqual(2)
       expect(host.events.some((event) => event instanceof MouseEvent)).toBe(true)
     })
 
     it('renders no load-more band without more rows and none while the table is loading', async () => {
       const plain = render(DataTable, { props: { columns, data: make(0, 3) } })
-      expect(plain.queryByTestId('data-data-table__more')).toBeNull()
+      expect(plain.queryByTestId('data-table__more')).toBeNull()
       plain.unmount()
 
       const loading = render(DataTable, {
         props: { columns, data: make(0, 3), moreRows: true, loading: true }
       })
-      expect(loading.queryByTestId('data-data-table__more')).toBeNull()
+      expect(loading.queryByTestId('data-table__more')).toBeNull()
     })
 
     it('works with virtual rows over 1,000 records: asks only once scrolled near the end', async () => {
@@ -140,7 +140,7 @@ describe('DataTable', () => {
       const host = liveHost()
       const { getByTestId } = render(host.Host)
 
-      const button = getByTestId('data-data-table__live-button')
+      const button = getByTestId('table-live-button')
       expect(button).toHaveAttribute('aria-pressed', 'false')
       expect(button).toHaveAccessibleName('Live')
       await user.click(button)
@@ -179,12 +179,13 @@ describe('DataTable', () => {
       const { getByTestId } = render(host.Host)
       host.loading.value = true
       await nextTick()
-      expect(getByTestId('data-data-table__live-button')).toBeDisabled()
+      expect(getByTestId('table-live-button')).toBeDisabled()
 
       const alone = render(TableLiveButton)
-      expect(
-        alone.container.querySelector('[data-testid="data-table__live-button"]')
-      ).toHaveAttribute('aria-pressed', 'false')
+      expect(alone.container.querySelector('[data-testid="table-live-button"]')).toHaveAttribute(
+        'aria-pressed',
+        'false'
+      )
     })
 
     it('is attached to the compound as Table.LiveButton', () => {

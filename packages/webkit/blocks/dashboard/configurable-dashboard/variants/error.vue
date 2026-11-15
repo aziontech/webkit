@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import Alert from '@aziontech/webkit/alert'
-  import Board from '@aziontech/webkit/board'
   import Button from '@aziontech/webkit/button'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DashboardGrid from '@aziontech/webkit/dashboard-grid'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
   import Tag from '@aziontech/webkit/tag'
@@ -139,7 +139,7 @@
         </div>
       </div>
 
-      <Board
+      <DashboardGrid
         v-model:layout="layout"
         :editing="editing"
         aria-label="Traffic overview cards"
@@ -148,7 +148,7 @@
         :min-height="280"
         :max-height="720"
       >
-        <Board.Item
+        <DashboardGrid.Item
           v-for="card in layout"
           :key="card.id"
           :item-id="card.id"
@@ -180,8 +180,8 @@
             </ChartCard.Content>
             <ChartCard.ResizeHandle :aria-label="'Resize ' + cards[card.id].title" />
           </ChartCard>
-        </Board.Item>
-      </Board>
+        </DashboardGrid.Item>
+      </DashboardGrid>
 
       <p
         class="sr-only"

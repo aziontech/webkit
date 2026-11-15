@@ -11,9 +11,7 @@
   }>()
 
   const attrs = useAttrs()
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__title'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'toast-title')
 </script>
 
 <template>

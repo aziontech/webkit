@@ -7,7 +7,7 @@
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocHero from '@aziontech/webkit/doc-hero'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
-  import DocPrevNext from '@aziontech/webkit/doc-prev-next'
+  import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocProse from '@aziontech/webkit/doc-prose'
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -311,7 +311,7 @@
                 <DocCard
                   title="Explore use cases"
                   icon="ai ai-sitemap"
-                  href="/docs/use-cases"
+                  href="/docs/customer-use-cases"
                   >Validated designs that show how Azion products combine to solve each use case,
                   grouped by solution.</DocCard
                 >
@@ -440,7 +440,7 @@
         </div>
       </DocProse>
       <div class="mt-(--spacing-2xl)">
-        <DocPrevNext :next="{ label: 'Agent setup', href: '/docs/agent-setup' }" />
+        <DocPreviousNext :next="{ label: 'Agent setup', href: '/docs/agent-setup' }" />
       </div>
     </article>
 

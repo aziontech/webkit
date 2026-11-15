@@ -11,10 +11,10 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = useChartCardContext()
+  useChartCardContext()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__controls`
+    () => (attrs['data-testid'] as string | undefined) ?? 'chart-card-controls'
   )
 </script>
 

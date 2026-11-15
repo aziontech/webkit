@@ -27,7 +27,7 @@ const mount = (props: Record<string, unknown> = {}, dir: 'ltr' | 'rtl' = 'ltr') 
 describe('GaugeChart', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const view = mount()
-    expect(view.getByTestId('chart-gauge-chart').tagName).toBe('FIGURE')
+    expect(view.getByTestId('gauge-chart').tagName).toBe('FIGURE')
     view.unmount()
     expect(mount({ 'data-testid': 'cpu' }).getByTestId('cpu')).toBeTruthy()
   })
@@ -48,17 +48,13 @@ describe('GaugeChart', () => {
         { value: 40, severity: 'severity-high', label: 'High' }
       ]
     })
-    expect(view.getByTestId('chart-gauge-chart__arc').getAttribute('stroke')).toBe(
-      'var(--severity-high)'
-    )
+    expect(view.getByTestId('gauge-chart__arc').getAttribute('stroke')).toBe('var(--severity-high)')
     view.unmount()
     const idle = mount({
       value: 10,
       thresholds: [{ value: 0, severity: 'neutral', label: 'Idle' }]
     })
-    expect(idle.getByTestId('chart-gauge-chart__arc').getAttribute('stroke')).toBe(
-      'var(--chart-label)'
-    )
+    expect(idle.getByTestId('gauge-chart__arc').getAttribute('stroke')).toBe('var(--chart-label)')
   })
 
   it('takes the color and name of the band the value falls in', () => {
@@ -67,29 +63,27 @@ describe('GaugeChart', () => {
     expect(meter.getAttribute('data-severity')).toBe('danger')
     expect(meter.hasAttribute('data-status')).toBe(false)
     expect(meter.getAttribute('aria-valuetext')).toBe('93%, Critical')
-    expect(view.getByTestId('chart-gauge-chart__arc').getAttribute('stroke')).toBe(
+    expect(view.getByTestId('gauge-chart__arc').getAttribute('stroke')).toBe(
       'var(--chart-status-danger)'
     )
-    expect(view.getByTestId('chart-gauge-chart__value').textContent).toContain(
-      'CPU usage, Critical'
-    )
+    expect(view.getByTestId('gauge-chart__value').textContent).toContain('CPU usage, Critical')
     expect(meter.querySelectorAll('line')).toHaveLength(2)
   })
 
   it('fills the arc to the share of the range and clamps past the ends', async () => {
     const view = mount({ value: 150, min: 50, max: 100 })
-    const arc = view.getByTestId('chart-gauge-chart__arc')
+    const arc = view.getByTestId('gauge-chart__arc')
     expect(arc.getAttribute('style')).toContain('--gauge-dash: 100 100')
     await vi.waitFor(() => expect(arc.getAttribute('data-entered')).toBe('true'))
   })
 
   it('renders exactly one state at a time', () => {
-    expect(mount({ loading: true }).getByTestId('chart-gauge-chart__skeleton')).toBeTruthy()
+    expect(mount({ loading: true }).getByTestId('gauge-chart__loading')).toBeTruthy()
     expect(
-      mount({ error: 'Could not load CPU usage.' }).getByTestId('chart-gauge-chart__error')
+      mount({ error: 'Could not load CPU usage.' }).getByTestId('gauge-chart__error')
     ).toBeTruthy()
     const empty = mount({ value: null, emptyTitle: 'No reading yet' })
-    expect(empty.getByTestId('chart-gauge-chart__empty').textContent).toContain('No reading yet')
+    expect(empty.getByTestId('gauge-chart__empty').textContent).toContain('No reading yet')
     expect(empty.queryByRole('meter')).toBeNull()
   })
 

@@ -3,7 +3,7 @@
 
   const hero: SitePageSection[] = [
     {
-      _id: 'hero-band',
+      _id: 'hero-section',
       props: {
         variant: 'title-band',
         size: 'large',
@@ -19,7 +19,7 @@
 
   const sections: SitePageSection[] = [
     {
-      _id: 'use-cases',
+      _id: 'customer-use-cases',
       props: {
         eyebrow: 'SQL Database',
         title: 'What teams use SQL Database for',

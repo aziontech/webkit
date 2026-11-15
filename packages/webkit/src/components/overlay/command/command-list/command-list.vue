@@ -15,9 +15,7 @@
   const attrs = useAttrs()
   const ctx = useCommandMenuContext()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__list`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'command-list')
 </script>
 
 <template>

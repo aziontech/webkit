@@ -4,7 +4,7 @@
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -12,7 +12,7 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import { toast } from '@aziontech/webkit/toast'
   import { reactive, ref, watch } from 'vue'
 
@@ -158,7 +158,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="Give a unique and descriptive name to identify the rule."
                       >
@@ -176,15 +176,14 @@
                               :aria-describedby="errors.name ? 'rule-name-error' : undefined"
                               @update:model-value="errors.name = ''"
                             />
-                            <HelperText
+                            <FieldError
                               v-if="errors.name"
                               id="rule-name-error"
-                              :type="form.name.trim() ? 'invalid' : 'required'"
-                              :label="errors.name"
-                            />
+                              >{{ errors.name }}</FieldError
+                            >
                           </div>
                         </div>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -195,7 +194,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Origin"
                         description="Select the origin matching requests go to, or create one."
                       >
@@ -238,15 +237,14 @@
                                 </template>
                               </Select.Content>
                             </Select>
-                            <HelperText
+                            <FieldError
                               v-if="errors.originId"
                               id="rule-origin-error"
-                              type="required"
-                              :label="errors.originId"
-                            />
+                              >{{ errors.originId }}</FieldError
+                            >
                           </div>
                         </div>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -308,7 +306,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="A unique name for the origin."
                       >
@@ -326,16 +324,15 @@
                               :aria-describedby="childErrors.name ? 'origin-name-error' : undefined"
                               @update:model-value="childErrors.name = ''"
                             />
-                            <HelperText
+                            <FieldError
                               v-if="childErrors.name"
                               id="origin-name-error"
-                              :type="childForm.name.trim() ? 'invalid' : 'required'"
-                              :label="childErrors.name"
-                            />
+                              >{{ childErrors.name }}</FieldError
+                            >
                           </div>
                         </div>
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Address"
                         description="The host this resource fetches content from."
                         stackable
@@ -356,15 +353,14 @@
                               "
                               @update:model-value="childErrors.address = ''"
                             />
-                            <HelperText
+                            <FieldError
                               v-if="childErrors.address"
                               id="origin-address-error"
-                              :type="childForm.address.trim() ? 'invalid' : 'required'"
-                              :label="childErrors.address"
-                            />
+                              >{{ childErrors.address }}</FieldError
+                            >
                           </div>
                         </div>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

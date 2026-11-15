@@ -1,6 +1,6 @@
 {
   "component": "feedback-reason-dialog",
-  "title": "Components/Primitives/AI/FeedbackReasonDialog",
+  "title": "Components/AI/FeedbackReasonDialog",
   "examples": [
     {
       "name": "Default",

@@ -46,7 +46,7 @@ describe('Trace', () => {
     expect(root?.getAttribute('aria-expanded')).toBe('true')
     expect(a1?.hasAttribute('aria-expanded')).toBe(false)
     expect(within(grid).getAllByRole('gridcell')).toHaveLength(8)
-    const bars = view.getAllByTestId('code-trace__bar')
+    const bars = view.getAllByTestId('trace__bar')
     expect(bars[3]?.getAttribute('data-status')).toBe('error')
     expect(bars[3]?.hasAttribute('data-root')).toBe(false)
     expect(bars[0]?.getAttribute('data-status')).toBe('success')
@@ -61,11 +61,11 @@ describe('Trace', () => {
 
   it('collapses and expands a parent from its toggle', async () => {
     const view = render(Trace, { props: { spans } })
-    const toggles = view.getAllByTestId('code-trace__toggle')
+    const toggles = view.getAllByTestId('trace__toggle')
     await fireEvent.click(toggles[1] as HTMLElement)
     expect(names(view)).toEqual(['root', 'a', 'b'])
     expect(rows(view)[1]?.getAttribute('aria-expanded')).toBe('false')
-    await fireEvent.click(view.getAllByTestId('code-trace__toggle')[1] as HTMLElement)
+    await fireEvent.click(view.getAllByTestId('trace__toggle')[1] as HTMLElement)
     expect(names(view)).toEqual(['root', 'a', 'a1', 'b'])
   })
 
@@ -142,16 +142,14 @@ describe('Trace', () => {
     expect(names(view)).toEqual(['root', 'a', 'a1'])
     await fireEvent.update(search, 'nothing')
     expect(view.queryByRole('treegrid')).toBeNull()
-    expect(view.getByTestId('code-trace__empty').textContent).toContain(
-      'No span matches “nothing”.'
-    )
+    expect(view.getByTestId('trace__empty').textContent).toContain('No span matches “nothing”.')
     await fireEvent.click(view.getByRole('button', { name: 'Clear search' }))
     expect(names(view)).toEqual(['root', 'a', 'a1', 'b'])
   })
 
   it('shows the empty state with no spans', () => {
     const view = render(Trace)
-    expect(view.getByTestId('code-trace__empty').textContent).toContain('No spans in this trace.')
+    expect(view.getByTestId('trace__empty').textContent).toContain('No spans in this trace.')
   })
 
   it('keeps the selection itself when no v-model is bound', async () => {
@@ -165,16 +163,16 @@ describe('Trace', () => {
   it('renders the empty and no-match states through EmptyState', async () => {
     const view = render(Trace, { props: { spans } })
     await fireEvent.update(view.getByRole('textbox', { name: 'Search spans' }), 'nothing')
-    const empty = view.getByTestId('code-trace__empty')
-    expect(within(empty).getByTestId('feedback-empty-state')).toBeTruthy()
+    const empty = view.getByTestId('trace__empty')
+    expect(within(empty).getByTestId('empty-state')).toBeTruthy()
     expect(within(empty).getByRole('button', { name: 'Clear search' })).toBeTruthy()
   })
 
   it('shows placeholder rows in a status region while loading', () => {
     const view = render(Trace, { props: { spans, loading: true, selected: 'b' } })
-    expect(view.getByTestId('code-trace').getAttribute('aria-busy')).toBe('true')
+    expect(view.getByTestId('trace').getAttribute('aria-busy')).toBe('true')
     expect(view.getByRole('status', { name: 'Loading spans' })).toBeTruthy()
-    expect(view.getAllByTestId('code-trace__skeleton').length).toBeGreaterThan(0)
+    expect(view.getAllByTestId('trace__skeleton').length).toBeGreaterThan(0)
     expect(view.queryByRole('treegrid')).toBeNull()
     expect(view.queryByRole('region')).toBeNull()
     expect((view.getByRole('textbox', { name: 'Search spans' }) as HTMLInputElement).disabled).toBe(
@@ -184,16 +182,16 @@ describe('Trace', () => {
 
   it('drops the outer border when bordered is off', () => {
     const on = render(Trace, { props: { spans } })
-    expect(on.getByTestId('code-trace').hasAttribute('data-bordered')).toBe(true)
+    expect(on.getByTestId('trace').hasAttribute('data-bordered')).toBe(true)
     on.unmount()
     const off = render(Trace, { props: { spans, bordered: false } })
-    expect(off.getByTestId('code-trace').hasAttribute('data-bordered')).toBe(false)
+    expect(off.getByTestId('trace').hasAttribute('data-bordered')).toBe(false)
   })
 
   it('takes the consumer data-testid over the fallback', () => {
     const view = render(Trace, { props: { spans }, attrs: { 'data-testid': 'run-trace' } })
     expect(view.getByTestId('run-trace')).toBeTruthy()
-    expect(view.queryByTestId('code-trace')).toBeNull()
+    expect(view.queryByTestId('trace')).toBeNull()
     expect(view.getAllByTestId('run-trace__row')).toHaveLength(4)
   })
 
@@ -203,7 +201,7 @@ describe('Trace', () => {
       setup: () => ({ spans }),
       template: `<div dir="rtl"><Trace :spans="spans" /></div>`
     })
-    const bar = view.getAllByTestId('code-trace__bar')[0] as HTMLElement
+    const bar = view.getAllByTestId('trace__bar')[0] as HTMLElement
     expect(bar.className).toContain('start-[calc(var(--trace-span-offset)*100%)]')
     expect(bar.className).not.toMatch(/(^|\s)left-/)
     const grid = view.getByRole('treegrid')
@@ -229,7 +227,7 @@ describe('Trace', () => {
     })
     expect(view.getByRole('treegrid', { name: 'Rastreamento' })).toBeTruthy()
     expect(view.getByRole('textbox', { name: 'Buscar spans' })).toBeTruthy()
-    expect(view.getAllByTestId('code-trace__bar')[3]?.textContent).toContain('1,50 s')
+    expect(view.getAllByTestId('trace__bar')[3]?.textContent).toContain('1,50 s')
     expect(view.getByRole('region', { name: 'Detalhes de encode' })).toBeTruthy()
   })
 
@@ -252,17 +250,17 @@ describe('Trace', () => {
       expect(root?.style.getPropertyValue('--trace-span-width')).toBe('1')
       expect(a?.style.getPropertyValue('--trace-span-width')).toBe(String(10 / 200))
       expect(Number(b?.style.getPropertyValue('--trace-span-offset'))).toBeCloseTo(0.1)
-      const bars = view.getAllByTestId('code-trace__bar')
+      const bars = view.getAllByTestId('trace__bar')
       expect(bars[2]?.hasAttribute('data-outside')).toBe(true)
       expect(a1?.getAttribute('aria-label')).toBe('dns, +10 ms, 20 ms')
-      expect(view.getByTestId('code-trace__axis').textContent).toContain('200 ms')
-      expect(view.getByTestId('code-trace__axis').textContent).toContain('400 ms')
-      expect(view.queryByTestId('code-trace__minimap')).toBeNull()
+      expect(view.getByTestId('trace__axis').textContent).toContain('200 ms')
+      expect(view.getByTestId('trace__axis').textContent).toContain('400 ms')
+      expect(view.queryByTestId('trace__minimap')).toBeNull()
     })
 
     it('widens a range narrower than 1% of the run', () => {
       const view = render(Trace, { props: { spans, range: [100, 100] } })
-      expect(view.getByTestId('code-trace__axis').textContent).toContain('117 ms')
+      expect(view.getByTestId('trace__axis').textContent).toContain('117 ms')
       expect(offsets(view).every(Number.isFinite)).toBe(true)
     })
 
@@ -272,13 +270,13 @@ describe('Trace', () => {
       const [start, end] = view.getAllByRole('slider') as HTMLElement[]
       expect(start?.getAttribute('aria-label')).toBe('Zoom start')
       expect(end?.getAttribute('aria-valuenow')).toBe('1720')
-      expect(view.queryByTestId('code-trace__reset-zoom')).toBeNull()
+      expect(view.queryByTestId('trace__reset-zoom')).toBeNull()
       await fireEvent.keyDown(start as HTMLElement, { key: 'PageUp' })
       expect(emitted().at(-1)?.[0]).toEqual([172, 1720])
       await view.rerender({ spans, zoomable: true, range: [172, 1720] })
       await fireEvent.keyDown(end as HTMLElement, { key: 'Home' })
       expect(emitted().at(-1)?.[0]).toEqual([172, 172 + 17.2])
-      expect(view.getByTestId('code-trace__minimap').hasAttribute('data-zoomed')).toBe(true)
+      expect(view.getByTestId('trace__minimap').hasAttribute('data-zoomed')).toBe(true)
       await fireEvent.click(view.getByRole('button', { name: 'Reset zoom' }))
       expect(emitted().at(-1)?.[0]).toBeNull()
     })
@@ -289,7 +287,7 @@ describe('Trace', () => {
         setup: () => ({ spans }),
         template: `<div style="width: 800px"><Trace :spans="spans" zoomable /></div>`
       })
-      const track = view.getByTestId('code-trace__track')
+      const track = view.getByTestId('trace__track')
       const box = track.getBoundingClientRect()
       const at = (share: number) => box.left + box.width * share
       await fireEvent.pointerDown(track, { button: 0, clientX: at(0.25), pointerId: 1 })
@@ -316,19 +314,19 @@ describe('Trace', () => {
           ]
         }
       })
-      const marks = view.getAllByTestId('code-trace__event')
+      const marks = view.getAllByTestId('trace__event')
       expect(marks).toHaveLength(2)
       expect(marks[0]?.style.getPropertyValue('--trace-event-at')).toBe(String(110 / 400))
       expect(rows(view)[1]?.getAttribute('aria-label')).toBe(
         'fetch, Network, +10 ms, 200 ms, 2 events'
       )
-      const list = view.getByTestId('code-trace__events')
+      const list = view.getByTestId('trace__events')
       expect(list.textContent).toMatch(/\+30 ms\s*cache-miss[\s\S]*\+110 ms\s*first-byte/)
     })
 
     it('flags the slowest span under the root only when asked', () => {
       const plain = render(Trace, { props: { spans } })
-      expect(plain.queryByTestId('code-trace__slowest')).toBeNull()
+      expect(plain.queryByTestId('trace__slowest')).toBeNull()
       plain.unmount()
       const view = render(Trace, { props: { spans, highlightSlowest: true, selected: 'b' } })
       const flagged = rows(view).filter((row) => row.hasAttribute('data-slowest'))
@@ -336,7 +334,7 @@ describe('Trace', () => {
       expect(flagged[0]?.getAttribute('aria-label')).toBe(
         'encode, +220 ms, 1.50 s, Failed, Slowest'
       )
-      expect(view.getByTestId('code-trace__slowest-tag').textContent).toContain('Slowest')
+      expect(view.getByTestId('trace__slowest-tag').textContent).toContain('Slowest')
     })
   })
 })

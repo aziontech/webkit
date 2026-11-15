@@ -19,7 +19,7 @@
     return componentGroups()
       .map((group) => ({
         ...group,
-        id: group.label.toLowerCase().replace(/\s+/g, '-'),
+        id: group.id ?? group.label.toLowerCase().replace(/\s+/g, '-'),
         items: group.items
           .map((item) => ({ ...item, entry: byPath.get(item.to) }))
           .filter(

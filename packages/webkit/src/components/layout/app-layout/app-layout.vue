@@ -5,7 +5,7 @@
   import { useDirection } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import Drawer from '../../overlay/drawer/drawer.vue'
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
@@ -86,7 +86,7 @@
   const uid = useId()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-app-layout'
+    () => (attrs['data-testid'] as string | undefined) ?? 'app-layout'
   )
 
   const rootEl = ref<globalThis.HTMLElement | null>(null)

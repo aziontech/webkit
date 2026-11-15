@@ -1,18 +1,18 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, reactive, ref } from 'vue'
 
-  type FieldProblem = { type: HelperTextType; message: string }
+  type FieldProblem = { type: 'helper' | 'invalid' | 'required'; message: string }
 
   const typeOptions = [
     {
@@ -117,7 +117,7 @@
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"
                 >
-                  <SettingRow
+                  <SettingsRow
                     key="name"
                     title="Name"
                     description="Give a unique and descriptive name to identify the access list."
@@ -135,13 +135,12 @@
                       :disabled="saving"
                       @update:model-value="clear('name')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.name"
                       id="access-lists-name-message"
-                      :type="errors.name.type"
-                      :label="errors.name.message"
-                    />
-                  </SettingRow>
+                      >{{ errors.name.message }}</FieldError
+                    >
+                  </SettingsRow>
                 </TransitionGroup>
               </Item.List>
             </template>
@@ -159,7 +158,7 @@
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"
                 >
-                  <SettingRow
+                  <SettingsRow
                     key="type"
                     title="Type"
                     variant="stacked"
@@ -179,8 +178,8 @@
                         >{{ option.label }}</RadioGroup.Item
                       >
                     </RadioGroup>
-                  </SettingRow>
-                  <SettingRow
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.type === 'asn'"
                     key="items-asn"
                     title="List"
@@ -199,14 +198,13 @@
                       :disabled="saving"
                       @update:model-value="clear('items')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.items"
                       id="access-lists-items-message"
-                      :type="errors.items.type"
-                      :label="errors.items.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.items.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-else-if="form.type === 'ip_cidr'"
                     key="items-ip-cidr"
                     title="List"
@@ -225,14 +223,13 @@
                       :disabled="saving"
                       @update:model-value="clear('items')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.items"
                       id="access-lists-items-message"
-                      :type="errors.items.type"
-                      :label="errors.items.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.items.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-else
                     key="items-countries"
                     title="Countries"
@@ -251,13 +248,12 @@
                       :disabled="saving"
                       @update:model-value="clear('items')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.items"
                       id="access-lists-items-message"
-                      :type="errors.items.type"
-                      :label="errors.items.message"
-                    />
-                  </SettingRow>
+                      >{{ errors.items.message }}</FieldError
+                    >
+                  </SettingsRow>
                 </TransitionGroup>
               </Item.List>
             </template>

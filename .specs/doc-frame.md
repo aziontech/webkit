@@ -1,10 +1,10 @@
 ---
 name: doc-frame
-category: documentation
+category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: f1935562ee1217da41d0e48f848244e228f1987da28e7cb5e7fe69982fdbf33a
+checksum: 9efbb188f9eeb5b179bcc7cca29062ee0604ac746ac4e42d7d6730725195d976
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -24,7 +24,7 @@ The bordered surface every screenshot, diagram and clip in a documentation page 
 
 ## When NOT to use
 
-- For an application-screen media block outside documentation prose — use `FrameBox` or compose the layout directly.
+- For an application-screen media block outside documentation prose — use `RegistrationFrame` or compose the layout directly.
 - For an image that is itself a link or a card — a frame is a figure, not a navigation target.
 - For a gallery or carousel; the frame holds one piece of media at a time.
 

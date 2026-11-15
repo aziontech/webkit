@@ -1,6 +1,6 @@
 {
   "component": "password-input",
-  "title": "Components/Primitives/Inputs/PasswordInput",
+  "title": "Components/Input/PasswordInput",
   "examples": [
     {
       "name": "Default",

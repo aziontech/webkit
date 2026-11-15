@@ -1,11 +1,11 @@
 ---
 name: doc-markdown
-category: documentation
+category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
 template: 2
-checksum: 68823a81c1a147d372c678c56533f08a5cb0c33e8c65c7667b6a129b6ddafb45
+checksum: 7624720175261f6da04613370b4803ed7881be97a0d3b01889e5e30e822636a6
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `DocTabs`, `DocCodeGroup`, `DocUpdate`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for `DocOnThisPage` / `DocLayout`'s `outline`) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
+Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `DocTabs`, `DocCodeGroup`, `DocChangelogEntry`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for `DocOnThisPage` / `DocLayout`'s `outline`) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
 
 ## When to use
 
@@ -35,9 +35,9 @@ Renders a documentation page written in Markdown with Mintlify-style MDX compone
 - `DocHeading` — every Markdown heading renders as one, with the slug id the outline points at.
 - `DocLayout`, `DocOnThisPage` — take `parseDocMarkdown(source).headings` as `outline` / `items`.
 - `DocPageHeader` — takes the frontmatter's `title` and `description`.
-- `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordionItem`, `DocTabs`, `DocTab`, `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocUpdate` — what the tags mount.
+- `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordion`, `DocTabs`, `DocTab`, `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocChangelogEntry` — what the tags mount.
 - `HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.
-- `FrameBox`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.
+- `RegistrationFrame`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.
 - `StreamingResponse` — renders chat Markdown with the AI layer's reader; this component reuses that reader's inline tokenizer and `safeHref` and adds the MDX block tags, document heading levels and anchors a docs page needs, which a chat bubble must not have.
 
 ## Best practices
@@ -115,7 +115,7 @@ You need an Acme account. Run \`acme login\` first.
 | table body cell          | `.text-label-md`, `var(--text-default)`                 |
 | table cell padding       | `var(--spacing-sm)`, `var(--spacing-xs)`                |
 | callout paragraph gap    | `var(--spacing-xs)`                                     |
-| item group frame surface | `var(--bg-surface)` (on `FrameBox`)                     |
+| item group frame surface | `var(--bg-surface)` (on `RegistrationFrame`)            |
 | everything else          | the mounted Doc components' own tokens and `DocProse`'s |
 
 ## Theme gaps
@@ -151,16 +151,16 @@ You need an Acme account. Run \`acme login\` first.
 
 ## Responsive
 
-- Container queries: none of its own; `DocCardGroup`, `DocUpdate` and the other mounted components respond to their containers.
+- Container queries: none of its own; `DocCardGroup`, `DocChangelogEntry` and the other mounted components respond to their containers.
 - Narrow (≤ 640 px): a wide table scrolls inside its own region instead of the page; everything else reflows with `DocProse`.
 - Touch: targets are the mounted components'; inline links follow `DocProse`.
 - Reflow: no horizontal page scroll at 320 px and 200 % zoom; the exception is a wide table, which scrolls inside its region (WCAG 1.4.10 data-table exception).
 
 ## Performance
 
-- Bundle budget: 15 KB gzip for the initial chunk of `./doc-markdown` in `.size-limit.json` (`entryOnly`; 14.5 KB measured). It statically imports `DocHeading`, `DocCallout`, `DocCard`, `DocCardGroup`, `DocSteps`, `DocStep`, `DocUpdate`, `HoverCard`, `FrameBox` and `ItemList`.
+- Bundle budget: 15 KB gzip for the initial chunk of `./doc-markdown` in `.size-limit.json` (`entryOnly`; 14.5 KB measured). It statically imports `DocHeading`, `DocCallout`, `DocCard`, `DocCardGroup`, `DocSteps`, `DocStep`, `DocChangelogEntry`, `HoverCard`, `RegistrationFrame` and `ItemList`.
 - Runtime budget: parsing is linear in the source length and recomputed only when `source` or `components` changes; a 1,000-line page parses in well under one frame.
-- Heavy parts: `DocCodeGroup`, `DocTabs`, `DocTab`, `DocAccordionGroup`, `DocAccordionItem`, `DocFrame`, `DocItem` and `DocPrompt` are async chunks (`defineAsyncComponent`), loaded only when the page uses their tag; the server render and hydration render them in place. Syntax highlighting is `DocCodeGroup`'s own lazy chunk.
+- Heavy parts: `DocCodeGroup`, `DocTabs`, `DocTab`, `DocAccordionGroup`, `DocAccordion`, `DocFrame`, `DocItem` and `DocPrompt` are async chunks (`defineAsyncComponent`), loaded only when the page uses their tag; the server render and hydration render them in place. Syntax highlighting is `DocCodeGroup`'s own lazy chunk.
 
 ## Examples
 

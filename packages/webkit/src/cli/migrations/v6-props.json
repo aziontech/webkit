@@ -61,7 +61,7 @@
     },
     "#prefix": "leading"
   },
-  "card-pricing": {
+  "pricing-card": {
     "planTitle": "title",
     "slotPosition": "actionsPosition",
     "aligned": "equalHeight",
@@ -90,9 +90,9 @@
     "interval": "autoplayInterval"
   },
   "hero": {
-    "carousel": "ticker",
-    "carouselMarks": "tickerMarks",
-    "carouselLabel": "tickerLabel",
+    "carousel": "marquee",
+    "carouselMarks": "marqueeMarks",
+    "carouselLabel": "marqueeLabel",
     "align": {
       "to": "align",
       "values": {
@@ -100,11 +100,14 @@
         "bottom": "end"
       }
     },
-    "kind": "variant"
+    "kind": "variant",
+    "ticker": "marquee",
+    "tickerLabel": "marqueeLabel",
+    "tickerMarks": "marqueeMarks"
   },
-  "hero-band": {
-    "carouselMarks": "tickerMarks",
-    "carouselLabel": "tickerLabel",
+  "hero-section": {
+    "carouselMarks": "marqueeMarks",
+    "carouselLabel": "marqueeLabel",
     "highlight": "titleHighlight",
     "kind": {
       "to": "variant",
@@ -112,13 +115,17 @@
         "centered": "center",
         "centered-band": "center-band"
       }
-    }
+    },
+    "tickerLabel": "marqueeLabel",
+    "tickerMarks": "marqueeMarks"
   },
-  "hero-form": {
-    "carouselMarks": "tickerMarks",
-    "carouselLabel": "tickerLabel",
+  "hero-form-section": {
+    "carouselMarks": "marqueeMarks",
+    "carouselLabel": "marqueeLabel",
     "highlight": "titleHighlight",
-    "error": "failed"
+    "error": "failed",
+    "tickerLabel": "marqueeLabel",
+    "tickerMarks": "marqueeMarks"
   },
   "item": {
     "kind": {
@@ -144,7 +151,7 @@
       "removed": "set href to render the row as a link or clickable to render it as a button, move the child's attributes and listeners onto the Item, and drop the inner element."
     }
   },
-  "log-view": {
+  "log-viewer": {
     "border": "bordered",
     "showCopy": "copyable",
     "warningsOnly": {
@@ -189,9 +196,6 @@
       "removed": "each NavigationMenu part renders a fixed element (nav, ul, li, a or button, div, span); wrap the part or style it instead of swapping its element."
     },
     "@open-change-complete": "open-transition-end"
-  },
-  "overline": {
-    "showCursor": "cursor"
   },
   "popover": {
     "width": "size"
@@ -498,9 +502,6 @@
   "textarea": {
     "resizable": "resize"
   },
-  "flow-anchor": {
-    "type": "side"
-  },
   "table-header": {
     "kind": {
       "to": "density",
@@ -549,7 +550,7 @@
       }
     }
   },
-  "log-view-root": {
+  "log-viewer-root": {
     "warningsOnly": {
       "removed": "bind v-model:level and set it to 'warn' to show only warnings; a line with type: 'warning' becomes type: 'text' with level: 'warn'."
     }
@@ -704,15 +705,18 @@
     }
   },
   "hero-root": {
-    "carousel": "ticker",
-    "carouselMarks": "tickerMarks",
-    "carouselLabel": "tickerLabel",
-    "kind": "variant"
+    "carousel": "marquee",
+    "carouselMarks": "marqueeMarks",
+    "carouselLabel": "marqueeLabel",
+    "kind": "variant",
+    "ticker": "marquee",
+    "tickerLabel": "marqueeLabel",
+    "tickerMarks": "marqueeMarks"
   },
   "popover-root": {
     "width": "size"
   },
-  "banner-art": {
+  "backdrop": {
     "art": "variant",
     "kind": "variant"
   },
@@ -764,7 +768,7 @@
     "kind": "variant",
     "titleKind": "titleVariant"
   },
-  "console-panel": {
+  "console-showcase": {
     "actions": {
       "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, variant? } shape); a third action has no slot, put it in the page instead"
     },
@@ -804,7 +808,7 @@
       }
     }
   },
-  "log-view-header": {
+  "log-viewer-header": {
     "#left": "start",
     "#right": "end"
   },
@@ -814,7 +818,7 @@
   "topology-diagram": {
     "expanded": "openKeys"
   },
-  "product-widget": {
+  "console-mockup": {
     "hover": "hovered",
     "interval": "autoplayInterval",
     "kind": "variant"
@@ -913,7 +917,7 @@
     "#breadcrumb": "breadcrumbs",
     "@meta-action": "action-click"
   },
-  "setting-row": {
+  "settings-row": {
     "level": "depth",
     "kind": "variant"
   },
@@ -1042,7 +1046,7 @@
       }
     }
   },
-  "closing-call-to-action-newsletter": {
+  "newsletter-section": {
     "error": "failed"
   },
   "media-split": {
@@ -1074,7 +1078,7 @@
     },
     "kind": "variant"
   },
-  "listing-browser": {
+  "listing-index": {
     "rows": "data",
     "search": {
       "removed": "split into searchPlaceholder, searchShortPlaceholder and searchAriaLabel"
@@ -1129,7 +1133,7 @@
   "sticky-stack": {
     "@index-change": "active-index-change"
   },
-  "story-library": {
+  "story-index": {
     "search": {
       "removed": "split into searchPlaceholder, searchShortPlaceholder and searchAriaLabel"
     },
@@ -1205,19 +1209,16 @@
   "key-value-pairs-root": {
     "kind": "variant"
   },
-  "navigation-menu-popup": {
-    "kind": "variant"
-  },
   "footer": {
     "kind": "variant"
   },
   "footer-root": {
     "kind": "variant"
   },
-  "global-header": {
+  "app-header": {
     "kind": "variant"
   },
-  "global-header-root": {
+  "app-header-root": {
     "kind": "variant"
   },
   "save-bar": {
@@ -1235,7 +1236,7 @@
   "call-to-action": {
     "kind": "variant"
   },
-  "ticker": {
+  "marquee": {
     "kind": "variant"
   },
   "carousel": {
@@ -1244,7 +1245,7 @@
   "carousel-root": {
     "kind": "variant"
   },
-  "texture-material": {
+  "texture": {
     "kind": "variant"
   },
   "logo-wall": {
@@ -1277,7 +1278,7 @@
   "stat-tile": {
     "kind": "variant"
   },
-  "ai-loading": {
+  "response-loading": {
     "kind": "variant"
   },
   "closing-call-to-action": {
@@ -1286,11 +1287,11 @@
   "feature-tiles": {
     "kind": "variant"
   },
-  "logo-wall-quote": {
+  "logo-wall-section": {
     "kind": "variant",
     "quoteKind": "quoteVariant"
   },
-  "media-split-stack": {
+  "media-split-stack-section": {
     "kind": "variant"
   },
   "site-footer": {
@@ -1341,5 +1342,18 @@
   },
   "item-media": {
     "kind": "type"
+  },
+  "flow-diagram-anchor": {
+    "type": "side"
+  },
+  "navigation-menu-popup": {
+    "kind": "variant"
+  },
+  "eyebrow": {
+    "showCursor": "cursor"
+  },
+  "template-gallery": {
+    "tickerLabel": "marqueeLabel",
+    "tickerMarks": "marqueeMarks"
   }
 }

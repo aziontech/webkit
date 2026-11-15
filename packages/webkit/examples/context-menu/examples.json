@@ -1,6 +1,6 @@
 {
   "component": "context-menu",
-  "title": "Components/Primitives/Navigation/ContextMenu",
+  "title": "Components/Navigation/ContextMenu",
   "examples": [
     {
       "name": "Default",

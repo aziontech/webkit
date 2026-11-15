@@ -2,7 +2,10 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import LogView, { type LogViewStep, type LogViewStepsView } from '@aziontech/webkit/log-view'
+  import LogViewer, {
+    type LogViewerStep,
+    type LogViewerStepsView
+  } from '@aziontech/webkit/log-viewer'
   import PageHeader from '@aziontech/webkit/page-header'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -36,7 +39,7 @@
     return { label: 'Idle', severity: 'neutral' }
   })
 
-  type DeployStep = LogViewStep & { tag?: StatusTag }
+  type DeployStep = LogViewerStep & { tag?: StatusTag }
 
   const steps: DeployStep[] = [
     {
@@ -272,7 +275,7 @@
 
   const stepTag = (key: string) => steps.find((step) => step.id === key)?.tag
 
-  const logView = ref<LogViewStepsView>('phased')
+  const logViewer = ref<LogViewerStepsView>('phased')
   const openStep = ref('rules')
 
   const RUN_TOAST = 'async-submit-run'
@@ -351,7 +354,7 @@
           <template #header>
             <p class="truncate text-heading-xs text-(--text-default)">Deployment</p>
             <ToggleGroup
-              v-model="logView"
+              v-model="logViewer"
               :options="logViews"
               class="shrink-0"
               aria-label="Log view"
@@ -359,8 +362,8 @@
           </template>
 
           <template #default>
-            <LogView.Steps
-              v-model:view="logView"
+            <LogViewer.Steps
+              v-model:view="logViewer"
               v-model:open-step="openStep"
               :steps="steps"
               :view-switch="false"
@@ -388,7 +391,7 @@
                     : 'No log lines yet.'
                 }}
               </template>
-            </LogView.Steps>
+            </LogViewer.Steps>
           </template>
         </Card>
       </div>

@@ -36,9 +36,7 @@
   const ctx = inject(ResizableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__pane` : 'layout-resizable__pane')
+    () => (attrs['data-testid'] as string | undefined) ?? 'resizable-pane'
   )
 
   const flexible = computed(() => basis.value === undefined)

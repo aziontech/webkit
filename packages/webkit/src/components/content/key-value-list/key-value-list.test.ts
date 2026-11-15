@@ -42,8 +42,7 @@ const Grouped = defineComponent({
   `
 })
 
-const itemsOf = (view: ReturnType<typeof render>) =>
-  view.getAllByTestId('content-key-value-list__item')
+const itemsOf = (view: ReturnType<typeof render>) => view.getAllByTestId('key-value-list-item')
 
 describe('KeyValueList', () => {
   describe('compound API', () => {
@@ -56,7 +55,7 @@ describe('KeyValueList', () => {
   describe('rendering & testid', () => {
     it('renders a description list with the derived testid and accessible name', () => {
       const view = render(Facts)
-      const root = view.getByTestId('content-key-value-list')
+      const root = view.getByTestId('key-value-list')
 
       expect(root.tagName).toBe('DL')
       expect(root.getAttribute('aria-label')).toBe('Workload details')
@@ -68,10 +67,10 @@ describe('KeyValueList', () => {
       const view = render(KeyValueList, { attrs: { 'data-testid': 'facts' } })
 
       expect(view.getByTestId('facts')).toBeInTheDocument()
-      expect(view.queryByTestId('content-key-value-list')).toBeNull()
+      expect(view.queryByTestId('key-value-list')).toBeNull()
     })
 
-    it('derives the Item testid from a consumer root testid', () => {
+    it('keeps the Item on its own test id under a consumer root testid', () => {
       const Custom = defineComponent({
         components: { KeyValueList, KeyValueListItem },
         template: `
@@ -83,13 +82,13 @@ describe('KeyValueList', () => {
       })
       const view = render(Custom)
 
-      expect(view.getByTestId('facts__item')).toBeInTheDocument()
+      expect(view.getByTestId('key-value-list-item')).toBeInTheDocument()
       expect(view.getByTestId('name-pair')).toBeInTheDocument()
     })
 
     it('omits aria-label when none is set', () => {
       const view = render(KeyValueList)
-      expect(view.getByTestId('content-key-value-list').hasAttribute('aria-label')).toBe(false)
+      expect(view.getByTestId('key-value-list').hasAttribute('aria-label')).toBe(false)
     })
   })
 
@@ -123,9 +122,7 @@ describe('KeyValueList', () => {
   describe('columns', () => {
     it.each([1, 2, 3, 4])('mirrors columns=%i on data-columns', (columns) => {
       const view = render(Facts, { props: { columns } })
-      expect(view.getByTestId('content-key-value-list').getAttribute('data-columns')).toBe(
-        String(columns)
-      )
+      expect(view.getByTestId('key-value-list').getAttribute('data-columns')).toBe(String(columns))
     })
   })
 
@@ -157,11 +154,11 @@ describe('KeyValueList', () => {
   describe('loading', () => {
     it('replaces values with skeletons, keeps labels and sets aria-busy', () => {
       const view = render(Facts, { props: { loading: true } })
-      const root = view.getByTestId('content-key-value-list')
+      const root = view.getByTestId('key-value-list')
 
       expect(root.getAttribute('aria-busy')).toBe('true')
       expect(root.hasAttribute('data-loading')).toBe(true)
-      expect(view.getAllByTestId('feedback-skeleton')).toHaveLength(4)
+      expect(view.getAllByTestId('skeleton')).toHaveLength(4)
       expect(view.queryByText('1752167890')).toBeNull()
       expect(view.getByText('Workload ID')).toBeInTheDocument()
       expect(view.getByText('Region')).toBeInTheDocument()
@@ -171,7 +168,7 @@ describe('KeyValueList', () => {
   describe('groups', () => {
     it('renders each Group as a dt title and a dd holding a nested dl of Items', () => {
       const view = render(Grouped)
-      const groups = view.getAllByTestId('content-key-value-list__group')
+      const groups = view.getAllByTestId('key-value-list-group')
 
       expect(groups).toHaveLength(1)
       const group = groups[0]
@@ -182,7 +179,7 @@ describe('KeyValueList', () => {
 
       const nested = group.querySelector(':scope > dd > dl')
       expect(nested).not.toBeNull()
-      const item = nested?.querySelector('[data-testid="content-key-value-list__item"]')
+      const item = nested?.querySelector('[data-testid="key-value-list-item"]')
       expect(item?.parentElement).toBe(nested)
       expect(item?.textContent).toContain('Active')
     })
@@ -231,9 +228,7 @@ describe('KeyValueList', () => {
 
     it('defaults to the stacked variant on the root and on every Item', () => {
       const view = render(Facts)
-      expect(view.getByTestId('content-key-value-list').getAttribute('data-variant')).toBe(
-        'stacked'
-      )
+      expect(view.getByTestId('key-value-list').getAttribute('data-variant')).toBe('stacked')
       for (const item of itemsOf(view)) expect(item.getAttribute('data-variant')).toBe('stacked')
     })
 
@@ -248,7 +243,7 @@ describe('KeyValueList', () => {
           </KeyValueList>
         `
       })
-      expect(view.getByTestId('content-key-value-list').getAttribute('data-variant')).toBe('split')
+      expect(view.getByTestId('key-value-list').getAttribute('data-variant')).toBe('split')
       expect(itemsOf(view)[0]?.getAttribute('data-variant')).toBe('split')
     })
 
@@ -286,7 +281,7 @@ describe('KeyValueList', () => {
         },
         container: boxOf(width)
       })
-      return getComputedStyle(view.getByTestId('content-key-value-list'))
+      return getComputedStyle(view.getByTestId('key-value-list'))
         .gridTemplateColumns.split(' ')
         .filter(Boolean).length
     }

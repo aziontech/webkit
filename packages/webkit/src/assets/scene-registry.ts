@@ -10,7 +10,7 @@ export const sceneAssets = {
   FunctionsHeroCanvas: () => import('./scenes/runtime-api/runtime-api-scene.vue'),
   Diagram: () => import('../components/marketing/diagram/diagram.vue'),
   Illustration: () => import('../components/content/illustration/illustration.vue'),
-  ProductWidget: () => import('../components/content/product-widget/product-widget.vue'),
+  ConsoleMockup: () => import('../components/content/console-mockup/console-mockup.vue'),
   RuntimeApiCloud: () => import('./scenes/runtime-api/runtime-api-cloud.vue'),
   SpinningGlobe: () => import('./globe/spinning-globe.vue')
 } satisfies Record<string, SceneLoader>
@@ -22,7 +22,7 @@ export type SceneName = keyof typeof sceneAssets
 export type SceneRef = {
   /** Registry name of the scene. */
   component: SceneName
-  /** Props bound onto the scene, such as the `name` of a `ProductWidget`; the section's own state props win on a clash. */
+  /** Props bound onto the scene, such as the `name` of a `ConsoleMockup`; the section's own state props win on a clash. */
   props?: Record<string, unknown>
 }
 

@@ -1,6 +1,6 @@
 ---
 name: doc-callout
-category: documentation
+category: docs
 structure: monolithic
 status: implemented
 spec_version: 4

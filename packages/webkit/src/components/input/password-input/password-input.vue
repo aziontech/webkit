@@ -1,0 +1,184 @@
+<script setup lang="ts">
+  import { computed, ref, useAttrs, useSlots } from 'vue'
+
+  import { useFieldControl } from '../../../composables/use-field-control'
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
+  import IconButton from '../../action/icon-button/icon-button.vue'
+
+  export type PasswordInputAutocomplete = 'current-password' | 'new-password' | 'off'
+
+  defineOptions({
+    name: 'PasswordInput',
+    inheritAttrs: false
+  })
+
+  export interface PasswordInputProps {
+    /** Placeholder shown when the field is empty. */
+    placeholder?: string
+    /** Native maxlength — maximum number of characters allowed. */
+    maxLength?: number
+    /** Disables interaction and applies disabled tokens. */
+    disabled?: boolean
+    /** Marks the field read-only; value is visible but not editable. */
+    readonly?: boolean
+    /** Marks the field as required; sets native required and aria-required. */
+    required?: boolean
+    /** Applies the invalid border + ring tokens and sets aria-invalid. */
+    invalid?: boolean
+    /** Renders the visibility toggle on the trailing edge of the field. */
+    toggleable?: boolean
+    /** Native autocomplete hint for password managers. */
+    autocomplete?: PasswordInputAutocomplete
+    /** Sets the value and placeholder in the monospace code face, for API tokens, client secrets and keys. */
+    monospace?: boolean
+  }
+  const props = withDefaults(defineProps<PasswordInputProps>(), {
+    placeholder: '',
+    maxLength: undefined,
+    disabled: false,
+    readonly: false,
+    required: false,
+    invalid: false,
+    toggleable: true,
+    autocomplete: 'current-password',
+    monospace: false
+  })
+
+  /** Two-way bound value of the field. */
+  const model = defineModel<string>({ default: '' })
+
+  defineSlots<{
+    /** Leading adornment at the inline start of the field (an icon, a unit). */
+    leading(): unknown
+    /** Trailing adornment at the inline end of the field. */
+    trailing(): unknown
+  }>()
+
+  const attrs = useAttrs()
+  const { t } = useTranslate({ passwordInput: en.passwordInput })
+
+  const {
+    controlId,
+    describedBy,
+    invalid: isInvalid,
+    disabled: isDisabled,
+    required: isRequired
+  } = useFieldControl({
+    id: () => attrs['id'] as string | undefined,
+    describedBy: () => attrs['aria-describedby'] as string | undefined,
+    invalid: () => props.invalid,
+    disabled: () => props.disabled,
+    required: () => props.required
+  })
+  const slots = useSlots()
+
+  const visible = ref(false)
+  const inputEl = ref<globalThis.HTMLInputElement | null>(null)
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'password-input')
+
+  const passthroughAttrs = computed(() => {
+    const rest: Record<string, unknown> = { ...attrs }
+    delete rest['class']
+    delete rest['data-testid']
+    return rest
+  })
+
+  const hasLeading = () => Boolean(slots['leading'])
+  const hasTrailing = () => !props.toggleable && Boolean(slots['trailing'])
+
+  const toggleLabel = computed(() =>
+    visible.value ? t('passwordInput.hide') : t('passwordInput.show')
+  )
+  const toggleIcon = computed(() => (visible.value ? 'ai ai-eye-off' : 'ai ai-eye'))
+
+  const onInput = (event: globalThis.Event) => {
+    const target = event.target as globalThis.HTMLInputElement
+    model.value = target.value
+  }
+
+  const toggleVisible = () => {
+    visible.value = !visible.value
+  }
+
+  defineExpose({
+    /** Moves focus to the native field. */
+    focus: (): void => inputEl.value?.focus()
+  })
+</script>
+
+<template>
+  <span
+    :data-disabled="isDisabled || null"
+    :data-invalid="isInvalid || null"
+    :data-required="isRequired || null"
+    :data-leading="hasLeading() || null"
+    :data-trailing="hasTrailing() || null"
+    :data-toggleable="toggleable || null"
+    :data-revealed="visible || null"
+    :data-monospace="monospace || null"
+    :class="[
+      'group relative inline-flex items-center w-full h-10',
+      'gap-(--spacing-xs) pe-(--spacing-xs)',
+      'rounded-(--shape-control)',
+      'border border-(--border-input) bg-(--bg-surface) text-(--text-default)',
+      'transition-colors duration-150 ease-out motion-reduce:transition-none',
+      '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong)',
+      'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas)',
+      'data-[invalid]:border-(--danger-border)',
+      'data-[required]:border-(--warning-border)',
+      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
+      attrs.class
+    ]"
+  >
+    <span
+      v-if="hasLeading()"
+      class="inline-flex shrink-0 items-center justify-center ps-(--spacing-md) text-(--text-muted)"
+      aria-hidden="true"
+    >
+      <slot name="leading" />
+    </span>
+
+    <input
+      ref="inputEl"
+      :type="visible ? 'text' : 'password'"
+      :id="controlId"
+      :aria-describedby="describedBy"
+      :value="model"
+      :placeholder="placeholder"
+      :maxlength="maxLength"
+      :autocomplete="autocomplete"
+      :disabled="isDisabled"
+      :readonly="readonly"
+      :required="isRequired"
+      :aria-invalid="isInvalid || undefined"
+      :aria-required="isRequired || undefined"
+      :data-testid="testId"
+      dir="auto"
+      class="relative z-(--z-control) w-full min-w-0 border-0 bg-transparent py-0 pe-0 ps-(--spacing-md) group-data-[leading]:ps-0 outline-none text-label-sm group-data-[monospace]:text-label-code-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default transition-opacity duration-150 ease-out motion-reduce:transition-none"
+      v-bind="passthroughAttrs"
+      @input="onInput"
+    />
+
+    <span
+      v-if="hasTrailing()"
+      class="inline-flex shrink-0 items-center justify-center text-(--text-muted)"
+      aria-hidden="true"
+    >
+      <slot name="trailing" />
+    </span>
+
+    <IconButton
+      v-if="toggleable"
+      variant="ghost"
+      size="small"
+      :icon="toggleIcon"
+      :ariaLabel="toggleLabel"
+      :aria-pressed="visible"
+      :disabled="isDisabled"
+      type="button"
+      @click="toggleVisible"
+    />
+  </span>
+</template>

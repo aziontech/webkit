@@ -82,7 +82,7 @@ At the foot of the drawer above a divider: four rows at most, a placeholder that
 
 ## Copy
 
-- **Entry point:** `Agent`, the name the console header's `ButtonHighlight` gives the same assistant; the panel title says what it is, `AI assistant`.
+- **Entry point:** `Agent`, the name the console header's `HighlightButton` gives the same assistant; the panel title says what it is, `AI assistant`.
 - **Drawer title:** `AI assistant`, with the Preview tag while in preview.
 - **Empty state:** "Ask about <resource>" and one sentence saying the assistant reads this resource's settings and metrics.
 - **Placeholder:** "Ask about <resource>".

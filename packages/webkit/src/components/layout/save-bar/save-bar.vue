@@ -35,7 +35,7 @@
   let observer: ResizeObserver | null = null
   let measured = -1
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-save-bar')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'save-bar')
 
   const rootStyle = computed(() => (reserved.value ? { height: `${reserved.value}px` } : undefined))
 

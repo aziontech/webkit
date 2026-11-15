@@ -8,7 +8,7 @@ import Finished from '../../../../examples/upload-progress/finished.vue'
 import Move from '../../../../examples/upload-progress/move.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import UploadProgress, { type UploadProgressItem } from './upload-progress.vue'
 
 const running = (): UploadProgressItem[] => [
@@ -23,7 +23,7 @@ describe('UploadProgress', () => {
     const region = view.getByRole('region', { name: 'File transfers' })
     expect(region.getAttribute('data-status')).toBe('running')
     expect(region.getAttribute('data-state')).toBe('open')
-    expect(view.getByTestId('feedback-upload-progress__title').textContent?.trim()).toBe(
+    expect(view.getByTestId('upload-progress__title').textContent?.trim()).toBe(
       'Uploading 1 of 3 files'
     )
     expect(view.getByRole('status').textContent).toBe('Uploading 1 of 3 files')
@@ -95,7 +95,7 @@ describe('UploadProgress', () => {
     expect(toggle.getAttribute('aria-expanded')).toBe('false')
     const list = document.getElementById(toggle.getAttribute('aria-controls') ?? '')
     expect(list?.style.display).toBe('none')
-    expect(view.getByTestId('feedback-upload-progress__title').textContent?.trim()).toBe(
+    expect(view.getByTestId('upload-progress__title').textContent?.trim()).toBe(
       'Moving 1 of 3 files'
     )
     await fireEvent.click(toggle)
@@ -113,7 +113,7 @@ describe('UploadProgress', () => {
     expect(emitted()['update:open']).toEqual([[false]])
     expect(emitted()['update:expanded']).toBeUndefined()
     await rerender({ open: false })
-    expect(getByTestId('feedback-upload-progress').getAttribute('data-state')).toBe('closed')
+    expect(getByTestId('upload-progress').getAttribute('data-state')).toBe('closed')
   })
 
   it('starts open when the model is unbound', () => {
@@ -138,7 +138,7 @@ describe('UploadProgress', () => {
       progress: 10
     }))
     const view = render(UploadProgress, { props: { items, floating: false } })
-    const rows = view.getAllByTestId('feedback-upload-progress__row')
+    const rows = view.getAllByTestId('upload-progress__row')
     expect(rows.length).toBeLessThan(1000)
     expect(view.container.querySelector('[data-chunk]')).not.toBeNull()
   })

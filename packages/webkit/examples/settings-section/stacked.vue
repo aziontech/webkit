@@ -2,7 +2,7 @@
   import Card from '@aziontech/webkit/card'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { ref } from 'vue'
@@ -36,7 +36,7 @@
       <Card :padded="false">
         <template #default>
           <Item.List>
-            <SettingRow
+            <SettingsRow
               title="Name"
               description="A unique and descriptive name to identify the resource."
             >
@@ -46,8 +46,8 @@
                 class="w-full"
                 aria-label="Name"
               />
-            </SettingRow>
-            <SettingRow
+            </SettingsRow>
+            <SettingsRow
               title="Active"
               description="When disabled, the resource stops serving traffic."
               variant="compact"
@@ -56,7 +56,7 @@
                 v-model="active"
                 aria-label="Active"
               />
-            </SettingRow>
+            </SettingsRow>
           </Item.List>
         </template>
       </Card>
@@ -69,7 +69,7 @@
       <Card :padded="false">
         <template #default>
           <Item.List>
-            <SettingRow
+            <SettingsRow
               v-for="feature in defaultFeatures"
               :key="feature.key"
               :title="feature.title"
@@ -80,7 +80,7 @@
                 v-model="features[feature.key]"
                 :aria-label="feature.title"
               />
-            </SettingRow>
+            </SettingsRow>
           </Item.List>
         </template>
       </Card>

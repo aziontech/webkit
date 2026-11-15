@@ -1,11 +1,11 @@
 {
   "renamed": {
-    "doc-pagination": "doc-prev-next (dup plan DO-2)",
-    "sample:shared/ui/banners/GlobeBanner": "banner-art (kind=\"globe\")",
-    "sample:shared/ui/banners/GlobeDisc": "banner-art (kind=\"globe\") on assets/spinning-globe",
-    "sample:shared/ui/banners/MapBanner": "banner-art (kind=\"map\") on network-map",
-    "sample:shared/ui/banners/NetworkBanner": "banner-art (kind=\"network\") on network-map",
-    "sample:shared/ui/flow/FlowCard": "flow-node (unstyled) with flow-anchor and a tag, as composed in assets/console-trace-scene",
+    "doc-pagination": "doc-previous-next (dup plan DO-2)",
+    "sample:shared/ui/banners/GlobeBanner": "backdrop (kind=\"globe\")",
+    "sample:shared/ui/banners/GlobeDisc": "backdrop (kind=\"globe\") on assets/spinning-globe",
+    "sample:shared/ui/banners/MapBanner": "backdrop (kind=\"map\") on network-map",
+    "sample:shared/ui/banners/NetworkBanner": "backdrop (kind=\"network\") on network-map",
+    "sample:shared/ui/flow-diagram/FlowDiagramCard": "flow-diagram-node (unstyled) with flow-diagram-anchor and a tag, as composed in assets/console-trace-scene",
     "sample:shared/ui/line-figure/LineFigure": "line-figure",
     "sample:shared/ui/line-figure/figures/ai-versioning": "line-figure (name=\"ai-versioning\")",
     "sample:shared/ui/line-figure/figures/applications-rules": "line-figure (name=\"applications-rules\")",
@@ -32,16 +32,16 @@
     "sample:shared/ui/line-figure/figures/secure-shield": "line-figure (name=\"secure-shield\")",
     "sample:shared/ui/line-figure/figures/store-replicas": "line-figure (name=\"store-replicas\")",
     "sample:shared/ui/line-figure/figures/variables-keys": "line-figure (name=\"variables-keys\")",
-    "sample:shared/ui/trace/RunLogs": "log-view (log-view-header and log-view-content), as composed in assets/console-trace-scene",
+    "sample:shared/ui/trace/RunLogs": "log-viewer (log-viewer-header and log-viewer-content), as composed in assets/console-trace-scene",
     "sample:shared/ui/trace/RunTrace": "trace, as composed in assets/console-trace-scene",
-    "sample:site/components/AzionCareersJob": "job-posting (description, rail and apply form; the opening stays hero-band title-band)",
-    "sample:site/components/ConsoleApplicationBand": "console-panel (tabs, assets/console-application-scene in #scene) or media-tabs (position=\"right\", the scene in #media)",
-    "sample:site/components/ConsoleTraceBand": "media-tabs (size=\"small\", assets/console-trace-scene in #media) or console-panel #scene",
+    "sample:site/components/AzionCareersJob": "job-posting (description, rail and apply form; the opening stays hero-section title-band)",
+    "sample:site/components/ConsoleApplicationBand": "console-showcase (tabs, assets/console-application-scene in #scene) or media-tabs (position=\"right\", the scene in #media)",
+    "sample:site/components/ConsoleTraceBand": "media-tabs (size=\"small\", assets/console-trace-scene in #media) or console-showcase #scene",
     "sample:site/composables/useScrollProgress": "internal to assets/runtime-api-cloud (composables/use-scroll-progress)",
     "sample:site/data/console-application": "internal to assets/console-application-scene",
     "sample:site/data/console-trace": "internal to assets/console-trace-scene",
     "sample:site/docs/ui/DocAccordionGroup": "doc-accordion-group",
-    "sample:site/docs/ui/DocAccordionItem": "doc-accordion-item",
+    "sample:site/docs/ui/DocAccordion": "doc-accordion",
     "sample:site/docs/ui/DocCodeGroup": "doc-code-group",
     "sample:site/docs/ui/DocCta": "doc-call-to-action",
     "sample:site/docs/ui/DocHeading": "doc-heading",
@@ -51,38 +51,38 @@
     "sample:site/ui/ConsoleApplicationScene": "assets/console-application-scene",
     "sample:site/ui/ConsoleTraceScene": "assets/console-trace-scene",
     "sample:site/ui/FrameworkStackScene": "illustration (name=\"modern-frontends\") in a scene slot",
-    "sample:site/ui/FunctionsHeroCanvas": "assets/runtime-api-scene (hero-band #bottom or #top)",
-    "sample:site/ui/RecognitionSealScene": "an <img> of the badge in a scene slot (hero-band #bottom or console-panel #scene)",
+    "sample:site/ui/FunctionsHeroCanvas": "assets/runtime-api-scene (hero-section #bottom or #top)",
+    "sample:site/ui/RecognitionSealScene": "an <img> of the badge in a scene slot (hero-section #bottom or console-showcase #scene)",
     "sample:site/ui/RuntimeApiCloud": "assets/runtime-api-cloud",
     "sample:site/ui/SpinningGlobe": "assets/spinning-globe",
-    "sample:site/ui/WorkloadTopologyScene": "product-widget (name=\"workload-topology-flow\") in hero-band #bottom",
-    "sample:site/ui/diagram/DiagramSet": "diagram in console-panel kind=\"diagram\", picked by the #scene slot tab",
+    "sample:site/ui/WorkloadTopologyScene": "console-mockup (name=\"workload-topology-flow\") in hero-section #bottom",
+    "sample:site/ui/diagram/DiagramSet": "diagram in console-showcase kind=\"diagram\", picked by the #scene slot tab",
     "sample:site/ui/sections/ArticleIndex": "article-index (filters=\"category-search\" or \"facets\")",
     "sample:site/ui/sections/CapabilityGrid": "capability-grid",
-    "sample:site/ui/sections/CompareCompetitors": "comparison-table",
-    "sample:site/ui/sections/ConsolePanel": "console-panel",
-    "sample:site/ui/sections/CustomerSpotlight": "client-mosaic-columns (reveal=\"hover\")",
-    "sample:site/ui/sections/Heroes": "hero-band (kinds centered, title-band, centered-band, compact-band, pixel-floor, copy-beside-art, copy-on-top-art with levels; top and bottom scene slots)",
-    "sample:site/ui/sections/PlanMatrix": "compare-plans",
+    "sample:site/ui/sections/CompareCompetitors": "competitor-comparison",
+    "sample:site/ui/sections/ConsoleShowcase": "console-showcase",
+    "sample:site/ui/sections/CustomerSpotlight": "client-story-columns (reveal=\"hover\")",
+    "sample:site/ui/sections/Heroes": "hero-section (kinds centered, title-band, centered-band, compact-band, pixel-floor, copy-beside-art, copy-on-top-art with levels; top and bottom scene slots)",
+    "sample:site/ui/sections/PlanMatrix": "plan-comparison",
     "sample:site/ui/sections/ProcessScroll": "process-scroll",
-    "sample:site/ui/sections/QuoteBand": "logo-wall-quote (kind=\"quote\")",
+    "sample:site/ui/sections/QuoteBand": "logo-wall-section (kind=\"quote\")",
     "sample:site/ui/sections/SectionAction": "button (label, href, kind, size, trailing chevron)",
-    "sample:site/ui/sections/SectionCommand": "section-command",
+    "sample:site/ui/sections/CopyCommand": "copy-command",
     "sample:site/ui/sections/StickyCarousel": "process-scroll (pinned)",
-    "hero-copy-on-top-art": "hero-band (kind=\"copy-on-top-art\", levels)",
-    "hero-with-opening": "hero-band (items)",
+    "hero-copy-on-top-art": "hero-section (kind=\"copy-on-top-art\", levels)",
+    "hero-with-opening": "hero-section (items)",
     "banner": "call-to-action (kind=\"announcement\")",
     "closing-call-to-action-agents": "closing-call-to-action (kind=\"primary\", audiences)",
     "closing-call-to-action-templates": "template-gallery (closing)",
-    "customer-spotlight": "client-mosaic-columns (reveal=\"hover\")",
+    "customer-spotlight": "client-story-columns (reveal=\"hover\")",
     "sticky-carousel": "process-scroll (pinned)",
-    "compare-support-tiers": "compare-plans",
+    "compare-support-tiers": "plan-comparison",
     "article-index-blog": "article-index (filters=\"category-search\")",
     "article-index-resource-hub": "article-index (filters=\"facets\")",
     "use-case-links": "capability-grid",
     "resource-grid": "capability-grid",
     "content-columns": "capability-grid",
-    "code-split": "media-split-band (codeTabs)",
+    "code-split": "media-split-section (codeTabs)",
     "sticky-scroll-code": "feature-scroll (item code)",
     "quote-carousel": "client-quotes",
     "assets/americamovil-extended-color.svg": "assets/america-movil-extended-color.svg",
@@ -124,7 +124,7 @@
   },
   "removed": {
     "block:headers/docs-header": "DocLayout already renders the documentation bar; the shell/docs block shows it (dup plan BL-8)",
-    "block:headers/site-header": "SiteLayout and SiteNav already render the marketing bar; the shell/site block shows it (dup plan BL-8)",
+    "block:headers/site-header": "SiteLayout and SiteHeader already render the marketing bar; the shell/site block shows it (dup plan BL-8)",
     "doc-tooltip": "HoverCard; DocMarkdown renders the MDX <Tooltip> tag as one (dup plan DO-1)",
     "sample:shared/ui/banners/map-framing": "the deck slide crop; decks are product tooling and are not ported (m2.9-inventory section 6)",
     "sample:shared/ui/line-figure/LineFigureBench": "a development bench for tuning figures; the line-figure examples (default, play, gallery) replace it"
@@ -1611,7 +1611,7 @@
       "surface": "site"
     },
     {
-      "id": "band-stack",
+      "id": "section-stack",
       "surface": "site"
     },
     {
@@ -1619,7 +1619,7 @@
       "surface": "site"
     },
     {
-      "id": "banner-art",
+      "id": "backdrop",
       "surface": "site"
     },
     {
@@ -1635,7 +1635,7 @@
       "surface": "site"
     },
     {
-      "id": "big-numbers",
+      "id": "stats",
       "surface": "site"
     },
     {
@@ -1691,7 +1691,7 @@
       "surface": "site"
     },
     {
-      "id": "client-mosaic-columns",
+      "id": "client-story-columns",
       "surface": "site"
     },
     {
@@ -1707,7 +1707,7 @@
       "surface": "site"
     },
     {
-      "id": "closing-call-to-action-newsletter",
+      "id": "newsletter-section",
       "surface": "site"
     },
     {
@@ -1719,23 +1719,23 @@
       "surface": "site"
     },
     {
-      "id": "column-navigation",
+      "id": "link-directory",
       "surface": "site"
     },
     {
-      "id": "column-navigation-column",
+      "id": "link-directory-column",
       "surface": "site"
     },
     {
-      "id": "column-navigation-item",
+      "id": "link-directory-item",
       "surface": "site"
     },
     {
-      "id": "column-navigation-root",
+      "id": "link-directory-root",
       "surface": "site"
     },
     {
-      "id": "compare-plans",
+      "id": "plan-comparison",
       "surface": "site"
     },
     {
@@ -1743,15 +1743,15 @@
       "surface": "site"
     },
     {
-      "id": "comparison-table",
+      "id": "competitor-comparison",
       "surface": "site"
     },
     {
-      "id": "compliance-badges",
+      "id": "compliance-logos",
       "surface": "site"
     },
     {
-      "id": "console-panel",
+      "id": "console-showcase",
       "surface": "site"
     },
     {
@@ -1775,7 +1775,7 @@
       "surface": "docs"
     },
     {
-      "id": "doc-accordion-item",
+      "id": "doc-accordion",
       "surface": "docs"
     },
     {
@@ -1851,7 +1851,7 @@
       "surface": "docs"
     },
     {
-      "id": "doc-update",
+      "id": "doc-changelog-entry",
       "surface": "docs"
     },
     {
@@ -1887,7 +1887,7 @@
       "surface": "site"
     },
     {
-      "id": "hero-band",
+      "id": "hero-section",
       "surface": "site"
     },
     {
@@ -1895,7 +1895,7 @@
       "surface": "site"
     },
     {
-      "id": "hero-form",
+      "id": "hero-form-section",
       "surface": "site"
     },
     {
@@ -1919,7 +1919,7 @@
       "surface": "site"
     },
     {
-      "id": "listing-browser",
+      "id": "listing-index",
       "surface": "site"
     },
     {
@@ -1931,7 +1931,7 @@
       "surface": "site"
     },
     {
-      "id": "logo-wall-quote",
+      "id": "logo-wall-section",
       "surface": "site"
     },
     {
@@ -1939,11 +1939,11 @@
       "surface": "site"
     },
     {
-      "id": "media-split-band",
+      "id": "media-split-section",
       "surface": "site"
     },
     {
-      "id": "media-split-stack",
+      "id": "media-split-stack-section",
       "surface": "site"
     },
     {
@@ -2011,7 +2011,7 @@
       "surface": "site"
     },
     {
-      "id": "section-command",
+      "id": "copy-command",
       "surface": "site"
     },
     {
@@ -2035,11 +2035,11 @@
       "surface": "site"
     },
     {
-      "id": "site-nav",
+      "id": "site-header",
       "surface": "site"
     },
     {
-      "id": "stats-band",
+      "id": "stats-section",
       "surface": "site"
     },
     {
@@ -2055,11 +2055,11 @@
       "surface": "site"
     },
     {
-      "id": "story-library",
+      "id": "story-index",
       "surface": "site"
     },
     {
-      "id": "subject-library",
+      "id": "subject-grid",
       "surface": "site"
     },
     {
@@ -2067,15 +2067,15 @@
       "surface": "site"
     },
     {
-      "id": "texture-material",
+      "id": "texture",
       "surface": "site"
     },
     {
-      "id": "ticker",
+      "id": "marquee",
       "surface": "site"
     },
     {
-      "id": "topic",
+      "id": "feature-item",
       "surface": "site"
     },
     {
@@ -2083,7 +2083,7 @@
       "surface": "site"
     },
     {
-      "id": "use-cases",
+      "id": "customer-use-cases",
       "surface": "site"
     }
   ]

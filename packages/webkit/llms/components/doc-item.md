@@ -3,7 +3,7 @@
 > One row of the documentation's related-content list: a leading glyph in a framed 32px tile, the row's name, and the sentence that says what the thing is. When it has an `href` the title becomes an anchor stretched over the whole row — one tab stop, the full row as the hit area — closed by a trailing chevron, or a diagonal arrow when the destination leaves the documentation. The shell keeps `role="listitem"`, so a set of rows inside an `ItemList` is a real list to assistive technology.
 
 - Import: `import DocItem from '@aziontech/webkit/doc-item'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-item.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-item.json)
 
 ## When to use
@@ -15,7 +15,7 @@
 
 - Keep the title to a noun phrase and let the sentence carry the verb; inline code in the sentence renders as the chip.
 - Give every row of one list the same shape — all with glyphs or none, all linked or none — so the column reads as one object.
-- Compose rows inside a `FrameBox` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role="list"` parent is what makes each row's `role="listitem"` valid.
+- Compose rows inside a `RegistrationFrame` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role="list"` parent is what makes each row's `role="listitem"` valid.
 
 ## Don’t
 
@@ -28,7 +28,7 @@
 
 - DocCard` — the cell counterpart. A card claims a whole tile; this claims one line.
 - Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the webkit anatomy this row composes.
-- FrameBox` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition.
+- RegistrationFrame` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition.
 
 ## Props
 
@@ -80,12 +80,12 @@
 ```vue
 <script setup>
   import DocItem from '@aziontech/webkit/doc-item'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import ItemList from '@aziontech/webkit/item-list'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
 </script>
 
 <template>
-  <FrameBox class="w-full bg-(--bg-surface)">
+  <RegistrationFrame class="w-full bg-(--bg-surface)">
     <ItemList>
       <DocItem
         title="Edge Functions"
@@ -111,7 +111,7 @@
         Decide what is cached, for how long, and by which key.
       </DocItem>
     </ItemList>
-  </FrameBox>
+  </RegistrationFrame>
 </template>
 ```
 
@@ -120,12 +120,12 @@
 ```vue
 <script setup>
   import DocItem from '@aziontech/webkit/doc-item'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import ItemList from '@aziontech/webkit/item-list'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
 </script>
 
 <template>
-  <FrameBox class="w-full bg-(--bg-surface)">
+  <RegistrationFrame class="w-full bg-(--bg-surface)">
     <ItemList>
       <DocItem
         title="Community templates"
@@ -145,6 +145,6 @@
         The glyph is optional too: a named connection from a function to the resource it reads.
       </DocItem>
     </ItemList>
-  </FrameBox>
+  </RegistrationFrame>
 </template>
 ```

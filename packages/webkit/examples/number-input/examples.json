@@ -1,6 +1,6 @@
 {
   "component": "number-input",
-  "title": "Components/Primitives/Inputs/NumberInput",
+  "title": "Components/Input/NumberInput",
   "examples": [
     {
       "name": "Default",

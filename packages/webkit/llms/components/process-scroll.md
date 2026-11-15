@@ -3,7 +3,7 @@
 > The stages of a process as a row of numbered dark cards on a pixel texture, under a section title. On narrow screens the row scrolls sideways with snap; from the large breakpoint up the cards share the width, or, with `pinned`, keep a 26rem card width while the band pins under the site header and the page scroll slides the row sideways until its last card is in view (azion.com's careers hiring process). The retired `'sticky-carousel'` `_id` resolves here with `pinned: true` and `titleVariant: 'center'`. From the design sample's site `ProcessScroll`.
 
 - Import: `import ProcessScroll from '@aziontech/webkit/process-scroll'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [process-scroll.json](https://github.com/aziontech/webkit/blob/main/.specs/process-scroll.json)
 
 ## When to use
@@ -24,14 +24,14 @@
 
 ## Related
 
-- TextureMaterial`, `FrameBox`, `SectionTitle`.
+- Texture`, `RegistrationFrame`, `SectionTitle`.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a hash link can target it. |
-| `eyebrow` | `string` | `''` | false | Overline above the title. |
+| `eyebrow` | `string` | `''` | false | Eyebrow above the title. |
 | `titleVariant` | `SectionTitleVariant` | `'split'` | false | Alignment of the section title over the card row. |
 | `title` | `string` | `''` | false | Headline of the band, rendered as its `h2`; the band renders nothing when empty. |
 | `description` | `string` | `''` | false | Paragraph beside the headline. |
@@ -39,7 +39,7 @@
 | `steps` | `ProcessScrollStep[]` | `[]` | false | The stages, in order; each is `{ title, description }` and gets its own numbered card. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the scrollable card row; defaults to the title. |
 | `pinned` | `boolean` | `false` | false | From the large breakpoint, pins the band under the site header while the page scrolls and slides the card row sideways until its last card is in view; below it, or under reduced motion, the row scrolls sideways on its own. |
-| `headerOffset` | `string` | `'var(--layout-header-height)'` | false | Height of the sticky site header a pinned band sticks under; defaults to the SiteNav bar's token, any CSS length. |
+| `headerOffset` | `string` | `'var(--layout-header-height)'` | false | Height of the sticky site header a pinned band sticks under; defaults to the SiteHeader bar's token, any CSS length. |
 
 ## States
 

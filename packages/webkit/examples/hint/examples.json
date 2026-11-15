@@ -1,6 +1,6 @@
 {
   "component": "hint",
-  "title": "Components/Primitives/Inputs/Hint",
+  "title": "Components/Input/Hint",
   "examples": [
     {
       "name": "Default",

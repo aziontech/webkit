@@ -1,11 +1,11 @@
 ---
 name: copy-prompt-button
-category: actions
+category: action
 structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: eb1b2fc0696be5a1ea080cfe787ad96f7865ac98ba2c63e882bd1062041dc169
+checksum: caa88b2dac00f1b7de689b83c5718d985f3b2d08eba05ed83a7a01999ae4b08e
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip carries the design system's AI treatment, the same three layers as `ButtonHighlight`: a blurred gradient glow rotating behind it, the brand-accent gradient over the glow, and a dark scrim over both that holds the white label at contrast; on hover the gradient and the scrim fade to a quarter and the glow blooms through. It is dark in both themes (it renders under `data-theme="dark"`), so it reads as the AI entry point next to a primary button, and a tooltip says what it does. The marks are single-colour and decorative, drawn in the chip's own ink; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor"). With `closable` a dismiss button sits beside the chip, and dismissing removes both from the layout.
+The "Copy prompt" button of a docs or product home: one dark chip that copies a ready-made prompt for a coding agent and, after its label, shows the marks of the agents it works with (Claude, ChatGPT, Gemini and Cursor by default). The chip carries the design system's AI treatment, the same three layers as `HighlightButton`: a blurred gradient glow rotating behind it, the brand-accent gradient over the glow, and a dark scrim over both that holds the white label at contrast; on hover the gradient and the scrim fade to a quarter and the glow blooms through. It is dark in both themes (it renders under `data-theme="dark"`), so it reads as the AI entry point next to a primary button, and a tooltip says what it does. The marks are single-colour and decorative, drawn in the chip's own ink; their names reach screen readers as the button's description ("Works with Claude, ChatGPT, Gemini, Cursor"). With `closable` a dismiss button sits beside the chip, and dismissing removes both from the layout.
 
 ## When to use
 
@@ -34,7 +34,7 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 - `DocAgentCard` — the docs-home card that places this button in its left column.
 - `DocHero` — the docs-home masthead whose `actions` slot holds `Get started` and this button.
 - `CopyButton` — the icon-only copy control; this button shares its clipboard fallback.
-- `ButtonHighlight` — the AI-flow button whose glow, gradient and scrim this chip shares.
+- `HighlightButton` — the AI-flow button whose glow, gradient and scrim this chip shares.
 - `Logo` — draws an agent mark from its asset file in the chip's ink.
 
 ## Best practices
@@ -106,15 +106,15 @@ _none_
 
 | Trigger              | Animation / Transition                                                                                                                                                        | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                             |
 | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | --------------------------------------------------- |
-| idle (always)        | the glow layer rotates once every 8 s: `animate-spin [animation-duration:8s] [animation-timing-function:linear]`                                                              | semantic `spin`, as `ButtonHighlight`             | `motion-reduce:animate-none` (the glow holds still) |
-| hover state change   | the gradient and scrim layers' `transition-opacity duration-300 ease-out`, and the chip's `transition-colors duration-fast-02 ease-productive-entrance`, as `ButtonHighlight` | semantic (fast-02 · productive entrance)          | `motion-reduce:transition-none` on every layer      |
+| idle (always)        | the glow layer rotates once every 8 s: `animate-spin [animation-duration:8s] [animation-timing-function:linear]`                                                              | semantic `spin`, as `HighlightButton`             | `motion-reduce:animate-none` (the glow holds still) |
+| hover state change   | the gradient and scrim layers' `transition-opacity duration-300 ease-out`, and the chip's `transition-colors duration-fast-02 ease-productive-entrance`, as `HighlightButton` | semantic (fast-02 · productive entrance)          | `motion-reduce:transition-none` on every layer      |
 | tooltip open / close | owned by `Tooltip` (its popup scale-in and scale-out)                                                                                                                         | semantic                                          | `motion-reduce:animate-none` (in `Tooltip`)         |
 
 ## Tokens
 
 | Region   | Token (DESIGN.md)                                                                                                                                                                                             |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| glow     | gradient of `var(--color-base-white)`, `var(--color-blue-500)` and `var(--color-brand-primary-500)`, blurred, as `ButtonHighlight`                                                                            |
+| glow     | gradient of `var(--color-base-white)`, `var(--color-blue-500)` and `var(--color-brand-primary-500)`, blurred, as `HighlightButton`                                                                            |
 | gradient | `var(--color-brand-accent-900)`, `var(--color-brand-accent-100)`, `var(--color-brand-accent-600)` on a 120° axis                                                                                              |
 | scrim    | `var(--bg-backdrop)`                                                                                                                                                                                          |
 | rim      | `var(--secondary-mask)` border, `var(--border-width-default)`                                                                                                                                                 |

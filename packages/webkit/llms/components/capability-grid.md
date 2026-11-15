@@ -1,9 +1,9 @@
 # Capability Grid
 
-> A framed grid of claims or links under an optional section title: each cell is a `Topic` (optional glyph, heading, sentence) with optional bullet points, three or four to a row, and an item with an `href` turns its whole cell into a link to that page. It is the one marketing grid of claims or links: it replaces `'use-case-links'`, `'resource-grid'` and `'content-columns'`. From the design sample's site `CapabilityGrid`. Use CapabilityGrid for any grid of claims or links on a marketing page; icons and per-item links are optional.
+> A framed grid of claims or links under an optional section title: each cell is a `FeatureItem` (optional glyph, heading, sentence) with optional bullet points, three or four to a row, and an item with an `href` turns its whole cell into a link to that page. It is the one marketing grid of claims or links: it replaces `'use-case-links'`, `'resource-grid'` and `'content-columns'`. From the design sample's site `CapabilityGrid`. Use CapabilityGrid for any grid of claims or links on a marketing page; icons and per-item links are optional.
 
 - Import: `import CapabilityGrid from '@aziontech/webkit/capability-grid'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [capability-grid.json](https://github.com/aziontech/webkit/blob/main/.specs/capability-grid.json)
 
 ## When to use
@@ -22,20 +22,20 @@
 ## Don’t
 
 - For capabilities with art — use `FeatureTiles` or `BentoGrid`.
-- For use cases whose band title sits in the first grid cell with one action — use `UseCases`.
+- For use cases whose band title sits in the first grid cell with one action — use `CustomerUseCases`.
 - For cells that each carry their own action or copy button — use `FeatureWidgets`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- Topic`, `CardGrid`, `FrameBox`, `SectionTitle` — the parts.
+- FeatureItem`, `CardGrid`, `RegistrationFrame`, `SectionTitle` — the parts.
 - FeatureTiles` — tiles with illustrations.
 
 ## Props
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `eyebrow` | `string` | `''` | false | Overline above the title. |
+| `eyebrow` | `string` | `''` | false | Eyebrow above the title. |
 | `title` | `string` | `''` | false | Headline over the grid, rendered as the band `h2`; without it the grid is bare and each capability heading is an `h2`. |
 | `description` | `string` | `''` | false | One or two sentences under the title. |
 | `items` | `CapabilityGridItem[]` | `[]` | false | The capabilities, in order; each is `{ title, description, icon?, points?, href? }`; an item with `href` links its whole cell to that page. The band renders nothing when empty. |
@@ -56,8 +56,8 @@
 
 - A `section` named by its title; headings nest under it.
 - Points are a real list.
-- Glyphs are decorative (from `Topic`).
-- A linked cell is one link named by its heading (from `Topic`), with a visible focus ring.
+- Glyphs are decorative (from `FeatureItem`).
+- A linked cell is one link named by its heading (from `FeatureItem`), with a visible focus ring.
 
 ## Right-to-left
 

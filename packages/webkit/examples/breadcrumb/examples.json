@@ -1,6 +1,6 @@
 {
   "component": "breadcrumb",
-  "title": "Components/Primitives/Navigation/Breadcrumb",
+  "title": "Components/Navigation/Breadcrumb",
   "examples": [
     {
       "name": "Default",

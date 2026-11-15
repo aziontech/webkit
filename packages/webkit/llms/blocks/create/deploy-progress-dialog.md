@@ -1,11 +1,11 @@
 # DeployProgressDialog (`create/deploy-progress-dialog`)
 
-> The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeMark` once it settles. When the run settles the header gains a large `OutcomeMark` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeMark`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.
+> The modal progress of one deploy that sends several Deployment Settings live, each on its own, and the drop-to-deploy confirm that starts it. The `Dialog` is titled Deploying 2 of 5… while it runs, can be hidden at any time (Hide while running, Close once settled; the toast keeps reporting and Show progress reopens it); under the title the tally says how many succeeded and failed and that the ones that succeeded stay live. A `Progress` bar and Deploying <name> track the run, a `ToggleGroup` filters All, Deploying, Failed and Done with their counts, and each row names the settings and the environments and projects it reaches, with a `Spinner` and a status `Tag` while it deploys and an `OutcomeIcon` once it settles. When the run settles the header gains a large `OutcomeIcon` and the outcome reports through one toast with Edit and Redeploy, as every async action does; a failed row says why and the footer offers Retry failed. The toast stays the standard for deploys: this dialog is only for the drop-to-deploy and multi-settings path. Built from `Dialog`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Progress`, `ToggleGroup`, `Spinner`, `Tag`, `OutcomeIcon`, `Button`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body. The page behind it is a page body for ConsoleLayout.
 
 - Surface: app
 - Source: `blocks/create/deploy-progress-dialog/deploy-progress-dialog.vue` in `@aziontech/webkit`
 - MCP: `get_block("create/deploy-progress-dialog")`
-- Components: [Button](../../components/button.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Item](../../components/item.md), [OutcomeMark](../../components/outcome-mark.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Progress](../../components/progress.md), [Spinner](../../components/spinner.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
+- Components: [Button](../../components/button.md), `DialogContent`, `DialogDescription`, [Dialog](../../components/dialog.md), `DialogTitle`, [EmptyState](../../components/empty-state.md), [Item](../../components/item.md), [OutcomeIcon](../../components/outcome-icon.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Progress](../../components/progress.md), [Spinner](../../components/spinner.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md), `use-locale`
 - Skills: `webkit-ui-states`, `webkit-errors`, `webkit-microcopy`
 
 ## Asked as
@@ -33,9 +33,9 @@ The modal progress of one deploy that sends several Deployment Settings live, ea
 
 Titled "New production deployment" (the environment in lower case), with the dialog's own close button in the header. The service name with the environment as a secondary `Tag`, one sentence on what the files replace and how many Deployment Settings the environment deploys with, then the dropped folder: its file count and total size, and a scrollable list (focusable, named "Dropped files") of the first 100 paths in code type with their sizes, and an "and N more" line for the rest. Sizes go through `Intl.NumberFormat` with `style: 'unit'`. The footer has Cancel (transparent) and "Deploy to Production" (primary).
 
-### B. Progress frame — `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeMark` (required)
+### B. Progress frame — `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeIcon` (required)
 
-`size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying 2 of 5…" while running, "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeMark` stands before the title: success when all deployed, warning when some failed.
+`size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying 2 of 5…" while running, "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeIcon` stands before the title: success when all deployed, warning when some failed.
 
 ### C. Progress — `PanelBody`, `Progress` (required)
 
@@ -45,9 +45,9 @@ The share of settled settings, named "Deploy progress", with "Deploying <name>" 
 
 Small, named "Filter deploys by status": All, Deploying n (running and queued), Failed n, Done n. An empty filter shows a small `EmptyState` ("Nothing failed.").
 
-### E. Rows — `Item`, `OutcomeMark`, `Spinner`, `Tag`, `EmptyState` (required)
+### E. Rows — `Item`, `OutcomeIcon`, `Spinner`, `Tag`, `EmptyState` (required)
 
-An `Item.List` with one small `Item variant="outline"` per Deployment Setting: its name, the environments and projects it reaches, and, when it failed, the reason in danger text. A queued or running row leads with the settings glyph; a settled row leads with a small `OutcomeMark`. On the end side a `Spinner` while deploying and a status `Tag`: Queued, Deploying, Done, Failed.
+An `Item.List` with one small `Item variant="outline"` per Deployment Setting: its name, the environments and projects it reaches, and, when it failed, the reason in danger text. A queued or running row leads with the settings glyph; a settled row leads with a small `OutcomeIcon`. On the end side a `Spinner` while deploying and a status `Tag`: Queued, Deploying, Done, Failed.
 
 ### F. Footer — `PanelFooter`, `Button` (required)
 
@@ -82,7 +82,7 @@ One toast id for the run: `toast.loading` with "It keeps running if you leave." 
 
 - The dialog traps focus and is named by its title and described by the tally.
 - The `Progress` bar is named; a `role="status"` line announces the outcome once settled.
-- `OutcomeMark` names its outcome; tags give the state in words, glyphs are `aria-hidden`.
+- `OutcomeIcon` names its outcome; tags give the state in words, glyphs are `aria-hidden`.
 - The dropped files list is a focusable scroll region with an `aria-label`; paths are `dir="ltr"`.
 - Motion: the marks honour reduced motion and the `Spinner` stops under it.
 
@@ -98,14 +98,14 @@ One toast id for the run: `toast.loading` with "It keeps running if you leave." 
 - `state/async-submit` — the toast rule this block follows.
 - `create/deploy-drawer` — the standard way to deploy.
 - `create/release-impact` — what a release reaches, before it runs.
-- `OutcomeMark` — the settled mark.
+- `OutcomeIcon` — the settled mark.
 
 ## Variants
 
 - `Running` — primary (the code below)
 - `Drop` — The drop-to-deploy confirm: New production deployment, the service with a Production `Tag`, what the files replace, and the dropped folder with its file count, total size and a scrollable list of up to 100 paths (an 'and N more' line counts the rest) with sizes formatted by `Intl.NumberFormat`. Cancel closes; Deploy to Production opens the progress dialog and starts the run.
-- `PartialError` — Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeMark`, staging-settings marked Failed with the reason, Retry failed beside Close, and an error toast with Edit (reopens the dialog on the failed rows) and Redeploy.
-- `Success` — Every Deployment Setting deployed: a large animated success `OutcomeMark` beside Deployed 5 Deployment Settings, every row Done, Close enabled, and a success toast with Edit and Redeploy.
+- `PartialError` — Settled with one failure: Deployed 4 of 5 Deployment Settings with a warning `OutcomeIcon`, staging-settings marked Failed with the reason, Retry failed beside Close, and an error toast with Edit (reopens the dialog on the failed rows) and Redeploy.
+- `Success` — Every Deployment Setting deployed: a large animated success `OutcomeIcon` beside Deployed 5 Deployment Settings, every row Done, Close enabled, and a success toast with Edit and Redeploy.
 
 Each variant is the same screen in another state: `get_block("create/deploy-progress-dialog", { variant })`, or the file under `blocks/create/deploy-progress-dialog/variants/`.
 
@@ -120,7 +120,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Item from '@aziontech/webkit/item'
-  import OutcomeMark, { type OutcomeMarkSeverity } from '@aziontech/webkit/outcome-mark'
+  import OutcomeIcon, { type OutcomeIconSeverity } from '@aziontech/webkit/outcome-icon'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -184,7 +184,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
     failed: { label: 'Failed', severity: 'danger' }
   }
 
-  const MARK: Partial<Record<DeployStatus, OutcomeMarkSeverity>> = {
+  const MARK: Partial<Record<DeployStatus, OutcomeIconSeverity>> = {
     done: 'success',
     failed: 'danger'
   }
@@ -379,7 +379,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
       <DialogContent>
         <PanelHeader class="w-full">
           <div class="flex min-w-0 items-start gap-(--spacing-sm)">
-            <OutcomeMark
+            <OutcomeIcon
               v-if="!running"
               :severity="outcomeSeverity"
               size="large"
@@ -431,7 +431,7 @@ Each variant is the same screen in another state: `get_block("create/deploy-prog
                 size="small"
               >
                 <Item.Media>
-                  <OutcomeMark
+                  <OutcomeIcon
                     v-if="MARK[item.status]"
                     :severity="MARK[item.status]"
                     size="small"

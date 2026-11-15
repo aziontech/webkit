@@ -14,12 +14,12 @@
   "The model performs extended reasoning before answering, and the trace helps the reader trust or check the response."
  ],
  "avoidWhen": [
-  "Ordinary loading with no reasoning → `ai-loading`.",
+  "Ordinary loading with no reasoning → `response-loading`.",
   "Agent actions with side effects (calls, commands) → `tool-call` and `tool-approval`.",
   "Progressive steps of a long task → a `stepper` or a list of `tool-call`s."
  ],
  "related": [
-  "ai-loading` — loading without a trace.",
+  "response-loading` — loading without a trace.",
   "tool-call` — what the agent did, rather than what it thought.",
   "streaming-response` — renders a Markdown trace inside the slot."
  ],

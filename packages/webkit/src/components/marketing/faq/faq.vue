@@ -5,7 +5,7 @@
   import AccordionContent from '../../content/accordion/accordion-content/accordion-content.vue'
   import AccordionItem from '../../content/accordion/accordion-item/accordion-item.vue'
   import AccordionTrigger from '../../content/accordion/accordion-trigger/accordion-trigger.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({
     name: 'Faq',
@@ -45,13 +45,13 @@
   const attrs = useAttrs()
   const headingId = useId()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-faq')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'faq')
 
   const hasItems = computed(() => props.items.length > 0)
 
   const hasHeading = computed(() => hasItems.value && props.title.length > 0)
 
-  const frame = computed(() => (props.framed ? FrameBox : 'div'))
+  const frame = computed(() => (props.framed ? RegistrationFrame : 'div'))
   const frameProps = computed(() =>
     props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
   )

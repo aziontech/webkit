@@ -114,7 +114,7 @@ Run roughly in this order; polish amplifies a sound structure, it can't rescue a
 
 | Phase      | Goal                                                                                                                                      | Skill                       |
 | ---------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
-| Start      | The whole screen from its block: `search_blocks` → `get_block`, change only the content                                             | `webkit` MCP                |
+| Start      | The whole screen from its block: `search_blocks` → `get_block`, change only the content                                                   | `webkit` MCP                |
 | Mechanics  | Import path, tokens, tree-shaking                                                                                                         | `/webkit-usage`             |
 | Structure  | Right component + Nielsen heuristics; the 3 states must exist                                                                             | `/webkit-ux-heuristics`     |
 | Structure  | Full loading/empty/error/partial state surface + async scope-lock & toasts                                                                | `/webkit-ui-states`         |
@@ -123,20 +123,20 @@ Run roughly in this order; polish amplifies a sound structure, it can't rescue a
 | Structure  | Where a failure goes: the field, a section Alert, a toast, the auth card                                                                  | `/webkit-errors`            |
 | Structure  | Data tables: data-driven `<DataTable :data :columns>`, toolbar, internal scroll, cell recipes — the cross-resource link every screen uses | `/webkit-tables`            |
 | Structure  | The index page around the table: one band, search vs filters, the chip filter bar                                                         | `/webkit-lists`             |
-| Structure  | The two console shells; one GlobalHeader; user always visible; one navigation per level                                                   | `/webkit-navigation`        |
+| Structure  | The two console shells; one AppHeader; user always visible; one navigation per level                                                      | `/webkit-navigation`        |
 | Structure  | Every string: punctuation, sentence case, label vs message, one word per concept                                                          | `/webkit-microcopy`         |
 | Layout     | The page container system: measure, boundary, rhythm, the site frame                                                                      | `/webkit-layout`            |
-| Foundation | Deslop: components-only, tokens-only, typography hierarchy, spacing rhythm                                                                | `/webkit-quick-cleanup`       |
+| Foundation | Deslop: components-only, tokens-only, typography hierarchy, spacing rhythm                                                                | `/webkit-quick-cleanup`     |
 | Quality    | Both themes work with zero per-theme edits                                                                                                | `/webkit-theming-dark-mode` |
 | Quality    | Charts mapped to tokens: form by question, palette, anatomy                                                                               | `/webkit-data-viz`          |
 | Polish     | Smooth motion with tokens only                                                                                                            | `/webkit-motion-polish`     |
-| Polish     | The "feels finished" cross-screen sign-off, incl. an earned delight moment                                                                | `/webkit-final-polish` |
+| Polish     | The "feels finished" cross-screen sign-off, incl. an earned delight moment                                                                | `/webkit-final-polish`      |
 | Verify     | Drive the screen: both themes, widths, console, axe/a11y, states                                                                          | `/webkit-ui-verify`         |
-| Migrate    | Adopt webkit incrementally in an existing app; coverage scorecard                                                                         | `/webkit-adoption`       |
+| Migrate    | Adopt webkit incrementally in an existing app; coverage scorecard                                                                         | `/webkit-adoption`          |
 
 ## When to invoke
 
-- Building or reviewing a product screen/flow that consumes `@aziontech/webkit`.
+- Building or reviewing a product screen/flow-diagram that consumes `@aziontech/webkit`.
 - The user asks for "polish", "make this feel better", "deslop", "is this good UX", "review this UI".
 - You're about to write UI on top of webkit and want the constraints and the right child skill loaded.
 

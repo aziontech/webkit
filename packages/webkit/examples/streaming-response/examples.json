@@ -1,6 +1,6 @@
 {
   "component": "streaming-response",
-  "title": "Components/Primitives/AI/StreamingResponse",
+  "title": "Components/AI/StreamingResponse",
   "examples": [
     {
       "name": "Default",

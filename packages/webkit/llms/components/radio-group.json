@@ -3,7 +3,7 @@
  "binding": "RadioGroup",
  "import": "@aziontech/webkit/radio-group",
  "treeShakeableImport": "@aziontech/webkit/radio-group-root",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,

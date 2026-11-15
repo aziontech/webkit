@@ -2,7 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -221,11 +221,7 @@
               </template>
             </Input>
 
-            <HelperText
-              v-if="projectPicker.message"
-              type="required"
-              >{{ projectPicker.message }}</HelperText
-            >
+            <FieldError v-if="projectPicker.message">{{ projectPicker.message }}</FieldError>
           </div>
 
           <div class="border-t border-(--border-default)">

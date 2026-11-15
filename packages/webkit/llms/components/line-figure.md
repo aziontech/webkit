@@ -30,7 +30,7 @@
 ## Related
 
 - Illustration` — static art from the registry.
-- ProductWidget` — product scenes.
+- ConsoleMockup` — product scenes.
 - EmptyState` — can carry a figure in its art slot.
 
 ## Props

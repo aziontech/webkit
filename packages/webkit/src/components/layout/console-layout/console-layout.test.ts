@@ -82,7 +82,7 @@ describe('ConsoleLayout', () => {
   describe('basics', () => {
     it('renders the chrome around one main landmark holding the page body', () => {
       const { getByTestId, getAllByRole, getByText } = mount()
-      expect(getByTestId('layout-console-layout')).toBeTruthy()
+      expect(getByTestId('console-layout')).toBeTruthy()
       const mains = getAllByRole('main')
       expect(mains).toHaveLength(1)
       expect(within(mains[0]!).getByText('Workloads page')).toBeTruthy()
@@ -92,17 +92,16 @@ describe('ConsoleLayout', () => {
 
     it('puts the middle region between the header start and end so the actions sit at the end', () => {
       const { getByTestId } = mount()
-      const header = getByTestId('layout-console-layout__header')
+      const header = getByTestId('console-layout__header')
       const regions = [
         ...header.querySelectorAll(
-          '[data-testid$="__start"], [data-testid$="__center"], [data-testid$="__end"]'
+          '[data-testid="app-header-start"], [data-testid="app-header-center"], [data-testid="app-header-end"]'
         )
       ]
         .filter(
-          (el) =>
-            el.parentElement?.closest('[data-testid="layout-console-layout__header"]') === header
+          (el) => el.parentElement?.closest('[data-testid="console-layout__header"]') === header
         )
-        .map((el) => el.getAttribute('data-testid')?.split('__').pop())
+        .map((el) => el.getAttribute('data-testid')?.replace('app-header-', ''))
       expect(regions).toEqual(['start', 'center', 'end'])
     })
 
@@ -344,7 +343,7 @@ describe('ConsoleLayout', () => {
         {},
         { 'account-menu': accountMenu }
       )
-      const footer = within(getByTestId('layout-console-layout__account'))
+      const footer = within(getByTestId('console-layout__account'))
       await userEvent.click(footer.getByRole('button', { name: 'Account menu' }))
       const option = await waitFor(() =>
         within(document.body).getByRole('menuitem', { name: 'Account settings' })
@@ -437,8 +436,8 @@ describe('ConsoleLayout', () => {
             h('button', { type: 'button' }, compact ? 'Compact switcher' : 'Rail switcher')
         }
       )
-      const region = getByTestId('layout-console-layout__sidebar-header')
-      const rail = within(getByTestId('layout-console-layout__navigation'))
+      const region = getByTestId('console-layout__sidebar-header')
+      const rail = within(getByTestId('console-layout__navigation'))
 
       expect(rail.getByRole('button', { name: 'Rail switcher' })).toBeTruthy()
       expect(region.contains(rail.getByRole('button', { name: 'Rail switcher' }))).toBe(true)
@@ -451,7 +450,7 @@ describe('ConsoleLayout', () => {
     it('renders no sidebar-header region without the slot', () => {
       const { queryByTestId } = mount()
 
-      expect(queryByTestId('layout-console-layout__sidebar-header')).toBeNull()
+      expect(queryByTestId('console-layout__sidebar-header')).toBeNull()
     })
 
     it('passes compact to the sidebar-header slot in the compact drawer', async () => {
@@ -520,7 +519,7 @@ describe('ConsoleLayout', () => {
     ]
 
     const scrollerOf = (getByTestId: (id: string) => HTMLElement) => {
-      const scroller = getByTestId('layout-console-layout__navigation__scroll')
+      const scroller = getByTestId('console-layout__navigation__scroll')
       scroller.style.height = '120px'
       scroller.style.overflowY = 'auto'
       return scroller
@@ -529,7 +528,7 @@ describe('ConsoleLayout', () => {
     const withShortRail = async (run: () => Promise<void>) => {
       const sheet = document.createElement('style')
       sheet.textContent =
-        '[data-testid="layout-console-layout__navigation__scroll"]{height:120px;overflow-y:auto}'
+        '[data-testid="console-layout__navigation__scroll"]{height:120px;overflow-y:auto}'
       document.head.append(sheet)
       try {
         await run()
@@ -581,7 +580,7 @@ describe('ConsoleLayout', () => {
         const { getByTestId } = render(ConsoleLayout, {
           props: { navigation: longNavigation, activeId: 'row-36' }
         })
-        const scroller = getByTestId('layout-console-layout__navigation__scroll')
+        const scroller = getByTestId('console-layout__navigation__scroll')
         await waitFor(() => expect(scroller.scrollTop).toBeGreaterThan(0))
         expect(inView(scroller, currentRow(scroller))).toBe(true)
       })
@@ -660,8 +659,7 @@ describe('ConsoleLayout', () => {
   })
 
   describe('navigation rail state', () => {
-    const rail = (view: ReturnType<typeof render>) =>
-      view.getByTestId('layout-console-layout__navigation')
+    const rail = (view: ReturnType<typeof render>) => view.getByTestId('console-layout__navigation')
 
     it('renders the rail expanded by default', () => {
       const view = mount()
@@ -720,7 +718,7 @@ describe('ConsoleLayout', () => {
       expect(rail(view).getAttribute('data-state')).toBe('open')
 
       await userEvent.click(
-        within(view.getByTestId('layout-console-layout__header')).getByRole('button', {
+        within(view.getByTestId('console-layout__header')).getByRole('button', {
           name: /search/i
         })
       )
@@ -729,7 +727,7 @@ describe('ConsoleLayout', () => {
       await waitFor(() => expect(rail(view).getAttribute('data-state')).toBe('closed'))
 
       await userEvent.click(
-        within(view.getByTestId('layout-console-layout__header')).getByRole('button', {
+        within(view.getByTestId('console-layout__header')).getByRole('button', {
           name: /search/i
         })
       )
@@ -776,9 +774,7 @@ describe('ConsoleLayout', () => {
       const crumbs = within(trail).getAllByRole('listitem')
       expect(crumbs).toHaveLength(3)
       expect(within(crumbs[2]!).getByRole('button', { name: 'Switch environment' })).toBeTruthy()
-      expect(
-        within(getByTestId('layout-console-layout__main')).queryByText('Production')
-      ).toBeNull()
+      expect(within(getByTestId('console-layout__main')).queryByText('Production')).toBeNull()
     })
 
     it('gives each top-level control its own crumb', async () => {
@@ -942,7 +938,7 @@ describe('ConsoleLayout', () => {
         target._lpa = null
         target.prepend(parsed.content)
       }
-      const serverHeader = host.querySelector('[data-testid="layout-console-layout__header"]')
+      const serverHeader = host.querySelector('[data-testid="console-layout__header"]')
       expect(serverHeader?.textContent).toContain('Applications')
       expect(serverHeader?.textContent).not.toContain('azion-site')
       const messages: string[] = []
@@ -1005,12 +1001,12 @@ describe('ConsoleLayout', () => {
       const { getByTestId } = wide()
 
       expect(
-        within(getByTestId('layout-console-layout__sidebar-header')).getByRole('button', {
+        within(getByTestId('console-layout__sidebar-header')).getByRole('button', {
           name: 'Account: Acme Inc.. Switch account'
         })
       ).toBeTruthy()
       expect(
-        within(getByTestId('layout-console-layout__header')).queryByRole('button', {
+        within(getByTestId('console-layout__header')).queryByRole('button', {
           name: /Switch account/
         })
       ).toBeNull()

@@ -6,14 +6,14 @@ status: implemented
 spec_version: 2
 created: 2026-11-10
 last_updated: 2026-11-15
-checksum: 181c09790db4f3424c7c1af4bf7dfea76129aebb6a7b99bca7dfef4b84b16344
+checksum: 79baa42f1fdcf412261d70133cf1ab80037e9f282eeff8b5d2793414e4c9e14f
 ---
 
 # SparkChart — Component Spec
 
 ## Purpose
 
-A word-sized chart: one series drawn as an area, a line or bars, with no axes, grid, legend or tooltip, filling the width of its container at a fixed height. It shows the shape of a recent history next to a number — in a stat tile, a table row or a ticker card — where a full `chart` would be too much.
+A word-sized chart: one series drawn as an area, a line or bars, with no axes, grid, legend or tooltip, filling the width of its container at a fixed height. It shows the shape of a recent history next to a number — in a stat tile, a table row or a marquee card — where a full `chart` would be too much.
 
 ## When to use
 
@@ -44,7 +44,7 @@ A word-sized chart: one series drawn as an area, a line or bars, with no axes, g
 
 ```vue
 <script setup>
-import SparkChart from '@aziontech/webkit/spark-chart'
+  import SparkChart from '@aziontech/webkit/spark-chart'
 </script>
 
 <template>
@@ -54,14 +54,14 @@ import SparkChart from '@aziontech/webkit/spark-chart'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `values` | `(number \| null)[]` | `[]` | false | The series, oldest first; null leaves a gap. |
-| `type` | `'area' \| 'line' \| 'bar'` | `'area'` | false | Mark drawn for the series. |
-| `color` | `ChartColor` | `1` | false | Hue of the mark: a categorical slot (1–6), `other`, or a status. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Height: 32, 48 or 64 pixels. Width follows the container. |
-| `fromZero` | `boolean` | `false` | false | Starts the value range at zero instead of the lowest value; bars always start at zero. |
-| `ariaLabel` | `string` | `''` | false | Accessible name; when set the chart is an image, when empty it is decorative. |
+| Prop        | Type                             | Default    | Required | JSDoc                                                                                  |
+| ----------- | -------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------- |
+| `values`    | `(number \| null)[]`             | `[]`       | false    | The series, oldest first; null leaves a gap.                                           |
+| `type`      | `'area' \| 'line' \| 'bar'`      | `'area'`   | false    | Mark drawn for the series.                                                             |
+| `color`     | `ChartColor`                     | `1`        | false    | Hue of the mark: a categorical slot (1–6), `other`, or a status.                       |
+| `size`      | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Height: 32, 48 or 64 pixels. Width follows the container.                              |
+| `fromZero`  | `boolean`                        | `false`    | false    | Starts the value range at zero instead of the lowest value; bars always start at zero. |
+| `ariaLabel` | `string`                         | `''`       | false    | Accessible name; when set the chart is an image, when empty it is decorative.          |
 
 ## Events
 
@@ -80,23 +80,23 @@ _No slots._
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| line / area entrance | `transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance`, `pathLength="1"` on `data-entered` | `slow-02` · `productive-entrance` | `motion-reduce:transition-none` |
-| area fill entrance | `transition-opacity duration-slow-01 ease-productive-entrance` on `data-entered` | `slow-01` · `productive-entrance` | `motion-reduce:transition-none` |
-| bar entrance | `transition-[scale] duration-slow-01 ease-productive-entrance` from the baseline on `data-entered` | `slow-01` · `productive-entrance` | `motion-reduce:transition-none` |
+| Trigger              | Animation / Transition                                                                                         | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback         |
+| -------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ------------------------------- |
+| line / area entrance | `transition-[stroke-dashoffset] duration-slow-02 ease-productive-entrance`, `pathLength="1"` on `data-entered` | `slow-02` · `productive-entrance`                 | `motion-reduce:transition-none` |
+| area fill entrance   | `transition-opacity duration-slow-01 ease-productive-entrance` on `data-entered`                               | `slow-01` · `productive-entrance`                 | `motion-reduce:transition-none` |
+| bar entrance         | `transition-[scale] duration-slow-01 ease-productive-entrance` from the baseline on `data-entered`             | `slow-01` · `productive-entrance`                 | `motion-reduce:transition-none` |
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| mark | the `color` role (`var(--chart-series-1)` … `var(--chart-series-6)`, `var(--chart-series-other)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-danger)`, `var(--chart-status-info)`) |
+| Region | Token (DESIGN.md)                                                                                                                                                                                                         |
+| ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| mark   | the `color` role (`var(--chart-series-1)` … `var(--chart-series-6)`, `var(--chart-series-other)`, `var(--chart-status-success)`, `var(--chart-status-warning)`, `var(--chart-status-danger)`, `var(--chart-status-info)`) |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
@@ -109,7 +109,7 @@ _No slots._
 - Default — an area spark.
 - Types — composite: `area`, `line`, `bar` side by side.
 - Sizes — composite: `small`, `medium`, `large`.
-- Cards — a list of ticker rows (name, SparkChart, value, delta); justified because a spark is only legible beside its number, and this is the reference composition.
+- Cards — a list of marquee rows (name, SparkChart, value, delta); justified because a spark is only legible beside its number, and this is the reference composition.
 
 ## Constraints — DO NOT
 

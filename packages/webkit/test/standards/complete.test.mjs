@@ -71,7 +71,7 @@ function fixtureRepo() {
     exports: {
       './button': {
         types: './types/b.d.ts',
-        default: './src/components/actions/button/button.vue'
+        default: './src/components/action/button/button.vue'
       },
       './tabs': './src/components/navigation/tabs/index.ts',
       './tabs-item': './src/components/navigation/tabs/tabs-item/tabs-item.vue',
@@ -82,7 +82,7 @@ function fixtureRepo() {
     }
   })
   write(root, `${pkg}/.size-limit.json`, [
-    { name: 'button', path: 'src/components/actions/button/button.vue', limit: '2 KB' },
+    { name: 'button', path: 'src/components/action/button/button.vue', limit: '2 KB' },
     { name: 'acc', path: 'src/components/content/accordion/accordion.vue', limit: '3 KB' },
     { name: 'panel-root', path: 'src/components/overlay/panel/panel.vue', limit: '3 KB' }
   ])

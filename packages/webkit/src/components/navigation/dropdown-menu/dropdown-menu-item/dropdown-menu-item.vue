@@ -51,7 +51,7 @@
   const inGroup = inject(DropdownMenuGroupInjectionKey, false)
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__option`
+    () => (attrs['data-testid'] as string | undefined) ?? 'dropdown-menu-item'
   )
 
   const hasCommand = computed(() => props.command.length > 0)

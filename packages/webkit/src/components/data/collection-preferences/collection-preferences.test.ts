@@ -27,14 +27,12 @@ describe('CollectionPreferences', () => {
     const view = render(CollectionPreferences, { props: { columns, defaultOpen: true } })
     await settle()
     expect(dialog()).toBeTruthy()
-    expect(view.getByTestId('data-collection-preferences').getAttribute('data-state')).toBe('open')
+    expect(view.getByTestId('collection-preferences').getAttribute('data-state')).toBe('open')
     view.unmount()
 
     const closed = render(CollectionPreferences, { props: { columns } })
     await settle()
-    expect(closed.getByTestId('data-collection-preferences').getAttribute('data-state')).toBe(
-      'closed'
-    )
+    expect(closed.getByTestId('collection-preferences').getAttribute('data-state')).toBe('closed')
     await fireEvent.click(closed.getByRole('button', { name: 'Preferences' }))
     expect(closed.emitted()['update:open']).toEqual([[true]])
   })
@@ -194,7 +192,7 @@ describe('CollectionPreferences', () => {
     const panel = within(dialog())
     await userEvent.click(panel.getByRole('button', { name: 'Move Region up' }))
     await settle()
-    const rows = panel.getAllByTestId('data-collection-preferences__column')
+    const rows = panel.getAllByTestId('collection-preferences__column')
     expect(rows.map((row) => row.textContent?.includes('Region'))).toEqual([false, true, false])
     expect(rows[1]?.contains(document.activeElement)).toBe(true)
     await fireEvent.click(panel.getByRole('button', { name: 'Confirm' }))
@@ -212,7 +210,7 @@ describe('CollectionPreferences', () => {
     })
     expect(view.getByTestId('domains-preferences')).toBeTruthy()
     expect(view.getByTestId('domains-preferences__trigger')).toBeTruthy()
-    expect(view.queryByTestId('data-collection-preferences')).toBeNull()
+    expect(view.queryByTestId('collection-preferences')).toBeNull()
   })
 
   it('marks a locked column label with data-locked', async () => {
@@ -264,18 +262,14 @@ describe('CollectionPreferences', () => {
         [...view.container.querySelectorAll('[role="columnheader"]')].map((c) =>
           c.textContent?.trim()
         )
-      await fireEvent.click(view.getByTestId('data-collection-preferences__trigger'))
-      const columns = await within(document.body).findByTestId(
-        'data-collection-preferences__columns'
-      )
-      const rows = within(columns).getAllByTestId('data-collection-preferences__column')
+      await fireEvent.click(view.getByTestId('collection-preferences__trigger'))
+      const columns = await within(document.body).findByTestId('collection-preferences__columns')
+      const rows = within(columns).getAllByTestId('collection-preferences__column')
       expect(rows.map((row) => row.textContent?.includes('Name'))).toContain(true)
       expect(columns.querySelector('[data-locked]')?.textContent).toContain('Name')
       const region = rows.find((row) => row.textContent?.includes('Region')) as HTMLElement
       await userEvent.click(within(region).getByRole('switch'))
-      await userEvent.click(
-        within(document.body).getByTestId('data-collection-preferences__confirm')
-      )
+      await userEvent.click(within(document.body).getByTestId('collection-preferences__confirm'))
       await vi.waitFor(() => expect(headers()).toEqual(['Name', 'Status']))
     })
   })

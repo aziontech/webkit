@@ -1,6 +1,6 @@
 {
   "component": "data-grid",
-  "title": "Components/Primitives/Data/DataGrid",
+  "title": "Components/Data/DataGrid",
   "examples": [
     {
       "name": "Default",

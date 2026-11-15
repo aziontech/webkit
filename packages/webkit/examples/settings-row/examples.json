@@ -1,0 +1,36 @@
+{
+  "component": "settings-row",
+  "title": "Components/Layout/SettingsRow",
+  "examples": [
+    {
+      "name": "SettingsCard",
+      "summary": "Field rows inside a flush Card: typed fields sit in a right cell capped at the 3xs container (`field`), and a textarea drops under the copy at the full measure (`stacked`).",
+      "file": "default.vue"
+    },
+    {
+      "name": "CompactRows",
+      "summary": "Login settings: two switches and a Manage button, each at its natural width against the right edge (`compact`).",
+      "file": "compact-rows.vue"
+    },
+    {
+      "name": "WithMessage",
+      "summary": "A Name row after Save was pressed with it empty: the input carries its required state and the FieldError message sits under it in the control column.",
+      "file": "with-message.vue"
+    },
+    {
+      "name": "Nested",
+      "summary": "Protocol rows that depend on a switch above them: HTTPS rows indent one level (`depth` 1) and HTTP/3 ports a second level (`depth` 2), each behind a rule.",
+      "file": "nested.vue"
+    },
+    {
+      "name": "WithHint",
+      "summary": "Cache rows whose description stays one sentence while `hint` carries the longer explanation in a Hint glyph beside the title, reachable on hover or focus.",
+      "file": "with-hint.vue"
+    },
+    {
+      "name": "Stackable",
+      "summary": "A drawer-width card: the Name row keeps its two columns with the description clamped, while the Address row sets `stackable` so its long URL field drops under the copy at full width.",
+      "file": "stackable.vue"
+    }
+  ]
+}

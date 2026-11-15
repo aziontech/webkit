@@ -5,7 +5,7 @@ handle. webkit components own the rendering of their states; your screen supplie
 **trigger** (a boolean prop, or the async data your app owns). The same applies to components
 you author in this project: decide which states each one handles and render them through
 `data-*` attributes and webkit's own state components (`Skeleton`, `EmptyState`,
-`HelperText`) — never an ad-hoc spinner or "no results" string improvised per screen.
+`FieldDescription`) — never an ad-hoc spinner or "no results" string improvised per screen.
 This pattern is convention + code review in this project; the tokens used inside state
 styling are still checked mechanically by the stylelint config and the
 `webkit/no-hardcoded-color` ESLint rule.
@@ -16,7 +16,7 @@ The canonical states and how each renders:
 | ----------------- | ------------------------- | --------------------------------------------------------------------- |
 | `disabled`        | `disabled` prop           | `data-disabled` + disabled tokens; not focusable                      |
 | `loading`         | `loading` prop            | `data-loading` + `Skeleton` / spinner affordance; interaction blocked |
-| `invalid`         | validation (form field)   | `data-invalid` + error tokens + a `HelperText` message                |
+| `invalid`         | validation (form field)   | `data-invalid` + error tokens + a `FieldError` message                |
 | `readonly`        | `readonly` prop           | `data-readonly`; value visible, not editable                          |
 | `empty`           | no data (data-driven)     | the `EmptyState` component, not a hand-written "no results" string    |
 | `error`           | load/action failure       | an error slot / message, never a bare thrown error                    |
@@ -30,7 +30,7 @@ Not every component has every state — a button has `disabled` + `loading`; a d
 - Switch state styling with a `data-*` attribute on the element, styled by a Tailwind
   `data-[...]:` variant inline in its `class` — the state decision lives in the markup.
 - Reuse the shipped state components: `Skeleton` for loading placeholders, `EmptyState` for
-  no-data, `HelperText` for validation messages.
+  no-data, `FieldError` for validation messages.
 - Keep the trigger in the app: fetch data in your page/store/composable and pass `loading`,
   `items`, or `error` down as props. Components render states; they do not fetch.
 - When authoring a local component, list its state surface up front and render every state —

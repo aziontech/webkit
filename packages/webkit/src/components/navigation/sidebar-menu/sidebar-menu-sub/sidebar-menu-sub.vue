@@ -32,9 +32,7 @@
   const attrs = useAttrs()
   const uid = useId()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu-sub'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sidebar-menu-sub')
 
   const id = (attrs['data-node-id'] as string | undefined) || uid
   const level = (parentSub?.level ?? -1) + 1

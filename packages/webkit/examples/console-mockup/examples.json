@@ -1,0 +1,26 @@
+{
+  "component": "console-mockup",
+  "title": "Components/Content/ConsoleMockup",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A framed widget, the workloads list, filling a panel the host sizes.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Variants",
+      "summary": "A workload screen plated as a console window and bare, and a fragment framed in a console window titled with its module beside the same fragment bare on the host surface.",
+      "file": "variants.vue"
+    },
+    {
+      "name": "Still fragment",
+      "summary": "The same fragment with its collaborator cursor, as a feature grid shows it, and with `:cursor=\"false\"`, as a product band that reads like a screenshot wants it. Each fragment keeps its own plating unless `variant` asks for the other one; `width` and `fade` re-plate only the workload screens, and setting them on a fragment warns in development.",
+      "file": "still-fragment.vue"
+    },
+    {
+      "name": "Library",
+      "summary": "Every registered widget in the cell that hosts it on the site: full screens in wide panels, fragments in grid cells that play their beat on hover, framed in a console window or bare as each one is plated by default. These are the only values `name` accepts.",
+      "file": "library.vue"
+    }
+  ]
+}

@@ -5,14 +5,14 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import { useChatMessageContext } from './composables/use-chat-message-context'
 import ChatMessage, { ChatMessageActions, ChatMessageFeedback } from './index'
 
 describe('ChatMessage', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
     expect(
-      render(ChatMessage, { slots: { default: () => 'Hi' } }).getByTestId('ai-chat-message')
+      render(ChatMessage, { slots: { default: () => 'Hi' } }).getByTestId('chat-message')
     ).toBeTruthy()
     expect(
       render(ChatMessage, {
@@ -37,7 +37,7 @@ describe('ChatMessage', () => {
       slots: { default: () => 'Text' }
     })
     expect(getByRole('article', { name: `${author} at 10:42` })).toBeTruthy()
-    expect(getByTestId('ai-chat-message')).toHaveAttribute('data-from', from)
+    expect(getByTestId('chat-message')).toHaveAttribute('data-from', from)
   })
 
   it('uses the author prop and hides the avatar from assistive tech', () => {
@@ -46,8 +46,8 @@ describe('ChatMessage', () => {
       slots: { default: () => 'Hi' }
     })
     expect(getByRole('article', { name: 'Ana Lima' })).toBeTruthy()
-    expect(getByTestId('ai-chat-message__avatar')).toHaveAttribute('aria-hidden', 'true')
-    expect(getByTestId('ai-chat-message__author')).toHaveTextContent('Ana Lima')
+    expect(getByTestId('chat-message__avatar')).toHaveAttribute('aria-hidden', 'true')
+    expect(getByTestId('chat-message__author')).toHaveTextContent('Ana Lima')
   })
 
   it('drops avatar and author line when grouped', () => {
@@ -55,8 +55,8 @@ describe('ChatMessage', () => {
       props: { grouped: true },
       slots: { default: () => 'More' }
     })
-    expect(queryByTestId('ai-chat-message__author')).toBeNull()
-    expect(queryByTestId('ai-chat-message__avatar')?.children).toHaveLength(0)
+    expect(queryByTestId('chat-message__author')).toBeNull()
+    expect(queryByTestId('chat-message__avatar')?.children).toHaveLength(0)
   })
 
   it('renders loading text while pending and is busy while pending or streaming', async () => {
@@ -65,17 +65,17 @@ describe('ChatMessage', () => {
       slots: { default: () => 'Answer', actions: () => h('button', 'Copy') }
     })
     expect(getByRole('article')).toHaveAttribute('aria-busy', 'true')
-    expect(getByTestId('ai-chat-message__loading')).toHaveTextContent('Generating a response')
-    expect(queryByTestId('ai-chat-message__content')).toBeNull()
-    expect(queryByTestId('ai-chat-message__actions')).toBeNull()
+    expect(getByTestId('chat-message__loading')).toHaveTextContent('Generating a response')
+    expect(queryByTestId('chat-message__content')).toBeNull()
+    expect(queryByTestId('chat-message__actions')).toBeNull()
     await rerender({ status: 'streaming' })
     expect(getByRole('article')).toHaveAttribute('aria-busy', 'true')
-    expect(getByTestId('ai-chat-message__content')).toHaveTextContent('Answer')
-    expect(queryByTestId('ai-chat-message__actions')).toBeNull()
+    expect(getByTestId('chat-message__content')).toHaveTextContent('Answer')
+    expect(queryByTestId('chat-message__actions')).toBeNull()
     await rerender({ status: 'success' })
     expect(getByRole('article')).not.toHaveAttribute('aria-busy')
     expect(getByRole('article')).toHaveAttribute('data-status', 'success')
-    expect(getByTestId('ai-chat-message__actions')).toHaveTextContent('Copy')
+    expect(getByTestId('chat-message__actions')).toHaveTextContent('Copy')
   })
 
   it('shows the error line and emits retry', async () => {
@@ -83,8 +83,8 @@ describe('ChatMessage', () => {
       props: { status: 'error', errorMessage: 'Connection lost.' },
       slots: { default: () => 'Partial' }
     })
-    expect(getByTestId('ai-chat-message__content')).toHaveTextContent('Partial')
-    expect(getByTestId('ai-chat-message__error')).toHaveTextContent('Connection lost.')
+    expect(getByTestId('chat-message__content')).toHaveTextContent('Partial')
+    expect(getByTestId('chat-message__error')).toHaveTextContent('Connection lost.')
     await userEvent.click(getByRole('button', { name: 'Try again' }))
     expect(emitted('retry')).toHaveLength(1)
     expect(emitted('retry')![0]![0]).toBeInstanceOf(MouseEvent)
@@ -148,12 +148,12 @@ describe('ChatMessage', () => {
     expect(up).toHaveAttribute('aria-pressed', 'false')
     await userEvent.click(down)
     expect(value.value).toBe('down')
-    expect(getByTestId('ai-chat-message-feedback__status')).toHaveTextContent('Submitting feedback')
+    expect(getByTestId('chat-message-feedback__status')).toHaveTextContent('Submitting feedback')
     loading.value = false
     await nextTick()
     expect(getByRole('button', { name: 'Not helpful' })).toHaveAttribute('aria-pressed', 'true')
     expect(getByRole('button', { name: 'Helpful' })).toBeDisabled()
-    expect(getByTestId('ai-chat-message-feedback__status')).toHaveTextContent('Feedback submitted')
+    expect(getByTestId('chat-message-feedback__status')).toHaveTextContent('Feedback submitted')
   })
 
   it('reads author names from the provider locale', () => {
@@ -198,16 +198,16 @@ describe('ChatMessage', () => {
         setup: () => ({ shown }),
         template: `<ChatMessage status="success">Answer.<template v-if="shown" #actions><span data-testid="probe">Slotted</span></template></ChatMessage>`
       })
-      expect(queryByTestId('ai-chat-message__actions')).toBeNull()
+      expect(queryByTestId('chat-message__actions')).toBeNull()
 
       shown.value = true
       await nextTick()
-      expect(queryByTestId('ai-chat-message__actions')).not.toBeNull()
+      expect(queryByTestId('chat-message__actions')).not.toBeNull()
       expect(queryByTestId('probe')).not.toBeNull()
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('ai-chat-message__actions')).toBeNull()
+      expect(queryByTestId('chat-message__actions')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
     })
   })

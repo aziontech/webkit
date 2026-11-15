@@ -54,8 +54,7 @@ const host = (props: Record<string, unknown> = {}) =>
     `
   })
 
-const area = (view: ReturnType<typeof render>, testId = 'layout-scroll-area') =>
-  view.getByTestId(testId)
+const area = (view: ReturnType<typeof render>, testId = 'scroll-area') => view.getByTestId(testId)
 
 describe('ScrollArea', () => {
   describe('layout viewport and keyboard scrolling', () => {

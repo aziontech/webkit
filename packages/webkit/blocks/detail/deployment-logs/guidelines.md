@@ -11,7 +11,7 @@ The user started a deployment and wants to know where it is, whether it went liv
 
 ## When not to use
 
-- A run of half a minute or more the user is expected to leave and come back to: use `state/async-submit`, which reports the outcome where the user returns (its logs card composes the same `LogView.Steps`).
+- A run of half a minute or more the user is expected to leave and come back to: use `state/async-submit`, which reports the outcome where the user returns (its logs card composes the same `LogViewer.Steps`).
 - The outcome once a create flow's run has finished: hand the column to `create/deploy-success`; do not keep the finished card as the last screen.
 - A dropped folder being uploaded before anything is built: use the Initializing overlay in `state/project-intake`.
 - The overview of the resource the deployment belongs to: use `detail/resource-detail`.
@@ -20,13 +20,13 @@ The user started a deployment and wants to know where it is, whether it went liv
 
 ## Building blocks
 
-### A. Steps — `LogView.Steps` (required)
+### A. Steps — `LogViewer.Steps` (required)
 
-`LogView.Steps` (`@aziontech/webkit/log-view`, or `@aziontech/webkit/log-view-steps` on its own) takes the steps in run order, each with its key, title, one sentence of outcome, status (`done`, `running`, `failed`, `skipped`, `pending`), time and its own log lines. It draws a single collapsible `Accordion` with the status glyph, a visually hidden status word, the title, the sentence and the time per step, and a borderless `LogView` per open step. Only one step is open at a time: unbound, the running step opens, else the failed one; bind `v-model:open-step` to open the last step after a success. A failed step's sentence wraps in full in danger color; pending and skipped titles go muted; the running step's sentence shimmers only when motion is allowed. Put a step's outcome `Tag` (Failed, Skipped) in the `step-meta` slot and the skipped step's sentence in `step-empty`. Never rebuild this list by hand from `Accordion` and `LogView`.
+`LogViewer.Steps` (`@aziontech/webkit/log-viewer`, or `@aziontech/webkit/log-viewer-steps` on its own) takes the steps in run order, each with its key, title, one sentence of outcome, status (`done`, `running`, `failed`, `skipped`, `pending`), time and its own log lines. It draws a single collapsible `Accordion` with the status glyph, a visually hidden status word, the title, the sentence and the time per step, and a borderless `LogViewer` per open step. Only one step is open at a time: unbound, the running step opens, else the failed one; bind `v-model:open-step` to open the last step after a success. A failed step's sentence wraps in full in danger color; pending and skipped titles go muted; the running step's sentence shimmers only when motion is allowed. Put a step's outcome `Tag` (Failed, Skipped) in the `step-meta` slot and the skipped step's sentence in `step-empty`. Never rebuild this list by hand from `Accordion` and `LogViewer`.
 
-### B. Toolbar row — `LogView.Steps` header slot (required)
+### B. Toolbar row — `LogViewer.Steps` header slot (required)
 
-The `header` slot starts the toolbar row with a level-2 "Deployment logs" heading (or "Logs" inside a card). While the run goes it holds the step count and the step in flight, computed from the steps, in a `role="status"` region, with `:view-switch="false"`, `:copyable="false"` and `progress` for the flush progress bar on the bottom edge. Once settled it holds the outcome Tag and the total time, and the built-in Phased or Complete switch (`v-model:view`) ends the row; the Complete view shows every line printed as one `LogView`, nothing from steps that never ran.
+The `header` slot starts the toolbar row with a level-2 "Deployment logs" heading (or "Logs" inside a card). While the run goes it holds the step count and the step in flight, computed from the steps, in a `role="status"` region, with `:view-switch="false"`, `:copyable="false"` and `progress` for the flush progress bar on the bottom edge. Once settled it holds the outcome Tag and the total time, and the built-in Phased or Complete switch (`v-model:view`) ends the row; the Complete view shows every line printed as one `LogViewer`, nothing from steps that never ran.
 
 ## Create-flow card (InCreateFlow, InCreateFlowError)
 
@@ -46,7 +46,7 @@ A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger 
 
 ## Don't
 
-- Don't hand-build the step list from `Accordion`, `LogView` and status glyphs; compose `LogView.Steps`.
+- Don't hand-build the step list from `Accordion`, `LogViewer` and status glyphs; compose `LogViewer.Steps`.
 - Don't open several steps at once or auto-expand every step after a success.
 - Don't print lines for steps that never ran in the Complete view.
 - Don't summarize the error in a vague sentence; the failed step shows the reason in full.
@@ -67,9 +67,9 @@ A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger 
 ## Accessibility
 
 - Each step is an accordion trigger, a button that announces expanded or collapsed and is reachable by keyboard in run order; opening a step does not move focus.
-- Status glyphs are `aria-hidden`; `LogView.Steps` gives each step trigger its status as screen-reader text, and the outcome tag carries the run's, so it never depends on color.
+- Status glyphs are `aria-hidden`; `LogViewer.Steps` gives each step trigger its status as screen-reader text, and the outcome tag carries the run's, so it never depends on color.
 - While the run goes, the step count and step in flight sit in one `role="status"` region, so a screen reader hears each step as it starts; new log lines do not announce one by one.
-- The progress bar and the view switch carry the accessible names `LogView.Steps` gives them; copy buttons announce what they copy.
+- The progress bar and the view switch carry the accessible names `LogViewer.Steps` gives them; copy buttons announce what they copy.
 - The splash tiles and connector are one `aria-hidden` group; its meaning is the visually hidden live line.
 - Shimmer, spinner and connector animations stop under `prefers-reduced-motion`.
 
@@ -78,7 +78,7 @@ A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger 
 - Running: the run is in flight; the toolbar shows 3/8 steps and Build, Build is open with the spinner and the progress bar runs along the bottom.
 - Success: every step checked, the last one open, a Completed tag with Deployed in 42s and the view switch, copy on every step log.
 - Error: the Routing Rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
-- CompleteView: a finished run in the Complete view, every line as one `LogView` with its copy button.
+- CompleteView: a finished run in the Complete view, every line as one `LogViewer` with its copy button.
 - CompleteViewError: the failed run in the Complete view, the lines up to the error and nothing from the skipped steps.
 - InCreateFlow: Deploy was just pressed in a create flow; the Deployment card with a Cloning indicator on the cloning splash.
 - InCreateFlowError: the create-flow card after a failure, the switch in the header, the failed step open and Edit and Redeploy in the footer.
@@ -92,4 +92,4 @@ A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger 
 - `create/deploy-success` — where a create flow lands once the run goes live.
 - `state/async-submit` — a long run the user leaves and comes back to, with the same steps in its logs card.
 - `detail/resource-detail` — the overview of the resource a deployment belongs to; its Deployments tab links here.
-- `LogView` — `LogView.Steps` draws the steps; see `skills/webkit-ui-states` for the running and failed states.
+- `LogViewer` — `LogViewer.Steps` draws the steps; see `skills/webkit-ui-states` for the running and failed states.

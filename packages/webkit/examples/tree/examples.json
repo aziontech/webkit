@@ -1,6 +1,6 @@
 {
   "component": "tree",
-  "title": "Components/Primitives/Data/Tree",
+  "title": "Components/Data/Tree",
   "examples": [
     {
       "name": "Default",

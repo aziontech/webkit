@@ -28,9 +28,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ sidebarMenu: en.sidebarMenu })
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu-back'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sidebar-menu-back')
 
   const isVisible = computed(() => ctx.backHost.value !== null)
 

@@ -6,8 +6,8 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import BentoGridCell from './bento-grid-cell/bento-grid-cell.vue'
 import BentoGrid from './index'
 
-const TESTID = 'marketing-bento-grid'
-const CELL_TESTID = 'marketing-bento-grid-cell'
+const TESTID = 'bento-grid'
+const CELL_TESTID = 'bento-grid-cell'
 
 const cells = [
   {

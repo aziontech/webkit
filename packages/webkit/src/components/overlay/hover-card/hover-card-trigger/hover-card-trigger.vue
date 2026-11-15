@@ -17,7 +17,7 @@
   const ctx = useHoverCardContext()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__trigger`
+    () => (attrs['data-testid'] as string | undefined) ?? 'hover-card-trigger'
   )
 
   const isOpen = computed(() => ctx.isOpen.value)

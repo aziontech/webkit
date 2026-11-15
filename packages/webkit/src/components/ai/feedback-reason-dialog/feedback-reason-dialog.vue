@@ -3,15 +3,15 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
-  import Field from '../../inputs/field/field.vue'
-  import FieldError from '../../inputs/field/field-error/field-error.vue'
-  import FieldLabel from '../../inputs/field/field-label/field-label.vue'
-  import FieldLegend from '../../inputs/field/field-legend/field-legend.vue'
-  import FieldSet from '../../inputs/field/field-set/field-set.vue'
-  import RadioGroup from '../../inputs/radio-group/radio-group.vue'
-  import RadioGroupItem from '../../inputs/radio-group/radio-group-item/radio-group-item.vue'
-  import Textarea from '../../inputs/textarea/textarea.vue'
+  import Button from '../../action/button/button.vue'
+  import Field from '../../input/field/field.vue'
+  import FieldError from '../../input/field/field-error/field-error.vue'
+  import FieldLabel from '../../input/field/field-label/field-label.vue'
+  import FieldLegend from '../../input/field/field-legend/field-legend.vue'
+  import FieldSet from '../../input/field/field-set/field-set.vue'
+  import RadioGroup from '../../input/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../input/radio-group/radio-group-item/radio-group-item.vue'
+  import Textarea from '../../input/textarea/textarea.vue'
   import Dialog from '../../overlay/dialog/dialog.vue'
   import DialogContent from '../../overlay/dialog/dialog-content.vue'
   import DialogDescription from '../../overlay/dialog/dialog-description.vue'
@@ -71,7 +71,7 @@
   const uid = useId()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-feedback-reason-dialog'
+    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-reason-dialog'
   )
 
   const options = computed<FeedbackReasonDialogReason[]>(() =>

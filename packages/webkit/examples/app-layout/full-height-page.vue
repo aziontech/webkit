@@ -1,9 +1,9 @@
 <script setup>
+  import AppHeader from '@aziontech/webkit/app-header'
   import AppLayout from '@aziontech/webkit/app-layout'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import PageHeader from '@aziontech/webkit/page-header'
 
   const crumbs = [{ label: 'Workloads', href: '#' }, { label: 'Domains' }]
@@ -13,11 +13,11 @@
   <div class="h-dvh">
     <AppLayout>
       <template #header>
-        <GlobalHeader aria-label="Console">
-          <GlobalHeader.Start />
-          <GlobalHeader.Center />
-          <GlobalHeader.End />
-        </GlobalHeader>
+        <AppHeader aria-label="Console">
+          <AppHeader.Start />
+          <AppHeader.Center />
+          <AppHeader.End />
+        </AppHeader>
       </template>
 
       <template #breadcrumbs>

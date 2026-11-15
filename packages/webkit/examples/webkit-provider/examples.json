@@ -1,6 +1,6 @@
 {
   "component": "webkit-provider",
-  "title": "Components/Primitives/Utils/WebkitProvider",
+  "title": "Components/Provider/WebkitProvider",
   "examples": [
     {
       "name": "Default",

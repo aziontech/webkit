@@ -1,0 +1,197 @@
+<script setup lang="ts">
+  import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
+
+  import { logicalArrowKey, useDirection } from '../../../composables/use-direction'
+  import { useTranslate } from '../../../composables/use-translate'
+  import * as en from '../../../locales/en'
+  import { cn } from '../../../utils/cn'
+  import Tooltip from '../../overlay/tooltip/tooltip.vue'
+
+  defineOptions({
+    name: 'ThemeSwitcher',
+    inheritAttrs: false
+  })
+
+  export type ThemeSwitcherValue = 'system' | 'dark' | 'light'
+
+  export interface ThemeSwitcherProps {
+    /** Disables the whole control and applies disabled tokens. */
+    disabled?: boolean
+    /** Accessible name for the icon-only segmented group. Empty uses the locale catalog (`Theme`). */
+    ariaLabel?: string
+  }
+  const props = withDefaults(defineProps<ThemeSwitcherProps>(), {
+    disabled: false,
+    ariaLabel: ''
+  })
+
+  const model = defineModel<ThemeSwitcherValue>({ default: 'system' })
+
+  const attrs = useAttrs()
+  const dir = useDirection()
+  const { t } = useTranslate({ themeSwitcher: en.themeSwitcher })
+
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'theme-switcher')
+
+  const MODES = [
+    { value: 'system', icon: 'ai ai-desktop', key: 'themeSwitcher.system' },
+    { value: 'dark', icon: 'ai ai-moon', key: 'themeSwitcher.dark' },
+    { value: 'light', icon: 'ai ai-sun', key: 'themeSwitcher.light' }
+  ] as const
+
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
+  const segmentEls = ref<globalThis.HTMLButtonElement[]>([])
+  const indicatorVisible = ref(false)
+  const indicatorOffsetX = ref(0)
+  const indicatorOffsetY = ref(0)
+
+  const selectedIndex = computed(() => MODES.findIndex((mode) => mode.value === model.value))
+
+  function setSegmentEl(el: globalThis.HTMLButtonElement | null, index: number) {
+    if (el) {
+      segmentEls.value[index] = el
+    }
+  }
+
+  function select(next: ThemeSwitcherValue) {
+    if (!props.disabled) {
+      model.value = next
+    }
+  }
+
+  function focusSegment(index: number) {
+    segmentEls.value[index]?.focus()
+  }
+
+  function onKeydown(event: globalThis.KeyboardEvent, index: number) {
+    if (props.disabled) {
+      return
+    }
+
+    const last = MODES.length - 1
+    let target: number | null = null
+
+    switch (logicalArrowKey(event.key, dir.value)) {
+      case 'ArrowRight':
+      case 'ArrowDown':
+        target = index === last ? 0 : index + 1
+        break
+      case 'ArrowLeft':
+      case 'ArrowUp':
+        target = index === 0 ? last : index - 1
+        break
+      case 'Home':
+        target = 0
+        break
+      case 'End':
+        target = last
+        break
+      case ' ':
+      case 'Enter':
+        event.preventDefault()
+        select(MODES[index].value)
+        return
+      default:
+        return
+    }
+
+    event.preventDefault()
+    select(MODES[target].value)
+    focusSegment(target)
+  }
+
+  function syncIndicator() {
+    const activeSegmentEl = segmentEls.value[selectedIndex.value]
+
+    if (!rootEl.value || !activeSegmentEl || selectedIndex.value < 0) {
+      indicatorVisible.value = false
+      return
+    }
+
+    indicatorOffsetX.value = activeSegmentEl.offsetLeft
+    indicatorOffsetY.value = activeSegmentEl.offsetTop
+    indicatorVisible.value = true
+  }
+
+  function scheduleIndicatorSync() {
+    nextTick(() => {
+      syncIndicator()
+    })
+  }
+
+  let resizeObserver: globalThis.ResizeObserver | null = null
+
+  onMounted(() => {
+    scheduleIndicatorSync()
+
+    if (typeof ResizeObserver !== 'undefined' && rootEl.value) {
+      resizeObserver = new ResizeObserver(() => {
+        syncIndicator()
+      })
+      resizeObserver.observe(rootEl.value)
+    }
+  })
+
+  onBeforeUnmount(() => {
+    resizeObserver?.disconnect()
+    resizeObserver = null
+  })
+
+  watch(() => model.value, scheduleIndicatorSync)
+
+  const ROOT_CLASS =
+    'relative inline-flex h-7 w-fit items-center gap-(--spacing-2xs) p-(--spacing-2xs) rounded-full border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface)'
+
+  const SEGMENT_CLASS =
+    'relative z-(--z-control) inline-flex h-5 w-7 shrink-0 items-center justify-center rounded-full cursor-pointer text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) [&:not([data-state=active])]:hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
+</script>
+
+<template>
+  <div
+    ref="rootEl"
+    v-bind="$attrs"
+    role="radiogroup"
+    :aria-label="ariaLabel || t('themeSwitcher.label')"
+    :aria-disabled="disabled || undefined"
+    :data-disabled="disabled || undefined"
+    :data-testid="testId"
+    :class="cn(ROOT_CLASS, attrs.class as string)"
+  >
+    <span
+      v-show="indicatorVisible"
+      aria-hidden="true"
+      :data-testid="`${testId}__indicator`"
+      :style="{
+        left: 0,
+        transform: `translate3d(${indicatorOffsetX}px, ${indicatorOffsetY}px, 0)`
+      }"
+      class="pointer-events-none absolute top-0 z-0 h-5 w-7 rounded-full bg-(--bg-selected) transition-transform duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+    />
+    <Tooltip
+      v-for="(mode, index) in MODES"
+      :key="mode.value"
+      :content="t(mode.key)"
+      placement="bottom"
+    >
+      <button
+        :ref="(el) => setSegmentEl(el as globalThis.HTMLButtonElement | null, index)"
+        type="button"
+        role="radio"
+        :aria-checked="mode.value === model"
+        :aria-label="t(mode.key)"
+        :data-state="mode.value === model ? 'active' : 'inactive'"
+        :tabindex="mode.value === model ? 0 : -1"
+        :disabled="disabled"
+        :class="SEGMENT_CLASS"
+        @click="select(mode.value)"
+        @keydown="onKeydown($event, index)"
+      >
+        <i
+          :class="mode.icon"
+          class="shrink-0 text-[length:inherit] leading-none"
+          aria-hidden="true"
+        />
+      </button>
+    </Tooltip>
+  </div>
+</template>

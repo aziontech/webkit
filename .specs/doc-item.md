@@ -1,10 +1,10 @@
 ---
 name: doc-item
-category: documentation
+category: docs
 structure: monolithic
 status: implemented
 spec_version: 2
-checksum: 07a2cd40a665acb390916ed4f0c65a548a52d26df43f1cc26ee4e35d02cd5a12
+checksum: 50ea16382e2bd8bd8ae439ecd7e6a2c4f96bff9e963dce69f9235b25d7269141
 created: 2026-08-22
 last_updated: 2026-11-15
 ---
@@ -30,25 +30,25 @@ One row of the documentation's related-content list: a leading glyph in a framed
 
 - `DocCard` — the cell counterpart. A card claims a whole tile; this claims one line.
 - `Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the webkit anatomy this row composes.
-- `FrameBox` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition.
+- `RegistrationFrame` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition.
 
 ## Best practices
 
 - Keep the title to a noun phrase and let the sentence carry the verb; inline code in the sentence renders as the chip.
 - Give every row of one list the same shape — all with glyphs or none, all linked or none — so the column reads as one object.
-- Compose rows inside a `FrameBox` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role="list"` parent is what makes each row's `role="listitem"` valid.
+- Compose rows inside a `RegistrationFrame` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role="list"` parent is what makes each row's `role="listitem"` valid.
 
 ## Usage
 
 ```vue
 <script setup>
   import DocItem from '@aziontech/webkit/doc-item'
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import ItemList from '@aziontech/webkit/item-list'
 </script>
 
 <template>
-  <FrameBox class="w-full bg-(--bg-surface)">
+  <RegistrationFrame class="w-full bg-(--bg-surface)">
     <ItemList>
       <DocItem
         title="Edge Functions"
@@ -65,7 +65,7 @@ One row of the documentation's related-content list: a leading glyph in a framed
         Store relational data across the network.
       </DocItem>
     </ItemList>
-  </FrameBox>
+  </RegistrationFrame>
 </template>
 ```
 
@@ -143,7 +143,7 @@ One row of the documentation's related-content list: a leading glyph in a framed
 
 ## Examples
 
-- Default — the documented pattern: a `FrameBox` holding an `ItemList` of linked rows. Justified in writing here: a lone row is not the unit the page composes — `role="listitem"` requires a `role="list"` parent to be valid (axe `aria-required-parent`), so even the default render is the composed list rather than a single-row arg canvas.
+- Default — the documented pattern: a `RegistrationFrame` holding an `ItemList` of linked rows. Justified in writing here: a lone row is not the unit the page composes — `role="listitem"` requires a `role="list"` parent to be valid (axe `aria-required-parent`), so even the default render is the composed list rather than a single-row arg canvas.
 - Variants — composite story covering the axes that change the anatomy: an external destination (diagonal arrow + `rel="noreferrer"`), a row without a glyph, and inert rows with no `href` at all — where the anchor and the trailing glyph region disappear. Justified in writing here because the rendered structure itself changes with `href` and the destination, which no single-arg story can show.
 
 ## Constraints — DO NOT

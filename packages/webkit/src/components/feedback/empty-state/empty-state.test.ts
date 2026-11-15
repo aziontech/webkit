@@ -13,15 +13,15 @@ describe('EmptyState', () => {
       render(EmptyState, { props: { title: 'No resource yet' } }).container
     )
 
-    const root = getByTestId('feedback-empty-state')
+    const root = getByTestId('empty-state')
     expect(root).toBeTruthy()
-    expect(getByTestId('feedback-empty-state__title').textContent).toBe('No resource yet')
+    expect(getByTestId('empty-state__title').textContent).toBe('No resource yet')
   })
 
   it('exposes role=status on the root for assistive announcement', () => {
     const { getByTestId } = within(render(EmptyState, { props: { title: 'Empty' } }).container)
 
-    expect(getByTestId('feedback-empty-state').getAttribute('role')).toBe('status')
+    expect(getByTestId('empty-state').getAttribute('role')).toBe('status')
   })
 
   it('honours a consumer-supplied data-testid across the whole subtree', () => {
@@ -42,18 +42,18 @@ describe('EmptyState', () => {
       render(EmptyState, { props: { title: 'Empty', description: 'Add your first item.' } })
         .container
     )
-    expect(withDesc.getByTestId('feedback-empty-state__description').textContent).toBe(
+    expect(withDesc.getByTestId('empty-state__description').textContent).toBe(
       'Add your first item.'
     )
 
     const withoutDesc = within(render(EmptyState, { props: { title: 'Empty' } }).container)
-    expect(withoutDesc.queryByTestId('feedback-empty-state__description')).toBeNull()
+    expect(withoutDesc.queryByTestId('empty-state__description')).toBeNull()
   })
 
   it('renders no adornment when neither the icon prop nor the icon slot is provided', () => {
     const { queryByTestId } = within(render(EmptyState, { props: { title: 'Empty' } }).container)
 
-    expect(queryByTestId('feedback-empty-state__icon')).toBeNull()
+    expect(queryByTestId('empty-state__icon')).toBeNull()
   })
 
   it('renders the standardized featured-icon tile when the icon prop is set', () => {
@@ -61,7 +61,7 @@ describe('EmptyState', () => {
       render(EmptyState, { props: { title: 'Empty', icon: 'ai ai-inbox' } }).container
     )
 
-    const icon = getByTestId('feedback-empty-state__icon')
+    const icon = getByTestId('empty-state__icon')
     expect(icon.getAttribute('aria-hidden')).toBe('true')
     // The tile carries the consumer-supplied icon glyph.
     expect(icon.querySelector('i.ai.ai-inbox')).toBeTruthy()
@@ -75,7 +75,7 @@ describe('EmptyState', () => {
       }).container
     )
 
-    const icon = getByTestId('feedback-empty-state__icon')
+    const icon = getByTestId('empty-state__icon')
     expect(icon.getAttribute('aria-hidden')).toBe('true')
     expect(getByTestId('my-icon').textContent).toBe('glyph')
     // Slot wins: the prop's default tile glyph is not rendered.
@@ -89,29 +89,29 @@ describe('EmptyState', () => {
         slots: { actions: '<button data-testid="cta">Create</button>' }
       }).container
     )
-    expect(withActions.getByTestId('feedback-empty-state__actions')).toBeTruthy()
+    expect(withActions.getByTestId('empty-state__actions')).toBeTruthy()
     expect(withActions.getByTestId('cta').textContent).toBe('Create')
 
     const withoutActions = within(render(EmptyState, { props: { title: 'Empty' } }).container)
-    expect(withoutActions.queryByTestId('feedback-empty-state__actions')).toBeNull()
+    expect(withoutActions.queryByTestId('empty-state__actions')).toBeNull()
   })
 
   it('does not set data-bordered by default and sets it when bordered', () => {
     const plain = within(render(EmptyState, { props: { title: 'Empty' } }).container)
-    expect(plain.getByTestId('feedback-empty-state').hasAttribute('data-bordered')).toBe(false)
+    expect(plain.getByTestId('empty-state').hasAttribute('data-bordered')).toBe(false)
 
     const bordered = within(
       render(EmptyState, { props: { title: 'Empty', bordered: true } }).container
     )
-    expect(bordered.getByTestId('feedback-empty-state').getAttribute('data-bordered')).toBe('true')
+    expect(bordered.getByTestId('empty-state').getAttribute('data-bordered')).toBe('true')
   })
 
   it('defaults data-size to medium and reflects the size prop', () => {
     const def = within(render(EmptyState, { props: { title: 'Empty' } }).container)
-    expect(def.getByTestId('feedback-empty-state').getAttribute('data-size')).toBe('medium')
+    expect(def.getByTestId('empty-state').getAttribute('data-size')).toBe('medium')
 
     const small = within(render(EmptyState, { props: { title: 'Empty', size: 'small' } }).container)
-    expect(small.getByTestId('feedback-empty-state').getAttribute('data-size')).toBe('small')
+    expect(small.getByTestId('empty-state').getAttribute('data-size')).toBe('small')
   })
 
   it.each(['small', 'medium'] as const)(
@@ -120,8 +120,8 @@ describe('EmptyState', () => {
       const { getByTestId } = within(
         render(EmptyState, { props: { title: 'Empty', size, icon: 'ai ai-inbox' } }).container
       )
-      expect(getByTestId('feedback-empty-state').getAttribute('data-size')).toBe(size)
-      expect(getByTestId('feedback-empty-state__icon').getAttribute('data-size')).toBe(size)
+      expect(getByTestId('empty-state').getAttribute('data-size')).toBe(size)
+      expect(getByTestId('empty-state__icon').getAttribute('data-size')).toBe(size)
     }
   )
 
@@ -150,18 +150,18 @@ describe('EmptyState', () => {
   describe('composed stories', () => {
     it('renders the Default story fixture', () => {
       const { getByTestId } = within(render(Default).container)
-      expect(getByTestId('feedback-empty-state__title').textContent).toBe('No resource yet')
-      expect(getByTestId('feedback-empty-state__actions')).toBeTruthy()
+      expect(getByTestId('empty-state__title').textContent).toBe('No resource yet')
+      expect(getByTestId('empty-state__actions')).toBeTruthy()
     })
 
     it('renders the Bordered story with data-bordered set', () => {
       const { getByTestId } = within(render(Bordered).container)
-      expect(getByTestId('feedback-empty-state').getAttribute('data-bordered')).toBe('true')
+      expect(getByTestId('empty-state').getAttribute('data-bordered')).toBe('true')
     })
 
     it('renders the Sizes story with all size variants', () => {
       const { getAllByTestId } = within(render(Sizes).container)
-      const roots = getAllByTestId('feedback-empty-state')
+      const roots = getAllByTestId('empty-state')
       expect(roots.map((el) => el.getAttribute('data-size'))).toEqual(['small', 'medium'])
     })
   })
@@ -175,7 +175,7 @@ describe('EmptyState', () => {
         }
       })
 
-      const actions = view.getByTestId('feedback-empty-state__actions')
+      const actions = view.getByTestId('empty-state__actions')
       expect(actions.contains(view.getByRole('button', { name: 'Add domain' }))).toBe(true)
       expect(actions.contains(view.getByRole('link', { name: 'Read the docs' }))).toBe(true)
     })

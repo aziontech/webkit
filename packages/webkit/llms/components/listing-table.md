@@ -1,9 +1,9 @@
 # Listing Table
 
-> A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. It is a page section — the site places it from a `{ _id: 'listing-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `table` and, below `sm`, `item`. Each row is one link named by its first column; a pointer click anywhere on the row follows that link (with the same modifier keys), and the link stays the keyboard and screen-reader path. The other columns are metadata in the small overline, each cut to one line with its full text as a tooltip. Below `sm` the same rows become a list of items, the first column as the title and the second as the description in the small overline, with the button going full width.
+> A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. It is a page section — the site places it from a `{ _id: 'listing-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `table` and, below `sm`, `item`. Each row is one link named by its first column; a pointer click anywhere on the row follows that link (with the same modifier keys), and the link stays the keyboard and screen-reader path. The other columns are metadata in the small overline, each cut to one line with its full text as a tooltip. Below `sm` the same rows become a list of items, the first column as the title and the second as the description in the small overline, with the button going full width.
 
 - Import: `import ListingTable from '@aziontech/webkit/listing-table'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [listing-table.json](https://github.com/aziontech/webkit/blob/main/.specs/listing-table.json)
 
 ## When to use
@@ -18,14 +18,14 @@
 
 ## Don’t
 
-- For a filterable or paginated listing → use `listing-browser`.
+- For a filterable or paginated listing → use `listing-index`.
 - For a comparison of plans or features → use the pricing matrix.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [table](table.md) — the composition table the wide layout renders.
-- [listing-browser](listing-browser.md) — the full listing this band links into.
+- [listing-index](listing-index.md) — the full listing this band links into.
 
 ## Props
 

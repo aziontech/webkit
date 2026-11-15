@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Overline from '../../content/overline/overline.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import Eyebrow from '../../content/eyebrow/eyebrow.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import SectionTitle from '../section-title/section-title.vue'
 
   defineOptions({
@@ -45,7 +45,7 @@
     aside?(): unknown
     /** Decoration drawn behind the copy in `primary`, such as a texture; ignored in the other registers. */
     background?(): unknown
-    /** The strip that floors the band in `primary`, such as a ticker, under a hairline; ignored in the other registers. */
+    /** The strip that floors the band in `primary`, such as a marquee, under a hairline; ignored in the other registers. */
     bottom?(): unknown
   }>()
 
@@ -53,13 +53,11 @@
 
   const EYEBROW_PREFIX = '//' as const
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-call-to-action'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'call-to-action')
 
   const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 
-  const frame = computed(() => (props.framed ? FrameBox : 'div'))
+  const frame = computed(() => (props.framed ? RegistrationFrame : 'div'))
   const frameProps = computed(() =>
     props.framed ? { flush: true, borders: 'y', marks: 'all' } : {}
   )
@@ -85,11 +83,11 @@
           class="flex flex-col justify-between gap-(--spacing-2xl) bg-(--bg-surface-raised) p-(--spacing-xl)"
         >
           <div class="flex flex-col gap-(--spacing-lg)">
-            <Overline
+            <Eyebrow
               v-if="eyebrow"
               :prefix="EYEBROW_PREFIX"
               cursor
-              >{{ eyebrow }}</Overline
+              >{{ eyebrow }}</Eyebrow
             >
             <h2 class="m-0 max-w-(--container-xl) text-balance text-heading-xl">
               <span class="block text-(--text-default)">{{ title }}</span>
@@ -133,11 +131,11 @@
         class="flex h-full flex-col justify-center gap-(--spacing-xl) bg-(--bg-surface-raised) p-(--spacing-xl)"
       >
         <div class="flex w-full max-w-(--container-2xl) flex-col gap-(--spacing-lg)">
-          <Overline
+          <Eyebrow
             v-if="eyebrow"
             :prefix="EYEBROW_PREFIX"
             cursor
-            >{{ eyebrow }}</Overline
+            >{{ eyebrow }}</Eyebrow
           >
           <h2 class="m-0 text-balance text-heading-xl">
             <span class="block text-(--text-default)">{{ title }}</span>

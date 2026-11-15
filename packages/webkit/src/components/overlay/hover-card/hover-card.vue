@@ -54,9 +54,7 @@
   let closeTimer: ReturnType<typeof setTimeout> | undefined
   let returningFocus = false
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'overlay-hover-card'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'hover-card')
 
   const openProp = computed<boolean | undefined>(() => openModel.value)
 

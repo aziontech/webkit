@@ -9,7 +9,7 @@ import WithActions from '../../../../../examples/hero-title/with-actions.vue'
 import { expectNoA11yViolations } from '../../../../test/axe'
 import HeroTitle from './hero-title.vue'
 
-const TESTID = 'marketing-hero-title'
+const TESTID = 'hero-title'
 
 const props = { title: 'Run it everywhere.' }
 

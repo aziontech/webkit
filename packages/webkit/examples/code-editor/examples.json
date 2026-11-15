@@ -1,6 +1,6 @@
 {
   "component": "code-editor",
-  "title": "Components/Primitives/Code/CodeEditor",
+  "title": "Components/Code/CodeEditor",
   "examples": [
     {
       "name": "Default",

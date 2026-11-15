@@ -26,7 +26,7 @@
 ## Don’t
 
 - When every claim carries the same weight → use `card-grid`.
-- For a row of measured figures → use `big-numbers`, which already draws this grid for numbers.
+- For a row of measured figures → use `stats`, which already draws this grid for numbers.
 - For a single copy-and-media pairing → use `media-split`.
 - For a list of questions → use `faq`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
@@ -34,9 +34,9 @@
 ## Related
 
 - [card-grid](card-grid.md) — the equal-cell grid with no spans, in the gap or divider register.
-- [big-numbers](big-numbers.md) — the same collapsed-rule grid, specialised for figures.
+- [stats](stats.md) — the same collapsed-rule grid, specialised for figures.
 - [media-split](media-split.md) — the two-column band when there is one claim, not several.
-- [frame-box](frame-box.md) — the frame each cell is drawn with.
+- [registration-frame](registration-frame.md) — the frame each cell is drawn with.
 
 ## Props
 

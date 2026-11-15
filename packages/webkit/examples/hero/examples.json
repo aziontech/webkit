@@ -54,7 +54,7 @@
     },
     {
       "name": "Carousel",
-      "summary": "The band’s floor holds the `bottom` window and the brand strip in one block, so a single ground covers both — `--banner-floor-bg` plinths the floor a shade off the band’s own canvas. `floorTexture` fills that window without wiring a slot: the cell is fixed, so the band already carries the ink (`--banner-floor-ink`) and the horizontal falloff fitted to it, and `--texture-pool-a` / `-b` place the light inside it. `ticker` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry, and `ticker-label` names what the marks are evidence of.",
+      "summary": "The band’s floor holds the `bottom` window and the brand strip in one block, so a single ground covers both — `--banner-floor-bg` plinths the floor a shade off the band’s own canvas. `floorTexture` fills that window without wiring a slot: the cell is fixed, so the band already carries the ink (`--banner-floor-ink`) and the horizontal falloff fitted to it, and `--texture-pool-a` / `-b` place the light inside it. `marquee` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry, and `marquee-label` names what the marks are evidence of.",
       "file": "carousel.vue"
     },
     {

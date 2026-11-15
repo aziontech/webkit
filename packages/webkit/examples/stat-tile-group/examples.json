@@ -1,6 +1,6 @@
 {
   "component": "stat-tile-group",
-  "title": "Components/Primitives/Chart/StatTileGroup",
+  "title": "Components/Chart/StatTileGroup",
   "examples": [
     {
       "name": "Default",

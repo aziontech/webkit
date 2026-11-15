@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import FrameBox from '../frame-box/frame-box.vue'
+  import RegistrationFrame from '../registration-frame/registration-frame.vue'
   import { FooterInjectionKey } from './injection-key'
 
   defineOptions({
@@ -49,7 +49,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ footer: en.footer })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-footer')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'footer')
 
   const hasStatusBar = () => Boolean(slots.status || slots.language)
 
@@ -72,7 +72,7 @@
     <div
       class="flex w-full items-stretch justify-center group-data-[variant=site]:border-b group-data-[variant=site]:border-b-(length:--border-width-default) group-data-[variant=site]:border-b-(--border-default)"
     >
-      <FrameBox
+      <RegistrationFrame
         v-if="variant === 'site'"
         key="gutter-start"
         :borders="['left']"
@@ -81,7 +81,7 @@
         :data-testid="`${testId}__gutter`"
         class="hidden flex-1 2xl:block"
       />
-      <FrameBox
+      <RegistrationFrame
         :borders="variant === 'site' ? 'x' : 'none'"
         :marks="variant === 'site' ? 'all' : 'none'"
         :data-testid="`${testId}__frame`"
@@ -104,7 +104,7 @@
             <slot name="language" />
           </div>
 
-          <FrameBox
+          <RegistrationFrame
             v-if="hasSignature()"
             borders="top"
             marks="all"
@@ -123,7 +123,7 @@
                 <slot name="tagline" />
               </p>
             </div>
-          </FrameBox>
+          </RegistrationFrame>
 
           <div
             v-if="slots.social"
@@ -133,9 +133,9 @@
             <slot name="social" />
           </div>
         </div>
-      </FrameBox>
+      </RegistrationFrame>
 
-      <FrameBox
+      <RegistrationFrame
         v-if="variant === 'site'"
         key="gutter-end"
         :borders="['right']"

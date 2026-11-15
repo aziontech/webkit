@@ -23,7 +23,7 @@ Composed once in `App.vue` around `RouterView` (imported from `console-layout-ro
 
 In the `actions` slot: Create (`primary`, `medium`, with its icon) while not compact. In the page body: Documentation (`outline`) and the create action, and Upgrade to Pro (`secondary`) in the account menu.
 
-### C. Agent — `ButtonHighlight` (required)
+### C. Agent — `HighlightButton` (required)
 
 The AI assistant entry in the `actions` slot, after Create, while not compact.
 
@@ -69,7 +69,7 @@ Flush (`:padded="false"`), standing in for the page body; the list page's contro
 
 ## Don't
 
-- Don't render `AppLayout`, `Sidebar`, `GlobalHeader`, `SearchTrigger`, a `Command` palette or a `<main>` in a page; the layout owns them.
+- Don't render `AppLayout`, `Sidebar`, `AppHeader`, `SearchTrigger`, a `Command` palette or a `<main>` in a page; the layout owns them.
 - Don't put a page's control crumb in `App.vue`, or size a body with `calc(100dvh - …)`.
 - Don't render the rail on create, edit or deploy pages.
 - Don't add page actions to the global header; they belong to the page's header, controls row or tab row.

@@ -1,6 +1,6 @@
 {
   "component": "chip",
-  "title": "Components/Primitives/Inputs/Chip",
+  "title": "Components/Input/Chip",
   "examples": [
     {
       "name": "Default",

@@ -4,7 +4,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import type { Severity } from '../../../utils/severity'
-  import Spinner from '../../utils/spinner/spinner.vue'
+  import Spinner from '../../feedback/spinner/spinner.vue'
 
   export type { Severity } from '../../../utils/severity'
 
@@ -35,9 +35,7 @@
   const text = computed(() => props.label || t('statusIndicator.label'))
   const loadingText = computed(() => `${text.value.replace(/\s*(?:…|\.{3})\s*$/, '')}…`)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-status-indicator'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'status-indicator')
 </script>
 
 <template>
@@ -52,7 +50,7 @@
     <Spinner
       v-if="loading"
       class="size-3 shrink-0 text-(--text-default)"
-      :data-testid="`${testId}__spinner`"
+      :data-testid="`${testId}__loading`"
     />
     <span
       v-else

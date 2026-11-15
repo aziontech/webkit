@@ -67,14 +67,14 @@ stylelint config (consumer lint).
 
 **A component has one name — the kebab-case name — and every surface derives from it.**
 
-| Surface                    | Form                                 | Example (`empty-state`)                                  |
-| -------------------------- | ------------------------------------ | -------------------------------------------------------- |
-| spec file + frontmatter    | kebab                                | `.specs/empty-state.md`                                  |
-| folder + `.vue` file       | kebab                                | `content/empty-state/empty-state.vue`                    |
-| export subpath             | kebab                                | `"./empty-state"`                                        |
-| `defineOptions({ name })`  | PascalCase                           | `EmptyState`                                             |
-| `data-testid` fallback     | `<category>-<name>` / `input-<name>` | `content-empty-state`                                    |
-| import binding + story tag | PascalCase of the subpath            | `import EmptyState from '@aziontech/webkit/empty-state'` |
+| Surface                    | Form                      | Example (`empty-state`)                                  |
+| -------------------------- | ------------------------- | -------------------------------------------------------- |
+| spec file + frontmatter    | kebab                     | `.specs/empty-state.md`                                  |
+| folder + `.vue` file       | kebab                     | `content/empty-state/empty-state.vue`                    |
+| export subpath             | kebab                     | `"./empty-state"`                                        |
+| `defineOptions({ name })`  | PascalCase                | `EmptyState`                                             |
+| `data-testid` fallback     | the kebab name itself     | `empty-state`                                            |
+| import binding + story tag | PascalCase of the subpath | `import EmptyState from '@aziontech/webkit/empty-state'` |
 
 Plurality is part of the name: a single token is `chip`; a container for many is a
 different component (`chip-group`), never a plural spelling of the same one.
@@ -100,7 +100,7 @@ their files are arranged.**
     └── <name>-<part>.vue
 ```
 
-- Categories (`actions`, `inputs`, `data`, `overlay`, …) organize the **folder** and the
+- Categories (`action`, `input`, `data`, `overlay`, …) organize the **folder** and the
   docs navigation — never the public import path.
 - **Co-locate** what only this component uses; promote to a shared `composables/` folder
   only when a second component needs it.
@@ -423,7 +423,7 @@ trigger.**
 | --------------- | ------------------- | --------------------------------------------------- |
 | `disabled`      | prop                | `data-disabled` + disabled tokens; not focusable    |
 | `loading`       | prop                | `data-loading` + `Skeleton`; interaction suppressed |
-| `invalid`       | validation          | `data-invalid` + error tokens + `HelperText`        |
+| `invalid`       | validation          | `data-invalid` + error tokens + `FieldError`        |
 | `readonly`      | prop                | `data-readonly`; visible, not editable              |
 | `empty`         | no data             | the `EmptyState` component — never an ad-hoc string |
 | `error`         | load/action failure | an error slot/message                               |
@@ -462,13 +462,13 @@ reduced-motion ship with it.**
 
 ## 14. data-testid
 
-**The root carries `data-testid`, defaulting to `<category>-<name>` (`input-<name>` for
-inputs), and the consumer's value wins.**
+**The root carries `data-testid`, defaulting to the component's own name, and the consumer's
+value wins.**
 
 <!-- prettier-ignore -->
 ```ts
 const attrs = useAttrs()
-const testId = computed(() => (attrs['data-testid'] as string) ?? 'input-chip')
+const testId = computed(() => (attrs['data-testid'] as string) ?? 'chip')
 ```
 
 Interactive sub-elements a test must reach get their own derived testid

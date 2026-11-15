@@ -4,7 +4,7 @@
 
 - Import: `import MultiSelectRoot from '@aziontech/webkit/multi-select-root'`
 - Compound import (dot notation, not tree-shakeable): `import MultiSelect from '@aziontech/webkit/multi-select'`
-- Category: inputs · Surface: app · Structure: composition
+- Category: input · Surface: app · Structure: composition
 - API as JSON: [multi-select.json](https://github.com/aziontech/webkit/blob/main/.specs/multi-select.json)
 
 ## When to use
@@ -97,10 +97,10 @@
 
 ## v-model
 
-| Model          | Type       | Default     | Emits               | Notes                                                                                                                                                                                                     |
-| -------------- | ---------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model          | Type       | Default     | Emits               | Notes                                                                                                                                                                                                   |
+| -------------- | ---------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model`      | `TValue[]` | `[]`        | `update:modelValue` | The selection via `defineModel`. Always an array; each item is the `value` of a selected `<MultiSelectItem>`. Fires when an option is toggled with the next selection array. Uncontrolled when unbound. |
-| `v-model:open` | `boolean`  | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                                |
+| `v-model:open` | `boolean`  | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                              |
 
 ## States
 

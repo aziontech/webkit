@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Chip from '../../../inputs/chip/chip.vue'
+  import Chip from '../../../input/chip/chip.vue'
   import type { PromptInputReference } from '../prompt-input.vue'
 
   defineOptions({ name: 'PromptInputReferences', inheritAttrs: false })

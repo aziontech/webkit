@@ -1,6 +1,6 @@
 ---
 name: toggle-group
-category: actions
+category: action
 structure: monolithic
 status: implemented
 spec_version: 8
@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2904-5892
   node_id: 2904:5892
-checksum: 0e2c8126414268bc705b360e2ad24b18d44ddb5dd6a2904f342d52e102eb62ca
+checksum: 724dffcac808c263c5d08a50d79b6621a4a122a2ed6921153961eee387fa9613
 created: 2026-11-09
 last_updated: 2026-11-15
 ---
@@ -116,7 +116,7 @@ ToggleGroup is a connected group of buttons that picks exactly one value out of 
 - Segment: `role="radio"` with `aria-checked`; `data-state="active"` on the selected segment and `"inactive"` on the others; `data-disabled` and the native `disabled` attribute on a disabled option (or every option when the root is `disabled`); a trailing lock icon (`ai ai-lock`) and `data-locked` on a locked option (see Locked options). Each segment carries a touch-target span that grows its hit area to 44px under `pointer-coarse`.
 - Indicator: an `aria-hidden` span positioned under the selected segment from its measured size and offset; hidden when nothing is selected or the selected segment is not rendered. It re-measures on option, selection and size changes (`ResizeObserver`).
 - Option normalization: a missing `label` falls back to `value`, then to `Option <n>`; a missing `value` falls back to `label`, then to the index.
-- Test ids: root `actions-toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.
+- Test ids: root `toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.
 - Reflow: the root is capped at the width of its container (`max-w-full`, `min-w-0`) and the options shrink, truncating their labels, instead of overflowing a narrow box.
 
 ## Motion & Animations

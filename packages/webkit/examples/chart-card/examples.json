@@ -1,6 +1,6 @@
 {
   "component": "chart-card",
-  "title": "Components/Primitives/Chart/ChartCard",
+  "title": "Components/Chart/ChartCard",
   "examples": [
     {
       "name": "Default",

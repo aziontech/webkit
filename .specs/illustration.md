@@ -7,7 +7,7 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=1901-225133
   node_id: 1901:225133
-checksum: 00f7a8b65a3d61b7f76ce0f914e513e43a2774161d8faa90dff4ba6e0400b6d8
+checksum: d0788e57ea637cff3db69ff66eb95b83f56e8641d2149b1ab7c2353ac301f5c4
 created: 2026-08-05
 last_updated: 2026-11-15
 ---
@@ -45,7 +45,7 @@ export follows light and dark like the rest of the page.
 ## Related
 
 - `empty-state` — the surrounding layout (illustration + title + description + actions); reach for it first and put an `Illustration` inside it.
-- `flow` — a real interactive node/edge diagram driven by data; `Illustration` is decorative and static by comparison.
+- `flow-diagram` — a real interactive node/edge diagram driven by data; `Illustration` is decorative and static by comparison.
 - `skeleton` — the loading placeholder; an illustration is never a loading state.
 - `svg/azion/*` — drawn brand marks, for artwork that is not part of the illustration library.
 
@@ -91,16 +91,19 @@ import) when an image, not an inline themed scene, is wanted.
 </script>
 
 <template>
-  <img :src="ddosProtection" alt="" />
+  <img
+    :src="ddosProtection"
+    alt=""
+  />
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `name` | `string` | `''` | no | Name of an official scene in the illustration asset library. |
-| `ariaLabel` | `string` | `''` | no | Accessible name; empty keeps the illustration decorative and hidden from assistive tech. |
+| Prop        | Type     | Default | Required | JSDoc                                                                                    |
+| ----------- | -------- | ------- | -------- | ---------------------------------------------------------------------------------------- |
+| `name`      | `string` | `''`    | no       | Name of an official scene in the illustration asset library.                             |
+| `ariaLabel` | `string` | `''`    | no       | Accessible name; empty keeps the illustration decorative and hidden from assistive tech. |
 
 ## Events
 
@@ -121,15 +124,15 @@ import) when an image, not an inline themed scene, is wanted.
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| _none_ | The scene is a static SVG; any motion belongs to the artwork itself, not to the component. | — | — |
+| Trigger | Animation / Transition                                                                     | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
+| ------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------- | ----------------------- |
+| _none_  | The scene is a static SVG; any motion belongs to the artwork itself, not to the component. | —                                                 | —                       |
 
 ## Tokens
 
 | Region | Token (DESIGN.md) |
-|---|---|
-| _none_ | — |
+| ------ | ----------------- |
+| _none_ | —                 |
 
 The component declares no utility that resolves a token, and the canvas each scene is drawn on
 reaches the root as the intrinsic `width`/`height` the frame already carries.
@@ -154,12 +157,12 @@ export palette in `src/assets/illustrations/palette.ts`. Each role aliases a glo
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `--bg-surface-overlay` / `--surface-700` (`#4D4D4D`) | `--illustration-line-strong` → `--text-disabled` | The export binds thin strokes to the overlay fill, whose light value (`#FAFAFA`) would erase them; the role follows the stroke's reading weight instead. |
-| `Global/textColor` (`#EDEDED`) | `--illustration-ink` | An off-token ink from an older library; folded into the ink role, which moves that path to `#FAFAFA` in dark. |
-| `--surface-600` (`#666666`) | stays as drawn | The dot map is bound to a fixed ramp step; it reads in both themes, so it has no role until design asks for one. |
-| `#5B0B0B` (the error band of `real-time-metrics-error-rate`) | stays as drawn | The illustration foundation has no danger-surface role; add `--illustration-danger-surface` when design binds it, then map this colour to it. |
+| Figma variable                                               | Temporary primitive                              | Follow-up                                                                                                                                                |
+| ------------------------------------------------------------ | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--bg-surface-overlay` / `--surface-700` (`#4D4D4D`)         | `--illustration-line-strong` → `--text-disabled` | The export binds thin strokes to the overlay fill, whose light value (`#FAFAFA`) would erase them; the role follows the stroke's reading weight instead. |
+| `Global/textColor` (`#EDEDED`)                               | `--illustration-ink`                             | An off-token ink from an older library; folded into the ink role, which moves that path to `#FAFAFA` in dark.                                            |
+| `--surface-600` (`#666666`)                                  | stays as drawn                                   | The dot map is bound to a fixed ramp step; it reads in both themes, so it has no role until design asks for one.                                         |
+| `#5B0B0B` (the error band of `real-time-metrics-error-rate`) | stays as drawn                                   | The illustration foundation has no danger-surface role; add `--illustration-danger-surface` when design binds it, then map this colour to it.            |
 
 ## Accessibility (WCAG 2.1 AA)
 

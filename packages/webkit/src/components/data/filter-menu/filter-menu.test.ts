@@ -40,10 +40,8 @@ const settle = (): Promise<void> => new Promise((resolve) => setTimeout(resolve,
 const byTestId = (id: string): HTMLElement | null =>
   document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
 const trigger = (): HTMLButtonElement =>
-  document.body.querySelector<HTMLButtonElement>(
-    '[data-testid="data-filter-menu__trigger"] button'
-  )!
-const panel = (): HTMLElement | null => byTestId('data-filter-menu__panel')
+  document.body.querySelector<HTMLButtonElement>('[data-testid="filter-menu__trigger"] button')!
+const panel = (): HTMLElement | null => byTestId('filter-menu__panel')
 
 function mount(start: FilterMenuModel = {}, withChips = false) {
   const model = ref<FilterMenuModel>(start)
@@ -86,7 +84,7 @@ async function openMenu(): Promise<HTMLElement> {
 
 async function openField(id: string): Promise<void> {
   await openMenu()
-  await fireEvent.click(byTestId(`data-filter-menu__field-${id}`)!)
+  await fireEvent.click(byTestId(`filter-menu__field-${id}`)!)
   await waitFor(
     () => expect(panel()?.querySelector(`[data-level="values:${id}"]`)).not.toBeNull(),
     WAIT
@@ -100,21 +98,21 @@ afterEach(() => {
 describe('FilterMenu', () => {
   it('renders the trigger with the data-testid fallback and lets a consumer data-testid win', () => {
     mount()
-    expect(byTestId('data-filter-menu')).not.toBeNull()
+    expect(byTestId('filter-menu')).not.toBeNull()
     expect(trigger().textContent).toContain('Filter')
     document.body.innerHTML = ''
     render(FilterMenu, { props: { fields }, attrs: { 'data-testid': 'workload-filter' } })
     expect(byTestId('workload-filter')).not.toBeNull()
-    expect(byTestId('data-filter-menu')).toBeNull()
+    expect(byTestId('filter-menu')).toBeNull()
   })
 
   it('counts the applied fields on a badge and in the trigger name, and drops the badge at zero', async () => {
     mount({ owner: ['jane', 'john'], status: ['live'], modified: [] })
-    expect(byTestId('data-filter-menu__count')?.textContent?.trim()).toBe('2')
+    expect(byTestId('filter-menu__count')?.textContent?.trim()).toBe('2')
     expect(trigger().getAttribute('aria-label')).toBe('Filter, 2 applied')
     document.body.innerHTML = ''
     mount()
-    expect(byTestId('data-filter-menu__count')).toBeNull()
+    expect(byTestId('filter-menu__count')).toBeNull()
     expect(trigger().getAttribute('aria-label')).toBe('Filter')
   })
 
@@ -128,11 +126,11 @@ describe('FilterMenu', () => {
     const opened = await openMenu()
     expect(trigger().getAttribute('aria-expanded')).toBe('true')
     expect(opened.querySelector('[data-level="fields"]')).not.toBeNull()
-    const author = byTestId('data-filter-menu__field-owner')!
+    const author = byTestId('filter-menu__field-owner')!
     expect(author.hasAttribute('data-applied')).toBe(true)
     expect(author.textContent).toContain('Jane Doe')
     expect(author.textContent).toContain('+1')
-    expect(byTestId('data-filter-menu__field-status')?.hasAttribute('data-applied')).toBe(false)
+    expect(byTestId('filter-menu__field-status')?.hasAttribute('data-applied')).toBe(false)
   })
 
   it('drills into a multiple field: checkbox rows inside a named group toggle values in the model', async () => {
@@ -140,8 +138,8 @@ describe('FilterMenu', () => {
     await openField('owner')
     const group = panel()!.querySelector('[role="group"]')!
     expect(group.getAttribute('aria-label')).toBe('Author')
-    const jane = byTestId('data-filter-menu__option-jane')!
-    const john = byTestId('data-filter-menu__option-john')!
+    const jane = byTestId('filter-menu__option-jane')!
+    const john = byTestId('filter-menu__option-john')!
     expect(jane.getAttribute('role')).toBe('checkbox')
     expect(jane.getAttribute('aria-checked')).toBe('true')
     expect(john.getAttribute('aria-checked')).toBe('false')
@@ -149,7 +147,7 @@ describe('FilterMenu', () => {
     expect(john.querySelector('[data-selected]')?.getAttribute('data-selected')).toBe('false')
     await fireEvent.click(john)
     expect(updates.at(-1)).toEqual({ owner: ['jane', 'john'] })
-    await fireEvent.click(byTestId('data-filter-menu__option-jane')!)
+    await fireEvent.click(byTestId('filter-menu__option-jane')!)
     expect(updates.at(-1)).toEqual({ owner: ['john'] })
   })
 
@@ -157,7 +155,7 @@ describe('FilterMenu', () => {
     const { updates } = mount()
     await openField('status')
     expect(panel()!.querySelector('[role="radiogroup"]')).not.toBeNull()
-    const live = byTestId('data-filter-menu__option-live')!
+    const live = byTestId('filter-menu__option-live')!
     expect(live.getAttribute('role')).toBe('radio')
     await fireEvent.click(live)
     expect(updates.at(-1)).toEqual({ status: ['live'] })
@@ -167,7 +165,7 @@ describe('FilterMenu', () => {
   it('clears a field with Clear and deletes its key from the model', async () => {
     const { updates } = mount({ owner: ['jane'], status: ['live'] })
     await openField('owner')
-    const clear = byTestId('data-filter-menu__clear')!
+    const clear = byTestId('filter-menu__clear')!
     expect(clear.textContent).toContain('Clear Author')
     await fireEvent.click(clear)
     expect(updates.at(-1)).toEqual({ status: ['live'] })
@@ -176,7 +174,7 @@ describe('FilterMenu', () => {
   it('goes back to the fields with the Back button', async () => {
     mount()
     await openField('owner')
-    const back = byTestId('data-filter-menu__back')!
+    const back = byTestId('filter-menu__previous')!
     expect(back.getAttribute('aria-label')).toBe('Back to all filters')
     await fireEvent.click(back)
     await waitFor(() => expect(panel()?.querySelector('[data-level="fields"]')).not.toBeNull())
@@ -186,12 +184,11 @@ describe('FilterMenu', () => {
     mount()
     await openField('owner')
     const input =
-      byTestId('data-filter-menu__search')!.querySelector('input') ??
-      byTestId('data-filter-menu__search')!
+      byTestId('filter-menu__search')!.querySelector('input') ?? byTestId('filter-menu__search')!
     expect(input.getAttribute('aria-label')).toBe('Search Author values')
     await fireEvent.update(input as HTMLInputElement, 'pri')
-    expect(byTestId('data-filter-menu__option-priya')).not.toBeNull()
-    expect(byTestId('data-filter-menu__option-jane')).toBeNull()
+    expect(byTestId('filter-menu__option-priya')).not.toBeNull()
+    expect(byTestId('filter-menu__option-jane')).toBeNull()
     await fireEvent.update(input as HTMLInputElement, 'zzz')
     expect(panel()!.textContent).toContain('No match for “zzz”.')
   })
@@ -199,22 +196,22 @@ describe('FilterMenu', () => {
   it('offers the built-in periods and a custom range on a date field, and stores the period id', async () => {
     const { updates } = mount()
     await openField('modified')
-    expect(byTestId('data-filter-menu__option-7d')?.textContent).toContain('Last 7 days')
-    expect(byTestId('data-filter-menu__custom')?.textContent).toContain('Custom range')
-    await fireEvent.click(byTestId('data-filter-menu__option-7d')!)
+    expect(byTestId('filter-menu__option-7d')?.textContent).toContain('Last 7 days')
+    expect(byTestId('filter-menu__custom')?.textContent).toContain('Custom range')
+    await fireEvent.click(byTestId('filter-menu__option-7d')!)
     expect(updates.at(-1)).toEqual({ modified: ['7d'] })
   })
 
   it('opens the custom range calendar from a date field and goes back to the periods', async () => {
     mount()
     await openField('modified')
-    await fireEvent.click(byTestId('data-filter-menu__custom')!)
-    await waitFor(() => expect(byTestId('data-filter-menu__calendar')).not.toBeNull())
+    await fireEvent.click(byTestId('filter-menu__custom')!)
+    await waitFor(() => expect(byTestId('filter-menu__calendar')).not.toBeNull())
     expect(panel()?.querySelector('[data-level="custom:modified"]')).not.toBeNull()
-    expect(byTestId('data-filter-menu__back')?.getAttribute('aria-label')).toBe(
+    expect(byTestId('filter-menu__previous')?.getAttribute('aria-label')).toBe(
       'Back to date periods'
     )
-    await fireEvent.click(byTestId('data-filter-menu__back')!)
+    await fireEvent.click(byTestId('filter-menu__previous')!)
     await waitFor(() =>
       expect(panel()?.querySelector('[data-level="values:modified"]')).not.toBeNull()
     )
@@ -223,9 +220,9 @@ describe('FilterMenu', () => {
   it('commits a whole-day custom range from the range picker as dates', async () => {
     const { updates } = mount()
     await openField('modified')
-    await fireEvent.click(byTestId('data-filter-menu__custom')!)
+    await fireEvent.click(byTestId('filter-menu__custom')!)
     const picker = await waitFor(() => {
-      const el = byTestId('data-filter-menu__calendar__popover')
+      const el = byTestId('filter-menu__calendar__popover')
       expect(el).not.toBeNull()
       return el as HTMLElement
     })
@@ -246,7 +243,7 @@ describe('FilterMenu', () => {
   it('summarizes a custom range on the field row', async () => {
     mount({ modified: [{ start: new Date(2026, 10, 2), end: new Date(2026, 10, 9) }] })
     await openMenu()
-    expect(byTestId('data-filter-menu__field-modified')?.textContent).toContain('Nov 2 – Nov 9')
+    expect(byTestId('filter-menu__field-modified')?.textContent).toContain('Nov 2 – Nov 9')
   })
 
   it('moves focus between the rows of a level with the arrow keys, wrapping at the ends', async () => {
@@ -264,9 +261,7 @@ describe('FilterMenu', () => {
   it('focuses the first value when a field opens', async () => {
     mount()
     await openField('status')
-    await waitFor(() =>
-      expect(document.activeElement).toBe(byTestId('data-filter-menu__option-live'))
-    )
+    await waitFor(() => expect(document.activeElement).toBe(byTestId('filter-menu__option-live')))
   })
 
   it('opens at a field through the exposed open()', async () => {
@@ -288,26 +283,26 @@ describe('FilterMenu', () => {
   describe('FilterMenu.ChipGroup', () => {
     it('renders one chip per applied field with its label, first value and +N, in a named group', () => {
       mount({ owner: ['jane', 'john', 'priya'], status: ['live'] }, true)
-      const group = byTestId('data-filter-menu-chip-group')!
+      const group = byTestId('filter-menu-chip-group')!
       expect(group.getAttribute('role')).toBe('group')
       expect(group.getAttribute('aria-label')).toBe('Applied filters')
-      const owner = byTestId('data-filter-menu-chip-group__chip-owner')!
+      const owner = byTestId('filter-menu-chip-group__chip-owner')!
       expect(owner.textContent).toContain('Author')
       expect(owner.textContent).toContain('Jane Doe')
       expect(owner.textContent).toContain('+2')
-      expect(byTestId('data-filter-menu-chip-group__chip-status')?.textContent).toContain('Live')
-      expect(byTestId('data-filter-menu-chip-group__chip-modified')).toBeNull()
+      expect(byTestId('filter-menu-chip-group__chip-status')?.textContent).toContain('Live')
+      expect(byTestId('filter-menu-chip-group__chip-modified')).toBeNull()
     })
 
     it('renders nothing when no field is applied', () => {
       mount({}, true)
-      expect(byTestId('data-filter-menu-chip-group')).toBeNull()
+      expect(byTestId('filter-menu-chip-group')).toBeNull()
     })
 
     it('reopens the menu that shares its fields at the chip field, emitting edit with the event first', async () => {
       const { edits } = mount({ status: ['live'] }, true)
       await settle()
-      const chip = byTestId('data-filter-menu-chip-group__chip-status')!
+      const chip = byTestId('filter-menu-chip-group__chip-status')!
       const body = chip.querySelector<HTMLElement>('[role="button"], button') ?? chip
       await fireEvent.click(body)
       expect(edits.length).toBe(1)
@@ -320,7 +315,7 @@ describe('FilterMenu', () => {
 
     it('removes a field from the model with the remove button, emitting remove with the event first', async () => {
       const { removes, updates } = mount({ owner: ['jane'], status: ['live'] }, true)
-      const chip = byTestId('data-filter-menu-chip-group__chip-owner')!
+      const chip = byTestId('filter-menu-chip-group__chip-owner')!
       const remove =
         chip.querySelector<HTMLElement>('[data-testid$="__remove"]') ??
         [...chip.querySelectorAll<HTMLElement>('button')].at(-1)!
@@ -341,12 +336,12 @@ describe('FilterMenu', () => {
   describe('examples', () => {
     it('render the Default and Sizes examples', async () => {
       const first = render(Default)
-      expect(first.getByTestId('data-filter-menu')).toBeTruthy()
-      expect(first.getByTestId('data-filter-menu-chip-group')).toBeTruthy()
+      expect(first.getByTestId('filter-menu')).toBeTruthy()
+      expect(first.getByTestId('filter-menu-chip-group')).toBeTruthy()
       await expectNoA11yViolations(first.container)
       first.unmount()
       const sizes = render(Sizes)
-      expect(sizes.getAllByTestId('data-filter-menu__count')).toHaveLength(3)
+      expect(sizes.getAllByTestId('filter-menu__count')).toHaveLength(3)
     })
   })
 
@@ -413,7 +408,7 @@ describe('FilterMenu', () => {
       render(FilterMenu, { props: { fields: hosts } })
       await openField('host')
       expect(panel()!.querySelectorAll('[data-filter-row][role="checkbox"]')).toHaveLength(100)
-      expect(byTestId('data-filter-menu__more-values')?.textContent).toContain('900 more values')
+      expect(byTestId('filter-menu__more-values')?.textContent).toContain('900 more values')
     })
 
     it('warns when FilterMenu.ChipGroup has no FilterMenu with the same fields array', async () => {
@@ -428,7 +423,7 @@ describe('FilterMenu', () => {
         })
       )
       await settle()
-      const chip = byTestId('data-filter-menu-chip-group__chip-status')!
+      const chip = byTestId('filter-menu-chip-group__chip-status')!
       await fireEvent.click(chip.querySelector<HTMLElement>('[role="button"], button') ?? chip)
       expect(warn).toHaveBeenCalledWith(expect.stringContaining('no FilterMenu has these fields'))
       warn.mockRestore()
@@ -438,7 +433,7 @@ describe('FilterMenu', () => {
       const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
       mount({ status: ['live'] }, true)
       await settle()
-      const chip = byTestId('data-filter-menu-chip-group__chip-status')!
+      const chip = byTestId('filter-menu-chip-group__chip-status')!
       await fireEvent.click(chip.querySelector<HTMLElement>('[role="button"], button') ?? chip)
       expect(warn).not.toHaveBeenCalledWith(
         expect.stringContaining('no FilterMenu has these fields')

@@ -28,13 +28,13 @@
 
 ## Don’t
 
-- For a real node/edge diagram driven by data → use `flow`.
+- For a real node/edge diagram driven by data → use `flow-diagram`.
 - As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [frame-box](frame-box.md) — the ruled box a network band usually sits in; it supplies the positioned, clipping ancestor.
+- [registration-frame](registration-frame.md) — the ruled box a network band usually sits in; it supplies the positioned, clipping ancestor.
 
 ## Props
 

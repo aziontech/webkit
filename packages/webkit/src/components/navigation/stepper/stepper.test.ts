@@ -44,7 +44,7 @@ const Single = defineComponent({
   `
 })
 
-const stepsOf = (view: ReturnType<typeof render>) => view.getAllByTestId('navigation-stepper-step')
+const stepsOf = (view: ReturnType<typeof render>) => view.getAllByTestId('stepper-step')
 
 const statesOf = (view: ReturnType<typeof render>) =>
   stepsOf(view).map((step) =>
@@ -64,7 +64,7 @@ describe('Stepper', () => {
     it('renders the rail with the derived testid, orientation and every step title', () => {
       const view = render(Rail)
 
-      const root = view.getByTestId('navigation-stepper')
+      const root = view.getByTestId('stepper')
       expect(root.tagName).toBe('NAV')
       expect(root.getAttribute('data-orientation')).toBe('vertical')
       expect(root.getAttribute('aria-label')).toBe('Create network list')
@@ -77,7 +77,7 @@ describe('Stepper', () => {
 
     it('falls back to the default aria-label when the consumer sets none', () => {
       const view = render(Single)
-      expect(view.getByTestId('navigation-stepper').getAttribute('aria-label')).toBe('Steps')
+      expect(view.getByTestId('stepper').getAttribute('aria-label')).toBe('Steps')
     })
 
     it('lets a consumer-supplied data-testid win on the root and on a step', () => {
@@ -92,9 +92,9 @@ describe('Stepper', () => {
       const view = render(Custom)
 
       expect(view.getByTestId('wizard')).toBeInTheDocument()
-      expect(view.queryByTestId('navigation-stepper')).not.toBeInTheDocument()
+      expect(view.queryByTestId('stepper')).not.toBeInTheDocument()
       expect(view.getByTestId('wizard-first')).toBeInTheDocument()
-      expect(view.queryByTestId('navigation-stepper-step')).not.toBeInTheDocument()
+      expect(view.queryByTestId('stepper-step')).not.toBeInTheDocument()
     })
 
     it('renumbers in document order when a step is inserted between two that exist', async () => {
@@ -171,7 +171,7 @@ describe('Stepper', () => {
     it('marks the step whose value matches the model', () => {
       const view = render(Rail, { props: { start: 'configure' } })
       expect(statesOf(view)).toEqual(['success', 'active', 'pending'])
-      expect(view.getByTestId('navigation-stepper').getAttribute('data-active')).toBe('configure')
+      expect(view.getByTestId('stepper').getAttribute('data-active')).toBe('configure')
     })
 
     it('marks no step when the model matches nothing', () => {
@@ -193,7 +193,7 @@ describe('Stepper', () => {
   describe('activation drives the v-model', () => {
     it('writes the clicked step value back to the model', async () => {
       const view = render(Rail, { props: { start: 'host' } })
-      const root = view.getByTestId('navigation-stepper')
+      const root = view.getByTestId('stepper')
       expect(root.getAttribute('data-active')).toBe('host')
 
       await userEvent.click(buttonIn(stepsOf(view)[1]))
@@ -204,7 +204,7 @@ describe('Stepper', () => {
 
     it('does not move the model when the step is disabled', async () => {
       const view = render(Rail, { props: { start: 'host', reviewDisabled: true } })
-      const root = view.getByTestId('navigation-stepper')
+      const root = view.getByTestId('stepper')
 
       const review = buttonIn(stepsOf(view)[2])
       expect(review.disabled).toBe(true)

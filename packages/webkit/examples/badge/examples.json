@@ -1,6 +1,6 @@
 {
   "component": "badge",
-  "title": "Components/Primitives/Content/Badge",
+  "title": "Components/Content/Badge",
   "examples": [
     {
       "name": "Default",

@@ -1,11 +1,11 @@
 # Billing (`account/billing`)
 
-> The Billing page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValueList` for plan start, next charge date and value as `Currency`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `Table` with No., Invoice ID, Plan, Cycle, Seats, Billing date, Amount, Payment method, Status as `Table.CellStatus` and a download `IconButton` per invoice. Payment methods shows Payment information as `KeyValueList` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `Table` of cards (holder with a Default `Tag`, brand and last four, expiry, `Table.CellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.
+> The Billing page of the account settings: a `PageHeader` with the last update, Refresh and Documentation over `PageTabs` (Bills, Payment methods). Bills puts a Subscription plan `Card` (plan with a Current plan `Tag`, Change plan, and `KeyValueList` for plan start, next charge date and value as `CurrencyAmount`, and the default card with its `PaymentBrand`) beside an Upgrade to Enterprise `Card`, then Invoices on one `useCollection`: a controls row (`PropertyFilter`, Refresh, Download CSV, `CollectionPreferences`) over a `Table` with No., Invoice ID, Plan, Cycle, Seats, Billing date, Amount, Payment method, Status as `Table.CellStatus` and a download `IconButton` per invoice. Payment methods shows Payment information as `KeyValueList` (billing email, auto-renewal as `StatusIndicator`, address, tax ID) with Update, and a `Table` of cards (holder with a Default `Tag`, brand and last four, expiry, `Table.CellActions` with Set as default and Remove behind a `ConfirmDialog`). Outcomes go through `toast`. A page body for ConsoleLayout, rendered in its default slot.
 
 - Surface: app
 - Source: `blocks/account/billing/billing.vue` in `@aziontech/webkit`
 - MCP: `get_block("account/billing")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [Currency](../../components/currency.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValueList](../../components/key-value-list.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), [PaymentBrand](../../components/payment-brand.md), [PropertyFilter](../../components/property-filter.md), [SectionHeader](../../components/section-header.md), [Skeleton](../../components/skeleton.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [CollectionPreferences](../../components/collection-preferences.md), [ConfirmDialog](../../components/confirm-dialog.md), [CurrencyAmount](../../components/currency-amount.md), [DataTable](../../components/data-table.md), [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [IconButton](../../components/icon-button.md), [KeyValueList](../../components/key-value-list.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), [PaymentBrand](../../components/payment-brand.md), [PropertyFilter](../../components/property-filter.md), [SectionHeader](../../components/section-header.md), [Skeleton](../../components/skeleton.md), [StatusIndicator](../../components/status-indicator.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), `use-collection`, `use-locale`
 - Skills: `webkit-lists`, `webkit-tables`, `webkit-ui-states`, `webkit-navigation`, `webkit-microcopy`
 
 ## Asked as
@@ -40,9 +40,9 @@ Title `Billing` and one sentence on what the page holds. Actions: the time of th
 
 When the billing data fails to load, a danger `Alert` with Retry takes the tab's place and says that nothing was charged or changed.
 
-### D. Subscription plan — `Card`, `Skeleton`, `Tag`, `KeyValueList`, `Currency`, `PaymentBrand` (required)
+### D. Subscription plan — `Card`, `Skeleton`, `Tag`, `KeyValueList`, `CurrencyAmount`, `PaymentBrand` (required)
 
-A `Card` whose header holds the `Subscription plan` heading and the outlined `Change plan`, which opens `account/change-plan-drawer` (the copyable SFC links to the plans route so it stands alone). The body shows the plan name with a small secondary `Current plan` `Tag` (a `Skeleton` while loading), then split `KeyValueList` with Plan start date, Next charge date, Next charge value as `Currency`, and the default card as a decorative `PaymentBrand` plate and its brand and last four. The footer says what an invoice includes. On wide containers it takes about half the row.
+A `Card` whose header holds the `Subscription plan` heading and the outlined `Change plan`, which opens `account/change-plan-drawer` (the copyable SFC links to the plans route so it stands alone). The body shows the plan name with a small secondary `Current plan` `Tag` (a `Skeleton` while loading), then split `KeyValueList` with Plan start date, Next charge date, Next charge value as `CurrencyAmount`, and the default card as a decorative `PaymentBrand` plate and its brand and last four. The footer says what an invoice includes. On wide containers it takes about half the row.
 
 ### E. Upgrade card — `Card` (required)
 
@@ -54,7 +54,7 @@ A small `SectionHeader` `Invoices` over the table-view controls row: `PropertyFi
 
 ### G. Invoices table — `DataTable`, `Table`, `useCollection` (required)
 
-One `useCollection` over the invoices, newest first, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: No., Invoice ID (left to right), Plan, Cycle, Seats, Billing date as a formatted date, Amount as `Currency`, Payment method with its plate, Status as `Table.CellStatus` (Paid success, Refunded secondary, Overdue danger), and a download icon button per row named `Download invoice <id>` that links to the PDF.
+One `useCollection` over the invoices, newest first, `DataTable` bound with `v-bind="tableProps"` in a flush `Card`. Columns: No., Invoice ID (left to right), Plan, Cycle, Seats, Billing date as a formatted date, Amount as `CurrencyAmount`, Payment method with its plate, Status as `Table.CellStatus` (Paid success, Refunded secondary, Overdue danger), and a download icon button per row named `Download invoice <id>` that links to the PDF.
 
 ### H. No invoices and no match — `EmptyState` (conditional)
 
@@ -137,7 +137,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import Currency from '@aziontech/webkit/currency'
+  import CurrencyAmount from '@aziontech/webkit/currency-amount'
   import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -488,7 +488,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                       <KeyValueList.Item label="Plan start date">Jan 25, 2023</KeyValueList.Item>
                       <KeyValueList.Item label="Next charge date">Dec 1, 2026</KeyValueList.Item>
                       <KeyValueList.Item label="Next charge value">
-                        <Currency
+                        <CurrencyAmount
                           value="184.20"
                           size="small"
                         />
@@ -673,7 +673,7 @@ Each variant is the same screen in another state: `get_block("account/billing", 
                     <span class="tabular-nums">{{ formatDate(value) }}</span>
                   </template>
                   <template #cell-amount="{ value }">
-                    <Currency
+                    <CurrencyAmount
                       :value="formatAmount(value)"
                       size="small"
                     />

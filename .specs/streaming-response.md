@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 7f01817ae120dbc93baadcda4041735ce8fccb07087c1e6fb912ceff16187681
+checksum: 1ca43c25b4310a7932b5d86b969a655faf906acc72d1d5df7cf009431f7a8fb7
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -44,7 +44,7 @@ Numbered citations `[1]` become `Citation` references resolved against `sources`
 - `chat-message` — the host of a response.
 - `citation`, `sources` — inline references and the list they point at.
 - `code-block` — what fenced code renders as.
-- `ai-loading` — the loading text before the first token, or a bar where a table is coming.
+- `response-loading` — the loading text before the first token, or a bar where a table is coming.
 
 ## Best practices
 

@@ -1,0 +1,19 @@
+{
+ "examples": [
+  {
+   "name": "Default",
+   "summary": "Default pricing card with bottom slot placement and a contained surface.",
+   "sfc": "<script setup>\n  import PricingCard from '@aziontech/webkit/pricing-card'\n</script>\n\n<template>\n  <PricingCard\n    title=\"Pro\"\n    pricing-details=\"Billed annually or $25/mo billed monthly.\"\n    actions-position=\"bottom\"\n    variant=\"contained\"\n    value=\"20\"\n    prefix=\"$\"\n    suffix=\"/ mon\"\n    action-label=\"Label\"\n  />\n</template>"
+  },
+  {
+   "name": "Aligned",
+   "summary": "Three tiers whose copy is deliberately uneven: Hobby has no billing caveat, Pro has one line and Enterprise two. With `equal-height` every region sits on the same line in all three cards, so the row reads as one comparison. Drop the prop and each card sizes to its own copy, staggering the feature lists and the buttons.",
+   "sfc": "<script setup>\n  import PricingCard from '@aziontech/webkit/pricing-card'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-[repeat(auto-fit,320px)] gap-6\">\n    <PricingCard\n      equal-height\n      title=\"Hobby\"\n      pricing-details=\"\"\n      value=\"Free\"\n      prefix=\"\"\n      suffix=\"\"\n      action-label=\"Start for free\"\n    />\n    <PricingCard\n      equal-height\n      show-tag\n      tag-label=\"Popular\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually, save 20%\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Continue with Pro\"\n    />\n    <PricingCard\n      equal-height\n      title=\"Enterprise\"\n      pricing-details=\"Tailored to your usage requirements and payment terms\"\n      value=\"Custom\"\n      prefix=\"\"\n      suffix=\"\"\n      action-label=\"Talk to a specialist\"\n    />\n  </div>\n</template>"
+  },
+  {
+   "name": "Variants",
+   "summary": "Every slot position (bottom, middle) and card style (contained, transparent) combination.",
+   "sfc": "<script setup>\n  import PricingCard from '@aziontech/webkit/pricing-card'\n</script>\n\n<template>\n  <div class=\"grid grid-cols-[repeat(auto-fit,320px)] gap-6\">\n    <PricingCard\n      actions-position=\"bottom\"\n      variant=\"contained\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n    <PricingCard\n      actions-position=\"bottom\"\n      variant=\"ghost\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n    <PricingCard\n      actions-position=\"middle\"\n      variant=\"contained\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n    <PricingCard\n      actions-position=\"middle\"\n      variant=\"ghost\"\n      title=\"Pro\"\n      pricing-details=\"Billed annually or $25/mo billed monthly.\"\n      value=\"20\"\n      prefix=\"$\"\n      suffix=\"/ mon\"\n      action-label=\"Label\"\n    />\n  </div>\n</template>"
+  }
+ ]
+}

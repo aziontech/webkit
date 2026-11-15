@@ -23,7 +23,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import SectionHeader from '@aziontech/webkit/section-header'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
@@ -321,7 +321,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="Connected repository"
                       variant="compact"
                     >
@@ -347,8 +347,8 @@
                         variant="danger"
                         size="small"
                       />
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Production branch"
                       description="Pushes to this branch build and deploy to Production."
                       stackable
@@ -361,8 +361,8 @@
                         monospace
                         :spellcheck="false"
                       />
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Preview branch"
                       description="Pushes to this branch deploy a preview with its own URL. Production is untouched."
                       stackable
@@ -375,7 +375,7 @@
                         monospace
                         :spellcheck="false"
                       />
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>
@@ -389,7 +389,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="Build command"
                       description="The command that builds the application."
                       stackable
@@ -402,8 +402,8 @@
                         monospace
                         :spellcheck="false"
                       />
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       title="Deploy command"
                       description="The command that deploys the build."
                       stackable
@@ -416,7 +416,7 @@
                         monospace
                         :spellcheck="false"
                       />
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>
@@ -430,7 +430,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="API token"
                       description="Stored as the PLATFORM_TOKEN GitHub secret."
                       stackable
@@ -453,7 +453,7 @@
                           size="small"
                         />
                       </InputGroupRoot>
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>

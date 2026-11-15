@@ -3,13 +3,13 @@
 > The field-shaped button in a top bar that opens search: a magnifier, a muted label (`Search` by default) and the keycap of the shortcut that opens the same palette (`⌘K` on macOS, `Ctrl K` elsewhere, drawn by `Kbd`). It looks like an input so the bar reads "you can search here", but it is one `<button>` that emits `open` — on click and on the shortcut itself, which it binds on the window unless a mounted `Command` already listens for it. The consumer opens `Command` (or its own search) from `open`. Every app header — console, demo, docs and site — carries one: it is the single way search is offered in a top bar. With `collapsible` it folds to the magnifier alone inside a narrow container (with its label as a tooltip), so one element serves the wide and the narrow bar.
 
 - Import: `import SearchTrigger from '@aziontech/webkit/search-trigger'`
-- Category: actions · Surface: app · Structure: monolithic
+- Category: action · Surface: app · Structure: monolithic
 - API as JSON: [search-trigger.json](https://github.com/aziontech/webkit/blob/main/.specs/search-trigger.json)
 
 ## When to use
 
 - Use SearchTrigger only in the top bar to open the ⌘K palette (Command); search over one table is Table.Search.
-- The search entry of every app header — console, demo, docs or site top bar (`GlobalHeader.End`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.
+- The search entry of every app header — console, demo, docs or site top bar (`AppHeader.End`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.
 - Anywhere a shortcut-backed launcher should look like a field without being one.
 
 ## Do
@@ -35,7 +35,7 @@
 - Kbd` — draws the keycap with the OS-aware modifier glyph.
 - IconButton` — the shape the trigger folds to when `collapsible` and the container is narrow.
 - Tooltip` — shows the label over the folded magnifier on hover and focus.
-- GlobalHeader` — the bar it sits in, usually in `GlobalHeader.End`.
+- AppHeader` — the bar it sits in, usually in `AppHeader.End`.
 
 ## Props
 

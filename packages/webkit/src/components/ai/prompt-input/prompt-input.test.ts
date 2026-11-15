@@ -7,7 +7,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import ShortcutMenus from '../../../../examples/prompt-input/shortcut-menus.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import PromptInput from './prompt-input.vue'
 
 function harness(props: Record<string, unknown> = {}, slots: Record<string, () => unknown> = {}) {
@@ -37,7 +37,7 @@ function harness(props: Record<string, unknown> = {}, slots: Record<string, () =
 
 describe('PromptInput', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
-    expect(render(PromptInput).getByTestId('ai-prompt-input')).toBeTruthy()
+    expect(render(PromptInput).getByTestId('prompt-input')).toBeTruthy()
     expect(
       render(PromptInput, { attrs: { 'data-testid': 'mine' } }).getByTestId('mine')
     ).toBeTruthy()
@@ -107,12 +107,12 @@ describe('PromptInput', () => {
   it('counts characters and blocks submit over the limit', async () => {
     const { getByRole, getByTestId, submitted } = harness({ initial: 'abcdef', maxLength: 4 })
     const textarea = getByRole('textbox')
-    expect(getByTestId('ai-prompt-input__counter')).toHaveTextContent('6/4')
+    expect(getByTestId('prompt-input__counter')).toHaveTextContent('6/4')
     expect(textarea).toHaveAttribute('aria-invalid', 'true')
     expect(textarea.getAttribute('aria-describedby')).toContain(
-      getByTestId('ai-prompt-input__counter').id
+      getByTestId('prompt-input__counter').id
     )
-    expect(getByTestId('ai-prompt-input__limit')).toHaveTextContent('2 characters over the limit')
+    expect(getByTestId('prompt-input__limit')).toHaveTextContent('2 characters over the limit')
     expect(getByRole('button', { name: 'Submit' })).toBeDisabled()
     await userEvent.click(textarea)
     await userEvent.keyboard('{Enter}')
@@ -134,9 +134,9 @@ describe('PromptInput', () => {
       {},
       { hint: () => 'The AI assistant can make mistakes.', attachments: () => h('span', 'log.txt') }
     )
-    const hint = getByTestId('ai-prompt-input__hint')
+    const hint = getByTestId('prompt-input__hint')
     expect(getByRole('textbox').getAttribute('aria-describedby')).toContain(hint.id)
-    expect(getByTestId('ai-prompt-input__attachments')).toHaveTextContent('log.txt')
+    expect(getByTestId('prompt-input__attachments')).toHaveTextContent('log.txt')
   })
 
   it('grows with the text up to maxRows', async () => {
@@ -254,7 +254,7 @@ describe('PromptInput', () => {
       })
       expect(
         (container.querySelector('textarea')?.getAttribute('aria-describedby') ?? '').includes(
-          queryByTestId('ai-prompt-input__hint')?.id ?? 'none'
+          queryByTestId('prompt-input__hint')?.id ?? 'none'
         )
       ).toBe(false)
 
@@ -262,7 +262,7 @@ describe('PromptInput', () => {
       await nextTick()
       expect(
         (container.querySelector('textarea')?.getAttribute('aria-describedby') ?? '').includes(
-          queryByTestId('ai-prompt-input__hint')?.id ?? 'none'
+          queryByTestId('prompt-input__hint')?.id ?? 'none'
         )
       ).toBe(true)
       expect(queryByTestId('probe')).not.toBeNull()
@@ -271,7 +271,7 @@ describe('PromptInput', () => {
       await nextTick()
       expect(
         (container.querySelector('textarea')?.getAttribute('aria-describedby') ?? '').includes(
-          queryByTestId('ai-prompt-input__hint')?.id ?? 'none'
+          queryByTestId('prompt-input__hint')?.id ?? 'none'
         )
       ).toBe(false)
       expect(queryByTestId('probe')).toBeNull()

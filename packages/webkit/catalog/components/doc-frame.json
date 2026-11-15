@@ -7,7 +7,7 @@
   "A clip that decorates a step (`autoplay`) or one the reader chooses to play (default, with controls)."
  ],
  "avoidWhen": [
-  "For an application-screen media block outside documentation prose — use `FrameBox` or compose the layout directly.",
+  "For an application-screen media block outside documentation prose — use `RegistrationFrame` or compose the layout directly.",
   "For an image that is itself a link or a card — a frame is a figure, not a navigation target.",
   "For a gallery or carousel; the frame holds one piece of media at a time."
  ],

@@ -1,11 +1,11 @@
 ---
 name: button
-category: actions
+category: action
 structure: monolithic
 status: implemented
 spec_version: 9
 template: 2
-checksum: 1ff744dd8fba9e6d1664e67a74895ebf3f0773af575fe54022ab08637202f5b0
+checksum: 7f16824b1e8c4ce4ba1f35eab09578cf7c7c907127781c3f91f5e2ead1315d4c
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -32,13 +32,13 @@ The labelled control that triggers an action. `variant` ranks the action in its 
 - A standalone navigation link with a trailing icon and a ghost hover → use `link`.
 - Link-looking text that goes to a URL in a table cell → `Table.CellLink`; a `variant="link"` Button is for an action with no destination.
 - A hand-written `<button class="text-(--text-link) …">` → use `variant="link"`.
-- The single AI or highlight entry point that must stand out from every other action → use `button-highlight`.
+- The single AI or highlight entry point that must stand out from every other action → use `highlight-button`.
 
 ## Related
 
 - `icon-button` — icon-only counterpart with the same sizes and a required `ariaLabel`; its `ghost` variant matches this one.
 - `split-button` — joins a Button to a chevron menu of related actions.
-- `button-highlight` — the same prop surface without `variant`, drawn with the brand gradient and a rotating glow rim.
+- `highlight-button` — the same prop surface without `variant`, drawn with the brand gradient and a rotating glow rim.
 - `link` — a text link that navigates to a page, resource or URL.
 - `toggle-group` — a group of mutually exclusive options, not a single action.
 

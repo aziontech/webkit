@@ -74,14 +74,14 @@ const Harness = defineComponent({
 describe('Tree', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const fallback = mount()
-    expect(fallback.getByTestId('data-tree')).toBeTruthy()
-    expect(fallback.getAllByTestId('data-tree__item')).toHaveLength(ITEMS.length)
-    expect(fallback.getAllByTestId('data-tree__toggle')).toHaveLength(2)
+    expect(fallback.getByTestId('tree')).toBeTruthy()
+    expect(fallback.getAllByTestId('tree__item')).toHaveLength(ITEMS.length)
+    expect(fallback.getAllByTestId('tree__toggle')).toHaveLength(2)
     fallback.unmount()
     const custom = mount({}, { attrs: { 'data-testid': 'objects' } })
     expect(custom.getByTestId('objects')).toBeTruthy()
     expect(custom.getAllByTestId('objects__item')).toHaveLength(ITEMS.length)
-    expect(custom.queryByTestId('data-tree')).toBeNull()
+    expect(custom.queryByTestId('tree')).toBeNull()
   })
 
   it('names the tree from the locale catalog when ariaLabel is empty', () => {
@@ -451,10 +451,10 @@ describe('Tree', () => {
 
   it('renders five skeleton rows and aria-busy while loading', () => {
     const view = mount({ loading: true })
-    const root = view.getByTestId('data-tree')
+    const root = view.getByTestId('tree')
     expect(root.getAttribute('aria-busy')).toBe('true')
     expect(root.hasAttribute('data-loading')).toBe(true)
-    expect(view.getAllByTestId('feedback-skeleton')).toHaveLength(5)
+    expect(view.getAllByTestId('skeleton')).toHaveLength(5)
     expect(view.queryByRole('tree')).toBeNull()
     expect(view.queryAllByRole('treeitem')).toHaveLength(0)
   })
@@ -465,7 +465,7 @@ describe('Tree', () => {
       emptyTitle: 'No objects',
       emptyDescription: 'Upload a file.'
     })
-    expect(fallback.getByTestId('data-tree').hasAttribute('data-empty')).toBe(true)
+    expect(fallback.getByTestId('tree').hasAttribute('data-empty')).toBe(true)
     expect(fallback.getByText('No objects')).toBeTruthy()
     expect(fallback.getByText('Upload a file.')).toBeTruthy()
     expect(fallback.queryByRole('tree')).toBeNull()
@@ -497,7 +497,7 @@ describe('Tree', () => {
       expect(logs.getAttribute('aria-expanded')).toBe('true')
       const group = logs.querySelector('[role="group"]') as HTMLElement
       expect(group.getAttribute('aria-busy')).toBe('true')
-      expect(view.getByTestId('data-tree__loading')).toBeTruthy()
+      expect(view.getByTestId('tree__loading')).toBeTruthy()
       expect(view.getByRole('status').textContent).toBe('Loading')
       await expectNoA11yViolations(view.container)
       await view.rerender({
@@ -506,7 +506,7 @@ describe('Tree', () => {
           CONFIG
         ]
       })
-      expect(view.queryByTestId('data-tree__loading')).toBeNull()
+      expect(view.queryByTestId('tree__loading')).toBeNull()
       expect(node(view.container, 'logs/a.log')).toBeTruthy()
     })
 
@@ -526,7 +526,7 @@ describe('Tree', () => {
       await userEvent.keyboard('{F2}')
       const field = view.getByRole('textbox', { name: 'Rename azion.config.js' })
       expect(document.activeElement).toBe(field)
-      expect(view.getByTestId('data-tree__rename')).toBe(field)
+      expect(view.getByTestId('tree__rename')).toBe(field)
       await userEvent.clear(field)
       await userEvent.type(field, '  app.config.js  {Enter}')
       expect(onRename).toHaveBeenCalledTimes(1)
@@ -576,7 +576,7 @@ describe('Tree', () => {
       await userEvent.dblClick(rowOf(view.container, 'azion.config.js'))
       expect(onDoubleClick).toHaveBeenCalledWith(expect.any(MouseEvent), CONFIG)
       await userEvent.dblClick(rowOf(view.container, 'locked.txt'))
-      await userEvent.dblClick(view.getAllByTestId('data-tree__toggle')[0])
+      await userEvent.dblClick(view.getAllByTestId('tree__toggle')[0])
       expect(onDoubleClick).toHaveBeenCalledTimes(1)
     })
 

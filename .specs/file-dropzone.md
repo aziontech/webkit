@@ -1,9 +1,9 @@
 ---
 name: file-dropzone
-category: inputs
+category: input
 structure: monolithic
 status: implemented
-checksum: c596ff5037c91cad6bce49d925f2ffa2dbdd513def3d78745f061c45518abdb0
+checksum: eacc85cdf37f9cef2913c0cc9b1a6793a575b36d7ef6303a5eec802ba332431b
 spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -31,7 +31,7 @@ The drop target itself is pointer-only. It is never a keyboard control. The keyb
 ## When NOT to use
 
 - Picking files by keyboard or click only, with no drag affordance → a `button` that opens a native file input is enough.
-- Showing the chosen files, their progress or their errors → render them yourself with `progress`, `message` or `helper-text`. The dropzone renders none of these.
+- Showing the chosen files, their progress or their errors → render them yourself with `progress`, `message` or `field-error`. The dropzone renders none of these.
 - Dragging items inside the page (reordering rows, moving cards) → this component only reacts to OS drags that carry `Files`. In-page drag and drop is out of scope.
 - A static "nothing here yet" panel with no drop behavior → use `empty-state`.
 

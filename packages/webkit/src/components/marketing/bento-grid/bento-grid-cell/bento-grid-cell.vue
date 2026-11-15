@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import FrameBox from '../../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({
     name: 'BentoGridCell',
@@ -40,9 +40,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-bento-grid-cell'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'bento-grid-cell')
 </script>
 
 <template>
@@ -53,7 +51,7 @@
     :data-rows="rows"
     class="flex min-w-0 data-[span=full]:col-span-full data-[span=2]:md:col-span-2 data-[span=3]:md:col-span-3 data-[span=4]:md:col-span-4 data-[rows=2]:md:row-span-2"
   >
-    <FrameBox
+    <RegistrationFrame
       :flush="['top', 'left']"
       marks="all"
       class="h-full w-full min-w-0"
@@ -65,6 +63,6 @@
       >
         <slot />
       </div>
-    </FrameBox>
+    </RegistrationFrame>
   </div>
 </template>

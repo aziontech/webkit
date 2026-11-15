@@ -82,7 +82,7 @@ Styles live on the **template root element's `class` attribute**, not in JavaScr
   })
 
   const attrs = useAttrs()
-  const testId = computed(() => (attrs['data-testid'] as string) ?? 'actions-button')
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'button')
 </script>
 
 <template>
@@ -137,12 +137,7 @@ Some components let the consumer override internal token choices (e.g. `<Card cl
 <template>
   <div
     :data-testid="testId"
-    :class="
-      cn(
-        'rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-md)',
-        attrs.class as string
-      )
-    "
+    :class="cn('rounded-(--shape-card) bg-(--bg-surface) p-(--spacing-md)', attrs.class as string)"
   />
 </template>
 ```
@@ -159,19 +154,21 @@ A design-token value on a utility is written with Tailwind v4's **paren shorthan
 
 ```html
 <!-- ✅ canonical — paren shorthand -->
-<div class="bg-(--bg-surface) text-(--text-default) rounded-(--shape-card) focus-visible:ring-(--ring-color)">
-
-<!-- ❌ legacy bracket form — do not author -->
-<div class="bg-[var(--bg-surface)] text-[var(--text-default)] rounded-[var(--shape-card)]">
+<div
+  class="bg-(--bg-surface) text-(--text-default) rounded-(--shape-card) focus-visible:ring-(--ring-color)"
+>
+  <!-- ❌ legacy bracket form — do not author -->
+  <div class="bg-[var(--bg-surface)] text-[var(--text-default)] rounded-[var(--shape-card)]"></div>
+</div>
 ```
 
 Three shapes:
 
-| Concern | Canonical | Notes |
-| --- | --- | --- |
-| **Whole-value var** | `prop-(--token)` | `bg-(--primary)`, `max-w-(--container-2xl)`, `focus-visible:ring-offset-(--bg-canvas)`. Variants compose (`data-[disabled]:bg-(--bg-disabled)`). |
-| **Typed value** | `prop-(type:--token)` | `text-(length:--text-body-md)`, `border-(color:--border-default)`, `font-(family-name:--font-sans)`. |
-| **Numeric arbitrary** | `z-1` | The bare-number utility, not `z-[1]`. |
+| Concern               | Canonical             | Notes                                                                                                                                            |
+| --------------------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Whole-value var**   | `prop-(--token)`      | `bg-(--primary)`, `max-w-(--container-2xl)`, `focus-visible:ring-offset-(--bg-canvas)`. Variants compose (`data-[disabled]:bg-(--bg-disabled)`). |
+| **Typed value**       | `prop-(type:--token)` | `text-(length:--text-body-md)`, `border-(color:--border-default)`, `font-(family-name:--font-sans)`.                                             |
+| **Numeric arbitrary** | `z-1`                 | The bare-number utility, not `z-[1]`.                                                                                                            |
 
 **Two cases stay bracketed — the paren form emits _no CSS_ for them, silently:**
 
@@ -184,8 +181,15 @@ Tailwind v4 does **not** compile the transform utilities to the `transform` prop
 
 ```css
 /* what Tailwind v4 actually emits */
-.translate-x-\[12\%\] { --tw-translate-x: 12%; translate: var(--tw-translate-x) var(--tw-translate-y) }
-.scale-90             { --tw-scale-x: 90%; --tw-scale-y: 90%; scale: var(--tw-scale-x) var(--tw-scale-y) }
+.translate-x-\[12\%\] {
+  --tw-translate-x: 12%;
+  translate: var(--tw-translate-x) var(--tw-translate-y);
+}
+.scale-90 {
+  --tw-scale-x: 90%;
+  --tw-scale-y: 90%;
+  scale: var(--tw-scale-x) var(--tw-scale-y);
+}
 ```
 
 So a transition that names `transform` never animates them. This fails **silently** in the worst way: the class compiles, `vue-tsc` and ESLint pass, the utility is emitted, the element ends up in the right place — and no motion is ever interpolated.
@@ -193,16 +197,18 @@ So a transition that names `transform` never animates them. This fails **silentl
 ```html
 <!-- ❌ compiles, lints, animates NOTHING -->
 <div class="translate-x-[12%] transition-[transform,opacity] duration-moderate-01">
-
-<!-- ✅ name the properties the utilities actually set -->
-<div class="translate-x-[12%] transition-[translate,opacity] duration-moderate-01">
-<div class="scale-90 transition-[scale,opacity] duration-moderate-01">
+  <!-- ✅ name the properties the utilities actually set -->
+  <div class="translate-x-[12%] transition-[translate,opacity] duration-moderate-01">
+    <div class="scale-90 transition-[scale,opacity] duration-moderate-01"></div>
+  </div>
+</div>
 ```
 
-**With Vue `<Transition>` / `<TransitionGroup>`, list all three.** The enter/leave classes use the utilities above (`translate`, `scale`), but `TransitionGroup`'s *move* animation sets an inline `transform` of its own, so a group that both moves and fades needs every property named:
+**With Vue `<Transition>` / `<TransitionGroup>`, list all three.** The enter/leave classes use the utilities above (`translate`, `scale`), but `TransitionGroup`'s _move_ animation sets an inline `transform` of its own, so a group that both moves and fades needs every property named:
 
 ```html
-transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance motion-reduce:transition-none
+transition-[transform,translate,scale,opacity] duration-moderate-01 ease-productive-entrance
+motion-reduce:transition-none
 ```
 
 Two related traps in the same family, both silent:
@@ -218,11 +224,11 @@ The guardrail token-checks (`typography-raw-length`, `leading-raw`, `tracking-ra
 
 The shorthand has no tolerance: the parens hold **exactly** `--token` or `type:--token`, nothing else. Get it slightly wrong and the style never reaches the element, while the class keeps reading as correct — in a 1000-character root `class` string, forever.
 
-| Written | What actually happens |
-| --- | --- |
-| `bg-(--bg-surface )` | The space **terminates the candidate**. Tailwind sees the unterminated `bg-(--bg-surface` and emits **nothing**. |
-| `bg-( --bg-surface)` | Same — whitespace anywhere inside the parens. |
-| `min-h-[--(size-4)]` | Bracket/paren inverted. This one *does* emit a rule — `min-height: --(size-4)`, an invalid value the **browser discards at parse time**. |
+| Written              | What actually happens                                                                                                                    |
+| -------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| `bg-(--bg-surface )` | The space **terminates the candidate**. Tailwind sees the unterminated `bg-(--bg-surface` and emits **nothing**.                         |
+| `bg-( --bg-surface)` | Same — whitespace anywhere inside the parens.                                                                                            |
+| `min-h-[--(size-4)]` | Bracket/paren inverted. This one _does_ emit a rule — `min-height: --(size-4)`, an invalid value the **browser discards at parse time**. |
 
 Both shipped: chip's `filled` variant was fully transparent in both themes from the day it shipped (the first form), and `popover-header`'s min-height was inert from the v4 sweep until 2026-08-12 (the third). Neither is a lint, type, or build error on its own, and **a visual baseline generated from the broken render encodes the bug as correct** — so nothing downstream fails either.
 
@@ -231,7 +237,7 @@ Two consequences worth internalizing:
 - **A dead class is invisible to the unit suite.** Vitest browser mode runs without Tailwind, so a computed-style assertion returns the same value whether the class works or does not exist (see [`testing.md`](./testing.md) § "What a real browser does NOT give this suite"). Verify a fill by sampling the rendered pixel, or probe the class through the v4 compile API — not through `getComputedStyle` in a test.
 - **When a style "does nothing", suspect the class before the cascade.** Probe it (`compile(...).build(['the-class'])`) with a deliberately bogus class in the list as a control; if the bogus one also "emits", the probe is measuring nothing.
 
-The **`dead-token-shorthand`** token-check blocks both spellings at write time and in the CI ratchet. It scans raw file text, so a comment that *quotes* a malformed class trips it too — describe such a class in prose instead of spelling it out.
+The **`dead-token-shorthand`** token-check blocks both spellings at write time and in the CI ratchet. It scans raw file text, so a comment that _quotes_ a malformed class trips it too — describe such a class in prose instead of spelling it out.
 
 ## A container query never matches its own container
 

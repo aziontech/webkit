@@ -3,7 +3,7 @@
 > The admonition a documentation page interrupts itself with — Note, Info, Tip, Check, Warning, Danger — rendered on the webkit `Alert` surface, so the severity colour, the border, the icon and the radius come from the design system rather than from this layer. Its anatomy is a glyph and a column of prose — a sentence, or a few short paragraphs and a list — nothing else: no title row.
 
 - Import: `import DocCallout from '@aziontech/webkit/doc-callout'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-callout.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-callout.json)
 
 ## When to use

@@ -1,6 +1,6 @@
 {
   "component": "otp-input",
-  "title": "Components/Primitives/Inputs/OtpInput",
+  "title": "Components/Input/OtpInput",
   "examples": [
     {
       "name": "Default",

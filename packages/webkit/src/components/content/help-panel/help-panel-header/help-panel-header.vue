@@ -26,7 +26,7 @@
   const attrs = useAttrs()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-help-panel-header'
+    () => (attrs['data-testid'] as string | undefined) ?? 'help-panel-header'
   )
 </script>
 

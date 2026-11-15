@@ -133,7 +133,7 @@
   const BINS = 5
   const CELL = /M(\d+) (\d+)h(\d+)/g
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-map-chart')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'map-chart')
   const summaryId = `${uid}-summary`
   const patternId = `${uid}-cell`
 
@@ -438,7 +438,7 @@
       <Skeleton
         width="100%"
         height="100%"
-        :data-testid="`${testId}__skeleton`"
+        :data-testid="`${testId}__loading`"
       />
     </div>
     <div

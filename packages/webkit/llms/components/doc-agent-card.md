@@ -3,7 +3,7 @@
 > The "Your AI agent, fluent in Azion" card that opens the first section of a documentation home. Two columns in one framed card: on the left the title, one or two sentences on what the prompt gives the agent, and the inline `CopyPromptButton` with the agent marks; on the right, behind a vertical divider, the question "Prefer the guided route?" over an orange `Agent setup` button, set on an orange halftone panel that fades in from the bottom corner. Below the card's `@3xl` container size the columns stack and the divider turns horizontal. All four strings default to the catalog, so `<DocAgentCard :prompt="…" />` is the whole reference card.
 
 - Import: `import DocAgentCard from '@aziontech/webkit/doc-agent-card'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-agent-card.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-agent-card.json)
 
 ## When to use
@@ -28,8 +28,8 @@
 
 - CopyPromptButton` — the left column's action.
 - DocHero` — the masthead above it on a docs home.
-- DocCardGroup` — the Console / CLI / API cards that follow it; both share `FrameBox`'s corner marks.
-- TextureMaterial` — the `dither` halftone behind the guided action.
+- DocCardGroup` — the Console / CLI / API cards that follow it; both share `RegistrationFrame`'s corner marks.
+- Texture` — the `dither` halftone behind the guided action.
 
 ## Props
 

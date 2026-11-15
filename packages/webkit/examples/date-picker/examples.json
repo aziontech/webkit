@@ -1,6 +1,6 @@
 {
   "component": "date-picker",
-  "title": "Components/Primitives/Inputs/DatePicker",
+  "title": "Components/Input/DatePicker",
   "examples": [
     {
       "name": "Default",

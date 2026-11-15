@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: eb21907e9a7a6e7a2fe7c744c593f8ad7b3d1adda3b3239e033e95bf1779b4dd
+checksum: a13c83001073ccbbe6dc82510a717a0aed5734364bfbb119eba26a80bad2f4d7
 created: 2026-11-15
 last_updated: 2026-11-15
 ---
@@ -43,7 +43,7 @@ The data-driven table: pass `data` + `columns` and it renders the header, rows, 
 - People edit many cells of many records in place, spreadsheet-style → use `data-grid`.
 - A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.
 - A short titled preview of a longer listing on a marketing page → use `listing-table`.
-- A feature-by-feature comparison of Azion with a competitor → use `comparison-table`.
+- A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison`.
 - Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
 - The same records as a grid of cards → use `card-list` (same collection, card layout).
 
@@ -239,7 +239,7 @@ For a query language of your own (e.g. AQL), bind `PropertyFilter` in `query` mo
 | --------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `row-click`     | `(event: MouseEvent, row: TRow)`                                                           | Fires when a rendered row is clicked. `event` is the click; `row` is the clicked record.                                                                                                                                                  |
 | `filter-apply`  | `(event: Event, filters: TableAppliedFilter[])`                                            | `Table.Filter` committed a pick or a token — the explicit re-query signal for `manualFiltering`.                                                                                                                                          |
-| `filter-remove` | `(event: Event, filter: TableAppliedFilter)`                                               | One applied filter was removed (a `FilterMenu.ChipGroup` chip).                                                                                                                                                                               |
+| `filter-remove` | `(event: Event, filter: TableAppliedFilter)`                                               | One applied filter was removed (a `FilterMenu.ChipGroup` chip).                                                                                                                                                                           |
 | `refresh`       | `(event: Event)`                                                                           | Refresh requested; the app refetches. `event` is the click of `Table.RefreshButton`, or `new Event('refresh')` when `reload()` is called.                                                                                                 |
 | `export`        | `(event: Event, rows: TRow[])`                                                             | Export requested with the resolved rows; `event` is the click of `Table.Export`, or `new Event('export')` when `exportCsv()` is called; a consumer may handle it server-side (otherwise the built-in CSV util downloads).                 |
 | `reorder`       | `(event: KeyboardEvent \| PointerEvent, payload: { from: number; to: number; row: TRow })` | `reorderable`: a row moved from index `from` to index `to` of `data`.                                                                                                                                                                     |

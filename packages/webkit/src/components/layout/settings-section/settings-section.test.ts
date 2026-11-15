@@ -16,9 +16,9 @@ describe('SettingsSection', () => {
       }).container
     )
 
-    expect(getByTestId('layout-settings-section').tagName).toBe('SECTION')
+    expect(getByTestId('settings-section').tagName).toBe('SECTION')
     expect(getByRole('heading', { level: 2 }).textContent?.trim()).toBe('General')
-    expect(getByTestId('layout-settings-section__body').textContent?.trim()).toBe('Body')
+    expect(getByTestId('settings-section__body').textContent?.trim()).toBe('Body')
   })
 
   it('honours a consumer data-testid', () => {
@@ -34,18 +34,18 @@ describe('SettingsSection', () => {
 
   it('renders the Hint only when hint is set', () => {
     const bare = within(render(SettingsSection, { props: { title: 'General' } }).container)
-    expect(bare.queryByTestId('input-hint')).toBeNull()
+    expect(bare.queryByTestId('hint')).toBeNull()
 
     const hinted = within(
       render(SettingsSection, { props: { title: 'General', hint: 'What this band holds.' } })
         .container
     )
-    expect(hinted.getByTestId('input-hint')).toBeTruthy()
+    expect(hinted.getByTestId('hint')).toBeTruthy()
   })
 
   it('renders the gutter copy-link and the h2 id only with an anchor', () => {
     const bare = within(render(SettingsSection, { props: { title: 'General' } }).container)
-    expect(bare.queryByTestId('layout-settings-section__copy-link')).toBeNull()
+    expect(bare.queryByTestId('settings-section__copy-link')).toBeNull()
 
     const anchored = within(
       render(SettingsSection, { props: { title: 'General', anchor: 'general' } }).container
@@ -70,12 +70,10 @@ describe('SettingsSection', () => {
       render(SettingsSection, { props: { title: 'General' } }).container
     )
 
-    expect(queryByTestId('layout-settings-section__trigger')).toBeNull()
-    expect(getByTestId('layout-settings-section__body').getAttribute('data-state')).toBe('open')
-    expect(getByTestId('layout-settings-section__body').hasAttribute('inert')).toBe(false)
-    expect(getByTestId('layout-settings-section__body').hasAttribute('data-collapsible')).toBe(
-      false
-    )
+    expect(queryByTestId('settings-section__trigger')).toBeNull()
+    expect(getByTestId('settings-section__body').getAttribute('data-state')).toBe('open')
+    expect(getByTestId('settings-section__body').hasAttribute('inert')).toBe(false)
+    expect(getByTestId('settings-section__body').hasAttribute('data-collapsible')).toBe(false)
   })
 
   it('toggles a collapsible band and emits update:open', async () => {
@@ -83,8 +81,8 @@ describe('SettingsSection', () => {
       props: { title: 'Advanced', collapsible: true, icon: 'ai ai-settings' }
     })
     const scope = within(container)
-    const trigger = scope.getByTestId('layout-settings-section__trigger')
-    const body = scope.getByTestId('layout-settings-section__body')
+    const trigger = scope.getByTestId('settings-section__trigger')
+    const body = scope.getByTestId('settings-section__body')
 
     expect(trigger.getAttribute('aria-expanded')).toBe('false')
     expect(trigger.getAttribute('aria-controls')).toBe(body.id)
@@ -97,14 +95,12 @@ describe('SettingsSection', () => {
     expect(emitted()['update:open']).toEqual([[true]])
     expect(trigger.getAttribute('aria-expanded')).toBe('true')
     expect(body.hasAttribute('inert')).toBe(false)
-    expect(scope.getByTestId('layout-settings-section').getAttribute('data-state')).toBe('open')
+    expect(scope.getByTestId('settings-section').getAttribute('data-state')).toBe('open')
   })
 
   it('renders the examples', async () => {
-    expect(within(render(Default).container).getAllByTestId('layout-setting-row')).toHaveLength(2)
-    expect(
-      within(render(Stacked).container).getAllByTestId('layout-settings-section')
-    ).toHaveLength(2)
+    expect(within(render(Default).container).getAllByTestId('settings-row')).toHaveLength(2)
+    expect(within(render(Stacked).container).getAllByTestId('settings-section')).toHaveLength(2)
 
     const collapsible = within(render(Collapsible).container)
     const trigger = collapsible.getByRole('button', { name: 'Advanced' })
@@ -130,7 +126,7 @@ describe('SettingsSection', () => {
     it('shows the copy-link inline where there is no hover', () => {
       const view = render(SettingsSection, { props: { title: 'Cache', anchor: 'cache' } })
 
-      expect(view.getByTestId('layout-settings-section__copy-link').className).toContain(
+      expect(view.getByTestId('settings-section__copy-link').className).toContain(
         '[@media(hover:none)]:opacity-100'
       )
     })

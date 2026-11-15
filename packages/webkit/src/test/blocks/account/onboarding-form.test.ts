@@ -14,11 +14,11 @@ describe('account/onboarding-form', () => {
     const column = view.container.querySelector('.layout-column.layout-boundary')
     expect(column).not.toBeNull()
     expect(view.queryByRole('progressbar')).toBeNull()
-    expect(view.getByTestId('navigation-wizard')).toBeTruthy()
+    expect(view.getByTestId('wizard')).toBeTruthy()
     expect(
       await view.findByRole('heading', { level: 2, name: 'Create your organization' })
     ).toBeTruthy()
-    expect(view.getByTestId('navigation-wizard__progress').textContent).toContain('Step 1 of 3')
+    expect(view.getByTestId('wizard__progress').textContent).toContain('Step 1 of 3')
   })
 
   it('gates Next on the required fields, then moves to the plan step', async () => {
@@ -51,11 +51,11 @@ describe('account/onboarding-form', () => {
     expect(view.queryByText('This field is required.')).toBeNull()
   })
 
-  it('lists what the upgrade includes with FeatureList', async () => {
+  it('lists what the upgrade includes with PlanFeatureList', async () => {
     const view = render(Plan)
     await userEvent.click(view.getByRole('radio', { name: /Pro plan/ }))
     const drawer = await view.findByRole('dialog', { name: 'Upgrade to Pro' })
-    const list = within(drawer).getByTestId('content-feature-list')
+    const list = within(drawer).getByTestId('plan-feature-list')
     expect(within(list).getAllByRole('listitem').length).toBeGreaterThan(3)
   })
 

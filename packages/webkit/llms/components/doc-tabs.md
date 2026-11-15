@@ -3,7 +3,7 @@
 > Alternative paths through the same instruction ("macOS / Linux / Windows", "Console / CLI"). It reads the `title` of each `DocTab` child to build the strip and renders each child body in its panel, on `Tabs`, so the strip, the indicator and the keyboard model are the design system's.
 
 - Import: `import DocTabs from '@aziontech/webkit/doc-tabs'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-tabs.json)
 
 ## When to use

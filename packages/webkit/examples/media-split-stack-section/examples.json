@@ -1,0 +1,41 @@
+{
+  "component": "media-split-stack-section",
+  "title": "Components/Marketing/Sections/MediaSplitStackSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "Five solution areas under a section title and description, every picture at the closing end. Each band carries its own overline; the AI band draws a live `ConsoleMockup` scene, and the performance band links as a whole to its own `href` while its button keeps its own. Under the section title each band headline is an `h3`. Edit the props in the Controls panel — switch `variant` to `alternating`, or clear the `title` to drop the header.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Variants",
+      "summary": "Both layouts stacked: the `media-end` run of solution areas with no header, then the `alternating` run of network claims under its centered header, the pictures swapping sides band by band.",
+      "file": "variants.vue"
+    },
+    {
+      "name": "Product media",
+      "summary": "Bands whose pictures show the product itself: a ConsoleMockup console screen (`widget`), which plays its beat while the pointer is over the band, a Diagram request flow (`diagram`), and an object picture set whole on its own plate (`imageFramed`). Widget and diagram load only when a band uses them.",
+      "file": "product-media.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Solutions",
+      "summary": "The five solution areas of Home: large, centered bands, every picture at the closing end, each with an outlined \"Learn more\" button.",
+      "file": "site-solutions.vue",
+      "json": "site-solutions.json"
+    },
+    {
+      "name": "Alternating",
+      "summary": "The Our Network run: a centered section title, then four bands alternating the picture between the opening and the closing end.",
+      "file": "site-alternating.vue",
+      "json": "site-alternating.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Solutions/MediaSplitStackSection",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Solutions", "SolutionsJson", "Alternating", "AlternatingJson"]
+}

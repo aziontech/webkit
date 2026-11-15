@@ -3,7 +3,7 @@
 > ToggleGroup is a connected group of buttons that picks exactly one value out of a small set of related options, with a selection indicator that slides to the active segment. It renders as a `radiogroup` whose segments are `radio` buttons, is driven by an `options` array plus `v-model`, and works uncontrolled through `defaultValue`. It differs from `tabs`, which switches between content panels it owns: a segmented button only holds the chosen value and leaves rendering what that value means to the consumer.
 
 - Import: `import ToggleGroup from '@aziontech/webkit/toggle-group'`
-- Category: actions · Surface: app · Structure: monolithic
+- Category: action · Surface: app · Structure: monolithic
 - API as JSON: [toggle-group.json](https://github.com/aziontech/webkit/blob/main/.specs/toggle-group.json)
 
 ## When to use
@@ -67,7 +67,7 @@
 - Segment: `role="radio"` with `aria-checked`; `data-state="active"` on the selected segment and `"inactive"` on the others; `data-disabled` and the native `disabled` attribute on a disabled option (or every option when the root is `disabled`); a trailing lock icon (`ai ai-lock`) and `data-locked` on a locked option (see Locked options). Each segment carries a touch-target span that grows its hit area to 44px under `pointer-coarse`.
 - Indicator: an `aria-hidden` span positioned under the selected segment from its measured size and offset; hidden when nothing is selected or the selected segment is not rendered. It re-measures on option, selection and size changes (`ResizeObserver`).
 - Option normalization: a missing `label` falls back to `value`, then to `Option <n>`; a missing `value` falls back to `label`, then to the index.
-- Test ids: root `actions-toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.
+- Test ids: root `toggle-group` (consumer `data-testid` wins), `<testId>__indicator`, `<testId>__option`, `<testId>__option-lock`.
 - Reflow: the root is capped at the width of its container (`max-w-full`, `min-w-0`) and the options shrink, truncating their labels, instead of overflowing a narrow box.
 
 ## Accessibility

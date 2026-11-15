@@ -22,7 +22,7 @@ import Illustration from './illustration.vue'
 
 const at = (view: ReturnType<typeof render>) => within(view.container)
 
-const root = (view: ReturnType<typeof render>, testId = 'content-illustration') =>
+const root = (view: ReturnType<typeof render>, testId = 'illustration') =>
   at(view).findByTestId(testId, {}, { timeout: 3000 })
 
 const urlOf = async (name: string) => (await resolveIllustrationAsset(name)!()).default
@@ -87,7 +87,7 @@ describe('Illustration', () => {
       attrs: { 'data-testid': 'hero-art' }
     })
     expect(await root(view, 'hero-art')).toBeTruthy()
-    expect(at(view).queryByTestId('content-illustration')).toBeNull()
+    expect(at(view).queryByTestId('illustration')).toBeNull()
   })
 
   it('forwards consumer attributes and merges the consumer class onto the root', async () => {
@@ -182,10 +182,10 @@ describe('Illustration', () => {
     })
     const expected = await sceneOf('runtime')
     await waitFor(() => {
-      const scenes = at(view).getAllByTestId('content-illustration')
+      const scenes = at(view).getAllByTestId('illustration')
       expect(scenes.map(drawnCount)).toEqual([expected, expected])
     })
-    const scenes = at(view).getAllByTestId('content-illustration')
+    const scenes = at(view).getAllByTestId('illustration')
     const ids = scenes.flatMap((scene) => [...scene.querySelectorAll('[id]')].map((n) => n.id))
     expect(ids.length).toBeGreaterThan(0)
     expect(new Set(ids).size).toBe(ids.length)
@@ -337,9 +337,7 @@ describe('Illustration', () => {
   it('has no a11y violations rendering every registered scene', async () => {
     const view = render(Assets)
     await waitFor(() =>
-      expect(at(view).getAllByTestId('content-illustration')).toHaveLength(
-        illustrationAssetNames.length
-      )
+      expect(at(view).getAllByTestId('illustration')).toHaveLength(illustrationAssetNames.length)
     )
     await expectNoA11yViolations(view.container)
   }, 60_000)

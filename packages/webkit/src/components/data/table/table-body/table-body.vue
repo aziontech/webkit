@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { computed, inject, provide, useAttrs } from 'vue'
+  import { computed, provide, useAttrs } from 'vue'
 
-  import { TableInjectionKey, TableRowGroupInjectionKey } from '../injection-key'
+  import { TableRowGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableBody',
@@ -15,12 +15,9 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__body` : 'data-table__body')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-body'
   )
 </script>
 

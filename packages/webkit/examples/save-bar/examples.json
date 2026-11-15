@@ -1,6 +1,6 @@
 {
   "component": "save-bar",
-  "title": "Components/Primitives/Layout/SaveBar",
+  "title": "Components/Layout/SaveBar",
   "examples": [
     {
       "name": "Floating",

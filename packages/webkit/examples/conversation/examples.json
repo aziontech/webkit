@@ -1,6 +1,6 @@
 {
   "component": "conversation",
-  "title": "Components/Primitives/AI/Conversation",
+  "title": "Components/AI/Conversation",
   "examples": [
     {
       "name": "Default",

@@ -20,31 +20,31 @@ JSON. Never rebuild a band from primitives when a section exists.
   from the site. The section never posts. Feed the outcome back through its `loading`, `submitted`
   and `error` props; the messages come from the JSON.
 - Compose the site chrome once: `SiteLayout` (`@aziontech/webkit/site-layout`) in `App.vue`, with
-  the `SiteNav` data as `navigation` and the `SiteFooter` data as `footer`, around `RouterView`. It
-  places `SiteNav` first and `SiteFooter` last, unwrapped, and opens the ⌘K palette from the bar's
+  the `SiteHeader` data as `navigation` and the `SiteFooter` data as `footer`, around `RouterView`. It
+  places `SiteHeader` first and `SiteFooter` last, unwrapped, and opens the ⌘K palette from the bar's
   search. A page is only its sections, in the layout's slot. The `shell/site` block is this
   layout with the azion.com data: copy it as the app shell, never per page.
-  `SiteNav` drops Login from the bar on a phone, as azion.com does; leave
+  `SiteHeader` drops Login from the bar on a phone, as azion.com does; leave
   `secondaryActionOnPhones` off. `SiteFooter` draws its own top rule, frame and closing bottom rule.
-- Size a screen-filling hero under `SiteNav` with the `--layout-header-height` token: `HeroBand`
+- Size a screen-filling hero under `SiteHeader` with the `--layout-header-height` token: `HeroSection`
   takes it out of the screen by default, and a bare `Hero variant="screen"` takes
   `offset="var(--layout-header-height)"`. Never a literal (`56px`, `3.5rem`).
 - End the page column on a closing section (`ClosingCallToAction` and its `-newsletter`,
   `-agents`, `-templates` variants) with nothing after it: it draws the hatched closing frame
   itself. A page that ends on any other band closes with `SectionGap hatch` + the closing
-  `FrameBox` of `shell/site`.
+  `RegistrationFrame` of `shell/site`.
 - Reach for the section's own switches before anything else: `ClientQuotes` `autoplay` /
   `autoplayInterval` / `v-model`, `ArticleHighlight` `v-model`, `CapabilityGrid` `titleKind`,
-  `MediaSplitBand` action `variant` (`ghost` for a "Learn more" text button beside `codeTabs`), `SiteFooter` link
+  `MediaSplitSection` action `variant` (`ghost` for a "Learn more" text button beside `codeTabs`), `SiteFooter` link
   `external`, `CapabilityGrid` items with `href` for a linked grid, `ProcessScroll` `pinned`
-  (a band that pins while its tall cards slide sideways), a `HeroForm` field's
+  (a band that pins while its tall cards slide sideways), a `HeroFormSection` field's
   `visuallyHiddenLabel` (a field labelled by its placeholder), `NetworkSection` benefits without
   `icon` (the bold run-in lead-in) and outcomes without `logo`.
 - A titled row of cards that scrolls sideways, with the previous/next arrows on the title row ("See
   how to use", "Industries"), is `CardCarousel` (`card-carousel`): each card takes `eyebrow`,
-  `title`, `description`, `href` and `linkLabel`. Do not compose it from `Carousel` and `Overline`.
+  `title`, `description`, `href` and `linkLabel`. Do not compose it from `Carousel` and `Eyebrow`.
 - A media split whose picture is a product console widget or a request-flow diagram stays a
-  `MediaSplitStack` band or a `MediaSplitBand`: set the band's `widget` (a `ProductWidget` name) or
+  `MediaSplitStackSection` band or a `MediaSplitSection`: set the band's `widget` (a `ConsoleMockup` name) or
   `diagram` (a `Diagram` name) instead of an illustration. Do not drop to `MediaSplit` and its
   `media` slot for that.
 - Give a grid section (contact channels, features, use cases, articles) as many items as the content
@@ -66,9 +66,9 @@ JSON. Never rebuild a band from primitives when a section exists.
   section changes in webkit first.
 - Do not wrap a section in your own `max-w-*`, padding or border to change its look. Spacing between
   bands is `SectionGap`.
-- Do not build the site header or footer from `GlobalHeader`, `NavigationMenu` or `Footer`, and do
-  not place `SiteNav` / `SiteFooter` in a page: `SiteLayout` owns them, once.
-- Do not wrap `SiteFooter` or `SiteNav` in a `div` with `border-t`, `border-b` or padding: the
+- Do not build the site header or footer from `AppHeader`, `NavigationMenu` or `Footer`, and do
+  not place `SiteHeader` / `SiteFooter` in a page: `SiteLayout` owns them, once.
+- Do not wrap `SiteFooter` or `SiteHeader` in a `div` with `border-t`, `border-b` or padding: the
   rules double and the frame drifts off the page column.
 - Do not pad an item list with placeholders, drop an item, or pick `columns` from the item count to
   make a grid "fit"; and do not compose a fixed `grid-cols-3` of cards yourself — `CardGrid` with its
@@ -77,7 +77,7 @@ JSON. Never rebuild a band from primitives when a section exists.
 - Do not copy a root-relative `/marketing-components/…` or `/media/…` URL from azion.com or the
   WebKit docs site into another app: it does not serve it and the image breaks (lint
   `webkit/no-root-relative-asset`).
-- Do not put a `SectionGap` or a closing `FrameBox` after a closing section: the hatch doubles
+- Do not put a `SectionGap` or a closing `RegistrationFrame` after a closing section: the hatch doubles
   (`webkit/no-gap-after-closing-section`).
 - Do not wrap a bare `CapabilityGrid` in a `SectionModule` to move its title: set `titleKind`, or
   its capability headings rise to `h2`.
@@ -89,7 +89,7 @@ JSON. Never rebuild a band from primitives when a section exists.
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
   import PricingPlans from '@aziontech/webkit/pricing-plans'
-  import ClosingCallToActionNewsletter from '@aziontech/webkit/closing-call-to-action-newsletter'
+  import NewsletterSection from '@aziontech/webkit/newsletter-section'
 
   interface SectionEntry {
     /** The section's props, as the page JSON stores them. */
@@ -112,7 +112,7 @@ JSON. Never rebuild a band from primitives when a section exists.
     <SectionGap hatch />
     <PricingPlans v-bind="page.pricing.props" />
     <SectionGap hatch />
-    <ClosingCallToActionNewsletter
+    <NewsletterSection
       v-bind="page.newsletter.props"
       @submit="subscribe"
     />

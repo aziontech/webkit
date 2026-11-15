@@ -1,6 +1,6 @@
 {
   "component": "artifact-preview",
-  "title": "Components/Primitives/AI/ArtifactPreview",
+  "title": "Components/AI/ArtifactPreview",
   "examples": [
     {
       "name": "Default",

@@ -1,6 +1,6 @@
 ---
 name: select
-category: inputs
+category: input
 structure: composition
 status: implemented
 spec_version: 12

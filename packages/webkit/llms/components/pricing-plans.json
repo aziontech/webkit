@@ -3,23 +3,23 @@
  "binding": "PricingPlans",
  "import": "@aziontech/webkit/pricing-plans",
  "treeShakeableImport": "@aziontech/webkit/pricing-plans",
- "category": "sections",
+ "category": "section",
  "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `frame-box`, `toggle-group`, `card-grid`, `card-pricing` and `button`; the picked period is local state. The band runs full bleed (the page's inline inset only, closed by a bottom rule) and centres its frame at the site measure, with rules on its sides.",
+ "purpose": "The plan cards at the top of Pricing: a billing-period toggle over a framed row of pricing cards, each with its plan name, its price for the picked period, what it includes and one button. The recommended plan sits on a raised surface and carries a tag. It is a page section — the site places it from a `{ _id: 'pricing-plans', props }` entry and binds `props` straight onto it — and it composes `registration-frame`, `toggle-group`, `card-grid`, `pricing-card` and `button`; the picked period is local state. The band runs full bleed (the page's inline inset only, closed by a bottom rule) and centres its frame at the site measure, with rules on its sides.",
  "setup": null,
  "useWhen": [
   "Use PricingPlans for price cards with a billing-period toggle on the public pricing page, the plans side by side at the top of Pricing."
  ],
  "avoidWhen": [
-  "To compare plans or support tiers feature by feature → use `compare-plans`.",
-  "To compare Azion with one competitor → use `comparison-table`."
+  "To compare plans or support tiers feature by feature → use `plan-comparison`.",
+  "To compare Azion with one competitor → use `competitor-comparison`."
  ],
  "related": [
-  "card-pricing` — the card each plan renders with.",
-  "compare-plans` — the matrix that sits under these cards."
+  "pricing-card` — the card each plan renders with.",
+  "plan-comparison` — the matrix that sits under these cards."
  ],
  "bestPractices": [
   "Give every plan one price per period, matched by `period`; a price without a `period` applies to every period.",

@@ -1,6 +1,6 @@
 {
   "component": "item",
-  "title": "Components/Primitives/Content/Item",
+  "title": "Components/Content/Item",
   "examples": [
     {
       "name": "Default",

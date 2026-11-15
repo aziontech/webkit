@@ -5,7 +5,7 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
   import Input from '@aziontech/webkit/input'
   import InputGroup from '@aziontech/webkit/input-group'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -468,11 +468,9 @@
                         </Select.Item>
                       </Select.Content>
                     </Select>
-                    <HelperText
-                      id="domain-certificate-helper"
-                      type="helper"
-                      >{{ certificateHint }}</HelperText
-                    >
+                    <FieldDescription id="domain-certificate-helper">{{
+                      certificateHint
+                    }}</FieldDescription>
                   </Field>
                 </template>
 
@@ -588,12 +586,10 @@
                       </Select.Item>
                     </Select.Content>
                   </Select>
-                  <HelperText
-                    id="environment-deployment-policy-helper"
-                    type="helper"
+                  <FieldDescription id="environment-deployment-policy-helper"
                     >{{ policyHint }} Only Deployment Settings set to
                     {{ deploymentPolicyLabel(environment.deploymentPolicy) }} can serve this
-                    environment.</HelperText
+                    environment.</FieldDescription
                   >
                 </Field>
                 <Field>
@@ -619,11 +615,9 @@
                       </Select.Item>
                     </Select.Content>
                   </Select>
-                  <HelperText
-                    id="environment-robots-policy-helper"
-                    type="helper"
-                    >{{ robotsHint }}</HelperText
-                  >
+                  <FieldDescription id="environment-robots-policy-helper">{{
+                    robotsHint
+                  }}</FieldDescription>
                 </Field>
               </div>
             </SettingsSection>
@@ -719,10 +713,8 @@
                         </Select.Item>
                       </Select.Content>
                     </Select>
-                    <HelperText
-                      id="environment-branch-mode-helper"
-                      type="helper"
-                      >How the branch name is matched.</HelperText
+                    <FieldDescription id="environment-branch-mode-helper"
+                      >How the branch name is matched.</FieldDescription
                     >
                   </Field>
                   <Field :required="!!environmentErrors.branchMatch">

@@ -1,6 +1,6 @@
 {
   "component": "dropdown-menu",
-  "title": "Components/Primitives/Navigation/DropdownMenu",
+  "title": "Components/Navigation/DropdownMenu",
   "examples": [
     {
       "name": "Default",

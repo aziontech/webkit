@@ -1,13 +1,12 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import DropdownMenu from '../../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuTrigger from '../../../navigation/dropdown-menu/dropdown-menu-trigger/dropdown-menu-trigger.vue'
   import type { DropdownMenuItemValue } from '../../../navigation/dropdown-menu/injection-key'
-  import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableCellActions',
@@ -38,11 +37,8 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableCellActions: en.tableCellActions })
-  const ctx = inject(TableInjectionKey, null)
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__cell-actions` : 'data-table__cell-actions')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-cell-actions'
   )
   const label = computed<string>(() =>
     props.name ? t('tableCellActions.labelFor', { name: props.name }) : t('tableCellActions.label')

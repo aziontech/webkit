@@ -59,10 +59,10 @@ describe('CodeBlock', () => {
     const view = render(CodeBlock, {
       props: { tabs: [{ label: 'Long', value: 'long', language: 'javascript', code }] }
     })
-    const mounted = view.getAllByTestId('code-code-block__line').length
+    const mounted = view.getAllByTestId('code-block__line').length
     expect(mounted).toBeGreaterThan(0)
     expect(mounted).toBeLessThan(2000)
-    expect(view.getByTestId('code-code-block__lines').querySelectorAll('[data-chunk]').length).toBe(
+    expect(view.getByTestId('code-block__lines').querySelectorAll('[data-chunk]').length).toBe(
       Math.ceil((2000 - mounted) / 100)
     )
   })
@@ -71,7 +71,7 @@ describe('CodeBlock', () => {
     it('renders with the default testid', () => {
       const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
 
-      expect(getByTestId('code-code-block')).toBeTruthy()
+      expect(getByTestId('code-block')).toBeTruthy()
     })
 
     it('honors a consumer-supplied data-testid', () => {
@@ -89,7 +89,7 @@ describe('CodeBlock', () => {
         attrs: { class: 'consumer-class' }
       })
 
-      expect(getByTestId('code-code-block').classList.contains('consumer-class')).toBe(true)
+      expect(getByTestId('code-block').classList.contains('consumer-class')).toBe(true)
     })
 
     it('renders the highlighted line content of the active tab', () => {
@@ -98,7 +98,7 @@ describe('CodeBlock', () => {
       })
 
       // Three source lines -> three line rows.
-      const content = getByTestId('code-code-block__content')
+      const content = getByTestId('code-block__content')
       expect(content.textContent).toContain('const one = 1')
       expect(content.textContent).toContain('const three = 3')
     })
@@ -208,12 +208,12 @@ describe('CodeBlock', () => {
         props: { tabs: [twoTabs[0]] }
       })
 
-      expect(getAllByTestId('code-code-block__line')).toHaveLength(3)
+      expect(getAllByTestId('code-block__line')).toHaveLength(3)
 
       await rerender({ tabs: [twoTabs[1]] })
 
       expect(queryByRole('tablist')).toBeNull()
-      const lines = getAllByTestId('code-code-block__line')
+      const lines = getAllByTestId('code-block__line')
       expect(lines).toHaveLength(2)
       expect(lines[0].textContent?.replace(/\s+/g, ' ').trim()).toContain('let a = 10')
     })
@@ -223,11 +223,11 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab }
       })
 
-      expect(getAllByTestId('code-code-block__line')).toHaveLength(3)
+      expect(getAllByTestId('code-block__line')).toHaveLength(3)
 
       await rerender({ tabs: [{ ...singleTab[0], code: CODE_TWO }] })
 
-      const lines = getAllByTestId('code-code-block__line')
+      const lines = getAllByTestId('code-block__line')
       expect(lines).toHaveLength(2)
       expect(lines[1].textContent?.replace(/\s+/g, ' ').trim()).toContain('let b = 20')
     })
@@ -307,7 +307,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, defaultValue: 'only' }
       })
 
-      await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
+      await fireEvent.click(within(getByTestId('code-block__copy')).getByRole('button'))
 
       await waitFor(() => {
         expect(emitted().copy).toBeTruthy()
@@ -326,7 +326,7 @@ describe('CodeBlock', () => {
       })
 
       await fireEvent.click(getAllByRole('tab')[1])
-      await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
+      await fireEvent.click(within(getByTestId('code-block__copy')).getByRole('button'))
 
       await waitFor(() => {
         expect(emitted().copy).toBeTruthy()
@@ -345,9 +345,9 @@ describe('CodeBlock', () => {
     it('renders the copy anchor and marks the root copyable by default', () => {
       const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
 
-      expect(getByTestId('code-code-block').hasAttribute('data-copyable')).toBe(true)
-      expect(getByTestId('code-code-block__copy-anchor')).toBeTruthy()
-      expect(within(getByTestId('code-code-block__copy')).getByRole('button')).toBeTruthy()
+      expect(getByTestId('code-block').hasAttribute('data-copyable')).toBe(true)
+      expect(getByTestId('code-block__copy-anchor')).toBeTruthy()
+      expect(within(getByTestId('code-block__copy')).getByRole('button')).toBeTruthy()
     })
 
     it('omits the copy anchor and the copyable marker when copyable is false', () => {
@@ -355,9 +355,9 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, copyable: false, copyAriaLabel: 'Copy snippet' }
       })
 
-      expect(getByTestId('code-code-block').hasAttribute('data-copyable')).toBe(false)
-      expect(queryByTestId('code-code-block__copy-anchor')).toBeNull()
-      expect(queryByTestId('code-code-block__copy')).toBeNull()
+      expect(getByTestId('code-block').hasAttribute('data-copyable')).toBe(false)
+      expect(queryByTestId('code-block__copy-anchor')).toBeNull()
+      expect(queryByTestId('code-block__copy')).toBeNull()
       expect(queryByRole('button', { name: 'Copy snippet' })).toBeNull()
     })
   })
@@ -369,7 +369,7 @@ describe('CodeBlock', () => {
       })
 
       // Three source lines -> a line-number cell per line.
-      expect(queryAllByTestId('code-code-block__line-number')).toHaveLength(3)
+      expect(queryAllByTestId('code-block__line-number')).toHaveLength(3)
     })
 
     it('hides the line-number gutter when showLineNumbers is false', () => {
@@ -377,7 +377,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, defaultValue: 'only', showLineNumbers: false }
       })
 
-      expect(queryAllByTestId('code-code-block__line-number')).toHaveLength(0)
+      expect(queryAllByTestId('code-block__line-number')).toHaveLength(0)
     })
   })
 
@@ -387,13 +387,13 @@ describe('CodeBlock', () => {
         props: { code: CODE_TWO, language: 'javascript', showLabel: true }
       })
       expect(view.queryByRole('tablist')).toBeNull()
-      expect(view.getAllByTestId('code-code-block__line')).toHaveLength(2)
-      expect(view.getByTestId('code-code-block__label-text').textContent?.trim()).toBe('JavaScript')
+      expect(view.getAllByTestId('code-block__line')).toHaveLength(2)
+      expect(view.getByTestId('code-block__label-text').textContent?.trim()).toBe('JavaScript')
     })
 
     it('ignores code when tabs are set', () => {
       const view = render(CodeBlock, { props: { code: CODE_TWO, tabs: singleTab } })
-      expect(view.getAllByTestId('code-code-block__line')).toHaveLength(3)
+      expect(view.getAllByTestId('code-block__line')).toHaveLength(3)
     })
   })
 
@@ -418,8 +418,8 @@ describe('CodeBlock', () => {
         expect(tab?.getAttribute('aria-selected')).toBe('true')
         expect(tab?.getAttribute('aria-controls')).toBe(panel.id)
         expect(view.container.contains(tab)).toBe(true)
-        expect(panel.parentElement?.closest('[data-testid="code-code-block"]')).toBe(
-          tab?.closest('[data-testid="code-code-block"]')
+        expect(panel.parentElement?.closest('[data-testid="code-block"]')).toBe(
+          tab?.closest('[data-testid="code-block"]')
         )
       })
       const inactive = view.getAllByRole('tab', { selected: false })
@@ -433,7 +433,7 @@ describe('CodeBlock', () => {
         props: { tabs: fileNameTab, defaultValue: 'file' }
       })
 
-      expect(getByTestId('code-code-block__filename-label').textContent?.trim()).toBe('handler.js')
+      expect(getByTestId('code-block__filename-label').textContent?.trim()).toBe('handler.js')
     })
 
     it('omits the filename bar when the active tab has no fileName', () => {
@@ -441,7 +441,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, defaultValue: 'only' }
       })
 
-      expect(queryByTestId('code-code-block__filename')).toBeNull()
+      expect(queryByTestId('code-block__filename')).toBeNull()
     })
   })
 
@@ -451,12 +451,12 @@ describe('CodeBlock', () => {
         props: { tabs: diffTab, defaultValue: 'diff' }
       })
 
-      const markers = queryAllByTestId('code-code-block__diff-marker')
+      const markers = queryAllByTestId('code-block__diff-marker')
       expect(markers.length).toBeGreaterThan(0)
 
       // The added/removed lines carry the corresponding data-state.
-      const lines = getByTestId('code-code-block__lines').querySelectorAll(
-        '[data-testid="code-code-block__line"]'
+      const lines = getByTestId('code-block__lines').querySelectorAll(
+        '[data-testid="code-block__line"]'
       )
       expect(lines[0].getAttribute('data-state')).toBe('added')
       expect(lines[1].getAttribute('data-state')).toBe('removed')
@@ -467,7 +467,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, defaultValue: 'only' }
       })
 
-      expect(queryAllByTestId('code-code-block__diff-marker')).toHaveLength(0)
+      expect(queryAllByTestId('code-block__diff-marker')).toHaveLength(0)
     })
   })
 
@@ -475,7 +475,7 @@ describe('CodeBlock', () => {
     it('draws the outer border by default (data-bordered set)', () => {
       const { getByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
 
-      expect(getByTestId('code-code-block').getAttribute('data-bordered')).toBe('true')
+      expect(getByTestId('code-block').getAttribute('data-bordered')).toBe('true')
     })
 
     it('drops the outer border when bordered is false (data-bordered absent)', () => {
@@ -483,7 +483,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, bordered: false }
       })
 
-      expect(getByTestId('code-code-block').getAttribute('data-bordered')).toBeNull()
+      expect(getByTestId('code-block').getAttribute('data-bordered')).toBeNull()
     })
   })
 
@@ -493,7 +493,7 @@ describe('CodeBlock', () => {
         props: { tabs: singleTab, animateLines: true }
       })
 
-      for (const line of getAllByTestId('code-code-block__line')) {
+      for (const line of getAllByTestId('code-block__line')) {
         const properties = line.style.transitionProperty.split(',').map((name) => name.trim())
 
         expect(properties).toContain('translate')
@@ -504,7 +504,7 @@ describe('CodeBlock', () => {
     it('leaves lines without an entrance transition when animateLines is off', () => {
       const { getAllByTestId } = render(CodeBlock, { props: { tabs: singleTab } })
 
-      for (const line of getAllByTestId('code-code-block__line')) {
+      for (const line of getAllByTestId('code-block__line')) {
         expect(line.style.transitionProperty).toBe('')
       }
     })
@@ -548,7 +548,7 @@ describe('CodeBlock', () => {
     it('renders the Default story cleanly', async () => {
       const { getByTestId, container } = render(Default)
 
-      expect(getByTestId('code-code-block')).toBeTruthy()
+      expect(getByTestId('code-block')).toBeTruthy()
       await expectNoA11yViolations(container)
     })
   })
@@ -772,12 +772,12 @@ describe('CodeBlock', () => {
     describe('label header', () => {
       it('is off by default', () => {
         const { queryByTestId } = render(CodeBlock, { props: { tabs: shell } })
-        expect(queryByTestId('code-code-block__label')).toBeNull()
+        expect(queryByTestId('code-block__label')).toBeNull()
       })
 
       it('names the block with the tab label when showLabel is on', () => {
         const { getByTestId } = render(CodeBlock, { props: { tabs: shell, showLabel: true } })
-        expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Shell')
+        expect(getByTestId('code-block__label-text').textContent?.trim()).toBe('Shell')
       })
 
       it('falls back to the readable language name when the tab label is empty', () => {
@@ -787,22 +787,22 @@ describe('CodeBlock', () => {
             showLabel: true
           }
         })
-        expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('JavaScript')
+        expect(getByTestId('code-block__label-text').textContent?.trim()).toBe('JavaScript')
       })
 
       it('uses title over the tab label', () => {
         const { getByTestId } = render(CodeBlock, {
           props: { tabs: shell, title: 'Terminal' }
         })
-        expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Terminal')
+        expect(getByTestId('code-block__label-text').textContent?.trim()).toBe('Terminal')
       })
 
       it('gives way to the tab strip and to the filename bar', () => {
         const tabs = render(CodeBlock, { props: { tabs: twoTabs, showLabel: true } })
-        expect(tabs.queryByTestId('code-code-block__label')).toBeNull()
+        expect(tabs.queryByTestId('code-block__label')).toBeNull()
         tabs.unmount()
         const file = render(CodeBlock, { props: { tabs: fileNameTab, showLabel: true } })
-        expect(file.queryByTestId('code-code-block__label')).toBeNull()
+        expect(file.queryByTestId('code-block__label')).toBeNull()
       })
     })
 
@@ -815,16 +815,16 @@ describe('CodeBlock', () => {
         const { getByTestId, queryByTestId } = render(CodeBlock, {
           props: { tabs: output, type: 'output' }
         })
-        const root = getByTestId('code-code-block')
+        const root = getByTestId('code-block')
         expect(root.getAttribute('data-type')).toBe('output')
         expect(root.hasAttribute('data-copyable')).toBe(false)
-        expect(queryByTestId('code-code-block__copy-anchor')).toBeNull()
-        expect(getByTestId('code-code-block__label-text').textContent?.trim()).toBe('Output')
+        expect(queryByTestId('code-block__copy-anchor')).toBeNull()
+        expect(getByTestId('code-block__label-text').textContent?.trim()).toBe('Output')
       })
 
       it('draws every line flat, without syntax tokens', () => {
         const { getAllByTestId } = render(CodeBlock, { props: { tabs: output, type: 'output' } })
-        for (const line of getAllByTestId('code-code-block__line-content')) {
+        for (const line of getAllByTestId('code-block__line-content')) {
           expect(line.children).toHaveLength(1)
         }
       })
@@ -833,13 +833,13 @@ describe('CodeBlock', () => {
         const { getByTestId } = render(CodeBlock, {
           props: { tabs: output, type: 'output', copyable: true }
         })
-        expect(getByTestId('code-code-block__copy-anchor')).toBeTruthy()
+        expect(getByTestId('code-block__copy-anchor')).toBeTruthy()
       })
 
       it('a code block stays copyable by default', () => {
         const { getByTestId } = render(CodeBlock, { props: { tabs: shell } })
-        expect(getByTestId('code-code-block').getAttribute('data-type')).toBe('code')
-        expect(getByTestId('code-code-block').hasAttribute('data-copyable')).toBe(true)
+        expect(getByTestId('code-block').getAttribute('data-type')).toBe('code')
+        expect(getByTestId('code-block').hasAttribute('data-copyable')).toBe(true)
       })
 
       it('has no a11y violations beside its command', async () => {
@@ -873,7 +873,7 @@ describe('CodeBlock', () => {
             ]
           }
         })
-        await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
+        await fireEvent.click(within(getByTestId('code-block__copy')).getByRole('button'))
         await waitFor(() => expect(emitted().copy).toBeTruthy())
         expect(writeText).toHaveBeenCalledWith('azion login\nazion deploy \\\n  --local')
       })
@@ -881,7 +881,7 @@ describe('CodeBlock', () => {
       it('copies a block without prompts as written', async () => {
         const writeText = stubClipboardResolved()
         const { getByTestId, emitted } = render(CodeBlock, { props: { tabs: shell } })
-        await fireEvent.click(within(getByTestId('code-code-block__copy')).getByRole('button'))
+        await fireEvent.click(within(getByTestId('code-block__copy')).getByRole('button'))
         await waitFor(() => expect(emitted().copy).toBeTruthy())
         expect(writeText).toHaveBeenCalledWith('azion deploy')
       })
@@ -934,7 +934,7 @@ describe('CodeBlock', () => {
 
     it('draws a unified diff with markers, side numbers and spoken changes', () => {
       const view = render(CodeBlock, { props: { tabs: tab } })
-      expect(states(view, 'code-code-block__line')).toEqual([
+      expect(states(view, 'code-block__line')).toEqual([
         'default',
         'removed',
         'added',
@@ -942,17 +942,10 @@ describe('CodeBlock', () => {
         'default',
         'added'
       ])
-      expect(texts(view, 'code-code-block__line-content')).toEqual(['a', 'b', 'x', 'c', 'd', 'e'])
-      expect(texts(view, 'code-code-block__line-number')).toEqual([
-        '01',
-        '02',
-        '02',
-        '03',
-        '04',
-        '05'
-      ])
-      expect(texts(view, 'code-code-block__diff-marker')).toEqual(['', '-', '+', '', '', '+'])
-      const lines = view.getAllByTestId('code-code-block__line')
+      expect(texts(view, 'code-block__line-content')).toEqual(['a', 'b', 'x', 'c', 'd', 'e'])
+      expect(texts(view, 'code-block__line-number')).toEqual(['01', '02', '02', '03', '04', '05'])
+      expect(texts(view, 'code-block__diff-marker')).toEqual(['', '-', '+', '', '', '+'])
+      const lines = view.getAllByTestId('code-block__line')
       expect(lines[1]?.querySelector('.sr-only')?.textContent).toBe('Removed')
       expect(lines[2]?.querySelector('.sr-only')?.textContent).toBe('Added')
     })
@@ -960,13 +953,13 @@ describe('CodeBlock', () => {
     it('draws a split diff with aligned, paired columns and copies the modified code', async () => {
       const writeText = stubClipboardResolved()
       const view = render(CodeBlock, { props: { tabs: tab, diffView: 'split' } })
-      expect(view.getByTestId('code-code-block__panel').hasAttribute('data-split')).toBe(true)
-      expect(view.queryAllByTestId('code-code-block__line')).toHaveLength(0)
+      expect(view.getByTestId('code-block__panel').hasAttribute('data-split')).toBe(true)
+      expect(view.queryAllByTestId('code-block__line')).toHaveLength(0)
       const [left, right] = view.getAllByRole('group') as HTMLElement[]
       expect(left?.getAttribute('aria-label')).toBe('Original')
       expect(right?.getAttribute('aria-label')).toBe('Modified')
-      const leftLines = within(left as HTMLElement).getAllByTestId('code-code-block__split-line')
-      const rightLines = within(right as HTMLElement).getAllByTestId('code-code-block__split-line')
+      const leftLines = within(left as HTMLElement).getAllByTestId('code-block__split-line')
+      const rightLines = within(right as HTMLElement).getAllByTestId('code-block__split-line')
       expect(leftLines.map((line) => line.getAttribute('data-state'))).toEqual([
         'default',
         'removed',
@@ -981,7 +974,7 @@ describe('CodeBlock', () => {
         'default',
         'added'
       ])
-      await fireEvent.click(within(view.getByTestId('code-code-block__copy')).getByRole('button'))
+      await fireEvent.click(within(view.getByTestId('code-block__copy')).getByRole('button'))
       await waitFor(() => expect(writeText).toHaveBeenCalledWith(modified))
     })
 
@@ -1002,7 +995,7 @@ describe('CodeBlock', () => {
           ]
         }
       })
-      const mounted = view.getAllByTestId('code-code-block__split-line').length
+      const mounted = view.getAllByTestId('code-block__split-line').length
       expect(mounted).toBeGreaterThan(0)
       expect(mounted).toBeLessThan(4000)
     })

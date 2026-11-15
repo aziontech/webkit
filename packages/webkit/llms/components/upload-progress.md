@@ -59,9 +59,9 @@
 
 ## v-model
 
-| Model               | Type      | Default | Emits              | Notes                                                     |
-| ------------------- | --------- | ------- | ------------------ | --------------------------------------------------------- |
-| `v-model:open`      | `boolean` | `undefined` (resolves to `true`) | `update:open`      | Shows the file list; `false` hides it and keeps the header and overall bar. While it is unbound the card starts open. |
+| Model          | Type      | Default                          | Emits         | Notes                                                                                                                 |
+| -------------- | --------- | -------------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` (resolves to `true`) | `update:open` | Shows the file list; `false` hides it and keeps the header and overall bar. While it is unbound the card starts open. |
 
 ## States
 
@@ -75,7 +75,7 @@
 - The header text is mirrored in a visually hidden `role="status"` region (polite), so each file finishing and the final outcome are announced; percentages are not announced.
 - The overall bar is a `progressbar` named by the header text; each row bar is named `<file> progress`.
 - Keyboard map: Tab reaches the collapse toggle (`aria-expanded`, `aria-controls` the list), Cancel all or Retry failed and Close, then each row's Cancel or Retry. After Close the card unmounts in the parent; the parent returns focus to the control that started the transfer.
-- State is never colour alone: rows carry a status word (`Waiting`, `Done`, `Canceled`) or the error text, and an `OutcomeMark` in the header when finished.
+- State is never colour alone: rows carry a status word (`Waiting`, `Done`, `Canceled`) or the error text, and an `OutcomeIcon` in the header when finished.
 - Contrast: text ≥ 4.5:1 on `--bg-surface-raised` in both themes.
 
 ## Right-to-left

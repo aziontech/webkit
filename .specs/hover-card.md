@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 3
 template: 2
-checksum: cb864fbd8d9538b22076c5878596a68f0d01c18e7c17c089fa141f702a10ad96
+checksum: 83e5916ac6fa344911493971060e858b039cc211741854d47f4da632369e4175
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -74,11 +74,11 @@ Tree-shaking alternative — the same sub-components as standalone imports:
 
 ## Sub-components
 
-- `hover-card-trigger/hover-card-trigger.vue` — wraps the previewed element in an `inline-flex` span that carries `data-testid` (`overlay-hover-card__trigger`) and `data-state`, and is the positioning anchor. It has no role and no tab stop of its own. It schedules the open on `pointerenter` (mouse and pen only; a touch tap follows the link) and on `focusin`, and the close on `pointerleave` and `focusout` (unless focus moves into the card). While the card is open and holds a focusable element, `Tab` on the trigger moves focus to the first one instead of leaving. While the card is open, the first focusable element in the slot gets `aria-describedby` pointing at the card, so screen readers read the card text after the link's name.
+- `hover-card-trigger/hover-card-trigger.vue` — wraps the previewed element in an `inline-flex` span that carries `data-testid` (`hover-card-trigger`) and `data-state`, and is the positioning anchor. It has no role and no tab stop of its own. It schedules the open on `pointerenter` (mouse and pen only; a touch tap follows the link) and on `focusin`, and the close on `pointerleave` and `focusout` (unless focus moves into the card). While the card is open and holds a focusable element, `Tab` on the trigger moves focus to the first one instead of leaving. While the card is open, the first focusable element in the slot gets `aria-describedby` pointing at the card, so screen readers read the card text after the link's name.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` with scope `{ isOpen: boolean }` — the previewed element.
-- `hover-card-content/hover-card-content.vue` — the floating card. Teleported to `body`, rendered only while open, positioned by the root, `data-testid` `overlay-hover-card__content`, `data-state`, `data-placement`. Entering it with the pointer cancels a pending close and leaving it schedules one, so the pointer can travel from the trigger to the card; focus entering it does the same and focus leaving it to anything but the trigger schedules the close. `Tab` past its last focusable element moves to the element after the trigger in the page, `Shift+Tab` from its first returns to the trigger. It has no role: it is description text for the trigger, not a dialog, and takes focus only when it holds a link or another focusable element.
+- `hover-card-content/hover-card-content.vue` — the floating card. Teleported to `body`, rendered only while open, positioned by the root, `data-testid` `hover-card-content`, `data-state`, `data-placement`. Entering it with the pointer cancels a pending close and leaving it schedules one, so the pointer can travel from the trigger to the card; focus entering it does the same and focus leaving it to anything but the trigger schedules the close. `Tab` past its last focusable element moves to the element after the trigger in the page, `Shift+Tab` from its first returns to the trigger. It has no role: it is description text for the trigger, not a dialog, and takes focus only when it holds a link or another focusable element.
   - Props: _none_.
   - Events: _none_.
   - Slots: `default` — the card content.

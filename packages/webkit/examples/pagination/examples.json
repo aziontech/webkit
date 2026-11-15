@@ -1,6 +1,6 @@
 {
   "component": "pagination",
-  "title": "Components/Primitives/Data/Pagination",
+  "title": "Components/Data/Pagination",
   "examples": [
     {
       "name": "Default",

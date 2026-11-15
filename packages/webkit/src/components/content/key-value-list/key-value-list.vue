@@ -39,7 +39,7 @@
   const attrs = useAttrs()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-key-value-list'
+    () => (attrs['data-testid'] as string | undefined) ?? 'key-value-list'
   )
 
   provide(KeyValueListInjectionKey, {

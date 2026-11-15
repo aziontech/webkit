@@ -1,6 +1,6 @@
 {
   "component": "map-chart",
-  "title": "Components/Primitives/Chart/MapChart",
+  "title": "Components/Chart/MapChart",
   "examples": [
     {
       "name": "Default",

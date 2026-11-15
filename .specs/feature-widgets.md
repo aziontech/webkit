@@ -1,19 +1,19 @@
 ---
 name: feature-widgets
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 5
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 84b90627dcde11be03732b676f2ef336c63dab96751feb2e12dba770a058f3a5
+checksum: 6a60c5c5693045bf77b9aad0c776cbfab85a9958173b26e4069541a82b58db58
 ---
 
 # FeatureWidgets — Component Spec
 
 ## Purpose
 
-The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with "Copied" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `bento-grid`, `illustration`, `button-highlight` and the webkit scene assets.
+The "three ways to start" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with "Copied" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `registration-frame`, `bento-grid`, `illustration`, `highlight-button` and the webkit scene assets.
 
 ## When to use
 
@@ -28,12 +28,12 @@ The "three ways to start" band of a product page: a centered section title with 
 ## Related
 
 - `bento-grid` — the grid the cells are laid in.
-- `button-highlight` — the copy affordance a cell renders when it carries `copy`.
+- `highlight-button` — the copy affordance a cell renders when it carries `copy`.
 
 ## Best practices
 
 - Give each item an `action` (a link), a `copy` (text to put on the clipboard), or both when the reader may want the docs and the prompt.
-- On a product page give each item a `scene` naming a `ProductWidget` fragment (`{ component: 'ProductWidget', props: { name } }`); keep `illustration` for cells with no console to show.
+- On a product page give each item a `scene` naming a `ConsoleMockup` fragment (`{ component: 'ConsoleMockup', props: { name } }`); keep `illustration` for cells with no console to show.
 - Keep `copy.text` self-contained; it is what the reader pastes into their agent.
 - Set `anchor` when a hero button scrolls to this band.
 
@@ -78,7 +78,7 @@ The "three ways to start" band of a product page: a centered section title with 
 | Prop              | Type                    | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 | ----------------- | ----------------------- | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `anchor`          | `string`                | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| `eyebrow`         | `string`                | `''`        | false    | Overline above the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `eyebrow`         | `string`                | `''`        | false    | Eyebrow above the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `title`           | `string`                | `''`        | false    | Headline of the band, rendered by the section title as its `h2`, and the accessible name of the band.                                                                                                                                                                                                                                                                                                                                                                                |
 | `description`     | `string`                | `''`        | false    | Supporting sentence under the headline.                                                                                                                                                                                                                                                                                                                                                                                                                                              |
 | `primaryAction`   | `SectionTitleAction`    | `undefined` | false    | First button under the headline; `{ label, href, trailing? }`. Omitted when absent.                                                                                                                                                                                                                                                                                                                                                                                                  |
@@ -130,17 +130,17 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: owned by the composed `button` and `button-highlight`, which carry the `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
+- Visible focus: owned by the composed `button` and `highlight-button`, which carry the `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
 - Keyboard map: `Tab` moves between the header actions and each cell's buttons; `Enter` / `Space` activates. The scene's hover beat is decorative, so keyboard users lose nothing without it.
 - ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the grid is an unnamed `bento-grid` inside that landmark, so the name is not duplicated; the cell lead is a `strong` inside the sentence, not a heading, so the outline stays the band's `h2`; the action row is a polite live region, so the copy button's "Copied" is announced.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): lead `var(--text-default)`, copy `var(--text-muted)`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the buttons' motion carries its own fallback; this band adds no motion.
-- Touch target ≥40×40 px — the cell buttons are medium `button` / `button-highlight`.
+- Touch target ≥40×40 px — the cell buttons are medium `button` / `highlight-button`.
 
 ## Examples
 
 - Default
-- Live scenes — each cell draws a `ProductWidget` fragment that plays while the pointer is over it; one cell carries a link and a copy button.
+- Live scenes — each cell draws a `ConsoleMockup` fragment that plays while the pointer is over it; one cell carries a link and a copy button.
 
 ## Constraints — DO NOT
 

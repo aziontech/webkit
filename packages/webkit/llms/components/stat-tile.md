@@ -1,6 +1,6 @@
 # Stat Tile
 
-> Use StatTile to show one headline metric (figure, delta, sparkline) in product UI; the strip of related metrics is a StatTileGroup, one value against a range with thresholds is a GaugeChart, and a money amount on its own is a Currency. A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses. Inside a `StatTileGroup` the tiles become the cells of one card, split by dividers, with the delta aligned to the cell's end. `variant` picks the figure face: `mono` (the big-number mono figure of a usage strip) or `sans` (the large heading figure of a traffic summary).
+> Use StatTile to show one headline metric (figure, delta, sparkline) in product UI; the strip of related metrics is a StatTileGroup, one value against a range with thresholds is a GaugeChart, and a money amount on its own is a CurrencyAmount. A KPI tile: a label, one big figure that counts up into place with an optional muted unit, an optional delta `Tag` against a named period, and an optional sparkline that bleeds to the tile's edges along its bottom. The delta reads good or bad for the metric, not merely up or down: `inverse` flips the polarity for metrics where a rise is bad (threats, errors, latency). A row of tiles sits above a dashboard's charts; without a `trend` the tile is the figure alone, the shape a usage strip uses. Inside a `StatTileGroup` the tiles become the cells of one card, split by dividers, with the delta aligned to the cell's end. `variant` picks the figure face: `mono` (the big-number mono figure of a usage strip) or `sans` (the large heading figure of a traffic summary).
 
 - Import: `import StatTile from '@aziontech/webkit/stat-tile'`
 - Category: chart · Surface: app · Structure: monolithic
@@ -27,14 +27,14 @@
 
 - The history itself is the point → use `chart`.
 - A share of a whole → use `donut-chart`.
-- Marketing figures on a site band → use `big-numbers`.
+- Marketing figures on a site band → use `stats`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [chart](chart.md) — the full history behind a tile.
 - [chart-card](chart-card.md) — the box for a chart; a tile is its own small surface and does not sit in one.
-- [big-numbers](big-numbers.md) — the marketing figure band, with no delta and no live data.
+- [stats](stats.md) — the marketing figure band, with no delta and no live data.
 - [spark-chart](spark-chart.md) — the sparkline the tile draws its `trend` with; use it alone for a trend beside a number in a list or table.
 - [tag](tag.md) — the delta renders as a `Tag`; the empty band's "No data" is a `Tag` too.
 - [separator](separator.md) — carries the "No data" `Tag` across the empty band.

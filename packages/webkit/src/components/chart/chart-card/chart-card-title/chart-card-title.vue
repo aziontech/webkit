@@ -15,9 +15,7 @@
 
   onScopeDispose(ctx.registerTitle())
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__title`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-card-title')
 </script>
 
 <template>

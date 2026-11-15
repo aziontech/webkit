@@ -1,11 +1,11 @@
 ---
 name: process-scroll
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 63ef37ee9f8d37ed7fe5790cfb0a6f897add9df97cdd4a4cca010e704b7e27dd
+checksum: 72ec71b500489d33ec6713a9839956892662f97041bce888c8ddd5584a094b53
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -27,7 +27,7 @@ The stages of a process as a row of numbered dark cards on a pixel texture, unde
 
 ## Related
 
-- `TextureMaterial`, `FrameBox`, `SectionTitle`.
+- `Texture`, `RegistrationFrame`, `SectionTitle`.
 
 ## Best practices
 
@@ -59,15 +59,15 @@ The stages of a process as a row of numbered dark cards on a pixel texture, unde
 | Prop               | Type                           | Default                         | Required | JSDoc                                                                                                                                                                                                                          |
 | ------------------ | ------------------------------ | ------------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `anchor`           | `string`                       | `''`                            | false    | In-page id set on the band so a hash link can target it.                                                                                                                                                                       |
-| `eyebrow`          | `string`                       | `''`                            | false    | Overline above the title.                                                                                                                                                                                                      |
-| `titleVariant`        | `SectionTitleVariant`             | `'split'`                  | false    | Alignment of the section title over the card row.                                                                                                                                                                              |
+| `eyebrow`          | `string`                       | `''`                            | false    | Eyebrow above the title.                                                                                                                                                                                                       |
+| `titleVariant`     | `SectionTitleVariant`          | `'split'`                       | false    | Alignment of the section title over the card row.                                                                                                                                                                              |
 | `title`            | `string`                       | `''`                            | false    | Headline of the band, rendered as its `h2`; the band renders nothing when empty.                                                                                                                                               |
 | `description`      | `string`                       | `''`                            | false    | Paragraph beside the headline.                                                                                                                                                                                                 |
 | `descriptionWidth` | `SectionTitleDescriptionWidth` | `'narrow'`                      | false    | Column span of the paragraph: `wide` runs it across the middle column too.                                                                                                                                                     |
 | `steps`            | `ProcessScrollStep[]`          | `[]`                            | false    | The stages, in order; each is `{ title, description }` and gets its own numbered card.                                                                                                                                         |
 | `ariaLabel`        | `string`                       | `''`                            | false    | Accessible name of the scrollable card row; defaults to the title.                                                                                                                                                             |
 | `pinned`           | `boolean`                      | `false`                         | false    | From the large breakpoint, pins the band under the site header while the page scrolls and slides the card row sideways until its last card is in view; below it, or under reduced motion, the row scrolls sideways on its own. |
-| `headerOffset`     | `string`                       | `'var(--layout-header-height)'` | false    | Height of the sticky site header a pinned band sticks under; defaults to the SiteNav bar's token, any CSS length.                                                                                                              |
+| `headerOffset`     | `string`                       | `'var(--layout-header-height)'` | false    | Height of the sticky site header a pinned band sticks under; defaults to the SiteHeader bar's token, any CSS length.                                                                                                           |
 
 ## Events
 
@@ -85,7 +85,7 @@ The stages of a process as a row of numbered dark cards on a pixel texture, unde
 
 ## Motion & Animations
 
-None of its own; `TextureMaterial` animates its pixel field and stops under reduced motion.
+None of its own; `Texture` animates its pixel field and stops under reduced motion.
 
 ## Tokens
 

@@ -7,9 +7,9 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 
 import AsyncSubmitSucceeded from '../../blocks/state/async-submit/variants/success.vue'
 import FormValidationSectionRejected from '../../blocks/state/form-validation/variants/section-rejected.vue'
-import type { LogViewLine } from '../components/code/log-view/injection-key'
-import LogView from '../components/code/log-view/log-view.vue'
-import LogViewContent from '../components/code/log-view/log-view-content.vue'
+import type { LogViewerLine } from '../components/code/log-viewer/injection-key'
+import LogViewer from '../components/code/log-viewer/log-viewer.vue'
+import LogViewerContent from '../components/code/log-viewer/log-viewer-content.vue'
 import StatusIndicator from '../components/feedback/status-indicator/status-indicator.vue'
 import Toaster from '../components/feedback/toast/toast.vue'
 
@@ -71,17 +71,17 @@ describe('live regions', () => {
     expect(nested()).toEqual([])
   })
 
-  it('LogView appends streamed lines inside one log region, never a region per line', async () => {
-    const line = (i: number): LogViewLine => ({
+  it('LogViewer appends streamed lines inside one log region, never a region per line', async () => {
+    const line = (i: number): LogViewerLine => ({
       id: `l${i}`,
       time: '12:00:0' + (i % 10),
       type: 'text',
       message: `Building step ${i}`
     })
-    const lines = ref<LogViewLine[]>([line(1), line(2)])
+    const lines = ref<LogViewerLine[]>([line(1), line(2)])
     render(
       defineComponent({
-        setup: () => () => h(LogView, { lines: lines.value }, () => h(LogViewContent))
+        setup: () => () => h(LogViewer, { lines: lines.value }, () => h(LogViewerContent))
       })
     )
     await nextTick()

@@ -15,7 +15,7 @@ The `/signup/onboarding` screen, frame included. A new user has an account but n
 
 ## Building blocks
 
-### A. Bar — `GlobalHeader` (required)
+### A. Bar — `AppHeader` (required)
 
 The signed-out bar (`top-bar/auth-bar`): brand at the start, Documentation at the end.
 
@@ -55,13 +55,13 @@ Seven colors, `aria-label="Organization mark"`, each card showing the generated 
 
 Square avatars: `pattern="marble"` seeded by the organization name with the card's `colors` in each radio card, the same marble in the selected colors for the organization in the wireframe, and initials for the workspace. Never hand-build the SVG or pass it as `src`.
 
-### K. Picker hint — `HelperText` (required)
+### K. Picker hint — `FieldDescription`, `FieldError` (required)
 
 Under the picker: `Generated from the organization's name. Select its color.`
 
-### L. Plan step — `Tag`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `FeatureList`, `ToggleGroup`, `Select`, `Checkbox`, `PaymentBrand`, `Separator`, `Link` (required)
+### L. Plan step — `Tag`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `PlanFeatureList`, `ToggleGroup`, `Select`, `Checkbox`, `PaymentBrand`, `Separator`, `Link` (required)
 
-The plans are full-width `RadioGroup` cards, each with its name `Tag` and price. Free selects directly; Pro or Enterprise opens the upgrade `Drawer`, the Checkout of `account/change-plan-drawer` (What's included as a `FeatureList`, the billing period `ToggleGroup`, the payment method with its `PaymentBrand`, the billing address `Select`s and the `Checkbox` that reuses the account's address, the pricing `Link`s), and selects only once Upgrade is pressed.
+The plans are full-width `RadioGroup` cards, each with its name `Tag` and price. Free selects directly; Pro or Enterprise opens the upgrade `Drawer`, the Checkout of `account/change-plan-drawer` (What's included as a `PlanFeatureList`, the billing period `ToggleGroup`, the payment method with its `PaymentBrand`, the billing address `Select`s and the `Checkbox` that reuses the account's address, the pricing `Link`s), and selects only once Upgrade is pressed.
 
 ### M. Work step — `Switch`, `Alert` (required)
 
@@ -96,7 +96,7 @@ The usage and role questions as `RadioGroup` cards, a `Field.Label` choice card 
 ## States
 
 - Organization: step 1 of 3, name fields and the organization mark.
-- Plan: step 2 of 3, the plans as rows; Free selects directly, Pro or Enterprise opens the upgrade drawer and selects only once Upgrade is pressed. The drawer is the Checkout of `account/change-plan-drawer` (What's included as a `FeatureList`, the charge, the payment method and the billing address); keep its fields and copy identical to that block rather than diverging.
+- Plan: step 2 of 3, the plans as rows; Free selects directly, Pro or Enterprise opens the upgrade drawer and selects only once Upgrade is pressed. The drawer is the Checkout of `account/change-plan-drawer` (What's included as a `PlanFeatureList`, the charge, the payment method and the billing address); keep its fields and copy identical to that block rather than diverging.
 - Profile: step 3 of 3, the usage and role questions, the onboarding-session switch and Create Organization, which locks the step while the request runs and answers in one `Alert` in the card: `Organization created.`, or, when the request fails (offline), `The organization wasn't created. Check your connection, then retry. Your answers are kept.` with Retry.
 
 ## Related

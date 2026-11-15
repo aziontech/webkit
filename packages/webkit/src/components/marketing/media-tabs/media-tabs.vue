@@ -4,13 +4,13 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import TextureMaterial, {
-    type TextureMaterialFade,
-    type TextureMaterialSize,
-    type TextureMaterialVariant
-  } from '../texture-material/texture-material.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import Texture, {
+    type TextureFade,
+    type TextureSize,
+    type TextureVariant
+  } from '../texture/texture.vue'
 
   defineOptions({
     name: 'MediaTabs',
@@ -52,11 +52,11 @@
     /** Advances a hairline along the active row's bottom edge while the timer runs. */
     showProgress?: boolean
     /** Texture the media column is grounded with; `none` leaves it bare. */
-    texture?: TextureMaterialVariant
+    texture?: TextureVariant
     /** Pitch of the ground's tiling — how far apart its cells sit. */
-    textureSize?: TextureMaterialSize
+    textureSize?: TextureSize
     /** How the ground fades out before the column's edges. */
-    textureFade?: TextureMaterialFade
+    textureFade?: TextureFade
   }
 
   const props = withDefaults(defineProps<MediaTabsProps>(), {
@@ -91,11 +91,9 @@
   const paused = ref(false)
   const pointerInside = ref(false)
   const focusInside = ref(false)
-  let ticker: ReturnType<typeof globalThis.setInterval> | null = null
+  let marquee: ReturnType<typeof globalThis.setInterval> | null = null
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-media-tabs'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'media-tabs')
 
   const orientation = computed(() =>
     props.tabsSide === 'top' || props.tabsSide === 'bottom' ? 'horizontal' : 'vertical'
@@ -143,14 +141,14 @@
   }
 
   function stop(): void {
-    if (ticker === null) return
-    globalThis.clearInterval(ticker)
-    ticker = null
+    if (marquee === null) return
+    globalThis.clearInterval(marquee)
+    marquee = null
   }
 
   function start(): void {
     stop()
-    ticker = globalThis.setInterval(tick, PROGRESS_TICK_MS)
+    marquee = globalThis.setInterval(tick, PROGRESS_TICK_MS)
   }
 
   function tick(): void {
@@ -228,7 +226,7 @@
           class="group/row flex flex-col lg:min-h-(--media-tabs-row) group-data-[orientation=horizontal]/media-tabs:lg:min-h-0 group-data-[orientation=horizontal]/media-tabs:lg:min-w-0 group-data-[orientation=horizontal]/media-tabs:lg:flex-1 group-data-[orientation=horizontal]/media-tabs:lg:not-first:[&>div]:border-s-0 group-data-[tabs-side=end]/media-tabs:lg:[&>div]:data-[borders~=left]:border-s-0"
           @pointerenter="point(index)"
         >
-          <FrameBox
+          <RegistrationFrame
             borders="all"
             marks="all"
             flush="top"
@@ -284,17 +282,17 @@
               :style="{ width: `${progress}%` }"
               class="absolute bottom-0 start-0 h-px bg-(--primary) transition-[width] duration-fast-01 ease-linear motion-reduce:transition-none"
             />
-          </FrameBox>
+          </RegistrationFrame>
         </li>
       </ul>
 
-      <FrameBox
+      <RegistrationFrame
         borders="all"
         marks="all"
         :flush="tabsSide === 'start' ? ['left', 'top'] : 'top'"
         class="relative hidden overflow-hidden bg-[var(--media-tabs-media-bg,var(--bg-canvas))] lg:block lg:min-w-0 group-data-[orientation=vertical]/media-tabs:lg:flex-1"
       >
-        <TextureMaterial
+        <Texture
           :variant="texture"
           :size="textureSize"
           :fade="textureFade"
@@ -325,7 +323,7 @@
             </slot>
           </div>
         </div>
-      </FrameBox>
+      </RegistrationFrame>
     </div>
     <IconButton
       v-if="hasItems && autoplayEnabled"

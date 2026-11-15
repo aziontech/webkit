@@ -7,11 +7,11 @@
   "When the same artwork has to read with more or fewer PoPs lit, or with none at all (`density=\"none\"`), from one component instead of separate exports."
  ],
  "avoidWhen": [
-  "For a real node/edge diagram driven by data → use `flow`.",
+  "For a real node/edge diagram driven by data → use `flow-diagram`.",
   "As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it."
  ],
  "related": [
-  "frame-box` — the ruled box a network band usually sits in; it supplies the positioned, clipping ancestor."
+  "registration-frame` — the ruled box a network band usually sits in; it supplies the positioned, clipping ancestor."
  ],
  "bestPractices": [
   "Give the layer a positioned ancestor (`relative overflow-hidden`); it fills that box and nothing else.",

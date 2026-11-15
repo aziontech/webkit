@@ -1,6 +1,6 @@
 {
   "component": "drawer",
-  "title": "Components/Primitives/Overlay/Drawer",
+  "title": "Components/Overlay/Drawer",
   "examples": [
     {
       "name": "Default",

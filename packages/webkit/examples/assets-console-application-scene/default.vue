@@ -1,6 +1,6 @@
 <script setup>
   import ConsoleApplicationScene from '@aziontech/webkit/assets/console-application-scene'
-  import ConsolePanel from '@aziontech/webkit/console-panel'
+  import ConsoleShowcase from '@aziontech/webkit/console-showcase'
 
   const tabs = [
     { value: 'build', title: 'Build' },
@@ -11,7 +11,7 @@
 </script>
 
 <template>
-  <ConsolePanel
+  <ConsoleShowcase
     eyebrow="Azion Console"
     title="The Application, tab by tab"
     description="Every tab owns its own list, its own create drawer and its own save."
@@ -20,5 +20,5 @@
     <template #scene="{ tab }">
       <ConsoleApplicationScene :tab="tab" />
     </template>
-  </ConsolePanel>
+  </ConsoleShowcase>
 </template>

@@ -1,6 +1,6 @@
 # App Layout
 
-> The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shell/console` block) keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the frame to `AppLayout`.
+> The frame every signed-in product page renders inside. It places named regions — navigation, header, notifications, breadcrumbs, content, tools (the help panel) and the split panel — and owns how they open, close, resize and remember their state. It responds to its **own** width, not the viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the split panel moves to the bottom. The regions are slots, so the shell (the `shell/console` block) keeps its own `Sidebar`, `AppHeader` and page content and only hands the frame to `AppLayout`.
 
 - Import: `import AppLayout from '@aziontech/webkit/app-layout'`
 - Category: layout · Surface: app · Structure: monolithic
@@ -36,7 +36,7 @@
 ## Related
 
 - [sidebar](sidebar.md) — the navigation rail that goes in the `navigation` slot; it owns its own width, resize and collapse.
-- [global-header](global-header.md) — the bar that goes in the `header` slot.
+- [app-header](app-header.md) — the bar that goes in the `header` slot.
 - [help-panel](help-panel.md) — the content of the tools region.
 - [drawer](drawer.md) — what the navigation and tools regions become below `compactBelow`.
 - [resizable](resizable.md) — a split between panes inside a page, without the shell.
@@ -137,11 +137,11 @@ Unbound, each one keeps its own local state.
 ```vue
 <script setup>
   import Alert from '@aziontech/webkit/alert'
+  import AppHeader from '@aziontech/webkit/app-header'
   import AppLayout from '@aziontech/webkit/app-layout'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Command from '@aziontech/webkit/command'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import HelpPanel from '@aziontech/webkit/help-panel'
   import IconButton from '@aziontech/webkit/icon-button'
   import KeyValueList from '@aziontech/webkit/key-value-list'
@@ -203,8 +203,8 @@ Unbound, each one keeps its own local state.
 
       <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container w-full">
-          <GlobalHeader aria-label="Console">
-            <GlobalHeader.Start>
+          <AppHeader aria-label="Console">
+            <AppHeader.Start>
               <div class="flex w-full min-w-0 items-center gap-(--spacing-xs)">
                 <IconButton
                   v-if="compact"
@@ -215,9 +215,9 @@ Unbound, each one keeps its own local state.
                   @click="openNavigation"
                 />
               </div>
-            </GlobalHeader.Start>
-            <GlobalHeader.Center />
-            <GlobalHeader.End>
+            </AppHeader.Start>
+            <AppHeader.Center />
+            <AppHeader.End>
               <SearchTrigger
                 collapsible
                 @open="searchOpen = true"
@@ -230,8 +230,8 @@ Unbound, each one keeps its own local state.
                 :aria-pressed="toolsOpen"
                 @click="toggleTools"
               />
-            </GlobalHeader.End>
-          </GlobalHeader>
+            </AppHeader.End>
+          </AppHeader>
           <Command v-model:open="searchOpen">
             <Command.Input placeholder="Search the console" />
             <Command.List>
@@ -319,11 +319,11 @@ Unbound, each one keeps its own local state.
 
 ```vue
 <script setup>
+  import AppHeader from '@aziontech/webkit/app-header'
   import AppLayout from '@aziontech/webkit/app-layout'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import GlobalHeader from '@aziontech/webkit/global-header'
   import PageHeader from '@aziontech/webkit/page-header'
 
   const crumbs = [{ label: 'Workloads', href: '#' }, { label: 'Domains' }]
@@ -333,11 +333,11 @@ Unbound, each one keeps its own local state.
   <div class="h-dvh">
     <AppLayout>
       <template #header>
-        <GlobalHeader aria-label="Console">
-          <GlobalHeader.Start />
-          <GlobalHeader.Center />
-          <GlobalHeader.End />
-        </GlobalHeader>
+        <AppHeader aria-label="Console">
+          <AppHeader.Start />
+          <AppHeader.Center />
+          <AppHeader.End />
+        </AppHeader>
       </template>
 
       <template #breadcrumbs>

@@ -1,6 +1,6 @@
 {
   "component": "command",
-  "title": "Components/Primitives/Overlay/Command",
+  "title": "Components/Overlay/Command",
   "examples": [
     {
       "name": "Default",

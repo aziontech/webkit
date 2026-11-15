@@ -1,6 +1,6 @@
 {
   "component": "panel",
-  "title": "Components/Primitives/Overlay/Panel",
+  "title": "Components/Overlay/Panel",
   "examples": [
     {
       "name": "Default",

@@ -3,7 +3,7 @@
   "name": "OnboardingForm",
   "title": "Blocks/Account/OnboardingForm",
   "surface": "app",
-  "summary": "The /signup/onboarding screen, frame included: the signed-out `GlobalHeader` over a two-column grid whose left column is a `Card` holding a `Wizard` (the step line, the step heading, the step's fields and the Cancel / Previous / Next footer, Next gated on the required answers), and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The three steps live in one component; each story here opens on one of them. Built from `Wizard`, `Field` with `Input`, `RadioGroup` with `variant=\"card\"` in a `fieldset` under a `Field.Legend` with a `HelperText`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.",
+  "summary": "The /signup/onboarding screen, frame included: the signed-out `AppHeader` over a two-column grid whose left column is a `Card` holding a `Wizard` (the step line, the step heading, the step's fields and the Cancel / Previous / Next footer, Next gated on the required answers), and whose right column, from `lg` up, is a wireframe of the app the new organization will open into. The three steps live in one component; each story here opens on one of them. Built from `Wizard`, `Field` with `Input`, `RadioGroup` with `variant=\"card\"` in a `fieldset` under a `Field.Legend` with a `FieldError`, a `Field.Label` choice card around a `Switch`, `Tag`, `Avatar` and `Button`; picking a paid plan opens the upgrade `Drawer` with `ToggleGroup`, `Field` with `Input`, `Select` and `Checkbox`, `Link` and `Alert`. A full page routed outside ConsoleLayout.",
   "preview": {
     "layout": "fullscreen",
     "background": "dark"
@@ -33,7 +33,7 @@
   "variants": [
     {
       "name": "Plan",
-      "summary": "Step 2 of 3: the three plans as full-width rows; Free selects directly, while Pro or Enterprise opens the upgrade drawer (the `account/change-plan-drawer#Checkout` form, What's included as a `FeatureList`) and only selects once Upgrade is pressed.",
+      "summary": "Step 2 of 3: the three plans as full-width rows; Free selects directly, while Pro or Enterprise opens the upgrade drawer (the `account/change-plan-drawer#Checkout` form, What's included as a `PlanFeatureList`) and only selects once Upgrade is pressed.",
       "file": "variants/plan.vue"
     },
     {

@@ -44,7 +44,7 @@ describe('Panel', () => {
       slots: { default: () => h('span', 'shell body') }
     })
 
-    const root = getByTestId('overlay-panel')
+    const root = getByTestId('panel')
     expect(root.tagName).toBe('DIV')
     expect(getByText('shell body')).toBeTruthy()
     // Shell owns no dialog semantics — no role/aria-modal/data-state.
@@ -55,9 +55,9 @@ describe('Panel', () => {
   it('exposes the sub-components as real components and renders their semantic roots', () => {
     const { getByTestId } = render(composed())
 
-    const header = getByTestId('overlay-panel__header')
-    const footer = getByTestId('overlay-panel__footer')
-    const content = getByTestId('overlay-panel__content')
+    const header = getByTestId('panel__header')
+    const footer = getByTestId('panel__footer')
+    const content = getByTestId('panel__content')
 
     expect(header.tagName).toBe('HEADER')
     expect(footer.tagName).toBe('FOOTER')
@@ -69,9 +69,9 @@ describe('Panel', () => {
 
     // Header / Content / Footer show no model-value wiring — their testids are
     // derived purely from the injected PanelContext.testId.
-    expect(getByTestId('overlay-panel__header')).toBeTruthy()
-    expect(getByTestId('overlay-panel__content')).toBeTruthy()
-    expect(getByTestId('overlay-panel__footer')).toBeTruthy()
+    expect(getByTestId('panel__header')).toBeTruthy()
+    expect(getByTestId('panel__content')).toBeTruthy()
+    expect(getByTestId('panel__footer')).toBeTruthy()
   })
 
   it('propagates a data-testid override from the shell to the sub-component testids', () => {
@@ -83,7 +83,7 @@ describe('Panel', () => {
     expect(getByTestId('edit-domain-panel__footer').tagName).toBe('FOOTER')
 
     // The default fallback testids no longer exist once overridden.
-    expect(() => getByTestId('overlay-panel__header')).toThrow()
+    expect(() => getByTestId('panel__header')).toThrow()
   })
 
   it('renders content as a plain div (no ScrollArea) when no drawer scroll host is present', () => {
@@ -96,8 +96,8 @@ describe('Panel', () => {
     // utility classes never apply and any scroll measurement would be a false
     // negative. Scrolling is exercised through Drawer and Dialog, which are the
     // contexts that mount this shell.
-    expect(getByTestId('overlay-panel__content').tagName).toBe('DIV')
-    expect(queryByTestId('overlay-panel__scroll')).toBeNull()
+    expect(getByTestId('panel__content').tagName).toBe('DIV')
+    expect(queryByTestId('panel__scroll')).toBeNull()
     expect(getByText('Adjust the domain configuration below.')).toBeTruthy()
   })
 
@@ -126,8 +126,8 @@ describe('Panel', () => {
 
     const { getByTestId, getByText } = render(Tree)
 
-    const scroll = getByTestId('overlay-panel__scroll')
-    const content = getByTestId('overlay-panel__content')
+    const scroll = getByTestId('panel__scroll')
+    const content = getByTestId('panel__content')
     expect(scroll).toBeTruthy()
     // Content div is nested INSIDE the ScrollArea host, not a sibling.
     expect(scroll.contains(content)).toBe(true)
@@ -136,17 +136,17 @@ describe('Panel', () => {
 
   it.each<PanelSize>(['small', 'medium', 'large'])('reflects size "%s" on data-width', (size) => {
     const { getByTestId } = render(composed({ size }))
-    expect(getByTestId('overlay-panel').getAttribute('data-width')).toBe(size)
+    expect(getByTestId('panel').getAttribute('data-width')).toBe(size)
   })
 
   it('reflects fluid mode (data-fluid attribute) on data-width', () => {
     const { getByTestId } = render(composed({ 'data-fluid': '' }))
-    expect(getByTestId('overlay-panel').getAttribute('data-width')).toBe('fluid')
+    expect(getByTestId('panel').getAttribute('data-width')).toBe('fluid')
   })
 
   it('reflects sizeAtMd on data-width', () => {
     const { getByTestId } = render(composed({ sizeAtMd: true, size: 'large' }))
-    expect(getByTestId('overlay-panel').getAttribute('data-width')).toBe('large-md')
+    expect(getByTestId('panel').getAttribute('data-width')).toBe('large-md')
   })
 
   it('makes an overflowing content region focusable only when nothing inside is', async () => {
@@ -163,7 +163,7 @@ describe('Panel', () => {
           )
       })
     )
-    const content = view.getByTestId('overlay-panel__content')
+    const content = view.getByTestId('panel__content')
     content.style.height = '40px'
     content.style.overflowY = 'auto'
     await nextTick()
@@ -178,7 +178,7 @@ describe('Panel', () => {
 
   it('has no accessibility violations on the composed tree', async () => {
     const { getByTestId } = render(composed())
-    await expectNoA11yViolations(getByTestId('overlay-panel'))
+    await expectNoA11yViolations(getByTestId('panel'))
   })
 
   describe('compound API (index.ts)', () => {

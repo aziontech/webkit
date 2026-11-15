@@ -6,7 +6,8 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -365,27 +366,30 @@
                       :id="`${pasteId}-report`"
                       class="flex flex-col gap-(--spacing-2xs)"
                     >
-                      <HelperText
-                        key="found"
-                        :label="`${pasteReport.lines.length} ${pasteReport.lines.length === 1 ? 'entry' : 'entries'} found. Text after # is kept as the comment.`"
-                      />
-                      <HelperText
+                      <FieldDescription key="found">{{
+                        `${pasteReport.lines.length} ${pasteReport.lines.length === 1 ? 'entry' : 'entries'} found. Text after # is kept as the comment.`
+                      }}</FieldDescription>
+                      <FieldError
                         v-if="pasteReport.invalid.length"
                         key="invalid"
-                        type="invalid"
-                        :label="`${lineList(pasteReport.invalid)} not ${copy.rule}; ${pasteReport.invalid.length === 1 ? 'it is' : 'they are'} added with an error to fix.`"
-                      />
-                      <HelperText
+                        >{{
+                          `${lineList(pasteReport.invalid)} not ${copy.rule}; ${pasteReport.invalid.length === 1 ? 'it is' : 'they are'} added with an error to fix.`
+                        }}</FieldError
+                      >
+                      <FieldDescription
                         v-if="pasteReport.duplicates.length"
                         key="duplicates"
-                        :label="`${lineList(pasteReport.duplicates)} already in the list and will be skipped.`"
-                      />
-                      <HelperText
+                        >{{
+                          `${lineList(pasteReport.duplicates)} already in the list and will be skipped.`
+                        }}</FieldDescription
+                      >
+                      <FieldError
                         v-if="pasteOverflow"
                         key="overflow"
-                        type="invalid"
-                        :label="`A list holds at most ${LIMIT} entries; the last ${pasteOverflow} will be skipped.`"
-                      />
+                        >{{
+                          `A list holds at most ${LIMIT} entries; the last ${pasteOverflow} will be skipped.`
+                        }}</FieldError
+                      >
                     </div>
                     <div class="flex flex-wrap items-center gap-(--spacing-xs)">
                       <Button

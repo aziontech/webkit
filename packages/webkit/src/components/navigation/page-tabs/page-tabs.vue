@@ -33,9 +33,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-page-tabs'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'page-tabs')
 </script>
 
 <template>

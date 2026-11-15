@@ -1,6 +1,6 @@
 {
   "component": "navigation-menu",
-  "title": "Components/Primitives/Navigation/NavigationMenu",
+  "title": "Components/Navigation/NavigationMenu",
   "examples": [
     {
       "name": "Default",

@@ -7,7 +7,7 @@ import Default from '../../../../examples/overflow-count/default.vue'
 import LongList from '../../../../examples/overflow-count/long-list.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import OverflowCount from './overflow-count.vue'
 
 const byTestId = (id: string): HTMLElement | null =>
@@ -15,7 +15,7 @@ const byTestId = (id: string): HTMLElement | null =>
 const allByTestId = (id: string): HTMLElement[] =>
   Array.from(document.body.querySelectorAll<HTMLElement>(`[data-testid="${id}"]`))
 const trigger = (): HTMLElement =>
-  document.body.querySelector<HTMLElement>('[data-testid="content-overflow-count__trigger"]')!
+  document.body.querySelector<HTMLElement>('[data-testid="overflow-count__trigger"]')!
 
 const tags = Array.from({ length: 33 }, (_, index) => `tag-${index + 1}`)
 
@@ -24,7 +24,7 @@ afterEach(() => cleanup())
 describe('OverflowCount', () => {
   it('renders nothing for an empty list', () => {
     render(OverflowCount, { props: { items: [] } })
-    expect(byTestId('content-overflow-count')).toBeNull()
+    expect(byTestId('overflow-count')).toBeNull()
   })
 
   it('shows +N and names the trigger with the count and noun', () => {
@@ -36,16 +36,14 @@ describe('OverflowCount', () => {
   it('opens a list of links that open in a new tab', async () => {
     const view = render(Default)
     await fireEvent.click(view.getByRole('button', { name: 'Show all 3 domains' }))
-    await waitFor(() => expect(byTestId('content-overflow-count__summary')).not.toBeNull())
-    expect(byTestId('content-overflow-count__summary')!.textContent).toContain('3 domains')
-    const links = allByTestId('content-overflow-count__item').map((item) =>
-      item.querySelector('a')!
-    )
+    await waitFor(() => expect(byTestId('overflow-count__summary')).not.toBeNull())
+    expect(byTestId('overflow-count__summary')!.textContent).toContain('3 domains')
+    const links = allByTestId('overflow-count__item').map((item) => item.querySelector('a')!)
     expect(links).toHaveLength(3)
     expect(links[0].getAttribute('target')).toBe('_blank')
     expect(links[0].getAttribute('rel')).toBe('noopener noreferrer')
     expect(links[0].textContent).toContain('(opens in a new tab)')
-    expect(byTestId('content-overflow-count__search')).toBeNull()
+    expect(byTestId('overflow-count__search')).toBeNull()
   })
 
   it('does not bubble the trigger click to a clickable row', async () => {
@@ -66,43 +64,43 @@ describe('OverflowCount', () => {
         h('div', { onClick: () => (rowClicks += 1) }, [h(OverflowCount, { items: ['a', 'b'] })])
     })
     render(Host)
-    await fireEvent.click(byTestId('content-overflow-count')!)
+    await fireEvent.click(byTestId('overflow-count')!)
     expect(rowClicks).toBe(1)
   })
 
   it('searches past 7 items, pages by 10 and quotes a query with no match', async () => {
     render(OverflowCount, { props: { items: tags, noun: { one: 'tag', other: 'tags' } } })
     await fireEvent.click(trigger().querySelector('button') ?? trigger())
-    await waitFor(() => expect(byTestId('content-overflow-count__summary')).not.toBeNull())
-    expect(byTestId('content-overflow-count__summary')!.textContent).toContain('10 of 33 tags')
-    expect(allByTestId('content-overflow-count__item')).toHaveLength(10)
+    await waitFor(() => expect(byTestId('overflow-count__summary')).not.toBeNull())
+    expect(byTestId('overflow-count__summary')!.textContent).toContain('10 of 33 tags')
+    expect(allByTestId('overflow-count__item')).toHaveLength(10)
 
-    const loadMore = byTestId('content-overflow-count__load-more')!
+    const loadMore = byTestId('overflow-count__load-more')!
     expect(loadMore.textContent).toContain('Load 10 more')
     await fireEvent.click(loadMore)
-    expect(allByTestId('content-overflow-count__item')).toHaveLength(20)
+    expect(allByTestId('overflow-count__item')).toHaveLength(20)
 
-    const search = byTestId('content-overflow-count__search') as HTMLInputElement
+    const search = byTestId('overflow-count__search') as HTMLInputElement
     await userEvent.fill(search, 'tag-3')
-    await waitFor(() => expect(allByTestId('content-overflow-count__item')).toHaveLength(5))
-    expect(byTestId('content-overflow-count__summary')!.textContent).toContain('5 of 33 tags')
-    expect(byTestId('content-overflow-count__load-more')).toBeNull()
+    await waitFor(() => expect(allByTestId('overflow-count__item')).toHaveLength(5))
+    expect(byTestId('overflow-count__summary')!.textContent).toContain('5 of 33 tags')
+    expect(byTestId('overflow-count__load-more')).toBeNull()
 
     await userEvent.fill(search, 'nothing')
-    await waitFor(() => expect(byTestId('content-overflow-count__no-match')).not.toBeNull())
-    expect(byTestId('content-overflow-count__no-match')!.textContent).toContain('“nothing”')
+    await waitFor(() => expect(byTestId('overflow-count__no-match')).not.toBeNull())
+    expect(byTestId('overflow-count__no-match')!.textContent).toContain('“nothing”')
   })
 
   it('resets the query and paging when it closes', async () => {
     render(OverflowCount, { props: { items: tags } })
     const control = trigger().querySelector('button') ?? trigger()
     await fireEvent.click(control)
-    await waitFor(() => expect(byTestId('content-overflow-count__load-more')).not.toBeNull())
-    await fireEvent.click(byTestId('content-overflow-count__load-more')!)
+    await waitFor(() => expect(byTestId('overflow-count__load-more')).not.toBeNull())
+    await fireEvent.click(byTestId('overflow-count__load-more')!)
     await userEvent.keyboard('{Escape}')
-    await waitFor(() => expect(byTestId('content-overflow-count__summary')).toBeNull())
+    await waitFor(() => expect(byTestId('overflow-count__summary')).toBeNull())
     await fireEvent.click(control)
-    await waitFor(() => expect(allByTestId('content-overflow-count__item')).toHaveLength(10))
+    await waitFor(() => expect(allByTestId('overflow-count__item')).toHaveLength(10))
   })
 
   it('renders the item slot', async () => {
@@ -145,9 +143,9 @@ describe('OverflowCount', () => {
       const view = render(example)
       await expectNoA11yViolations(view.container)
       await fireEvent.click(trigger().querySelector('button') ?? trigger())
-      await waitFor(() => expect(byTestId('content-overflow-count__summary')).not.toBeNull())
+      await waitFor(() => expect(byTestId('overflow-count__summary')).not.toBeNull())
       await expectNoA11yViolations(
-        byTestId('content-overflow-count__summary')!.closest<HTMLElement>('[role="dialog"]')!
+        byTestId('overflow-count__summary')!.closest<HTMLElement>('[role="dialog"]')!
       )
       view.unmount()
       cleanup()

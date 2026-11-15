@@ -1,19 +1,19 @@
 ---
 name: feature-tabs
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 4
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 9f00dfaffde71a4e8a470ca51cd0f05436e433c8306c320b2bd43b9821c4b49f
+checksum: 6d33013bf2e856e14f51f2f6e08aa84ed1d7d21dbf65f82fc269bb8a6e119e16
 ---
 
 # FeatureTabs — Component Spec
 
 ## Purpose
 
-The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
+The feature walkthrough band of a product page: a horizontal section title, with its button beside the headline, over up to three tabs on one side and the active tab's media on the other. A tab's media is its own code file (a `code-block` with line numbers whose lines rise in while the tab is open, on a pixelate texture in a taller stage), the band's live scene (handed the open tab's `value`), or the tab's illustration. It is a page section — the site places it from a `{ _id: 'feature-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `media-tabs`, `code-block`, `illustration`, `button`, `link` and the webkit scene assets. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
 
 ## When to use
 
@@ -36,7 +36,7 @@ The feature walkthrough band of a product page: a horizontal section title, with
 - Keep to three tabs; tabs past the limit are not rendered.
 - Give every tab an `illustrationLabel` saying what its picture shows.
 - Use tab `code` when the feature is an API a developer reads; keep each file short enough to read in the stage. Set `copyAriaLabel` to say what the copy button copies.
-- Use the band `scene` when one console widget plays a different beat per tab (`{ component: 'ProductWidget', props: { name: 'functions-start' } }` with tab `value`s naming its tabs); give every tab a `value` then.
+- Use the band `scene` when one console widget plays a different beat per tab (`{ component: 'ConsoleMockup', props: { name: 'functions-start' } }` with tab `value`s naming its tabs); give every tab a `value` then.
 
 ## Usage
 
@@ -73,7 +73,7 @@ The feature walkthrough band of a product page: a horizontal section title, with
 | Prop               | Type                 | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | ------------------ | -------------------- | ----------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `anchor`           | `string`             | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                                                                                                 |
-| `eyebrow`          | `string`             | `''`        | false    | Overline above the section title.                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `eyebrow`          | `string`             | `''`        | false    | Eyebrow above the section title.                                                                                                                                                                                                                                                                                                                                                                                                               |
 | `title`            | `string`             | `''`        | false    | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty.                                                                                                                                                                                                                                                                                                                             |
 | `description`      | `string`             | `''`        | false    | Supporting sentence under the headline.                                                                                                                                                                                                                                                                                                                                                                                                        |
 | `tabs`             | `FeatureTabsTab[]`   | `[]`        | false    | The features, in order, at most three; each is `{ title, description, value?, code?, illustration?, illustrationLabel? }` where `value` is the stable key handed to the band scene as its `tab`, `code` is the `{ label, value, code, language?, fileName?, fileIcon? }` file the tab opens as its media, `illustration` is a registry name drawn when the tab has no code and the band no scene, and `illustrationLabel` its accessible name. |
@@ -132,7 +132,7 @@ _none_
 
 - Default
 - Code — each tab opens a code file; the stage grows and draws the pixelate texture.
-- Live scene — one `ProductWidget` plays a different tab per feature through the band `scene` and the tab `value`s.
+- Live scene — one `ConsoleMockup` plays a different tab per feature through the band `scene` and the tab `value`s.
 
 ## Constraints — DO NOT
 

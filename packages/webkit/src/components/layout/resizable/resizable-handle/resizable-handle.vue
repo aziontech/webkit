@@ -25,9 +25,7 @@
   const ctx = inject(ResizableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__handle` : 'layout-resizable__handle')
+    () => (attrs['data-testid'] as string | undefined) ?? 'resizable-handle'
   )
 
   const orientation = computed(() => ctx?.orientation.value ?? 'horizontal')

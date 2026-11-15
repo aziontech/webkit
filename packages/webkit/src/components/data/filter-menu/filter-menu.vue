@@ -9,12 +9,12 @@
     watch
   } from 'vue'
 
-  import Button from '../../actions/button/button.vue'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import Button from '../../action/button/button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import Avatar from '../../content/avatar/avatar.vue'
   import Badge from '../../content/badge/badge.vue'
-  import type { DateRangeValue } from '../../inputs/date-range-picker/date-range'
-  import Input from '../../inputs/input/input.vue'
+  import type { DateRangeValue } from '../../input/date-range-picker/date-range'
+  import Input from '../../input/input/input.vue'
   import Popover from '../../overlay/popover/popover.vue'
   import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
   import PopoverTitle from '../../overlay/popover/popover-title/popover-title.vue'
@@ -70,7 +70,7 @@
   })
 
   const DateRangePicker = defineAsyncComponent(
-    () => import('../../inputs/date-range-picker/date-range-picker.vue')
+    () => import('../../input/date-range-picker/date-range-picker.vue')
   )
 
   const attrs = useAttrs()
@@ -88,7 +88,7 @@
   const returnFocusEl = ref<HTMLElement | null>(null)
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-filter-menu'
+    () => (attrs['data-testid'] as string | undefined) ?? 'filter-menu'
   )
   const triggerLabel = computed<string>(() => props.label || t('filterMenu.label'))
   const count = computed<number>(() => appliedFields(props.fields, model.value).length)
@@ -303,7 +303,10 @@
     :dismissible="!calendarOpen"
     class="shrink-0"
   >
-    <PopoverTrigger class="relative">
+    <PopoverTrigger
+      :data-testid="`${testId}__trigger`"
+      class="relative"
+    >
       <Button
         :label="triggerLabel"
         :aria-label="triggerName"
@@ -363,7 +366,7 @@
                 class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
               >
                 <IconButton
-                  :data-testid="`${testId}__back`"
+                  :data-testid="`${testId}__previous`"
                   icon="ai ai-chevron-left"
                   variant="outline"
                   size="small"

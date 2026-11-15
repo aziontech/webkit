@@ -3,13 +3,13 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
@@ -274,7 +274,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Account name"
                         description="What this account is called across the console."
                       >
@@ -292,15 +292,14 @@
                             :disabled="saving"
                             @update:model-value="errors.accountName = ''"
                           />
-                          <HelperText
+                          <FieldError
                             v-if="errors.accountName"
                             id="profile-accountName-error"
-                            type="required"
-                            :label="errors.accountName"
-                          />
+                            >{{ errors.accountName }}</FieldError
+                          >
                         </div>
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Client ID"
                         description="Can't be changed. Quote it when opening a support ticket about this account."
                       >
@@ -312,7 +311,7 @@
                           readonly
                           :disabled="saving"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -325,7 +324,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Company name"
                         description="The legal entity that owns this account."
                       >
@@ -337,8 +336,8 @@
                           autocomplete="organization"
                           :disabled="saving"
                         />
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Tax ID"
                         description="The tax ID of the person or company that owns this account."
                       >
@@ -349,8 +348,8 @@
                           aria-label="Tax ID"
                           :disabled="saving"
                         />
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Billing emails"
                         description="Invoices go to every address listed here. Separate addresses with a semicolon."
                         variant="stacked"
@@ -370,14 +369,13 @@
                             :disabled="saving"
                             @update:model-value="errors.billingEmails = ''"
                           />
-                          <HelperText
+                          <FieldError
                             v-if="errors.billingEmails"
                             id="profile-billingEmails-error"
-                            :type="form.billingEmails.trim() ? 'invalid' : 'required'"
-                            :label="errors.billingEmails"
-                          />
+                            >{{ errors.billingEmails }}</FieldError
+                          >
                         </div>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -390,7 +388,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow title="Postal code">
+                      <SettingsRow title="Postal code">
                         <Input
                           v-model="form.postalCode"
                           size="large"
@@ -399,8 +397,8 @@
                           aria-label="Postal code"
                           :disabled="saving"
                         />
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         v-for="place in places"
                         :key="place.key"
                         :title="place.label"
@@ -427,8 +425,8 @@
                             </Select.Item>
                           </Select.Content>
                         </Select>
-                      </SettingRow>
-                      <SettingRow title="Address">
+                      </SettingsRow>
+                      <SettingsRow title="Address">
                         <Input
                           v-model="form.address"
                           size="large"
@@ -437,8 +435,8 @@
                           aria-label="Address"
                           :disabled="saving"
                         />
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Address line 2"
                         description="Optional. Apartment, suite or floor."
                       >
@@ -451,7 +449,7 @@
                           placeholder="1st floor"
                           :disabled="saving"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -464,7 +462,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Allow social login"
                         description="Users linked to the account can log in with their social network credentials."
                         variant="compact"
@@ -474,8 +472,8 @@
                           aria-label="Allow social login"
                           :disabled="saving"
                         />
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Multi-factor authentication"
                         description="Require MFA for everyone in the account, see who has set it up and reset a lost device on the MFA management page."
                         variant="compact"
@@ -486,7 +484,7 @@
                           size="medium"
                           href="/account/security/mfa"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -554,7 +552,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Font family"
                         description="The primary sans typeface across the console."
                       >
@@ -579,8 +577,8 @@
                             </Select.Item>
                           </Select.Content>
                         </Select>
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="System appearance"
                         description="Follow the operating system, or force a light or dark theme."
                       >
@@ -606,7 +604,7 @@
                             </Select.Item>
                           </Select.Content>
                         </Select>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -619,7 +617,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Delete personal account"
                         description="Permanently deletes this personal account and all its data. It cannot be undone."
                         variant="compact"
@@ -632,7 +630,7 @@
                           icon="ai ai-trash"
                           @click="openDelete"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

@@ -30,7 +30,7 @@
   const attrs = useAttrs()
   const slots = useSlots()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-separator')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'separator')
 
   const labelId = useId()
 

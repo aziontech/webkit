@@ -14,28 +14,31 @@
     type SiteFooterColumn,
     type SiteFooterSocial,
     type SiteFooterVariant
-  } from '../../sections/site-footer/site-footer.vue'
-  import SiteNav, { type SiteNavLink, type SiteNavMenu } from '../../sections/site-nav/site-nav.vue'
+  } from '../../section/site-footer/site-footer.vue'
+  import SiteHeader, {
+    type SiteHeaderLink,
+    type SiteHeaderMenu
+  } from '../../section/site-header/site-header.vue'
 
   defineOptions({
     name: 'SiteLayout',
     inheritAttrs: false
   })
 
-  /** The site bar, bound onto `SiteNav`. */
+  /** The site bar, bound onto `SiteHeader`. */
   export type SiteLayoutNavigation = {
     /** The mega-menus, in bar order. */
-    menus: SiteNavMenu[]
+    menus: SiteHeaderMenu[]
     /** Where the Azion mark links. */
     home?: string
     /** Bar entries that open no panel. */
-    links?: SiteNavLink[]
+    links?: SiteHeaderLink[]
     /** The contact link. */
-    contact?: SiteNavLink
+    contact?: SiteHeaderLink
     /** The sign-up button. */
-    primaryAction?: SiteNavLink
+    primaryAction?: SiteHeaderLink
     /** The login button. */
-    secondaryAction?: SiteNavLink
+    secondaryAction?: SiteHeaderLink
     /** Keeps the login button in the bar on phones too. */
     secondaryActionOnPhones?: boolean
   }
@@ -71,7 +74,7 @@
   }
 
   export interface SiteLayoutProps {
-    /** The bar, bound onto `SiteNav`. */
+    /** The bar, bound onto `SiteHeader`. */
     navigation: SiteLayoutNavigation
     /** The footer, bound onto `SiteFooter`; `variant` defaults to `site`. No footer when absent. */
     footer?: SiteLayoutFooter
@@ -116,9 +119,7 @@
 
   const PAGE_VALUE = 'site-layout:page:'
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-site-layout'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'site-layout')
 
   const paletteGroups = computed(() => {
     const groups = props.navigation.menus.map((menu) => ({
@@ -194,7 +195,7 @@
     :data-nav-overlay="navOverlay || null"
     class="flex min-h-dvh w-full min-w-0 flex-col bg-(--bg-canvas) text-(--text-default) data-[nav-overlay]:grid data-[nav-overlay]:grid-rows-[1fr_auto] data-[nav-overlay]:[&>div>header]:[grid-area:1/1/3/2] data-[nav-overlay]:[&>div>header]:self-start data-[nav-overlay]:[&>main]:[grid-area:1/1] data-[nav-overlay]:[&>main+div]:[grid-area:2/1]"
   >
-    <SiteNav
+    <SiteHeader
       v-bind="navigation"
       :data-testid="`${testId}__nav`"
       @search="openSearch"

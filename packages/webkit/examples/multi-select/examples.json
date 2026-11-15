@@ -1,6 +1,6 @@
 {
   "component": "multi-select",
-  "title": "Components/Primitives/Inputs/MultiSelect",
+  "title": "Components/Input/MultiSelect",
   "examples": [
     {
       "name": "Default",

@@ -1,6 +1,6 @@
 {
   "component": "response-branches",
-  "title": "Components/Primitives/AI/ResponseBranches",
+  "title": "Components/AI/ResponseBranches",
   "examples": [
     {
       "name": "Default",

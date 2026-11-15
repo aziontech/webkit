@@ -4,7 +4,7 @@
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useLocaleContext, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
 
   export interface ConversationHistoryItem {
@@ -53,7 +53,7 @@
   const { context: localeContext } = useLocaleContext()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-conversation-history'
+    () => (attrs['data-testid'] as string | undefined) ?? 'conversation-history'
   )
 
   const ORDER: GroupKey[] = ['today', 'yesterday', 'previous7', 'previous30', 'older']

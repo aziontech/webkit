@@ -1,6 +1,6 @@
 {
   "component": "upload-progress",
-  "title": "Components/Primitives/Feedback/UploadProgress",
+  "title": "Components/Feedback/UploadProgress",
   "examples": [
     {
       "name": "Default",

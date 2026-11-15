@@ -1,6 +1,6 @@
 {
   "component": "transfer-list",
-  "title": "Components/Primitives/Data/TransferList",
+  "title": "Components/Data/TransferList",
   "examples": [
     {
       "name": "Default",

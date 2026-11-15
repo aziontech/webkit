@@ -1,19 +1,19 @@
 ---
 name: contact-hub
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 769487e76220ea3e02086a5ebe114b28933be207c7f7b74160a064d34e2c8a5b
+checksum: 38308f81fbdf7f89568f4736ebebd7d98aba71ce37d680a07c2f67c3b7f643b6
 ---
 
 # ContactHub — Component Spec
 
 ## Purpose
 
-The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `card-grid`, `topic`, `button` and `status-indicator`. Lanes and channels share one frame, the channels in the rows under the lanes. A lane can carry a second button and a link to the system status page, so a reader can check for an incident before opening a ticket.
+The band under the Contact title band: the team lanes side by side (Sales and Support), each with its scope in one sentence and the action that reaches that team, over a row of self-serve channels. It is a page section — the site places it from a `{ _id: 'contact-hub', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `card-grid`, `feature-item`, `button` and `status-indicator`. Lanes and channels share one frame, the channels in the rows under the lanes. A lane can carry a second button and a link to the system status page, so a reader can check for an incident before opening a ticket.
 
 ## When to use
 
@@ -22,12 +22,12 @@ The band under the Contact title band: the team lanes side by side (Sales and Su
 ## When NOT to use
 
 - For a closing ask at the end of a page → use `closing-call-to-action`.
-- For a grid of product use cases → use `use-cases`.
+- For a grid of product use cases → use `customer-use-cases`.
 
 ## Related
 
-- `topic` — each self-serve channel is a linked topic.
-- `use-cases` — the sibling band of icon-led topics.
+- `feature-item` — each self-serve channel is a linked topic.
+- `customer-use-cases` — the sibling band of icon-led topics.
 
 ## Best practices
 

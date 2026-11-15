@@ -47,7 +47,7 @@ describe('ChartCard', () => {
 
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const fallback = render(card())
-    expect(fallback.getByTestId('chart-chart-card').getAttribute('role')).toBe('group')
+    expect(fallback.getByTestId('chart-card').getAttribute('role')).toBe('group')
     fallback.unmount()
     expect(render(card({ 'data-testid': 'threats-card' })).getByTestId('threats-card')).toBeTruthy()
   })
@@ -55,7 +55,7 @@ describe('ChartCard', () => {
   it('is named by its title and described by its description', async () => {
     const view = render(card())
     await nextTick()
-    const root = view.getByTestId('chart-chart-card')
+    const root = view.getByTestId('chart-card')
     expect(document.getElementById(root.getAttribute('aria-labelledby') ?? '')?.textContent).toBe(
       'Threats vs requests'
     )
@@ -76,41 +76,37 @@ describe('ChartCard', () => {
         )
       )
     )
-    const plot = view.getByTestId('chart-chart__plot')
+    const plot = view.getByTestId('chart__plot')
     expect(document.getElementById(plot.getAttribute('aria-labelledby') ?? '')?.textContent).toBe(
       'Threats vs requests'
     )
     expect(plot.getAttribute('aria-describedby')).toContain(
-      view.getByTestId('chart-chart-card__description').id
+      view.getByTestId('chart-card-description').id
     )
   })
 
   it('applies span and height through custom properties', () => {
     const view = render(card({ span: 12, height: 552 }))
-    const root = view.getByTestId('chart-chart-card')
+    const root = view.getByTestId('chart-card')
     expect(root.style.getPropertyValue('--chart-card-span')).toBe('12')
     expect(root.style.getPropertyValue('--chart-card-height')).toBe('552px')
   })
 
   it('renders the handles only when enabled', () => {
     const plain = render(card())
-    expect(plain.queryByTestId('chart-chart-card__drag-handle')).toBeNull()
-    expect(plain.queryByTestId('chart-chart-card__resize-handle')).toBeNull()
+    expect(plain.queryByTestId('chart-card-drag-handle')).toBeNull()
+    expect(plain.queryByTestId('chart-card-resize-handle')).toBeNull()
     plain.unmount()
 
     const both = render(card({ draggable: true, resizable: true }))
-    expect(both.getByTestId('chart-chart-card__drag-handle').getAttribute('aria-label')).toBe(
-      'Move card'
-    )
-    expect(both.getByTestId('chart-chart-card__resize-handle').getAttribute('role')).toBe(
-      'separator'
-    )
+    expect(both.getByTestId('chart-card-drag-handle').getAttribute('aria-label')).toBe('Move card')
+    expect(both.getByTestId('chart-card-resize-handle').getAttribute('role')).toBe('separator')
   })
 
   it('emits move with the event first and the direction second from the drag handle', async () => {
     const moves: unknown[][] = []
     const view = render(card({ draggable: true, onMove: (...args: unknown[]) => moves.push(args) }))
-    const handle = view.getByTestId('chart-chart-card__drag-handle')
+    const handle = view.getByTestId('chart-card-drag-handle')
     await fireEvent.keyDown(handle, { key: 'ArrowRight' })
     await fireEvent.keyDown(handle, { key: 'ArrowUp' })
     await fireEvent.keyDown(handle, { key: 'Enter' })
@@ -120,8 +116,8 @@ describe('ChartCard', () => {
 
   it('arms native drag only while the handle is pressed', async () => {
     const view = render(card({ draggable: true }))
-    const root = view.getByTestId('chart-chart-card')
-    const handle = view.getByTestId('chart-chart-card__drag-handle')
+    const root = view.getByTestId('chart-card')
+    const handle = view.getByTestId('chart-card-drag-handle')
     expect(root.getAttribute('draggable')).toBeNull()
     await fireEvent.pointerDown(handle)
     expect(root.getAttribute('draggable')).toBe('true')
@@ -154,7 +150,7 @@ describe('ChartCard', () => {
           onResizeEnd: (...args: unknown[]) => ends.push(args)
         })
     })
-    const handle = view.getByTestId('chart-chart-card__resize-handle')
+    const handle = view.getByTestId('chart-card-resize-handle')
     await fireEvent.keyDown(handle, { key: 'ArrowRight' })
     expect(span.value).toBe(7)
     await fireEvent.keyDown(handle, { key: 'End' })
@@ -188,8 +184,8 @@ describe('ChartCard', () => {
           ]
         )
     })
-    const handle = view.getByTestId('chart-chart-card__resize-handle')
-    const rendered = view.getByTestId('chart-chart-card').offsetHeight
+    const handle = view.getByTestId('chart-card-resize-handle')
+    const rendered = view.getByTestId('chart-card').offsetHeight
     await fireEvent.pointerDown(handle, { pointerId: 1, button: 0, clientX: 100, clientY: 100 })
     await fireEvent.pointerMove(handle, { pointerId: 1, clientX: 100, clientY: 160 })
     expect(height.value).toBe(Math.max(240, rendered + 60))
@@ -203,7 +199,7 @@ describe('ChartCard', () => {
         default: () => [h(ChartCardContent, { padded: false }, { default: () => 'x' })]
       })
     )
-    expect(view.getByTestId('chart-chart-card__content').hasAttribute('data-flush')).toBe(true)
+    expect(view.getByTestId('chart-card-content').hasAttribute('data-flush')).toBe(true)
   })
 
   it('throws when a part renders outside a card', () => {
@@ -224,9 +220,9 @@ describe('ChartCard', () => {
     it('is a named container whose header and controls wrap in a narrow card', () => {
       const view = render(card())
 
-      expect(view.getByTestId('chart-chart-card').className).toContain('@container/chart-card')
-      expect(view.getByTestId('chart-chart-card__header').className).toContain('flex-wrap')
-      expect(view.getByTestId('chart-chart-card__controls').className).toContain(
+      expect(view.getByTestId('chart-card').className).toContain('@container/chart-card')
+      expect(view.getByTestId('chart-card-header').className).toContain('flex-wrap')
+      expect(view.getByTestId('chart-card-controls').className).toContain(
         '@max-xs/chart-card:w-full'
       )
     })
@@ -242,17 +238,17 @@ describe('ChartCard', () => {
       const padded = render(ChartCard, {
         slots: { default: () => h(ChartCardContent, { padded: false }, () => 'plot') }
       })
-      expect(padded.getByTestId('chart-chart-card__content').hasAttribute('data-flush')).toBe(true)
+      expect(padded.getByTestId('chart-card-content').hasAttribute('data-flush')).toBe(true)
       padded.unmount()
       const flush = render(ChartCard, {
         slots: { default: () => h(ChartCardContent, { flush: true }, () => 'plot') }
       })
-      expect(flush.getByTestId('chart-chart-card__content').hasAttribute('data-flush')).toBe(false)
+      expect(flush.getByTestId('chart-card-content').hasAttribute('data-flush')).toBe(false)
       flush.unmount()
       const normal = render(ChartCard, {
         slots: { default: () => h(ChartCardContent, null, () => 'plot') }
       })
-      expect(normal.getByTestId('chart-chart-card__content').hasAttribute('data-flush')).toBe(false)
+      expect(normal.getByTestId('chart-card-content').hasAttribute('data-flush')).toBe(false)
     })
 
     it('names a group, not a region landmark, and renders the title as no heading', async () => {

@@ -15,7 +15,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
@@ -26,7 +26,7 @@
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tag from '@aziontech/webkit/tag'
@@ -1534,11 +1534,10 @@
                             >{{ phase.label }}</RadioGroup.Item
                           >
                         </RadioGroup>
-                        <HelperText
-                          v-if="editing"
-                          type="disabled"
-                          label="A rule’s phase is set when it is created. Create a rule in the other phase to run these behaviors there."
-                        />
+                        <FieldDescription v-if="editing"
+                          >A rule’s phase is set when it is created. Create a rule in the other
+                          phase to run these behaviors there.</FieldDescription
+                        >
                       </div>
                     </div>
                   </template>
@@ -1746,7 +1745,7 @@
                                       </Select.Item>
                                     </Select.Content>
                                   </Select>
-                                  <HelperText
+                                  <FieldDescription
                                     v-if="
                                       behaviorArgumentNote(
                                         selectArgument(behavior.type).source,
@@ -1760,7 +1759,7 @@
                                         form.phase
                                       )
                                     }}
-                                  </HelperText>
+                                  </FieldDescription>
                                 </div>
                               </template>
 
@@ -1869,7 +1868,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Active"
                         description="Turn the rule on right after it is created."
                         variant="compact"
@@ -1879,7 +1878,7 @@
                           aria-label="Active"
                           :disabled="submitting"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

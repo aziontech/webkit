@@ -69,7 +69,7 @@
   const isActive = computed(() => toasterReg.isActive())
 
   const attrs = useAttrs()
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'toast')
 
   const progressOf = (entry: ToastEntry) => Math.min(100, Math.max(0, entry.progress ?? 0))
 

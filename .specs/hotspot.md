@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 5067102c195935d44c58728fd7953e236cb6f0ff20b531efaea0437fa1000e97
+checksum: f0add913d16f3f31ff3bc01e6289a1f681138493b64b937f9ad54e56bdeeaf65
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -29,7 +29,7 @@ Previous / Next (Finish on the last step). Outside a running tutorial, or outsid
 
 - A permanent tip on a control → use `hint` or `popover`.
 - A new feature announcement with no tutorial behind it → use `popover` or an `alert`.
-- Help text for a form field → use the field's `helper-text`.
+- Help text for a form field → use the field's `field-description`.
 
 ## Related
 

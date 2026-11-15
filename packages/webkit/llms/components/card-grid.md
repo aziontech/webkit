@@ -1,6 +1,6 @@
 # Card Grid
 
-> The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `frame-box` elements. The `frame` register is the one that composes: each `CardGrid.Cell` draws its own rules and corner marks and carries its own fill, so the grid needs no background trick and nests flush inside a column that already owns the outer edges.
+> The responsive cell grid of the page language, in three registers: spaced cards separated by real gutters, a hairline box grid whose internal rules are the gaps themselves, and a framed grid whose cells are real `registration-frame` elements. The `frame` register is the one that composes: each `CardGrid.Cell` draws its own rules and corner marks and carries its own fill, so the grid needs no background trick and nests flush inside a column that already owns the outer edges.
 
 - Import: `import CardGridRoot from '@aziontech/webkit/card-grid-root'`
 - Compound import (dot notation, not tree-shakeable): `import CardGrid from '@aziontech/webkit/card-grid'`
@@ -10,7 +10,7 @@
 ## When to use
 
 - For a row or block of equal cells that should fan out from one column on a phone to several on a wide screen.
-- With `variant` set to `frame` whenever the cells are real content — a `topic`, a claim, a figure — and should carry the page's frame language, corner marks included.
+- With `variant` set to `frame` whenever the cells are real content — a `feature-item`, a claim, a figure — and should carry the page's frame language, corner marks included.
 - For the hairline cell grid a `section-module` body holds, with `variant` set to `divider`.
 - For a row of self-contained cards with gutters between them, with the default `gap`.
 
@@ -18,10 +18,10 @@
 
 - **Do** hand the grid however many cells the content has. The default `balanced` layout takes the fewest rows `columns` allows and the narrowest track count that keeps them, so a count that splits evenly fills every row; a short last row keeps the track width and starts at the start edge, its trailing tracks left empty, as azion.com lays out its grids (compliance badges, the use-case grid). Under `columns: 3` that is 1 → one full-width cell, 2 → halves, 3 → thirds, 4 → 2 × 2, 5 → 3 + 2, 6 → 3 + 3, 7 → 3 + 3 + 1; under `columns: 4`, 4 → four across, 5 → 3 + 2, 6 → 3 + 3, 7 → 4 + 3; under `columns: 5`, 5 → five across. Below `lg` the same rule runs against two columns (`sm`) and against `mobileColumns` (phone), so 4 cells are 2 × 2 on a tablet and four across from `lg`.
 - **Don't** pick `columns` from the item count or pad the list with placeholder cells. `columns` is the most a row may hold, not how many it must; the track count already drops to the even split (2 → halves, 4 → 2 × 2), and a short last row is never stretched across the empty tracks — a stretched last cell reads as a different, wider card.
-- **Don't** reach for `layout="fixed"` to fix a count: keep it for tiles whose width must not change from row to row — square logo tiles, a cell that spans rows (`use-cases`) or columns (`subject-library`'s closing cell), a floor that keeps its track count whatever it holds (`network-section` benefits), a wall that overrides the track count. Anything else that wants unequal cells belongs in `bento-grid`.
+- **Don't** reach for `layout="fixed"` to fix a count: keep it for tiles whose width must not change from row to row — square logo tiles, a cell that spans rows (`customer-use-cases`) or columns (`subject-grid`'s closing cell), a floor that keeps its track count whatever it holds (`network-section` benefits), a wall that overrides the track count. Anything else that wants unequal cells belongs in `bento-grid`.
 - Prefer `frame` over `divider` for new work. The hairline register depends on every child filling its own background; the framed register draws real rules, so a cell that forgets its fill still reads correctly, and the corner marks come with it.
 - Give every child of a `divider` grid its own background fill, or the gap trick has nothing to show through and the whole band goes the colour of the rule.
-- Leave the perimeter to the container: the `divider` register draws no outer border, and a `frame` grid set to `flush` withholds its own top and left rules so a surrounding `frame-box` keeps one hairline per edge.
+- Leave the perimeter to the container: the `divider` register draws no outer border, and a `frame` grid set to `flush` withholds its own top and left rules so a surrounding `registration-frame` keeps one hairline per edge.
 - Let the grid draw the rules. Do not add borders inside a `frame` cell, or the shared edges double.
 - Give a cell `variant="none"` and `:padded="false"` when its own content paints the cell — a media layer, a brand fill, or a link that must be the whole tile.
 - Reach for `mobileColumns` of `2` only for short, glyph-led cells; a cell carrying a description reads better one-up on a phone.
@@ -29,7 +29,7 @@
 ## Don’t
 
 - For a mosaic whose cells claim different numbers of columns and rows → use `bento-grid`, which is this grid with spans.
-- For a single framed box → use `frame-box`.
+- For a single framed box → use `registration-frame`.
 - For one card with a header, content and footer → use `card`.
 - For the band that wraps the grid → use `section-module`.
 - For tabular data a reader scans row by row → use `table`.
@@ -38,10 +38,10 @@
 ## Related
 
 - [bento-grid](bento-grid.md) — the same framed grid with unequal cells; reach for it when one claim deserves more room than the rest.
-- [topic](topic.md) — the glyph, headline and sentence a `frame` cell usually holds.
+- [feature-item](feature-item.md) — the glyph, headline and sentence a `frame` cell usually holds.
 - [section-module](section-module.md) — the band whose body holds this grid.
 - [section-container](section-container.md) — the column whose vertical rules the `divider` and flush `frame` grids deliberately do not repeat.
-- [frame-box](frame-box.md) — the frame each `frame` cell is drawn with, and the framed box a `gap` cell may be built from.
+- [registration-frame](registration-frame.md) — the frame each `frame` cell is drawn with, and the framed box a `gap` cell may be built from.
 - [card](card.md) — a padded card surface, the usual child of a `gap` grid.
 
 ## Props
@@ -67,11 +67,11 @@
 
 ## Sub-components
 
-- `card-grid-cell/card-grid-cell.vue` — one cell of the `frame` register; wraps `frame-box` so the cell owns its own rules and corner marks, and takes the fill it carries (`variant`) and whether it pads its content (`padded`). It claims exactly one column — a cell that claims more belongs in `bento-grid`.
+- `card-grid-cell/card-grid-cell.vue` — one cell of the `frame` register; wraps `registration-frame` so the cell owns its own rules and corner marks, and takes the fill it carries (`variant`) and whether it pads its content (`padded`). It claims exactly one column — a cell that claims more belongs in `bento-grid`.
 
 Cell props: `variant` (`'surface' | 'canvas' | 'none'`, default `'surface'`) — the cell's fill, where `none` leaves the surface to the composed content; `padded` (`boolean`, default `true`) — off for a cell whose content reaches its edges.
 
-The cell's `frame-box` is set `flush` on its top and left edges, so it draws only its right and bottom rules; the grid root draws the matching top and left ones. That is what gives the block one hairline per edge instead of two at every junction.
+The cell's `registration-frame` is set `flush` on its top and left edges, so it draws only its right and bottom rules; the grid root draws the matching top and left ones. That is what gives the block one hairline per edge instead of two at every junction.
 
 The compound `index.ts` annotates the `Object.assign` result with an explicit `typeof CardGrid & { Cell: typeof CardGridCell }` type. Without it, declaration emit expands the root's private `Props` interface and `vue-tsc` fails with TS4082 ("default export of the module has or is using private name"). Do not simplify it back to a bare `Object.assign`.
 

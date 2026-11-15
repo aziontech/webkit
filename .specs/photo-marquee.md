@@ -1,12 +1,12 @@
 ---
 name: photo-marquee
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: aea3a588b8ad9d59ecf68f1d02e9385d9fa1439a895dd931d23e2cfb5bfaaac0
+checksum: 2dc36a7a06b448658034d4039ec19579f19c1082c96a8922c195cf67257113ad
 template: 2
 ---
 
@@ -14,7 +14,7 @@ template: 2
 
 ## Purpose
 
-The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `ticker` runs on. It is a page section — the site places it from a `{ _id: 'photo-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `frame-box`.
+The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'photo-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `registration-frame`.
 
 ## When to use
 
@@ -83,9 +83,9 @@ The office band of the careers page: a horizontal section title over a framed st
 
 ## Motion & Animations
 
-| Trigger                        | Animation / Transition                                         | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                            |
-| ------------------------------ | -------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------ |
-| continuous scroll of the strip | the brand marquee of the internal loop it shares with `ticker` | semantic (brand-marquee)                          | reduced motion stops it (the region becomes a horizontal scroller) |
+| Trigger                        | Animation / Transition                                          | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                            |
+| ------------------------------ | --------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------ |
+| continuous scroll of the strip | the brand marquee of the internal loop it shares with `marquee` | semantic (brand-marquee)                          | reduced motion stops it (the region becomes a horizontal scroller) |
 
 ## Tokens
 

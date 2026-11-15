@@ -1,6 +1,6 @@
 {
   "component": "chat-message",
-  "title": "Components/Primitives/AI/ChatMessage",
+  "title": "Components/AI/ChatMessage",
   "examples": [
     {
       "name": "Default",

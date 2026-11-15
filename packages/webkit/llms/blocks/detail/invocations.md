@@ -1,11 +1,11 @@
 # Invocations (`detail/invocations`)
 
-> The Invocation page of one function run, as a page body for ConsoleLayout: one run end to end. A `PageHeader` titled Invocation opens on the invocation summary `Card` (the function `Link`, the copyable invocation ID with its `StatusIndicator`, Replay, the Recent switcher, an outlined `Button` whose `DropdownMenu` picks another invocation, the Invocation actions menu with Open in Real-Time Events and Function settings, the Started, Completed, Duration and Location facts, and the triggering request with its outcome). Below it the Request path is a `Flow` with one node per hop (service, resource, function, origin), each with its `Tag`, its facts and the time spent there; a node's `IconButton` selects its span in the `Trace` waterfall and scrolls it into view. The `LogView` lists what the function printed, timed on the same clock as the trace. The Error variant opens on a run the origin timed out, with the failing span selected; Running shows a run still in progress, its spans running and the lines printed so far under a Streaming indicator. Built from `PageHeader`, `Card`, `Tooltip`, `CopyButton`, `StatusIndicator`, `Button`, `DropdownMenu`, `IconButton`, `Link`, `SectionHeader`, `Flow`, `Tag`, `Trace`, `LogView` and `LogViewContent`; Replay reports through `toast`.
+> The Invocation page of one function run, as a page body for ConsoleLayout: one run end to end. A `PageHeader` titled Invocation opens on the invocation summary `Card` (the function `Link`, the copyable invocation ID with its `StatusIndicator`, Replay, the Recent switcher, an outlined `Button` whose `DropdownMenu` picks another invocation, the Invocation actions menu with Open in Real-Time Events and Function settings, the Started, Completed, Duration and Location facts, and the triggering request with its outcome). Below it the Request path is a `FlowDiagram` with one node per hop (service, resource, function, origin), each with its `Tag`, its facts and the time spent there; a node's `IconButton` selects its span in the `Trace` waterfall and scrolls it into view. The `LogViewer` lists what the function printed, timed on the same clock as the trace. The Error variant opens on a run the origin timed out, with the failing span selected; Running shows a run still in progress, its spans running and the lines printed so far under a Streaming indicator. Built from `PageHeader`, `Card`, `Tooltip`, `CopyButton`, `StatusIndicator`, `Button`, `DropdownMenu`, `IconButton`, `Link`, `SectionHeader`, `FlowDiagram`, `Tag`, `Trace`, `LogViewer` and `LogViewerContent`; Replay reports through `toast`.
 
 - Surface: app
 - Source: `blocks/detail/invocations/invocations.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/invocations")`
-- Components: [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [DropdownMenu](../../components/dropdown-menu.md), [Flow](../../components/flow.md), [IconButton](../../components/icon-button.md), [Link](../../components/link.md), `LogViewContent`, [LogView](../../components/log-view.md), [PageHeader](../../components/page-header.md), [SectionHeader](../../components/section-header.md), [StatusIndicator](../../components/status-indicator.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md)
+- Components: [Button](../../components/button.md), [Card](../../components/card.md), [CopyButton](../../components/copy-button.md), [DropdownMenu](../../components/dropdown-menu.md), [FlowDiagram](../../components/flow-diagram.md), [IconButton](../../components/icon-button.md), [Link](../../components/link.md), `LogViewerContent`, [LogViewer](../../components/log-viewer.md), [PageHeader](../../components/page-header.md), [SectionHeader](../../components/section-header.md), [StatusIndicator](../../components/status-indicator.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md), [Trace](../../components/trace.md)
 - Skills: `webkit-layout`, `webkit-ui-states`, `webkit-data-viz`
 
 ## Asked as
@@ -38,17 +38,17 @@ A medium `PageHeader` titled Invocation, singular because the page is one run, w
 
 `Card :padded="false"` with three bands. The subject band holds the function `Link` (its `Tooltip` says where it goes), the invocation ID in code type with a `CopyButton`, and the run's `StatusIndicator` (loading while it runs); then Replay as a secondary `Button` (disabled while the run is still going), the Recent switcher, an outlined medium `Button` with the history glyph inside `DropdownMenu.Trigger` (its `Tooltip` inside the trigger, like the actions menu) that opens a `DropdownMenu` of the recent invocations with their status and start that swaps the page to the picked run, and the Invocation actions `IconButton` menu with Open in Real-Time Events and Function settings. The facts band lists Started, Completed, Duration and Location. The state band, on the canvas fill, shows the request that triggered the run with a `CopyButton` and its outcome, in danger color when it failed.
 
-### C. Request path — `SectionHeader`, `Flow`, `Tag` (required)
+### C. Request path — `SectionHeader`, `FlowDiagram`, `Tag` (required)
 
-A small `SectionHeader`, then a horizontally scrolling surface holding a `Flow` with one unstyled `Flow.Node` per hop: service, resource, function and origin, the last one `terminal`. Each node card has an eyebrow with its glyph and a status `Tag`, its name, and a short list of facts ending on the time spent there. A node measured by a span carries an outlined small `IconButton` named "Show <name> in the trace" that selects that span and scrolls the trace into view, honoring reduced motion.
+A small `SectionHeader`, then a horizontally scrolling surface holding a `FlowDiagram` with one unstyled `FlowDiagram.Node` per hop: service, resource, function and origin, the last one `terminal`. Each node card has an eyebrow with its glyph and a status `Tag`, its name, and a short list of facts ending on the time spent there. A node measured by a span carries an outlined small `IconButton` named "Show <name> in the trace" that selects that span and scrolls the trace into view, honoring reduced motion.
 
 ### D. Trace — `Trace` (required)
 
 A small `SectionHeader` over the `Trace` waterfall of the run, its spans nested by `parentId` with a service word and glyph, bound with `v-model:selected` so a node of the request path and a row of the waterfall are one selection. A failed span carries `status: 'error'` and its `message`; a span still going carries `status: 'running'`.
 
-### E. Logs — `SectionHeader`, `StatusIndicator`, `LogView`, `LogViewContent` (required)
+### E. Logs — `SectionHeader`, `StatusIndicator`, `LogViewer`, `LogViewerContent` (required)
 
-A small `SectionHeader` over a copyable `LogView` whose lines are timed from the run's zero (+16 ms), the same clock as the trace. Warnings and errors use the warning line type and keep the level word in the message; the last line of a completed run is a success line. While the run is going the lines printed so far stay on screen and a loading `StatusIndicator` reading Streaming sits in the section header; the view shows its own loading state only while no line has arrived yet, and `LogViewContent` holds the empty text.
+A small `SectionHeader` over a copyable `LogViewer` whose lines are timed from the run's zero (+16 ms), the same clock as the trace. Warnings and errors use the warning line type and keep the level word in the message; the last line of a completed run is a success line. While the run is going the lines printed so far stay on screen and a loading `StatusIndicator` reading Streaming sits in the section header; the view shows its own loading state only while no line has arrived yet, and `LogViewerContent` holds the empty text.
 
 ## Do
 
@@ -112,11 +112,11 @@ Each variant is the same screen in another state: `get_block("detail/invocations
   import Card from '@aziontech/webkit/card'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
-  import Flow from '@aziontech/webkit/flow'
+  import FlowDiagram from '@aziontech/webkit/flow-diagram'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
-  import LogViewContent from '@aziontech/webkit/log-view-content'
-  import LogView, { type LogViewLine } from '@aziontech/webkit/log-view-root'
+  import LogViewerContent from '@aziontech/webkit/log-viewer-content'
+  import LogViewer, { type LogViewerLine } from '@aziontech/webkit/log-viewer-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import SectionHeader from '@aziontech/webkit/section-header'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
@@ -464,7 +464,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
     ]
   })
 
-  const lines = computed<LogViewLine[]>(() =>
+  const lines = computed<LogViewerLine[]>(() =>
     run.value.logs.map((entry, index) => ({
       id: `${run.value.id}-${index}`,
       time: `+${formatDuration(entry.at)}`,
@@ -695,11 +695,11 @@ Each variant is the same screen in another state: `get_block("detail/invocations
           <div
             class="overflow-x-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface-raised)"
           >
-            <Flow
+            <FlowDiagram
               align="start"
               class="min-w-max"
             >
-              <Flow.Node
+              <FlowDiagram.Node
                 v-for="node in path"
                 :key="node.key"
                 unstyled
@@ -709,7 +709,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                 <div
                   class="flex w-full min-w-0 flex-col rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) transition-colors duration-moderate-01 ease-productive-entrance hover:border-(--border-strong) has-[:focus-visible]:border-(--border-strong) motion-reduce:transition-none"
                 >
-                  <Flow.Anchor>
+                  <FlowDiagram.Anchor>
                     <div
                       class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
                     >
@@ -729,7 +729,7 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                         />
                       </span>
                     </div>
-                  </Flow.Anchor>
+                  </FlowDiagram.Anchor>
                   <div
                     class="flex min-h-8 min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)"
                   >
@@ -766,8 +766,8 @@ Each variant is the same screen in another state: `get_block("detail/invocations
                     </div>
                   </dl>
                 </div>
-              </Flow.Node>
-            </Flow>
+              </FlowDiagram.Node>
+            </FlowDiagram>
           </div>
         </section>
 
@@ -809,16 +809,16 @@ Each variant is the same screen in another state: `get_block("detail/invocations
               />
             </template>
           </SectionHeader>
-          <LogView
+          <LogViewer
             :lines="lines"
             :loading="running && !lines.length"
             loading-label="Waiting for the function to finish…"
             copyable
           >
-            <LogViewContent>
+            <LogViewerContent>
               <template #empty>No log lines yet.</template>
-            </LogViewContent>
-          </LogView>
+            </LogViewerContent>
+          </LogViewer>
         </section>
       </div>
     </div>

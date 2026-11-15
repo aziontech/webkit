@@ -27,8 +27,8 @@ const settle = async () => {
 
 const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
 
-const panel = () => byTestId('overlay-drawer__panel')
-const backdrop = () => byTestId('overlay-drawer__backdrop')
+const panel = () => byTestId('drawer__panel')
+const backdrop = () => byTestId('drawer__backdrop')
 
 /**
  * A realistic composed tree wired like the Default example: Root > Trigger
@@ -90,8 +90,8 @@ describe('Drawer', () => {
         await settle()
 
         // The Root + Trigger render in-place; DrawerContent teleports nothing until open.
-        expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
-        const trigger = getByTestId('overlay-drawer__trigger')
+        expect(getByTestId('drawer').getAttribute('data-state')).toBe('closed')
+        const trigger = getByTestId('drawer__trigger')
         expect(trigger.hasAttribute('role')).toBe(false)
         expect(trigger.hasAttribute('tabindex')).toBe(false)
         const button = trigger.querySelector('button') as HTMLElement
@@ -108,11 +108,11 @@ describe('Drawer', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.click(getByTestId('overlay-drawer__trigger'))
+        await fireEvent.click(getByTestId('drawer__trigger'))
         await settle()
 
         // Root reflects the injected open state.
-        expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('open')
+        expect(getByTestId('drawer').getAttribute('data-state')).toBe('open')
 
         const dlg = panel()
         expect(dlg).not.toBeNull()
@@ -121,20 +121,20 @@ describe('Drawer', () => {
         expect(dlg!.getAttribute('role')).toBe('dialog')
         expect(dlg!.getAttribute('aria-modal')).toBe('true')
 
-        const title = byTestId('overlay-drawer__title')!
-        const description = byTestId('overlay-drawer__description')!
+        const title = byTestId('drawer__title')!
+        const description = byTestId('drawer__description')!
         expect(dlg!.getAttribute('aria-labelledby')).toBe(title.id)
         expect(dlg!.getAttribute('aria-describedby')).toBe(description.id)
         expect(title.textContent).toContain('Edit settings')
         expect(description.textContent).toContain('Update the workspace configuration.')
         // The internal Panel shell mounts under the same injected testId.
-        expect(byTestId('overlay-drawer__panel-shell')).not.toBeNull()
+        expect(byTestId('drawer__panel-shell')).not.toBeNull()
       })
 
       it('opens on Enter and on Space keydown on the trigger', async () => {
         const enter = render(composed())
         await settle()
-        await fireEvent.keyDown(enter.getByTestId('overlay-drawer__trigger'), { key: 'Enter' })
+        await fireEvent.keyDown(enter.getByTestId('drawer__trigger'), { key: 'Enter' })
         await settle()
         expect(panel()).not.toBeNull()
 
@@ -143,7 +143,7 @@ describe('Drawer', () => {
 
         const space = render(composed())
         await settle()
-        await fireEvent.keyDown(space.getByTestId('overlay-drawer__trigger'), { key: ' ' })
+        await fireEvent.keyDown(space.getByTestId('drawer__trigger'), { key: ' ' })
         await settle()
         expect(panel()).not.toBeNull()
       })
@@ -160,7 +160,7 @@ describe('Drawer', () => {
         })
         await settle()
 
-        await fireEvent.click(getByTestId('overlay-drawer__trigger'))
+        await fireEvent.click(getByTestId('drawer__trigger'))
         await settle()
 
         expect(onUpdate).toHaveBeenCalledWith(true)
@@ -193,16 +193,16 @@ describe('Drawer', () => {
         await settle()
 
         // Opens because parent seeds open=true (controlled).
-        expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('open')
+        expect(getByTestId('drawer').getAttribute('data-state')).toBe('open')
         expect(panel()).not.toBeNull()
 
         // DrawerClose (IconButton) calls ctx.close() -> update:open(false).
-        const close = byTestId('overlay-drawer__close')!
+        const close = byTestId('drawer__close')!
         await fireEvent.click(close)
         await settle()
 
         expect(onUpdate).toHaveBeenLastCalledWith(false)
-        expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
+        expect(getByTestId('drawer').getAttribute('data-state')).toBe('closed')
       })
     })
 
@@ -211,7 +211,7 @@ describe('Drawer', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        const trigger = getByTestId('overlay-drawer__trigger')
+        const trigger = getByTestId('drawer__trigger')
         await fireEvent.click(trigger)
         await settle()
         expect(panel()).not.toBeNull()
@@ -220,7 +220,7 @@ describe('Drawer', () => {
         await fireEvent.keyDown(document, { key: 'Escape' })
         await settle()
 
-        expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
+        expect(getByTestId('drawer').getAttribute('data-state')).toBe('closed')
         // Focus is restored to the trigger element (watch on isOpen -> triggerEl.focus()).
         await vi.waitFor(() => {
           expect(document.activeElement).toBe(trigger.querySelector('button'))
@@ -231,7 +231,7 @@ describe('Drawer', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.click(getByTestId('overlay-drawer__trigger'))
+        await fireEvent.click(getByTestId('drawer__trigger'))
         await settle()
 
         const bd = backdrop()
@@ -241,24 +241,24 @@ describe('Drawer', () => {
         await fireEvent.click(bd!)
         await settle()
 
-        expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
+        expect(getByTestId('drawer').getAttribute('data-state')).toBe('closed')
       })
 
       it('the DrawerClose control closes the drawer', async () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.click(getByTestId('overlay-drawer__trigger'))
+        await fireEvent.click(getByTestId('drawer__trigger'))
         await settle()
 
-        const close = byTestId('overlay-drawer__close')!
+        const close = byTestId('drawer__close')!
         // dismissible (default) -> the IconButton is enabled.
         expect(close.hasAttribute('disabled')).toBe(false)
 
         await fireEvent.click(close)
         await settle()
 
-        expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
+        expect(getByTestId('drawer').getAttribute('data-state')).toBe('closed')
       })
     })
 
@@ -267,25 +267,25 @@ describe('Drawer', () => {
         const { getByTestId } = render(composed({ dismissible: false }))
         await settle()
 
-        await fireEvent.click(getByTestId('overlay-drawer__trigger'))
+        await fireEvent.click(getByTestId('drawer__trigger'))
         await settle()
         expect(panel()).not.toBeNull()
 
         // Escape: guarded by ctx.dismissible.
         await fireEvent.keyDown(document, { key: 'Escape' })
         await settle()
-        expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('open')
+        expect(getByTestId('drawer').getAttribute('data-state')).toBe('open')
 
         // Backdrop click: guarded by ctx.dismissible.
         await fireEvent.click(backdrop()!)
         await settle()
-        expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('open')
+        expect(getByTestId('drawer').getAttribute('data-state')).toBe('open')
 
-        const close = byTestId('overlay-drawer__close')!
+        const close = byTestId('drawer__close')!
         expect(close.hasAttribute('disabled')).toBe(false)
         await fireEvent.click(close)
         await settle()
-        expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
+        expect(getByTestId('drawer').getAttribute('data-state')).toBe('closed')
       })
     })
 
@@ -296,7 +296,7 @@ describe('Drawer', () => {
           const { getByTestId } = render(composed({ defaultOpen: true, side }))
           await settle()
 
-          expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('open')
+          expect(getByTestId('drawer').getAttribute('data-state')).toBe('open')
           const dlg = panel()
           expect(dlg).not.toBeNull()
           expect(dlg!.getAttribute('role')).toBe('dialog')
@@ -312,10 +312,10 @@ describe('Drawer', () => {
           const { getByTestId } = render(composed({ defaultOpen: true, size }))
           await settle()
 
-          expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('open')
+          expect(getByTestId('drawer').getAttribute('data-state')).toBe('open')
           expect(panel()).not.toBeNull()
           // Panel shell testid is derived from the same injected testId.
-          expect(byTestId('overlay-drawer__panel-shell')).not.toBeNull()
+          expect(byTestId('drawer__panel-shell')).not.toBeNull()
         }
       )
     })
@@ -325,7 +325,7 @@ describe('Drawer', () => {
         const { getByTestId } = render(composed({ defaultOpen: true }))
         await settle()
 
-        expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('open')
+        expect(getByTestId('drawer').getAttribute('data-state')).toBe('open')
         expect(panel()).not.toBeNull()
       })
     })
@@ -372,13 +372,13 @@ describe('Drawer', () => {
         const { getByTestId } = render(Default)
         await settle()
 
-        await fireEvent.click(getByTestId('overlay-drawer__trigger'))
+        await fireEvent.click(getByTestId('drawer__trigger'))
         await settle()
 
         const dlg = panel()
         expect(dlg).not.toBeNull()
         expect(dlg!.getAttribute('role')).toBe('dialog')
-        expect(byTestId('overlay-drawer__title')!.textContent).toContain('Drawer Title')
+        expect(byTestId('drawer__title')!.textContent).toContain('Drawer Title')
       })
     })
   })
@@ -407,7 +407,7 @@ describe('Drawer', () => {
     const openWithKey = async (key: string) => {
       const { getByTestId } = render(twoActions)
       await settle()
-      const trigger = getByTestId('overlay-drawer__trigger').querySelector('button')!
+      const trigger = getByTestId('drawer__trigger').querySelector('button')!
       trigger.focus()
       await userEvent.keyboard(key)
       await settle()
@@ -454,7 +454,7 @@ describe('Drawer', () => {
     it('teleports the panel inside a portal wrapper derived from the root testid', async () => {
       render(composed({ defaultOpen: true }))
       await settle()
-      const portal = byTestId('overlay-drawer__portal')
+      const portal = byTestId('drawer__portal')
       expect(portal).not.toBeNull()
       expect(portal!.parentElement).toBe(document.body)
       expect(portal!.contains(panel())).toBe(true)
@@ -471,7 +471,7 @@ describe('Drawer', () => {
       const bd = backdrop()
       expect(bd).not.toBeNull()
       expect(bd!.getAttribute('aria-hidden')).toBe('true')
-      expect(byTestId('overlay-drawer__portal')!.contains(bd)).toBe(true)
+      expect(byTestId('drawer__portal')!.contains(bd)).toBe(true)
       expect(panel()!.getAttribute('aria-modal')).toBe('true')
     })
   })
@@ -611,7 +611,7 @@ describe('Drawer', () => {
       expect(panel()!.getAttribute('data-side')).toBe('end')
       expect(panel()!.hasAttribute('aria-describedby')).toBe(false)
       expect(panel()!.style.transition).toBe('')
-      expect(byTestId('overlay-drawer')!.id).toBe('details')
+      expect(byTestId('drawer')!.id).toBe('details')
       side.value = 'start'
       await settle()
       expect(panel()!.getAttribute('data-side')).toBe('start')
@@ -672,9 +672,9 @@ describe('Drawer', () => {
     it('renders the close button at the end of the header by default', async () => {
       render(composed({ defaultOpen: true }))
       await settle()
-      const close = byTestId('overlay-drawer__close')!
+      const close = byTestId('drawer__close')!
       expect(close).not.toBeNull()
-      expect(close.closest('header')).toBe(byTestId('overlay-drawer__panel-shell__header'))
+      expect(close.closest('header')).toBe(byTestId('drawer__panel-shell__header'))
       expect(close.hasAttribute('disabled')).toBe(false)
     })
 
@@ -684,13 +684,13 @@ describe('Drawer', () => {
       await settle()
 
       await fireEvent.keyDown(document, { key: 'Escape' })
-      await fireEvent.click(byTestId('overlay-drawer__backdrop')!)
+      await fireEvent.click(byTestId('drawer__backdrop')!)
       await settle()
-      expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('open')
+      expect(getByTestId('drawer').getAttribute('data-state')).toBe('open')
 
-      await fireEvent.click(byTestId('overlay-drawer__close')!)
+      await fireEvent.click(byTestId('drawer__close')!)
       await settle()
-      expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
+      expect(getByTestId('drawer').getAttribute('data-state')).toBe('closed')
     })
 
     it('closable false removes the close button and keeps light-dismiss', async () => {
@@ -698,10 +698,10 @@ describe('Drawer', () => {
       await settle()
       await settle()
 
-      expect(byTestId('overlay-drawer__close')).toBeNull()
+      expect(byTestId('drawer__close')).toBeNull()
       await fireEvent.keyDown(document, { key: 'Escape' })
       await settle()
-      expect(getByTestId('overlay-drawer').getAttribute('data-state')).toBe('closed')
+      expect(getByTestId('drawer').getAttribute('data-state')).toBe('closed')
     })
   })
 
@@ -729,8 +729,8 @@ describe('Drawer', () => {
       await settle()
       await fireEvent.click(view.getByRole('button', { name: 'Open drawer' }))
       await settle()
-      expect(byTestId('overlay-drawer__panel')).not.toBeNull()
-      expect(byTestId('overlay-drawer__close')).not.toBeNull()
+      expect(byTestId('drawer__panel')).not.toBeNull()
+      expect(byTestId('drawer__close')).not.toBeNull()
     })
   })
 })

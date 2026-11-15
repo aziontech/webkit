@@ -11,8 +11,8 @@
  "related": [
   "CopyPromptButton` — the left column's action.",
   "DocHero` — the masthead above it on a docs home.",
-  "DocCardGroup` — the Console / CLI / API cards that follow it; both share `FrameBox`'s corner marks.",
-  "TextureMaterial` — the `dither` halftone behind the guided action."
+  "DocCardGroup` — the Console / CLI / API cards that follow it; both share `RegistrationFrame`'s corner marks.",
+  "Texture` — the `dither` halftone behind the guided action."
  ],
  "bestPractices": [
   "Pass the exact prompt in `prompt`; leave the strings to the catalog unless the product differs.",

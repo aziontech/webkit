@@ -1,6 +1,6 @@
 # Settings Section
 
-> A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.
+> A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingsRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.
 
 - Import: `import SettingsSection from '@aziontech/webkit/settings-section'`
 - Category: layout · Surface: app · Structure: monolithic
@@ -8,7 +8,7 @@
 
 ## When to use
 
-- Use SettingsSection for a band of a settings page whose body is SettingRow rows; any other band heading is a SectionHeader.
+- Use SettingsSection for a band of a settings page whose body is SettingsRow rows; any other band heading is a SectionHeader.
 - Every settings page and create page: a resource's Settings tab, Account Settings, a create form, a create drawer.
 - An Advanced band that starts closed (`collapsible`).
 
@@ -28,10 +28,10 @@
 
 ## Related
 
-- [setting-row](setting-row.md) — the rows inside the band's card.
+- [settings-row](settings-row.md) — the rows inside the band's card.
 - [card](card.md) — the flush (`:padded="false"`) surface the rows sit on.
 - [hint](hint.md) — the guidance glyph beside the title.
-- [section-header](section-header.md) — the band heading with a description and actions. Pick by content: a settings band of `SettingRow`s (a Hint, a gutter copy-link, an optional disclosure) is `SettingsSection`; a console band heading with a description and its own actions is `SectionHeader`; a marketing section heading is `section-title`. The three share the h2 and the copy-link anchor; folding SettingsSection's heading onto SectionHeader is a planned refactor, not a behaviour change.
+- [section-header](section-header.md) — the band heading with a description and actions. Pick by content: a settings band of `SettingsRow`s (a Hint, a gutter copy-link, an optional disclosure) is `SettingsSection`; a console band heading with a description and its own actions is `SectionHeader`; a marketing section heading is `section-title`. The three share the h2 and the copy-link anchor; folding SettingsSection's heading onto SectionHeader is a planned refactor, not a behaviour change.
 
 ## Props
 
@@ -48,7 +48,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | The band body, usually a flush Card of SettingRow rows. |
+| `default` | — | The band body, usually a flush Card of SettingsRow rows. |
 | `title` | — | Rich title content; replaces the `title` prop text in the h2. |
 
 ## Assets
@@ -85,7 +85,7 @@
   import Card from '@aziontech/webkit/card'
   import Item from '@aziontech/webkit/item'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import { ref } from 'vue'
 
@@ -119,7 +119,7 @@
       <Card :padded="false">
         <template #default>
           <Item.List>
-            <SettingRow
+            <SettingsRow
               title="Font family"
               description="The primary sans typeface across the interface."
             >
@@ -142,8 +142,8 @@
                   </Select.Item>
                 </Select.Content>
               </Select>
-            </SettingRow>
-            <SettingRow
+            </SettingsRow>
+            <SettingsRow
               title="System appearance"
               description="Follow the operating system, or force a light or dark theme."
             >
@@ -166,7 +166,7 @@
                   </Select.Item>
                 </Select.Content>
               </Select>
-            </SettingRow>
+            </SettingsRow>
           </Item.List>
         </template>
       </Card>
@@ -182,7 +182,7 @@
   import Card from '@aziontech/webkit/card'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { ref } from 'vue'
@@ -216,7 +216,7 @@
       <Card :padded="false">
         <template #default>
           <Item.List>
-            <SettingRow
+            <SettingsRow
               title="Name"
               description="A unique and descriptive name to identify the resource."
             >
@@ -226,8 +226,8 @@
                 class="w-full"
                 aria-label="Name"
               />
-            </SettingRow>
-            <SettingRow
+            </SettingsRow>
+            <SettingsRow
               title="Active"
               description="When disabled, the resource stops serving traffic."
               variant="compact"
@@ -236,7 +236,7 @@
                 v-model="active"
                 aria-label="Active"
               />
-            </SettingRow>
+            </SettingsRow>
           </Item.List>
         </template>
       </Card>
@@ -249,7 +249,7 @@
       <Card :padded="false">
         <template #default>
           <Item.List>
-            <SettingRow
+            <SettingsRow
               v-for="feature in defaultFeatures"
               :key="feature.key"
               :title="feature.title"
@@ -260,7 +260,7 @@
                 v-model="features[feature.key]"
                 :aria-label="feature.title"
               />
-            </SettingRow>
+            </SettingsRow>
           </Item.List>
         </template>
       </Card>
@@ -275,7 +275,7 @@
 <script setup>
   import Card from '@aziontech/webkit/card'
   import Item from '@aziontech/webkit/item'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { ref } from 'vue'
@@ -295,7 +295,7 @@
       <Card :padded="false">
         <template #default>
           <Item.List>
-            <SettingRow
+            <SettingsRow
               title="Active"
               description="Inactive teams keep their permissions but can't be assigned."
               variant="compact"
@@ -304,7 +304,7 @@
                 v-model="active"
                 aria-label="Active"
               />
-            </SettingRow>
+            </SettingsRow>
           </Item.List>
         </template>
       </Card>

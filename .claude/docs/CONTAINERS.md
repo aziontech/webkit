@@ -8,10 +8,10 @@ the drawn-grid, technical-drawing look — the _industrial_ register of the Azio
 Reference implementations live in
 the WebKit shells [`blocks/shell/site`](../../packages/webkit/blocks/shell/site/site.vue) and
 [`blocks/shell/docs`](../../packages/webkit/blocks/shell/docs/docs.vue), and the page sections in
-[`src/components/sections/`](../../packages/webkit/src/components/sections/); the layout primitives —
+[`src/components/section/`](../../packages/webkit/src/components/section/); the layout primitives —
 shared by Site, Hub and Docs — are in
 [`src/components/marketing/`](../../packages/webkit/src/components/marketing/) (`SectionContainer`, `SectionModule`, `CardGrid`, `Hero`)
-and [`src/components/layout/`](../../packages/webkit/src/components/layout/) (`FrameBox`, `PageHeader`). The design sample these
+and [`src/components/layout/`](../../packages/webkit/src/components/layout/) (`RegistrationFrame`, `PageHeader`). The design sample these
 were taken from lives on the `design/sample` branch only.
 
 For the token-level vocabulary (weights, border colors, radii) and how individual **webkit
@@ -48,7 +48,7 @@ Two consequences you have to actively remember:
 ## The three-layer skeleton
 
 The page renders inside `SiteLayout` (or `DocLayout`), composed once in `App.vue`: the layout owns
-`SiteNav`, the `<main>` and `SiteFooter`, so the page is only the hero and the framed column.
+`SiteHeader`, the `<main>` and `SiteFooter`, so the page is only the hero and the framed column.
 
 ```vue
 <Hero variant="screen" max-width="7xl">     <!-- 1. fluid hero band, full-bleed, owns border-b -->
@@ -105,9 +105,9 @@ Unset ⇒ `0`, so a banner that owns the whole viewport needs nothing.
 `--banner-offset`, and `variant="screen"` subtracts it.)
 
 **`#background` is z-0, copy is z-10.** A backdrop is named on the container
-with the `texture` prop (a `TextureMaterial` kind) or filled through the `#background` slot
+with the `texture` prop (a `Texture` kind) or filled through the `#background` slot
 ([`hero.vue:143`](../../packages/webkit/src/components/marketing/hero/hero.vue#L143)); the slot is where an artwork backdrop goes —
-[`BannerArt`](../../packages/webkit/src/components/marketing/banner-art/banner-art.vue) `variant="globe" | "map" | "network"`,
+[`Backdrop`](../../packages/webkit/src/components/marketing/backdrop/backdrop.vue) `variant="globe" | "map" | "network"`,
 the design sample's banner registry — and it wins over the prop when both are given.
 
 **Every Site hero carries `banner="dot-grid"`.** It is azion.com's own hero texture — a crisp 2px
@@ -129,8 +129,8 @@ A flat texture skips all three: `dot-grid` covers ~0.17% of the band, so there i
 headline to compete with, and the ink is a 22% mix of `--text-default` so the field carries the
 same step from the ground on either theme instead of being tuned for the dark one.
 
-([`hero-band.vue`](../../packages/webkit/src/components/sections/hero-band/hero-band.vue) — `variant="centered"` paints the dots
-texture with its top fade; [`banner-art.vue`](../../packages/webkit/src/components/marketing/banner-art/banner-art.vue)
+([`hero-section.vue`](../../packages/webkit/src/components/section/hero-section/hero-section.vue) — `variant="centered"` paints the dots
+texture with its top fade; [`backdrop.vue`](../../packages/webkit/src/components/marketing/backdrop/backdrop.vue)
 carries the mask and scrim recipe for the heavier backdrops.)
 
 **Hero copy anatomy** — left-aligned, always in this order
@@ -147,7 +147,7 @@ carries the mask and scrim recipe for the heavier backdrops.)
 The Site hero closes with a **capability strip** — a 2/3/5-column grid separated from the copy by
 `border-t border-[var(--border-muted)]`, bold lead-in plus one supporting line per cell.
 (the client strip on the band floor: [`hero.vue`](../../packages/webkit/src/components/marketing/hero/hero.vue) `carousel`,
-`carousel-marks`, `carousel-label`; the stat cells are [`stats-band`](../../packages/webkit/src/components/sections/stats-band/stats-band.vue))
+`carousel-marks`, `carousel-label`; the stat cells are [`stats-section`](../../packages/webkit/src/components/section/stats-section/stats-section.vue))
 
 ---
 
@@ -227,9 +227,9 @@ component showcase grid moves to the docs site, M2.5.)
 
 ---
 
-## 5. The registration frame — `FrameBox`
+## 5. The registration frame — `RegistrationFrame`
 
-[`frame-box.vue`](../../packages/webkit/src/components/layout/frame-box/frame-box.vue)
+[`registration-frame.vue`](../../packages/webkit/src/components/layout/registration-frame/registration-frame.vue)
 
 The most literal piece of the industrial language: a thin bordered box with **crosshair registration
 marks** straddling each corner, plus an optional vertical hatch texture. Used for the final CTA
@@ -271,12 +271,12 @@ Tailwind's **1px**.
 
 ### Colors
 
-| Token               | Light       | Dark        | Role                                                                                     |
-| ------------------- | ----------- | ----------- | ---------------------------------------------------------------------------------------- |
-| `--border-default`  | `#00000014` | `#FFFFFF1A` | The frame: hero rule, column rules, module dividers, grid gaps.                          |
-| `--border-muted`    | `#00000014` | `#FFFFFF0D` | One step back: rules _inside_ a module, capability strips, `FrameBox` perimeter + hatch. |
-| `--border-strong`   | `#000000`   | `#FFFFFF`   | Pressed / active edge.                                                                   |
-| `--border-selected` | `#F3652B`   | `#F3652B`   | Selection (Azion orange, both modes).                                                    |
+| Token               | Light       | Dark        | Role                                                                                              |
+| ------------------- | ----------- | ----------- | ------------------------------------------------------------------------------------------------- |
+| `--border-default`  | `#00000014` | `#FFFFFF1A` | The frame: hero rule, column rules, module dividers, grid gaps.                                   |
+| `--border-muted`    | `#00000014` | `#FFFFFF0D` | One step back: rules _inside_ a module, capability strips, `RegistrationFrame` perimeter + hatch. |
+| `--border-strong`   | `#000000`   | `#FFFFFF`   | Pressed / active edge.                                                                            |
+| `--border-selected` | `#F3652B`   | `#F3652B`   | Selection (Azion orange, both modes).                                                             |
 
 > **`default` and `muted` are identical in light mode** (`#00000014`); only dark mode separates them.
 > Pick by role and verify in dark — light mode cannot show you the mistake.
@@ -314,15 +314,15 @@ Both containers key into [`container.js`](../../packages/theme/src/tokens/primit
 
 Found while documenting; **not fixed** — each changes rendered output.
 
-1. **`FrameBox` is used but never imported** (design sample only; fixed in WebKit, where
-   [`closing-call-to-action.vue:146`](../../packages/webkit/src/components/sections/closing-call-to-action/closing-call-to-action.vue#L146)
+1. **`RegistrationFrame` is used but never imported** (design sample only; fixed in WebKit, where
+   [`closing-call-to-action.vue:146`](../../packages/webkit/src/components/section/closing-call-to-action/closing-call-to-action.vue#L146)
    imports it) — the sample's `AzionHome.vue:550` wraps the
-   final CTA in `<FrameBox hatch>`, but the script block imports only `Button`, `Card`,
-   `CardPricing`, `CodeBlock`, `PlatformIllustrations`, `PlatformShowcase`, and
+   final CTA in `<RegistrationFrame hatch>`, but the script block imports only `Button`, `Card`,
+   `PricingCard`, `CodeBlock`, `PlatformIllustrations`, `PlatformShowcase`, and
    `main.js` registers nothing globally. The route is live (`/site/home` → `LandingAzion` →
-   `AzionHome`), so Vue logs _"Failed to resolve component: FrameBox"_ and the CTA renders with **no
+   `AzionHome`), so Vue logs _"Failed to resolve component: RegistrationFrame"_ and the CTA renders with **no
    frame, no crosshairs, no hatch**. One-line fix:
-   `import FrameBox from './foundations/components/layout/FrameBox.vue'`.
+   `import RegistrationFrame from './foundations/components/layout/RegistrationFrame.vue'`.
 
 2. **`maxWidth` keys don't mean the same width in the two containers.** `Hero`'s map is
    shifted two steps down from `SectionContainer`'s — `max-width="7xl"` gives `--container-5xl`

@@ -1,29 +1,29 @@
 <script setup>
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionContainer from '@aziontech/webkit/section-container'
 </script>
 
 <template>
   <div class="flex flex-col gap-(--spacing-xl)">
     <SectionContainer max-width="4xl">
-      <FrameBox borders="y"
+      <RegistrationFrame borders="y"
         ><div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
           4xl
-        </div></FrameBox
+        </div></RegistrationFrame
       >
     </SectionContainer>
     <SectionContainer max-width="6xl">
-      <FrameBox borders="y"
+      <RegistrationFrame borders="y"
         ><div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
           6xl
-        </div></FrameBox
+        </div></RegistrationFrame
       >
     </SectionContainer>
     <SectionContainer max-width="site">
-      <FrameBox borders="y"
+      <RegistrationFrame borders="y"
         ><div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
           site
-        </div></FrameBox
+        </div></RegistrationFrame
       >
     </SectionContainer>
   </div>

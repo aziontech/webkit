@@ -1,6 +1,6 @@
 {
   "component": "qr-code",
-  "title": "Components/Primitives/Content/QrCode",
+  "title": "Components/Content/QrCode",
   "examples": [
     {
       "name": "Default",

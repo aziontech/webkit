@@ -3,7 +3,7 @@ name: settings-section
 category: layout
 structure: monolithic
 status: implemented
-checksum: b1506c6affb492ded1761ff9bafa72dc3dc60ab5397df327011d613c79e8db05
+checksum: 8eb00f77da6eb051052cf3510ce32de011804ce56a9a52d965207ea1c10dca33
 spec_version: 7
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -13,11 +13,11 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.
+A band of a settings page: an h2 with a `Hint` glyph that carries the one-sentence guidance, over the band body (usually a flush `Card` of `SettingsRow` rows). Bands stack at the section gap with no rule between them. An anchored band shows a copy-link button in the gutter when the heading is hovered or focused; a collapsible band turns the heading into a disclosure that unfolds the body along the grid track.
 
 ## When to use
 
-- Use SettingsSection for a band of a settings page whose body is SettingRow rows; any other band heading is a SectionHeader.
+- Use SettingsSection for a band of a settings page whose body is SettingsRow rows; any other band heading is a SectionHeader.
 - Every settings page and create page: a resource's Settings tab, Account Settings, a create form, a create drawer.
 - An Advanced band that starts closed (`collapsible`).
 
@@ -29,10 +29,10 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
 
 ## Related
 
-- `setting-row` — the rows inside the band's card.
+- `settings-row` — the rows inside the band's card.
 - `card` — the flush (`:padded="false"`) surface the rows sit on.
 - `hint` — the guidance glyph beside the title.
-- `section-header` — the band heading with a description and actions. Pick by content: a settings band of `SettingRow`s (a Hint, a gutter copy-link, an optional disclosure) is `SettingsSection`; a console band heading with a description and its own actions is `SectionHeader`; a marketing section heading is `section-title`. The three share the h2 and the copy-link anchor; folding SettingsSection's heading onto SectionHeader is a planned refactor, not a behaviour change.
+- `section-header` — the band heading with a description and actions. Pick by content: a settings band of `SettingsRow`s (a Hint, a gutter copy-link, an optional disclosure) is `SettingsSection`; a console band heading with a description and its own actions is `SectionHeader`; a marketing section heading is `section-title`. The three share the h2 and the copy-link anchor; folding SettingsSection's heading onto SectionHeader is a planned refactor, not a behaviour change.
 
 ## Best practices
 
@@ -48,7 +48,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
   import Card from '@aziontech/webkit/card'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import { ref } from 'vue'
 
@@ -64,7 +64,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
     <Card :padded="false">
       <template #default>
         <Item.List>
-          <SettingRow
+          <SettingsRow
             title="Name"
             description="A unique and descriptive name to identify the resource."
           >
@@ -74,7 +74,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
               class="w-full"
               aria-label="Name"
             />
-          </SettingRow>
+          </SettingsRow>
         </Item.List>
       </template>
     </Card>
@@ -104,7 +104,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
 
 | Slot      | Scope | Notes                                                         |
 | --------- | ----- | ------------------------------------------------------------- |
-| `default` | —     | The band body, usually a flush Card of SettingRow rows.       |
+| `default` | —     | The band body, usually a flush Card of SettingsRow rows.      |
 | `title`   | —     | Rich title content; replaces the `title` prop text in the h2. |
 
 ## States

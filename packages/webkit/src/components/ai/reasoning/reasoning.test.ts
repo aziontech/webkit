@@ -9,7 +9,7 @@ const slots = { default: () => 'Checking the cache settings first.' }
 
 describe('Reasoning', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
-    expect(render(Reasoning, { slots }).getByTestId('ai-reasoning')).toBeTruthy()
+    expect(render(Reasoning, { slots }).getByTestId('reasoning')).toBeTruthy()
     expect(
       render(Reasoning, { slots, attrs: { 'data-testid': 'mine' } }).getByTestId('mine')
     ).toBeTruthy()
@@ -17,40 +17,40 @@ describe('Reasoning', () => {
 
   it('reads Thinking while streaming and the duration when done', async () => {
     const { getByTestId, rerender } = render(Reasoning, { props: { streaming: true }, slots })
-    expect(getByTestId('ai-reasoning__label')).toHaveTextContent('Thinking')
-    expect(getByTestId('ai-reasoning')).toHaveAttribute('data-streaming')
+    expect(getByTestId('reasoning__label')).toHaveTextContent('Thinking')
+    expect(getByTestId('reasoning')).toHaveAttribute('data-streaming')
     await rerender({ streaming: false, duration: 14 })
-    expect(getByTestId('ai-reasoning__label')).toHaveTextContent('Thought for 14 seconds')
-    expect(getByTestId('ai-reasoning__status')).toHaveTextContent('Thought for 14 seconds')
+    expect(getByTestId('reasoning__label')).toHaveTextContent('Thought for 14 seconds')
+    expect(getByTestId('reasoning__status')).toHaveTextContent('Thought for 14 seconds')
   })
 
   it('measures the duration when the server gives none', async () => {
     const { getByTestId, rerender } = render(Reasoning, { props: { streaming: true }, slots })
     await rerender({ streaming: false })
-    expect(getByTestId('ai-reasoning__label')).toHaveTextContent('Thought for 1 second')
+    expect(getByTestId('reasoning__label')).toHaveTextContent('Thought for 1 second')
   })
 
   it('says a few seconds when nothing was measured', () => {
     const { getByTestId } = render(Reasoning, { slots })
-    expect(getByTestId('ai-reasoning__label')).toHaveTextContent('Thought for a few seconds')
+    expect(getByTestId('reasoning__label')).toHaveTextContent('Thought for a few seconds')
   })
 
   it('is collapsed by default and toggles by keyboard', async () => {
     const { getByRole, getByTestId, emitted } = render(Reasoning, { props: { duration: 3 }, slots })
     const trigger = getByRole('button', { name: /Thought for 3 seconds/ })
     expect(trigger).toHaveAttribute('aria-expanded', 'false')
-    expect(trigger).toHaveAttribute('aria-controls', getByTestId('ai-reasoning__content').id)
-    expect(getByTestId('ai-reasoning__content')).not.toBeVisible()
+    expect(trigger).toHaveAttribute('aria-controls', getByTestId('reasoning__content').id)
+    expect(getByTestId('reasoning__content')).not.toBeVisible()
     trigger.focus()
     await userEvent.keyboard('{Enter}')
     expect(trigger).toHaveAttribute('aria-expanded', 'true')
-    expect(getByTestId('ai-reasoning__content')).toBeVisible()
+    expect(getByTestId('reasoning__content')).toBeVisible()
     expect(emitted('update:open')?.[0]).toEqual([true])
   })
 
   it('starts from defaultOpen when unbound and follows the parent when bound', async () => {
     const free = render(Reasoning, { props: { defaultOpen: true }, slots })
-    expect(free.getByTestId('ai-reasoning__content')).toBeVisible()
+    expect(free.getByTestId('reasoning__content')).toBeVisible()
     expect(free.emitted('update:open')).toBeUndefined()
     free.unmount()
     const bound = render(Reasoning, {
@@ -59,9 +59,9 @@ describe('Reasoning', () => {
     })
     await userEvent.click(bound.getByRole('button'))
     expect(bound.emitted('update:open')?.[0]).toEqual([false])
-    expect(bound.getByTestId('ai-reasoning__content')).toBeVisible()
+    expect(bound.getByTestId('reasoning__content')).toBeVisible()
     await bound.rerender({ open: false, 'onUpdate:open': () => undefined })
-    expect(bound.getByTestId('ai-reasoning__content')).not.toBeVisible()
+    expect(bound.getByTestId('reasoning__content')).not.toBeVisible()
   })
 
   it('offers Skip thinking only while streaming and skippable', async () => {

@@ -1,6 +1,6 @@
 {
   "component": "sources",
-  "title": "Components/Primitives/AI/Sources",
+  "title": "Components/AI/Sources",
   "examples": [
     {
       "name": "Default",

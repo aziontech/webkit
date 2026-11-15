@@ -1,6 +1,6 @@
 {
   "component": "file-dropzone",
-  "title": "Components/Primitives/Inputs/FileDropzone",
+  "title": "Components/Input/FileDropzone",
   "examples": [
     {
       "name": "Default",

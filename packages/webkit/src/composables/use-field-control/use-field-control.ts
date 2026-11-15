@@ -1,6 +1,6 @@
 import { computed, type ComputedRef, inject, type MaybeRefOrGetter, toValue } from 'vue'
 
-import { type FieldContext, FieldInjectionKey } from '../../components/inputs/field/injection-key'
+import { type FieldContext, FieldInjectionKey } from '../../components/input/field/injection-key'
 
 export interface UseFieldControlOptions {
   id?: MaybeRefOrGetter<string | undefined>

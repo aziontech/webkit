@@ -3,7 +3,7 @@
  "useWhen": [
   "Use ConsoleLayout once at the app root of the Azion console; every page is its body.",
   "Every signed-in console page: put one `ConsoleLayout` in the app's root (around `RouterView`) and render each page block as its default slot.",
-  "A product area that needs the console navigation, breadcrumbs, the ⌘K palette and the account menu without hand-composing `AppLayout`, `Sidebar`, `SidebarMenu`, `GlobalHeader`, `SearchTrigger` and `Command`."
+  "A product area that needs the console navigation, breadcrumbs, the ⌘K palette and the account menu without hand-composing `AppLayout`, `Sidebar`, `SidebarMenu`, `AppHeader`, `SearchTrigger` and `Command`."
  ],
  "avoidWhen": [
   "A focused flow with no navigation rail (a creation wizard, sign-in) → render the page on its own or with the flow's own header.",

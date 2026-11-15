@@ -4,7 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import CodeEditor, { type CodeEditorMonacoModule } from '@aziontech/webkit/code-editor'
-  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import NumberInput from '@aziontech/webkit/number-input'
@@ -13,13 +13,13 @@
   import RadioGroup from '@aziontech/webkit/radio-group'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Textarea from '@aziontech/webkit/textarea'
   import { computed, nextTick, reactive, ref } from 'vue'
 
-  type FieldProblem = { type: HelperTextType; message: string }
+  type FieldProblem = { type: 'helper' | 'invalid' | 'required'; message: string }
   type LabeledOption = SelectOptionItem
 
   const loadMonaco = async (): Promise<CodeEditorMonacoModule> => {
@@ -357,7 +357,7 @@
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"
                 >
-                  <SettingRow
+                  <SettingsRow
                     key="name"
                     title="Name"
                     description="Give a unique and descriptive name to identify the data stream."
@@ -376,14 +376,13 @@
                       :disabled="saving"
                       @update:model-value="clear('name')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.name"
                       id="data-stream-name-message"
-                      :type="errors.name.type"
-                      :label="errors.name.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.name.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     key="active"
                     title="Active"
                     description="When off, the stream stops collecting records and nothing is sent to the destination."
@@ -394,7 +393,7 @@
                       aria-label="Active"
                       :disabled="saving"
                     />
-                  </SettingRow>
+                  </SettingsRow>
                 </TransitionGroup>
               </Item.List>
             </template>
@@ -412,7 +411,7 @@
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"
                 >
-                  <SettingRow
+                  <SettingsRow
                     key="source"
                     title="Data source"
                     description="The product the records are collected from."
@@ -436,8 +435,8 @@
                         </Select.Item>
                       </Select.Content>
                     </Select>
-                  </SettingRow>
-                  <SettingRow
+                  </SettingsRow>
+                  <SettingsRow
                     key="scope"
                     title="Workloads"
                     variant="stacked"
@@ -457,8 +456,8 @@
                         >{{ option.label }}</RadioGroup.Item
                       >
                     </RadioGroup>
-                  </SettingRow>
-                  <SettingRow
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.scope === 'filtered'"
                     key="workloads"
                     title="Selected workloads"
@@ -480,13 +479,12 @@
                       :disabled="saving"
                       @update:model-value="clear('workloads')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.workloads"
                       id="data-stream-workloads-message"
-                      :type="errors.workloads.type"
-                      :label="errors.workloads.message"
-                    />
-                  </SettingRow>
+                      >{{ errors.workloads.message }}</FieldError
+                    >
+                  </SettingsRow>
                 </TransitionGroup>
               </Item.List>
             </template>
@@ -514,7 +512,7 @@
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"
                 >
-                  <SettingRow
+                  <SettingsRow
                     key="sampling"
                     title="Sampling"
                     description="Collect a share of the records instead of all of them, to save resources."
@@ -525,8 +523,8 @@
                       aria-label="Sampling"
                       :disabled="saving"
                     />
-                  </SettingRow>
-                  <SettingRow
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.sampling"
                     key="samplingRate"
                     title="Sampling rate"
@@ -549,13 +547,12 @@
                     >
                       <template #trailing>%</template>
                     </NumberInput>
-                    <HelperText
+                    <FieldError
                       v-if="errors.samplingRate"
                       id="data-stream-samplingRate-message"
-                      :type="errors.samplingRate.type"
-                      :label="errors.samplingRate.message"
-                    />
-                  </SettingRow>
+                      >{{ errors.samplingRate.message }}</FieldError
+                    >
+                  </SettingsRow>
                 </TransitionGroup>
               </Item.List>
             </template>
@@ -573,7 +570,7 @@
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"
                 >
-                  <SettingRow
+                  <SettingsRow
                     key="template"
                     title="Template"
                     description="A preset sends a fixed set of variables for one source. A custom template lets you choose the variables."
@@ -597,8 +594,8 @@
                         </Select.Item>
                       </Select.Content>
                     </Select>
-                  </SettingRow>
-                  <SettingRow
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.template === 'custom'"
                     key="templateName"
                     title="Template name"
@@ -620,14 +617,13 @@
                       :disabled="saving"
                       @update:model-value="clear('templateName')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.templateName"
                       id="data-stream-templateName-message"
-                      :type="errors.templateName.type"
-                      :label="errors.templateName.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.templateName.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.template === 'custom'"
                     key="dataSet"
                     title="Data set"
@@ -651,14 +647,13 @@
                         @update:model-value="clear('dataSet')"
                       />
                     </div>
-                    <HelperText
+                    <FieldError
                       v-if="errors.dataSet"
                       id="data-stream-dataSet-message"
-                      :type="errors.dataSet.type"
-                      :label="errors.dataSet.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.dataSet.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-else
                     key="preset"
                     title="Data set"
@@ -671,7 +666,7 @@
                         copy-aria-label="Copy the data set as JSON"
                       />
                     </div>
-                  </SettingRow>
+                  </SettingsRow>
                 </TransitionGroup>
               </Item.List>
             </template>
@@ -716,7 +711,7 @@
                 <TransitionGroup
                   enter-active-class="animate-content-enter motion-reduce:animate-none"
                 >
-                  <SettingRow
+                  <SettingsRow
                     key="connector"
                     title="Connector"
                     description="Each platform asks for different values."
@@ -743,8 +738,8 @@
                         </Select.Item>
                       </Select.Content>
                     </Select>
-                  </SettingRow>
-                  <SettingRow
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.connector === 'standard'"
                     key="url"
                     title="URL"
@@ -765,14 +760,13 @@
                       :disabled="saving"
                       @update:model-value="onDestinationChange('url')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.url"
                       id="data-stream-url-message"
-                      :type="errors.url.type"
-                      :label="errors.url.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.url.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.connector === 'standard'"
                     key="payloadFormat"
                     title="Payload format"
@@ -794,14 +788,13 @@
                       :disabled="saving"
                       @update:model-value="onDestinationChange('payloadFormat')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.payloadFormat"
                       id="data-stream-payloadFormat-message"
-                      :type="errors.payloadFormat.type"
-                      :label="errors.payloadFormat.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.payloadFormat.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.connector === 'standard'"
                     key="lineSeparator"
                     title="Log line separator"
@@ -823,14 +816,13 @@
                       :disabled="saving"
                       @update:model-value="onDestinationChange('lineSeparator')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.lineSeparator"
                       id="data-stream-lineSeparator-message"
-                      :type="errors.lineSeparator.type"
-                      :label="errors.lineSeparator.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.lineSeparator.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.connector === 'standard'"
                     key="headers"
                     title="Custom headers"
@@ -854,14 +846,13 @@
                         @update:model-value="onDestinationChange('headers')"
                       />
                     </div>
-                    <HelperText
+                    <FieldError
                       v-if="errors.headers"
                       id="data-stream-headers-message"
-                      :type="errors.headers.type"
-                      :label="errors.headers.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.headers.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.connector === 'kafka'"
                     key="bootstrapServers"
                     title="Bootstrap servers"
@@ -887,14 +878,13 @@
                         @update:model-value="onDestinationChange('bootstrapServers')"
                       />
                     </div>
-                    <HelperText
+                    <FieldError
                       v-if="errors.bootstrapServers"
                       id="data-stream-bootstrapServers-message"
-                      :type="errors.bootstrapServers.type"
-                      :label="errors.bootstrapServers.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.bootstrapServers.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.connector === 'kafka'"
                     key="topic"
                     title="Topic"
@@ -914,14 +904,13 @@
                       :disabled="saving"
                       @update:model-value="onDestinationChange('topic')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.topic"
                       id="data-stream-topic-message"
-                      :type="errors.topic.type"
-                      :label="errors.topic.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.topic.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.connector === 's3'"
                     key="bucket"
                     title="Bucket"
@@ -941,14 +930,13 @@
                       :disabled="saving"
                       @update:model-value="onDestinationChange('bucket')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.bucket"
                       id="data-stream-bucket-message"
-                      :type="errors.bucket.type"
-                      :label="errors.bucket.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.bucket.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.connector === 's3'"
                     key="region"
                     title="Region"
@@ -968,14 +956,13 @@
                       :disabled="saving"
                       @update:model-value="onDestinationChange('region')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.region"
                       id="data-stream-region-message"
-                      :type="errors.region.type"
-                      :label="errors.region.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.region.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.connector === 's3'"
                     key="accessKey"
                     title="Access key"
@@ -997,14 +984,13 @@
                       :disabled="saving"
                       @update:model-value="onDestinationChange('accessKey')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.accessKey"
                       id="data-stream-accessKey-message"
-                      :type="errors.accessKey.type"
-                      :label="errors.accessKey.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.accessKey.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.connector === 's3'"
                     key="secretKey"
                     title="Secret key"
@@ -1025,14 +1011,13 @@
                       :disabled="saving"
                       @update:model-value="onDestinationChange('secretKey')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.secretKey"
                       id="data-stream-secretKey-message"
-                      :type="errors.secretKey.type"
-                      :label="errors.secretKey.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.secretKey.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.connector === 'analytics'"
                     key="analyticsUrl"
                     title="Intake URL"
@@ -1055,14 +1040,13 @@
                       :disabled="saving"
                       @update:model-value="onDestinationChange('analyticsUrl')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.analyticsUrl"
                       id="data-stream-analyticsUrl-message"
-                      :type="errors.analyticsUrl.type"
-                      :label="errors.analyticsUrl.message"
-                    />
-                  </SettingRow>
-                  <SettingRow
+                      >{{ errors.analyticsUrl.message }}</FieldError
+                    >
+                  </SettingsRow>
+                  <SettingsRow
                     v-if="form.connector === 'analytics'"
                     key="apiKey"
                     title="API key"
@@ -1081,13 +1065,12 @@
                       :disabled="saving"
                       @update:model-value="onDestinationChange('apiKey')"
                     />
-                    <HelperText
+                    <FieldError
                       v-if="errors.apiKey"
                       id="data-stream-apiKey-message"
-                      :type="errors.apiKey.type"
-                      :label="errors.apiKey.message"
-                    />
-                  </SettingRow>
+                      >{{ errors.apiKey.message }}</FieldError
+                    >
+                  </SettingsRow>
                 </TransitionGroup>
               </Item.List>
             </template>

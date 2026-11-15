@@ -27,7 +27,7 @@
 - Numbered instructions inside a document, where every step is read at once → use `doc-steps` + `doc-step`.
 - Progress with no discrete, nameable steps (a percentage, an upload) → use `progress`.
 - Switching between peer views that are not ordered and have no completion → use `tabs`.
-- A provisioning log that reports what a server is doing, rather than what the reader must answer → use `flow`.
+- A provisioning log that reports what a server is doing, rather than what the reader must answer → use `flow-diagram`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
@@ -35,7 +35,7 @@
 - [doc-steps](doc-steps.md) — the same numbered-dot shape for prose; static, never current, never navigable.
 - [tabs](tabs.md) — peer views with no order and no completion.
 - [progress](progress.md) — continuous progress with no named steps.
-- [flow](flow.md) — a machine's stages, reported rather than navigated.
+- [flow-diagram](flow-diagram.md) — a machine's stages, reported rather than navigated.
 
 ## Props
 

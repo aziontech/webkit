@@ -1,6 +1,6 @@
 {
   "component": "icon-button",
-  "title": "Components/Primitives/Actions/IconButton",
+  "title": "Components/Action/IconButton",
   "examples": [
     {
       "name": "Default",

@@ -27,7 +27,7 @@ export function buildFixtures(cwd) {
       rule: 'webkit/no-deep-internal-import',
       optional: false,
       content: `<script setup>
-import Button from '@aziontech/webkit/src/components/actions/button/button.vue'
+import Button from '@aziontech/webkit/src/components/action/button/button.vue'
 </script>
 
 <template>

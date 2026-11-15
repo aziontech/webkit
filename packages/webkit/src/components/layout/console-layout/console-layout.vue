@@ -31,8 +31,8 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
-  import SearchTrigger from '../../actions/search-trigger/search-trigger.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
+  import SearchTrigger from '../../action/search-trigger/search-trigger.vue'
   import Avatar from '../../content/avatar/avatar.vue'
   import Brand from '../../content/brand/brand.vue'
   import type { BreadcrumbItemData } from '../../navigation/breadcrumb/breadcrumb.vue'
@@ -53,11 +53,11 @@
   import CommandItem from '../../overlay/command/command-item/command-item.vue'
   import CommandList from '../../overlay/command/command-list/command-list.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
+  import AppHeader from '../app-header/app-header.vue'
+  import AppHeaderCenter from '../app-header/app-header-center.vue'
+  import AppHeaderEnd from '../app-header/app-header-end.vue'
+  import AppHeaderStart from '../app-header/app-header-start.vue'
   import AppLayout from '../app-layout/app-layout.vue'
-  import GlobalHeader from '../global-header/global-header.vue'
-  import GlobalHeaderCenter from '../global-header/global-header-center.vue'
-  import GlobalHeaderEnd from '../global-header/global-header-end.vue'
-  import GlobalHeaderStart from '../global-header/global-header-start.vue'
   import Sidebar from '../sidebar/sidebar.vue'
   import {
     ConsoleLayoutInjectionKey,
@@ -199,9 +199,7 @@
 
   const NAV_VALUE = 'console-layout:nav:'
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-console-layout'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'console-layout')
 
   const leaves = computed(
     () =>
@@ -559,8 +557,8 @@
 
       <template #header="{ compact, openNavigation, toggleTools }">
         <div class="@container">
-          <GlobalHeader :data-testid="`${testId}__header`">
-            <GlobalHeaderStart>
+          <AppHeader :data-testid="`${testId}__header`">
+            <AppHeaderStart>
               <div class="flex min-w-0 items-center justify-start gap-(--spacing-xs)">
                 <template v-if="compact">
                   <Tooltip
@@ -630,9 +628,9 @@
                   />
                 </div>
               </div>
-            </GlobalHeaderStart>
-            <GlobalHeaderCenter />
-            <GlobalHeaderEnd>
+            </AppHeaderStart>
+            <AppHeaderCenter />
+            <AppHeaderEnd>
               <SearchTrigger
                 collapsible
                 :data-testid="`${testId}__search`"
@@ -672,8 +670,8 @@
                 size="medium"
                 variant="square"
               />
-            </GlobalHeaderEnd>
-          </GlobalHeader>
+            </AppHeaderEnd>
+          </AppHeader>
         </div>
       </template>
 

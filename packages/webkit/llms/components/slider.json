@@ -3,7 +3,7 @@
  "binding": "Slider",
  "import": "@aziontech/webkit/slider",
  "treeShakeableImport": "@aziontech/webkit/slider",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
@@ -25,7 +25,7 @@
  "related": [
   "number-input` — exact numeric entry; pair it next to a slider when the user needs both coarse dragging and an exact value.",
   "field` — `Field.Label` names the slider; point its `for` at the slider's `id` (the `id` attribute lands on the native input).",
-  "helper-text` — description or error message under the slider in a field layout.",
+  "field-error` — description or error message under the slider in a field layout.",
   "toggle-group` — a few discrete, named choices instead of a continuous range.",
   "progress` — displays a fraction; it is not interactive."
  ],

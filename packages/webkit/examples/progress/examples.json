@@ -1,6 +1,6 @@
 {
   "component": "progress",
-  "title": "Components/Primitives/Feedback/Progress",
+  "title": "Components/Feedback/Progress",
   "examples": [
     {
       "name": "Default",

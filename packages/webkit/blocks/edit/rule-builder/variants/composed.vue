@@ -9,7 +9,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -17,7 +17,7 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
@@ -633,11 +633,10 @@
                           >{{ phase.label }}</RadioGroup.Item
                         >
                       </RadioGroup>
-                      <HelperText
-                        v-if="editing"
-                        type="disabled"
-                        label="A rule’s phase is set when it is created. Create a rule in the other phase to run these behaviors there."
-                      />
+                      <FieldDescription v-if="editing"
+                        >A rule’s phase is set when it is created. Create a rule in the other phase
+                        to run these behaviors there.</FieldDescription
+                      >
                     </div>
                   </div>
                 </template>
@@ -839,9 +838,11 @@
                                   </Select.Item>
                                 </Select.Content>
                               </Select>
-                              <HelperText v-if="behaviorArgumentNote(argument.source, form.phase)">
+                              <FieldDescription
+                                v-if="behaviorArgumentNote(argument.source, form.phase)"
+                              >
                                 {{ behaviorArgumentNote(argument.source, form.phase) }}
-                              </HelperText>
+                              </FieldDescription>
                             </div>
                             <div
                               v-else-if="argument?.kind === 'group'"
@@ -891,7 +892,7 @@
               <Card :padded="false">
                 <template #default>
                   <Item.List>
-                    <SettingRow
+                    <SettingsRow
                       title="Active"
                       description="Turn the rule on right after it is created."
                       variant="compact"
@@ -901,7 +902,7 @@
                         aria-label="Active"
                         :disabled="submitting"
                       />
-                    </SettingRow>
+                    </SettingsRow>
                   </Item.List>
                 </template>
               </Card>

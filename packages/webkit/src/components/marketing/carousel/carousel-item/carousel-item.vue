@@ -28,9 +28,7 @@
   const context = useCarouselContext()
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-carousel-item'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'carousel-item')
 </script>
 
 <template>

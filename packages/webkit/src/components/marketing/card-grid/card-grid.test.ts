@@ -6,8 +6,8 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import CardGridCell from './card-grid-cell/card-grid-cell.vue'
 import CardGrid from './index'
 
-const TESTID = 'marketing-card-grid'
-const CELL_TESTID = 'marketing-card-grid-cell'
+const TESTID = 'card-grid'
+const CELL_TESTID = 'card-grid-cell'
 
 const framed = (gridProps: Record<string, unknown> = {}, cellProps: Record<string, unknown> = {}) =>
   defineComponent({
@@ -209,12 +209,14 @@ describe('CardGrid', () => {
       const cells = getAllByTestId(CELL_TESTID)
 
       expect(cells).toHaveLength(2)
-      expect(cells[0].querySelector('[data-testid="layout-frame-box"]')).not.toBeNull()
+      expect(cells[0].querySelector('[data-testid="registration-frame"]')).not.toBeNull()
     })
 
     it('draws only its right and bottom rules, leaving the top and left to the grid', () => {
       const { getAllByTestId } = render(framed())
-      const frame = getAllByTestId(CELL_TESTID)[0].querySelector('[data-testid="layout-frame-box"]')
+      const frame = getAllByTestId(CELL_TESTID)[0].querySelector(
+        '[data-testid="registration-frame"]'
+      )
 
       expect(frame).toHaveAttribute('data-borders', 'right bottom')
       expect(frame).toHaveAttribute('data-flush', 'top left')

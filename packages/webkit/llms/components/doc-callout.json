@@ -3,7 +3,7 @@
  "binding": "DocCallout",
  "import": "@aziontech/webkit/doc-callout",
  "treeShakeableImport": "@aziontech/webkit/doc-callout",
- "category": "documentation",
+ "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
  "compoundRoot": false,

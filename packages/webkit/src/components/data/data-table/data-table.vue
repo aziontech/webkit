@@ -41,20 +41,20 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { downloadCsv, toCsv } from '../../../utils/csv'
-  import Button from '../../actions/button/button.vue'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import Button from '../../action/button/button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import Checkbox from '../../inputs/checkbox/checkbox.vue'
+  import Spinner from '../../feedback/spinner/spinner.vue'
+  import Checkbox from '../../input/checkbox/checkbox.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
-  import Spinner from '../../utils/spinner/spinner.vue'
   import Pagination from '../pagination/pagination.vue'
   import {
     type TableAppliedFilter,
     type TableCellSlots,
     type TableColumn,
     type TableDensity,
-    type TableExportScope,
+    type TableExportButtonScope,
     type TableExposed,
     type TableFilterField,
     type TableFilterOperator,
@@ -243,7 +243,7 @@
   const hasSlot = (name: string): boolean => Boolean((slots as Record<string, unknown>)[name])
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-data-table'
+    () => (attrs['data-testid'] as string | undefined) ?? 'data-table'
   )
 
   const captionId = `${useId()}-caption`
@@ -636,7 +636,7 @@
   const instance = getCurrentInstance()
   const hasExportListener = (): boolean =>
     Boolean((instance?.vnode.props as Record<string, unknown> | null | undefined)?.['onExport'])
-  const resolveExportRows = (scope: TableExportScope): RowRecord[] => {
+  const resolveExportRows = (scope: TableExportButtonScope): RowRecord[] => {
     if (leanRows.value) return records()
     if (scope === 'all') return table.getCoreRowModel().rows.map((row) => row.original)
     if (scope === 'page') return rows.value.map((row) => row.original)
@@ -657,7 +657,7 @@
   const exportCsv = (
     options?: {
       filename?: string
-      scope?: TableExportScope
+      scope?: TableExportButtonScope
       rows?: RowRecord[]
     },
     event: Event = new Event('export')
@@ -1657,7 +1657,7 @@
     TableCellSlots,
     TableColumn,
     TableDensity,
-    TableExportScope,
+    TableExportButtonScope,
     TableExposed,
     TableHeaderSlotProps,
     TableHeaderSlots,

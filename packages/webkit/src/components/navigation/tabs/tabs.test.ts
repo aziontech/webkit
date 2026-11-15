@@ -80,16 +80,14 @@ describe('Tabs', () => {
       })
     })
 
-    describe('structure, roles, and context-derived ids', () => {
+    describe('structure, roles, and test ids', () => {
       it('renders root/list/content with their testids and tablist role', () => {
         const { getByTestId, getAllByTestId } = render(Tree)
 
-        // Root testid supplied by the consumer (data-testid="tv"); List/Content
-        // derive their testids from the injected context.testId.
         expect(getByTestId('tv')).toBeTruthy()
-        const list = getByTestId('tv__list')
+        const list = getByTestId('tabs-list')
         expect(list.getAttribute('role')).toBe('tablist')
-        expect(getAllByTestId('tv__panel')[0]?.getAttribute('role')).toBe('tabpanel')
+        expect(getAllByTestId('tabs-content')[0]?.getAttribute('role')).toBe('tabpanel')
       })
 
       // The horizontal-scroll affordance (overflow-x + edge-fade overlays) is a
@@ -235,7 +233,7 @@ describe('Tabs', () => {
           props: { value: 'a', label: 'Alpha', closable: true }
         })
 
-        const close = getByTestId('navigation-tabs-trigger__close')
+        const close = getByTestId('tabs-trigger__close')
         expect(close.getAttribute('aria-hidden')).toBe('true')
         expect(close.getAttribute('role')).toBeNull()
         expect(close.getAttribute('title')).toBe('Close tab')
@@ -252,7 +250,7 @@ describe('Tabs', () => {
         const { getByTestId, emitted, rerender } = render(TabsTrigger, {
           props: { value: 'a', label: 'Alpha', closable: true }
         })
-        const tab = getByTestId('navigation-tabs-trigger')
+        const tab = getByTestId('tabs-trigger')
         expect(tab.getAttribute('aria-keyshortcuts')).toBe('Delete')
 
         await fireEvent.keyDown(tab, { key: 'Delete' })
@@ -272,13 +270,11 @@ describe('Tabs', () => {
 
         const tab = getByRole('button')
         expect(tab.hasAttribute('data-dirty')).toBe(true)
-        expect(getByTestId('navigation-tabs-trigger__dirty').getAttribute('aria-hidden')).toBe(
-          'true'
-        )
+        expect(getByTestId('tabs-trigger__dirty').getAttribute('aria-hidden')).toBe('true')
         expect(tab.textContent).toContain('Unsaved changes')
 
         await rerender({ dirty: false })
-        expect(queryByTestId('navigation-tabs-trigger__dirty')).toBeNull()
+        expect(queryByTestId('tabs-trigger__dirty')).toBeNull()
         expect(tab.hasAttribute('data-dirty')).toBe(false)
       })
     })
@@ -385,7 +381,7 @@ describe('Tabs', () => {
 
       it('ArrowRight/ArrowLeft move selection across enabled tabs and wrap around', async () => {
         const { getByTestId, getByText } = render(Tree)
-        const list = getByTestId('tv__list')
+        const list = getByTestId('tabs-list')
 
         // Start on tab-1 (default). ArrowRight → tab-2.
         await fireEvent.keyDown(list, { key: 'ArrowRight' })
@@ -414,7 +410,7 @@ describe('Tabs', () => {
 
       it('Home selects the first enabled tab and End selects the last', async () => {
         const { getByTestId, getByText } = render(Tree, { props: { defaultValue: 'tab-2' } })
-        const list = getByTestId('tv__list')
+        const list = getByTestId('tabs-list')
 
         await fireEvent.keyDown(list, { key: 'End' })
         expect(
@@ -430,7 +426,7 @@ describe('Tabs', () => {
       it('ArrowRight skips a disabled tab (only enabled tabs participate)', async () => {
         // tab-2 disabled → from tab-1, ArrowRight lands on tab-3.
         const { getByTestId, getByText } = render(Tree, { props: { disableSecond: true } })
-        const list = getByTestId('tv__list')
+        const list = getByTestId('tabs-list')
 
         await fireEvent.keyDown(list, { key: 'ArrowRight' })
 
@@ -446,16 +442,14 @@ describe('Tabs', () => {
     describe('Item label prop and slot', () => {
       it('renders the label prop and lets the default slot override it', () => {
         const withProp = render(TabsTrigger, { props: { value: 'a', label: 'FromProp' } })
-        expect(withProp.getByTestId('navigation-tabs-trigger__label').textContent?.trim()).toBe(
-          'FromProp'
-        )
+        expect(withProp.getByTestId('tabs-trigger__label').textContent?.trim()).toBe('FromProp')
         withProp.unmount()
 
         const withSlot = render(TabsTrigger, {
           props: { value: 'a', label: 'FromProp' },
           slots: { default: 'FromSlot' }
         })
-        const label = withSlot.getByTestId('navigation-tabs-trigger__label')
+        const label = withSlot.getByTestId('tabs-trigger__label')
         expect(label.textContent).toContain('FromSlot')
         expect(label.textContent).not.toContain('FromProp')
       })
@@ -471,7 +465,7 @@ describe('Tabs', () => {
       it('renders the Default story fixture cleanly with no a11y violations', async () => {
         const { getByTestId, container } = render(Default)
 
-        expect(getByTestId('navigation-tabs')).toBeTruthy()
+        expect(getByTestId('tabs')).toBeTruthy()
         await expectNoA11yViolations(container)
       })
     })
@@ -558,7 +552,7 @@ describe('Tabs', () => {
         `
         })
       )
-      const root = getByTestId('navigation-tabs')
+      const root = getByTestId('tabs')
       expect(root.id).toBe('tabs-root')
       expect(root).toHaveAttribute('dir', 'ltr')
       expect(root).toHaveAttribute('aria-describedby', 'hint')
@@ -666,7 +660,7 @@ describe('Tabs', () => {
 
     it('renders an empty label by default instead of placeholder text', () => {
       const { getByTestId } = render(TabsTrigger)
-      expect(getByTestId('navigation-tabs-trigger__label').textContent?.trim()).toBe('')
+      expect(getByTestId('tabs-trigger__label').textContent?.trim()).toBe('')
     })
   })
 })

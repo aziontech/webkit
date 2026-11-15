@@ -35,9 +35,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-empty-state'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'empty-state')
 </script>
 
 <template>

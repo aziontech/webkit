@@ -18,7 +18,7 @@ afterEach(() => {
 describe('create-wizard#CreateAndDeploy', () => {
   it('gates Next on the project, then shows the loading state on Create and deploy', async () => {
     render(MultipageCreateAndDeploy)
-    expect(screen.getByTestId('navigation-wizard')).toBeTruthy()
+    expect(screen.getByTestId('wizard')).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     expect(
       await screen.findByText('Select the project this service serves, or create a new one.')
@@ -55,7 +55,7 @@ describe('create-wizard', () => {
 
   it('runs on the Wizard: Next needs an answer, and a host with the module off adds a step', async () => {
     render(MultipageCreate)
-    expect(screen.getByTestId('navigation-wizard')).toBeTruthy()
+    expect(screen.getByTestId('wizard')).toBeTruthy()
     expect(screen.getByRole('heading', { level: 1, name: 'Create Access List' })).toBeTruthy()
     await fireEvent.click(screen.getByRole('button', { name: 'Next' }))
     expect(await screen.findByText('Select a policy, or continue without one.')).toBeTruthy()

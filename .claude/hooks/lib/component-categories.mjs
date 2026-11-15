@@ -1,17 +1,17 @@
 export const COMPONENT_CATEGORIES = [
-  'actions',
+  'action',
   'ai',
   'chart',
   'code',
   'content',
   'data',
-  'documentation',
+  'docs',
   'feedback',
-  'inputs',
+  'input',
   'layout',
   'marketing',
   'navigation',
   'overlay',
-  'sections',
-  'utils'
+  'provider',
+  'section'
 ]

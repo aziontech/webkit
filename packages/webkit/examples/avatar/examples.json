@@ -1,6 +1,6 @@
 {
   "component": "avatar",
-  "title": "Components/Primitives/Content/Avatar",
+  "title": "Components/Content/Avatar",
   "examples": [
     {
       "name": "Default",

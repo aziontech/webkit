@@ -66,7 +66,7 @@ const mount = (
 describe('SiteLayout', () => {
   it('renders the bar, one main landmark with the sections, and the footer', () => {
     const { getByTestId, getAllByRole, getByRole } = mount()
-    expect(getByTestId('layout-site-layout')).toBeTruthy()
+    expect(getByTestId('site-layout')).toBeTruthy()
     expect(getByRole('banner', { name: 'Azion' })).toBeTruthy()
     const mains = getAllByRole('main')
     expect(mains).toHaveLength(1)
@@ -87,11 +87,11 @@ describe('SiteLayout', () => {
 
   it('floats the bar over the first band only with navOverlay, keeping one bar, main and footer', async () => {
     const stacked = mount()
-    expect(stacked.getByTestId('layout-site-layout')).not.toHaveAttribute('data-nav-overlay')
+    expect(stacked.getByTestId('site-layout')).not.toHaveAttribute('data-nav-overlay')
     stacked.unmount()
 
     const { getByTestId, getAllByRole, getByRole, container } = mount({ navOverlay: true })
-    expect(getByTestId('layout-site-layout')).toHaveAttribute('data-nav-overlay')
+    expect(getByTestId('site-layout')).toHaveAttribute('data-nav-overlay')
     expect(getByRole('banner', { name: 'Azion' })).toBeTruthy()
     expect(getAllByRole('main')).toHaveLength(1)
     expect(getByRole('contentinfo')).toBeTruthy()

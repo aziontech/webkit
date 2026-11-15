@@ -1,6 +1,6 @@
 ---
 name: multi-select
-category: inputs
+category: input
 structure: composition
 status: implemented
 spec_version: 13
@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: 7329359e2d8e1588f5d2e0bda412dd1260a1ff1996641828e3c41a3fe3a78d8a
+checksum: 71763dc5f2f6fc62ab2755cfbef1115fd82d9b4057b0dfa57ca1d30bd94f02d3
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -153,8 +153,8 @@ Chips, typed filter and a create row:
 | `invalid`      | `boolean`                        | `false`     | false    | Applies the invalid border + ring tokens and sets `aria-invalid` on the trigger.                                                                                                                                                                                     |
 | `displayValue` | `(value: TValue[]) => string`    | `undefined` | false    | Custom formatter used by the trigger to render the selected labels; receives the current `modelValue` array.                                                                                                                                                         |
 | `name`         | `string`                         | `''`        | false    | Form field name. Set, the root renders one hidden input per selected value so a native `form` and `FormData` submit every selection under that name; `required` then adds a hidden required proxy that blocks an empty submit, and `disabled` leaves the values out. |
-| `variant`         | `'summary' \| 'chips'`           | `'summary'` | false    | How the trigger shows the selection: `summary` joins the labels (or `displayValue`), `chips` renders one removable chip per value.                                                                                                                                   |
-| `chipLimit`    | `number`                         | `0`         | false    | With `variant="chips"`, the most chips shown before a `+N more` chip; `0` shows every chip and wraps.                                                                                                                                                                   |
+| `variant`      | `'summary' \| 'chips'`           | `'summary'` | false    | How the trigger shows the selection: `summary` joins the labels (or `displayValue`), `chips` renders one removable chip per value.                                                                                                                                   |
+| `chipLimit`    | `number`                         | `0`         | false    | With `variant="chips"`, the most chips shown before a `+N more` chip; `0` shows every chip and wraps.                                                                                                                                                                |
 | `searchable`   | `boolean`                        | `false`     | false    | Types in the trigger: the text filters the options, `Backspace` in an empty field removes the last value.                                                                                                                                                            |
 | `filter`       | `boolean`                        | `true`      | false    | With `searchable`, hides the options whose label does not contain the typed text. Turn off when the server filters on `search`.                                                                                                                                      |
 | `allowCustom`  | `boolean`                        | `false`     | false    | With `searchable`, offers typed text that matches no option as an `Add "…"` row that emits `create`.                                                                                                                                                                 |
@@ -166,10 +166,10 @@ Chips, typed filter and a create row:
 
 ## v-model
 
-| Model          | Type       | Default     | Emits               | Notes                                                                                                                                                                                                     |
-| -------------- | ---------- | ----------- | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model          | Type       | Default     | Emits               | Notes                                                                                                                                                                                                   |
+| -------------- | ---------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model`      | `TValue[]` | `[]`        | `update:modelValue` | The selection via `defineModel`. Always an array; each item is the `value` of a selected `<MultiSelectItem>`. Fires when an option is toggled with the next selection array. Uncontrolled when unbound. |
-| `v-model:open` | `boolean`  | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                                |
+| `v-model:open` | `boolean`  | `undefined` | `update:open`       | Open state of the dropdown via `defineModel`. Fires when the dropdown opens or closes. Unbound, the dropdown keeps its own state, seeded by `defaultOpen`.                                              |
 
 ## Events
 
@@ -234,7 +234,7 @@ Chips, typed filter and a create row:
 | spacing (option gap)                 | `var(--spacing-xs)`                                                                                                             |
 | shape                                | `var(--shape-control)`                                                                                                          |
 | shadow (panel)                       | `var(--shadow-xs)`                                                                                                              |
-| chips (`variant="chips"`)               | `Chip` `variant="filled"` `size="small"` (24px); the `+N more` chip `variant="outline"`                                              |
+| chips (`variant="chips"`)            | `Chip` `variant="filled"` `size="small"` (24px); the `+N more` chip `variant="outline"`                                         |
 | spacing (between chips, wrap rows)   | `var(--spacing-2xs)`                                                                                                            |
 | typed text / placeholder             | `.text-label-sm`, `var(--text-default)` / `var(--text-muted)`                                                                   |
 | list state rows (loading, empty)     | `.text-body-sm` + `var(--text-muted)`                                                                                           |

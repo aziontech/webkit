@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 8
 template: 2
-checksum: 9554a19c59f200a7091cd7092946b8bc11544ade5d0304415e240c2152ac845b
+checksum: ac704bd946d1d7d71966355fcbe820a18488cb41011e75d25b179ce272b27181
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -19,7 +19,7 @@ header, notifications, breadcrumbs, content, tools (the help panel) and the spli
 how they open, close, resize and remember their state. It responds to its **own** width, not the
 viewport's: below `compactBelow` pixels the navigation and the tools turn into drawers and the
 split panel moves to the bottom. The regions are slots, so the shell (the `shell/console` block)
-keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the frame to `AppLayout`.
+keeps its own `Sidebar`, `AppHeader` and page content and only hands the frame to `AppLayout`.
 
 ## When to use
 
@@ -39,7 +39,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
 ## Related
 
 - `sidebar` — the navigation rail that goes in the `navigation` slot; it owns its own width, resize and collapse.
-- `global-header` — the bar that goes in the `header` slot.
+- `app-header` — the bar that goes in the `header` slot.
 - `help-panel` — the content of the tools region.
 - `drawer` — what the navigation and tools regions become below `compactBelow`.
 - `resizable` — a split between panes inside a page, without the shell.
@@ -61,7 +61,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
 ```vue
 <script setup>
   import AppLayout from '@aziontech/webkit/app-layout'
-  import GlobalHeader from '@aziontech/webkit/global-header'
+  import AppHeader from '@aziontech/webkit/app-header'
   import HelpPanel from '@aziontech/webkit/help-panel'
   import IconButton from '@aziontech/webkit/icon-button'
   import Sidebar from '@aziontech/webkit/sidebar'
@@ -85,8 +85,8 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
       />
     </template>
     <template #header="{ compact, openNavigation, toggleTools }">
-      <GlobalHeader aria-label="Console">
-        <GlobalHeader.Start>
+      <AppHeader aria-label="Console">
+        <AppHeader.Start>
           <IconButton
             v-if="compact"
             icon="ai ai-menu"
@@ -95,8 +95,8 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
             size="medium"
             @click="openNavigation"
           />
-        </GlobalHeader.Start>
-        <GlobalHeader.End>
+        </AppHeader.Start>
+        <AppHeader.End>
           <IconButton
             icon="ai ai-circle-help"
             aria-label="Help"
@@ -104,8 +104,8 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
             size="medium"
             @click="toggleTools"
           />
-        </GlobalHeader.End>
-      </GlobalHeader>
+        </AppHeader.End>
+      </AppHeader>
     </template>
     <template #notifications>…</template>
     <template #breadcrumbs>…</template>

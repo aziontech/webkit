@@ -2,7 +2,7 @@
   import Card from '@aziontech/webkit/card'
   import Item from '@aziontech/webkit/item'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import { ref } from 'vue'
 
@@ -36,7 +36,7 @@
       <Card :padded="false">
         <template #default>
           <Item.List>
-            <SettingRow
+            <SettingsRow
               title="Font family"
               description="The primary sans typeface across the interface."
             >
@@ -59,8 +59,8 @@
                   </Select.Item>
                 </Select.Content>
               </Select>
-            </SettingRow>
-            <SettingRow
+            </SettingsRow>
+            <SettingsRow
               title="System appearance"
               description="Follow the operating system, or force a light or dark theme."
             >
@@ -83,7 +83,7 @@
                   </Select.Item>
                 </Select.Content>
               </Select>
-            </SettingRow>
+            </SettingsRow>
           </Item.List>
         </template>
       </Card>

@@ -313,7 +313,7 @@ export const COMPONENT_TERMS = {
     'big number'
   ],
   'copy-button': ['copy to clipboard', 'copiar', 'copy button', 'copy text', 'copy value'],
-  'card-pricing': ['pricing card', 'plan card', 'price card'],
+  'pricing-card': ['pricing card', 'plan card', 'price card'],
   'code-block': [
     'code snippet',
     'trecho de código',
@@ -405,9 +405,9 @@ export const COMPONENT_TERMS = {
   sidebar: ['menu lateral', 'barra lateral'],
   slider: ['range slider', 'controle deslizante', 'deslizador'],
   'page-header': ['page title', 'title with actions', 'page heading', 'page header'],
-  'global-header': ['top bar', 'app bar', 'header bar', 'top navigation bar', 'top navigation'],
+  'app-header': ['top bar', 'app bar', 'header bar', 'top navigation bar', 'top navigation'],
   'console-layout': ['app shell', 'layout', 'console layout', 'page shell'],
-  'log-view': ['logs', 'show logs', 'build output', 'deploy logs', 'terminal output'],
+  'log-viewer': ['logs', 'show logs', 'build output', 'deploy logs', 'terminal output'],
   item: ['list', 'list of items', 'row list'],
   'key-value-list': ['description list', 'details', 'properties', 'metadata'],
   'collection-preferences': ['column selector', 'visible columns', 'table preferences'],
@@ -424,18 +424,14 @@ export const COMPONENT_TERMS = {
   ],
   'data-grid': ['data grid', 'editable grid', 'spreadsheet', 'edit cells', 'inline edit table'],
   'client-quotes': ['testimonial', 'testimonials', 'customer quotes', 'depoimentos', 'testimonios'],
-  'stats-band': ['stats', 'stats band', 'proof figures'],
+  'stats-section': ['stats', 'stats band', 'proof figures'],
   'closing-call-to-action': ['cta', 'closing cta', 'call to action band'],
-  ticker: ['marquee', 'logo marquee', 'logo ticker'],
+  marquee: ['marquee', 'logo marquee', 'logo marquee'],
   'logo-wall': ['logo cloud', 'logo wall', 'customer logos'],
   'capability-grid': ['feature grid', 'features grid', 'capabilities grid'],
-  'compare-plans': ['comparison', 'plan comparison', 'feature matrix', 'compare plans'],
+  'plan-comparison': ['comparison', 'plan comparison', 'feature matrix', 'compare plans'],
   'article-index': ['blog index', 'article index', 'resource hub', 'blog list'],
-  'closing-call-to-action-newsletter': [
-    'newsletter',
-    'newsletter signup',
-    'subscribe to newsletter'
-  ]
+  'newsletter-section': ['newsletter', 'newsletter signup', 'subscribe to newsletter']
 }
 
 export const STOPWORDS = new Set([
@@ -624,8 +620,8 @@ export const MARKETING_PAGE_GENERIC = [
 ]
 
 export const MARKETING_PAGE_FRAME = {
-  'hero-band': 25,
+  'hero-section': 25,
   'closing-call-to-action': 6,
-  'site-nav': 4,
+  'site-header': 4,
   'site-footer': 4
 }

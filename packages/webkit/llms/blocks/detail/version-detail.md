@@ -1,11 +1,11 @@
 # VersionDetail (`detail/version-detail`)
 
-> One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumb`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the Edit/RuleBuilder template. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `DataTable`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.
+> One version of a resource, opened from its Versions tab, as a page body for ConsoleLayout: the layout's last crumb is a transparent select that switches between the resource versions, each with its state Tag, or creates a new one (the page sets it with `ConsoleLayout.Breadcrumb`; below md the body's own row carries it with a Back button); the root carries `data-layout-fill`, so the layout's main gives the workspace the height under the header. In the body a horizontal `Resizable` holds the version workspace, a tab bar with Settings, Source, Device Groups, Cache Settings, Functions Instances and Rules Engine carrying the state Tag and a Version actions menu, the open tab in a fading `ScrollArea`, and the version bar pinned to the bottom that names the state and holds the Save and deploy `SplitButton` on a draft or Add Version and Redeploy on a built version, and a collapsible Version history pane with the current version, its changes and the earlier built versions. The primary opens on the Settings tab; the Source, Device Groups, Cache Settings and Functions Instances variants open on their tab (a list with the controls row and an add or edit `Drawer`), Creating draws the workspace as `Skeleton` wires while a new version is copied, NotFound is the `EmptyState` for a version that does not exist, and the Rules Engine tab is the Edit/RuleBuilder template. Built from `ConfirmDialog`, `PageHeader`, `PageTabs`, `SettingsSection`, `SettingsRow`, `Select`, `Resizable`, `Tabs`, `Tag`, `DropdownMenu`, `ScrollArea`, `Card`, `Item`, `Input`, `Switch`, `SplitButton`, `Button`, `Avatar`, `Field`, `Textarea`, `DataTable`, `Drawer`, `MultiSelect`, `NumberInput`, `SchemaForm`, `CodeEditor`, `Breadcrumb` and `EmptyState`; its toasts go through `toast` into the app's one toast region (ToastPlugin, or one Toaster at the app root), never a Toaster in the page body.
 
 - Surface: app
 - Source: `blocks/detail/version-detail/version-detail.vue` in `@aziontech/webkit`
 - MCP: `get_block("detail/version-detail")`
-- Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), [HelperText](../../components/helper-text.md), [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingRow](../../components/setting-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
+- Components: [Avatar](../../components/avatar.md), [Breadcrumb](../../components/breadcrumb.md), [Button](../../components/button.md), [Card](../../components/card.md), [CodeEditor](../../components/code-editor.md), [ConfirmDialog](../../components/confirm-dialog.md), [ConsoleLayout](../../components/console-layout.md), [DataTable](../../components/data-table.md), `DrawerContent`, `DrawerDescription`, [Drawer](../../components/drawer.md), `DrawerTitle`, [DropdownMenu](../../components/dropdown-menu.md), [EmptyState](../../components/empty-state.md), [Field](../../components/field.md), `FieldError`, [IconButton](../../components/icon-button.md), [Input](../../components/input.md), [Item](../../components/item.md), [MultiSelect](../../components/multi-select.md), [NumberInput](../../components/number-input.md), [PageHeader](../../components/page-header.md), [PageTabs](../../components/page-tabs.md), `PanelBody`, `PanelFooter`, `PanelHeader`, [Resizable](../../components/resizable.md), [SchemaForm](../../components/schema-form.md), [ScrollArea](../../components/scroll-area.md), [Select](../../components/select.md), [SettingsRow](../../components/settings-row.md), [SettingsSection](../../components/settings-section.md), [Skeleton](../../components/skeleton.md), [Spinner](../../components/spinner.md), [SplitButton](../../components/split-button.md), [Switch](../../components/switch.md), [Table](../../components/table.md), [Tabs](../../components/tabs.md), [Tag](../../components/tag.md), [Textarea](../../components/textarea.md), [Toast](../../components/toast.md), [Tooltip](../../components/tooltip.md)
 - Skills: `webkit-layout`, `webkit-navigation`, `webkit-ui-states`
 
 ## Asked as
@@ -43,9 +43,9 @@ A horizontal `Resizable` named "Version workspace": the version settings pane, a
 
 `PageTabs` with one `Tabs.Trigger` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: a variant renders the open tab's panel, and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it.
 
-### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Switch`, `Tooltip` (required)
+### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip` (required)
 
-The open tab scrolls in a fading `ScrollArea`. A small `PageHeader` names the tab, then `SettingsSection`s (General, Modules, Subscription modules) each hold a `Card :padded="false"` with an `Item.List` of `SettingRow`s: a title, a one-sentence description and its control, an `Input` or a `Switch`. A module that needs a sales contact keeps its `Switch` disabled, explained by a `Tooltip`. On a built version the whole fieldset is disabled.
+The open tab scrolls in a fading `ScrollArea`. A small `PageHeader` names the tab, then `SettingsSection`s (General, Modules, Subscription modules) each hold a `Card :padded="false"` with an `Item.List` of `SettingsRow`s: a title, a one-sentence description and its control, an `Input` or a `Switch`. A module that needs a sales contact keeps its `Switch` disabled, explained by a `Tooltip`. On a built version the whole fieldset is disabled.
 
 ### E. Version bar — `Tag`, `SplitButton`, `Button` (required)
 
@@ -61,7 +61,7 @@ An earlier version opened from Version history keeps the page read-only and says
 
 ## List tabs
 
-Source, Device Groups, Cache Settings and Functions Instances are lists inside the version: a small `PageHeader` with an outlined add action, the controls row of `view/table-view` (search, Refresh, Download CSV, Columns) and a flush `DataTable` in a `Card`, paginated at 10. Its `#empty` slot tells a search that matches nothing (No matching, with Clear search) apart from a list with nothing yet (the add action). The name cell is a button that opens the edit `Drawer`, the same drawer the add action opens, built as in `create/create-drawer`: `SettingsSection`s of `Field`s (Device Groups, Functions Instances) or of `SettingRow`s in a `Card` (Cache Settings, reusing the rows of `edit/edit-resource#CacheSettings` plus Adaptive delivery and a Device groups `MultiSelect`). Functions Instances renders the arguments as a `SchemaForm` when the function declares a schema and as a JSON `CodeEditor` when it does not, and its function `Select` ends on Create Function. Source embeds the file browser: Upload Files in the heading, Open in Object Storage in the controls row, the folder path as a `Breadcrumb` and an `EmptyState` with Upload Files and Open Bucket. Saving a drawer changes the draft only; the version bar still deploys it.
+Source, Device Groups, Cache Settings and Functions Instances are lists inside the version: a small `PageHeader` with an outlined add action, the controls row of `view/table-view` (search, Refresh, Download CSV, Columns) and a flush `DataTable` in a `Card`, paginated at 10. Its `#empty` slot tells a search that matches nothing (No matching, with Clear search) apart from a list with nothing yet (the add action). The name cell is a button that opens the edit `Drawer`, the same drawer the add action opens, built as in `create/create-drawer`: `SettingsSection`s of `Field`s (Device Groups, Functions Instances) or of `SettingsRow`s in a `Card` (Cache Settings, reusing the rows of `edit/edit-resource#CacheSettings` plus Adaptive delivery and a Device groups `MultiSelect`). Functions Instances renders the arguments as a `SchemaForm` when the function declares a schema and as a JSON `CodeEditor` when it does not, and its function `Select` ends on Create Function. Source embeds the file browser: Upload Files in the heading, Open in Object Storage in the controls row, the folder path as a `Breadcrumb` and an `EmptyState` with Upload Files and Open Bucket. Saving a drawer changes the draft only; the version bar still deploys it.
 
 ## Creating and not found
 
@@ -141,7 +141,7 @@ While Add Version copies a built version into a new draft, the workspace is draw
 - `state/page-skeleton` — the skeleton wires Creating draws.
 - `create/deploy-drawer` — deploying a version outside this page.
 - `state/async-submit` — how the version bar locks while Save and deploy runs.
-- `SettingRow` — the row primitive of every settings section; see `skills/webkit-form` and `skills/webkit-layout`.
+- `SettingsRow` — the row primitive of every settings section; see `skills/webkit-form` and `skills/webkit-layout`.
 
 ## Variants
 
@@ -178,7 +178,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
   import Resizable from '@aziontech/webkit/resizable'
   import ScrollArea from '@aziontech/webkit/scroll-area'
   import Select from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import SplitButton from '@aziontech/webkit/split-button'
   import Switch from '@aziontech/webkit/switch'
@@ -678,7 +678,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                             <Card :padded="false">
                               <template #default>
                                 <Item.List>
-                                  <SettingRow
+                                  <SettingsRow
                                     title="Name"
                                     description="A unique and descriptive name to identify the resource."
                                   >
@@ -688,8 +688,8 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                       class="w-full"
                                       aria-label="Name"
                                     />
-                                  </SettingRow>
-                                  <SettingRow
+                                  </SettingsRow>
+                                  <SettingsRow
                                     title="Active"
                                     description="When disabled, the resource stops serving traffic."
                                     variant="compact"
@@ -698,7 +698,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                       v-model="settings.active"
                                       aria-label="Active"
                                     />
-                                  </SettingRow>
+                                  </SettingsRow>
                                 </Item.List>
                               </template>
                             </Card>
@@ -712,7 +712,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                             <Card :padded="false">
                               <template #default>
                                 <Item.List>
-                                  <SettingRow
+                                  <SettingsRow
                                     v-for="mod in defaultModules"
                                     :key="mod.key"
                                     :title="mod.title"
@@ -723,7 +723,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                       v-model="settings.modules[mod.key]"
                                       :aria-label="mod.title"
                                     />
-                                  </SettingRow>
+                                  </SettingsRow>
                                 </Item.List>
                               </template>
                             </Card>
@@ -737,7 +737,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                             <Card :padded="false">
                               <template #default>
                                 <Item.List>
-                                  <SettingRow
+                                  <SettingsRow
                                     title="WebSocket Proxy"
                                     variant="compact"
                                   >
@@ -764,7 +764,7 @@ Each variant is the same screen in another state: `get_block("detail/version-det
                                         aria-label="WebSocket Proxy"
                                       />
                                     </Tooltip>
-                                  </SettingRow>
+                                  </SettingsRow>
                                 </Item.List>
                               </template>
                             </Card>

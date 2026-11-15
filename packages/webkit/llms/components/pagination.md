@@ -25,14 +25,14 @@
 ## Don’t
 
 - The rows live in a data-driven `table` → set `paginated` on the table; it renders this pagination in its footer and wires it for you.
-- It is the previous / next pair at the end of a documentation page → use `doc-prev-next`.
+- It is the previous / next pair at the end of a documentation page → use `doc-previous-next`.
 - The content loads more as the reader scrolls or clicks "Load more" → use a `button` at the end of the list.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [table](table.md) — renders a wired pagination in its footer when `paginated` is set.
-- [doc-prev-next](doc-prev-next.md) — previous / next links between documentation pages, not numbered pages of a list.
+- [doc-previous-next](doc-previous-next.md) — previous / next links between documentation pages, not numbered pages of a list.
 
 ## Props
 

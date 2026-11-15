@@ -15,9 +15,7 @@
   const attrs = useAttrs()
   const ctx = usePopoverContext()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__title`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'popover-title')
 
   onMounted(() => {
     ctx.registerTitle()

@@ -1,12 +1,11 @@
 <script setup lang="ts">
-  import { computed, inject, onMounted, ref, useAttrs } from 'vue'
+  import { computed, onMounted, ref, useAttrs } from 'vue'
 
   import { useLocale } from '../../../../composables/use-locale/use-locale'
   import * as en from '../../../../locales/en'
   import Avatar from '../../../content/avatar/avatar.vue'
   import { relativeText, toDate } from '../../../content/timestamp/timestamp-format'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
-  import { TableInjectionKey } from '../injection-key'
   import { useMinuteClock } from './minute-clock'
 
   defineOptions({
@@ -32,11 +31,8 @@
   const attrs = useAttrs()
   const now = useMinuteClock()
   const { t, formatDate, formatRelativeTime } = useLocale({ tableCellTime: en.tableCellTime })
-  const ctx = inject(TableInjectionKey, null)
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__cell-time` : 'data-table__cell-time')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-cell-time'
   )
 
   const date = computed<Date | null>(() => toDate(props.value))

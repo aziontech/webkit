@@ -1,9 +1,9 @@
 # Closing Call To Action
 
-> The last ask at the end of a landing page, followed by a hatched closing frame with no rules of its own, because the site footer under it opens with one. It is a page section — the site places it from a `{ _id: 'closing-call-to-action', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `button`, `frame-box` and `texture-material`. `variant` picks the layout only: `split` sets the headline and the primary action in a raised lead cell beside an aside cell carrying the description and the secondary action, over a tall closing frame; `panel` sets the copy and its actions on one surface, over a short closing frame; `primary` is the loud close, one centred ask on the canvas under a pixelated texture whose waves keep travelling, over a tall closing frame. All three take the same copy, the same two actions and an optional copyable shell `command` set before the actions. `frame` draws the closing frame alone, with no ask: the close of a page whose last band already carries its own action. `hatch` turns the closing frame off when another closing band stacks directly below and draws the shared one (`site-page` sets it for stacked closings). In `primary`, `audiences` turns the ask into a switch between ways in (a person or an agent): each audience swaps in its own copyable line and actions, and a typed line (`typedLead` + `typedWords`) loops under them; the switch block loads on demand, only when `audiences` is set.
+> The last ask at the end of a landing page, followed by a hatched closing frame with no rules of its own, because the site footer under it opens with one. It is a page section — the site places it from a `{ _id: 'closing-call-to-action', props }` entry and binds `props` straight onto it — and it composes `section-module`, `call-to-action`, `button`, `registration-frame` and `texture`. `variant` picks the layout only: `split` sets the headline and the primary action in a raised lead cell beside an aside cell carrying the description and the secondary action, over a tall closing frame; `panel` sets the copy and its actions on one surface, over a short closing frame; `primary` is the loud close, one centred ask on the canvas under a pixelated texture whose waves keep travelling, over a tall closing frame. All three take the same copy, the same two actions and an optional copyable shell `command` set before the actions. `frame` draws the closing frame alone, with no ask: the close of a page whose last band already carries its own action. `hatch` turns the closing frame off when another closing band stacks directly below and draws the shared one (`site-page` sets it for stacked closings). In `primary`, `audiences` turns the ask into a switch between ways in (a person or an agent): each audience swaps in its own copyable line and actions, and a typed line (`typedLead` + `typedWords`) loops under them; the switch block loads on demand, only when `audiences` is set.
 
 - Import: `import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [closing-call-to-action.json](https://github.com/aziontech/webkit/blob/main/.specs/closing-call-to-action.json)
 
 ## When to use
@@ -15,7 +15,7 @@
 
 ## Do
 
-- Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `FrameBox` + `TextureMaterial` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
+- Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
 - Set `anchor: 'contact'` so the page's contact links scroll to the close.
 - Use `variant: 'frame'` (no copy) to close a page that ends on a band with its own actions (a listing, a legal page); `site-page` draws no gap before it.
 - Turn `hatch` off only on a closing band that another closing band follows directly; the last one keeps the frame.
@@ -26,7 +26,7 @@
 
 ## Don’t
 
-- For a newsletter sign-up close → use `closing-call-to-action-newsletter`.
+- For a newsletter sign-up close → use `newsletter-section`.
 - For a close that lists deployable templates → use `template-gallery` with `closing`.
 - For an ask in the middle of a page → compose `call-to-action` directly.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
@@ -34,7 +34,7 @@
 ## Related
 
 - [call-to-action](call-to-action.md) — the framed band this section renders.
-- [closing-call-to-action-newsletter](closing-call-to-action-newsletter.md) — the closing band whose ask is a subscribe form.
+- [newsletter-section](newsletter-section.md) — the closing band whose ask is a subscribe form.
 - [template-gallery](template-gallery.md) — with `closing`, the closing band that lists deployable templates.
 
 ## Props
@@ -61,7 +61,7 @@
 
 - Visual states: `default`
 - `data-variant` mirrors the `variant` prop and drives the call-to-action layout and the closing frame height
-- `primary`: the call to action takes its `primary` register with a pixelated `texture-material` in its `background` slot; its waves stop under reduced motion (owned by `texture-material`)
+- `primary`: the call to action takes its `primary` register with a pixelated `texture` in its `background` slot; its waves stop under reduced motion (owned by `texture`)
 - `frame`: only the tall closing frame renders, whatever the copy; `hatch` does not apply
 - `hatch` off: the band renders without its closing frame
 - Empty: when `title` is empty the band renders nothing but its root (except in `frame`)
@@ -83,11 +83,11 @@
 - Layout: logical utilities only (`ms-px` on the typed-line cursor); the split cells mirror as `call-to-action` lays them out.
 - Icons: the trailing chevron on an action mirrors with `button`; the texture is not mirrored.
 - Keyboard: the audience switch's arrow keys follow the direction (owned by `toggle-group`); nothing else handles arrows.
-- User data: the command line renders `dir="ltr"` (owned by `section-command`).
+- User data: the command line renders `dir="ltr"` (owned by `copy-command`).
 
 ## Internationalization
 
-No built-in strings of its own: every visible text is a prop from the page JSON, including the switch, field and copy-button names of `audiences` (`audiencesAriaLabel`, `lineAriaLabel`, `copy.label`). The command line's field and copy button names come from `section-command` (`sectionCommand.command`, `sectionCommand.copyCommand`).
+No built-in strings of its own: every visible text is a prop from the page JSON, including the switch, field and copy-button names of `audiences` (`audiencesAriaLabel`, `lineAriaLabel`, `copy.label`). The command line's field and copy button names come from `copy-command` (`copyCommand.command`, `copyCommand.copyCommand`).
 
 - Formatting: none.
 

@@ -1,8 +1,7 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { SidebarInjectionKey } from './injection-key'
 
   defineOptions({
     name: 'SidebarHeader',
@@ -14,13 +13,8 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(SidebarInjectionKey)
 
-  const testId = computed(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      `${ctx?.testId ?? 'layout-sidebar'}__header-region`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sidebar-header')
 </script>
 
 <template>

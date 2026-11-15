@@ -3,53 +3,54 @@ import { type Component, defineAsyncComponent, markRaw } from 'vue'
 export type SitePageSectionLoader = () => Promise<{ default: Component }>
 
 export const sitePageSections = {
-  'architecture-tabs': () => import('../../sections/architecture-tabs/architecture-tabs.vue'),
-  'article-body': () => import('../../sections/article-body/article-body.vue'),
-  'article-cards': () => import('../../sections/article-cards/article-cards.vue'),
-  'article-highlight': () => import('../../sections/article-highlight/article-highlight.vue'),
-  'article-index': () => import('../../sections/article-index/article-index.vue'),
-  'capability-grid': () => import('../../sections/capability-grid/capability-grid.vue'),
-  'card-carousel': () => import('../../sections/card-carousel/card-carousel.vue'),
-  'client-mosaic': () => import('../../sections/client-mosaic/client-mosaic.vue'),
-  'client-mosaic-columns': () =>
-    import('../../sections/client-mosaic-columns/client-mosaic-columns.vue'),
-  'client-quotes': () => import('../../sections/client-quotes/client-quotes.vue'),
-  'cli-terminal': () => import('../../sections/cli-terminal/cli-terminal.vue'),
+  'architecture-tabs': () => import('../../section/architecture-tabs/architecture-tabs.vue'),
+  'article-body': () => import('../../section/article-body/article-body.vue'),
+  'article-cards': () => import('../../section/article-cards/article-cards.vue'),
+  'article-highlight': () => import('../../section/article-highlight/article-highlight.vue'),
+  'article-index': () => import('../../section/article-index/article-index.vue'),
+  'capability-grid': () => import('../../section/capability-grid/capability-grid.vue'),
+  'card-carousel': () => import('../../section/card-carousel/card-carousel.vue'),
+  'client-mosaic': () => import('../../section/client-mosaic/client-mosaic.vue'),
+  'client-story-columns': () =>
+    import('../../section/client-story-columns/client-story-columns.vue'),
+  'client-quotes': () => import('../../section/client-quotes/client-quotes.vue'),
+  'cli-terminal': () => import('../../section/cli-terminal/cli-terminal.vue'),
   'closing-call-to-action': () =>
-    import('../../sections/closing-call-to-action/closing-call-to-action.vue'),
-  'closing-call-to-action-newsletter': () =>
-    import('../../sections/closing-call-to-action-newsletter/closing-call-to-action-newsletter.vue'),
-  'compare-plans': () => import('../../sections/compare-plans/compare-plans.vue'),
-  'comparison-table': () => import('../../sections/comparison-table/comparison-table.vue'),
-  'compliance-badges': () => import('../../sections/compliance-badges/compliance-badges.vue'),
-  'console-panel': () => import('../../sections/console-panel/console-panel.vue'),
-  'contact-hub': () => import('../../sections/contact-hub/contact-hub.vue'),
-  'faq-section': () => import('../../sections/faq-section/faq-section.vue'),
-  'feature-scroll': () => import('../../sections/feature-scroll/feature-scroll.vue'),
-  'feature-tabs': () => import('../../sections/feature-tabs/feature-tabs.vue'),
-  'feature-tiles': () => import('../../sections/feature-tiles/feature-tiles.vue'),
-  'feature-widgets': () => import('../../sections/feature-widgets/feature-widgets.vue'),
-  'hero-band': () => import('../../sections/hero-band/hero-band.vue'),
-  'hero-form': () => import('../../sections/hero-form/hero-form.vue'),
-  'investor-marks': () => import('../../sections/investor-marks/investor-marks.vue'),
-  'job-posting': () => import('../../sections/job-posting/job-posting.vue'),
-  'listing-browser': () => import('../../sections/listing-browser/listing-browser.vue'),
-  'listing-table': () => import('../../sections/listing-table/listing-table.vue'),
-  'logo-wall-quote': () => import('../../sections/logo-wall-quote/logo-wall-quote.vue'),
-  'media-split-band': () => import('../../sections/media-split-band/media-split-band.vue'),
-  'media-split-stack': () => import('../../sections/media-split-stack/media-split-stack.vue'),
-  'network-section': () => import('../../sections/network-section/network-section.vue'),
-  'photo-marquee': () => import('../../sections/photo-marquee/photo-marquee.vue'),
-  'platform-directory': () => import('../../sections/platform-directory/platform-directory.vue'),
-  'pricing-plans': () => import('../../sections/pricing-plans/pricing-plans.vue'),
-  'process-scroll': () => import('../../sections/process-scroll/process-scroll.vue'),
-  'recognition-marquee': () => import('../../sections/recognition-marquee/recognition-marquee.vue'),
-  'section-command': () => import('../../sections/section-command/section-command.vue'),
-  'stats-band': () => import('../../sections/stats-band/stats-band.vue'),
-  'story-library': () => import('../../sections/story-library/story-library.vue'),
-  'subject-library': () => import('../../sections/subject-library/subject-library.vue'),
-  'template-gallery': () => import('../../sections/template-gallery/template-gallery.vue'),
-  'use-cases': () => import('../../sections/use-cases/use-cases.vue')
+    import('../../section/closing-call-to-action/closing-call-to-action.vue'),
+  'newsletter-section': () => import('../../section/newsletter-section/newsletter-section.vue'),
+  'plan-comparison': () => import('../../section/plan-comparison/plan-comparison.vue'),
+  'competitor-comparison': () =>
+    import('../../section/competitor-comparison/competitor-comparison.vue'),
+  'compliance-logos': () => import('../../section/compliance-logos/compliance-logos.vue'),
+  'console-showcase': () => import('../../section/console-showcase/console-showcase.vue'),
+  'contact-hub': () => import('../../section/contact-hub/contact-hub.vue'),
+  'faq-section': () => import('../../section/faq-section/faq-section.vue'),
+  'feature-scroll': () => import('../../section/feature-scroll/feature-scroll.vue'),
+  'feature-tabs': () => import('../../section/feature-tabs/feature-tabs.vue'),
+  'feature-tiles': () => import('../../section/feature-tiles/feature-tiles.vue'),
+  'feature-widgets': () => import('../../section/feature-widgets/feature-widgets.vue'),
+  'hero-section': () => import('../../section/hero-section/hero-section.vue'),
+  'hero-form-section': () => import('../../section/hero-form-section/hero-form-section.vue'),
+  'investor-marks': () => import('../../section/investor-marks/investor-marks.vue'),
+  'job-posting': () => import('../../section/job-posting/job-posting.vue'),
+  'listing-index': () => import('../../section/listing-index/listing-index.vue'),
+  'listing-table': () => import('../../section/listing-table/listing-table.vue'),
+  'logo-wall-section': () => import('../../section/logo-wall-section/logo-wall-section.vue'),
+  'media-split-section': () => import('../../section/media-split-section/media-split-section.vue'),
+  'media-split-stack-section': () =>
+    import('../../section/media-split-stack-section/media-split-stack-section.vue'),
+  'network-section': () => import('../../section/network-section/network-section.vue'),
+  'photo-marquee': () => import('../../section/photo-marquee/photo-marquee.vue'),
+  'platform-directory': () => import('../../section/platform-directory/platform-directory.vue'),
+  'pricing-plans': () => import('../../section/pricing-plans/pricing-plans.vue'),
+  'process-scroll': () => import('../../section/process-scroll/process-scroll.vue'),
+  'recognition-marquee': () => import('../../section/recognition-marquee/recognition-marquee.vue'),
+  'copy-command': () => import('../../section/copy-command/copy-command.vue'),
+  'stats-section': () => import('../../section/stats-section/stats-section.vue'),
+  'story-index': () => import('../../section/story-index/story-index.vue'),
+  'subject-grid': () => import('../../section/subject-grid/subject-grid.vue'),
+  'template-gallery': () => import('../../section/template-gallery/template-gallery.vue'),
+  'customer-use-cases': () => import('../../section/customer-use-cases/customer-use-cases.vue')
 } satisfies Record<string, SitePageSectionLoader>
 
 export type SitePageSectionId = keyof typeof sitePageSections
@@ -88,7 +89,7 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
     props: (p) => ({ ...p, closing: true })
   },
   'code-split': {
-    target: 'media-split-band',
+    target: 'media-split-section',
     props: (p) => {
       const action = p['primaryAction']
       return action && typeof action === 'object'
@@ -97,11 +98,11 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
     }
   },
   'compare-support-tiers': {
-    target: 'compare-plans',
+    target: 'plan-comparison',
     props: (p) => (p['tiers'] === undefined ? p : { ...without(p, 'tiers'), plans: p['tiers'] })
   },
   'customer-spotlight': {
-    target: 'client-mosaic-columns',
+    target: 'client-story-columns',
     props: (p) => ({
       ...without(p, 'items'),
       reveal: 'hover',
@@ -112,11 +113,11 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
     })
   },
   'hero-copy-on-top-art': {
-    target: 'hero-band',
+    target: 'hero-section',
     props: (p) => ({ ...p, variant: 'copy-on-top-art' })
   },
   'hero-with-opening': {
-    target: 'hero-band',
+    target: 'hero-section',
     props: (p) => ({
       variant: 'title-band',
       size: 'large',
@@ -148,7 +149,24 @@ export const sitePageSectionAliases: Record<string, SitePageSectionAlias> = {
   'use-case-links': {
     target: 'capability-grid',
     props: (p) => ({ ...p, titleVariant: 'start' })
-  }
+  },
+  'client-mosaic-columns': { target: 'client-story-columns' },
+  'closing-call-to-action-newsletter': { target: 'newsletter-section' },
+  'compare-plans': { target: 'plan-comparison' },
+  'comparison-table': { target: 'competitor-comparison' },
+  'compliance-badges': { target: 'compliance-logos' },
+  'console-panel': { target: 'console-showcase' },
+  'hero-band': { target: 'hero-section' },
+  'hero-form': { target: 'hero-form-section' },
+  'listing-browser': { target: 'listing-index' },
+  'logo-wall-quote': { target: 'logo-wall-section' },
+  'media-split-band': { target: 'media-split-section' },
+  'media-split-stack': { target: 'media-split-stack-section' },
+  'section-command': { target: 'copy-command' },
+  'stats-band': { target: 'stats-section' },
+  'story-library': { target: 'story-index' },
+  'subject-library': { target: 'subject-grid' },
+  'use-cases': { target: 'customer-use-cases' }
 }
 
 export function resolveSectionEntry(

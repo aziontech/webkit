@@ -3,7 +3,7 @@
  "binding": "FileDropzone",
  "import": "@aziontech/webkit/file-dropzone",
  "treeShakeableImport": "@aziontech/webkit/file-dropzone",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,
@@ -17,7 +17,7 @@
  ],
  "avoidWhen": [
   "Picking files by keyboard or click only, with no drag affordance → a `button` that opens a native file input is enough.",
-  "Showing the chosen files, their progress or their errors → render them yourself with `progress`, `message` or `helper-text`. The dropzone renders none of these.",
+  "Showing the chosen files, their progress or their errors → render them yourself with `progress`, `message` or `field-error`. The dropzone renders none of these.",
   "Dragging items inside the page (reordering rows, moving cards) → this component only reacts to OS drags that carry `Files`. In-page drag and drop is out of scope.",
   "A static \"nothing here yet\" panel with no drop behavior → use `empty-state`."
  ],

@@ -63,7 +63,7 @@ describe('TransferList', () => {
     describe('root render + testids', () => {
       it('renders the root grid with the default data-testid', () => {
         const { getByTestId } = render(Harness())
-        const root = getByTestId('data-transfer-list')
+        const root = getByTestId('transfer-list')
         expect(root.tagName).toBe('DIV')
       })
 
@@ -441,7 +441,7 @@ describe('TransferList', () => {
           expect((getByTestId(id) as HTMLButtonElement).disabled).toBe(true)
         }
         expect(getByTestId('transfer-list-source__list').getAttribute('aria-disabled')).toBe('true')
-        expect(getByTestId('data-transfer-list').getAttribute('data-disabled')).toBe('true')
+        expect(getByTestId('transfer-list').getAttribute('data-disabled')).toBe('true')
       })
 
       it('does not toggle selection on click when disabled', async () => {
@@ -569,7 +569,7 @@ describe('TransferList', () => {
     describe('story fixture', () => {
       it('renders the composed Default story fixture through the sub-components', () => {
         const { getByTestId, getByText } = render(Default)
-        expect(getByTestId('data-transfer-list')).toBeTruthy()
+        expect(getByTestId('transfer-list')).toBeTruthy()
         expect(getByTestId('transfer-list-source__header').textContent).toContain('Available')
         expect(getByTestId('transfer-list-target__header').textContent).toContain('Selected')
         expect(getByText('Edge Functions')).toBeTruthy()
@@ -669,7 +669,7 @@ describe('TransferList', () => {
     it('has no dataKey prop: a data-key attribute stays an attribute', () => {
       const view = render(Keyed(''), { attrs: { 'data-key': 'id' } })
       expect(sourceOptions(view.container)).toHaveLength(3)
-      expect(view.getByTestId('data-transfer-list').getAttribute('data-key')).toBe('id')
+      expect(view.getByTestId('transfer-list').getAttribute('data-key')).toBe('id')
     })
 
     it('shows an empty state in a list with no items', async () => {

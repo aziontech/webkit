@@ -2,7 +2,7 @@
 
 Every header that navigates — the console and demo top bar, the docs header, the site header —
 offers search the same way: one `SearchTrigger` (`@aziontech/webkit/search-trigger`) first in
-`GlobalHeader.End`, opening a `Command` palette, with `⌘K` on macOS and `Ctrl K` elsewhere.
+`AppHeader.End`, opening a `Command` palette, with `⌘K` on macOS and `Ctrl K` elsewhere.
 A header without it is incomplete, even when nobody asked for search.
 
 `ConsoleLayout`, `SiteLayout` and `DocLayout` already render the trigger and the palette, wired to
@@ -12,12 +12,12 @@ groups go in their `search` slot; a page opens the console palette with
 
 ## Do
 
-- Put the trigger first in `GlobalHeader.End` and wire it to the palette:
+- Put the trigger first in `AppHeader.End` and wire it to the palette:
 
   ```vue
   <script setup>
     import Command from '@aziontech/webkit/command'
-    import GlobalHeader from '@aziontech/webkit/global-header'
+    import AppHeader from '@aziontech/webkit/app-header'
     import SearchTrigger from '@aziontech/webkit/search-trigger'
     import { ref } from 'vue'
 
@@ -26,16 +26,16 @@ groups go in their `search` slot; a page opens the console palette with
 
   <template>
     <div class="@container w-full">
-      <GlobalHeader aria-label="Console">
-        <GlobalHeader.Start><!-- brand, breadcrumb --></GlobalHeader.Start>
-        <GlobalHeader.End>
+      <AppHeader aria-label="Console">
+        <AppHeader.Start><!-- brand, breadcrumb --></AppHeader.Start>
+        <AppHeader.End>
           <SearchTrigger
             collapsible
             @open="searchOpen = true"
           />
           <!-- the header's other actions -->
-        </GlobalHeader.End>
-      </GlobalHeader>
+        </AppHeader.End>
+      </AppHeader>
       <Command v-model:open="searchOpen">
         <Command.Input placeholder="Search…" />
         <Command.List>
@@ -56,8 +56,8 @@ groups go in their `search` slot; a page opens the console palette with
   header's other icon buttons; its 44 px touch area is built in. The site header keeps the folded
   form (no `@container` around it), as azion.com does.
 - Name the scope in `label` when it is narrow (`label="Search docs"`).
-- On the marketing site, `SiteNav` already carries the folded trigger: listen to its `search` event
-  (`<SiteNav @search="searchOpen = true" />`) and mount the `Command` beside it.
+- On the marketing site, `SiteHeader` already carries the folded trigger: listen to its `search` event
+  (`<SiteHeader @search="searchOpen = true" />`) and mount the `Command` beside it.
 - Without a `Command` on the page, `@open` still fires on `⌘K` / `Ctrl K`, so a custom search
   dialog gets the shortcut for free.
 - Start from a shell block (`shell/console`, `shell/docs`, `shell/site`): each
@@ -76,6 +76,6 @@ groups go in their `search` slot; a page opens the console palette with
 ## Enforced
 
 `webkit/require-header-search` (ESLint, in the recommended preset and in `webkit check`) flags a
-`GlobalHeader` with navigation (`GlobalHeader.Center`, `NavigationMenu`, or a `Sidebar` in the same
+`AppHeader` with navigation (`AppHeader.Center`, `NavigationMenu`, or a `Sidebar` in the same
 template) and no `SearchTrigger`, any `aria-keyshortcuts="Meta+K"` / `Control+K` outside
-`SearchTrigger`, and a `ai-search` button inside a `GlobalHeader`.
+`SearchTrigger`, and a `ai-search` button inside a `AppHeader`.

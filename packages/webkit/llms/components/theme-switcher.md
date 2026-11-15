@@ -3,7 +3,7 @@
 > A compact pill-shaped segmented control that lets the user pick the app color-theme mode — `system`, `dark`, or `light` — via three icon-only segments. It reflects and emits the selected mode through `v-model` and applies no global side effect itself (the app decides what each mode means). Unlike `switch` (a boolean toggle) or `tabs` (view navigation), it is a fixed three-way single-select over the theme modes.
 
 - Import: `import ThemeSwitcher from '@aziontech/webkit/theme-switcher'`
-- Category: inputs · Surface: app · Structure: monolithic
+- Category: input · Surface: app · Structure: monolithic
 - API as JSON: [theme-switcher.json](https://github.com/aziontech/webkit/blob/main/.specs/theme-switcher.json)
 
 ## When to use

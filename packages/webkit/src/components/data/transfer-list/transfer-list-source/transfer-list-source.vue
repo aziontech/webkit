@@ -4,7 +4,7 @@
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import EmptyState from '../../../feedback/empty-state/empty-state.vue'
-  import Spinner from '../../../utils/spinner/spinner.vue'
+  import Spinner from '../../../feedback/spinner/spinner.vue'
   import { useTransferListSide } from '../composables/use-transfer-list-side'
   import { TransferListInjectionKey, type TransferListSide } from '../injection-key'
   import { getItemTransitionStyle, transferListItemTransitionClasses } from '../presets/transitions'

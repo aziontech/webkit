@@ -2,7 +2,7 @@
  "purpose": "The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the \"On this page\" rail (`DocOnThisPage`) on the inline end with its own slot below it, and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article, rendered through the default slot.",
  "useWhen": [
   "Every documentation page (guide, reference, legal, changelog): put one `DocLayout` in the app's root (around `RouterView`) and render each page's article as its default slot.",
-  "A docs site that needs the navigation rail, the outline and the search palette without hand-composing `GlobalHeader`, `Sidebar`, `SidebarMenu`, `DocOnThisPage`, `Drawer` and `Command`."
+  "A docs site that needs the navigation rail, the outline and the search palette without hand-composing `AppHeader`, `Sidebar`, `SidebarMenu`, `DocOnThisPage`, `Drawer` and `Command`."
  ],
  "avoidWhen": [
   "The signed-in console → `ConsoleLayout`. Marketing pages → `SiteLayout`.",

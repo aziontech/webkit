@@ -28,14 +28,12 @@ export const VALUE_DEPRECATIONS = [
 export const DOCUMENTED_DEPRECATIONS = [
   { file: 'packages/webkit/examples/select/multiple.vue', message: 'prop multiple' },
   {
-    file: 'packages/webkit/src/components/content/product-widget/widgets/edge-dns-dnssec-fragment.vue',
+    file: 'packages/webkit/src/components/content/console-mockup/widgets/edge-dns-dnssec-fragment.vue',
     message: 'prop focused'
   }
 ]
 
-export const SAME_NAME_ATTRIBUTES = [
-  { component: 'inputs/checkbox/checkbox.vue', prop: 'tabindex' }
-]
+export const SAME_NAME_ATTRIBUTES = [{ component: 'input/checkbox/checkbox.vue', prop: 'tabindex' }]
 
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', 'coverage', 'test', '__tests__'])
 const TEST_FILE = /\.(test|spec)\.[cm]?[jt]sx?$/

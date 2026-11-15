@@ -1,6 +1,6 @@
 {
   "component": "stepper",
-  "title": "Components/Primitives/Navigation/Stepper",
+  "title": "Components/Navigation/Stepper",
   "examples": [
     {
       "name": "Default",

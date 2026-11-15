@@ -1,13 +1,13 @@
 ---
 name: input-group
-category: inputs
+category: input
 structure: composition
 status: implemented
 spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10802
   node_id: 3714:10802
-checksum: 55c8db47a2d96a6ba1aa23f9ae04c392e5363331e77c30678f4416e4ab217c75
+checksum: f919cdac6be6df9b25010410b6d4aeb23d1d82ceb8e0b34ecb83fd28a19f0f63
 created: 2026-07-01
 last_updated: 2026-11-15
 ---
@@ -128,7 +128,7 @@ Standalone (tree-shakeable) imports — for consumers who want only the root or 
 Folder layout:
 
 ```
-packages/webkit/src/components/inputs/input-group/
+packages/webkit/src/components/input/input-group/
 ├── input-group.vue                      # root
 ├── input-group-addon/
 │   └── input-group-addon.vue            # <InputGroup.Addon>
@@ -139,11 +139,11 @@ packages/webkit/src/components/inputs/input-group/
 
 Public members of the compound:
 
-| Member               | Attached name           | Standalone export                     | Purpose                                                                                                                                                                                                                                                                                                                  |
-| -------------------- | ----------------------- | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Root                 | — (the compound itself) | `@aziontech/webkit/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                                                                                                                                                                                                                      |
-| `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `$`) rendered with the darker `--bg-canvas` fill and muted text.                                                                                                                                                                                             |
-| `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`, with the same inline padding as `Input` (`--spacing-sm`). Props: `modelValue` (`''`), `type` (`'text' | 'email' | 'number' | 'password'`, default `'text'`: the restricted set of `Input`, plus `password` to mask a secret value that a reveal control in an addon toggles back to `text`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid` (all `false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled` and `required` from an enclosing `Field` (an explicit prop/attribute wins). |
+| Member               | Attached name           | Standalone export                     | Purpose                                                                                                                            |
+| -------------------- | ----------------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Root                 | — (the compound itself) | `@aziontech/webkit/input-group-root`  | The container. Orchestrates borders, seams, focus ring, and states.                                                                |
+| `<InputGroup.Addon>` | `Addon`                 | `@aziontech/webkit/input-group-addon` | Static-content island (icon, text like `https://`, `.com`, `$`) rendered with the darker `--bg-canvas` fill and muted text.        |
+| `<InputGroup.Input>` | `Input`                 | `@aziontech/webkit/input-group-input` | Borderless middle `<input>`, with the same inline padding as `Input` (`--spacing-sm`). Props: `modelValue` (`''`), `type` (`'text' | 'email' | 'number' | 'password'`, default `'text'`: the restricted set of `Input`, plus `password`to mask a secret value that a reveal control in an addon toggles back to`text`), `placeholder` (`''`), `autocomplete`, `disabled`, `readonly`, `required`, `invalid`(all`false`); emits `update:modelValue`. Reads `id`, `aria-describedby`, `invalid`, `disabled`and`required`from an enclosing`Field` (an explicit prop/attribute wins). |
 
 The root reads `invalid`, `disabled` and `required` from an enclosing `Field` too, OR-ed with its own props, so a `Field`'s state styles the whole group. The root then provides the Field context to its children with `invalid` and `disabled` OR-ed with the group's own (the parent Field's id, description, title and `required` pass through), so the group's state reaches the controls inside.
 
@@ -151,11 +151,11 @@ The root reads `invalid`, `disabled` and `required` from an enclosing `Field` to
 
 Root props:
 
-| Prop       | Type                             | Default    | Required | JSDoc                                                                                                                                                                                                                                                                                                                          |
-| ---------- | -------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `size`     | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`Input`, `Select`) — set the same `size` on child controls to keep them visually aligned.                                                                                   |
-| `invalid`  | `boolean`                        | `false`    | false    | Renders the error border and marks the field controls inside invalid (`aria-invalid` on the input, never on the `role="group"` root, where ARIA does not allow it). |
-| `required` | `boolean`                        | `false`    | false    | Renders the required (warning) border. `aria-required` is not allowed on `role="group"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field).                                                                                                                                              |
+| Prop       | Type                             | Default    | Required | JSDoc                                                                                                                                                                                                                                         |
+| ---------- | -------------------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `size`     | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Size token; affects the root's height and inner addon padding. Heights: small=28px, medium=32px, large=40px. Matches the sibling input primitives (`Input`, `Select`) — set the same `size` on child controls to keep them visually aligned.  |
+| `invalid`  | `boolean`                        | `false`    | false    | Renders the error border and marks the field controls inside invalid (`aria-invalid` on the input, never on the `role="group"` root, where ARIA does not allow it).                                                                           |
+| `required` | `boolean`                        | `false`    | false    | Renders the required (warning) border. `aria-required` is not allowed on `role="group"`, so the required state belongs on the input (`InputGroup.Input` reads it from the Field).                                                             |
 | `disabled` | `boolean`                        | `false`    | false    | Renders the disabled visual, sets `aria-disabled="true"` on the root and disables the field controls inside (`InputGroup.Input`, `Input`, `Select`, …) through the Field context. A `Button` or `IconButton` inside needs its own `disabled`. |
 
 `InputGroup.Addon` props: _none_ — the sub-component is a pure presentational span whose content is the default slot. `v-bind="$attrs"` on its root lets the consumer pass `data-testid`, `aria-hidden`, `class` (merged via `cn`), etc.
@@ -208,7 +208,7 @@ Root props:
 | root surface (disabled) | `var(--bg-disabled)`                                                                       |
 | root text (disabled)    | `var(--text-disabled)`                                                                     |
 | root border width       | `border` (Tailwind utility)                                                                |
-| root shape              | `var(--shape-control)`                                                                    |
+| root shape              | `var(--shape-control)`                                                                     |
 | root height (small)     | `h-7` (Tailwind utility)                                                                   |
 | root height (medium)    | `h-8` (Tailwind utility)                                                                   |
 | root height (large)     | `h-10` (Tailwind utility)                                                                  |

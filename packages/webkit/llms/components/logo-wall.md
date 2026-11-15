@@ -16,7 +16,7 @@
 
 ## Do
 
-- Place the wall inside a `frame-box` (in a `section-module`, as every framed band is). The grid is `card-grid`'s `flush` frame: the surrounding frame draws the outer rules and the cells lay their right and bottom rules onto it.
+- Place the wall inside a `registration-frame` (in a `section-module`, as every framed band is). The grid is `card-grid`'s `flush` frame: the surrounding frame draws the outer rules and the cells lay their right and bottom rules onto it.
 - Supply marks that read on the page's own surface. The component applies no colour filter, so a mark that only works on one theme will not work on both; brand-colour marks read on either. When the marks come from a registry that already places them per theme, render them through the `mark` slot and keep `items` as the list they are drawn from.
 - Set `shape: 'compact'` on a mark that is close to square (a roundel, a monogram) so it sits taller than the wordmarks beside it and all of them read at one visual weight.
 - Give every mark a real `alt` — the company name. A linked cell is announced as `linkLabel`, then that name ("Read story, Magalu").
@@ -28,18 +28,18 @@
 
 ## Don’t
 
-- For a measured claim rather than a set of names → use `big-numbers`.
+- For a measured claim rather than a set of names → use `stats`.
 - For one customer's statement → use `quote`.
 - For a single brand mark, such as the product's own → use `brand`.
-- For a grid of described features rather than marks → use `topic` in a `card-grid`.
-- For a moving strip of many small marks, such as a tool stack → use `ticker`.
+- For a grid of described features rather than marks → use `feature-item` in a `card-grid`.
+- For a moving strip of many small marks, such as a tool stack → use `marquee`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [card-grid](card-grid.md) — the frame register the wall is built on; its cells draw the rules and marks.
 - [quote](quote.md) — one named customer's statement; the wall shows many without words.
-- [big-numbers](big-numbers.md) — the numeric form of the same proof band.
+- [stats](stats.md) — the numeric form of the same proof band.
 - [brand](brand.md) — the product's own mark, not a customer's.
 
 ## Props
@@ -96,13 +96,13 @@
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
   import nznLogo from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import LogoWall from '@aziontech/webkit/logo-wall'
   import Quote from '@aziontech/webkit/quote'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
 </script>
 
 <template>
-  <FrameBox>
+  <RegistrationFrame>
     <LogoWall
       aria-label="Clients running on Azion"
       :items="[
@@ -139,7 +139,7 @@
         />
       </template>
     </LogoWall>
-  </FrameBox>
+  </RegistrationFrame>
 </template>
 ```
 
@@ -153,12 +153,12 @@
   import netshoesLogo from '@aziontech/webkit/assets/netshoes-extended-color.svg'
   import nznLogo from '@aziontech/webkit/assets/nzn-extended-reversed.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import LogoWall from '@aziontech/webkit/logo-wall'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
 </script>
 
 <template>
-  <FrameBox>
+  <RegistrationFrame>
     <LogoWall
       aria-label="Clients running on Azion"
       :items="[
@@ -204,7 +204,7 @@
         }
       ]"
     />
-  </FrameBox>
+  </RegistrationFrame>
 </template>
 ```
 
@@ -222,13 +222,13 @@
   import rennerLogo from '@aziontech/webkit/assets/renner-extended-color.svg'
   import stoneLogo from '@aziontech/webkit/assets/stone-extended-color.svg'
   import zoopLogo from '@aziontech/webkit/assets/zoop-extended-color.svg'
-  import FrameBox from '@aziontech/webkit/frame-box'
   import LogoWall from '@aziontech/webkit/logo-wall'
   import Quote from '@aziontech/webkit/quote'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
 </script>
 
 <template>
-  <FrameBox>
+  <RegistrationFrame>
     <LogoWall
       variant="rectangle"
       aria-label="Clients running on Azion"
@@ -269,6 +269,6 @@
         />
       </template>
     </LogoWall>
-  </FrameBox>
+  </RegistrationFrame>
 </template>
 ```

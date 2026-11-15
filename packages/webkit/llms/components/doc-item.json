@@ -3,7 +3,7 @@
  "binding": "DocItem",
  "import": "@aziontech/webkit/doc-item",
  "treeShakeableImport": "@aziontech/webkit/doc-item",
- "category": "documentation",
+ "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
  "compoundRoot": false,
@@ -22,12 +22,12 @@
  "related": [
   "DocCard` — the cell counterpart. A card claims a whole tile; this claims one line.",
   "Item` / `ItemMedia` / `ItemContent` / `ItemTitle` / `ItemDescription` / `ItemActions` — the webkit anatomy this row composes.",
-  "FrameBox` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition."
+  "RegistrationFrame` + `ItemList` — the documented group pattern: the page draws one framed surface holding an `ItemList`, and the list rules between the rows. There is no `DocItemGroup` in the package; the group is this composition."
  ],
  "bestPractices": [
   "Keep the title to a noun phrase and let the sentence carry the verb; inline code in the sentence renders as the chip.",
   "Give every row of one list the same shape — all with glyphs or none, all linked or none — so the column reads as one object.",
-  "Compose rows inside a `FrameBox` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role=\"list\"` parent is what makes each row's `role=\"listitem\"` valid."
+  "Compose rows inside a `RegistrationFrame` (with a solid surface) holding an `ItemList`: the frame draws the single box and the list draws full-width dividers, and the `role=\"list\"` parent is what makes each row's `role=\"listitem\"` valid."
  ],
  "props": [
   {
@@ -84,11 +84,11 @@
  "examples": [
   {
    "name": "Default",
-   "sfc": "<script setup>\n  import DocItem from '@aziontech/webkit/doc-item'\n  import FrameBox from '@aziontech/webkit/frame-box'\n  import ItemList from '@aziontech/webkit/item-list'\n</script>\n\n<template>\n  <FrameBox class=\"w-full bg-(--bg-surface)\">\n    <ItemList>\n      <DocItem\n        title=\"Edge Functions\"\n        icon=\"ai ai-code\"\n        href=\"#edge-functions\"\n      >\n        Build serverless applications on Azion's global network. Workloads integrate with functions\n        natively, through a binding.\n      </DocItem>\n      <DocItem\n        title=\"Edge SQL\"\n        icon=\"ai ai-database\"\n        href=\"#edge-sql\"\n      >\n        Store relational data across the network. A workload reads it from the location that served\n        the request.\n      </DocItem>\n      <DocItem\n        title=\"Edge Cache\"\n        icon=\"ai ai-bolt\"\n        href=\"#edge-cache\"\n      >\n        Decide what is cached, for how long, and by which key.\n      </DocItem>\n    </ItemList>\n  </FrameBox>\n</template>"
+   "sfc": "<script setup>\n  import DocItem from '@aziontech/webkit/doc-item'\n  import ItemList from '@aziontech/webkit/item-list'\n  import RegistrationFrame from '@aziontech/webkit/registration-frame'\n</script>\n\n<template>\n  <RegistrationFrame class=\"w-full bg-(--bg-surface)\">\n    <ItemList>\n      <DocItem\n        title=\"Edge Functions\"\n        icon=\"ai ai-code\"\n        href=\"#edge-functions\"\n      >\n        Build serverless applications on Azion's global network. Workloads integrate with functions\n        natively, through a binding.\n      </DocItem>\n      <DocItem\n        title=\"Edge SQL\"\n        icon=\"ai ai-database\"\n        href=\"#edge-sql\"\n      >\n        Store relational data across the network. A workload reads it from the location that served\n        the request.\n      </DocItem>\n      <DocItem\n        title=\"Edge Cache\"\n        icon=\"ai ai-bolt\"\n        href=\"#edge-cache\"\n      >\n        Decide what is cached, for how long, and by which key.\n      </DocItem>\n    </ItemList>\n  </RegistrationFrame>\n</template>"
   },
   {
    "name": "Variants",
-   "sfc": "<script setup>\n  import DocItem from '@aziontech/webkit/doc-item'\n  import FrameBox from '@aziontech/webkit/frame-box'\n  import ItemList from '@aziontech/webkit/item-list'\n</script>\n\n<template>\n  <FrameBox class=\"w-full bg-(--bg-surface)\">\n    <ItemList>\n      <DocItem\n        title=\"Community templates\"\n        icon=\"ai ai-github\"\n        href=\"https://github.com/aziontech\"\n        target=\"_blank\"\n      >\n        A row that leaves the documentation trades the chevron for a diagonal arrow.\n      </DocItem>\n      <DocItem\n        title=\"Rule\"\n        icon=\"ai ai-filter\"\n      >\n        With no href the row is inert — no hover, no anchor, no trailing arrow.\n      </DocItem>\n      <DocItem title=\"Binding\">\n        The glyph is optional too: a named connection from a function to the resource it reads.\n      </DocItem>\n    </ItemList>\n  </FrameBox>\n</template>"
+   "sfc": "<script setup>\n  import DocItem from '@aziontech/webkit/doc-item'\n  import ItemList from '@aziontech/webkit/item-list'\n  import RegistrationFrame from '@aziontech/webkit/registration-frame'\n</script>\n\n<template>\n  <RegistrationFrame class=\"w-full bg-(--bg-surface)\">\n    <ItemList>\n      <DocItem\n        title=\"Community templates\"\n        icon=\"ai ai-github\"\n        href=\"https://github.com/aziontech\"\n        target=\"_blank\"\n      >\n        A row that leaves the documentation trades the chevron for a diagonal arrow.\n      </DocItem>\n      <DocItem\n        title=\"Rule\"\n        icon=\"ai ai-filter\"\n      >\n        With no href the row is inert — no hover, no anchor, no trailing arrow.\n      </DocItem>\n      <DocItem title=\"Binding\">\n        The glyph is optional too: a named connection from a function to the resource it reads.\n      </DocItem>\n    </ItemList>\n  </RegistrationFrame>\n</template>"
   }
  ],
  "docs": "components/doc-item.md"

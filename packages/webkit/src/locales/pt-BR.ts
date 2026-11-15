@@ -9,7 +9,7 @@ export const ptBR: Messages = {
     expired: 'Pedido expirado',
     confirmLabel: 'Digite {phrase} para confirmar'
   },
-  aiLoading: {
+  responseLoading: {
     generating: 'Gerando uma resposta'
   },
   artifactCanvas: {
@@ -151,7 +151,7 @@ export const ptBR: Messages = {
     emptyTitle: 'Nenhum dado disponível',
     errorTitle: 'Não foi possível carregar os dados'
   },
-  board: {
+  dashboardGrid: {
     label: 'Painel',
     item: 'Item {position}',
     moved: '{label} movido para a posição {position} de {total}.',
@@ -282,7 +282,7 @@ export const ptBR: Messages = {
     placeholder: 'Buscar em tudo',
     title: 'Menu de comandos'
   },
-  comparePlans: {
+  planComparison: {
     about: 'Sobre {label}',
     search: 'Buscar',
     searchPicker: 'Buscar {picker}',
@@ -290,7 +290,7 @@ export const ptBR: Messages = {
     included: 'Incluído',
     excluded: 'Não incluído'
   },
-  comparisonTable: {
+  competitorComparison: {
     about: 'Sobre {capability}'
   },
   confirmDialog: {
@@ -449,7 +449,7 @@ export const ptBR: Messages = {
   docPageHeader: {
     lastUpdated: 'Atualizado em'
   },
-  docPrevNext: {
+  docPreviousNext: {
     label: 'Navegação entre páginas',
     previous: 'Anterior',
     next: 'Próxima'
@@ -590,17 +590,17 @@ export const ptBR: Messages = {
   footer: {
     label: 'Rodapé'
   },
-  globalHeader: {
+  appHeader: {
     label: 'Cabeçalho global'
   },
   helpPanel: {
     label: 'Ajuda',
     learnMore: 'Saiba mais'
   },
-  heroBand: {
+  heroSection: {
     carouselLabel: 'Comprovada em cargas de trabalho críticas'
   },
-  heroForm: {
+  heroFormSection: {
     search: 'Buscar',
     noMatch: 'Nenhum resultado encontrado.'
   },
@@ -633,14 +633,14 @@ export const ptBR: Messages = {
   link: {
     label: 'Saiba mais'
   },
-  listingBrowser: {
+  listingIndex: {
     filters: 'Filtros',
     filtersApplied: '{label} ({count})',
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
     noMatch: 'Nenhum resultado encontrado.'
   },
-  logView: {
+  logViewer: {
     searchPlaceholder: 'Buscar nos logs',
     search: 'Buscar logs',
     loading: 'Carregando…',
@@ -699,7 +699,7 @@ export const ptBR: Messages = {
     increment: 'Aumentar',
     decrement: 'Diminuir'
   },
-  outcomeMark: {
+  outcomeIcon: {
     success: 'Concluído',
     danger: 'Falhou',
     warning: 'Requer atenção',
@@ -877,7 +877,7 @@ export const ptBR: Messages = {
     noMatch: 'Nenhuma página corresponde à busca.',
     pages: 'Páginas'
   },
-  siteNav: {
+  siteHeader: {
     open: 'Abrir navegação',
     home: 'Página inicial da Azion',
     search: 'Buscar',
@@ -905,7 +905,7 @@ export const ptBR: Messages = {
     complete: 'Concluída',
     upcoming: 'Não iniciada'
   },
-  storyLibrary: {
+  storyIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
     noMatch: 'Nenhum resultado encontrado.',
@@ -929,7 +929,7 @@ export const ptBR: Messages = {
     emptyDescription: 'Comece criando seu primeiro recurso.',
     errorTitle: 'Não foi possível carregar os dados'
   },
-  tableExport: {
+  tableExportButton: {
     label: 'Exportar CSV'
   },
   tableHeadCell: {
@@ -1126,17 +1126,17 @@ export const ptBR: Messages = {
   otpInput: {
     label: 'Código de uso único'
   },
-  consolePanel: {
+  consoleShowcase: {
     views: 'Visões do console'
   },
   runtimeApiCloud: {
     label: 'Globais disponíveis no Azion Runtime'
   },
-  clientMosaicColumns: {
+  clientStoryColumns: {
     list: 'Histórias de clientes',
     story: 'Ler a história'
   },
-  sectionCommand: {
+  copyCommand: {
     command: 'Comando',
     prompt: 'Prompt',
     copyCommand: 'Copiar comando',
@@ -1168,7 +1168,7 @@ export const ptBR: Messages = {
     copied: 'Copiado',
     newTab: '(abre em uma nova aba)'
   },
-  closingCallToActionNewsletter: {
+  newsletterSection: {
     email: 'Endereço de e-mail'
   },
   dataTable: {

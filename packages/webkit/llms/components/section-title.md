@@ -29,16 +29,16 @@
 ## Don’t
 
 - For the page's leading band and its `h1` → use `hero` instead.
-- For the top bar of an application shell → use `global-header` instead.
-- For a plain framed container with arbitrary content → use `frame-box` instead.
+- For the top bar of an application shell → use `app-header` instead.
+- For a plain framed container with arbitrary content → use `registration-frame` instead.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [hero](hero.md) — the opening band; its `Hero.Title` renders the page's `h1` at hero scale.
-- [frame-box](frame-box.md) — the frame this component composes.
+- [registration-frame](registration-frame.md) — the frame this component composes.
 - [section-gap](section-gap.md) — the empty frame that sets the air before and after a section header; this component holds no vertical air of its own beyond its padding.
-- [overline](overline.md) — the eyebrow treatment rendered above the headline.
+- [eyebrow](eyebrow.md) — the eyebrow treatment rendered above the headline.
 
 ## Props
 

@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import Button from '../../../actions/button/button.vue'
+  import Button from '../../../action/button/button.vue'
   import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
@@ -25,9 +25,7 @@
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__live-button` : 'data-table__live-button')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-live-button'
   )
 
   const isLive = computed<boolean>(() => ctx?.live?.value ?? false)

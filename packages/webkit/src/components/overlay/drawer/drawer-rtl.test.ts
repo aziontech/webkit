@@ -15,7 +15,7 @@ const closedTranslate = async (side: 'start' | 'end') => {
   )
   await nextTick()
   await nextTick()
-  const panel = document.body.querySelector<HTMLElement>('[data-testid="overlay-drawer__panel"]')
+  const panel = document.body.querySelector<HTMLElement>('[data-testid="drawer__panel"]')
   panel?.setAttribute('data-state', 'closed')
   const translate = panel ? getComputedStyle(panel).translate : ''
   view.unmount()

@@ -51,7 +51,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-quote')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'quote')
 
   const hasMark = () => Boolean(slots.mark) || props.logo.length > 0
 

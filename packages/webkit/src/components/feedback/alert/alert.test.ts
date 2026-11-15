@@ -32,7 +32,7 @@ describe('Alert', () => {
       })
       const html = await renderToString(app)
       const doc = new DOMParser().parseFromString(html, 'text/html')
-      const content = doc.querySelector('[data-testid="feedback-alert__content"]')
+      const content = doc.querySelector('[data-testid="alert__content"]')
 
       expect(content).not.toBeNull()
       expect(content?.querySelector('ul')).not.toBeNull()
@@ -45,11 +45,11 @@ describe('Alert', () => {
       props: { severity: 'info', label: 'Deployment finished.' }
     })
 
-    const root = getByTestId('feedback-alert')
+    const root = getByTestId('alert')
     expect(root).toBeTruthy()
     expect(root.getAttribute('role')).toBe('status')
     expect(root.getAttribute('data-severity')).toBe('info')
-    expect(getByTestId('feedback-alert__content').textContent).toContain('Deployment finished.')
+    expect(getByTestId('alert__content').textContent).toContain('Deployment finished.')
   })
 
   it('lets a consumer data-testid win over the derived fallback', () => {
@@ -59,28 +59,28 @@ describe('Alert', () => {
     })
 
     expect(getByTestId('my-banner')).toBeTruthy()
-    expect(queryByTestId('feedback-alert')).toBeNull()
+    expect(queryByTestId('alert')).toBeNull()
   })
 
   it('renders the content region even when label is empty', () => {
     const { getByTestId } = render(Alert, { props: {} })
 
-    expect(getByTestId('feedback-alert__content').textContent?.trim()).toBe('')
+    expect(getByTestId('alert__content').textContent?.trim()).toBe('')
   })
 
   describe('size', () => {
     it('defaults to medium on the root and the content region', () => {
       const { getByTestId } = render(Alert, { props: { label: 'Default size' } })
 
-      expect(getByTestId('feedback-alert').getAttribute('data-size')).toBe('medium')
-      expect(getByTestId('feedback-alert__content').getAttribute('data-size')).toBe('medium')
+      expect(getByTestId('alert').getAttribute('data-size')).toBe('medium')
+      expect(getByTestId('alert__content').getAttribute('data-size')).toBe('medium')
     })
 
     it.each(['small', 'medium'] as const)('maps size=%s onto data-size', (size) => {
       const { getByTestId } = render(Alert, { props: { size, label: `Size ${size}` } })
 
-      expect(getByTestId('feedback-alert').getAttribute('data-size')).toBe(size)
-      expect(getByTestId('feedback-alert__content').getAttribute('data-size')).toBe(size)
+      expect(getByTestId('alert').getAttribute('data-size')).toBe(size)
+      expect(getByTestId('alert__content').getAttribute('data-size')).toBe(size)
     })
   })
 
@@ -88,7 +88,7 @@ describe('Alert', () => {
     it('is absent when the banner carries no action or close control', () => {
       const { getByTestId } = render(Alert, { props: { label: 'Bare' } })
 
-      expect(getByTestId('feedback-alert').hasAttribute('data-trailing')).toBe(false)
+      expect(getByTestId('alert').hasAttribute('data-trailing')).toBe(false)
     })
 
     it.each([
@@ -97,7 +97,7 @@ describe('Alert', () => {
     ])('is set when %s is provided', (_name, props) => {
       const { getByTestId } = render(Alert, { props })
 
-      expect(getByTestId('feedback-alert').hasAttribute('data-trailing')).toBe(true)
+      expect(getByTestId('alert').hasAttribute('data-trailing')).toBe(true)
     })
 
     it('is set when the actions slot is filled', () => {
@@ -106,7 +106,7 @@ describe('Alert', () => {
         slots: { actions: '<button type="button">Go</button>' }
       })
 
-      expect(getByTestId('feedback-alert').hasAttribute('data-trailing')).toBe(true)
+      expect(getByTestId('alert').hasAttribute('data-trailing')).toBe(true)
     })
   })
 
@@ -115,7 +115,7 @@ describe('Alert', () => {
       props: { severity: 'danger', label: 'Boom' }
     })
 
-    const root = getByTestId('feedback-alert')
+    const root = getByTestId('alert')
     expect(root.getAttribute('data-severity')).toBe('danger')
     expect(root.getAttribute('role')).toBe('alert')
   })
@@ -125,7 +125,7 @@ describe('Alert', () => {
       props: { severity: 'warning', label: 'Careful' }
     })
 
-    const root = getByTestId('feedback-alert')
+    const root = getByTestId('alert')
     expect(root.getAttribute('data-severity')).toBe('warning')
     expect(root.getAttribute('role')).toBe('alert')
   })
@@ -135,7 +135,7 @@ describe('Alert', () => {
       props: { label: 'With icon', icon: 'ai ai-star' }
     })
 
-    const glyph = getByTestId('feedback-alert').querySelector('i')
+    const glyph = getByTestId('alert').querySelector('i')
     expect(glyph).toBeTruthy()
     expect(glyph?.className).toContain('ai-star')
     expect(glyph?.getAttribute('aria-hidden')).toBe('true')
@@ -148,7 +148,7 @@ describe('Alert', () => {
         slots: { default: 'Slot copy' }
       })
 
-      const content = getByTestId('feedback-alert__content')
+      const content = getByTestId('alert__content')
       expect(content.textContent).toContain('Slot copy')
       expect(content.textContent).not.toContain('Ignored label')
     })
@@ -158,7 +158,7 @@ describe('Alert', () => {
         slots: { default: 'Slot copy' }
       })
 
-      expect(getByTestId('feedback-alert').querySelector('i')).toBeTruthy()
+      expect(getByTestId('alert').querySelector('i')).toBeTruthy()
     })
 
     it('renders inline anchors from the default slot as real, focusable links', async () => {
@@ -169,7 +169,7 @@ describe('Alert', () => {
         }
       })
 
-      const content = getByTestId('feedback-alert__content')
+      const content = getByTestId('alert__content')
       const anchor = content.querySelector('a')
 
       expect(anchor).toBeTruthy()
@@ -194,7 +194,7 @@ describe('Alert', () => {
         props: { label: 'Has action', actionLabel: 'Retry' }
       })
 
-      const action = getByTestId('feedback-alert__action')
+      const action = getByTestId('alert__action')
       expect(action.textContent).toContain('Retry')
 
       await fireEvent.click(action)
@@ -209,7 +209,7 @@ describe('Alert', () => {
         props: { label: 'No action' }
       })
 
-      expect(queryByTestId('feedback-alert__action')).toBeNull()
+      expect(queryByTestId('alert__action')).toBeNull()
     })
 
     it('replaces the built-in button with the actions slot', () => {
@@ -219,7 +219,7 @@ describe('Alert', () => {
       })
 
       expect(getByText('Do it')).toBeTruthy()
-      expect(queryByTestId('feedback-alert__action')).toBeNull()
+      expect(queryByTestId('alert__action')).toBeNull()
     })
   })
 
@@ -230,7 +230,7 @@ describe('Alert', () => {
         ...realTransition
       })
 
-      const close = getByTestId('feedback-alert__close')
+      const close = getByTestId('alert__close')
       expect(close).toBeTruthy()
 
       await fireEvent.click(close)
@@ -242,7 +242,7 @@ describe('Alert', () => {
       expect((emitted('close')[0] as unknown[])[0]).toBeInstanceOf(MouseEvent)
       // Once dismissed and unmounted, the root is gone.
       await waitFor(() => {
-        expect(queryByTestId('feedback-alert')).toBeNull()
+        expect(queryByTestId('alert')).toBeNull()
       })
     })
 
@@ -251,7 +251,7 @@ describe('Alert', () => {
         props: { label: 'Persistent' }
       })
 
-      expect(queryByTestId('feedback-alert__close')).toBeNull()
+      expect(queryByTestId('alert__close')).toBeNull()
     })
 
     it('dismisses on Escape when closable, emitting "close"', async () => {
@@ -260,7 +260,7 @@ describe('Alert', () => {
         ...realTransition
       })
 
-      const root = getByTestId('feedback-alert')
+      const root = getByTestId('alert')
       await fireEvent.keyDown(root, { key: 'Escape' })
 
       await waitFor(() => {
@@ -274,13 +274,13 @@ describe('Alert', () => {
         props: { label: 'No escape' }
       })
 
-      const root = getByTestId('feedback-alert')
+      const root = getByTestId('alert')
       await fireEvent.keyDown(root, { key: 'Escape' })
 
       // Give any pending transition a chance; the component must stay mounted and silent.
       await new Promise((resolve) => setTimeout(resolve, 50))
       expect(emitted('close')).toBeUndefined()
-      expect(getByTestId('feedback-alert')).toBeTruthy()
+      expect(getByTestId('alert')).toBeTruthy()
     })
 
     it('auto-dismisses once life expires', async () => {
@@ -299,7 +299,7 @@ describe('Alert', () => {
 
     it('sets no inline transition on the root', () => {
       const { getByTestId } = render(Alert, { props: { label: 'Fade', closable: true } })
-      expect(getByTestId('feedback-alert').style.transition).toBe('')
+      expect(getByTestId('alert').style.transition).toBe('')
     })
   })
 
@@ -345,15 +345,15 @@ describe('Alert', () => {
         props: { severity, label: `Severity ${severity}` }
       })
 
-      expect(getByTestId('feedback-alert').getAttribute('data-severity')).toBe(severity)
+      expect(getByTestId('alert').getAttribute('data-severity')).toBe(severity)
     }
   )
 
   it('composes the Default story fixture', () => {
     const { getByTestId } = render(Default)
 
-    expect(getByTestId('feedback-alert')).toBeTruthy()
-    expect(getByTestId('feedback-alert__content').textContent).toContain(
+    expect(getByTestId('alert')).toBeTruthy()
+    expect(getByTestId('alert__content').textContent).toContain(
       'Your workload finished deploying in 42 seconds.'
     )
   })
@@ -409,16 +409,16 @@ describe('Alert', () => {
         setup: () => ({ shown }),
         template: `<Alert><template #default>Saved.</template><template v-if="shown" #actions><span data-testid="probe">Slotted</span></template></Alert>`
       })
-      expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(false)
+      expect(queryByTestId('alert')?.hasAttribute('data-trailing')).toBe(false)
 
       shown.value = true
       await nextTick()
-      expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(true)
+      expect(queryByTestId('alert')?.hasAttribute('data-trailing')).toBe(true)
       expect(queryByTestId('probe')).not.toBeNull()
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('feedback-alert')?.hasAttribute('data-trailing')).toBe(false)
+      expect(queryByTestId('alert')?.hasAttribute('data-trailing')).toBe(false)
       expect(queryByTestId('probe')).toBeNull()
     })
   })
@@ -427,8 +427,8 @@ describe('Alert', () => {
     it('renders no title and no data-titled by default', () => {
       const { getByTestId, queryByTestId } = render(Alert, { props: { label: 'Saved.' } })
 
-      expect(getByTestId('feedback-alert')).not.toHaveAttribute('data-titled')
-      expect(queryByTestId('feedback-alert__title')).toBeNull()
+      expect(getByTestId('alert')).not.toHaveAttribute('data-titled')
+      expect(queryByTestId('alert__title')).toBeNull()
     })
 
     it('renders the title above the label copy and marks the root', () => {
@@ -436,9 +436,9 @@ describe('Alert', () => {
         props: { title: 'Deploy failed', label: 'Check the logs.' }
       })
 
-      const root = getByTestId('feedback-alert')
-      const title = getByTestId('feedback-alert__title')
-      const content = getByTestId('feedback-alert__content')
+      const root = getByTestId('alert')
+      const title = getByTestId('alert__title')
+      const content = getByTestId('alert__content')
       expect(root).toHaveAttribute('data-titled')
       expect(title).toHaveTextContent('Deploy failed')
       expect(content).toHaveTextContent('Check the logs.')
@@ -451,21 +451,21 @@ describe('Alert', () => {
         slots: { default: 'Requests above the limit are throttled.' }
       })
 
-      expect(getByTestId('feedback-alert__title')).toHaveTextContent('Request limit at 90%')
-      expect(getByTestId('feedback-alert__content')).toHaveTextContent('throttled')
+      expect(getByTestId('alert__title')).toHaveTextContent('Request limit at 90%')
+      expect(getByTestId('alert__content')).toHaveTextContent('throttled')
     })
 
     it('renders only the title when there is no copy', () => {
       const { getByTestId, queryByTestId } = render(Alert, { props: { title: 'Saved' } })
 
-      expect(getByTestId('feedback-alert__title')).toHaveTextContent('Saved')
-      expect(queryByTestId('feedback-alert__content')).toBeNull()
+      expect(getByTestId('alert__title')).toHaveTextContent('Saved')
+      expect(queryByTestId('alert__content')).toBeNull()
     })
 
     it('does not leak the title prop onto the root as a native tooltip', () => {
       const { getByTestId } = render(Alert, { props: { title: 'Saved', label: 'Done.' } })
 
-      expect(getByTestId('feedback-alert')).not.toHaveAttribute('title')
+      expect(getByTestId('alert')).not.toHaveAttribute('title')
     })
 
     it('reads the title inside the live region before the copy', () => {
@@ -474,8 +474,8 @@ describe('Alert', () => {
       })
 
       const region = getByRole('alert')
-      const title = region.querySelector('[data-testid="feedback-alert__title"]')
-      const content = region.querySelector('[data-testid="feedback-alert__content"]')
+      const title = region.querySelector('[data-testid="alert__title"]')
+      const content = region.querySelector('[data-testid="alert__content"]')
       expect(title).toHaveTextContent('Deploy failed')
       expect(content).toHaveTextContent('Check the logs.')
       expect(
@@ -486,7 +486,7 @@ describe('Alert', () => {
     it('renders the WithTitle example with no a11y violations', async () => {
       const { container, getAllByTestId } = render(WithTitle)
 
-      expect(getAllByTestId('feedback-alert__title')).toHaveLength(4)
+      expect(getAllByTestId('alert__title')).toHaveLength(4)
       await expectNoA11yViolations(container)
     })
   })

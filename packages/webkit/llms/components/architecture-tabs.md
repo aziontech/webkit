@@ -1,9 +1,9 @@
 # Architecture Tabs
 
-> The architecture band of a product page: a horizontal section title with one large button, over a row of up to five tabs whose active tab draws its named diagram the full width of the frame. It is a page section — the site places it from a `{ _id: 'architecture-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `media-tabs` and `diagram`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
+> The architecture band of a product page: a horizontal section title with one large button, over a row of up to five tabs whose active tab draws its named diagram the full width of the frame. It is a page section — the site places it from a `{ _id: 'architecture-tabs', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `registration-frame`, `media-tabs` and `diagram`. The tabs advance on a timer that pauses under the pointer or keyboard focus and never runs under reduced motion; that state is owned by `media-tabs`.
 
 - Import: `import ArchitectureTabs from '@aziontech/webkit/architecture-tabs'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [architecture-tabs.json](https://github.com/aziontech/webkit/blob/main/.specs/architecture-tabs.json)
 
 ## When to use
@@ -32,7 +32,7 @@
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
 | `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
+| `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty. |
 | `description` | `string` | `''` | false | Supporting sentence beside the headline. |
 | `tabsSide` | `ArchitectureTabsSide` | `'top'` | false | Side of the diagram the tabs sit on: `top`, `bottom`, `start` or `end`; start and end hold up to three tabs. |

@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 7
-checksum: d325ad4886a233d2c422fd3e8eaf5b4d0ae11a6ca5273bec5b492b1e83914abe
+checksum: 0e69098bda1d43b125d03fd359d46a09744dfa83b46407795ece1480d08ba712
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=7495-24338
   node_id: 7495:24338
@@ -28,15 +28,15 @@ The framed header row that opens a page section: an optional overline, the secti
 ## When NOT to use
 
 - For the page's leading band and its `h1` → use `hero` instead.
-- For the top bar of an application shell → use `global-header` instead.
-- For a plain framed container with arbitrary content → use `frame-box` instead.
+- For the top bar of an application shell → use `app-header` instead.
+- For a plain framed container with arbitrary content → use `registration-frame` instead.
 
 ## Related
 
 - `hero` — the opening band; its `Hero.Title` renders the page's `h1` at hero scale.
-- `frame-box` — the frame this component composes.
+- `registration-frame` — the frame this component composes.
 - `section-gap` — the empty frame that sets the air before and after a section header; this component holds no vertical air of its own beyond its padding.
-- `overline` — the eyebrow treatment rendered above the headline.
+- `eyebrow` — the eyebrow treatment rendered above the headline.
 
 ## Best practices
 
@@ -56,8 +56,8 @@ The framed header row that opens a page section: an optional overline, the secti
 
 ```vue
 <script setup>
-import SectionTitle from '@aziontech/webkit/section-title'
-import Button from '@aziontech/webkit/button'
+  import SectionTitle from '@aziontech/webkit/section-title'
+  import Button from '@aziontech/webkit/button'
 </script>
 
 <template>
@@ -75,16 +75,16 @@ import Button from '@aziontech/webkit/button'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `title` | `string` | `—` | true | Headline of the section, rendered as the section's `h2`. |
-| `description` | `string` | `''` | false | Supporting sentence under the headline; overridden by the default slot. |
-| `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `variant` | `'center' \| 'start' \| 'split'` | `'center'` | false | Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns. |
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement. |
-| `framed` | `boolean` | `true` | false | Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both. |
-| `padding` | `'small' \| 'medium'` | `'medium'` | false | Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band. |
-| `descriptionWidth` | `'narrow' \| 'wide'` | `'narrow'` | false | Width of the description in the horizontal layout: `narrow` keeps it to the third column, `wide` runs it across the middle column too. |
+| Prop               | Type                             | Default    | Required | JSDoc                                                                                                                                                                           |
+| ------------------ | -------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`            | `string`                         | `—`        | true     | Headline of the section, rendered as the section's `h2`.                                                                                                                        |
+| `description`      | `string`                         | `''`       | false    | Supporting sentence under the headline; overridden by the default slot.                                                                                                         |
+| `eyebrow`          | `string`                         | `''`       | false    | Short uppercase overline rendered above the headline.                                                                                                                           |
+| `variant`          | `'center' \| 'start' \| 'split'` | `'center'` | false    | Layout of the header: `center` stacks and centers the copy, `start` stacks it at the start edge, `split` sets the headline and its description in two columns.                  |
+| `size`             | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | Step of the headline on the heading scale: `small` for a subsection inside a band, `medium` for an ordinary section opener, `large` for a band whose headline is the statement. |
+| `framed`           | `boolean`                        | `true`     | false    | Draw the header's own frame and padding. Turn it off when the header is composed inside a band that already owns both.                                                          |
+| `padding`          | `'small' \| 'medium'`            | `'medium'` | false    | Vertical padding of the framed header: `medium` for a section opener, `small` for a header that sits tight over its band.                                                       |
+| `descriptionWidth` | `'narrow' \| 'wide'`             | `'narrow'` | false    | Width of the description in the horizontal layout: `narrow` keeps it to the third column, `wide` runs it across the middle column too.                                          |
 
 ## Events
 
@@ -92,10 +92,10 @@ import Button from '@aziontech/webkit/button'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Description body; replaces the `description` prop when provided. |
-| `actions` | — | Call-to-action row under the copy, aligned with the chosen `variant`. |
+| Slot      | Scope | Notes                                                                 |
+| --------- | ----- | --------------------------------------------------------------------- |
+| `default` | —     | Description body; replaces the `description` prop when provided.      |
+| `actions` | —     | Call-to-action row under the copy, aligned with the chosen `variant`. |
 
 ## States
 
@@ -112,27 +112,27 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (headline, `size="small"`) | `.text-heading-lg` |
-| typography (headline, `size="medium"`) | `.text-heading-xl` |
-| typography (headline, `size="large"`) | `.text-heading-2xl` |
-| typography (description) | `.text-heading-sm` |
-| headline text | `var(--text-default)` |
-| description text | `var(--text-muted)` |
-| spacing (copy stack) | `var(--spacing-lg)` |
-| spacing (copy → actions) | `var(--spacing-xl)` |
-| spacing (actions gap) | `var(--spacing-md)` |
-| spacing (padding) | `var(--spacing-xl)` / `var(--spacing-2xl)` |
-| spacing (padding, `padding="small"`) | `var(--spacing-xl)` |
-| copy max width | `var(--container-2xl)` |
+| Region                                 | Token (DESIGN.md)                          |
+| -------------------------------------- | ------------------------------------------ |
+| typography (headline, `size="small"`)  | `.text-heading-lg`                         |
+| typography (headline, `size="medium"`) | `.text-heading-xl`                         |
+| typography (headline, `size="large"`)  | `.text-heading-2xl`                        |
+| typography (description)               | `.text-heading-sm`                         |
+| headline text                          | `var(--text-default)`                      |
+| description text                       | `var(--text-muted)`                        |
+| spacing (copy stack)                   | `var(--spacing-lg)`                        |
+| spacing (copy → actions)               | `var(--spacing-xl)`                        |
+| spacing (actions gap)                  | `var(--spacing-md)`                        |
+| spacing (padding)                      | `var(--spacing-xl)` / `var(--spacing-2xl)` |
+| spacing (padding, `padding="small"`)   | `var(--spacing-xl)`                        |
+| copy max width                         | `var(--container-2xl)`                     |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `spacing/elements/gap-elements-base` (48) | `var(--spacing-xl)` | The theme's named spacing scale has no 48px step of its own; `--spacing-xl` resolves to 3rem at the large breakpoint. TODO: confirm whether the theme should carry the Figma element-gap family. |
-| `sizing/max-width/max-w-3xl` (768) | `var(--container-2xl)` (752) | Closest step on the theme's own container scale; no follow-up expected. |
+| Figma variable                            | Temporary primitive          | Follow-up                                                                                                                                                                                        |
+| ----------------------------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `spacing/elements/gap-elements-base` (48) | `var(--spacing-xl)`          | The theme's named spacing scale has no 48px step of its own; `--spacing-xl` resolves to 3rem at the large breakpoint. TODO: confirm whether the theme should carry the Figma element-gap family. |
+| `sizing/max-width/max-w-3xl` (768)        | `var(--container-2xl)` (752) | Closest step on the theme's own container scale; no follow-up expected.                                                                                                                          |
 
 ## Accessibility (WCAG 2.1 AA)
 

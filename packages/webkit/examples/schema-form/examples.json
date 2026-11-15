@@ -1,6 +1,6 @@
 {
   "component": "schema-form",
-  "title": "Components/Primitives/Inputs/SchemaForm",
+  "title": "Components/Input/SchemaForm",
   "examples": [
     {
       "name": "Default",

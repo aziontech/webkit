@@ -51,9 +51,9 @@ A Delete team section at the end of the form opens a `ConfirmDialog` that says h
 
 ### I. Creation frame — `IconButton` (CreateTeam, EditTeam)
 
-Variants CreateTeam and EditTeam only; they add `GlobalHeader`, `Brand` and `Breadcrumb`.
+Variants CreateTeam and EditTeam only; they add `AppHeader`, `Brand` and `Breadcrumb`.
 
-Creating or editing a team is a full page in the creation frame of `create/create-page`, not a page body in `ConsoleLayout`: a `GlobalHeader` with no rail, a small outlined `IconButton` named `Back to Teams and permissions` that returns to the list, the `Brand` linking home, a `Breadcrumb` (`Teams and permissions` › `Create Team` or `Edit Team`) and nothing on the right: the frame is for one task, so it carries no account control that does nothing. The form scrolls in the `main` under it, and its `SaveBar variant="centered"` floats at the bottom of that scroll region on both pages.
+Creating or editing a team is a full page in the creation frame of `create/create-page`, not a page body in `ConsoleLayout`: a `AppHeader` with no rail, a small outlined `IconButton` named `Back to Teams and permissions` that returns to the list, the `Brand` linking home, a `Breadcrumb` (`Teams and permissions` › `Create Team` or `Edit Team`) and nothing on the right: the frame is for one task, so it carries no account control that does nothing. The form scrolls in the `main` under it, and its `SaveBar variant="centered"` floats at the bottom of that scroll region on both pages.
 
 ### J. Permission matrix — `Table`, `EmptyState` (CreateTeam, EditTeam)
 

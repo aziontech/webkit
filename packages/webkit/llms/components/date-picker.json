@@ -3,7 +3,7 @@
  "binding": "DatePicker",
  "import": "@aziontech/webkit/date-picker",
  "treeShakeableImport": "@aziontech/webkit/date-picker-root",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,

@@ -1,6 +1,6 @@
 {
   "component": "conversation-history",
-  "title": "Components/Primitives/AI/ConversationHistory",
+  "title": "Components/AI/ConversationHistory",
   "examples": [
     {
       "name": "Default",

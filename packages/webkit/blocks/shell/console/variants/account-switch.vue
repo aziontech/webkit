@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
-  import ButtonHighlight from '@aziontech/webkit/button-highlight'
   import Card from '@aziontech/webkit/card'
   import Command from '@aziontech/webkit/command'
   import ConsoleLayout, { type ConsoleLayoutNavGroup } from '@aziontech/webkit/console-layout-root'
@@ -13,6 +12,7 @@
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import HighlightButton from '@aziontech/webkit/highlight-button'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -462,7 +462,7 @@
             size="medium"
             icon="ai ai-circle-plus"
           />
-          <ButtonHighlight
+          <HighlightButton
             label="Agent"
             size="medium"
             icon="ai ai-ask-azion"

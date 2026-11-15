@@ -44,7 +44,7 @@ describe('PropertyFilter', () => {
       tokens: [{ propertyKey: 'status', operator: '=', value: 'Active' }],
       operation: 'and'
     })
-    expect(view.getByTestId('data-property-filter__token').textContent).toContain('Status = Active')
+    expect(view.getByTestId('property-filter__token').textContent).toContain('Status = Active')
   })
 
   it('commits typed text, a typed property value, and free text on Enter', async () => {
@@ -82,7 +82,7 @@ describe('PropertyFilter', () => {
         }
       }
     })
-    expect(view.getByTestId('data-property-filter__count').textContent).toBe('3 matches')
+    expect(view.getByTestId('property-filter__count').textContent).toBe('3 matches')
     const group = view.getByRole('group', { name: 'Applied filters' })
     expect(within(group).getAllByText('and')).toHaveLength(1)
     await fireEvent.click(view.getByRole('radio', { name: 'Match any' }))
@@ -116,7 +116,7 @@ describe('PropertyFilter', () => {
     await fireEvent.keyDown(input, { key: 'Enter' })
     await fireEvent.update(input, 'cdn')
     await fireEvent.keyDown(input, { key: 'Enter' })
-    expect(view.getAllByTestId('data-property-filter__token')).toHaveLength(2)
+    expect(view.getAllByTestId('property-filter__token')).toHaveLength(2)
     expect(lastQuery(view.emitted())?.tokens).toEqual([
       { operator: ':', value: 'edge' },
       { operator: ':', value: 'cdn' }
@@ -150,11 +150,11 @@ describe('PropertyFilter', () => {
 
   it('takes the consumer data-testid over the fallback', () => {
     const fallback = render(PropertyFilter, { props: { properties } })
-    expect(fallback.getByTestId('data-property-filter')).toBeTruthy()
+    expect(fallback.getByTestId('property-filter')).toBeTruthy()
     fallback.unmount()
     const view = render(PropertyFilter, { props: { properties }, attrs: { 'data-testid': 'logs' } })
     expect(view.getByTestId('logs')).toBeTruthy()
-    expect(view.queryByTestId('data-property-filter')).toBeNull()
+    expect(view.queryByTestId('property-filter')).toBeNull()
   })
 
   it('renders at most 100 suggestions and keeps the typed-text row last', async () => {
@@ -186,7 +186,7 @@ describe('PropertyFilter', () => {
     expect(view.getByRole('combobox').getAttribute('placeholder')).toBe(
       'Filtrar por propriedade ou texto'
     )
-    expect(view.getByTestId('data-property-filter__count').textContent).toBe('1 resultado')
+    expect(view.getByTestId('property-filter__count').textContent).toBe('1 resultado')
   })
 
   it('narrows a useCollection table', async () => {
@@ -196,7 +196,7 @@ describe('PropertyFilter', () => {
     await fireEvent.update(input, 'Status = Degraded')
     await fireEvent.keyDown(input, { key: 'Enter' })
     await waitFor(() =>
-      expect(view.getByTestId('data-property-filter__count').textContent).toBe('12 matches')
+      expect(view.getByTestId('property-filter__count').textContent).toBe('12 matches')
     )
   })
 
@@ -266,19 +266,19 @@ describe('PropertyFilter', () => {
       await fireEvent.keyDown(input, { key: 'Enter' })
       expect(view.emitted()['submit']).toBeUndefined()
       expect(input.getAttribute('aria-invalid')).toBe('true')
-      const error = view.getByTestId('data-property-filter__error')
+      const error = view.getByTestId('property-filter__error')
       expect(error.textContent).toBe('There is no field named “stat”.')
       expect(input.getAttribute('aria-describedby')).toBe(error.id)
       await fireEvent.update(input, 'status >= Active')
-      expect(view.getByTestId('data-property-filter__error').textContent).toBe(
+      expect(view.getByTestId('property-filter__error').textContent).toBe(
         '“>=” does not apply to status.'
       )
       await fireEvent.update(input, 'status = "Active')
-      expect(view.getByTestId('data-property-filter__error').textContent).toBe(
+      expect(view.getByTestId('property-filter__error').textContent).toBe(
         'Close the quote that opens at character 10.'
       )
       await fireEvent.update(input, 'status = Active')
-      expect(view.queryByTestId('data-property-filter__error')).toBeNull()
+      expect(view.queryByTestId('property-filter__error')).toBeNull()
       expect(input.getAttribute('aria-invalid')).toBeNull()
       expect(input.getAttribute('aria-describedby')).toBeNull()
     })
@@ -302,7 +302,7 @@ describe('PropertyFilter', () => {
       expect(lastSubmit(view.emitted())).toEqual({ text: 'status between ', query: null })
       await fireEvent.update(input, 'status')
       await fireEvent.keyDown(input, { key: 'Enter' })
-      expect(view.getByTestId('data-property-filter__error').textContent).toBe('Use between.')
+      expect(view.getByTestId('property-filter__error').textContent).toBe('Use between.')
     })
 
     it('emits submit as (event, payload) when Enter is pressed in the field', async () => {
@@ -358,7 +358,7 @@ describe('PropertyFilter', () => {
         }
       })
       const input = view.getByRole('combobox') as HTMLInputElement
-      expect(view.queryByTestId('data-property-filter__tokens')).toBeNull()
+      expect(view.queryByTestId('property-filter__tokens')).toBeNull()
       await fireEvent.focus(input)
       expect(input.getAttribute('aria-expanded')).toBe('true')
       await fireEvent.keyDown(input, { key: 'Escape' })
@@ -385,8 +385,8 @@ describe('PropertyFilter', () => {
       expect(listbox.getAttribute('dir')).toBe('rtl')
       await fireEvent.update(input, 'stat = x')
       await fireEvent.keyDown(input, { key: 'Enter' })
-      const error = view.getByTestId('data-property-filter__error')
-      const count = view.getByTestId('data-property-filter__count')
+      const error = view.getByTestId('property-filter__error')
+      const count = view.getByTestId('property-filter__count')
       expect(error.compareDocumentPosition(count) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
       expect(count.className).toContain('ms-auto')
       expect(input.closest('[dir]')?.getAttribute('dir')).toBe('auto')
@@ -395,18 +395,16 @@ describe('PropertyFilter', () => {
     it('has no axe violations with suggestions open and an error shown', async () => {
       const view = render(QueryMode)
       const input = view.getByRole('combobox', { name: 'Query events' }) as HTMLInputElement
-      expect(view.getByTestId('data-property-filter__count').textContent).toBe('6 matches')
+      expect(view.getByTestId('property-filter__count').textContent).toBe('6 matches')
       await expectNoA11yViolations(view.container)
       await fireEvent.update(input, 'level = Warning')
       await fireEvent.keyDown(input, { key: 'Enter' })
       await waitFor(() =>
-        expect(view.getByTestId('data-property-filter__count').textContent).toBe('10 matches')
+        expect(view.getByTestId('property-filter__count').textContent).toBe('10 matches')
       )
       await fireEvent.update(input, 'level = ')
       await fireEvent.keyDown(input, { key: 'Enter' })
-      expect(view.getByTestId('data-property-filter__error').textContent).toBe(
-        'Add a value after =.'
-      )
+      expect(view.getByTestId('property-filter__error').textContent).toBe('Add a value after =.')
       await fireEvent.focus(input)
       await fireEvent.update(input, 'level = W')
       await expectNoA11yViolations(view.container)
@@ -468,13 +466,11 @@ describe('PropertyFilter', () => {
         ]
       })
       await fireEvent.click(view.getByRole('button', { name: 'Add group' }))
-      expect(view.getByTestId('data-property-filter__pending-group').textContent).toContain(
-        'New group'
-      )
+      expect(view.getByTestId('property-filter__pending-group').textContent).toContain('New group')
       await fireEvent.update(input, 'Requests > 10')
       await fireEvent.keyDown(input, { key: 'Enter' })
       expect(latest(view.emitted())?.groups).toHaveLength(2)
-      expect(view.getAllByTestId('data-property-filter__group')).toHaveLength(2)
+      expect(view.getAllByTestId('property-filter__group')).toHaveLength(2)
       expect(view.getByRole('group', { name: 'Filter group 2' })).toBeTruthy()
 
       const groupToggle = view.getByRole('radiogroup', { name: 'Combine filters in group 1' })
@@ -502,9 +498,7 @@ describe('PropertyFilter', () => {
       await fireEvent.focus(input)
       await fireEvent.update(input, 'Host = a')
       await nextTick()
-      expect(
-        document.body.querySelector('[data-testid="data-property-filter__loading"]')
-      ).not.toBeNull()
+      expect(document.body.querySelector('[data-testid="property-filter__loading"]')).not.toBeNull()
       expect(document.body.querySelector('[role="listbox"]')?.getAttribute('aria-busy')).toBe(
         'true'
       )
@@ -513,9 +507,7 @@ describe('PropertyFilter', () => {
       calls[1]!.resolve([{ value: 'api.example.com', label: 'API', count: 1200 }])
       calls[0]!.resolve([{ value: 'stale.example.com' }])
       await waitFor(() =>
-        expect(
-          document.body.querySelector('[data-testid="data-property-filter__loading"]')
-        ).toBeNull()
+        expect(document.body.querySelector('[data-testid="property-filter__loading"]')).toBeNull()
       )
       expect(calls.map((c) => c.text)).toEqual(['a', 'ap'])
       const texts = options().map((o) => o.textContent ?? '')
@@ -526,7 +518,7 @@ describe('PropertyFilter', () => {
       expect(lastQuery(view.emitted())?.tokens).toEqual([
         { propertyKey: 'host', operator: '=', value: 'api.example.com' }
       ])
-      expect(view.getByTestId('data-property-filter__token').textContent).toContain('Host = API')
+      expect(view.getByTestId('property-filter__token').textContent).toContain('Host = API')
     })
 
     it('shows an error row when loading values fails', async () => {
@@ -541,8 +533,7 @@ describe('PropertyFilter', () => {
       await fireEvent.update(input, 'Host = x')
       await waitFor(() =>
         expect(
-          document.body.querySelector('[data-testid="data-property-filter__values-error"]')
-            ?.textContent
+          document.body.querySelector('[data-testid="property-filter__values-error"]')?.textContent
         ).toContain('Could not load values')
       )
     })
@@ -561,14 +552,14 @@ describe('PropertyFilter', () => {
         }
       })
       const input = view.getByRole('combobox')
-      expect(view.queryByTestId('data-property-filter__value-editor')).toBeNull()
+      expect(view.queryByTestId('property-filter__value-editor')).toBeNull()
       await fireEvent.update(input, 'Created > ')
       const editor = view.getByRole('group', { name: 'Value of Created' })
       await fireEvent.click(within(editor).getByRole('button', { name: 'Pick Created >' }))
       expect(lastQuery(view.emitted())?.tokens).toEqual([
         { propertyKey: 'created', operator: '>', value: '2026-01-15' }
       ])
-      expect(view.queryByTestId('data-property-filter__value-editor')).toBeNull()
+      expect(view.queryByTestId('property-filter__value-editor')).toBeNull()
     })
   })
 
@@ -587,11 +578,11 @@ describe('PropertyFilter', () => {
 
     it('offers the Match all / Match any toggle by default and hides it with showOperations false', () => {
       const shown = render(PropertyFilter, { props: { properties, query } })
-      expect(shown.getByTestId('data-property-filter__operation')).toBeTruthy()
+      expect(shown.getByTestId('property-filter__operation')).toBeTruthy()
       shown.unmount()
       const hidden = render(PropertyFilter, { props: { properties, query, showOperations: false } })
-      expect(hidden.queryByTestId('data-property-filter__operation')).toBeNull()
-      expect(hidden.getByTestId('data-property-filter').textContent).toContain('us-east')
+      expect(hidden.queryByTestId('property-filter__operation')).toBeNull()
+      expect(hidden.getByTestId('property-filter').textContent).toContain('us-east')
     })
   })
 })

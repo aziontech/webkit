@@ -1,10 +1,10 @@
 ---
 name: spinner
-category: utils
+category: feedback
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: de358e8d5e62a3be1117d18ae48ee4eac5b32d2021c974d2d727ebc735602207
+checksum: 0c4f6c1f44ccd0707b0dc4275190b6c6578e8b698ce547924da9098af60f0149
 style_seam: true
 created: 2026-05-22
 last_updated: 2026-11-15
@@ -25,7 +25,7 @@ A small rotating mark that says work is in progress, for a row, a log line or a 
 
 ## When NOT to use
 
-- A button waiting on its action → set `loading` on `button`, `icon-button` or `button-highlight`.
+- A button waiting on its action → set `loading` on `button`, `icon-button` or `highlight-button`.
 - Content that is still loading → use `skeleton`.
 - Progress you can measure → use `progress`.
 - A status with a color and a label → use `status-indicator`.
@@ -62,8 +62,8 @@ A small rotating mark that says work is in progress, for a row, a log line or a 
 
 ## Props
 
-| Prop        | Type     | Default | Required | JSDoc                                                                                                                         |
-| ----------- | -------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Prop        | Type     | Default | Required | JSDoc                                                                                                                                          |
+| ----------- | -------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
 | `ariaLabel` | `string` | `''`    | false    | Accessible name; when set the spinner renders role status with this name, otherwise it stays aria-hidden. Size and color come through `class`. |
 
 ## Events
@@ -86,14 +86,14 @@ A small rotating mark that says work is in progress, for a row, a log line or a 
 
 ## Tokens
 
-| Region     | Token (DESIGN.md)       |
-| ---------- | ----------------------- |
-| typography | .text-body-sm           |
-| surface    | `var(--bg-surface)`     |
-| text       | `var(--text-default)`   |
-| spacing    | `var(--spacing-3)`      |
+| Region     | Token (DESIGN.md)      |
+| ---------- | ---------------------- |
+| typography | .text-body-sm          |
+| surface    | `var(--bg-surface)`    |
+| text       | `var(--text-default)`  |
+| spacing    | `var(--spacing-3)`     |
 | shape      | `var(--shape-control)` |
-| ring       | `var(--ring-color)`     |
+| ring       | `var(--ring-color)`    |
 
 ## Theme gaps
 

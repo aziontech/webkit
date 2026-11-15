@@ -45,9 +45,7 @@
   const resolvedIcon = computed(() => props.icon || 'ai ai-box')
   const resolvedHref = computed(() => props.href || '#')
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb-item'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'breadcrumb-item')
 
   const passthroughAttrs = computed(() => {
     const rest = { ...attrs }

@@ -28,7 +28,7 @@
  "related": [
   "sidebar-menu` — the navigation rows, groups and drill levels that go in the sidebar's default slot.",
   "resizable` — draggable splits between content regions; the sidebar's rail gesture is for navigation only.",
-  "global-header` — the top bar that usually sits above the sidebar in an app shell.",
+  "app-header` — the top bar that usually sits above the sidebar in an app shell.",
   "console-layout` — the console layout template that composes the header, the sidebar and the page."
  ],
  "bestPractices": [

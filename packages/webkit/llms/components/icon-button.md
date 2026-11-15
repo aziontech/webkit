@@ -3,7 +3,7 @@
 > A square control that triggers an action with a glyph and no visible text: close, refresh, delete, more. It shares the variants, sizes and loading state of `Button`, takes its accessible name from `aria-label`, can swap between two icons in place, and renders as an anchor when `href` is set.
 
 - Import: `import IconButton from '@aziontech/webkit/icon-button'`
-- Category: actions · Surface: app · Structure: monolithic
+- Category: action · Surface: app · Structure: monolithic
 - API as JSON: [icon-button.json](https://github.com/aziontech/webkit/blob/main/.specs/icon-button.json)
 
 ## When to use

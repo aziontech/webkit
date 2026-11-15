@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it } from 'vitest'
 import { commands } from 'vitest/browser'
 import { defineComponent, effectScope, nextTick } from 'vue'
 
-import ThemeSwitcher from '../../components/inputs/theme-switcher/theme-switcher.vue'
+import ThemeSwitcher from '../../components/input/theme-switcher/theme-switcher.vue'
 import { COLOR_MODE_STORAGE_KEY, colorModeScript, setColorMode, useColorMode } from './index'
 
 const scopes: ReturnType<typeof effectScope>[] = []

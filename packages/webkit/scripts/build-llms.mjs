@@ -26,20 +26,21 @@ const SPEC_SECTIONS = [
 ]
 
 const CATEGORY_TITLES = {
-  actions: 'Actions',
+  action: 'Actions',
+  ai: 'AI',
   chart: 'Charts',
   code: 'Code',
   content: 'Content',
   data: 'Data',
-  documentation: 'Documentation',
+  docs: 'Documentation',
   feedback: 'Feedback',
-  inputs: 'Inputs',
+  input: 'Inputs',
   layout: 'Layout',
   marketing: 'Marketing',
   navigation: 'Navigation',
   overlay: 'Overlay',
-  sections: 'Marketing sections',
-  utils: 'Utilities'
+  provider: 'Providers',
+  section: 'Marketing sections'
 }
 
 function stripComments(text) {
@@ -284,7 +285,7 @@ function assetUsage(kind) {
     )
   if (kind === 'brandMarks')
     return code(
-      "<script setup>\n  import Ticker from '@aziontech/webkit/ticker'\n</script>\n\n<template>\n  <Ticker :marks=\"['itau', 'magalu', 'netshoes']\" />\n</template>"
+      "<script setup>\n  import Marquee from '@aziontech/webkit/marquee'\n</script>\n\n<template>\n  <Marquee :marks=\"['itau', 'magalu', 'netshoes']\" />\n</template>"
     )
   if (kind === 'icons')
     return code(

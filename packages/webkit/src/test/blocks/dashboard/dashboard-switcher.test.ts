@@ -21,24 +21,24 @@ const buttonByText = (text: string, root: Document | HTMLElement = document) =>
 describe('dashboard/dashboard-switcher', () => {
   it('sets the shared period with FilterMenu and shows it as a removable chip', async () => {
     const view = render(Switcher)
-    const trigger = byTestId('data-filter-menu', view.container)
+    const trigger = byTestId('filter-menu', view.container)
     expect(trigger).not.toBeNull()
     expect(view.container.querySelector('[aria-label="Filter, 1 applied"]')).not.toBeNull()
-    const chip = byTestId('data-filter-menu-chip-group__chip-period', view.container)!
+    const chip = byTestId('filter-menu-chip-group__chip-period', view.container)!
     expect(chip.textContent).toContain('Last 24 hours')
     const remove =
       chip.querySelector<HTMLElement>('[data-testid$="__remove"]') ??
       [...chip.querySelectorAll<HTMLElement>('button')].at(-1)!
     await fireEvent.click(remove)
     await waitFor(() =>
-      expect(byTestId('data-filter-menu-chip-group__chip-period', view.container)).toBeNull()
+      expect(byTestId('filter-menu-chip-group__chip-period', view.container)).toBeNull()
     )
     expect(view.container.textContent).toContain('vs previous 24 hours')
   })
 
   it('hides the shared filter for a dashboard that owns its period', () => {
     const view = render(SwitcherOwnPeriod)
-    expect(byTestId('data-filter-menu', view.container)).toBeNull()
+    expect(byTestId('filter-menu', view.container)).toBeNull()
     expect(view.getByRole('radiogroup', { name: 'Quarter' })).toBeTruthy()
   })
 

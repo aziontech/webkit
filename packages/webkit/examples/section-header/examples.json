@@ -1,6 +1,6 @@
 {
   "component": "section-header",
-  "title": "Components/Primitives/Layout/SectionHeader",
+  "title": "Components/Layout/SectionHeader",
   "examples": [
     {
       "name": "Default",

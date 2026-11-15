@@ -1,6 +1,6 @@
 {
   "component": "attribute-editor",
-  "title": "Components/Primitives/Inputs/AttributeEditor",
+  "title": "Components/Input/AttributeEditor",
   "examples": [
     {
       "name": "Default",

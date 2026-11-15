@@ -1,20 +1,20 @@
 ---
 name: listing-table
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 3fa342e9dfca99b2d30655d30fecec9fa8baa8c499a1f8f9c51fd0c488e82374
+checksum: 2412a9ce9bcdaf3ae68ebbbe1c3c231863dad24518ef153969b27a6265a2b765
 ---
 
 # ListingTable — Component Spec
 
 ## Purpose
 
-A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. It is a page section — the site places it from a `{ _id: 'listing-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `table` and, below `sm`, `item`. Each row is one link named by its first column; a pointer click anywhere on the row follows that link (with the same modifier keys), and the link stays the keyboard and screen-reader path. The other columns are metadata in the small overline, each cut to one line with its full text as a tooltip. Below `sm` the same rows become a list of items, the first column as the title and the second as the description in the small overline, with the button going full width.
+A titled preview of a longer listing: a few linked rows in columns, and one outlined button into the full list. It is a page section — the site places it from a `{ _id: 'listing-table', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `table` and, below `sm`, `item`. Each row is one link named by its first column; a pointer click anywhere on the row follows that link (with the same modifier keys), and the link stays the keyboard and screen-reader path. The other columns are metadata in the small overline, each cut to one line with its full text as a tooltip. Below `sm` the same rows become a list of items, the first column as the title and the second as the description in the small overline, with the button going full width.
 
 ## When to use
 
@@ -22,13 +22,13 @@ A titled preview of a longer listing: a few linked rows in columns, and one outl
 
 ## When NOT to use
 
-- For a filterable or paginated listing → use `listing-browser`.
+- For a filterable or paginated listing → use `listing-index`.
 - For a comparison of plans or features → use the pricing matrix.
 
 ## Related
 
 - `table` — the composition table the wide layout renders.
-- `listing-browser` — the full listing this band links into.
+- `listing-index` — the full listing this band links into.
 
 ## Best practices
 

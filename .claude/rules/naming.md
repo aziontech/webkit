@@ -147,7 +147,7 @@ Banned file names: `types`, `kinds`, `basic`, `overview`, `playground`, `demo`, 
 `transparent`, `prefix`, `suffix`, `left`, `right`, `current`, `expanded`, `failed`. The one
 exception is a prop the component really has: `types.vue` shows a `type` prop (the sort of part:
 `donut-chart`, `spark-chart`, `sidebar-menu`), `levels.vue` a `level` prop (`doc-heading`,
-`log-view`).
+`log-viewer`).
 
 | ✅                     | ❌                                        |
 | ---------------------- | ----------------------------------------- |
@@ -295,7 +295,7 @@ imports are flat ([`imports.md`](./imports.md)).
 ## 12. Category folders
 
 Singular, from a closed list: `action`, `ai`, `chart`, `code`, `content`, `data`,
-`documentation`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`,
+`docs`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`,
 `section`, `provider`. `utils` dissolves (spinner → `feedback`, webkit-provider →
 `provider`). The category never appears in an export key or a test id.
 
@@ -338,11 +338,11 @@ see [`composables.md`](./composables.md).
 
 A component's own custom property is **`--<component>-<part>-<property>`**, whole words.
 
-| ✅                       | ❌                 |
-| ------------------------ | ------------------ |
-| `--texture-material-row` | `--row`            |
-| `--card-grid-columns`    | `--card-grid-cols` |
-| `--trace-tick-at`        | `--tick-at`        |
+| ✅                    | ❌                 |
+| --------------------- | ------------------ |
+| `--texture-row`       | `--row`            |
+| `--card-grid-columns` | `--card-grid-cols` |
+| `--trace-tick-at`     | `--tick-at`        |
 
 ## 16. Tokens and utilities
 

@@ -1,6 +1,6 @@
 # Carousel
 
-> A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote` or a `topic`. Two layouts, set on the root with `variant`: `strip` (the default) sets the cards edge to edge with no gutter — each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip; `cards` separates them with a gutter and rounds each one, so the row reads as a set of standalone cards. Each card takes its width from its own `size`, never from a class. The track fades at whichever end still has cards past it. An optional `header` slot shares the row the step controls sit in: the band's title goes at the start and the controls move to the end, so a titled carousel needs no hand-built row around it.
+> A horizontally scrollable track of cards with snap points and a pair of step controls. It is built on native scrolling and CSS scroll snap rather than a carousel runtime, so it is draggable, swipeable and keyboard-scrollable by default, and it never moves on its own. The unit is Carousel, then a `Carousel.Item` card, then its content — usually a `quote` or a `feature-item`. Two layouts, set on the root with `variant`: `strip` (the default) sets the cards edge to edge with no gutter — each draws its own hairline and the next one overlaps it by a pixel, so the row reads as one ruled strip; `cards` separates them with a gutter and rounds each one, so the row reads as a set of standalone cards. Each card takes its width from its own `size`, never from a class. The track fades at whichever end still has cards past it. An optional `header` slot shares the row the step controls sit in: the band's title goes at the start and the controls move to the end, so a titled carousel needs no hand-built row around it.
 
 - Import: `import CarouselRoot from '@aziontech/webkit/carousel-root'`
 - Compound import (dot notation, not tree-shakeable): `import Carousel from '@aziontech/webkit/carousel'`
@@ -31,14 +31,14 @@
 - For content the reader must see → lay it out as a grid; anything past the first slide can be missed.
 - For a vertical list → use `item` with `ItemGroup`.
 - For a framed grid of unequal cells → use `bento-grid`.
-- For a set of figures that fits the row → use `big-numbers` or `logo-wall`, which wrap instead of scrolling.
+- For a set of figures that fits the row → use `stats` or `logo-wall`, which wrap instead of scrolling.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [bento-grid](bento-grid.md) — the framed grid, when everything should be visible at once.
 - [logo-wall](logo-wall.md) — a wrapping grid of marks; reach for the carousel only when the wall is too long.
-- [topic](topic.md) — the usual slide content.
+- [feature-item](feature-item.md) — the usual slide content.
 - [scroll-area](scroll-area.md) — the console's styled scroll container; this one owns snap points and step controls.
 
 ## Props
@@ -221,8 +221,8 @@
 ```vue
 <script setup>
   import Carousel from '@aziontech/webkit/carousel'
+  import FeatureItem from '@aziontech/webkit/feature-item'
   import SectionTitle from '@aziontech/webkit/section-title'
-  import Topic from '@aziontech/webkit/topic'
 </script>
 
 <template>
@@ -243,28 +243,28 @@
       <Carousel.Next />
     </template>
     <Carousel.Item>
-      <Topic
+      <FeatureItem
         title="E-commerce product image optimization"
         description="Serve product images at the right size and format for each device, so pages load faster and convert better."
         :heading-level="3"
       />
     </Carousel.Item>
     <Carousel.Item>
-      <Topic
+      <FeatureItem
         title="News and media site responsive images"
         description="Deliver article images that load instantly on any device, with the format chosen for each browser."
         :heading-level="3"
       />
     </Carousel.Item>
     <Carousel.Item>
-      <Topic
+      <FeatureItem
         title="User-generated content optimization"
         description="Resize and compress uploaded images on the fly from your storage, with no preprocessing step."
         :heading-level="3"
       />
     </Carousel.Item>
     <Carousel.Item>
-      <Topic
+      <FeatureItem
         title="Marketplace listing thumbnails"
         description="Crop every seller's photo to the same frame and quality, whatever size it was uploaded at."
         :heading-level="3"

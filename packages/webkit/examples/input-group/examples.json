@@ -1,6 +1,6 @@
 {
   "component": "input-group",
-  "title": "Components/Primitives/Inputs/InputGroup",
+  "title": "Components/Input/InputGroup",
   "examples": [
     {
       "name": "Default",

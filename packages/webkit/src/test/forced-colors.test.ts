@@ -9,12 +9,12 @@ import { defineComponent, nextTick } from 'vue'
 import DrawerDefault from '../../examples/drawer/default.vue'
 import DropdownMenuDefault from '../../examples/dropdown-menu/default.vue'
 import SelectDefault from '../../examples/select/default.vue'
-import Button from '../components/actions/button/button.vue'
+import Button from '../components/action/button/button.vue'
 import StatusIndicator from '../components/feedback/status-indicator/status-indicator.vue'
-import Checkbox from '../components/inputs/checkbox/checkbox.vue'
-import Chip from '../components/inputs/chip/chip.vue'
-import Input from '../components/inputs/input/input.vue'
-import Switch from '../components/inputs/switch/switch.vue'
+import Checkbox from '../components/input/checkbox/checkbox.vue'
+import Chip from '../components/input/chip/chip.vue'
+import Input from '../components/input/input/input.vue'
+import Switch from '../components/input/switch/switch.vue'
 import Tabs from '../components/navigation/tabs'
 
 const frame = () => new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
@@ -81,7 +81,7 @@ describe('forced colors (Windows high contrast)', () => {
   it('the Switch handle stays distinct from the track, on and off', async () => {
     const view = render(Switch, { props: { 'aria-label': 'Notifications' } })
     const track = view.container.querySelector('button')!
-    const handle = view.getByTestId('input-switch__handle')
+    const handle = view.getByTestId('switch__handle')
     expect(style(handle).backgroundColor).not.toBe(style(track).backgroundColor)
     await fireEvent.click(track)
     await settle()
@@ -90,7 +90,7 @@ describe('forced colors (Windows high contrast)', () => {
 
   it('the StatusIndicator dot stays painted', () => {
     const view = render(StatusIndicator, { props: { severity: 'success', label: 'Healthy' } })
-    const dot = view.getByTestId('feedback-status-indicator__dot')
+    const dot = view.getByTestId('status-indicator__dot')
     expect(style(dot).backgroundColor).not.toBe(style(document.body).backgroundColor)
     expect(style(dot).backgroundColor).not.toBe('rgba(0, 0, 0, 0)')
   })

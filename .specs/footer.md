@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: 4ba05a57f1c83a6c08e27b9e94709d2c3dd9a4c13ae6cdaaf6943d4ec6e21421
+checksum: 01b2b540684bf0298ab64b2b2852cecff7a539e2c886077c37a6323c102fa9aa
 created: 2026-08-10
 last_updated: 2026-11-15
 ---
@@ -16,11 +16,11 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Page footer for marketing and product surfaces: the bottom-of-page counterpart to `GlobalHeader`. A canvas-colored shell divided into bands by hairline rules. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`).
+Page footer for marketing and product surfaces: the bottom-of-page counterpart to `AppHeader`. A canvas-colored shell divided into bands by hairline rules. Matches the Webkit Footer component set (Figma node 5467:1638, `Type=Default` / `Type=Mobile`).
 
-**Four bands.** Top to bottom: the link columns, a row carrying the social icons and the status/language pair, and the signature band (the brand beside its tagline, in its own `FrameBox` with corner marks).
+**Four bands.** Top to bottom: the link columns, a row carrying the social icons and the status/language pair, and the signature band (the brand beside its tagline, in its own `RegistrationFrame` with corner marks).
 
-**Two placements, chosen with `variant` — the same two `GlobalHeader` has, and the bands are identical in both.** `content` is the default: the bands run full bleed across whatever zone holds the footer, and the footer adds no inset of its own because every band already carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. `site` closes a framed marketing page: the bands take the site column (`layout-column-site`: capped at `--layout-measure-site`, inset by `--layout-boundary-inline` once the window is narrower than that), side rules run down both edges, two hatched `FrameBox` gutters flank them from `2xl`, and a hatched band closes the frame below. Those three hold no content and stay out of the a11y tree. The hero band, the framed sections and this footer resolve to that one measure, which is the only reason the border-x running down the page is continuous; the top bar is deliberately one rung wider (`--layout-measure-site-header`).
+**Two placements, chosen with `variant` — the same two `AppHeader` has, and the bands are identical in both.** `content` is the default: the bands run full bleed across whatever zone holds the footer, and the footer adds no inset of its own because every band already carries `--spacing-lg` inside it — the value `--layout-boundary-inline` resolves to — so the first column title opens on the page boundary by construction. `site` closes a framed marketing page: the bands take the site column (`layout-column-site`: capped at `--layout-measure-site`, inset by `--layout-boundary-inline` once the window is narrower than that), side rules run down both edges, two hatched `RegistrationFrame` gutters flank them from `2xl`, and a hatched band closes the frame below. Those three hold no content and stay out of the a11y tree. The hero band, the framed sections and this footer resolve to that one measure, which is the only reason the border-x running down the page is continuous; the top bar is deliberately one rung wider (`--layout-measure-site-header`).
 
 The frame apparatus belongs to `site` alone, and not as a matter of taste: on a full-bleed footer the side rules land on the zone's own edges, where a hairline reads as a seam against the bezel rather than as a frame, and the `flex-1` gutters — with no slack to grow into — collapse to zero width while still painting their borders and corner marks onto the bands' own edges.
 
@@ -39,7 +39,7 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
 
 - Use Footer to compose a footer in product or docs.
 - Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).
-- The page-level footer of a site or application, paired with `GlobalHeader`.
+- The page-level footer of a site or application, paired with `AppHeader`.
 - Grouped navigation links at the bottom of the page plus a brand/social/status bar.
 
 ## When NOT to use
@@ -49,10 +49,10 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
 
 ## Related
 
-- `global-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).
+- `app-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).
 - `brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.
 - `site-footer` — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer` for a site page fed from section JSON and `Footer` when composing the bands by hand; the two do not share code yet.
-- `frame-box` — the footer's own frame: the hatched gutters, the framed column and the signature box are `FrameBox` instances (`borders` / `marks` / `hatch`).
+- `registration-frame` — the footer's own frame: the hatched gutters, the framed column and the signature box are `RegistrationFrame` instances (`borders` / `marks` / `hatch`).
 
 ## Best practices
 
@@ -175,7 +175,7 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 ## States
 
 - Visual states: `default` on the shell and columns; `default`, `hover`, `focus-visible`, `active`, `visited` on `footer-link`.
-- Placement: `data-variant="content" | "site"` on the root (from `variant`); the bands read it through `group-data-[variant=site]:` for the cap and the bottom rule, the column `FrameBox` draws its side rules and corner marks only in `site`, and the gutters render only in `site`.
+- Placement: `data-variant="content" | "site"` on the root (from `variant`); the bands read it through `group-data-[variant=site]:` for the cap and the bottom rule, the column `RegistrationFrame` draws its side rules and corner marks only in `site`, and the gutters render only in `site`.
 - Signature placement: `data-signature="always" | "compact"` on the root (from `signature`); in `compact` the signature band carries `group-data-[signature=compact]:lg:hidden`.
 - Each band renders exactly when its slot renders, read at render time rather than cached: a slot behind a `v-if` that turns off — or a slot the server rendered and the client does not — takes its band with it, so no empty bordered band is ever left under the bottom bar.
 - No `data-state`; the shell has no interactive states — slotted children own their own.
@@ -210,7 +210,7 @@ Tree-shaking alternative — the standalone root and each sub-component from its
 | signature inner padding                 | `var(--spacing-lg)`                                                                                   |
 | signature brand ↔ tagline gap           | `var(--spacing-md)` stacked / `var(--spacing-lg)` from `md`                                           |
 | tagline typography / color              | `.text-heading-xl` / `var(--text-default)`                                                            |
-| gutter texture                          | `FrameBox hatch` (pitch `var(--spacing-lg)`, `var(--border-default)`)                                 |
+| gutter texture                          | `RegistrationFrame hatch` (pitch `var(--spacing-lg)`, `var(--border-default)`)                        |
 | column title typography / color         | `.text-label-sm` / `var(--text-muted)`                                                                |
 | link typography / color                 | `.text-label-sm` / `var(--text-default)`                                                              |
 | link hover color                        | `var(--text-muted)`                                                                                   |

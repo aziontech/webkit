@@ -45,7 +45,7 @@
   }>()
 
   const attrs = useAttrs()
-  const testId = computed(() => (attrs['data-testid'] as string) ?? 'marketing-section-module')
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'section-module')
   const hasHeader = () => Boolean(slots.header || props.title)
 </script>
 

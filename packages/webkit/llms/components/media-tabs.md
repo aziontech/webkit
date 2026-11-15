@@ -33,7 +33,7 @@
 
 - [media-split](media-split.md) — one claim, one picture, no selection.
 - [illustration](illustration.md) — the official scene a tab's `media` slot usually holds.
-- [frame-box](frame-box.md) — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.
+- [registration-frame](registration-frame.md) — the registration frame the band is built from: every tab is its own frame and the media column is one more, each with all four corner marks. Every tab flushes its top rule and the media column its top and left rules, so the band draws no top rule of its own: the rule above it (a section title's, or the page frame's) is the only one, and a shared edge is one hairline.
 - [section-title](section-title.md) — the heading above the band; this component carries no title of its own.
 
 ## Props
@@ -47,9 +47,9 @@
 | `autoplay` | `boolean` | `true` | false | Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion. |
 | `autoplayInterval` | `number` | `5000` | false | Milliseconds each tab is held before the band advances. |
 | `showProgress` | `boolean` | `true` | false | Advances a hairline along the active row's bottom edge while the timer runs. |
-| `texture` | `TextureMaterialVariant` | `'none'` | false | Texture the media column is grounded with; `none` leaves it bare. |
-| `textureSize` | `TextureMaterialSize` | `'medium'` | false | Pitch of the ground's tiling — how far apart its cells sit. |
-| `textureFade` | `TextureMaterialFade` | `'vignette'` | false | How the ground fades out before the column's edges. |
+| `texture` | `TextureVariant` | `'none'` | false | Texture the media column is grounded with; `none` leaves it bare. |
+| `textureSize` | `TextureSize` | `'medium'` | false | Pitch of the ground's tiling — how far apart its cells sit. |
+| `textureFade` | `TextureFade` | `'vignette'` | false | How the ground fades out before the column's edges. |
 | `modelValue` | `number` | `0` | false | Two-way value (`v-model`). |
 
 ## Slots
@@ -75,12 +75,12 @@
 - `data-select-on` carries the interaction mode
 - The media frame shows exactly one medium at full opacity; the rest are present and transparent, which is what lets them cross-fade
 - A tab's frame carries no padding of its own; the title and description sit in an inset block, so the mobile media runs flush to the frame's edges
-- Every tab and the media column are `frame-box` cells with `borders="all"` and `marks="all"`, minus the top rule they flush against whatever sits above the band
+- Every tab and the media column are `registration-frame` cells with `borders="all"` and `marks="all"`, minus the top rule they flush against whatever sits above the band
 - The band holds at most three tabs when the side is `start` or `end` and five when it is `top` or `bottom`; `items` past the limit are dropped, so the tabs, the rotation and the media frame always agree on the same set
 - Tabs in a row (`top`, `bottom`) are compact from `lg` up: no minimum row height, `--spacing-md` of inset, the title keeps `.text-heading-md` (`.text-heading-xs` at `size` `small`, with the description at `.text-body-xs`) and the description drops to `.text-body-sm`; below `lg` they stack at the full-size treatment
 - With the tabs in a row, the media of every tab sits stacked in one cell, so the frame is as tall as the tallest medium and no shorter than `--media-tabs-media-min-lg` (`24rem` unless set); `--media-tabs-media-min` floors the active tab's media inside its row below `lg`; `--media-tabs-media-bg` sets the media's fill (`--bg-canvas` unless set)
 - `data-tabs-side` carries the side and `data-orientation` the axis it implies (`vertical` for `start` and `end`, `horizontal` for `top` and `bottom`); `top` and `bottom` share each tab's frame edges with the next so the row draws one hairline between tabs, `end` shares the seam with the media on the tabs' side and `bottom` puts the media above the row, and every side keeps one hairline at the seam between the tabs and the media
-- The media column is grounded on a `texture-material` the band paints itself, behind the media: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the column's edges. The default `none` leaves the column bare
+- The media column is grounded on a `texture` the band paints itself, behind the media: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the column's edges. The default `none` leaves the column bare
 - Empty: when `items` is empty the band renders nothing
 
 ## Accessibility
@@ -90,7 +90,7 @@
 - ARIA: the rows are a `<ul>` of `<li>`, each holding the button; the active button carries `aria-current="true"`. Each medium carries its tab's `alt` text, and the inactive media are `aria-hidden` so the frame announces one picture rather than all of them.
 - **Not `role="tablist"`.** A tab's label here is a heading and a paragraph — the copy is the content, and the media only illustrates it. Real tabs promise a roving `tabindex` and arrow-key navigation over short labels; this band is a list of claims a reader tabs through one at a time, so it is announced as the list it is rather than as a tab set whose keyboard contract it does not honour.
 - **WCAG 2.2.2 (pause, stop, hide):** autoplay is moving content, so it must be stoppable. While the timer can run, a visible outlined `IconButton` at the band's top end pauses it ("Pause rotation") and resumes it ("Resume rotation"), for touch and screen-reader users alike; the rotation also pauses while the band has hover or keyboard focus, resumes when they leave, and does not start at all under `prefers-reduced-motion`. A click selects a tab and restarts the count from that tab; it does not end the rotation.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the description is `var(--text-muted)`, a known theme-level shortfall on the light canvas (see `big-numbers`); every other text region is `var(--text-default)`.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the description is `var(--text-muted)`, a known theme-level shortfall on the light canvas (see `stats`); every other text region is `var(--text-default)`.
 - Touch target ≥40×40 px — each row's button spans the whole row, well past the minimum.
 
 ## Internationalization

@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 47f0318f1a6cf07574f1b24bec51f54bde821a244d9480b2482362fa6d6613a7
+checksum: 0ac5cc64c2de0c1031b06605e833b4c2e952cc51e92ed2fbd949a40709cfaa8e
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=8869-10008
   node_id: 8869:10008
@@ -16,7 +16,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The empty registration frame that divides two page sections. On a page with no margins between sections, this frame *is* the gap: it holds the vertical air, and its own two rules are what separate the sections it sits between — which is why it is a frame and not a spacer `div`. `size` picks how much air, on a three-step scale built from the theme's own spacing tokens.
+The empty registration frame that divides two page sections. On a page with no margins between sections, this frame _is_ the gap: it holds the vertical air, and its own two rules are what separate the sections it sits between — which is why it is a frame and not a spacer `div`. `size` picks how much air, on a three-step scale built from the theme's own spacing tokens.
 
 ## When to use
 
@@ -29,12 +29,12 @@ The empty registration frame that divides two page sections. On a page with no m
 
 - To space two elements inside a section → use the layout's own `gap-(--spacing-*)` utility.
 - To draw a single separating line with no air → use `separator` instead.
-- When the gap must hold content (a headline, a CTA) → use `section-title`, or a `frame-box` you fill yourself.
+- When the gap must hold content (a headline, a CTA) → use `section-title`, or a `registration-frame` you fill yourself.
 
 ## Related
 
-- `frame-box` — the frame this component configures; reach for it directly when the gap needs content or different rules.
-- `texture-material` — the layer that paints the ruling, composed here at its `lines` kind.
+- `registration-frame` — the frame this component configures; reach for it directly when the gap needs content or different rules.
+- `texture` — the layer that paints the ruling, composed here at its `lines` kind.
 - `section-title` — the framed header that usually follows a gap; it owns no vertical air of its own beyond its padding, so the gaps around it are what set the page's rhythm.
 - `separator` — a hairline with no vertical air.
 
@@ -52,7 +52,7 @@ The empty registration frame that divides two page sections. On a page with no m
 
 ```vue
 <script setup>
-import SectionGap from '@aziontech/webkit/section-gap'
+  import SectionGap from '@aziontech/webkit/section-gap'
 </script>
 
 <template>
@@ -62,10 +62,10 @@ import SectionGap from '@aziontech/webkit/section-gap'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `size` | `'small' \| 'medium' \| 'large'` | `'medium'` | false | How much vertical air the gap holds, as a multiple of `--spacing-2xl`: `small` is 1× (keeps two related bands close), `medium` 2× (the ordinary break), `large` 3× (opens a new part of the page). The token is responsive, so every step scales with the viewport. |
-| `hatch` | `boolean` | `false` | false | Draw the gap's ruled line texture — fine vertical rules at a fixed pitch. |
+| Prop    | Type                             | Default    | Required | JSDoc                                                                                                                                                                                                                                                               |
+| ------- | -------------------------------- | ---------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `size`  | `'small' \| 'medium' \| 'large'` | `'medium'` | false    | How much vertical air the gap holds, as a multiple of `--spacing-2xl`: `small` is 1× (keeps two related bands close), `medium` 2× (the ordinary break), `large` 3× (opens a new part of the page). The token is responsive, so every step scales with the viewport. |
+| `hatch` | `boolean`                        | `false`    | false    | Draw the gap's ruled line texture — fine vertical rules at a fixed pitch.                                                                                                                                                                                           |
 
 ## Events
 
@@ -79,7 +79,7 @@ import SectionGap from '@aziontech/webkit/section-gap'
 
 - Visual states: `default`
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
-- `data-hatch` present when the hatch texture is drawn; the texture layer itself is addressable at `marketing-section-gap__hatch`
+- `data-hatch` present when the hatch texture is drawn; the texture layer itself is addressable at `section-gap__hatch`
 
 ## Motion & Animations
 
@@ -87,15 +87,15 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| frame rule | `var(--border-default)` |
-| corner mark | `var(--border-default)` |
-| hatch line | `var(--text-default)` at 6%, via `texture-material`'s `lines` kind — mixed down so the step off the canvas is equal in both themes |
-| hatch pitch | 8 px (the `lines` kind at its `medium` step) |
-| height (small) | `var(--spacing-2xl)` — 1× |
-| height (medium) | `var(--spacing-2xl)` — 2× |
-| height (large) | `var(--spacing-2xl)` — 3× |
+| Region          | Token (DESIGN.md)                                                                                                         |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| frame rule      | `var(--border-default)`                                                                                                   |
+| corner mark     | `var(--border-default)`                                                                                                   |
+| hatch line      | `var(--text-default)` at 6%, via `texture`'s `lines` kind — mixed down so the step off the canvas is equal in both themes |
+| hatch pitch     | 8 px (the `lines` kind at its `medium` step)                                                                              |
+| height (small)  | `var(--spacing-2xl)` — 1×                                                                                                 |
+| height (medium) | `var(--spacing-2xl)` — 2×                                                                                                 |
+| height (large)  | `var(--spacing-2xl)` — 3×                                                                                                 |
 
 ## Theme gaps
 
@@ -104,15 +104,15 @@ _none_
      token is already responsive (2rem / 4rem / 6rem across breakpoints), so the gap inherits
      the responsiveness instead of declaring a scale of its own. -->
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| Figma variable                                                 | Temporary primitive              | Follow-up                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| -------------------------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `--spacing-spacer-spacer-{sm,md,lg,xl}` (80 / 128 / 160 / 240) | `var(--spacing-2xl)` × 1 / 2 / 3 | The Figma spacer family is deliberately **not** ported as its own token group: the theme's existing spacing scale already carries the page's rhythm, and a second family would be a parallel source of truth for the same decision. The multiples land on the Figma weights in the middle of the responsive range (64/128/192 at `sm`) and scale past them on a wide screen. Revisit only if the design needs a step the existing scale cannot express. |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: not applicable — the gap holds no content and no interactive surface.
 - Keyboard map: none — the gap is not focusable and is skipped by `Tab`.
-- ARIA: no role and no accessible name; the frame's rules and corner marks are decoration inherited from `frame-box`, which marks them `aria-hidden="true"`.
+- ARIA: no role and no accessible name; the frame's rules and corner marks are decoration inherited from `registration-frame`, which marks them `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons) — no text; the rules are non-informational decoration.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — not applicable, no interactive control.

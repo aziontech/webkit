@@ -72,7 +72,7 @@ describe('detail/version-detail', () => {
 describe('version-detail#EnvironmentCrumb', () => {
   it('names the environment and the version crumbs', async () => {
     render(inConsoleLayout(EnvironmentCrumb))
-    const header = within(screen.getByTestId('layout-console-layout__header'))
+    const header = within(screen.getByTestId('console-layout__header'))
     await waitFor(() =>
       expect(header.getByRole('combobox', { name: 'Switch environment' })).toBeTruthy()
     )

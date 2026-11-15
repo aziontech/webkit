@@ -1,12 +1,12 @@
 ---
 name: investor-marks
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 2
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: a41de1d1d76766cffbc62fe84faeb5dbfa6537d7cc71e3a7844c05e92e8011ec
+checksum: 41e4b8ad63c75db311bfeb028c87d6db86ff4d1517383dc136728afbb1e96b4b
 template: 2
 ---
 
@@ -14,7 +14,7 @@ template: 2
 
 ## Purpose
 
-The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a "visit website" line. It is a page section — the site places it from a `{ _id: 'investor-marks', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `bento-grid`.
+The investors band: a centered section title over a two-column bento grid where each cell is an investor's mark, linked to its site, that lifts on hover to reveal a "visit website" line. It is a page section — the site places it from a `{ _id: 'investor-marks', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame` and `bento-grid`.
 
 ## When to use
 
@@ -22,7 +22,7 @@ The investors band: a centered section title over a two-column bento grid where 
 
 ## When NOT to use
 
-- For client marks → use `client-mosaic` or `logo-wall-quote`.
+- For client marks → use `client-mosaic` or `logo-wall-section`.
 
 ## Related
 
@@ -67,7 +67,7 @@ The investors band: a centered section title over a two-column bento grid where 
 
 | Prop        | Type                  | Default | Required | JSDoc                                                                                                                                                      |
 | ----------- | --------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `eyebrow`   | `string`              | `''`    | false    | Overline above the section title.                                                                                                                          |
+| `eyebrow`   | `string`              | `''`    | false    | Eyebrow above the section title.                                                                                                                           |
 | `title`     | `string`              | `''`    | false    | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty.                                           |
 | `linkLabel` | `string`              | `''`    | false    | Line revealed under a mark on hover, and the start of each link's accessible name.                                                                         |
 | `items`     | `InvestorMarksItem[]` | `[]`    | false    | The investors, in order; each is `{ name, logo, logoLight?, href }` where `logo` is the mark on the dark theme and `logoLight` the one on the light theme. |

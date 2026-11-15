@@ -16,12 +16,12 @@ describe('Sidebar', () => {
         props: { collapsible: true, open: false },
         slots: { default: '<a href="/">Home</a>' }
       })
-      const inner = getByTestId('layout-sidebar__panel')
+      const inner = getByTestId('sidebar__panel')
       expect(getComputedStyle(inner).translate).toBe('100%')
-      const expand = await waitFor(() => getByTestId('layout-sidebar__expand'))
+      const expand = await waitFor(() => getByTestId('sidebar__expand'))
       const label = expand.lastElementChild as HTMLElement
       expect(parseFloat(getComputedStyle(label).translate)).toBeGreaterThan(0)
-      getByTestId('layout-sidebar__expand-button').focus()
+      getByTestId('sidebar__expand-button').focus()
       await waitFor(() => expect(getComputedStyle(label).translate).toMatch(/^0px/))
       host.remove()
     })

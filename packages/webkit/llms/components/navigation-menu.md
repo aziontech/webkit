@@ -9,7 +9,7 @@
 
 ## When to use
 
-- Use NavigationMenu only to build a marketing top bar with hover panels; the site already gets one from SiteNav, and app navigation uses SidebarMenu.
+- Use NavigationMenu only to build a marketing top bar with hover panels; the site already gets one from SiteHeader, and app navigation uses SidebarMenu.
 - A horizontal top bar whose items open large panels of grouped links (product and solution mega-menus).
 - A mix of panel triggers and plain links in one bar that shares hover-intent timing, keyboard navigation and a single animated popup.
 - Panel entries need a title plus a muted description line, a leading icon, or a featured "see all" link.
@@ -22,7 +22,7 @@
 - The `Viewport` teleports to `container` when set and to `body` otherwise, passing the selector through so the server renders the same tree the client hydrates.
 - Pin a wide panel to the page column with the viewport's `collision-padding`, not with override classes on the popup.
 - Set `aria-label` on the root (default `'Main'`) when the page has more than one navigation landmark.
-- Test ids: root fallback `navigation-navigation-menu` (`<category>-<name>`); every part derives from it (`navigation-navigation-menu__list`, `__item`, `__trigger`, `__icon` (the trigger chevron), `__content`, and inside the viewport `__portal`, `__positioner`, `__popup`, `__viewport`, `__arrow`, `__backdrop`), and a consumer `data-testid` wins on every part; one set on the `Viewport` lands on its popup.
+- Test ids: root fallback `navigation-menu` (its own name); every part uses its own name (`navigation-menu-list`, `navigation-menu-item`, `navigation-menu-trigger` with its chevron `navigation-menu__icon`, `navigation-menu-content`, `navigation-menu-viewport` and the viewport's inner `__portal`, `__positioner`, `__popup`, `__arrow`, `__backdrop`), and a consumer `data-testid` wins on every part; one set on the `Viewport` lands on its popup.
 - Attributes on the root (`id`, `aria-labelledby`, `data-*`, listeners) land on the `nav` landmark.
 - The compound has the shadcn parts only: `List`, `Item`, `Trigger`, `Content`, `Link`, `Viewport`. 6.0 folded the Base UI overlay chain (`Portal`, `Positioner`, `Popup`, `Arrow`, `Backdrop`) into `Viewport` props, and the `Icon` part into the trigger, which renders its own chevron.
 - NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`); 6.0 removed its `native-button` prop.
@@ -32,13 +32,13 @@
 - It is the persistent vertical navigation of an app → use `sidebar` with `sidebar-menu`.
 - It is a list of actions or options opened from a button → use `dropdown-menu`.
 - It shows where the current page sits in a hierarchy → use `breadcrumb`.
-- It is the marketing site's whole navigation bar → use `site-nav`, which already composes this menu.
+- It is the marketing site's whole navigation bar → use `site-header`, which already composes this menu.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [site-nav](site-nav.md) — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.
-- [global-header](global-header.md) — the bar layout this menu usually sits in.
+- [site-header](site-header.md) — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
+- [app-header](app-header.md) — the bar layout this menu usually sits in.
 - [dropdown-menu](dropdown-menu.md) — a single-trigger option menu, not a site-wide navigation bar.
 - [sidebar-menu](sidebar-menu.md) — vertical, hierarchical navigation rows for a sidebar.
 
@@ -83,8 +83,8 @@ Every part is attached to the compound (`NavigationMenu.List`, …) and importab
 - `navigation-menu-trigger.vue` — Public sub-component `navigation-menu-trigger`. A panel trigger (no `href`) renders a trailing `ai ai-chevron-down` in an `aria-hidden` span (`__icon`) whose `data-state="open|closed"` follows its panel and turns 180° when open; a link trigger (`href`) has no chevron.
 - `navigation-menu-content.vue` — Public sub-component `navigation-menu-content`.
 - `navigation-menu-link.vue` — Public sub-component `navigation-menu-link`, reached as `NavigationMenu.Link`: a top-level link of the bar (`href`, `active`, `close-on-click`) that renders the same anchor as a trigger with an `href`. Attributes it does not declare still flow to the trigger it renders, so a `NavigationMenu.Link` written as a panel trigger keeps working.
-- `navigation-menu-viewport.vue` — Public sub-component `navigation-menu-viewport`, the one overlay that hosts every panel. It teleports (`container`, default `body`; `keep-mounted`, default `true`), places the popup on the active trigger and renders the popup surface with the shared panel frame. Props: `side?: NavigationMenuSide` (`top | end | bottom | start`, logical: `start`/`end` follow the reading direction; default `'bottom'`), `align?: NavigationMenuAlign` (`start | center | end`, default `'center'`), `sideOffset?: number` (default `8`), `alignOffset?: number` (default `0`), `arrowPadding?: number` (default `8`), `collisionPadding?: NavigationMenuCollisionPadding` (default `8`), `sticky?: boolean` (default `false`), `trackAnchor?: boolean` (default `true`, keeps the popup on the active trigger), `kind?: NavigationMenuPopupVariant` (`default | contrast`, default `'default'`, the popup surface), `arrow?: boolean` (default `false`, an arrow pointing at the trigger), `backdrop?: boolean` (default `false`, a dimmed layer behind the popup; a click on it closes the menu), `container?: object | string` (default `undefined`), `keepMounted?: boolean` (default `true`). Attributes it does not declare land on the popup.
-- `parts/` — private, not exported: `navigation-menu-portal.vue`, `navigation-menu-positioner.vue`, `navigation-menu-popup.vue`, `navigation-menu-arrow.vue`, `navigation-menu-backdrop.vue` and `navigation-menu-viewport-frame.vue`, the pieces the `Viewport` composes.
+- `navigation-menu-viewport.vue` — Public sub-component `navigation-menu-viewport`, the one overlay that hosts every panel. It teleports (`container`, default `body`; `keep-mounted`, default `true`), places the popup on the active trigger and renders the popup surface with the shared panel frame. Props: `side?: NavigationMenuSide` (`top | end | bottom | start`, logical: `start`/`end` follow the reading direction; default `'bottom'`), `align?: NavigationMenuAlign` (`start | center | end`, default `'center'`), `sideOffset?: number` (default `8`), `alignOffset?: number` (default `0`), `arrowPadding?: number` (default `8`), `collisionPadding?: NavigationMenuCollisionPadding` (default `8`), `sticky?: boolean` (default `false`), `trackAnchor?: boolean` (default `true`, keeps the popup on the active trigger), `kind?: NavigationMenuPopoverVariant` (`default | contrast`, default `'default'`, the popup surface), `arrow?: boolean` (default `false`, an arrow pointing at the trigger), `backdrop?: boolean` (default `false`, a dimmed layer behind the popup; a click on it closes the menu), `container?: object | string` (default `undefined`), `keepMounted?: boolean` (default `true`). Attributes it does not declare land on the popup.
+- `parts/` — private, not exported: `navigation-menu-portal.vue`, `navigation-menu-positioner.vue`, `navigation-menu-popover.vue`, `navigation-menu-arrow.vue`, `navigation-menu-backdrop.vue` and `navigation-menu-viewport-frame.vue`, the pieces the `Viewport` composes.
 
 ## v-model
 

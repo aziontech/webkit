@@ -65,7 +65,7 @@ The drawer's content as a page, for the integration's own URL (the variant adds 
 
 ### L. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
 
-The settings of one installed integration on one application (the variant adds `SettingsSection`, `Item`, `SettingRow`, `Switch`, `Input` and `SaveBar`). `SettingsSection`s group them; an on/off setting is a compact `SettingRow` in an `Item.List`, the rest are `Field`s. Errors follow `state/form-validation` (SectionRejected): nothing is red before Save; after it a danger `Alert` above and a `Field.Error` per field, focus on the first. Changes raise a `SaveBar` with Discard and Save. Saving settings is not a deploy, so the toast has no Edit or Redeploy.
+The settings of one installed integration on one application (the variant adds `SettingsSection`, `Item`, `SettingsRow`, `Switch`, `Input` and `SaveBar`). `SettingsSection`s group them; an on/off setting is a compact `SettingsRow` in an `Item.List`, the rest are `Field`s. Errors follow `state/form-validation` (SectionRejected): nothing is red before Save; after it a danger `Alert` above and a `Field.Error` per field, focus on the first. Changes raise a `SaveBar` with Discard and Save. Saving settings is not a deploy, so the toast has no Edit or Redeploy.
 
 ### Install toast — through `toast`
 

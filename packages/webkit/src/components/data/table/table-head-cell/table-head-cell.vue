@@ -3,11 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import {
-    TableInjectionKey,
-    TableRowGroupInjectionKey,
-    type TableSortDirection
-  } from '../injection-key'
+  import { TableRowGroupInjectionKey, type TableSortDirection } from '../injection-key'
   import TableSortButton from '../table-sort-button/table-sort-button.vue'
 
   export type TableHeadCellType = 'default' | 'checkbox' | 'action' | 'slot'
@@ -66,14 +62,11 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableHeadCell: en.tableHeadCell })
-  const ctx = inject(TableInjectionKey, null)
   const group = inject(TableRowGroupInjectionKey, { hoverable: false })
   const compact = computed<boolean>(() => group.compact === true)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__head-cell` : 'data-table__head-cell')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-head-cell'
   )
 
   const labelId = useId()

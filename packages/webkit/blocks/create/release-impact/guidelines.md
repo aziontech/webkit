@@ -42,7 +42,7 @@ A box under the resource fields headed Dependencies with a count `Badge`. A `typ
 The right column, sticky from `xl`. The `Card` header has the title Impact and, once ready, a small `ToggleGroup` named Impact view with Tree and Flow.
 
 - **Tree** — a nested list: each Deployment Setting with its domain count, its environments with their project count, and the projects with theirs. Rails are drawn with logical borders, so they mirror under RTL. It is a static read-out, not `Tree`: `Tree` is an interactive `role="tree"` (arrow keys, expand and select), and a tree role with nothing to operate would announce controls that do nothing. Use `Tree` once the impact becomes navigable.
-- **Flow** — the same data left to right: the setting as a raised card, an arrow, then one card per environment listing its projects. It is plain lists and cards, not `Flow`: `Flow` still carries `aria-required-parent` and `aria-required-children` findings, and this view has nothing to connect beyond one level.
+- **Flow** — the same data left to right: the setting as a raised card, an arrow, then one card per environment listing its projects. It is plain lists and cards, not `FlowDiagram`: `FlowDiagram` still carries `aria-required-parent` and `aria-required-children` findings, and this view has nothing to connect beyond one level.
 - **Loading** — Computing impact… with a `Spinner` and three `Skeleton` lines; the region is `aria-busy` and a status line announces it.
 - **Unavailable** — a warning `Alert` saying the impact is unknown, how many settings are selected, and Retry. Deploying stays possible.
 - **Partial** — the list was truncated: a warning `Alert` above the tree.
@@ -70,7 +70,7 @@ When the release starts from the settings rather than from a service, a ChooseSe
 - Don't hide shared dependencies; changing one changes it everywhere in the release.
 - Don't confirm twice: the page is the review, the `ConfirmDialog` is the only step before the run. Deploying one service or one project is `create/deploy-drawer`, which confirms nothing after Deploy; this page is only for a release of several resources.
 - Don't keep the user on the page while it runs; the run reports wherever they are.
-- Don't draw the Flow view with `Flow` until its list semantics pass axe.
+- Don't draw the Flow view with `FlowDiagram` until its list semantics pass axe.
 
 ## Copy
 

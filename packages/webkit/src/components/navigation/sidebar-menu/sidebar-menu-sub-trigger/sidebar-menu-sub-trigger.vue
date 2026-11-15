@@ -14,7 +14,7 @@
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
   import { cn } from '../../../../utils/cn'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
   import { useSidebarMenuSubContext } from '../composables/use-sidebar-menu-sub-context'
   import type { SidebarMenuSubType } from '../injection-key'
@@ -62,7 +62,7 @@
   const arrowEl = shallowRef<ComponentPublicInstance | null>(null)
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu-sub-trigger'
+    () => (attrs['data-testid'] as string | undefined) ?? 'sidebar-menu-sub-trigger'
   )
 
   const isInline = computed(() => props.type === 'inline')
@@ -278,7 +278,7 @@
       :disabled="disabled"
       :class="arrowClass"
       :icon-class="arrowIconClass"
-      :data-testid="`${testId}__arrow`"
+      :data-testid="`${testId}__chevron`"
       @click="reveal"
     />
   </div>

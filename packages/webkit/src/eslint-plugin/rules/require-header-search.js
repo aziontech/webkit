@@ -1,6 +1,6 @@
 import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
-const HEADER = new Set(['GlobalHeader', 'global-header'])
+const HEADER = new Set(['AppHeader', 'app-header'])
 const TRIGGER = new Set(['SearchTrigger', 'search-trigger'])
 const NAVIGATION = new Set(['NavigationMenu', 'navigation-menu', 'Sidebar', 'sidebar'])
 const ICON_BUTTONS = new Set(['IconButton', 'icon-button', 'Button', 'button'])
@@ -43,12 +43,12 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Every app header offers search through SearchTrigger: flag a GlobalHeader that carries navigation (NavigationMenu or a Sidebar in the same template) without a SearchTrigger, a hand-rolled ⌘K field (aria-keyshortcuts Meta+K / Control+K on anything but SearchTrigger), and a bare magnifier button inside a GlobalHeader.'
+        'Every app header offers search through SearchTrigger: flag a AppHeader that carries navigation (NavigationMenu or a Sidebar in the same template) without a SearchTrigger, a hand-rolled ⌘K field (aria-keyshortcuts Meta+K / Control+K on anything but SearchTrigger), and a bare magnifier button inside a AppHeader.'
     },
     schema: [],
     messages: {
       missing:
-        'This app header has navigation but no search. Add <SearchTrigger collapsible @open="open = true" /> (import SearchTrigger from \'@aziontech/webkit/search-trigger\') first in GlobalHeader.End, wire it to a <Command v-model:open="open">, and wrap the header in an @container. Focused task headers (sign-in, create flows) have no navigation and are not checked.',
+        'This app header has navigation but no search. Add <SearchTrigger collapsible @open="open = true" /> (import SearchTrigger from \'@aziontech/webkit/search-trigger\') first in AppHeader.End, wire it to a <Command v-model:open="open">, and wrap the header in an @container. Focused task headers (sign-in, create flows) have no navigation and are not checked.',
       handRolled:
         'Hand-rolled ⌘K search field. Use <SearchTrigger> (@aziontech/webkit/search-trigger): it draws the field, the OS-aware keycap, aria-keyshortcuts, the narrow fold, and binds ⌘K / Ctrl K.',
       bareIcon:

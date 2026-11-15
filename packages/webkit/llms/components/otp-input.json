@@ -3,7 +3,7 @@
  "binding": "OtpInput",
  "import": "@aziontech/webkit/otp-input",
  "treeShakeableImport": "@aziontech/webkit/otp-input",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

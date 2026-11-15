@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
+  import Button from '../../action/button/button.vue'
   import Popover from '../../overlay/popover/popover.vue'
   import PopoverClose from '../../overlay/popover/popover-close/popover-close.vue'
   import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
@@ -42,9 +42,7 @@
   const { t } = useTranslate({ hotspot: en.hotspot })
   const context = useOptionalTutorialPanelContext()
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-hotspot'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'hotspot')
 
   const entry = computed(() => {
     if (!context || !context.active.value || context.finished.value) return null
@@ -143,7 +141,7 @@
               {{ t('hotspot.stepOf', { current: entry.index + 1, total }) }}
               <template v-if="taskTitle">· {{ taskTitle }}</template>
             </PopoverDescription>
-            <PopoverClose :data-testid="`${testId}__dismiss`" />
+            <PopoverClose :data-testid="`${testId}__close`" />
           </PopoverHeader>
           <p class="px-(--spacing-md) py-(--spacing-sm) text-body-sm text-(--text-default)">
             {{ entry.content }}

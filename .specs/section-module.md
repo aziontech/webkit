@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 4
-checksum: 1872e3b7035e2cfdd8196902d975bfa925e37c85f32fd5c75869fe358a9a6a4f
+checksum: 063bce6d6a7d4ecf60ce6562ecc4de966d1c6ef68281b371380426387c7d543f
 style_seam: true
 created: 2026-09-23
 last_updated: 2026-11-15
@@ -35,7 +35,7 @@ The brick of the page column: a section whose header row is divided from its bod
 - `section-container` — the framed column this module stacks inside.
 - `section-title` — the header row this module renders by default.
 - `card-grid` — the edge-to-edge cell grid a module's body commonly holds.
-- `frame-box` — the registration frame a body wraps itself in.
+- `registration-frame` — the registration frame a body wraps itself in.
 
 ## Best practices
 
@@ -47,7 +47,7 @@ The brick of the page column: a section whose header row is divided from its bod
 
 ```vue
 <script setup>
-import SectionModule from '@aziontech/webkit/section-module'
+  import SectionModule from '@aziontech/webkit/section-module'
 </script>
 
 <template>
@@ -63,14 +63,14 @@ import SectionModule from '@aziontech/webkit/section-module'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `title` | `string` | `''` | false | Headline of the module's header row, rendered as its `h2`. |
-| `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `eyebrow` | `string` | `''` | false | Short uppercase overline rendered above the headline. |
-| `variant` | `SectionModuleVariant` | `'start'` | false | Layout of the default header row. |
-| `divided` | `boolean` | `true` | false | Draw the top rule that divides this module from the one above it. |
-| `padded` | `boolean` | `true` | false | Pad the module's body. Leave off for an edge-to-edge grid that owns its cell padding. |
+| Prop          | Type                   | Default   | Required | JSDoc                                                                                 |
+| ------------- | ---------------------- | --------- | -------- | ------------------------------------------------------------------------------------- |
+| `title`       | `string`               | `''`      | false    | Headline of the module's header row, rendered as its `h2`.                            |
+| `description` | `string`               | `''`      | false    | Supporting sentence under the headline.                                               |
+| `eyebrow`     | `string`               | `''`      | false    | Short uppercase overline rendered above the headline.                                 |
+| `variant`     | `SectionModuleVariant` | `'start'` | false    | Layout of the default header row.                                                     |
+| `divided`     | `boolean`              | `true`    | false    | Draw the top rule that divides this module from the one above it.                     |
+| `padded`      | `boolean`              | `true`    | false    | Pad the module's body. Leave off for an edge-to-edge grid that owns its cell padding. |
 
 ## Events
 
@@ -78,11 +78,11 @@ import SectionModule from '@aziontech/webkit/section-module'
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The module's body. |
-| `header` | — | Replaces the default header row entirely. |
-| `actions` | — | Trailing controls inside the default header row. |
+| Slot      | Scope | Notes                                            |
+| --------- | ----- | ------------------------------------------------ |
+| `default` | —     | The module's body.                               |
+| `header`  | —     | Replaces the default header row entirely.        |
+| `actions` | —     | Trailing controls inside the default header row. |
 
 ## States
 
@@ -97,16 +97,16 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| module rule | `var(--border-default)` |
-| body padding | `var(--spacing-xl)` |
+| Region       | Token (DESIGN.md)       |
+| ------------ | ----------------------- |
+| module rule  | `var(--border-default)` |
+| body padding | `var(--spacing-xl)`     |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

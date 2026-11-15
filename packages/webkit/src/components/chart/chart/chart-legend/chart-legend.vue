@@ -17,9 +17,7 @@
   const attrs = useAttrs()
   const ctx = useChartContext()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__legend`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-legend')
 
   const entries = computed(() =>
     ctx.series.value.map((entry) => ({

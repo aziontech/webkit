@@ -36,8 +36,23 @@ export function loadMigration(version) {
     icons: readJson(join(MIGRATIONS_DIR, `v${version}-icons.json`)),
     tokens: readJson(join(MIGRATIONS_DIR, `v${version}-tokens.json`)),
     lint: readJson(join(MIGRATIONS_DIR, `v${version}-lint.json`)),
-    blocks: readJson(join(MIGRATIONS_DIR, `v${version}-blocks.json`))
+    blocks: readJson(join(MIGRATIONS_DIR, `v${version}-blocks.json`)),
+    testids: readJson(join(MIGRATIONS_DIR, `v${version}-testids.json`))
   }
+}
+
+const TEST_FILE = /(\.(test|spec|cy|e2e)\.[cm]?[jt]sx?$)|(^|\/)(e2e|cypress|playwright|tests?)\//
+
+export function migrateTestIds(source, testids = {}) {
+  const keys = Object.keys(testids).sort((a, b) => b.length - a.length)
+  if (!keys.length) return { source, changes: [] }
+  const re = new RegExp(`(?<=['"\`])(${keys.map(escapeRe).join('|')})(?=['"\`]|__)`, 'g')
+  const seen = new Set()
+  const out = source.replace(re, (id) => {
+    seen.add(`data-testid "${id}" → "${testids[id]}"`)
+    return testids[id]
+  })
+  return { source: out, changes: [...seen] }
 }
 
 const ICON_PAIR = /(?<![\w-])pi(\s+)(pi-[a-z0-9]+(?:-[a-z0-9]+)*)(?![\w-])/g
@@ -689,10 +704,18 @@ export function planMigrate(projectDir, { version = 6, dryRun = false, fromMajor
   }
 
   for (const { file, before } of files) {
-    const { source, changes, warnings } = migrateSource(before, migration, {
+    const migrated = migrateSource(before, migration, {
       fromMajor: from,
       declaredMajor: declared ? declared.major : null
     })
+    let { source } = migrated
+    const changes = [...migrated.changes]
+    const { warnings } = migrated
+    if (TEST_FILE.test(relative(projectDir, file).split('\\').join('/'))) {
+      const ids = migrateTestIds(source, migration.testids)
+      source = ids.source
+      changes.push(...ids.changes)
+    }
     if (!changes.length && !warnings.length) continue
     if (source !== before && !dryRun) writeFileSync(file, source)
     results.push({ file: relative(projectDir, file), changes, warnings })

@@ -1,6 +1,6 @@
 {
   "component": "hover-card",
-  "title": "Components/Primitives/Overlay/HoverCard",
+  "title": "Components/Overlay/HoverCard",
   "examples": [
     {
       "name": "Default",

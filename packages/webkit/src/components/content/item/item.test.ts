@@ -35,7 +35,7 @@ describe('Item', () => {
         const { getByTestId } = render(Item, {
           slots: { default: '<span data-testid="child">x</span>' }
         })
-        const root = getByTestId('content-item')
+        const root = getByTestId('item')
         expect(root.tagName).toBe('DIV')
         expect(root.getAttribute('data-slot')).toBe('item')
         expect(root.getAttribute('data-variant')).toBe('default')
@@ -47,7 +47,7 @@ describe('Item', () => {
           props: { variant: 'outline', size: 'small' },
           slots: { default: '<span>y</span>' }
         })
-        const root = getByTestId('content-item')
+        const root = getByTestId('item')
         expect(root.getAttribute('data-variant')).toBe('outline')
         expect(root.getAttribute('data-size')).toBe('small')
       })
@@ -56,14 +56,14 @@ describe('Item', () => {
         const { getByTestId } = render(Item, {
           slots: { default: '<span data-testid="inner">hello</span>' }
         })
-        const root = getByTestId('content-item')
+        const root = getByTestId('item')
         const inner = getByTestId('inner')
         expect(root.contains(inner)).toBe(true)
         expect(inner.textContent).toBe('hello')
       })
     })
 
-    describe('provide/inject — the injected testId flows to sub-components', () => {
+    describe('test ids of the parts', () => {
       it('derives every sub-component testid from the root context testId (default)', () => {
         const Tree = {
           components: {
@@ -93,21 +93,17 @@ describe('Item', () => {
         }
         const { getByTestId } = render(Tree)
 
-        expect(getByTestId('content-item__media').getAttribute('data-slot')).toBe('item-media')
-        expect(getByTestId('content-item__content').getAttribute('data-slot')).toBe('item-content')
-        expect(getByTestId('content-item__header').getAttribute('data-slot')).toBe('item-header')
-        expect(getByTestId('content-item__title').getAttribute('data-slot')).toBe('item-title')
-        expect(getByTestId('content-item__description').getAttribute('data-slot')).toBe(
-          'item-description'
-        )
-        expect(getByTestId('content-item__footer').getAttribute('data-slot')).toBe('item-footer')
-        expect(getByTestId('content-item__actions').getAttribute('data-slot')).toBe('item-actions')
-        expect(getByTestId('content-item__separator').getAttribute('data-slot')).toBe(
-          'item-separator'
-        )
+        expect(getByTestId('item-media').getAttribute('data-slot')).toBe('item-media')
+        expect(getByTestId('item-content').getAttribute('data-slot')).toBe('item-content')
+        expect(getByTestId('item-header').getAttribute('data-slot')).toBe('item-header')
+        expect(getByTestId('item-title').getAttribute('data-slot')).toBe('item-title')
+        expect(getByTestId('item-description').getAttribute('data-slot')).toBe('item-description')
+        expect(getByTestId('item-footer').getAttribute('data-slot')).toBe('item-footer')
+        expect(getByTestId('item-actions').getAttribute('data-slot')).toBe('item-actions')
+        expect(getByTestId('item-separator').getAttribute('data-slot')).toBe('item-separator')
       })
 
-      it('propagates a consumer-overridden root testId into every sub-component testid', () => {
+      it('keeps every part on its own test id under a consumer root testId', () => {
         const Tree = {
           components: {
             Item,
@@ -129,17 +125,16 @@ describe('Item', () => {
         const { getByTestId, queryByTestId } = render(Tree)
 
         expect(getByTestId('row-1').getAttribute('data-slot')).toBe('item')
-        expect(getByTestId('row-1__content')).toBeTruthy()
-        expect(getByTestId('row-1__title')).toBeTruthy()
-        expect(getByTestId('row-1__description')).toBeTruthy()
-        expect(getByTestId('row-1__separator')).toBeTruthy()
-        expect(queryByTestId('content-item')).toBeNull()
-        expect(queryByTestId('content-item__separator')).toBeNull()
+        expect(getByTestId('item-content')).toBeTruthy()
+        expect(getByTestId('item-title')).toBeTruthy()
+        expect(getByTestId('item-description')).toBeTruthy()
+        expect(getByTestId('item-separator')).toBeTruthy()
+        expect(queryByTestId('item')).toBeNull()
       })
 
-      it('falls back to content-item base when a sub-component is used with no root context', () => {
+      it('keeps its own test id when a sub-component is used with no root context', () => {
         const { getByTestId } = render(Item.Separator)
-        expect(getByTestId('content-item__separator').getAttribute('role')).toBe('separator')
+        expect(getByTestId('item-separator').getAttribute('role')).toBe('separator')
       })
     })
 
@@ -148,7 +143,7 @@ describe('Item', () => {
         const { getByRole, getByTestId } = render(Item.Group, {
           slots: { default: '<span>row</span>' }
         })
-        expect(getByRole('list')).toBe(getByTestId('content-item-group'))
+        expect(getByRole('list')).toBe(getByTestId('item-group'))
       })
 
       it('ItemSeparator renders role="separator"', () => {
@@ -160,7 +155,7 @@ describe('Item', () => {
         const { getByTestId } = render(Item.Description, {
           slots: { default: 'A description' }
         })
-        const el = getByTestId('content-item__description')
+        const el = getByTestId('item-description')
         expect(el.tagName).toBe('P')
         expect(el.textContent).toBe('A description')
       })
@@ -169,7 +164,7 @@ describe('Item', () => {
         const { getByTestId } = render(Item.Media, {
           slots: { default: '<span>m</span>' }
         })
-        expect(getByTestId('content-item__media').getAttribute('data-type')).toBe('default')
+        expect(getByTestId('item-media').getAttribute('data-type')).toBe('default')
       })
 
       it.each([['icon'], ['image']])('ItemMedia reflects type="%s" on data-type', (variant) => {
@@ -177,7 +172,7 @@ describe('Item', () => {
           props: { type: variant },
           slots: { default: '<span>m</span>' }
         })
-        expect(getByTestId('content-item__media').getAttribute('data-type')).toBe(variant)
+        expect(getByTestId('item-media').getAttribute('data-type')).toBe(variant)
       })
     })
 
@@ -187,7 +182,7 @@ describe('Item', () => {
           props: { href: 'https://example.com/docs', variant: 'outline', size: 'small' },
           slots: { default: 'Docs' }
         })
-        const root = getByTestId('content-item')
+        const root = getByTestId('item')
         expect(root.tagName).toBe('A')
         expect(root.getAttribute('href')).toBe('https://example.com/docs')
         expect(root.getAttribute('data-slot')).toBe('item')
@@ -203,7 +198,7 @@ describe('Item', () => {
           attrs: { onClick: () => (clicks += 1) },
           slots: { default: 'Pick' }
         })
-        const root = getByTestId('content-item')
+        const root = getByTestId('item')
         expect(root.tagName).toBe('BUTTON')
         expect(root.getAttribute('type')).toBe('button')
         expect(root.hasAttribute('href')).toBe(false)
@@ -227,12 +222,12 @@ describe('Item', () => {
           props: { href: '#one', clickable: true },
           slots: { default: 'One' }
         })
-        expect(getByTestId('content-item').tagName).toBe('A')
+        expect(getByTestId('item').tagName).toBe('A')
       })
 
       it('renders a div root by default', () => {
         const { getByTestId } = render(Item, { slots: { default: 'Row' } })
-        const root = getByTestId('content-item')
+        const root = getByTestId('item')
         expect(root.tagName).toBe('DIV')
         expect(root.hasAttribute('href')).toBe(false)
       })
@@ -248,10 +243,10 @@ describe('Item', () => {
     describe('documented example (the real fixtures run in-test)', () => {
       it('Default story renders a titled row with a trailing action through the sub-components', () => {
         const { getByTestId, getByText } = render(Default)
-        expect(getByTestId('content-item').getAttribute('data-slot')).toBe('item')
-        expect(getByTestId('content-item__content')).toBeTruthy()
-        expect(getByTestId('content-item__title').textContent?.trim()).toBe('Basic Item')
-        expect(getByTestId('content-item__actions')).toBeTruthy()
+        expect(getByTestId('item').getAttribute('data-slot')).toBe('item')
+        expect(getByTestId('item-content')).toBeTruthy()
+        expect(getByTestId('item-title').textContent?.trim()).toBe('Basic Item')
+        expect(getByTestId('item-actions')).toBeTruthy()
         expect(getByText(/simple item with title/i)).toBeTruthy()
       })
 
@@ -261,7 +256,7 @@ describe('Item', () => {
         ['Small', Small, 'outline', 'small']
       ])('%s story sets the root variant/size from its args', (_name, Story, variant, size) => {
         const { getByTestId } = render(Story)
-        const root = getByTestId('content-item')
+        const root = getByTestId('item')
         expect(root.getAttribute('data-variant')).toBe(variant)
         expect(root.getAttribute('data-size')).toBe(size)
       })
@@ -365,7 +360,7 @@ describe('Item', () => {
 
       it('gives an Item outside a list no listitem role', () => {
         const { getByTestId } = render(Item, { slots: { default: '<span>row</span>' } })
-        expect(getByTestId('content-item').hasAttribute('role')).toBe(false)
+        expect(getByTestId('item').hasAttribute('role')).toBe(false)
       })
 
       it('gives an Item nested inside a list row no listitem role', () => {

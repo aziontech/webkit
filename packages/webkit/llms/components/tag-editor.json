@@ -3,7 +3,7 @@
  "binding": "TagEditor",
  "import": "@aziontech/webkit/tag-editor",
  "treeShakeableImport": "@aziontech/webkit/tag-editor",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

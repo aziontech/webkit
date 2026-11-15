@@ -2,13 +2,11 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import CardPricing from '@aziontech/webkit/card-pricing'
   import Checkbox from '@aziontech/webkit/checkbox'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import FeatureList from '@aziontech/webkit/feature-list'
   import Field from '@aziontech/webkit/field'
   import Input from '@aziontech/webkit/input'
   import Link from '@aziontech/webkit/link'
@@ -16,6 +14,8 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PaymentBrand from '@aziontech/webkit/payment-brand'
+  import PlanFeatureList from '@aziontech/webkit/plan-feature-list'
+  import PricingCard from '@aziontech/webkit/pricing-card'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import Separator from '@aziontech/webkit/separator'
   import { toast } from '@aziontech/webkit/toast'
@@ -400,7 +400,7 @@
               :key="plan.id"
               class="flex max-w-none min-w-0 flex-1"
             >
-              <CardPricing
+              <PricingCard
                 equal-height
                 class="w-full"
                 :title="plan.name"
@@ -423,7 +423,7 @@
                   >
                     {{ plan.featuresTitle }}
                   </p>
-                  <FeatureList :items="plan.features" />
+                  <PlanFeatureList :items="plan.features" />
                 </div>
                 <template #actions>
                   <Button
@@ -435,7 +435,7 @@
                     @click="choosePlan(plan)"
                   />
                 </template>
-              </CardPricing>
+              </PricingCard>
             </div>
           </div>
         </div>
@@ -470,7 +470,7 @@
                   What's included
                 </h3>
                 <div class="px-(--spacing-xs)">
-                  <FeatureList :items="upgradeFeatures" />
+                  <PlanFeatureList :items="upgradeFeatures" />
                 </div>
               </div>
               <div class="flex flex-col gap-(--spacing-xs)">

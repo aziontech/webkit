@@ -1,18 +1,19 @@
 ---
 name: feature-scroll
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 47df2ba3b85bc6f1fa58b1695b0ae7dd1f906a77d011cf2e04eff448f7f96a1e
+checksum: 5fb659250c261aebff00cf6d7f07a213999faf830b339117a96a1df7b353b919
 ---
+
 # FeatureScroll — Component Spec
 
 ## Purpose
 
-The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile`, `illustration`, `code-block`, `sticky-stack`, `texture-material`, `button` and the webkit scene assets (a `ProductWidget` console fragment, most often).
+The walkthrough band of a product page: a large section title over one screen per feature. From the large breakpoint up the features scroll through a sticky stack — the copy advances while the feature's live scene or illustration stays pinned in a framed, textured stage with one small action under each step (a step may pin a one-file code sample instead, for a code-led walkthrough); below it the same features are a three-column grid of media tiles. It is a page section — the site places it from a `{ _id: 'feature-scroll', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile`, `illustration`, `code-block`, `sticky-stack`, `texture`, `button` and the webkit scene assets (a `ConsoleMockup` console fragment, most often).
 
 ## When to use
 
@@ -23,7 +24,7 @@ The walkthrough band of a product page: a large section title over one screen pe
 ## When NOT to use
 
 - For three reasons with no scroll story → use `feature-tiles`.
-- For one claim beside one code sample → use `media-split-band` with `codeTabs`.
+- For one claim beside one code sample → use `media-split-section` with `codeTabs`.
 - In a hand-built SFC that needs its own media slot → use `sticky-stack` directly.
 
 ## Related
@@ -34,14 +35,14 @@ The walkthrough band of a product page: a large section title over one screen pe
 ## Best practices
 
 - Four to six items; the stack needs enough steps to earn the scroll.
-- Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ProductWidget` (`{ component: 'ProductWidget', props: { name } }`): it shows the console itself.
+- Give every item a `scene`, a `code` sample or an `illustration`; it is the pinned picture on large screens and the tile media on small ones. On a product page prefer a `scene` naming a `ConsoleMockup` (`{ component: 'ConsoleMockup', props: { name } }`): it shows the console itself.
 - Keep `action` to a short label such as "Docs" — it sits under the step copy at the small size.
 
 ## Usage
 
 ```vue
 <script setup>
-import FeatureScroll from '@aziontech/webkit/feature-scroll'
+  import FeatureScroll from '@aziontech/webkit/feature-scroll'
 </script>
 
 <template>
@@ -50,8 +51,18 @@ import FeatureScroll from '@aziontech/webkit/feature-scroll'
     title="Everything a workload does, one screen at a time"
     description="Scroll through the console a workload is run from."
     :items="[
-      { title: 'Every workload on one list', description: 'See each workload with its domain, status and last deployment.', illustration: 'traffic-and-cost-bar-chart', action: { label: 'Docs', href: '/docs', trailing: true } },
-      { title: 'Read the deployment topology', description: 'The domains, the application and the firewall a workload serves.', illustration: 'global-network', action: { label: 'Docs', href: '/docs', trailing: true } }
+      {
+        title: 'Every workload on one list',
+        description: 'See each workload with its domain, status and last deployment.',
+        illustration: 'traffic-and-cost-bar-chart',
+        action: { label: 'Docs', href: '/docs', trailing: true }
+      },
+      {
+        title: 'Read the deployment topology',
+        description: 'The domains, the application and the firewall a workload serves.',
+        illustration: 'global-network',
+        action: { label: 'Docs', href: '/docs', trailing: true }
+      }
     ]"
   />
 </template>
@@ -59,13 +70,13 @@ import FeatureScroll from '@aziontech/webkit/feature-scroll'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty. |
-| `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `items` | `FeatureScrollItem[]` | `[]` | false | The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, variant? }` rendered as a small button under the step, secondary unless `variant` says otherwise. |
+| Prop          | Type                  | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| ------------- | --------------------- | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`      | `string`              | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `eyebrow`     | `string`              | `''`    | false    | Eyebrow above the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `title`       | `string`              | `''`    | false    | Headline of the band, rendered by the large section title as its `h2`; the band renders no header when empty.                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| `description` | `string`              | `''`    | false    | Supporting sentence under the headline.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `items`       | `FeatureScrollItem[]` | `[]`    | false    | The features, in order; each is `{ title, description, scene?, code?, illustration?, action? }` where `scene` is `{ component, props? }` naming a webkit scene asset (drawn live in the stack, still in the grid), `code` is a one-file sample `{ fileName, code, language?, fileIcon?, copyAriaLabel? }` drawn when no scene is set, `illustration` is a registry name drawn when neither is set, and `action` is `{ label, href, trailing?, target?, variant? }` rendered as a small button under the step, secondary unless `variant` says otherwise. |
 
 ## Events
 
@@ -88,26 +99,26 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| stage fill | `var(--bg-surface)` |
-| stage shape | `var(--shape-card)` |
-| stage inset | `var(--spacing-md)` |
-| stage inset (large) | `var(--spacing-xl)` |
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
+| stage fill            | `var(--bg-surface)`     |
+| stage shape           | `var(--shape-card)`     |
+| stage inset           | `var(--spacing-md)`     |
+| stage inset (large)   | `var(--spacing-xl)`     |
 | frame rules and marks | `var(--border-default)` |
-| anchor scroll offset | `var(--spacing-2xl)` |
+| anchor scroll offset  | `var(--spacing-2xl)`    |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 
 - Visible focus: owned by the composed `button`.
 - Keyboard map: `Tab` reaches each step's action and a code sample's copy button; `Enter` follows it; the stack's own progression is scroll-driven and never traps focus.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the step headings are `sticky-stack`'s and `media-tile`'s; the texture layer and the pinned illustration are decorative; a scene carries its own semantics (a `ProductWidget` is a decorative console picture).
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the step headings are `sticky-stack`'s and `media-tile`'s; the texture layer and the pinned illustration are decorative; a scene carries its own semantics (a `ConsoleMockup` is a decorative console picture).
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by the composed components.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the step transition belongs to `sticky-stack`, which carries its own fallback; this band adds no motion.
 - Touch target ≥40×40 px — the per-step action is a small `button` on the large layout only, where pointer precision is available.
@@ -115,7 +126,7 @@ _none_
 ## Examples
 
 - Default
-- Live scenes — each item draws a `ProductWidget` console fragment instead of an illustration.
+- Live scenes — each item draws a `ConsoleMockup` console fragment instead of an illustration.
 - Code — each item pins a one-file code sample with a docs action, one opening in a new tab (justified: the code media is a render path the other examples do not reach).
 
 ## Constraints — DO NOT

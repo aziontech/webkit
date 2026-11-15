@@ -1,0 +1,28 @@
+{
+ "purpose": "Composition-based terminal log viewer for CI/deploy output. **LogViewer** is the root shell and context provider; **`LogViewer.Header`**, **`LogViewer.Content`**, and **`LogViewer.Footer`** are composed as children so teams can reorder, omit, or replace the toolbar and footer without forking the log renderer. **`LogViewer.Steps`** shows a run with known steps (build, deploy, provisioning) as a pipeline: one collapsible step per phase, each with its own log, a Phased or Complete switch and an optional flush progress bar. Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when the run has named steps; for code the person reads or copies use CodeBlock, and for code the person edits use CodeEditor.",
+ "useWhen": [
+  "Showing build, deploy or CI output as timestamped lines the reader can search, filter to warnings, and copy.",
+  "A log shell whose toolbar and footer vary by screen — compose `LogViewerHeader`, `LogViewerContent` and `LogViewerFooter` in the order you need, or drop the ones you don't.",
+  "A run log with levels (`debug`, `info`, `warn`, `error`), such as what a function printed during a test run: set `level` on each line and `levels` on the root, and the header filters by level with a count per level.",
+  "A log that is still loading from the server — set `loading` to show a spinner and `loading-label` in place of the body.",
+  "A build or deploy run with known steps → `LogViewer.Steps` with one entry per step; every deploy-log block composes it instead of rebuilding the pipeline."
+ ],
+ "avoidWhen": [
+  "Static, read-only code or configuration snippets → use `code-block`.",
+  "An animated terminal session on a marketing page → use `cli-terminal`.",
+  "Rows of structured records with columns, sorting or paging → use `table`."
+ ],
+ "related": [
+  "code-block` — highlighted source code with a copy action, not a stream of typed log lines.",
+  "cli-terminal` — marketing band that plays a scripted terminal session.",
+  "deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log."
+ ],
+ "bestPractices": [
+  "Give every line a stable `id` and a `type` (`text`, `folder`, `framework-version`, `success`); the type drives the line's rendering. A warning is a `text` line with `level: 'warn'`; `level` drives the warnings filter and the level toggles.",
+  "For a run log, give each line a `level` and put the run offset (`120 ms`, `1.24 s`) in `time`; pass the levels the run can print as `levels` so every level is offered even when it has no line yet. Bind `v-model:level` when the app needs the chosen level.",
+  "Bind `v-model:search` and `v-model:level` when the app needs the filter state; otherwise leave them unbound and the header manages them.",
+  "Set `:bordered=\"false\"` when the log sits inside a surface that already frames it (an accordion panel, a drawer).",
+  "The copy control hides while `disabled` or `loading`, or when there is nothing to copy; listen to `@copy` for the copied text instead of reading the clipboard.",
+  "Use the header's `start` / `end` / `search` slots and the footer's default slot to add actions, rather than rebuilding the toolbar."
+ ]
+}

@@ -15,7 +15,7 @@
   const attrs = useAttrs()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb-separator'
+    () => (attrs['data-testid'] as string | undefined) ?? 'breadcrumb-separator'
   )
 </script>
 

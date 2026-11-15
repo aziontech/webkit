@@ -1,6 +1,6 @@
 {
   "component": "network-map",
-  "title": "Components/Primitives/Content/NetworkMap",
+  "title": "Components/Content/NetworkMap",
   "examples": [
     {
       "name": "Default",

@@ -1,12 +1,13 @@
 <script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Field from '@aziontech/webkit/field'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
+  import FieldError from '@aziontech/webkit/field-error'
   import Hint from '@aziontech/webkit/hint'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
@@ -14,7 +15,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import RadioGroup from '@aziontech/webkit/radio-group-root'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
@@ -693,15 +694,15 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Console">
-      <GlobalHeader.Start>
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Services"
           variant="outline"
           size="small"
         />
-        <GlobalHeader.Brand>
+        <AppHeader.Brand>
           <a
             href="/home"
             aria-label="Azion home"
@@ -712,11 +713,11 @@
               size="small"
             />
           </a>
-        </GlobalHeader.Brand>
+        </AppHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Start>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -728,8 +729,8 @@
             variant="square"
           />
         </button>
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="animate-page-enter motion-reduce:animate-none min-h-0 flex-1 overflow-auto">
       <div
@@ -823,11 +824,9 @@
                         </template>
                       </Input>
 
-                      <HelperText
-                        v-if="projectPicker.message"
-                        type="required"
-                        >{{ projectPicker.message }}</HelperText
-                      >
+                      <FieldError v-if="projectPicker.message">{{
+                        projectPicker.message
+                      }}</FieldError>
                     </div>
 
                     <div class="border-t border-(--border-default)">
@@ -1002,7 +1001,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Add an origin"
                         description="Where the project fetches from when the cache does not already hold the answer. Add one now, or bind one later."
                         variant="compact"
@@ -1011,7 +1010,7 @@
                           v-model="scratch.origin.enabled"
                           aria-label="Add an origin"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
 
                     <div
@@ -1040,11 +1039,10 @@
                               aria-labelledby="origin-type-label"
                               aria-describedby="origin-type-help"
                             />
-                            <HelperText
-                              id="origin-type-help"
-                              type="helper"
-                              label="Decides what the origin is addressed by: a host, a storage location, or a region."
-                            />
+                            <FieldDescription id="origin-type-help"
+                              >Decides what the origin is addressed by: a host, a storage location,
+                              or a region.</FieldDescription
+                            >
                           </div>
 
                           <template
@@ -1087,12 +1085,9 @@
                                   </Select.Item>
                                 </Select.Content>
                               </Select>
-                              <HelperText
-                                :id="'origin-' + field.name + '-helper'"
-                                :type="errors['origin.' + field.name] ? 'required' : 'helper'"
-                              >
+                              <FieldError :id="'origin-' + field.name + '-helper'">
                                 {{ errors['origin.' + field.name] || field.description }}
-                              </HelperText>
+                              </FieldError>
                             </Field>
                             <Field
                               key="field-2"
@@ -1290,12 +1285,9 @@
                           aria-labelledby="environment-label"
                           aria-describedby="environment-helper"
                         />
-                        <HelperText
-                          id="environment-helper"
-                          type="helper"
-                        >
+                        <FieldDescription id="environment-helper">
                           The domain answers on the environment it is bound to.
-                        </HelperText>
+                        </FieldDescription>
                       </fieldset>
 
                       <div class="grid grid-cols-1 gap-(--spacing-lg) sm:grid-cols-2">
@@ -1409,11 +1401,9 @@
                           </template>
                         </Input>
 
-                        <HelperText
-                          v-if="deploymentPicker.message"
-                          type="required"
-                          >{{ deploymentPicker.message }}</HelperText
-                        >
+                        <FieldError v-if="deploymentPicker.message">{{
+                          deploymentPicker.message
+                        }}</FieldError>
                       </div>
 
                       <div class="border-t border-(--border-default)">
@@ -1587,7 +1577,7 @@
                       Behavior
                     </h3>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Allow the platform domain"
                         variant="compact"
                       >
@@ -1602,8 +1592,8 @@
                           v-model="form.allowPlatformDomain"
                           aria-label="Allow the platform domain"
                         />
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Active"
                         description="When disabled, the service is created but does not serve traffic."
                         variant="compact"
@@ -1612,7 +1602,7 @@
                           v-model="form.active"
                           aria-label="Active"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

@@ -16,7 +16,7 @@
   "section-container` — the framed column this module stacks inside.",
   "section-title` — the header row this module renders by default.",
   "card-grid` — the edge-to-edge cell grid a module's body commonly holds.",
-  "frame-box` — the registration frame a body wraps itself in."
+  "registration-frame` — the registration frame a body wraps itself in."
  ],
  "bestPractices": [
   "Pass `divided` as `false` on the first module in a column: its top edge is already the hero's bottom rule, and drawing its own would put two hairlines on one pixel.",

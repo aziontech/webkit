@@ -1,6 +1,6 @@
 {
   "component": "donut-chart",
-  "title": "Components/Primitives/Chart/DonutChart",
+  "title": "Components/Chart/DonutChart",
   "examples": [
     {
       "name": "Default",

@@ -16,9 +16,7 @@
     }
   )
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__crosshair`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-crosshair')
   const vertical = computed(() => ctx.orientation.value === 'vertical')
   const plot = computed(() => ctx.plot.value)
   const offset = computed(() => {

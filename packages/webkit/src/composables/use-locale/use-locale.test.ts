@@ -129,8 +129,8 @@ describe('useLocale', () => {
 
     it('picks a plural form by count', () => {
       const l = probe()
-      expect(l.t('logView.lines', { count: 1 })).toBe('1 line')
-      expect(l.t('logView.lines', { count: 4 })).toBe('4 lines')
+      expect(l.t('logViewer.lines', { count: 1 })).toBe('1 line')
+      expect(l.t('logViewer.lines', { count: 4 })).toBe('4 lines')
       expect(l.plural(0, { zero: 'none', one: 'one', other: 'many' })).toBe('none')
     })
 
@@ -279,8 +279,8 @@ describe('useLocale', () => {
         ['pagination.next'],
         ['pagination.info', { start: 1, end: 10, total: 1200 }],
         ['chip.removeNamed', { label: 'prod' }],
-        ['logView.lines', { count: 1 }],
-        ['logView.lines', { count: 4 }],
+        ['logViewer.lines', { count: 1 }],
+        ['logViewer.lines', { count: 4 }],
         ['nope.missing' as MessageKey]
       ]
       for (const [key, params] of cases) expect(l.t(key, params)).toBe(full.t(key, params))

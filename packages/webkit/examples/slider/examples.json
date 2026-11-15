@@ -1,6 +1,6 @@
 {
   "component": "slider",
-  "title": "Components/Primitives/Inputs/Slider",
+  "title": "Components/Input/Slider",
   "examples": [
     {
       "name": "Default",

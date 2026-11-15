@@ -1,6 +1,6 @@
 {
   "component": "hotspot",
-  "title": "Components/Primitives/Content/Hotspot",
+  "title": "Components/Content/Hotspot",
   "examples": [
     {
       "name": "Default",

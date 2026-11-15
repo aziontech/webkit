@@ -30,7 +30,7 @@ function fixture() {
         purpose: 'Pages through rows.'
       }),
       'bar-list': component('bar-list', { purpose: 'Ranked bars.' }),
-      'feature-list': component('feature-list', {
+      'plan-feature-list': component('plan-feature-list', {
         surface: 'site',
         purpose: 'Ranked bars.'
       }),

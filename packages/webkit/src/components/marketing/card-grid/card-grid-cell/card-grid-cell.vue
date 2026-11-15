@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import FrameBox from '../../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../../layout/registration-frame/registration-frame.vue'
 
   defineOptions({
     name: 'CardGridCell',
@@ -30,9 +30,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-card-grid-cell'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'card-grid-cell')
 </script>
 
 <template>
@@ -41,7 +39,7 @@
     :data-testid="testId"
     class="flex min-w-0"
   >
-    <FrameBox
+    <RegistrationFrame
       :flush="['top', 'left']"
       marks="all"
       class="h-full w-full min-w-0"
@@ -53,6 +51,6 @@
       >
         <slot />
       </div>
-    </FrameBox>
+    </RegistrationFrame>
   </div>
 </template>

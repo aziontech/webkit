@@ -3,7 +3,7 @@
 > The labelled control that triggers an action. `variant` ranks the action in its view (one `primary`, the rest `secondary`, `outline`, `ghost`, `danger` for a destructive one, or `link` for an action that reads as a link), `size` fits it to its context, and `loading` and `disabled` cover the states in between. With `href` it renders an anchor that looks the same, so a call to action that navigates needs no second component.
 
 - Import: `import Button from '@aziontech/webkit/button'`
-- Category: actions · Surface: app · Structure: monolithic
+- Category: action · Surface: app · Structure: monolithic
 - API as JSON: [button.json](https://github.com/aziontech/webkit/blob/main/.specs/button.json)
 
 ## When to use
@@ -31,14 +31,14 @@
 - A standalone navigation link with a trailing icon and a ghost hover → use `link`.
 - Link-looking text that goes to a URL in a table cell → `Table.CellLink`; a `variant="link"` Button is for an action with no destination.
 - A hand-written `<button class="text-(--text-link) …">` → use `variant="link"`.
-- The single AI or highlight entry point that must stand out from every other action → use `button-highlight`.
+- The single AI or highlight entry point that must stand out from every other action → use `highlight-button`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [icon-button](icon-button.md) — icon-only counterpart with the same sizes and a required `ariaLabel`; its `ghost` variant matches this one.
 - [split-button](split-button.md) — joins a Button to a chevron menu of related actions.
-- [button-highlight](button-highlight.md) — the same prop surface without `variant`, drawn with the brand gradient and a rotating glow rim.
+- [highlight-button](highlight-button.md) — the same prop surface without `variant`, drawn with the brand gradient and a rotating glow rim.
 - [link](link.md) — a text link that navigates to a page, resource or URL.
 - [toggle-group](toggle-group.md) — a group of mutually exclusive options, not a single action.
 

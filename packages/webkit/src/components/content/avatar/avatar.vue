@@ -53,7 +53,7 @@
   const imageEl = ref<HTMLImageElement | null>(null)
   const imageFailed = ref(false)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-avatar')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'avatar')
 
   const normalizedLabel = computed(() => {
     const value = props.label.trim()

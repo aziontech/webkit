@@ -16,9 +16,9 @@ The top bar of the focused creation shell: create, edit and deploy flows that ru
 
 ## Building blocks
 
-### A. Bar — `GlobalHeader` (required)
+### A. Bar — `AppHeader` (required)
 
-Default `content` placement spanning the whole window, `aria-label="Console"`. The start cluster lives in `GlobalHeader.Start`, the avatar in `GlobalHeader.End`; `GlobalHeader.Center` stays empty. Exactly one header per page.
+Default `content` placement spanning the whole window, `aria-label="Console"`. The start cluster lives in `AppHeader.Start`, the avatar in `AppHeader.End`; `AppHeader.Center` stays empty. Exactly one header per page.
 
 ### B. Back — `IconButton` (required until the flow is terminal)
 
@@ -26,7 +26,7 @@ Small, outlined, chevron icon, a link (`href`) to the list the flow started from
 
 ### C. Brand — `Brand` (required)
 
-Inside `GlobalHeader.Brand`, linked to the home route with `aria-label="Azion home"`.
+Inside `AppHeader.Brand`, linked to the home route with `aria-label="Azion home"`.
 
 ### D. Breadcrumb — `Breadcrumb` (required until the flow is terminal)
 

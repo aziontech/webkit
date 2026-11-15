@@ -23,7 +23,7 @@
 
 ## Don’t
 
-- A one-line hint attached to a single control → use `tooltip` or `hint`, or the field's `helper-text`.
+- A one-line hint attached to a single control → use `tooltip` or `hint`, or the field's `field-description`.
 - A guided tutorial with tasks, progress and hotspots on the real controls → use `tutorial-panel`.
 - The region itself (overlay, slide-in, close button, focus trap) → use `drawer`; put `help-panel` inside it.
 - Ordered steps the reader navigates between, with the step's form filling the column beside it → use `stepper`.
@@ -69,15 +69,15 @@ tutorial mode (`HelpPanel.Tutorial`, `HelpPanel.Task`): `TutorialPanel` owns tut
 - `help-panel-header/help-panel-header.vue` — The topic's title and an optional one-line description. Renders a `<header>` holding an `<h2>` and, when `description` is non-empty, a `<p>`. No close affordance — the host owns closing.
   - Props: `title?: string` (default `''` — the topic's name, rendered as the panel's heading), `description?: string` (default `''` — one line under the title saying what the topic covers; not rendered when empty).
   - Slot: `default` — optional extra content under the description (a `Tag` naming the product state, for example).
-  - `data-testid` fallback: `content-help-panel-header`.
+  - `data-testid` fallback: `help-panel-header`.
 - `help-panel-group/help-panel-group.vue` — One block of guidance with its own heading. Renders a `<section aria-labelledby>` holding an `<h3>` (only when `title` is non-empty) and the slot, in `text-body-sm`, with a fixed vertical rhythm between paragraphs and lists inside it.
   - Props: `title?: string` (default `''` — the question this section answers; the section renders no heading when empty).
   - Slot: `default` — the section's prose: paragraphs, short lists, inline `text-link` anchors.
-  - `data-testid` fallback: `content-help-panel-group`.
+  - `data-testid` fallback: `help-panel-group`.
 - `help-panel-footer/help-panel-footer.vue` — The "Learn more" footer: a heading over a column of `Link` items the consumer composes. Renders a `<section aria-labelledby>` holding an `<h3>` and a vertical flex column of the slot, separated from the content above by a `Separator`.
   - Props: `title?: string` (default `undefined` — the heading over the links; absent uses the locale catalog, `Learn more` in English, and an empty string renders no heading).
   - Slot: `default` — `Link` items, one per destination.
-  - `data-testid` fallback: `content-help-panel-footer`.
+  - `data-testid` fallback: `help-panel-footer`.
     Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports`
     resolves every path, and `.d.ts` is generated at publish time):
 

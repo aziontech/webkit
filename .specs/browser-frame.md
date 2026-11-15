@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-10-20
 last_updated: 2026-11-15
-checksum: 418b20db58801cb9cbb2879fbd131c1bbba9c2bfb933cdd2b895ff8e4e2c7f30
+checksum: 73e172b8d9faf270245b45267560e5325bd3749cf0332ab1be22f46f0d6f2b81
 ---
 
 # BrowserFrame — Component Spec
@@ -29,13 +29,13 @@ A browser window that renders live webkit components inside a viewport of its ow
 - For third-party content loaded from another origin → use `embed`.
 - For a mock of the Azion console's own shell on a marketing band → use the console shell mockup the page composes; it draws the console chrome and staggers its parts.
 - For content whose layout depends on an overlay (`dialog`, `drawer`, a dropdown panel) or a JS breakpoint composable — those still read the outer page (see States), so the frame cannot show them at the simulated size.
-- For a framed page section or grid cell → use `frame-box`.
+- For a framed page section or grid cell → use `registration-frame`.
 
 ## Related
 
 - `doc-frame` — the documentation figure frame for stills and clips; no live viewport.
 - `embed` — a titled `iframe` for another origin's document; `browser-frame` renders our own components.
-- `frame-box` — the page's registration frame (hairlines + corner marks), not a window.
+- `registration-frame` — the page's registration frame (hairlines + corner marks), not a window.
 - `copy-button` — the clipboard control the address bar composes; reach for it directly to copy any other value.
 
 ## Best practices
@@ -120,7 +120,7 @@ The frame is static apart from its resize handles.
 - **Scaled.** The root sets `data-scaled` while the viewport is scaled below 1.
 - **Address.** Rendered only when `address` is non-empty, centered in the chrome as a compact, fully rounded pill up to `--container-xs` wide and exactly as tall as the small copy button (28px), which sits flush at its trailing end, never overlapping the window dots or the readout. The pill is filled with the skeleton placeholder fill (static — no sweep) and edged with a muted hairline. Its text is set in the monospace code label and centered in the space left of the copy button; long addresses truncate in the middle: a leading part ellipsizes and the last 12 characters always stay visible.
 - **Copy.** The address bar's trailing end composes the package's `CopyButton` (`variant="ghost"`, `size="small"`) with `value` = the full `address`; its copied feedback is the `CopyButton`'s own.
-- **Test ids.** Root fallback `content-browser-frame` (consumer override wins); `${testId}__address`, `${testId}__viewport` (the `iframe`), `${testId}__copy`, `${testId}__width-handle`, `${testId}__height-handle`, `${testId}__corner-handle`.
+- **Test ids.** Root fallback `browser-frame` (consumer override wins); `${testId}__address`, `${testId}__viewport` (the `iframe`), `${testId}__copy`, `${testId}__width-handle`, `${testId}__height-handle`, `${testId}__corner-handle`.
 - **Composable.** The document mirroring and teleport target live in a co-located lifecycle composable, `composables/use-frame-document.ts`, that disconnects every observer on scope dispose.
 
 ## Motion & Animations

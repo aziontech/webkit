@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
-
-  import { ItemInjectionKey } from './injection-key'
+  import { computed, useAttrs } from 'vue'
 
   defineOptions({
     name: 'ItemContent',
@@ -13,12 +11,8 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(ItemInjectionKey)
 
-  const testId = computed(
-    () =>
-      (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'content-item'}__content`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'item-content')
 </script>
 
 <template>

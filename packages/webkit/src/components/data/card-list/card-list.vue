@@ -6,9 +6,9 @@
   import * as en from '../../../locales/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import Checkbox from '../../inputs/checkbox/checkbox.vue'
-  import RadioGroup from '../../inputs/radio-group/radio-group.vue'
-  import RadioGroupItem from '../../inputs/radio-group/radio-group-item/radio-group-item.vue'
+  import Checkbox from '../../input/checkbox/checkbox.vue'
+  import RadioGroup from '../../input/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../input/radio-group/radio-group-item/radio-group-item.vue'
   import type { CardListItemSlotProps, CardListSelectionMode } from './types'
 
   defineOptions({
@@ -51,9 +51,7 @@
   const { t } = useTranslate({ cardList: en.cardList })
   const uid = useId()
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-card-list'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'card-list')
   const rootAttrs = computed(() =>
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'data-testid'))
   )
@@ -141,7 +139,7 @@
       <li
         v-for="n in SKELETONS"
         :key="n"
-        :data-testid="`${testId}__skeleton`"
+        :data-testid="`${testId}__loading`"
         class="flex flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-md)"
       >
         <Skeleton

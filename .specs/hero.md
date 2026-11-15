@@ -4,7 +4,7 @@ category: marketing
 structure: composition
 status: implemented
 spec_version: 7
-checksum: a66e943cc17b36742eb3a45be0db16b7dd869a3f6f7f69dbce852ceb09c8342f
+checksum: f5217661105e5d6fc4a0877c5bc6185409a33319f8fc87caf7536ea3308b3c21
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -17,8 +17,8 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 
 ## When to use
 
-- Use the Hero primitive only in a hand-built SFC that needs slots HeroBand does not offer.
-- Rendering page JSON, or you need a whole band with no custom content → the section (`hero-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`hero`).
+- Use the Hero primitive only in a hand-built SFC that needs slots HeroSection does not offer.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`hero-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`hero`).
 - As the opening band of a marketing, hub or documentation page.
 - Whenever a band must span the window while its copy stays on the page's measure.
 - For any band that carries a decorative backdrop behind its content.
@@ -26,7 +26,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 
 ## When NOT to use
 
-- For a marketing page opening placed from page JSON → use `hero-band` (or `hero-form` for a lead form).
+- For a marketing page opening placed from page JSON → use `hero-section` (or `hero-form-section` for a lead form).
 - For the framed column of bands below the opening → use `section-container`.
 - For one band inside that column → use `section-module`.
 - For a section header further down the page → use `section-title`, which renders an `h2`.
@@ -37,7 +37,7 @@ The opening band of a page: a full-bleed section spanning the whole viewport wid
 
 - `section-container` — the framed column below it; this band's `border-b` is that column's top edge.
 - `section-module` — the brick stacked inside that column.
-- `texture-material` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than variant, size and fade.
+- `texture` — the backdrop the `texture` and `floorTexture` props paint, at the pitch `textureSize` and `floorTextureSize` set; reach for the `background` slot only when the layer needs more than variant, size and fade.
 - `media-split` — the same copy-beside-media shape at section scale, rendering an `h2`.
 - `call-to-action` — the mid-page announcement band (`variant="announcement"`) and the closing ask.
 
@@ -92,25 +92,25 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 
 ## Props
 
-| Prop               | Type                  | Default    | Required | JSDoc                                                                                                                                                                  |
-| ------------------ | --------------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `variant`             | `HeroVariant`            | `'band'`   | false    | Height of the band; `screen` fills one viewport minus `--hero-banner-offset`.                                                                                               |
-| `maxWidth`         | `HeroWidth`           | `'7xl'`    | false    | Width the inner column is capped at; `site` is the marketing measure, `full` keeps only the inset.                                                                     |
-| `bordered`         | `boolean`             | `true`     | false    | Draw the band's bottom rule, which is the top edge of whatever follows it.                                                                                             |
-| `padded`           | `boolean`             | `true`     | false    | Apply the band's own vertical rhythm. The inline inset is always applied.                                                                                              |
-| `size`             | `HeroSize`            | `'medium'` | false    | Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with.                                                       |
-| `texture`          | `TextureMaterialVariant` | `'none'`   | false    | Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot.                                                                     |
-| `textureSize`      | `TextureMaterialSize` | `'medium'` | false    | Pitch of the tiling the `texture` prop paints — how far apart its cells sit.                                                                                           |
-| `textureFade`      | `TextureMaterialFade` | `'none'`   | false    | Fade applied to the layer the `texture` prop paints.                                                                                                                   |
-| `floorTexture`     | `TextureMaterialVariant` | `'none'`   | false    | Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip.                                                                    |
-| `floorTextureSize` | `TextureMaterialSize` | `'medium'` | false    | Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit.                                                                                      |
-| `align`            | `HeroAlign`           | `'center'` | false    | Where the content column sits vertically when the band fills a screen (`start` is the top, `end` the bottom).                                                                                            |
-| `mediaAlign`       | `HeroMediaAlign`      | `'center'` | false    | Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. |
-| `offset`           | `string`              | `''`       | false    | Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length.                                                       |
-| `bottomHeight`     | `string`              | `''`       | false    | Height of the window under the content, where the brand strip and the floor texture stand; any CSS length.                                                             |
-| `ticker`           | `boolean`             | `false`    | false    | Stand the brand ticker on the band's floor, under the `bottom` window.                                                                                                 |
-| `tickerMarks`      | `string[]`            | `[]`       | false    | Registry names of the marks the ticker shows, in order.                                                                                                                |
-| `tickerLabel`      | `string`              | `''`       | false    | Overline above the brand ticker, stating the claim the marks make.                                                                                                     |
+| Prop               | Type             | Default    | Required | JSDoc                                                                                                                                                                  |
+| ------------------ | ---------------- | ---------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`          | `HeroVariant`    | `'band'`   | false    | Height of the band; `screen` fills one viewport minus `--hero-banner-offset`.                                                                                          |
+| `maxWidth`         | `HeroWidth`      | `'7xl'`    | false    | Width the inner column is capped at; `site` is the marketing measure, `full` keeps only the inset.                                                                     |
+| `bordered`         | `boolean`        | `true`     | false    | Draw the band's bottom rule, which is the top edge of whatever follows it.                                                                                             |
+| `padded`           | `boolean`        | `true`     | false    | Apply the band's own vertical rhythm. The inline inset is always applied.                                                                                              |
+| `size`             | `HeroSize`       | `'medium'` | false    | Vertical rhythm the band applies when `padded`, equal above and below; `large` is the opening a page leads with.                                                       |
+| `texture`          | `TextureVariant` | `'none'`   | false    | Paint this texture behind the band's content; `none` leaves the backdrop to the `background` slot.                                                                     |
+| `textureSize`      | `TextureSize`    | `'medium'` | false    | Pitch of the tiling the `texture` prop paints — how far apart its cells sit.                                                                                           |
+| `textureFade`      | `TextureFade`    | `'none'`   | false    | Fade applied to the layer the `texture` prop paints.                                                                                                                   |
+| `floorTexture`     | `TextureVariant` | `'none'`   | false    | Paint this texture standing on the band's floor, filling the `bottom` window under the brand strip.                                                                    |
+| `floorTextureSize` | `TextureSize`    | `'medium'` | false    | Pitch of the tiling the `floorTexture` prop paints — how far apart its cells sit.                                                                                      |
+| `align`            | `HeroAlign`      | `'center'` | false    | Where the content column sits vertically when the band fills a screen (`start` is the top, `end` the bottom).                                                          |
+| `mediaAlign`       | `HeroMediaAlign` | `'center'` | false    | Where the `media` slot sits in its column: `center` balances it in the column, `end` sets its end edge on the container boundary, past the inline inset, from `md` up. |
+| `offset`           | `string`         | `''`       | false    | Height of the fixed chrome above the band, subtracted from the viewport when `variant` is `screen`; any CSS length.                                                    |
+| `bottomHeight`     | `string`         | `''`       | false    | Height of the window under the content, where the brand strip and the floor texture stand; any CSS length.                                                             |
+| `marquee`          | `boolean`        | `false`    | false    | Stand the brand marquee on the band's floor, under the `bottom` window.                                                                                                |
+| `marqueeMarks`     | `string[]`       | `[]`       | false    | Registry names of the marks the marquee shows, in order.                                                                                                               |
+| `marqueeLabel`     | `string`         | `''`       | false    | Eyebrow above the brand marquee, stating the claim the marks make.                                                                                                     |
 
 ## Events
 
@@ -118,13 +118,13 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 
 ## Slots
 
-| Slot         | Scope | Notes                                                                                                                                                                                                                                                                                                                                                                           |
-| ------------ | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `default`    | —     | The band's copy, centered in the capped column above the backdrop; usually one `Hero.Title`.                                                                                                                                                                                                                                                                                    |
-| `media`      | —     | Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two equal halves from `md` up and the copy keeps the leading one; the `Hero.Title` `maxWidth` caps the copy inside its half.                                                                                                                                              |
-| `background` | —     | Decorative backdrop rendered full-bleed beneath the content; marked `aria-hidden`.                                                                                                                                                                                                                                                                                              |
-| `top`        | —     | Decorative asset window overlaying the band's top edge; clips its child, which may be larger than the window and offset inside it. It claims no space, so content still centres on the band.                                                                                                                                                                                    |
-| `bottom`     | —     | Asset window standing on the band's floor; clips its child, which may be larger than the window and offset inside it. It is real content, so it **reserves its height** and `align` centres the copy in what is left. It shares the floor with the `ticker` strip, which stands under it. `floorTexture` fills this same window when the asset is one of the system's textures. |
+| Slot         | Scope | Notes                                                                                                                                                                                                                                                                                                                                                                            |
+| ------------ | ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default`    | —     | The band's copy, centered in the capped column above the backdrop; usually one `Hero.Title`.                                                                                                                                                                                                                                                                                     |
+| `media`      | —     | Screenshot, diagram or form set beside the copy from `md` up. When filled, the content column becomes two equal halves from `md` up and the copy keeps the leading one; the `Hero.Title` `maxWidth` caps the copy inside its half.                                                                                                                                               |
+| `background` | —     | Decorative backdrop rendered full-bleed beneath the content; marked `aria-hidden`.                                                                                                                                                                                                                                                                                               |
+| `top`        | —     | Decorative asset window overlaying the band's top edge; clips its child, which may be larger than the window and offset inside it. It claims no space, so content still centres on the band.                                                                                                                                                                                     |
+| `bottom`     | —     | Asset window standing on the band's floor; clips its child, which may be larger than the window and offset inside it. It is real content, so it **reserves its height** and `align` centres the copy in what is left. It shares the floor with the `marquee` strip, which stands under it. `floorTexture` fills this same window when the asset is one of the system's textures. |
 
 ## Sub-components
 
@@ -148,12 +148,12 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - `data-align` carries where the content column sits vertically in a `screen` band. The column takes the band's leftover height, (`start`, `center` or `end`), so `center` is the centre of the space actually available — a `bottom` asset reserves its height and the copy centres above it, while a `top` asset overlays and claims none
 - The band is an `isolate` stacking context, so its layer order never leaks into the page. Layer tokens set that order: `--banner-z-background` (0), `--banner-z-top` / `--banner-z-bottom` (1), `--banner-z-content` (10)
 - Each asset window clips its slotted child, so an asset larger than the band shows only the part the window frames. Custom properties place it: `--banner-top-height` / `--banner-bottom-height` size the window, and `--banner-top-x` / `-y`, `--banner-bottom-x` / `-y`, `--banner-background-x` / `-y` move the asset inside it
-- The backdrop sets `--texture-fade-lead: transparent`, so a `top` / `bottom` fade on the `texture` layer — or on a `texture-material` in the `background` slot — ramps in from zero at its leading edge as well as fading out: the opening band sits under the site header, and the texture must clear it. Outside a hero the same fades stay single
+- The backdrop sets `--texture-fade-lead: transparent`, so a `top` / `bottom` fade on the `texture` layer — or on a `texture` in the `background` slot — ramps in from zero at its leading edge as well as fading out: the opening band sits under the site header, and the texture must clear it. Outside a hero the same fades stay single
 - `data-floor` present when `floorTexture` paints the floor window. The window then takes a fluid default height (`clamp(9rem, 30dvh, 34rem)`) so a `screen` band still measures one screen on a laptop and caps at the design's field where there is room; with no floor texture it stays `auto` and is sized by its slotted child. `--banner-bottom-height` overrides either, and `--banner-floor-ink` (0.6) sets how strongly the texture reads
-- The floor holds the `bottom` window and the `ticker` strip in one block, so a single ground covers both: `--banner-floor-bg` (transparent by default) paints it, which is how a design plinths the floor a shade off the band's own canvas
-- The `ticker` strip stands on `--bg-canvas` edge to edge, so a `texture` backdrop or `background` slot never shows through the marks; a `--banner-floor-bg` plinth replaces that ground so the floor still reads as one block
-- `ticker` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry
-- `tickerLabel` names what the strip is evidence of; left empty the marks stand alone, which is the right register when the band's copy has already said it
+- The floor holds the `bottom` window and the `marquee` strip in one block, so a single ground covers both: `--banner-floor-bg` (transparent by default) paints it, which is how a design plinths the floor a shade off the band's own canvas
+- The `marquee` strip stands on `--bg-canvas` edge to edge, so a `texture` backdrop or `background` slot never shows through the marks; a `--banner-floor-bg` plinth replaces that ground so the floor still reads as one block
+- `marquee` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry
+- `marqueeLabel` names what the strip is evidence of; left empty the marks stand alone, which is the right register when the band's copy has already said it
 
 ## Motion & Animations
 

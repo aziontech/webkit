@@ -21,7 +21,7 @@
 ## Don’t
 
 - A one-shot generated block on a page (a summary card, an explanation beside a chart) → render `StreamingResponse` in place.
-- A log of system events with timestamps and filtering → use `log-view`.
+- A log of system events with timestamps and filtering → use `log-viewer`.
 - A list of past conversations → a `table` or `item` list; this is one thread.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -31,7 +31,7 @@
 - [prompt-input](prompt-input.md) — the composer pinned under the log (outside it; only the log scrolls).
 - [suggestion-group](suggestion-group.md) — follow-up questions after the last response, or support prompts in the empty state.
 - [empty-state](empty-state.md) — what the panel shows before the first message (the block renders it instead of the log).
-- [log-view](log-view.md) — machine logs, not conversations.
+- [log-viewer](log-viewer.md) — machine logs, not conversations.
 
 ## Props
 
@@ -79,11 +79,11 @@ Exports: `"./conversation": "./src/components/ai/conversation/conversation.vue"`
 
 ## Internationalization
 
-| Key                          | English source                   | Override prop |
-| ---------------------------- | -------------------------------- | ------------- |
-| `conversation.label`         | `Conversation`                   | `ariaLabel`   |
-| `conversation.scrollToLatest`| `Scroll to the latest message`   | —             |
-| `conversation.announcement`  | `{author}: {text}`               | —             |
+| Key                           | English source                 | Override prop |
+| ----------------------------- | ------------------------------ | ------------- |
+| `conversation.label`          | `Conversation`                 | `ariaLabel`   |
+| `conversation.scrollToLatest` | `Scroll to the latest message` | —             |
+| `conversation.announcement`   | `{author}: {text}`             | —             |
 
 - Formatting: none.
 

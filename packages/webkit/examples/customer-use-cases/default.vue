@@ -1,0 +1,34 @@
+<script setup>
+  import CustomerUseCases from '@aziontech/webkit/customer-use-cases'
+</script>
+
+<template>
+  <CustomerUseCases
+    eyebrow="SQL Database"
+    title="What teams use SQL Database for"
+    description="Teams use it to:"
+    :primary-action="{ label: 'Docs', href: '/site/docs', trailing: true }"
+    :items="[
+      {
+        icon: 'ai ai-comments',
+        title: 'RAG Applications',
+        description: 'Build topic-specific chatbots with the topic data stored in SQL Database.'
+      },
+      {
+        icon: 'ai ai-search',
+        title: 'Search Applications',
+        description: 'Power search with vector similarity queries on stored embeddings.'
+      },
+      {
+        icon: 'ai ai-sync',
+        title: 'AI Context Injection',
+        description: 'Give AI applications relevant context from vector embeddings.'
+      },
+      {
+        icon: 'ai ai-globe',
+        title: 'AI Workflows',
+        description: 'Pair stored embeddings with AI Inference to run RAG applications on Azion.'
+      }
+    ]"
+  />
+</template>

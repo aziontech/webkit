@@ -52,9 +52,7 @@
     return rest
   })
   const { t } = useTranslate({ navigationMenu: en.navigationMenu })
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu')
 
   const ROOT_CLASS =
     'relative [--navigation-menu-highlight-background:color-mix(in_srgb,var(--bg-hover)_60%,transparent)]'

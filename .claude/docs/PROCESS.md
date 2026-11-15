@@ -131,7 +131,7 @@ examples in `examples/<name>/`, and the Code Connect mapping. The orchestrator n
 | 1    | Spec validation      | `spec-validator`                                    | no                             | any schema/body/Constraints failure                    |
 | 2    | Discovery (parallel) | `figma-extractor` → `token-mapper`, `reuse-auditor` | no                             | — (emit JSON artifacts)                                |
 | 3    | Reconciliation       | orchestrator                                        | no                             | spec tokens/regions don't reconcile with discovery     |
-| 4    | Scaffold             | `component-scaffolder` + `component-scaffold` skill           | `.vue`(s), `index.ts`, exports | any hook blocks (surfaced, never worked around)        |
+| 4    | Scaffold             | `component-scaffolder` + `component-scaffold` skill | `.vue`(s), `index.ts`, exports | any hook blocks (surfaced, never worked around)        |
 | 5    | Examples             | orchestrator (`/component-create` step 5)           | `examples/<name>/`             | catalog drift, copyable / server-render harnesses      |
 | 6    | Code Connect         | `code-connect-writer`                               | `.figma.ts` (or skip)          | — (skip becomes a pending item)                        |
 | 7    | Echo cross-check     | `echo-reporter`                                     | no                             | independent re-parse diverges from the spec            |
@@ -164,14 +164,14 @@ message naming the violated rule.
 Wired in [`.claude/settings.json`](../settings.json); all fail **open** on
 unexpected errors (a hook bug never bricks the workflow) and fail **closed** on violations.
 
-| Hook                                                                | Fires on                                | Blocks                                                                                                                                                                                                                                         |
-| ------------------------------------------------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [`enforce-component-create`](../hooks/enforce-component-create.mjs) | first `Write` of a new component `.vue` | creating a webkit component outside the `/spec-create` → `/component-create` pipeline                                                                                                                                                          |
-| [`enforce-spec-exists`](../hooks/enforce-spec-exists.mjs)           | `Write` of a component `.vue`           | spec missing, not `approved`/`implemented`, or checksum-tampered (legacy whitelist exempt)                                                                                                                                                     |
+| Hook                                                                | Fires on                                | Blocks                                                                                                                                                                                                                                             |
+| ------------------------------------------------------------------- | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| [`enforce-component-create`](../hooks/enforce-component-create.mjs) | first `Write` of a new component `.vue` | creating a webkit component outside the `/spec-create` → `/component-create` pipeline                                                                                                                                                              |
+| [`enforce-spec-exists`](../hooks/enforce-spec-exists.mjs)           | `Write` of a component `.vue`           | spec missing, not `approved`/`implemented`, or checksum-tampered (legacy whitelist exempt)                                                                                                                                                         |
 | [`validate-tokens`](../hooks/validate-tokens.mjs)                   | `Write\|Edit\|MultiEdit`                | hex/RGB/HSL, Tailwind palette, raw typography, `class` in `defineProps`, `any`, `@ts-ignore` — engine: [`token-checks.js`](../../packages/webkit/src/eslint-plugin/lib/token-checks.js)                                                            |
-| [`validate-references`](../hooks/validate-references.mjs)           | `Write\|Edit\|MultiEdit`                | phantom `@aziontech/webkit/*` subpaths, unresolved relative imports, uninstalled npm packages, forbidden positioning/animation libs                                                                                                            |
+| [`validate-references`](../hooks/validate-references.mjs)           | `Write\|Edit\|MultiEdit`                | phantom `@aziontech/webkit/*` subpaths, unresolved relative imports, uninstalled npm packages, forbidden positioning/animation libs                                                                                                                |
 | [`validate-authoring`](../hooks/validate-authoring.mjs)             | `Write\|Edit\|MultiEdit`                | construction anti-patterns — manual `v-model`, runtime `defineProps`, undeclared slots, un-`readonly` composable state, silent breaking changes — engine: [`authoring-checks.js`](../../packages/webkit/src/eslint-plugin/lib/authoring-checks.js) |
-| [`validate-spec-compliance`](../hooks/validate-spec-compliance.mjs) | **Post**ToolUse on component `.vue`     | any divergence from the spec: missing/extra prop/event/slot/sub-component, name/testid drift, uncatalogued animations, missing `motion-reduce:`                                                                                                |
+| [`validate-spec-compliance`](../hooks/validate-spec-compliance.mjs) | **Post**ToolUse on component `.vue`     | any divergence from the spec: missing/extra prop/event/slot/sub-component, name/testid drift, uncatalogued animations, missing `motion-reduce:`                                                                                                    |
 
 **One engine, many surfaces.** The hooks do not own their logic — they call shared
 engines (`authoring-checks`, `token-checks`, `spec-compliance-checks`)
@@ -194,19 +194,19 @@ an off-pattern change either.
 [`.github/workflows/governance.yml`](../../.github/workflows/governance.yml) — jobs
 gated by a `changes` path filter and summarized by a required `gates` gate:
 
-| Job                | Runs                                                                                                             | Fails the PR when                                                                                       |
-| ------------------ | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| `security`         | `pnpm audit` + TruffleHog + depcheck                                                                             | high-severity advisory, a leaked secret, or a ghost dependency                                          |
-| `lint-canaries`      | `node lint-canaries/index.js`                                                                                    | a deliberately broken fixture stops failing its rule (a lint was weakened)                              |
-| `lint`             | eslint (`--max-warnings 0`) + stylelint + prettier `--check` over `packages/webkit`                              | any warning or format drift                                                                             |
-| `types`            | `vue-tsc --noEmit` + `type-coverage --at-least 95`                                                               | type error or coverage below 95%                                                                        |
-| `build`            | `check:pack` + `check:size` (after `lint` + `types`)                                                                   | a test file leaks into the tarball or an entry exceeds its [bundle budget](../rules/bundle-budget.md)   |
-| `site`             | `build:docs` + `build:demos`, artifact for the visual shards (after `lint` + `types`)                            | a page, example, block or demo fails to build or prerender                                              |
-| `toolkit`          | `check:catalog` + `test:toolkit` + `check:authoring` + `check:tests` + `check:authoring-docs`                                   | catalog drift, toolkit test failure, a **new** authoring/doc violation, or a component without its test |
-| `smoke`            | `test:consume` — packs the three packages, runs `webkit init` in a bare Vite app, builds a `Button`             | the published packages don't install, wire, render styled, or build for a real consumer                 |
-| `tests`            | Vitest browser mode (Playwright Chromium), 4 shards (after `lint` + `types`)                                     | any functional or axe assertion fails                                                                   |
-| `visual`           | Playwright styled screenshots in the Playwright image, 4 shards (after every job above except `toolkit`/`smoke`) | an example, block or demo route drifts from its committed baseline                                      |
-| `gates` | summary gate over every job                                                                                      | any upstream job failed (skips count as pass)                                                           |
+| Job             | Runs                                                                                                             | Fails the PR when                                                                                       |
+| --------------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `security`      | `pnpm audit` + TruffleHog + depcheck                                                                             | high-severity advisory, a leaked secret, or a ghost dependency                                          |
+| `lint-canaries` | `node lint-canaries/index.js`                                                                                    | a deliberately broken fixture stops failing its rule (a lint was weakened)                              |
+| `lint`          | eslint (`--max-warnings 0`) + stylelint + prettier `--check` over `packages/webkit`                              | any warning or format drift                                                                             |
+| `types`         | `vue-tsc --noEmit` + `type-coverage --at-least 95`                                                               | type error or coverage below 95%                                                                        |
+| `build`         | `check:pack` + `check:size` (after `lint` + `types`)                                                             | a test file leaks into the tarball or an entry exceeds its [bundle budget](../rules/bundle-budget.md)   |
+| `site`          | `build:docs` + `build:demos`, artifact for the visual shards (after `lint` + `types`)                            | a page, example, block or demo fails to build or prerender                                              |
+| `toolkit`       | `check:catalog` + `test:toolkit` + `check:authoring` + `check:tests` + `check:authoring-docs`                    | catalog drift, toolkit test failure, a **new** authoring/doc violation, or a component without its test |
+| `smoke`         | `test:consume` — packs the three packages, runs `webkit init` in a bare Vite app, builds a `Button`              | the published packages don't install, wire, render styled, or build for a real consumer                 |
+| `tests`         | Vitest browser mode (Playwright Chromium), 4 shards (after `lint` + `types`)                                     | any functional or axe assertion fails                                                                   |
+| `visual`        | Playwright styled screenshots in the Playwright image, 4 shards (after every job above except `toolkit`/`smoke`) | an example, block or demo route drifts from its committed baseline                                      |
+| `gates`         | summary gate over every job                                                                                      | any upstream job failed (skips count as pass)                                                           |
 
 **The ratchet** ([`check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)) re-runs the
 construction, token, and spec-compliance engines over every source file and
@@ -468,23 +468,23 @@ and the [invariant test](#the-invariant) fails CI if a rule and its gate ever dr
 Construction patterns for **any** Vue component, anywhere. These are the future
 [standards pack](#roadmap--the-standards-pack).
 
-| Standard                                               | One line                                                                                   |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------ |
+| Standard                                               | One line                                                                                      |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------- |
 | [prop-vocabulary](../rules/prop-vocabulary.md)         | one canonical name/type/default per concept (`variant`, `small/medium/large`, `dismissible`…) |
-| [props](../rules/props.md)                             | typed `interface Props` + `withDefaults` + JSDoc; no negative/prefixed booleans            |
-| [v-model](../rules/v-model.md)                         | two-way state via `defineModel`, never manual prop+emit                                    |
-| [emits](../rules/emits.md)                             | typed `defineEmits`; no echo events duplicating `update:*`                                 |
-| [event-payloads](../rules/event-payloads.md)           | activation events emit `(event, item?)` — DOM event always first                           |
-| [slots](../rules/slots.md)                             | typed `defineSlots`; fallback content lives in the slot                                    |
-| [composables](../rules/composables.md)                 | `readonly` state out, `toValue` args in, cleanup in `onScopeDispose`                       |
-| [styling](../rules/styling.md)                         | utilities inline on the root; variants via `data-*`; no class-map presets, no `<style>`    |
-| [component-structure](../rules/component-structure.md) | one folder per component; fixed `<script setup>` order                                     |
-| [root-element](../rules/root-element.md)               | own the root; `inheritAttrs:false` + `$attrs` + `cn`; polymorphism via `href`              |
-| [component-states](../rules/component-states.md)       | loading/empty/error rendered via `data-*` + DS components                                  |
-| [accessibility](../rules/accessibility.md)             | semantics, keyboard, `focus-visible`, `motion-reduce`, `useId`                             |
-| [testid](../rules/testid.md)                           | overridable `data-testid` derived `<category>-<name>`                                      |
-| [deprecation](../rules/deprecation.md)                 | `@deprecated` naming the replacement → one major → removal                                 |
-| [comments](../rules/comments.md)                       | no prose comments; only API JSDoc and tool directives                                      |
+| [props](../rules/props.md)                             | typed `interface Props` + `withDefaults` + JSDoc; no negative/prefixed booleans               |
+| [v-model](../rules/v-model.md)                         | two-way state via `defineModel`, never manual prop+emit                                       |
+| [emits](../rules/emits.md)                             | typed `defineEmits`; no echo events duplicating `update:*`                                    |
+| [event-payloads](../rules/event-payloads.md)           | activation events emit `(event, item?)` — DOM event always first                              |
+| [slots](../rules/slots.md)                             | typed `defineSlots`; fallback content lives in the slot                                       |
+| [composables](../rules/composables.md)                 | `readonly` state out, `toValue` args in, cleanup in `onScopeDispose`                          |
+| [styling](../rules/styling.md)                         | utilities inline on the root; variants via `data-*`; no class-map presets, no `<style>`       |
+| [component-structure](../rules/component-structure.md) | one folder per component; fixed `<script setup>` order                                        |
+| [root-element](../rules/root-element.md)               | own the root; `inheritAttrs:false` + `$attrs` + `cn`; polymorphism via `href`                 |
+| [component-states](../rules/component-states.md)       | loading/empty/error rendered via `data-*` + DS components                                     |
+| [accessibility](../rules/accessibility.md)             | semantics, keyboard, `focus-visible`, `motion-reduce`, `useId`                                |
+| [testid](../rules/testid.md)                           | overridable `data-testid`: the component's own name                                           |
+| [deprecation](../rules/deprecation.md)                 | `@deprecated` naming the replacement → one major → removal                                    |
+| [comments](../rules/comments.md)                       | no prose comments; only API JSDoc and tool directives                                         |
 
 ### `scope: webkit` — 12 standards (internal to the design system)
 
@@ -521,8 +521,8 @@ practices**, adoptable by any project (with or without webkit components).
 | Asset                      | Today                                                | In the pack                               |
 | -------------------------- | ---------------------------------------------------- | ----------------------------------------- |
 | The 14 `general` rule docs | `.claude/rules/*.md`                                 | the pack's `rules/` (source of truth)     |
-| Construction engine        | `src/eslint-plugin/lib/authoring-checks.js`              | pack engine                               |
-| Token discipline engine    | `src/eslint-plugin/lib/token-checks.js`                  | pack engine (token source configurable)   |
+| Construction engine        | `src/eslint-plugin/lib/authoring-checks.js`          | pack engine                               |
+| Token discipline engine    | `src/eslint-plugin/lib/token-checks.js`              | pack engine (token source configurable)   |
 | ESLint preset              | `@aziontech/webkit/eslint-plugin` (standards subset) | the pack's eslint plugin                  |
 | Stylelint config           | `@aziontech/webkit/stylelint-config`                 | the pack's stylelint config               |
 | AI guidance bundle         | `skills/`, `rules/`, `adapters/` (repo root)         | the pack's `init` bundle                  |
@@ -558,9 +558,9 @@ a non-webkit repo can adopt the pack with one command.
 | Concern                          | Where                                                                                                                                                                                                                                                                                                                                                 |
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Rule documents (25)              | [`.claude/rules/`](../rules/) — index in its [README](../rules/README.md)                                                                                                                                                                                                                                                                             |
-| Machine registry (scope + gates) | [`.claude/hooks/lib/standards.mjs`](../hooks/lib/standards.mjs)                                                                                                                                                                                                                                                                                     |
+| Machine registry (scope + gates) | [`.claude/hooks/lib/standards.mjs`](../hooks/lib/standards.mjs)                                                                                                                                                                                                                                                                                       |
 | Write-time hooks                 | [`.claude/hooks/`](../hooks/) — [README](../hooks/README.md)                                                                                                                                                                                                                                                                                          |
-| Shared check engines             | [`src/eslint-plugin/lib/*.js`](../../packages/webkit/src/eslint-plugin/lib/) + [`.claude/hooks/lib/*.mjs`](../hooks/lib/)                                                                                                                                                                                                                                   |
+| Shared check engines             | [`src/eslint-plugin/lib/*.js`](../../packages/webkit/src/eslint-plugin/lib/) + [`.claude/hooks/lib/*.mjs`](../hooks/lib/)                                                                                                                                                                                                                             |
 | Specs                            | [`.specs/`](../../.specs/) — template, schema, one `.md` per component                                                                                                                                                                                                                                                                                |
 | Pipeline commands & skills       | [`.claude/commands/`](../commands/) + [`.claude/skills/`](../skills/)                                                                                                                                                                                                                                                                                 |
 | CI                               | [`.github/workflows/governance.yml`](../../.github/workflows/governance.yml) + [`scripts/check-authoring.mjs`](../../packages/webkit/scripts/check-authoring.mjs)                                                                                                                                                                                     |

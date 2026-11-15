@@ -5,7 +5,7 @@ import { defineComponent, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import Command from './command.vue'
 import CommandEmpty from './command-empty/command-empty.vue'
 import CommandGroup from './command-group/command-group.vue'
@@ -26,7 +26,7 @@ const settle = async () => {
 
 const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
 
-const panel = () => byTestId('overlay-command__panel')
+const panel = () => byTestId('command__panel')
 
 /**
  * A realistic composed palette: Root (v-model:open) > Input + List > two Groups
@@ -143,7 +143,7 @@ describe('Command', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        expect(getByTestId('overlay-command').getAttribute('data-state')).toBe('closed')
+        expect(getByTestId('command').getAttribute('data-state')).toBe('closed')
         expect(panel()).toBeNull()
       })
     })
@@ -153,17 +153,17 @@ describe('Command', () => {
         const { getByTestId } = render(composed({ defaultOpen: true }))
         await settle()
 
-        expect(getByTestId('overlay-command').getAttribute('data-state')).toBe('open')
+        expect(getByTestId('command').getAttribute('data-state')).toBe('open')
 
         const dialog = panel()
         expect(dialog).not.toBeNull()
         expect(dialog!.getAttribute('role')).toBe('dialog')
 
         // The input is a combobox wired to the list's id.
-        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        const input = byTestId('command-input')!.querySelector('input')!
         expect(input.getAttribute('role')).toBe('combobox')
         expect(input.getAttribute('aria-expanded')).toBe('true')
-        expect(input.getAttribute('aria-controls')).toBe(byTestId('overlay-command__list')!.id)
+        expect(input.getAttribute('aria-controls')).toBe(byTestId('command-list')!.id)
       })
 
       it('names each group with its label prop', async () => {
@@ -184,7 +184,7 @@ describe('Command', () => {
         render(composed({ defaultOpen: true }))
         await settle()
 
-        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        const input = byTestId('command-input')!.querySelector('input')!
         expect(screen.getByLabelText('Search commands…')).toBe(input)
         expect(input.getAttribute('aria-label')).toBe('Search commands…')
       })
@@ -193,7 +193,7 @@ describe('Command', () => {
         render(composed({ defaultOpen: true }, { ariaLabel: 'Search actions' }))
         await settle()
 
-        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        const input = byTestId('command-input')!.querySelector('input')!
         expect(screen.getByLabelText('Search actions')).toBe(input)
         expect(input.getAttribute('placeholder')).toBe('Search commands…')
       })
@@ -203,14 +203,14 @@ describe('Command', () => {
       it('uses the overlay-command fallback on the root', async () => {
         const { getByTestId } = render(composed())
         await settle()
-        expect(getByTestId('overlay-command')).toBeTruthy()
+        expect(getByTestId('command')).toBeTruthy()
       })
 
       it('a consumer-supplied data-testid wins', async () => {
         render(composed({ defaultOpen: true, 'data-testid': 'palette' }))
         await settle()
         expect(byTestId('palette__panel')).not.toBeNull()
-        expect(byTestId('overlay-command__panel')).toBeNull()
+        expect(byTestId('command__panel')).toBeNull()
       })
     })
 
@@ -226,7 +226,7 @@ describe('Command', () => {
         // Everything visible, Empty hidden.
         expect(empty.style.display).toBe('none')
 
-        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        const input = byTestId('command-input')!.querySelector('input')!
         await fireEvent.update(input, 'deploy')
         await settle()
 
@@ -241,11 +241,11 @@ describe('Command', () => {
         await fireEvent.update(input, 'zzzzzzz')
         await settle()
         expect(empty.style.display).not.toBe('none')
-        expect(byTestId('overlay-command__list')).not.toHaveAttribute('role')
+        expect(byTestId('command-list')).not.toHaveAttribute('role')
 
         await fireEvent.update(input, '')
         await settle()
-        expect(byTestId('overlay-command__list')).toHaveAttribute('role', 'listbox')
+        expect(byTestId('command-list')).toHaveAttribute('role', 'listbox')
       })
     })
 
@@ -256,7 +256,7 @@ describe('Command', () => {
         await settle()
 
         // Narrow to a single enabled item so the active target is deterministic.
-        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        const input = byTestId('command-input')!.querySelector('input')!
         await fireEvent.update(input, 'new-app')
         await settle()
 
@@ -271,7 +271,7 @@ describe('Command', () => {
 
         // Selecting closes the palette. DialogPortal keeps the panel mounted for
         // the exit animation, so assert the closed state on the root (as dialog does).
-        expect(byTestId('overlay-command')?.getAttribute('data-state')).toBe('closed')
+        expect(byTestId('command')?.getAttribute('data-state')).toBe('closed')
       })
 
       it('emits update:open(false) once when activation closes the palette', async () => {
@@ -279,7 +279,7 @@ describe('Command', () => {
         render(composed({ defaultOpen: true, 'onUpdate:open': onOpen }))
         await settle()
 
-        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        const input = byTestId('command-input')!.querySelector('input')!
         await fireEvent.update(input, 'new-app')
         await settle()
         await fireEvent.keyDown(input, { key: 'ArrowDown' })
@@ -299,14 +299,14 @@ describe('Command', () => {
         render(conditionalResults())
         await settle()
 
-        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        const input = byTestId('command-input')!.querySelector('input')!
         await fireEvent.update(input, 'sto')
         await settle()
 
         // Both rows match "sto" — the conditional one renders first, so it is the one the
         // highlight (and therefore Enter) lands on, even though it registered last.
         const rows = Array.from(
-          document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
+          document.body.querySelectorAll<HTMLElement>('[data-testid="command-item"]')
         )
         expect(rows.map((row) => row.textContent?.trim())).toEqual(['storefront', 'Object Storage'])
         expect(rows[0].getAttribute('data-active')).toBe('true')
@@ -317,7 +317,7 @@ describe('Command', () => {
         render(conditionalResults())
         await settle()
 
-        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        const input = byTestId('command-input')!.querySelector('input')!
         await fireEvent.update(input, 'sto')
         await settle()
 
@@ -325,7 +325,7 @@ describe('Command', () => {
         await settle()
 
         const rows = Array.from(
-          document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
+          document.body.querySelectorAll<HTMLElement>('[data-testid="command-item"]')
         )
         expect(rows[1].getAttribute('data-active')).toBe('true')
       })
@@ -359,16 +359,16 @@ describe('Command', () => {
         await settle()
 
         const items = Array.from(
-          document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
+          document.body.querySelectorAll<HTMLElement>('[data-testid="command-item"]')
         )
         expect(items).toHaveLength(2)
 
-        const iconed = items[0].querySelector('[data-testid="overlay-command__item__leading"]')
+        const iconed = items[0].querySelector('[data-testid="command-item__leading"]')
         expect(iconed).not.toBeNull()
         expect(items[0].querySelector('i.ai-cloud-upload')).not.toBeNull()
 
         // The icon-less row puts no empty box in the DOM, so it carries no indent.
-        expect(items[1].querySelector('[data-testid="overlay-command__item__leading"]')).toBeNull()
+        expect(items[1].querySelector('[data-testid="command-item__leading"]')).toBeNull()
         expect(items[1].querySelector('i')).toBeNull()
       })
 
@@ -377,11 +377,11 @@ describe('Command', () => {
         await settle()
 
         const items = Array.from(
-          document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
+          document.body.querySelectorAll<HTMLElement>('[data-testid="command-item"]')
         )
         expect(items.length).toBeGreaterThan(0)
         for (const item of items) {
-          expect(item.querySelector('[data-testid="overlay-command__item__leading"]')).toBeNull()
+          expect(item.querySelector('[data-testid="command-item__leading"]')).toBeNull()
         }
       })
     })
@@ -390,9 +390,9 @@ describe('Command', () => {
       it('points aria-activedescendant at the active item id as ArrowDown moves', async () => {
         render(composed({ defaultOpen: true }))
         await settle()
-        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        const input = byTestId('command-input')!.querySelector('input')!
         const items = Array.from(
-          document.body.querySelectorAll<HTMLElement>('[data-testid="overlay-command__item"]')
+          document.body.querySelectorAll<HTMLElement>('[data-testid="command-item"]')
         )
         expect(items[0]!.id).not.toBe('')
 
@@ -425,12 +425,12 @@ describe('Command', () => {
           })
         )
         await settle()
-        const input = byTestId('overlay-command__input')!.querySelector('input')!
+        const input = byTestId('command-input')!.querySelector('input')!
         await fireEvent.keyDown(input, { key: 'End' })
         await settle()
         await new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
         const last = document.getElementById(input.getAttribute('aria-activedescendant')!)!
-        const list = byTestId('overlay-command__list')!
+        const list = byTestId('command-list')!
         expect(last.textContent).toContain('row-39')
         expect(list.scrollTop).toBeGreaterThan(0)
       })
@@ -468,8 +468,8 @@ describe('Command', () => {
     it('prints Esc, Enter and Space from the catalog', async () => {
       const view = render(localized('pt-BR'))
       await settle()
-      const keycaps = [...document.body.querySelectorAll('[data-testid="content-kbd"]')].map(
-        (node) => node.textContent?.trim()
+      const keycaps = [...document.body.querySelectorAll('[data-testid="kbd"]')].map((node) =>
+        node.textContent?.trim()
       )
       expect(keycaps).toContain('Esc')
       expect(keycaps.some((text) => text?.endsWith('Enter'))).toBe(true)
@@ -481,7 +481,7 @@ describe('Command', () => {
   describe('keyboard map (spec)', () => {
     const activeText = () =>
       document.body.querySelector('[role="option"][aria-selected="true"]')?.textContent?.trim()
-    const input = () => byTestId('overlay-command__input')!.querySelector('input')!
+    const input = () => byTestId('command-input')!.querySelector('input')!
 
     const withOpener = defineComponent({
       components: { Palette: composed() },
@@ -530,7 +530,7 @@ describe('Command', () => {
       const { getByTestId } = await openPalette()
       await userEvent.keyboard('{Enter}')
       await settle()
-      expect(byTestId('overlay-command')?.getAttribute('data-state')).toBe('closed')
+      expect(byTestId('command')?.getAttribute('data-state')).toBe('closed')
       await vi.waitFor(() => expect(document.activeElement).toBe(getByTestId('opener')))
     })
 
@@ -538,7 +538,7 @@ describe('Command', () => {
       const { getByTestId } = await openPalette()
       await userEvent.keyboard('{Escape}')
       await settle()
-      expect(byTestId('overlay-command')?.getAttribute('data-state')).toBe('closed')
+      expect(byTestId('command')?.getAttribute('data-state')).toBe('closed')
       await vi.waitFor(() => expect(document.activeElement).toBe(getByTestId('opener')))
     })
 
@@ -619,7 +619,7 @@ describe('Command', () => {
   })
 
   describe('ranked search', () => {
-    const input = () => byTestId('overlay-command__input')!.querySelector('input')!
+    const input = () => byTestId('command-input')!.querySelector('input')!
     const activeText = () =>
       document.body.querySelector('[role="option"][aria-selected="true"]')?.textContent?.trim()
 
@@ -675,12 +675,12 @@ describe('Command', () => {
       await settle()
 
       const groups = document.body.querySelectorAll('[role="group"]')
-      expect(byTestId('overlay-command__list')).toHaveAttribute('data-ranked')
+      expect(byTestId('command-list')).toHaveAttribute('data-ranked')
       expect(groups[1]).toHaveAttribute('data-leading')
       expect((groups[0] as HTMLElement).style.display).toBe('none')
       const rows = [...groups[1].querySelectorAll('[role="option"]')] as HTMLElement[]
       expect(Number(rows[0].style.order)).toBeLessThan(Number(rows[1].style.order))
-      expect(byTestId('overlay-command__separator')!.style.display).toBe('none')
+      expect(byTestId('command-separator')!.style.display).toBe('none')
       expect(activeText()).toBe('Settings Domains')
 
       await userEvent.keyboard('{Enter}')
@@ -752,7 +752,7 @@ describe('Command', () => {
   })
 
   describe('nested pages', () => {
-    const input = () => byTestId('overlay-command__input')!.querySelector('input')!
+    const input = () => byTestId('command-input')!.querySelector('input')!
     const visibleTexts = () =>
       [...document.body.querySelectorAll('[role="option"]')]
         .filter((node) => (node as HTMLElement).style.display !== 'none')
@@ -787,7 +787,7 @@ describe('Command', () => {
       const view = render(paged(onSelect))
       await settle()
       expect(visibleTexts()).toEqual(['Switch Project', 'Create Project'])
-      expect(byTestId('overlay-command__item__page')).not.toBeNull()
+      expect(byTestId('command-item__page')).not.toBeNull()
 
       input().focus()
       await userEvent.keyboard('{ArrowDown}{Enter}')
@@ -795,9 +795,9 @@ describe('Command', () => {
       expect(onSelect).not.toHaveBeenCalled()
       expect(view.getByTestId('page-value').textContent).toBe('projects')
       expect(visibleTexts()).toEqual(['acme-store', 'docs-site'])
-      const back = byTestId('overlay-command__input__back')!
+      const back = byTestId('command-input__previous')!
       expect(back).toHaveAccessibleName('Back from Switch project')
-      expect(byTestId('overlay-command__input')).toHaveAttribute('data-page', 'projects')
+      expect(byTestId('command-input')).toHaveAttribute('data-page', 'projects')
 
       await userEvent.keyboard('{Enter}')
       expect(onSelect).toHaveBeenCalledWith(expect.any(KeyboardEvent), 'acme-store')
@@ -817,7 +817,7 @@ describe('Command', () => {
       await userEvent.keyboard('{Enter}')
       await settle()
       expect(view.getByTestId('page-value').textContent).toBe('projects')
-      await userEvent.click(byTestId('overlay-command__input__back')!)
+      await userEvent.click(byTestId('command-input__previous')!)
       await settle()
       expect(view.getByTestId('page-value').textContent).toBe('')
     })

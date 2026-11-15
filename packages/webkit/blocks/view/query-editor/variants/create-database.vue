@@ -1,17 +1,17 @@
 <script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
@@ -23,7 +23,7 @@
   const form = reactive(blank())
   const baseline = ref(JSON.stringify(form))
   const dirty = computed(() => JSON.stringify(form) !== baseline.value)
-  const errors = reactive<{ name: string; nameKind: HelperTextType }>({
+  const errors = reactive<{ name: string; nameKind: 'helper' | 'invalid' | 'required' }>({
     name: '',
     nameKind: 'required'
   })
@@ -107,15 +107,15 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Console">
-      <GlobalHeader.Start>
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Databases"
           variant="outline"
           size="small"
         />
-        <GlobalHeader.Brand>
+        <AppHeader.Brand>
           <a
             href="/home"
             aria-label="Azion home"
@@ -126,11 +126,11 @@
               size="small"
             />
           </a>
-        </GlobalHeader.Brand>
+        </AppHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Start>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -142,8 +142,8 @@
             variant="square"
           />
         </button>
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
       <form
@@ -176,7 +176,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="Identifies the database wherever it is queried from. It cannot be changed later. Between 6 and 50 characters: letters, numbers and hyphens."
                       >
@@ -195,13 +195,12 @@
                           "
                           @update:model-value="errors.name = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.name"
                           id="create-database-name-message"
-                          :type="errors.nameKind"
-                          :label="errors.name"
-                        />
-                      </SettingRow>
+                          >{{ errors.name }}</FieldError
+                        >
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -216,7 +215,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Active"
                         description="An inactive database keeps its data and refuses connections."
                         variant="compact"
@@ -225,7 +224,7 @@
                           v-model="form.active"
                           aria-label="Active"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

@@ -61,7 +61,7 @@
 
 ## Sub-components
 
-- `context-menu-trigger/context-menu-trigger.vue` — the area that opens the menu. Renders a block `div` that carries `data-testid` (`navigation-context-menu__trigger`), `data-state` and `data-disabled` and receives the consumer's attributes. It is not focusable itself and has no role; the focusable content inside it (rows, buttons, links) keeps its own semantics. It listens for `contextmenu` (opens at the pointer and prevents the native menu), `keydown` `Shift+F10` and the `ContextMenu` key from any focused descendant (opens at the inline-start bottom corner of the focused element), and a 500 ms touch long-press that does not move more than 10 px (opens at the touch point). When the root is disabled it does nothing and the native menu appears.
+- `context-menu-trigger/context-menu-trigger.vue` — the area that opens the menu. Renders a block `div` that carries `data-testid` (`context-menu-trigger`), `data-state` and `data-disabled` and receives the consumer's attributes. It is not focusable itself and has no role; the focusable content inside it (rows, buttons, links) keeps its own semantics. It listens for `contextmenu` (opens at the pointer and prevents the native menu), `keydown` `Shift+F10` and the `ContextMenu` key from any focused descendant (opens at the inline-start bottom corner of the focused element), and a 500 ms touch long-press that does not move more than 10 px (opens at the touch point). When the root is disabled it does nothing and the native menu appears.
   - Props: _none_.
   - Events: _none_ (the root handles `update:open`).
   - Slots: `default` with scope `{ isOpen: boolean }` — the area's content.

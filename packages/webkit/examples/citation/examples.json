@@ -1,6 +1,6 @@
 {
   "component": "citation",
-  "title": "Components/Primitives/AI/Citation",
+  "title": "Components/AI/Citation",
   "examples": [
     {
       "name": "Default",

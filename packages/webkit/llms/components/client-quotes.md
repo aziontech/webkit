@@ -1,9 +1,9 @@
 # Client Quotes
 
-> The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it. It is a page section — the site places it from a `{ _id: 'client-quotes', props }` entry and binds `props` straight onto it — and it composes `section-module`, `frame-box`, `quote-tabs` and `button`.
+> The client-stories band: a framed `quote-tabs` carousel of customer quotes, each signed by its author and marked by the client's logo, with one call to action under it. It is a page section — the site places it from a `{ _id: 'client-quotes', props }` entry and binds `props` straight onto it — and it composes `section-module`, `registration-frame`, `quote-tabs` and `button`.
 
 - Import: `import ClientQuotes from '@aziontech/webkit/client-quotes'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [client-quotes.json](https://github.com/aziontech/webkit/blob/main/.specs/client-quotes.json)
 
 ## When to use
@@ -17,12 +17,12 @@
 - Three to six items; the tabs need room for each client's mark.
 - Give each item either a registry `mark` or a `logo` URL with `clientName`, not both.
 - On azion.com the client wall is in each brand's colours, not one ink: give each client its logo file from the package, `import gpa from '@aziontech/webkit/assets/gpa-extended-color.svg'`, then `logo: gpa`. On the dark site use `-extended-color.svg` where the colour logo reads on black (GPA, Zoop, HeroSpark, Magalu) and `-extended-reversed.svg` where the colour logo has dark lettering (Axur, Contabilizei, Dafiti, Global Fashion Group as `gfg`); on a light page use `-extended-color.svg`. A registry `mark` (one ink, follows the theme) is for a client that ships no logo file. `catalog.json` lists every file under `imports` with `"kind": "asset"`.
-- Every item needs its quotation (`text`): a card is a tab that features it, and an item without one is skipped. Do not invent a quotation to fill the wall; list the clients you have quotes for, or use `logo-wall-quote` for one quotation beside a logo wall.
+- Every item needs its quotation (`text`): a card is a tab that features it, and an item without one is skipped. Do not invent a quotation to fill the wall; list the clients you have quotes for, or use `logo-wall-section` for one quotation beside a logo wall.
 - The band advances on a timer like azion.com's. Set `:autoplay="false"` when the page must hold one quote (a still capture, a page with other moving content), and bind `v-model` (the selected index) to open on a quote other than the first; never wrap or re-time the band yourself.
 
 ## Don’t
 
-- For one quote beside a logo wall → use `logo-wall-quote`.
+- For one quote beside a logo wall → use `logo-wall-section`.
 - For a scrolling strip of analyst recognitions → use `recognition-marquee`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
@@ -44,7 +44,7 @@
 
 ## Assets
 
-- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.
+- Brand marks: every valid name is in [brand-marks.md](../foundations/brand-marks.md) (MCP `list_assets({ kind: "brandMarks" })`). An unknown name is not drawn as a mark: `Marquee` prints it as a typographic wordmark, the quote components show no mark.
 
 ## v-model
 

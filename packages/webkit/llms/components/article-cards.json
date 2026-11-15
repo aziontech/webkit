@@ -3,12 +3,12 @@
  "binding": "ArticleCards",
  "import": "@aziontech/webkit/article-cards",
  "treeShakeableImport": "@aziontech/webkit/article-cards",
- "category": "sections",
+ "category": "section",
  "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `card-grid`. `variant` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.",
+ "purpose": "A titled row of three linked article cards on one hairline frame grid with no gutter, stacking to one column on mobile. Each card is a single link: a 16:9 media cell holding the article's cover — or, when it has none, the client's mark in one flat ink that follows the theme — then the headline, the deck and a `meta` overline pinned to the foot. It is a page section — the site places it from a `{ _id: 'article-cards', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame` and `card-grid`. `variant` places the heading only: `start` at the start (an article's closing row), `center` centred over the cards under an overline (a landing-page band); the cards keep the same shape in both.",
  "setup": null,
  "useWhen": [
   "To close a blog post with its related articles, or a success story with its related stories.",
@@ -47,7 +47,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Overline above the heading."
+   "doc": "Eyebrow above the heading."
   },
   {
    "name": "title",

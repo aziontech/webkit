@@ -32,7 +32,7 @@
   const context = useKeyValueListContext()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? `${context.testId.value}__item`
+    () => (attrs['data-testid'] as string | undefined) ?? 'key-value-list-item'
   )
 
   const hasValue = () => hasRenderedContent(slots['default']?.() ?? [])

@@ -29,7 +29,7 @@
 
   const isFluid = computed(() => attrs['data-fluid'] !== undefined && attrs['data-fluid'] !== false)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-panel')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'panel')
 
   provide(PanelInjectionKey, {
     testId: testId.value

@@ -42,9 +42,7 @@
     }))
   )
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__area`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-area')
 
   const areas = computed(() => {
     const layout = ctx.category.value

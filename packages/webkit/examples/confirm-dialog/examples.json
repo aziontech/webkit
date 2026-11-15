@@ -1,6 +1,6 @@
 {
   "component": "confirm-dialog",
-  "title": "Components/Primitives/Overlay/ConfirmDialog",
+  "title": "Components/Overlay/ConfirmDialog",
   "examples": [
     {
       "name": "Confirm",

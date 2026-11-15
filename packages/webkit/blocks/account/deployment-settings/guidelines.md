@@ -24,9 +24,9 @@ Title `Build and deployment` and one sentence that says every environment is lin
 
 A small info `Alert`, closable, that explains the binding policy, the deployment policy, the automatic link and what sharing a setting does. It closes for the session.
 
-### C. New service defaults — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Select`, `Switch`, `SaveBar` (required)
+### C. New service defaults — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Select`, `Switch`, `SaveBar` (required)
 
-A `SettingsSection` with an anchor around a flush `Card` and an `Item.List` of `SettingRow`s: Binding policy and Deployment policy as large `Select`s whose value reads the policy label, then `Apply to existing Deployment Settings` as a compact `Switch`. Changing any of them raises a `SaveBar` (entering and leaving with a short translate and fade, none under reduced motion) that says `You have unsaved changes.` with Discard and Save. Save spins, keeps the values, turns Apply off again and toasts what changed: with Apply on, how many settings now use the binding policy (Default is never changed).
+A `SettingsSection` with an anchor around a flush `Card` and an `Item.List` of `SettingsRow`s: Binding policy and Deployment policy as large `Select`s whose value reads the policy label, then `Apply to existing Deployment Settings` as a compact `Switch`. Changing any of them raises a `SaveBar` (entering and leaving with a short translate and fade, none under reduced motion) that says `You have unsaved changes.` with Discard and Save. Save spins, keeps the values, turns Apply off again and toasts what changed: with Apply on, how many settings now use the binding policy (Default is never changed).
 
 ### D. All services — `Accordion`, `Input`, `Tag`, `Select`, `Pagination` (required)
 

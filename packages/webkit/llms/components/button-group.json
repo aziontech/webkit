@@ -3,7 +3,7 @@
  "binding": "ButtonGroup",
  "import": "@aziontech/webkit/button-group",
  "treeShakeableImport": "@aziontech/webkit/button-group",
- "category": "actions",
+ "category": "action",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

@@ -11,13 +11,13 @@ The top bar of every signed-out and first-run screen: sign in, sign up, password
 ## When not to use
 
 - Any page with a session: `ConsoleLayout` already renders the console bar (`shell/console`); a create, edit or deploy flow uses `top-bar/creation-bar`.
-- Documentation pages: `DocLayout` renders their bar (`shell/docs`). Marketing pages: `SiteLayout` and `SiteNav` render theirs (`shell/site`).
+- Documentation pages: `DocLayout` renders their bar (`shell/docs`). Marketing pages: `SiteLayout` and `SiteHeader` render theirs (`shell/site`).
 
 ## Building blocks
 
-### A. Bar — `GlobalHeader` (required)
+### A. Bar — `AppHeader` (required)
 
-The bar in its default `content` placement, labelled `aria-label="Console"`. Fill `GlobalHeader.Brand` and `GlobalHeader.End`; keep `GlobalHeader.Center` empty. Never a bare `<header>`.
+The bar in its default `content` placement, labelled `aria-label="Console"`. Fill `AppHeader.Brand` and `AppHeader.End`; keep `AppHeader.Center` empty. Never a bare `<header>`.
 
 ### B. Brand — `Brand` (required)
 
@@ -44,7 +44,7 @@ One outlined, medium button with the book icon and an `href` to the docs. It is 
 
 ## Accessibility
 
-- The `GlobalHeader` is a landmark with its own label (`Console`); keep one per page.
+- The `AppHeader` is a landmark with its own label (`Console`); keep one per page.
 - The brand is a link with an accessible name, not a decorative image.
 - Tab order is brand, then Documentation; nothing else in the bar takes focus.
 

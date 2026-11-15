@@ -3,7 +3,7 @@
  "binding": "DateRangePicker",
  "import": "@aziontech/webkit/date-range-picker",
  "treeShakeableImport": "@aziontech/webkit/date-range-picker",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

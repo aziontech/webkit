@@ -1,11 +1,11 @@
 # AsyncSubmit (`state/async-submit`)
 
-> The async counterpart of the server rejection in the SectionRejected state of the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`: the page shows an `EmptyState` whose Deploy starts the run while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: the app's one toast region (ToastPlugin, or one Toaster near the app root) shows it, never a Toaster in the page body; the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, `Tag`, `Button`, `EmptyState`, `Alert`, and the deployment logs card of Templates/Platform/Detail/DeploymentLogs (`Card`, `StatusIndicator`, `LogView` with its `LogView.Steps` steps and progress bar, and `ToggleGroup` for the Phased or Complete log switch on failure). A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
+> The async counterpart of the server rejection in the SectionRejected state of the FormValidation template: a deploy that runs for about half a minute, so the user walks away before it ends. The page heading carries the run status as a `Tag`: the page shows an `EmptyState` whose Deploy starts the run while idle, the deployment logs card while it runs, a danger `Alert` with Edit and Redeploy over the stopped logs when it fails, and a success `Alert` with Edit, Redeploy and Open service once it is live. Progress and the outcome also ride a toast wherever the user is: the app's one toast region (ToastPlugin, or one Toaster near the app root) shows it, never a Toaster in the page body; the Running frame shows the progress toast, and the failure (permanent) and success toasts carry Edit and Redeploy. Built from `PageHeader`, `Tag`, `Button`, `EmptyState`, `Alert`, and the deployment logs card of Templates/Platform/Detail/DeploymentLogs (`Card`, `StatusIndicator`, `LogViewer` with its `LogViewer.Steps` steps and progress bar, and `ToggleGroup` for the Phased or Complete log switch on failure). A page body: render it in the default slot of ConsoleLayout, which owns the rail, the header and the main.
 
 - Surface: app
 - Source: `blocks/state/async-submit/async-submit.vue` in `@aziontech/webkit`
 - MCP: `get_block("state/async-submit")`
-- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [EmptyState](../../components/empty-state.md), [LogView](../../components/log-view.md), [PageHeader](../../components/page-header.md), [StatusIndicator](../../components/status-indicator.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md)
+- Components: [Alert](../../components/alert.md), [Button](../../components/button.md), [Card](../../components/card.md), [EmptyState](../../components/empty-state.md), [LogViewer](../../components/log-viewer.md), [PageHeader](../../components/page-header.md), [StatusIndicator](../../components/status-indicator.md), [Tag](../../components/tag.md), [Toast](../../components/toast.md), [ToggleGroup](../../components/toggle-group.md)
 - Skills: `webkit-errors`, `webkit-ui-states`, `webkit-form`
 
 ## Asked as
@@ -89,7 +89,7 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 - The run status is text in the heading's `Tag`, not color alone.
 - Toasts are announced by the app's `Toaster`, politely except the failure toast (`danger`), which interrupts; the progress toast must not steal focus.
 - The failure toast's actions and close button are reachable by keyboard, and it stays until closed.
-- The logs card (Running and Error) streams into a `LogView`; do not announce every log line.
+- The logs card (Running and Error) streams into a `LogViewer`; do not announce every log line.
 - Page entrance and the outcome `Alert` animate with `motion-reduce:animate-none`.
 
 ## States
@@ -102,7 +102,7 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 ## Related
 
 - `state/form-validation` — the synchronous counterpart: field, section and toast placement for a save that answers right away.
-- `detail/deployment-logs` — the deployment logs card (`LogView.Steps`) the Running and Error states reuse, and the full logs of a run the page Edit or a failure leads into.
+- `detail/deployment-logs` — the deployment logs card (`LogViewer.Steps`) the Running and Error states reuse, and the full logs of a run the page Edit or a failure leads into.
 - `create/deploy-success` — the confirmation page after a deploy completes.
 - `shell/console` — the layout this body renders in, which the user moves through while the run reports back.
 

@@ -31,9 +31,9 @@ A horizontal `Resizable` named "Version workspace": the version settings pane, a
 
 `PageTabs` with one `Tabs.Trigger` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: a variant renders the open tab's panel, and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it.
 
-### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `Switch`, `Tooltip` (required)
+### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip` (required)
 
-The open tab scrolls in a fading `ScrollArea`. A small `PageHeader` names the tab, then `SettingsSection`s (General, Modules, Subscription modules) each hold a `Card :padded="false"` with an `Item.List` of `SettingRow`s: a title, a one-sentence description and its control, an `Input` or a `Switch`. A module that needs a sales contact keeps its `Switch` disabled, explained by a `Tooltip`. On a built version the whole fieldset is disabled.
+The open tab scrolls in a fading `ScrollArea`. A small `PageHeader` names the tab, then `SettingsSection`s (General, Modules, Subscription modules) each hold a `Card :padded="false"` with an `Item.List` of `SettingsRow`s: a title, a one-sentence description and its control, an `Input` or a `Switch`. A module that needs a sales contact keeps its `Switch` disabled, explained by a `Tooltip`. On a built version the whole fieldset is disabled.
 
 ### E. Version bar — `Tag`, `SplitButton`, `Button` (required)
 
@@ -49,7 +49,7 @@ An earlier version opened from Version history keeps the page read-only and says
 
 ## List tabs
 
-Source, Device Groups, Cache Settings and Functions Instances are lists inside the version: a small `PageHeader` with an outlined add action, the controls row of `view/table-view` (search, Refresh, Download CSV, Columns) and a flush `DataTable` in a `Card`, paginated at 10. Its `#empty` slot tells a search that matches nothing (No matching, with Clear search) apart from a list with nothing yet (the add action). The name cell is a button that opens the edit `Drawer`, the same drawer the add action opens, built as in `create/create-drawer`: `SettingsSection`s of `Field`s (Device Groups, Functions Instances) or of `SettingRow`s in a `Card` (Cache Settings, reusing the rows of `edit/edit-resource#CacheSettings` plus Adaptive delivery and a Device groups `MultiSelect`). Functions Instances renders the arguments as a `SchemaForm` when the function declares a schema and as a JSON `CodeEditor` when it does not, and its function `Select` ends on Create Function. Source embeds the file browser: Upload Files in the heading, Open in Object Storage in the controls row, the folder path as a `Breadcrumb` and an `EmptyState` with Upload Files and Open Bucket. Saving a drawer changes the draft only; the version bar still deploys it.
+Source, Device Groups, Cache Settings and Functions Instances are lists inside the version: a small `PageHeader` with an outlined add action, the controls row of `view/table-view` (search, Refresh, Download CSV, Columns) and a flush `DataTable` in a `Card`, paginated at 10. Its `#empty` slot tells a search that matches nothing (No matching, with Clear search) apart from a list with nothing yet (the add action). The name cell is a button that opens the edit `Drawer`, the same drawer the add action opens, built as in `create/create-drawer`: `SettingsSection`s of `Field`s (Device Groups, Functions Instances) or of `SettingsRow`s in a `Card` (Cache Settings, reusing the rows of `edit/edit-resource#CacheSettings` plus Adaptive delivery and a Device groups `MultiSelect`). Functions Instances renders the arguments as a `SchemaForm` when the function declares a schema and as a JSON `CodeEditor` when it does not, and its function `Select` ends on Create Function. Source embeds the file browser: Upload Files in the heading, Open in Object Storage in the controls row, the folder path as a `Breadcrumb` and an `EmptyState` with Upload Files and Open Bucket. Saving a drawer changes the draft only; the version bar still deploys it.
 
 ## Creating and not found
 
@@ -129,4 +129,4 @@ While Add Version copies a built version into a new draft, the workspace is draw
 - `state/page-skeleton` — the skeleton wires Creating draws.
 - `create/deploy-drawer` — deploying a version outside this page.
 - `state/async-submit` — how the version bar locks while Save and deploy runs.
-- `SettingRow` — the row primitive of every settings section; see `skills/webkit-form` and `skills/webkit-layout`.
+- `SettingsRow` — the row primitive of every settings section; see `skills/webkit-form` and `skills/webkit-layout`.

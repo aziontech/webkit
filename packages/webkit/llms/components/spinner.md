@@ -3,7 +3,7 @@
 > Use Spinner only for an inline busy mark in a row, log line or custom control that has no loading prop; buttons use their own `loading`, a loading region with a known shape uses Skeleton, and measurable work uses Progress. A small rotating mark that says work is in progress, for a row, a log line or a custom control that has no loading state of its own. It is decorative by default; with an `aria-label` it becomes a `status` region that announces the work, and it stops rotating under reduced motion.
 
 - Import: `import Spinner from '@aziontech/webkit/spinner'`
-- Category: utils · Surface: app · Structure: monolithic
+- Category: feedback · Surface: app · Structure: monolithic
 - API as JSON: [spinner.json](https://github.com/aziontech/webkit/blob/main/.specs/spinner.json)
 
 ## When to use
@@ -20,7 +20,7 @@
 
 ## Don’t
 
-- A button waiting on its action → set `loading` on `button`, `icon-button` or `button-highlight`.
+- A button waiting on its action → set `loading` on `button`, `icon-button` or `highlight-button`.
 - Content that is still loading → use `skeleton`.
 - Progress you can measure → use `progress`.
 - A status with a color and a label → use `status-indicator`.

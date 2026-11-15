@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
@@ -141,7 +141,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="Give a unique and descriptive name to identify this policy."
                       >
@@ -156,21 +156,20 @@
                             :required="nameError"
                             :aria-describedby="nameError ? 'resource-name-message' : undefined"
                           />
-                          <HelperText
+                          <FieldError
                             v-if="nameError"
                             id="resource-name-message"
-                            type="required"
-                            label="This field is required."
-                          />
+                            >This field is required.</FieldError
+                          >
                         </div>
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Project"
                         description="The project this policy runs in front of."
                         variant="compact"
                       >
                         <span class="text-body-md text-(--text-default)">web-app</span>
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -183,7 +182,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         v-for="field in moduleFields"
                         :key="field.key"
                         :title="field.title"
@@ -207,7 +206,7 @@
                           v-model="form.modules[field.key]"
                           :aria-label="field.title"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -220,7 +219,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Active"
                         description="Logs which rules ran for a request, under the trace field of each logged event."
                         variant="compact"
@@ -229,7 +228,7 @@
                           v-model="form.debugRules"
                           aria-label="Debug rules"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -239,7 +238,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Active"
                         description="An inactive policy stops evaluating rules."
                         variant="compact"
@@ -248,7 +247,7 @@
                           v-model="form.active"
                           aria-label="Active"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

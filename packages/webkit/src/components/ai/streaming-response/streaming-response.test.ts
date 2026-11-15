@@ -111,7 +111,7 @@ describe('StreamingResponse', () => {
   })
 
   it('renders the fallback data-testid and lets a consumer override it', () => {
-    expect(render(StreamingResponse).getByTestId('ai-streaming-response')).toBeTruthy()
+    expect(render(StreamingResponse).getByTestId('streaming-response')).toBeTruthy()
     expect(
       render(StreamingResponse, { attrs: { 'data-testid': 'mine' } }).getByTestId('mine')
     ).toBeTruthy()
@@ -133,7 +133,7 @@ describe('StreamingResponse', () => {
     ])
     expect(container.querySelector('blockquote')).toHaveTextContent('A quote')
     expect(container.querySelector('hr')).toBeTruthy()
-    expect(container.querySelector('[data-testid="code-code-block"], pre')).toBeTruthy()
+    expect(container.querySelector('[data-testid="code-block"], pre')).toBeTruthy()
   })
 
   it('never injects model HTML and drops unsafe links', () => {
@@ -154,24 +154,24 @@ describe('StreamingResponse', () => {
     const { getByTestId, queryByTestId, rerender } = render(StreamingResponse, {
       props: { content: 'Partial text', streaming: true }
     })
-    const root = getByTestId('ai-streaming-response')
+    const root = getByTestId('streaming-response')
     expect(root).toHaveAttribute('aria-busy', 'true')
-    const caret = getByTestId('ai-streaming-response__caret')
+    const caret = getByTestId('streaming-response__caret')
     expect(caret).toHaveAttribute('aria-hidden', 'true')
     expect(caret.className).toContain('motion-reduce:animate-none')
     await rerender({ content: 'Partial text, complete.', streaming: false })
     expect(root).not.toHaveAttribute('aria-busy')
-    expect(queryByTestId('ai-streaming-response__caret')).toBeNull()
+    expect(queryByTestId('streaming-response__caret')).toBeNull()
   })
 
   it('keeps an unclosed fence plain while streaming, then hands it to CodeBlock', async () => {
     const { getByTestId, queryByTestId, rerender } = render(StreamingResponse, {
       props: { content: '```bash\nazion purge', streaming: true }
     })
-    expect(getByTestId('ai-streaming-response__pending-code')).toHaveTextContent('azion purge')
-    expect(getByTestId('ai-streaming-response__pending-code')).toHaveAttribute('dir', 'ltr')
+    expect(getByTestId('streaming-response__pending-code')).toHaveTextContent('azion purge')
+    expect(getByTestId('streaming-response__pending-code')).toHaveAttribute('dir', 'ltr')
     await rerender({ content: '```bash\nazion purge\n```', streaming: false })
-    expect(queryByTestId('ai-streaming-response__pending-code')).toBeNull()
+    expect(queryByTestId('streaming-response__pending-code')).toBeNull()
   })
 
   it('does not re-render a closed code block while later tokens stream in', async () => {

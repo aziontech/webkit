@@ -26,7 +26,7 @@
 
 - It is the app's primary navigation → use `navigation-menu` or `sidebar` with `sidebar-menu`.
 - It moves between sibling views of the same page → use `tabs`.
-- It is the previous / next pair at the end of a docs page → use `doc-prev-next`.
+- It is the previous / next pair at the end of a docs page → use `doc-previous-next`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related

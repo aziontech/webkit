@@ -19,12 +19,12 @@ const mount = (props: Record<string, unknown> = {}) =>
 const rowText = (row: HTMLElement) => row.textContent?.replace(/\s+/g, ' ').trim() ?? ''
 
 const names = (view: ReturnType<typeof mount>) =>
-  view.getAllByTestId('chart-bar-list__row').map((row) => rowText(row).split(',')[0])
+  view.getAllByTestId('bar-list__row').map((row) => rowText(row).split(',')[0])
 
 describe('BarList', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const fallback = mount()
-    expect(fallback.getByTestId('chart-bar-list').tagName).toBe('OL')
+    expect(fallback.getByTestId('bar-list').tagName).toBe('OL')
     fallback.unmount()
     expect(mount({ 'data-testid': 'top-paths' }).getByTestId('top-paths')).toBeTruthy()
   })
@@ -54,28 +54,26 @@ describe('BarList', () => {
 
   it('formats the value column compactly by default and with formatValue', () => {
     const fallback = mount({ items: [{ name: '/home', value: 48210 }] })
-    expect(fallback.getByTestId('chart-bar-list__value').textContent?.trim()).toBe('48.2K')
+    expect(fallback.getByTestId('bar-list__value').textContent?.trim()).toBe('48.2K')
     fallback.unmount()
     const custom = mount({
       items: [{ name: '/home', value: 843 }],
       formatValue: (value: number) => `${value} req`
     })
-    expect(custom.getByTestId('chart-bar-list__value').textContent?.trim()).toBe('843 req')
+    expect(custom.getByTestId('bar-list__value').textContent?.trim()).toBe('843 req')
   })
 
   it('reads name then value in each row and hides the bar', () => {
     const view = mount({ items: [{ name: '/home', value: 843 }] })
-    expect(rowText(view.getByTestId('chart-bar-list__row'))).toBe('/home, 843')
-    expect(view.getByTestId('chart-bar-list__bar').getAttribute('aria-hidden')).toBe('true')
+    expect(rowText(view.getByTestId('bar-list__row'))).toBe('/home, 843')
+    expect(view.getByTestId('bar-list__bar').getAttribute('aria-hidden')).toBe('true')
   })
 
   it('renders static rows that are neither links nor buttons', () => {
     const view = mount()
     expect(view.queryAllByRole('button')).toHaveLength(0)
     expect(view.queryAllByRole('link')).toHaveLength(0)
-    expect(view.getAllByTestId('chart-bar-list__row')[0].hasAttribute('data-interactive')).toBe(
-      false
-    )
+    expect(view.getAllByTestId('bar-list__row')[0].hasAttribute('data-interactive')).toBe(false)
   })
 
   it('renders an href row as a link that emits item-click with the event and the item', async () => {
@@ -108,53 +106,51 @@ describe('BarList', () => {
 
   it('does not emit item-click from a static row', async () => {
     const view = mount()
-    await fireEvent.click(view.getAllByTestId('chart-bar-list__row')[0])
+    await fireEvent.click(view.getAllByTestId('bar-list__row')[0])
     expect(view.emitted('item-click')).toBeUndefined()
   })
 
   it('renders the skeleton and marks the list busy while loading', () => {
     const view = mount({ loading: true })
-    const root = view.getByTestId('chart-bar-list')
+    const root = view.getByTestId('bar-list')
     expect(root.getAttribute('aria-busy')).toBe('true')
     expect(root.hasAttribute('data-loading')).toBe(true)
-    expect(view.getByTestId('chart-bar-list__skeleton')).toBeTruthy()
-    expect(view.queryAllByTestId('chart-bar-list__row')).toHaveLength(0)
+    expect(view.getByTestId('bar-list__loading')).toBeTruthy()
+    expect(view.queryAllByTestId('bar-list__row')).toHaveLength(0)
   })
 
   it('renders the empty state titled by emptyTitle when there are no items', () => {
     const fallback = mount({ items: [] })
-    expect(fallback.getByTestId('chart-bar-list__empty').textContent).toContain('No data available')
-    expect(fallback.queryAllByTestId('chart-bar-list__row')).toHaveLength(0)
+    expect(fallback.getByTestId('bar-list__empty').textContent).toContain('No data available')
+    expect(fallback.queryAllByTestId('bar-list__row')).toHaveLength(0)
     fallback.unmount()
     const custom = mount({ items: [], emptyTitle: 'No paths in this range' })
-    expect(custom.getByTestId('chart-bar-list__empty').textContent).toContain(
-      'No paths in this range'
-    )
+    expect(custom.getByTestId('bar-list__empty').textContent).toContain('No paths in this range')
   })
 
   it('renders the error Alert in place of the rows, and the error slot over it', async () => {
     const view = render(BarList, { props: { items: ITEMS, error: 'Timed out' } })
-    expect(view.getByTestId('chart-bar-list__error').textContent).toContain('Timed out')
+    expect(view.getByTestId('bar-list__error').textContent).toContain('Timed out')
     expect(view.getByRole('alert')).toHaveTextContent('Timed out')
     expect(view.getByRole('list').children[0]?.tagName).toBe('LI')
     await expectNoA11yViolations(view.container)
-    expect(view.queryAllByTestId('chart-bar-list__row')).toHaveLength(0)
-    expect(view.getByTestId('chart-bar-list').hasAttribute('data-error')).toBe(true)
+    expect(view.queryAllByTestId('bar-list__row')).toHaveLength(0)
+    expect(view.getByTestId('bar-list').hasAttribute('data-error')).toBe(true)
     view.unmount()
     const custom = render(BarList, {
       props: { items: [], error: 'Timed out' },
       slots: { error: '<p>Custom error</p>' }
     })
     expect(custom.getByText('Custom error')).toBeTruthy()
-    expect(custom.queryByTestId('chart-bar-list__empty')).toBeNull()
+    expect(custom.queryByTestId('bar-list__empty')).toBeNull()
   })
 
   it('keeps the rows and marks the list busy while refetching', () => {
     const view = render(BarList, { props: { items: ITEMS, refetching: true } })
-    const root = view.getByTestId('chart-bar-list')
+    const root = view.getByTestId('bar-list')
     expect(root.hasAttribute('data-refetching')).toBe(true)
     expect(root.getAttribute('aria-busy')).toBe('true')
-    expect(view.getAllByTestId('chart-bar-list__row').length).toBeGreaterThan(0)
+    expect(view.getAllByTestId('bar-list__row').length).toBeGreaterThan(0)
   })
 
   it('shows emptyDescription and the empty-actions slot, and the empty slot replaces it', () => {
@@ -167,7 +163,7 @@ describe('BarList', () => {
     view.unmount()
     const custom = render(BarList, { props: { items: [] }, slots: { empty: '<p>Nothing yet</p>' } })
     expect(custom.getByText('Nothing yet')).toBeTruthy()
-    expect(custom.queryByTestId('chart-bar-list__empty')).toBeNull()
+    expect(custom.queryByTestId('bar-list__empty')).toBeNull()
   })
 
   it('has no a11y violations across static, interactive, loading and empty renders', async () => {

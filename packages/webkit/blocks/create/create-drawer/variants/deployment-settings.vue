@@ -5,7 +5,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
   import Field from '@aziontech/webkit/field'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldDescription from '@aziontech/webkit/field-description'
   import Hint from '@aziontech/webkit/hint'
   import Input from '@aziontech/webkit/input'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -223,7 +223,9 @@
                       >{{ policy.label }}</RadioGroup.Item
                     >
                   </RadioGroup>
-                  <HelperText label="Cannot be changed after the deployment is created." />
+                  <FieldDescription
+                    >Cannot be changed after the deployment is created.</FieldDescription
+                  >
                 </fieldset>
 
                 <Field.Label>

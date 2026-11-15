@@ -75,7 +75,7 @@ Every `<script setup lang="ts">` reads top-to-bottom in this fixed order. Omit a
 
   // 9. local state
   // 10. computed
-  const testId = computed(() => (attrs['data-testid'] as string) ?? 'input-chip')
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'chip')
 
   // 11. watchers / lifecycle
   // 12. functions

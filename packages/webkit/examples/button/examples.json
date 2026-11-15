@@ -1,6 +1,6 @@
 {
   "component": "button",
-  "title": "Components/Primitives/Actions/Button",
+  "title": "Components/Action/Button",
   "examples": [
     {
       "name": "Default",

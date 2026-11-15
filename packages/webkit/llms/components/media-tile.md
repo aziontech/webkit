@@ -28,19 +28,19 @@
 
 ## Don’t
 
-- When the claim deserves a heading and a place in the document outline → use `topic`, which leads with a real `h2`/`h3`.
-- When the tile is a padded surface card with a glyph and a link → use `topic` in a `CardGrid.Cell`.
+- When the claim deserves a heading and a place in the document outline → use `feature-item`, which leads with a real `h2`/`h3`.
+- When the tile is a padded surface card with a glyph and a link → use `feature-item` in a `CardGrid.Cell`.
 - For one scene beside a block of copy across the full band → use `media-split`.
 - For a mosaic whose cells claim different numbers of columns → use `bento-grid`.
-- For the grid that lays the tiles out, or a framed cell that wraps media *and* copy together → use `card-grid`.
+- For the grid that lays the tiles out, or a framed cell that wraps media _and_ copy together → use `card-grid`.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
 - [card-grid](card-grid.md) — the grid that lays a row of tiles out; use its `gap` register, whose gutters keep every tile's frame its own.
-- [topic](topic.md) — the heading-led claim, for a band whose items belong in the outline.
+- [feature-item](feature-item.md) — the heading-led claim, for a band whose items belong in the outline.
 - [media-split](media-split.md) — one scene beside one block of copy, across the whole band.
-- [frame-box](frame-box.md) — the frame this tile draws around its media.
+- [registration-frame](registration-frame.md) — the frame this tile draws around its media.
 - [illustration](illustration.md) — the scene the frame usually holds; unnamed, it renders the placeholder that reserves a tile's space.
 
 ## Props

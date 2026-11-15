@@ -1,6 +1,6 @@
 {
   "component": "link",
-  "title": "Components/Primitives/Navigation/Link",
+  "title": "Components/Navigation/Link",
   "examples": [
     {
       "name": "Default",

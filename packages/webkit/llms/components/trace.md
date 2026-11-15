@@ -11,7 +11,7 @@
 - Use Trace for the timed span waterfall of one request or invocation; a nested data hierarchy without timing is a Tree.
 - The test run of a function or the detail of one invocation, to show where the time went.
 - A request that crossed several services, each with its own span, where the order and the overlap matter.
-- Next to the run's logs (`log-view`), on the same clock.
+- Next to the run's logs (`log-viewer`), on the same clock.
 
 ## Do
 
@@ -26,7 +26,7 @@
 
 ## Don’t
 
-- A list of log lines with levels → use `log-view`.
+- A list of log lines with levels → use `log-viewer`.
 - Durations to compare across many items with no parent/child relation → use `bar-list` or `chart`.
 - Status history of a service over days → use `tracker`.
 - A hierarchy without time → use `tree`.
@@ -34,7 +34,7 @@
 
 ## Related
 
-- [log-view](log-view.md) — the run's log lines, shown under the trace on the same clock.
+- [log-viewer](log-viewer.md) — the run's log lines, shown under the trace on the same clock.
 - [tree](tree.md) — the same expand and collapse model without the time axis.
 - [bar-list](bar-list.md) — ranked durations without nesting.
 - [key-value-list](key-value-list.md) — the facts of the run above the trace.

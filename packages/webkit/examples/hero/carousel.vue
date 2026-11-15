@@ -11,9 +11,9 @@
       align="center"
       max-width="site"
       floor-texture="pixelate"
-      ticker
-      ticker-label="Trusted by teams running in production"
-      :ticker-marks="['herospark', 'itau', 'nzn', 'netshoes', 'caixa', 'agibank', 'gpa']"
+      marquee
+      marquee-label="Trusted by teams running in production"
+      :marquee-marks="['herospark', 'itau', 'nzn', 'netshoes', 'caixa', 'agibank', 'gpa']"
     >
       <Hero.Title
         eyebrow="AI Inference"

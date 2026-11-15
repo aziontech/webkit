@@ -3,7 +3,7 @@
 > DocPrompt renders text the reader is meant to **run, not read** — the block a documentation page uses when the next step is "say this to your agent". It is the one component in this layer whose payload is addressed to a machine, so it is the one that ships an affordance for handing it to one: a copy control wired to the exact string on screen. It is deliberately **not** a code block — a prompt is a sentence, so it carries no language, no gutter, and no syntax highlighting, and it is set in the mono face only to say "this is the literal text, copy it as it stands".
 
 - Import: `import DocPrompt from '@aziontech/webkit/doc-prompt'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-prompt.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-prompt.json)
 
 ## When to use

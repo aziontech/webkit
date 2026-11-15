@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: 83f6372a2abed1225aa46f87ebdd3ea26866f01db222cc3898b40f4959d5ee13
+checksum: c28d08fd8abbfe9b04ebeadf5d653f5a113f70cdd7acff8cc6350c4c1ba52ac8
 created: 2026-09-26
 last_updated: 2026-11-15
 ---
@@ -24,12 +24,12 @@ A decorative, full-bleed layer that paints the dotted world map with Azion's PoP
 
 ## When NOT to use
 
-- For a real node/edge diagram driven by data → use `flow`.
+- For a real node/edge diagram driven by data → use `flow-diagram`.
 - As a wrapper around content. The layer is absolutely positioned and paints only itself; content is a sibling above it.
 
 ## Related
 
-- `frame-box` — the ruled box a network band usually sits in; it supplies the positioned, clipping ancestor.
+- `registration-frame` — the ruled box a network band usually sits in; it supplies the positioned, clipping ancestor.
 
 ## Best practices
 
@@ -48,7 +48,7 @@ A decorative, full-bleed layer that paints the dotted world map with Azion's PoP
 
 ```vue
 <script setup>
-import NetworkMap from '@aziontech/webkit/network-map'
+  import NetworkMap from '@aziontech/webkit/network-map'
 </script>
 
 <template>
@@ -68,18 +68,18 @@ import NetworkMap from '@aziontech/webkit/network-map'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `region` | `'world' \| 'atlantic' \| 'americas' \| 'north-america' \| 'south-america' \| 'europe' \| 'africa' \| 'asia' \| 'oceania'` | `'world'` | false | Which part of the world has its PoPs lit; the map always frames the whole world. |
-| `density` | `'none' \| 'low' \| 'medium' \| 'high'` | `'medium'` | false | How many PoPs are lit, from `none` to `high`. |
-| `animated` | `boolean` | `false` | false | Pulses the PoPs in three staggered waves; static when false. |
-| `opacity` | `number` | `0.4` | false | Opacity of the landmass dots, from 0 to 1; the PoPs stay at full strength. |
-| `position` | `'center' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'` | `'center'` | false | Where the map parks in the space the box leaves over. |
-| `scale` | `number` | `0.85` | false | Size of the map relative to the box; 1 fits it, below 1 shrinks it toward its position, above 1 enlarges it. |
-| `offsetX` | `number` | `0` | false | Horizontal shift as a fraction of the map width; negative moves it left, positive right, past the box edge if large enough. |
-| `offsetY` | `number` | `0` | false | Vertical shift as a fraction of the map height; negative moves it up, positive down, past the box edge if large enough. |
-| `fade` | `'none' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'edges' \| 'vignette'` | `'none'` | false | Fades the map out along an axis so it meets content without a hard edge. |
-| `traffic` | `boolean` | `false` | false | Draws traffic between lit PoPs: faint links and, while `animated`, packets that cross them; the links alone under reduced motion. |
+| Prop       | Type                                                                                                                       | Default    | Required | JSDoc                                                                                                                             |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------- | ---------- | -------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `region`   | `'world' \| 'atlantic' \| 'americas' \| 'north-america' \| 'south-america' \| 'europe' \| 'africa' \| 'asia' \| 'oceania'` | `'world'`  | false    | Which part of the world has its PoPs lit; the map always frames the whole world.                                                  |
+| `density`  | `'none' \| 'low' \| 'medium' \| 'high'`                                                                                    | `'medium'` | false    | How many PoPs are lit, from `none` to `high`.                                                                                     |
+| `animated` | `boolean`                                                                                                                  | `false`    | false    | Pulses the PoPs in three staggered waves; static when false.                                                                      |
+| `opacity`  | `number`                                                                                                                   | `0.4`      | false    | Opacity of the landmass dots, from 0 to 1; the PoPs stay at full strength.                                                        |
+| `position` | `'center' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'top-left' \| 'top-right' \| 'bottom-left' \| 'bottom-right'`       | `'center'` | false    | Where the map parks in the space the box leaves over.                                                                             |
+| `scale`    | `number`                                                                                                                   | `0.85`     | false    | Size of the map relative to the box; 1 fits it, below 1 shrinks it toward its position, above 1 enlarges it.                      |
+| `offsetX`  | `number`                                                                                                                   | `0`        | false    | Horizontal shift as a fraction of the map width; negative moves it left, positive right, past the box edge if large enough.       |
+| `offsetY`  | `number`                                                                                                                   | `0`        | false    | Vertical shift as a fraction of the map height; negative moves it up, positive down, past the box edge if large enough.           |
+| `fade`     | `'none' \| 'top' \| 'bottom' \| 'left' \| 'right' \| 'edges' \| 'vignette'`                                                | `'none'`   | false    | Fades the map out along an axis so it meets content without a hard edge.                                                          |
+| `traffic`  | `boolean`                                                                                                                  | `false`    | false    | Draws traffic between lit PoPs: faint links and, while `animated`, packets that cross them; the links alone under reduced motion. |
 
 ## Events
 
@@ -105,9 +105,9 @@ import NetworkMap from '@aziontech/webkit/network-map'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| `animated` set — PoP pulse, three waves at 0 / 700 / 1400ms | `animate-pulse` | catalog (`animate.js`, Tailwind stock loop) | `motion-reduce:animate-none` (static PoPs) |
+| Trigger                                                     | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                    |
+| ----------------------------------------------------------- | ---------------------- | ------------------------------------------------- | ------------------------------------------ |
+| `animated` set — PoP pulse, three waves at 0 / 700 / 1400ms | `animate-pulse`        | catalog (`animate.js`, Tailwind stock loop)       | `motion-reduce:animate-none` (static PoPs) |
 
 | `traffic` with `animated` — a packet grows out of one PoP, crosses its ray and is absorbed into the other (dash length 0 → 30 → 0 and offset 0 → −100 over the first 45% of the ray's cycle, then parked) | Web Animations API on each packet path; every ray on its own 3.4–6.2 s clock so the field never pulses in step | — (one-off geometry, no token) | none: the packets stay parked at zero length and the links draw at 0.24 instead of 0.12, the still frame of the mesh |
 
@@ -115,16 +115,16 @@ Static by default: without `animated` no PoP carries an animation class. `traffi
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region        | Token (DESIGN.md)   |
+| ------------- | ------------------- |
 | landmass dots | `var(--text-muted)` |
-| PoPs | `var(--primary)` |
+| PoPs          | `var(--primary)`    |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

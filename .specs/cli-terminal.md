@@ -1,19 +1,19 @@
 ---
 name: cli-terminal
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 3
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 246cd37fea138fb49ef355a537c23aefb9a683545b6a13072051a5ccf63d6dbf
+checksum: 0345e5c92a4c71c4450c51ba3efdc9a68cab25ea548f0a84fce9fe0bedbf0524
 ---
 
 # CliTerminal — Component Spec
 
 ## Purpose
 
-The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal on the pixelate texture that runs off the frame's bottom rule. The terminal is either a recorded Azion CLI session typed live by a `product-widget` (`script`), in a fixed-height stage that rises in when it scrolls into view, or a static session whose lines enter one after another (`session`). It is a page section — the site places it from a `{ _id: 'cli-terminal', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `texture-material`, `product-widget` and `code-block`.
+The Azion CLI band of a product page: a horizontal section title with one outlined button, over a terminal on the pixelate texture that runs off the frame's bottom rule. The terminal is either a recorded Azion CLI session typed live by a `console-mockup` (`script`), in a fixed-height stage that rises in when it scrolls into view, or a static session whose lines enter one after another (`session`). It is a page section — the site places it from a `{ _id: 'cli-terminal', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `registration-frame`, `texture`, `console-mockup` and `code-block`.
 
 ## When to use
 
@@ -22,13 +22,13 @@ The Azion CLI band of a product page: a horizontal section title with one outlin
 
 ## When NOT to use
 
-- For a config file or handler beside the claim → use `media-split-band` with `codeTabs`.
+- For a config file or handler beside the claim → use `media-split-section` with `codeTabs`.
 - For several capabilities, each with its own file → use `feature-scroll` with code items.
 
 ## Related
 
 - `code-block` — the terminal session the band shows.
-- `media-split-band` — the sibling band with the sample (`codeTabs`) beside the copy.
+- `media-split-section` — the sibling band with the sample (`codeTabs`) beside the copy.
 
 ## Best practices
 
@@ -61,7 +61,7 @@ The Azion CLI band of a product page: a horizontal section title with one outlin
 | Prop            | Type                 | Default     | Required | JSDoc                                                                                                                                                                       |
 | --------------- | -------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `anchor`        | `string`             | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                              |
-| `eyebrow`       | `string`             | `''`        | false    | Overline above the section title.                                                                                                                                           |
+| `eyebrow`       | `string`             | `''`        | false    | Eyebrow above the section title.                                                                                                                                            |
 | `title`         | `string`             | `''`        | false    | Headline of the band, rendered by the horizontal section title as its `h2`; the band renders no header when empty.                                                          |
 | `description`   | `string`             | `''`        | false    | Supporting sentence beside the headline.                                                                                                                                    |
 | `script`        | `CliTerminalScript`  | `undefined` | false    | Recorded Azion CLI session the terminal types live: `start` or `deploy`; wins over `session`.                                                                               |
@@ -81,7 +81,7 @@ The Azion CLI band of a product page: a horizontal section title with one outlin
 
 - Visual states: `default`; the copy button and the button own their hover and focus states
 - Empty: when neither `script` nor `session` is set the band renders nothing — not the header, not the frame
-- `script` draws the `product-widget` `cli-terminal-start` or `cli-terminal-deploy` in a stage 18rem tall (24rem from `md` up); `data-entered` is set on the stage the first time a fifth of it is on screen, and the stage rises, grows and fades in. The widget types its session while on screen and shows its finished state under reduced motion (owned by `product-widget`). Without `script` the `session` renders as a `code-block`
+- `script` draws the `console-mockup` `cli-terminal-start` or `cli-terminal-deploy` in a stage 18rem tall (24rem from `md` up); `data-entered` is set on the stage the first time a fifth of it is on screen, and the stage rises, grows and fades in. The widget types its session while on screen and shows its finished state under reduced motion (owned by `console-mockup`). Without `script` the `session` renders as a `code-block`
 - The header renders only when `title` is set
 
 ## Motion & Animations
@@ -115,7 +115,7 @@ The Azion CLI band of a product page: a horizontal section title with one outlin
 
 - Visible focus: owned by `code-block` (copy button) and `button`; the `script` terminal has no focusable parts.
 - Keyboard map: `Tab` reaches the button and the copy button; `Enter` follows the button.
-- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2`; the copy button is named by `copyAriaLabel`; the `script` terminal is an `aria-hidden` picture of the console (owned by `product-widget`), so the headline carries the meaning.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the headline is the section title's `h2`; the copy button is named by `copyAriaLabel`; the `script` terminal is an `aria-hidden` picture of the console (owned by `console-mockup`), so the headline carries the meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `code-block` and `button`.
 - `motion-reduce:transition-none` — the `script` stage's entrance is skipped under reduced motion and the stage is drawn at rest; the session's line entrance is owned by `code-block` and draws at once under reduced motion.
 - Touch target ≥40×40 px: the large button.

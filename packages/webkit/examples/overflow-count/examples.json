@@ -1,6 +1,6 @@
 {
   "component": "overflow-count",
-  "title": "Components/Primitives/Content/OverflowCount",
+  "title": "Components/Content/OverflowCount",
   "examples": [
     {
       "name": "Default",

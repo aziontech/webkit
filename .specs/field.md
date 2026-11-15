@@ -1,10 +1,10 @@
 ---
 name: field
-category: inputs
+category: input
 structure: composition
 status: implemented
-spec_version: 7
-checksum: e41b4ef09d9dc81e6d39b58496d2c96c088017ec275241c3a012d692e26218d8
+spec_version: 8
+checksum: b75d4157a6c20d12510cec917cba124192b3468e2796ca38263c226f3e442bba
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -17,7 +17,7 @@ One composable form field that wraps **any** control — `Input`, `Textarea`, `S
 
 ## When to use
 
-- Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Under a control that is not inside Field use HelperText; for a one-sentence explanation beside a label use Hint.
+- Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Field.Description and Field.Error also work alone, under a control that is not inside a Field; for a one-sentence explanation beside a label use Hint.
 - Any labelled form control: a text input, a select, a textarea, a password, a phone number, a slider.
 - A checkbox, radio or switch with its label beside it (`orientation="horizontal"`).
 - A selectable checkbox or switch card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants). For one choice among cards use `RadioGroup variant="card"`, never a radio inside a `Field.Label`.
@@ -31,7 +31,6 @@ One composable form field that wraps **any** control — `Input`, `Textarea`, `S
 
 ## Related
 
-- `helper-text` — the tone-aware helper line that `Field.Description` and `Field.Error` render.
 - `input-group` — wraps an input with addons; put it inside a `Field` and use `InputGroup.Input` as the control.
 - `phone-input`, `password-requirements` — a phone number control and the live password rules row, each placed inside a `Field`.
 
@@ -113,9 +112,9 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
   - Props: `hint` (`string`, default `''`) — short explanation revealed by a `Hint` glyph.
   - Events: _none_.
   - Slots: `default` — label text, or a horizontal `Field` for a choice card.
-- `field-description/field-description.vue` — guidance line rendered through `HelperText`; registers its id with the Field. Tone follows the Field: `disabled` (lock icon) > `invalid` (only when no `Field.Error` is mounted) > `required` > `helper`.
+- `field-description/field-description.vue` — guidance line in the label-sm text style; registers its id with the Field. Tone follows the Field: `disabled` (lock icon) > `invalid` (only when no `Field.Error` is mounted) > `required` > `helper`.
   - Props: _none_. Events: _none_. Slots: `default`.
-- `field-error/field-error.vue` — validation message rendered through `HelperText type="invalid"` with `role="alert"`; registers its id with the Field, and while it is mounted the Field counts as invalid (the control gets `aria-invalid`) even when the `invalid` prop is not set.
+- `field-error/field-error.vue` — validation message in the danger tone with `role="alert"`; registers its id with the Field, and while it is mounted the Field counts as invalid (the control gets `aria-invalid`) even when the `invalid` prop is not set.
   - Props: _none_. Events: _none_. Slots: `default`.
 - `field-group/field-group.vue` — vertical stack of fields; it is a `@container/field-group`, one of the containers `orientation="responsive"` can follow.
   - Props: _none_. Events: _none_. Slots: `default`.
@@ -133,7 +132,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 <!-- Resulting layout:
 
-  packages/webkit/src/components/inputs/field/
+  packages/webkit/src/components/input/field/
   ├── field.vue
   ├── index.ts
   ├── injection-key.ts

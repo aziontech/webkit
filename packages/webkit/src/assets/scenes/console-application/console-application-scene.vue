@@ -2,25 +2,25 @@
   import { duration } from '@aziontech/theme/animations'
   import { computed, onMounted, ref, useAttrs, watch } from 'vue'
 
-  import Button from '../../../components/actions/button/button.vue'
-  import IconButton from '../../../components/actions/icon-button/icon-button.vue'
+  import Button from '../../../components/action/button/button.vue'
+  import IconButton from '../../../components/action/icon-button/icon-button.vue'
   import CodeBlock from '../../../components/code/code-block/code-block.vue'
   import Card from '../../../components/content/card/card.vue'
+  import ConsoleMockupShell from '../../../components/content/console-mockup/console-mockup-shell/console-mockup-shell.vue'
   import ItemList from '../../../components/content/item/item-list.vue'
-  import ShellMockup from '../../../components/content/product-widget/shell-mockup/shell-mockup.vue'
   import Tag from '../../../components/content/tag/tag.vue'
   import DataTable from '../../../components/data/data-table/data-table.vue'
   import TableCellStatus from '../../../components/data/table/table-cell-status/table-cell-status.vue'
-  import Field from '../../../components/inputs/field/field.vue'
-  import FieldLabel from '../../../components/inputs/field/field-label/field-label.vue'
-  import Input from '../../../components/inputs/input/input.vue'
-  import RadioGroup from '../../../components/inputs/radio-group/radio-group.vue'
-  import Select from '../../../components/inputs/select/select.vue'
-  import SelectTrigger from '../../../components/inputs/select/select-trigger/select-trigger.vue'
-  import Switch from '../../../components/inputs/switch/switch.vue'
-  import Textarea from '../../../components/inputs/textarea/textarea.vue'
+  import Field from '../../../components/input/field/field.vue'
+  import FieldLabel from '../../../components/input/field/field-label/field-label.vue'
+  import Input from '../../../components/input/input/input.vue'
+  import RadioGroup from '../../../components/input/radio-group/radio-group.vue'
+  import Select from '../../../components/input/select/select.vue'
+  import SelectTrigger from '../../../components/input/select/select-trigger/select-trigger.vue'
+  import Switch from '../../../components/input/switch/switch.vue'
+  import Textarea from '../../../components/input/textarea/textarea.vue'
   import SaveBar from '../../../components/layout/save-bar/save-bar.vue'
-  import SettingRow from '../../../components/layout/setting-row/setting-row.vue'
+  import SettingsRow from '../../../components/layout/settings-row/settings-row.vue'
   import TabsRoot from '../../../components/navigation/tabs/tabs.vue'
   import TabsList from '../../../components/navigation/tabs/tabs-list.vue'
   import TabsTrigger from '../../../components/navigation/tabs/tabs-trigger.vue'
@@ -150,7 +150,7 @@
 </script>
 
 <template>
-  <ShellMockup
+  <ConsoleMockupShell
     v-bind="$attrs"
     :data-testid="testId"
     :data-tab="step.value"
@@ -267,7 +267,7 @@
           >
             <template #default>
               <ItemList>
-                <SettingRow
+                <SettingsRow
                   v-for="row in band.rows"
                   :key="row.label"
                   :title="row.label"
@@ -289,7 +289,7 @@
                     :model-value="rowOn(row)"
                     :aria-label="row.label"
                   />
-                </SettingRow>
+                </SettingsRow>
               </ItemList>
             </template>
           </Card>
@@ -448,5 +448,5 @@
         </Panel>
       </div>
     </template>
-  </ShellMockup>
+  </ConsoleMockupShell>
 </template>

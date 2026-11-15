@@ -40,9 +40,7 @@
   const canScrollStart = ref(false)
   const canScrollEnd = ref(false)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${context.testId}__list`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tabs-list')
 
   const indicatorTarget = computed<TabsValue | null>(() => context.value.value)
 

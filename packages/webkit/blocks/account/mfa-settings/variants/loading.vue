@@ -12,7 +12,7 @@
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import Switch from '@aziontech/webkit/switch'
   import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
   import { toast } from '@aziontech/webkit/toast'
@@ -216,7 +216,7 @@
         <Card :padded="false">
           <template #default>
             <Item.List>
-              <SettingRow
+              <SettingsRow
                 title="Require MFA"
                 variant="compact"
                 description="Everyone in the account must use a second factor to sign in. People without one set it up at their next sign-in."
@@ -227,7 +227,7 @@
                   :disabled="loading || loadFailed"
                   @update:model-value="onRequire"
                 />
-              </SettingRow>
+              </SettingsRow>
             </Item.List>
           </template>
         </Card>

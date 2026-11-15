@@ -24,9 +24,7 @@
     ctx.registerMark(() => ({ type: 'scatter', stacked: false, labeled: false, ids: ids.value }))
   )
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__scatter`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-scatter')
 
   const groups = computed(() => {
     const layout = ctx.category.value

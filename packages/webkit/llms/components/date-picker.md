@@ -4,7 +4,7 @@
 
 - Import: `import DatePickerRoot from '@aziontech/webkit/date-picker-root'`
 - Compound import (dot notation, not tree-shakeable): `import DatePicker from '@aziontech/webkit/date-picker'`
-- Category: inputs · Surface: app · Structure: composition
+- Category: input · Surface: app · Structure: composition
 - API as JSON: [date-picker.json](https://github.com/aziontech/webkit/blob/main/.specs/date-picker.json)
 
 ## When to use
@@ -82,11 +82,11 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ## v-model
 
-| Model               | Type           | Default     | Emits               | Notes                                                                                                                                                   |
-| ------------------- | -------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`           | `Date \| null` | `null`      | `update:modelValue` | The committed date via `defineModel`; `null` on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound.      |
+| Model               | Type           | Default     | Emits               | Notes                                                                                                                                                      |
+| ------------------- | -------------- | ----------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`           | `Date \| null` | `null`      | `update:modelValue` | The committed date via `defineModel`; `null` on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound.        |
 | `v-model:open`      | `boolean`      | `undefined` | `update:open`       | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts at `defaultOpen`. |
-| `v-model:time-zone` | `string`       | `''`        | `update:timeZone`   | IANA time zone the trigger formats the value in, via `defineModel('timeZone')`. Empty resolves to the local zone. Same name as on `date-range-picker`.  |
+| `v-model:time-zone` | `string`       | `''`        | `update:timeZone`   | IANA time zone the trigger formats the value in, via `defineModel('timeZone')`. Empty resolves to the local zone. Same name as on `date-range-picker`.     |
 
 **Booleans that default to true.** `showFields` and `showApply` default to `true`: they switch off parts of the default panel. Inverting them (`hideFields`, `instant`) would break every consumer, so they are recorded here as the exceptions to props.md's default-false rule.
 

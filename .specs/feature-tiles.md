@@ -1,18 +1,19 @@
 ---
 name: feature-tiles
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: 42c5857061859ee60ff6ec3bf106d74b0cad7d59d184102190810a4c0c6dba37
+checksum: b88e262c68280e2e2934e8d17dcf7dddf9a8081b2af17168c9256e35acd1239d
 ---
+
 # FeatureTiles — Component Spec
 
 ## Purpose
 
-The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
+The reasons band of a marketing page: an optional centered section title over a frame grid of media tiles, each an image or an illustration above a short heading and a sentence. It is a page section — the site places it from a `{ _id: 'feature-tiles', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame`, `card-grid`, `media-tile` and `illustration`. `variant` picks the layout only: `artwork` is four columns with marks on every corner, `illustrated` is three columns with marks on the bottom rule; the tiles keep the same shape in both.
 
 ## When to use
 
@@ -39,7 +40,7 @@ The reasons band of a marketing page: an optional centered section title over a 
 
 ```vue
 <script setup>
-import FeatureTiles from '@aziontech/webkit/feature-tiles'
+  import FeatureTiles from '@aziontech/webkit/feature-tiles'
 </script>
 
 <template>
@@ -49,8 +50,16 @@ import FeatureTiles from '@aziontech/webkit/feature-tiles'
     title="From commit to live traffic, on one platform"
     description="Build, ship, and run an application on the same platform that serves it."
     :tiles="[
-      { image: '/illustrations/branches.svg', title: 'Build at AI speed.', description: 'Go from commit to a live URL in minutes.' },
-      { image: '/illustrations/personal-tokens.svg', title: 'Secure by default.', description: 'Every workload runs in its own isolated environment.' }
+      {
+        image: '/illustrations/branches.svg',
+        title: 'Build at AI speed.',
+        description: 'Go from commit to a live URL in minutes.'
+      },
+      {
+        image: '/illustrations/personal-tokens.svg',
+        title: 'Secure by default.',
+        description: 'Every workload runs in its own isolated environment.'
+      }
     ]"
   />
 </template>
@@ -58,14 +67,14 @@ import FeatureTiles from '@aziontech/webkit/feature-tiles'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `variant` | `FeatureTilesVariant` | `'artwork'` | false | Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule. |
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty. |
-| `description` | `string` | `''` | false | Supporting sentence under the headline. |
-| `tiles` | `FeatureTilesTile[]` | `[]` | false | The tiles rendered as frame cells, in order; each is `{ title, description, image?, alt?, illustration?, scale? }` where `image` is a picture URL, `alt` its alternative text (empty keeps the picture decorative), `illustration` a registry name drawn fluid, and `scale` its media scale. |
+| Prop          | Type                  | Default     | Required | JSDoc                                                                                                                                                                                                                                                                                        |
+| ------------- | --------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`     | `FeatureTilesVariant` | `'artwork'` | false    | Layout of the grid: `artwork` is four columns with marks on every corner, `illustrated` three columns with marks on the bottom rule.                                                                                                                                                         |
+| `anchor`      | `string`              | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                                                                                                                                                               |
+| `eyebrow`     | `string`              | `''`        | false    | Eyebrow above the section title.                                                                                                                                                                                                                                                             |
+| `title`       | `string`              | `''`        | false    | Headline of the band, rendered by the centered section title as its `h2`; the band renders no header when empty.                                                                                                                                                                             |
+| `description` | `string`              | `''`        | false    | Supporting sentence under the headline.                                                                                                                                                                                                                                                      |
+| `tiles`       | `FeatureTilesTile[]`  | `[]`        | false    | The tiles rendered as frame cells, in order; each is `{ title, description, image?, alt?, illustration?, scale? }` where `image` is a picture URL, `alt` its alternative text (empty keeps the picture decorative), `illustration` a registry name drawn fluid, and `scale` its media scale. |
 
 ## Events
 
@@ -89,16 +98,16 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| cell fill | `var(--bg-canvas)` |
+| Region                | Token (DESIGN.md)       |
+| --------------------- | ----------------------- |
+| cell fill             | `var(--bg-canvas)`      |
 | frame rules and marks | `var(--border-default)` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

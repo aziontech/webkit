@@ -3,7 +3,7 @@
  "binding": "DocLayout",
  "import": "@aziontech/webkit/doc-layout",
  "treeShakeableImport": "@aziontech/webkit/doc-layout",
- "category": "documentation",
+ "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
  "compoundRoot": false,
@@ -12,7 +12,7 @@
  "setup": null,
  "useWhen": [
   "Every documentation page (guide, reference, legal, changelog): put one `DocLayout` in the app's root (around `RouterView`) and render each page's article as its default slot.",
-  "A docs site that needs the navigation rail, the outline and the search palette without hand-composing `GlobalHeader`, `Sidebar`, `SidebarMenu`, `DocOnThisPage`, `Drawer` and `Command`."
+  "A docs site that needs the navigation rail, the outline and the search palette without hand-composing `AppHeader`, `Sidebar`, `SidebarMenu`, `DocOnThisPage`, `Drawer` and `Command`."
  ],
  "avoidWhen": [
   "The signed-in console → `ConsoleLayout`. Marketing pages → `SiteLayout`.",

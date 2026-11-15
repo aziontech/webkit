@@ -1,13 +1,13 @@
 ---
 name: doc-tab
-category: documentation
+category: docs
 structure: monolithic
 status: implemented
 spec_version: 1
 template: 2
 checksum: a6f1b86dd6f64df832900de818615905bf560f6bc88fdc817e15234dfe06ada1
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # DocTab — Component Spec

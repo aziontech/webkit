@@ -3,7 +3,7 @@
 > Bare range control `Slider`: one thumb on a horizontal track that picks a single number between `min` and `max` in `step` increments, with the portion from `min` to the value filled. It is built on a native `<input type="range">`, so the keyboard model, the `slider` role and the value announcements come from the platform; the component only styles the track, fill and thumb with tokens and adds optional tick marks and labelled reference values under the track. It renders no label, value readout or helper text — a field composes it with `Field.Label` and `Field.Description`, the same way `switch` and `number-input` are composed.
 
 - Import: `import Slider from '@aziontech/webkit/slider'`
-- Category: inputs · Surface: app · Structure: monolithic
+- Category: input · Surface: app · Structure: monolithic
 - API as JSON: [slider.json](https://github.com/aziontech/webkit/blob/main/.specs/slider.json)
 
 ## When to use
@@ -35,7 +35,7 @@
 
 - [number-input](number-input.md) — exact numeric entry; pair it next to a slider when the user needs both coarse dragging and an exact value.
 - [field](field.md) — `Field.Label` names the slider; point its `for` at the slider's `id` (the `id` attribute lands on the native input).
-- [helper-text](helper-text.md) — description or error message under the slider in a field layout.
+- field-error` — description or error message under the slider in a field layout.
 - [toggle-group](toggle-group.md) — a few discrete, named choices instead of a continuous range.
 - [progress](progress.md) — displays a fraction; it is not interactive.
 
@@ -77,8 +77,8 @@
 - Track and thumb are styled only through arbitrary pseudo-element variants on the native input (`appearance-none`, `[&::-webkit-slider-runnable-track]:…`, `[&::-webkit-slider-thumb]:appearance-none …`, `[&::-moz-range-track]:…`, `[&::-moz-range-thumb]:…`) — no extra track/thumb elements, no `<style>` block.
 - Geometry: the native input is 40 px tall (`h-10`, the hit area) and full width; the track is 4 px tall and centred; the thumb is 16×16 px.
 - Ticks (`ticks`) and reference marks (`referenceValues`) render in an `aria-hidden` row under the track. Each mark is positioned at the thumb-centre position for its value — `thumb/2 + (100% - thumb) × fraction` — so marks line up with the thumb at both ends; the fraction is passed per mark through an inline custom property. Every reference value also draws a tick. Reference labels read `{value}{unit}`; the first label is start-aligned, the last end-aligned, the rest centred on their mark.
-- Attribute routing (as in `number-input`): consumer `class` merges onto the root wrapper; every other attribute (`id`, `name`, `aria-labelledby`, `aria-describedby`, …) is forwarded to the native input so a `Label for` and a `HelperText` association reach the focusable element. `data-testid` is read from attrs and applied to the root.
-- `data-testid`: root fallback `input-slider`; native input `${testId}__input`; each reference label `${testId}__reference`.
+- Attribute routing (as in `number-input`): consumer `class` merges onto the root wrapper; every other attribute (`id`, `name`, `aria-labelledby`, `aria-describedby`, …) is forwarded to the native input so a `Label for` and a `FieldDescription` association reach the focusable element. `data-testid` is read from attrs and applied to the root.
+- `data-testid`: root fallback `slider`; native input `${testId}__input`; each reference label `${testId}__reference`.
 
 ## Accessibility
 

@@ -21,9 +21,9 @@ The modal progress of one deploy that sends several Deployment Settings live, ea
 
 Titled "New production deployment" (the environment in lower case), with the dialog's own close button in the header. The service name with the environment as a secondary `Tag`, one sentence on what the files replace and how many Deployment Settings the environment deploys with, then the dropped folder: its file count and total size, and a scrollable list (focusable, named "Dropped files") of the first 100 paths in code type with their sizes, and an "and N more" line for the rest. Sizes go through `Intl.NumberFormat` with `style: 'unit'`. The footer has Cancel (transparent) and "Deploy to Production" (primary).
 
-### B. Progress frame — `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeMark` (required)
+### B. Progress frame — `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `OutcomeIcon` (required)
 
-`size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying 2 of 5…" while running, "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeMark` stands before the title: success when all deployed, warning when some failed.
+`size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying 2 of 5…" while running, "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeIcon` stands before the title: success when all deployed, warning when some failed.
 
 ### C. Progress — `PanelBody`, `Progress` (required)
 
@@ -33,9 +33,9 @@ The share of settled settings, named "Deploy progress", with "Deploying <name>" 
 
 Small, named "Filter deploys by status": All, Deploying n (running and queued), Failed n, Done n. An empty filter shows a small `EmptyState` ("Nothing failed.").
 
-### E. Rows — `Item`, `OutcomeMark`, `Spinner`, `Tag`, `EmptyState` (required)
+### E. Rows — `Item`, `OutcomeIcon`, `Spinner`, `Tag`, `EmptyState` (required)
 
-An `Item.List` with one small `Item variant="outline"` per Deployment Setting: its name, the environments and projects it reaches, and, when it failed, the reason in danger text. A queued or running row leads with the settings glyph; a settled row leads with a small `OutcomeMark`. On the end side a `Spinner` while deploying and a status `Tag`: Queued, Deploying, Done, Failed.
+An `Item.List` with one small `Item variant="outline"` per Deployment Setting: its name, the environments and projects it reaches, and, when it failed, the reason in danger text. A queued or running row leads with the settings glyph; a settled row leads with a small `OutcomeIcon`. On the end side a `Spinner` while deploying and a status `Tag`: Queued, Deploying, Done, Failed.
 
 ### F. Footer — `PanelFooter`, `Button` (required)
 
@@ -70,7 +70,7 @@ One toast id for the run: `toast.loading` with "It keeps running if you leave." 
 
 - The dialog traps focus and is named by its title and described by the tally.
 - The `Progress` bar is named; a `role="status"` line announces the outcome once settled.
-- `OutcomeMark` names its outcome; tags give the state in words, glyphs are `aria-hidden`.
+- `OutcomeIcon` names its outcome; tags give the state in words, glyphs are `aria-hidden`.
 - The dropped files list is a focusable scroll region with an `aria-label`; paths are `dir="ltr"`.
 - Motion: the marks honour reduced motion and the `Spinner` stops under it.
 
@@ -86,4 +86,4 @@ One toast id for the run: `toast.loading` with "It keeps running if you leave." 
 - `state/async-submit` — the toast rule this block follows.
 - `create/deploy-drawer` — the standard way to deploy.
 - `create/release-impact` — what a release reaches, before it runs.
-- `OutcomeMark` — the settled mark.
+- `OutcomeIcon` — the settled mark.

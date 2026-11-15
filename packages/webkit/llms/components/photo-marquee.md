@@ -1,9 +1,9 @@
 # Photo Marquee
 
-> The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `ticker` runs on. It is a page section — the site places it from a `{ _id: 'photo-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `frame-box`.
+> The office band of the careers page: a horizontal section title over a framed strip of photographs of varied aspect ratios that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'photo-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title` and `registration-frame`.
 
 - Import: `import PhotoMarquee from '@aziontech/webkit/photo-marquee'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [photo-marquee.json](https://github.com/aziontech/webkit/blob/main/.specs/photo-marquee.json)
 
 ## When to use

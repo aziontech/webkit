@@ -3,7 +3,7 @@
  "binding": "ToggleGroup",
  "import": "@aziontech/webkit/toggle-group",
  "treeShakeableImport": "@aziontech/webkit/toggle-group",
- "category": "actions",
+ "category": "action",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

@@ -16,7 +16,7 @@ import type { DiagramSpec } from './types'
 
 const NAMES = Object.keys(diagrams) as DiagramName[]
 
-const TESTID = 'marketing-diagram'
+const TESTID = 'diagram'
 
 const spec: DiagramSpec = {
   nodes: [
@@ -278,14 +278,14 @@ describe('Diagram', () => {
       const { container, getAllByTestId } = render(Diagram, { props: { spec } })
       await ready(container)
 
-      const nodes = getAllByTestId(`${TESTID}__node`)
+      const nodes = getAllByTestId('diagram-node')
       expect(nodes.map((node) => node.getAttribute('data-diagram-node'))).toEqual([
         'user',
         'workload',
         'cache',
         'origin'
       ])
-      expect(getAllByTestId(`${TESTID}__layout`).length).toBeGreaterThan(0)
+      expect(getAllByTestId('diagram-layout').length).toBeGreaterThan(0)
     })
 
     it('lets a consumer override the node and layout testids', () => {
@@ -304,7 +304,7 @@ describe('Diagram', () => {
         attrs: { 'data-testid': 'custom-layout' }
       })
       expect(layout.getByTestId('custom-layout')).toBeTruthy()
-      expect(layout.getByTestId(`${TESTID}__node`)).toBeTruthy()
+      expect(layout.getByTestId('diagram-node')).toBeTruthy()
     })
   })
 })

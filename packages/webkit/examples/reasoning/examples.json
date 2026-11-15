@@ -1,6 +1,6 @@
 {
   "component": "reasoning",
-  "title": "Components/Primitives/AI/Reasoning",
+  "title": "Components/AI/Reasoning",
   "examples": [
     {
       "name": "Default",

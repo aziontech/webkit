@@ -27,9 +27,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ citation: en.citation })
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-citation'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'citation')
   const label = computed<string>(() =>
     props.title
       ? t('citation.label', { index: props.index, title: props.title })

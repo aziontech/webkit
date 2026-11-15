@@ -1,17 +1,17 @@
 <script setup lang="ts">
+  import AppHeader from '@aziontech/webkit/app-header'
   import Avatar from '@aziontech/webkit/avatar'
   import Brand from '@aziontech/webkit/brand'
   import Breadcrumb from '@aziontech/webkit/breadcrumb-root'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import GlobalHeader from '@aziontech/webkit/global-header'
-  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
@@ -19,9 +19,9 @@
 
   interface FormErrors {
     name: string
-    nameKind: HelperTextType
+    nameKind: 'helper' | 'invalid' | 'required'
     domain: string
-    domainKind: HelperTextType
+    domainKind: 'helper' | 'invalid' | 'required'
   }
 
   const breadcrumb = [{ label: 'Domains', href: '/domains' }, { label: 'Create Domain' }]
@@ -99,15 +99,15 @@
 
 <template>
   <div class="flex h-dvh flex-col bg-(--bg-canvas)">
-    <GlobalHeader aria-label="Console">
-      <GlobalHeader.Start>
+    <AppHeader aria-label="Console">
+      <AppHeader.Start>
         <IconButton
           icon="ai ai-chevron-left"
           aria-label="Back to Domains"
           variant="outline"
           size="small"
         />
-        <GlobalHeader.Brand>
+        <AppHeader.Brand>
           <a
             href="/home"
             aria-label="Azion home"
@@ -118,11 +118,11 @@
               size="small"
             />
           </a>
-        </GlobalHeader.Brand>
+        </AppHeader.Brand>
         <Breadcrumb :items="breadcrumb" />
-      </GlobalHeader.Start>
-      <GlobalHeader.Center />
-      <GlobalHeader.End>
+      </AppHeader.Start>
+      <AppHeader.Center />
+      <AppHeader.End>
         <button
           type="button"
           aria-label="Account settings"
@@ -134,8 +134,8 @@
             variant="square"
           />
         </button>
-      </GlobalHeader.End>
-    </GlobalHeader>
+      </AppHeader.End>
+    </AppHeader>
 
     <main class="animate-page-enter motion-reduce:animate-none flex min-h-0 flex-1 flex-col">
       <form
@@ -168,7 +168,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="Name"
                         description="Identifies the domain in this list. It is not the hostname."
                       >
@@ -184,14 +184,13 @@
                           :aria-describedby="errors.name ? 'create-domain-name-message' : undefined"
                           @update:model-value="errors.name = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.name"
                           id="create-domain-name-message"
-                          :type="errors.nameKind"
-                          :label="errors.name"
-                        />
-                      </SettingRow>
-                      <SettingRow
+                          >{{ errors.name }}</FieldError
+                        >
+                      </SettingsRow>
+                      <SettingsRow
                         title="Domain name"
                         description="The root hostname this domain answers for, without a subdomain."
                       >
@@ -209,13 +208,12 @@
                           "
                           @update:model-value="errors.domain = ''"
                         />
-                        <HelperText
+                        <FieldError
                           v-if="errors.domain"
                           id="create-domain-domain-message"
-                          :type="errors.domainKind"
-                          :label="errors.domain"
-                        />
-                      </SettingRow>
+                          >{{ errors.domain }}</FieldError
+                        >
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>
@@ -230,7 +228,7 @@
                 <Card :padded="false">
                   <template #default>
                     <Item.List>
-                      <SettingRow
+                      <SettingsRow
                         title="DNSSEC"
                         description="Signs this domain's answers so a resolver can detect cache poisoning and spoofing. Completing the setup also means adding the Key Tag and Digest at your domain provider."
                         variant="compact"
@@ -239,8 +237,8 @@
                           v-model="form.dnssec"
                           aria-label="Enable DNSSEC"
                         />
-                      </SettingRow>
-                      <SettingRow
+                      </SettingsRow>
+                      <SettingsRow
                         title="Active"
                         description="When active, the domain answers authoritative DNS queries for its hostname."
                         variant="compact"
@@ -249,7 +247,7 @@
                           v-model="form.active"
                           aria-label="Active"
                         />
-                      </SettingRow>
+                      </SettingsRow>
                     </Item.List>
                   </template>
                 </Card>

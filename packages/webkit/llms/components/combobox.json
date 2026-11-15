@@ -3,7 +3,7 @@
  "binding": "Combobox",
  "import": "@aziontech/webkit/combobox",
  "treeShakeableImport": "@aziontech/webkit/combobox",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

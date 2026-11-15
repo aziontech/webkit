@@ -48,7 +48,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-tag')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tag')
 
   const SEVERITIES: readonly TagSeverity[] = ['neutral', 'info', 'success', 'warning', 'danger']
   const VARIANTS: readonly TagVariant[] = ['primary', 'accent', 'contrast', 'highlight']

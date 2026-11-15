@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionModule from './section-module.vue'
 
-const TESTID = 'marketing-section-module'
+const TESTID = 'section-module'
 
 describe('SectionModule', () => {
   it('renders with the default testid and the default brick configuration', () => {

@@ -1,6 +1,6 @@
 {
   "component": "tabs",
-  "title": "Components/Primitives/Navigation/Tabs",
+  "title": "Components/Navigation/Tabs",
   "examples": [
     {
       "name": "Default",

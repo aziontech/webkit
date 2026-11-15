@@ -1,6 +1,6 @@
 {
   "component": "illustration",
-  "title": "Components/Primitives/Content/Illustration",
+  "title": "Components/Content/Illustration",
   "examples": [
     {
       "name": "Default",

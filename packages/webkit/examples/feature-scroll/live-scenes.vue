@@ -12,7 +12,7 @@
         title: 'Every workload on one list',
         description:
           'See each workload with its domain, status and last deployment, so what is live is never a question.',
-        scene: { component: 'ProductWidget', props: { name: 'workloads-list' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workloads-list' } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -23,7 +23,7 @@
         title: 'Read the deployment topology',
         description:
           'The domains, the application and the firewall a workload serves, drawn as one chain.',
-        scene: { component: 'ProductWidget', props: { name: 'workload-topology' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workload-topology' } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -34,7 +34,7 @@
         title: 'Domains and TLS, handled',
         description:
           'Add a domain, get its certificate issued and renewed, and set the TLS floor without leaving the page.',
-        scene: { component: 'ProductWidget', props: { name: 'workload-domains' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workload-domains' } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -45,7 +45,7 @@
         title: 'Ship a version in seconds',
         description:
           'Build, upload, propagate and warm the cache, every step streamed as it happens until the version is live everywhere.',
-        scene: { component: 'ProductWidget', props: { name: 'workload-deploy' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workload-deploy' } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',
@@ -56,7 +56,7 @@
         title: 'Gradual rollouts and instant rollback',
         description:
           'Send a share of traffic to a new version, promote it to every data center once it holds, or roll back to the last one without a redeploy.',
-        scene: { component: 'ProductWidget', props: { name: 'workload-rollout-rows' } },
+        scene: { component: 'ConsoleMockup', props: { name: 'workload-rollout-rows' } },
         action: {
           label: 'Docs',
           href: 'https://www.azion.com/en/documentation/products/workloads/',

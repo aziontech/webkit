@@ -48,9 +48,7 @@
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__filter` : 'data-table__filter')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-filter'
   )
 
   const fields = computed<TableFilterField[]>(() =>

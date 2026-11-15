@@ -22,7 +22,7 @@
   "Navigation between views of the app → use `sidebar-menu` inside `sidebar`.",
   "Flat records with several attributes each → use `table`.",
   "A few sections of free content that open and close → use `accordion`.",
-  "A two- or three-level directory of destinations on a marketing page → use `column-navigation`."
+  "A two- or three-level directory of destinations on a marketing page → use `link-directory`."
  ],
  "related": [
   "table` — the flat, multi-column view of the same records; switch to it when columns matter more than nesting.",

@@ -2,7 +2,7 @@
   import { computed, useAttrs } from 'vue'
 
   import Tag from '../../../content/tag/tag.vue'
-  import FrameBox from '../../../layout/frame-box/frame-box.vue'
+  import RegistrationFrame from '../../../layout/registration-frame/registration-frame.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import type { DiagramNode } from '../types'
 
@@ -17,9 +17,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-diagram__node'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'diagram-node')
 
   const markStyle = (url: string) => ({ maskImage: `url("${url}")` })
 </script>
@@ -49,7 +47,7 @@
     v-else-if="node.type === 'tile'"
     :content="node.title"
   >
-    <FrameBox
+    <RegistrationFrame
       borders="none"
       marks="all"
     >
@@ -65,7 +63,7 @@
           class="text-body-lg leading-none"
         />
       </span>
-    </FrameBox>
+    </RegistrationFrame>
   </Tooltip>
 
   <div

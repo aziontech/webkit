@@ -1,6 +1,6 @@
 {
   "component": "button-group",
-  "title": "Components/Primitives/Actions/ButtonGroup",
+  "title": "Components/Action/ButtonGroup",
   "examples": [
     {
       "name": "Default",

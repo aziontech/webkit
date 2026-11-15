@@ -8,7 +8,7 @@
 
   const attrs = useAttrs()
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__arrow'
+    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-arrow'
   )
 
   const positioner = inject(NavigationMenuPositionerInjectionKey, null)

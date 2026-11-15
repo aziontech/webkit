@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 7
-checksum: 108824a44a45ccbef85fa9efeb118c1bccd1e909dfa38d8453dee42502f47769
+checksum: 30ef351e801f3a2a813693cf1c4863910859324edc1b02a296d363bd951c8e70
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -25,7 +25,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 
 ## When to use
 
-- Rendering page JSON, or you need a whole band with no custom content → the section (`media-split-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`media-split`).
+- Rendering page JSON, or you need a whole band with no custom content → the section (`media-split-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`media-split`).
 - Use MediaSplit (primitive) to pair copy with one piece of media in a hand-built SFC.
 - To pair one capability's explanation with a screenshot or diagram of it.
 - Down a product page, alternating `variant` so consecutive bands mirror each other.
@@ -37,24 +37,24 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 ## When NOT to use
 
 - For copy with no media → use `section-title`, which is the header band.
-- For one claim beside its picture, scene or code placed from page JSON → use `media-split-band`.
+- For one claim beside its picture, scene or code placed from page JSON → use `media-split-section`.
 - For the closing ask → use `call-to-action`; for a mid-page announcement → use `call-to-action` with `variant="announcement"`.
-- For several short claims side by side → use `topic` in a `card-grid`.
+- For several short claims side by side → use `feature-item` in a `card-grid`.
 - For a picture with no explanation → use `illustration` directly.
 
 ## Related
 
 - `section-title` — the copy-only section header.
-- `topic` — the smaller unit when a page needs several claims rather than one.
+- `feature-item` — the smaller unit when a page needs several claims rather than one.
 - `illustration` — the media itself; a scene dropped in the `media` slot is what the band's ground is drawn for.
-- `texture-material` — the material the media half is grounded with; compose it yourself when a band needs a different one.
-- `frame-box` — the frame the band is drawn with. With `framed` on, or inside a `band-stack`, each of the band's two cells is its own `frame-box`.
-- `band-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws.
+- `texture` — the material the media half is grounded with; compose it yourself when a band needs a different one.
+- `registration-frame` — the frame the band is drawn with. With `framed` on, or inside a `section-stack`, each of the band's two cells is its own `registration-frame`.
+- `section-stack` — the run that stacks these bands; inside it every band frames its two cells, left and right, under the rules the stack draws.
 
 ## Best practices
 
-- By default the band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `frame-box` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
-- A run of bands goes in a `band-stack`, not in a frame per band: the stack draws each band's rules and the band frames its two cells. Leave `framed` off there, or the band draws a second set of rules over the stack's.
+- By default the band draws no frame of its own: the rule and the corner marks belong to the `section-module` or `registration-frame` that the page assembles it into, so a band placed in a framed column never lands a second hairline on the column's own.
+- A run of bands goes in a `section-stack`, not in a frame per band: the stack draws each band's rules and the band frames its two cells. Leave `framed` off there, or the band draws a second set of rules over the stack's.
 
 - Alternate `variant` down a page so consecutive bands mirror; two identical bands in a row read as one.
 - Reach for `orientation="vertical"` when the column is too narrow to carry two halves, not to vary the rhythm of a wide page — a vertical band across a full-width page reads as a card that lost its grid.
@@ -118,19 +118,19 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 | `eyebrow`      | `string`                 | `''`           | false    | Short uppercase overline rendered above the headline.                                                                                                                                                                                                         |
 | `src`          | `string`                 | `''`           | false    | URL of the band's image; ignored when the `media` slot is filled.                                                                                                                                                                                             |
 | `alt`          | `string`                 | `''`           | false    | Alternative text describing what the image shows.                                                                                                                                                                                                             |
-| `variant`         | `MediaSplitVariant`         | `'media-end'`  | false    | Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first.                                                                                                                      |
+| `variant`      | `MediaSplitVariant`      | `'media-end'`  | false    | Which end the media sits on: the closing cell from `lg` up, or the lower one when the band is vertical. `media-end` puts the copy first.                                                                                                                      |
 | `orientation`  | `MediaSplitOrientation`  | `'horizontal'` | false    | Axis the band splits on. `horizontal` sets the cells side by side from `lg` up; `vertical` holds them stacked at every width.                                                                                                                                 |
 | `fill`         | `MediaSplitFill`         | `'canvas'`     | false    | The copy cell's fill. `canvas` lets the band sit in the page column; `surface` lifts it onto its own plate. The media cell follows `mediaFill`.                                                                                                               |
 | `mediaFill`    | `MediaSplitFill`         | `'surface'`    | false    | The media cell's fill. `surface` sets the asset on its own plate, one step off the page; `canvas` lets the whole band sit on the page.                                                                                                                        |
 | `framed`       | `boolean`                | `false`        | false    | Draw the band's own registration frame: its top and bottom rules, with the copy and the media framed as two cells, each with its four marks. Turn it off when the page already wraps the band in a frame.                                                     |
 | `divided`      | `boolean`                | `true`         | false    | Draw the seam between the copy and the media. Turn it off for a band whose two halves should read as one plate.                                                                                                                                               |
 | `headingLevel` | `MediaSplitHeadingLevel` | `2`            | false    | Level of the band's headline element. Drop it to `3` when the band is a sub-band of a section a `section-title` has already opened with its `h2`, so the document outline stays in order.                                                                     |
-| `texture`      | `TextureMaterialVariant`    | `'grid'`       | false    | Texture the media half is grounded with; `none` leaves the cell bare.                                                                                                                                                                                         |
-| `textureSize`  | `TextureMaterialSize`    | `'medium'`     | false    | Pitch of the ground's tiling — how far apart its cells sit.                                                                                                                                                                                                   |
-| `textureFade`  | `TextureMaterialFade`    | `'vignette'`   | false    | How the ground fades out before the cell's edges.                                                                                                                                                                                                             |
+| `texture`      | `TextureVariant`         | `'grid'`       | false    | Texture the media half is grounded with; `none` leaves the cell bare.                                                                                                                                                                                         |
+| `textureSize`  | `TextureSize`            | `'medium'`     | false    | Pitch of the ground's tiling — how far apart its cells sit.                                                                                                                                                                                                   |
+| `textureFade`  | `TextureFade`            | `'vignette'`   | false    | How the ground fades out before the cell's edges.                                                                                                                                                                                                             |
 | `mediaPadded`  | `boolean`                | `false`        | false    | Inset the media from the cell's edges. An exported asset carries its own air and runs flush; a screenshot or a composed panel wants the inset.                                                                                                                |
 | `mediaHref`    | `string`                 | `''`           | false    | URL the band links to. With it set the media cell is one link named by the band's `title`, a click anywhere else on the band follows it, and hovering the band reveals the chevron affordance and the hover state of its link actions.                        |
-| `align`        | `MediaSplitAlign`        | `'start'`      | false    | Where the copy sits down its cell. `start` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle.                                  |
+| `align`        | `MediaSplitAlign`        | `'start'`      | false    | Where the copy sits down its cell. `start` holds the copy at the cell's top and floors the actions so consecutive bands align on them; `center` gathers the copy and its actions into one block on the cell's vertical middle.                                |
 | `size`         | `MediaSplitSize`         | `'medium'`     | false    | Type scale and air of the copy. `medium` sets the headline at heading-md for a band beside other content; `large` sets it at heading-xl with a larger description and pads the copy cell a step wider, for a band that carries only its headline and actions. |
 
 ## Events
@@ -139,11 +139,11 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                                                                                                                                                                                        |
-| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `default` | —     | Description body; replaces the `description` prop when provided.                                                                                                                                                                                             |
-| `content` | —     | Further copy-column content under the description — an inventory, a list of surfaces — inside the paragraph's own measure.                                                                                                                                   |
-| `media`   | —     | The band's media; replaces the image built from `src`.                                                                                                                                                                                                       |
+| Slot      | Scope | Notes                                                                                                                                                                                                                                                             |
+| --------- | ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `default` | —     | Description body; replaces the `description` prop when provided.                                                                                                                                                                                                  |
+| `content` | —     | Further copy-column content under the description — an inventory, a list of surfaces — inside the paragraph's own measure.                                                                                                                                        |
+| `media`   | —     | The band's media; replaces the image built from `src`.                                                                                                                                                                                                            |
 | `actions` | —     | Optional controls under the copy, floored so consecutive bands align on them. Small buttons: `variant="secondary"` for the action, `variant="outline"` for a second beside it, `icon="ai ai-chevron-right"` + `icon-position="trailing"` when it leaves the page. |
 
 ## States
@@ -152,11 +152,11 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 - `data-variant` mirrors the `variant` prop and drives which column the media occupies
 - `data-media` is present when the band has media (either `src` or the `media` slot), and is what switches the band between one and two columns
 - `data-orientation` mirrors the `orientation` prop; `vertical` holds the stacked layout at every width, so the band never reaches two columns and `variant` decides which cell is on top instead of which is on the right
-- With `framed` on, or when the band sits inside a `band-stack`, each cell — the copy and the media — is its own `frame-box` with no rules and all four registration marks, so the band reads as two frames, left and right, and every corner of each half is ticked, including both sides of the seam. `framed` adds the band's top and bottom rules around them; inside a `band-stack` the stack draws those. Below `lg` the same two frames stack, and their marks flank the horizontal seam
+- With `framed` on, or when the band sits inside a `section-stack`, each cell — the copy and the media — is its own `registration-frame` with no rules and all four registration marks, so the band reads as two frames, left and right, and every corner of each half is ticked, including both sides of the seam. `framed` adds the band's top and bottom rules around them; inside a `section-stack` the stack draws those. Below `lg` the same two frames stack, and their marks flank the horizontal seam
 - `data-divided` mirrors the `divided` prop and is what draws the seam — the grid's own gap over a rule fill. With it off the grid closes the gap and the two cells meet on their own fills
 - Below `lg` a horizontal band is one column with the copy first, so reading order matches the argument regardless of `variant`; a vertical band honours `variant` at every width, and does it with grid `order` so the copy — which carries the actions — stays first in DOM and in tab order either way
 - When neither `src` nor the `media` slot is given, the copy column spans the full width rather than leaving an empty half
-- The media half is grounded on a `texture-material` the band paints itself: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the cell's edges, so a transparent scene has something to sit on and the seam stays the only hard line. `texture="none"` leaves the cell bare; no media, no layer
+- The media half is grounded on a `texture` the band paints itself: `texture` picks the material, `textureSize` its pitch and `textureFade` how it reaches zero before the cell's edges, so a transparent scene has something to sit on and the seam stays the only hard line. `texture="none"` leaves the cell bare; no media, no layer
 - `data-media-padded` mirrors the `mediaPadded` prop and is what insets the media from the cell's edges — off by default, because an exported asset already carries its own air and a padded cell pays for that margin twice. The ground fills the cell either way, so the texture reaches the seam even when the media does not
 - `data-media-fill` mirrors the `mediaFill` prop. `surface` paints the media cell `var(--bg-surface)`, so the asset sits on its own plate one step off the page; `canvas` paints it `var(--bg-canvas)` and, with `divided` off, the whole band sits on the page
 - `data-size` mirrors the `size` prop; `large` sets the headline at `heading-xl` and the description at `body-lg`, and pads the copy cell `var(--spacing-2xl)` on every side instead of `var(--spacing-xl)`, for a band whose copy cell holds only a headline and its actions. The padding follows the type, so a call site never re-spaces a large band by hand
@@ -187,7 +187,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 | band rules, marks and the seam | `var(--border-default)`                                                    |
 | spacing (cell padding)         | `var(--spacing-xl)`                                                        |
 | spacing (copy cell, `large`)   | `var(--spacing-2xl)`                                                       |
-| media ground ink               | `var(--text-default)`, mixed down by `texture-material`                    |
+| media ground ink               | `var(--text-default)`, mixed down by `texture`                             |
 | spacing (copy stack)           | `var(--spacing-lg)`                                                        |
 | spacing (copy to actions)      | `var(--spacing-2xl)`                                                       |
 | spacing (between actions)      | `var(--spacing-sm)`                                                        |
@@ -203,7 +203,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 - Visible focus: not applicable to the band; controls composed into `actions` keep their own `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)` ring.
 - Keyboard map: none of its own — `Tab` reaches the controls placed in the `actions` slot, in DOM order, which is the copy column first at every width, then the media cell's link when `mediaHref` is set. The band-wide click is a pointer convenience over that link, not a second tab stop.
 - ARIA: the headline is a real `h2` and the band is a `<section>` labelled by it; the image carries `alt`, and an image given no `alt` is marked `aria-hidden` rather than announced as an unnamed graphic.
-- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `big-numbers`).
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): the headline is `var(--text-default)` on `var(--bg-surface)`; the description uses `var(--text-muted)`, which clears AA on the dark canvas and is a known theme-level shortfall on the light one (see `stats`).
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the band is static.
 - Touch target — the band composes no control of its own; the small buttons its `actions` pattern calls for stand 28 px tall, which clears WCAG 2.2 AA 2.5.8 (24×24 px) but is under this package's own 40×40 px house floor.
 

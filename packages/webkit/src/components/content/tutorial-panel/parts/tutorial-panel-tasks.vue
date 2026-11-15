@@ -92,7 +92,7 @@
   })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-tutorial-panel-tasks'
+    () => (attrs['data-testid'] as string | undefined) ?? 'tutorial-panel-tasks'
   )
 
   const hasActions = () => hasRenderedContent(slots['actions']?.() ?? [])

@@ -68,8 +68,8 @@
     ],
     "deployLabel": "Deploy now",
     "templatesAriaLabel": "Templates you can deploy",
-    "tickerLabel": "Compatible with Your Stack",
-    "tickerMarks": [
+    "marqueeLabel": "Compatible with Your Stack",
+    "marqueeMarks": [
       "nextjs",
       "astro",
       "react",

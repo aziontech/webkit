@@ -14,7 +14,12 @@ export const KEBAB_RE = /^[a-z][a-z0-9]*(-[a-z0-9]+)*$/
 export const TEMPLATE_VERSIONS = [1, 2]
 export const CURRENT_TEMPLATE = 2
 export const TEMPLATE_2_SINCE = '2026-11-12'
-export const TEMPLATE_2_SECTIONS = ['Internationalization', 'Right-to-left', 'Responsive', 'Performance']
+export const TEMPLATE_2_SECTIONS = [
+  'Internationalization',
+  'Right-to-left',
+  'Responsive',
+  'Performance'
+]
 
 // ---- Frontmatter ----
 
@@ -255,7 +260,11 @@ function isPlaceholderSection(heading, text) {
 export function templateSectionErrors(fm, body) {
   const errors = []
   const version = templateVersion(fm)
-  if (version < CURRENT_TEMPLATE && typeof fm?.created === 'string' && fm.created >= TEMPLATE_2_SINCE) {
+  if (
+    version < CURRENT_TEMPLATE &&
+    typeof fm?.created === 'string' &&
+    fm.created >= TEMPLATE_2_SINCE
+  ) {
     errors.push(
       `template: a spec created on or after ${TEMPLATE_2_SINCE} must declare \`template: ${CURRENT_TEMPLATE}\``
     )
@@ -265,7 +274,8 @@ export function templateSectionErrors(fm, body) {
   for (const heading of TEMPLATE_2_SECTIONS) {
     const section = getSection(body, heading)
     if (section === null) errors.push(`## ${heading}: section missing (required by template 2)`)
-    else if (isPlaceholderSection(heading, section)) errors.push(`## ${heading}: section is empty, TBD or still a placeholder`)
+    else if (isPlaceholderSection(heading, section))
+      errors.push(`## ${heading}: section is empty, TBD or still a placeholder`)
   }
   return errors
 }
@@ -426,7 +436,7 @@ function extractBracedBlockAfter(script, pattern) {
 }
 
 function extractProps(script) {
-  // Match `interface Props {` AND named prop interfaces (`interface CardPricingProps {`)
+  // Match `interface Props {` AND named prop interfaces (`interface PricingCardProps {`)
   // so components that name their props interface aren't silently skipped by the checks.
   let block = extractBracedBlockAfter(script, /interface\s+\w*Props\s*\{/)
   if (!block) block = extractBracedBlockAfter(script, /defineProps<\s*\{/)

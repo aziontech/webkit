@@ -23,8 +23,8 @@ const Strip = (props: Record<string, unknown> = {}) =>
 describe('StatTileGroup', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const fallback = render(Strip())
-    expect(fallback.getByTestId('chart-stat-tile-group')).toBeTruthy()
-    expect(fallback.getByTestId('chart-stat-tile-group__cells')).toBeTruthy()
+    expect(fallback.getByTestId('stat-tile-group')).toBeTruthy()
+    expect(fallback.getByTestId('stat-tile-group__cells')).toBeTruthy()
     fallback.unmount()
     const custom = render(Strip({ 'data-testid': 'usage' }))
     expect(custom.getByTestId('usage')).toBeTruthy()
@@ -33,7 +33,7 @@ describe('StatTileGroup', () => {
 
   it('is a group, named by ariaLabel when set', () => {
     const unnamed = render(Strip())
-    const root = unnamed.getByTestId('chart-stat-tile-group')
+    const root = unnamed.getByTestId('stat-tile-group')
     expect(root).not.toHaveAttribute('aria-label')
     unnamed.unmount()
     const named = render(Strip({ ariaLabel: 'Usage' }))
@@ -42,7 +42,7 @@ describe('StatTileGroup', () => {
 
   it('turns every StatTile inside it into a grouped cell, in slot order', () => {
     const view = render(Strip())
-    const cells = view.getAllByTestId('chart-stat-tile')
+    const cells = view.getAllByTestId('stat-tile')
     expect(cells).toHaveLength(2)
     for (const cell of cells) expect(cell).toHaveAttribute('data-grouped')
     expect(
@@ -57,7 +57,7 @@ describe('StatTileGroup', () => {
 
   it('keeps each cell named and its delta readable', () => {
     const view = render(Strip())
-    const [first] = view.getAllByTestId('chart-stat-tile__delta-tag')
+    const [first] = view.getAllByTestId('stat-tile__delta-tag')
     expect(first.textContent).toContain('+12.4%')
     expect(view.getByRole('group', { name: 'Data transferred' })).toBeTruthy()
   })
@@ -68,7 +68,7 @@ describe('StatTileGroup', () => {
     })
     const view = render(InRtl)
     expect(view.getByRole('group', { name: 'Usage' })).toBeTruthy()
-    const cells = view.getAllByTestId('chart-stat-tile')
+    const cells = view.getAllByTestId('stat-tile')
     expect(cells).toHaveLength(4)
     for (const cell of cells) expect(cell).toHaveAttribute('data-grouped')
   })
@@ -84,8 +84,8 @@ describe('StatTileGroup', () => {
   it('renders the BesideCard example: the strip and its neighbour card share one row', async () => {
     const view = render(BesideCardExample)
     const group = view.getByRole('group', { name: 'Usage' })
-    expect(group.parentElement).toBe(view.getByTestId('content-card').parentElement)
-    expect(view.getAllByTestId('chart-stat-tile')).toHaveLength(4)
+    expect(group.parentElement).toBe(view.getByTestId('card').parentElement)
+    expect(view.getAllByTestId('stat-tile')).toHaveLength(4)
     await expectNoA11yViolations(view.container)
   })
 })

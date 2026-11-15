@@ -1,6 +1,6 @@
 {
   "component": "accordion",
-  "title": "Components/Primitives/Content/Accordion",
+  "title": "Components/Content/Accordion",
   "examples": [
     {
       "name": "Default",
@@ -23,9 +23,9 @@
       "file": "disabled.vue"
     },
     {
-      "name": "WithLogView",
-      "summary": "Real composition: the `Accordion.Content` slot takes any component. Here each deploy item wraps a full `LogView` (header and content) over a deploy log.",
-      "file": "with-log-view.vue"
+      "name": "WithLogViewer",
+      "summary": "Real composition: the `Accordion.Content` slot takes any component. Here each deploy item wraps a full `LogViewer` (header and content) over a deploy log.",
+      "file": "with-log-viewer.vue"
     },
     {
       "name": "Multiple",

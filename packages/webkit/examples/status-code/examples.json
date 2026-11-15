@@ -1,6 +1,6 @@
 {
   "component": "status-code",
-  "title": "Components/Primitives/Content/StatusCode",
+  "title": "Components/Content/StatusCode",
   "examples": [
     {
       "name": "Default",

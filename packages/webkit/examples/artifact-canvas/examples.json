@@ -1,6 +1,6 @@
 {
   "component": "artifact-canvas",
-  "title": "Components/Primitives/AI/ArtifactCanvas",
+  "title": "Components/AI/ArtifactCanvas",
   "examples": [
     {
       "name": "Default",

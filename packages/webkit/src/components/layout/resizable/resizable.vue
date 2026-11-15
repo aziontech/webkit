@@ -25,9 +25,7 @@
   }>()
 
   const attrs = useAttrs()
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-resizable'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'resizable')
 
   const panes = new Map<globalThis.HTMLElement, ResizablePaneApi>()
 

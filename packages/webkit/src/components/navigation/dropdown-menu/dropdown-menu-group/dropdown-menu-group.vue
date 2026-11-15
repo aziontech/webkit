@@ -34,7 +34,7 @@
   provide(DropdownMenuGroupInjectionKey, true)
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__group`
+    () => (attrs['data-testid'] as string | undefined) ?? 'dropdown-menu-group'
   )
 
   const hasLabel = computed(() => props.label.length > 0)

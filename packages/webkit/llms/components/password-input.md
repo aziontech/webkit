@@ -3,7 +3,7 @@
 > Single-line password input for forms. Renders a bordered field with a built-in visibility toggle button on the trailing edge that flips the native `type` between `password` and `text`. Shares the visual language of `Input` (same heights, borders, focus ring, disabled treatment). The component is the field only — labels, helper text, and strength meters live in the wrapping form-field layer. Aligned with Figma frame `3714:10788` (Webkit / PasswordInput). The token mapping was originally inferred from the `input` sibling because the Figma MCP was unreachable during spec authoring; it has since been **reconciled against the frame** as rendered inside the password field frame (`2027:3212`), which corrected the trailing padding to `var(--spacing-xs)` and the visibility toggle to the 28 px (`small`) `IconButton`. One frame value is deliberately not adopted: the border width stays at the shared 1 px rather than the frame's `var(--border-width-default)` (0.8 px), because this component's contract is to share `Input`'s borders and `Input` is still on 1 px — moving one without the other would break that stated invariant. Adopting it is a coordinated follow-up across every bordered input.
 
 - Import: `import PasswordInput from '@aziontech/webkit/password-input'`
-- Category: inputs · Surface: app · Structure: monolithic
+- Category: input · Surface: app · Structure: monolithic
 - API as JSON: [password-input.json](https://github.com/aziontech/webkit/blob/main/.specs/password-input.json)
 
 ## When to use

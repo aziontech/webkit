@@ -4,7 +4,7 @@ category: data
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: f058401af889efda9b95a708cf0ebceaf72691892cf51d3e01b5d6ec1cf515bb
+checksum: de6af1d2b7ee5bdd95a10ff942c31accdeca4dea3994340c4d765b9c117e39ac
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -24,7 +24,7 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 
 - You know the item count → pass `total` to `pagination` and bind `v-model:page`; it renders and wires every PaginationButton itself.
 - The rows live in a data-driven `table` → set `paginated` on the table instead.
-- The control is a previous / next link between documentation pages → use `doc-prev-next`.
+- The control is a previous / next link between documentation pages → use `doc-previous-next`.
 - It is a standalone action outside a pagination strip → use `button` or `icon-button`; this button has no radius or frame of its own except at the strip's ends.
 - It is a "Load more" control at the end of a list → use `button`.
 

@@ -27,9 +27,9 @@ A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Settings last, in a `st
 
 A small `PageHeader` titled Settings with one sentence about what these settings cover. It sits at the top of the form column, inside the scrolling region.
 
-### C. Settings sections — `SettingsSection`, `Card`, `Item`, `SettingRow`, `Input`, `HelperText`, `Switch` (required)
+### C. Settings sections — `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `FieldError`, `Switch` (required)
 
-One `form` with a disabled-while-saving `fieldset` and a visually hidden legend. Each `SettingsSection` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `HelperText` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. See `skills/webkit-form`.
+One `form` with a disabled-while-saving `fieldset` and a visually hidden legend. Each `SettingsSection` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. See `skills/webkit-form`.
 
 ### D. Locked settings — `Tooltip`, `Switch` (optional)
 
@@ -39,11 +39,11 @@ A setting the user cannot change here (a paid module, a module that is always on
 
 Hidden at rest. On the first edit a `SaveBar` slides up at the bottom of the scroll region with the unsaved-changes label, an optional muted hint, and an outlined Discard beside a primary Save, both medium (stacked under the label on small screens). While saving, the fieldset is disabled, Save shows its loading state and Discard is disabled. The bar leaves when Save lands or when Discard restores the record.
 
-### F. Conditional fields — `SettingRow`, `Input`, `HelperText` (optional)
+### F. Conditional fields — `SettingsRow`, `Input`, `FieldError` (optional)
 
 When one choice decides which fields apply (a connector, a scope, a template), the choice (a `Select` or `RadioGroup` choice cards (`variant="card"`)) comes first and the rows it unlocks follow it inside the same `Card`, entering with `animate-content-enter`. Hidden rows keep no value that Save sends. Credentials are `PasswordInput`s that cannot be read back after Save, and the row says so. In DataStream the workload scope is `RadioGroup` choice cards (`variant="card"`); the Sampling band appears only when the stream collects from every workload, and Sampling rate is a `NumberInput` with a `%` suffix.
 
-### G. Template editor — `SettingRow`, `HelperText` (optional)
+### G. Template editor — `SettingsRow`, `FieldError` (optional)
 
 A setting whose value is a document (a JSON data set) gets a stacked row, under the `Select` that picks the template. A preset is read-only: its document shows in a `CodeBlock` with Copy, and the row says how to edit (choose Custom template). A custom document is a `CodeEditor` (`language="json"`, a fixed `height`), checked on Save (`Write the data set as a JSON object.`); it passes `:loader="loadMonaco"` (the loader from the `code-editor` spec, with the JSON worker) so JSON is validated as you type, and keeps plain line numbers: `pad-line-numbers` is for full-page editors, not a fixed-height field in a form.
 
@@ -59,9 +59,9 @@ A setting with a side effect beyond this resource carries a warning `Alert` abov
 
 When the record was saved by someone else after the form opened, a warning `Alert` sits between the heading and the first section: a bold "Changed elsewhere." lead, one sentence that says nothing was lost and what Save will do, and a secondary Reload button in its action slot. Save does not overwrite silently: it opens a `ConfirmDialog` (kind `primary`) with Go back and Overwrite and save. Reload swaps the edits for the saved values and the notice becomes an info `Alert` "Edits discarded." with Undo, which brings the edits back. The save bar's hint and Discard label follow the notice ("Saving overwrites the version saved elsewhere.", "Discard and reload"). This is the form-validation rule (`state/form-validation`, SectionRejected) applied to an edit: one message above the form, the recovery action on it.
 
-### K. Danger zone — `SettingsSection`, `Card`, `SettingRow`, `Button`, `Input` (optional)
+### K. Danger zone — `SettingsSection`, `Card`, `SettingsRow`, `Button`, `Input` (optional)
 
-The last section, titled Danger zone with the hint "Actions that cannot be undone.", holds one compact `SettingRow` per irreversible action with a medium danger `Button` and a trash icon. The action opens a medium `ConfirmDialog`: a warning `Alert` that it cannot be reversed, one paragraph on what goes with it and a docs link (a plain anchor with the `text-link` class, since it sits inside the sentence), then "To confirm, type" the name in a `text-label-code-sm` chip with a `CopyButton`, and an `Input` labelled by that sentence. The danger confirm button stays disabled until the typed name matches and shows its loading state while the request runs; Enter in the input confirms. See `edit/delete-dialog`.
+The last section, titled Danger zone with the hint "Actions that cannot be undone.", holds one compact `SettingsRow` per irreversible action with a medium danger `Button` and a trash icon. The action opens a medium `ConfirmDialog`: a warning `Alert` that it cannot be reversed, one paragraph on what goes with it and a docs link (a plain anchor with the `text-link` class, since it sits inside the sentence), then "To confirm, type" the name in a `text-label-code-sm` chip with a `CopyButton`, and an `Input` labelled by that sentence. The danger confirm button stays disabled until the typed name matches and shows its loading state while the request runs; Enter in the input confirms. See `edit/delete-dialog`.
 
 ## Do
 
@@ -114,7 +114,7 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - A disabled `Switch` keeps its `Tooltip`, so keyboard and pointer users can still read why it is locked.
 - External links open in a new tab with `rel="noopener noreferrer"` and an icon marked `aria-hidden="true"`.
 - The save bar enters after the form in reading order and its motion respects reduced motion.
-- An invalid field points at its `HelperText` through `aria-describedby`; on Save the first invalid field takes the focus.
+- An invalid field points at its `FieldError` through `aria-describedby`; on Save the first invalid field takes the focus.
 - A section `Alert` is announced by `Alert` itself; its recovery `Button` is a real button inside it.
 - The `CodeEditor` and the read-only `CodeBlock` are named after their row (`Data set`, `Copy the data set as JSON`).
 - The dirty tab mark is `aria-hidden`; a visually hidden "Unsaved changes" joins the tab's accessible name, and under forced colors the dot paints in `CanvasText`.
@@ -134,7 +134,7 @@ The last section, titled Danger zone with the hint "Actions that cannot be undon
 - DataStream: a data stream at its own settings route with General, Source, Sampling, Template and Destination; the destination fields follow the connector, Save sends one test record, and an endpoint that does not answer raises the section `Alert` of the form-validation rule.
 - StaleRecord: the form holds edits and the record changed elsewhere; the warning notice with Reload is up, Save asks before overwriting, Reload turns the notice into Edits discarded with Undo.
 - DangerZone: the settings end with the Danger zone; Delete project opens the typed-name confirmation, enabled only on a match, loading while the delete runs.
-- CacheSettings: one cache setting of an application; General, Browser cache, Edge cache and the collapsed Advanced cache key. Rows that only apply under a switch or an override sit one level in (`SettingRow` `level`). An edge TTL under 60 seconds and an empty allowlist or denylist are field errors with their reason, focused on Save. Save deploys and reports through the async-submit toast with Edit and Redeploy.
+- CacheSettings: one cache setting of an application; General, Browser cache, Edge cache and the collapsed Advanced cache key. Rows that only apply under a switch or an override sit one level in (`SettingsRow` `level`). An edge TTL under 60 seconds and an empty allowlist or denylist are field errors with their reason, focused on Save. Save deploys and reports through the async-submit toast with Edit and Redeploy.
 - Protocols: the protocol settings of a workload; ports per protocol, TLS version and cipher suite, then Mutual authentication. Mutual authentication stays off, with a helper line saying why, until HTTPS is on; once on it shows the mode as `Field` choice cards, the trusted CA picker (search, expiry beside each certificate, Upload certificate in its footer opening a `Drawer`) and the revocation lists. Save checks a port per protocol and a CA, then deploys through the async-submit toast with Edit and Redeploy.
 - UnsavedChanges (leave guard): the Settings tab carries the dirty dot, and switching tabs while dirty opens the Unsaved changes dialog.
 

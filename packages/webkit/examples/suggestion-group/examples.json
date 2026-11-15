@@ -1,6 +1,6 @@
 {
   "component": "suggestion-group",
-  "title": "Components/Primitives/AI/SuggestionGroup",
+  "title": "Components/AI/SuggestionGroup",
   "examples": [
     {
       "name": "Default",

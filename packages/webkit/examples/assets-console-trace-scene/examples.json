@@ -4,13 +4,13 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "One function invocation in the `MediaTabs` `#media` slot, one document per tab: the span waterfall (`Trace`), the run's logs (`LogView`) and the request path (`Flow`).",
+      "summary": "One function invocation in the `MediaTabs` `#media` slot, one document per tab: the span waterfall (`Trace`), the run's logs (`LogViewer`) and the request path (`FlowDiagram`).",
       "file": "default.vue"
     },
     {
       "name": "Console panel",
-      "summary": "The same scene in a `ConsolePanel` `#scene` slot, switched by the panel's tabs.",
-      "file": "console-panel.vue"
+      "summary": "The same scene in a `ConsoleShowcase` `#scene` slot, switched by the panel's tabs.",
+      "file": "console-showcase.vue"
     }
   ]
 }

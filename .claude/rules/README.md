@@ -37,7 +37,7 @@ This table is the human-readable summary of that registry — when in doubt, the
 | [root-element](./root-element.md) | general | Own root; `href` polymorphism; `$attrs`+`cn`; minimal `defineExpose` | tokens · references · authoring · ratchet · lint · review |
 | [component-states](./component-states.md) | general | Rendered state surface via `data-*` + DS components | spec-compliance · ratchet · review |
 | [accessibility](./accessibility.md) | general | Role, keyboard, focus, `motion-reduce` | vuejs-accessibility · review |
-| [testid](./testid.md) | general | `data-testid` derived `<category>-<name>` | spec-compliance · ratchet |
+| [testid](./testid.md) | general | `data-testid` = the component's own name | spec-compliance · ratchet |
 | [deprecation](./deprecation.md) | general | 6.0 clean break; from then `@deprecated` → one major → remove | authoring · ratchet · lint |
 | [bundle-budget](./bundle-budget.md) | webkit | `size-limit` per entry; tree-shaking | size-limit · review |
 | [testing](./testing.md) | general | One `<name>.test.ts` per component (Vitest browser + axe) | vitest (CI) · references · review |

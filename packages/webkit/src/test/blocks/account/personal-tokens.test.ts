@@ -61,7 +61,7 @@ describe('account/tokens', () => {
     expect(secret).toHaveAttribute('readonly')
     const statuses = reveal.querySelectorAll('[role="status"]')
     expect(statuses).toHaveLength(1)
-    expect(statuses[0]).toHaveAttribute('data-testid', 'actions-copy-button__status')
+    expect(statuses[0]).toHaveAttribute('data-testid', 'copy-button__status')
     await expectNoA11yViolations(reveal)
     await fireEvent.click(buttonByText('I copied the token', reveal))
     await waitFor(() => expect(document.body.textContent).not.toContain('Copy your new token'))

@@ -1,6 +1,6 @@
 {
   "component": "topology-diagram",
-  "title": "Components/Primitives/Data/TopologyDiagram",
+  "title": "Components/Data/TopologyDiagram",
   "examples": [
     {
       "name": "Default",

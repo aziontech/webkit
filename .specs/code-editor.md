@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 10
 template: 2
-checksum: a0bcf296a14a8f589908de2a4133f3c64b915d1728465e8f24d761c05bffde5d
+checksum: 3429b3e9312e51f908f342291a73bb2e585f9784bf045446217ca58a04101b82
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Use CodeEditor only when the person edits the code (its diff mode is for editing one side beside the original); to show code, config or JSON the person reads or copies, including read-only diffs, use CodeBlock, and for build, deploy or runtime log lines use LogView.
+Use CodeEditor only when the person edits the code (its diff mode is for editing one side beside the original); to show code, config or JSON the person reads or copies, including read-only diffs, use CodeBlock, and for build, deploy or runtime log lines use LogViewer.
 
 An editable code surface with line numbers, diagnostics and a read-only and a diff mode. It is a plain-text editor first: a monospace textarea with a line-number gutter that works on the server, without JavaScript and on any device. When the app passes a `loader` (a function that wires Monaco's workers and returns `import('monaco-editor')`), Monaco is loaded lazily, painted with the design tokens and takes over the same value, markers and options; until it loads, or if it fails, the plain editor stays in place. It differs from `code-block`, which only shows code.
 
@@ -32,7 +32,7 @@ An editable code surface with line numbers, diagnostics and a read-only and a di
 - Showing a read-only change between two versions (what a release or a revert changes, a configuration before and after) → use `code-block` with the tab's `original`; diff mode is for editing beside the original, not for reviewing a change nobody edits.
 - A one-line value such as a header, a regex or a path → use `input` inside a `field`.
 - Free prose or a description → use `textarea`.
-- A stream of log lines → use `log-view`.
+- A stream of log lines → use `log-viewer`.
 - A form generated from a JSON schema → use `schema-form` (the arguments tab of a function pairs both).
 
 ## Related
@@ -41,7 +41,7 @@ An editable code surface with line numbers, diagnostics and a read-only and a di
 - `textarea` — plain multi-line text; the fallback editor is built in its spirit but keeps code typography and a gutter.
 - `field` — wraps the editor with a label, a description and an error; the editor reads id, `aria-describedby`, invalid and disabled from it.
 - `toggle-group` — the document switch (Code / Arguments) placed in the `toolbar` slot.
-- `log-view` — output of a run next to the editor.
+- `log-viewer` — output of a run next to the editor.
 
 ## Best practices
 
@@ -255,7 +255,7 @@ Types: `CodeEditorMarker = { line: number; column?: number; endLine?: number; en
 - **Theme is global in Monaco.** Every editor shares the `webkit` theme, so it is defined and set only when its content changes (`applyThemeOnce`, per Monaco instance): several editors on a page no longer each re-define it on every `class`/`data-theme` change of the document, and a `setTheme` that touched those classes could not make two editors ping-pong (`code-editor.test.ts`).
 - **JSON Schema (`schema`).** The design sample checks the arguments schema editor against a JSON Schema. When Monaco is loaded and `language` is `json`, CodeEditor registers `schema` with Monaco's JSON defaults (`json.jsonDefaults` since monaco-editor 0.55, `languages.json.jsonDefaults` before) under its own schema URI with `fileMatch` set to the model's URI, keeping every other entry, so several editors on a page each keep their own schema. It turns on `validate`, reports schema problems as warnings (as the sample does) and never fetches remote schemas. The model gets a URI even without `path` when a schema is set. The entry is removed when the schema is cleared, the language changes or the editor unmounts. The plain editor does not validate.
 - **`markers-change` payload.** It emits WebKit's `CodeEditorMarker` shape (1-based `line`, `column`, `endLine`, `endColumn`, `severity`, `message`), not Monaco's `IMarker`, so the payload is typed without Monaco's types and matches `markers`. Monaco's `Hint` maps to `info`. Markers WebKit set from the `markers` prop (owner `webkit`) are left out, so the app never receives its own diagnostics back. It is a value event, not an activation, so it carries no DOM event.
-- **`bordered` (sample `flush`).** The vocabulary name for an outline is `bordered` (default `true`, like `log-view` and `code-block`). Off, the root drops its border, radius and ring offset and the ring is drawn inset (`ring-inset`), so the focus stays visible when a pane's `overflow: hidden` would clip an outer ring. The toolbar and problems bands keep their dividers.
+- **`bordered` (sample `flush`).** The vocabulary name for an outline is `bordered` (default `true`, like `log-viewer` and `code-block`). Off, the root drops its border, radius and ring offset and the ring is drawn inset (`ring-inset`), so the focus stays visible when a pane's `overflow: hidden` would clip an outer ring. The toolbar and problems bands keep their dividers.
 - **Diff names.** Both sides of the diff are named after the editor (`<name>, Original` and `<name>, Modified`), since Monaco leaves them empty.
 - **Plain editor is the default.** Not a skeleton: it is fully usable, so the SSR markup is an editor and slow networks never block typing.
 - **Theme.** Colours are read from the host element's computed tokens (hex values) at mount and when `class`/`data-theme` changes on `<html>` or `<body>` or the colour scheme changes; Monaco's theme is global, so the last editor to apply it wins, which is fine because all read the same tokens.

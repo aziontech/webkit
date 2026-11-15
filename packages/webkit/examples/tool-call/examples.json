@@ -1,6 +1,6 @@
 {
   "component": "tool-call",
-  "title": "Components/Primitives/AI/ToolCall",
+  "title": "Components/AI/ToolCall",
   "examples": [
     {
       "name": "Default",

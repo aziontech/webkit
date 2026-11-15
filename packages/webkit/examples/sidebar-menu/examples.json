@@ -1,6 +1,6 @@
 {
   "component": "sidebar-menu",
-  "title": "Components/Primitives/Navigation/SidebarMenu",
+  "title": "Components/Navigation/SidebarMenu",
   "examples": [
     {
       "name": "Default",

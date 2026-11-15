@@ -70,7 +70,7 @@ PostToolUse hook on `Write|Edit|MultiEdit` of the same `.vue` paths. Re-reads th
 - Missing or extra prop, event, slot, sub-component.
 - Type mismatch in a union-literal prop.
 - `defineOptions.name` not equal to the spec's PascalCase name.
-- `data-testid` fallback different from `'<category>-<name>'`.
+- `data-testid` fallback different from the component's own name.
 - Animation classes in the `.vue` that aren't in the spec's "Motion & Animations" table (or vice versa).
 - Motion-bearing classes without a `motion-reduce:*` escape.
 

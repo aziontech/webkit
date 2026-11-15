@@ -9,8 +9,8 @@ A design system is imported into every consumer, so its size is the consumer's s
 ```jsonc
 // packages/webkit/.size-limit.json (excerpt — budgets are measured gzip + headroom)
 [
-  { "name": "button",      "path": "src/components/actions/button/button.vue", "limit": "2.5 KB" },
-  { "name": "table-root",  "path": "src/components/data/table/table.vue",       "limit": "48 KB" }
+  { "name": "button", "path": "src/components/action/button/button.vue", "limit": "2.5 KB" },
+  { "name": "table-root", "path": "src/components/data/table/table.vue", "limit": "48 KB" }
 ]
 ```
 

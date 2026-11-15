@@ -46,7 +46,7 @@
   const returnFocusEl = ref<HTMLElement | null>(null)
   const hasDescription = ref(false)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-drawer')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'drawer')
 
   const openProp = computed<boolean | undefined>(() => openModel.value)
 

@@ -42,7 +42,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-badge')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'badge')
 
   const SEVERITIES: readonly BadgeSeverity[] = ['neutral', 'info', 'success', 'warning', 'danger']
 

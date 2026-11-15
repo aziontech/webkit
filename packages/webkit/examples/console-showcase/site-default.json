@@ -1,0 +1,35 @@
+{
+  "_id": "console-showcase",
+  "props": {
+    "eyebrow": "Console",
+    "title": "One console for every workload",
+    "description": "Build, route and secure an application from the same page.",
+    "tabs": [
+      {
+        "value": "build",
+        "title": "Build"
+      },
+      {
+        "value": "device-groups",
+        "title": "Device Groups"
+      },
+      {
+        "value": "rules-engine",
+        "title": "Rules Engine"
+      }
+    ],
+    "crop": 0.2,
+    "primaryAction": {
+      "label": "Start for free",
+      "href": "https://console.azion.com/signup/"
+    }
+  },
+  "scenes": {
+    "scene": {
+      "component": "ConsoleApplicationScene",
+      "props": {
+        "width": 760
+      }
+    }
+  }
+}

@@ -13,7 +13,7 @@
   })
 
   export interface SidebarMenuGroupProps {
-    /** Overline label shown above the group's items. */
+    /** Eyebrow label shown above the group's items. */
     label?: string
     /** Accessible name of the group when it has no visible label. */
     ariaLabel?: string
@@ -38,7 +38,7 @@
   const labelId = `${uid}-label`
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu-group'
+    () => (attrs['data-testid'] as string | undefined) ?? 'sidebar-menu-group'
   )
 
   const hasLabel = () => Boolean(props.label) || Boolean(slots.label)

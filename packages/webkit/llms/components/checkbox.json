@@ -3,7 +3,7 @@
  "binding": "Checkbox",
  "import": "@aziontech/webkit/checkbox",
  "treeShakeableImport": "@aziontech/webkit/checkbox",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "monolithic",
  "compoundRoot": false,

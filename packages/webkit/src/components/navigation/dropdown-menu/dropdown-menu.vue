@@ -71,9 +71,7 @@
     bodyTargetEl.value = null
   }
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-dropdown-menu'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'dropdown-menu')
 
   const triggerId = `${uid}-trigger`
   const panelId = `${uid}-panel`

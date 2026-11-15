@@ -1,6 +1,6 @@
 {
   "component": "combobox",
-  "title": "Components/Primitives/Inputs/Combobox",
+  "title": "Components/Input/Combobox",
   "examples": [
     {
       "name": "Default",

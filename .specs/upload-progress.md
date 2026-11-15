@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 42e6a626b4f6a0ae928cd25f0dd47f21686fca6e19cd02e9c9de1838894d3762
+checksum: cef2a233f4ccc180ce259e12a0ac6171b00f829c11a69159e6aa86a13d18f221
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -78,17 +78,17 @@ Types: `UploadProgressStatus = 'pending' | 'running' | 'success' | 'error' | 'ca
 
 ## v-model
 
-| Model               | Type      | Default | Emits              | Notes                                                     |
-| ------------------- | --------- | ------- | ------------------ | --------------------------------------------------------- |
-| `v-model:open`      | `boolean` | `undefined` (resolves to `true`) | `update:open`      | Shows the file list; `false` hides it and keeps the header and overall bar. While it is unbound the card starts open. |
+| Model          | Type      | Default                          | Emits         | Notes                                                                                                                 |
+| -------------- | --------- | -------------------------------- | ------------- | --------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open` | `boolean` | `undefined` (resolves to `true`) | `update:open` | Shows the file list; `false` hides it and keeps the header and overall bar. While it is unbound the card starts open. |
 
 ## Events
 
-| Event    | Payload       | Notes                                                                                 |
-| -------- | ------------- | ------------------------------------------------------------------------------------- |
+| Event    | Payload                            | Notes                                                                                 |
+| -------- | ---------------------------------- | ------------------------------------------------------------------------------------- |
 | `cancel` | `(event: MouseEvent, id?: string)` | Cancel on one file (its `id`) or Cancel all (no `id`). The parent stops the transfer. |
 | `retry`  | `(event: MouseEvent, id?: string)` | Retry on one failed file (its `id`) or Retry failed (no `id`).                        |
-| `close`  | `(event: MouseEvent)` | Close was pressed; offered only once every file has finished.                         |
+| `close`  | `(event: MouseEvent)`              | Close was pressed; offered only once every file has finished.                         |
 
 ## Slots
 
@@ -108,7 +108,7 @@ Types: `UploadProgressStatus = 'pending' | 'running' | 'success' | 'error' | 'ca
 | -------------- | ------------------------------------------------ | ---------------------- | ---------------------------- |
 | card appears   | `animate-popup-scale-in`                         | popup scale-in (theme) | `motion-reduce:animate-none` |
 | progress moves | inherited from `progress` (`transition-[width]`) | duration `moderate-02` | inherited                    |
-| finished mark  | `OutcomeMark` `animated`                         | as in `outcome-mark`   | static under reduced motion  |
+| finished mark  | `OutcomeIcon` `animated`                         | as in `outcome-icon`   | static under reduced motion  |
 
 ## Tokens
 
@@ -116,7 +116,7 @@ Types: `UploadProgressStatus = 'pending' | 'running' | 'success' | 'error' | 'ca
 | ----------- | ----------------------------------------------------------------------------------------------------------------- |
 | card        | `var(--bg-surface-raised)`, border `var(--border-default)`, radius `var(--shape-card)`, shadow `var(--shadow-sm)` |
 | header text | `var(--text-default)`; counts and sizes `var(--text-muted)`                                                       |
-| row error   | `var(--danger-foreground)`                                                                                          |
+| row error   | `var(--danger-foreground)`                                                                                        |
 
 ## Theme gaps
 
@@ -130,7 +130,7 @@ Types: `UploadProgressStatus = 'pending' | 'running' | 'success' | 'error' | 'ca
 - The header text is mirrored in a visually hidden `role="status"` region (polite), so each file finishing and the final outcome are announced; percentages are not announced.
 - The overall bar is a `progressbar` named by the header text; each row bar is named `<file> progress`.
 - Keyboard map: Tab reaches the collapse toggle (`aria-expanded`, `aria-controls` the list), Cancel all or Retry failed and Close, then each row's Cancel or Retry. After Close the card unmounts in the parent; the parent returns focus to the control that started the transfer.
-- State is never colour alone: rows carry a status word (`Waiting`, `Done`, `Canceled`) or the error text, and an `OutcomeMark` in the header when finished.
+- State is never colour alone: rows carry a status word (`Waiting`, `Done`, `Canceled`) or the error text, and an `OutcomeIcon` in the header when finished.
 - Contrast: text ≥ 4.5:1 on `--bg-surface-raised` in both themes.
 
 ## Internationalization

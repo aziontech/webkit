@@ -86,11 +86,11 @@ const tick = async () => {
 }
 
 const panelOf = (container: Element) =>
-  container.querySelector('[data-testid="content-tutorial-panel"]') as HTMLElement
+  container.querySelector('[data-testid="tutorial-panel"]') as HTMLElement
 const markers = () =>
-  Array.from(document.querySelectorAll<HTMLElement>('[data-testid="content-hotspot__marker"]'))
+  Array.from(document.querySelectorAll<HTMLElement>('[data-testid="hotspot__marker"]'))
 const openStep = () =>
-  document.querySelector<HTMLElement>('[data-testid="content-hotspot__popover__panel"]')
+  document.querySelector<HTMLElement>('[data-testid="hotspot__popover__panel"]')
 
 describe('TutorialPanel', () => {
   it('lists the tutorials with their counts and completion', async () => {
@@ -98,7 +98,7 @@ describe('TutorialPanel', () => {
     const panel = panelOf(container)
     expect(panel.dataset['view']).toBe('list')
     expect(getByText('Tutorials')).toBeTruthy()
-    const items = panel.querySelectorAll('[data-testid="content-tutorial-panel__item"]')
+    const items = panel.querySelectorAll('[data-testid="tutorial-panel__item"]')
     expect(items).toHaveLength(2)
     expect(items[0]?.textContent).toContain('2 tasks')
     expect(items[0]?.textContent).toContain('3 steps')
@@ -130,18 +130,18 @@ describe('TutorialPanel', () => {
     const { container, getByRole, getByTestId } = render(Page)
     getByRole('button', { name: 'Start tutorial' }).click()
     await tick()
-    ;(openStep()?.querySelector('[data-testid="content-hotspot__next"]') as HTMLElement).click()
+    ;(openStep()?.querySelector('[data-testid="hotspot__next"]') as HTMLElement).click()
     await tick()
     expect(openStep()?.textContent).toContain('Name it')
     expect(openStep()?.textContent).toContain('Step 2 of 3')
-    ;(openStep()?.querySelector('[data-testid="content-hotspot__previous"]') as HTMLElement).click()
+    ;(openStep()?.querySelector('[data-testid="hotspot__previous"]') as HTMLElement).click()
     await tick()
     expect(openStep()?.textContent).toContain('Step 1 of 3')
-    ;(openStep()?.querySelector('[data-testid="content-hotspot__next"]') as HTMLElement).click()
+    ;(openStep()?.querySelector('[data-testid="hotspot__next"]') as HTMLElement).click()
     await tick()
-    ;(openStep()?.querySelector('[data-testid="content-hotspot__next"]') as HTMLElement).click()
+    ;(openStep()?.querySelector('[data-testid="hotspot__next"]') as HTMLElement).click()
     await tick()
-    const finish = openStep()?.querySelector('[data-testid="content-hotspot__next"]') as HTMLElement
+    const finish = openStep()?.querySelector('[data-testid="hotspot__next"]') as HTMLElement
     expect(finish.textContent).toContain('Finish')
     finish.click()
     await tick()
@@ -178,9 +178,9 @@ describe('TutorialPanel', () => {
     const { container, getByRole } = render(Page, { props: { withDeploy: false } })
     getByRole('button', { name: 'Start tutorial' }).click()
     await tick()
-    ;(openStep()?.querySelector('[data-testid="content-hotspot__next"]') as HTMLElement).click()
+    ;(openStep()?.querySelector('[data-testid="hotspot__next"]') as HTMLElement).click()
     await tick()
-    ;(openStep()?.querySelector('[data-testid="content-hotspot__next"]') as HTMLElement).click()
+    ;(openStep()?.querySelector('[data-testid="hotspot__next"]') as HTMLElement).click()
     await tick()
     const current = panelOf(container).querySelector(
       '[aria-current="step"][data-slot="tutorial-step"]'
@@ -202,9 +202,7 @@ describe('TutorialPanel', () => {
   it('shows the EmptyState with no tutorials', () => {
     const { getByText, getByTestId } = render(Page, { props: { list: [] } })
     expect(getByText('No tutorials yet.')).toBeTruthy()
-    expect(getByTestId('content-tutorial-panel__empty__title')).toHaveTextContent(
-      'No tutorials yet.'
-    )
+    expect(getByTestId('tutorial-panel__empty__title')).toHaveTextContent('No tutorials yet.')
   })
 
   it('keeps the running tutorial and step locally when v-model is unbound', async () => {
@@ -230,7 +228,7 @@ describe('TutorialPanel', () => {
       props: { hotspotId: 'x' },
       slots: { default: '<button type="button">Plain</button>' }
     })
-    expect(container.querySelector('[data-testid="content-hotspot__marker"]')).toBeNull()
+    expect(container.querySelector('[data-testid="hotspot__marker"]')).toBeNull()
     expect(container.textContent).toContain('Plain')
   })
 
@@ -255,7 +253,7 @@ describe('TutorialPanel', () => {
     getByRole('button', { name: 'Start tutorial' }).click()
     await tick()
     const name = container.querySelector('[data-side="start"]') as HTMLElement
-    const marker = name.querySelector('[data-testid="content-hotspot__marker"]') as HTMLElement
+    const marker = name.querySelector('[data-testid="hotspot__marker"]') as HTMLElement
     const input = name.querySelector('input') as HTMLElement
     expect(marker.getBoundingClientRect().left).toBeGreaterThan(input.getBoundingClientRect().left)
     await expectNoA11yViolations(container)
@@ -291,8 +289,7 @@ describe('TutorialPanel', () => {
   `
   })
 
-  const tasksOf = (view: ReturnType<typeof render>) =>
-    view.getAllByTestId('content-tutorial-panel-task')
+  const tasksOf = (view: ReturnType<typeof render>) => view.getAllByTestId('tutorial-panel-task')
 
   describe('task list', () => {
     it('numbers the tasks in order and mirrors their status', async () => {
@@ -322,7 +319,7 @@ describe('TutorialPanel', () => {
     it('derives the progress line from the task statuses', async () => {
       const view = render(Guide)
       await nextTick()
-      const progress = view.getByTestId('content-tutorial-panel-tasks__progress')
+      const progress = view.getByTestId('tutorial-panel-tasks__progress')
       expect(progress.textContent?.trim()).toBe('1 of 3 complete')
       expect(progress.getAttribute('aria-live')).toBe('polite')
 
@@ -339,26 +336,24 @@ describe('TutorialPanel', () => {
 
     it('shows the Completed tag only when the owner marks the tutorial done', async () => {
       const view = render(Guide)
-      const tutorial = view.getByTestId('content-tutorial-panel-tasks')
+      const tutorial = view.getByTestId('tutorial-panel-tasks')
       expect(tutorial.hasAttribute('data-completed')).toBe(false)
-      expect(view.queryByTestId('content-tutorial-panel-tasks__completed')).toBeNull()
+      expect(view.queryByTestId('tutorial-panel-tasks__completed')).toBeNull()
 
       await view.rerender({ completed: true })
       expect(tutorial.hasAttribute('data-completed')).toBe(true)
-      expect(view.getByTestId('content-tutorial-panel-tasks__completed').textContent).toContain(
-        'Completed'
-      )
+      expect(view.getByTestId('tutorial-panel-tasks__completed').textContent).toContain('Completed')
     })
 
     it('renders the actions row when the slot has content', () => {
       const view = render(Guide)
-      const actions = view.getByTestId('content-tutorial-panel-tasks__actions')
+      const actions = view.getByTestId('tutorial-panel-tasks__actions')
       expect(actions.querySelector('button')?.textContent).toBe('Continue')
     })
 
     it('omits the actions row when the slot is empty', () => {
       const view = render(Guide, { props: { withActions: false } })
-      expect(view.queryByTestId('content-tutorial-panel-tasks__actions')).toBeNull()
+      expect(view.queryByTestId('tutorial-panel-tasks__actions')).toBeNull()
     })
 
     it('has no axe violations with a completed tutorial', async () => {

@@ -1,10 +1,10 @@
 ---
 name: hint
-category: inputs
+category: input
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 2eb551f2c6069e5740a8a456761507961fdff3ef74658bcfc33a7d606ae0468f
+checksum: 656a75a4f092daba41ae062d98a112a7c74df12884a74d091bdbb2399674e2de
 created: 2026-08-10
 last_updated: 2026-11-15
 ---
@@ -17,26 +17,26 @@ Small info affordance — a muted `ai ai-circle-info` glyph on a focusable butto
 
 ## When to use
 
-- Use Hint for the info glyph beside a field label or column header that explains it in one sentence. Guidance that must stay visible goes in Field.Description (inside Field) or HelperText.
+- Use Hint for the info glyph beside a field label or column header that explains it in one sentence. Guidance that must stay visible goes in Field.Description (inside Field) or FieldDescription.
 - A field, switch or setting whose name is clear but whose consequence is not (what "Sensitive" does to a stored value).
 - A short, self-contained sentence — one that reads fine in a tooltip and is not needed to complete the field.
 - Beside a label, a section heading, or a table column header, where a permanent line of helper text would add noise.
 
 ## When NOT to use
 
-- Guidance the user needs while typing, or any validation message → use `helper-text` (it stays on screen and is wired with `aria-describedby`).
+- Guidance the user needs while typing, or any validation message → use `field-error` (it stays on screen and is wired with `aria-describedby`).
 - More than a sentence, links, or formatted content → use `popover`, which is dismissible and can hold real content.
 - A plain description of an action already labelled by a control → use `tooltip` directly on that control.
 
 ## Related
 
 - `tooltip` — the overlay `Hint` composes; reach for it when the trigger is an existing control rather than a standalone info glyph.
-- `helper-text` — persistent guidance under a field; the right choice when the text must always be visible.
+- `field-description` — persistent guidance under a field; the right choice when the text must always be visible.
 - `Field.Label` — renders `Hint` from its own `hint` prop, so a field name and its note stay one component.
 
 ## Best practices
 
-- One sentence, ending in a period. If it needs two, it belongs in `helper-text` or a `popover`.
+- One sentence, ending in a period. If it needs two, it belongs in `field-description` or a `popover`.
 - Never hide required information behind a hint — hover is not discoverable on touch, so treat it as an enhancement.
 - The `content` doubles as the button's accessible name, so write it as prose a screen reader can read verbatim.
 - Place it immediately after the thing it explains, not at the end of a row.

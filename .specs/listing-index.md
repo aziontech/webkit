@@ -1,0 +1,237 @@
+---
+name: listing-index
+category: section
+structure: monolithic
+status: implemented
+spec_version: 8
+template: 2
+created: 2026-11-05
+last_updated: 2026-11-15
+checksum: 655948358d8c35de8712e43a5c479d57a86ce8768907c6f85f0866d831eb27db
+---
+
+# ListingIndex — Component Spec
+
+## Purpose
+
+The full, browsable listing of a page such as the Careers jobs list: a headline over a toolbar (a search field, one select per facet and one for the order) and every row under its group, as a table from the small breakpoint up and as a list of items below it, with an empty state when nothing matches. A row may carry its client's mark, drawn before the name on the table and above it on phones; a pointer click anywhere on a table row follows the row link; the other columns are metadata in the small overline, each cut to one line with its full text as a tooltip; group headings stick under the site header while their rows scroll. Below the large breakpoint the toolbar folds to the search field and a filter button that reveals the selects, with each applied facet listed under it as a removable chip. A select with more than seven options gains an option search. Search, facets and order are local state over the rows the page carries; a facet is seeded from `?<id>=` in the URL when the value is one the page offers. It is a page section — the site places it from a `{ _id: 'listing-index', props }` entry and binds `props` straight onto it — so its whole API is the props below, and it composes `section-module`, `section-title`, `registration-frame`, `input`, `select`, `table`, `item`, `chip`, `empty-state` and `button` rather than owning any anatomy of its own.
+
+## When to use
+
+- Use ListingIndex for a filterable list of non-article rows (jobs): a listing a reader narrows by text and by a few facets, such as open positions grouped by department.
+- When every row links to its own page and the listing fits in the page JSON.
+
+## When NOT to use
+
+- For a short, unfiltered preview of the same rows → use `listing-table`.
+- For a data table with sorting, selection and pagination inside the product → use `table`.
+- For a grid of linked topic cards → use `subject-grid`.
+- For the full filterable list of articles or resources → use `article-index`.
+- For a card grid of customer stories with search and facets → use `story-index`.
+
+## Related
+
+- `table` — the composed rows and cells the listing renders from the small breakpoint up.
+- `item` — the list rows the listing renders below the small breakpoint.
+- `empty-state` — the state shown when the search and facets match nothing.
+
+## Best practices
+
+- Name the first column after what the row is (`Role`); it is the row's link, and the second column describes the row on phones.
+- Give every row the facet values it carries under the facet's `id`, so the selects narrow it.
+- Keep `groups` in the order the reader scans; rows of a group not listed there are not shown.
+- Make the first entry of `sorts` the order the page is authored in, with an empty `by`.
+
+## Usage
+
+```vue
+<script setup>
+  import ListingIndex from '@aziontech/webkit/listing-index'
+</script>
+
+<template>
+  <ListingIndex
+    title="Open positions"
+    :columns="[
+      { key: 'role', label: 'Role', grow: 2 },
+      { key: 'team', label: 'Team and location', grow: 2 },
+      { key: 'type', label: 'Work type', align: 'end' }
+    ]"
+    :data="[
+      {
+        href: '/careers/software-engineer-go',
+        group: 'Engineering',
+        values: {
+          role: 'Software Engineer (Go)',
+          team: 'Engineering · Porto Alegre',
+          type: 'Hybrid · Full-time'
+        },
+        facets: { area: ['Engineering'] }
+      }
+    ]"
+    :groups="['Engineering']"
+    :facets="[
+      {
+        id: 'area',
+        label: 'Department',
+        allLabel: 'All departments',
+        options: [{ value: 'Engineering', label: 'Engineering' }]
+      }
+    ]"
+    :sorts="[
+      { value: 'newest', label: 'Newest posted', by: '' },
+      { value: 'title', label: 'Title (A–Z)', by: 'role' }
+    ]"
+    sort-aria-label="Sort positions"
+    search-placeholder="Search by title, team, or location"
+    search-short-placeholder="Search positions"
+    search-aria-label="Search positions"
+    empty-title="Nothing here yet"
+    empty-description="No open positions match your search."
+    empty-action-label="View all open positions"
+  />
+</template>
+```
+
+## Props
+
+| Prop                     | Type                   | Default | Required | JSDoc                                                                                                                                                                               |
+| ------------------------ | ---------------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`                 | `string`               | `''`    | false    | In-page `id` of the band, the target of a `#hash` link.                                                                                                                             |
+| `title`                  | `string`               | `''`    | false    | Headline over the listing, rendered by the section title as its `h2` and naming the band.                                                                                           |
+| `columns`                | `ListingIndexColumn[]` | `[]`    | false    | The columns, left to right; each is `{ key, label, grow?, align? }`. The first names the row and links it, the second describes it on phones.                                       |
+| `data`                   | `ListingIndexRow[]`    | `[]`    | false    | Every row, in source order; each is `{ href, group, values, facets, mark? }` where `values` and `facets` are keyed by column and facet and `mark` is the client's `{ name, logo }`. |
+| `groups`                 | `string[]`             | `[]`    | false    | The groups the rows are listed under, in order; a group with no matching row is not shown.                                                                                          |
+| `facets`                 | `ListingIndexFacet[]`  | `[]`    | false    | The facet selects; each is `{ id, label, allLabel, options }` where `id` matches a row facet and seeds it from `?id=` in the URL, and every option is `{ value, label }`.           |
+| `sorts`                  | `ListingIndexSort[]`   | `[]`    | false    | The orders, the first the default; each is `{ value, label, by? }` where `by` is the column it sorts on and an empty `by` keeps the source order.                                   |
+| `sortAriaLabel`          | `string`               | `''`    | false    | Accessible name of the order select.                                                                                                                                                |
+| `searchPlaceholder`      | `string`               | `''`    | false    | Placeholder of the search field from the large breakpoint up; the field is omitted when this and `searchAriaLabel` are both empty.                                                  |
+| `searchShortPlaceholder` | `string`               | `''`    | false    | Shorter placeholder of the search field below the large breakpoint; empty uses `searchPlaceholder`.                                                                                 |
+| `searchAriaLabel`        | `string`               | `''`    | false    | Accessible name of the search field.                                                                                                                                                |
+| `emptyTitle`             | `string`               | `''`    | false    | Headline of the state shown when nothing matches; the state renders only with it.                                                                                                   |
+| `emptyDescription`       | `string`               | `''`    | false    | Sentence under the empty-state headline.                                                                                                                                            |
+| `emptyActionLabel`       | `string`               | `''`    | false    | Label of the empty-state button that clears the search and every facet; no button renders without it.                                                                               |
+| `filterLabel`            | `string`               | `''`    | false    | Label of the filter button below the large breakpoint; empty uses the locale catalog (`Filters`).                                                                                   |
+
+## Events
+
+| _none_ | — | — |
+
+## Slots
+
+| _none_ | — | — |
+
+## States
+
+- Visual states: `default`, `filtered`, `empty`
+- Filtered: the search matches a row when any of its values contains the query, ignoring case; every facet set to a value keeps only the rows carrying it; the order select sorts on its column or keeps the source order
+- Empty: when the search and facets match no row, `empty-state` replaces the table and the list, and its `emptyActionLabel` button clears the search and every facet; without `emptyTitle`, nothing is shown in their place
+- Seeded: on mount a facet takes the value of `?<id>=` in the URL when it is one of its options
+- Absent: when `data` is empty the band renders nothing — not the header, not the toolbar
+- The table renders from the small breakpoint up, the list below it; below the large breakpoint the search field shows `searchShortPlaceholder`
+- Folded toolbar (below the large breakpoint): a filter button (`aria-expanded`, `aria-controls`) beside the search field shows or hides the facet and order selects, stacked (the panel carries `data-state="open|closed"`); its label carries the number of applied facets; every facet set to a value renders a removable `chip` (`<facet label>: <option label>`) whose remove clears that facet. From the large breakpoint the selects sit on the toolbar row and the button and chips are hidden (CSS only, so server and client markup match)
+- Option search: a facet or order select with more than seven options renders a search field above its options and a `status` line when nothing matches
+- Marked: a row with `mark` draws the client's logo (flattened to one ink that inverts in the dark theme) before the name in the table and above the title in the list
+- Whole-row navigation: a click on a table row outside its link is forwarded to the link, keeping `ctrl`/`meta`/`shift`/`alt`; a click that ends a text selection is not forwarded
+- Metadata cells (every column after the first) render `text-overline-sm`, truncated to one line, with their full value as `title`; the list's description renders `text-overline-sm`
+- Sticky groups: each group heading row sticks under `var(--layout-header-height)` while its rows scroll
+- Server render and hydration: the large-breakpoint check runs only after mount, so the server HTML and the first client render both use `shortPlaceholder` and match; the full placeholder applies on mount.
+
+## Motion & Animations
+
+_none_
+
+## Tokens
+
+| Region                                      | Token (DESIGN.md)                        |
+| ------------------------------------------- | ---------------------------------------- |
+| typography (column headers, group headings) | `.text-overline-md`                      |
+| typography (row link)                       | `.text-label-lg`                         |
+| typography (meta cells, list description)   | `.text-overline-sm`                      |
+| sticky group offset                         | `var(--layout-header-height)`            |
+| row link and group heading                  | `var(--text-default)`                    |
+| column headers and meta cells               | `var(--text-muted)`                      |
+| group row fill                              | `var(--bg-surface)`                      |
+| row hover fill                              | `var(--bg-hover)`                        |
+| list row hover fill                         | `var(--bg-hover)`                        |
+| rules                                       | `var(--border-default)`                  |
+| band inset                                  | `var(--spacing-xl)`                      |
+| header inset                                | `var(--spacing-2xl)`                     |
+| toolbar inset and gap                       | `var(--spacing-lg)`, `var(--spacing-md)` |
+
+## Theme gaps
+
+| Figma variable | Temporary primitive | Follow-up |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
+
+## Accessibility (WCAG 2.1 AA)
+
+- Visible focus: owned by the composed `input`, `select` and `button`; each row link draws `focus-visible:ring-2 focus-visible:ring-(--ring-color)`.
+- Keyboard map: `Tab` moves through the filter button (below the large breakpoint), the search field, the selects, the applied-filter chips and the row links in reading order; a select opens on `Enter`, `Space` or `ArrowDown`, moves with the arrows and closes on `Escape` (all `select`'s own); `Enter` follows a row link.
+- ARIA: the band is a `<section>` named by its title (`aria-label`) when one is set; the toolbar is a `role="search"` region; the search field is named by `searchAriaLabel`, each facet select by its `label` and the order select by `sortAriaLabel`; the filter button reports `aria-expanded` and controls the selects; each applied chip's remove button is named by the chip; a client mark is named by the client; each group is an `h3`; the table is `table`'s `role="table"`, and the phone list is `item`'s `role="list"` of `role="listitem"` rows.
+- Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): row links and group headings `var(--text-default)`, headers and meta `var(--text-muted)`.
+- `motion-reduce:transition-none motion-reduce:transform-none` — the field, select and button transitions belong to the composed components, which carry their own reduced-motion fallback; this band adds no motion.
+- Touch target ≥40×40 px — the search field, selects and empty-state button are large; each phone row link stretches over its whole item and each table row is a whole-row target.
+
+## Internationalization
+
+| Key                           | English source      | Override prop |
+| ----------------------------- | ------------------- | ------------- |
+| `listingIndex.filters`        | `Filters`           | `filterLabel` |
+| `listingIndex.filtersApplied` | `{label} ({count})` | —             |
+| `listingIndex.search`         | `Search`            | —             |
+| `listingIndex.searchFacet`    | `Search {facet}`    | —             |
+| `listingIndex.noMatch`        | `No results found.` | —             |
+
+- Every other string (title, column labels, facet labels, placeholders, the empty state) arrives through props.
+- Formatting: none; values arrive pre-formatted.
+
+## Right-to-left
+
+- Layout: logical utilities only (`ps-`/`pe-`); a mark sits at the inline start of its flex row; columns mirror with the table.
+- Icons: the filter and search glyphs do not mirror; client marks never mirror.
+- Keyboard: the selects own their keyboard map under `rtl`.
+- User data: none.
+
+## Responsive
+
+- Container queries: none.
+- Narrow (< `lg`): the toolbar folds to the filter button and the search field; the selects stack inside the disclosure; applied facets wrap as chips.
+- Narrow (< `sm`): the table is hidden and the rows render as an item list under sticky group headings.
+- Touch: each phone row is a whole-item link; each table row is a whole-row target; the button, field and selects are large.
+- Reflow: no horizontal scroll at 320 px; metadata truncates instead of widening the table, its full text in the tooltip.
+
+## Performance
+
+- Bundle budget: the `./listing-index` entry in `.size-limit.json`, initial chunk only.
+- Runtime budget: `listing-index-1k` in `perf-budgets.json` (mount 1k grouped rows, then search them), measured by `src/test/performance.test.ts`.
+- The phone list and the table are both rendered and switched by CSS at the small breakpoint, so the server-rendered and hydrated markup stays one for every screen. When more than 300 rows match, each of the two mounts the first group and then each later group as it nears the viewport (`useLazyChunks`, one group per chunk; an `aria-hidden` placeholder sized from the group's row count holds its place), so a long listing mounts what is on screen and only its first group is in the server-rendered HTML.
+- Heavy parts: none; marks load lazily, and the applied-filter `Chip`s load in their own chunk the first time a filter is applied.
+
+## Examples
+
+- Default
+
+## Constraints — DO NOT
+
+<!-- This block is injected VERBATIM into every sub-agent prompt.
+     spec-validator rejects the spec if this block is missing or shorter than the template. -->
+
+- Do not add props beyond the Props table above. If you need a prop that is not listed, emit `BLOCKED: missing prop <name>` and stop — do not invent.
+- Do not add events beyond the Events table above. Same rule for slots and sub-components.
+- Do not invent imports. Every `@aziontech/webkit/*` path must exist in `packages/webkit/package.json#exports`. Every relative import must resolve to a real file. Every npm package must be installed.
+- Do not use HEX/RGB/HSL colors, Tailwind palette names (e.g. `bg-blue-500`), raw typography classes (e.g. `text-sm`), `any`, `@ts-ignore`, or `class` inside `defineProps`.
+- Do not install or import positioning/animation libraries (`@floating-ui/*`, `popper.js`, `tippy.js`, `gsap`, `framer-motion`, `motion`, `@vueuse/motion`, `@formkit/auto-animate`, drag-drop runtimes, scroll virtualization libs). Use CSS + Vue primitives (`<Teleport>`, `<Transition>`). See `.claude/rules/dependencies.md`.
+- Do not improvise animations. Every `animate-*` / `transition-*` class must come from `packages/theme/src/tokens/semantic/animations.js`; every motion-bearing class pairs with `motion-reduce:*` on the same class string; no component-local `@keyframes`.
+- Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
+- Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
+- Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
+- Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
+- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit the root `package.json` or `.github/workflows/*`.
+- Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
+- Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
+- Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).
+- Do not run `git` commands, `pnpm install`, or any command that changes the lockfile.
+- If anything in the spec is ambiguous or contradicts the rules, emit `BLOCKED: <one-sentence reason>` and write nothing.

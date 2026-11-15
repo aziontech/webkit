@@ -2,7 +2,7 @@
   import { computed, inject, useAttrs } from 'vue'
 
   import Avatar from '../../../content/avatar/avatar.vue'
-  import Chip from '../../../inputs/chip/chip.vue'
+  import Chip from '../../../input/chip/chip.vue'
   import { toMenuFields, toMenuModel } from '../../table/filter-menu-bridge'
   import { TableInjectionKey } from '../../table/injection-key'
   import { useFilterMenuChannel } from '../composables/use-filter-menu-channel'
@@ -56,7 +56,7 @@
   const { requestOpen } = useFilterMenuChannel(() => props.fields)
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-filter-menu-chip-group'
+    () => (attrs['data-testid'] as string | undefined) ?? 'filter-menu-chip-group'
   )
 
   const chips = computed<FilterMenuField[]>(() => appliedFields(fields.value, value.value))

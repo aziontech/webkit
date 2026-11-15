@@ -1,9 +1,9 @@
 # Doc Accordion Group
 
-> The FAQ and "expand for detail" block of a documentation page. It reads the `title` of each `DocAccordionItem` child to build the triggers and renders the child body in the panel, so an author writes only titles and prose. It always ships as a card (surface, outer rule, radius) so a run of rows reads as one closed group in an open prose column. Built on `Accordion` at `size="large"`.
+> The FAQ and "expand for detail" block of a documentation page. It reads the `title` of each `DocAccordion` child to build the triggers and renders the child body in the panel, so an author writes only titles and prose. It always ships as a card (surface, outer rule, radius) so a run of rows reads as one closed group in an open prose column. Built on `Accordion` at `size="large"`.
 
 - Import: `import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-accordion-group.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-accordion-group.json)
 
 ## When to use
@@ -27,7 +27,7 @@
 
 ## Related
 
-- DocAccordionItem` — the entry it reads.
+- DocAccordion` — the entry it reads.
 - Accordion` — the design-system surface it renders on.
 - Faq` — the marketing FAQ band.
 
@@ -41,7 +41,7 @@
 
 | Slot | Scope | Notes |
 | --- | --- | --- |
-| `default` | — | The `DocAccordionItem` children, in order. Each child's `title` and `defaultOpen` are read; its body is rendered inside the panel. |
+| `default` | — | The `DocAccordion` children, in order. Each child's `title` and `defaultOpen` are read; its body is rendered inside the panel. |
 
 ## States
 
@@ -77,24 +77,24 @@
 
 ```vue
 <script setup>
+  import DocAccordion from '@aziontech/webkit/doc-accordion'
   import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
-  import DocAccordionItem from '@aziontech/webkit/doc-accordion-item'
 </script>
 
 <template>
   <DocAccordionGroup>
-    <DocAccordionItem
+    <DocAccordion
       title="Why does my first request miss the cache?"
       default-open
     >
       <p>Each location warms up on its own first request. Warm-up is per location, not global.</p>
-    </DocAccordionItem>
-    <DocAccordionItem title="Can I purge a single path?">
+    </DocAccordion>
+    <DocAccordion title="Can I purge a single path?">
       <p>Yes. Purge by URL for one object, or by wildcard for a folder.</p>
-    </DocAccordionItem>
-    <DocAccordionItem title="How long does a purge take to reach every location?">
+    </DocAccordion>
+    <DocAccordion title="How long does a purge take to reach every location?">
       <p>Usually a few seconds. The purge request returns once every location has confirmed it.</p>
-    </DocAccordionItem>
+    </DocAccordion>
   </DocAccordionGroup>
 </template>
 ```
@@ -103,24 +103,24 @@
 
 ```vue
 <script setup>
+  import DocAccordion from '@aziontech/webkit/doc-accordion'
   import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
-  import DocAccordionItem from '@aziontech/webkit/doc-accordion-item'
 </script>
 
 <template>
   <DocAccordionGroup type="multiple">
-    <DocAccordionItem
+    <DocAccordion
       title="Which runtimes are supported?"
       default-open
     >
       <p>JavaScript and TypeScript, plus WebAssembly modules compiled from other languages.</p>
-    </DocAccordionItem>
-    <DocAccordionItem
+    </DocAccordion>
+    <DocAccordion
       title="Is there a cold start?"
       default-open
     >
       <p>Isolates start in under a millisecond, so there is no warm-up to plan for.</p>
-    </DocAccordionItem>
+    </DocAccordion>
   </DocAccordionGroup>
 </template>
 ```

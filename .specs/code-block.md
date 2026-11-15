@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: eea6e27a7f18e605f79e6df9bab9b399ccfeb67d21512f2a7dbf0c9d2f8de47a
+checksum: a9b4959c422572dd683404f50ad4a6191c50fa4f9d703245962faf551a595313
 created: 2026-05-28
 last_updated: 2026-11-15
 ---
@@ -17,7 +17,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Use CodeBlock to show code, config or JSON the person reads or copies, including read-only diffs (a tab's `original`); for code the person edits use CodeEditor, and for build, deploy or runtime log lines use LogView.
+Use CodeBlock to show code, config or JSON the person reads or copies, including read-only diffs (a tab's `original`); for code the person edits use CodeEditor, and for build, deploy or runtime log lines use LogViewer.
 
 Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell:
 
@@ -50,8 +50,8 @@ The other regions render conditionally from tab data. Tab header appears when `t
 
 ## When NOT to use
 
-- The content is build or deploy output with timestamps and log levels → use `log-view`.
-- It is a marketing band that pairs a claim with its code → use `media-split-band` with `codeTabs`, or `feature-scroll` with code items for several claims.
+- The content is build or deploy output with timestamps and log levels → use `log-viewer`.
+- It is a marketing band that pairs a claim with its code → use `media-split-section` with `codeTabs`, or `feature-scroll` with code items for several claims.
 - It is a terminal session of CLI commands on a product page → use `cli-terminal`.
 - You only need to copy one short value (a token, an ID) without showing a block → use `copy-button`.
 - The reader edits the new version beside the old one → use `code-editor` in diff mode. A read-only diff is always this block with `original`, never a read-only code editor.
@@ -60,8 +60,8 @@ The other regions render conditionally from tab data. Tab header appears when `t
 
 - `copy-button` — the copy control CodeBlock embeds; use it alone for one-line values.
 - `code-editor` — the editable surface; its diff mode is for editing beside an original, while a read-only diff is this block.
-- `log-view` — terminal-style viewer for CI and deploy logs.
-- `media-split-band` — page section that sets one claim beside a code sample (`codeTabs`).
+- `log-viewer` — terminal-style viewer for CI and deploy logs.
+- `media-split-section` — page section that sets one claim beside a code sample (`codeTabs`).
 - `scroll-area` — the scroll container the code region runs in.
 
 ## Best practices

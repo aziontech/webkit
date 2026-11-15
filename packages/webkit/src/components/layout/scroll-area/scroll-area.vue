@@ -33,9 +33,7 @@
   const attrs = useAttrs()
   const viewportEl = ref<HTMLElement | null>(null)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-scroll-area'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'scroll-area')
 
   const tabIndex = computed(() => (attrs['tabindex'] as string | number | undefined) ?? 0)
 

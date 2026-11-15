@@ -55,7 +55,7 @@ describe('Accordion', () => {
     it('renders the root with default testid, orientation and variant defaults', () => {
       const view = render(host())
 
-      const root = view.getByTestId('content-accordion')
+      const root = view.getByTestId('accordion')
       expect(root.getAttribute('data-orientation')).toBe('vertical')
       expect(root.getAttribute('data-type')).toBe('single')
       expect(root.getAttribute('data-size')).toBe('medium')
@@ -72,7 +72,7 @@ describe('Accordion', () => {
         })
       )
 
-      const root = view.getByTestId('content-accordion')
+      const root = view.getByTestId('accordion')
       expect(root.getAttribute('data-type')).toBe('multiple')
       expect(root.getAttribute('data-size')).toBe('large')
       expect(root.getAttribute('data-icon-position')).toBe('leading')
@@ -112,7 +112,7 @@ describe('Accordion', () => {
       for (const name of ['What is Azion', 'How does pricing work', 'Enterprise support']) {
         expect(trigger(view, name).getAttribute('aria-expanded')).toBe('false')
       }
-      view.getAllByTestId('content-accordion-item').forEach((item) => {
+      view.getAllByTestId('accordion-item').forEach((item) => {
         expect(item.getAttribute('data-state')).toBe('closed')
       })
     })
@@ -440,7 +440,7 @@ describe('Accordion', () => {
     it('renders a decorative chevron marked aria-hidden inside each trigger', () => {
       const view = render(host())
       const chevron = within(trigger(view, 'What is Azion')).getByTestId(
-        'content-accordion-trigger__chevron'
+        'accordion-trigger__chevron'
       )
       expect(chevron.getAttribute('aria-hidden')).toBe('true')
     })

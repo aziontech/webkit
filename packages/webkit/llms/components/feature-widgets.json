@@ -3,12 +3,12 @@
  "binding": "FeatureWidgets",
  "import": "@aziontech/webkit/feature-widgets",
  "treeShakeableImport": "@aziontech/webkit/feature-widgets",
- "category": "sections",
+ "category": "section",
  "surface": "site",
  "structure": "monolithic",
  "compoundRoot": false,
  "subcomponents": [],
- "purpose": "The \"three ways to start\" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with \"Copied\" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `frame-box`, `bento-grid`, `illustration`, `button-highlight` and the webkit scene assets.",
+ "purpose": "The \"three ways to start\" band of a product page: a centered section title with up to two calls to action, over a bento grid where every cell is a live console scene (or an illustration) above a bold-led sentence and its affordances — a link button, a copy button that puts a prompt on the clipboard and confirms it with \"Copied\" for two seconds, or both. A cell's scene plays its beat while the pointer is over the cell. It is a page section — the site places it from a `{ _id: 'feature-widgets', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `button`, `registration-frame`, `bento-grid`, `illustration`, `highlight-button` and the webkit scene assets.",
  "setup": null,
  "useWhen": [
   "Use FeatureWidgets when each cell has its own action or copy button.",
@@ -20,11 +20,11 @@
  ],
  "related": [
   "bento-grid` — the grid the cells are laid in.",
-  "button-highlight` — the copy affordance a cell renders when it carries `copy`."
+  "highlight-button` — the copy affordance a cell renders when it carries `copy`."
  ],
  "bestPractices": [
   "Give each item an `action` (a link), a `copy` (text to put on the clipboard), or both when the reader may want the docs and the prompt.",
-  "On a product page give each item a `scene` naming a `ProductWidget` fragment (`{ component: 'ProductWidget', props: { name } }`); keep `illustration` for cells with no console to show.",
+  "On a product page give each item a `scene` naming a `ConsoleMockup` fragment (`{ component: 'ConsoleMockup', props: { name } }`); keep `illustration` for cells with no console to show.",
   "Keep `copy.text` self-contained; it is what the reader pastes into their agent.",
   "Set `anchor` when a hero button scrolls to this band."
  ],
@@ -41,7 +41,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Overline above the section title."
+   "doc": "Eyebrow above the section title."
   },
   {
    "name": "title",
@@ -120,7 +120,7 @@
   },
   {
    "name": "Live scenes",
-   "sfc": "<script setup>\n  import FeatureWidgets from '@aziontech/webkit/feature-widgets'\n\n  const docs = 'https://www.azion.com/en/documentation/products/build/applications/'\n\n  const items = [\n    {\n      title: 'Cache settings you reuse.',\n      description:\n        'Set the CDN TTL, stale cache and large file optimization once, then reuse the setting wherever the application needs it.',\n      scene: { component: 'ProductWidget', props: { name: 'application-cache' } },\n      action: { label: 'Docs', href: docs }\n    },\n    {\n      title: 'Rules that decide what is cached.',\n      description:\n        'Match a path, a method or a header, and attach a cache setting to just that traffic.',\n      scene: { component: 'ProductWidget', props: { name: 'application-rule' } },\n      action: { label: 'Docs', href: docs }\n    },\n    {\n      title: 'Functions for the cases rules miss.',\n      description:\n        'Rewrite cache headers on the response in a few lines of JavaScript, running in every data center before the response leaves.',\n      scene: { component: 'ProductWidget', props: { name: 'application-function' } },\n      action: { label: 'Docs', href: docs },\n      copy: {\n        label: 'Copy prompt',\n        text: 'Write an Azion function that sets cache-control to public, max-age=3600 on every response from /assets.'\n      }\n    }\n  ]\n</script>\n\n<template>\n  <FeatureWidgets\n    anchor=\"built-in\"\n    eyebrow=\"Built in\"\n    title=\"Every cache control in one application\"\n    description=\"Cache settings, the rules that apply them and the functions that shape responses live inside the application, versioned and deployed with it.\"\n    :columns=\"3\"\n    :items=\"items\"\n  />\n</template>"
+   "sfc": "<script setup>\n  import FeatureWidgets from '@aziontech/webkit/feature-widgets'\n\n  const docs = 'https://www.azion.com/en/documentation/products/build/applications/'\n\n  const items = [\n    {\n      title: 'Cache settings you reuse.',\n      description:\n        'Set the CDN TTL, stale cache and large file optimization once, then reuse the setting wherever the application needs it.',\n      scene: { component: 'ConsoleMockup', props: { name: 'application-cache' } },\n      action: { label: 'Docs', href: docs }\n    },\n    {\n      title: 'Rules that decide what is cached.',\n      description:\n        'Match a path, a method or a header, and attach a cache setting to just that traffic.',\n      scene: { component: 'ConsoleMockup', props: { name: 'application-rule' } },\n      action: { label: 'Docs', href: docs }\n    },\n    {\n      title: 'Functions for the cases rules miss.',\n      description:\n        'Rewrite cache headers on the response in a few lines of JavaScript, running in every data center before the response leaves.',\n      scene: { component: 'ConsoleMockup', props: { name: 'application-function' } },\n      action: { label: 'Docs', href: docs },\n      copy: {\n        label: 'Copy prompt',\n        text: 'Write an Azion function that sets cache-control to public, max-age=3600 on every response from /assets.'\n      }\n    }\n  ]\n</script>\n\n<template>\n  <FeatureWidgets\n    anchor=\"built-in\"\n    eyebrow=\"Built in\"\n    title=\"Every cache control in one application\"\n    description=\"Cache settings, the rules that apply them and the functions that shape responses live inside the application, versioned and deployed with it.\"\n    :columns=\"3\"\n    :items=\"items\"\n  />\n</template>"
   }
  ],
  "docs": "components/feature-widgets.md"

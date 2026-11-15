@@ -55,7 +55,7 @@ for (const mode of DOCS_MODES) {
     await prepare(page, mode)
     await page.goto(`${DOCS}/frame/landing/shell/docs${query(mode)}`)
     await settle(page)
-    await page.getByTestId('documentation-doc-agent-card').scrollIntoViewIfNeeded()
+    await page.getByTestId('doc-agent-card').scrollIntoViewIfNeeded()
     await settle(page)
     await expect(page).toHaveScreenshot(
       shot(`blocks/shell/docs/landing-agent-card--${label(mode)}.png`)

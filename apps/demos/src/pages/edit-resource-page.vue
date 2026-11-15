@@ -2,13 +2,13 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import HelperText from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Tabs from '@aziontech/webkit/tabs'
@@ -178,7 +178,7 @@
                   <Card :padded="false">
                     <template #default>
                       <Item.List>
-                        <SettingRow
+                        <SettingsRow
                           title="Name"
                           description="A unique and descriptive name to identify the project."
                         >
@@ -193,15 +193,14 @@
                               :required="nameError"
                               :aria-describedby="nameError ? 'resource-name-message' : undefined"
                             />
-                            <HelperText
+                            <FieldError
                               v-if="nameError"
                               id="resource-name-message"
-                              type="required"
-                              label="This field is required."
-                            />
+                              >This field is required.</FieldError
+                            >
                           </div>
-                        </SettingRow>
-                        <SettingRow
+                        </SettingsRow>
+                        <SettingsRow
                           title="Active"
                           description="When disabled, the project stops serving traffic."
                           variant="compact"
@@ -211,7 +210,7 @@
                             aria-label="Active"
                             :disabled="saving"
                           />
-                        </SettingRow>
+                        </SettingsRow>
                       </Item.List>
                     </template>
                   </Card>
@@ -225,7 +224,7 @@
                   <Card :padded="false">
                     <template #default>
                       <Item.List>
-                        <SettingRow
+                        <SettingsRow
                           v-for="mod in defaultModules"
                           :key="mod.key"
                           :title="mod.title"
@@ -237,7 +236,7 @@
                             :aria-label="mod.title"
                             :disabled="saving"
                           />
-                        </SettingRow>
+                        </SettingsRow>
                       </Item.List>
                     </template>
                   </Card>
@@ -251,7 +250,7 @@
                   <Card :padded="false">
                     <template #default>
                       <Item.List>
-                        <SettingRow
+                        <SettingsRow
                           v-for="mod in subscriptionModules"
                           :key="mod.key"
                           :title="mod.title"
@@ -279,7 +278,7 @@
                               :aria-label="mod.title"
                             />
                           </Tooltip>
-                        </SettingRow>
+                        </SettingsRow>
                       </Item.List>
                     </template>
                   </Card>

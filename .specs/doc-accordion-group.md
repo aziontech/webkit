@@ -1,11 +1,11 @@
 ---
 name: doc-accordion-group
-category: documentation
+category: docs
 structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: edc8df3071ed5a4aafb2d22eb63f8e0c3439cd8f6331becc3d0ddecb3a80b440
+checksum: 86135203574cca1d037761e1192b6fd935b374d920a6cdeea7a8e131d445deac
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-The FAQ and "expand for detail" block of a documentation page. It reads the `title` of each `DocAccordionItem` child to build the triggers and renders the child body in the panel, so an author writes only titles and prose. It always ships as a card (surface, outer rule, radius) so a run of rows reads as one closed group in an open prose column. Built on `Accordion` at `size="large"`.
+The FAQ and "expand for detail" block of a documentation page. It reads the `title` of each `DocAccordion` child to build the triggers and renders the child body in the panel, so an author writes only titles and prose. It always ships as a card (surface, outer rule, radius) so a run of rows reads as one closed group in an open prose column. Built on `Accordion` at `size="large"`.
 
 ## When to use
 
@@ -30,7 +30,7 @@ The FAQ and "expand for detail" block of a documentation page. It reads the `tit
 
 ## Related
 
-- `DocAccordionItem` — the entry it reads.
+- `DocAccordion` — the entry it reads.
 - `Accordion` — the design-system surface it renders on.
 - `Faq` — the marketing FAQ band.
 
@@ -45,14 +45,14 @@ The FAQ and "expand for detail" block of a documentation page. It reads the `tit
 ```vue
 <script setup>
   import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
-  import DocAccordionItem from '@aziontech/webkit/doc-accordion-item'
+  import DocAccordion from '@aziontech/webkit/doc-accordion'
 </script>
 
 <template>
   <DocAccordionGroup>
-    <DocAccordionItem title="Why does my first request miss the cache?">
+    <DocAccordion title="Why does my first request miss the cache?">
       Each location warms up on its own first request.
-    </DocAccordionItem>
+    </DocAccordion>
   </DocAccordionGroup>
 </template>
 ```
@@ -69,9 +69,9 @@ The FAQ and "expand for detail" block of a documentation page. It reads the `tit
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                                                              |
-| --------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `default` | —     | The `DocAccordionItem` children, in order. Each child's `title` and `defaultOpen` are read; its body is rendered inside the panel. |
+| Slot      | Scope | Notes                                                                                                                          |
+| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `default` | —     | The `DocAccordion` children, in order. Each child's `title` and `defaultOpen` are read; its body is rendered inside the panel. |
 
 ## States
 

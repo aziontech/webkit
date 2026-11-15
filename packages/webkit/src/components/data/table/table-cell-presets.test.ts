@@ -7,7 +7,7 @@ import Refresh from '../../../../examples/data-table/refresh.vue'
 import CellPresets from '../../../../examples/table/cell-presets.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import TableCellActions from './table-cell-actions/table-cell-actions.vue'
 import TableCellId from './table-cell-id/table-cell-id.vue'
 import TableCellLink from './table-cell-link/table-cell-link.vue'
@@ -59,14 +59,14 @@ describe('Table', () => {
           icon: 'ai ai-github'
         }
       })
-      const icon = view.getByTestId('data-table__cell-link__icon')
+      const icon = view.getByTestId('table-cell-link__icon')
       expect(icon.getAttribute('aria-hidden')).toBe('true')
       expect(icon.classList.contains('ai-github')).toBe(true)
       expect(view.getByRole('link').contains(icon)).toBe(false)
       expect(view.getByRole('link').textContent).toContain('example/storefront')
 
       const bare = render(TableCellLink, { props: { label: 'draft' } })
-      expect(bare.container.querySelector('[data-testid="data-table__cell-link__icon"]')).toBeNull()
+      expect(bare.container.querySelector('[data-testid="table-cell-link__icon"]')).toBeNull()
     })
 
     it('CellLink: no destination renders plain text with no mark', () => {
@@ -228,7 +228,7 @@ describe('Table', () => {
       const view = render(TableCellTags, { props: { items: ['a', 'b'] } })
       await waitFor(() =>
         expect(
-          view.container.querySelectorAll('[data-testid="data-table__cell-tags__tag"]')
+          view.container.querySelectorAll('[data-testid="table-cell-tags__tag"]')
         ).toHaveLength(2)
       )
       expect(view.queryByRole('button')).toBeNull()
@@ -257,7 +257,7 @@ describe('Table', () => {
               )
           })
         )
-        expect(view.getAllByTestId('data-table__cell-tags')).toHaveLength(20)
+        expect(view.getAllByTestId('table-cell-tags')).toHaveLength(20)
         await new Promise((resolve) => requestAnimationFrame(() => resolve(null)))
         expect(created).toBeLessThanOrEqual(1)
       } finally {
@@ -300,7 +300,7 @@ describe('Table', () => {
       })
       const view = render(Host)
       expect(view.getByText('a1b2-c3').getAttribute('dir')).toBe('ltr')
-      expect(byTestId('data-table__cell-link__link')).not.toBeNull()
+      expect(byTestId('table-cell-link__link')).not.toBeNull()
     })
 
     it('has no axe violations', async () => {

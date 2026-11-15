@@ -30,7 +30,7 @@ Two scales, documented in `@aziontech/theme` ("Breakpoints and container sizes")
   most `@5xl:` on the site (the column caps at 1388 px) and `@6xl:` in the console (1620 px).
 
 These components are box-aware and need nothing from the page: `Table` (scrolls sideways
-inside its viewport, opt-in `stackable` rows, toolbar), `PageHeader`, `SectionHeader`, `SettingRow`, `SettingsSection`,
+inside its viewport, opt-in `stackable` rows, toolbar), `PageHeader`, `SectionHeader`, `SettingsRow`, `SettingsSection`,
 `SaveBar`, `Card` (its content is `@container/card`), `Alert`, `EmptyState`, `Pagination`,
 `Wizard`, `HelpPanel`, `ChartCard`, `StatTile`, and the dialog and drawer body (`PanelBody`,
 `@container/panel`). `KeyValueList` and `Item` reflow by themselves; `Field orientation="responsive"`
@@ -59,7 +59,7 @@ follows the nearest container.
   `.layout-group-start`.
 - Build the repeated bands from their components, which already carry the right container and
   rhythm: `PageHeader` for the page heading, `SectionHeader` or `SettingsSection` for a band title,
-  `SettingRow` for a settings row, `PageTabs` for a detail page's tab strip, and `SaveBar` for the
+  `SettingsRow` for a settings row, `PageTabs` for a detail page's tab strip, and `SaveBar` for the
   sticky action bar (`variant="plain"` is the form-column footer).
 - Size cards, dialogs and side columns with the container scale: `max-w-(--container-sm)` …
   `max-w-(--container-7xl)`.
@@ -75,7 +75,7 @@ follows the nearest container.
 - Never write a literal length (`px`, `rem`) for a layout width; every measure is a token.
 - Never use a viewport breakpoint (`md:`, `lg:`) for a layout that lives inside a band; it breaks
   the moment the band moves into a drawer or a split view.
-- Never render a `<main>`, `AppLayout`, `Sidebar` or `GlobalHeader` in a page: the app layout,
+- Never render a `<main>`, `AppLayout`, `Sidebar` or `AppHeader` in a page: the app layout,
   composed once in `App.vue`, owns them, and the page is the body of its default slot.
 
 ## Correct

@@ -3,7 +3,7 @@
 > The bordered surface every screenshot, diagram and clip in a documentation page sits on, so no media floats loose on the canvas and all of it shares one border, radius and inset. Pass `src` and the frame decides from the extension whether it holds a still or a clip; compose the default slot when the framed thing is markup. A still opens full screen out of its own frame — the picture is the button — while a clip keeps its player controls and composed content has no source to open. The caption reads under the frame, centered, as part of the picture; the hint reads above it on the text's own left edge, as part of the sentence that led the reader here; each is a string prop for the plain case with a slot of the same name for rich content.
 
 - Import: `import DocFrame from '@aziontech/webkit/doc-frame'`
-- Category: documentation · Surface: docs · Structure: monolithic
+- Category: docs · Surface: docs · Structure: monolithic
 - API as JSON: [doc-frame.json](https://github.com/aziontech/webkit/blob/main/.specs/doc-frame.json)
 
 ## When to use
@@ -22,7 +22,7 @@
 
 ## Don’t
 
-- For an application-screen media block outside documentation prose — use `FrameBox` or compose the layout directly.
+- For an application-screen media block outside documentation prose — use `RegistrationFrame` or compose the layout directly.
 - For an image that is itself a link or a card — a frame is a figure, not a navigation target.
 - For a gallery or carousel; the frame holds one piece of media at a time.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.

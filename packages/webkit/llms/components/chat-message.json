@@ -27,7 +27,7 @@
   "streaming-response` — the safe Markdown renderer for assistant content.",
   "reasoning`, `sources`, `tool-call`, `artifact-preview` — parts that stack inside an assistant message.",
   "copy-button`, `icon-button` — the actions composed into `ChatMessage.Actions`.",
-  "ai-loading` — what `pending` renders."
+  "response-loading` — what `pending` renders."
  ],
  "bestPractices": [
   "Pass `status` from your request: `pending` until the first token, `streaming` while tokens arrive, then `success` or `error`.",
@@ -83,7 +83,7 @@
    "type": "string",
    "default": "''",
    "required": "false",
-   "doc": "Loading text shown while `status` is `pending`. Empty uses `AiLoading`'s own (`Generating a response`)."
+   "doc": "Loading text shown while `status` is `pending`. Empty uses `ResponseLoading`'s own (`Generating a response`)."
   }
  ],
  "events": [

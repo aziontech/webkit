@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Hint from '../../inputs/hint/hint.vue'
+  import Hint from '../../input/hint/hint.vue'
 
   defineOptions({
     name: 'SettingsSection',
@@ -33,7 +33,7 @@
   const open = defineModel<boolean>('open', { default: false })
 
   defineSlots<{
-    /** The band body, usually a flush Card of SettingRow rows. */
+    /** The band body, usually a flush Card of SettingsRow rows. */
     default(): unknown
     /** Rich title content; replaces the title prop text inside the h2. */
     title(): unknown
@@ -43,9 +43,7 @@
   const { t } = useTranslate({ settingsSection: en.settingsSection })
   const regionId = useId()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-settings-section'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'settings-section')
 
   const expanded = computed(() => !props.collapsible || open.value)
 

@@ -19,7 +19,7 @@ describe('ConfirmDialog', () => {
   it('opens at the medium width by default', async () => {
     const { getByTestId } = within(render(Default).container)
 
-    await fireEvent.click(getByTestId('overlay-confirm-dialog__trigger'))
+    await fireEvent.click(getByTestId('confirm-dialog__trigger'))
     await settle()
 
     expect(document.body.querySelector('[role="alertdialog"] [data-size]')).toHaveAttribute(
@@ -31,9 +31,9 @@ describe('ConfirmDialog', () => {
   it('stays closed until the trigger is activated, then teleports the dialog to body', async () => {
     const { getByTestId } = within(render(Default).container)
 
-    expect(byTestId('overlay-confirm-dialog__panel')).toBeNull()
+    expect(byTestId('confirm-dialog__panel')).toBeNull()
 
-    await fireEvent.click(getByTestId('overlay-confirm-dialog__trigger'))
+    await fireEvent.click(getByTestId('confirm-dialog__trigger'))
     await settle()
 
     const dialog = document.body.querySelector<HTMLElement>('[role="alertdialog"]')
@@ -50,9 +50,9 @@ describe('ConfirmDialog', () => {
     })
     await settle()
 
-    expect(byTestId('overlay-confirm-dialog')).toBeTruthy()
-    expect(byTestId('overlay-confirm-dialog__cancel')?.textContent?.trim()).toBe('Cancel')
-    expect(byTestId('overlay-confirm-dialog__confirm')?.textContent?.trim()).toBe('Confirm')
+    expect(byTestId('confirm-dialog')).toBeTruthy()
+    expect(byTestId('confirm-dialog__cancel')?.textContent?.trim()).toBe('Cancel')
+    expect(byTestId('confirm-dialog__confirm')?.textContent?.trim()).toBe('Confirm')
     expect(document.body.textContent).toContain('It stops answering.')
   })
 
@@ -72,12 +72,12 @@ describe('ConfirmDialog', () => {
     })
     await settle()
 
-    await fireEvent.click(byTestId('overlay-confirm-dialog__confirm') as HTMLElement)
+    await fireEvent.click(byTestId('confirm-dialog__confirm') as HTMLElement)
     const confirms = emitted()['confirm'] as [Event][]
     expect(confirms).toHaveLength(1)
     expect(confirms[0]![0]).toBeInstanceOf(MouseEvent)
 
-    await fireEvent.click(byTestId('overlay-confirm-dialog__cancel') as HTMLElement)
+    await fireEvent.click(byTestId('confirm-dialog__cancel') as HTMLElement)
     const cancels = emitted()['cancel'] as [Event][]
     expect(cancels).toHaveLength(1)
     expect(cancels[0]![0]).toBeInstanceOf(MouseEvent)
@@ -91,7 +91,7 @@ describe('ConfirmDialog', () => {
     })
     await settle()
 
-    ;(byTestId('overlay-confirm-dialog__confirm') as HTMLElement).focus()
+    ;(byTestId('confirm-dialog__confirm') as HTMLElement).focus()
     await user.keyboard('{Enter}')
     const confirms = emitted()['confirm'] as [Event][]
     expect(confirms).toHaveLength(1)
@@ -106,7 +106,7 @@ describe('ConfirmDialog', () => {
       })
       await settle()
 
-      await fireEvent.click(byTestId('overlay-confirm-dialog__confirm') as HTMLElement)
+      await fireEvent.click(byTestId('confirm-dialog__confirm') as HTMLElement)
       expect(emitted()['confirm']).toBeUndefined()
     }
   )
@@ -117,7 +117,7 @@ describe('ConfirmDialog', () => {
     })
     await settle()
 
-    const cancel = byTestId('overlay-confirm-dialog__cancel') as HTMLButtonElement
+    const cancel = byTestId('confirm-dialog__cancel') as HTMLButtonElement
     expect(cancel.disabled).toBe(true)
     await fireEvent.keyDown(document, { key: 'Escape' })
     expect(emitted()['update:open']).toBeUndefined()
@@ -131,21 +131,19 @@ describe('ConfirmDialog', () => {
   it('opens with focus on Cancel, the least destructive action, and shows no close button', async () => {
     render(ConfirmDialog, { props: { open: true, title: 'Delete resource' } })
     await settle()
-    await vi.waitFor(() =>
-      expect(document.activeElement).toBe(byTestId('overlay-confirm-dialog__cancel'))
-    )
-    expect(byTestId('overlay-confirm-dialog__close')).toBeNull()
+    await vi.waitFor(() => expect(document.activeElement).toBe(byTestId('confirm-dialog__cancel')))
+    expect(byTestId('confirm-dialog__close')).toBeNull()
   })
 
   it('replaces the buttons with the actions slot', async () => {
     const { getByTestId } = within(render(SaveOrDiscard).container)
 
-    await fireEvent.click(getByTestId('overlay-confirm-dialog__trigger'))
+    await fireEvent.click(getByTestId('confirm-dialog__trigger'))
     await settle()
 
     const dialog = document.body.querySelector<HTMLElement>('[role="alertdialog"]') as HTMLElement
     expect(within(dialog).getByRole('button', { name: 'Save changes' })).toBeTruthy()
-    expect(byTestId('overlay-confirm-dialog__confirm')).toBeNull()
+    expect(byTestId('confirm-dialog__confirm')).toBeNull()
   })
 
   it('has no accessibility violations when open', async () => {
@@ -162,7 +160,7 @@ describe('ConfirmDialog', () => {
       props: { open: true, title: 'Type the name first', disabled: true }
     })
     await settle()
-    await fireEvent.click(byTestId('overlay-confirm-dialog__confirm')!)
+    await fireEvent.click(byTestId('confirm-dialog__confirm')!)
     expect(emitted()['confirm']).toBeUndefined()
   })
 
@@ -180,7 +178,7 @@ describe('ConfirmDialog', () => {
     open.value = true
     await settle()
     expect(document.body.querySelector('[role="alertdialog"]')).not.toBeNull()
-    await fireEvent.click(byTestId('overlay-confirm-dialog__cancel')!)
+    await fireEvent.click(byTestId('confirm-dialog__cancel')!)
     await settle()
     expect(open.value).toBe(false)
   })
@@ -188,7 +186,7 @@ describe('ConfirmDialog', () => {
   it('opens at defaultOpen when uncontrolled, as an alertdialog', async () => {
     render(ConfirmDialog, { props: { defaultOpen: true, title: 'Remove domain' } })
     await settle()
-    const panel = byTestId('overlay-confirm-dialog__panel')
+    const panel = byTestId('confirm-dialog__panel')
     expect(panel?.getAttribute('role')).toBe('alertdialog')
   })
 })

@@ -9,11 +9,9 @@ import ResourcePreview from '../../../../examples/hover-card/resource-preview.vu
 import { expectNoA11yViolations } from '../../../test/axe'
 import HoverCard from './index'
 
-const card = () =>
-  document.body.querySelector<HTMLElement>('[data-testid="overlay-hover-card__content"]')
+const card = () => document.body.querySelector<HTMLElement>('[data-testid="hover-card-content"]')
 
-const trigger = () =>
-  document.body.querySelector<HTMLElement>('[data-testid="overlay-hover-card__trigger"]')
+const trigger = () => document.body.querySelector<HTMLElement>('[data-testid="hover-card-trigger"]')
 
 const link = () => trigger()?.querySelector('a') as HTMLElement
 
@@ -58,13 +56,13 @@ const LinkHost = defineComponent({
 
 const inCard = (id: string) =>
   document.body.querySelector<HTMLElement>(
-    `[data-testid="overlay-hover-card__content"] [data-testid="${id}"]`
+    `[data-testid="hover-card-content"] [data-testid="${id}"]`
   ) as HTMLElement
 
 describe('HoverCard', () => {
   it('renders derived test ids, closed by default, and a consumer test id wins', () => {
     const { container } = render(Default)
-    expect(container.querySelector('[data-testid="overlay-hover-card"]')).not.toBeNull()
+    expect(container.querySelector('[data-testid="hover-card"]')).not.toBeNull()
     expect(trigger()?.dataset['state']).toBe('closed')
     expect(card()).toBeNull()
 
@@ -76,7 +74,7 @@ describe('HoverCard', () => {
     })
     const second = render(Override)
     expect(second.container.querySelector('[data-testid="user-card"]')).not.toBeNull()
-    expect(second.container.querySelector('[data-testid="user-card__trigger"]')).not.toBeNull()
+    expect(second.container.querySelector('[data-testid="hover-card-trigger"]')).not.toBeNull()
   })
 
   it('hover opens after the open delay and leaving closes after the close delay', async () => {
@@ -178,7 +176,7 @@ describe('HoverCard', () => {
   it('disabled never opens', async () => {
     const { container } = render(Disabled)
     expect(
-      container.querySelector('[data-testid="overlay-hover-card"]')?.hasAttribute('data-disabled')
+      container.querySelector('[data-testid="hover-card"]')?.hasAttribute('data-disabled')
     ).toBe(true)
     await userEvent.hover(link())
     await new Promise((resolve) => setTimeout(resolve, 650))
@@ -218,9 +216,7 @@ describe('HoverCard', () => {
     const start = performance.now()
     render(Many)
     const elapsed = performance.now() - start
-    expect(
-      document.body.querySelectorAll('[data-testid="overlay-hover-card__trigger"]')
-    ).toHaveLength(1000)
+    expect(document.body.querySelectorAll('[data-testid="hover-card-trigger"]')).toHaveLength(1000)
     expect(card()).toBeNull()
     expect(elapsed).toBeLessThan(1500)
   })

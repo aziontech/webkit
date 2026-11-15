@@ -86,7 +86,7 @@
   const slots = useSlots()
   const { t } = useTranslate({ card: en.card })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-card')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'card')
 
   const isIntegration = computed(() => props.variant === 'integration')
   const isFeatured = computed(() => isIntegration.value && props.featured)

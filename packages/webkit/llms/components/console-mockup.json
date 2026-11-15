@@ -1,0 +1,136 @@
+{
+ "name": "console-mockup",
+ "binding": "ConsoleMockup",
+ "import": "@aziontech/webkit/console-mockup",
+ "treeShakeableImport": "@aziontech/webkit/console-mockup",
+ "category": "content",
+ "surface": "app",
+ "structure": "monolithic",
+ "compoundRoot": false,
+ "subcomponents": [],
+ "purpose": "Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `ConsoleMockupShell` frame (not exported), that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.",
+ "setup": null,
+ "useWhen": [
+  "Use ConsoleMockup to show an official console screen on a marketing band.",
+  "A product band (hero, media split, feature tab, widget grid cell) needs to show a console screen or a fragment of one.",
+  "The same console screen appears on more than one page and must be the same drawing on each.",
+  "Several widgets share one slot (tabs), and only the one showing should play: drive `active` from the host.",
+  "A grid cell plays its fragment's beat while the pointer is over it: drive `hovered` from the host."
+ ],
+ "avoidWhen": [
+  "The screen you need is not in the registry → add it to the registry inside WebKit (drawn in the internal `ConsoleMockupShell` frame). Do not approximate it at the call site.",
+  "A live, working screen at a device size → use `browser-frame`.",
+  "A static product concept drawing → use `illustration`.",
+  "A screenshot or clip in documentation → use `doc-frame`."
+ ],
+ "related": [
+  "illustration` — the same closed-registry pattern for static scenes.",
+  "texture` — the texture a full-screen widget grounds itself with through `texture`."
+ ],
+ "bestPractices": [
+  "Give the host a size (a height or an aspect ratio). A widget fills its host and scales its design width to fit.",
+  "Host a framed widget (a full screen) in a wide panel, and a fragment in a grid cell with its own padding. A bare fragment floats on the cell's surface and a framed one fades its window into it, so set `--mockup-fade-color` on the cell when it is not `--bg-canvas`. The cell clips on both axes (`overflow-clip`, as a media split's media cell does): a fragment's collaborator cursor and shadows float onto the cell's padding, and at a large root font size (200% zoom) its mock text outgrows the drawing; clipping them at the cell's border keeps the page from scrolling sideways. Never frame a fragment with `overflow-x-visible`.",
+  "Leave `variant`, `chrome`, `width`, `tab` and `autoplayInterval` unset unless the host needs a different value: unset keeps the widget's own.",
+  "Leave a fragment's plating to the registry. Each fragment has its own default: a form or a list that reads as a console screen is framed in a console window titled with its module, and a fragment that draws its own card, terminal or code panel is bare, because a window around it would be a window in a window. Set `variant` only when the host needs the other plating, and `chrome` to drop the window's console bar. `width` and `fade` re-plate only the workload screens listed under Props; a fragment keeps its own design width and fade, and the root warns in development when a prop is set on a widget that does not read it.",
+  "Turn `cursor` off when the widget stands for a screen the reader uses alone. Fragments act their beat with a named collaborator cursor; that is right in a feature grid that plays on hover, and a fake second person in a product band that reads as a screenshot.",
+  "Keep the copy beside the widget saying what it shows. Every widget but `function-code` and the coding-agent switch of `functions-start` is hidden from assistive technology."
+ ],
+ "props": [
+  {
+   "name": "name",
+   "type": "'ai-inference-function' | 'ai-inference-model' | 'ai-inference-template' | 'application-accelerator-cookie' | 'application-accelerator-method' | 'application-accelerator-query-string' | 'application-cache' | 'application-function' | 'application-rule' | 'application-version' | 'applications-create-method' | 'applications-device-group' | 'applications-rule-phases' | 'bot-manager-metrics' | 'bot-manager-rule' | 'bot-manager-traffic' | 'cli-terminal-deploy' | 'cli-terminal-start' | 'data-stream-connector' | 'data-stream-sampling' | 'data-stream-source' | 'ddos-firewall-modules' | 'ddos-http-events' | 'ddos-requests-metric' | 'edge-dns-dnssec' | 'edge-dns-nameserver' | 'edge-dns-record' | 'firewall-function' | 'firewall-modules' | 'firewall-rules-order' | 'function-code' | 'functions-start' | 'image-processor-events' | 'image-processor-module' | 'image-processor-rule' | 'kv-store-function' | 'kv-store-key' | 'kv-store-security-list' | 'load-balancer-address' | 'load-balancer-method' | 'load-balancer-origins' | 'network-shield-ip-list' | 'network-shield-lists' | 'network-shield-rule' | 'object-storage-access' | 'object-storage-browser' | 'object-storage-buckets' | 'real-time-events-filter' | 'real-time-events-log' | 'real-time-events-volume' | 'real-time-metrics-dashboard' | 'real-time-metrics-filter' | 'real-time-metrics-panel' | 'sql-database-query' | 'sql-database-row' | 'sql-database-table' | 'waf-allowed-rule' | 'waf-firewall-rule' | 'waf-threat' | 'workload-deploy' | 'workload-deploy-logs' | 'workload-deployments' | 'workload-domain' | 'workload-domains' | 'workload-overview' | 'workload-rollout-rows' | 'workload-topology-chain' | 'workload-topology' | 'workload-topology-flow' | 'workloads-list'",
+   "default": "—",
+   "required": "true",
+   "doc": "Name of the console widget to draw."
+  },
+  {
+   "name": "active",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Whether this widget is the one showing; it replays its entrance each time it becomes active."
+  },
+  {
+   "name": "hovered",
+   "type": "boolean",
+   "default": "false",
+   "required": "false",
+   "doc": "Whether the pointer is over the host; a fragment plays its beat while it is."
+  },
+  {
+   "name": "variant",
+   "type": "'window' | 'bare'",
+   "default": "undefined",
+   "required": "false",
+   "doc": "How the widget is plated (window or bare): a workload screen re-plates its own frame, a fragment is drawn bare or framed in a console window, and unset keeps the widget's own plating."
+  },
+  {
+   "name": "chrome",
+   "type": "boolean",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Draws the console bar on a workload screen or on the window a framed fragment is drawn in; unset keeps the widget's own bar, and a bare fragment ignores it."
+  },
+  {
+   "name": "width",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Design width of a workload screen from md up; fragments keep their own width, and unset keeps the widget's own."
+  },
+  {
+   "name": "fade",
+   "type": "'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'",
+   "default": "'none'",
+   "required": "false",
+   "doc": "Edge a workload screen, workload-overview or application-version fades out along; fragments keep their own fade."
+  },
+  {
+   "name": "texture",
+   "type": "'dots' | 'grid' | 'lines' | 'dither' | 'pixelate' | 'none'",
+   "default": "'none'",
+   "required": "false",
+   "doc": "Texture a full-screen widget is grounded with."
+  },
+  {
+   "name": "tab",
+   "type": "'agents' | 'console' | 'cli' | 'overview' | 'topology' | 'deploy' | 'main-settings' | 'cache-settings' | 'device-groups' | 'functions' | 'rules-engine'",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Tab a tabbed widget plays (`workload-overview`, `application-version`, `functions-start`); other widgets ignore it, and unset plays the first tab."
+  },
+  {
+   "name": "cursor",
+   "type": "boolean",
+   "default": "true",
+   "required": "false",
+   "doc": "Draws the named collaborator cursor a fragment acts its beat with; turn it off for a still console picture. Widgets without a cursor ignore it."
+  },
+  {
+   "name": "autoplayInterval",
+   "type": "number",
+   "default": "undefined",
+   "required": "false",
+   "doc": "Milliseconds between revealed log lines in the deploy logs widget; unset keeps its own pace."
+  }
+ ],
+ "events": [],
+ "slots": [],
+ "styleSeam": false,
+ "assets": [],
+ "examples": [
+  {
+   "name": "Default",
+   "sfc": "<script setup>\n  import ConsoleMockup from '@aziontech/webkit/console-mockup'\n</script>\n\n<template>\n  <div class=\"h-96 w-full\">\n    <ConsoleMockup name=\"workloads-list\" />\n  </div>\n</template>"
+  },
+  {
+   "name": "Variants",
+   "sfc": "<script setup>\n  import ConsoleMockup from '@aziontech/webkit/console-mockup'\n</script>\n\n<template>\n  <div class=\"grid w-full grid-cols-1 gap-(--spacing-lg) md:grid-cols-2\">\n    <div class=\"h-80 w-full\">\n      <ConsoleMockup\n        name=\"workload-topology\"\n        variant=\"window\"\n      />\n    </div>\n    <div class=\"h-80 w-full\">\n      <ConsoleMockup\n        name=\"workload-topology\"\n        variant=\"bare\"\n      />\n    </div>\n    <div class=\"h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)\">\n      <ConsoleMockup\n        name=\"edge-dns-record\"\n        variant=\"window\"\n      />\n    </div>\n    <div class=\"h-80 w-full min-w-0 overflow-clip p-(--spacing-xl)\">\n      <ConsoleMockup\n        name=\"edge-dns-record\"\n        variant=\"bare\"\n      />\n    </div>\n  </div>\n</template>"
+  },
+  {
+   "name": "Still fragment",
+   "sfc": "<script setup>\n  import ConsoleMockup from '@aziontech/webkit/console-mockup'\n</script>\n\n<template>\n  <div class=\"grid w-full grid-cols-1 gap-(--spacing-lg) md:grid-cols-2\">\n    <div class=\"h-80 w-full p-(--spacing-xl)\">\n      <ConsoleMockup name=\"data-stream-source\" />\n    </div>\n    <div class=\"h-80 w-full p-(--spacing-xl)\">\n      <ConsoleMockup\n        name=\"data-stream-source\"\n        :cursor=\"false\"\n      />\n    </div>\n  </div>\n</template>"
+  }
+ ],
+ "docs": "components/console-mockup.md"
+}

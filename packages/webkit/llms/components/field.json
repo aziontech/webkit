@@ -3,7 +3,7 @@
  "binding": "Field",
  "import": "@aziontech/webkit/field",
  "treeShakeableImport": "@aziontech/webkit/field-root",
- "category": "inputs",
+ "category": "input",
  "surface": "app",
  "structure": "composition",
  "compoundRoot": true,
@@ -21,7 +21,7 @@
  "purpose": "One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `DatePicker`, `DateRangePicker`, `Checkbox`, `RadioGroup`, `Switch`, `Slider` — with its label, description and error. The root `Field` owns the field state (`invalid`, `disabled`, `required`) and the ids, and shares them through `provide`/`inject`: the control picks up its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from the Field, `Field.Label` points its `for` at the control and shows the Required marker, and `Field.Description` / `Field.Error` register themselves so the control is described by them. Grouping parts (`Field.Set`, `Field.Legend`, `Field.Group`, `Field.Content`, `Field.Title`, `Field.Separator`) build fieldsets, choice cards and settings rows. One anatomy serves every control, so there is no per-control field wrapper.",
  "setup": null,
  "useWhen": [
-  "Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Under a control that is not inside Field use HelperText; for a one-sentence explanation beside a label use Hint.",
+  "Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Field.Description and Field.Error also work alone, under a control that is not inside a Field; for a one-sentence explanation beside a label use Hint.",
   "Any labelled form control: a text input, a select, a textarea, a password, a phone number, a slider.",
   "A checkbox, radio or switch with its label beside it (`orientation=\"horizontal\"`).",
   "A selectable checkbox or switch card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants). For one choice among cards use `RadioGroup variant=\"card\"`, never a radio inside a `Field.Label`.",
@@ -33,7 +33,6 @@
   "A static key/value read-out → use `key-value-list`."
  ],
  "related": [
-  "helper-text` — the tone-aware helper line that `Field.Description` and `Field.Error` render.",
   "input-group` — wraps an input with addons; put it inside a `Field` and use `InputGroup.Input` as the control.",
   "phone-input`, `password-requirements` — a phone number control and the live password rules row, each placed inside a `Field`."
  ],

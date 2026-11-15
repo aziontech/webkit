@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import { DrawerInjectionKey } from './injection-key'
 
   defineOptions({

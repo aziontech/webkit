@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
-  import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
+  import FieldError from '@aziontech/webkit/field-error'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import MultiSelect from '@aziontech/webkit/multi-select'
@@ -9,13 +9,13 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import SaveBar from '@aziontech/webkit/save-bar'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
-  import SettingRow from '@aziontech/webkit/setting-row'
+  import SettingsRow from '@aziontech/webkit/settings-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
   import { computed, nextTick, onBeforeUnmount, reactive, ref } from 'vue'
 
-  type FieldProblem = { type: HelperTextType; message: string }
+  type FieldProblem = { type: 'helper' | 'invalid' | 'required'; message: string }
   type LabeledOption = SelectOptionItem
 
   const browserBehaviors = [
@@ -192,7 +192,7 @@
                   <TransitionGroup
                     enter-active-class="animate-content-enter motion-reduce:animate-none"
                   >
-                    <SettingRow
+                    <SettingsRow
                       key="name"
                       title="Name"
                       description="What the Set cache policy behavior of a rule picks from its list."
@@ -211,13 +211,12 @@
                         :disabled="saving"
                         @update:model-value="clear('name')"
                       />
-                      <HelperText
+                      <FieldError
                         v-if="errors.name"
                         id="cache-name-message"
-                        :type="errors.name.type"
-                        :label="errors.name.message"
-                      />
-                    </SettingRow>
+                        >{{ errors.name.message }}</FieldError
+                      >
+                    </SettingsRow>
                   </TransitionGroup>
                 </Item.List>
               </template>
@@ -234,7 +233,7 @@
                   <TransitionGroup
                     enter-active-class="animate-content-enter motion-reduce:animate-none"
                   >
-                    <SettingRow
+                    <SettingsRow
                       key="browserBehavior"
                       title="Behavior"
                       description="Honoring the origin passes its Cache-Control through. Overriding replaces it with the time set here."
@@ -257,8 +256,8 @@
                           </Select.Item>
                         </Select.Content>
                       </Select>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="form.browserBehavior === 'override'"
                       key="browserMaxAge"
                       title="Maximum TTL in seconds"
@@ -275,7 +274,7 @@
                         aria-label="Browser maximum TTL in seconds"
                         :disabled="saving"
                       />
-                    </SettingRow>
+                    </SettingsRow>
                   </TransitionGroup>
                 </Item.List>
               </template>
@@ -292,7 +291,7 @@
                   <TransitionGroup
                     enter-active-class="animate-content-enter motion-reduce:animate-none"
                   >
-                    <SettingRow
+                    <SettingsRow
                       key="edgeBehavior"
                       title="Behavior"
                       description="Overriding sets the time the edge keeps each object, from 60 seconds up."
@@ -315,8 +314,8 @@
                           </Select.Item>
                         </Select.Content>
                       </Select>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="form.edgeBehavior === 'override'"
                       key="edgeMaxAge"
                       title="Maximum TTL in seconds"
@@ -338,14 +337,13 @@
                         "
                         @update:model-value="clear('edgeMaxAge')"
                       />
-                      <HelperText
+                      <FieldError
                         v-if="errors.edgeMaxAge"
                         id="cache-edgeMaxAge-message"
-                        :type="errors.edgeMaxAge.type"
-                        :label="errors.edgeMaxAge.message"
-                      />
-                    </SettingRow>
-                    <SettingRow
+                        >{{ errors.edgeMaxAge.message }}</FieldError
+                      >
+                    </SettingsRow>
+                    <SettingsRow
                       key="staleCache"
                       title="Stale cache"
                       description="Keep serving the expired object while the origin is unreachable, instead of answering with an error."
@@ -356,8 +354,8 @@
                         aria-label="Stale cache"
                         :disabled="saving"
                       />
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       key="largeFileCache"
                       title="Large file optimization"
                       description="Fetch and cache large objects in fragments, so a partial request does not wait for the whole file."
@@ -368,8 +366,8 @@
                         aria-label="Large file optimization"
                         :disabled="saving"
                       />
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="form.largeFileCache"
                       key="largeFileOffset"
                       title="Fragment size in kB"
@@ -385,8 +383,8 @@
                         aria-label="Fragment size in kilobytes"
                         :disabled="saving"
                       />
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       key="tieredCache"
                       title="Tiered cache"
                       description="Add a second cache layer between the edge and your origin, so an edge miss can still be answered without reaching it."
@@ -397,8 +395,8 @@
                         aria-label="Tiered cache"
                         :disabled="saving"
                       />
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="form.tieredCache"
                       key="tieredTopology"
                       title="Topology"
@@ -423,7 +421,7 @@
                           </Select.Item>
                         </Select.Content>
                       </Select>
-                    </SettingRow>
+                    </SettingsRow>
                   </TransitionGroup>
                 </Item.List>
               </template>
@@ -441,7 +439,7 @@
                   <TransitionGroup
                     enter-active-class="animate-content-enter motion-reduce:animate-none"
                   >
-                    <SettingRow
+                    <SettingsRow
                       key="varyByMethod"
                       title="Cache by HTTP method"
                       description="GET and HEAD are always cached. Adding POST or OPTIONS puts the request body in the cache key."
@@ -465,8 +463,8 @@
                           </MultiSelect.Item>
                         </MultiSelect.Content>
                       </MultiSelect>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       key="queryStringBehavior"
                       title="Cache by query string"
                     >
@@ -488,8 +486,8 @@
                           </Select.Item>
                         </Select.Content>
                       </Select>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="['allowlist', 'denylist'].includes(form.queryStringBehavior)"
                       key="queryStringFields"
                       title="Query string fields"
@@ -512,14 +510,13 @@
                         :disabled="saving"
                         @update:model-value="clear('queryStringFields')"
                       />
-                      <HelperText
+                      <FieldError
                         v-if="errors.queryStringFields"
                         id="cache-queryStringFields-message"
-                        :type="errors.queryStringFields.type"
-                        :label="errors.queryStringFields.message"
-                      />
-                    </SettingRow>
-                    <SettingRow
+                        >{{ errors.queryStringFields.message }}</FieldError
+                      >
+                    </SettingsRow>
+                    <SettingsRow
                       key="cookieBehavior"
                       title="Cache by cookies"
                     >
@@ -541,8 +538,8 @@
                           </Select.Item>
                         </Select.Content>
                       </Select>
-                    </SettingRow>
-                    <SettingRow
+                    </SettingsRow>
+                    <SettingsRow
                       v-if="['allowlist', 'denylist'].includes(form.cookieBehavior)"
                       key="cookieNames"
                       title="Cookie names"
@@ -565,13 +562,12 @@
                         :disabled="saving"
                         @update:model-value="clear('cookieNames')"
                       />
-                      <HelperText
+                      <FieldError
                         v-if="errors.cookieNames"
                         id="cache-cookieNames-message"
-                        :type="errors.cookieNames.type"
-                        :label="errors.cookieNames.message"
-                      />
-                    </SettingRow>
+                        >{{ errors.cookieNames.message }}</FieldError
+                      >
+                    </SettingsRow>
                   </TransitionGroup>
                 </Item.List>
               </template>

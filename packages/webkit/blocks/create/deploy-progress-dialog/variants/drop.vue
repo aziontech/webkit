@@ -6,7 +6,7 @@
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Item from '@aziontech/webkit/item'
-  import OutcomeMark, { type OutcomeMarkSeverity } from '@aziontech/webkit/outcome-mark'
+  import OutcomeIcon, { type OutcomeIconSeverity } from '@aziontech/webkit/outcome-icon'
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
@@ -96,7 +96,7 @@
     failed: { label: 'Failed', severity: 'danger' }
   }
 
-  const MARK: Partial<Record<DeployStatus, OutcomeMarkSeverity>> = {
+  const MARK: Partial<Record<DeployStatus, OutcomeIconSeverity>> = {
     done: 'success',
     failed: 'danger'
   }
@@ -399,7 +399,7 @@
       <DialogContent>
         <PanelHeader class="w-full">
           <div class="flex min-w-0 items-start gap-(--spacing-sm)">
-            <OutcomeMark
+            <OutcomeIcon
               v-if="!running"
               :severity="outcomeSeverity"
               size="large"
@@ -451,7 +451,7 @@
                 size="small"
               >
                 <Item.Media>
-                  <OutcomeMark
+                  <OutcomeIcon
                     v-if="MARK[item.status]"
                     :severity="MARK[item.status]"
                     size="small"

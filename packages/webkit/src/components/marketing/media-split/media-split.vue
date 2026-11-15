@@ -1,14 +1,14 @@
 <script setup lang="ts">
   import { computed, inject, onMounted, onScopeDispose, ref, useAttrs } from 'vue'
 
-  import Overline from '../../content/overline/overline.vue'
-  import FrameBox from '../../layout/frame-box/frame-box.vue'
-  import { BandStackInjectionKey } from '../band-stack/injection-key'
-  import TextureMaterial, {
-    type TextureMaterialFade,
-    type TextureMaterialSize,
-    type TextureMaterialVariant
-  } from '../texture-material/texture-material.vue'
+  import Eyebrow from '../../content/eyebrow/eyebrow.vue'
+  import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
+  import { SectionStackInjectionKey } from '../section-stack/injection-key'
+  import Texture, {
+    type TextureFade,
+    type TextureSize,
+    type TextureVariant
+  } from '../texture/texture.vue'
 
   defineOptions({
     name: 'MediaSplit',
@@ -54,11 +54,11 @@
     /** Level of the band's headline element. Drop it to 3 when the band is a sub-band of a section a section-title has already opened with its h2, so the document outline stays in order. */
     headingLevel?: MediaSplitHeadingLevel
     /** Texture the media half is grounded with; `none` leaves the cell bare. */
-    texture?: TextureMaterialVariant
+    texture?: TextureVariant
     /** Pitch of the ground's tiling — how far apart its cells sit. */
-    textureSize?: TextureMaterialSize
+    textureSize?: TextureSize
     /** How the ground fades out before the cell's edges. */
-    textureFade?: TextureMaterialFade
+    textureFade?: TextureFade
     /** Inset the media from the cell's edges. An exported asset carries its own air and runs flush; a screenshot or a composed panel wants the inset. */
     mediaPadded?: boolean
     /** URL the band links to. With it set the media cell is one link named by the band's title, a click anywhere else on the band follows it, and hovering the band reveals the chevron affordance and the hover state of its link actions. */
@@ -106,15 +106,13 @@
   }>()
 
   const attrs = useAttrs()
-  const stack = inject(BandStackInjectionKey, null)
+  const stack = inject(SectionStackInjectionKey, null)
 
   const rootEl = ref<globalThis.HTMLElement | null>(null)
 
   const EYEBROW_PREFIX = '//' as const
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-media-split'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'media-split')
 
   const hasMedia = () => Boolean(slots.media) || props.src.length > 0
 
@@ -122,13 +120,13 @@
 
   const isMediaLink = computed<boolean>(() => props.mediaHref.length > 0)
 
-  const frame = computed(() => (props.framed ? FrameBox : 'div'))
+  const frame = computed(() => (props.framed ? RegistrationFrame : 'div'))
   const frameProps = computed(() =>
     props.framed ? { flush: true, borders: 'y', marks: 'none' } : {}
   )
 
   const framesCells = computed<boolean>(() => props.framed || Boolean(stack?.framesCells))
-  const cellFrame = computed(() => (framesCells.value ? FrameBox : 'div'))
+  const cellFrame = computed(() => (framesCells.value ? RegistrationFrame : 'div'))
   const cellFrameProps = computed(() =>
     framesCells.value ? { borders: 'none', marks: 'all' } : {}
   )
@@ -190,11 +188,11 @@
             <div
               class="flex max-w-(--container-md) flex-col gap-(--spacing-lg) group-data-[size=large]/split:max-w-(--container-lg)"
             >
-              <Overline
+              <Eyebrow
                 v-if="eyebrow"
                 :prefix="EYEBROW_PREFIX"
                 cursor
-                >{{ eyebrow }}</Overline
+                >{{ eyebrow }}</Eyebrow
               >
 
               <component
@@ -237,7 +235,7 @@
             :data-testid="`${testId}__media`"
             class="group/media relative flex h-full min-w-0 items-center justify-center overflow-hidden group-data-[media-fill=surface]/split:bg-(--bg-surface) group-data-[media-fill=canvas]/split:bg-(--bg-canvas) group-data-[media-padded]/split:p-(--spacing-xl) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
           >
-            <TextureMaterial
+            <Texture
               :variant="texture"
               :size="textureSize"
               :fade="textureFade"

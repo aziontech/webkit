@@ -50,7 +50,7 @@
   const { t } = useTranslate({ pagination: en.pagination })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-pagination'
+    () => (attrs['data-testid'] as string | undefined) ?? 'pagination'
   )
 
   provide(PaginationInjectionKey, { testId: testId.value })

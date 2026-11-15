@@ -197,7 +197,7 @@ If you are new (human or AI), open these in order — together they describe the
 
 1. [`.specs/_template.md`](./.specs/_template.md) — the spec format every component conforms to.
 2. [`.specs/button.md`](./.specs/button.md) — canonical filled-in spec.
-3. [`packages/webkit/src/components/actions/button/button.vue`](./packages/webkit/src/components/actions/button/button.vue) — canonical implementation matching that spec.
+3. [`packages/webkit/src/components/action/button/button.vue`](./packages/webkit/src/components/action/button/button.vue) — canonical implementation matching that spec.
 4. [`.claude/rules/`](./.claude/rules/) — the constraints every component must respect.
 
 ### Packages

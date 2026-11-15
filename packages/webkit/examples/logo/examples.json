@@ -1,6 +1,6 @@
 {
   "component": "logo",
-  "title": "Components/Primitives/Content/Logo",
+  "title": "Components/Content/Logo",
   "examples": [
     {
       "name": "Default",

@@ -1,6 +1,6 @@
 {
   "component": "app-layout",
-  "title": "Components/Primitives/Layout/AppLayout",
+  "title": "Components/Layout/AppLayout",
   "examples": [
     {
       "name": "Default",

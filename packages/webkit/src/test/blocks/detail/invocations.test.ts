@@ -7,7 +7,7 @@ import Running from '../../../../blocks/detail/invocations/variants/running.vue'
 import { useToastRegion } from '../../toast-region'
 
 const selectedSpan = () =>
-  document.querySelector<HTMLElement>('[data-testid="code-trace__row"][aria-selected="true"]')
+  document.querySelector<HTMLElement>('[data-testid="trace__row"][aria-selected="true"]')
 
 useToastRegion()
 

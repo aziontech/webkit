@@ -152,9 +152,9 @@ const arrow = (view: ReturnType<typeof render>, label: string) =>
 
 const arrowOfKind = (view: ReturnType<typeof render>, type: string) => {
   const row = view
-    .getAllByTestId('navigation-sidebar-menu-sub-trigger')
+    .getAllByTestId('sidebar-menu-sub-trigger')
     .find((el) => el.getAttribute('data-type') === type)
-  const el = row?.querySelector('[data-testid="navigation-sidebar-menu-sub-trigger__arrow"]')
+  const el = row?.querySelector('[data-testid="sidebar-menu-sub-trigger__chevron"]')
   if (!(el instanceof globalThis.HTMLElement)) throw new Error(`no ${type} arrow rendered`)
   return el
 }
@@ -174,7 +174,7 @@ describe('SidebarMenu', () => {
     it('renders the navigation region with the fallback testid and its accessible name', () => {
       const view = render(composed())
 
-      const root = view.getByTestId('navigation-sidebar-menu')
+      const root = view.getByTestId('sidebar-menu')
       expect(root.getAttribute('role')).toBe('navigation')
       expect(root.getAttribute('aria-label')).toBe('Console navigation')
     })
@@ -183,26 +183,26 @@ describe('SidebarMenu', () => {
       const view = render(composed({ 'data-testid': 'console-menu' }))
 
       expect(view.getByTestId('console-menu')).toBeTruthy()
-      expect(view.queryByTestId('navigation-sidebar-menu')).toBeNull()
+      expect(view.queryByTestId('sidebar-menu')).toBeNull()
     })
 
     it('lets the host own the landmark by suppressing the role', () => {
       const view = render(composed({ role: 'presentation' }))
 
-      expect(view.getByTestId('navigation-sidebar-menu').getAttribute('role')).toBe('presentation')
+      expect(view.getByTestId('sidebar-menu').getAttribute('role')).toBe('presentation')
     })
 
     it('drops its accessible name when the host owns the landmark', async () => {
       const view = render(composed({ role: 'presentation' }))
 
-      expect(view.getByTestId('navigation-sidebar-menu').getAttribute('aria-label')).toBeNull()
+      expect(view.getByTestId('sidebar-menu').getAttribute('aria-label')).toBeNull()
       await expectNoA11yViolations(view.container)
     })
 
     it('renders nothing with neither groups nor composed content', () => {
       const view = render(SidebarMenu)
 
-      expect(view.queryByTestId('navigation-sidebar-menu')).toBeNull()
+      expect(view.queryByTestId('sidebar-menu')).toBeNull()
     })
 
     it('serves its groups as live markup, never inside an inert <template>', () => {
@@ -223,12 +223,10 @@ describe('SidebarMenu', () => {
     it('renders the data-driven tree through the same sub-components', () => {
       const view = render(SidebarMenu, { props: { groups: GROUPS } })
 
-      expect(view.getAllByTestId('navigation-sidebar-menu-group')).toHaveLength(2)
+      expect(view.getAllByTestId('sidebar-menu-group')).toHaveLength(2)
       expect(view.getByRole('link', { name: 'End User' })).toBeTruthy()
       expect(view.getByRole('link', { name: 'Web Browser' })).toBeTruthy()
-      expect(
-        view.getByTestId('navigation-sidebar-menu-sub-trigger').getAttribute('data-type')
-      ).toBe('drill')
+      expect(view.getByTestId('sidebar-menu-sub-trigger').getAttribute('data-type')).toBe('drill')
     })
 
     it('marks the activeId node as the current page', () => {
@@ -397,13 +395,9 @@ describe('SidebarMenu', () => {
         }
       })
 
-      const [drill, inline] = view.getAllByTestId('navigation-sidebar-menu-sub-trigger')
-      expect(
-        drill.querySelector('[data-testid="navigation-sidebar-menu-sub-trigger__icon"] i')
-      ).toBeTruthy()
-      expect(
-        inline.querySelector('[data-testid="navigation-sidebar-menu-sub-trigger__icon"]')
-      ).toBeNull()
+      const [drill, inline] = view.getAllByTestId('sidebar-menu-sub-trigger')
+      expect(drill.querySelector('[data-testid="sidebar-menu-sub-trigger__icon"] i')).toBeTruthy()
+      expect(inline.querySelector('[data-testid="sidebar-menu-sub-trigger__icon"]')).toBeNull()
     })
 
     it('renders a group title as static text that names the section and never folds it', () => {
@@ -411,11 +405,11 @@ describe('SidebarMenu', () => {
 
       expect(view.queryByRole('button', { name: 'User agents' })).toBeNull()
 
-      const group = view.getAllByTestId('navigation-sidebar-menu-group')[0]
+      const group = view.getAllByTestId('sidebar-menu-group')[0]
       expect(group.hasAttribute('data-state')).toBe(false)
-      expect(view.queryByTestId('navigation-sidebar-menu-group__toggle')).toBeNull()
+      expect(view.queryByTestId('sidebar-menu-group__toggle')).toBeNull()
 
-      const label = view.getAllByTestId('navigation-sidebar-menu-group__label')[0]
+      const label = view.getAllByTestId('sidebar-menu-group__label')[0]
       expect(label.textContent?.trim()).toBe('User agents')
       expect(group.getAttribute('aria-labelledby')).toBe(label.id)
       expect(view.getByRole('region', { name: 'User agents' })).toBe(group)
@@ -427,13 +421,9 @@ describe('SidebarMenu', () => {
       const view = render(composed())
 
       const trigger = view.getByRole('button', { name: 'Getting started' })
-      expect(trigger.getAttribute('data-testid')).toBe(
-        'navigation-sidebar-menu-sub-trigger__control'
-      )
+      expect(trigger.getAttribute('data-testid')).toBe('sidebar-menu-sub-trigger__control')
       expect(
-        trigger
-          .closest('[data-testid="navigation-sidebar-menu-sub-trigger"]')
-          ?.getAttribute('data-type')
+        trigger.closest('[data-testid="sidebar-menu-sub-trigger"]')?.getAttribute('data-type')
       ).toBe('inline')
       expect(trigger.getAttribute('aria-expanded')).toBe('false')
 
@@ -528,7 +518,7 @@ describe('SidebarMenu', () => {
     it('renders no Back button at the root level', () => {
       const view = render(composed())
 
-      expect(view.queryByTestId('navigation-sidebar-menu-back')).toBeNull()
+      expect(view.queryByTestId('sidebar-menu-back')).toBeNull()
     })
 
     it('a drill trigger pushes a level, focuses Back, and pops back to the trigger', async () => {
@@ -544,7 +534,7 @@ describe('SidebarMenu', () => {
       await waitFor(() => expect(paths).toHaveLength(1))
       expect(paths[0]).toHaveLength(1)
 
-      const back = await waitFor(() => view.getByTestId('navigation-sidebar-menu-back'))
+      const back = await waitFor(() => view.getByTestId('sidebar-menu-back'))
       expect(back.textContent?.trim()).toBe('Back')
       expect(back.hasAttribute('aria-label')).toBe(false)
       await waitFor(() => expect(document.activeElement).toBe(back))
@@ -559,7 +549,7 @@ describe('SidebarMenu', () => {
       expect(levelGroup.hasAttribute('aria-hidden')).toBe(false)
       expect(levelGroup.hasAttribute('inert')).toBe(false)
 
-      for (const group of view.getAllByTestId('navigation-sidebar-menu-group')) {
+      for (const group of view.getAllByTestId('sidebar-menu-group')) {
         if (level.contains(group)) continue
         expect(group.getAttribute('aria-hidden')).toBe('true')
         expect(group.hasAttribute('inert')).toBe(true)
@@ -568,11 +558,9 @@ describe('SidebarMenu', () => {
       await userEvent.click(back)
 
       await waitFor(() => expect(paths[1]).toEqual([]))
-      await waitFor(() => expect(view.queryByTestId('navigation-sidebar-menu-back')).toBeNull())
+      await waitFor(() => expect(view.queryByTestId('sidebar-menu-back')).toBeNull())
       await waitFor(() => expect(document.activeElement).toBe(open))
-      expect(view.getAllByTestId('navigation-sidebar-menu-group')[0].hasAttribute('inert')).toBe(
-        false
-      )
+      expect(view.getAllByTestId('sidebar-menu-group')[0].hasAttribute('inert')).toBe(false)
     })
 
     it('the data-driven drill stack carries the node ids', async () => {
@@ -589,7 +577,7 @@ describe('SidebarMenu', () => {
     it('a stack supplied through v-model:path names its level and offers Back', async () => {
       const view = render(restored())
 
-      const back = await waitFor(() => view.getByTestId('navigation-sidebar-menu-back'))
+      const back = await waitFor(() => view.getByTestId('sidebar-menu-back'))
       expect(back.textContent?.trim()).toBe('Back')
       expect(view.getByRole('group', { name: 'Settings' })).toBeTruthy()
       expect(view.getByRole('link', { name: 'General' })).toBeTruthy()
@@ -599,7 +587,7 @@ describe('SidebarMenu', () => {
       const view = render(nested())
 
       await userEvent.click(arrow(view, 'Settings'))
-      const back = await waitFor(() => view.getByTestId('navigation-sidebar-menu-back'))
+      const back = await waitFor(() => view.getByTestId('sidebar-menu-back'))
       expect(back.textContent?.trim()).toBe('Back')
 
       await userEvent.click(await waitFor(() => arrow(view, 'Security')))
@@ -607,7 +595,7 @@ describe('SidebarMenu', () => {
 
       await userEvent.click(back)
       await waitFor(() =>
-        expect(view.getByTestId('navigation-sidebar-menu-back').textContent?.trim()).toBe('Back')
+        expect(view.getByTestId('sidebar-menu-back').textContent?.trim()).toBe('Back')
       )
     })
 
@@ -616,21 +604,21 @@ describe('SidebarMenu', () => {
 
       await userEvent.click(arrow(view, 'Settings'))
 
-      const back = await waitFor(() => view.getByTestId('navigation-sidebar-menu-back'))
+      const back = await waitFor(() => view.getByTestId('sidebar-menu-back'))
       expect(back.textContent?.trim()).toBe('Back to app')
     })
 
     it('a restored stack arrives in the push motion when enterOnMount is set', async () => {
       const view = render(restored({ enterOnMount: true }))
 
-      const level = await waitFor(() => view.getByTestId('navigation-sidebar-menu-sub-content'))
+      const level = await waitFor(() => view.getByTestId('sidebar-menu-sub-content'))
       expect(level.getAttribute('data-motion')).toBe('push')
     })
 
     it('a restored stack renders in place by default', async () => {
       const view = render(restored())
 
-      const level = await waitFor(() => view.getByTestId('navigation-sidebar-menu-sub-content'))
+      const level = await waitFor(() => view.getByTestId('sidebar-menu-sub-content'))
       expect(level.getAttribute('data-motion')).toBe('none')
     })
 
@@ -638,7 +626,7 @@ describe('SidebarMenu', () => {
       const view = render(SidebarMenu, { props: { groups: GROUPS, enterOnMount: true } })
 
       await nextTick()
-      for (const group of view.getAllByTestId('navigation-sidebar-menu-group')) {
+      for (const group of view.getAllByTestId('sidebar-menu-group')) {
         expect(group.getAttribute('data-motion')).toBe('pop')
       }
     })
@@ -647,7 +635,7 @@ describe('SidebarMenu', () => {
       const view = render(SidebarMenu, { props: { groups: GROUPS } })
 
       await nextTick()
-      for (const group of view.getAllByTestId('navigation-sidebar-menu-group')) {
+      for (const group of view.getAllByTestId('sidebar-menu-group')) {
         expect(group.getAttribute('data-motion')).toBe('none')
       }
     })
@@ -655,7 +643,7 @@ describe('SidebarMenu', () => {
     it('a stack supplied through v-model:path restores focus to its trigger on pop', async () => {
       const view = render(restored())
 
-      await userEvent.click(await waitFor(() => view.getByTestId('navigation-sidebar-menu-back')))
+      await userEvent.click(await waitFor(() => view.getByTestId('sidebar-menu-back')))
 
       await waitFor(() => expect(globalThis.document.activeElement).toBe(arrow(view, 'Settings')))
     })
@@ -687,7 +675,7 @@ describe('SidebarMenu', () => {
       await userEvent.click(arrow(view, 'Settings'))
       await waitFor(() => expect(paths).toHaveLength(1))
 
-      await fireEvent.keyDown(view.getByTestId('navigation-sidebar-menu-back'), { key: 'Escape' })
+      await fireEvent.keyDown(view.getByTestId('sidebar-menu-back'), { key: 'Escape' })
 
       await waitFor(() => expect(paths[1]).toEqual([]))
     })
@@ -718,7 +706,7 @@ describe('SidebarMenu', () => {
       )
 
       expect(view.queryByRole('link', { name: 'Settings' })).toBeNull()
-      const settings = view.getByTestId('navigation-sidebar-menu-sub-trigger__reference')
+      const settings = view.getByTestId('sidebar-menu-sub-trigger__reference')
       expect(settings.getAttribute('data-disabled')).toBe('')
       expect(settings.getAttribute('aria-disabled')).toBe('true')
       expect(settings.hasAttribute('href')).toBe(false)
@@ -732,7 +720,7 @@ describe('SidebarMenu', () => {
       await fireEvent.click(open)
 
       expect(paths).toEqual([])
-      expect(view.queryByTestId('navigation-sidebar-menu-back')).toBeNull()
+      expect(view.queryByTestId('sidebar-menu-back')).toBeNull()
     })
 
     it('has no axe violations composed, with an inline sub expanded', async () => {
@@ -763,20 +751,20 @@ describe('SidebarMenu', () => {
         </SidebarMenu>
       `
       })
-      const group = getByTestId('navigation-sidebar-menu-group')
-      expect(queryByTestId('navigation-sidebar-menu-group__label')).toBeNull()
+      const group = getByTestId('sidebar-menu-group')
+      expect(queryByTestId('sidebar-menu-group__label')).toBeNull()
       expect(group.getAttribute('aria-label')).toBe('Fallback name')
 
       shown.value = true
       await nextTick()
-      const label = getByTestId('navigation-sidebar-menu-group__label')
+      const label = getByTestId('sidebar-menu-group__label')
       expect(queryByTestId('probe')).not.toBeNull()
       expect(group.getAttribute('aria-labelledby')).toBe(label.id)
       expect(group.hasAttribute('aria-label')).toBe(false)
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('navigation-sidebar-menu-group__label')).toBeNull()
+      expect(queryByTestId('sidebar-menu-group__label')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
       expect(group.hasAttribute('aria-labelledby')).toBe(false)
       expect(group.getAttribute('aria-label')).toBe('Fallback name')
@@ -795,7 +783,7 @@ describe('SidebarMenu', () => {
           </ul>`
         })
       )
-      const [home, billing] = view.getAllByTestId('navigation-sidebar-menu-item')
+      const [home, billing] = view.getAllByTestId('sidebar-menu-item')
       const link = home!.querySelector('a') as HTMLElement
       expect(link.hasAttribute('data-active')).toBe(true)
       expect(link.hasAttribute('data-icon')).toBe(true)
@@ -823,7 +811,7 @@ describe('SidebarMenu', () => {
         `
         })
       )
-      await fireEvent.click(getByTestId('navigation-sidebar-menu-sub-trigger__reference'))
+      await fireEvent.click(getByTestId('sidebar-menu-sub-trigger__reference'))
       expect(calls).toHaveLength(1)
       expect(calls[0]?.[0]).toBeInstanceOf(MouseEvent)
       expect(calls[0]?.[1]).toEqual({ label: 'Guides', href: '/guides' })
@@ -847,7 +835,7 @@ describe('SidebarMenu', () => {
           template: `<SidebarMenu v-model:open-keys="openKeys" :groups="groups" />`
         })
       )
-      await fireEvent.click(getByTestId('navigation-sidebar-menu-sub-trigger__control'))
+      await fireEvent.click(getByTestId('sidebar-menu-sub-trigger__control'))
       await waitFor(() => expect(openKeys.value).toContain('guides'))
     })
   })

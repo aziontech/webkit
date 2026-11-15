@@ -35,7 +35,7 @@
   const attrs = useAttrs()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-severity-tag'
+    () => (attrs['data-testid'] as string | undefined) ?? 'severity-tag'
   )
 
   const { t } = useTranslate({ severityTag: en.severityTag })

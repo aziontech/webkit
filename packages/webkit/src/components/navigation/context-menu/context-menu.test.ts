@@ -9,18 +9,16 @@ import WithSubMenu from '../../../../examples/context-menu/with-sub-menu.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import ContextMenu from './index'
 
-const panel = () =>
-  document.body.querySelector<HTMLElement>('[data-testid="navigation-context-menu__panel"]')
+const panel = () => document.body.querySelector<HTMLElement>('[data-testid="context-menu__panel"]')
 
-const area = () =>
-  document.body.querySelector<HTMLElement>('[data-testid="navigation-context-menu__trigger"]')
+const area = () => document.body.querySelector<HTMLElement>('[data-testid="context-menu-trigger"]')
 
 const rows = () => Array.from(document.body.querySelectorAll<HTMLElement>('li'))
 
 describe('ContextMenu', () => {
   it('renders the root and the area with derived test ids, and a consumer test id wins', async () => {
     const { container } = render(Default)
-    expect(container.querySelector('[data-testid="navigation-context-menu"]')).not.toBeNull()
+    expect(container.querySelector('[data-testid="context-menu"]')).not.toBeNull()
     expect(area()?.dataset['state']).toBe('closed')
     expect(panel()).toBeNull()
 
@@ -32,7 +30,7 @@ describe('ContextMenu', () => {
     })
     const second = render(Override)
     expect(second.container.querySelector('[data-testid="files-menu"]')).not.toBeNull()
-    expect(second.container.querySelector('[data-testid="files-menu__trigger"]')).not.toBeNull()
+    expect(second.container.querySelector('[data-testid="context-menu-trigger"]')).not.toBeNull()
   })
 
   it('compound exposes the shared DropdownMenu item parts', () => {
@@ -146,7 +144,7 @@ describe('ContextMenu', () => {
     await waitFor(() => expect(panel()).not.toBeNull())
     await waitFor(() =>
       expect(
-        document.body.querySelector('[data-testid="navigation-context-menu__sub-panel"]')
+        document.body.querySelector('[data-testid="dropdown-menu-sub-content"]')
       ).not.toBeNull()
     )
     expect(document.body.querySelectorAll('[role="menuitemcheckbox"]')).toHaveLength(2)

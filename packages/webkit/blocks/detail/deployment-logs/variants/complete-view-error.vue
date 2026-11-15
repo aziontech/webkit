@@ -1,9 +1,12 @@
 <script setup lang="ts">
-  import LogView, { type LogViewStep, type LogViewStepsView } from '@aziontech/webkit/log-view'
+  import LogViewer, {
+    type LogViewerStep,
+    type LogViewerStepsView
+  } from '@aziontech/webkit/log-viewer'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
-  type DeployStep = LogViewStep & { tag?: { label: string; severity: TagSeverity } }
+  type DeployStep = LogViewerStep & { tag?: { label: string; severity: TagSeverity } }
 
   const steps: DeployStep[] = [
     {
@@ -235,13 +238,13 @@
 
   const stepTag = (key: string) => steps.find((step) => step.id === key)?.tag
 
-  const logView = ref<LogViewStepsView>('complete')
+  const logViewer = ref<LogViewerStepsView>('complete')
   const openStep = ref('rules')
 </script>
 
 <template>
-  <LogView.Steps
-    v-model:view="logView"
+  <LogViewer.Steps
+    v-model:view="logViewer"
     v-model:open-step="openStep"
     :steps="steps"
   >
@@ -269,5 +272,5 @@
           : 'No log lines yet.'
       }}
     </template>
-  </LogView.Steps>
+  </LogViewer.Steps>
 </template>

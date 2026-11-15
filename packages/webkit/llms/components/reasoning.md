@@ -19,14 +19,14 @@
 
 ## Don’t
 
-- Ordinary loading with no reasoning → `ai-loading`.
+- Ordinary loading with no reasoning → `response-loading`.
 - Agent actions with side effects (calls, commands) → `tool-call` and `tool-approval`.
 - Progressive steps of a long task → a `stepper` or a list of `tool-call`s.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [ai-loading](ai-loading.md) — loading without a trace.
+- [response-loading](response-loading.md) — loading without a trace.
 - [tool-call](tool-call.md) — what the agent did, rather than what it thought.
 - [streaming-response](streaming-response.md) — renders a Markdown trace inside the slot.
 

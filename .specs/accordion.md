@@ -7,7 +7,7 @@ spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: 40e2f58ee9deffd55a43c9cf98f534addab0910dba6826ef4a59818c8fe6853f
+checksum: 3d5b61c0caaac21c0e16c0ba2ee6a6bdfb0169805f6d5ded9039712f53d5d7cd
 created: 2026-06-26
 last_updated: 2026-11-15
 ---
@@ -173,7 +173,7 @@ Props below belong to the root `Accordion`. Sub-component props are documented i
 | content reveal on open (on `Accordion.Content` only) | `transition-[height] duration-150 ease-out` on the panel class plus `<Transition :css="false">` with JS `@enter`/`@leave` hooks that set only an inline `height` (`0 → scrollHeight` on enter, `scrollHeight → 0` on leave) and clear it when the `height` transition ends, or after a fallback timer of the computed transition duration plus 50 ms when no `transitionend` fires; a panel with zero-height content, or a computed transition duration of zero, finishes at once. No inline `transition` is set, so a consumer class can override the timing. The wrapper stays `overflow-hidden` at rest. | inline (matches catalog)                          | `motion-reduce:transition-none`; the hooks also call `done()` immediately when `matchMedia('(prefers-reduced-motion: reduce)')` matches |
 | header hover state change                            | `transition-colors duration-150 ease-out`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   | inline (matches catalog)                          | `motion-reduce:transition-none`                                                                                                         |
 
-> Figma declares no motion spec for this component (the open/closed/hover states are static variants). The chevron pattern mirrors `select-trigger.vue` (`data-[state=open]:rotate-180`). The content reveal animates the real `height` of the panel via JS-driven `<Transition>` hooks — a pure-CSS keyframe cannot animate `height: 0 → auto`, and the `grid-template-rows: 0fr → 1fr` trick was rejected because it forces a `display: grid` wrapper that constrains embedded children (e.g. `LogView` with an explicit height). No component-local `@keyframes`; no shared `animate-*` utility.
+> Figma declares no motion spec for this component (the open/closed/hover states are static variants). The chevron pattern mirrors `select-trigger.vue` (`data-[state=open]:rotate-180`). The content reveal animates the real `height` of the panel via JS-driven `<Transition>` hooks — a pure-CSS keyframe cannot animate `height: 0 → auto`, and the `grid-template-rows: 0fr → 1fr` trick was rejected because it forces a `display: grid` wrapper that constrains embedded children (e.g. `LogViewer` with an explicit height). No component-local `@keyframes`; no shared `animate-*` utility.
 
 ## Tokens
 

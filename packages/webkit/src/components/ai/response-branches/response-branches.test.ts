@@ -5,7 +5,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/response-branches/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import ResponseBranches from './response-branches.vue'
 
 afterEach(() => cleanup())
@@ -49,7 +49,7 @@ describe('ResponseBranches', () => {
     expect(view.getByRole('button', { name: 'Next version' })).toBeDisabled()
     await fireEvent.click(view.getByRole('button', { name: 'Previous version' }))
     expect(view.getByText('Second')).toBeTruthy()
-    expect(group.closest('[data-testid="ai-response-branches"]')).toHaveAttribute('data-index', '1')
+    expect(group.closest('[data-testid="response-branches"]')).toHaveAttribute('data-index', '1')
   })
 
   it('clamps an out-of-range index and hides the pager for one version', async () => {

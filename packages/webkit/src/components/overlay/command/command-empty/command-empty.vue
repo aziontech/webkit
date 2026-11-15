@@ -18,9 +18,7 @@
   const { t } = useTranslate({ command: en.command })
   const ctx = useCommandMenuContext()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__empty`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'command-empty')
 </script>
 
 <template>

@@ -7,7 +7,7 @@ import Default from '../../../../examples/conversation-history/default.vue'
 import States from '../../../../examples/conversation-history/states.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import ConversationHistory from './conversation-history.vue'
 
 afterEach(() => cleanup())
@@ -148,7 +148,7 @@ describe('ConversationHistory', () => {
         attrs: { 'data-testid': 'chats' }
       })
       expect(getByTestId('chats')).toBeInTheDocument()
-      expect(queryByTestId('ai-conversation-history')).toBeNull()
+      expect(queryByTestId('conversation-history')).toBeNull()
     })
 
     it('keeps every conversation of a large history, newest first in each group', () => {
@@ -158,7 +158,7 @@ describe('ConversationHistory', () => {
         updatedAt: new Date(Date.parse('2026-11-11T14:00:00') - i * 60_000).toISOString()
       }))
       const { getAllByTestId } = render(ConversationHistory, { props: { items: many, now } })
-      const rows = getAllByTestId('ai-conversation-history__item')
+      const rows = getAllByTestId('conversation-history__item')
       expect(rows).toHaveLength(300)
       expect(rows[0]!.textContent).toContain('Chat 0')
       expect(rows[299]!.textContent).toContain('Chat 299')
@@ -174,8 +174,8 @@ describe('ConversationHistory', () => {
       const { getAllByTestId, container } = render(ConversationHistory, {
         props: { items, now: '2026-11-11T15:00:00' }
       })
-      expect(getAllByTestId('ai-conversation-history__item').length).toBeLessThan(1000)
-      expect(getAllByTestId('ai-conversation-history__item')[0]).toHaveTextContent('Conversation 0')
+      expect(getAllByTestId('conversation-history__item').length).toBeLessThan(1000)
+      expect(getAllByTestId('conversation-history__item')[0]).toHaveTextContent('Conversation 0')
       expect(container.querySelector('[data-chunk][aria-hidden="true"]')).not.toBeNull()
     })
   })

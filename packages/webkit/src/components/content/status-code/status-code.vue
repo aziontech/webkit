@@ -37,7 +37,7 @@
 
   const attrs = useAttrs()
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-status-code'
+    () => (attrs['data-testid'] as string | undefined) ?? 'status-code'
   )
 
   const text = computed<string>(() => String(props.code ?? '').trim())

@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { expectNoA11yViolations } from '../../../test/axe'
 import LogoWall from './logo-wall.vue'
 
-const TESTID = 'marketing-logo-wall'
+const TESTID = 'logo-wall'
 
 const items = [
   { src: '/logos/northwind.svg', alt: 'Northwind' },

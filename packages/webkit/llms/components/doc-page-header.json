@@ -3,7 +3,7 @@
  "binding": "DocPageHeader",
  "import": "@aziontech/webkit/doc-page-header",
  "treeShakeableImport": "@aziontech/webkit/doc-page-header",
- "category": "documentation",
+ "category": "docs",
  "surface": "docs",
  "structure": "monolithic",
  "compoundRoot": false,

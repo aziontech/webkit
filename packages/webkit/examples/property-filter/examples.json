@@ -1,6 +1,6 @@
 {
   "component": "property-filter",
-  "title": "Components/Primitives/Data/PropertyFilter",
+  "title": "Components/Data/PropertyFilter",
   "examples": [
     {
       "name": "Default",

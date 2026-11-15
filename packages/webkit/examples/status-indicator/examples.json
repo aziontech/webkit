@@ -1,6 +1,6 @@
 {
   "component": "status-indicator",
-  "title": "Components/Primitives/Feedback/StatusIndicator",
+  "title": "Components/Feedback/StatusIndicator",
   "examples": [
     {
       "name": "Default",

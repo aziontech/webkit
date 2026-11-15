@@ -10,7 +10,7 @@ const base = { title: 'Allow `npm test`?', description: 'Runs the test suite of 
 
 describe('ToolApproval', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
-    expect(render(ToolApproval, { props: base }).getByTestId('ai-tool-approval')).toBeTruthy()
+    expect(render(ToolApproval, { props: base }).getByTestId('tool-approval')).toBeTruthy()
     expect(
       render(ToolApproval, { props: base, attrs: { 'data-testid': 'mine' } }).getByTestId('mine')
     ).toBeTruthy()
@@ -21,7 +21,7 @@ describe('ToolApproval', () => {
       props: { title: 'Allow `rm <b>x</b>`?' }
     })
     expect(getByRole('group', { name: 'Allow rm <b>x</b>?' })).toBeTruthy()
-    const title = getByTestId('ai-tool-approval__title')
+    const title = getByTestId('tool-approval__title')
     expect(title.querySelector('code')).toHaveTextContent('rm <b>x</b>')
     expect(title.querySelector('b')).toBeNull()
   })
@@ -49,7 +49,7 @@ describe('ToolApproval', () => {
       props: { ...base, variant: 'danger', approveLabel: 'Delete' }
     })
     expect(getByRole('button', { name: 'Delete' })).toBeTruthy()
-    expect(getByTestId('ai-tool-approval')).toHaveAttribute('data-variant', 'danger')
+    expect(getByTestId('tool-approval')).toHaveAttribute('data-variant', 'danger')
   })
 
   it('keeps Approve disabled until the phrase is typed', async () => {
@@ -78,14 +78,14 @@ describe('ToolApproval', () => {
     const { queryByRole, getByTestId, rerender } = render(ToolApproval, { props: base })
     await rerender({ ...base, status })
     expect(queryByRole('button')).toBeNull()
-    expect(getByTestId('ai-tool-approval__outcome')).toHaveTextContent(text)
-    expect(getByTestId('ai-tool-approval__announcer')).toHaveTextContent(text)
-    expect(getByTestId('ai-tool-approval')).toHaveAttribute('data-status', status)
+    expect(getByTestId('tool-approval__outcome')).toHaveTextContent(text)
+    expect(getByTestId('tool-approval__announcer')).toHaveTextContent(text)
+    expect(getByTestId('tool-approval')).toHaveAttribute('data-status', status)
   })
 
   it('moves focus to its heading through focus()', async () => {
     const wrapper = render(ToolApproval, { props: base })
-    const heading = wrapper.getByTestId('ai-tool-approval__title')
+    const heading = wrapper.getByTestId('tool-approval__title')
     heading.focus()
     await nextTick()
     expect(document.activeElement).toBe(heading)

@@ -12,7 +12,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
 
   export type PromptInputStatus = 'ready' | 'pending' | 'streaming'
 
@@ -104,7 +104,7 @@
   const listId = `${uid}-menu`
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-prompt-input'
+    () => (attrs['data-testid'] as string | undefined) ?? 'prompt-input'
   )
   const textareaEl = ref<HTMLTextAreaElement | null>(null)
   const composing = ref<boolean>(false)

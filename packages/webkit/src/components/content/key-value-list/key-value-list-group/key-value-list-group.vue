@@ -21,10 +21,10 @@
   }>()
 
   const attrs = useAttrs()
-  const context = useKeyValueListContext()
+  useKeyValueListContext()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? `${context.testId.value}__group`
+    () => (attrs['data-testid'] as string | undefined) ?? 'key-value-list-group'
   )
 </script>
 

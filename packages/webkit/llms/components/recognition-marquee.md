@@ -1,9 +1,9 @@
 # Recognition Marquee
 
-> The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `ticker` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `frame-box` and `quote`.
+> The analyst-recognition band: a section title over a framed strip of signed quotes — one per report, marked by the firm's logo — that scrolls continuously and pauses on hover, on focus or from its pause control; the loop is the one `marquee` runs on. It is a page section — the site places it from a `{ _id: 'recognition-marquee', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `registration-frame` and `quote`.
 
 - Import: `import RecognitionMarquee from '@aziontech/webkit/recognition-marquee'`
-- Category: sections · Surface: site · Structure: monolithic
+- Category: section · Surface: site · Structure: monolithic
 - API as JSON: [recognition-marquee.json](https://github.com/aziontech/webkit/blob/main/.specs/recognition-marquee.json)
 
 ## When to use
@@ -31,7 +31,7 @@
 
 | Prop | Type | Default | Required | Description |
 | --- | --- | --- | --- | --- |
-| `eyebrow` | `string` | `''` | false | Overline above the section title. |
+| `eyebrow` | `string` | `''` | false | Eyebrow above the section title. |
 | `title` | `string` | `''` | false | Headline of the band, rendered by the section title as its `h2`; the band renders no header when empty. |
 | `ariaLabel` | `string` | `''` | false | Accessible name of the scrolling region. |
 | `duration` | `number` | `0` | false | Seconds one loop of the strip takes; `0` paces it at twelve seconds per item. |

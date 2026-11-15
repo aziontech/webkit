@@ -333,7 +333,7 @@ const LEGACY_ROOT = mkdtempSync(join(tmpdir(), 'webkit-legacy-'))
 mkdirSync(resolve(LEGACY_ROOT, '.claude/hooks/lib'), { recursive: true })
 writeFileSync(
   resolve(LEGACY_ROOT, '.claude/hooks/lib/legacy-components.json'),
-  JSON.stringify([{ category: 'actions', name: 'button' }])
+  JSON.stringify([{ category: 'action', name: 'button' }])
 )
 const MISSING_SPEC_VUE = 'packages/webkit/src/components/feedback/no-such-widget/no-such-widget.vue'
 
@@ -343,10 +343,10 @@ group('lib: legacy whitelist', () => {
       JSON.parse(readFileSync(resolve(ROOT, '.claude/hooks/lib/legacy-components.json'), 'utf-8')),
       []
     )
-    assertTrue(!isLegacyComponent('actions', 'button', ROOT))
+    assertTrue(!isLegacyComponent('action', 'button', ROOT))
   })
   test('legacy button is whitelisted', () => {
-    assertTrue(isLegacyComponent('actions', 'button', LEGACY_ROOT))
+    assertTrue(isLegacyComponent('action', 'button', LEGACY_ROOT))
   })
   test('unknown component is NOT whitelisted', () => {
     assertTrue(!isLegacyComponent('feedback', 'tooltip', LEGACY_ROOT))
@@ -367,7 +367,7 @@ group('hook: enforce-spec-exists.mjs', () => {
     const r = runHook('.claude/hooks/enforce-spec-exists.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/actions/button/button.vue')
+        file_path: resolve(ROOT, 'packages/webkit/src/components/action/button/button.vue')
       }
     })
     assertEqual(r.code, 0)
@@ -378,10 +378,7 @@ group('hook: enforce-spec-exists.mjs', () => {
       {
         tool_name: 'Write',
         tool_input: {
-          file_path: resolve(
-            LEGACY_ROOT,
-            'packages/webkit/src/components/actions/button/button.vue'
-          )
+          file_path: resolve(LEGACY_ROOT, 'packages/webkit/src/components/action/button/button.vue')
         }
       },
       LEGACY_ROOT
@@ -418,7 +415,7 @@ group('hook: validate-spec-compliance.mjs', () => {
     const r = runHook('.claude/hooks/validate-spec-compliance.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/actions/button/button.vue')
+        file_path: resolve(ROOT, 'packages/webkit/src/components/action/button/button.vue')
       }
     })
     assertEqual(r.code, 0)
@@ -537,7 +534,7 @@ group('hook: validate-authoring.mjs comments', () => {
     })
   test('a prose comment in a component blocks (exit 2)', () => {
     const r = write(
-      'packages/webkit/src/components/actions/button/zz.ts',
+      'packages/webkit/src/components/action/button/zz.ts',
       '// why\nexport const a = 1'
     )
     assertEqual(r.code, 2)
@@ -559,13 +556,10 @@ group('hook: validate-authoring.mjs comments', () => {
       '</script>',
       '<template><div /></template>'
     ].join('\n')
-    assertEqual(write('packages/webkit/src/components/actions/button/zz.vue', sfc).code, 0)
+    assertEqual(write('packages/webkit/src/components/action/button/zz.vue', sfc).code, 0)
   })
   test('test files are out of scope (exit 0)', () => {
-    assertEqual(
-      write('packages/webkit/src/components/actions/button/zz.test.ts', '// ok\n').code,
-      0
-    )
+    assertEqual(write('packages/webkit/src/components/action/button/zz.test.ts', '// ok\n').code, 0)
   })
 })
 
@@ -574,7 +568,7 @@ group('hook: validate-authoring.mjs slot presence', () => {
     runHook('.claude/hooks/validate-authoring.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/actions/button/zz.vue'),
+        file_path: resolve(ROOT, 'packages/webkit/src/components/action/button/zz.vue'),
         content
       }
     })
@@ -620,7 +614,7 @@ group('hook: validate-authoring.mjs built-in strings', () => {
     ].join('\n')
   test('a literal aria-label in a component template blocks (exit 2)', () => {
     const r = write(
-      'packages/webkit/src/components/actions/button/zz.vue',
+      'packages/webkit/src/components/action/button/zz.vue',
       sfc('<button aria-label="Close dialog" />')
     )
     assertEqual(r.code, 2)
@@ -628,7 +622,7 @@ group('hook: validate-authoring.mjs built-in strings', () => {
   })
   test('an English prop default blocks (exit 2)', () => {
     const r = write(
-      'packages/webkit/src/components/actions/button/zz.vue',
+      'packages/webkit/src/components/action/button/zz.vue',
       sfc('<span />', "\n    label: 'Save changes'\n")
     )
     assertEqual(r.code, 2)
@@ -636,7 +630,7 @@ group('hook: validate-authoring.mjs built-in strings', () => {
   })
   test('a catalog-bound label passes (exit 0)', () => {
     const r = write(
-      'packages/webkit/src/components/actions/button/zz.vue',
+      'packages/webkit/src/components/action/button/zz.vue',
       sfc('<button :aria-label="t(\'dialog.close\')" />')
     )
     assertEqual(r.code, 0)
@@ -655,7 +649,7 @@ group('hook: validate-references.mjs', () => {
     const r = runHook('.claude/hooks/validate-references.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/actions/button/zz.figma.ts'),
+        file_path: resolve(ROOT, 'packages/webkit/src/components/action/button/zz.figma.ts'),
         content: "import figma from 'figma'"
       }
     })
@@ -665,7 +659,7 @@ group('hook: validate-references.mjs', () => {
     const r = runHook('.claude/hooks/validate-references.mjs', {
       tool_name: 'Write',
       tool_input: {
-        file_path: resolve(ROOT, 'packages/webkit/src/components/actions/button/zz.ts'),
+        file_path: resolve(ROOT, 'packages/webkit/src/components/action/button/zz.ts'),
         content: "import figma from 'figma'"
       }
     })

@@ -1,6 +1,6 @@
 # Section Gap
 
-> The empty registration frame that divides two page sections. On a page with no margins between sections, this frame *is* the gap: it holds the vertical air, and its own two rules are what separate the sections it sits between — which is why it is a frame and not a spacer `div`. `size` picks how much air, on a three-step scale built from the theme's own spacing tokens.
+> The empty registration frame that divides two page sections. On a page with no margins between sections, this frame _is_ the gap: it holds the vertical air, and its own two rules are what separate the sections it sits between — which is why it is a frame and not a spacer `div`. `size` picks how much air, on a three-step scale built from the theme's own spacing tokens.
 
 - Import: `import SectionGap from '@aziontech/webkit/section-gap'`
 - Category: marketing · Surface: site · Structure: monolithic
@@ -27,13 +27,13 @@
 
 - To space two elements inside a section → use the layout's own `gap-(--spacing-*)` utility.
 - To draw a single separating line with no air → use `separator` instead.
-- When the gap must hold content (a headline, a CTA) → use `section-title`, or a `frame-box` you fill yourself.
+- When the gap must hold content (a headline, a CTA) → use `section-title`, or a `registration-frame` you fill yourself.
 - Only layout utilities (margin, flex and grid placement, width, order, self-alignment) go on the component tag. Colors, borders, padding, typography and every other look come from the component props; put anything else on a wrapper element or inside a slot.
 
 ## Related
 
-- [frame-box](frame-box.md) — the frame this component configures; reach for it directly when the gap needs content or different rules.
-- [texture-material](texture-material.md) — the layer that paints the ruling, composed here at its `lines` kind.
+- [registration-frame](registration-frame.md) — the frame this component configures; reach for it directly when the gap needs content or different rules.
+- [texture](texture.md) — the layer that paints the ruling, composed here at its `lines` kind.
 - [section-title](section-title.md) — the framed header that usually follows a gap; it owns no vertical air of its own beyond its padding, so the gaps around it are what set the page's rhythm.
 - [separator](separator.md) — a hairline with no vertical air.
 
@@ -48,13 +48,13 @@
 
 - Visual states: `default`
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
-- `data-hatch` present when the hatch texture is drawn; the texture layer itself is addressable at `marketing-section-gap__hatch`
+- `data-hatch` present when the hatch texture is drawn; the texture layer itself is addressable at `section-gap__hatch`
 
 ## Accessibility
 
 - Visible focus: not applicable — the gap holds no content and no interactive surface.
 - Keyboard map: none — the gap is not focusable and is skipped by `Tab`.
-- ARIA: no role and no accessible name; the frame's rules and corner marks are decoration inherited from `frame-box`, which marks them `aria-hidden="true"`.
+- ARIA: no role and no accessible name; the frame's rules and corner marks are decoration inherited from `registration-frame`, which marks them `aria-hidden="true"`.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons) — no text; the rules are non-informational decoration.
 - `motion-reduce:transition-none motion-reduce:transform-none` — not applicable, the component is static.
 - Touch target ≥40×40 px — not applicable, no interactive control.
@@ -65,23 +65,23 @@
 
 ```vue
 <script setup>
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionGap from '@aziontech/webkit/section-gap'
 </script>
 
 <template>
   <div>
-    <FrameBox borders="y">
+    <RegistrationFrame borders="y">
       <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Section above</div>
-    </FrameBox>
+    </RegistrationFrame>
     <SectionGap size="medium" />
-    <FrameBox
+    <RegistrationFrame
       flush
       marks="bottom"
       borders="y"
     >
       <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Section below</div>
-    </FrameBox>
+    </RegistrationFrame>
   </div>
 </template>
 ```
@@ -90,26 +90,26 @@
 
 ```vue
 <script setup>
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionGap from '@aziontech/webkit/section-gap'
 </script>
 
 <template>
   <div>
-    <FrameBox borders="y">
+    <RegistrationFrame borders="y">
       <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Section above</div>
-    </FrameBox>
+    </RegistrationFrame>
     <SectionGap
       hatch
       size="large"
     />
-    <FrameBox
+    <RegistrationFrame
       flush
       marks="bottom"
       borders="y"
     >
       <div class="p-(--spacing-xl) text-center text-body-md text-(--text-muted)">Section below</div>
-    </FrameBox>
+    </RegistrationFrame>
   </div>
 </template>
 ```
@@ -118,19 +118,19 @@
 
 ```vue
 <script setup>
-  import FrameBox from '@aziontech/webkit/frame-box'
+  import RegistrationFrame from '@aziontech/webkit/registration-frame'
   import SectionGap from '@aziontech/webkit/section-gap'
 </script>
 
 <template>
   <div>
-    <FrameBox borders="y">
+    <RegistrationFrame borders="y">
       <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
         size="small" — one --spacing-2xl below
       </div>
-    </FrameBox>
+    </RegistrationFrame>
     <SectionGap size="small" />
-    <FrameBox
+    <RegistrationFrame
       flush
       marks="bottom"
       borders="y"
@@ -138,9 +138,9 @@
       <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
         size="medium" — two below
       </div>
-    </FrameBox>
+    </RegistrationFrame>
     <SectionGap size="medium" />
-    <FrameBox
+    <RegistrationFrame
       flush
       marks="bottom"
       borders="y"
@@ -148,15 +148,15 @@
       <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">
         size="large" — three below
       </div>
-    </FrameBox>
+    </RegistrationFrame>
     <SectionGap size="large" />
-    <FrameBox
+    <RegistrationFrame
       flush
       marks="bottom"
       borders="y"
     >
       <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">End</div>
-    </FrameBox>
+    </RegistrationFrame>
   </div>
 </template>
 ```

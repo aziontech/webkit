@@ -40,7 +40,7 @@ describe('ConsoleTraceScene', () => {
   it('draws the span waterfall by default and for an unknown tab', () => {
     const empty = render(host())
     expect(empty.getByTestId(TESTID).getAttribute('data-tab')).toBe('trace')
-    expect(empty.getByTestId('code-trace')).toHaveTextContent('fetch-origin')
+    expect(empty.getByTestId('trace')).toHaveTextContent('fetch-origin')
     empty.unmount()
 
     const unknown = render(host({ tab: 'nope' }))
@@ -50,15 +50,15 @@ describe('ConsoleTraceScene', () => {
   it('draws the run logs on the logs tab', () => {
     const { getByTestId, queryByTestId } = render(host({ tab: 'logs', animated: false }))
 
-    expect(getByTestId('code-log-view')).toHaveTextContent('Invocation completed · 200')
-    expect(queryByTestId('code-trace')).toBeNull()
+    expect(getByTestId('log-viewer')).toHaveTextContent('Invocation completed · 200')
+    expect(queryByTestId('trace')).toBeNull()
   })
 
   it('draws the request path as a flow of four hops on the path tab', () => {
     const { getByTestId } = render(host({ tab: 'path', animated: false }))
-    const flow = getByTestId('data-flow')
+    const flow = getByTestId('flow-diagram')
 
-    expect(flow.querySelectorAll('[data-slot="flow-node"]')).toHaveLength(4)
+    expect(flow.querySelectorAll('[data-slot="flow-diagram-node"]')).toHaveLength(4)
     for (const hop of ['storefront-prod', 'storefront', 'image-optimizer', 'origin-assets']) {
       expect(flow).toHaveTextContent(hop)
     }

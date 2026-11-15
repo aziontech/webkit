@@ -65,9 +65,7 @@
   const labelEl = ref<HTMLElement | null>(null)
   const itemText = ref(String(props.value))
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__item`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'command-item')
 
   const match = computed(() =>
     matchCommand(ctx.query.value, itemText.value, [String(props.value), ...props.keywords])
