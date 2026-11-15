@@ -47,7 +47,7 @@
         {
           id: 'settings',
           label: 'Settings',
-          icon: 'ai ai-cog',
+          icon: 'ai ai-settings',
           kind: 'drill',
           groups: [
             {
@@ -86,7 +86,7 @@
         placement="bottom"
       >
         <IconButton
-          icon="ai ai-plus-circle"
+          icon="ai ai-circle-plus"
           kind="primary"
           size="medium"
           aria-label="Create"
@@ -97,7 +97,7 @@
           label="Create"
           kind="primary"
           size="medium"
-          icon="ai ai-plus-circle"
+          icon="ai ai-circle-plus"
         />
         <ButtonHighlight
           label="Agent"

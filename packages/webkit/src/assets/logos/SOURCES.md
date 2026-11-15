@@ -19,7 +19,7 @@ monochrome glyph in `@aziontech/icons`, `fill="currentColor"`.
   the logo in the other ways outlined below." … "Don't modify color of logo" … "Don't contain logo
   in a box" … "Don't outline logo". The page publishes the files with no permission requirement.
 - **Use:** the purple file as is, on light backgrounds. Do not recolour it. This is why Datadog is
-  **not** in the `Ticker` brand-mark registry (`src/svg/brands/registry.ts`): those marks are
+  **not** in the `Ticker` brand-mark registry (`src/assets/brands/registry.ts`): those marks are
   drawn in `currentColor`, which recolours them.
 
 ### Nitro — `@aziontech/icons`, `packages/icons/src/svg-raw/ai/ai-nitro.svg` (`ai ai-nitro`)

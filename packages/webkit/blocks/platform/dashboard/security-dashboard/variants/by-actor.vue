@@ -847,7 +847,7 @@
               key="empty-state-1"
               v-else-if="filtering"
               size="small"
-              icon="ai ai-filter-slash"
+              icon="ai ai-filter-off"
               title="No requests match these filters"
               description="Clear the filters or pick other values."
             >

@@ -88,7 +88,7 @@
       label: 'Community',
       links: [
         { label: 'Discord', href: 'https://discord.gg/azion', icon: 'ai ai-discord' },
-        { label: 'X', href: 'https://x.com/aziontech', icon: 'ai ai-x' }
+        { label: 'X', href: 'https://x.com/aziontech', icon: 'ai ai-x-brand' }
       ]
     }
   ]
@@ -214,7 +214,7 @@
           >
           <DocCard
             title="Rules Engine"
-            icon="ai ai-sliders-h"
+            icon="ai ai-sliders-horizontal"
             href="/docs/applications/rules-engine"
             >Criteria and behaviors, phase by phase.</DocCard
           >

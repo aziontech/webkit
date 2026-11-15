@@ -556,7 +556,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Requests over time"
@@ -644,7 +644,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Status codes"
@@ -722,7 +722,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Requests by country"
@@ -796,7 +796,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Top hosts"

@@ -5,7 +5,7 @@ import { iconKeywordString } from './icon-keywords.mjs'
 
 const CHARSET = 'utf-8'
 const DIST_DIR = './dist'
-const COLOR_DIR = './src/svg-raw/ai-cor'
+const COLOR_DIR = './src/svg-raw/ai-color'
 
 mkdirSync(DIST_DIR, { recursive: true })
 
@@ -17,7 +17,7 @@ const data = files.map((file) => {
   const name = file.replace('.svg', '')
 
   return {
-    icon: `ai-cor ${name}`,
+    icon: `ai-color ${name}`,
     keywords: iconKeywordString(name),
     name,
     colored: true,

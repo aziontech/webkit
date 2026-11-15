@@ -489,7 +489,7 @@
       </Input>
       <IconButton
         v-if="showClear"
-        icon="ai ai-times"
+        icon="ai ai-x"
         :ariaLabel="t('combobox.clear')"
         kind="transparent"
         size="small"

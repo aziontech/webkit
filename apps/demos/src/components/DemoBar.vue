@@ -65,7 +65,7 @@
       label: t.value.deploy,
       icon: 'ai ai-cloud-upload'
     },
-    { value: '/settings', label: t.value.settings, icon: 'ai ai-cog' },
+    { value: '/settings', label: t.value.settings, icon: 'ai ai-settings' },
     { value: '/onboarding', label: t.value.onboarding, icon: 'ai ai-flag' },
     { value: '/assistant', label: t.value.assistant, icon: 'ai ai-ask-azion' }
   ])
@@ -124,7 +124,7 @@
     </Tooltip>
     <Tooltip :text="settings.dir === 'rtl' ? t.ltr : t.rtl">
       <IconButton
-        icon="ai ai-arrow-right-arrow-left"
+        icon="ai ai-arrow-right-left"
         kind="outlined"
         size="medium"
         :aria-label="settings.dir === 'rtl' ? t.ltr : t.rtl"

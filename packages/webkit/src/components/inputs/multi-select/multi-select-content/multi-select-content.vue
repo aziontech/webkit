@@ -217,7 +217,7 @@
             class="flex min-h-8 items-center gap-(--spacing-xs) px-(--spacing-xs) text-body-sm text-(--text-default)"
           >
             <i
-              class="ai ai-exclamation-circle shrink-0 text-(--danger)"
+              class="ai ai-circle-alert shrink-0 text-(--danger)"
               aria-hidden="true"
             />
             <span class="min-w-0 flex-1">{{ ctx.error.value }}</span>

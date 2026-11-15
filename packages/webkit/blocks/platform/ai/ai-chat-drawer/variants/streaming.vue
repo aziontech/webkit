@@ -59,7 +59,7 @@
     {
       id: 'errors',
       label: 'Why is storefront answering with 502 errors?',
-      icon: 'ai ai-exclamation-triangle'
+      icon: 'ai ai-triangle-alert'
     },
     { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'ai ai-bolt' },
     { id: 'domains', label: 'Which domains does storefront answer on?', icon: 'ai ai-globe' }

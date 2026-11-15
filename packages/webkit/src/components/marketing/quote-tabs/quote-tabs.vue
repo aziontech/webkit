@@ -14,10 +14,10 @@
     watch
   } from 'vue'
 
+  import { brandMarkLabel, resolveBrandMark } from '../../../assets/brands/registry'
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
-  import { brandMarkLabel, resolveBrandMark } from '../../../svg/brands/registry'
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
   import CardGrid from '../card-grid/card-grid.vue'

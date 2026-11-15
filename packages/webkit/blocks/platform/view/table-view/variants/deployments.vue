@@ -328,7 +328,7 @@
                         label="Current"
                         severity="info"
                         size="small"
-                        icon="ai ai-arrow-circle-up"
+                        icon="ai ai-circle-arrow-up"
                         class="shrink-0"
                       />
                     </span>
@@ -409,7 +409,7 @@
                         >
                           <template #leading
                             ><i
-                              class="ai ai-arrow-circle-up"
+                              class="ai ai-circle-arrow-up"
                               aria-hidden="true"
                           /></template>
                         </DropdownMenuOption>
@@ -419,7 +419,7 @@
                   <template #empty>
                     <EmptyState
                       size="medium"
-                      icon="ai ai-filter-slash"
+                      icon="ai ai-filter-off"
                       title="No matching deployments"
                       description="No deployment matches these filters."
                     >

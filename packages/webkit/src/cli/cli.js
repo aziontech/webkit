@@ -46,7 +46,8 @@ Commands:
                    this webkit version's templates. In a monorepo app with no agent
                    files of its own, works on the repository root that has them.
   migrate v6      Rewrite this project for the v6 major: renamed imports and components,
-                   renamed props and values, PrimeIcons classes (pi pi-x → ai ai-x); lists
+                   renamed props and values, icon classes (pi pi-times → ai ai-x,
+                   ai-cor ai-next → ai-color ai-nextjs); lists
                    removed components to replace by hand.
                    --from <major> sets the version the project is on (read from
                    package.json, or detected from v3-only imports, when omitted).

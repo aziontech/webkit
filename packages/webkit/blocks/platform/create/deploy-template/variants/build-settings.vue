@@ -199,7 +199,7 @@
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-cor ai-nuxt text-body-lg leading-none text-(--text-default)"
+                  class="ai-color ai-nuxt text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -463,9 +463,7 @@
                                       :text="revealed[field.name] ? 'Hide value' : 'Show value'"
                                     >
                                       <IconButton
-                                        :icon="
-                                          revealed[field.name] ? 'ai ai-eye-slash' : 'ai ai-eye'
-                                        "
+                                        :icon="revealed[field.name] ? 'ai ai-eye-off' : 'ai ai-eye'"
                                         kind="outlined"
                                         size="large"
                                         :aria-label="

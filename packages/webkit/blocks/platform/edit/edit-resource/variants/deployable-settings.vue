@@ -330,7 +330,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-plus-circle"
+                  class="ai ai-circle-plus"
                   aria-hidden="true"
                 />
                 Add Environment
@@ -473,7 +473,7 @@
                             <DropdownMenu.Trigger>
                               <Tooltip text="Row actions">
                                 <IconButton
-                                  icon="ai ai-ellipsis-h"
+                                  icon="ai ai-ellipsis"
                                   kind="outlined"
                                   size="small"
                                   :disabled="saving"

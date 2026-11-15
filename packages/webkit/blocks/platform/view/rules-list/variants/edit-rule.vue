@@ -1797,7 +1797,7 @@
                                 @keydown.down.prevent="moveBehavior(bIdx, 1)"
                               >
                                 <i
-                                  class="ai ai-bars"
+                                  class="ai ai-menu"
                                   aria-hidden="true"
                                 />
                               </span>
@@ -1841,7 +1841,7 @@
                             label="Add behavior"
                             kind="outlined"
                             size="medium"
-                            icon="ai ai-plus-circle"
+                            icon="ai ai-circle-plus"
                             :disabled="submitting || !canAddBehavior"
                             @click="addBehavior"
                           />

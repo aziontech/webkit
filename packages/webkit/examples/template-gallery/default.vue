@@ -20,20 +20,20 @@
       {
         title: 'Next.js Commerce',
         description: 'Ecommerce template built with Next.js and Shopify.',
-        icon: 'ai-cor ai-next',
+        icon: 'ai-color ai-nextjs',
         invertInDark: true,
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       },
       {
         title: 'Astro Odyssey',
         description: 'A modern business marketing website theme/starter built with Astro.',
-        icon: 'ai-cor ai-astro',
+        icon: 'ai-color ai-astro',
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       },
       {
         title: 'SvelteKit Commerce',
         description: 'Ecommerce template built with SvelteKit and Shopify.',
-        icon: 'ai-cor ai-svelte',
+        icon: 'ai-color ai-svelte',
         href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
       }
     ]"

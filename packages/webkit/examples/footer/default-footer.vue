@@ -64,7 +64,7 @@
       <IconButton
         kind="transparent"
         size="small"
-        icon="ai ai-x"
+        icon="ai ai-x-brand"
         aria-label="Azion on X"
         href="https://x.com/aziontech"
         target="_blank"

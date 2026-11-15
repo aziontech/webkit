@@ -266,7 +266,7 @@
             <template #content>
               <EmptyState
                 size="medium"
-                icon="ai ai-th-large"
+                icon="ai ai-layout-grid"
                 title="No applications yet"
                 description="Create an application to start serving traffic."
               >
@@ -331,7 +331,7 @@
               <template #empty>
                 <EmptyState
                   size="medium"
-                  icon="ai ai-filter-slash"
+                  icon="ai ai-filter-off"
                   title="No matching applications"
                   description="No application matches these filters."
                 >

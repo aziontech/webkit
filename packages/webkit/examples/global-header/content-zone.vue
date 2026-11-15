@@ -18,7 +18,7 @@
           label="Create"
           kind="secondary"
           size="medium"
-          icon="ai ai-plus-circle"
+          icon="ai ai-circle-plus"
         />
       </GlobalHeader.End>
     </GlobalHeader>

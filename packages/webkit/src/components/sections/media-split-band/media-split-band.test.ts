@@ -29,7 +29,7 @@ const codeTabs = [
     language: 'ts',
     code: 'const client = new OpenAI()',
     fileName: 'client.ts',
-    icon: 'ai-cor ai-open'
+    icon: 'ai-color ai-openai'
   },
   {
     label: 'GitHub Copilot',
@@ -37,7 +37,7 @@ const codeTabs = [
     language: 'json',
     code: '[]',
     fileName: 'chatLanguageModels.json',
-    icon: 'ai-cor ai-microsoft-copilot'
+    icon: 'ai-color ai-microsoft-copilot'
   },
   { label: 'Empty', value: 'empty', code: '' }
 ]
@@ -298,7 +298,7 @@ describe('MediaSplitBand', () => {
     const tabs = await findAllByRole('tab', {}, { timeout: 5000 })
     expect(tabs.map((tab) => tab.textContent?.trim())).toEqual(['OpenAI SDK', 'GitHub Copilot'])
     expect(tabs[1]).toHaveAttribute('aria-selected', 'true')
-    expect(container.querySelectorAll('[role="tab"] i.ai-cor')).toHaveLength(2)
+    expect(container.querySelectorAll('[role="tab"] i.ai-color')).toHaveLength(2)
     expect(getByTestId(SPLIT_TESTID).hasAttribute('data-media-padded')).toBe(true)
   })
 

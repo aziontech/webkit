@@ -300,7 +300,7 @@
         class="relative z-10 flex h-14 shrink-0 items-center gap-(--spacing-sm) border-b border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xl)"
       >
         <IconButton
-          icon="ai ai-bars"
+          icon="ai ai-menu"
           kind="outlined"
           size="small"
           ariaLabel="Open navigation"
@@ -328,7 +328,7 @@
             icon="ai ai-flag"
           />
           <IconButton
-            icon="ai ai-question-circle"
+            icon="ai ai-circle-help"
             kind="outlined"
             size="small"
             ariaLabel="Help"
@@ -399,7 +399,7 @@
               >
                 <i
                   v-if="index > 0"
-                  class="ai ai-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                  class="ai ai-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                   aria-hidden="true"
                 />
                 <li
@@ -431,7 +431,7 @@
                 label="Create"
                 kind="primary"
                 size="medium"
-                icon="ai ai-plus-circle"
+                icon="ai ai-circle-plus"
               />
               <ButtonHighlight
                 label="Agent"

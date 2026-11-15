@@ -1166,7 +1166,7 @@
           <DropdownMenu.Trigger>
             <Tooltip text="Investigation actions">
               <IconButton
-                icon="ai ai-ellipsis-h"
+                icon="ai ai-ellipsis"
                 kind="transparent"
                 size="small"
                 :aria-label="`Actions for ${currentSession.name}`"
@@ -1648,7 +1648,7 @@
 
                     <template #cell-detail="{ row }">
                       <IconButton
-                        :icon="row.id === selectedId ? 'ai ai-angle-down' : 'ai ai-angle-right'"
+                        :icon="row.id === selectedId ? 'ai ai-chevron-down' : 'ai ai-chevron-right'"
                         kind="transparent"
                         size="small"
                         :aria-label="`Open event ${row.id}`"
@@ -1721,7 +1721,7 @@
                         v-else
                         key="no-events"
                         size="small"
-                        icon="ai ai-filter-slash"
+                        icon="ai ai-filter-off"
                         title="No events in this window"
                         description="Widen the period or clear a filter to see more of the log."
                       />
@@ -1760,7 +1760,7 @@
               </h2>
               <Tooltip text="Close">
                 <IconButton
-                  icon="ai ai-times"
+                  icon="ai ai-x"
                   kind="transparent"
                   size="small"
                   aria-label="Close the event document"

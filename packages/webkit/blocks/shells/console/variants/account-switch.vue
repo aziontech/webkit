@@ -146,7 +146,7 @@
         {
           id: 'settings',
           label: 'Settings',
-          icon: 'ai ai-cog',
+          icon: 'ai ai-settings',
           kind: 'drill',
           groups: [
             {
@@ -228,7 +228,7 @@
   const accountTypes: Record<AccountType, AccountTypeMeta> = {
     organization: { label: 'Organization', icon: 'ai ai-building', severity: 'primary' },
     group: { label: 'Group', icon: 'ai ai-users', severity: 'info' },
-    workspace: { label: 'Workspace', icon: 'ai ai-th-large', severity: 'neutral' }
+    workspace: { label: 'Workspace', icon: 'ai ai-layout-grid', severity: 'neutral' }
   }
 
   const accounts: Account[] = [
@@ -430,7 +430,7 @@
             placement="bottom"
           >
             <IconButton
-              icon="ai ai-plus-circle"
+              icon="ai ai-circle-plus"
               kind="primary"
               size="medium"
               aria-label="Create"
@@ -453,7 +453,7 @@
             label="Create"
             kind="primary"
             size="medium"
-            icon="ai ai-plus-circle"
+            icon="ai ai-circle-plus"
           />
           <ButtonHighlight
             label="Agent"
@@ -489,7 +489,7 @@
           <Command.Item value="action:create">
             <template #prefix>
               <i
-                class="ai ai-plus-circle"
+                class="ai ai-circle-plus"
                 aria-hidden="true"
               />
             </template>
@@ -521,7 +521,7 @@
           >
             <template #trailing>
               <i
-                class="ai ai-cog"
+                class="ai ai-settings"
                 aria-hidden="true"
               />
             </template>
@@ -569,7 +569,7 @@
           >
             <template #trailing>
               <i
-                class="ai ai-sign-out"
+                class="ai ai-log-out"
                 aria-hidden="true"
               />
             </template>

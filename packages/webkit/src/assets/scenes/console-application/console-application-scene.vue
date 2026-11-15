@@ -304,7 +304,7 @@
         >
           <template #leading>
             <i
-              class="ai ai-info-circle shrink-0 text-(--text-muted)"
+              class="ai ai-circle-info shrink-0 text-(--text-muted)"
               aria-hidden="true"
             />
             <span class="min-w-0">
@@ -351,7 +351,7 @@
               drawer.title
             }}</span>
             <IconButton
-              icon="ai ai-times"
+              icon="ai ai-x"
               aria-label="Close"
               kind="transparent"
               size="small"

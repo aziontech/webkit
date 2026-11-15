@@ -44,7 +44,7 @@
       id: 'ADA8FMMR',
       name: 'ADA8FMMR',
       state: 'draft',
-      tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-edit' },
+      tag: { label: 'Draft', severity: 'warning', icon: 'ai ai-file-pen' },
       comment: 'Cache static assets for 30 days',
       author: 'John Smith',
       createdAgo: '14 hours ago'
@@ -299,7 +299,7 @@
             >
               <span class="flex items-center gap-(--spacing-xs)">
                 <i
-                  class="ai ai-plus-circle"
+                  class="ai ai-circle-plus"
                   aria-hidden="true"
                 />
                 Add Version
@@ -383,7 +383,7 @@
               >
                 <span class="flex items-center gap-(--spacing-xs)">
                   <i
-                    class="ai ai-plus-circle"
+                    class="ai ai-circle-plus"
                     aria-hidden="true"
                   />
                   Add Version
@@ -423,7 +423,7 @@
                 >
                   <DropdownMenu.Trigger>
                     <IconButton
-                      icon="ai ai-ellipsis-h"
+                      icon="ai ai-ellipsis"
                       kind="transparent"
                       size="small"
                       aria-label="Version actions"
@@ -696,7 +696,7 @@
                 Version history
               </h2>
               <IconButton
-                icon="ai ai-times"
+                icon="ai ai-x"
                 kind="transparent"
                 size="small"
                 aria-label="Close version history"

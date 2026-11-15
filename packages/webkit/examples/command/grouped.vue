@@ -40,7 +40,7 @@
         <CommandItem value="settings">
           <template #prefix
             ><i
-              class="ai ai-cog"
+              class="ai ai-settings"
               aria-hidden="true"
           /></template>
           Go to Settings

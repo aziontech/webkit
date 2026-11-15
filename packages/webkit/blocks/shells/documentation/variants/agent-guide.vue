@@ -295,7 +295,7 @@
     },
     {
       title: 'AGENTS.md',
-      icon: 'ai ai-file-edit',
+      icon: 'ai ai-file-pen',
       href: '/docs/get-started/first-deploy',
       description:
         'Your own conventions, committed at the repository root: workload names, what not to touch.'

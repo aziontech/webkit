@@ -52,7 +52,7 @@
       {
         label: 'Follow us on X',
         href: 'https://twitter.com/aziontech',
-        icon: 'ai ai-x'
+        icon: 'ai ai-x-brand'
       }
     ]
   }

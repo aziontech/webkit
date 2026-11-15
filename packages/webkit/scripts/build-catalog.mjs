@@ -518,15 +518,15 @@ const ASSET_KINDS = {
     title: 'Brand marks',
     summary:
       'Client, analyst and framework marks drawn as theme-aware SVG. Pass the name where a component asks for a mark (`Ticker` `marks`, `QuoteTabs` `mark`, `ClientQuotes` `mark`); the label is the accessible name.',
-    markers: ['svg/brands/registry.ts'],
-    registry: 'src/svg/brands/registry.ts',
+    markers: ['assets/brands/registry.ts'],
+    registry: 'src/assets/brands/registry.ts',
     unknown:
       'An unknown name is not drawn as a mark: `Ticker` prints it as a typographic wordmark, the quote components show no mark.'
   },
   icons: {
     title: 'Icons',
     summary:
-      'Every icon class of `@aziontech/icons` with search keywords. A monochrome icon is `ai ai-<name>`, coloured by the text colour; a colour brand icon is `ai-cor ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.',
+      'Every icon class of `@aziontech/icons` with search keywords. A monochrome icon is `ai ai-<name>`, coloured by the text colour; a colour brand icon is `ai-color ai-<name>`. Import `@aziontech/icons` once at the app entry; an `icon` prop takes the class string.',
     unknown: 'An unknown class renders nothing.'
   }
 }
@@ -596,7 +596,7 @@ function reaches(graph, from, markers) {
 function iconItems() {
   const sets = [
     ['ai', 'azionicons', (n) => `ai ${n}`],
-    ['ai-cor', 'color', (n) => `ai-cor ${n}`]
+    ['ai-color', 'color', (n) => `ai-color ${n}`]
   ]
   const items = []
   for (const [folder, set, cls] of sets) {

@@ -1091,7 +1091,7 @@
               </h2>
               <Tooltip text="Close">
                 <IconButton
-                  icon="ai ai-times"
+                  icon="ai ai-x"
                   kind="transparent"
                   size="small"
                   aria-label="Close the event document"

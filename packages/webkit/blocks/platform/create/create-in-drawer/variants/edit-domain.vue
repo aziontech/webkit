@@ -196,7 +196,7 @@
     <DropdownMenuTrigger>
       <Tooltip text="Row actions">
         <IconButton
-          icon="ai ai-ellipsis-h"
+          icon="ai ai-ellipsis"
           kind="outlined"
           size="small"
           aria-label="Actions for www.example.com"

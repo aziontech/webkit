@@ -15,7 +15,7 @@
           value: 'explain',
           label: 'explain',
           description: 'Explain a configuration',
-          icon: 'ai ai-info-circle'
+          icon: 'ai ai-circle-info'
         },
         {
           value: 'troubleshoot',

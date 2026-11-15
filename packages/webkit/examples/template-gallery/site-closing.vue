@@ -24,40 +24,40 @@
     {
       title: 'Next.js Commerce',
       description: 'Ecommerce template built with Next.js and Shopify.',
-      icon: 'ai-cor ai-next',
+      icon: 'ai-color ai-nextjs',
       invertInDark: true,
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Astro Odyssey',
       description: 'A business marketing website built with Astro.',
-      icon: 'ai-cor ai-astro',
+      icon: 'ai-color ai-astro',
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Next.js AI Chatbot',
       description: 'A server-rendered Next.js App Router AI chatbot.',
-      icon: 'ai-cor ai-next',
+      icon: 'ai-color ai-nextjs',
       invertInDark: true,
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'SvelteKit Commerce',
       description: 'Ecommerce template built with SvelteKit and Shopify.',
-      icon: 'ai-cor ai-svelte',
+      icon: 'ai-color ai-svelte',
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Next.js Multi-tenant Starter',
       description: 'A minimal multi-tenant Next.js starter.',
-      icon: 'ai-cor ai-next',
+      icon: 'ai-color ai-nextjs',
       invertInDark: true,
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {
       title: 'Cosmic Agency Website',
       description: "A template built on Cosmic's React components.",
-      icon: 'ai-cor ai-react',
+      icon: 'ai-color ai-react',
       href: 'https://www.azion.com/en/documentation/products/guides/#azion-templates'
     },
     {

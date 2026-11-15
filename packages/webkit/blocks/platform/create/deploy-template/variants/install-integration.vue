@@ -120,7 +120,7 @@
                 class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai ai-arrow-right-arrow-left text-body-lg leading-none text-(--text-default)"
+                  class="ai ai-arrow-right-left text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -221,7 +221,7 @@
                       class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                     >
                       <i
-                        class="ai ai-sliders-h text-body-md leading-none text-(--text-default)"
+                        class="ai ai-sliders-horizontal text-body-md leading-none text-(--text-default)"
                         aria-hidden="true"
                       />
                     </span>

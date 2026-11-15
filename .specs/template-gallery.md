@@ -4,10 +4,10 @@ category: sections
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 5
+spec_version: 6
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: da68ccf1f1ab148b080d3995e02a490dc2200b05d44e26bc17cb705699184ba6
+checksum: 0ca53158487a147b7df3fd4672c269d79239af074ce35c0fb868b14e84db54a1
 ---
 
 # TemplateGallery — Component Spec
@@ -57,8 +57,8 @@ import TemplateGallery from '@aziontech/webkit/template-gallery'
     :primary-action="{ label: 'Start for free', href: '/signup' }"
     :secondary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
     :templates="[
-      { title: 'Astro Odyssey', description: 'A marketing website starter built with Astro.', icon: 'ai-cor ai-astro', href: '/templates/astro-odyssey' },
-      { title: 'Next.js Commerce', description: 'Ecommerce template built with Next.js.', icon: 'ai-cor ai-next', invertInDark: true, href: '/templates/nextjs-commerce' }
+      { title: 'Astro Odyssey', description: 'A marketing website starter built with Astro.', icon: 'ai-color ai-astro', href: '/templates/astro-odyssey' },
+      { title: 'Next.js Commerce', description: 'Ecommerce template built with Next.js.', icon: 'ai-color ai-nextjs', invertInDark: true, href: '/templates/nextjs-commerce' }
     ]"
     deploy-label="Deploy now"
     templates-aria-label="Templates you can deploy"

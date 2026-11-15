@@ -54,7 +54,7 @@
             <IconButton
               kind="transparent"
               size="small"
-              icon="ai ai-ellipsis-h"
+              icon="ai ai-ellipsis"
               aria-label="More options"
             />
           </DropdownMenuTrigger>

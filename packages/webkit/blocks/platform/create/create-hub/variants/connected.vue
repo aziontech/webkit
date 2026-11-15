@@ -44,17 +44,17 @@
     { label: 'acme-labs', value: 'acme-labs' }
   ]
   const repos = [
-    { name: 'next-js-boilerplate', age: '2 hours ago', icon: 'ai-cor ai-next' },
-    { name: 'docs-site', age: '5 hours ago', icon: 'ai-cor ai-astro' },
-    { name: 'api-playground', age: 'yesterday', icon: 'ai-cor ai-vue' },
-    { name: 'storefront-checkout', age: '3 days ago', icon: 'ai-cor ai-react' },
-    { name: 'observability-dashboard', age: '6 days ago', icon: 'ai-cor ai-svelte' },
-    { name: 'marketing-landing', age: '2 weeks ago', icon: 'ai-cor ai-nuxt' },
-    { name: 'internal-admin', age: 'last month', icon: 'ai-cor ai-angular' },
+    { name: 'next-js-boilerplate', age: '2 hours ago', icon: 'ai-color ai-nextjs' },
+    { name: 'docs-site', age: '5 hours ago', icon: 'ai-color ai-astro' },
+    { name: 'api-playground', age: 'yesterday', icon: 'ai-color ai-vue' },
+    { name: 'storefront-checkout', age: '3 days ago', icon: 'ai-color ai-react' },
+    { name: 'observability-dashboard', age: '6 days ago', icon: 'ai-color ai-svelte' },
+    { name: 'marketing-landing', age: '2 weeks ago', icon: 'ai-color ai-nuxt' },
+    { name: 'internal-admin', age: 'last month', icon: 'ai-color ai-angular' },
     { name: 'image-resizer', age: 'last month', icon: 'ai ai-image' },
-    { name: 'status-page', age: '2 months ago', icon: 'ai-cor ai-astro' },
+    { name: 'status-page', age: '2 months ago', icon: 'ai-color ai-astro' },
     { name: 'auth-gateway', age: '2 months ago', icon: 'ai ai-lock' },
-    { name: 'blog', age: '3 months ago', icon: 'ai-cor ai-nuxt' },
+    { name: 'blog', age: '3 months ago', icon: 'ai-color ai-nuxt' },
     { name: 'design-tokens', age: '5 months ago', icon: 'ai ai-palette' }
   ]
   const REPO_PAGE = 10
@@ -68,49 +68,49 @@
           slug: 'next-boilerplate',
           title: 'Next.js Boilerplate',
           description: 'Deploy a full-stack Next.js application in a few steps.',
-          icon: 'ai-cor ai-next',
+          icon: 'ai-color ai-nextjs',
           markClass: '[[data-theme=dark]_&]:invert'
         },
         {
           slug: 'react-boilerplate',
           title: 'React Boilerplate',
           description: 'Automate your React.js deployment process.',
-          icon: 'ai-cor ai-react',
+          icon: 'ai-color ai-react',
           markClass: ''
         },
         {
           slug: 'vue-boilerplate',
           title: 'Vue.js starter',
           description: 'A lightweight template to rapidly build Vue.js applications.',
-          icon: 'ai-cor ai-vue',
+          icon: 'ai-color ai-vue',
           markClass: ''
         },
         {
           slug: 'angular-boilerplate',
           title: 'Angular Boilerplate',
           description: 'Automate your Angular deployment process with this template.',
-          icon: 'ai-cor ai-angular',
+          icon: 'ai-color ai-angular',
           markClass: ''
         },
         {
           slug: 'nuxt-ecommerce',
           title: 'Nuxt E-commerce',
           description: 'Launch a Nuxt e-commerce or content app.',
-          icon: 'ai-cor ai-nuxt',
+          icon: 'ai-color ai-nuxt',
           markClass: ''
         },
         {
           slug: 'astro-starter',
           title: 'Astro Starter',
           description: 'Ship a content-driven Astro site that renders.',
-          icon: 'ai-cor ai-astro',
+          icon: 'ai-color ai-astro',
           markClass: ''
         },
         {
           slug: 'svelte-boilerplate',
           title: 'Svelte Boilerplate',
           description: 'Accelerate the deployment of Svelte applications.',
-          icon: 'ai-cor ai-svelte',
+          icon: 'ai-color ai-svelte',
           markClass: ''
         },
         {
@@ -258,7 +258,7 @@
           title: 'OpenNext Starter',
           description: 'Deploy Next.js through the OpenNext adapter, server routes included.',
           vendor: '',
-          icon: 'ai-cor ai-next',
+          icon: 'ai-color ai-nextjs',
           markClass: '[[data-theme=dark]_&]:invert'
         },
         {
@@ -346,7 +346,7 @@
           title: 'Static HTML Starter',
           description: 'Serve a folder of HTML, CSS and JavaScript with no build step.',
           vendor: '',
-          icon: 'ai-cor ai-html',
+          icon: 'ai-color ai-html',
           markClass: ''
         },
         {
@@ -354,7 +354,7 @@
           title: 'JavaScript Starter',
           description: 'Run plain JavaScript with no framework, only a handler.',
           vendor: '',
-          icon: 'ai-cor ai-js',
+          icon: 'ai-color ai-javascript',
           markClass: ''
         },
         {
@@ -362,7 +362,7 @@
           title: 'TypeScript Starter',
           description: 'Run a TypeScript handler, compiled on build.',
           vendor: '',
-          icon: 'ai-cor ai-ts',
+          icon: 'ai-color ai-typescript',
           markClass: ''
         },
         {
@@ -678,7 +678,7 @@
                           </Select.Option>
                           <Select.Option
                             value="__add-account__"
-                            icon="ai ai-plus-circle"
+                            icon="ai ai-circle-plus"
                           >
                             Add GitHub account
                           </Select.Option>

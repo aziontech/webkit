@@ -11,6 +11,7 @@ import { ESLINT_CONFIG_CANDIDATES, firstExisting } from './plan.js'
 import { resolveEslintBin, runESLint } from './report.js'
 import { PACKAGE_NAME } from './source.js'
 
+const MIGRATION_MAJOR = 6
 const SOURCE_EXT = /\.(vue|ts|tsx|js|jsx|mjs|cjs)$/
 const SKIP_DIRS = new Set([
   'node_modules',
@@ -53,7 +54,9 @@ function lineOf(text, index) {
 }
 
 function migrationFindings(rel, source, migration) {
-  const { changes, warnings } = migrateSource(source, migration)
+  const { changes, warnings } = migrateSource(source, migration, {
+    declaredMajor: MIGRATION_MAJOR
+  })
   return [
     ...(changes.length
       ? [
@@ -69,7 +72,7 @@ function migrationFindings(rel, source, migration) {
       .filter((w) => !/is not an export of v\d/.test(w))
       .map((w) => ({
         source: 'migration',
-        severity: w.startsWith('PrimeIcons class') ? 'warn' : 'error',
+        severity: /^(PrimeIcons class|Azion icon)/.test(w) ? 'warn' : 'error',
         file: rel,
         message: `v5 API to replace by hand: ${w} (MIGRATION-v6.md).`
       }))
@@ -164,7 +167,7 @@ export function runCheck(projectDir, webkit, { lint = true } = {}) {
     })
   }
 
-  const migration = loadMigration(6)
+  const migration = loadMigration(MIGRATION_MAJOR)
   const renamed = new Set([...Object.keys(migration.components), ...Object.keys(migration.removed)])
   const files = sourceFiles(projectDir)
   const linted = lint ? lintFindings(projectDir) : { ran: false, reason: '--no-lint', findings: [] }

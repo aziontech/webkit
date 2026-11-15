@@ -3,7 +3,7 @@ import { join } from 'node:path'
 
 const CHARSET = 'utf-8'
 const DIST_DIR = './dist'
-const COLOR_DIR = './src/svg-raw/ai-cor'
+const COLOR_DIR = './src/svg-raw/ai-color'
 
 const INK_LIGHT = '#141414'
 const INK_DARK = '#FAFAFA'
@@ -37,7 +37,7 @@ const files = readdirSync(COLOR_DIR)
 
 const names = files.map((f) => f.replace('.svg', ''))
 
-const sharedSelector = 'ai-cor'
+const sharedSelector = 'ai-color'
 const sharedRule = `.${sharedSelector} {
   display: inline-block;
   width: 1em;
@@ -71,8 +71,7 @@ const perIconRules = files
 
 const css = `/* azionicons-color — colored brand icons as background-image.
  * These are multicolor logos that cannot live in the woff2 font; use them like a
- * font icon, with the ai-cor base class instead of ai: <i class="ai-cor ai-google"></i>.
- * There is no ai-<name>-cor class. Sizes with font-size (1em).
+ * font icon, with the ai-color base class instead of ai: <i class="ai-color ai-google"></i>. Sizes with font-size (1em).
  * An icon whose SVG uses currentColor for its ink parts is emitted twice — light ink
  * in the base rule, dark ink under the theme's dark selectors — because a
  * background-image cannot inherit color from the element painting it.

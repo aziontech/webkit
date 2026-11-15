@@ -211,7 +211,7 @@
                   {{ summary(field.id) }}
                 </span>
                 <i
-                  class="ai ai-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                  class="ai ai-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                   aria-hidden="true"
                 />
               </span>
@@ -227,7 +227,7 @@
               class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
             >
               <IconButton
-                icon="ai ai-angle-left"
+                icon="ai ai-chevron-left"
                 kind="outlined"
                 size="small"
                 ariaLabel="Back to all filters"
@@ -274,7 +274,7 @@
                 class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"
               >
                 <i
-                  class="ai ai-filter-slash text-(--text-muted)"
+                  class="ai ai-filter-off text-(--text-muted)"
                   aria-hidden="true"
                 />
                 Clear Source

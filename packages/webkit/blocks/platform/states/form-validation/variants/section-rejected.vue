@@ -206,7 +206,7 @@
             >
               <template #trailing>
                 <i
-                  class="ai ai-cog"
+                  class="ai ai-settings"
                   aria-hidden="true"
                 />
               </template>
@@ -230,7 +230,7 @@
             >
               <template #trailing>
                 <i
-                  class="ai ai-sign-out"
+                  class="ai ai-log-out"
                   aria-hidden="true"
                 />
               </template>

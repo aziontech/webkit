@@ -2,7 +2,7 @@
   "name": "icons-gallery",
   "version": "0.1.0",
   "private": true,
-  "description": "Azion icon font library — azionicons + primeicons as CSS/woff2",
+  "description": "Azion icon font library — azionicons and colored brand icons as CSS/woff2",
   "license": "MIT",
   "type": "module",
   "scripts": {

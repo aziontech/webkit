@@ -13,9 +13,9 @@ export const navigation: ConsoleLayoutNavGroup[] = [
     items: [
       { id: 'resources', label: 'Resources', icon: 'ai ai-box', href: '/resources' },
       { id: 'services', label: 'Services', icon: 'ai ai-server' },
-      { id: 'variables', label: 'Variables', icon: 'ai ai-sliders-h' },
+      { id: 'variables', label: 'Variables', icon: 'ai ai-sliders-horizontal' },
       { id: 'integrations', label: 'Integrations', icon: 'ai ai-link' },
-      { id: 'templates', label: 'Templates', icon: 'ai ai-clone' }
+      { id: 'templates', label: 'Templates', icon: 'ai ai-copy' }
     ]
   },
   {
@@ -76,11 +76,11 @@ export const navigation: ConsoleLayoutNavGroup[] = [
   {
     label: 'More',
     items: [
-      { id: 'catalog', label: 'Catalog', icon: 'ai ai-th-large' },
+      { id: 'catalog', label: 'Catalog', icon: 'ai ai-layout-grid' },
       {
         id: 'settings',
         label: 'Settings',
-        icon: 'ai ai-cog',
+        icon: 'ai ai-settings',
         kind: 'drill',
         groups: [
           {

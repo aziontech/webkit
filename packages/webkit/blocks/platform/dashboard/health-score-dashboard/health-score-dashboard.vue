@@ -964,7 +964,7 @@
       id: 'incident-03',
       name: 'Video calls',
       scope: 'Application',
-      icon: 'ai ai-th-large',
+      icon: 'ai ai-layout-grid',
       devices: 34,
       share: 12,
       cause: 'Packet loss',
@@ -979,7 +979,7 @@
       id: 'incident-02',
       name: 'Travel',
       scope: 'Location',
-      icon: 'ai ai-map-marker',
+      icon: 'ai ai-map-pin',
       devices: 9,
       share: 31,
       cause: 'High latency',
@@ -994,7 +994,7 @@
       id: 'incident-01',
       name: 'File storage',
       scope: 'Application',
-      icon: 'ai ai-th-large',
+      icon: 'ai ai-layout-grid',
       devices: 18,
       share: 7,
       cause: 'Slow server response',
@@ -1287,7 +1287,7 @@
           >
             <EmptyState
               size="small"
-              icon="ai ai-check-circle"
+              icon="ai ai-circle-check"
               :title="'No open incidents in ' + phrase"
               description="An incident opens when an application or a location stays poor for several samples in a row."
             />

@@ -3,11 +3,11 @@ name: sidebar-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 7610b60c1ad34da791e538499fe8425ef7da748a37caafeb66c239ffe6defea3
+checksum: 997373a2226bbb5890a64c86f124041ce7546ab665faecf9f2d29203f039bd2a
 created: 2026-08-03
 last_updated: 2026-11-15
 ---
@@ -132,7 +132,7 @@ is the shape every story below uses.
         <SidebarMenu.Sub>
           <SidebarMenu.SubTrigger
             label="Settings"
-            icon="ai ai-cog"
+            icon="ai ai-settings"
             kind="drill"
           />
           <SidebarMenu.SubContent>

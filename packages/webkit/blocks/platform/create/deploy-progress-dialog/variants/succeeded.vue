@@ -326,7 +326,7 @@
                   />
                   <i
                     v-else
-                    class="ai ai-sliders-h text-(--text-muted)"
+                    class="ai ai-sliders-horizontal text-(--text-muted)"
                     aria-hidden="true"
                   />
                 </Item.Media>

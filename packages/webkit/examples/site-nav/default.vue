@@ -242,7 +242,7 @@
               {
                 label: 'Join our community',
                 description: 'Developers and the Azion team on Discord',
-                icon: 'ai-cor ai-discord'
+                icon: 'ai-color ai-discord'
               }
             ]
           }

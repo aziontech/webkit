@@ -565,7 +565,7 @@
                       <IconButton
                         kind="outlined"
                         size="medium"
-                        icon="ai ai-x"
+                        icon="ai ai-x-brand"
                         :ariaLabel="share.shareX"
                         :href="shareX"
                         target="_blank"

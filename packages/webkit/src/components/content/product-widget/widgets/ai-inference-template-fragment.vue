@@ -32,13 +32,13 @@
     {
       title: 'Next.js Boilerplate',
       description: 'Deploy a full-stack Next.js application in a few steps.',
-      icon: 'ai-cor ai-next',
+      icon: 'ai-color ai-nextjs',
       markClass: DARK_INK
     },
     {
       title: 'React Boilerplate',
       description: 'Automate your React.js deployments.',
-      icon: 'ai-cor ai-react',
+      icon: 'ai-color ai-react',
       markClass: ''
     },
     {
@@ -66,19 +66,19 @@
     {
       title: 'OpenNext Starter',
       description: 'Deploy Next.js through the OpenNext adapter, server routes included.',
-      icon: 'ai-cor ai-next',
+      icon: 'ai-color ai-nextjs',
       markClass: DARK_INK
     },
     {
       title: 'JavaScript Starter',
       description: 'Run plain JavaScript close to users — no framework, just a handler.',
-      icon: 'ai-cor ai-js',
+      icon: 'ai-color ai-javascript',
       markClass: ''
     },
     {
       title: 'TypeScript Starter',
       description: 'Run a TypeScript handler close to users, compiled on build.',
-      icon: 'ai-cor ai-ts',
+      icon: 'ai-color ai-typescript',
       markClass: ''
     }
   ]

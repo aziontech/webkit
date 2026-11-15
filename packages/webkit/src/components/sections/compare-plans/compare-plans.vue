@@ -336,7 +336,7 @@
                           <IconButton
                             kind="transparent"
                             size="small"
-                            icon="ai ai-info-circle"
+                            icon="ai ai-circle-info"
                             :aria-label="t('comparePlans.about', { label: row.label })"
                           />
                         </PopoverTrigger>
@@ -369,7 +369,7 @@
               <template v-if="isIncluded(row.values[index])">
                 <Tooltip :text="includedText">
                   <i
-                    class="ai ai-check-circle text-body-md text-(--success-foreground)"
+                    class="ai ai-circle-check text-body-md text-(--success-foreground)"
                     aria-hidden="true"
                   />
                 </Tooltip>

@@ -208,12 +208,12 @@
           >
             <span class="px-0.5 text-(--text-muted)">Applications</span>
             <i
-              class="ai ai-angle-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
+              class="ai ai-chevron-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="px-0.5 text-(--text-default)">qa-p-app</span>
             <i
-              class="ai ai-angle-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
+              class="ai ai-chevron-right text-body-sm text-(--text-muted) rtl:-scale-x-100"
               aria-hidden="true"
             />
             <span class="px-0.5 text-(--text-default)">A7TEE0XR</span>
@@ -428,11 +428,11 @@
                 >
                 <span class="inline-flex items-center gap-(--spacing-sm)">
                   <i
-                    class="ai ai-angle-double-left rtl:-scale-x-100"
+                    class="ai ai-chevrons-left rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <i
-                    class="ai ai-angle-left rtl:-scale-x-100"
+                    class="ai ai-chevron-left rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span
@@ -440,11 +440,11 @@
                     >1</span
                   >
                   <i
-                    class="ai ai-angle-right rtl:-scale-x-100"
+                    class="ai ai-chevron-right rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <i
-                    class="ai ai-angle-double-right rtl:-scale-x-100"
+                    class="ai ai-chevrons-right rtl:-scale-x-100"
                     aria-hidden="true"
                   />
                   <span
@@ -475,7 +475,7 @@
             class="inline-flex size-9 shrink-0 items-center justify-center rounded-(--shape-control) bg-(--bg-canvas)"
           >
             <i
-              class="ai ai-check-circle text-body-lg text-(--text-muted)"
+              class="ai ai-circle-check text-body-lg text-(--text-muted)"
               aria-hidden="true"
             />
           </span>

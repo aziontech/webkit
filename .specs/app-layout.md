@@ -3,9 +3,9 @@ name: app-layout
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: a60ec097c10d41cc7cdd541e49a550665b3400a7d168a34ca3ea9ce6178f8fda
+checksum: 946650dc332eff22eb2fcf5056535eaee71efa8c5dda182f1d46dfe1bdd8a587
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -89,7 +89,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
         <GlobalHeader.Start>
           <IconButton
             v-if="compact"
-            icon="ai ai-bars"
+            icon="ai ai-menu"
             aria-label="Open navigation"
             kind="outlined"
             size="medium"
@@ -98,7 +98,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
         </GlobalHeader.Start>
         <GlobalHeader.End>
           <IconButton
-            icon="ai ai-question-circle"
+            icon="ai ai-circle-help"
             aria-label="Help"
             kind="outlined"
             size="medium"

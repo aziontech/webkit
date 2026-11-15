@@ -33,7 +33,7 @@
 <template>
   <IconButton
     v-if="ctx"
-    icon="ai ai-times"
+    icon="ai ai-x"
     kind="outlined"
     size="small"
     :ariaLabel="props.ariaLabel || t('drawer.close')"

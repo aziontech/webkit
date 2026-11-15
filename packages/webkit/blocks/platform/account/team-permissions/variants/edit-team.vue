@@ -404,7 +404,7 @@
                           </span>
                           <IconButton
                             :id="`team-member-remove-${email}`"
-                            icon="ai ai-times"
+                            icon="ai ai-x"
                             kind="transparent"
                             size="small"
                             :aria-label="`Remove ${userByEmail(email)?.name ?? email}`"

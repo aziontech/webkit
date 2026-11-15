@@ -49,7 +49,7 @@
         />
         <EmptyState
           size="medium"
-          icon="ai ai-th-large"
+          icon="ai ai-layout-grid"
           title="Templates are unavailable"
           description="The catalog shows here once it loads. You can still deploy from your own repository."
         >

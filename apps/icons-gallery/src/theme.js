@@ -36,7 +36,7 @@ function saveTheme(theme) {
 }
 
 function getThemeIcon() {
-  return isDarkMode ? 'pi pi-moon text-sm' : 'pi pi-sun text-sm'
+  return isDarkMode ? 'ai ai-moon text-sm' : 'ai ai-sun text-sm'
 }
 
 function updateThemeIcon() {

@@ -6,7 +6,13 @@
   const surface = ref<string>('Editor')
   const items: ButtonGroupItem[] = [
     { id: 'copy', label: 'Copy code', icon: 'ai ai-copy' },
-    { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'ai ai-arrows-h', pressed: false }
+    {
+      id: 'wrap',
+      type: 'toggle',
+      label: 'Wrap lines',
+      icon: 'ai ai-move-horizontal',
+      pressed: false
+    }
   ]
 </script>
 

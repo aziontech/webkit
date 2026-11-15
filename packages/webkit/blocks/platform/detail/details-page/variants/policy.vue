@@ -52,7 +52,7 @@
             <DropdownMenu.Trigger>
               <Tooltip text="Policy actions">
                 <IconButton
-                  icon="ai ai-ellipsis-h"
+                  icon="ai ai-ellipsis"
                   kind="outlined"
                   size="medium"
                   aria-label="Policy actions"
@@ -81,7 +81,7 @@
               >
                 <template #leading>
                   <i
-                    class="ai ai-cog"
+                    class="ai ai-settings"
                     aria-hidden="true"
                   />
                 </template>

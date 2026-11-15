@@ -406,7 +406,7 @@
       id: 'insert-data',
       title: 'Insert data',
       description: 'Insert sample customer records into the customers table',
-      icon: 'ai ai-plus-circle',
+      icon: 'ai ai-circle-plus',
       sql: `INSERT INTO customers (name, email) VALUES
   ('Jane Doe', 'jane.doe@example.com'),
   ('John Smith', 'john.smith@example.com'),
@@ -426,7 +426,7 @@ LIMIT 100;`
       id: 'count-records',
       title: 'Count records',
       description: 'Count total number of records in customers table',
-      icon: 'ai ai-hashtag',
+      icon: 'ai ai-hash',
       sql: 'SELECT COUNT(*) AS total_customers FROM customers;'
     },
     {
@@ -444,7 +444,7 @@ LIMIT 100;`
       id: 'insert-related',
       title: 'Insert related rows',
       description: 'Insert sample orders for existing customers',
-      icon: 'ai ai-arrow-right-arrow-left',
+      icon: 'ai ai-arrow-right-left',
       sql: `INSERT INTO orders (customer_id, total) VALUES
   (1, 42.50),
   (3, 18.00);`
@@ -471,7 +471,7 @@ ON orders (customer_id);`
       id: 'top-customers',
       title: 'Top customers',
       description: 'Find the 3 customers with the highest order totals',
-      icon: 'ai ai-sort-amount-down',
+      icon: 'ai ai-arrow-down-wide-narrow',
       sql: `SELECT customers.name, SUM(orders.total) AS total_spent
 FROM customers
 JOIN orders ON orders.customer_id = customers.id
@@ -629,7 +629,7 @@ LIMIT 3;`
                   <DropdownMenu.Trigger>
                     <Tooltip :text="`Actions for ${table.name}`">
                       <IconButton
-                        icon="ai ai-ellipsis-h"
+                        icon="ai ai-ellipsis"
                         kind="transparent"
                         size="small"
                         :aria-label="`Actions for ${table.name}`"
@@ -733,7 +733,7 @@ LIMIT 3;`
                   label="Sort"
                   kind="outlined"
                   size="medium"
-                  icon="ai ai-sort-alt"
+                  icon="ai ai-sort"
                 />
                 <Tooltip text="Refresh">
                   <IconButton
@@ -971,7 +971,7 @@ LIMIT 3;`
                   <DropdownMenu.Trigger>
                     <Tooltip :text="`Actions for ${oneLine(item.sql)}`">
                       <IconButton
-                        icon="ai ai-ellipsis-h"
+                        icon="ai ai-ellipsis"
                         kind="transparent"
                         size="small"
                         :aria-label="`Actions for ${oneLine(item.sql)}`"

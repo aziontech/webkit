@@ -19,7 +19,7 @@
     anchor?: string
     /** Turns the title into a disclosure that folds the band body. */
     collapsible?: boolean
-    /** Glyph shown before the title of a collapsible band (e.g. `ai ai-cog`). */
+    /** Glyph shown before the title of a collapsible band (e.g. `ai ai-settings`). */
     icon?: string
   }
 

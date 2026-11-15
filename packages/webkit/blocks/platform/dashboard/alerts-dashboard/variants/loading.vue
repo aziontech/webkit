@@ -649,7 +649,7 @@
               <EmptyState
                 v-else
                 size="small"
-                icon="ai ai-check-circle"
+                icon="ai ai-circle-check"
                 title="No open alerts"
                 description="Every alert raised in the period has been closed."
               />

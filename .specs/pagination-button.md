@@ -3,8 +3,8 @@ name: pagination-button
 category: data
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 862cdab539e9cca85a9e60783f98d30b0fbb3f381ee61adc3d9b1500ec1286e6
+spec_version: 3
+checksum: efae0a7923c438a6a1e139fd0fe00fed263afdac3f8fb0110e06487041d8f8e2
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -97,7 +97,7 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 
 - Visual states: `default`, `hover`, `active`, `focus-visible`, `selected`, `disabled`.
 - Root: a native `button` with `type="button"`, or a `span` with `aria-hidden="true"` when `kind` is `more` (inert: not focusable, no hover / active layer, no `selected` / `disabled` treatment, never emits `click`); attributes (including `aria-label` and `class`) are forwarded to it (`inheritAttrs: false` + `v-bind="$attrs"`).
-- `data-kind` mirrors `kind` (`previous` | `next` | `number` | `more`). `previous` renders `ai ai-chevron-left`, `next` renders `ai ai-chevron-right`, `more` renders `ai ai-ellipsis-h`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
+- `data-kind` mirrors `kind` (`previous` | `next` | `number` | `more`). `previous` renders `ai ai-chevron-left`, `next` renders `ai ai-chevron-right`, `more` renders `ai ai-ellipsis`; only `number` renders the default slot. `number` and `more` carry `var(--bg-surface)`; `previous` and `next` have no surface of their own.
 - `hover` and `active` are two stacked pseudo-element layers (`before:` hover, `after:` active) and are mutually exclusive: pressing hides the hover layer and shows the active layer alone.
 - `data-selected` is present when `selected` is set; it adds `var(--bg-selected)` and a `var(--border-default)` border, and sets `aria-current="page"`.
 - `data-disabled` is present when `disabled` is set; the button also gets the native `disabled` attribute and `aria-disabled="true"`, mutes the foreground to `var(--text-disabled)`, shows `cursor-not-allowed`, hides both state layers and keeps the kind's own surface.

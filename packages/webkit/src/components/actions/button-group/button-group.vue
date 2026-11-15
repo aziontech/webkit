@@ -285,7 +285,7 @@
       <Tooltip :text="overflowName">
         <DropdownMenuTrigger>
           <IconButton
-            icon="ai ai-ellipsis-h"
+            icon="ai ai-ellipsis"
             :ariaLabel="overflowName"
             :kind="kind"
             :size="size"

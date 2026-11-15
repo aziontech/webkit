@@ -567,7 +567,7 @@ test('list_assets filters by name, label and keyword', () => {
   const trash = listAssets(catalog, { kind: 'icons', query: 'delete' }).items.map((i) => i.class)
   assert.ok(trash.includes('ai ai-trash'), trash.join(', '))
   const colour = listAssets(catalog, { kind: 'icons', query: 'react' }).items.map((i) => i.class)
-  assert.ok(colour.includes('ai-cor ai-react'), colour.join(', '))
+  assert.ok(colour.includes('ai-color ai-react'), colour.join(', '))
   const cache = listAssets(catalog, { kind: 'diagrams', query: 'tiered cache' }).items
   assert.ok(cache.some((i) => i.name === 'cache'))
   assert.equal(listAssets(catalog, { kind: 'figures', query: 'cache' }).kind, 'lineFigures')
@@ -604,8 +604,8 @@ test('the Nitro and Stencil glyphs ship as monochrome brand icons', () => {
     assert.doesNotMatch(raw, /#[0-9a-f]{3,6}\b|gradient|<mask|<filter|stroke=/i, cls)
     assert.equal(raw.match(/<path\b/g).length, 1, cls)
   }
-  assert.ok(!icons.has('ai-cor ai-nitro'))
-  assert.ok(!icons.has('ai-cor ai-stencil'))
+  assert.ok(!icons.has('ai-color ai-nitro'))
+  assert.ok(!icons.has('ai-color ai-stencil'))
 })
 
 test('get_component points a consuming component at its asset list', () => {

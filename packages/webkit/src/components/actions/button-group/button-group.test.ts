@@ -10,7 +10,7 @@ import ButtonGroup, { type ButtonGroupItem } from './button-group.vue'
 const items: ButtonGroupItem[] = [
   { id: 'copy', label: 'Copy', icon: 'ai ai-copy' },
   { id: 'off', label: 'Disabled', icon: 'ai ai-ban', disabled: true },
-  { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'ai ai-arrows-h', pressed: true },
+  { id: 'wrap', type: 'toggle', label: 'Wrap lines', icon: 'ai ai-move-horizontal', pressed: true },
   {
     id: 'download',
     type: 'menu',

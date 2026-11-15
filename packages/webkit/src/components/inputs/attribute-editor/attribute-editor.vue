@@ -515,7 +515,7 @@
               @keydown="onGroupGripKeydown($event, groupIndex)"
             >
               <i
-                class="ai ai-bars"
+                class="ai ai-menu"
                 aria-hidden="true"
               />
             </button>
@@ -693,7 +693,7 @@
                           @keydown="onGripKeydown($event, index, grouped ? groupIndex : undefined)"
                         >
                           <i
-                            class="ai ai-bars"
+                            class="ai ai-menu"
                             aria-hidden="true"
                           />
                         </button>

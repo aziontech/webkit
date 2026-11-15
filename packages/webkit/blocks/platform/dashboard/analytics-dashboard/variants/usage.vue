@@ -542,7 +542,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Data transferred, this period vs previous"
@@ -620,7 +620,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Data transferred by project"
@@ -693,7 +693,7 @@
               >
                 <DropdownMenu.Trigger>
                   <IconButton
-                    icon="ai ai-ellipsis-h"
+                    icon="ai ai-ellipsis"
                     kind="transparent"
                     size="small"
                     aria-label="More options for Usage by project"

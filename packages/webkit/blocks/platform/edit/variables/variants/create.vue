@@ -516,7 +516,7 @@
                               :text="entries[index].visible ? 'Hide value' : 'Show value'"
                             >
                               <IconButton
-                                :icon="entries[index].visible ? 'ai ai-eye-slash' : 'ai ai-eye'"
+                                :icon="entries[index].visible ? 'ai ai-eye-off' : 'ai ai-eye'"
                                 kind="outlined"
                                 size="large"
                                 :aria-label="entries[index].visible ? 'Hide value' : 'Show value'"

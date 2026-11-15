@@ -3,8 +3,8 @@ name: hint
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: 593a1bdc5439db4ee248fbb293d5601a07fb6c1125ff902e295c36f83cb1df4e
+spec_version: 5
+checksum: 8c4f155d65b5be30cad5f0574fbe388a754afca0d758eeca7f62aafe24ce766c
 created: 2026-08-10
 last_updated: 2026-11-15
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Small info affordance — a muted `ai ai-info-circle` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a "why does this matter?" note to a field name without spending a line of vertical space on it, and it is what `Field.Label`'s `hint` prop renders.
+Small info affordance — a muted `ai ai-circle-info` glyph on a focusable button — that reveals one short explanation on hover or focus, through `Tooltip`. It is the standard way to attach a "why does this matter?" note to a field name without spending a line of vertical space on it, and it is what `Field.Label`'s `hint` prop renders.
 
 ## When to use
 

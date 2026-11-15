@@ -171,7 +171,7 @@
             :label="editing ? 'Done' : 'Edit layout'"
             :kind="editing ? 'primary' : 'outlined'"
             size="medium"
-            :icon="editing ? 'ai ai-check' : 'ai ai-th-large'"
+            :icon="editing ? 'ai ai-check' : 'ai ai-layout-grid'"
             :aria-pressed="editing"
             @click="editing = !editing"
           />
@@ -205,7 +205,7 @@
                   :label="card.span + '/12'"
                   severity="neutral"
                   size="small"
-                  icon="ai ai-arrows-h"
+                  icon="ai ai-move-horizontal"
                 />
               </ChartCard.Action>
             </ChartCard.Header>

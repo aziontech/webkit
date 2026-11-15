@@ -3,8 +3,8 @@ name: stepper
 category: navigation
 structure: composition
 status: implemented
-spec_version: 4
-checksum: 3e3f71cac7a6f26f2eb62eac6edc3ce4f6e26d4ddcd8e75638819d08f4849083
+spec_version: 5
+checksum: 53828b65a61d5ba27344c52e1239893fa78dff1300ac6642cd6a4f45acfee6f2
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -154,7 +154,7 @@ The five dot states, and what each one renders:
 | `upcoming`   | not reached, nothing known          | outlined, muted, shows its number                           | muted track          |
 | `current`    | `value` equals the root's `v-model` | outlined in `--secondary` with a filled inner disc          | muted track          |
 | `complete`   | the owner set `state="complete"`    | filled `--secondary`, `ai ai-check` glyph                   | filled `--secondary` |
-| `error`      | the owner set `state="error"`       | filled `--danger`, `ai ai-exclamation-triangle` glyph       | muted track          |
+| `error`      | the owner set `state="error"`       | filled `--danger`, `ai ai-triangle-alert` glyph             | muted track          |
 | `loading`    | the owner set `state="loading"`     | outlined in `--secondary`, `Spinner` in place of the number | muted track          |
 
 `error` and `loading` outrank `current`: a step that is both on screen and wrong must say it is wrong.

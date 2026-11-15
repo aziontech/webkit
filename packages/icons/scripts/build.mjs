@@ -48,7 +48,7 @@ const distPkg = {
   name: rootPkg.name,
   version: rootPkg.version,
   description: rootPkg.description,
-  keywords: ['icons', 'icon-font', 'azionicons', 'primeicons', 'css', 'woff2'],
+  keywords: ['icons', 'icon-font', 'azionicons', 'css', 'woff2'],
   license: rootPkg.license,
   repository: rootPkg.repository,
   publishConfig: rootPkg.publishConfig ?? { access: 'public' },
@@ -59,7 +59,6 @@ const distPkg = {
     '.': { types: './index.d.ts', default: './index.css' },
     './azionicons': { types: './index.d.ts', default: './azionicons.css' },
     './azionicons-color': { types: './index.d.ts', default: './azionicons-color.css' },
-    './primeicons': { types: './index.d.ts', default: './primeicons.css' },
     './catalog': './catalog.json',
     './color-catalog': './color-catalog.json'
   }

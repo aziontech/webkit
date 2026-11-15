@@ -139,7 +139,7 @@
         >
           <slot name="leading">
             <i
-              class="ai ai-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
+              class="ai ai-circle-info mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
               aria-hidden="true"
             />
             <p class="min-w-0 text-body-sm text-(--text-default)">
@@ -190,7 +190,7 @@
         >
           <slot name="leading">
             <i
-              class="ai ai-info-circle shrink-0 text-body-sm text-(--text-muted)"
+              class="ai ai-circle-info shrink-0 text-body-sm text-(--text-muted)"
               aria-hidden="true"
             />
             <p class="min-w-0 text-body-sm text-(--text-default)">
@@ -217,7 +217,7 @@
         >
           <slot name="leading">
             <i
-              class="ai ai-info-circle mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
+              class="ai ai-circle-info mt-0.5 shrink-0 text-body-sm text-(--text-muted)"
               aria-hidden="true"
             />
             <p class="min-w-0 text-body-sm text-(--text-default)">

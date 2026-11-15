@@ -3,9 +3,9 @@ name: tutorial-panel
 category: content
 structure: composition
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: a0333a2d3c03b5a66d2d733b2d8be79c5d6ba7dfae93230db67a179f409e6d74
+checksum: e2016d65d54dbbe33fea6d08600388788d0d7b2d52b60b4a76d337a1f55d10eb
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -260,7 +260,7 @@ _None._
 ## Right-to-left
 
 - Layout: logical utilities only; every row is a flex row that follows `dir`.
-- Icons: `ai ai-check-circle` (not mirrored), `ai ai-sign-out` on Exit (not mirrored; it names the action, not a direction).
+- Icons: `ai ai-circle-check` (not mirrored), `ai ai-log-out` on Exit (not mirrored; it names the action, not a direction).
 - Keyboard: no arrow keys.
 - User data: none.
 

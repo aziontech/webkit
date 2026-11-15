@@ -38,19 +38,73 @@ export function loadMigration(version) {
 
 const ICON_PAIR = /(?<![\w-])pi(\s+)(pi-[a-z0-9]+(?:-[a-z0-9]+)*)(?![\w-])/g
 const ICON_TOKEN = /(?<![\w-])pi-[a-z0-9]+(?:-[a-z0-9]+)*(?![\w-])/g
+const AZION_PAIR = /(?<![\w-])(ai-cor|ai)(\s+|\.)(ai-[a-z0-9]+(?:-[a-z0-9]+)*)(?![\w-])/g
+const AZION_TOKEN = /(?<![\w-])ai-[a-z0-9]+(?:-[a-z0-9]+)*(?![\w-])/g
 
-export function migrateIcons(source, icons = {}) {
+function migrateAzionIcons(source, icons, { fromMajor, declaredMajor }) {
+  const { azionicons = {}, colorBase = {}, color = {} } = icons
   const changes = []
   const warnings = []
-  if (!source.includes('pi-')) return { source, changes, warnings }
-  const out = source.replace(ICON_PAIR, (all, space, name) => {
-    const rule = icons[name]
+  if (!source.includes('ai-')) return { source, changes, warnings }
+  let out = source.replace(AZION_PAIR, (all, base, glue, name) => {
+    if (colorBase[base]) {
+      const next = color[name] || name
+      changes.push(`${base} ${name} → ${colorBase[base]} ${next}`)
+      return `${colorBase[base]}${glue}${next}`
+    }
+    const rule = azionicons[name]
+    if (typeof rule === 'string') {
+      changes.push(`ai ${name} → ai ${rule}`)
+      return `ai${glue}${rule}`
+    }
+    if (!rule || !rule.to) return all
+    if (fromMajor != null && fromMajor < rule.before) {
+      changes.push(`ai ${name} → ai ${rule.to}`)
+      return `ai${glue}${rule.to}`
+    }
+    if (declaredMajor == null || declaredMajor < rule.before)
+      warnings.push(
+        `Azion icon ai ${name}: ${rule.note}; write ai ${rule.to} if it is the brand mark`
+      )
+    return all
+  })
+  for (const [base, next] of Object.entries(colorBase)) {
+    const loose = new RegExp(`(?<![\\w-])${base}(?![\\w-])`, 'g')
+    out = out.replace(loose, () => {
+      changes.push(`${base} → ${next}`)
+      return next
+    })
+  }
+  for (const [name] of out.matchAll(AZION_TOKEN)) {
+    const rule = name in azionicons ? azionicons[name] : color[name]
+    if (typeof rule !== 'string') continue
+    warnings.push(
+      `Azion icon class ${name} outside an "ai ${name}" pair: rewrite it to ${rule} by hand`
+    )
+  }
+  return { source: out, changes, warnings }
+}
+
+export function migrateIcons(source, icons = {}, { fromMajor = null, declaredMajor = null } = {}) {
+  const azion = migrateAzionIcons(source, icons, { fromMajor, declaredMajor })
+  const primeicons = icons.primeicons || {}
+  const changes = [...azion.changes]
+  const warnings = [...azion.warnings]
+  const done = () => ({
+    source: out,
+    changes: [...new Set(changes)],
+    warnings: [...new Set(warnings)]
+  })
+  let out = azion.source
+  if (!out.includes('pi-')) return done()
+  out = out.replace(ICON_PAIR, (all, space, name) => {
+    const rule = primeicons[name]
     if (typeof rule !== 'string') return all
     changes.push(`pi ${name} → ai ${rule}`)
     return `ai${space}${rule}`
   })
   for (const [name] of out.matchAll(ICON_TOKEN)) {
-    const rule = icons[name]
+    const rule = primeicons[name]
     if (!rule) continue
     warnings.push(
       typeof rule === 'string'
@@ -58,7 +112,7 @@ export function migrateIcons(source, icons = {}) {
         : `PrimeIcons class ${name} has no Azion icon: ${rule.removed}`
     )
   }
-  return { source: out, changes: [...new Set(changes)], warnings: [...new Set(warnings)] }
+  return done()
 }
 
 const kebab = (s) =>
@@ -86,6 +140,7 @@ export function renameSubpath(subpath, components) {
 }
 
 function renameBinding(name, rule) {
+  if (!rule.from || !rule.binding) return name
   if (name === rule.from) return rule.binding
   const extendsFrom = rule.binding.startsWith(rule.from) && rule.binding !== rule.from
   const alreadyNew =
@@ -254,10 +309,10 @@ export function referencedSubpaths(source) {
   return new Set([...source.matchAll(SUBPATH_LITERAL)].map((m) => m[2]))
 }
 
-export function migrateSource(input, migration, { fromMajor = null } = {}) {
+export function migrateSource(input, migration, { fromMajor = null, declaredMajor = null } = {}) {
   const { props, types } = migration
   const tokenPass = migrateTokens(input, migration.tokens)
-  const iconPass = migrateIcons(tokenPass.source, migration.icons)
+  const iconPass = migrateIcons(tokenPass.source, migration.icons, { fromMajor, declaredMajor })
   const source = iconPass.source
   const changes = [...tokenPass.changes, ...iconPass.changes]
   const warnings = [...tokenPass.warnings, ...iconPass.warnings]
@@ -426,7 +481,10 @@ export function planMigrate(projectDir, { version = 6, dryRun = false, fromMajor
   }
 
   for (const { file, before } of files) {
-    const { source, changes, warnings } = migrateSource(before, migration, { fromMajor: from })
+    const { source, changes, warnings } = migrateSource(before, migration, {
+      fromMajor: from,
+      declaredMajor: declared ? declared.major : null
+    })
     if (!changes.length && !warnings.length) continue
     if (source !== before && !dryRun) writeFileSync(file, source)
     results.push({ file: relative(projectDir, file), changes, warnings })

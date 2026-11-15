@@ -186,13 +186,13 @@
               label="And"
               kind="outlined"
               size="small"
-              icon="ai ai-plus-circle"
+              icon="ai ai-circle-plus"
             />
             <Button
               label="Or"
               kind="outlined"
               size="small"
-              icon="ai ai-plus-circle"
+              icon="ai ai-circle-plus"
             />
           </span>
         </ShellMockupPart>
@@ -231,7 +231,7 @@
             label="Add Behavior"
             kind="outlined"
             size="small"
-            icon="ai ai-plus-circle"
+            icon="ai ai-circle-plus"
           />
         </ShellMockupPart>
       </div>

@@ -34,7 +34,7 @@
     title: string
     /** One line on what the template builds. */
     description?: string
-    /** Icon-font class of the template's mark, such as `ai-cor ai-astro`. */
+    /** Icon-font class of the template's mark, such as `ai-color ai-astro`. */
     icon?: string
     /** Inverts the mark under the dark theme, for a mark whose artwork ships in dark ink only. */
     invertInDark?: boolean

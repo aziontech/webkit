@@ -20,7 +20,7 @@
         label="Configure"
         kind="outlined"
         size="small"
-        icon="ai ai-cog"
+        icon="ai ai-settings"
       />
     </template>
   </Card>

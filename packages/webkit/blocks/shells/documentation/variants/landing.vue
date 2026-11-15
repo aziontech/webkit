@@ -104,11 +104,11 @@
     }
   ]
   const templates = [
-    { title: 'React', icon: 'ai-cor ai-react', href: '/docs/templates/react' },
-    { title: 'Next.js', icon: 'ai-cor ai-next', href: '/docs/templates/next-js' },
-    { title: 'Astro', icon: 'ai-cor ai-astro', href: '/docs/templates/astro' },
-    { title: 'Vue.js', icon: 'ai-cor ai-vue', href: '/docs/templates/vue-js' },
-    { title: 'Angular', icon: 'ai-cor ai-angular', href: '/docs/templates/angular' },
+    { title: 'React', icon: 'ai-color ai-react', href: '/docs/templates/react' },
+    { title: 'Next.js', icon: 'ai-color ai-nextjs', href: '/docs/templates/next-js' },
+    { title: 'Astro', icon: 'ai-color ai-astro', href: '/docs/templates/astro' },
+    { title: 'Vue.js', icon: 'ai-color ai-vue', href: '/docs/templates/vue-js' },
+    { title: 'Angular', icon: 'ai-color ai-angular', href: '/docs/templates/angular' },
     { title: 'Gatsby Blog', icon: 'ai ai-gatsby', href: '/docs/templates/gatsby-blog' },
     { title: 'Hono', icon: 'ai ai-hono', href: '/docs/templates/hono' },
     { title: 'Hugo', icon: 'ai ai-hugo', href: '/docs/templates/hugo' }

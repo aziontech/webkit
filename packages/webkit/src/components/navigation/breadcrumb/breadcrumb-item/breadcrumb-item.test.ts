@@ -47,14 +47,14 @@ describe('BreadcrumbItem', () => {
 
     it('renders the leading icon when showIcon is true', () => {
       const { getByTestId } = render(BreadcrumbItem, {
-        props: { label: 'Home', showIcon: true, icon: 'ai ai-cog' }
+        props: { label: 'Home', showIcon: true, icon: 'ai ai-settings' }
       })
 
       const icon = getByTestId(`${TESTID}__icon`)
 
       expect(icon).toBeTruthy()
       expect(icon.getAttribute('aria-hidden')).toBe('true')
-      expect(icon.className).toContain('ai ai-cog')
+      expect(icon.className).toContain('ai ai-settings')
     })
 
     it('honours a consumer-provided data-testid', () => {

@@ -1262,7 +1262,7 @@
               class="flex min-w-0 items-center gap-(--spacing-2xs) text-body-xs text-(--text-muted)"
             >
               <i
-                class="ai ai-info-circle shrink-0"
+                class="ai ai-circle-info shrink-0"
                 aria-hidden="true"
               />
               <span class="truncate">{{ changeSummary }}</span>

@@ -3,12 +3,12 @@ name: sidebar
 category: layout
 structure: composition
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: f7b4c6777edcd2d468d84b18f9f42cb21adc3f8b6c446619cde0f6ee9aded276
+checksum: dee25e1196f067abc2002a71c7ae7dfe9cf623762536ba0853fbfbbb6b31a2b0
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -142,7 +142,7 @@ Two details are what make the pair correct, and neither costs more than one attr
         <SidebarMenu.Sub>
           <SidebarMenu.SubTrigger
             label="Settings"
-            icon="ai ai-cog"
+            icon="ai ai-settings"
             kind="drill"
           />
           <SidebarMenu.SubContent>
@@ -178,7 +178,7 @@ Two details are what make the pair correct, and neither costs more than one attr
         >
           <DropdownMenu.Trigger>
             <IconButton
-              icon="ai ai-ellipsis-v"
+              icon="ai ai-ellipsis-vertical"
               aria-label="Account menu"
               kind="outlined"
               size="small"
@@ -636,7 +636,7 @@ Every story composes `SidebarMenu` for its rows and groups.
   it under `dir="rtl"`.
 - The drag and the arrow keys mirror (`logicalArrowKey`); the expand affordance slides in from the
   right, and every tooltip (the expand button, the icon-rail rows) opens on the left.
-- The collapse / expand glyphs (`ai-angle-double-left` / `-right`) keep their meaning through the
+- The collapse / expand glyphs (`ai-chevrons-left` / `-right`) keep their meaning through the
   direction-aware placement of the trigger.
 
 ## Responsive

@@ -3,8 +3,8 @@ name: settings-section
 category: layout
 structure: monolithic
 status: implemented
-checksum: ea99b11b3a87ae14d3f6d01df3da180eeed06e1fa570430beb879ad0570f1527
-spec_version: 4
+checksum: 3ca5f6abe03ceae1d04e8ca7597251ab1b887b1651ba00941a1e4821a76529b3
+spec_version: 5
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -90,7 +90,7 @@ A band of a settings page: an h2 with a `Hint` glyph that carries the one-senten
 | `hint`        | `string`  | `''`    | false    | One-sentence guidance shown in a Hint glyph beside the title.                                                |
 | `anchor`      | `string`  | `''`    | false    | Id of the h2 that a hash link targets; when set, a copy-link button appears in the gutter on hover or focus. |
 | `collapsible` | `boolean` | `false` | false    | Turns the title into a disclosure that folds the band body.                                                  |
-| `icon`        | `string`  | `''`    | false    | Glyph shown before the title of a collapsible band (e.g. `ai ai-cog`).                                       |
+| `icon`        | `string`  | `''`    | false    | Glyph shown before the title of a collapsible band (e.g. `ai ai-settings`).                                  |
 
 ## v-model
 

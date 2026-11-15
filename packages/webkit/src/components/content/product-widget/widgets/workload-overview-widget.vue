@@ -245,7 +245,7 @@
                       />
                     </span>
                     <IconButton
-                      icon="ai ai-ellipsis-h"
+                      icon="ai ai-ellipsis"
                       kind="outlined"
                       size="medium"
                       ariaLabel="Workload actions"
@@ -262,7 +262,7 @@
                     >
                       Custom domains
                       <i
-                        class="ai ai-plus-circle text-body-sm leading-none"
+                        class="ai ai-circle-plus text-body-sm leading-none"
                         aria-hidden="true"
                       />
                     </span>
@@ -312,7 +312,7 @@
                   class="flex min-h-12 items-center gap-(--spacing-xs) border-t border-(--border-muted) bg-(--bg-canvas) px-(--spacing-md)"
                 >
                   <i
-                    class="ai ai-angle-down text-(--text-muted)"
+                    class="ai ai-chevron-down text-(--text-muted)"
                     aria-hidden="true"
                   />
                   <span class="text-label-md text-(--text-default)">Deployment Settings</span>
@@ -478,7 +478,7 @@
           </div>
           <IconButton
             class="ms-auto shrink-0"
-            icon="ai ai-times"
+            icon="ai ai-x"
             kind="outlined"
             size="small"
             ariaLabel="Close"
@@ -494,7 +494,7 @@
             >
               Resources
               <i
-                class="ai ai-info-circle text-body-xs text-(--text-muted)"
+                class="ai ai-circle-info text-body-xs text-(--text-muted)"
                 aria-hidden="true"
               />
             </h3>
@@ -568,7 +568,7 @@
             >
               Environment
               <i
-                class="ai ai-info-circle text-body-xs text-(--text-muted)"
+                class="ai ai-circle-info text-body-xs text-(--text-muted)"
                 aria-hidden="true"
               />
             </h3>

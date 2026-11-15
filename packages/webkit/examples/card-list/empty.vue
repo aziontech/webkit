@@ -9,7 +9,7 @@
     <template #empty>
       <EmptyState
         size="small"
-        icon="ai ai-th-large"
+        icon="ai ai-layout-grid"
         title="No applications yet"
         description="Create an application to serve your site from the edge."
       >

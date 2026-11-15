@@ -3,9 +3,9 @@ name: job-posting
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 267ed73eb445c08c56d0ceb0a6ba647f17125fc31d7026de17f0509603ee8f53
+checksum: 7cf62faf981b188893c879f94dbec435740c51b42755f07a328d36fe12e04f3c
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -69,7 +69,7 @@ The body of a careers posting page, under the posting's title band: the descript
     apply-label="Apply for this position"
     :facets="[
       { label: 'Engineering', icon: 'ai ai-sitemap' },
-      { label: 'San Francisco, California', icon: 'ai ai-map-marker' }
+      { label: 'San Francisco, California', icon: 'ai ai-map-pin' }
     ]"
     :sections="[
       {

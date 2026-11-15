@@ -7,7 +7,7 @@
   <DocCardGroup :columns="3">
     <DocCard
       title="Start from a template"
-      icon="ai ai-th-large"
+      icon="ai ai-layout-grid"
       href="#templates"
     >
       Ready-made projects that go live in a few clicks. No local tooling.

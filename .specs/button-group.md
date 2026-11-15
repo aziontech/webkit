@@ -3,9 +3,9 @@ name: button-group
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: e7fdb935129e89c4dcf056238746baea28d8858ee1d9aa4d6255a85e03a19569
+checksum: 13a751a3b25ca6a746933088f0c795ac203cdd87088ec91a202f68f422748595
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -66,7 +66,7 @@ A toolbar of icon actions that belong to one surface (a code panel, a table head
       id: 'wrap',
       type: 'toggle',
       label: 'Wrap lines',
-      icon: 'ai ai-arrows-h',
+      icon: 'ai ai-move-horizontal',
       pressed: wrap.value
     },
     {

@@ -30,7 +30,7 @@
 
 <template>
   <div class="input-container">
-    <i class="pi pi-search"></i>
+    <i class="ai ai-search"></i>
     <input
       class="w-full"
       autofocus

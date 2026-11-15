@@ -364,7 +364,7 @@
               >
                 <IconButton
                   :data-testid="`${testId}__back`"
-                  icon="ai ai-angle-left"
+                  icon="ai ai-chevron-left"
                   kind="outlined"
                   size="small"
                   :aria-label="customField ? t('filterMenu.backToPeriods') : t('filterMenu.back')"
@@ -434,7 +434,7 @@
                         {{ summaryOf(field) }}
                       </bdi>
                       <i
-                        class="ai ai-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                        class="ai ai-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                         aria-hidden="true"
                       />
                     </button>
@@ -500,7 +500,7 @@
                   >
                     <span class="grow truncate">{{ t('filterMenu.customRange') }}</span>
                     <i
-                      class="ai ai-angle-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
+                      class="ai ai-chevron-right shrink-0 text-(--text-muted) rtl:-scale-x-100"
                       aria-hidden="true"
                     />
                   </button>
@@ -517,7 +517,7 @@
                     @click="clear(activeField)"
                   >
                     <i
-                      class="ai ai-filter-slash text-(--text-muted)"
+                      class="ai ai-filter-off text-(--text-muted)"
                       aria-hidden="true"
                     />
                     <bdi class="truncate">{{

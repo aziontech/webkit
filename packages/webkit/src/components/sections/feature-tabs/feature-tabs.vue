@@ -203,7 +203,7 @@
             :label="primaryAction.label"
             :href="primaryAction.href"
             :target="primaryAction.target"
-            :icon="primaryAction.trailing ? 'ai ai-angle-right' : ''"
+            :icon="primaryAction.trailing ? 'ai ai-chevron-right' : ''"
           />
         </div>
       </FrameBox>

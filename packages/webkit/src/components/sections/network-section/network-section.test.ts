@@ -50,7 +50,7 @@ const benefits = [
     description: 'Compute, AI, databases and security run close to your users.'
   },
   {
-    icon: 'ai ai-arrows-v',
+    icon: 'ai ai-move-vertical',
     title: 'Zero-ops autoscaling and failover',
     description: 'Absorbs any traffic spike with no cold starts and no capacity planning.'
   }

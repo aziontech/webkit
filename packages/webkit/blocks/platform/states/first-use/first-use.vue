@@ -148,7 +148,7 @@
                 class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-cor ai-next text-body-lg leading-none text-(--text-default)"
+                  class="ai-color ai-nextjs text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -156,7 +156,7 @@
                 class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-cor ai-react text-body-lg leading-none text-(--text-default)"
+                  class="ai-color ai-react text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -164,7 +164,7 @@
                 class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-cor ai-vue text-body-lg leading-none text-(--text-default)"
+                  class="ai-color ai-vue text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>
@@ -172,7 +172,7 @@
                 class="flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border-(length:--border-width-default) border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
-                  class="ai-cor ai-svelte text-body-lg leading-none text-(--text-default)"
+                  class="ai-color ai-svelte text-body-lg leading-none text-(--text-default)"
                   aria-hidden="true"
                 />
               </span>

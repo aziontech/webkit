@@ -40,7 +40,7 @@
           icon: 'ai ai-discord'
         },
         { label: 'Read our blog posts', href: '/blog', icon: 'ai ai-comment' },
-        { label: 'Follow us on X', href: 'https://twitter.com/aziontech', icon: 'ai ai-x' }
+        { label: 'Follow us on X', href: 'https://twitter.com/aziontech', icon: 'ai ai-x-brand' }
       ]
     }"
     :copy-page="{

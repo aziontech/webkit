@@ -46,7 +46,7 @@
       version: 'v43',
       application: 'storefront',
       framework: 'Next.js',
-      frameworkIcon: 'ai-cor ai-next',
+      frameworkIcon: 'ai-color ai-nextjs',
       environment: 'Preview',
       action: ''
     },
@@ -54,7 +54,7 @@
       version: 'v42',
       application: 'storefront',
       framework: 'Next.js',
-      frameworkIcon: 'ai-cor ai-next',
+      frameworkIcon: 'ai-color ai-nextjs',
       environment: 'Preview',
       action: 'Promote'
     },
@@ -62,7 +62,7 @@
       version: 'v41',
       application: 'storefront',
       framework: 'Next.js',
-      frameworkIcon: 'ai-cor ai-next',
+      frameworkIcon: 'ai-color ai-nextjs',
       environment: 'Production',
       action: ''
     },
@@ -70,7 +70,7 @@
       version: 'v18',
       application: 'marketing-site',
       framework: 'Astro',
-      frameworkIcon: 'ai-cor ai-astro',
+      frameworkIcon: 'ai-color ai-astro',
       environment: 'Production',
       action: ''
     },
@@ -78,7 +78,7 @@
       version: 'v12',
       application: 'docs',
       framework: 'Nuxt',
-      frameworkIcon: 'ai-cor ai-nuxt',
+      frameworkIcon: 'ai-color ai-nuxt',
       environment: 'Preview',
       action: 'Promote'
     },
@@ -86,7 +86,7 @@
       version: 'v31',
       application: 'dashboard',
       framework: 'React',
-      frameworkIcon: 'ai-cor ai-react',
+      frameworkIcon: 'ai-color ai-react',
       environment: 'Production',
       action: ''
     },
@@ -94,7 +94,7 @@
       version: 'v30',
       application: 'dashboard',
       framework: 'React',
-      frameworkIcon: 'ai-cor ai-react',
+      frameworkIcon: 'ai-color ai-react',
       environment: 'Production',
       action: 'Rollback',
       actionIcon: 'ai ai-undo'

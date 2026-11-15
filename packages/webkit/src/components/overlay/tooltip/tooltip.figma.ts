@@ -9,7 +9,7 @@ const text = instance.getString('text')
 
 export default {
   example: figma.code`<Tooltip text="${text}">
-  <IconButton icon="ai ai-info-circle" aria-label="More information" />
+  <IconButton icon="ai ai-circle-info" aria-label="More information" />
 </Tooltip>`,
   imports: [
     "import Tooltip from '@aziontech/webkit/tooltip'",
