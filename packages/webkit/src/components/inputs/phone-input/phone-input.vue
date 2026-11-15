@@ -292,7 +292,7 @@
           :data-testid="`${testId}__search-empty`"
           class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
         >
-          {{ searchEmptyLabel || t('phoneInput.empty') }}
+          {{ searchEmptyLabel || t('phoneInput.noMatch') }}
         </p>
       </SelectContent>
       <FormValue

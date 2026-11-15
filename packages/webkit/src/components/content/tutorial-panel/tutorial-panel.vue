@@ -145,7 +145,7 @@
         </h3>
         <EmptyState
           v-if="context.tutorials.value.length === 0"
-          :title="t('tutorialPanel.empty')"
+          :title="t('tutorialPanel.emptyTitle')"
           size="small"
           :data-testid="`${testId}__empty`"
         />

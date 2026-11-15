@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 4b1be138142e29eeb7652e215598736cffffc6a21bfcf68f540a40657c4a94a5
+checksum: 0b2b05259d2cfd6ea3eeef96dbdca8046b5c7278e0727f946ad4f21809b71185
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -129,8 +129,8 @@ _none_
 | `conversationHistory.previous7`  | `Previous 7 days`       | —             |
 | `conversationHistory.previous30` | `Previous 30 days`      | —             |
 | `conversationHistory.older`      | `Older`                 | —             |
-| `conversationHistory.empty`      | `No conversations yet.` | —             |
-| `conversationHistory.remove`     | `Delete {title}`        | —             |
+| `conversationHistory.emptyTitle` | `No conversations yet.` | —             |
+| `conversationHistory.delete`     | `Delete {title}`        | —             |
 
 - Groups use calendar days in the browser's time zone, not 24-hour windows.
 

@@ -82,7 +82,7 @@
 
   const attrs = useAttrs()
   const reducedMotion = usePreferredReducedMotion()
-  const { t } = useTranslate({ autoplayControl: en.autoplayControl })
+  const { t } = useTranslate({ common: en.common })
 
   const PROGRESS_TICK_MS = 100
   const MAX_TABS = { vertical: 3, horizontal: 5 } as const
@@ -114,7 +114,7 @@
   )
 
   const pauseLabel = computed(() =>
-    paused.value ? t('autoplayControl.resumeRotation') : t('autoplayControl.pauseRotation')
+    paused.value ? t('common.resumeRotation') : t('common.pauseRotation')
   )
 
   const progress = computed(() =>

@@ -32,7 +32,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ helpPanel: en.helpPanel })
+  const { t } = useTranslate({ helpPanel: en.helpPanel, tutorialPanel: en.tutorialPanel })
   const context = useTutorialPanelTasksContext()
 
   const id = Symbol('TutorialPanelTask')
@@ -47,9 +47,9 @@
   )
 
   const statusLabel = computed<string>(() => {
-    if (props.active) return t('helpPanel.taskCurrent')
-    if (props.status === 'success') return t('helpPanel.taskComplete')
-    return t('helpPanel.taskNotStarted')
+    if (props.active) return t('tutorialPanel.taskCurrent')
+    if (props.status === 'success') return t('tutorialPanel.taskComplete')
+    return t('tutorialPanel.taskNotStarted')
   })
 </script>
 

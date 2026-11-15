@@ -67,7 +67,7 @@
 
   const attrs = useAttrs()
   const dir = useDirection()
-  const { t } = useTranslate({ menu: en.menu })
+  const { t } = useTranslate({ sidebarMenu: en.sidebarMenu })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu'
@@ -77,7 +77,7 @@
   const ariaLabelAttr = computed(() =>
     role.value === 'presentation' || role.value === 'none'
       ? undefined
-      : props.ariaLabel || t('menu.label')
+      : props.ariaLabel || t('sidebarMenu.label')
   )
 
   const hasGroups = computed(() => props.groups.length > 0)

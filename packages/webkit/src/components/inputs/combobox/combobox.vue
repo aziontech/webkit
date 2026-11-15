@@ -226,7 +226,7 @@
 
   useOverlayLayer(expanded, { element: panelEl, transient: true })
 
-  const emptyLabel = computed(() => props.emptyTitle || t('combobox.empty'))
+  const emptyLabel = computed(() => props.emptyTitle || t('combobox.noMatch'))
 
   const activeId = computed(() =>
     expanded.value && active.value >= 0 ? rows.value[active.value]?.id : undefined

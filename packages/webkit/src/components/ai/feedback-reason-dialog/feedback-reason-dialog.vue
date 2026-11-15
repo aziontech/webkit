@@ -67,7 +67,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ feedbackReason: en.feedbackReason })
+  const { t } = useTranslate({ feedbackReasonDialog: en.feedbackReasonDialog })
   const uid = useId()
 
   const testId = computed<string>(
@@ -78,7 +78,7 @@
     props.reasons.length
       ? props.reasons
       : (['inaccurate', 'notHelpful', 'ignoredRequest', 'unsafe', 'other'] as const).map(
-          (value) => ({ value, label: t(`feedbackReason.${value}`) })
+          (value) => ({ value, label: t(`feedbackReasonDialog.${value}`) })
         )
   )
 
@@ -121,8 +121,8 @@
     <DialogContent>
       <PanelHeader class="w-full">
         <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-          <DialogTitle>{{ title || t('feedbackReason.title') }}</DialogTitle>
-          <DialogDescription>{{ t('feedbackReason.description') }}</DialogDescription>
+          <DialogTitle>{{ title || t('feedbackReasonDialog.title') }}</DialogTitle>
+          <DialogDescription>{{ t('feedbackReasonDialog.description') }}</DialogDescription>
         </div>
       </PanelHeader>
       <form
@@ -137,7 +137,7 @@
               :aria-describedby="missing ? `${uid}-error` : undefined"
               :disabled="loading"
             >
-              <FieldLegend kind="label">{{ t('feedbackReason.reason') }}</FieldLegend>
+              <FieldLegend kind="label">{{ t('feedbackReasonDialog.reason') }}</FieldLegend>
               <RadioGroup
                 :id="`${uid}-reasons`"
                 v-model="reason"
@@ -155,14 +155,14 @@
               <FieldError
                 v-if="missing"
                 :id="`${uid}-error`"
-                >{{ t('feedbackReason.required') }}</FieldError
+                >{{ t('feedbackReasonDialog.required') }}</FieldError
               >
             </FieldSet>
             <Field :disabled="loading">
-              <FieldLabel>{{ t('feedbackReason.details') }}</FieldLabel>
+              <FieldLabel>{{ t('feedbackReasonDialog.details') }}</FieldLabel>
               <Textarea
                 v-model="details"
-                :placeholder="t('feedbackReason.detailsPlaceholder')"
+                :placeholder="t('feedbackReasonDialog.detailsPlaceholder')"
                 :data-testid="`${testId}__details`"
               />
             </Field>
@@ -172,7 +172,7 @@
           <Button
             class="w-full md:w-auto"
             type="button"
-            :label="t('feedbackReason.cancel')"
+            :label="t('feedbackReasonDialog.cancel')"
             kind="outlined"
             :disabled="loading"
             @click="open = false"
@@ -180,7 +180,7 @@
           <Button
             class="w-full md:w-auto"
             type="submit"
-            :label="t('feedbackReason.send')"
+            :label="t('feedbackReasonDialog.send')"
             kind="primary"
             :loading="loading"
           />

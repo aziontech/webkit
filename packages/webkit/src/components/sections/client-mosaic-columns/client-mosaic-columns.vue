@@ -72,7 +72,7 @@
   })
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ customerSpotlight: en.customerSpotlight })
+  const { t } = useTranslate({ clientMosaicColumns: en.clientMosaicColumns })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-client-mosaic-columns'
@@ -92,8 +92,8 @@
     }
   }
 
-  const listName = computed(() => props.ariaLabel || t('customerSpotlight.list'))
-  const story = computed(() => props.linkLabel || t('customerSpotlight.story'))
+  const listName = computed(() => props.ariaLabel || t('clientMosaicColumns.list'))
+  const story = computed(() => props.linkLabel || t('clientMosaicColumns.story'))
 
   const active = ref(-1)
   const panelEls = ref<HTMLElement[]>([])

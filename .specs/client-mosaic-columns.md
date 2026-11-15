@@ -6,7 +6,7 @@ status: implemented
 spec_version: 4
 created: 2026-11-04
 last_updated: 2026-11-15
-checksum: dfc1fd83aa37f651f3e390f1800dd5f9bd90329b316a060093a81772b22b674d
+checksum: 155187a56f828040faca2149b503fde9975136ebe472714ccc55da6f5d42ae55
 ---
 
 # ClientMosaicColumns — Component Spec
@@ -131,10 +131,10 @@ Three featured success stories side by side: each column is a client's mark on a
 
 ## Internationalization
 
-| Key                       | English source     | Override prop                          |
-| ------------------------- | ------------------ | -------------------------------------- |
-| `customerSpotlight.list`  | `Customer stories` | `ariaLabel` (read by `reveal="hover"`) |
-| `customerSpotlight.story` | `Read story`       | `linkLabel` (read by `reveal="hover"`) |
+| Key                         | English source     | Override prop                          |
+| --------------------------- | ------------------ | -------------------------------------- |
+| `clientMosaicColumns.list`  | `Customer stories` | `ariaLabel` (read by `reveal="hover"`) |
+| `clientMosaicColumns.story` | `Read story`       | `linkLabel` (read by `reveal="hover"`) |
 
 ## Examples
 

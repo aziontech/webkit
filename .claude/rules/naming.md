@@ -302,7 +302,13 @@ Singular, from a closed list: `action`, `ai`, `chart`, `code`, `content`, `data`
 ## 13. i18n keys
 
 The namespace is the **camelCase component name** (`feedbackReasonDialog` for
-`feedback-reason-dialog`); keys are **camelCase**, nested by part when needed.
+`feedback-reason-dialog`); keys are **camelCase**, and a part's keys carry the part as a prefix
+(`promptInput.menuResults`, `copyButton.fallbackTitle`), because a key is always `group.key`.
+Strings several components share live in the one shared namespace, **`common`** (`common.copy`,
+`common.copied`, `common.newTab`, the autoplay pause and resume labels). One key per message: a
+search or filter miss is `noMatch`, a no-data state is `emptyTitle` / `emptyDescription`, the
+keys mirror the props they default (`emptyTitle`, `noMatch`). Locale catalogs live in
+`src/locales/<bcp47>.ts`, the same path as the `./locales/<bcp47>` export.
 
 | ✅                           | ❌                                                               |
 | ---------------------------- | ---------------------------------------------------------------- |

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 0ec19fed5004d65087d4c1a32a4e6fe78657f7aaf89fa5f5335edfbe225bb6b3
+checksum: 534ab6eaeb29965ce427ce8af4ffbd9f7b801e59cb1464c0b0f8f0d214c4447f
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -119,17 +119,17 @@ _none_
 
 ## Internationalization
 
-| Key                                                                            | English source                                                                                    | Override prop |
-| ------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | ------------- |
-| `feedbackReason.title`                                                         | `What went wrong?`                                                                                | `title`       |
-| `feedbackReason.description`                                                   | `Your answer helps improve future responses.`                                                     | —             |
-| `feedbackReason.reason`                                                        | `Reason`                                                                                          | —             |
-| `feedbackReason.details`                                                       | `Details (optional)`                                                                              | —             |
-| `feedbackReason.detailsPlaceholder`                                            | `What did you expect instead?`                                                                    | —             |
-| `feedbackReason.required`                                                      | `Choose a reason.`                                                                                | —             |
-| `feedbackReason.cancel`                                                        | `Cancel`                                                                                          | —             |
-| `feedbackReason.send`                                                          | `Send feedback`                                                                                   | —             |
-| `feedbackReason.inaccurate`, `notHelpful`, `ignoredRequest`, `unsafe`, `other` | `Inaccurate or made up`, `Not helpful`, `Did not follow my request`, `Unsafe or harmful`, `Other` | `reasons`     |
+| Key                                                                                  | English source                                                                                    | Override prop |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------- | ------------- |
+| `feedbackReasonDialog.title`                                                         | `What went wrong?`                                                                                | `title`       |
+| `feedbackReasonDialog.description`                                                   | `Your answer helps improve future responses.`                                                     | —             |
+| `feedbackReasonDialog.reason`                                                        | `Reason`                                                                                          | —             |
+| `feedbackReasonDialog.details`                                                       | `Details (optional)`                                                                              | —             |
+| `feedbackReasonDialog.detailsPlaceholder`                                            | `What did you expect instead?`                                                                    | —             |
+| `feedbackReasonDialog.required`                                                      | `Choose a reason.`                                                                                | —             |
+| `feedbackReasonDialog.cancel`                                                        | `Cancel`                                                                                          | —             |
+| `feedbackReasonDialog.send`                                                          | `Send feedback`                                                                                   | —             |
+| `feedbackReasonDialog.inaccurate`, `notHelpful`, `ignoredRequest`, `unsafe`, `other` | `Inaccurate or made up`, `Not helpful`, `Did not follow my request`, `Unsafe or harmful`, `Other` | `reasons`     |
 
 ## Right-to-left
 

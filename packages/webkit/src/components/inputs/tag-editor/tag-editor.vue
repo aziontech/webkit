@@ -188,7 +188,7 @@
       :disabled="isDisabled"
       :add-button-label="t('tagEditor.add')"
       :remove-button-label="t('tagEditor.remove')"
-      :empty-title="t('tagEditor.empty')"
+      :empty-title="t('tagEditor.emptyTitle')"
       :aria-label="ariaLabel || t('tagEditor.label')"
       :data-testid="`${testId}__editor`"
       @update:items="setTags"

@@ -30,6 +30,6 @@
     :data-testid="testId"
     class="p-(--spacing-sm) text-label-sm text-(--text-muted)"
   >
-    <slot>{{ t('command.empty') }}</slot>
+    <slot>{{ t('command.noMatch') }}</slot>
   </div>
 </template>

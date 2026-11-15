@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: 3df8f23b1eb76728ac755a72c613401284096889c493eb48c887725521fe521a
+checksum: 286651393d1dee912962cb16af70e165319124ed8dc8c66ac0520b0001b755a8
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -125,20 +125,20 @@ Query mode:
 
 ## Props
 
-| Prop             | Type                                                                             | Default    | Required | JSDoc                                                                                                                                              |
-| ---------------- | -------------------------------------------------------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `properties`     | `FilteringProperty[]`                                                            | `[]`       | false    | Properties the suggestions offer, with their operators and values.                                                                                 |
-| `totalCount`     | `number`                                                                         | undefined  | false    | Items that match the query, announced next to the tokens. Hidden when unset.                                                                       |
-| `placeholder`    | `string`                                                                         | `''`       | false    | Placeholder of the field. Empty uses the locale catalog.                                                                                           |
-| `ariaLabel`      | `string`                                                                         | `''`       | false    | Accessible name of the field. Empty uses the locale catalog.                                                                                       |
-| `freeText`       | `boolean`                                                                        | `true`     | false    | Accepts typed text with no property as a free-text token.                                                                                          |
-| `disabled`       | `boolean`                                                                        | `false`    | false    | Disables the field and the tokens.                                                                                                                 |
-| `mode`           | `'tokens' \| 'query'`                                                            | `'tokens'` | false    | `tokens` turns each choice into a token; `query` edits one query string.                                                                           |
-| `validate`       | `(text: string) => string`                                                       | undefined  | false    | Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check.                         |
-| `suggest`        | `(text: string, caret: number) => PropertyFilterQuerySuggestion[]`               | undefined  | false    | Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions.                        |
-| `grouped`        | `boolean`                                                                        | `false`    | false    | Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one.                                            |
+| Prop             | Type                                                                             | Default    | Required | JSDoc                                                                                                                                                 |
+| ---------------- | -------------------------------------------------------------------------------- | ---------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `properties`     | `FilteringProperty[]`                                                            | `[]`       | false    | Properties the suggestions offer, with their operators and values.                                                                                    |
+| `totalCount`     | `number`                                                                         | undefined  | false    | Items that match the query, announced next to the tokens. Hidden when unset.                                                                          |
+| `placeholder`    | `string`                                                                         | `''`       | false    | Placeholder of the field. Empty uses the locale catalog.                                                                                              |
+| `ariaLabel`      | `string`                                                                         | `''`       | false    | Accessible name of the field. Empty uses the locale catalog.                                                                                          |
+| `freeText`       | `boolean`                                                                        | `true`     | false    | Accepts typed text with no property as a free-text token.                                                                                             |
+| `disabled`       | `boolean`                                                                        | `false`    | false    | Disables the field and the tokens.                                                                                                                    |
+| `mode`           | `'tokens' \| 'query'`                                                            | `'tokens'` | false    | `tokens` turns each choice into a token; `query` edits one query string.                                                                              |
+| `validate`       | `(text: string) => string`                                                       | undefined  | false    | Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check.                            |
+| `suggest`        | `(text: string, caret: number) => PropertyFilterQuerySuggestion[]`               | undefined  | false    | Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions.                           |
+| `grouped`        | `boolean`                                                                        | `false`    | false    | Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one.                                               |
 | `showOperations` | `boolean`                                                                        | `true`     | false    | Shows the Match all / Match any toggle; false keeps the tokens combined with AND (a model that holds only AND conditions, such as a table's filters). |
-| `loadValues`     | `(property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>` | undefined  | false    | Fetches the values of a property for the typed text, after the operator. Replaces its `options` in the suggestions.                                |
+| `loadValues`     | `(property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>` | undefined  | false    | Fetches the values of a property for the typed text, after the operator. Replaces its `options` in the suggestions.                                   |
 
 Types (from `@aziontech/webkit/use-collection`): `PropertyFilterQuery = { tokens: PropertyFilterToken[]; operation: 'and' | 'or' }`; `PropertyFilterToken = { propertyKey?: string; operator: '=' | '!=' | ':' | '!:' | '^' | '!^' | '>' | '<' | '>=' | '<='; value: string }`; `FilteringProperty = { key: string; label: string; operators?: PropertyFilterOperator[]; options?: PropertyFilterOption[]; type?: 'text' | 'number' | 'date'; customValue?: boolean }`; `PropertyFilterOption = { value: string; label?: string; count?: number }`. Since v4, `PropertyFilterQuery` may carry `groups?: PropertyFilterTokenGroup[]` (`{ tokens, operation }`): each group is one condition next to the tokens, combined with the query's `operation`; `useCollection` matches it, sends it to `fetch` and keeps it in the URL (`groups` key). From `@aziontech/webkit/property-filter`: `PropertyFilterQuerySuggestion = { label: string; insert: string; description?: string }` (`insert` replaces the word at the caret); `PropertyFilterSubmit = { text: string; query: PropertyFilterQuery | null }`.
 
@@ -241,11 +241,11 @@ Built-in query grammar: `clause (AND | OR clause)*`, where a clause is `<propert
 | `propertyFilter.groupOperation`                        | Combine filters in group {index}                                                              | —             |
 | `propertyFilter.loadingValues` / `valuesError`         | Loading values / Could not load values                                                        | —             |
 | `propertyFilter.valueEditor`                           | Value of {property}                                                                           | —             |
-| `propertyFilterQuery.label`                            | Query                                                                                         | `ariaLabel`   |
-| `propertyFilterQuery.placeholder`                      | Type a query, for example status = Active AND requests > 10                                   | `placeholder` |
-| `propertyFilterQuery.fields`                           | Fields                                                                                        | —             |
-| `propertyFilterQuery.all` / `any`                      | Every condition matches / Any condition matches (AND / OR)                                    | —             |
-| `propertyFilterQuery.unknownField` … `unclosedQuote`   | the built-in check messages (`{field}`, `{operator}`, `{word}`, `{connective}`, `{position}`) | `validate`    |
+| `propertyFilter.queryLabel`                            | Query                                                                                         | `ariaLabel`   |
+| `propertyFilter.queryPlaceholder`                      | Type a query, for example status = Active AND requests > 10                                   | `placeholder` |
+| `propertyFilter.queryFields`                           | Fields                                                                                        | —             |
+| `propertyFilter.queryAll` / `queryAny`                 | Every condition matches / Any condition matches (AND / OR)                                    | —             |
+| `propertyFilter.unknownField` … `unclosedQuote`        | the built-in check messages (`{field}`, `{operator}`, `{word}`, `{connective}`, `{position}`) | `validate`    |
 
 - Formatting: value counts use `Intl.NumberFormat` of the active locale; the match count goes through the plural rules and number format of the active locale (`Intl.PluralRules`, `Intl.NumberFormat`).
 

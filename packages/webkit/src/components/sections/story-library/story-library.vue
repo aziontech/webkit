@@ -119,7 +119,7 @@
 
   const Chip = defineAsyncComponent(() => import('../../inputs/chip/chip.vue'))
   const attrs = useAttrs()
-  const { t } = useTranslate({ storyLibrary: en.storyLibrary })
+  const { t } = useTranslate({ storyLibrary: en.storyLibrary, common: en.common })
 
   const query = ref('')
 
@@ -239,7 +239,7 @@
 
   const cardLabel = (item: StoryLibraryItem): string => {
     const name = props.linkLabel ? `${props.linkLabel}: ${item.client.name}` : item.client.name
-    return item.target === '_blank' ? `${name} ${t('storyLibrary.newTab')}` : name
+    return item.target === '_blank' ? `${name} ${t('common.newTab')}` : name
   }
 </script>
 
@@ -354,7 +354,7 @@
                   role="status"
                   class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                 >
-                  {{ t('storyLibrary.empty') }}
+                  {{ t('storyLibrary.noMatch') }}
                 </p>
               </SelectContent>
             </Select>

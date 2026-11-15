@@ -486,7 +486,7 @@
             {{ item.label }}
           </CommandItem>
         </CommandGroup>
-        <CommandEmpty>{{ t('docLayout.searchEmpty') }}</CommandEmpty>
+        <CommandEmpty>{{ t('docLayout.noMatch') }}</CommandEmpty>
       </CommandList>
     </Command>
   </div>

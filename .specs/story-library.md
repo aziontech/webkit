@@ -7,7 +7,7 @@ spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 67aa13c3497dca87ed4dd5082c030eb12dd3e0f3ee844c614aa834da05b78ab1
+checksum: bbf2eac2a9707f4074c9c8bb101f61d153c453954ff16b4472ffb605f8f8f16b
 ---
 
 # StoryLibrary — Component Spec
@@ -79,23 +79,23 @@ Every success story of a company as one filterable library. A left-aligned title
 
 ## Props
 
-| Prop        | Type                  | Default     | Required | JSDoc                                                                                           |
-| ----------- | --------------------- | ----------- | -------- | ----------------------------------------------------------------------------------------------- |
-| `anchor`    | `string`              | `''`        | false    | In-page id set on the band so a `#hash` link can scroll to it.                                  |
-| `title`     | `string`              | `''`        | false    | Headline of the band, rendered left-aligned as its `h2`; the band renders no header when empty. |
-| `items`     | `StoryLibraryItem[]`  | `[]`        | false    | The stories, in order; each is `{ id, href, client, category, description, facets?, target? }`; a story whose `target` is `_blank` opens in a new tab. |
-| `facets`    | `StoryLibraryFacet[]` | `[]`        | false    | The facet selects, in order; each is `{ id, label, allLabel, options }`.                       |
-| `searchPlaceholder` | `string`      | `''`        | false    | Placeholder of the search field; the field is omitted when this and `searchAriaLabel` are both empty. |
-| `searchShortPlaceholder` | `string` | `''`        | false    | Shorter placeholder of the search field below `lg`; empty uses `searchPlaceholder`. |
-| `searchAriaLabel` | `string`        | `''`        | false    | Accessible name of the search field. |
-| `emptyTitle` | `string`             | `''`        | false    | Message of the no-match state; the state renders only with it. |
-| `emptyActionLabel` | `string`       | `''`        | false    | Label of the no-match state's button that clears every filter; no button renders without it. |
-| `linkLabel` | `string`              | `''`        | false    | Read cue at the foot of each card, also the lead of its accessible name.                        |
-| `moreLabel` | `string`              | `''`        | false    | Label of the load-more button under the grid; without it every match is listed and no button renders. |
-| `pageSize`  | `number`              | `12`        | false    | Stories listed per page when `moreLabel` is set; the load-more button reveals the next page.    |
-| `filterLabel` | `string`            | `''`        | false    | Label of the filter button below `lg`; empty uses the locale catalog (`Filters`).               |
-| `seedFromQuery` | `boolean`         | `false`     | false    | Seeds each facet on mount from the URL query parameter named by its `id` when the value is one of its options. |
-| `ariaLabel` | `string`              | `''`        | false    | Accessible name of the list of stories.                                                         |
+| Prop                     | Type                  | Default | Required | JSDoc                                                                                                                                                  |
+| ------------------------ | --------------------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `anchor`                 | `string`              | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                         |
+| `title`                  | `string`              | `''`    | false    | Headline of the band, rendered left-aligned as its `h2`; the band renders no header when empty.                                                        |
+| `items`                  | `StoryLibraryItem[]`  | `[]`    | false    | The stories, in order; each is `{ id, href, client, category, description, facets?, target? }`; a story whose `target` is `_blank` opens in a new tab. |
+| `facets`                 | `StoryLibraryFacet[]` | `[]`    | false    | The facet selects, in order; each is `{ id, label, allLabel, options }`.                                                                               |
+| `searchPlaceholder`      | `string`              | `''`    | false    | Placeholder of the search field; the field is omitted when this and `searchAriaLabel` are both empty.                                                  |
+| `searchShortPlaceholder` | `string`              | `''`    | false    | Shorter placeholder of the search field below `lg`; empty uses `searchPlaceholder`.                                                                    |
+| `searchAriaLabel`        | `string`              | `''`    | false    | Accessible name of the search field.                                                                                                                   |
+| `emptyTitle`             | `string`              | `''`    | false    | Message of the no-match state; the state renders only with it.                                                                                         |
+| `emptyActionLabel`       | `string`              | `''`    | false    | Label of the no-match state's button that clears every filter; no button renders without it.                                                           |
+| `linkLabel`              | `string`              | `''`    | false    | Read cue at the foot of each card, also the lead of its accessible name.                                                                               |
+| `moreLabel`              | `string`              | `''`    | false    | Label of the load-more button under the grid; without it every match is listed and no button renders.                                                  |
+| `pageSize`               | `number`              | `12`    | false    | Stories listed per page when `moreLabel` is set; the load-more button reveals the next page.                                                           |
+| `filterLabel`            | `string`              | `''`    | false    | Label of the filter button below `lg`; empty uses the locale catalog (`Filters`).                                                                      |
+| `seedFromQuery`          | `boolean`             | `false` | false    | Seeds each facet on mount from the URL query parameter named by its `id` when the value is one of its options.                                         |
+| `ariaLabel`              | `string`              | `''`    | false    | Accessible name of the list of stories.                                                                                                                |
 
 ## Events
 
@@ -153,14 +153,14 @@ Every success story of a company as one filterable library. A left-aligned title
 
 ## Internationalization
 
-| Key | English source | Override prop |
-|---|---|---|
-| `storyLibrary.search` | `Search` | — |
-| `storyLibrary.searchFacet` | `Search {facet}` | — |
-| `storyLibrary.empty` | `No results found.` | — |
-| `storyLibrary.filters` | `Filters` | `filterLabel` |
-| `storyLibrary.filtersApplied` | `{label} ({count})` | — |
-| `storyLibrary.newTab` | `(opens in a new tab)` | — |
+| Key                           | English source         | Override prop |
+| ----------------------------- | ---------------------- | ------------- |
+| `storyLibrary.search`         | `Search`               | —             |
+| `storyLibrary.searchFacet`    | `Search {facet}`       | —             |
+| `storyLibrary.noMatch`        | `No results found.`    | —             |
+| `storyLibrary.filters`        | `Filters`              | `filterLabel` |
+| `storyLibrary.filtersApplied` | `{label} ({count})`    | —             |
+| `common.newTab`               | `(opens in a new tab)` | —             |
 
 - Every other string arrives through props.
 - Formatting: none.

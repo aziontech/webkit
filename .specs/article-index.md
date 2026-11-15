@@ -7,7 +7,7 @@ spec_version: 3
 template: 2
 created: 2026-11-15
 last_updated: 2026-11-15
-checksum: 684fadfc291d1b387a24e96c06fe7e8702eca62048017037001c277c4d2e9a3c
+checksum: 243dd611cbde796c828337e3e43ac8207de958389de85cc96a593d17d1e8319f
 ---
 
 # ArticleIndex — Component Spec
@@ -105,28 +105,28 @@ Every article or resource of a blog or a resource hub as one ruled list, with th
 
 ## Props
 
-| Prop            | Type                   | Default             | Required | JSDoc |
-| --------------- | ---------------------- | ------------------- | -------- | ----- |
-| `anchor`        | `string`               | `''`                | false    | In-page id set on the band so a `#hash` link can scroll to it. |
-| `title`         | `string`               | `''`                | false    | Headline beside the controls, rendered as the band's `h2`; it also names the band. |
-| `filters`       | `ArticleIndexFilters`  | `'category-search'` | false    | Filter bar: `category-search` draws the category picker and the search field, `facets` draws one dropdown per facet. |
-| `items`         | `ArticleIndexItem[]`   | `[]`                | false    | The entries, in order; each is `{ id, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, facets?, target? }`. |
-| `categories`    | `string[]`             | `[]`                | false    | Segments of the category picker after the show-all segment (`category-search`); the picker is omitted when empty. |
-| `allLabel`      | `string`               | `''`                | false    | Label of the first category segment, which shows every category (`category-search`). |
-| `categoryAriaLabel` | `string`           | `''`                | false    | Accessible name of the category picker (`category-search`). |
-| `searchPlaceholder` | `string`           | `''`                | false    | Placeholder of the search field (`category-search`); the field is omitted when this and `searchAriaLabel` are both empty. |
-| `searchAriaLabel` | `string`             | `''`                | false    | Accessible name of the search field (`category-search`). |
-| `facets`        | `ArticleIndexFacet[]`  | `[]`                | false    | The facet dropdowns, in order (`facets`); each is `{ id, label, allLabel, options }`. |
-| `rowLabel`      | `string`               | `''`                | false    | Read cue revealed at the end of a row under hover or focus. |
-| `moreLabel`     | `string`               | `''`                | false    | Label of the load-more button under the list; without it every match is listed and no button renders. |
-| `pageSize`      | `number`               | `12`                | false    | Rows listed per page when `moreLabel` is set; the load-more button reveals the next page. |
-| `leading`       | `number`               | `0`                 | false    | Leading entries left out until a filter applies, because a band above already shows them. |
-| `emptyTitle`    | `string`               | `''`                | false    | Headline of the state when nothing matches; the state renders only with it. |
-| `emptyDescription` | `string`            | `''`                | false    | Sentence under the empty-state headline. |
-| `emptyActionLabel` | `string`            | `''`                | false    | Label of the empty-state button that clears every filter; no button renders without it. |
-| `rowKind`       | `ArticleIndexRowKind`  | `undefined`         | false    | Row layout: `byline` pins the writers to the foot of the copy, `center` centres the copy; unset, `byline` for `category-search` and `center` for `facets`. |
-| `categoryParam` | `string`               | `''`                | false    | Name of a URL query parameter that preselects a category on load and scrolls the band into view (`category-search`); off when empty. |
-| `ariaLabel`     | `string`               | `''`                | false    | Accessible name of the list. |
+| Prop                | Type                  | Default             | Required | JSDoc                                                                                                                                                      |
+| ------------------- | --------------------- | ------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`            | `string`              | `''`                | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                             |
+| `title`             | `string`              | `''`                | false    | Headline beside the controls, rendered as the band's `h2`; it also names the band.                                                                         |
+| `filters`           | `ArticleIndexFilters` | `'category-search'` | false    | Filter bar: `category-search` draws the category picker and the search field, `facets` draws one dropdown per facet.                                       |
+| `items`             | `ArticleIndexItem[]`  | `[]`                | false    | The entries, in order; each is `{ id, href, image?, mark?, meta, title, description?, authors?, byline?, categories?, facets?, target? }`.                 |
+| `categories`        | `string[]`            | `[]`                | false    | Segments of the category picker after the show-all segment (`category-search`); the picker is omitted when empty.                                          |
+| `allLabel`          | `string`              | `''`                | false    | Label of the first category segment, which shows every category (`category-search`).                                                                       |
+| `categoryAriaLabel` | `string`              | `''`                | false    | Accessible name of the category picker (`category-search`).                                                                                                |
+| `searchPlaceholder` | `string`              | `''`                | false    | Placeholder of the search field (`category-search`); the field is omitted when this and `searchAriaLabel` are both empty.                                  |
+| `searchAriaLabel`   | `string`              | `''`                | false    | Accessible name of the search field (`category-search`).                                                                                                   |
+| `facets`            | `ArticleIndexFacet[]` | `[]`                | false    | The facet dropdowns, in order (`facets`); each is `{ id, label, allLabel, options }`.                                                                      |
+| `rowLabel`          | `string`              | `''`                | false    | Read cue revealed at the end of a row under hover or focus.                                                                                                |
+| `moreLabel`         | `string`              | `''`                | false    | Label of the load-more button under the list; without it every match is listed and no button renders.                                                      |
+| `pageSize`          | `number`              | `12`                | false    | Rows listed per page when `moreLabel` is set; the load-more button reveals the next page.                                                                  |
+| `leading`           | `number`              | `0`                 | false    | Leading entries left out until a filter applies, because a band above already shows them.                                                                  |
+| `emptyTitle`        | `string`              | `''`                | false    | Headline of the state when nothing matches; the state renders only with it.                                                                                |
+| `emptyDescription`  | `string`              | `''`                | false    | Sentence under the empty-state headline.                                                                                                                   |
+| `emptyActionLabel`  | `string`              | `''`                | false    | Label of the empty-state button that clears every filter; no button renders without it.                                                                    |
+| `rowKind`           | `ArticleIndexRowKind` | `undefined`         | false    | Row layout: `byline` pins the writers to the foot of the copy, `center` centres the copy; unset, `byline` for `category-search` and `center` for `facets`. |
+| `categoryParam`     | `string`              | `''`                | false    | Name of a URL query parameter that preselects a category on load and scrolls the band into view (`category-search`); off when empty.                       |
+| `ariaLabel`         | `string`              | `''`                | false    | Accessible name of the list.                                                                                                                               |
 
 ## Events
 
@@ -160,16 +160,16 @@ Every article or resource of a blog or a resource hub as one ruled list, with th
 
 ## Tokens
 
-| Region                 | Token (DESIGN.md)                                                        |
-| ---------------------- | ------------------------------------------------------------------------ |
-| row fill               | hover `var(--bg-hover)`                                                  |
-| cover cell             | `var(--bg-surface)`, rule `var(--border-default)`                        |
-| headline               | `text-heading-sm`, `var(--text-default)`                                 |
+| Region                 | Token (DESIGN.md)                                                                          |
+| ---------------------- | ------------------------------------------------------------------------------------------ |
+| row fill               | hover `var(--bg-hover)`                                                                    |
+| cover cell             | `var(--bg-surface)`, rule `var(--border-default)`                                          |
+| headline               | `text-heading-sm`, `var(--text-default)`                                                   |
 | overline, deck, byline | `text-overline-sm` / `text-body-sm` (`text-body-lg` deck in `facets`), `var(--text-muted)` |
-| read cue               | `text-overline-md`, `var(--text-default)`                                |
-| avatar ring            | `var(--bg-canvas)`                                                       |
-| band headline          | `text-heading-md`, `var(--text-default)`                                 |
-| focus ring             | `var(--ring-color)`                                                      |
+| read cue               | `text-overline-md`, `var(--text-default)`                                                  |
+| avatar ring            | `var(--bg-canvas)`                                                                         |
+| band headline          | `text-heading-md`, `var(--text-default)`                                                   |
+| focus ring             | `var(--ring-color)`                                                                        |
 
 ## Theme gaps
 
@@ -188,12 +188,12 @@ Every article or resource of a blog or a resource hub as one ruled list, with th
 
 ## Internationalization
 
-| Key | English source | Override prop |
-|---|---|---|
-| `articleIndex.search` | `Search` | — |
-| `articleIndex.searchFacet` | `Search {facet}` | — |
-| `articleIndex.empty` | `No results found.` | — |
-| `articleIndex.newTab` | `(opens in a new tab)` | — |
+| Key                        | English source         | Override prop |
+| -------------------------- | ---------------------- | ------------- |
+| `articleIndex.search`      | `Search`               | —             |
+| `articleIndex.searchFacet` | `Search {facet}`       | —             |
+| `articleIndex.noMatch`     | `No results found.`    | —             |
+| `common.newTab`            | `(opens in a new tab)` | —             |
 
 - Every other string (labels, placeholders, facet labels, the empty state's copy) arrives through props.
 - Formatting: none; dates arrive pre-formatted in `meta`.

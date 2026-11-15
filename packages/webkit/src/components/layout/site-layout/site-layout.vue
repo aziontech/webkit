@@ -238,7 +238,7 @@
             {{ page.label }}
           </CommandItem>
         </CommandGroup>
-        <CommandEmpty>{{ t('siteLayout.searchEmpty') }}</CommandEmpty>
+        <CommandEmpty>{{ t('siteLayout.noMatch') }}</CommandEmpty>
       </CommandList>
     </Command>
   </div>

@@ -51,7 +51,7 @@
   )
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ tableCellLink: en.tableCellLink })
+  const { t } = useTranslate({ tableCellLink: en.tableCellLink, common: en.common })
   const ctx = inject(TableInjectionKey, null)
   const instance = getCurrentInstance()
   const testId = computed<string>(
@@ -78,7 +78,7 @@
   })
   const tooltip = computed<string>(() => {
     if (!isLink.value) return ''
-    if (external.value) return t('tableCellLink.newTab', { label: props.label })
+    if (external.value) return t('tableCellLink.openInNewTab', { label: props.label })
     return props.destination
       ? t('tableCellLink.openIn', { label: props.label, destination: props.destination })
       : t('tableCellLink.open', { label: props.label })
@@ -120,7 +120,7 @@
         <span
           v-if="external"
           class="sr-only"
-          >{{ ` ${t('tableCellLink.newTabHint')}` }}</span
+          >{{ ` ${t('common.newTab')}` }}</span
         >
         <i
           v-if="isLink"

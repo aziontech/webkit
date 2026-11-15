@@ -98,7 +98,7 @@
 
   const attrs = useAttrs()
 
-  const { t } = useTranslate({ copyButton: en.copyButton })
+  const { t } = useTranslate({ copyButton: en.copyButton, common: en.common })
 
   const hovered = ref(-1)
 
@@ -118,7 +118,7 @@
     props.items.map((item) => (item.scene ? resolveScene(item.scene.component) : null))
   )
 
-  const doneLabel = computed(() => props.copiedLabel || t('copyButton.copied'))
+  const doneLabel = computed(() => props.copiedLabel || t('common.copied'))
 
   const copyPrompt = async (index: number, text: string) => {
     try {

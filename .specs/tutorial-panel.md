@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 6
 template: 2
-checksum: 7998e6a380d5c2b967a0b9ed6606c0cbe1ea6caaab03439d7b78a51a7ca19476
+checksum: a94baaf8c82315ed521835625a9f5de88df1bc805d989036d76d454c43e86575
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -196,7 +196,7 @@ _No events on the panel — every action goes through the provider, which emits 
 
 ## States
 
-- Visual states: `list`, `running`, `complete`, `empty` (no tutorials, rendered by a small `EmptyState` titled with `tutorialPanel.empty`), `loading`
+- Visual states: `list`, `running`, `complete`, `empty` (no tutorials, rendered by a small `EmptyState` titled with `tutorialPanel.emptyTitle`), `loading`
 - `data-view` on the root: `list` | `running` | `complete`
 - `data-completed` on each list item mirrors the tutorial's `completed`
 - In `running`, each task's status is derived from the current step: `success` when every step of the task is behind it, `pending` otherwise; the task that holds the current step is `active`. The current step's row carries `aria-current="step"`.
@@ -244,7 +244,7 @@ _None._
 | `tutorialPanel.title`                | `Tutorials`                                                   | `title`       |
 | `tutorialPanel.description`          | `Learn the product by doing a real task, one step at a time.` | `description` |
 | `tutorialPanel.listLabel`            | `Available tutorials`                                         | —             |
-| `tutorialPanel.empty`                | `No tutorials yet.`                                           | —             |
+| `tutorialPanel.emptyTitle`           | `No tutorials yet.`                                           | —             |
 | `tutorialPanel.start`                | `Start tutorial`                                              | —             |
 | `tutorialPanel.restart`              | `Restart tutorial`                                            | —             |
 | `tutorialPanel.exit`                 | `Exit tutorial`                                               | —             |

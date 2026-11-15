@@ -131,7 +131,7 @@
       class="m-0 px-(--spacing-xs) text-body-sm text-(--text-muted)"
       :data-testid="`${testId}__empty`"
     >
-      {{ t('conversationHistory.empty') }}
+      {{ t('conversationHistory.emptyTitle') }}
     </p>
     <template v-else>
       <div
@@ -186,7 +186,7 @@
                 <IconButton
                   v-if="removable"
                   icon="ai ai-trash"
-                  :ariaLabel="t('conversationHistory.remove', { title: item.title })"
+                  :ariaLabel="t('conversationHistory.delete', { title: item.title })"
                   kind="transparent"
                   size="small"
                   :data-testid="`${testId}__remove`"

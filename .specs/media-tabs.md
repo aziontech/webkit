@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=13138-296208
   node_id: 13138-296208
-checksum: efe6e435b21a79ac472b8a217f6af1e5114de250f50e164d52525dd6d3163f75
+checksum: 1756471160aef19f229825c027db46dadb09cd85dcd5740898d4d9696f63e421
 created: 2026-09-24
 last_updated: 2026-11-15
 ---
@@ -85,18 +85,18 @@ A band split in two: a stack of claims on one side, one piece of media on the ot
 
 ## Props
 
-| Prop               | Type                                     | Default      | Required | JSDoc                                                                                                                                                                                                 |
-| ------------------ | ---------------------------------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `items`            | `MediaTabsItem[]`                        | `[]`         | false    | The tabs, in order, at most three when `tabsSide` is `start` or `end` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered. |
-| `tabsSide`         | `'start' \| 'end' \| 'top' \| 'bottom'`  | `'start'`    | false    | Which side of the media the tabs sit on. Below the `lg` breakpoint every side stacks, with the active tab's media inside its row.                                                                 |
-| `size`             | `'small' \| 'medium' \| 'large'`         | `'medium'`   | false    | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down.                                                    |
-| `selectOn`         | `'hover' \| 'click'`                     | `'hover'`    | false    | What moves the selection as the reader points at a row. A click always selects, on either setting.                                                                                                    |
-| `autoplay`         | `boolean`                                | `true`       | false    | Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion.                    |
-| `autoplayInterval` | `number`                                 | `5000`       | false    | Milliseconds each tab is held before the band advances.                                                                                                                                               |
-| `showProgress`     | `boolean`                                | `true`       | false    | Advances a hairline along the active row's bottom edge while the timer runs.                                                                                                                          |
-| `texture`          | `TextureMaterialKind`                    | `'none'`     | false    | Texture the media column is grounded with; `none` leaves it bare.                                                                                                                                     |
-| `textureSize`      | `TextureMaterialSize`                    | `'medium'`   | false    | Pitch of the ground's tiling — how far apart its cells sit.                                                                                                                                           |
-| `textureFade`      | `TextureMaterialFade`                    | `'vignette'` | false    | How the ground fades out before the column's edges.                                                                                                                                                   |
+| Prop               | Type                                    | Default      | Required | JSDoc                                                                                                                                                                                                |
+| ------------------ | --------------------------------------- | ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `items`            | `MediaTabsItem[]`                       | `[]`         | false    | The tabs, in order, at most three when `tabsSide` is `start` or `end` and five when it is `top` or `bottom`; each item is `{ title, description, src, alt }`. Items past the limit are not rendered. |
+| `tabsSide`         | `'start' \| 'end' \| 'top' \| 'bottom'` | `'start'`    | false    | Which side of the media the tabs sit on. Below the `lg` breakpoint every side stacks, with the active tab's media inside its row.                                                                    |
+| `size`             | `'small' \| 'medium' \| 'large'`        | `'medium'`   | false    | Height each row is held to beside the media, as a multiple of the band's own padding step; in a row of tabs, `small` sets the title one step down.                                                   |
+| `selectOn`         | `'hover' \| 'click'`                    | `'hover'`    | false    | What moves the selection as the reader points at a row. A click always selects, on either setting.                                                                                                   |
+| `autoplay`         | `boolean`                               | `true`       | false    | Advances to the next tab on a timer, with a visible pause control; pauses under the pointer or keyboard focus, restarts its count on a click, and never runs under reduced motion.                   |
+| `autoplayInterval` | `number`                                | `5000`       | false    | Milliseconds each tab is held before the band advances.                                                                                                                                              |
+| `showProgress`     | `boolean`                               | `true`       | false    | Advances a hairline along the active row's bottom edge while the timer runs.                                                                                                                         |
+| `texture`          | `TextureMaterialKind`                   | `'none'`     | false    | Texture the media column is grounded with; `none` leaves it bare.                                                                                                                                    |
+| `textureSize`      | `TextureMaterialSize`                   | `'medium'`   | false    | Pitch of the ground's tiling — how far apart its cells sit.                                                                                                                                          |
+| `textureFade`      | `TextureMaterialFade`                   | `'vignette'` | false    | How the ground fades out before the column's edges.                                                                                                                                                  |
 
 ## v-model
 
@@ -186,10 +186,10 @@ None. The tab shown is the `v-model` (`update:modelValue`).
 
 ## Internationalization
 
-| Key                              | English source    | Override prop |
-| -------------------------------- | ----------------- | ------------- |
-| `autoplayControl.pauseRotation`  | `Pause rotation`  | —             |
-| `autoplayControl.resumeRotation` | `Resume rotation` | —             |
+| Key                     | English source    | Override prop |
+| ----------------------- | ----------------- | ------------- |
+| `common.pauseRotation`  | `Pause rotation`  | —             |
+| `common.resumeRotation` | `Resume rotation` | —             |
 
 - Every other string is copy passed through `items`.
 

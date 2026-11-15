@@ -237,11 +237,7 @@
   >()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({
-    table: en.table,
-    tableReorder: en.tableReorder,
-    tableLoadMore: en.tableLoadMore
-  })
+  const { t } = useTranslate({ table: en.table, dataTable: en.dataTable })
 
   const slots = useSlots()
   const hasSlot = (name: string): boolean => Boolean((slots as Record<string, unknown>)[name])
@@ -1377,7 +1373,7 @@
     return value === undefined || value === null || value === '' ? id : String(value)
   }
   const reorderHandleLabelOf = (id: string, index: number): string =>
-    t('tableReorder.handle', {
+    t('dataTable.reorderHandle', {
       name: rowNameOf(id),
       position: index + 1,
       total: orderedIds.value.length
@@ -1405,11 +1401,14 @@
     const next = [...records()]
     const [moved] = next.splice(from, 1)
     next.splice(to, 0, moved)
-    reorderMessage.value = t(`tableReorder.${message}`, {
-      name: rowNameOf(id),
-      position: orderedIds.value.indexOf(targetId) + 1,
-      total: orderedIds.value.length
-    })
+    reorderMessage.value = t(
+      message === 'moved' ? 'dataTable.reorderMoved' : 'dataTable.reorderDropped',
+      {
+        name: rowNameOf(id),
+        position: orderedIds.value.indexOf(targetId) + 1,
+        total: orderedIds.value.length
+      }
+    )
     focusAfterMove = id
     data.value = typed<TRow[]>(next)
     emit('reorder', event, { from, to, row: typed<TRow>(moved) })
@@ -1436,7 +1435,7 @@
     if (event.key === 'Escape' && dragId.value) {
       dragId.value = null
       overId.value = null
-      reorderMessage.value = t('tableReorder.cancelled')
+      reorderMessage.value = t('dataTable.reorderCancelled')
       event.preventDefault()
       return
     }
@@ -1767,7 +1766,7 @@
                   :frozen="reorderHandleFrozen ? 'start' : undefined"
                   data-slot="reorder-cell"
                 >
-                  <span class="sr-only">{{ t('tableReorder.column') }}</span>
+                  <span class="sr-only">{{ t('dataTable.reorderColumn') }}</span>
                 </TableHeadCell>
                 <TableHeadCell
                   v-if="selectable"
@@ -2060,20 +2059,20 @@
               aria-hidden="true"
               class="size-4"
             />
-            <span :data-testid="`${testId}__more-loading`">{{ t('tableLoadMore.loading') }}</span>
+            <span :data-testid="`${testId}__more-loading`">{{ t('dataTable.loadingMore') }}</span>
           </template>
           <Button
             v-else-if="moreRows"
             kind="transparent"
             size="small"
-            :label="t('tableLoadMore.action')"
+            :label="t('dataTable.loadMore')"
             :data-testid="`${testId}__more-button`"
             @click="requestMore"
           />
           <span
             v-else
             :data-testid="`${testId}__more-end`"
-            >{{ t('tableLoadMore.end') }}</span
+            >{{ t('dataTable.noMoreRows') }}</span
           >
         </div>
       </div>
@@ -2120,7 +2119,7 @@
       <span
         :id="reorderHintId"
         class="sr-only"
-        >{{ reorderLocked ? t('tableReorder.locked') : t('tableReorder.hint') }}</span
+        >{{ reorderLocked ? t('dataTable.reorderLocked') : t('dataTable.reorderHint') }}</span
       >
       <span
         role="status"

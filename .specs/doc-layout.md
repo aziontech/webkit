@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: a0bb58081246a683c962972a1e75aeca67b85ad0535bedb57cb5e07a6bbee2c3
+checksum: 9751b6df5780b9847d2dbf6f65bfcf7cdc1504151954305cd31dbb2ae68c4591
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -159,7 +159,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 | `docLayout.badge`              | `Docs`                          | —             |
 | `docLayout.openNavigation`     | `Open documentation navigation` | —             |
 | `docLayout.search`             | `Search docs`                   | —             |
-| `docLayout.searchEmpty`        | `No page matches your search.`  | —             |
+| `docLayout.noMatch`            | `No page matches your search.`  | —             |
 | `docLayout.pages`              | `Pages`                         | —             |
 | `docLayout.root`               | `Docs`                          | `rootLabel`   |
 | `docLayout.collapseNavigation` | `Collapse navigation`           | —             |

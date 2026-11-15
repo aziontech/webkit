@@ -40,7 +40,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ copyButton: en.copyButton })
+  const { t } = useTranslate({ copyButton: en.copyButton, common: en.common })
 
   const CopyButtonFallback = defineAsyncComponent(() => import('./copy-button-fallback.vue'))
 
@@ -58,9 +58,7 @@
   const icon = computed(() => (copied.value ? 'ai ai-check' : 'ai ai-copy'))
 
   const label = computed(() =>
-    copied.value
-      ? props.copiedLabel || t('copyButton.copied')
-      : props.ariaLabel || t('copyButton.copy')
+    copied.value ? props.copiedLabel || t('common.copied') : props.ariaLabel || t('common.copy')
   )
 
   async function onCopy(event: MouseEvent) {

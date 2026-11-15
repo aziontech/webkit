@@ -36,7 +36,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ helpPanel: en.helpPanel })
+  const { t } = useTranslate({ helpPanel: en.helpPanel, tutorialPanel: en.tutorialPanel })
   const slots = useSlots()
   const headingId = useId()
 
@@ -121,7 +121,7 @@
         <Tag
           v-if="completed"
           :data-testid="`${testId}__completed`"
-          :label="t('helpPanel.tutorialCompleted')"
+          :label="t('tutorialPanel.completed')"
           severity="success"
           size="small"
         />
@@ -137,7 +137,7 @@
         aria-live="polite"
         class="text-label-sm text-(--text-muted)"
       >
-        {{ t('helpPanel.tutorialProgress', { complete, total }) }}
+        {{ t('tutorialPanel.progress', { complete, total }) }}
       </p>
     </div>
     <ol class="flex w-full flex-col gap-(--spacing-sm)">

@@ -52,6 +52,8 @@
 
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-kbd')
 
+  const KEY_NAMES = Object.keys(en.kbd) as KbdKeyName[]
+
   const isMac = ref(false)
 
   onMounted(() => {
@@ -70,7 +72,8 @@
     const name = key.toLowerCase()
     const modifier = modifierGlyph(name)
     if (modifier) return modifier
-    if (name in en.kbd) return t(`kbd.${name as KbdKeyName}`)
+    const named = KEY_NAMES.find((k) => k.toLowerCase() === name.replace(/-/g, ''))
+    if (named) return t(`kbd.${named}`)
     return key.length === 1 ? key.toUpperCase() : key
   }
 

@@ -12,7 +12,7 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ docProse: en.docProse, kbd: en.kbd })
+  const { t } = useTranslate({ docProse: en.docProse, kbd: en.kbd, common: en.common })
 
   const proseEl = ref<HTMLElement | null>(null)
   const tipForEl = ref<HTMLElement | null>(null)
@@ -23,10 +23,10 @@
       : `${t('kbd.ctrl')}+C`
   const tipLabel = computed(() =>
     tipState.value === 'copied'
-      ? t('docProse.copied')
+      ? t('common.copied')
       : tipState.value === 'manual'
         ? t('docProse.copyManually', { shortcut: copyShortcut() })
-        : t('docProse.copy')
+        : t('common.copy')
   )
   const tipLeft = ref(0)
   const tipTop = ref(0)

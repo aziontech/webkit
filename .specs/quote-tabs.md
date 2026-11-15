@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: cfdb51f3ae9f4c2c166eaa39aff46257ef8852d2c7debc301a32a08815a00f38
+checksum: 53916eafce073549f37809c56213abf3bbf6bf9f04a641e8e078628653e9a48a
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
@@ -202,10 +202,10 @@ _No plain events — selection flows through `v-model`._
 
 ## Internationalization
 
-| Key                              | English source    | Override prop |
-| -------------------------------- | ----------------- | ------------- |
-| `autoplayControl.pauseRotation`  | `Pause rotation`  | —             |
-| `autoplayControl.resumeRotation` | `Resume rotation` | —             |
+| Key                     | English source    | Override prop |
+| ----------------------- | ----------------- | ------------- |
+| `common.pauseRotation`  | `Pause rotation`  | —             |
+| `common.resumeRotation` | `Resume rotation` | —             |
 
 - Every other string is copy passed through `items`.
 

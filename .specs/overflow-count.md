@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 8d65d09cdb8f3b315f8e4bdabd0359646d88eb8dc4a7bf4574f8e554a21f4e53
+checksum: c0d523fce0256f439e0f80b670b71eab68dfa2e53938f686f087429f8c1e743a
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -126,7 +126,7 @@ _none_
 | `overflowCount.search`   | `Search`                    | —             |
 | `overflowCount.noMatch`  | `Nothing matches “{query}”` | —             |
 | `overflowCount.loadMore` | `Load {count} more`         | —             |
-| `overflowCount.newTab`   | `(opens in a new tab)`      | —             |
+| `common.newTab`          | `(opens in a new tab)`      | —             |
 
 - Formatting: counts go through the locale's number format.
 

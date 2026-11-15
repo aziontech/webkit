@@ -71,7 +71,7 @@
 
   const attrs = useAttrs()
 
-  const { t } = useTranslate({ articleCards: en.articleCards })
+  const { t } = useTranslate({ common: en.common })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'sections-article-cards'
@@ -155,7 +155,7 @@
                   <span
                     v-if="item.target === '_blank'"
                     class="sr-only"
-                    >{{ t('articleCards.newTab') }}</span
+                    >{{ t('common.newTab') }}</span
                   >
                 </h3>
                 <p class="m-0 text-pretty text-body-sm text-(--text-muted)">

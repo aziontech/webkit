@@ -239,7 +239,7 @@
         kind="transparent"
         size="small"
         :label="
-          expanded ? t('fileTokenGroup.showFewer') : t('fileTokenGroup.showMore', { count: hidden })
+          expanded ? t('fileTokenGroup.showLess') : t('fileTokenGroup.showMore', { count: hidden })
         "
         :icon="expanded ? 'ai ai-chevron-up' : 'ai ai-chevron-down'"
         :aria-expanded="expanded ? 'true' : 'false'"

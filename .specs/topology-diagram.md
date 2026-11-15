@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 0e29ba6e4ac591fc7d5d30edd8ffdceb3a19febb37a9545c4a495233d6a9dddc
+checksum: e0843550b1163d4be95b2c945fee0a6fb013ebbb927156cd033b3bb20d3c87cf
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -141,10 +141,10 @@ Types: `TopologyLevel = { id: string; label?: string; nodes: TopologyNode[] }`; 
 
 ## Slots
 
-| Slot      | Scope                    | Notes                                                                                                                       |
-| --------- | ------------------------ | --------------------------------------------------------------------------------------------------------------------------- |
-| `actions` | `{ node: TopologyNode }` | Extra controls in a node's identity row, before the bind control.                                                           |
-| `empty`   | —                        | Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.empty`) shown when there are no levels. |
+| Slot      | Scope                    | Notes                                                                                                                            |
+| --------- | ------------------------ | -------------------------------------------------------------------------------------------------------------------------------- |
+| `actions` | `{ node: TopologyNode }` | Extra controls in a node's identity row, before the bind control.                                                                |
+| `empty`   | —                        | Replaces the default empty state (the package `EmptyState`, small, `topologyDiagram.emptyTitle`) shown when there are no levels. |
 
 ## States
 
@@ -196,7 +196,7 @@ Types: `TopologyLevel = { id: string; label?: string; nodes: TopologyNode[] }`; 
 | `topologyDiagram.existing`                              | Existing                                                    | —             |
 | `topologyDiagram.noOptions`                             | No options yet.                                             | —             |
 | `topologyDiagram.copy`                                  | Copy {field}                                                | —             |
-| `topologyDiagram.empty`                                 | Nothing is connected yet.                                   | `empty` slot  |
+| `topologyDiagram.emptyTitle`                            | Nothing is connected yet.                                   | `empty` slot  |
 | `topologyDiagram.loading`                               | Loading the topology                                        | —             |
 
 - Formatting: none; kinds, names, statuses and fields are data.

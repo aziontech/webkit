@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: a9159032881da6f542e2e5a3d50660ef26de37d9820146b383289900e6df3b94
+checksum: 811074e2d7442081e78894549fc0f829873e3506f1f7b8d23d4e2166cd2b9c1a
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -144,7 +144,7 @@ _none_
 | `tagEditor.undo`             | Undo                                                   | —                                |
 | `tagEditor.undoLabel`        | Undo removal of tag {index}                            | —                                |
 | `tagEditor.markedForRemoval` | This tag will be removed when you save.                | —                                |
-| `tagEditor.empty`            | No tags associated with the resource.                  | —                                |
+| `tagEditor.emptyTitle`       | No tags associated with the resource.                  | —                                |
 | `tagEditor.remaining`        | You can add {count} more tag(s) (plural)               | —                                |
 | `tagEditor.limitReached`     | You have reached the limit of {limit} tags.            | —                                |
 | `tagEditor.keyRequired`      | Enter a key.                                           | —                                |

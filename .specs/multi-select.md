@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3899-29362
   node_id: 3899:29362
-checksum: aa8cf7332043449815f0dbd79fa053302cf66e2004bc1ab6edff6be5ac3998de
+checksum: 560af7e780ed17214ad858df92c4d854f0830ebde133b8829e61e57e2f355692
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -268,7 +268,7 @@ Chips, typed filter and a create row:
 
 | Key                   | English source                                | Override prop |
 | --------------------- | --------------------------------------------- | ------------- |
-| `multiSelect.empty`   | `No matches`                                  | `emptyTitle`  |
+| `multiSelect.noMatch` | `No matches`                                  | `emptyTitle`  |
 | `multiSelect.loading` | `Loading options`                             | —             |
 | `multiSelect.add`     | `Add "{value}"`                               | —             |
 | `multiSelect.more`    | `+{count} more`                               | —             |

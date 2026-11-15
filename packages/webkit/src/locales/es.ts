@@ -55,7 +55,13 @@ export const es: Messages = {
     submit: 'Enviar',
     stop: 'Detener la generación',
     count: '{count}/{max}',
-    overLimit: '{count} caracteres por encima del límite'
+    overLimit: '{count} caracteres por encima del límite',
+    menuResults: {
+      one: '{count} sugerencia',
+      other: '{count} sugerencias'
+    },
+    noMatch: 'Sin resultados',
+    menuReferences: 'Referencias'
   },
   reasoning: {
     thinking: 'Pensando',
@@ -99,28 +105,24 @@ export const es: Messages = {
     showAtBottom: 'Mostrar debajo del contenido'
   },
   articleBody: {
-    copiedLink: 'Enlace copiado',
+    linkCopied: 'Enlace copiado',
     copiedFeed: 'Enlace del feed copiado',
     copiedPage: 'Página copiada como markdown',
     copyFailed: 'No se pudo copiar',
     copyFailedHint: 'Tu navegador bloqueó el acceso al portapapeles.',
     assistantPrompt: 'Lee {url} para que pueda hacerte preguntas sobre él.'
   },
-  articleCards: {
-    newTab: '(se abre en una pestaña nueva)'
-  },
   articleIndex: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'No se encontraron resultados.',
-    newTab: '(se abre en una pestaña nueva)'
+    noMatch: 'No se encontraron resultados.'
   },
   attributeEditor: {
     add: 'Agregar elemento',
     remove: 'Quitar elemento',
     rowAction: '{label} {index}',
     addGroup: 'Agregar grupo O',
-    empty: 'Todavía no hay elementos.',
+    emptyTitle: 'Todavía no hay elementos.',
     remaining: {
       one: 'Puedes agregar {count} elemento más.',
       other: 'Puedes agregar {count} elementos más.'
@@ -264,7 +266,7 @@ export const es: Messages = {
     compact: 'Compacta'
   },
   combobox: {
-    empty: 'Sin resultados',
+    noMatch: 'Sin resultados',
     loading: 'Cargando opciones',
     useValue: 'Usar "{value}"',
     clear: 'Borrar',
@@ -276,7 +278,7 @@ export const es: Messages = {
   },
   command: {
     back: 'Volver de {page}',
-    empty: 'No se encontraron resultados.',
+    noMatch: 'No se encontraron resultados.',
     placeholder: 'Buscar en todo',
     title: 'Menú de comandos'
   },
@@ -284,7 +286,7 @@ export const es: Messages = {
     about: 'Acerca de {label}',
     search: 'Buscar',
     searchPicker: 'Buscar {picker}',
-    empty: 'No se encontraron resultados.',
+    noMatch: 'No se encontraron resultados.',
     included: 'Incluido',
     excluded: 'No incluido'
   },
@@ -302,12 +304,13 @@ export const es: Messages = {
     accountMenu: 'Menú de la cuenta',
     accountMenuFor: '{initials}, menú de la cuenta',
     searchPlaceholder: 'Buscar páginas y comandos',
-    searchEmpty: 'Ninguna página o comando coincide con la búsqueda.',
+    noMatch: 'Ninguna página o comando coincide con la búsqueda.',
     pages: 'Páginas'
   },
   copyButton: {
-    copy: 'Copiar',
-    copied: 'Copiado'
+    fallbackTitle: 'Copia manualmente',
+    fallbackField: 'Valor para copiar',
+    fallbackHint: 'Pulsa {keys} para copiar.'
   },
   responseBranches: {
     label: 'Versiones de la respuesta',
@@ -315,7 +318,7 @@ export const es: Messages = {
     next: 'Versión siguiente',
     position: '{current} de {total}'
   },
-  feedbackReason: {
+  feedbackReasonDialog: {
     title: '¿Qué salió mal?',
     description: 'Tu respuesta ayuda a mejorar las próximas respuestas.',
     reason: 'Motivo',
@@ -337,24 +340,11 @@ export const es: Messages = {
     previous7: 'Últimos 7 días',
     previous30: 'Últimos 30 días',
     older: 'Más antiguas',
-    empty: 'Aún no hay conversaciones.',
-    remove: 'Eliminar {title}'
-  },
-  promptInputMenu: {
-    results: {
-      one: '{count} sugerencia',
-      other: '{count} sugerencias'
-    },
-    noMatches: 'Sin resultados',
-    references: 'Referencias'
+    emptyTitle: 'Aún no hay conversaciones.',
+    delete: 'Eliminar {title}'
   },
   qrCode: {
     label: 'Código QR'
-  },
-  copyFallback: {
-    title: 'Copia manualmente',
-    field: 'Valor para copiar',
-    hint: 'Pulsa {keys} para copiar.'
   },
   datePicker: {
     placeholder: 'Selecciona una fecha',
@@ -446,15 +436,12 @@ export const es: Messages = {
     badge: 'Docs',
     openNavigation: 'Abrir navegación de la documentación',
     search: 'Buscar en la documentación',
-    searchEmpty: 'Ninguna página coincide con la búsqueda.',
+    noMatch: 'Ninguna página coincide con la búsqueda.',
     pages: 'Páginas',
     root: 'Docs',
     collapseNavigation: 'Contraer navegación',
     expandNavigation: 'Expandir navegación',
     resizeNavigation: 'Cambiar el tamaño de la navegación'
-  },
-  docMarkdown: {
-    newTab: '(se abre en una pestaña nueva)'
   },
   docOnThisPage: {
     title: 'En esta página'
@@ -474,8 +461,6 @@ export const es: Messages = {
     copied: 'Prompt copiado'
   },
   docProse: {
-    copy: 'Copiar',
-    copied: 'Copiado',
     copyManually: 'Pulsa {shortcut} para copiar'
   },
   donutChart: {
@@ -531,7 +516,7 @@ export const es: Messages = {
       one: 'Mostrar {count} archivo más',
       other: 'Mostrar {count} archivos más'
     },
-    showFewer: 'Mostrar menos archivos'
+    showLess: 'Mostrar menos archivos'
   },
   filterMenu: {
     label: 'Filtrar',
@@ -610,19 +595,14 @@ export const es: Messages = {
   },
   helpPanel: {
     label: 'Ayuda',
-    learnMore: 'Más información',
-    taskComplete: 'Completada',
-    taskCurrent: 'Tarea actual',
-    taskNotStarted: 'Sin iniciar',
-    tutorialCompleted: 'Completado',
-    tutorialProgress: '{complete} de {total} completadas'
+    learnMore: 'Más información'
   },
   heroBand: {
     carouselLabel: 'Probada en cargas de trabajo críticas'
   },
   heroForm: {
     search: 'Buscar',
-    empty: 'No se encontraron resultados.'
+    noMatch: 'No se encontraron resultados.'
   },
   hotspot: {
     label: 'Paso del tutorial: {title}',
@@ -645,10 +625,10 @@ export const es: Messages = {
     backspace: 'Retroceso',
     delete: 'Supr',
     return: '↵',
-    'arrow-up': '↑',
-    'arrow-down': '↓',
-    'arrow-left': '←',
-    'arrow-right': '→'
+    arrowUp: '↑',
+    arrowDown: '↓',
+    arrowLeft: '←',
+    arrowRight: '→'
   },
   link: {
     label: 'Más información'
@@ -691,7 +671,7 @@ export const es: Messages = {
   logoWall: {
     link: 'Leer historia'
   },
-  menu: {
+  sidebarMenu: {
     label: 'Menú',
     back: 'Volver',
     backTo: 'Volver a {label}',
@@ -703,7 +683,7 @@ export const es: Messages = {
     expandNamed: 'Expandir {label}'
   },
   multiSelect: {
-    empty: 'Sin resultados',
+    noMatch: 'Sin resultados',
     loading: 'Cargando opciones',
     add: 'Añadir "{value}"',
     more: '+{count} más',
@@ -735,8 +715,7 @@ export const es: Messages = {
     showAll: 'Ver lista completa: {count} {noun}',
     search: 'Buscar',
     noMatch: 'Nada coincide con “{query}”',
-    loadMore: 'Cargar {count} más',
-    newTab: '(se abre en una pestaña nueva)'
+    loadMore: 'Cargar {count} más'
   },
   pagination: {
     label: 'Paginación',
@@ -763,34 +742,20 @@ export const es: Messages = {
   phoneInput: {
     dialCode: 'Código de marcación del país',
     search: 'Buscar país',
-    empty: 'No se encontró ningún país.'
+    noMatch: 'No se encontró ningún país.'
   },
   transferList: {
     moveSelectedToTarget: 'Mover seleccionados al destino',
     moveAllToTarget: 'Mover todos al destino',
     moveSelectedToSource: 'Mover seleccionados al origen',
     moveAllToSource: 'Mover todos al origen',
-    empty: 'Sin elementos'
+    emptyTitle: 'Sin elementos'
   },
   popover: {
     close: 'Cerrar'
   },
   progress: {
     label: 'Progreso'
-  },
-  propertyFilterQuery: {
-    label: 'Consulta',
-    placeholder: 'Escribe una consulta, por ejemplo status = Active AND requests > 10',
-    fields: 'Campos',
-    all: 'Se cumplen todas las condiciones',
-    any: 'Se cumple cualquier condición',
-    unknownField: 'No hay ningún campo llamado “{field}”.',
-    unknownOperator: '“{operator}” no se aplica a {field}.',
-    missingOperator: 'Añade un operador después de {field}, por ejemplo =.',
-    missingValue: 'Añade un valor después de {operator}.',
-    expectedConnective: 'Une las condiciones con AND u OR antes de “{word}”.',
-    danglingConnective: 'Añade una condición después de {connective}.',
-    unclosedQuote: 'Cierra las comillas abiertas en el carácter {position}.'
   },
   propertyFilter: {
     label: 'Filtrar',
@@ -831,7 +796,19 @@ export const es: Messages = {
     groupOperation: 'Combinar filtros del grupo {index}',
     loadingValues: 'Cargando valores',
     valuesError: 'No se pudieron cargar los valores',
-    valueEditor: 'Valor de {property}'
+    valueEditor: 'Valor de {property}',
+    queryLabel: 'Consulta',
+    queryPlaceholder: 'Escribe una consulta, por ejemplo status = Active AND requests > 10',
+    queryFields: 'Campos',
+    queryAll: 'Se cumplen todas las condiciones',
+    queryAny: 'Se cumple cualquier condición',
+    unknownField: 'No hay ningún campo llamado “{field}”.',
+    unknownOperator: '“{operator}” no se aplica a {field}.',
+    missingOperator: 'Añade un operador después de {field}, por ejemplo =.',
+    missingValue: 'Añade un valor después de {operator}.',
+    expectedConnective: 'Une las condiciones con AND u OR antes de “{word}”.',
+    danglingConnective: 'Añade una condición después de {connective}.',
+    unclosedQuote: 'Cierra las comillas abiertas en el carácter {position}.'
   },
   resizable: {
     handle: 'Redimensionar panel'
@@ -893,12 +870,11 @@ export const es: Messages = {
   siteFooter: {
     label: 'Pie de página',
     home: 'Página de inicio de Azion',
-    language: 'Idioma',
-    newTab: '(se abre en una pestaña nueva)'
+    language: 'Idioma'
   },
   siteLayout: {
     searchPlaceholder: 'Buscar en el sitio',
-    searchEmpty: 'Ninguna página coincide con la búsqueda.',
+    noMatch: 'Ninguna página coincide con la búsqueda.',
     pages: 'Páginas'
   },
   siteNav: {
@@ -932,10 +908,9 @@ export const es: Messages = {
   storyLibrary: {
     search: 'Buscar',
     searchFacet: 'Buscar {facet}',
-    empty: 'No se encontraron resultados.',
+    noMatch: 'No se encontraron resultados.',
     filters: 'Filtros',
-    filtersApplied: '{label} ({count})',
-    newTab: '(se abre en una pestaña nueva)'
+    filtersApplied: '{label} ({count})'
   },
   dataGrid: {
     selectAll: 'Seleccionar todas las filas',
@@ -975,8 +950,7 @@ export const es: Messages = {
   tableCellLink: {
     open: 'Abrir {label}',
     openIn: 'Abrir {label} en {destination}',
-    newTab: 'Abrir {label} en una pestaña nueva',
-    newTabHint: '(se abre en una pestaña nueva)',
+    openInNewTab: 'Abrir {label} en una pestaña nueva',
     copy: 'Copiar {label}'
   },
   tableCellTags: {
@@ -990,20 +964,6 @@ export const es: Messages = {
   },
   tableLiveButton: {
     label: 'En vivo'
-  },
-  tableLoadMore: {
-    loading: 'Cargando más filas',
-    action: 'Cargar más',
-    end: 'No hay más filas'
-  },
-  tableReorder: {
-    column: 'Orden',
-    handle: 'Reordenar {name}, posición {position} de {total}',
-    hint: 'Arrastra, o pulsa Flecha arriba o Flecha abajo para mover.',
-    locked: 'Quita el orden para reordenar las filas.',
-    moved: '{name} movido a la posición {position} de {total}.',
-    dropped: '{name} soltado en la posición {position} de {total}.',
-    cancelled: 'Reordenación cancelada.'
   },
   tableSearch: {
     placeholder: 'Buscar',
@@ -1029,7 +989,7 @@ export const es: Messages = {
     undo: 'Deshacer',
     undoLabel: 'Deshacer la eliminación de la etiqueta {index}',
     markedForRemoval: 'Esta etiqueta se eliminará cuando guardes.',
-    empty: 'No hay etiquetas asociadas al recurso.',
+    emptyTitle: 'No hay etiquetas asociadas al recurso.',
     remaining: {
       one: 'Puedes agregar {count} etiqueta más.',
       other: 'Puedes agregar {count} etiquetas más.'
@@ -1069,7 +1029,7 @@ export const es: Messages = {
     search: 'Buscar spans',
     noMatch: 'Ningún span coincide con “{query}”.',
     clearSearch: 'Borrar búsqueda',
-    empty: 'No hay spans en esta traza.',
+    emptyTitle: 'No hay spans en esta traza.',
     loading: 'Cargando spans',
     details: 'Detalles de {name}',
     close: 'Cerrar',
@@ -1105,7 +1065,7 @@ export const es: Messages = {
     existing: 'Existentes',
     noOptions: 'Aún no hay opciones.',
     copy: 'Copiar {field}',
-    empty: 'Aún no hay nada conectado.',
+    emptyTitle: 'Aún no hay nada conectado.',
     loading: 'Cargando la topología'
   },
   tracker: {
@@ -1136,7 +1096,7 @@ export const es: Messages = {
     title: 'Tutoriales',
     description: 'Aprende el producto haciendo una tarea real, paso a paso.',
     listLabel: 'Tutoriales disponibles',
-    empty: 'Aún no hay tutoriales.',
+    emptyTitle: 'Aún no hay tutoriales.',
     start: 'Iniciar tutorial',
     restart: 'Reiniciar tutorial',
     exit: 'Salir del tutorial',
@@ -1145,7 +1105,11 @@ export const es: Messages = {
     completedTitle: 'Tutorial completado',
     completedDescription: 'Terminaste {title}.',
     taskCount: { one: '{count} tarea', other: '{count} tareas' },
-    stepCount: { one: '{count} paso', other: '{count} pasos' }
+    stepCount: { one: '{count} paso', other: '{count} pasos' },
+    taskComplete: 'Completada',
+    taskCurrent: 'Tarea actual',
+    taskNotStarted: 'Sin iniciar',
+    progress: '{complete} de {total} completadas'
   },
   wizard: {
     stepOf: 'Paso {step} de {total}',
@@ -1167,7 +1131,7 @@ export const es: Messages = {
   runtimeApiCloud: {
     label: 'Globales disponibles en Azion Runtime'
   },
-  customerSpotlight: {
+  clientMosaicColumns: {
     list: 'Historias de clientes',
     story: 'Leer la historia'
   },
@@ -1194,14 +1158,29 @@ export const es: Messages = {
     asideTitle: '¿Prefieres la ruta guiada?',
     action: 'Configurar agente'
   },
-  autoplayControl: {
+  common: {
     pauseRotation: 'Pausar rotación',
     resumeRotation: 'Reanudar rotación',
     pauseScrolling: 'Pausar desplazamiento',
-    resumeScrolling: 'Reanudar desplazamiento'
+    resumeScrolling: 'Reanudar desplazamiento',
+    copy: 'Copiar',
+    copied: 'Copiado',
+    newTab: '(se abre en una pestaña nueva)'
   },
   closingCallToActionNewsletter: {
     email: 'Correo electrónico'
+  },
+  dataTable: {
+    loadingMore: 'Cargando más filas',
+    loadMore: 'Cargar más',
+    noMoreRows: 'No hay más filas',
+    reorderColumn: 'Orden',
+    reorderHandle: 'Reordenar {name}, posición {position} de {total}',
+    reorderHint: 'Arrastra, o pulsa Flecha arriba o Flecha abajo para mover.',
+    reorderLocked: 'Quita el orden para reordenar las filas.',
+    reorderMoved: '{name} movido a la posición {position} de {total}.',
+    reorderDropped: '{name} soltado en la posición {position} de {total}.',
+    reorderCancelled: 'Reordenación cancelada.'
   }
 }
 

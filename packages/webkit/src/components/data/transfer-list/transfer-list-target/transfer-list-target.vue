@@ -138,7 +138,7 @@
       >
         <EmptyState
           size="small"
-          :title="t('transferList.empty')"
+          :title="t('transferList.emptyTitle')"
         />
       </div>
     </div>

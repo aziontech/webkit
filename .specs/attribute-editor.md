@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: 2724f911595842bf580e087d41f9471e532b12836307d2bbd79196cd0680cd1b
+checksum: d01b5e2fccc1a6a97e43501ddf67bb35a657739cdeea2f7af92e0ac5d58f558c
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -180,7 +180,7 @@ Rows appear and leave without animation; the controls keep their own transitions
 | `attributeEditor.remove`        | Remove item                                    | `removeButtonLabel` |
 | `attributeEditor.rowAction`     | {label} {index}                                | —                   |
 | `attributeEditor.addGroup`      | Add OR group                                   | `addGroupLabel`     |
-| `attributeEditor.empty`         | No items yet.                                  | `emptyTitle`        |
+| `attributeEditor.emptyTitle`    | No items yet.                                  | `emptyTitle`        |
 | `attributeEditor.remaining`     | You can add {count} more item(s) (plural)      | —                   |
 | `attributeEditor.limitReached`  | You have reached the limit of {limit} items.   | —                   |
 | `attributeEditor.added`         | Item {index} added.                            | —                   |

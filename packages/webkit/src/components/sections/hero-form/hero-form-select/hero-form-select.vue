@@ -131,7 +131,7 @@
         :data-testid="`${testId}__search-empty`"
         class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
       >
-        {{ t('heroForm.empty') }}
+        {{ t('heroForm.noMatch') }}
       </p>
     </SelectContent>
   </Select>

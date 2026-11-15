@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: ac99f2ae364b590b44d81e3006b8d804b5303c196c70110dd8d3fd04d86b722a
+checksum: 36fb581b2019eb847f737542650cf7cf3cc9986f336c5fa3cc7eddd8678a3fbe
 created: 2026-09-23
 last_updated: 2026-11-15
 ---
@@ -138,10 +138,10 @@ An endlessly looping row of brand marks — the trust strip that names the compa
 
 ## Internationalization
 
-| Key                               | English source     | Override prop |
-| --------------------------------- | ------------------ | ------------- |
-| `autoplayControl.pauseScrolling`  | `Pause scrolling`  | —             |
-| `autoplayControl.resumeScrolling` | `Resume scrolling` | —             |
+| Key                      | English source     | Override prop |
+| ------------------------ | ------------------ | ------------- |
+| `common.pauseScrolling`  | `Pause scrolling`  | —             |
+| `common.resumeScrolling` | `Resume scrolling` | —             |
 
 - Marks and item labels are content passed through props.
 

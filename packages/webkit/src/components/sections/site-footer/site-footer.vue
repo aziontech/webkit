@@ -87,7 +87,7 @@
   const language = defineModel<string>('language', { default: '' })
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ siteFooter: en.siteFooter })
+  const { t } = useTranslate({ siteFooter: en.siteFooter, common: en.common })
 
   const selectedLanguage = computed({
     get: () => language.value || props.languages[0] || '',
@@ -134,7 +134,7 @@
               class="ai ai-external-link shrink-0 text-body-xs leading-none"
               aria-hidden="true"
             />
-            <span class="sr-only">{{ ` ${t('siteFooter.newTab')}` }}</span>
+            <span class="sr-only">{{ ` ${t('common.newTab')}` }}</span>
           </template>
         </FooterLink>
       </FooterColumn>

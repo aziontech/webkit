@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 11
 template: 2
-checksum: c9c2bdf191d8c9f2d5e40d08d9334795c2154d6e4bf325d66346250513079d42
+checksum: 8e07e50d8d8ca16655fa13b699890291f33fe7aebc306113ff76a795883a7427
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -241,7 +241,7 @@ packages/webkit/src/components/layout/console-layout/
 | `consoleLayout.accountMenu`       | `Account menu`                            | —                   |
 | `consoleLayout.accountMenuFor`    | `{initials}, account menu`                | —                   |
 | `consoleLayout.searchPlaceholder` | `Search pages and commands`               | `searchPlaceholder` |
-| `consoleLayout.searchEmpty`       | `No page or command matches your search.` | —                   |
+| `consoleLayout.noMatch`           | `No page or command matches your search.` | —                   |
 | `consoleLayout.pages`             | `Pages`                                   | —                   |
 
 - Formatting: none. Navigation, breadcrumb and account text is consumer data.

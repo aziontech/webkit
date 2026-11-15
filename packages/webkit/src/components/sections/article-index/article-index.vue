@@ -150,7 +150,7 @@
 
   const attrs = useAttrs()
 
-  const { t } = useTranslate({ articleIndex: en.articleIndex })
+  const { t } = useTranslate({ articleIndex: en.articleIndex, common: en.common })
 
   const SEARCH_THRESHOLD = 7
 
@@ -380,7 +380,7 @@
                   role="status"
                   class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                 >
-                  {{ t('articleIndex.empty') }}
+                  {{ t('articleIndex.noMatch') }}
                 </p>
               </SelectContent>
             </Select>
@@ -448,7 +448,7 @@
                           <span
                             v-if="item.target === '_blank'"
                             class="sr-only"
-                            >{{ t('articleIndex.newTab') }}</span
+                            >{{ t('common.newTab') }}</span
                           >
                         </a>
                       </h3>

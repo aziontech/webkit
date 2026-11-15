@@ -4,7 +4,7 @@ category: data
 structure: composition
 status: implemented
 spec_version: 6
-checksum: 97f77c46d37fe536363b5f71c65cc2d81379396a25e113003f1bb0fe98fa156f
+checksum: b90c699ff8eb07d7214c52469a58e4c5c3e9b0e189f725847104c7284734138a
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -128,7 +128,7 @@ Each part is also a standalone import (`import TransferListSource from '@azionte
 
 | Event               | Payload                                                                                      | Notes                                                                                                                                                                                                                                    |
 | ------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `move`              | `(event: Event, payload: { direction: 'to-target' \| 'to-source'; items: unknown[] })`      | Fired after items move between lists; the DOM event of the control (or the double-click) first, then the direction and the moved items.                                                                                                                                                                              |
+| `move`              | `(event: Event, payload: { direction: 'to-target' \| 'to-source'; items: unknown[] })`       | Fired after items move between lists; the DOM event of the control (or the double-click) first, then the direction and the moved items.                                                                                                  |
 | `item-double-click` | `(event: MouseEvent, payload: { list: 'source' \| 'target'; item: unknown; index: number })` | Fired when an option is double-clicked. `event` is the dblclick; `payload` carries the item, its index, and which list it was in. Fires regardless of `moveOnDoubleClick`, but not while the component is disabled or a list is loading. |
 
 ## Slots
@@ -146,7 +146,7 @@ The root also **exposes** `move`, `moveAll`, `hasSelection`, and `count` on its 
 - `data-loading` on a list (`transfer-list-source` / `transfer-list-target`) mirrors that list's `loading` prop
 - A loading list renders a centered spinner instead of its options and sets `aria-busy="true"`; while any list is loading, both the move controls and double-click-to-move are disabled until loading clears
 - Each option carries `data-selected` mirroring its selection and `aria-selected`
-- Empty list (not loading, no items): the package `EmptyState` (small, `transferList.empty`, `No items`) is laid over the list box, outside the listbox element (a `status` region is not an allowed listbox child); test id `<list testid>__empty`
+- Empty list (not loading, no items): the package `EmptyState` (small, `transferList.emptyTitle`, `No items`) is laid over the list box, outside the listbox element (a `status` region is not an allowed listbox child); test id `<list testid>__empty`
 - Server render and hydration: the options are the direct `v-for` children of the `TransitionGroup` list (an empty list while loading) and the spinner a sibling `v-if`, so the server renders no fragment markers inside the list and the HTML hydrates as is.
 
 ## Motion & Animations

@@ -308,7 +308,7 @@
   }
 
   const copyLink = (): void => {
-    void copy(props.share?.copiedLink || t('articleBody.copiedLink'), pageUrl())
+    void copy(props.share?.copiedLink || t('articleBody.linkCopied'), pageUrl())
   }
 
   const copyFeed = (): void => {

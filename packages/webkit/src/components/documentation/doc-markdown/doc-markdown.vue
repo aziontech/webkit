@@ -50,7 +50,7 @@
   )
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ docMarkdown: en.docMarkdown })
+  const { t } = useTranslate({ common: en.common })
   const { follow } = useAppNavigation()
 
   const testId = computed(
@@ -154,9 +154,7 @@
         rel: external ? 'noreferrer' : undefined,
         onClick: external ? undefined : (event: globalThis.MouseEvent) => follow(event, { href })
       },
-      external
-        ? [...children, h('span', { class: 'sr-only' }, ` ${t('docMarkdown.newTab')}`)]
-        : children
+      external ? [...children, h('span', { class: 'sr-only' }, ` ${t('common.newTab')}`)] : children
     )
   }
 

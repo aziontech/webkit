@@ -741,7 +741,7 @@
             {{ item.label }}
           </CommandItem>
         </CommandGroup>
-        <CommandEmpty>{{ t('consoleLayout.searchEmpty') }}</CommandEmpty>
+        <CommandEmpty>{{ t('consoleLayout.noMatch') }}</CommandEmpty>
       </CommandList>
     </Command>
   </div>

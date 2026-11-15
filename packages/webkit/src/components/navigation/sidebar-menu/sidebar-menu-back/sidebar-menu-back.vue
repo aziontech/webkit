@@ -26,7 +26,7 @@
 
   const ctx = useSidebarMenuContext()
   const attrs = useAttrs()
-  const { t } = useTranslate({ menu: en.menu })
+  const { t } = useTranslate({ sidebarMenu: en.sidebarMenu })
 
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu-back'
@@ -40,7 +40,9 @@
   })
 
   const text = computed(() =>
-    destination.value ? t('menu.backTo', { label: destination.value }) : t('menu.back')
+    destination.value
+      ? t('sidebarMenu.backTo', { label: destination.value })
+      : t('sidebarMenu.back')
   )
 
   const ROOT_CLASS =

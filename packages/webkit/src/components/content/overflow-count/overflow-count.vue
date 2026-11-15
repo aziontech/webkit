@@ -46,7 +46,7 @@
   const BATCH = 10
 
   const attrs = useAttrs()
-  const { t, locale } = useTranslate({ overflowCount: en.overflowCount })
+  const { t, locale } = useTranslate({ overflowCount: en.overflowCount, common: en.common })
 
   const testId = computed<string>(
     () => (attrs['data-testid'] as string | undefined) ?? 'content-overflow-count'
@@ -188,7 +188,7 @@
                   class="min-w-0 truncate"
                   >{{ entry.label }}</span
                 >
-                <span class="sr-only">{{ ` ${t('overflowCount.newTab')}` }}</span>
+                <span class="sr-only">{{ ` ${t('common.newTab')}` }}</span>
                 <i
                   class="ai ai-external-link ms-auto shrink-0 text-body-xs leading-none"
                   aria-hidden="true"

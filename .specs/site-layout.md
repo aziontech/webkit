@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 597f2de08677978ed8a3e05d84b10ca75db316d6dfb8afc81ba0a5f68fdc9620
+checksum: b6bbf143fd3f9beb81dbf08ca4ff0d998c5e5db8c27577be9011eff424392fb7
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -126,7 +126,7 @@ The marketing site's chrome, composed once in the app: `SiteNav` on top, the pag
 | Key                            | English source                 | Override prop       |
 | ------------------------------ | ------------------------------ | ------------------- |
 | `siteLayout.searchPlaceholder` | `Search the site`              | `searchPlaceholder` |
-| `siteLayout.searchEmpty`       | `No page matches your search.` | —                   |
+| `siteLayout.noMatch`           | `No page matches your search.` | —                   |
 | `siteLayout.pages`             | `Pages`                        | —                   |
 
 - Formatting: none. Navigation and footer text is consumer data.

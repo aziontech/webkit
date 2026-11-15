@@ -113,9 +113,9 @@
   )
 
   const paused = ref(false)
-  const { t } = useTranslate({ autoplayControl: en.autoplayControl })
+  const { t } = useTranslate({ common: en.common })
   const pauseLabel = computed(() =>
-    paused.value ? t('autoplayControl.resumeRotation') : t('autoplayControl.pauseRotation')
+    paused.value ? t('common.resumeRotation') : t('common.pauseRotation')
   )
 
   const running = computed(

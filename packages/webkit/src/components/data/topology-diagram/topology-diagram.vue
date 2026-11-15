@@ -122,7 +122,7 @@
         <EmptyState
           size="small"
           icon="ai ai-sitemap"
-          :title="t('topologyDiagram.empty')"
+          :title="t('topologyDiagram.emptyTitle')"
         />
       </slot>
     </div>

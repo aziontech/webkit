@@ -143,7 +143,7 @@
 
   const addLabel = computed(() => props.addButtonLabel || t('attributeEditor.add'))
   const groupAddLabel = computed(() => props.addGroupLabel || t('attributeEditor.addGroup'))
-  const emptyText = computed(() => props.emptyTitle || t('attributeEditor.empty'))
+  const emptyText = computed(() => props.emptyTitle || t('attributeEditor.emptyTitle'))
   const removeLabel = (position: number) =>
     t('attributeEditor.rowAction', {
       label: props.removeButtonLabel || t('attributeEditor.remove'),

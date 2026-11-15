@@ -97,7 +97,7 @@
   )
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ promptInput: en.promptInput, promptInputMenu: en.promptInputMenu })
+  const { t } = useTranslate({ promptInput: en.promptInput })
   const uid = useId()
   const counterId = `${uid}-counter`
   const hintId = `${uid}-hint`
@@ -158,8 +158,8 @@
   const announcement = computed<string>(() => {
     if (!query.value) return ''
     return matches.value.length
-      ? t('promptInputMenu.results', { count: matches.value.length })
-      : t('promptInputMenu.noMatches')
+      ? t('promptInput.menuResults', { count: matches.value.length })
+      : t('promptInput.noMatch')
   })
 
   function readQuery(): void {
@@ -298,7 +298,7 @@
         <PromptInputReferences
           v-if="references.length"
           :references="references"
-          :label="t('promptInputMenu.references')"
+          :label="t('promptInput.menuReferences')"
           :disabled="disabled"
           :test-id="testId"
           @remove="

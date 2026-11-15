@@ -809,7 +809,7 @@
         <EmptyState
           size="small"
           :icon="term ? 'ai ai-search' : 'ai ai-sitemap'"
-          :title="term ? t('trace.noMatch', { query: search.trim() }) : t('trace.empty')"
+          :title="term ? t('trace.noMatch', { query: search.trim() }) : t('trace.emptyTitle')"
         >
           <template
             v-if="term"

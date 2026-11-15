@@ -247,7 +247,7 @@
                     role="status"
                     class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                   >
-                    {{ t('comparePlans.empty') }}
+                    {{ t('comparePlans.noMatch') }}
                   </p>
                 </SelectContent>
               </Select>
