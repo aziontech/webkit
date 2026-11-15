@@ -20,6 +20,14 @@ function migration() {
 const camel = (s) => s.replace(/-([a-z0-9])/g, (_, c) => c.toUpperCase())
 const kebab = (s) => s.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase()
 
+function flatIcons(icons) {
+  if (!icons.primeicons && !icons.azionicons) return icons
+  const azion = Object.fromEntries(
+    Object.entries(icons.azionicons || {}).filter(([, rule]) => typeof rule === 'string')
+  )
+  return { ...icons.primeicons, ...azion }
+}
+
 function iconFindings(text, icons) {
   const out = []
   for (const m of String(text).matchAll(ICON)) {
@@ -71,7 +79,7 @@ export default {
     }
 
     function checkIcons(node, text) {
-      for (const f of iconFindings(text, icons)) {
+      for (const f of iconFindings(text, flatIcons(icons))) {
         if (f.next) context.report({ node, messageId: 'icon', data: f })
         else context.report({ node, messageId: 'iconRemoved', data: f })
       }

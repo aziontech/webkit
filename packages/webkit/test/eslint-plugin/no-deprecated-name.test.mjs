@@ -27,6 +27,7 @@ test('no-deprecated-name', () => {
         '<SeverityTag severity="high" />'
       ),
       sfc('', '<i class="ai ai-search" />'),
+      sfc('', '<i class="ai ai-x" />'),
       sfc(
         "import Tag from '@aziontech/webkit/tag'",
         '<Other level="x" /><Tag severity="neutral" />'
@@ -48,6 +49,7 @@ test('no-deprecated-name', () => {
       bad("import Link from '@aziontech/webkit/link'", '<Link show-icon />', 'propRemoved'),
       bad('', '<i class="pi pi-search" />', 'icon'),
       bad('', '<i class="pi pi-amazon" />', 'iconRemoved'),
+      bad('', '<i class="ai ai-times" />', 'icon'),
       bad("const icon = 'pi pi-check'", '', 'icon')
     ]
   })
