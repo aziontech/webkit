@@ -13,7 +13,7 @@ describe('StatusCode', () => {
 
     const root = getByTestId('content-status-code')
     expect(root).toHaveAttribute('data-status-class', 'invalid')
-    expect(root).toHaveAttribute('data-severity', 'secondary')
+    expect(root).toHaveAttribute('data-severity', 'neutral')
     expect(root).toHaveAttribute('data-size', 'medium')
     expect(getByTestId('content-status-code__code')).toHaveTextContent('—')
     expect(queryByTestId('content-status-code__method')).toBeNull()
@@ -32,16 +32,16 @@ describe('StatusCode', () => {
   })
 
   it.each([
-    [101, 'informational', 'secondary'],
-    [200, 'success', 'secondary'],
-    ['204', 'success', 'secondary'],
-    [304, 'redirect', 'secondary'],
+    [101, 'informational', 'neutral'],
+    [200, 'success', 'neutral'],
+    ['204', 'success', 'neutral'],
+    [304, 'redirect', 'neutral'],
     [404, 'client-error', 'warning'],
     ['429', 'client-error', 'warning'],
     [503, 'server-error', 'danger'],
-    [42, 'invalid', 'secondary'],
-    [600, 'invalid', 'secondary'],
-    ['ok', 'invalid', 'secondary']
+    [42, 'invalid', 'neutral'],
+    [600, 'invalid', 'neutral'],
+    ['ok', 'invalid', 'neutral']
   ] as const)('maps %s to the %s class and the %s severity', (code, statusClass, severity) => {
     const { getByTestId } = render(StatusCode, { props: { code } })
 
