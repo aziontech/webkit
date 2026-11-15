@@ -92,6 +92,14 @@ test('props of a renamed component are compared under its new subpath', () => {
   assert.deepEqual(diffApi(before, after, migrations).uncovered, [])
 })
 
+test('a prop renamed to a fallthrough attribute passes only when the rule says attribute', () => {
+  const before = api(['checkbox'], { checkbox: { inputId: null, size: null } })
+  const after = api(['checkbox'], { checkbox: { size: null } })
+  const rule = (spec) => ({ ...none, props: { checkbox: { inputId: spec } } })
+  assert.equal(diffApi(before, after, rule('id')).uncovered.length, 1)
+  assert.deepEqual(diffApi(before, after, rule({ to: 'id', attribute: true })).uncovered, [])
+})
+
 test('additions never fail and are counted', () => {
   const { uncovered, additions } = diffApi(
     api(['a'], { a: { x: null } }),
