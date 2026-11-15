@@ -190,9 +190,7 @@ describe('WebkitProvider', () => {
     })
 
     it('with no locale, renders en-US on the server, hydrates cleanly, then follows the device', async () => {
-      vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['pt-BR'])
       vi.spyOn(navigator, 'language', 'get').mockReturnValue('pt-BR')
-      window.dispatchEvent(new Event('languagechange'))
       const App = withProvider({}, () => h(Pagination, { total: 1200 }))
       const html = await renderToString(createSSRApp(App))
       expect(html).toContain('lang="en-US"')
@@ -215,7 +213,6 @@ describe('WebkitProvider', () => {
         app.unmount()
       } finally {
         vi.restoreAllMocks()
-        window.dispatchEvent(new Event('languagechange'))
         host.remove()
       }
     })
@@ -324,9 +321,7 @@ describe('WebkitProvider', () => {
     })
 
     it('DeviceLocale prints the range for the device and keeps ISO instants in the value', async () => {
-      vi.spyOn(navigator, 'languages', 'get').mockReturnValue(['pt-BR'])
       vi.spyOn(navigator, 'language', 'get').mockReturnValue('pt-BR')
-      window.dispatchEvent(new Event('languagechange'))
       try {
         const view = render(DeviceLocale)
         await settle()
@@ -337,7 +332,6 @@ describe('WebkitProvider', () => {
         )
       } finally {
         vi.restoreAllMocks()
-        window.dispatchEvent(new Event('languagechange'))
       }
     })
   })

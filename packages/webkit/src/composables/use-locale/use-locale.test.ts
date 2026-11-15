@@ -37,14 +37,11 @@ function probe(setupParent?: () => void) {
 }
 
 const useDevice = (languages: string[]) => {
-  vi.spyOn(navigator, 'languages', 'get').mockReturnValue(languages)
   vi.spyOn(navigator, 'language', 'get').mockReturnValue(languages[0] ?? '')
-  window.dispatchEvent(new Event('languagechange'))
 }
 
 afterEach(() => {
   vi.restoreAllMocks()
-  window.dispatchEvent(new Event('languagechange'))
 })
 
 describe('useLocale', () => {
@@ -72,11 +69,12 @@ describe('useLocale', () => {
       expect(l.dir.value).toBe('ltr')
     })
 
-    it('follows a device language change', async () => {
+    it('reads the device again when a component mounts', async () => {
       useDevice(['en-US'])
       const l = probe()
       expect(l.formatNumber(1200.5)).toBe('1,200.5')
       useDevice(['de-DE'])
+      probe()
       await nextTick()
       expect(l.locale.value).toBe('de-DE')
       expect(l.formatNumber(1200.5)).toBe('1.200,5')

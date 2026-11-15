@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 653139fb1a6c2ebdfb33c89c17f0babe1d211e370a10e453718fbe74c50c1a97
+checksum: 83892e64b542f9d33990cf9186e694eb7f2f300e85af6dc30f95f63794ff3afc
 created: 2026-06-25
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Calendar — Component Spec

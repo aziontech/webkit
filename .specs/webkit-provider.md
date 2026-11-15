@@ -3,10 +3,10 @@ name: webkit-provider
 category: utils
 structure: monolithic
 status: implemented
-checksum: cc5cbe170edc1fb843c26d380ab0a07bad5a5fe584778db66472a1ceaad9cc4c
+checksum: 56fa160ebec3368594513ac8fe52690ca686f95b0b61249e9b5964220ec5295d
 spec_version: 2
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # WebkitProvider — Component Spec

@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 23d50c80d3c5839c5119eddaba7ebbb2f4fb0b339543241fac143c75f10716d6
+checksum: 14de3a28755d681ef4861b3e66158a27c375e10a6238b1d84de172fde07fa5a6
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DateRangePicker — Component Spec

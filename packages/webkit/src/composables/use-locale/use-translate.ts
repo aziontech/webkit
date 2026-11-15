@@ -2,11 +2,9 @@ import {
   computed,
   type ComputedRef,
   getCurrentInstance,
-  getCurrentScope,
   inject,
   type InjectionKey,
   onMounted,
-  onScopeDispose,
   type Ref,
   ref
 } from 'vue'
@@ -48,50 +46,26 @@ export const DEFAULT_LOCALE = 'en'
 
 export const SERVER_LOCALE = 'en-US'
 
-export function readDeviceLocale(): string {
-  const nav = globalThis.navigator as Navigator | undefined
-  const tag = nav?.languages?.[0] || nav?.language
-  if (!tag) return SERVER_LOCALE
-  try {
-    return Intl.getCanonicalLocales(tag)[0] ?? SERVER_LOCALE
-  } catch {
-    return SERVER_LOCALE
-  }
-}
-
 const deviceTag = ref(SERVER_LOCALE)
-let deviceUsers = 0
 
 const readDevice = () => {
-  deviceTag.value = readDeviceLocale()
-}
-
-const watchDevice = () => {
-  deviceUsers += 1
-  if (deviceUsers > 1) return
-  readDevice()
-  window.addEventListener('languagechange', readDevice)
-}
-
-const unwatchDevice = () => {
-  deviceUsers = Math.max(0, deviceUsers - 1)
-  if (deviceUsers === 0) window.removeEventListener('languagechange', readDevice)
+  try {
+    deviceTag.value =
+      Intl.getCanonicalLocales(navigator.language || SERVER_LOCALE)[0] ?? SERVER_LOCALE
+  } catch {
+    deviceTag.value = SERVER_LOCALE
+  }
 }
 
 export function useDeviceLocale(): Readonly<Ref<string>> {
   const mounted = ref(false)
   const start = () => {
-    if (mounted.value || typeof window === 'undefined') return
-    watchDevice()
+    if (typeof window === 'undefined') return
+    readDevice()
     mounted.value = true
   }
   if (getCurrentInstance()) onMounted(start)
   else start()
-  if (getCurrentScope()) {
-    onScopeDispose(() => {
-      if (mounted.value) unwatchDevice()
-    })
-  }
   return computed(() => (mounted.value ? deviceTag.value : SERVER_LOCALE))
 }
 

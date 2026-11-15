@@ -5,9 +5,9 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 4d13c033f84e394933068db76b734cb87809056d62012874793b3519f4aa4a99
+checksum: 1ea16eaac53e32b7dc130256c47d459c1b24de2d3cc6af8a6ed51d7b566c447b
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # TagEditor — Component Spec
