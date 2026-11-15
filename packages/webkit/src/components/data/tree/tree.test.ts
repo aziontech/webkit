@@ -36,7 +36,14 @@ const node = (container: Element, id: string) => {
 }
 
 const rowOf = (container: Element, id: string) =>
-  node(container, id).firstElementChild as HTMLElement
+  container.querySelector<HTMLElement>(`[role="row"][data-item-id="${id}"]`) ??
+  (node(container, id).firstElementChild as HTMLElement)
+
+const gridRow = (container: Element, id: string) => {
+  const found = container.querySelector<HTMLElement>(`[role="row"][data-item-id="${id}"]`)
+  if (!found) throw new Error(`row ${id} not rendered`)
+  return found
+}
 
 const tabStops = (container: Element) =>
   Array.from(container.querySelectorAll<HTMLElement>('[role="treeitem"][tabindex="0"]')).map(
@@ -297,45 +304,105 @@ describe('Tree', () => {
     expect(labels).toContain('hero.webp:2:false')
     expect(labels).toContain('src:1:false')
     const more = view.getByRole('button', { name: 'More hero.webp 2' })
-    node(view.container, 'assets').focus()
+    gridRow(view.container, 'assets').focus()
     await userEvent.click(more)
     expect(view.emitted()['item-click']).toBeUndefined()
-    expect(tabStops(view.container)).toEqual(['assets'])
-    more.focus()
-    await userEvent.keyboard('{ArrowDown}')
-    expect(document.activeElement).toBe(more)
-    expect(node(view.container, 'assets').getAttribute('aria-labelledby')).toBeTruthy()
-    expect(view.getByRole('treeitem', { name: 'hero.webp:2:false' })).toBe(
-      node(view.container, HERO.id)
+    expect(view.getByRole('row', { name: 'hero.webp:2:false' })).toBe(
+      gridRow(view.container, HERO.id)
     )
   })
 
-  it('keeps only the tab-stop row actions in the Tab order', async () => {
-    const view = mount(
-      {},
-      {
+  describe('with row actions (treegrid)', () => {
+    const withActions = (props: Record<string, unknown> = {}) =>
+      mount(props, {
         slots: {
-          actions: (scope: { item: TreeItem }) =>
-            h('button', { type: 'button', 'aria-label': `More ${scope.item.label}` })
+          actions: (scope: { item: TreeItem }) => [
+            h('button', { type: 'button', 'aria-label': `Rename ${scope.item.label}` }),
+            h('button', { type: 'button', 'aria-label': `Delete ${scope.item.label}` })
+          ]
         }
+      })
+
+    it('renders a treegrid of rows and gridcells, and a plain tree without actions', () => {
+      const view = withActions({ expanded: ['assets'] })
+      const grid = view.getByRole('treegrid', { name: 'Bucket objects' })
+      expect(view.queryByRole('tree')).toBeNull()
+      expect(view.queryAllByRole('treeitem')).toHaveLength(0)
+      const assets = gridRow(view.container, 'assets')
+      expect(grid.contains(assets)).toBe(true)
+      expect(assets.getAttribute('aria-level')).toBe('1')
+      expect(assets.getAttribute('aria-expanded')).toBe('true')
+      expect(gridRow(view.container, HERO.id).getAttribute('aria-level')).toBe('2')
+      expect(view.getByRole('row', { name: /^hero\.webp/ })).toBe(gridRow(view.container, HERO.id))
+      expect(assets.querySelectorAll('[role="gridcell"]')).toHaveLength(2)
+      view.unmount()
+
+      const plain = mount()
+      expect(plain.getByRole('tree')).toBeTruthy()
+      expect(plain.queryByRole('treegrid')).toBeNull()
+    })
+
+    it('keeps one tab stop and reaches the row buttons with the arrow keys', async () => {
+      const view = withActions()
+      await nextTick()
+      const button = (name: string) => view.getByRole('button', { name })
+      for (const control of view.getAllByRole('button', { name: /^(Rename|Delete) / })) {
+        expect(control.getAttribute('tabindex')).toBe('-1')
       }
-    )
-    await nextTick()
-    const more = (label: string) => view.getByRole('button', { name: `More ${label}` })
-    expect(more('assets').hasAttribute('tabindex')).toBe(false)
-    expect(more('src').getAttribute('tabindex')).toBe('-1')
-    expect(more('azion.config.js').getAttribute('tabindex')).toBe('-1')
+      const config = gridRow(view.container, CONFIG.id)
+      config.focus()
+      await userEvent.keyboard('{ArrowRight}')
+      const label = config.querySelector('[role="gridcell"]')
+      expect(document.activeElement).toBe(label)
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(button('Rename azion.config.js'))
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(button('Delete azion.config.js'))
+      await userEvent.keyboard('{ArrowUp}')
+      expect(document.activeElement).toBe(button('Delete locked.txt'))
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(document.activeElement).toBe(button('Rename locked.txt'))
+      await userEvent.keyboard('{Escape}')
+      expect(document.activeElement).toBe(gridRow(view.container, LOCKED.id))
+      await userEvent.tab()
+      expect(view.container.contains(document.activeElement)).toBe(false)
+    })
 
-    node(view.container, 'assets').focus()
-    await userEvent.keyboard('{ArrowDown}')
-    await nextTick()
-    expect(more('src').hasAttribute('tabindex')).toBe(false)
-    expect(more('assets').getAttribute('tabindex')).toBe('-1')
+    it('expands a collapsed parent row on ArrowRight before entering its cells', async () => {
+      const view = withActions()
+      const assets = gridRow(view.container, 'assets')
+      assets.focus()
+      await userEvent.keyboard('{ArrowRight}')
+      expect(assets.getAttribute('aria-expanded')).toBe('true')
+      expect(document.activeElement).toBe(assets)
+      await userEvent.keyboard('{ArrowRight}')
+      expect(document.activeElement).toBe(assets.querySelector('[role="gridcell"]'))
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(document.activeElement).toBe(assets)
+      await userEvent.keyboard('{ArrowLeft}')
+      expect(assets.getAttribute('aria-expanded')).toBe('false')
+    })
 
-    await userEvent.tab()
-    expect(document.activeElement).toBe(more('src'))
-    await userEvent.tab()
-    expect(view.container.contains(document.activeElement)).toBe(false)
+    it('activates a row by click and Enter, and a button click does not', async () => {
+      const view = withActions({ selectable: true })
+      await userEvent.click(rowOf(view.container, CONFIG.id))
+      expect(view.emitted()['update:selected']?.at(-1)).toEqual([CONFIG.id])
+      await userEvent.click(view.getByRole('button', { name: 'Delete src' }))
+      expect(view.emitted()['item-click']).toHaveLength(1)
+    })
+
+    it('has no axe violations nested, selected and with a loading lazy parent', async () => {
+      const lazy: TreeItem = { id: 'remote', label: 'remote', lazy: true, loading: true }
+      const view = withActions({
+        items: [...ITEMS, lazy],
+        selectable: 'multiple',
+        selectedIds: [LOGO.id],
+        expanded: ['assets', IMG.id, 'remote']
+      })
+      await nextTick()
+      expect(view.getByRole('status')).toBeTruthy()
+      await expectNoA11yViolations(view.container)
+    })
   })
 
   it('moves focus to the next visible node whose label starts with the typed text', async () => {
@@ -555,7 +622,7 @@ describe('Tree feature examples', () => {
     ['MultiSelect', MultiSelect]
   ])('renders the %s example without axe violations', async (_, example) => {
     const view = render(example)
-    expect(view.getByRole('tree')).toBeTruthy()
+    expect(view.queryByRole('tree') ?? view.getByRole('treegrid')).toBeTruthy()
     await expectNoA11yViolations(view.container)
   })
 })

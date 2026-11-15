@@ -3,6 +3,8 @@ import type { InjectionKey, Ref } from 'vue'
 export interface TreeContext {
   /** Resolved root data-testid; parts derive from it. */
   testId: Readonly<Ref<string>>
+  /** Whether rows carry actions, so the tree renders the treegrid pattern. */
+  grid: Readonly<Ref<boolean>>
   /** Whether selection is on, single or multiple. */
   selectable: Readonly<Ref<boolean>>
   /** Mirrors the root editable prop. */
