@@ -1,9 +1,23 @@
 {
   "accordion": {
-    "value": "modelValue"
+    "value": "modelValue",
+    "arrowPosition": {
+      "to": "iconPosition",
+      "values": {
+        "left": "leading",
+        "right": "trailing"
+      }
+    }
   },
   "accordion-root": {
-    "value": "modelValue"
+    "value": "modelValue",
+    "arrowPosition": {
+      "to": "iconPosition",
+      "values": {
+        "left": "leading",
+        "right": "trailing"
+      }
+    }
   },
   "alert": {
     "severity": {
@@ -11,16 +25,28 @@
       "values": {
         "error": "danger"
       }
-    }
+    },
+    "#action": "actions"
   },
   "architecture-tabs": {
-    "interval": "autoplayInterval"
+    "interval": "autoplayInterval",
+    "position": {
+      "to": "tabsSide",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
   },
   "badge": {
     "severity": {
       "to": "severity",
       "values": {
         "default": "neutral"
+      },
+      "moves": {
+        "primary": "variant",
+        "secondary": "variant"
       }
     }
   },
@@ -30,15 +56,17 @@
       "values": {
         "text": "transparent"
       }
-    }
+    },
+    "#prefix": "leading"
   },
   "card-pricing": {
-    "planTitle": "title"
+    "planTitle": "title",
+    "slotPosition": "actionsPosition",
+    "aligned": "equalHeight"
   },
   "code-block": {
     "border": "bordered",
-    "value": "modelValue",
-    "showLineNumbers": "lineNumbers"
+    "value": "modelValue"
   },
   "doc-card": {
     "overline": "eyebrow",
@@ -54,15 +82,32 @@
   "hero": {
     "carousel": "ticker",
     "carouselMarks": "tickerMarks",
-    "carouselLabel": "tickerLabel"
+    "carouselLabel": "tickerLabel",
+    "align": {
+      "to": "align",
+      "values": {
+        "top": "start",
+        "bottom": "end"
+      }
+    }
   },
   "hero-band": {
     "carouselMarks": "tickerMarks",
-    "carouselLabel": "tickerLabel"
+    "carouselLabel": "tickerLabel",
+    "highlight": "titleHighlight",
+    "kind": {
+      "to": "kind",
+      "values": {
+        "centered": "center",
+        "centered-band": "center-band"
+      }
+    }
   },
   "hero-form": {
     "carouselMarks": "tickerMarks",
-    "carouselLabel": "tickerLabel"
+    "carouselLabel": "tickerLabel",
+    "highlight": "titleHighlight",
+    "error": "failed"
   },
   "item": {
     "kind": {
@@ -95,18 +140,42 @@
   },
   "media-tabs": {
     "autoPlay": "autoplay",
-    "autoPlayInterval": "autoplayInterval"
+    "autoPlayInterval": "autoplayInterval",
+    "position": {
+      "to": "tabsSide",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
   },
   "navigation-menu": {
     "value": "modelValue",
     "as": {
       "removed": "each NavigationMenu part renders a fixed element (nav, ul, li, a or button, div, span); wrap the part or style it instead of swapping its element."
-    }
+    },
+    "highlight": "showHighlight",
+    "disableAnchorTracking": {
+      "to": "trackAnchor",
+      "values": {
+        "true": "false",
+        "false": "true"
+      }
+    },
+    "side": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    },
+    "@open-change-complete": "open-transition-end"
   },
   "navigation-menu-root": {
     "as": {
       "removed": "each NavigationMenu part renders a fixed element (nav, ul, li, a or button, div, span); wrap the part or style it instead of swapping its element."
-    }
+    },
+    "@open-change-complete": "open-transition-end"
   },
   "overline": {
     "showCursor": "cursor"
@@ -165,10 +234,10 @@
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
     },
     "enableRowSelection": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; enableRowSelection is selectable there"
     },
     "enableSorting": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; enableSorting is sortable there"
     },
     "error": {
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
@@ -279,10 +348,10 @@
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
     },
     "enableRowSelection": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; enableRowSelection is selectable there"
     },
     "enableSorting": {
-      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
+      "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it; enableSorting is sortable there"
     },
     "error": {
       "removed": "the data-driven table moved to DataTable: import DataTable from '@aziontech/webkit/data-table' and move the tag, its props, events and slots to it"
@@ -425,6 +494,12 @@
       "to": "severity",
       "values": {
         "secondary": "neutral"
+      },
+      "moves": {
+        "primary": "variant",
+        "accent": "variant",
+        "contrast": "variant",
+        "highlight": "variant"
       }
     }
   },
@@ -448,7 +523,8 @@
     "type": {
       "to": "severity",
       "values": {
-        "error": "danger"
+        "error": "danger",
+        "default": "neutral"
       }
     }
   },
@@ -547,8 +623,9 @@
   },
   "resizable-pane": {
     "collapsed": {
-      "removed": "use v-model:expanded, inverted: expanded = !collapsed"
-    }
+      "removed": "use v-model:open, inverted: open = !collapsed"
+    },
+    "expanded": "open"
   },
   "select": {
     "multiple": {
@@ -566,10 +643,12 @@
     }
   },
   "transfer-list": {
-    "dataKey": "trackBy"
+    "dataKey": "itemKey",
+    "trackBy": "itemKey"
   },
   "transfer-list-root": {
-    "dataKey": "trackBy"
+    "dataKey": "itemKey",
+    "trackBy": "itemKey"
   },
   "attribute-editor": {
     "empty": "emptyTitle"
@@ -600,10 +679,12 @@
     "emptyText": "emptyTitle"
   },
   "console-layout": {
-    "navigationExpanded": "navigationOpen"
+    "navigationExpanded": "navigationOpen",
+    "#header-start": "header-leading"
   },
   "console-layout-root": {
-    "navigationExpanded": "navigationOpen"
+    "navigationExpanded": "navigationOpen",
+    "#header-start": "header-leading"
   },
   "conversation-history": {
     "label": "ariaLabel"
@@ -631,8 +712,9 @@
   },
   "upload-progress": {
     "collapsed": {
-      "removed": "use v-model:expanded, inverted: expanded = !collapsed"
-    }
+      "removed": "use v-model:open, inverted: open = !collapsed"
+    },
+    "expanded": "open"
   },
   "capability-grid": {
     "actions": {
@@ -642,6 +724,361 @@
   "console-panel": {
     "actions": {
       "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, kind? } shape); a third action has no slot, put it in the page instead"
+    }
+  },
+  "chat-message": {
+    "state": {
+      "to": "status",
+      "values": {
+        "complete": "success"
+      }
+    }
+  },
+  "prompt-input": {
+    "state": {
+      "to": "status",
+      "values": {
+        "submitted": "pending"
+      }
+    }
+  },
+  "tool-approval": {
+    "state": "status"
+  },
+  "tool-call": {
+    "state": "status"
+  },
+  "stepper-step": {
+    "state": {
+      "to": "status",
+      "values": {
+        "upcoming": "pending",
+        "complete": "success",
+        "loading": "running"
+      }
+    }
+  },
+  "log-view-header": {
+    "#left": "start",
+    "#right": "end"
+  },
+  "tutorial-panel-provider": {
+    "@finish": "complete"
+  },
+  "topology-diagram": {
+    "expanded": "openKeys"
+  },
+  "product-widget": {
+    "hover": "hovered",
+    "interval": "autoplayInterval"
+  },
+  "breadcrumb": {
+    "current": "active"
+  },
+  "breadcrumb-root": {
+    "current": "active"
+  },
+  "breadcrumb-item": {
+    "current": "active"
+  },
+  "sidebar-menu": {
+    "selected": "active",
+    "expanded": "openKeys"
+  },
+  "sidebar-menu-root": {
+    "selected": "active"
+  },
+  "sidebar-menu-item": {
+    "selected": "active",
+    "tagSeverity": {
+      "to": "tagSeverity",
+      "moves": {
+        "primary": "tagVariant",
+        "accent": "tagVariant"
+      }
+    }
+  },
+  "pagination": {
+    "selected": "active"
+  },
+  "pagination-root": {
+    "selected": "active"
+  },
+  "pagination-button": {
+    "selected": "active"
+  },
+  "navigation-menu-list": {
+    "highlight": "showHighlight"
+  },
+  "navigation-menu-positioner": {
+    "disableAnchorTracking": {
+      "to": "trackAnchor",
+      "values": {
+        "true": "false",
+        "false": "true"
+      }
+    },
+    "side": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
+  },
+  "doc-layout": {
+    "navigationExpanded": "navigationOpen"
+  },
+  "app-layout": {
+    "navigationLabel": "navigationAriaLabel"
+  },
+  "drawer": {
+    "side": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
+  },
+  "drawer-root": {
+    "side": {
+      "to": "side",
+      "values": {
+        "left": "start",
+        "right": "end"
+      }
+    }
+  },
+  "resizable": {
+    "expanded": "open"
+  },
+  "resizable-root": {
+    "expanded": "open"
+  },
+  "page-header": {
+    "#breadcrumb": "breadcrumbs"
+  },
+  "doc-page-header": {
+    "breadcrumb": "breadcrumbs",
+    "#breadcrumb": "breadcrumbs",
+    "@meta-action": "action-click"
+  },
+  "setting-row": {
+    "level": "depth"
+  },
+  "dropdown-menu": {
+    "#top": "header",
+    "#bottom": "footer"
+  },
+  "dropdown-menu-root": {
+    "#top": "header",
+    "#bottom": "footer"
+  },
+  "dropdown-menu-group": {
+    "#top": "header",
+    "#bottom": "footer"
+  },
+  "input": {
+    "#prefix": "leading",
+    "#suffix": "trailing"
+  },
+  "password-input": {
+    "#prefix": "leading",
+    "#suffix": "trailing"
+  },
+  "number-input": {
+    "#prefix": "leading",
+    "#suffix": "trailing"
+  },
+  "command-item": {
+    "#prefix": "leading",
+    "#suffix": "trailing"
+  },
+  "select-option": {
+    "#left": "leading"
+  },
+  "multi-select-option": {
+    "#left": "leading"
+  },
+  "select-trigger": {
+    "#prefix": "leading"
+  },
+  "multi-select-trigger": {
+    "#prefix": "leading"
+  },
+  "accordion-trigger": {
+    "level": "headingLevel"
+  },
+  "tooltip": {
+    "text": "content"
+  },
+  "hint": {
+    "text": "content"
+  },
+  "command-group": {
+    "heading": "label"
+  },
+  "command-page": {
+    "heading": "title"
+  },
+  "phone-input": {
+    "@update:phone": "phone-change"
+  },
+  "card": {
+    "#header-action": "header-actions",
+    "#action": "actions",
+    "#content": "default"
+  },
+  "code-editor": {
+    "lineNumbers": "showLineNumbers",
+    "@validate": "markers-change"
+  },
+  "chart-bar": {
+    "labeled": "showLabels"
+  },
+  "tree": {
+    "selectedIds": "selectedKeys",
+    "@item-dblclick": "item-double-click",
+    "expanded": "openKeys"
+  },
+  "card-list": {
+    "trackBy": "itemKey",
+    "selectionMode": {
+      "to": "selectionMode",
+      "values": {
+        "multi": "multiple"
+      }
+    }
+  },
+  "property-filter": {
+    "hideOperations": {
+      "to": "showOperations",
+      "values": {
+        "true": "false",
+        "false": "true"
+      }
+    }
+  },
+  "data-table": {
+    "enableSorting": "sortable",
+    "enableRowSelection": "selectable"
+  },
+  "data-grid": {
+    "enableRowSelection": "selectable",
+    "@row-delete": "row-remove"
+  },
+  "table-sort-button": {
+    "direction": "sortDirection",
+    "@toggle": "sort",
+    "visible": {
+      "removed": "hide it with class=\"invisible\" (it keeps its space)"
+    }
+  },
+  "hero-title": {
+    "highlight": "titleHighlight",
+    "centered": {
+      "to": "align",
+      "values": {
+        "true": "'center'"
+      }
+    },
+    "mobileCentered": {
+      "to": "mobileAlign",
+      "values": {
+        "true": "'center'"
+      }
+    }
+  },
+  "closing-call-to-action-newsletter": {
+    "error": "failed"
+  },
+  "media-split": {
+    "align": {
+      "to": "align",
+      "values": {
+        "top": "start"
+      }
+    }
+  },
+  "network-section": {
+    "lead": "claimsEyebrow"
+  },
+  "article-index": {
+    "categoryLabel": "categoryAriaLabel",
+    "rowKind": {
+      "to": "rowKind",
+      "values": {
+        "centered": "center"
+      }
+    },
+    "search": {
+      "removed": "split into searchPlaceholder and searchAriaLabel"
+    },
+    "empty": {
+      "removed": "split into emptyTitle, emptyDescription and emptyActionLabel"
+    }
+  },
+  "listing-browser": {
+    "rows": "data",
+    "search": {
+      "removed": "split into searchPlaceholder, searchShortPlaceholder and searchAriaLabel"
+    },
+    "empty": {
+      "removed": "split into emptyTitle, emptyDescription and emptyActionLabel (was clearLabel)"
+    }
+  },
+  "listing-table": {
+    "rows": "data"
+  },
+  "section-title": {
+    "kind": {
+      "to": "kind",
+      "values": {
+        "centered": "center",
+        "left": "start",
+        "horizontal": "split"
+      }
+    }
+  },
+  "section-module": {
+    "kind": {
+      "to": "kind",
+      "values": {
+        "centered": "center",
+        "left": "start",
+        "horizontal": "split"
+      }
+    }
+  },
+  "article-cards": {
+    "kind": {
+      "to": "kind",
+      "values": {
+        "left": "start",
+        "centered": "center"
+      }
+    }
+  },
+  "feature-widgets": {
+    "titleKind": {
+      "to": "titleKind",
+      "values": {
+        "centered": "center",
+        "left": "start",
+        "horizontal": "split"
+      }
+    }
+  },
+  "sticky-stack": {
+    "@index-change": "active-index-change"
+  },
+  "story-library": {
+    "search": {
+      "removed": "split into searchPlaceholder, searchShortPlaceholder and searchAriaLabel"
+    },
+    "empty": {
+      "removed": "split into emptyTitle and emptyActionLabel (was action)"
     }
   }
 }
