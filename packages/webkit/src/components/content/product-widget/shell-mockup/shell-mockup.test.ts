@@ -3,10 +3,10 @@ import { describe, expect, it } from 'vitest'
 import { commands } from 'vitest/browser'
 import { defineComponent, nextTick, ref } from 'vue'
 
-import Default from '../../../../examples/shell-mockup/default.vue'
-import { expectNoA11yViolations } from '../../../test/axe'
-import { useHydrationHost } from '../../../test/hydration-shared'
-import ShellMockup from './index'
+import Default from '../../../../../examples/product-widget/default.vue'
+import { expectNoA11yViolations } from '../../../../test/axe'
+import { useHydrationHost } from '../../../../test/hydration-shared'
+import ShellMockup from './shell-mockup.vue'
 import ShellMockupPart from './shell-mockup-part/shell-mockup-part.vue'
 
 const TESTID = 'content-shell-mockup'
@@ -38,10 +38,6 @@ const parts = (container: Element) =>
   Array.from(container.querySelectorAll(`[data-testid="${PART_TESTID}"]`))
 
 describe('ShellMockup (composition)', () => {
-  it('attaches the part to the compound root', () => {
-    expect(ShellMockup.Part).toBe(ShellMockupPart)
-  })
-
   it('renders the root and its parts under the default testids', () => {
     const { getByTestId, container } = render(host())
 
@@ -324,7 +320,7 @@ describe('ShellMockup under reduced motion', () => {
   it('hydrates the server-rendered HTML without a mismatch', async () => {
     await commands.emulateMedia({ reducedMotion: 'reduce' })
     try {
-      const rendered = await commands.renderOnServer('examples/shell-mockup/default.vue')
+      const rendered = await commands.renderOnServer('examples/product-widget/default.vue')
       expect(rendered.error).toBeNull()
       const mismatches = await hydrate(Default, rendered.html, rendered.teleports)
       expect(mismatches, mismatches.join('\n')).toEqual([])

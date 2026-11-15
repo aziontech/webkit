@@ -10,10 +10,10 @@
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Label from '../../../inputs/label/label.vue'
   import RadioButton from '../../../inputs/radio-button/radio-button.vue'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import MockupCursor from '../parts/mockup-cursor.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'ObjectStorageAccessFragment' })
 

@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { type Component, computed } from 'vue'
 
-  import ShellMockup, { type ShellMockupKind } from '../../shell-mockup/shell-mockup.vue'
   import type { ProductWidgetPlating } from '../plates'
+  import ShellMockup, { type ShellMockupKind } from '../shell-mockup/shell-mockup.vue'
 
   defineOptions({ name: 'WidgetPlate' })
 

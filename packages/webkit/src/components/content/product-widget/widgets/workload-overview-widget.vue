@@ -10,9 +10,9 @@
   import Tabs from '../../../navigation/tabs'
   import Avatar from '../../avatar/avatar.vue'
   import Card from '../../card/card.vue'
-  import ShellMockup, { type ShellMockupFade } from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import Tag, { type TagSeverity } from '../../tag/tag.vue'
+  import ShellMockup, { type ShellMockupFade } from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'WorkloadOverviewWidget' })
 

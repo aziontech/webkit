@@ -6,11 +6,11 @@
   import Input from '../../../inputs/input/input.vue'
   import Label from '../../../inputs/label/label.vue'
   import Textarea from '../../../inputs/textarea/textarea.vue'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import MockupCursor from '../parts/mockup-cursor.vue'
   import MockupSelect from '../parts/mockup-select.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'DataStreamConnectorFragment' })
 

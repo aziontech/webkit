@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import Spinner from '../../../utils/spinner/spinner.vue'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import MockupElevator from '../parts/mockup-elevator.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'WorkloadDeployFragment' })
 

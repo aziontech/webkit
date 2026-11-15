@@ -3,10 +3,10 @@ name: hero-band
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 0b331fe24c9cc60c2aa9f39f7725a68cafddf9b19afcc49f262925e9114d9729
+checksum: 59bea076b187e14cdecbc58b20098f3cdb6b201dfdf7df7a41e88e7bea49ea40
 template: 2
 ---
 
@@ -96,7 +96,7 @@ The opening band of a marketing page: the page `h1` with its overline, accent ph
 
 | Slot     | Scope | Notes                                                                                                                                                                  |
 | -------- | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `top`    | —     | A scene in the window above the copy (`ShellMockup`, `ProductWidget`, a diagram). The design sample's hero scenes render here.                                         |
+| `top`    | —     | A scene in the window above the copy (`ProductWidget`, a diagram). The design sample's hero scenes render here.                                         |
 | `bottom` | —     | A scene in the window under the copy; it enters after the copy (`animate-content-enter`, off under reduced motion) and fades at the inline edges on narrow containers. |
 
 ## States

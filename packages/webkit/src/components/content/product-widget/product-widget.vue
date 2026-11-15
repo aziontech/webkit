@@ -2,10 +2,10 @@
   import { type Component, computed, markRaw, provide, shallowRef, useAttrs, watch } from 'vue'
 
   import type { TextureMaterialKind } from '../../marketing/texture-material/texture-material.vue'
-  import type { ShellMockupFade, ShellMockupKind } from '../shell-mockup/shell-mockup.vue'
   import { ProductWidgetInjectionKey } from './injection-key'
   import type * as Plates from './plates'
   import { resolveProductWidget } from './registry'
+  import type { ShellMockupFade, ShellMockupKind } from './shell-mockup/shell-mockup.vue'
 
   defineOptions({ name: 'ProductWidget', inheritAttrs: false })
 

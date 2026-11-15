@@ -3,9 +3,9 @@ name: console-panel
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 465bc7eed1912b52394bc088545393cf5cab2934ff28f19300f513c599d77ad0
+checksum: 7091eeab4e1c6b25f4a1c7a8dbdde291d2ae5258c54d36729e1577b3925307e7
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -14,10 +14,11 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ShellMockup`, `ProductWidget` or diagram and reads the selected tab from the slot scope. In `console` kind the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.
+A full-width framed panel that presents a product scene (a console mock or a diagram) under a section title, on a texture, with optional tabs that each play one beat of the scene. The scene is a slot: the page passes a `ProductWidget` or a diagram and reads the selected tab from the slot scope. In `console` kind the scene keeps a 1.9:1 aspect and can be cropped and faded at the bottom. From the design sample's site `ConsolePanel`.
 
 ## When to use
 
+- Use ConsolePanel for a marketing band that plays a product scene under a section title.
 - Showing the product itself on a landing page.
 - A tour of three or four views of one screen.
 
@@ -28,7 +29,7 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 
 ## Related
 
-- `ShellMockup`, `ProductWidget` — scenes it frames.
+- `ProductWidget` — the console scenes it frames.
 - `ToggleGroup` — the tab control.
 - `TextureMaterial`, `FrameBox`, `SectionTitle`.
 
@@ -42,7 +43,7 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 ```vue
 <script setup>
   import ConsolePanel from '@aziontech/webkit/console-panel'
-  import ShellMockup from '@aziontech/webkit/shell-mockup'
+  import ProductWidget from '@aziontech/webkit/product-widget'
 </script>
 
 <template>
@@ -54,7 +55,7 @@ A full-width framed panel that presents a product scene (a console mock or a dia
     ]"
   >
     <template #scene="{ tab }">
-      <ShellMockup :data-tab="tab" />
+      <ProductWidget :name="tab === 'logs' ? 'workload-deploy-logs' : 'workloads-list'" />
     </template>
   </ConsolePanel>
 </template>
@@ -94,7 +95,7 @@ A full-width framed panel that presents a product scene (a console mock or a dia
 
 - `data-kind` mirrors `kind`.
 - The first tab is selected on render.
-- `--mockup-fade-start` / `--mockup-fade-end` are set for a `ShellMockup` scene when cropped.
+- `--mockup-fade-start` / `--mockup-fade-end` are set for a `ProductWidget` scene when cropped.
 
 ## Motion & Animations
 

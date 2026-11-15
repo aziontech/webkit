@@ -5,10 +5,10 @@
   import Input from '../../../inputs/input/input.vue'
   import Label from '../../../inputs/label/label.vue'
   import type { TextureMaterialKind } from '../../../marketing/texture-material/texture-material.vue'
-  import ShellMockup, { type ShellMockupFade } from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import Tag from '../../tag/tag.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
+  import ShellMockup, { type ShellMockupFade } from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'ApplicationVersionWidget' })
 

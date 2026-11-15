@@ -3,10 +3,10 @@ name: diagram
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 9d60c063dbe7f43b872c8b77cba4f6ad10f09241e74c7e6c565e4b1ba9f974bd
+spec_version: 3
+checksum: 7909aa19ae00a8538a01393f215beaa41129806693c279da14173a22c8752969
 created: 2026-10-21
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 ---
 
 # Diagram — Component Spec
@@ -17,6 +17,7 @@ A node-and-connector diagram for marketing pages: the request path of an archite
 
 ## When to use
 
+- Use Diagram for one of the official marketing architecture drawings.
 - Showing how a request travels through Azion — client, application, the product the page is about, and its outcomes.
 - Showing a routing or failover policy as nodes and labelled edges, with the path a request takes highlighted.
 - Filling the media cell of a marketing band (`media-tabs`, `media-split`) with an architecture instead of a picture.

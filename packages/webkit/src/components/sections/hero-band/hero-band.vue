@@ -166,7 +166,7 @@
   })
 
   const slots = defineSlots<{
-    /** A scene in the window above the copy (a `ShellMockup`, a `ProductWidget`, a diagram). */
+    /** A scene in the window above the copy (a `ProductWidget`, a diagram). */
     top?(): unknown
     /** A scene in the window under the copy, entering after it. */
     bottom?(): unknown

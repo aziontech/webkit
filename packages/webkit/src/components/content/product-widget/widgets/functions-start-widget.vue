@@ -2,10 +2,10 @@
   import { ref } from 'vue'
 
   import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import { AGENT_CLIENTS } from '../data/functions-start'
   import CliTerminal from '../parts/cli-terminal.vue'
   import FunctionsAgent from '../parts/functions-agent.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
   import FunctionCodeFragment from './function-code-fragment.vue'
 
   defineOptions({ name: 'FunctionsStartWidget' })

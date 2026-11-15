@@ -2,16 +2,16 @@
   import { duration } from '@aziontech/theme/animations'
   import { computed, onMounted, onScopeDispose, provide, readonly, ref, useAttrs, watch } from 'vue'
 
-  import Button from '../../actions/button/button.vue'
-  import ButtonHighlight from '../../actions/button-highlight/button-highlight.vue'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import Button from '../../../actions/button/button.vue'
+  import ButtonHighlight from '../../../actions/button-highlight/button-highlight.vue'
+  import IconButton from '../../../actions/icon-button/icon-button.vue'
   import TextureMaterial, {
     type TextureMaterialFade,
     type TextureMaterialKind
-  } from '../../marketing/texture-material/texture-material.vue'
-  import Avatar from '../avatar/avatar.vue'
-  import Brand from '../brand/brand.vue'
-  import Kbd from '../kbd/kbd.vue'
+  } from '../../../marketing/texture-material/texture-material.vue'
+  import Avatar from '../../avatar/avatar.vue'
+  import Brand from '../../brand/brand.vue'
+  import Kbd from '../../kbd/kbd.vue'
   import { SHELL_MOCKUP_KEY } from './injection-key'
 
   defineOptions({ name: 'ShellMockup', inheritAttrs: false })

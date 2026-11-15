@@ -9,8 +9,8 @@
   import ShellMockup, {
     type ShellMockupFade,
     type ShellMockupKind
-  } from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  } from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'WorkloadsListWidget' })
 

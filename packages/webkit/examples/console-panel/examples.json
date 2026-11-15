@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "A console mock in the framed panel with three tabs; the scene slot receives the selected tab. The bottom fifth is cropped and faded from the medium breakpoint up.",
+      "summary": "A ProductWidget console screen in the framed panel with three tabs; the scene slot receives the selected tab and shows that widget. The bottom fifth is cropped and faded from the medium breakpoint up.",
       "file": "default.vue"
     },
     {

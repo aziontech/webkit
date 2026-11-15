@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import Card from '../../card/card.vue'
   import Item from '../../item/index'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'ApplicationsCreateMethodFragment' })
 

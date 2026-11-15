@@ -3,21 +3,22 @@ name: product-widget
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 382666cfb8c8cd9c5aed31db7c90b3642bbff562e7db99df97232a6dc2b72fdc
+checksum: 652bd51656dedb2b726e5ad6258574dfa2be258583dc26610cf49703e7502640
 created: 2026-10-23
-last_updated: 2026-11-13
+last_updated: 2026-11-15
 ---
 
 # ProductWidget — Component Spec
 
 ## Purpose
 
-Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside a `shell-mockup` frame, that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.
+Draws one of the **official console widgets**: a scaled, inert mock of an Azion Console screen or fragment, built from real webkit components inside an internal `shell-mockup` frame (not exported), that marketing bands use to show the product. `name` selects the widget from a closed registry of 70 drawings, loaded on demand, so a page can only render mocks that already exist and the same screen is the same drawing on every page that shows it. The remaining props pass through to the widget that declares them, and a widget that does not declare one keeps its own value.
 
 ## When to use
 
+- Use ProductWidget to show an official console screen on a marketing band.
 - A product band (hero, media split, feature tab, widget grid cell) needs to show a console screen or a fragment of one.
 - The same console screen appears on more than one page and must be the same drawing on each.
 - Several widgets share one slot (tabs), and only the one showing should play: drive `active` from the host.
@@ -25,14 +26,13 @@ Draws one of the **official console widgets**: a scaled, inert mock of an Azion 
 
 ## When NOT to use
 
-- The screen you need is not in the registry → compose it with `shell-mockup` and its parts, then add it to the registry. Do not approximate it at the call site.
+- The screen you need is not in the registry → add it to the registry inside WebKit (drawn in the internal `shell-mockup` frame). Do not approximate it at the call site.
 - A live, working screen at a device size → use `browser-frame`.
 - A static product concept drawing → use `illustration`.
 - A screenshot or clip in documentation → use `doc-frame`.
 
 ## Related
 
-- `shell-mockup` — the frame every widget is drawn in; reach for it directly to compose a new screen.
 - `illustration` — the same closed-registry pattern for static scenes.
 - `texture-material` — the texture a full-screen widget grounds itself with through `texture`.
 

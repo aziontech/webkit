@@ -5,9 +5,9 @@
   import TableRoot from '../../../data/table/table.vue'
   import Input from '../../../inputs/input/input.vue'
   import Card from '../../card/card.vue'
-  import ShellMockup from '../../shell-mockup/shell-mockup.vue'
-  import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import Tag from '../../tag/tag.vue'
+  import ShellMockup from '../shell-mockup/shell-mockup.vue'
+  import ShellMockupPart from '../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
 
   defineOptions({ name: 'ObjectStorageBucketsFragment' })
 
