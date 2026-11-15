@@ -1,5 +1,5 @@
 import { useMutationObserver, useResizeObserver } from '@vueuse/core'
-import { onMounted, type Ref, ref } from 'vue'
+import { computed, type ComputedRef, onMounted, onScopeDispose, type Ref, ref } from 'vue'
 
 export interface FlowDiagramPath {
   /** SVG path `d` for the connector (straight when endpoints share a row, rounded elbow otherwise). */
@@ -122,7 +122,16 @@ const pairEndpoints = (exits: Endpoint[], entries: Endpoint[]): Array<[Endpoint,
   return Array.from({ length: count }, (_, i): [Endpoint, Endpoint] => [exits[i], entries[i]])
 }
 
-export const useFlowDiagramConnectors = (containerEl: Ref<HTMLElement | null>) => {
+export interface UseFlowDiagramConnectorsReturn {
+  /** The connector paths between the measured nodes. */
+  paths: ComputedRef<FlowDiagramPath[]>
+  /** The SVG viewBox matching the container. */
+  viewBox: ComputedRef<string>
+}
+
+export const useFlowDiagramConnectors = (
+  containerEl: Ref<HTMLElement | null>
+): UseFlowDiagramConnectorsReturn => {
   const paths = ref<FlowDiagramPath[]>([])
   const viewBox = ref<string>('0 0 0 0')
 
@@ -178,9 +187,11 @@ export const useFlowDiagramConnectors = (containerEl: Ref<HTMLElement | null>) =
     paths.value = out
   }
 
+  let frame = 0
   onMounted(() => {
-    globalThis.requestAnimationFrame(measure)
+    frame = globalThis.requestAnimationFrame(measure)
   })
+  onScopeDispose(() => globalThis.cancelAnimationFrame(frame))
 
   useResizeObserver(() => containerEl.value, measure)
   useMutationObserver(
@@ -194,5 +205,5 @@ export const useFlowDiagramConnectors = (containerEl: Ref<HTMLElement | null>) =
     }
   )
 
-  return { paths, viewBox }
+  return { paths: computed(() => paths.value), viewBox: computed(() => viewBox.value) }
 }
