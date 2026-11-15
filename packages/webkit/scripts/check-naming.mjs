@@ -6,8 +6,10 @@ import { fileURLToPath } from 'node:url'
 import {
   checkBlocks,
   checkSubpaths,
+  checkSuites,
   checkSynonyms,
   readBlockIds,
+  readSuites,
   retiredNames
 } from './lib/naming.mjs'
 
@@ -29,16 +31,20 @@ if (invoked) {
   const migration = JSON.parse(readFileSync(resolve(PKG, 'src/cli/migrations/v6.json'), 'utf8'))
   const subpaths = exportSubpaths(pkg)
   const blocks = readBlockIds(resolve(PKG, 'blocks'))
-  const errors = checkNaming({ subpaths, blocks, retired: retiredNames(migration) })
+  const suites = readSuites(PKG)
+  const errors = [
+    ...checkNaming({ subpaths, blocks, retired: retiredNames(migration) }),
+    ...checkSuites(suites)
+  ]
   if (errors.length) {
     console.error(`Naming check failed (${errors.length}):`)
     for (const e of errors) console.error(`  - ${e}`)
     console.error(
-      'Rules: kebab-case English ids, block ids match their folder, no synonym of an existing export, no retired v6 name (scripts/lib/naming.mjs).'
+      'Rules: kebab-case English ids, block ids match their folder, no synonym of an existing export, no retired v6 name, one top-level describe per test named after its component (scripts/lib/naming.mjs).'
     )
     process.exit(1)
   }
   console.log(
-    `Naming OK: ${subpaths.length} exports, ${blocks.length} blocks, no synonyms or retired names.`
+    `Naming OK: ${subpaths.length} exports, ${blocks.length} blocks, ${suites.length} suites, no synonyms or retired names.`
   )
 }
