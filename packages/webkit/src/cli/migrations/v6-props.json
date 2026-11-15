@@ -204,5 +204,29 @@
         "compact": "compact"
       }
     }
+  },
+  "tag": {
+    "severity": {
+      "to": "severity",
+      "values": {
+        "secondary": "neutral"
+      }
+    }
+  },
+  "status-indicator": {
+    "severity": {
+      "to": "severity",
+      "values": {
+        "alt": "neutral"
+      }
+    }
+  },
+  "menu-item": {
+    "tagSeverity": {
+      "to": "tagSeverity",
+      "values": {
+        "secondary": "neutral"
+      }
+    }
   }
 }
