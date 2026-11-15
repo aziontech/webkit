@@ -300,7 +300,7 @@
     code: ''
   }
 
-  const plan = ref<string>('free')
+  const plan = ref<string | undefined>('free')
   const pendingPlanId = ref('')
   const upgradeOpen = ref(false)
   const planSubmitted = ref(false)
