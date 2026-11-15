@@ -28,6 +28,9 @@ It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `d
   pair becomes its Azion twin (`pi pi-check` → `ai ai-check`, `pi pi-minus-circle` →
   `ai ai-circle-minus`, `pi pi-twitter` → `ai ai-x`; the map is `src/cli/migrations/v6-icons.json`).
   A `pi-<name>` outside a pair, and a third-party mark with no Azion glyph, is listed to fix by hand.
+- renamed WebKit lint rule ids, in every source file (ESLint configs and `eslint-disable` comments):
+  `webkit/valid-import-path` → `webkit/no-unknown-import`, … (section 4, "Lint rules renamed"; the
+  map is `src/cli/migrations/v6-lint.json`).
 
 It prints `MANUAL` for anything it cannot rewrite safely (section 4), and for any import that v6
 does not export.
@@ -1066,6 +1069,21 @@ new folders and reports the old ones as orphans; delete the old folders in `.cla
 | `webkit-genai`             | `webkit-ai-surfaces`   |
 | `webkit-baseline-ui`       | `webkit-quick-cleanup` |
 | `webkit-impeccable-polish` | `webkit-final-polish`  |
+
+### Lint rules renamed
+
+Every rule of `@aziontech/webkit/eslint-plugin` starts with a `no-`, `prefer-` or `require-` verb.
+The old ids are gone, so a config or `eslint-disable` comment that names one reports an unknown rule;
+`migrate v6` rewrites them. Only `valid-import-path` shipped in 5.x; the other four existed only in
+6.0 previews.
+
+| Old rule                       | 6.0 rule                          |
+| ------------------------------ | --------------------------------- |
+| `webkit/accessible-name`       | `webkit/require-accessible-name`  |
+| `webkit/container-needs-width` | `webkit/require-container-width`  |
+| `webkit/header-search-trigger` | `webkit/require-header-search`    |
+| `webkit/menu-node-href`        | `webkit/prefer-href-in-menu-node` |
+| `webkit/valid-import-path`     | `webkit/no-unknown-import`        |
 
 ## 5. Field report: Azion Console
 
