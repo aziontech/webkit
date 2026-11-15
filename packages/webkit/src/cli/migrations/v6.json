@@ -132,6 +132,7 @@
     "field-checkbox-block": "FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription)",
     "field-radio-block": "RadioGroup kind=\"card\" v-model with a RadioGroup.Item per option (description on the item)",
     "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)",
+    "sidebar-group": "SidebarMenu with a SidebarMenu.Group per section (label, the rows as SidebarMenu.Item)",
     "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)",
     "mini-button": "Link (label, href, icon) for a text link that navigates; Button kind=\"link\" for a text action without href",
     "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",

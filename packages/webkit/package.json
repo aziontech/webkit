@@ -79,7 +79,7 @@
     "tailwind-merge": "^3.6.0"
   },
   "peerDependencies": {
-    "@aziontech/icons": "^4.4.0",
+    "@aziontech/icons": "^4.4.0 || ^5.0.0",
     "@aziontech/theme": "^5.2.2 || ^6.0.0",
     "eslint": ">=9",
     "monaco-editor": ">=0.50",
@@ -1351,10 +1351,6 @@
     "./sidebar-root": {
       "types": "./types/components/layout/sidebar/sidebar.vue.d.ts",
       "default": "./src/components/layout/sidebar/sidebar.vue"
-    },
-    "./sidebar-group": {
-      "types": "./types/components/layout/sidebar/sidebar-group.vue.d.ts",
-      "default": "./src/components/layout/sidebar/sidebar-group.vue"
     },
     "./sidebar-header": {
       "types": "./types/components/layout/sidebar/sidebar-header.vue.d.ts",
@@ -3380,9 +3376,6 @@
       ],
       "sidebar-root": [
         "./types/components/layout/sidebar/sidebar.vue.d.ts"
-      ],
-      "sidebar-group": [
-        "./types/components/layout/sidebar/sidebar-group.vue.d.ts"
       ],
       "sidebar-header": [
         "./types/components/layout/sidebar/sidebar-header.vue.d.ts"

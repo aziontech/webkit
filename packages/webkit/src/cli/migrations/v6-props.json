@@ -390,9 +390,16 @@
     "timezone": "timeZone"
   },
   "checkbox": {
-    "inputId": "id",
+    "inputId": {
+      "to": "id",
+      "attribute": true
+    },
     "binary": {
       "removed": "leave value unset for a boolean v-model"
+    },
+    "tabindex": {
+      "to": "tabindex",
+      "attribute": true
     }
   },
   "split-button": {
@@ -572,5 +579,18 @@
   },
   "multi-select-root": {
     "emptyText": "emptyTitle"
+  },
+  "sidebar-root": {
+    "collapsed": {
+      "removed": "use v-model:open, inverted: open = !collapsed"
+    }
+  },
+  "hero-root": {
+    "carousel": "ticker",
+    "carouselMarks": "tickerMarks",
+    "carouselLabel": "tickerLabel"
+  },
+  "popover-root": {
+    "width": "size"
   }
 }

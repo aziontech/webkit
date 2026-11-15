@@ -227,7 +227,8 @@ v5 listed `@aziontech/theme@^4` as a dependency, so an app on theme 5 got a seco
 copy under `@aziontech/webkit/node_modules`. v6 declares it as a peer (`^5.2.2`): install it next to
 WebKit (`npm install @aziontech/theme@^5.2.2`; `npx @aziontech/webkit init` adds it). `webkit doctor`
 fails when a nested copy is left or the installed theme misses the range. `init` now writes caret
-ranges for every dependency it adds, never `latest`.
+ranges for every dependency it adds, never `latest`. The `@aziontech/icons` peer accepts
+`^4.4.0 || ^5.0.0`, so the icons major that drops PrimeIcons from its default entry installs as is.
 
 ### Theme: dark mode follows the device, fonts are a separate import, unused variables are gone
 
@@ -593,6 +594,12 @@ Test ids follow the component name: `feedback-message` → `feedback-alert`, `la
 `navigation-navigation-menu`, and its parts from `navigation-menu__*` to
 `navigation-navigation-menu__*`.
 
+Every input takes the `input-<name>` id, also when its name already says input: `input` →
+`input-input`, `input-group` → `input-input-group` (its parts `input-input-group-addon` and
+`input-input-group-input`), `number-input` → `input-number-input`, `otp-input` →
+`input-otp-input`, `password-input` → `input-password-input` and `phone-input` →
+`input-phone-input`, with their parts (`otp-input__box` → `input-otp-input__box`, and so on).
+
 A child test id joins its root with two underscores, never a hyphen. These moved:
 
 | Component                     | v5                                       | v6                                         |
@@ -927,8 +934,10 @@ components the same locale, `t()` and `Intl` helpers.
 
 The navigation rail now has one name across the layouts: `open` on `Sidebar` and `navigationOpen`
 on `AppLayout` and `ConsoleLayout`. `@aziontech/webkit/sidebar` is now the compound
-(`Sidebar.Header`, `Sidebar.Group`, `Sidebar.Footer`); `@aziontech/webkit/sidebar-root` is the
-standalone root.
+(`Sidebar.Header`, `Sidebar.Footer`); `@aziontech/webkit/sidebar-root` is the
+standalone root. `SidebarGroup` (`@aziontech/webkit/sidebar-group`, `Sidebar.Group`) is removed:
+group the rows with `SidebarMenu.Group` inside a `SidebarMenu` (`label`, rows as
+`SidebarMenu.Item`).
 
 ### Changed defaults in the input and action controls
 
