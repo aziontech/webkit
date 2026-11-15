@@ -3,20 +3,20 @@ name: phone-input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2048-5713
   node_id: 2048:5713
-checksum: 7e7066276879f9b70ab49660fdcf8a23d77abd5b5a175a2811e1d326087c4f62
+checksum: eca050271d4d44dc5d0ad119d5ada5897a1834a04f220e81b9ff9f9d41102c3c
 created: 2026-11-10
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # PhoneInput — Component Spec
 
 ## Purpose
 
-International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `update:phone` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (it replaces the v5 `field-phone-number`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.
+International phone-number control: an `InputGroup` with a searchable dial-code `Select` on the left and a `type="tel"` input on the right that applies the selected country's mask as the user types and accepts exactly the lengths that country allows. Two v-models (`v-model` for the national digits, `v-model:country` for the ISO 3166-1 alpha-2 code) carry the editable state; the one-way `update:phone` event hands the form the full E.164 number and whether it is complete. It carries no label or helper text: wrap it in a `Field` (`Field.Label` + `PhoneInput` + `Field.Description`), and it picks up `id`, `aria-describedby`, `invalid`, `disabled` and `required` from the Field.
 
 ## When to use
 

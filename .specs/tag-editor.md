@@ -3,9 +3,9 @@ name: tag-editor
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 1ea16eaac53e32b7dc130256c47d459c1b24de2d3cc6af8a6ed51d7b566c447b
+checksum: a2eb7e3ed490ade5f45b3a849b1cedb77ad7aee56fa9dc635ebd9a1cf62e2d43
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -18,6 +18,7 @@ Key and value tags of one resource, after Cloudscape's tag editor, built on `Att
 
 ## When to use
 
+- Use TagEditor when the person adds, edits or removes key/value tags (labels) on a resource; it enforces tag limits and reserved prefixes. For a short list of same-field rows inside a form (environment variables, headers) use AttributeEditor; to edit many cells of many records in place use DataGrid.
 - The Tags section of a create or settings form of any resource.
 - Labels used for cost allocation, ownership or search, where keys repeat across resources and suggestions help keep them consistent.
 

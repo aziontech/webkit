@@ -3,18 +3,18 @@ name: otp-input
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 5dcbb11c0dfa1c5a2a464fb5b825185c63b2cee42efed151adb7560043b0f9e0
+checksum: 62a377ba0e36bc01b2ba0b9eb1434e90c3da34c025d1ce83e746e9aca58085d7
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # OtpInput — Component Spec
 
 ## Purpose
 
-The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS. It looks like a row of boxes, one character each, but it is **one real text input** laid over the boxes, so the browser's one-time-code autofill (`autocomplete="one-time-code"`), password managers, paste and screen readers all see a single field. Typing fills the next box (auto-advance), Backspace empties the last one, and a pasted code (`123 456`, `123-456`, with a line break) keeps only its valid characters and fills every box. When the last box fills it emits `complete`, so the screen can submit without a button press. It replaces the Console Kit's six `InputText`s with hand-written focus moves (`mfa-setup-block`, `mfa-authenticate-block`).
+The field for a one-time code: the six digits an authenticator app shows, or a code sent by email or SMS. It looks like a row of boxes, one character each, but it is **one real text input** laid over the boxes, so the browser's one-time-code autofill (`autocomplete="one-time-code"`), password managers, paste and screen readers all see a single field. Typing fills the next box (auto-advance), Backspace empties the last one, and a pasted code (`123 456`, `123-456`, with a line break) keeps only its valid characters and fills every box. When the last box fills it emits `complete`, so the screen can submit without a button press. It replaces six hand-wired text inputs with focus moves between them; the `platform/account/mfa-management` block uses it to set up and confirm an authenticator.
 
 ## When to use
 
