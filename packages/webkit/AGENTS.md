@@ -30,7 +30,7 @@ Component creation under `components/**` is **always** driven by the pipeline at
 ## 3) Layer rules outside `components/**`
 
 - **`composables/*`** — Vue composables following [`../../.claude/rules/composables.md`](../../.claude/rules/composables.md) (`readonly` state out, `toValue` args, `onScopeDispose` cleanup); document the API in TSDoc; export through the root `packages/webkit/package.json#exports` (one entry per public composable).
-- **`cli/` · `mcp/` · `eslint-plugin/` · `stylelint-config.js`** — the adoption toolkit. It ships inside `@aziontech/webkit` (bins + subpath exports; no separate packages). Covered by `test/**/*.test.mjs` (`pnpm test:toolkit`) and documented in [`docs/toolkit/`](./docs/toolkit/). The check engines in `eslint-plugin/*.js` are shared with the write-time hooks and the CI ratchet — changing them changes three enforcement surfaces at once.
+- **`cli/` · `mcp/` · `eslint-plugin/` · `stylelint-config.js`** — the adoption toolkit. It ships inside `@aziontech/webkit` (bins + subpath exports; no separate packages). Covered by `test/**/*.test.mjs` (`pnpm test:toolkit`) and documented in [`docs/toolkit/`](./docs/toolkit/). The check engines in `eslint-plugin/lib/*.js` are shared with the write-time hooks and the CI ratchet — changing them changes three enforcement surfaces at once.
 
 ## 4) Validation gate (must pass before reporting done)
 
