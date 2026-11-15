@@ -162,7 +162,8 @@
     "shell-mockup": "ProductWidget from @aziontech/webkit/product-widget with the registry name of the console screen; the frame is internal",
     "shell-mockup-root": "ProductWidget from @aziontech/webkit/product-widget with the registry name of the console screen; the frame is internal",
     "shell-mockup-part": "ProductWidget from @aziontech/webkit/product-widget; the frame and its parts are internal",
-    "vite": "delete the webkitViteConfig import and its mergeConfig call; an app that uses vee-validate sets optimizeDeps: { include: ['vee-validate'] } in its own Vite config"
+    "vite": "delete the webkitViteConfig import and its mergeConfig call; an app that uses vee-validate sets optimizeDeps: { include: ['vee-validate'] } in its own Vite config",
+    "doc-cta": "use DocCallToAction from '@aziontech/webkit/doc-call-to-action': primary-label and primary-href become :primary-action=\"{ label, href }\", secondary-label and secondary-href become :secondary-action=\"{ label, href }\""
   },
   "types": {
     "BoxGridSelectionItem": "RadioGroupOption",

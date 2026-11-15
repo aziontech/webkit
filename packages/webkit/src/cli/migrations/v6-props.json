@@ -592,5 +592,56 @@
   },
   "popover-root": {
     "width": "size"
+  },
+  "banner-art": {
+    "art": "kind"
+  },
+  "combobox": {
+    "emptyText": "emptyTitle"
+  },
+  "console-layout": {
+    "navigationExpanded": "navigationOpen"
+  },
+  "console-layout-root": {
+    "navigationExpanded": "navigationOpen"
+  },
+  "conversation-history": {
+    "label": "ariaLabel"
+  },
+  "response-branches": {
+    "label": "ariaLabel"
+  },
+  "payment-brand": {
+    "label": "ariaLabel"
+  },
+  "qr-code": {
+    "label": "ariaLabel"
+  },
+  "doc-heading": {
+    "id": "anchor"
+  },
+  "wizard": {
+    "activeStep": "modelValue"
+  },
+  "wizard-root": {
+    "activeStep": "modelValue"
+  },
+  "file-token-group": {
+    "alignment": "orientation"
+  },
+  "upload-progress": {
+    "collapsed": {
+      "removed": "use v-model:expanded, inverted: expanded = !collapsed"
+    }
+  },
+  "capability-grid": {
+    "actions": {
+      "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, kind? } shape); a third action has no slot, put it in the page instead"
+    }
+  },
+  "console-panel": {
+    "actions": {
+      "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, kind? } shape); a third action has no slot, put it in the page instead"
+    }
   }
 }

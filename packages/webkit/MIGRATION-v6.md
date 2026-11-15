@@ -74,40 +74,50 @@ component.
 
 ## 3. Renamed props and values
 
-| Component          | v5                 | v6                   |
-| ------------------ | ------------------ | -------------------- |
-| `accordion`        | `value`            | `modelValue`         |
-| `alert`            | `severity="error"` | `severity="danger"`  |
-| `attribute-editor` | `empty`            | `emptyTitle`         |
-| `badge`            | `severity=default` | `severity=neutral`   |
-| `button`           | `kind="text"`      | `kind="transparent"` |
-| `card-pricing`     | `planTitle`        | `title`              |
-| `checkbox`         | `inputId`          | `id`                 |
-| `code-block`       | `border`           | `bordered`           |
-| `code-block`       | `value`            | `modelValue`         |
-| `doc-card-group`   | `cols`             | `columns`            |
-| `doc-card-group`   | `mobileCols`       | `mobileColumns`      |
-| `doc-card`         | `link`             | `linkLabel`          |
-| `doc-card`         | `overline`         | `eyebrow`            |
-| `item`             | `kind="outline"`   | `kind="outlined"`    |
-| `log-view`         | `border`           | `bordered`           |
-| `log-view`         | `showCopy`         | `copyable`           |
-| `media-tabs`       | `autoPlayInterval` | `autoplayInterval`   |
-| `media-tabs`       | `autoPlay`         | `autoplay`           |
-| `multi-select`     | `emptyText`        | `emptyTitle`         |
-| `navigation-menu`  | `value`            | `modelValue`         |
-| `overline`         | `showCursor`       | `cursor`             |
-| `popover`          | `width`            | `size`               |
-| `progress`         | `shape`            | `kind`               |
-| `quote-tabs`       | `autoPlayInterval` | `autoplayInterval`   |
-| `quote-tabs`       | `autoPlay`         | `autoplay`           |
-| `severity-tag`     | `level`            | `severity`           |
-| `skeleton`         | `kind="shape"`     | `kind="rectangle"`   |
-| `split-button`     | `model`            | `items`              |
-| `table`            | `border`           | `bordered`           |
-| `tabs`             | `value`            | `modelValue`         |
-| `textarea`         | `resizable`        | `resize`             |
-| `theme-switcher`   | `value`            | `modelValue`         |
+| Component              | v5                            | v6                        |
+| ---------------------- | ----------------------------- | ------------------------- |
+| `accordion`            | `value`                       | `modelValue`              |
+| `alert`                | `severity="error"`            | `severity="danger"`       |
+| `attribute-editor`     | `empty`                       | `emptyTitle`              |
+| `badge`                | `severity=default`            | `severity=neutral`        |
+| `banner-art`           | `art`                         | `kind`                    |
+| `button`               | `kind="text"`                 | `kind="transparent"`      |
+| `card-pricing`         | `planTitle`                   | `title`                   |
+| `checkbox`             | `inputId`                     | `id`                      |
+| `code-block`           | `border`                      | `bordered`                |
+| `code-block`           | `value`                       | `modelValue`              |
+| `combobox`             | `emptyText`                   | `emptyTitle`              |
+| `console-layout`       | `v-model:navigation-expanded` | `v-model:navigation-open` |
+| `conversation-history` | `label`                       | `ariaLabel`               |
+| `doc-card`             | `link`                        | `linkLabel`               |
+| `doc-card`             | `overline`                    | `eyebrow`                 |
+| `doc-card-group`       | `cols`                        | `columns`                 |
+| `doc-card-group`       | `mobileCols`                  | `mobileColumns`           |
+| `doc-heading`          | `id`                          | `anchor`                  |
+| `file-token-group`     | `alignment`                   | `orientation`             |
+| `item`                 | `kind="outline"`              | `kind="outlined"`         |
+| `log-view`             | `border`                      | `bordered`                |
+| `log-view`             | `showCopy`                    | `copyable`                |
+| `media-tabs`           | `autoPlayInterval`            | `autoplayInterval`        |
+| `media-tabs`           | `autoPlay`                    | `autoplay`                |
+| `multi-select`         | `emptyText`                   | `emptyTitle`              |
+| `navigation-menu`      | `value`                       | `modelValue`              |
+| `overline`             | `showCursor`                  | `cursor`                  |
+| `payment-brand`        | `label`                       | `ariaLabel`               |
+| `popover`              | `width`                       | `size`                    |
+| `progress`             | `shape`                       | `kind`                    |
+| `qr-code`              | `label`                       | `ariaLabel`               |
+| `quote-tabs`           | `autoPlayInterval`            | `autoplayInterval`        |
+| `quote-tabs`           | `autoPlay`                    | `autoplay`                |
+| `response-branches`    | `label`                       | `ariaLabel`               |
+| `severity-tag`         | `level`                       | `severity`                |
+| `skeleton`             | `kind="shape"`                | `kind="rectangle"`        |
+| `split-button`         | `model`                       | `items`                   |
+| `table`                | `border`                      | `bordered`                |
+| `tabs`                 | `value`                       | `modelValue`              |
+| `textarea`             | `resizable`                   | `resize`                  |
+| `theme-switcher`       | `value`                       | `modelValue`              |
+| `wizard`               | `v-model:activeStep`          | `v-model`                 |
 
 ### Renamed types
 
@@ -330,6 +340,21 @@ state on its own.
 New pieces that came out of the old wrappers: `PhoneInput` (`@aziontech/webkit/phone-input`),
 `PasswordRequirements` (`@aziontech/webkit/password-requirements`) and `InputGroup.Input`
 (`@aziontech/webkit/input-group-input`). `HelperText` and `Hint` remain; `Label` is removed (use `Field.Label`, or `FieldLabel` with `for` and `required` beside its control).
+
+### Preview-only names
+
+These shipped only in the 6.0 previews (`feat/webkit-ai-ready`), never in 5.x; they are gone in 6.0.
+
+- `DocCta` (`@aziontech/webkit/doc-cta`) → `DocCallToAction` (`@aziontech/webkit/doc-call-to-action`):
+  `primary-label` / `primary-href` become `:primary-action="{ label, href }"`, `secondary-label` /
+  `secondary-href` become `:secondary-action="{ label, href }"`. The codemod lists the import as `MANUAL`.
+- `CapabilityGrid` and `ConsolePanel`: `actions` → `primaryAction` and `secondaryAction` (one object
+  each, same `{ label, href, trailing?, target?, kind? }` shape). The codemod lists it as `MANUAL`.
+- `UploadProgress`: `v-model:collapsed` → `v-model:expanded`, inverted (`expanded = !collapsed`).
+- `ConsoleLayout`: `v-model:navigation-expanded` → `v-model:navigation-open` (same value);
+  `Wizard`: `v-model:activeStep` → `v-model`; the codemod rewrites both.
+- `DocPrompt`: the default `icon` is `ai ai-sparkles` (was `pi pi-sparkles`), like every icon in
+  the Azion set above.
 
 ### Documentation components
 
