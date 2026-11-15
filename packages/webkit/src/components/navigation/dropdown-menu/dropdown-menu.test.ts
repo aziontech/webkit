@@ -74,15 +74,11 @@ const Host = defineComponent({
 })
 
 const control = () =>
-  document.body.querySelector(
-    '[data-testid="navigation-dropdown-menu__trigger"] button'
-  ) as HTMLElement
+  document.body.querySelector('[data-testid="dropdown-menu-trigger"] button') as HTMLElement
 
 /** Query the Teleported panel from document.body (it escapes the container). */
 const getPanel = () =>
-  document.body.querySelector(
-    '[data-testid="navigation-dropdown-menu__panel"]'
-  ) as HTMLElement | null
+  document.body.querySelector('[data-testid="dropdown-menu__panel"]') as HTMLElement | null
 
 const getOptions = () =>
   Array.from(document.body.querySelectorAll('[role^="menuitem"]')) as HTMLElement[]
@@ -99,7 +95,7 @@ afterEach(() => {
   // Teleported panels leak across tests if a wrapper unmounts mid-transition;
   // scrub any stray panel so document.body queries stay deterministic.
   document.body
-    .querySelectorAll('[data-testid="navigation-dropdown-menu__panel"]')
+    .querySelectorAll('[data-testid="dropdown-menu__panel"]')
     .forEach((el) => el.remove())
 })
 
@@ -115,11 +111,9 @@ describe('DropdownMenu', () => {
     it('renders the root header and footer slots outside the scrolling menu', async () => {
       render(WithHeaderAndFooter)
       await waitFor(() =>
-        expect(
-          document.body.querySelector('[data-testid="navigation-dropdown-menu__header"]')
-        ).not.toBeNull()
+        expect(document.body.querySelector('[data-testid="dropdown-menu__header"]')).not.toBeNull()
       )
-      const footer = document.body.querySelector('[data-testid="navigation-dropdown-menu__footer"]')
+      const footer = document.body.querySelector('[data-testid="dropdown-menu__footer"]')
       expect(footer).not.toBeNull()
       expect(document.body.querySelector('[data-testid$="__top"]')).toBeNull()
       expect(footer?.closest('[role="menu"]')).toBeNull()
@@ -129,11 +123,11 @@ describe('DropdownMenu', () => {
       render(GroupsWithHeaderAndFooter)
       await waitFor(() =>
         expect(
-          document.body.querySelectorAll('[data-testid="navigation-dropdown-menu__group__header"]')
+          document.body.querySelectorAll('[data-testid="dropdown-menu-group__header"]')
         ).toHaveLength(2)
       )
       expect(
-        document.body.querySelectorAll('[data-testid="navigation-dropdown-menu__group__footer"]')
+        document.body.querySelectorAll('[data-testid="dropdown-menu-group__footer"]')
       ).toHaveLength(2)
     })
 
@@ -141,7 +135,7 @@ describe('DropdownMenu', () => {
     it('renders the root div with the default testid and closed state', () => {
       const { getByTestId } = render(Host)
 
-      const root = getByTestId('navigation-dropdown-menu')
+      const root = getByTestId('dropdown-menu')
       expect(root.tagName).toBe('DIV')
       expect(root.getAttribute('data-state')).toBe('closed')
       expect(root.getAttribute('data-placement')).toBe('bottom-start')
@@ -150,19 +144,19 @@ describe('DropdownMenu', () => {
 
     it('reflects the disabled prop as data-disabled on the root', () => {
       const { getByTestId } = render(Host, { props: { disabled: true } })
-      expect(getByTestId('navigation-dropdown-menu').getAttribute('data-disabled')).toBe('true')
+      expect(getByTestId('dropdown-menu').getAttribute('data-disabled')).toBe('true')
     })
 
     it('reflects the placement prop on data-placement', () => {
       const { getByTestId } = render(Host, { props: { placement: 'top-end' } })
-      expect(getByTestId('navigation-dropdown-menu').getAttribute('data-placement')).toBe('top-end')
+      expect(getByTestId('dropdown-menu').getAttribute('data-placement')).toBe('top-end')
     })
 
     // ---- Trigger anatomy + a11y wiring (context-driven) -----------------------
     it('forwards aria-haspopup/expanded/controls onto the slotted button instead of wrapping it', () => {
       const { getByTestId } = render(Host)
 
-      const trigger = getByTestId('navigation-dropdown-menu__trigger')
+      const trigger = getByTestId('dropdown-menu-trigger')
       expect(trigger.tagName).toBe('SPAN')
       expect(trigger.hasAttribute('role')).toBe(false)
       expect(trigger.hasAttribute('tabindex')).toBe(false)
@@ -186,7 +180,7 @@ describe('DropdownMenu', () => {
             ])
         })
       )
-      const trigger = screen.getByTestId('navigation-dropdown-menu__trigger')
+      const trigger = screen.getByTestId('dropdown-menu-trigger')
       expect(trigger.getAttribute('role')).toBe('button')
       expect(trigger.getAttribute('tabindex')).toBe('0')
       expect(trigger.getAttribute('aria-haspopup')).toBe('menu')
@@ -203,16 +197,16 @@ describe('DropdownMenu', () => {
 
       expect(getPanel()).toBeNull()
 
-      await fireEvent.click(getByTestId('navigation-dropdown-menu__trigger'))
+      await fireEvent.click(getByTestId('dropdown-menu-trigger'))
       await waitForOpen(3)
 
       const panel = getPanel() as HTMLElement
       const menu = panel.querySelector('[role="menu"]') as HTMLElement
       expect(menu).not.toBeNull()
       // Panel is Teleported OUT of the render container, onto document.body.
-      expect(panel.closest('[data-testid="navigation-dropdown-menu"]')).toBeNull()
+      expect(panel.closest('[data-testid="dropdown-menu"]')).toBeNull()
       // aria-labelledby wires back to the trigger id (shared context).
-      const trigger = getByTestId('navigation-dropdown-menu__trigger')
+      const trigger = getByTestId('dropdown-menu-trigger')
       expect(menu.getAttribute('aria-labelledby')).toBe(control().id)
       // Trigger aria-expanded now reflects open via injected isOpen.
       expect(control().getAttribute('aria-expanded')).toBe('true')
@@ -226,7 +220,7 @@ describe('DropdownMenu', () => {
     it('renders one role=menuitem per DropdownMenuItem through the injected panel body', async () => {
       const { getByTestId } = render(Host)
 
-      await fireEvent.click(getByTestId('navigation-dropdown-menu__trigger'))
+      await fireEvent.click(getByTestId('dropdown-menu-trigger'))
       await waitForOpen(3)
 
       const options = getOptions()
@@ -237,7 +231,7 @@ describe('DropdownMenu', () => {
     it('does NOT open when the root is disabled', async () => {
       const { getByTestId } = render(Host, { props: { disabled: true } })
 
-      await fireEvent.click(getByTestId('navigation-dropdown-menu__trigger'))
+      await fireEvent.click(getByTestId('dropdown-menu-trigger'))
       // Give any async teleport a chance; it must never appear.
       await Promise.resolve()
       expect(getPanel()).toBeNull()
@@ -253,7 +247,7 @@ describe('DropdownMenu', () => {
         }
       })
 
-      await fireEvent.click(getByTestId('navigation-dropdown-menu__trigger'))
+      await fireEvent.click(getByTestId('dropdown-menu-trigger'))
       await waitForOpen(3)
 
       await fireEvent.click(getOptions()[1])
@@ -275,7 +269,7 @@ describe('DropdownMenu', () => {
         props: { grouped: true, onSelect: () => (calls.value += 1) }
       })
 
-      await fireEvent.click(getByTestId('navigation-dropdown-menu__trigger'))
+      await fireEvent.click(getByTestId('dropdown-menu-trigger'))
       await waitForOpen(5)
 
       const disabled = getOptions().find((o) => o.getAttribute('aria-disabled') === 'true')
@@ -294,7 +288,7 @@ describe('DropdownMenu', () => {
         props: { 'onUpdate:open': (v: boolean) => events.value.push(v) }
       })
 
-      await fireEvent.click(getByTestId('navigation-dropdown-menu__trigger'))
+      await fireEvent.click(getByTestId('dropdown-menu-trigger'))
       await waitForOpen(3)
       expect(events.value).toEqual([true])
 
@@ -316,7 +310,7 @@ describe('DropdownMenu', () => {
     it('closes on Escape from inside the panel and returns focus to the trigger', async () => {
       // Uncontrolled: open via the trigger so the root owns and can flip its state.
       const { getByTestId } = render(Host)
-      await fireEvent.click(getByTestId('navigation-dropdown-menu__trigger'))
+      await fireEvent.click(getByTestId('dropdown-menu-trigger'))
       await waitForOpen(3)
 
       await fireEvent.keyDown(getPanel() as HTMLElement, { key: 'Escape' })
@@ -328,12 +322,12 @@ describe('DropdownMenu', () => {
     it('opens from the trigger on ArrowDown, Enter and Space', async () => {
       for (const key of ['ArrowDown', 'Enter', ' ']) {
         const view = render(Host)
-        await fireEvent.keyDown(view.getByTestId('navigation-dropdown-menu__trigger'), { key })
+        await fireEvent.keyDown(view.getByTestId('dropdown-menu-trigger'), { key })
         await waitForOpen(3)
         expect(getPanel()).not.toBeNull()
         view.unmount()
         document.body
-          .querySelectorAll('[data-testid="navigation-dropdown-menu__panel"]')
+          .querySelectorAll('[data-testid="dropdown-menu__panel"]')
           .forEach((el) => el.remove())
       }
     })
@@ -346,7 +340,7 @@ describe('DropdownMenu', () => {
         }
       })
 
-      await fireEvent.click(getByTestId('navigation-dropdown-menu__trigger'))
+      await fireEvent.click(getByTestId('dropdown-menu-trigger'))
       await waitForOpen(3)
 
       await fireEvent.keyDown(getOptions()[2], { key: 'Enter' })
@@ -359,7 +353,7 @@ describe('DropdownMenu', () => {
     it('closes when a mousedown lands outside the trigger and panel', async () => {
       // Uncontrolled: open via the trigger so onDocumentMousedown can flip state.
       const { getByTestId } = render(Host)
-      await fireEvent.click(getByTestId('navigation-dropdown-menu__trigger'))
+      await fireEvent.click(getByTestId('dropdown-menu-trigger'))
       await waitForOpen(3)
       expect(getPanel()).not.toBeNull()
 
@@ -399,9 +393,7 @@ describe('DropdownMenu', () => {
       expect(selected.getAttribute('aria-checked')).toBe('true')
       expect(selected.hasAttribute('aria-current')).toBe(false)
       expect(selected.hasAttribute('data-selected')).toBe(true)
-      expect(
-        selected.querySelector('[data-testid="navigation-dropdown-menu__option__check"]')
-      ).not.toBeNull()
+      expect(selected.querySelector('[data-testid="dropdown-menu-item__check"]')).not.toBeNull()
 
       expect(disabled.getAttribute('aria-disabled')).toBe('true')
       expect(disabled.hasAttribute('data-disabled')).toBe(true)
@@ -424,9 +416,7 @@ describe('DropdownMenu', () => {
       )
 
       await waitFor(() => expect(getOptions()).toHaveLength(1))
-      const command = document.body.querySelector(
-        '[data-testid="navigation-dropdown-menu__option__command"]'
-      )
+      const command = document.body.querySelector('[data-testid="dropdown-menu-item__command"]')
       expect(command).not.toBeNull()
       expect(command?.textContent?.trim()).toBe('⌘P')
     })
@@ -448,9 +438,7 @@ describe('DropdownMenu', () => {
       'mirrors placement=%s onto the root data-placement',
       (placement) => {
         const { getByTestId } = render(Host, { props: { placement } })
-        expect(getByTestId('navigation-dropdown-menu').getAttribute('data-placement')).toBe(
-          placement
-        )
+        expect(getByTestId('dropdown-menu').getAttribute('data-placement')).toBe(placement)
       }
     )
 
@@ -463,7 +451,7 @@ describe('DropdownMenu', () => {
 
     it('renders the Groups story and opens its two labeled groups', async () => {
       render(Groups)
-      await fireEvent.click(screen.getByTestId('navigation-dropdown-menu__trigger'))
+      await fireEvent.click(screen.getByTestId('dropdown-menu-trigger'))
       await waitFor(() => {
         const groups = document.body.querySelectorAll('[role="group"]')
         expect(groups).toHaveLength(2)
@@ -477,9 +465,7 @@ describe('DropdownMenu', () => {
       await waitFor(() =>
         expect(document.body.querySelectorAll('[role^="menuitem"]').length).toBeGreaterThan(0)
       )
-      const command = document.body.querySelector(
-        '[data-testid="navigation-dropdown-menu__option__command"]'
-      )
+      const command = document.body.querySelector('[data-testid="dropdown-menu-item__command"]')
       expect(command?.textContent?.trim()).toBe('⌘P')
     })
   })
@@ -643,13 +629,10 @@ describe('DropdownMenu', () => {
         ])
       )
       await waitForOpen(2)
-      const leading = document.body.querySelector(
-        '[data-testid="navigation-dropdown-menu__option__leading"]'
-      )
+      const leading = document.body.querySelector('[data-testid="dropdown-menu-item__leading"]')
       expect(leading?.textContent).toBe('L')
       expect(
-        document.body.querySelector('[data-testid="navigation-dropdown-menu__option__trailing"]')
-          ?.textContent
+        document.body.querySelector('[data-testid="dropdown-menu-item__trailing"]')?.textContent
       ).toBe('T')
       expect(document.body.querySelector('[data-testid="old__leading"]')).toBeNull()
       expect(document.body.querySelector('[data-testid="old__trailing"]')).toBeNull()
@@ -843,16 +826,12 @@ describe('DropdownMenu', () => {
 
   const subTrigger = (name: string) =>
     Array.from(
-      document.body.querySelectorAll<HTMLElement>(
-        '[data-testid="navigation-dropdown-menu__sub-trigger"]'
-      )
+      document.body.querySelectorAll<HTMLElement>('[data-testid="dropdown-menu-sub-trigger"]')
     ).find((el) => el.textContent?.includes(name)) as HTMLElement
 
   const subPanels = () =>
     Array.from(
-      document.body.querySelectorAll<HTMLElement>(
-        '[data-testid="navigation-dropdown-menu__sub-panel"]'
-      )
+      document.body.querySelectorAll<HTMLElement>('[data-testid="dropdown-menu-sub-content"]')
     )
 
   async function openSubHost(onSelect?: (...args: unknown[]) => void) {

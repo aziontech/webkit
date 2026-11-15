@@ -1,8 +1,7 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import Tag, { type TagSeverity } from '../../../content/tag/tag.vue'
-  import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableCellStatus',
@@ -25,11 +24,8 @@
   })
 
   const attrs = useAttrs()
-  const ctx = inject(TableInjectionKey, null)
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__cell-status` : 'data-table__cell-status')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-cell-status'
   )
 </script>
 

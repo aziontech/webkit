@@ -1,6 +1,6 @@
 # Rule: imports — flat public name, category in the folder only
 
-Every webkit component is published under a **flat, single-segment public name**. The category (`feedback`, `content`, `inputs`, `data`, `actions`, …) organizes the **source folder** and the **docs site's navigation**, but it never appears in the public import path or the `package.json` export key.
+Every webkit component is published under a **flat, single-segment public name**. The category (`feedback`, `content`, `input`, `data`, `action`, …) organizes the **source folder** and the **docs site's navigation**, but it never appears in the public import path or the `package.json` export key.
 
 ## The rule
 
@@ -35,6 +35,10 @@ When adding or migrating a component named `<name>` in category `<category>`:
 
 If the flat name is already taken by another component, that is a **naming** problem: rename the new component, do not fall back to a category-prefixed export. Emit `BLOCKED: export key "./<name>" already in use` and resolve the name before shipping.
 
+## Namespaces that are not components
+
+A few export keys have two segments on purpose. The first segment is a **namespace for a kind of file**, never a category: `assets/*` (logos, scenes and media), `locales/*` (message catalogs), `styles/*` (stylesheets), `svg/*` (raw drawings) and `utils/*` (`utils/cn`, `utils/csv`: plain helpers, not components). A component never takes a namespace; it is always `@aziontech/webkit/<name>`.
+
 ## Marketing — primitives and page sections
 
 The two marketing categories follow the flat rule like every other category; only their docs navigation is grouped under one `Marketing` node.
@@ -42,7 +46,7 @@ The two marketing categories follow the flat rule like every other category; onl
 | Category                      | Source folder                      | Export / import                           | Examples `title`                           |
 | ----------------------------- | ---------------------------------- | ----------------------------------------- | ------------------------------------------ |
 | `marketing` (building blocks) | `src/components/marketing/<name>/` | `"./<name>"` · `@aziontech/webkit/<name>` | `Components/Marketing/Primitives/<Pascal>` |
-| `sections` (page sections)    | `src/components/sections/<name>/`  | `"./<name>"` · `@aziontech/webkit/<name>` | `Components/Marketing/Sections/<Pascal>`   |
+| `section` (page sections)     | `src/components/section/<name>/`   | `"./<name>"` · `@aziontech/webkit/<name>` | `Components/Marketing/Sections/<Pascal>`   |
 
 - A page section's `<name>` is the `_id` the marketing site writes in a page's `sections[]` JSON, so the `_id` and the import subpath are the same string (see [`SECTIONS.md`](../docs/SECTIONS.md)).
 - The `<name>` is unique across every category (`.specs/<name>.md` is a flat folder): `sections/customer-use-cases` and a future `content/customer-use-cases` cannot coexist.

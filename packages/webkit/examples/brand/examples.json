@@ -1,6 +1,6 @@
 {
   "component": "brand",
-  "title": "Components/Primitives/Content/Brand",
+  "title": "Components/Content/Brand",
   "examples": [
     {
       "name": "Default",

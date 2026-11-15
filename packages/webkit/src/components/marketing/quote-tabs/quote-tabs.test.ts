@@ -5,7 +5,7 @@ import { h, nextTick } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import QuoteTabs, { type QuoteTabsItem } from './quote-tabs.vue'
 
-const TESTID = 'marketing-quote-tabs'
+const TESTID = 'quote-tabs'
 
 const COLOUR_LOGO =
   'data:image/svg+xml;utf8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 40 10%22%3E%3Crect width=%2240%22 height=%2210%22 fill=%22%230086ff%22/%3E%3C/svg%3E'
@@ -200,7 +200,7 @@ describe('QuoteTabs', () => {
     expect(sizer).toHaveAttribute('aria-hidden', 'true')
     expect(sizer).toHaveAttribute('inert')
     expect(sizerQuotationsOf(container)).toEqual(ITEMS.map((item) => item.text))
-    expect(sizer?.querySelector('[data-testid="marketing-quote"]')).toBeNull()
+    expect(sizer?.querySelector('[data-testid="quote"]')).toBeNull()
 
     await fireEvent.click(tabsOf(container)[3])
 

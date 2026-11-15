@@ -1,6 +1,6 @@
 {
   "component": "password-requirements",
-  "title": "Components/Primitives/Inputs/PasswordRequirements",
+  "title": "Components/Input/PasswordRequirements",
   "examples": [
     {
       "name": "Default",

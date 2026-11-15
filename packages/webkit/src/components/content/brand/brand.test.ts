@@ -22,14 +22,14 @@ describe('Brand', () => {
   it('renders with the default testid and role="img"', () => {
     const { getByTestId } = render(Brand)
 
-    const root = getByTestId('content-brand')
+    const root = getByTestId('brand')
     expect(root).toBeInTheDocument()
     expect(root).toHaveAttribute('role', 'img')
   })
 
   it('drops its role and name and hides from assistive tech when decorative', () => {
     const { getByTestId } = render(Brand, { props: { decorative: true } })
-    const root = getByTestId('content-brand')
+    const root = getByTestId('brand')
     expect(root).not.toHaveAttribute('role')
     expect(root).not.toHaveAttribute('aria-label')
     expect(root).toHaveAttribute('aria-hidden', 'true')
@@ -47,7 +47,7 @@ describe('Brand', () => {
   it.each(VARIANTS)('variant=%s sets data-variant and renders the matching lockup', (variant) => {
     const { getByTestId } = render(Brand, { props: { variant: variant } })
 
-    const root = getByTestId('content-brand')
+    const root = getByTestId('brand')
     expect(root).toHaveAttribute('data-variant', variant)
 
     const svg = root.querySelector('svg')
@@ -58,7 +58,7 @@ describe('Brand', () => {
   it('defaults to the default lockup when variant is omitted', () => {
     const { getByTestId } = render(Brand)
 
-    const root = getByTestId('content-brand')
+    const root = getByTestId('brand')
     expect(root).toHaveAttribute('data-variant', 'default')
     expect(root.querySelector('svg')).toHaveAttribute('viewBox', KIND_VIEWBOX.default)
   })
@@ -66,11 +66,11 @@ describe('Brand', () => {
   // --- size -> data-size + preserved aspect ratio -------------------------
   it.each(SIZES)('size=%s sets data-size on the root', (size) => {
     const { getByTestId } = render(Brand, { props: { size } })
-    expect(getByTestId('content-brand')).toHaveAttribute('data-size', size)
+    expect(getByTestId('brand')).toHaveAttribute('data-size', size)
   })
 
   it('defaults to size "medium" when size is omitted', () => {
-    expect(render(Brand).getByTestId('content-brand')).toHaveAttribute('data-size', 'medium')
+    expect(render(Brand).getByTestId('brand')).toHaveAttribute('data-size', 'medium')
   })
 
   // Sizing is applied via width:auto on the SVG, so each lockup keeps its own viewBox
@@ -86,7 +86,7 @@ describe('Brand', () => {
   it('labels the logo "Azion" by default and marks the inner SVG presentational', () => {
     const { getByTestId } = render(Brand)
 
-    const root = getByTestId('content-brand')
+    const root = getByTestId('brand')
     expect(root).toHaveAttribute('aria-label', 'Azion')
     expect(root.querySelector('svg')).toHaveAttribute('aria-hidden', 'true')
   })
@@ -96,7 +96,7 @@ describe('Brand', () => {
       attrs: { 'aria-label': 'Azion home' }
     })
 
-    expect(getByTestId('content-brand')).toHaveAttribute('aria-label', 'Azion home')
+    expect(getByTestId('brand')).toHaveAttribute('aria-label', 'Azion home')
   })
 
   it.each(VARIANTS)('has no accessibility violations for variant=%s', async (variant) => {
@@ -108,7 +108,7 @@ describe('Brand', () => {
   it('renders the composed Default story fixture (default lockup)', () => {
     const { getByTestId } = render(Default)
 
-    const root = getByTestId('content-brand')
+    const root = getByTestId('brand')
     expect(root).toHaveAttribute('data-variant', 'default')
     expect(root.querySelector('svg')).toHaveAttribute('viewBox', KIND_VIEWBOX.default)
   })
@@ -116,7 +116,7 @@ describe('Brand', () => {
   it('renders all three lockups in the composed Types story fixture', () => {
     const { getAllByTestId } = render(Types)
 
-    const roots = getAllByTestId('content-brand')
+    const roots = getAllByTestId('brand')
     expect(roots).toHaveLength(3)
     expect(roots.map((r) => r.getAttribute('data-variant'))).toEqual([
       'default',
@@ -128,7 +128,7 @@ describe('Brand', () => {
   it('renders all three sizes in the composed Sizes story fixture', () => {
     const { getAllByTestId } = render(Sizes)
 
-    const roots = getAllByTestId('content-brand')
+    const roots = getAllByTestId('brand')
     expect(roots).toHaveLength(3)
     expect(roots.map((r) => r.getAttribute('data-size'))).toEqual(['small', 'medium', 'large'])
   })

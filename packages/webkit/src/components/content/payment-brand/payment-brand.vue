@@ -75,7 +75,7 @@
   const { t } = useTranslate({ paymentBrand: en.paymentBrand })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-payment-brand'
+    () => (attrs['data-testid'] as string | undefined) ?? 'payment-brand'
   )
 
   const id = computed<PaymentBrandId>(() => {

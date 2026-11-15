@@ -8,7 +8,7 @@ import ToolCall from './tool-call.vue'
 
 describe('ToolCall', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
-    expect(render(ToolCall, { props: { name: 'list' } }).getByTestId('ai-tool-call')).toBeTruthy()
+    expect(render(ToolCall, { props: { name: 'list' } }).getByTestId('tool-call')).toBeTruthy()
     expect(
       render(ToolCall, { props: { name: 'list' }, attrs: { 'data-testid': 'mine' } }).getByTestId(
         'mine'
@@ -24,7 +24,7 @@ describe('ToolCall', () => {
     ['denied', 'Denied']
   ] as const)('shows %s as text in a status region', (status, text) => {
     const { getByTestId, getByRole } = render(ToolCall, { props: { name: 'purge_urls', status } })
-    expect(getByTestId('ai-tool-call')).toHaveAttribute('data-status', status)
+    expect(getByTestId('tool-call')).toHaveAttribute('data-status', status)
     expect(getByRole('status')).toHaveTextContent(text)
   })
 
@@ -39,7 +39,7 @@ describe('ToolCall', () => {
   it('is static without details', () => {
     const { queryByRole, getByTestId } = render(ToolCall, { props: { name: 'list' } })
     expect(queryByRole('button')).toBeNull()
-    expect(getByTestId('ai-tool-call')).not.toHaveAttribute('data-state')
+    expect(getByTestId('tool-call')).not.toHaveAttribute('data-state')
   })
 
   it('expands input and output by keyboard', async () => {
@@ -49,7 +49,7 @@ describe('ToolCall', () => {
     })
     const trigger = getByRole('button')
     expect(trigger).toHaveAttribute('aria-expanded', 'false')
-    expect(getByTestId('ai-tool-call__details')).not.toBeVisible()
+    expect(getByTestId('tool-call__details')).not.toBeVisible()
     trigger.focus()
     await userEvent.keyboard('{Enter}')
     expect(trigger).toHaveAttribute('aria-expanded', 'true')
@@ -63,12 +63,12 @@ describe('ToolCall', () => {
       props: { name: 'get_settings', open: true, 'onUpdate:open': () => undefined },
       slots: { input: () => '{ "id": 1 }' }
     })
-    expect(getByTestId('ai-tool-call__details')).toBeVisible()
+    expect(getByTestId('tool-call__details')).toBeVisible()
     await userEvent.click(getByRole('button'))
     expect(emitted('update:open')?.[0]).toEqual([false])
-    expect(getByTestId('ai-tool-call__details')).toBeVisible()
+    expect(getByTestId('tool-call__details')).toBeVisible()
     await rerender({ name: 'get_settings', open: false, 'onUpdate:open': () => undefined })
-    expect(getByTestId('ai-tool-call__details')).not.toBeVisible()
+    expect(getByTestId('tool-call__details')).not.toBeVisible()
   })
 
   it('has no axe violations', async () => {
@@ -87,16 +87,16 @@ describe('ToolCall', () => {
         setup: () => ({ shown }),
         template: `<ToolCall name="search"><template v-if="shown" #input><span data-testid="probe">Slotted</span></template></ToolCall>`
       })
-      expect(queryByTestId('ai-tool-call__trigger')).toBeNull()
+      expect(queryByTestId('tool-call__trigger')).toBeNull()
 
       shown.value = true
       await nextTick()
-      expect(queryByTestId('ai-tool-call__trigger')).not.toBeNull()
+      expect(queryByTestId('tool-call__trigger')).not.toBeNull()
       expect(queryByTestId('probe')).not.toBeNull()
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('ai-tool-call__trigger')).toBeNull()
+      expect(queryByTestId('tool-call__trigger')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
     })
   })

@@ -1,6 +1,6 @@
 {
   "component": "table",
-  "title": "Components/Primitives/Data/Table",
+  "title": "Components/Data/Table",
   "examples": [
     {
       "name": "Default",

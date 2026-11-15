@@ -38,7 +38,7 @@
   const labelId = `${uid}-label`
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu-group'
+    () => (attrs['data-testid'] as string | undefined) ?? 'sidebar-menu-group'
   )
 
   const hasLabel = () => Boolean(props.label) || Boolean(slots.label)

@@ -84,7 +84,7 @@
   const ARC = 'M10 60A50 50 0 0 1 110 60'
   const rangeId = `${useId()}-range`
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-gauge-chart')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'gauge-chart')
   const valueText = (value: number): string =>
     props.formatValue === formatCompact
       ? formatCompact(value, locale.value)
@@ -202,7 +202,7 @@
       <Skeleton
         width="100%"
         height="100%"
-        :data-testid="`${testId}__skeleton`"
+        :data-testid="`${testId}__loading`"
       />
     </div>
     <div

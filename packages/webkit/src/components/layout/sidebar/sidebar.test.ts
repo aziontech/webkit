@@ -19,12 +19,12 @@ describe('Sidebar', () => {
   describe('v-model:open', () => {
     it('open=false renders the rail collapsed', () => {
       const { getByTestId } = render(Sidebar, { props: { collapsible: true, open: false } })
-      expect(getByTestId('layout-sidebar').getAttribute('data-state')).toBe('closed')
+      expect(getByTestId('sidebar').getAttribute('data-state')).toBe('closed')
     })
 
     it('the trigger emits update:open false and no update:collapsed', async () => {
       const { getByTestId, emitted } = render(Sidebar, { props: { collapsible: true } })
-      await fireEvent.click(getByTestId('layout-sidebar__collapse'))
+      await fireEvent.click(getByTestId('sidebar__collapse'))
       expect(emitted()['update:open']?.at(-1)).toEqual([false])
       expect(emitted()['update:collapsed']).toBeUndefined()
     })
@@ -33,7 +33,7 @@ describe('Sidebar', () => {
       const { getByTestId, emitted } = render(Sidebar, {
         props: { collapsible: true, open: false }
       })
-      await fireEvent.click(getByTestId('layout-sidebar__expand-button'))
+      await fireEvent.click(getByTestId('sidebar__expand-button'))
       expect(emitted()['update:open']?.at(-1)).toEqual([true])
     })
 
@@ -42,7 +42,7 @@ describe('Sidebar', () => {
         props: { collapsible: true },
         attrs: { collapsed: true }
       })
-      expect(getByTestId('layout-sidebar').getAttribute('data-state')).toBe('open')
+      expect(getByTestId('sidebar').getAttribute('data-state')).toBe('open')
     })
 
     it('a parent that binds open follows it after an internal collapse', async () => {
@@ -52,11 +52,11 @@ describe('Sidebar', () => {
         setup: () => ({ open }),
         template: '<Sidebar v-model:open="open" collapsible />'
       })
-      await fireEvent.click(getByTestId('layout-sidebar__collapse'))
+      await fireEvent.click(getByTestId('sidebar__collapse'))
       expect(open.value).toBe(false)
       open.value = true
       await nextTick()
-      expect(getByTestId('layout-sidebar').getAttribute('data-state')).toBe('open')
+      expect(getByTestId('sidebar').getAttribute('data-state')).toBe('open')
     })
   })
 
@@ -83,21 +83,21 @@ describe('Sidebar', () => {
             }
           )
       })
-      expect(getByTestId('layout-sidebar__header-region').textContent).toContain('Acme')
-      expect(getByTestId('layout-sidebar__nav').textContent).toContain('Build')
-      expect(getByTestId('layout-sidebar__footer-region').textContent).toContain('Jane Doe')
+      expect(getByTestId('sidebar-header').textContent).toContain('Acme')
+      expect(getByTestId('sidebar__nav').textContent).toContain('Build')
+      expect(getByTestId('sidebar-footer').textContent).toContain('Jane Doe')
     })
   })
   describe('rendering (structure grounded in the template)', () => {
     it('renders an <aside> root carrying the default data-testid and its nav/scroll regions', () => {
       const { getByTestId } = render(Sidebar)
 
-      const root = getByTestId('layout-sidebar')
+      const root = getByTestId('sidebar')
       expect(root.tagName).toBe('ASIDE')
 
-      const nav = getByTestId('layout-sidebar__nav')
+      const nav = getByTestId('sidebar__nav')
       expect(nav.tagName).toBe('NAV')
-      expect(getByTestId('layout-sidebar__scroll')).toBeTruthy()
+      expect(getByTestId('sidebar__scroll')).toBeTruthy()
     })
 
     it('exposes a navigation landmark', () => {
@@ -107,27 +107,25 @@ describe('Sidebar', () => {
 
     it('does not render the header region when no header slot is provided', () => {
       const { queryByTestId } = render(Sidebar)
-      expect(queryByTestId('layout-sidebar__header')).toBeNull()
+      expect(queryByTestId('sidebar__header')).toBeNull()
     })
 
     it('does not render the footer region when no footer slot is provided', () => {
       const { queryByTestId } = render(Sidebar)
-      expect(queryByTestId('layout-sidebar__footer')).toBeNull()
+      expect(queryByTestId('sidebar__footer')).toBeNull()
     })
   })
 
   describe('ariaLabel prop -> aria-label on the <aside> landmark', () => {
     it('defaults the aria-label to "Sidebar"', () => {
       const { getByTestId } = render(Sidebar)
-      expect(getByTestId('layout-sidebar').getAttribute('aria-label')).toBe('Sidebar')
+      expect(getByTestId('sidebar').getAttribute('aria-label')).toBe('Sidebar')
     })
 
     it('applies a custom ariaLabel to the root', () => {
       const { getByTestId, getByRole } = render(Sidebar, { props: { ariaLabel: 'Application' } })
-      expect(getByTestId('layout-sidebar').getAttribute('aria-label')).toBe('Application')
-      expect(getByRole('complementary', { name: 'Application' })).toBe(
-        getByTestId('layout-sidebar')
-      )
+      expect(getByTestId('sidebar').getAttribute('aria-label')).toBe('Application')
+      expect(getByRole('complementary', { name: 'Application' })).toBe(getByTestId('sidebar'))
     })
   })
 
@@ -147,7 +145,7 @@ describe('Sidebar', () => {
       expect(getByTestId('my-sidebar__scroll')).toBeTruthy()
       expect(getByTestId('my-sidebar__footer')).toBeTruthy()
 
-      expect(queryByTestId('layout-sidebar')).toBeNull()
+      expect(queryByTestId('sidebar')).toBeNull()
     })
   })
 
@@ -156,7 +154,7 @@ describe('Sidebar', () => {
       const { getByTestId } = render(Sidebar, {
         slots: { default: '<span data-testid="nav-item">Home</span>' }
       })
-      const scroll = getByTestId('layout-sidebar__scroll')
+      const scroll = getByTestId('sidebar__scroll')
       const item = getByTestId('nav-item')
       expect(scroll.contains(item)).toBe(true)
     })
@@ -165,7 +163,7 @@ describe('Sidebar', () => {
       const { getByTestId } = render(Sidebar, {
         slots: { header: '<span data-testid="hd">search</span>' }
       })
-      const header = getByTestId('layout-sidebar__header')
+      const header = getByTestId('sidebar__header')
       expect(header.contains(getByTestId('hd'))).toBe(true)
     })
 
@@ -173,7 +171,7 @@ describe('Sidebar', () => {
       const { getByTestId } = render(Sidebar, {
         slots: { footer: '<span data-testid="ft">profile</span>' }
       })
-      const footer = getByTestId('layout-sidebar__footer')
+      const footer = getByTestId('sidebar__footer')
       expect(footer.contains(getByTestId('ft'))).toBe(true)
     })
   })
@@ -183,7 +181,7 @@ describe('Sidebar', () => {
       const { getByTestId } = render(Sidebar, {
         slots: { default: '<a href="/">Home</a>' }
       })
-      expect(getByTestId('layout-sidebar__scroll').getAttribute('tabindex')).toBe('-1')
+      expect(getByTestId('sidebar__scroll').getAttribute('tabindex')).toBe('-1')
     })
 
     it('tabs from the header straight to the first navigation row', async () => {
@@ -225,10 +223,10 @@ describe('Sidebar', () => {
   describe('documented example (the story fixtures run in-test)', () => {
     it('Default story renders the console rail: header, nav and footer regions', () => {
       const { getByTestId } = render(Default)
-      expect(getByTestId('layout-sidebar').tagName).toBe('ASIDE')
-      expect(getByTestId('layout-sidebar__header')).toBeTruthy()
-      expect(getByTestId('layout-sidebar__nav')).toBeTruthy()
-      expect(getByTestId('layout-sidebar__footer')).toBeTruthy()
+      expect(getByTestId('sidebar').tagName).toBe('ASIDE')
+      expect(getByTestId('sidebar__header')).toBeTruthy()
+      expect(getByTestId('sidebar__nav')).toBeTruthy()
+      expect(getByTestId('sidebar__footer')).toBeTruthy()
     })
 
     it('Default story labels the landmark from its args (aria-label="Console")', () => {
@@ -239,11 +237,11 @@ describe('Sidebar', () => {
     it('the navigation is a SidebarMenu that gives up the landmark to the sidebar', () => {
       const { getByTestId, getAllByRole } = render(Default)
 
-      const menu = getByTestId('navigation-sidebar-menu')
+      const menu = getByTestId('sidebar-menu')
       expect(menu.getAttribute('role')).toBe('presentation')
       expect(menu.getAttribute('aria-label')).toBeNull()
       expect(getAllByRole('navigation')).toHaveLength(1)
-      expect(getByTestId('layout-sidebar__nav').contains(menu)).toBe(true)
+      expect(getByTestId('sidebar__nav').contains(menu)).toBe(true)
     })
   })
 
@@ -253,9 +251,9 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      expect(queryByTestId('layout-sidebar__handle')).toBeNull()
-      expect(queryByTestId('layout-sidebar__collapse')).toBeNull()
-      expect(getByTestId('layout-sidebar').getAttribute('style')).toBeNull()
+      expect(queryByTestId('sidebar__handle')).toBeNull()
+      expect(queryByTestId('sidebar__collapse')).toBeNull()
+      expect(getByTestId('sidebar').getAttribute('style')).toBeNull()
     })
 
     it('the collapse trigger sits in the footer region, after the footer content', () => {
@@ -264,8 +262,8 @@ describe('Sidebar', () => {
         slots: { footer: '<span data-testid="ft">profile</span>' }
       })
 
-      const footer = getByTestId('layout-sidebar__footer')
-      const trigger = getByTestId('layout-sidebar__collapse')
+      const footer = getByTestId('sidebar__footer')
+      const trigger = getByTestId('sidebar__collapse')
       expect(footer.contains(trigger)).toBe(true)
       expect(
         getByTestId('ft').compareDocumentPosition(trigger) & Node.DOCUMENT_POSITION_FOLLOWING
@@ -278,17 +276,17 @@ describe('Sidebar', () => {
         slots: { footer: '<span data-testid="ft">profile</span>' }
       })
 
-      const region = getByTestId('layout-sidebar__footer')
+      const region = getByTestId('sidebar__footer')
       expect(region.children).toHaveLength(1)
 
       const band = region.firstElementChild
       expect(band?.contains(getByTestId('ft'))).toBe(true)
-      expect(band?.contains(getByTestId('layout-sidebar__collapse'))).toBe(true)
+      expect(band?.contains(getByTestId('sidebar__collapse'))).toBe(true)
     })
 
     it('renders the collapse trigger even with no footer slot', () => {
       const { getByTestId } = render(Sidebar, { props: { collapsible: true } })
-      expect(getByTestId('layout-sidebar__collapse')).toBeTruthy()
+      expect(getByTestId('sidebar__collapse')).toBeTruthy()
     })
 
     it('settles only after mount, so a state restored in the mount tick lands in place', async () => {
@@ -297,8 +295,8 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const root = getByTestId('layout-sidebar')
-      const panel = getByTestId('layout-sidebar__panel')
+      const root = getByTestId('sidebar')
+      const panel = getByTestId('sidebar__panel')
       expect(root.hasAttribute('data-settled')).toBe(false)
       expect(panel.hasAttribute('data-settled')).toBe(false)
 
@@ -317,15 +315,15 @@ describe('Sidebar', () => {
       })
       void onUpdate
 
-      await fireEvent.click(getByTestId('layout-sidebar__collapse'))
+      await fireEvent.click(getByTestId('sidebar__collapse'))
 
       expect(emitted()['update:open']?.[0]).toEqual([false])
 
-      const root = getByTestId('layout-sidebar')
+      const root = getByTestId('sidebar')
       expect(root.getAttribute('data-state')).toBe('closed')
       expect(root.getAttribute('aria-hidden')).toBe('true')
       expect(root.hasAttribute('inert')).toBe(true)
-      expect((getByTestId('layout-sidebar__collapse-input') as HTMLInputElement).checked).toBe(true)
+      expect((getByTestId('sidebar__collapse-input') as HTMLInputElement).checked).toBe(true)
     })
 
     it('renders a hidden checkbox whose checked state mirrors collapsed, CSS-only motion driver', () => {
@@ -334,7 +332,7 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const input = getByTestId('layout-sidebar__collapse-input') as HTMLInputElement
+      const input = getByTestId('sidebar__collapse-input') as HTMLInputElement
       expect(input.type).toBe('checkbox')
       expect(input.checked).toBe(true)
       expect(input.getAttribute('aria-hidden')).toBe('true')
@@ -347,12 +345,12 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const input = getByTestId('layout-sidebar__collapse-input') as HTMLInputElement
+      const input = getByTestId('sidebar__collapse-input') as HTMLInputElement
       await fireEvent.click(input)
 
       expect(input.checked).toBe(true)
       expect(emitted()['update:open']?.at(-1)).toEqual([false])
-      expect(getByTestId('layout-sidebar').getAttribute('data-state')).toBe('closed')
+      expect(getByTestId('sidebar').getAttribute('data-state')).toBe('closed')
     })
 
     it('the way back is a sibling of the rail, because a collapsed rail would clip it', async () => {
@@ -361,8 +359,8 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const rail = getByTestId('layout-sidebar')
-      const expand = await waitFor(() => getByTestId('layout-sidebar__expand'))
+      const rail = getByTestId('sidebar')
+      const expand = await waitFor(() => getByTestId('sidebar__expand'))
       expect(rail.contains(expand)).toBe(false)
     })
 
@@ -372,8 +370,8 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const rail = getByTestId('layout-sidebar')
-      const zone = await waitFor(() => getByTestId('layout-sidebar__expand'))
+      const rail = getByTestId('sidebar')
+      const zone = await waitFor(() => getByTestId('sidebar__expand'))
 
       await fireEvent.pointerEnter(zone)
       expect(zone.getAttribute('data-preview')).toBe('')
@@ -390,8 +388,8 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const rail = getByTestId('layout-sidebar')
-      const zone = await waitFor(() => getByTestId('layout-sidebar__expand'))
+      const rail = getByTestId('sidebar')
+      const zone = await waitFor(() => getByTestId('sidebar__expand'))
 
       await fireEvent.focusIn(zone)
       expect(rail.style.width).toBe('40px')
@@ -406,8 +404,8 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const rail = getByTestId('layout-sidebar')
-      await fireEvent.pointerEnter(await waitFor(() => getByTestId('layout-sidebar__expand')))
+      const rail = getByTestId('sidebar')
+      await fireEvent.pointerEnter(await waitFor(() => getByTestId('sidebar__expand')))
 
       expect(rail.style.width).toBe('40px')
       expect(rail.hasAttribute('inert')).toBe(true)
@@ -421,7 +419,7 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const zone = await waitFor(() => getByTestId('layout-sidebar__expand'))
+      const zone = await waitFor(() => getByTestId('sidebar__expand'))
       await fireEvent.pointerEnter(zone)
       await fireEvent.click(zone.querySelector('[role="separator"]') as HTMLElement)
 
@@ -434,7 +432,7 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const zone = await waitFor(() => getByTestId('layout-sidebar__expand'))
+      const zone = await waitFor(() => getByTestId('sidebar__expand'))
       const splitter = zone.querySelector('[role="separator"]') as HTMLElement
 
       await fireEvent.pointerDown(splitter, { clientX: 0 })
@@ -450,7 +448,7 @@ describe('Sidebar', () => {
         props: { collapsible: true },
         slots: { default: '<a href="/">Home</a>' }
       })
-      expect(queryByTestId('layout-sidebar__expand')).toBeNull()
+      expect(queryByTestId('sidebar__expand')).toBeNull()
     })
 
     it('the expand button brings a collapsed rail back', async () => {
@@ -459,7 +457,7 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      await fireEvent.click(await waitFor(() => getByTestId('layout-sidebar__expand-button')))
+      await fireEvent.click(await waitFor(() => getByTestId('sidebar__expand-button')))
       expect(emitted()['update:open']?.at(-1)).toEqual([true])
     })
 
@@ -469,7 +467,7 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const handle = getByTestId('layout-sidebar__handle')
+      const handle = getByTestId('sidebar__handle')
       expect(handle).toBe(getByRole('separator', { name: 'Resize navigation' }))
       expect(handle.getAttribute('tabindex')).toBe('0')
       expect(handle.getAttribute('aria-orientation')).toBe('vertical')
@@ -481,7 +479,7 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const handle = getByTestId('layout-sidebar__handle')
+      const handle = getByTestId('sidebar__handle')
       handle.focus()
       await userEvent.keyboard('{ArrowRight}')
 
@@ -501,7 +499,7 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      const handle = getByTestId('layout-sidebar__handle')
+      const handle = getByTestId('sidebar__handle')
       handle.focus()
       await userEvent.keyboard('{ArrowLeft}')
       expect(emitted()['update:width']?.at(-1)).toEqual([316])
@@ -522,7 +520,7 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      getByTestId('layout-sidebar__handle').focus()
+      getByTestId('sidebar__handle').focus()
       await userEvent.keyboard('{ArrowRight}')
 
       expect(emitted()['update:width']?.at(-1)).toEqual([408])
@@ -534,7 +532,7 @@ describe('Sidebar', () => {
         slots: { default: '<a href="/">Home</a>' }
       })
 
-      await fireEvent.dblClick(getByTestId('layout-sidebar__handle'))
+      await fireEvent.dblClick(getByTestId('sidebar__handle'))
       expect(emitted()['update:open']?.at(-1)).toEqual([false])
     })
 
@@ -561,10 +559,10 @@ describe('Sidebar', () => {
     it('Resizable story renders the handle, the trigger and a sized rail', async () => {
       const { getByTestId } = render(Resizable)
 
-      expect(getByTestId('layout-sidebar__handle')).toBeTruthy()
-      expect(getByTestId('layout-sidebar__collapse')).toBeTruthy()
+      expect(getByTestId('sidebar__handle')).toBeTruthy()
+      expect(getByTestId('sidebar__collapse')).toBeTruthy()
       await waitFor(() =>
-        expect(getByTestId('layout-sidebar').style.getPropertyValue('--sidebar-width')).not.toBe('')
+        expect(getByTestId('sidebar').style.getPropertyValue('--sidebar-width')).not.toBe('')
       )
     })
   })
@@ -577,16 +575,16 @@ describe('Sidebar', () => {
         setup: () => ({ shown }),
         template: `<Sidebar><template v-if="shown" #footer><span data-testid="probe">Slotted</span></template><a href="/home">Home</a></Sidebar>`
       })
-      expect(queryByTestId('layout-sidebar__footer')).toBeNull()
+      expect(queryByTestId('sidebar__footer')).toBeNull()
 
       shown.value = true
       await nextTick()
-      expect(queryByTestId('layout-sidebar__footer')).not.toBeNull()
+      expect(queryByTestId('sidebar__footer')).not.toBeNull()
       expect(queryByTestId('probe')).not.toBeNull()
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('layout-sidebar__footer')).toBeNull()
+      expect(queryByTestId('sidebar__footer')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
     })
   })
@@ -615,18 +613,18 @@ describe('Sidebar', () => {
 
     it('keeps a collapsed icon sidebar in the layout: data-rail, not inert, not aria-hidden', () => {
       const { getByTestId, queryByTestId } = render(railMenu)
-      const root = getByTestId('layout-sidebar')
+      const root = getByTestId('sidebar')
       expect(root.hasAttribute('data-rail')).toBe(true)
       expect(root.hasAttribute('inert')).toBe(false)
       expect(root.getAttribute('aria-hidden')).toBeNull()
-      expect(queryByTestId('layout-sidebar__expand')).toBeNull()
+      expect(queryByTestId('sidebar__expand')).toBeNull()
       expect(getByTestId('footer-scope').textContent).toBe('rail')
     })
 
     it('keeps each row reachable by its label and hides rows without an icon', () => {
       const { getByRole, getAllByTestId } = render(railMenu)
       expect(getByRole('link', { name: 'Applications' })).toBeTruthy()
-      const rows = getAllByTestId('navigation-sidebar-menu-item')
+      const rows = getAllByTestId('sidebar-menu-item')
       expect(rows.every((row) => row.hasAttribute('data-rail'))).toBe(true)
     })
 
@@ -642,11 +640,11 @@ describe('Sidebar', () => {
 
     it('expands from the rail footer button', async () => {
       const { getByTestId } = render(railMenu)
-      const expand = getByTestId('layout-sidebar__expand-button')
+      const expand = getByTestId('sidebar__expand-button')
       expect(expand.getAttribute('aria-keyshortcuts')).toBe('Control+B Meta+B')
       await fireEvent.click(expand)
       await waitFor(() => expect(getByTestId('state').textContent).toBe('false'))
-      expect(getByTestId('layout-sidebar').hasAttribute('data-rail')).toBe(false)
+      expect(getByTestId('sidebar').hasAttribute('data-rail')).toBe(false)
       expect(getByTestId('footer-scope').textContent).toBe('full')
     })
 
@@ -671,10 +669,10 @@ describe('Sidebar', () => {
 
     it('keeps collapsible=true as the offcanvas collapse', () => {
       const { getByTestId } = render(Sidebar, { props: { collapsible: true, open: false } })
-      const root = getByTestId('layout-sidebar')
+      const root = getByTestId('sidebar')
       expect(root.hasAttribute('inert')).toBe(true)
       expect(root.hasAttribute('data-rail')).toBe(false)
-      expect(getByTestId('layout-sidebar__expand')).toBeTruthy()
+      expect(getByTestId('sidebar__expand')).toBeTruthy()
     })
 
     it('renders the IconRail example without axe violations', async () => {

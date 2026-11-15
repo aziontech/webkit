@@ -1,6 +1,6 @@
 {
   "component": "pricing-card",
-  "title": "Components/Primitives/Content/PricingCard",
+  "title": "Components/Content/PricingCard",
   "examples": [
     {
       "name": "Default",

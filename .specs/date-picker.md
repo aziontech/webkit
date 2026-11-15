@@ -1,6 +1,6 @@
 ---
 name: date-picker
-category: inputs
+category: input
 structure: composition
 status: implemented
 spec_version: 10
@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: e20097b6e36e88510e4a720da632d356c8171d1baf858f430f5fe802632caca5
+checksum: 703e1c8e4aab373fa30354b4fe8b62fef2acd7292a7228a589386ad8f2bdaa6a
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -94,37 +94,37 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ## Props
 
-| Prop          | Type                             | Default      | Required | JSDoc                                                                                                                                                       |
-| ------------- | -------------------------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`   | false    | Size token; affects the trigger, day-cell hit-area, and typography.                                                                                         |
-| `min`         | `Date \| undefined`              | `undefined`  | false    | Earliest selectable date; earlier days render disabled.                                                                                                     |
-| `max`         | `Date \| undefined`              | `undefined`  | false    | Latest selectable date; later days render disabled.                                                                                                         |
-| `disabled`    | `boolean`                        | `false`      | false    | Disables the trigger, grid, and all controls, applying disabled tokens.                                                                                     |
-| `invalid`     | `boolean`                        | `false`      | false    | Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too.                                         |
-| `defaultOpen` | `boolean`                        | `false`      | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                                              |
-| `placeholder` | `string`                         | `''`         | false    | Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date`).                                                             |
+| Prop          | Type                             | Default      | Required | JSDoc                                                                                                                                                      |
+| ------------- | -------------------------------- | ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `size`        | `'small' \| 'medium' \| 'large'` | `'medium'`   | false    | Size token; affects the trigger, day-cell hit-area, and typography.                                                                                        |
+| `min`         | `Date \| undefined`              | `undefined`  | false    | Earliest selectable date; earlier days render disabled.                                                                                                    |
+| `max`         | `Date \| undefined`              | `undefined`  | false    | Latest selectable date; later days render disabled.                                                                                                        |
+| `disabled`    | `boolean`                        | `false`      | false    | Disables the trigger, grid, and all controls, applying disabled tokens.                                                                                    |
+| `invalid`     | `boolean`                        | `false`      | false    | Marks the trigger invalid: sets `aria-invalid` and the danger border. An enclosing `Field`'s `invalid` sets it too.                                        |
+| `defaultOpen` | `boolean`                        | `false`      | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                                             |
+| `placeholder` | `string`                         | `''`         | false    | Trigger text shown when there is no selection. Empty uses the locale catalog (`Select a date`).                                                            |
 | `showFields`  | `boolean`                        | `true`       | false    | Shows the date field (and the time field with `showTime`) in the panel. Set false when the grid is the whole interaction and typing a date is not offered. |
-| `showTime`    | `boolean`                        | `false`      | false    | Shows a time field beside the date field, so the value carries a time of day.                                                                               |
-| `orientation` | `'vertical' \| 'horizontal'`     | `'vertical'` | false    | Places the fields and Apply column below the calendar (vertical) or beside it (horizontal).                                                                 |
+| `showTime`    | `boolean`                        | `false`      | false    | Shows a time field beside the date field, so the value carries a time of day.                                                                              |
+| `orientation` | `'vertical' \| 'horizontal'`     | `'vertical'` | false    | Places the fields and Apply column below the calendar (vertical) or beside it (horizontal).                                                                |
 | `ariaLabel`   | `string`                         | `''`         | false    | Accessible name of the trigger; the current value is appended (`Due date: Nov 15, 2026`). Empty leaves the name to the Field label or the trigger text.    |
-| `clearable`   | `boolean`                        | `false`      | false    | Shows a clear control on the trigger that empties the committed selection.                                                                                  |
-| `showApply`   | `boolean`                        | `true`       | false    | Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately.                                                           |
-| `split`       | `boolean`                        | `false`      | false    | Renders the trigger as a split control with a separate chevron affordance.                                                                                  |
+| `clearable`   | `boolean`                        | `false`      | false    | Shows a clear control on the trigger that empties the committed selection.                                                                                 |
+| `showApply`   | `boolean`                        | `true`       | false    | Stages edits in a draft and requires Apply to commit; when false, every edit commits immediately.                                                          |
+| `split`       | `boolean`                        | `false`      | false    | Renders the trigger as a split control with a separate chevron affordance.                                                                                 |
 
 ## v-model
 
-| Model               | Type           | Default     | Emits               | Notes                                                                                                                                                   |
-| ------------------- | -------------- | ----------- | ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model`           | `Date \| null` | `null`      | `update:modelValue` | The committed date via `defineModel`; `null` on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound.      |
+| Model               | Type           | Default     | Emits               | Notes                                                                                                                                                      |
+| ------------------- | -------------- | ----------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model`           | `Date \| null` | `null`      | `update:modelValue` | The committed date via `defineModel`; `null` on clear. Only updated on Apply (or immediately when `showApply` is false). Uncontrolled when unbound.        |
 | `v-model:open`      | `boolean`      | `undefined` | `update:open`       | Open state of the popover via `defineModel`. Fires when the popover opens or closes. Unbound, the popover keeps its own state and starts at `defaultOpen`. |
-| `v-model:time-zone` | `string`       | `''`        | `update:timeZone`   | IANA time zone the trigger formats the value in, via `defineModel('timeZone')`. Empty resolves to the local zone. Same name as on `date-range-picker`.  |
+| `v-model:time-zone` | `string`       | `''`        | `update:timeZone`   | IANA time zone the trigger formats the value in, via `defineModel('timeZone')`. Empty resolves to the local zone. Same name as on `date-range-picker`.     |
 
 **Booleans that default to true.** `showFields` and `showApply` default to `true`: they switch off parts of the default panel. Inverting them (`hideFields`, `instant`) would break every consumer, so they are recorded here as the exceptions to props.md's default-false rule.
 
 ## Events
 
-| Event          | Payload                               | Notes                                                                                                                               |
-| -------------- | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Event          | Payload                               | Notes                                                                                                                              |
+| -------------- | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
 | `month-change` | `DatePickerMonth`                     | Emitted when the first visible month changes via navigation or keyboard paging. Payload is `{ year, month }` (month is 0-indexed). |
 | `apply`        | `(event: Event, value: Date \| null)` | Emitted when the draft selection is committed via Apply; `event` is the activating click or key event, `value` the committed date. |
 
@@ -161,40 +161,40 @@ Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `par
 
 ## Tokens
 
-| Region                                  | Token (DESIGN.md)           |
-| --------------------------------------- | --------------------------- |
-| popover surface                         | `var(--bg-surface-raised)`  |
-| popover border                          | `var(--border-default)`     |
-| popover shape                           | `var(--shape-card)`         |
-| popover elevation                       | `var(--shadow-md)`          |
-| trigger / field surface                 | `var(--bg-surface)`         |
-| trigger / field surface (disabled)      | `var(--bg-disabled)`        |
-| trigger / field border                  | `var(--border-default)`     |
-| trigger / field border (hover)          | `var(--border-strong)`      |
-| trigger / field shape                   | `var(--shape-control)`     |
-| section divider                         | `var(--border-default)`     |
-| label typography                        | `.text-label-sm`            |
-| trigger / field value typography        | `.text-label-sm`            |
-| weekday typography                      | `.text-label-sm`            |
-| day typography (small)                  | `.text-body-xs`             |
-| day typography (medium)                 | `.text-body-sm`             |
-| day typography (large)                  | `.text-body-md`             |
-| month header typography                 | `.text-body-sm`             |
-| header / muted text, adjacent-month day | `var(--text-muted)`         |
-| default text                            | `var(--text-default)`       |
-| disabled text                           | `var(--text-disabled)`      |
-| selected day surface                    | `var(--secondary)`          |
+| Region                                  | Token (DESIGN.md)             |
+| --------------------------------------- | ----------------------------- |
+| popover surface                         | `var(--bg-surface-raised)`    |
+| popover border                          | `var(--border-default)`       |
+| popover shape                           | `var(--shape-card)`           |
+| popover elevation                       | `var(--shadow-md)`            |
+| trigger / field surface                 | `var(--bg-surface)`           |
+| trigger / field surface (disabled)      | `var(--bg-disabled)`          |
+| trigger / field border                  | `var(--border-default)`       |
+| trigger / field border (hover)          | `var(--border-strong)`        |
+| trigger / field shape                   | `var(--shape-control)`        |
+| section divider                         | `var(--border-default)`       |
+| label typography                        | `.text-label-sm`              |
+| trigger / field value typography        | `.text-label-sm`              |
+| weekday typography                      | `.text-label-sm`              |
+| day typography (small)                  | `.text-body-xs`               |
+| day typography (medium)                 | `.text-body-sm`               |
+| day typography (large)                  | `.text-body-md`               |
+| month header typography                 | `.text-body-sm`               |
+| header / muted text, adjacent-month day | `var(--text-muted)`           |
+| default text                            | `var(--text-default)`         |
+| disabled text                           | `var(--text-disabled)`        |
+| selected day surface                    | `var(--secondary)`            |
 | selected day text                       | `var(--secondary-foreground)` |
-| hover surface                           | `var(--bg-hover)`           |
-| spacing (padding)                       | `var(--spacing-sm)`         |
-| spacing (gap)                           | `var(--spacing-2xs)`        |
-| spacing (sections)                      | `var(--spacing-md)`         |
-| ring                                    | `var(--ring-color)`         |
+| hover surface                           | `var(--bg-hover)`             |
+| spacing (padding)                       | `var(--spacing-sm)`           |
+| spacing (gap)                           | `var(--spacing-2xs)`          |
+| spacing (sections)                      | `var(--spacing-md)`           |
+| ring                                    | `var(--ring-color)`           |
 
 ## Theme gaps
 
-| Figma variable                          | Temporary primitive                                                           | Follow-up                                                                                                                                                                                                                                                                                                              |
-| --------------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Figma variable                          | Temporary primitive                                                           | Follow-up                                                                                                                                                                                                                                                                                                                                 |
+| --------------------------------------- | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Typography/Heading/xss` (14px regular) | `.text-body-sm` (0.875rem / 14px regular — matches the Figma size and weight) | `TODO: catalogar` — no heading-named token exists at 14px; `.text-body-sm` matches the size/weight, so the gap is naming-only. Applies to the day grid only: the **trigger / field value** deliberately uses `.text-label-sm` to match the shared inputs field contract (see § States), overriding the Figma frame's 14px on that region. |
 
 ## Accessibility (WCAG 2.1 AA)

@@ -69,9 +69,7 @@
   const dir = useDirection()
   const { t } = useTranslate({ sidebarMenu: en.sidebarMenu })
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sidebar-menu')
   const role = computed(() => (attrs['role'] as string | undefined) ?? 'navigation')
 
   const ariaLabelAttr = computed(() =>

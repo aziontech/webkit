@@ -1,6 +1,6 @@
 {
   "component": "tracker",
-  "title": "Components/Primitives/Chart/Tracker",
+  "title": "Components/Chart/Tracker",
   "examples": [
     {
       "name": "Default",

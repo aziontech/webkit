@@ -21,7 +21,7 @@
   const { entered, beatStyle } = useConsoleMockupShellContext()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-console-mockup-shell-item'
+    () => (attrs['data-testid'] as string | undefined) ?? 'console-mockup-shell-item'
   )
 
   const style = computed(() => beatStyle(props.order))

@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import Button from '../../../actions/button/button.vue'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import Input from '../../../inputs/input/input.vue'
+  import Button from '../../../action/button/button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
+  import Input from '../../../input/input/input.vue'
   import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
   import MockupElevator from '../parts/mockup-elevator.vue'

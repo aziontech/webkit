@@ -5,7 +5,7 @@
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import CopyButton from '../../actions/copy-button/copy-button.vue'
+  import CopyButton from '../../action/copy-button/copy-button.vue'
   import { useFrameDocument } from './composables/use-frame-document'
 
   defineOptions({ name: 'BrowserFrame', inheritAttrs: false })
@@ -72,7 +72,7 @@
   let startHeight = 0
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-browser-frame'
+    () => (attrs['data-testid'] as string | undefined) ?? 'browser-frame'
   )
 
   const resizing = computed(() => dragAxis.value !== null)

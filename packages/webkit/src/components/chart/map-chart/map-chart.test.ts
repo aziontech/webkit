@@ -26,13 +26,13 @@ const mount = (props: Record<string, unknown> = {}) =>
 
 const ready = (view: ReturnType<typeof render>) =>
   vi.waitFor(() =>
-    expect(view.getByTestId('chart-map-chart').getAttribute('data-geometry')).toBe('ready')
+    expect(view.getByTestId('map-chart').getAttribute('data-geometry')).toBe('ready')
   )
 
 describe('MapChart', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const view = mount()
-    expect(view.getByTestId('chart-map-chart').tagName).toBe('FIGURE')
+    expect(view.getByTestId('map-chart').tagName).toBe('FIGURE')
     view.unmount()
     expect(mount({ 'data-testid': 'geo' }).getByTestId('geo')).toBeTruthy()
   })
@@ -40,15 +40,15 @@ describe('MapChart', () => {
   it('loads the country shapes lazily and shades each country by its bin', async () => {
     const view = mount()
     await ready(view)
-    const plot = view.getByTestId('chart-map-chart__plot')
+    const plot = view.getByTestId('map-chart__plot')
     expect(plot.querySelector('[data-region="BR"]')?.getAttribute('data-bin')).toBe('4')
     expect(plot.querySelector('[data-region="DE"]')?.getAttribute('data-bin')).toBe('0')
     expect(plot.querySelector('[data-region="ZZ"]')).toBeNull()
-    expect(view.getByTestId('chart-map-chart__legend').textContent).toContain('48.2K')
+    expect(view.getByTestId('map-chart__legend').textContent).toContain('48.2K')
   })
 
   it('draws one bubble per location, larger for the larger value', () => {
-    const plot = mount().getByTestId('chart-map-chart__plot')
+    const plot = mount().getByTestId('map-chart__plot')
     const gru = Number(plot.querySelector('[data-point="gru"]')?.getAttribute('r'))
     const fra = Number(plot.querySelector('[data-point="fra"]')?.getAttribute('r'))
     expect(gru).toBeGreaterThan(fra)
@@ -59,12 +59,12 @@ describe('MapChart', () => {
     const onPoint = vi.fn()
     const view = mount({ onRegionClick: onRegion, onPointClick: onPoint })
     await ready(view)
-    const plot = view.getByTestId('chart-map-chart__plot')
-    const live = view.getByTestId('chart-map-chart__live')
+    const plot = view.getByTestId('map-chart__plot')
+    const live = view.getByTestId('map-chart__live')
     plot.focus()
     await fireEvent.keyDown(plot, { key: 'ArrowRight' })
     expect(live.textContent).toBe('Brazil: 48.2K')
-    expect(view.getByTestId('chart-map-chart__tooltip').textContent).toContain('Brazil')
+    expect(view.getByTestId('map-chart__tooltip').textContent).toContain('Brazil')
     await fireEvent.keyDown(plot, { key: 'Enter' })
     expect(onRegion.mock.calls[0]?.[1]).toEqual(regions[0])
     await fireEvent.keyDown(plot, { key: 'End' })
@@ -85,7 +85,7 @@ describe('MapChart', () => {
       'onUpdate:activeId': (id: string | null) => ids.push(id)
     })
     await ready(view)
-    const plot = view.getByTestId('chart-map-chart__plot')
+    const plot = view.getByTestId('map-chart__plot')
     await fireEvent.click(plot.querySelector('[data-region="US"]') as Element)
     expect(onRegion).toHaveBeenCalledTimes(1)
     expect(onRegion.mock.calls[0]?.[0]).toBeInstanceOf(MouseEvent)
@@ -116,8 +116,8 @@ describe('MapChart', () => {
         ])
     })
     await ready(view)
-    const plot = view.getByTestId('chart-map-chart__plot')
-    expect(view.getByTestId('chart-map-chart__live').textContent).toBe('Frankfurt: 800')
+    const plot = view.getByTestId('map-chart__plot')
+    expect(view.getByTestId('map-chart__live').textContent).toBe('Frankfurt: 800')
     plot.focus()
     await fireEvent.keyDown(plot, { key: 'Enter' })
     expect(onPoint.mock.calls[0]?.[0]).toBeInstanceOf(KeyboardEvent)
@@ -129,19 +129,17 @@ describe('MapChart', () => {
   })
 
   it('keeps a table twin and shows it in table view', () => {
-    const twin = mount().getByTestId('chart-map-chart__twin')
+    const twin = mount().getByTestId('map-chart__twin')
     expect(twin.querySelectorAll('tbody tr')).toHaveLength(5)
-    const table = mount({ tableView: true }).getByTestId('chart-map-chart__table')
+    const table = mount({ tableView: true }).getByTestId('map-chart__table')
     expect(table.textContent).toContain('United States')
     expect(table.textContent).toContain('São Paulo')
   })
 
   it('renders exactly one state at a time', () => {
-    expect(mount({ loading: true }).getByTestId('chart-map-chart__skeleton')).toBeTruthy()
-    expect(
-      mount({ error: 'Could not load the map.' }).getByTestId('chart-map-chart__error')
-    ).toBeTruthy()
-    expect(mount({ regions: [], points: [] }).getByTestId('chart-map-chart__empty')).toBeTruthy()
+    expect(mount({ loading: true }).getByTestId('map-chart__loading')).toBeTruthy()
+    expect(mount({ error: 'Could not load the map.' }).getByTestId('map-chart__error')).toBeTruthy()
+    expect(mount({ regions: [], points: [] }).getByTestId('map-chart__empty')).toBeTruthy()
   })
 
   it('keeps the geography unmirrored under rtl', async () => {
@@ -151,7 +149,7 @@ describe('MapChart', () => {
           h(MapChart, { points, ariaLabel: 'PoPs' })
         ])
     })
-    const plot = view.getByTestId('chart-map-chart__plot')
+    const plot = view.getByTestId('map-chart__plot')
     const gru = Number(plot.querySelector('[data-point="gru"]')?.getAttribute('cx'))
     const fra = Number(plot.querySelector('[data-point="fra"]')?.getAttribute('cx'))
     expect(fra).toBeGreaterThan(gru)

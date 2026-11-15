@@ -39,7 +39,7 @@
   const attrs = useAttrs()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-link-directory-item'
+    () => (attrs['data-testid'] as string | undefined) ?? 'link-directory-item'
   )
 
   const linked = computed(() => props.href.length > 0)

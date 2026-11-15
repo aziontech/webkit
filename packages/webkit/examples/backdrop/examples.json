@@ -1,6 +1,6 @@
 {
   "component": "backdrop",
-  "title": "Components/Marketing/Backdrop",
+  "title": "Components/Marketing/Primitives/Backdrop",
   "examples": [
     {
       "name": "Default",

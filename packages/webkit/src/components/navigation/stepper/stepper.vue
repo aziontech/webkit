@@ -44,9 +44,7 @@
     select
   })
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-stepper'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'stepper')
 </script>
 
 <template>

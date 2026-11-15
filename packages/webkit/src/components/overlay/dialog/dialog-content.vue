@@ -30,7 +30,7 @@
   const portalLocale = usePortalLocale()
   const isScrollLocked = useScrollLock(defaultDocument?.body)
   const { isTop, isFocusTop } = useOverlayLayer(isOpen, { element: contentEl })
-  const testId = computed(() => ctx?.testId ?? 'overlay-dialog')
+  const testId = computed(() => ctx?.testId ?? 'dialog')
 
   const forwardedAttrs = computed(() =>
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'class'))

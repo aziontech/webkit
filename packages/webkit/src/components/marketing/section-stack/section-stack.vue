@@ -31,9 +31,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-section-stack'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'section-stack')
 
   function flatten(nodes: VNodeArrayChildren): VNode[] {
     return nodes.flatMap((node): VNode[] => {

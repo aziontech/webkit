@@ -31,7 +31,7 @@ describe('FlowDiagram', () => {
       })
 
       it('names the compound members from the anatomy (defineOptions.name)', () => {
-        expect(FlowDiagram.name).toBe('Flow')
+        expect(FlowDiagram.name).toBe('FlowDiagram')
         expect(FlowDiagramNode.name).toBe('FlowNode')
         expect(FlowDiagramParallel.name).toBe('FlowParallel')
         expect(FlowDiagramAnchor.name).toBe('FlowAnchor')
@@ -41,7 +41,7 @@ describe('FlowDiagram', () => {
     describe('root — flow.vue structure & align prop', () => {
       it('renders role=list with the default data-testid and an inner container defaulting align=start', () => {
         const { getByTestId, getByRole } = render(FlowDiagram)
-        const root = getByTestId('data-flow')
+        const root = getByTestId('flow-diagram')
         expect(root.tagName).toBe('DIV')
         expect(getByRole('list')).toBe(root)
         const inner = root.querySelector('[data-align]') as HTMLElement
@@ -50,7 +50,7 @@ describe('FlowDiagram', () => {
 
       it('reflects the align prop onto the inner container', () => {
         const { getByTestId } = render(FlowDiagram, { props: { align: 'center' } })
-        const inner = getByTestId('data-flow').querySelector('[data-align]') as HTMLElement
+        const inner = getByTestId('flow-diagram').querySelector('[data-align]') as HTMLElement
         expect(inner.getAttribute('data-align')).toBe('center')
       })
 
@@ -73,12 +73,12 @@ describe('FlowDiagram', () => {
         </FlowDiagram>
       `)
         // Derived ids are shared across instances, so there can be several node ids.
-        expect(getAllByTestId('data-flow__node').length).toBeGreaterThan(0)
-        expect(getAllByTestId('data-flow__parallel').length).toBe(1)
-        expect(getAllByTestId('data-flow__anchor').length).toBe(1)
+        expect(getAllByTestId('flow-diagram-node').length).toBeGreaterThan(0)
+        expect(getAllByTestId('flow-diagram-parallel').length).toBe(1)
+        expect(getAllByTestId('flow-diagram-anchor').length).toBe(1)
       })
 
-      it('propagates a custom root testId through inject into every sub-component id', () => {
+      it('keeps every part on its own test id under a custom root testId', () => {
         const { getByTestId, getAllByTestId } = renderTree(`
         <FlowDiagram data-testid="pipeline">
           <FlowDiagramNode>Only</FlowDiagramNode>
@@ -86,13 +86,13 @@ describe('FlowDiagram', () => {
         </FlowDiagram>
       `)
         expect(getByTestId('pipeline')).toBeTruthy()
-        expect(getAllByTestId('pipeline__node').length).toBe(2)
-        expect(getByTestId('pipeline__parallel')).toBeTruthy()
+        expect(getAllByTestId('flow-diagram-node').length).toBe(2)
+        expect(getByTestId('flow-diagram-parallel')).toBeTruthy()
       })
 
-      it('falls back to "data-flow" prefix when a sub-component has no FlowDiagram ancestor (inject default)', () => {
+      it('keeps its own test id when a sub-component has no FlowDiagram ancestor', () => {
         const { getByTestId } = render(FlowDiagramNode, { slots: { default: 'orphan' } })
-        expect(getByTestId('data-flow__node')).toBeTruthy()
+        expect(getByTestId('flow-diagram-node')).toBeTruthy()
       })
     })
 
@@ -101,7 +101,7 @@ describe('FlowDiagram', () => {
         const { getByTestId } = renderTree(
           `<FlowDiagram><FlowDiagramNode>N</FlowDiagramNode></FlowDiagram>`
         )
-        const node = getByTestId('data-flow__node')
+        const node = getByTestId('flow-diagram-node')
         expect(node.getAttribute('role')).toBe('listitem')
         expect(node.getAttribute('data-slot')).toBe('flow-diagram-node')
         expect(node.hasAttribute('data-styled')).toBe(true)
@@ -111,14 +111,14 @@ describe('FlowDiagram', () => {
         const { getByTestId } = renderTree(
           `<FlowDiagram><FlowDiagramNode unstyled>N</FlowDiagramNode></FlowDiagram>`
         )
-        expect(getByTestId('data-flow__node').hasAttribute('data-styled')).toBe(false)
+        expect(getByTestId('flow-diagram-node').hasAttribute('data-styled')).toBe(false)
       })
 
       it('marks a disabled node with the connector/aria data attributes', () => {
         const { getByTestId } = renderTree(
           `<FlowDiagram><FlowDiagramNode disabled>N</FlowDiagramNode></FlowDiagram>`
         )
-        const node = getByTestId('data-flow__node')
+        const node = getByTestId('flow-diagram-node')
         expect(node.getAttribute('data-flow-disabled')).toBe('true')
         expect(node.hasAttribute('data-disabled')).toBe(true)
         expect(node.getAttribute('aria-disabled')).toBe('true')
@@ -128,7 +128,7 @@ describe('FlowDiagram', () => {
         const { getByTestId } = renderTree(
           `<FlowDiagram><FlowDiagramNode>N</FlowDiagramNode></FlowDiagram>`
         )
-        const node = getByTestId('data-flow__node')
+        const node = getByTestId('flow-diagram-node')
         expect(node.hasAttribute('data-flow-disabled')).toBe(false)
         expect(node.hasAttribute('data-disabled')).toBe(false)
         expect(node.hasAttribute('aria-disabled')).toBe(false)
@@ -145,7 +145,7 @@ describe('FlowDiagram', () => {
         const { getByTestId } = renderTree(
           `<FlowDiagram><FlowDiagramNode>N</FlowDiagramNode></FlowDiagram>`
         )
-        const node = getByTestId('data-flow__node')
+        const node = getByTestId('flow-diagram-node')
         const ports = Array.from(node.querySelectorAll<HTMLElement>('[data-slot="flow-port"]'))
         expect(ports.map((p) => p.getAttribute('data-side'))).toEqual(['end', 'start'])
         expect(ports.every((p) => p.getAttribute('aria-hidden') === 'true')).toBe(true)
@@ -156,7 +156,7 @@ describe('FlowDiagram', () => {
           `<FlowDiagram><FlowDiagramNode unstyled>N</FlowDiagramNode></FlowDiagram>`
         )
         expect(
-          getByTestId('data-flow__node').querySelectorAll('[data-slot="flow-port"]').length
+          getByTestId('flow-diagram-node').querySelectorAll('[data-slot="flow-port"]').length
         ).toBe(0)
       })
 
@@ -170,7 +170,7 @@ describe('FlowDiagram', () => {
           </FlowDiagramParallel>
         </FlowDiagram>
       `)
-        const [, chain, leaf] = getAllByTestId('data-flow__node')
+        const [, chain, leaf] = getAllByTestId('flow-diagram-node')
         expect(leaf.getAttribute('data-flow-terminal')).toBe('true')
         expect(
           Array.from(leaf.querySelectorAll<HTMLElement>('[data-slot="flow-port"]')).map((p) =>
@@ -198,7 +198,7 @@ describe('FlowDiagram', () => {
 
       it('draws no connector leaving a terminal branch', async () => {
         const { getByTestId } = renderTree(tree(true))
-        const root = getByTestId('data-flow')
+        const root = getByTestId('flow-diagram')
         await waitFor(() => {
           expect(root.querySelectorAll('svg path').length).toBeGreaterThan(0)
         })
@@ -209,7 +209,7 @@ describe('FlowDiagram', () => {
 
       it('draws the outgoing connector when the same branch is not terminal', async () => {
         const { getByTestId } = renderTree(tree(false))
-        const root = getByTestId('data-flow')
+        const root = getByTestId('flow-diagram')
         await waitFor(() => {
           expect(root.querySelectorAll('svg path').length).toBe(4)
         })
@@ -224,7 +224,7 @@ describe('FlowDiagram', () => {
           <FlowDiagramNode>Sink</FlowDiagramNode>
         </FlowDiagram>
       `)
-        const root = getByTestId('data-flow')
+        const root = getByTestId('flow-diagram')
         await waitFor(() => {
           expect(root.querySelectorAll('svg path').length).toBe(1)
         })
@@ -241,11 +241,11 @@ describe('FlowDiagram', () => {
           </FlowDiagramParallel>
         </FlowDiagram>
       `)
-        const group = getByTestId('data-flow__parallel')
+        const group = getByTestId('flow-diagram-parallel')
         expect(group.getAttribute('role')).toBe('listitem')
         expect(group.getAttribute('data-slot')).toBe('flow-diagram-parallel')
         expect(group.getAttribute('data-align')).toBe('start')
-        const branches = getByTestId('data-flow__parallel__branches')
+        const branches = getByTestId('flow-diagram-parallel__branches')
         expect(branches.parentElement).toBe(group)
         expect(branches.getAttribute('role')).toBe('list')
         expect(branches.querySelectorAll(':scope > [role="listitem"]').length).toBe(2)
@@ -259,7 +259,7 @@ describe('FlowDiagram', () => {
           </FlowDiagramParallel>
         </FlowDiagram>
       `)
-        expect(getByTestId('data-flow__parallel').getAttribute('data-align')).toBe('end')
+        expect(getByTestId('flow-diagram-parallel').getAttribute('data-align')).toBe('end')
       })
     })
 
@@ -272,7 +272,7 @@ describe('FlowDiagram', () => {
           </FlowDiagramNode>
         </FlowDiagram>
       `)
-        const anchor = getByTestId('data-flow__anchor')
+        const anchor = getByTestId('flow-diagram-anchor')
         expect(anchor.getAttribute('data-side')).toBe(side)
         expect(
           Array.from(anchor.querySelectorAll('[data-slot="flow-port"]')).map((port) =>
@@ -287,10 +287,10 @@ describe('FlowDiagram', () => {
           <FlowDiagramParallel><FlowDiagramNode>A</FlowDiagramNode><FlowDiagramNode>B</FlowDiagramNode></FlowDiagramParallel>
         </FlowDiagram>
       `)
-        expect(getByTestId('data-flow__parallel').getAttribute('data-align')).toBe('start')
+        expect(getByTestId('flow-diagram-parallel').getAttribute('data-align')).toBe('start')
       })
 
-      it('passes a changed root data-testid on to the children', async () => {
+      it('renames only the root when its data-testid changes', async () => {
         const testid = ref('pipeline')
         const view = render(
           defineComponent({
@@ -301,10 +301,11 @@ describe('FlowDiagram', () => {
               ])
           })
         )
-        expect(view.getAllByTestId('pipeline__node')).toHaveLength(2)
+        expect(view.getByTestId('pipeline')).toBeTruthy()
         testid.value = 'release'
         await nextTick()
-        expect(view.getAllByTestId('release__node')).toHaveLength(2)
+        expect(view.getByTestId('release')).toBeTruthy()
+        expect(view.getAllByTestId('flow-diagram-node')).toHaveLength(2)
       })
     })
 
@@ -317,7 +318,7 @@ describe('FlowDiagram', () => {
           </FlowDiagramNode>
         </FlowDiagram>
       `)
-        expect(getByTestId('data-flow__anchor').getAttribute('data-side')).toBe(type)
+        expect(getByTestId('flow-diagram-anchor').getAttribute('data-side')).toBe(type)
       })
 
       it('ignores the retired type attribute: only side marks an edge', () => {
@@ -328,7 +329,7 @@ describe('FlowDiagram', () => {
           </FlowDiagramNode>
         </FlowDiagram>
       `)
-        expect(getByTestId('data-flow__anchor').hasAttribute('data-side')).toBe(false)
+        expect(getByTestId('flow-diagram-anchor').hasAttribute('data-side')).toBe(false)
       })
 
       it('marks an anchor with no side as "both"', () => {
@@ -339,7 +340,7 @@ describe('FlowDiagram', () => {
           </FlowDiagramNode>
         </FlowDiagram>
       `)
-        expect(getByTestId('data-flow__anchor').hasAttribute('data-side')).toBe(false)
+        expect(getByTestId('flow-diagram-anchor').hasAttribute('data-side')).toBe(false)
       })
 
       it.each([
@@ -354,7 +355,9 @@ describe('FlowDiagram', () => {
         </FlowDiagram>
       `)
         const ports = Array.from(
-          getByTestId('data-flow__anchor').querySelectorAll<HTMLElement>('[data-slot="flow-port"]')
+          getByTestId('flow-diagram-anchor').querySelectorAll<HTMLElement>(
+            '[data-slot="flow-port"]'
+          )
         )
         expect(ports.map((p) => p.getAttribute('data-side'))).toEqual(expected)
       })
@@ -368,7 +371,9 @@ describe('FlowDiagram', () => {
         </FlowDiagram>
       `)
         const ports = Array.from(
-          getByTestId('data-flow__anchor').querySelectorAll<HTMLElement>('[data-slot="flow-port"]')
+          getByTestId('flow-diagram-anchor').querySelectorAll<HTMLElement>(
+            '[data-slot="flow-port"]'
+          )
         )
         expect(ports.map((p) => p.getAttribute('data-side'))).toEqual(['end', 'start'])
       })
@@ -382,7 +387,7 @@ describe('FlowDiagram', () => {
           <FlowDiagramNode>Deliver</FlowDiagramNode>
         </FlowDiagram>
       `)
-        const root = getByTestId('data-flow')
+        const root = getByTestId('flow-diagram')
         // Connector layout is measured on mount via rAF + observers, so paths appear async.
         await waitFor(() => {
           expect(root.querySelectorAll('svg path').length).toBeGreaterThan(0)
@@ -431,7 +436,7 @@ describe('FlowDiagram', () => {
         const { getByTestId } = renderTree(
           `<FlowDiagram><FlowDiagramNode>Only</FlowDiagramNode></FlowDiagram>`
         )
-        const root = getByTestId('data-flow')
+        const root = getByTestId('flow-diagram')
         // Wait out the rAF-scheduled measure before asserting the svg stays absent.
         await new Promise((resolve) =>
           requestAnimationFrame(() => requestAnimationFrame(() => resolve(undefined)))
@@ -445,31 +450,31 @@ describe('FlowDiagram', () => {
         const { getByText, getAllByTestId } = render(Default)
         expect(getByText('Source')).toBeTruthy()
         expect(getByText('Deliver')).toBeTruthy()
-        expect(getAllByTestId('data-flow__node').length).toBe(3)
+        expect(getAllByTestId('flow-diagram-node').length).toBe(3)
       })
 
       it('renders the Parallel story with a parallel group between nodes', () => {
         const { getByTestId, getByText } = render(Parallel)
-        expect(getByTestId('data-flow__parallel').getAttribute('role')).toBe('listitem')
+        expect(getByTestId('flow-diagram-parallel').getAttribute('role')).toBe('listitem')
         expect(getByText('Branch A')).toBeTruthy()
         expect(getByText('Branch C')).toBeTruthy()
       })
 
       it('renders the Branches story with leading and trailing parallel groups', () => {
         const { getAllByTestId } = render(Branches)
-        expect(getAllByTestId('data-flow__parallel').length).toBe(2)
+        expect(getAllByTestId('flow-diagram-parallel').length).toBe(2)
       })
 
       it('renders the AnchoredNode story exposing start/end anchors inside an unstyled node', () => {
         const { getAllByTestId } = render(AnchoredNode)
-        const anchors = getAllByTestId('data-flow__anchor')
+        const anchors = getAllByTestId('flow-diagram-anchor')
         const types = anchors.map((a) => a.getAttribute('data-side')).sort()
         expect(types).toEqual(['end', 'start'])
       })
 
       it('renders the Disabled story with the middle node marked disabled', () => {
         const { getAllByTestId } = render(Disabled)
-        const disabled = getAllByTestId('data-flow__node').filter(
+        const disabled = getAllByTestId('flow-diagram-node').filter(
           (n) => n.getAttribute('data-flow-disabled') === 'true'
         )
         expect(disabled.length).toBe(1)
@@ -486,7 +491,7 @@ describe('FlowDiagram', () => {
           <FlowDiagramNode>Deliver</FlowDiagramNode>
         </FlowDiagram>
       `)
-        await expectNoA11yViolations(getByTestId('data-flow'))
+        await expectNoA11yViolations(getByTestId('flow-diagram'))
       })
 
       it('has no violations for a flow with parallel branches', async () => {
@@ -501,7 +506,7 @@ describe('FlowDiagram', () => {
           <FlowDiagramNode>Deliver</FlowDiagramNode>
         </FlowDiagram>
       `)
-        await expectNoA11yViolations(getByTestId('data-flow'))
+        await expectNoA11yViolations(getByTestId('flow-diagram'))
       })
     })
 
@@ -515,7 +520,7 @@ describe('FlowDiagram', () => {
           </FlowDiagram>
         </div>
       `)
-        const root = getByTestId('data-flow')
+        const root = getByTestId('flow-diagram')
         const nodes = root.querySelectorAll<HTMLElement>('[data-slot="flow-diagram-node"]')
         await waitFor(() => {
           expect(root.querySelectorAll('svg path').length).toBe(1)

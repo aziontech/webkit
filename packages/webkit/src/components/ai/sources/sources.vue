@@ -39,9 +39,7 @@
   const uid = useId()
   const panelId = `${uid}-panel`
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-sources'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'sources')
   const prefix = computed<string>(() => props.anchor || uid)
   const heading = computed<string>(
     () => props.title || t('sources.count', { count: props.items.length })

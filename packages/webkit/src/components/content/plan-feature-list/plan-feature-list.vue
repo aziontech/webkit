@@ -34,9 +34,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-plan-feature-list'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'plan-feature-list')
 </script>
 
 <template>

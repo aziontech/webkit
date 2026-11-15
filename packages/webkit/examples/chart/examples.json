@@ -1,6 +1,6 @@
 {
   "component": "chart",
-  "title": "Components/Primitives/Chart/Chart",
+  "title": "Components/Chart/Chart",
   "examples": [
     {
       "name": "Default",

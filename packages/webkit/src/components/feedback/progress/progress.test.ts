@@ -10,7 +10,7 @@ describe('Progress', () => {
   it('renders the progressbar role with the default testid', () => {
     const { getByTestId, getByRole } = render(Progress)
 
-    const bar = getByTestId('feedback-progress')
+    const bar = getByTestId('progress')
     expect(bar).toBe(getByRole('progressbar'))
   })
 

@@ -11,11 +11,9 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = useChartCardContext()
+  useChartCardContext()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__footer`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-card-footer')
 </script>
 
 <template>

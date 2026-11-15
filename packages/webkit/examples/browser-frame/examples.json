@@ -1,6 +1,6 @@
 {
   "component": "browser-frame",
-  "title": "Components/Primitives/Content/BrowserFrame",
+  "title": "Components/Content/BrowserFrame",
   "examples": [
     {
       "name": "Default",

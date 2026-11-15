@@ -1,6 +1,6 @@
 {
   "component": "toggle-group",
-  "title": "Components/Primitives/Actions/ToggleGroup",
+  "title": "Components/Action/ToggleGroup",
   "examples": [
     {
       "name": "Default",

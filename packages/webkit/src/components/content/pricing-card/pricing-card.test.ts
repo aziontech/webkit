@@ -8,7 +8,7 @@ import PricingCard from './pricing-card.vue'
 const ACTIONS_POSITIONS = ['bottom', 'middle'] as const
 const CARD_STYLES = ['contained', 'ghost'] as const
 
-const ROOT = 'content-pricing-card'
+const ROOT = 'pricing-card'
 
 describe('PricingCard', () => {
   it('renders the article root with the fallback data-testid', () => {

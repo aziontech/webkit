@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import Button from '../../actions/button/button.vue'
+  import Button from '../../action/button/button.vue'
   import CurrencyAmount from '../currency-amount/currency-amount.vue'
   import Tag from '../tag/tag.vue'
 
@@ -73,7 +73,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => attrs['data-testid'] ?? 'content-pricing-card')
+  const testId = computed(() => attrs['data-testid'] ?? 'pricing-card')
 
   const isMiddle = computed(() => props.actionsPosition === 'middle')
 

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref } from 'vue'
 
-  import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
+  import ToggleGroup from '../../../action/toggle-group/toggle-group.vue'
   import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
   import { AGENT_CLIENTS } from '../lib/functions-start'
   import CliTerminal from '../parts/cli-terminal.vue'

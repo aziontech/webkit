@@ -13,8 +13,8 @@ import DeploymentLogs from './parts/deployment-logs.vue'
 import { productWidgets } from './registry'
 import ObjectStorageBrowser from './widgets/object-storage-browser-fragment.vue'
 
-const TESTID = 'content-console-mockup'
-const FRAME_TESTID = 'content-console-mockup-shell'
+const TESTID = 'console-mockup'
+const FRAME_TESTID = 'console-mockup-shell'
 const WINDOW_TESTID = `${TESTID}__frame`
 const BODY_TESTID = `${TESTID}__frame-body`
 const NAMES = Object.keys(productWidgets) as ConsoleMockupName[]

@@ -100,15 +100,15 @@ describe('Table', () => {
         // BEM-suffixed id from `ctx.testId`.
         const { getByTestId, getAllByTestId } = render(CompositionTree)
 
-        expect(getByTestId('data-table')).toBeTruthy()
-        expect(getByTestId('data-table__header')).toBeTruthy()
-        expect(getByTestId('data-table__body')).toBeTruthy()
-        expect(getByTestId('data-table__caption')).toBeTruthy()
-        expect(getAllByTestId('data-table__head-cell')).toHaveLength(2)
-        expect(getAllByTestId('data-table__cell')).toHaveLength(6)
+        expect(getByTestId('table')).toBeTruthy()
+        expect(getByTestId('table-header')).toBeTruthy()
+        expect(getByTestId('table-body')).toBeTruthy()
+        expect(getByTestId('table-caption')).toBeTruthy()
+        expect(getAllByTestId('table-head-cell')).toHaveLength(2)
+        expect(getAllByTestId('table-cell')).toHaveLength(6)
       })
 
-      it('propagates a custom root testid into the injected child ids', () => {
+      it('keeps the parts on their own test ids under a custom root testid', () => {
         const Custom = defineComponent({
           components: { Table, TableBody, TableRow, TableCell },
           setup: () => ({ items: rows.slice(0, 1) }),
@@ -125,9 +125,8 @@ describe('Table', () => {
         const { getByTestId } = render(Custom)
 
         expect(getByTestId('my-table')).toBeTruthy()
-        // ctx.testId === 'my-table' -> body/cell derive from it.
-        expect(getByTestId('my-table__body')).toBeTruthy()
-        expect(getByTestId('my-table__cell')).toBeTruthy()
+        expect(getByTestId('table-body')).toBeTruthy()
+        expect(getByTestId('table-cell')).toBeTruthy()
       })
     })
     describe('TableRow — selected state (composition)', () => {
@@ -256,14 +255,14 @@ describe('Table', () => {
       it('renders the Default story cleanly', () => {
         const { getByTestId, getAllByRole } = render(Default)
 
-        expect(getByTestId('data-table')).toBeTruthy()
+        expect(getByTestId('table')).toBeTruthy()
         // 1 header row + 5 body rows (the story slices the first five records).
         expect(getAllByRole('row')).toHaveLength(6)
       })
       it('never stacks a hand-composed table', () => {
         const { getByTestId } = render(Default)
 
-        expect(getByTestId('data-table').hasAttribute('data-stacked')).toBe(false)
+        expect(getByTestId('table').hasAttribute('data-stacked')).toBe(false)
       })
     })
   })
@@ -288,7 +287,7 @@ describe('Table', () => {
         `
         })
       )
-      const root = view.getByTestId('data-table')
+      const root = view.getByTestId('table')
       expect(root.getAttribute('data-density')).toBe('compact')
       expect(root.hasAttribute('data-wrap')).toBe(true)
       expect(root.hasAttribute('data-bordered')).toBe(true)
@@ -296,8 +295,8 @@ describe('Table', () => {
       expect(root.hasAttribute('aria-label')).toBe(false)
       expect(table.contains(view.getByRole('button', { name: 'Refresh' }))).toBe(false)
       expect(table.contains(view.getByText('3 domains'))).toBe(false)
-      expect(view.getByTestId('data-table__toolbar').textContent).toContain('Domains')
-      await fireEvent.scroll(view.getByTestId('data-table__viewport'))
+      expect(view.getByTestId('table__toolbar').textContent).toContain('Domains')
+      await fireEvent.scroll(view.getByTestId('table__viewport'))
       await expectNoA11yViolations(view.container)
     })
   })

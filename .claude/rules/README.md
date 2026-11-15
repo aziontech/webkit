@@ -10,39 +10,39 @@ This table is the human-readable summary of that registry — when in doubt, the
 
 ## Foundational (10)
 
-| Rule | Scope | Fixes | Blocks via |
-|---|---|---|---|
-| [no-invention](./no-invention.md) | webkit | Nothing beyond the spec | spec-compliance · references · ratchet |
-| [prop-vocabulary](./prop-vocabulary.md) | general | One name/type/value set per concept | spec-compliance · ratchet · naming gate |
-| [naming](./naming.md) | webkit | One standard for every name; old names never come back | naming gate · validate-naming · prop-vocabulary · no-deprecated-name |
-| [imports](./imports.md) | webkit | Flat public name; category in the folder only | references · 5 lint rules |
-| [compound-api](./compound-api.md) | webkit | `index.ts` compound + tree-shakeable `-root` | catalog-drift · review |
-| [styling](./styling.md) | general | Inline classes on the root; variants via `data-*` | validate-tokens · ratchet · lints |
-| [dependencies](./dependencies.md) | webkit | No external positioning/animation libs | references · type-check (CI) |
-| [migration](./migration.md) | webkit | Rewrite inherited artifacts, never copy as-is | output checks · ratchet · review |
-| [release-types](./release-types.md) | webkit | Commit type → bump identical across 4 sources | commitlint |
-| [git-workflow](./git-workflow.md) | webkit | Branch/PR via command, based on `main` | commitlint · branch-protection |
+| Rule                                    | Scope   | Fixes                                                  | Blocks via                                                           |
+| --------------------------------------- | ------- | ------------------------------------------------------ | -------------------------------------------------------------------- |
+| [no-invention](./no-invention.md)       | webkit  | Nothing beyond the spec                                | spec-compliance · references · ratchet                               |
+| [prop-vocabulary](./prop-vocabulary.md) | general | One name/type/value set per concept                    | spec-compliance · ratchet · naming gate                              |
+| [naming](./naming.md)                   | webkit  | One standard for every name; old names never come back | naming gate · validate-naming · prop-vocabulary · no-deprecated-name |
+| [imports](./imports.md)                 | webkit  | Flat public name; category in the folder only          | references · 5 lint rules                                            |
+| [compound-api](./compound-api.md)       | webkit  | `index.ts` compound + tree-shakeable `-root`           | catalog-drift · review                                               |
+| [styling](./styling.md)                 | general | Inline classes on the root; variants via `data-*`      | validate-tokens · ratchet · lints                                    |
+| [dependencies](./dependencies.md)       | webkit  | No external positioning/animation libs                 | references · type-check (CI)                                         |
+| [migration](./migration.md)             | webkit  | Rewrite inherited artifacts, never copy as-is          | output checks · ratchet · review                                     |
+| [release-types](./release-types.md)     | webkit  | Commit type → bump identical across 4 sources          | commitlint                                                           |
+| [git-workflow](./git-workflow.md)       | webkit  | Branch/PR via command, based on `main`                 | commitlint · branch-protection                                       |
 
 ## Construction (17)
 
-| Rule | Scope | Fixes | Blocks via |
-|---|---|---|---|
-| [component-structure](./component-structure.md) | general | Folder layout + `<script setup>` order | spec-compliance · ratchet · review |
-| [props](./props.md) | general | Typed `interface Props` + `withDefaults` + JSDoc | authoring · spec-compliance · tokens · ratchet |
-| [v-model](./v-model.md) | general | Two-way via `defineModel` | authoring · ratchet · lint |
-| [emits](./emits.md) | general | Typed `defineEmits`; no echo events duplicating `update:*` | authoring · spec-compliance · ratchet |
-| [event-payloads](./event-payloads.md) | general | Activation events emit `(event, item?)` — event always first | spec-compliance · ratchet · review |
-| [slots](./slots.md) | general | Typed `defineSlots`; fallback in the slot | authoring · spec-compliance · ratchet |
-| [composables](./composables.md) | general | `readonly` out, `toValue` args, `onScopeDispose` | authoring · ratchet · lint |
-| [root-element](./root-element.md) | general | Own root; `href` polymorphism; `$attrs`+`cn`; minimal `defineExpose` | tokens · references · authoring · ratchet · lint · review |
-| [component-states](./component-states.md) | general | Rendered state surface via `data-*` + DS components | spec-compliance · ratchet · review |
-| [accessibility](./accessibility.md) | general | Role, keyboard, focus, `motion-reduce` | vuejs-accessibility · review |
-| [testid](./testid.md) | general | `data-testid` derived `<category>-<name>` | spec-compliance · ratchet |
-| [deprecation](./deprecation.md) | general | 6.0 clean break; from then `@deprecated` → one major → remove | authoring · ratchet · lint |
-| [bundle-budget](./bundle-budget.md) | webkit | `size-limit` per entry; tree-shaking | size-limit · review |
-| [testing](./testing.md) | general | One `<name>.test.ts` per component (Vitest browser + axe) | vitest (CI) · references · review |
-| [comments](./comments.md) | general | No prose comments; API JSDoc + directives only | authoring · ratchet · lint · review |
-| [example-data](./example-data.md) | general | `example.com` domains, Acme, fictional US data, no national formats | check-authoring · review |
-| [authoring-docs](./authoring-docs.md) | webkit | Skills/agents carry conforming frontmatter; no file-as-example | authoring-docs · check:authoring-docs (CI) |
+| Rule                                            | Scope   | Fixes                                                                | Blocks via                                                |
+| ----------------------------------------------- | ------- | -------------------------------------------------------------------- | --------------------------------------------------------- |
+| [component-structure](./component-structure.md) | general | Folder layout + `<script setup>` order                               | spec-compliance · ratchet · review                        |
+| [props](./props.md)                             | general | Typed `interface Props` + `withDefaults` + JSDoc                     | authoring · spec-compliance · tokens · ratchet            |
+| [v-model](./v-model.md)                         | general | Two-way via `defineModel`                                            | authoring · ratchet · lint                                |
+| [emits](./emits.md)                             | general | Typed `defineEmits`; no echo events duplicating `update:*`           | authoring · spec-compliance · ratchet                     |
+| [event-payloads](./event-payloads.md)           | general | Activation events emit `(event, item?)` — event always first         | spec-compliance · ratchet · review                        |
+| [slots](./slots.md)                             | general | Typed `defineSlots`; fallback in the slot                            | authoring · spec-compliance · ratchet                     |
+| [composables](./composables.md)                 | general | `readonly` out, `toValue` args, `onScopeDispose`                     | authoring · ratchet · lint                                |
+| [root-element](./root-element.md)               | general | Own root; `href` polymorphism; `$attrs`+`cn`; minimal `defineExpose` | tokens · references · authoring · ratchet · lint · review |
+| [component-states](./component-states.md)       | general | Rendered state surface via `data-*` + DS components                  | spec-compliance · ratchet · review                        |
+| [accessibility](./accessibility.md)             | general | Role, keyboard, focus, `motion-reduce`                               | vuejs-accessibility · review                              |
+| [testid](./testid.md)                           | general | `data-testid` = the component's own name                             | spec-compliance · ratchet                                 |
+| [deprecation](./deprecation.md)                 | general | 6.0 clean break; from then `@deprecated` → one major → remove        | authoring · ratchet · lint                                |
+| [bundle-budget](./bundle-budget.md)             | webkit  | `size-limit` per entry; tree-shaking                                 | size-limit · review                                       |
+| [testing](./testing.md)                         | general | One `<name>.test.ts` per component (Vitest browser + axe)            | vitest (CI) · references · review                         |
+| [comments](./comments.md)                       | general | No prose comments; API JSDoc + directives only                       | authoring · ratchet · lint · review                       |
+| [example-data](./example-data.md)               | general | `example.com` domains, Acme, fictional US data, no national formats  | check-authoring · review                                  |
+| [authoring-docs](./authoring-docs.md)           | webkit  | Skills/agents carry conforming frontmatter; no file-as-example       | authoring-docs · check:authoring-docs (CI)                |
 
 **Split:** 17 `general` (ship to projects — see [`packages/webkit/docs/GUIDELINES.md`](../../packages/webkit/docs/GUIDELINES.md)) · 10 `webkit` (internal). Nothing is advisory — every rule blocks the merge, automatically or by mandatory review. The full process map (creation → release, adoption → enforcement) is [`.claude/docs/PROCESS.md`](../docs/PROCESS.md).

@@ -20,9 +20,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-diagram__layout'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'diagram-layout')
 </script>
 
 <template>

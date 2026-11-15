@@ -13,8 +13,8 @@ describe('Badge', () => {
   it('renders the value fallback text inside the value sub-element when no slot is given', () => {
     const { getByTestId } = render(Badge, { props: { label: '99' } })
 
-    const root = getByTestId('content-badge')
-    const valueEl = getByTestId('content-badge__label')
+    const root = getByTestId('badge')
+    const valueEl = getByTestId('badge__label')
 
     expect(valueEl).toBeInTheDocument()
     expect(valueEl).toHaveTextContent('99')
@@ -25,9 +25,9 @@ describe('Badge', () => {
     const { getByTestId, queryByTestId } = render(Badge, { props: {} })
 
     // root still renders
-    expect(getByTestId('content-badge')).toBeInTheDocument()
+    expect(getByTestId('badge')).toBeInTheDocument()
     // value span is guarded by v-else-if="value"; empty default => absent
-    expect(queryByTestId('content-badge__label')).toBeNull()
+    expect(queryByTestId('badge__label')).toBeNull()
   })
 
   it('renders default slot content and suppresses the value fallback when both are provided', () => {
@@ -36,10 +36,10 @@ describe('Badge', () => {
       slots: { default: 'slotted' }
     })
 
-    const root = getByTestId('content-badge')
+    const root = getByTestId('badge')
     expect(root).toHaveTextContent('slotted')
     // slot present => v-if branch wins, value branch not rendered
-    expect(queryByTestId('content-badge__label')).toBeNull()
+    expect(queryByTestId('badge__label')).toBeNull()
     expect(root).not.toHaveTextContent('fallback-ignored')
   })
 
@@ -58,7 +58,7 @@ describe('Badge', () => {
       props: { label: '1', severity: 'success', size: 'large' }
     })
 
-    const root = getByTestId('content-badge')
+    const root = getByTestId('badge')
     expect(root).toHaveAttribute('data-severity', 'success')
     expect(root).toHaveAttribute('data-size', 'large')
   })
@@ -66,7 +66,7 @@ describe('Badge', () => {
   it('applies default variant=primary and size=medium when unset, with no severity', () => {
     const { getByTestId } = render(Badge, { props: { label: '1' } })
 
-    const root = getByTestId('content-badge')
+    const root = getByTestId('badge')
     expect(root).toHaveAttribute('data-variant', 'primary')
     expect(root).not.toHaveAttribute('data-severity')
     expect(root).toHaveAttribute('data-size', 'medium')
@@ -74,7 +74,7 @@ describe('Badge', () => {
 
   it.each(VARIANTS)('renders data-variant=%s for each brand look', (variant) => {
     const { getByTestId } = render(Badge, { props: { label: '1', variant } })
-    expect(getByTestId('content-badge')).toHaveAttribute('data-variant', variant)
+    expect(getByTestId('badge')).toHaveAttribute('data-variant', variant)
   })
 
   it('lets severity win over variant when both are set', () => {
@@ -82,7 +82,7 @@ describe('Badge', () => {
       props: { label: '1', variant: 'secondary', severity: 'danger' }
     })
 
-    const root = getByTestId('content-badge')
+    const root = getByTestId('badge')
     expect(root).toHaveAttribute('data-severity', 'danger')
     expect(root).not.toHaveAttribute('data-variant')
   })
@@ -93,19 +93,19 @@ describe('Badge', () => {
       props: { label: '1', severity: 'primary' }
     })
 
-    const root = getByTestId('content-badge')
+    const root = getByTestId('badge')
     expect(root).not.toHaveAttribute('data-severity')
     expect(root).toHaveAttribute('data-variant', 'primary')
   })
 
   it.each(SEVERITIES)('renders data-severity=%s for each valid severity', (severity) => {
     const { getByTestId } = render(Badge, { props: { label: '1', severity } })
-    expect(getByTestId('content-badge')).toHaveAttribute('data-severity', severity)
+    expect(getByTestId('badge')).toHaveAttribute('data-severity', severity)
   })
 
   it.each(SIZES)('renders data-size=%s for each valid size', (size) => {
     const { getByTestId } = render(Badge, { props: { label: '1', size } })
-    expect(getByTestId('content-badge')).toHaveAttribute('data-size', size)
+    expect(getByTestId('badge')).toHaveAttribute('data-size', size)
   })
 
   it('has no accessibility violations for the default value render', async () => {
@@ -123,7 +123,7 @@ describe('Badge', () => {
 
   it('renders the composed Default story fixture', () => {
     const { getByTestId } = render(Default)
-    const root = getByTestId('content-badge')
+    const root = getByTestId('badge')
     expect(root).toHaveTextContent('99')
     expect(root).toHaveAttribute('data-variant', 'primary')
     expect(root).toHaveAttribute('data-size', 'medium')

@@ -53,9 +53,7 @@
 
   const roundingTolerance = 1
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-carousel'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'carousel')
 
   const canScrollPrev = computed(() => scrolled.value > roundingTolerance)
 

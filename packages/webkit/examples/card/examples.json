@@ -1,6 +1,6 @@
 {
   "component": "card",
-  "title": "Components/Primitives/Content/Card",
+  "title": "Components/Content/Card",
   "examples": [
     {
       "name": "Default",

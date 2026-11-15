@@ -1,6 +1,6 @@
 {
   "component": "spark-chart",
-  "title": "Components/Primitives/Chart/SparkChart",
+  "title": "Components/Chart/SparkChart",
   "examples": [
     {
       "name": "Default",

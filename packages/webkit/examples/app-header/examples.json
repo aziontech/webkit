@@ -1,6 +1,6 @@
 {
   "component": "app-header",
-  "title": "Components/Primitives/Layout/AppHeader",
+  "title": "Components/Layout/AppHeader",
   "examples": [
     {
       "name": "Default",

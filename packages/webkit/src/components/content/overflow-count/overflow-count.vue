@@ -3,8 +3,8 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
-  import Input from '../../inputs/input/input.vue'
+  import Button from '../../action/button/button.vue'
+  import Input from '../../input/input/input.vue'
   import Popover from '../../overlay/popover/popover.vue'
   import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
   import PopoverTitle from '../../overlay/popover/popover-title/popover-title.vue'
@@ -49,7 +49,7 @@
   const { t, locale } = useTranslate({ overflowCount: en.overflowCount, common: en.common })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-overflow-count'
+    () => (attrs['data-testid'] as string | undefined) ?? 'overflow-count'
   )
 
   const entries = computed<OverflowCountEntry[]>(() =>

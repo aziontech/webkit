@@ -112,9 +112,7 @@
 
   const EYEBROW_PREFIX = '//' as const
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-media-split'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'media-split')
 
   const hasMedia = () => Boolean(slots.media) || props.src.length > 0
 

@@ -5,7 +5,7 @@ import { h, nextTick } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import StickyStack, { type StickyStackItem } from './sticky-stack.vue'
 
-const TESTID = 'marketing-sticky-stack'
+const TESTID = 'sticky-stack'
 
 const PIXEL = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
 

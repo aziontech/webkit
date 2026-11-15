@@ -18,7 +18,7 @@
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
   import CardGrid from '../card-grid/card-grid.vue'
   import CardGridCell from '../card-grid/card-grid-cell/card-grid-cell.vue'
@@ -99,9 +99,7 @@
   const focusInside = ref(false)
   const paused = ref(false)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-quote-tabs'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'quote-tabs')
 
   const panelId = computed(() => `${baseId}-panel`)
 

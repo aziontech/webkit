@@ -1,6 +1,6 @@
 {
   "component": "spinner",
-  "title": "Components/Primitives/Feedback/Spinner",
+  "title": "Components/Feedback/Spinner",
   "examples": [
     {
       "name": "Default",

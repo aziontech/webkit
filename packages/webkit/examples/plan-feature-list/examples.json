@@ -1,6 +1,6 @@
 {
   "component": "plan-feature-list",
-  "title": "Components/Primitives/Content/PlanFeatureList",
+  "title": "Components/Content/PlanFeatureList",
   "examples": [
     {
       "name": "Default",

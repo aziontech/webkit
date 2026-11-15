@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 6
 template: 2
-checksum: 95d261de52d53d258d1bd55436044828c4bc18ca42570f616c009dd5d3eca41e
+checksum: 6b78d280ce13771ae22588eb55cd24c4d01abd530470dc2537d06870a13baf51
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -111,7 +111,7 @@ drags and resizes go to the board. `ChartCard` keeps working on its own outside 
 - `dashboard-grid-item/dashboard-grid-item.vue` — One cell of the grid, an `<li>` that spans the entry's columns (capped at the grid's current column count) and, when the entry has a `height`, that many pixels. It is the drop target while another item is dragged (`data-over` while hovered), registers its `label` for announcements, and returns focus to the handle that moved it.
   - Props: `itemId: string` (required — the `id` of its layout entry), `label?: string` (default `''` — the name the live region announces; empty uses `Item <position>` from the locale catalog).
   - Slot: `default` — the item's content, normally one `ChartCard`.
-  - `data-testid` fallback: `layout-board__item`.
+  - `data-testid` fallback: `dashboard-grid-item`.
 
 Resulting layout:
 
@@ -213,8 +213,8 @@ ping or a save of one row. They are outcomes of a drag or a key, so they carry n
 
 ## Internationalization
 
-| Key                       | English source                                                        | Override prop              |
-| ------------------------- | --------------------------------------------------------------------- | -------------------------- |
+| Key                               | English source                                                        | Override prop              |
+| --------------------------------- | --------------------------------------------------------------------- | -------------------------- |
 | `dashboardGrid.label`             | Dashboard                                                             | `ariaLabel`                |
 | `dashboardGrid.item`              | Item {position}                                                       | `DashboardGrid.Item label` |
 | `dashboardGrid.moved`             | {label} moved to position {position} of {total}.                      | —                          |

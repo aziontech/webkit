@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import CopyButton from '../../../actions/copy-button/copy-button.vue'
-  import FieldDescription from '../../../inputs/field/field-description/field-description.vue'
-  import Input from '../../../inputs/input/input.vue'
-  import InputGroupRoot from '../../../inputs/input-group/input-group.vue'
+  import CopyButton from '../../../action/copy-button/copy-button.vue'
+  import FieldDescription from '../../../input/field/field-description/field-description.vue'
+  import Input from '../../../input/input/input.vue'
+  import InputGroupRoot from '../../../input/input-group/input-group.vue'
   import Item from '../../item/index'
   import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'

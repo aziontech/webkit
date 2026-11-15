@@ -1,6 +1,6 @@
 {
   "component": "separator",
-  "title": "Components/Primitives/Layout/Separator",
+  "title": "Components/Layout/Separator",
   "examples": [
     {
       "name": "Default",

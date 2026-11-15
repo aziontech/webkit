@@ -3,10 +3,10 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
+  import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
   import Accordion from '../../content/accordion/index'
   import Progress from '../../feedback/progress/progress.vue'
-  import Spinner from '../../utils/spinner/spinner.vue'
+  import Spinner from '../../feedback/spinner/spinner.vue'
   import type {
     LogViewerLine,
     LogViewerStep,
@@ -56,9 +56,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ logViewer: en.logViewer })
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'code-log-viewer__steps'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'log-viewer-steps')
 
   const statusLabels = computed<Record<LogViewerStepStatus, string>>(() => ({
     success: t('logViewer.stepDone'),

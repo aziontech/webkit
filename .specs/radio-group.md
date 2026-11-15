@@ -1,11 +1,11 @@
 ---
 name: radio-group
-category: inputs
+category: input
 structure: composition
 status: implemented
 spec_version: 5
 template: 2
-checksum: 55208214a1f993b9e7d40007c7942522214fd3dd1734851eb8a179a77892c5b5
+checksum: d78d8a391ff76836101115982fd34c3ea1844cafbc40c674396d65750f4745ea
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -117,7 +117,7 @@ Tree-shaking alternative — the standalone root and the item from their own ent
 Layout:
 
 ```
-packages/webkit/src/components/inputs/radio-group/
+packages/webkit/src/components/input/radio-group/
 ├── radio-group.vue
 ├── index.ts
 ├── injection-key.ts
@@ -129,22 +129,22 @@ packages/webkit/src/components/inputs/radio-group/
 
 ## Props
 
-| Prop          | Type                         | Default      | Required | JSDoc                                                                                                                              |
-| ------------- | ---------------------------- | ------------ | -------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| `name`        | `string`                     | `''`         | false    | Form field name shared by every radio; the selected value submits under it. Empty uses a generated name so the radios still group. |
-| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` | false    | Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way.                         |
-| `variant`        | `'default' \| 'card'`        | `'default'`  | false    | Look of every option: a circle beside its label, or a bordered card for options with an icon, a description or card weight (plans, roles). `RadioGroupVariant`, exported. |
+| Prop          | Type                         | Default      | Required | JSDoc                                                                                                                                                                                                                                                                   |
+| ------------- | ---------------------------- | ------------ | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `name`        | `string`                     | `''`         | false    | Form field name shared by every radio; the selected value submits under it. Empty uses a generated name so the radios still group.                                                                                                                                      |
+| `orientation` | `'vertical' \| 'horizontal'` | `'vertical'` | false    | Layout axis: options stacked, or in a wrapping row. Arrow keys move the selection on both axes either way.                                                                                                                                                              |
+| `variant`     | `'default' \| 'card'`        | `'default'`  | false    | Look of every option: a circle beside its label, or a bordered card for options with an icon, a description or card weight (plans, roles). `RadioGroupVariant`, exported.                                                                                               |
 | `options`     | `TOption[]`                  | `[]`         | false    | Options rendered as `RadioGroup.Item` rows, in place of composed items (`TOption extends RadioGroupOption`: `{ value, label, description?, icon?, ariaLabel?, disabled? }`, exported); extra fields reach the `option` and `tag` slots. Empty renders the default slot. |
-| `disabled`    | `boolean`                    | `false`      | false    | Disables every option and applies the disabled tokens.                                                                             |
-| `required`    | `boolean`                    | `false`      | false    | Requires a selection: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit.     |
-| `invalid`     | `boolean`                    | `false`      | false    | Marks the group invalid: sets `aria-invalid` on the group and on every radio.                                                      |
+| `disabled`    | `boolean`                    | `false`      | false    | Disables every option and applies the disabled tokens.                                                                                                                                                                                                                  |
+| `required`    | `boolean`                    | `false`      | false    | Requires a selection: sets `aria-required` on the group and `required` on the radios, so a native form blocks an empty submit.                                                                                                                                          |
+| `invalid`     | `boolean`                    | `false`      | false    | Marks the group invalid: sets `aria-invalid` on the group and on every radio.                                                                                                                                                                                           |
 
 **Generic.** The root is generic over `TOption extends RadioGroupOption` (default `RadioGroupOption`), inferred from `options`: the `option` and `tag` slots receive `TOption`, so a plan list with a `price` field reads `option.price` with its type, and `v-model` / `update:modelValue` carry `TOption['value']`. Props stay an inline literal in `defineProps` because the root is generic; `RadioGroupProps` is exported from `injection-key.ts`.
 
 ## v-model
 
-| Model     | Type                  | Default     | Emits               | Notes                                                                                                                               |
-| --------- | --------------------- | ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| Model     | Type                            | Default     | Emits               | Notes                                                                                                                               |
+| --------- | ------------------------------- | ----------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model` | `TOption['value'] \| undefined` | `undefined` | `update:modelValue` | Selected value via `defineModel` on the root. Unbound, the group keeps its own selection, starting empty. Emits the item's `value`. |
 
 ## Events
@@ -153,10 +153,10 @@ _none_
 
 ## Slots
 
-| Slot      | Scope | Notes                   |
-| --------- | ----- | ----------------------- |
-| `default` | —     | The `RadioGroup.Item`s. Not rendered while `options` is set. |
-| `option`  | `{ option: TOption; selected: boolean }` | Body of one data-driven option, in place of its label. |
+| Slot      | Scope                                    | Notes                                                                 |
+| --------- | ---------------------------------------- | --------------------------------------------------------------------- |
+| `default` | —                                        | The `RadioGroup.Item`s. Not rendered while `options` is set.          |
+| `option`  | `{ option: TOption; selected: boolean }` | Body of one data-driven option, in place of its label.                |
 | `tag`     | `{ option: TOption; selected: boolean }` | Trailing content of one data-driven option, such as a price or a tag. |
 
 ## States
@@ -169,28 +169,28 @@ _none_
 
 ## Motion & Animations
 
-| Trigger                 | Animation / Transition  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-| ----------------------- | ----------------------- | ------------------------------------------------- | ----------------------- |
-| hover / focus / checked (circle) | `transition-opacity duration-fast-02 ease-productive-entrance` on the hover and press layers | inline (matches catalog) | `motion-reduce:before:transition-none motion-reduce:after:transition-none` |
-| hover / checked (card)  | `transition-colors duration-fast-02 ease-productive-entrance` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                          | Animation / Transition                                                                       | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                                                    |
+| -------------------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------- |
+| hover / focus / checked (circle) | `transition-opacity duration-fast-02 ease-productive-entrance` on the hover and press layers | inline (matches catalog)                          | `motion-reduce:before:transition-none motion-reduce:after:transition-none` |
+| hover / checked (card)           | `transition-colors duration-fast-02 ease-productive-entrance`                                | inline (matches catalog)                          | `motion-reduce:transition-none`                                            |
 
 The root and the item add no motion of their own.
 
 ## Tokens
 
-| Region                        | Token (DESIGN.md)      |
-| ----------------------------- | ---------------------- |
-| item label                    | `.text-label-sm`       |
-| item label color              | `var(--text-default)`  |
-| item label color (disabled)   | `var(--text-disabled)` |
-| gap between circle and label  | `var(--spacing-xs)`    |
-| gap between options (stacked) | `var(--spacing-sm)`    |
-| gap between options (row)     | `var(--spacing-md)`    |
-| gap between cards             | `var(--spacing-xs)`    |
-| card border / selected        | `var(--border-muted)` / `var(--border-selected)` |
+| Region                        | Token (DESIGN.md)                                                   |
+| ----------------------------- | ------------------------------------------------------------------- |
+| item label                    | `.text-label-sm`                                                    |
+| item label color              | `var(--text-default)`                                               |
+| item label color (disabled)   | `var(--text-disabled)`                                              |
+| gap between circle and label  | `var(--spacing-xs)`                                                 |
+| gap between options (stacked) | `var(--spacing-sm)`                                                 |
+| gap between options (row)     | `var(--spacing-md)`                                                 |
+| gap between cards             | `var(--spacing-xs)`                                                 |
+| card border / selected        | `var(--border-muted)` / `var(--border-selected)`                    |
 | card fill / hover / selected  | `var(--bg-surface)` / `var(--bg-hover)` / `var(--primary-selected)` |
-| card radius / padding         | `var(--shape-button)` / `var(--spacing-sm)` |
-| card label / description      | `.text-body-sm` / `.text-body-xs` `var(--text-muted)` |
+| card radius / padding         | `var(--shape-button)` / `var(--spacing-sm)`                         |
+| card label / description      | `.text-body-sm` / `.text-body-xs` `var(--text-muted)`               |
 
 ## Theme gaps
 

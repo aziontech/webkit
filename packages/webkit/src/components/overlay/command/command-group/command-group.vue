@@ -30,9 +30,7 @@
 
   provide(CommandGroupInjectionKey, groupId)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__group`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'command-group')
 
   const hasLabel = computed(() => props.label.length > 0)
 </script>

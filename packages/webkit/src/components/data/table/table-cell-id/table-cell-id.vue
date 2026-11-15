@@ -1,10 +1,9 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import CopyButton from '../../../actions/copy-button/copy-button.vue'
-  import { TableInjectionKey } from '../injection-key'
+  import CopyButton from '../../../action/copy-button/copy-button.vue'
 
   defineOptions({
     name: 'TableCellId',
@@ -25,11 +24,8 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableCellId: en.tableCellId })
-  const ctx = inject(TableInjectionKey, null)
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__cell-id` : 'data-table__cell-id')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-cell-id'
   )
 
   const text = computed<string>(() =>

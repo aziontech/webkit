@@ -36,7 +36,7 @@
   const attrs = useAttrs()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-streaming-response'
+    () => (attrs['data-testid'] as string | undefined) ?? 'streaming-response'
   )
   let parsed: MarkdownParse | undefined
 

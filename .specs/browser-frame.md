@@ -6,7 +6,7 @@ status: implemented
 spec_version: 3
 created: 2026-10-20
 last_updated: 2026-11-15
-checksum: dcdd0037732045b657577414b1f60b64e99bcd95e3e97f090191a6d6d1ec026e
+checksum: 73e172b8d9faf270245b45267560e5325bd3749cf0332ab1be22f46f0d6f2b81
 ---
 
 # BrowserFrame — Component Spec
@@ -120,7 +120,7 @@ The frame is static apart from its resize handles.
 - **Scaled.** The root sets `data-scaled` while the viewport is scaled below 1.
 - **Address.** Rendered only when `address` is non-empty, centered in the chrome as a compact, fully rounded pill up to `--container-xs` wide and exactly as tall as the small copy button (28px), which sits flush at its trailing end, never overlapping the window dots or the readout. The pill is filled with the skeleton placeholder fill (static — no sweep) and edged with a muted hairline. Its text is set in the monospace code label and centered in the space left of the copy button; long addresses truncate in the middle: a leading part ellipsizes and the last 12 characters always stay visible.
 - **Copy.** The address bar's trailing end composes the package's `CopyButton` (`variant="ghost"`, `size="small"`) with `value` = the full `address`; its copied feedback is the `CopyButton`'s own.
-- **Test ids.** Root fallback `content-browser-frame` (consumer override wins); `${testId}__address`, `${testId}__viewport` (the `iframe`), `${testId}__copy`, `${testId}__width-handle`, `${testId}__height-handle`, `${testId}__corner-handle`.
+- **Test ids.** Root fallback `browser-frame` (consumer override wins); `${testId}__address`, `${testId}__viewport` (the `iframe`), `${testId}__copy`, `${testId}__width-handle`, `${testId}__height-handle`, `${testId}__corner-handle`.
 - **Composable.** The document mirroring and teleport target live in a co-located lifecycle composable, `composables/use-frame-document.ts`, that disconnects every observer on scope dispose.
 
 ## Motion & Animations

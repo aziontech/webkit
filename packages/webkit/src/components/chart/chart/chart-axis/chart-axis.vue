@@ -29,9 +29,7 @@
   const LABEL_GUTTER = 12
   const LABEL_SPACING = 16
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__axis-${props.type}`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-axis')
   const vertical = computed(() => ctx.orientation.value === 'vertical')
   const plot = computed(() => ctx.plot.value)
   const showsCategories = computed(() => (props.type === 'x') === vertical.value)
@@ -118,6 +116,7 @@
   <svg
     v-bind="$attrs"
     :data-testid="testId"
+    :data-type="type"
     aria-hidden="true"
     direction="ltr"
     :width="ctx.size.value.width"

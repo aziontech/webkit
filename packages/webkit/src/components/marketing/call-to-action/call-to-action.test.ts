@@ -5,7 +5,7 @@ import { nextTick, ref } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import CallToAction from './call-to-action.vue'
 
-const TESTID = 'marketing-call-to-action'
+const TESTID = 'call-to-action'
 
 const TITLE = 'Ship your first application today.'
 const DESCRIPTION = 'Deploy to every edge location in seconds. No credit card required.'

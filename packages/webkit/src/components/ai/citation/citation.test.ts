@@ -6,7 +6,7 @@ import Citation from './citation.vue'
 
 describe('Citation', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
-    expect(render(Citation, { props: { index: 1 } }).getByTestId('ai-citation')).toBeTruthy()
+    expect(render(Citation, { props: { index: 1 } }).getByTestId('citation')).toBeTruthy()
     expect(
       render(Citation, { props: { index: 1 }, attrs: { 'data-testid': 'mine' } }).getByTestId(
         'mine'

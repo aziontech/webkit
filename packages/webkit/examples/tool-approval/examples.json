@@ -1,6 +1,6 @@
 {
   "component": "tool-approval",
-  "title": "Components/Primitives/AI/ToolApproval",
+  "title": "Components/AI/ToolApproval",
   "examples": [
     {
       "name": "Default",

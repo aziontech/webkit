@@ -1,6 +1,6 @@
 {
   "component": "copy-prompt-button",
-  "title": "Components/Primitives/Actions/CopyPromptButton",
+  "title": "Components/Action/CopyPromptButton",
   "examples": [
     {
       "name": "Default",

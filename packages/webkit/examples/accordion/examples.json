@@ -1,6 +1,6 @@
 {
   "component": "accordion",
-  "title": "Components/Primitives/Content/Accordion",
+  "title": "Components/Content/Accordion",
   "examples": [
     {
       "name": "Default",

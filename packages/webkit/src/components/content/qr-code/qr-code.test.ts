@@ -6,7 +6,7 @@ import Default from '../../../../examples/qr-code/default.vue'
 import Sizes from '../../../../examples/qr-code/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import QrCode from './qr-code.vue'
 import { encodeQr } from './qr-encode'
 
@@ -15,8 +15,7 @@ afterEach(() => {
   vi.restoreAllMocks()
 })
 
-const root = (): HTMLElement =>
-  document.body.querySelector<HTMLElement>('[data-testid="content-qr-code"]')!
+const root = (): HTMLElement => document.body.querySelector<HTMLElement>('[data-testid="qr-code"]')!
 
 const URI = 'otpauth://totp/Azion:ana%40example.com?secret=JBSWY3DPEHPK3PXP&issuer=Azion'
 

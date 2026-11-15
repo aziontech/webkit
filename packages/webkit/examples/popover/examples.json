@@ -1,6 +1,6 @@
 {
   "component": "popover",
-  "title": "Components/Primitives/Overlay/Popover",
+  "title": "Components/Overlay/Popover",
   "examples": [
     {
       "name": "Default",

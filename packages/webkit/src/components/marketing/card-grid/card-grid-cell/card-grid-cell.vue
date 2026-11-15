@@ -30,9 +30,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-card-grid-cell'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'card-grid-cell')
 </script>
 
 <template>

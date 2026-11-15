@@ -29,7 +29,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-skeleton')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'skeleton')
 </script>
 
 <template>

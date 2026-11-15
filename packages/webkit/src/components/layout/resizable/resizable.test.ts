@@ -28,7 +28,7 @@ const group = (
 describe('Resizable', () => {
   it('renders and exposes the fallback data-testid', () => {
     const { getByTestId } = render(group())
-    expect(getByTestId('layout-resizable')).toBeTruthy()
+    expect(getByTestId('resizable')).toBeTruthy()
   })
 
   it('lets a consumer override data-testid', () => {
@@ -50,7 +50,7 @@ describe('Resizable', () => {
 
   it('sizes the pane that has a basis and lets the other one absorb the rest', () => {
     const { getAllByTestId } = render(group())
-    const [flexible, sized] = getAllByTestId('layout-resizable__pane')
+    const [flexible, sized] = getAllByTestId('resizable-pane')
     expect(flexible.dataset.flexible).toBe('true')
     expect(sized.dataset.flexible).toBeUndefined()
     expect(sized.style.width).toBe('300px')
@@ -88,7 +88,7 @@ describe('Resizable', () => {
 
   it('renders a collapsed pane at zero length without unmounting its content', () => {
     const { getAllByTestId, getByText } = render(group({ open: false, collapsible: true }))
-    const sized = getAllByTestId('layout-resizable__pane')[1]
+    const sized = getAllByTestId('resizable-pane')[1]
     expect(sized.dataset.state).toBe('closed')
     expect(sized.style.width).toBe('0px')
     // Still in the DOM — the whole point of collapsing rather than v-if.
@@ -160,7 +160,7 @@ describe('Resizable', () => {
 
     it('Enter collapses a collapsible pane and restores it, emitting update:open', async () => {
       const { handle, opens, getAllByTestId } = await setup({ collapsible: true })
-      const pane = getAllByTestId('layout-resizable__pane')[1]
+      const pane = getAllByTestId('resizable-pane')[1]
       await fireEvent.keyDown(handle, { key: 'Enter' })
       expect(opens.at(-1)).toBe(false)
       expect(pane.dataset.state).toBe('closed')
@@ -171,7 +171,7 @@ describe('Resizable', () => {
 
     it('has no expanded model: only open drives the pane', async () => {
       const { getAllByTestId } = await setup({ expanded: false, collapsible: true })
-      expect(getAllByTestId('layout-resizable__pane')[1].dataset.state).toBe('open')
+      expect(getAllByTestId('resizable-pane')[1].dataset.state).toBe('open')
     })
 
     it('Enter does nothing on a pane that is not collapsible', async () => {
@@ -190,7 +190,7 @@ describe('Resizable', () => {
             'onUpdate:open': (value: boolean) => (open.value = value)
           })
       })
-      const pane = getAllByTestId('layout-resizable__pane')[1]
+      const pane = getAllByTestId('resizable-pane')[1]
       expect(pane.dataset.state).toBe('closed')
       open.value = true
       await nextTick()
@@ -202,7 +202,7 @@ describe('Resizable', () => {
     it('clips the handle hit area at its own edge', () => {
       const { getByTestId } = render(group())
 
-      expect(getByTestId('layout-resizable').className).toContain(
+      expect(getByTestId('resizable').className).toContain(
         'data-[orientation=horizontal]:overflow-x-clip'
       )
     })

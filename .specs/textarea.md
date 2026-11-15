@@ -1,6 +1,6 @@
 ---
 name: textarea
-category: inputs
+category: input
 structure: monolithic
 status: implemented
 spec_version: 10
@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4722-6730
   node_id: 4722:6730
-checksum: 0b7b5eaacd08d12590b00f5e123a02ea99ff5a61e078acf332e87f1e15ded9a7
+checksum: 203f34b7599541e4f9346ed60a04bdacc30b64a79c843578f1ec53a152f3c88f
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -17,7 +17,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Collects multi-line free-form text from the user. Sibling of `input` in the `inputs` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`). With `autoResize` the field instead grows with its content between `minRows` and `maxRows` lines. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
+Collects multi-line free-form text from the user. Sibling of `input` in the `input` category; renders a fixed-size (`large`) multi-line field with a minimum height of 80px. The resize axis is controlled by the `resize` prop (defaults to `vertical`). With `autoResize` the field instead grows with its content between `minRows` and `maxRows` lines. Native textarea attributes (`rows`, `maxlength`, `name`, etc.) flow through via attribute fallthrough.
 
 ## When to use
 
@@ -90,7 +90,7 @@ Collects multi-line free-form text from the user. Sibling of `input` in the `inp
 | `readonly`    | `boolean`                                        | `false`      | false    | Marks the field read-only: the value is visible, focusable and copyable but not editable. Keeps the filled field (surface and solid border) with no hover border and a default cursor (`data-readonly`), the same look as `Input`; distinct from the disabled field. |
 | `invalid`     | `boolean`                                        | `false`      | false    | Applies invalid styling and sets `aria-invalid`. Combined with `required`, switches to warning border tone.                                                                                                                                                          |
 | `required`    | `boolean`                                        | `false`      | false    | Marks the field as required and sets `aria-required`.                                                                                                                                                                                                                |
-| `resize`      | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior. |
+| `resize`      | `'vertical' \| 'horizontal' \| 'both' \| 'none'` | `'vertical'` | false    | Which axes the user can drag to resize the field, named after the CSS `resize` property (`TextareaResize`, exported). `none` locks the size; `vertical` keeps the default behavior.                                                                                  |
 | `monospace`   | `boolean`                                        | `false`      | false    | Sets the value and placeholder in the monospace code face (`.text-body-code-sm`, which wraps) for pasted zone files, certificates, JSON and lists of IPs (`data-monospace`). Same prop as on `Input`.                                                                |
 | `autoResize`  | `boolean`                                        | `false`      | false    | Grows the field with its content instead of a fixed height (`data-auto-resize`): CSS `field-sizing: content`, with a measured height where the browser lacks it. Turns the drag handle off.                                                                          |
 | `minRows`     | `number`                                         | `1`          | false    | Lines the field shows when empty while `autoResize` is on. Ignored without `autoResize`.                                                                                                                                                                             |
@@ -154,7 +154,7 @@ _No slots._
 | border (invalid)         | `var(--danger-border)`        |
 | border width             | `var(--border-width-default)` |
 | spacing (padding)        | `var(--spacing-sm)`           |
-| shape                    | `var(--shape-control)`       |
+| shape                    | `var(--shape-control)`        |
 
 ## Theme gaps
 

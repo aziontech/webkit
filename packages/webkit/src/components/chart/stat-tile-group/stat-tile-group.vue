@@ -21,9 +21,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'chart-stat-tile-group'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'stat-tile-group')
 
   provide(StatTileGroupInjectionKey, { grouped: true })
 </script>

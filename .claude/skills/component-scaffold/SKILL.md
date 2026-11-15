@@ -47,7 +47,7 @@ packages/webkit/src/components/overlay/dialog/
 **Folder layout — monolithic (unchanged):**
 
 ```
-packages/webkit/src/components/actions/button/
+packages/webkit/src/components/action/button/
 └── button.vue
 ```
 
@@ -63,8 +63,8 @@ packages/webkit/src/components/actions/button/
 - The Constraints block (verbatim).
 - [`.claude/rules/no-invention.md`](../../rules/no-invention.md), [`.claude/rules/compound-api.md`](../../rules/compound-api.md) (composition only), [`.claude/docs/COMPONENT_REQUIREMENTS.md`](../../docs/COMPONENT_REQUIREMENTS.md), [`.claude/docs/DESIGN.md`](../../docs/DESIGN.md).
 - The canonical files for cross-reference (read-only):
-  - `packages/webkit/src/components/actions/button/button.vue`
-  - `packages/webkit/src/components/actions/icon-button/icon-button.vue`
+  - `packages/webkit/src/components/action/button/button.vue`
+  - `packages/webkit/src/components/action/icon-button/icon-button.vue`
   - `packages/webkit/src/components/content/pricing-card/pricing-card.vue`
 
 ## Workflow
@@ -162,7 +162,7 @@ packages/webkit/src/components/actions/button/
    - `defineOptions({ name: '<PascalRoot><PascalPart>', inheritAttrs: false })`.
    - Relative import for the shared injection key: `import { <PascalRoot>InjectionKey } from '../injection-key'` (one directory up — sibling of the root `.vue`).
    - `inject(<PascalRoot>InjectionKey)` to read shared state.
-   - Local `testId` derived from `ctx.testId` per [`bem-testid.md`](../../docs/COMPONENT_REQUIREMENTS.md). The fallback follows BEM: `'<category>-<name>__<part>'` (e.g. `'overlay-dialog__trigger'`).
+   - Local `testId` per [`testid.md`](../../rules/testid.md): the fallback is the sub-component's own name (e.g. `'dialog-trigger'`), never the parent's id.
 
 4. **(Composition only) Write `injection-key.ts`** at the **root** level of the component (sibling of `<name>.vue`, **not** inside any sub-component folder). Replace `Dialog` with the PascalCase name of your component:
 
@@ -234,7 +234,7 @@ export default Object.assign(Dialog, {
    describe('<PascalName>', () => {
      it('renders and exposes the fallback data-testid', () => {
        const { getByTestId } = render(<PascalName>, { props: { /* required spec props */ } })
-       expect(getByTestId('<category>-<name>')).toBeTruthy()
+       expect(getByTestId('<name>')).toBeTruthy()
      })
 
      it('lets a consumer override data-testid', () => {
@@ -311,6 +311,6 @@ export default Object.assign(Dialog, {
 - [ ] No HEX / Tailwind palette / raw typography / `any` / `@ts-ignore`.
 - [ ] No zero with a length unit (`0px` / `0rem` / `0em`) anywhere in the emitted files — a zero is written `0`, except inside `calc()`/`min()`/`max()`/`clamp()`, where it is `0rem`.
 - [ ] `defineOptions.name` is PascalCase and matches the directory.
-- [ ] `data-testid` fallback equals `'<category>-<name>'` on the root and `'<category>-<name>__<part>'` on each sub-component.
+- [ ] `data-testid` fallback equals `'<name>'` on the root and each sub-component's own name on it (`'<name>-<part>'`); inner elements use `${testId}__<part>`.
 - [ ] Starter `<name>.test.ts` written next to the root `.vue` (render + `data-testid` fallback + consumer override + axe; required props filled from the spec) — satisfies `enforce-test-exists.mjs`.
 - [ ] No story file written, no `.figma.ts` written, no pnpm command run.

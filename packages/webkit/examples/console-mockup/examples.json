@@ -1,6 +1,6 @@
 {
   "component": "console-mockup",
-  "title": "Components/Primitives/Content/ConsoleMockup",
+  "title": "Components/Content/ConsoleMockup",
   "examples": [
     {
       "name": "Default",

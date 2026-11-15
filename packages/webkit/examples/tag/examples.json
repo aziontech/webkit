@@ -1,6 +1,6 @@
 {
   "component": "tag",
-  "title": "Components/Primitives/Content/Tag",
+  "title": "Components/Content/Tag",
   "examples": [
     {
       "name": "Default",

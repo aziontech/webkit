@@ -1,6 +1,6 @@
 {
   "component": "textarea",
-  "title": "Components/Primitives/Inputs/Textarea",
+  "title": "Components/Input/Textarea",
   "examples": [
     {
       "name": "Default",

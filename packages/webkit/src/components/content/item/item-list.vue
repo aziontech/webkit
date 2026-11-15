@@ -14,7 +14,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-item-list')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'item-list')
 
   provide(ItemContainerInjectionKey, { forceVariant: 'default' })
   provide(ItemListMemberInjectionKey, true)

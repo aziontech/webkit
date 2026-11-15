@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Stats from './stats.vue'
 
-const TESTID = 'marketing-stats'
+const TESTID = 'stats'
 
 const items = [
   { value: '120', suffix: '+', label: 'Points of presence' },

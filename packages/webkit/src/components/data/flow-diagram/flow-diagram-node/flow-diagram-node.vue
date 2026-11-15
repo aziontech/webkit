@@ -1,8 +1,7 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import { cn } from '../../../../utils/cn'
-  import { FlowDiagramInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'FlowNode',
@@ -29,11 +28,9 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(FlowDiagramInjectionKey)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId.value ?? 'data-flow'}__node`
+    () => (attrs['data-testid'] as string | undefined) ?? 'flow-diagram-node'
   )
 
   const ROOT_CLASS =

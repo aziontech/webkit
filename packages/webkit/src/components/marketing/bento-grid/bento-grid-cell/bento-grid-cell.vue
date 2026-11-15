@@ -40,9 +40,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-bento-grid-cell'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'bento-grid-cell')
 </script>
 
 <template>

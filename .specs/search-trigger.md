@@ -1,6 +1,6 @@
 ---
 name: search-trigger
-category: actions
+category: action
 structure: monolithic
 status: implemented
 spec_version: 4

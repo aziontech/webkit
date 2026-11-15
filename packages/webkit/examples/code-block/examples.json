@@ -1,6 +1,6 @@
 {
   "component": "code-block",
-  "title": "Components/Primitives/Code/CodeBlock",
+  "title": "Components/Code/CodeBlock",
   "examples": [
     {
       "name": "Default",

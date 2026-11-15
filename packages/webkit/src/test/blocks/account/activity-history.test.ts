@@ -8,7 +8,7 @@ describe('account/activity-history', () => {
   it('draws the category as a Tag, not a status', () => {
     const view = render(ActivityHistory)
     const table = view.getByRole('table', { name: 'Activity history' })
-    expect(table.querySelector('[data-testid="content-tag"]')).not.toBeNull()
+    expect(table.querySelector('[data-testid="tag"]')).not.toBeNull()
     expect(table.querySelector('[data-testid$="cell-status"]')).toBeNull()
   })
 

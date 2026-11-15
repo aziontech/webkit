@@ -17,9 +17,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-diagram__node'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'diagram-node')
 
   const markStyle = (url: string) => ({ maskImage: `url("${url}")` })
 </script>

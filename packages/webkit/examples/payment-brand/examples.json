@@ -1,6 +1,6 @@
 {
   "component": "payment-brand",
-  "title": "Components/Primitives/Content/PaymentBrand",
+  "title": "Components/Content/PaymentBrand",
   "examples": [
     {
       "name": "Default",

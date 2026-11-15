@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Texture from './texture.vue'
 
-const TESTID = 'marketing-texture'
+const TESTID = 'texture'
 
 const VARIANTS = ['dots', 'grid', 'dither', 'pixelate', 'none'] as const
 const SIZES = ['small', 'medium', 'large'] as const

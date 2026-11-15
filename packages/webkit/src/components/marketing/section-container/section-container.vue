@@ -30,7 +30,7 @@
   }>()
 
   const attrs = useAttrs()
-  const testId = computed(() => (attrs['data-testid'] as string) ?? 'marketing-section-container')
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'section-container')
 </script>
 
 <template>

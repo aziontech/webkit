@@ -695,7 +695,8 @@
     {
       "tool": "suggest",
       "query": "stats",
-      "top1": "stats-section"
+      "top1": "stats",
+      "accept": ["stats", "stats-section"]
     },
     {
       "tool": "suggest",

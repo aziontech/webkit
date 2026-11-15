@@ -4,7 +4,7 @@ import { defineComponent, h } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import SeverityTag from './severity-tag.vue'
 
 const LEVELS = [
@@ -21,10 +21,10 @@ describe('SeverityTag', () => {
   it('renders with the fallback data-testid and the default level and size', () => {
     const { getByTestId } = render(SeverityTag)
 
-    const root = getByTestId('content-severity-tag')
+    const root = getByTestId('severity-tag')
     expect(root).toHaveAttribute('data-severity', 'info')
     expect(root).toHaveAttribute('data-size', 'medium')
-    expect(getByTestId('content-severity-tag__label')).toHaveTextContent('Info')
+    expect(getByTestId('severity-tag__label')).toHaveTextContent('Info')
   })
 
   it('lets a consumer data-testid win and derives the sub-element ids from it', () => {
@@ -35,26 +35,26 @@ describe('SeverityTag', () => {
     expect(getByTestId('alert-severity')).toBeInTheDocument()
     expect(getByTestId('alert-severity__glyph')).toBeInTheDocument()
     expect(getByTestId('alert-severity__label')).toBeInTheDocument()
-    expect(queryByTestId('content-severity-tag')).toBeNull()
+    expect(queryByTestId('severity-tag')).toBeNull()
   })
 
   it.each(LEVELS)('mirrors level %s on data-severity and labels it %s', (level, name) => {
     const { getByTestId } = render(SeverityTag, { props: { severity: level } })
 
-    expect(getByTestId('content-severity-tag')).toHaveAttribute('data-severity', level)
-    expect(getByTestId('content-severity-tag__label')).toHaveTextContent(name)
+    expect(getByTestId('severity-tag')).toHaveAttribute('data-severity', level)
+    expect(getByTestId('severity-tag__label')).toHaveTextContent(name)
   })
 
   it.each(SIZES)('mirrors size %s on data-size', (size) => {
     const { getByTestId } = render(SeverityTag, { props: { size } })
 
-    expect(getByTestId('content-severity-tag')).toHaveAttribute('data-size', size)
+    expect(getByTestId('severity-tag')).toHaveAttribute('data-size', size)
   })
 
   it('shows the label prop instead of the severity name', () => {
     const { getByTestId } = render(SeverityTag, { props: { severity: 'high', label: 'Alta' } })
 
-    const label = getByTestId('content-severity-tag__label')
+    const label = getByTestId('severity-tag__label')
     expect(label).toHaveTextContent('Alta')
     expect(label).not.toHaveTextContent('High')
   })
@@ -65,7 +65,7 @@ describe('SeverityTag', () => {
       slots: { default: 'Sev 1' }
     })
 
-    const root = getByTestId('content-severity-tag')
+    const root = getByTestId('severity-tag')
     expect(root).toHaveTextContent('Sev 1')
     expect(root).not.toHaveTextContent('ignored')
     expect(root).not.toHaveTextContent('Critical')
@@ -81,13 +81,13 @@ describe('SeverityTag', () => {
         )
     })
     const { getByTestId } = render(Host)
-    expect(getByTestId('content-severity-tag__label')).toHaveTextContent('Baixa')
+    expect(getByTestId('severity-tag__label')).toHaveTextContent('Baixa')
   })
 
   it('hides the four-bar glyph from assistive technology', () => {
     const { getByTestId } = render(SeverityTag, { props: { severity: 'medium' } })
 
-    const glyph = getByTestId('content-severity-tag__glyph')
+    const glyph = getByTestId('severity-tag__glyph')
     expect(glyph).toHaveAttribute('aria-hidden', 'true')
     expect(glyph.children).toHaveLength(4)
   })
@@ -95,7 +95,7 @@ describe('SeverityTag', () => {
   it('is not focusable', () => {
     const { getByTestId } = render(SeverityTag)
 
-    expect(getByTestId('content-severity-tag')).not.toHaveAttribute('tabindex')
+    expect(getByTestId('severity-tag')).not.toHaveAttribute('tabindex')
   })
 
   it('has no axe violations on the default render', async () => {

@@ -14,7 +14,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
   import ScrollArea from '../scroll-area/scroll-area.vue'
   import {
@@ -87,7 +87,7 @@
     }
   })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-sidebar')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sidebar')
 
   const collapseMode = computed<SidebarCollapsible | null>(() => {
     if (props.collapsible === 'icon') return 'icon'

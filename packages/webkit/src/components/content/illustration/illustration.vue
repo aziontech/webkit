@@ -82,9 +82,7 @@
 
   const decorative = computed(() => placeheld.value || props.ariaLabel.length === 0)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-illustration'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'illustration')
 
   const passthroughAttrs = computed(() => {
     const rest = { ...attrs }

@@ -30,7 +30,7 @@
   const bodyEl = ref<globalThis.HTMLElement | null>(null)
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${parent.testId}__sub-panel`
+    () => (attrs['data-testid'] as string | undefined) ?? 'dropdown-menu-sub-content'
   )
 
   const isOpen = computed(() => sub.isOpen.value && parent.isOpen.value)

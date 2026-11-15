@@ -16,7 +16,7 @@
   onScopeDispose(ctx.registerDescription())
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__description`
+    () => (attrs['data-testid'] as string | undefined) ?? 'chart-card-description'
   )
 </script>
 

@@ -30,7 +30,6 @@ export const MARKET_ALIASES = {
   testimonial: 'client-quotes',
   testimonials: 'client-quotes',
   'text-field': 'input',
-  ticker: 'marquee',
   transfer: 'transfer-list'
 }
 

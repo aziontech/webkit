@@ -65,7 +65,7 @@ describe('TopologyDiagram', () => {
 
   it('draws one connector per adjacent pair of columns', async () => {
     const view = render(Default)
-    const root = view.getByTestId('data-topology-diagram')
+    const root = view.getByTestId('topology-diagram')
     await waitFor(() => expect(root.querySelectorAll('svg path').length).toBe(9))
   })
 
@@ -133,7 +133,7 @@ describe('TopologyDiagram', () => {
     const link = view
       .getAllByRole('link', { name: 'web-app' })
       .find((node) => node.getAttribute('href') === '#project')!
-    expect(link).toHaveAttribute('data-testid', 'data-topology-diagram__node-link')
+    expect(link).toHaveAttribute('data-testid', 'topology-diagram__node-link')
     expect(link.querySelector('.ai-external-link')).toHaveAttribute('aria-hidden', 'true')
     const plain = render(TopologyDiagram, { props: { levels } })
     expect(within(plain.container).queryByRole('link')).toBeNull()
@@ -143,7 +143,7 @@ describe('TopologyDiagram', () => {
   it('puts the Domains add control from the actions slot in the identity row', async () => {
     const view = render(Default)
     const add = view.getByRole('button', { name: 'Add domain' })
-    const domains = view.getAllByTestId('data-topology-diagram__node')[0]!
+    const domains = view.getAllByTestId('topology-diagram__node')[0]!
     expect(domains).toContainElement(add)
     await fireEvent.click(add)
     expect(view.getByText('Add a domain.')).toHaveAttribute('role', 'status')
@@ -161,17 +161,17 @@ describe('TopologyDiagram', () => {
 
   it('renders the package EmptyState when there are no levels', () => {
     const view = render(TopologyDiagram, { props: { levels: [] } })
-    const empty = view.getByTestId('data-topology-diagram__empty')
-    expect(within(empty).getByTestId('feedback-empty-state')).toBeTruthy()
+    const empty = view.getByTestId('topology-diagram__empty')
+    expect(within(empty).getByTestId('empty-state')).toBeTruthy()
   })
 
   it('takes the consumer data-testid over the fallback', () => {
     const fallback = render(TopologyDiagram, { props: { levels } })
-    expect(fallback.getByTestId('data-topology-diagram')).toBeTruthy()
+    expect(fallback.getByTestId('topology-diagram')).toBeTruthy()
     fallback.unmount()
     const view = render(TopologyDiagram, { props: { levels }, attrs: { 'data-testid': 'stack' } })
     expect(view.getByTestId('stack')).toBeTruthy()
-    expect(view.queryByTestId('data-topology-diagram')).toBeNull()
+    expect(view.queryByTestId('topology-diagram')).toBeNull()
   })
 
   it('reads the node type, and not the removed kind', () => {
@@ -194,7 +194,7 @@ describe('TopologyDiagram', () => {
 
   it('keeps the scroll area out of the tab order until it overflows', () => {
     const view = render(TopologyDiagram, { props: { levels } })
-    const area = view.getByTestId('data-topology-diagram').firstElementChild as HTMLElement
+    const area = view.getByTestId('topology-diagram').firstElementChild as HTMLElement
     expect(area.hasAttribute('tabindex')).toBe(false)
   })
 
@@ -203,7 +203,7 @@ describe('TopologyDiagram', () => {
       render: () => h('div', { dir: 'rtl' }, [h(TopologyDiagram, { levels })])
     })
     const view = render(Host)
-    const root = view.getByTestId('data-topology-diagram')
+    const root = view.getByTestId('topology-diagram')
     await waitFor(() => expect(root.querySelectorAll('svg path').length).toBe(2))
   })
 

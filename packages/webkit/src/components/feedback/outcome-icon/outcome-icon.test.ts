@@ -7,7 +7,7 @@ import Default from '../../../../examples/outcome-icon/default.vue'
 import Sizes from '../../../../examples/outcome-icon/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import OutcomeIcon from './outcome-icon.vue'
 
 describe('OutcomeIcon', () => {
@@ -20,9 +20,7 @@ describe('OutcomeIcon', () => {
 
   it('draws a distinct glyph per severity', () => {
     const view = render(Default)
-    const glyphs = view
-      .getAllByTestId('feedback-outcome-icon__glyph')
-      .map((path) => path.getAttribute('d'))
+    const glyphs = view.getAllByTestId('outcome-icon__glyph').map((path) => path.getAttribute('d'))
     expect(new Set(glyphs).size).toBe(4)
   })
 

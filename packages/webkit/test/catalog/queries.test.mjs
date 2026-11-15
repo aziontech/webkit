@@ -53,10 +53,10 @@ test('listComponents returns >50 components and includes button', () => {
 })
 
 test('listComponents can filter by category', () => {
-  const res = listComponents(catalog, { category: 'actions' })
+  const res = listComponents(catalog, { category: 'action' })
   assert.equal(res.ok, true)
   assert.ok(res.count >= 1)
-  assert.ok(res.components.every((c) => c.category === 'actions'))
+  assert.ok(res.components.every((c) => c.category === 'action'))
   assert.ok(res.components.some((c) => c.name === 'button'))
 })
 
@@ -74,7 +74,7 @@ test('every component carries a surface, and listComponents filters by it', () =
 test('listCategories returns a sorted, non-empty list', () => {
   const res = listCategories(catalog)
   assert.equal(res.ok, true)
-  assert.ok(res.categories.includes('actions'))
+  assert.ok(res.categories.includes('action'))
   assert.ok(res.categories.includes('data'))
 })
 
@@ -624,7 +624,7 @@ test('a marketing page query ranks the website shell and the page sections first
     const sections = searchComponents(catalog, q).matches
     assert.ok(sections.length > 0, q)
     assert.ok(
-      sections.every((m) => m.category === 'sections'),
+      sections.every((m) => m.category === 'section'),
       `${q}: ${sections.map((m) => m.name).join(', ')}`
     )
   }

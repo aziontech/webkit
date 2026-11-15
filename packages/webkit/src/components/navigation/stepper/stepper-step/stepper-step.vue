@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import Spinner from '../../../utils/spinner/spinner.vue'
+  import Spinner from '../../../feedback/spinner/spinner.vue'
   import { useStepperContext } from '../composables/use-stepper-context'
 
   defineOptions({
@@ -51,9 +51,7 @@
   onMounted(() => context.attach(id, rootEl.value))
   onBeforeUnmount(() => context.unregister(id))
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-stepper-step'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'stepper-step')
 
   const shown = computed<StepperStepStatus | 'active'>(() => {
     if (props.status === 'error' || props.status === 'running') return props.status

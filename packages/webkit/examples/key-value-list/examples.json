@@ -1,6 +1,6 @@
 {
   "component": "key-value-list",
-  "title": "Components/Primitives/Content/KeyValueList",
+  "title": "Components/Content/KeyValueList",
   "examples": [
     {
       "name": "Default",

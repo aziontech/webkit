@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
+  import Button from '../../action/button/button.vue'
   import Stepper from '../stepper/stepper.vue'
   import StepperStep from '../stepper/stepper-step/stepper-step.vue'
   import type { WizardStepHandle, WizardStepMeta, WizardStepRecord } from './injection-key'
@@ -128,9 +128,7 @@
     }
   })
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-wizard'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'wizard')
 
   const register = (id: symbol, meta: WizardStepMeta): WizardStepHandle => {
     metas.set(id, meta)

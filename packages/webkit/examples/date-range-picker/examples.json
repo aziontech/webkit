@@ -1,6 +1,6 @@
 {
   "component": "date-range-picker",
-  "title": "Components/Primitives/Inputs/DateRangePicker",
+  "title": "Components/Input/DateRangePicker",
   "examples": [
     {
       "name": "Default",

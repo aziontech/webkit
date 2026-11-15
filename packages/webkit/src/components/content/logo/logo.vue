@@ -57,7 +57,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-logo')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'logo')
 
   const file = computed(() => props.src || props.srcLight)
 

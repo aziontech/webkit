@@ -23,9 +23,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ carousel: en.carousel })
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-carousel-next'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'carousel-next')
 </script>
 
 <template>

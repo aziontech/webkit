@@ -24,9 +24,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-accordion-content'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'accordion-content')
 
   const cancels = new WeakMap<globalThis.HTMLElement, () => void>()
 

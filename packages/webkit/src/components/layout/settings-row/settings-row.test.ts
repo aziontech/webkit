@@ -37,12 +37,10 @@ describe('SettingsRow', () => {
       render(inList({ title: 'Name', description: 'A unique name.' })).container
     )
 
-    expect(getByTestId('layout-settings-row')).toBeTruthy()
-    expect(getByTestId('layout-settings-row__title').textContent?.trim()).toBe('Name')
-    expect(getByTestId('layout-settings-row__description').textContent?.trim()).toBe(
-      'A unique name.'
-    )
-    expect(getByTestId('layout-settings-row__control').contains(getByRole('textbox'))).toBe(true)
+    expect(getByTestId('settings-row')).toBeTruthy()
+    expect(getByTestId('settings-row__title').textContent?.trim()).toBe('Name')
+    expect(getByTestId('settings-row__description').textContent?.trim()).toBe('A unique name.')
+    expect(getByTestId('settings-row__control').contains(getByRole('textbox'))).toBe(true)
   })
 
   it('honours a consumer data-testid', () => {
@@ -63,7 +61,7 @@ describe('SettingsRow', () => {
   it('omits the description when none is given', () => {
     const { queryByTestId } = within(render(inList({ title: 'Name' })).container)
 
-    expect(queryByTestId('layout-settings-row__description')).toBeNull()
+    expect(queryByTestId('settings-row__description')).toBeNull()
   })
 
   it.each(['field', 'compact', 'stacked'] as const)(
@@ -71,23 +69,23 @@ describe('SettingsRow', () => {
     (variant) => {
       const { getByTestId } = within(render(inList({ title: 'Name', variant })).container)
 
-      expect(getByTestId('layout-settings-row').getAttribute('data-row-variant')).toBe(variant)
-      expect(getByTestId('layout-settings-row__control').getAttribute('data-variant')).toBe(variant)
+      expect(getByTestId('settings-row').getAttribute('data-row-variant')).toBe(variant)
+      expect(getByTestId('settings-row__control').getAttribute('data-variant')).toBe(variant)
     }
   )
 
   it.each([0, 1, 2] as const)('mirrors depth=%s onto data-depth', (depth) => {
     const { getByTestId } = within(render(inList({ title: 'Name', depth })).container)
 
-    expect(getByTestId('layout-settings-row').getAttribute('data-depth')).toBe(String(depth))
+    expect(getByTestId('settings-row').getAttribute('data-depth')).toBe(String(depth))
   })
 
   it('sets data-stackable only when stackable is on', () => {
     const off = within(render(inList({ title: 'Name' })).container)
-    expect(off.getByTestId('layout-settings-row').hasAttribute('data-stackable')).toBe(false)
+    expect(off.getByTestId('settings-row').hasAttribute('data-stackable')).toBe(false)
 
     const on = within(render(inList({ title: 'Address', stackable: true })).container)
-    expect(on.getByTestId('layout-settings-row').hasAttribute('data-stackable')).toBe(true)
+    expect(on.getByTestId('settings-row').hasAttribute('data-stackable')).toBe(true)
   })
 
   it('renders a Hint beside the title when hint is set', () => {
@@ -96,15 +94,15 @@ describe('SettingsRow', () => {
       render(inList({ title: 'Cache TTL', hint })).container
     )
 
-    const glyph = getByTestId('layout-settings-row__hint__trigger')
-    expect(getByTestId('layout-settings-row__title').contains(glyph)).toBe(true)
+    const glyph = getByTestId('settings-row__hint__trigger')
+    expect(getByTestId('settings-row__title').contains(glyph)).toBe(true)
     expect(getByRole('button', { name: hint })).toBe(glyph)
   })
 
   it('renders no Hint when hint is empty', () => {
     const { queryByTestId, queryByRole } = within(render(inList({ title: 'Name' })).container)
 
-    expect(queryByTestId('layout-settings-row__hint__trigger')).toBeNull()
+    expect(queryByTestId('settings-row__hint__trigger')).toBeNull()
     expect(queryByRole('button')).toBeNull()
   })
 
@@ -113,7 +111,7 @@ describe('SettingsRow', () => {
       'The first sentence says what it does. The second adds detail. The third adds even more detail that a two-line clamp would hide on screen.'
     const { getByTestId } = within(render(inList({ title: 'Name', description })).container)
 
-    expect(getByTestId('layout-settings-row__description').textContent?.trim()).toBe(description)
+    expect(getByTestId('settings-row__description').textContent?.trim()).toBe(description)
   })
 
   it('renders rich title and description slots', () => {
@@ -123,21 +121,21 @@ describe('SettingsRow', () => {
       ).container
     )
 
-    expect(getByTestId('layout-settings-row__title').querySelector('b')).toBeTruthy()
-    expect(getByTestId('layout-settings-row__description').querySelector('a')).toBeTruthy()
+    expect(getByTestId('settings-row__title').querySelector('b')).toBeTruthy()
+    expect(getByTestId('settings-row__description').querySelector('a')).toBeTruthy()
   })
 
   it('renders the examples', () => {
-    expect(within(render(Default).container).getAllByTestId('layout-settings-row')).toHaveLength(3)
+    expect(within(render(Default).container).getAllByTestId('settings-row')).toHaveLength(3)
     expect(within(render(CompactRows).container).getAllByRole('switch')).toHaveLength(2)
     expect(within(render(WithMessage).container).getByText('This field is required.')).toBeTruthy()
     const depths = within(render(Nested).container)
-      .getAllByTestId('layout-settings-row')
+      .getAllByTestId('settings-row')
       .map((el) => el.dataset['depth'])
     expect(depths).toEqual(['0', '0', '1', '1', '1', '2'])
     expect(within(render(Stackable).container).getAllByRole('textbox')).toHaveLength(2)
     expect(
-      within(render(WithHint).container).getAllByTestId('layout-settings-row__hint__trigger')
+      within(render(WithHint).container).getAllByTestId('settings-row__hint__trigger')
     ).toHaveLength(2)
   })
 
@@ -163,8 +161,8 @@ describe('SettingsRow', () => {
       })
 
     const beside = (view: ReturnType<typeof mountIn>) => {
-      const title = view.getByTestId('layout-settings-row__title')
-      const control = view.getByTestId('layout-settings-row__control')
+      const title = view.getByTestId('settings-row__title')
+      const control = view.getByTestId('settings-row__control')
       return control.getBoundingClientRect().top < title.getBoundingClientRect().bottom
     }
 
@@ -178,9 +176,9 @@ describe('SettingsRow', () => {
         slots: { default: '<textarea aria-label="Nameservers" rows="8"></textarea>' },
         container: boxOf(900)
       })
-      const row = view.getByTestId('layout-settings-row').getBoundingClientRect()
-      const title = view.getByTestId('layout-settings-row__title').getBoundingClientRect()
-      const control = view.getByTestId('layout-settings-row__control').getBoundingClientRect()
+      const row = view.getByTestId('settings-row').getBoundingClientRect()
+      const title = view.getByTestId('settings-row__title').getBoundingClientRect()
+      const control = view.getByTestId('settings-row__control').getBoundingClientRect()
 
       expect(Math.abs(title.top - control.top)).toBeLessThan(row.height / 4)
     })

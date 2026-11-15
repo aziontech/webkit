@@ -5,7 +5,7 @@ import { defineComponent, h, ref } from 'vue'
 import ReorderableRows from '../../../../examples/data-table/reorderable-rows.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import DataTable from './data-table.vue'
 
 type Row = { id: string; name: string }
@@ -22,7 +22,7 @@ const handles = (root: Document | HTMLElement = document): HTMLElement[] =>
 const order = (root: Document | HTMLElement = document): string[] =>
   handles(root).map((handle) => handle.getAttribute('data-reorder-handle') ?? '')
 const status = (): string =>
-  document.body.querySelector('[data-testid="data-data-table__reorder-status"]')?.textContent ?? ''
+  document.body.querySelector('[data-testid="data-table__reorder-status"]')?.textContent ?? ''
 
 const mountTable = (extra: Record<string, unknown> = {}) => {
   const data = ref<Row[]>(seed())

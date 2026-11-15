@@ -79,7 +79,7 @@ describe('AppHeader', () => {
   describe('root rendering (grounded in app-header.vue)', () => {
     it('renders a <header> banner carrying the default data-testid', () => {
       const { getByTestId } = render(AppHeader)
-      const root = getByTestId('layout-app-header')
+      const root = getByTestId('app-header')
       expect(root.tagName).toBe('HEADER')
       // Template: role="banner" is hardcoded on the <header>.
       expect(root.getAttribute('role')).toBe('banner')
@@ -95,15 +95,15 @@ describe('AppHeader', () => {
       const { getByRole, getByTestId } = render(AppHeader, {
         props: { ariaLabel: 'Console header' }
       })
-      expect(getByTestId('layout-app-header').getAttribute('aria-label')).toBe('Console header')
-      expect(getByRole('banner', { name: 'Console header' })).toBe(getByTestId('layout-app-header'))
+      expect(getByTestId('app-header').getAttribute('aria-label')).toBe('Console header')
+      expect(getByRole('banner', { name: 'Console header' })).toBe(getByTestId('app-header'))
     })
 
     it('renders default slot content directly inside the banner', () => {
       const { getByTestId } = render(AppHeader, {
         slots: { default: '<span data-testid="slotted">brand</span>' }
       })
-      const root = getByTestId('layout-app-header')
+      const root = getByTestId('app-header')
       expect(root.contains(getByTestId('slotted'))).toBe(true)
     })
   })
@@ -115,7 +115,7 @@ describe('AppHeader', () => {
       expect(AppHeader.End).toBeTruthy()
     })
 
-    it('derives __start / __center / __end from the root testid', () => {
+    it('names Start / Center / End by their own part test ids', () => {
       const { getByTestId } = render({
         components: {
           AppHeader,
@@ -131,24 +131,23 @@ describe('AppHeader', () => {
           </AppHeader>
         `
       })
-      expect(getByTestId('app-chrome__start').textContent).toContain('Menu')
-      expect(getByTestId('app-chrome__center').textContent).toContain('Products')
-      expect(getByTestId('app-chrome__end').textContent).toContain('Account')
+      expect(getByTestId('app-header-start').textContent).toContain('Menu')
+      expect(getByTestId('app-header-center').textContent).toContain('Products')
+      expect(getByTestId('app-header-end').textContent).toContain('Account')
     })
   })
 
-  describe('provide/inject — the root testId flows to every region', () => {
-    it('derives each region testid from the root fallback testId', () => {
+  describe('test ids — the root and every region', () => {
+    it('gives the root and each region its own test id', () => {
       const { getByTestId } = renderComposed()
-      // Root fallback is 'layout-app-header'; each region appends its own suffix.
-      expect(getByTestId('layout-app-header').tagName).toBe('HEADER')
-      expect(getByTestId('layout-app-header__start').tagName).toBe('DIV')
-      expect(getByTestId('layout-app-header__center').tagName).toBe('DIV')
-      expect(getByTestId('layout-app-header__end').tagName).toBe('DIV')
-      expect(getByTestId('layout-app-header__brand').tagName).toBe('DIV')
+      expect(getByTestId('app-header').tagName).toBe('HEADER')
+      expect(getByTestId('app-header-start').tagName).toBe('DIV')
+      expect(getByTestId('app-header-center').tagName).toBe('DIV')
+      expect(getByTestId('app-header-end').tagName).toBe('DIV')
+      expect(getByTestId('app-header-brand').tagName).toBe('DIV')
     })
 
-    it('overriding the root data-testid re-keys every injected region (proves shared state)', () => {
+    it('overriding the root data-testid renames only the root', () => {
       const overriddenTemplate = `
         <AppHeader data-testid="app-chrome">
           <AppHeaderStart>
@@ -163,25 +162,19 @@ describe('AppHeader', () => {
         template: overriddenTemplate
       })
 
-      // Root uses the overridden value; each region derives from the injected ctx.testId.
       expect(getByTestId('app-chrome').tagName).toBe('HEADER')
-      expect(getByTestId('app-chrome__start')).toBeTruthy()
-      expect(getByTestId('app-chrome__brand')).toBeTruthy()
-      expect(getByTestId('app-chrome__center')).toBeTruthy()
-      expect(getByTestId('app-chrome__end')).toBeTruthy()
-
-      // The fallback keys no longer exist — the injected value drove every region.
-      expect(queryByTestId('layout-app-header')).toBeNull()
-      expect(queryByTestId('layout-app-header__start')).toBeNull()
-      expect(queryByTestId('layout-app-header__center')).toBeNull()
+      expect(queryByTestId('app-header')).toBeNull()
+      expect(getByTestId('app-header-start')).toBeTruthy()
+      expect(getByTestId('app-header-brand')).toBeTruthy()
+      expect(getByTestId('app-header-center')).toBeTruthy()
+      expect(getByTestId('app-header-end')).toBeTruthy()
     })
 
-    it('a region rendered without a root falls back to the literal default testId', () => {
-      // No provider => inject() is undefined => ctx?.testId ?? 'layout-app-header'.
+    it('a region rendered without a root keeps its own test id', () => {
       const { getByTestId } = render(AppHeader.End, {
         slots: { default: '<button type="button">solo</button>' }
       })
-      expect(getByTestId('layout-app-header__end').tagName).toBe('DIV')
+      expect(getByTestId('app-header-end').tagName).toBe('DIV')
     })
 
     it('lets a region override its own testid independent of the injected context', () => {
@@ -191,7 +184,7 @@ describe('AppHeader', () => {
       })
       // The sub-component prefers its own attrs['data-testid'] over the derived value.
       expect(getByTestId('my-left').tagName).toBe('DIV')
-      expect(queryByTestId('layout-app-header__start')).toBeNull()
+      expect(queryByTestId('app-header-start')).toBeNull()
     })
   })
 
@@ -199,10 +192,10 @@ describe('AppHeader', () => {
     it('places composed children into their matching regions', () => {
       const { getByTestId, getByText } = renderComposed()
 
-      const left = getByTestId('layout-app-header__start')
-      const brand = getByTestId('layout-app-header__brand')
-      const middle = getByTestId('layout-app-header__center')
-      const right = getByTestId('layout-app-header__end')
+      const left = getByTestId('app-header-start')
+      const brand = getByTestId('app-header-brand')
+      const middle = getByTestId('app-header-center')
+      const right = getByTestId('app-header-end')
 
       // Brand is nested inside Left; the products link inside Middle; the button inside Right.
       expect(left.contains(brand)).toBe(true)
@@ -217,12 +210,12 @@ describe('AppHeader', () => {
       // withDefaults: variant: 'content' — a bar with no variant reads the page boundary, so it
       // cannot open on a different vertical from the page under it. The inset geometry
       // itself belongs to the visual gate; this env renders without Tailwind.
-      expect(getByTestId('layout-app-header').getAttribute('data-variant')).toBe('content')
+      expect(getByTestId('app-header').getAttribute('data-variant')).toBe('content')
     })
 
     it('marks the content placement on the root', () => {
       const { getByTestId } = render(AppHeader, { props: { variant: 'content' } })
-      expect(getByTestId('layout-app-header').getAttribute('data-variant')).toBe('content')
+      expect(getByTestId('app-header').getAttribute('data-variant')).toBe('content')
     })
 
     it('holds the regions directly — the placement changes the inset, not the anatomy', () => {
@@ -231,9 +224,9 @@ describe('AppHeader', () => {
         template:
           '<AppHeader variant="content"><AppHeaderStart>L</AppHeaderStart><AppHeaderEnd>R</AppHeaderEnd></AppHeader>'
       })
-      const root = getByTestId('layout-app-header')
-      expect(getByTestId('layout-app-header__start').parentElement).toBe(root)
-      expect(getByTestId('layout-app-header__end').parentElement).toBe(root)
+      const root = getByTestId('app-header')
+      expect(getByTestId('app-header-start').parentElement).toBe(root)
+      expect(getByTestId('app-header-end').parentElement).toBe(root)
     })
 
     it('keeps the banner landmark in the content placement', () => {
@@ -248,7 +241,7 @@ describe('AppHeader', () => {
       // The site inset (capped + centred at --layout-measure-site) is selected by this
       // attribute alone; the geometry itself belongs to the visual gate, since this
       // env renders without Tailwind.
-      expect(getByTestId('layout-app-header').getAttribute('data-variant')).toBe('site')
+      expect(getByTestId('app-header').getAttribute('data-variant')).toBe('site')
     })
 
     it('holds the regions directly in the site placement too', () => {
@@ -257,9 +250,9 @@ describe('AppHeader', () => {
         template:
           '<AppHeader variant="site"><AppHeaderBrand>Azion</AppHeaderBrand><AppHeaderEnd>R</AppHeaderEnd></AppHeader>'
       })
-      const root = getByTestId('layout-app-header')
-      expect(getByTestId('layout-app-header__brand').parentElement).toBe(root)
-      expect(getByTestId('layout-app-header__end').parentElement).toBe(root)
+      const root = getByTestId('app-header')
+      expect(getByTestId('app-header-brand').parentElement).toBe(root)
+      expect(getByTestId('app-header-end').parentElement).toBe(root)
     })
 
     it('keeps the banner landmark in the site placement', () => {
@@ -318,10 +311,10 @@ describe('AppHeader', () => {
       const { getByTestId, getByRole } = render(DefaultHeader)
       // The story composes Start>Brand (Azion logo), plus empty Center and End.
       expect(getByRole('banner', { name: 'Global header' })).toBeTruthy()
-      expect(getByTestId('layout-app-header__start')).toBeTruthy()
-      expect(getByTestId('layout-app-header__brand')).toBeTruthy()
-      expect(getByTestId('layout-app-header__center')).toBeTruthy()
-      expect(getByTestId('layout-app-header__end')).toBeTruthy()
+      expect(getByTestId('app-header-start')).toBeTruthy()
+      expect(getByTestId('app-header-brand')).toBeTruthy()
+      expect(getByTestId('app-header-center')).toBeTruthy()
+      expect(getByTestId('app-header-end')).toBeTruthy()
     })
 
     it('Default story has no a11y violations', async () => {
@@ -331,11 +324,11 @@ describe('AppHeader', () => {
 
     it('Content zone story renders the full-bleed content placement', () => {
       const { getByTestId } = render(ContentZone)
-      const root = getByTestId('layout-app-header')
+      const root = getByTestId('app-header')
       // data-variant is what carries the boundary inset instead of the shell step.
       expect(root.getAttribute('data-variant')).toBe('content')
-      expect(root.contains(getByTestId('layout-app-header__start'))).toBe(true)
-      expect(root.contains(getByTestId('layout-app-header__end'))).toBe(true)
+      expect(root.contains(getByTestId('app-header-start'))).toBe(true)
+      expect(root.contains(getByTestId('app-header-end'))).toBe(true)
     })
 
     it('Content zone story has no a11y violations', async () => {
@@ -345,11 +338,11 @@ describe('AppHeader', () => {
 
     it('Site placement story renders the capped, centred regions on the site column', () => {
       const { getByTestId } = render(SitePlacement)
-      const root = getByTestId('layout-app-header')
+      const root = getByTestId('app-header')
       expect(root.getAttribute('data-variant')).toBe('site')
-      expect(root.contains(getByTestId('layout-app-header__brand'))).toBe(true)
-      expect(root.contains(getByTestId('layout-app-header__center'))).toBe(true)
-      expect(root.contains(getByTestId('layout-app-header__end'))).toBe(true)
+      expect(root.contains(getByTestId('app-header-brand'))).toBe(true)
+      expect(root.contains(getByTestId('app-header-center'))).toBe(true)
+      expect(root.contains(getByTestId('app-header-end'))).toBe(true)
     })
 
     it('Site placement story has no a11y violations', async () => {

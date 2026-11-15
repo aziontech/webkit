@@ -47,9 +47,7 @@
   const RADIUS = 4
   const LABEL_OFFSET = 6
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__bar`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-bar')
   const vertical = computed(() => ctx.orientation.value === 'vertical')
   const histogram = computed(() => props.type === 'histogram')
 

@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
-
-  import { TableInjectionKey } from '../injection-key'
+  import { computed, useAttrs } from 'vue'
 
   defineOptions({
     name: 'TableToolbar',
@@ -13,12 +11,9 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__toolbar-actions` : 'data-table__toolbar-actions')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-toolbar'
   )
 </script>
 

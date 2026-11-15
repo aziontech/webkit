@@ -47,7 +47,7 @@ const mount = (props: Record<string, unknown> = {}, children = parts) =>
       ])
   })
 
-const plotOf = (view: ReturnType<typeof render>) => view.getByTestId('chart-chart__plot')
+const plotOf = (view: ReturnType<typeof render>) => view.getByTestId('chart__plot')
 
 const measured = (view: ReturnType<typeof render>) =>
   vi.waitFor(() => {
@@ -70,7 +70,7 @@ describe('Chart', () => {
 
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const fallback = mount()
-    expect(fallback.getByTestId('chart-chart').tagName).toBe('FIGURE')
+    expect(fallback.getByTestId('chart').tagName).toBe('FIGURE')
     fallback.unmount()
     expect(mount({ 'data-testid': 'threats' }).getByTestId('threats')).toBeTruthy()
   })
@@ -78,13 +78,9 @@ describe('Chart', () => {
   it('draws one path per series in its mark and paints each with its slot token', async () => {
     const view = mount()
     await measured(view)
-    const line = view.getByTestId('chart-chart__line').querySelector('[data-series="blocked"] path')
-    const area = view
-      .getByTestId('chart-chart__area')
-      .querySelectorAll('[data-series="allowed"] path')
-    const bars = view
-      .getByTestId('chart-chart__bar')
-      .querySelectorAll('[data-series="threat"] path')
+    const line = view.getByTestId('chart-line').querySelector('[data-series="blocked"] path')
+    const area = view.getByTestId('chart-area').querySelectorAll('[data-series="allowed"] path')
+    const bars = view.getByTestId('chart-bar').querySelectorAll('[data-series="threat"] path')
     expect(line?.getAttribute('stroke')).toBe('var(--chart-series-2)')
     expect(area).toHaveLength(2)
     expect(area[0]?.getAttribute('fill')).toBe('var(--chart-series-1)')
@@ -100,8 +96,8 @@ describe('Chart', () => {
     }))
     const view = mount({ series: many }, () => [h(ChartLine), h(ChartLegend)])
     await nextTick()
-    const strokes = [...view.getByTestId('chart-chart__line').querySelectorAll('path')].map(
-      (path) => path.getAttribute('stroke')
+    const strokes = [...view.getByTestId('chart-line').querySelectorAll('path')].map((path) =>
+      path.getAttribute('stroke')
     )
     expect(strokes).toEqual([
       'var(--chart-series-1)',
@@ -112,7 +108,7 @@ describe('Chart', () => {
       'var(--chart-series-6)',
       'var(--chart-series-other)'
     ])
-    const items = view.getAllByTestId('chart-chart__legend__item')
+    const items = view.getAllByTestId('chart-legend__item')
     expect(items).toHaveLength(7)
     expect(items[6]?.textContent).toContain('Other')
   })
@@ -123,9 +119,9 @@ describe('Chart', () => {
       () => [h(ChartLine)]
     )
     await nextTick()
-    expect(
-      view.getByTestId('chart-chart__line').querySelector('path')?.getAttribute('stroke')
-    ).toBe('var(--chart-status-danger)')
+    expect(view.getByTestId('chart-line').querySelector('path')?.getAttribute('stroke')).toBe(
+      'var(--chart-status-danger)'
+    )
   })
 
   it('honours a severity color for a series that counts one severity level', async () => {
@@ -138,29 +134,27 @@ describe('Chart', () => {
       () => [h(ChartLine)]
     )
     await nextTick()
-    expect(
-      view.getByTestId('chart-chart__line').querySelector('path')?.getAttribute('stroke')
-    ).toBe('var(--severity-critical)')
+    expect(view.getByTestId('chart-line').querySelector('path')?.getAttribute('stroke')).toBe(
+      'var(--severity-critical)'
+    )
   })
 
   it('renders no legend for a single series', () => {
     const view = mount({ series: [threats[0]] }, () => [h(ChartLine), h(ChartLegend)])
-    expect(view.queryByTestId('chart-chart__legend')).toBeNull()
+    expect(view.queryByTestId('chart-legend')).toBeNull()
   })
 
   it('toggles a series from the legend and keeps the others painted the same', async () => {
     const view = mount()
     await nextTick()
-    const [allowed] = view.getAllByTestId('chart-chart__legend__item')
+    const [allowed] = view.getAllByTestId('chart-legend__item')
     expect(allowed?.getAttribute('aria-pressed')).toBe('true')
     await fireEvent.click(allowed as Element)
     expect(allowed?.getAttribute('aria-pressed')).toBe('false')
-    expect(
-      view.getByTestId('chart-chart__area').querySelector('[data-series="allowed"]')
-    ).toBeNull()
-    expect(
-      view.getByTestId('chart-chart__line').querySelector('path')?.getAttribute('stroke')
-    ).toBe('var(--chart-series-2)')
+    expect(view.getByTestId('chart-area').querySelector('[data-series="allowed"]')).toBeNull()
+    expect(view.getByTestId('chart-line').querySelector('path')?.getAttribute('stroke')).toBe(
+      'var(--chart-series-2)'
+    )
     const toggles = view.emitted('legend-toggle') as unknown[][] | undefined
     expect(toggles).toBeUndefined()
   })
@@ -168,12 +162,12 @@ describe('Chart', () => {
   it('dims the other legend keys with their marks while one entry is emphasized', async () => {
     const view = mount()
     await nextTick()
-    const items = view.getAllByTestId('chart-chart__legend__item')
+    const items = view.getAllByTestId('chart-legend__item')
     const keys = () => items.map((item) => item.querySelector('[data-dimmed]') !== null)
     expect(keys()).toEqual([false, false, false])
     await fireEvent.pointerEnter(items[0] as Element)
     expect(keys()).toEqual([false, true, true])
-    expect(view.getByTestId('chart-chart__line').querySelector('[data-dimmed]')).not.toBeNull()
+    expect(view.getByTestId('chart-line').querySelector('[data-dimmed]')).not.toBeNull()
     await fireEvent.pointerLeave(items[0] as Element)
     expect(keys()).toEqual([false, false, false])
   })
@@ -198,7 +192,7 @@ describe('Chart', () => {
           { default: () => [h(ChartLine), h(ChartLegend)] }
         )
     })
-    const items = view.getAllByTestId('chart-chart__legend__item')
+    const items = view.getAllByTestId('chart-legend__item')
     await fireEvent.click(items[1] as Element)
     expect(hidden.value).toEqual(['blocked'])
     expect(toggles).toHaveLength(1)
@@ -220,8 +214,8 @@ describe('Chart', () => {
     await fireEvent.keyDown(plot, { key: 'End' })
     await fireEvent.keyDown(plot, { key: 'Home' })
     expect(indexes).toEqual([0, 1, 3, 0])
-    expect(view.getByTestId('chart-chart__live').textContent).toContain('14:00')
-    expect(view.getByTestId('chart-chart__live').textContent).toContain('WAF requests allowed 1.2K')
+    expect(view.getByTestId('chart__live').textContent).toContain('14:00')
+    expect(view.getByTestId('chart__live').textContent).toContain('WAF requests allowed 1.2K')
     await fireEvent.keyDown(plot, { key: 'Enter' })
     expect(clicks).toHaveLength(1)
     expect(clicks[0]?.[0]).toBeInstanceOf(KeyboardEvent)
@@ -289,8 +283,8 @@ describe('Chart', () => {
   it('shows the tooltip inside the figure with every visible series, name before value', async () => {
     const view = mount({ activeIndex: 1 })
     await nextTick()
-    const tooltip = view.getByTestId('chart-chart__tooltip')
-    expect(view.getByTestId('chart-chart').contains(tooltip)).toBe(true)
+    const tooltip = view.getByTestId('chart-tooltip')
+    expect(view.getByTestId('chart').contains(tooltip)).toBe(true)
     const text = tooltip.textContent ?? ''
     expect(text).toContain('14:05')
     expect(text).toContain('1.4K')
@@ -304,8 +298,8 @@ describe('Chart', () => {
       h(ChartTooltip, { total: true }, { footer: () => 'Click to filter to this bucket.' })
     ])
     await nextTick()
-    expect(view.getByTestId('chart-chart__tooltip__total').textContent).toContain('1.6K')
-    expect(view.getByTestId('chart-chart__tooltip__footer').textContent).toContain(
+    expect(view.getByTestId('chart-tooltip__total').textContent).toContain('1.6K')
+    expect(view.getByTestId('chart-tooltip__footer').textContent).toContain(
       'Click to filter to this bucket.'
     )
   })
@@ -316,33 +310,31 @@ describe('Chart', () => {
       h(ChartTooltip, { total: true })
     ])
     await nextTick()
-    expect(view.getByTestId('chart-chart__tooltip__total').textContent).toContain('70')
+    expect(view.getByTestId('chart-tooltip__total').textContent).toContain('70')
   })
 
   it('renders no Total row or footer by default', async () => {
     const view = mount({ activeIndex: 1 })
     await nextTick()
-    expect(view.queryByTestId('chart-chart__tooltip__total')).toBeNull()
-    expect(view.queryByTestId('chart-chart__tooltip__footer')).toBeNull()
+    expect(view.queryByTestId('chart-tooltip__total')).toBeNull()
+    expect(view.queryByTestId('chart-tooltip__footer')).toBeNull()
   })
 
   it('renders exactly one state at a time', () => {
     const loading = mount({ loading: true })
-    expect(loading.getByTestId('chart-chart__skeleton')).toBeTruthy()
-    expect(loading.queryByTestId('chart-chart__plot')).toBeNull()
-    expect(loading.getByTestId('chart-chart').getAttribute('aria-busy')).toBe('true')
+    expect(loading.getByTestId('chart__loading')).toBeTruthy()
+    expect(loading.queryByTestId('chart__plot')).toBeNull()
+    expect(loading.getByTestId('chart').getAttribute('aria-busy')).toBe('true')
     loading.unmount()
 
     const failed = mount({ error: 'The chart could not load.' })
-    expect(failed.getByTestId('chart-chart__error').textContent).toContain(
-      'The chart could not load.'
-    )
-    expect(failed.queryByTestId('chart-chart__plot')).toBeNull()
+    expect(failed.getByTestId('chart__error').textContent).toContain('The chart could not load.')
+    expect(failed.queryByTestId('chart__plot')).toBeNull()
     failed.unmount()
 
     const empty = mount({ series: [{ id: 'a', name: 'A', values: [null, null] }] })
-    expect(empty.getByTestId('chart-chart__empty').textContent).toContain('No data available')
-    expect(empty.getByTestId('chart-chart').hasAttribute('data-empty')).toBe(true)
+    expect(empty.getByTestId('chart__empty').textContent).toContain('No data available')
+    expect(empty.getByTestId('chart').hasAttribute('data-empty')).toBe(true)
   })
 
   it('thins axis labels to the width it has, so neighbours never overlap', async () => {
@@ -360,7 +352,9 @@ describe('Chart', () => {
               { default: () => [h(ChartAxis, { type: 'x', ticks: 24 }), h(ChartBar)] }
             )
           ])
-      }).container.querySelector(`[data-testid="chart-chart__axis-${axis}"]`) as globalThis.Element
+      }).container.querySelector(
+        `[data-testid="chart-axis"][data-type="${axis}"]`
+      ) as globalThis.Element
 
     const gapsClear = (axis: globalThis.Element) => {
       const texts = [...axis.querySelectorAll('text')]
@@ -404,41 +398,41 @@ describe('Chart', () => {
       },
       slots: { 'empty-actions': () => h('button', { type: 'button' }, 'Clear filters') }
     })
-    expect(view.getByTestId('chart-chart__empty__title').textContent).toContain(
+    expect(view.getByTestId('chart__empty__title').textContent).toContain(
       'No requests match these filters'
     )
-    expect(view.getByTestId('chart-chart__empty__description').textContent).toContain(
+    expect(view.getByTestId('chart__empty__description').textContent).toContain(
       'Choose another host or widen the time range.'
     )
-    expect(view.getByTestId('chart-chart__empty__icon')).toBeTruthy()
-    expect(
-      view.getByTestId('chart-chart__empty__actions').querySelector('button')?.textContent
-    ).toBe('Clear filters')
+    expect(view.getByTestId('chart__empty__icon')).toBeTruthy()
+    expect(view.getByTestId('chart__empty__actions').querySelector('button')?.textContent).toBe(
+      'Clear filters'
+    )
     await expectNoA11yViolations(view.container)
   })
 
   it('renders no actions region when the consumer passes none', () => {
     const view = mount({ series: [{ id: 'a', name: 'A', values: [null, null] }] })
-    expect(view.queryByTestId('chart-chart__empty__description')).toBeNull()
-    expect(view.queryByTestId('chart-chart__empty__actions')).toBeNull()
+    expect(view.queryByTestId('chart__empty__description')).toBeNull()
+    expect(view.queryByTestId('chart__empty__actions')).toBeNull()
   })
 
   it('holds the previous render while refetching', () => {
     const view = mount({ refetching: true })
-    expect(view.getByTestId('chart-chart').hasAttribute('data-refetching')).toBe(true)
-    expect(view.getByTestId('chart-chart__plot')).toBeTruthy()
+    expect(view.getByTestId('chart').hasAttribute('data-refetching')).toBe(true)
+    expect(view.getByTestId('chart__plot')).toBeTruthy()
   })
 
   it('keeps a table twin of every value and shows it in table view', () => {
     const chart = mount()
-    const twin = chart.getByTestId('chart-chart__twin')
+    const twin = chart.getByTestId('chart__twin')
     expect(twin.querySelectorAll('tbody tr')).toHaveLength(labels.length)
     expect(twin.querySelectorAll('thead th')).toHaveLength(threats.length + 1)
     chart.unmount()
 
     const table = mount({ tableView: true })
-    expect(table.getByTestId('chart-chart__table').querySelectorAll('tbody tr')).toHaveLength(4)
-    expect(table.queryByTestId('chart-chart__plot')).toBeNull()
+    expect(table.getByTestId('chart__table').querySelectorAll('tbody tr')).toHaveLength(4)
+    expect(table.queryByTestId('chart__plot')).toBeNull()
   })
 
   it('samples the hidden twin to 1,000 rows above 1,000 categories and keeps both ends', () => {
@@ -447,7 +441,7 @@ describe('Chart', () => {
     const chart = mount({ labels: many, series: [{ id: 'a', name: 'A', values }] }, () => [
       h(ChartLine)
     ])
-    const rows = chart.getByTestId('chart-chart__twin').querySelectorAll('tbody tr')
+    const rows = chart.getByTestId('chart__twin').querySelectorAll('tbody tr')
     expect(rows).toHaveLength(1000)
     expect(rows[0]?.querySelector('th')?.textContent).toBe('t0')
     expect(rows[999]?.querySelector('th')?.textContent).toBe('t4999')
@@ -459,8 +453,8 @@ describe('Chart', () => {
       h(ChartBar, { ids: ['allowed'], showLabels: true })
     ])
     await measured(view)
-    expect(view.getByTestId('chart-chart').getAttribute('data-orientation')).toBe('horizontal')
-    const bar = view.getByTestId('chart-chart__bar')
+    expect(view.getByTestId('chart').getAttribute('data-orientation')).toBe('horizontal')
+    const bar = view.getByTestId('chart-bar')
     expect(bar.querySelectorAll('path')).toHaveLength(4)
     expect(bar.querySelectorAll('text')).toHaveLength(4)
   })
@@ -488,15 +482,17 @@ describe('Chart', () => {
       })
     const segments = async (view: ReturnType<typeof render>) => {
       await measured(view)
-      const bar = view.getByTestId('chart-chart__bar')
+      const bar = view.getByTestId('chart-bar')
       const paths = [...bar.querySelectorAll('path')] as globalThis.SVGPathElement[]
       expect(paths).toHaveLength(4)
       return { bar, boxes: paths.map((path) => path.getBBox()) }
     }
     const ticks = (view: ReturnType<typeof render>) =>
-      [...view.getByTestId('chart-chart__axis-y').querySelectorAll('text')].map((text) =>
-        text.textContent?.trim()
-      )
+      [
+        ...view.container
+          .querySelector('[data-testid="chart-axis"][data-type="y"]')!
+          .querySelectorAll('text')
+      ].map((text) => text.textContent?.trim())
 
     const solid = at('histogram')
     const histogram = await segments(solid)
@@ -529,7 +525,7 @@ describe('Chart', () => {
   describe('table twin on devices', () => {
     it('clips the twin inside a visually hidden box so it adds no horizontal overflow', () => {
       const view = mount()
-      const twin = view.getByTestId('chart-chart__twin')
+      const twin = view.getByTestId('chart__twin')
 
       expect(twin.parentElement?.className).toBe('sr-only')
     })
@@ -538,13 +534,13 @@ describe('Chart', () => {
   describe('ChartLegend total', () => {
     it('shows the totals with total, and not with the removed totals', () => {
       const next = mount({}, () => [h(ChartLine), h(ChartLegend, { total: true })])
-      const withTotal = next.getAllByTestId('chart-chart__legend__item')[0]!.textContent
+      const withTotal = next.getAllByTestId('chart-legend__item')[0]!.textContent
       next.unmount()
       const legacy = mount({}, () => [h(ChartLine), h(ChartLegend, { totals: true })])
-      expect(legacy.getAllByTestId('chart-chart__legend__item')[0]!.textContent).not.toBe(withTotal)
+      expect(legacy.getAllByTestId('chart-legend__item')[0]!.textContent).not.toBe(withTotal)
       legacy.unmount()
       const none = mount({}, () => [h(ChartLine), h(ChartLegend)])
-      expect(none.getAllByTestId('chart-chart__legend__item')[0]!.textContent).not.toBe(withTotal)
+      expect(none.getAllByTestId('chart-legend__item')[0]!.textContent).not.toBe(withTotal)
     })
   })
 

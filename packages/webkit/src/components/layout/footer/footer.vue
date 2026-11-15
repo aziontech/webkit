@@ -49,7 +49,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ footer: en.footer })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-footer')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'footer')
 
   const hasStatusBar = () => Boolean(slots.status || slots.language)
 

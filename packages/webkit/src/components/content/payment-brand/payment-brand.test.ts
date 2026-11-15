@@ -6,13 +6,13 @@ import Brands from '../../../../examples/payment-brand/brands.vue'
 import Default from '../../../../examples/payment-brand/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import PaymentBrand from './payment-brand.vue'
 
 afterEach(() => cleanup())
 
 const root = (): HTMLElement =>
-  document.body.querySelector<HTMLElement>('[data-testid="content-payment-brand"]')!
+  document.body.querySelector<HTMLElement>('[data-testid="payment-brand"]')!
 
 describe('PaymentBrand', () => {
   it('names the plate after the brand', () => {

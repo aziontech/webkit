@@ -57,12 +57,12 @@ afterEach(() => {
 describe('AppLayout', () => {
   it('renders every region and the fallback data-testid', () => {
     const { getByTestId, getByText } = render(layout())
-    const root = getByTestId('layout-app-layout')
+    const root = getByTestId('app-layout')
     expect(root.dataset.navigation).toBe('open')
     expect(root.dataset.tools).toBe('closed')
     expect(root.dataset.splitPanel).toBe('closed')
-    expect(getByTestId('layout-app-layout__notifications').textContent).toContain('Saved')
-    expect(getByTestId('layout-app-layout__breadcrumbs').textContent).toContain('Resources')
+    expect(getByTestId('app-layout__notifications').textContent).toContain('Saved')
+    expect(getByTestId('app-layout__breadcrumbs').textContent).toContain('Resources')
     expect(getByText('page content')).toBeTruthy()
     expect(getByText('nav links').getAttribute('data-drawer')).toBe('false')
   })
@@ -74,9 +74,9 @@ describe('AppLayout', () => {
         default: () => h('main', { class: 'flex min-h-full flex-col' }, 'full-height body')
       })
     )
-    const content = getByTestId('layout-app-layout__content')
-    const breadcrumbs = getByTestId('layout-app-layout__breadcrumbs')
-    const body = getByTestId('layout-app-layout__body')
+    const content = getByTestId('app-layout__content')
+    const breadcrumbs = getByTestId('app-layout__breadcrumbs')
+    const body = getByTestId('app-layout__body')
     expect(Array.from(content.children)).toEqual([breadcrumbs, body])
     expect(body.children).toHaveLength(1)
     expect(body.firstElementChild?.tagName).toBe('MAIN')
@@ -87,9 +87,9 @@ describe('AppLayout', () => {
     const { getByTestId, queryByTestId } = render(
       h(AppLayout, null, { default: () => h('main', 'page') })
     )
-    expect(queryByTestId('layout-app-layout__breadcrumbs')).toBeNull()
-    expect(Array.from(getByTestId('layout-app-layout__content').children)).toEqual([
-      getByTestId('layout-app-layout__body')
+    expect(queryByTestId('app-layout__breadcrumbs')).toBeNull()
+    expect(Array.from(getByTestId('app-layout__content').children)).toEqual([
+      getByTestId('app-layout__body')
     ])
   })
 
@@ -104,7 +104,7 @@ describe('AppLayout', () => {
       layout({ 'onUpdate:navigationOpen': (value: boolean) => updates.push(value) })
     )
     await fireEvent.click(getByText('Toggle navigation'))
-    expect(getByTestId('layout-app-layout').dataset.navigation).toBe('closed')
+    expect(getByTestId('app-layout').dataset.navigation).toBe('closed')
     expect(queryByText('nav links')).toBeNull()
     expect(updates).toEqual([false])
   })
@@ -123,12 +123,12 @@ describe('AppLayout', () => {
     })
     await fireEvent.click(getByText('Toggle navigation'))
     expect(navigationOpen.value).toBe(false)
-    expect(getByTestId('layout-app-layout').dataset.navigation).toBe('closed')
+    expect(getByTestId('app-layout').dataset.navigation).toBe('closed')
     await fireEvent.click(getByText('Help'))
     expect(toolsOpen.value).toBe(true)
     navigationOpen.value = true
     await nextTick()
-    expect(getByTestId('layout-app-layout').dataset.navigation).not.toBe('closed')
+    expect(getByTestId('app-layout').dataset.navigation).not.toBe('closed')
   })
 
   it('opens the tools region from the header and closes it from its own button', async () => {
@@ -136,7 +136,7 @@ describe('AppLayout', () => {
     await fireEvent.click(getByRole('button', { name: 'Help' }))
     const region = getByRole('region', { name: 'Help' })
     expect(region.textContent).toContain('help body')
-    await fireEvent.click(getByTestId('layout-app-layout__tools-close'))
+    await fireEvent.click(getByTestId('app-layout__tools-close'))
     expect(queryByRole('region', { name: 'Help' })).toBeNull()
   })
 
@@ -159,12 +159,12 @@ describe('AppLayout', () => {
     expect(separator.getAttribute('aria-valuenow')).toBe('192')
     await fireEvent.keyDown(separator, { key: 'Home' })
     expect(separator.getAttribute('aria-valuenow')).toBe('160')
-    expect(getByTestId('layout-app-layout__split-panel').style.height).toBe('160px')
+    expect(getByTestId('app-layout__split-panel').style.height).toBe('160px')
   })
 
   it('moves the split panel to the side and back', async () => {
     const { getByTestId, getByRole } = render(layout({ splitPanelOpen: true }))
-    const root = getByTestId('layout-app-layout')
+    const root = getByTestId('app-layout')
     expect(root.dataset.splitPanelPosition).toBe('bottom')
     await fireEvent.click(getByRole('button', { name: 'Show beside the content' }))
     expect(root.dataset.splitPanelPosition).toBe('side')
@@ -186,7 +186,7 @@ describe('AppLayout', () => {
   it('goes compact below its own width and renders navigation in a drawer', async () => {
     const { getByTestId, getByText, queryByText, findByRole } = render(layout({}, 500))
     await waitFor(() => expect(getByTestId('compact').textContent).toBe('true'))
-    const root = getByTestId('layout-app-layout')
+    const root = getByTestId('app-layout')
     expect(root.dataset.compact).toBeDefined()
     expect(queryByText('nav links')).toBeNull()
     await fireEvent.click(getByText('Open navigation'))
@@ -209,7 +209,7 @@ describe('AppLayout', () => {
       layout({ splitPanelOpen: true, splitPanelPosition: 'side' }, 500)
     )
     await waitFor(() => expect(getByTestId('compact').textContent).toBe('true'))
-    expect(getByTestId('layout-app-layout').dataset.splitPanelPosition).toBe('bottom')
+    expect(getByTestId('app-layout').dataset.splitPanelPosition).toBe('bottom')
     expect(queryByRole('button', { name: 'Show beside the content' })).toBeNull()
   })
 

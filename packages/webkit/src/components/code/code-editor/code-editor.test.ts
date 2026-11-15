@@ -11,9 +11,9 @@ import WithToolbar from '../../../../examples/code-editor/with-toolbar.vue'
 import { en, provideLocale } from '../../../composables/use-locale'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import Field from '../../inputs/field/field.vue'
-import FieldDescription from '../../inputs/field/field-description/field-description.vue'
-import FieldLabel from '../../inputs/field/field-label/field-label.vue'
+import Field from '../../input/field/field.vue'
+import FieldDescription from '../../input/field/field-description/field-description.vue'
+import FieldLabel from '../../input/field/field-label/field-label.vue'
 import CodeEditor from './code-editor.vue'
 import {
   type CodeEditorMonaco,
@@ -103,7 +103,7 @@ const fakeMonaco = () => {
 }
 
 const textarea = (container: Element) =>
-  container.querySelector<HTMLTextAreaElement>('[data-testid="code-code-editor__input"]')!
+  container.querySelector<HTMLTextAreaElement>('[data-testid="code-editor__input"]')!
 
 const TOKENS = `:root{--bg-surface:#ffffff;--text-default:#171717;--border-default:#e5e5e5}:root[data-theme=dark]{--bg-surface:#0a0a0a;--text-default:#fafafa}`
 const withTokens = () => {
@@ -122,9 +122,9 @@ describe('CodeEditor', () => {
     const view = render(CodeEditor, {
       props: { modelValue: 'one\ntwo\nthree', ariaLabel: 'Script' }
     })
-    const root = view.getByTestId('code-code-editor')
+    const root = view.getByTestId('code-editor')
     expect(root.getAttribute('data-mode')).toBe('plain')
-    expect(view.getByTestId('code-code-editor__gutter').querySelectorAll('li')).toHaveLength(3)
+    expect(view.getByTestId('code-editor__gutter').querySelectorAll('li')).toHaveLength(3)
     const input = view.getByRole('textbox', { name: 'Script' })
     await fireEvent.update(input, 'one\ntwo')
     expect(view.emitted()['update:modelValue']?.at(-1)).toEqual(['one\ntwo'])
@@ -182,7 +182,7 @@ describe('CodeEditor', () => {
     expect(input.disabled).toBe(true)
     await userEvent.type(input, 'abc')
     expect(disabled.emitted()['update:modelValue']).toBeUndefined()
-    expect(disabled.getByTestId('code-code-editor').hasAttribute('data-disabled')).toBe(true)
+    expect(disabled.getByTestId('code-editor').hasAttribute('data-disabled')).toBe(true)
   })
 
   it('takes the consumer data-testid over the fallback', () => {
@@ -191,7 +191,7 @@ describe('CodeEditor', () => {
       attrs: { 'data-testid': 'rules-editor' }
     })
     expect(view.getByTestId('rules-editor')).toBeTruthy()
-    expect(view.queryByTestId('code-code-editor')).toBeNull()
+    expect(view.queryByTestId('code-editor')).toBeNull()
     expect(view.getByTestId('rules-editor__input')).toBeTruthy()
   })
 
@@ -206,11 +206,11 @@ describe('CodeEditor', () => {
         ]
       }
     })
-    const lines = view.getByTestId('code-code-editor__gutter').querySelectorAll('li')
+    const lines = view.getByTestId('code-editor__gutter').querySelectorAll('li')
     expect(lines[1]?.getAttribute('data-severity')).toBe('warning')
     expect(lines[2]?.getAttribute('data-severity')).toBe('error')
     expect(view.getByRole('status').textContent?.trim()).toBe('2 problems')
-    const problems = view.getAllByTestId('code-code-editor__problem')
+    const problems = view.getAllByTestId('code-editor__problem')
     expect(problems.map((p) => p.textContent?.replace(/\s+/g, ' ').trim())).toEqual([
       'Warning: Line 2 Careful',
       'Error: Line 3 Broken'
@@ -236,18 +236,18 @@ describe('CodeEditor', () => {
     const view = render(CodeEditor, {
       props: { modelValue: 'one\nTWO\nthree\nfour', original: 'one\ntwo\nthree', diff: true }
     })
-    const [original, modified] = view.getAllByTestId('code-code-editor__gutter')
+    const [original, modified] = view.getAllByTestId('code-editor__gutter')
     const changes = (gutter: HTMLElement) =>
       Array.from(gutter.querySelectorAll('li')).map((li) => li.getAttribute('data-change'))
     expect(changes(original!)).toEqual([null, 'removed', null])
     expect(changes(modified!)).toEqual([null, 'added', null, 'added'])
     await view.rerender({ modelValue: 'one\ntwo\nthree', original: 'one\ntwo\nthree', diff: true })
-    expect(changes(view.getAllByTestId('code-code-editor__gutter')[1]!)).toEqual([null, null, null])
+    expect(changes(view.getAllByTestId('code-editor__gutter')[1]!)).toEqual([null, null, null])
   })
 
   it('marks no change outside diff mode', () => {
     const view = render(CodeEditor, { props: { modelValue: 'a\nb', original: 'a' } })
-    expect(view.getByTestId('code-code-editor__gutter').querySelector('[data-change]')).toBeNull()
+    expect(view.getByTestId('code-editor__gutter').querySelector('[data-change]')).toBeNull()
   })
 
   it('takes the id and description from attrs and paints invalid', () => {
@@ -259,14 +259,14 @@ describe('CodeEditor', () => {
     expect(input.id).toBe('code')
     expect(input.getAttribute('aria-invalid')).toBe('true')
     expect(input.getAttribute('aria-describedby')?.split(' ')[0]).toBe('help')
-    expect(view.getByTestId('code-code-editor').hasAttribute('data-invalid')).toBe(true)
+    expect(view.getByTestId('code-editor').hasAttribute('data-invalid')).toBe(true)
   })
 
   it('zero-pads the gutter to two digits with padLineNumbers', async () => {
     const lines = Array.from({ length: 12 }, (_, index) => `line ${index + 1}`).join('\n')
     const view = render(CodeEditor, { props: { modelValue: lines, ariaLabel: 'Script' } })
     const labels = () =>
-      [...view.getByTestId('code-code-editor__gutter').querySelectorAll('li')].map((li) =>
+      [...view.getByTestId('code-editor__gutter').querySelectorAll('li')].map((li) =>
         li.textContent?.trim()
       )
     expect(labels().slice(0, 2)).toEqual(['1', '2'])
@@ -288,7 +288,7 @@ describe('CodeEditor', () => {
       }
     })
     await waitFor(() =>
-      expect(view.getByTestId('code-code-editor').getAttribute('data-mode')).toBe('monaco')
+      expect(view.getByTestId('code-editor').getAttribute('data-mode')).toBe('monaco')
     )
     const format = fake.calls.options[0]?.['lineNumbers'] as (line: number) => string
     expect(format(3)).toBe('03')
@@ -302,7 +302,7 @@ describe('CodeEditor', () => {
       props: { modelValue: 'a', loader: () => Promise.resolve(fake.api), ariaLabel: 'Script' }
     })
     await waitFor(() =>
-      expect(view.getByTestId('code-code-editor').getAttribute('data-mode')).toBe('monaco')
+      expect(view.getByTestId('code-editor').getAttribute('data-mode')).toBe('monaco')
     )
     expect(fake.calls.options[0]?.['lineHeight']).toBe(16)
   })
@@ -355,7 +355,7 @@ describe('CodeEditor', () => {
       props: { modelValue: 'x', loader: () => Promise.resolve(fake.api), ariaLabel: 'Script' }
     })
     await waitFor(() =>
-      expect(view.getByTestId('code-code-editor').getAttribute('data-mode')).toBe('monaco')
+      expect(view.getByTestId('code-editor').getAttribute('data-mode')).toBe('monaco')
     )
   })
 
@@ -379,7 +379,7 @@ describe('CodeEditor', () => {
           })
       })
     )
-    const root = view.getByTestId('code-code-editor')
+    const root = view.getByTestId('code-editor')
     await waitFor(() => expect(root.getAttribute('data-mode')).toBe('monaco'))
     expect(onReady).toHaveBeenCalledOnce()
     expect(fake.calls.themes[0]?.name).toBe('webkit')
@@ -388,7 +388,7 @@ describe('CodeEditor', () => {
     expect(fake.calls.markers.at(-1)).toEqual([
       expect.objectContaining({ startLineNumber: 1, severity: 8, message: 'Nope', endColumn: 10 })
     ])
-    expect(view.queryByTestId('code-code-editor__input')).toBeNull()
+    expect(view.queryByTestId('code-editor__input')).toBeNull()
 
     fake.models[0]!.setValue('let a = 2')
     expect(value.value).toBe('let a = 2')
@@ -421,7 +421,7 @@ describe('CodeEditor', () => {
       })
     )
     await waitFor(() =>
-      expect(view.getAllByTestId('code-code-editor').map((el) => el.dataset['mode'])).toEqual([
+      expect(view.getAllByTestId('code-editor').map((el) => el.dataset['mode'])).toEqual([
         'monaco',
         'monaco'
       ])
@@ -442,7 +442,7 @@ describe('CodeEditor', () => {
       props: { loader: () => Promise.resolve(fake.api), ariaLabel: 'Code' }
     })
     await waitFor(() =>
-      expect(view.getByTestId('code-code-editor').getAttribute('data-mode')).toBe('monaco')
+      expect(view.getByTestId('code-editor').getAttribute('data-mode')).toBe('monaco')
     )
     const before = fake.calls.themes.length
     document.documentElement.setAttribute('data-theme', 'dark')
@@ -454,12 +454,12 @@ describe('CodeEditor', () => {
 
   it('draws the frame by default and drops it with bordered false', () => {
     const view = render(CodeEditor, { props: { modelValue: 'x', ariaLabel: 'Script' } })
-    expect(view.getByTestId('code-code-editor').hasAttribute('data-bordered')).toBe(true)
+    expect(view.getByTestId('code-editor').hasAttribute('data-bordered')).toBe(true)
     view.unmount()
     const flush = render(CodeEditor, {
       props: { modelValue: 'x', ariaLabel: 'Script', bordered: false }
     })
-    expect(flush.getByTestId('code-code-editor').hasAttribute('data-bordered')).toBe(false)
+    expect(flush.getByTestId('code-editor').hasAttribute('data-bordered')).toBe(false)
   })
 
   it('maps Monaco markers to the marker shape, sorted, without its own', () => {
@@ -531,7 +531,7 @@ describe('CodeEditor', () => {
       })
     )
     await waitFor(() =>
-      expect(view.getByTestId('code-code-editor').getAttribute('data-mode')).toBe('monaco')
+      expect(view.getByTestId('code-editor').getAttribute('data-mode')).toBe('monaco')
     )
     const mine = options.schemas?.find((entry) => entry.uri !== 'inmemory://other/schema.json')
     expect(options.schemas).toHaveLength(2)
@@ -580,8 +580,8 @@ describe('CodeEditor', () => {
       }
     })
     await waitFor(() => expect(onError).toHaveBeenCalledOnce())
-    expect(view.getByTestId('code-code-editor').getAttribute('data-mode')).toBe('plain')
-    expect(view.getByTestId('code-code-editor__status').textContent).toContain('could not load')
+    expect(view.getByTestId('code-editor').getAttribute('data-mode')).toBe('plain')
+    expect(view.getByTestId('code-editor__status').textContent).toContain('could not load')
     expect(textarea(view.container)).toBeTruthy()
   })
 

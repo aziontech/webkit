@@ -10,16 +10,16 @@ import Backdrop from './backdrop.vue'
 describe('Backdrop', () => {
   it('draws the backdrop from variant and ignores the removed art prop', () => {
     const { getByTestId } = render(Backdrop, { props: { art: 'globe' } })
-    expect(getByTestId('marketing-backdrop')).toHaveAttribute('data-variant', 'map')
-    expect(getByTestId('marketing-backdrop')).not.toHaveAttribute('data-art')
+    expect(getByTestId('backdrop')).toHaveAttribute('data-variant', 'map')
+    expect(getByTestId('backdrop')).not.toHaveAttribute('data-art')
   })
 
   it('defaults to the map backdrop and hides it from assistive technology', () => {
     const { getByTestId } = render(Backdrop)
-    const root = getByTestId('marketing-backdrop')
+    const root = getByTestId('backdrop')
     expect(root).toHaveAttribute('data-variant', 'map')
     expect(root).toHaveAttribute('aria-hidden', 'true')
-    expect(root.querySelector('[data-testid="content-network-map"]')).toHaveAttribute(
+    expect(root.querySelector('[data-testid="network-map"]')).toHaveAttribute(
       'data-region',
       'atlantic'
     )
@@ -27,24 +27,20 @@ describe('Backdrop', () => {
 
   it('draws the globe over the dot lattice', () => {
     const { getByTestId } = render(Backdrop, { props: { variant: 'globe' } })
-    const root = getByTestId('marketing-backdrop')
+    const root = getByTestId('backdrop')
     expect(root.querySelector('[data-testid="assets-spinning-globe"]')).not.toBeNull()
-    expect(root.querySelector('[data-testid="marketing-texture"]')).not.toBeNull()
+    expect(root.querySelector('[data-testid="texture"]')).not.toBeNull()
   })
 
   it('lays the network map full bleed with its PoPs lit', () => {
     const { getByTestId } = render(Backdrop, { props: { variant: 'network' } })
-    const map = getByTestId('marketing-backdrop').querySelector(
-      '[data-testid="content-network-map"]'
-    )
+    const map = getByTestId('backdrop').querySelector('[data-testid="network-map"]')
     expect(map).toHaveAttribute('data-density', 'high')
   })
 
   it('passes animated through so the art can hold a still frame', () => {
     const { getByTestId } = render(Backdrop, { props: { variant: 'map', animated: false } })
-    const map = getByTestId('marketing-backdrop').querySelector(
-      '[data-testid="content-network-map"]'
-    )
+    const map = getByTestId('backdrop').querySelector('[data-testid="network-map"]')
     expect(map?.querySelector('[data-animated]')).toBeNull()
   })
 
@@ -52,7 +48,7 @@ describe('Backdrop', () => {
     const { getByTestId } = render({
       render: () => h('div', { dir: 'rtl' }, [h(Backdrop, { variant: 'globe' })])
     })
-    expect(getByTestId('marketing-backdrop').innerHTML).toContain('rtl:-translate-x-1/2')
+    expect(getByTestId('backdrop').innerHTML).toContain('rtl:-translate-x-1/2')
   })
 
   it('has no axe violations behind a hero and alone', async () => {

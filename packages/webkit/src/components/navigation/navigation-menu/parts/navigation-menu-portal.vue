@@ -23,7 +23,7 @@
 
   const attrs = useAttrs()
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__portal'
+    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-portal'
   )
 
   const root = useNavigationMenuContext()

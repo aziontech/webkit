@@ -29,7 +29,7 @@
   const { status } = useChatMessageContext()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-chat-message-actions'
+    () => (attrs['data-testid'] as string | undefined) ?? 'chat-message-actions'
   )
 </script>
 

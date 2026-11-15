@@ -1,10 +1,10 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import { TableInjectionKey, type TableSortDirection } from '../injection-key'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
+  import { type TableSortDirection } from '../injection-key'
 
   export type { TableSortDirection }
 
@@ -27,12 +27,9 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableSortButton: en.tableSortButton })
-  const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__sort-button` : 'data-table__sort-button')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-sort-button'
   )
 
   const icon = computed<string>(() => {

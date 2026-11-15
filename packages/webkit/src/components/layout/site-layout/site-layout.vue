@@ -14,11 +14,11 @@
     type SiteFooterColumn,
     type SiteFooterSocial,
     type SiteFooterVariant
-  } from '../../sections/site-footer/site-footer.vue'
+  } from '../../section/site-footer/site-footer.vue'
   import SiteHeader, {
     type SiteHeaderLink,
     type SiteHeaderMenu
-  } from '../../sections/site-header/site-header.vue'
+  } from '../../section/site-header/site-header.vue'
 
   defineOptions({
     name: 'SiteLayout',
@@ -119,9 +119,7 @@
 
   const PAGE_VALUE = 'site-layout:page:'
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-site-layout'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'site-layout')
 
   const paletteGroups = computed(() => {
     const groups = props.navigation.menus.map((menu) => ({

@@ -77,7 +77,7 @@
     flat: 'neutral'
   }
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-stat-tile')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'stat-tile')
   const labelId = `${uid}-label`
 
   const hasValue = computed(() => isFiniteNumber(props.value))
@@ -138,7 +138,7 @@
         v-if="loading"
         width="60%"
         height="1.5rem"
-        :data-testid="`${testId}__skeleton`"
+        :data-testid="`${testId}__loading`"
       />
       <div
         v-else

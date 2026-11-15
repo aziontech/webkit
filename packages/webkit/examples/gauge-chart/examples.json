@@ -1,6 +1,6 @@
 {
   "component": "gauge-chart",
-  "title": "Components/Primitives/Chart/GaugeChart",
+  "title": "Components/Chart/GaugeChart",
   "examples": [
     {
       "name": "Default",

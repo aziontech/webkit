@@ -1,6 +1,6 @@
 {
   "component": "settings-section",
-  "title": "Components/Primitives/Layout/SettingsSection",
+  "title": "Components/Layout/SettingsSection",
   "examples": [
     {
       "name": "Default",

@@ -45,7 +45,7 @@
   const attrs = useAttrs()
   const headingId = useId()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-faq')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'faq')
 
   const hasItems = computed(() => props.items.length > 0)
 

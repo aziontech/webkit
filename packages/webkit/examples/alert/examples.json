@@ -1,6 +1,6 @@
 {
   "component": "alert",
-  "title": "Components/Primitives/Feedback/Alert",
+  "title": "Components/Feedback/Alert",
   "examples": [
     {
       "name": "Default",

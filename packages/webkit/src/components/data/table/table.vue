@@ -48,9 +48,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-table'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'table')
 
   const captionId = `${useId()}-caption`
   const captions = ref<number>(0)

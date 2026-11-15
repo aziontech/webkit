@@ -5,7 +5,7 @@ import { nextTick, ref } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Quote from './quote.vue'
 
-const TESTID = 'marketing-quote'
+const TESTID = 'quote'
 
 const props = {
   text: 'Magalu guarantees high availability for hundreds of global-scale applications.',

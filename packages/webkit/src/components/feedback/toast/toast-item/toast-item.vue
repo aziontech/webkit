@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import Spinner from '../../../utils/spinner/spinner.vue'
+  import Spinner from '../../../feedback/spinner/spinner.vue'
   import type { ToastSeverity } from '../composables/use-toast-store'
   import { ToastInjectionKey } from '../injection-key'
 
@@ -30,9 +30,7 @@
   }>()
 
   const attrs = useAttrs()
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__item'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'toast-item')
 
   const inToaster = inject(ToastInjectionKey, null) !== null
 

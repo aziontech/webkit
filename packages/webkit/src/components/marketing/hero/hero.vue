@@ -100,7 +100,7 @@
   }>()
 
   const attrs = useAttrs()
-  const testId = computed(() => (attrs['data-testid'] as string) ?? 'marketing-hero')
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'hero')
 
   const hasBackdrop = () => Boolean(slots.background) || props.texture !== 'none'
   const hasMedia = () => Boolean(slots.media)

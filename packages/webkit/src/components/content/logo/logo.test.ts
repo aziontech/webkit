@@ -12,8 +12,7 @@ afterEach(() => cleanup())
 const DARK = 'https://example.com/acme-dark.svg'
 const LIGHT = 'https://example.com/acme-light.svg'
 
-const root = (): HTMLElement =>
-  document.body.querySelector<HTMLElement>('[data-testid="content-logo"]')!
+const root = (): HTMLElement => document.body.querySelector<HTMLElement>('[data-testid="logo"]')!
 
 describe('Logo', () => {
   it('renders the derived test id and lets the consumer override it', () => {

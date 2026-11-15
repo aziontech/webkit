@@ -10,7 +10,7 @@
   } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import Tag from '../../tag/tag.vue'
   import { typeInto, useSceneScript } from '../composables/use-scene-script'
   import {

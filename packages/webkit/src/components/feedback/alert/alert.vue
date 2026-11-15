@@ -3,8 +3,8 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import Button from '../../action/button/button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import { MESSAGE_DISMISS_MS } from './presets/transitions'
 
   export type AlertSeverity = 'info' | 'success' | 'warning' | 'danger'
@@ -68,7 +68,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ alert: en.alert })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-alert')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'alert')
 
   type NormalizedSeverity = keyof typeof defaultIcons
 

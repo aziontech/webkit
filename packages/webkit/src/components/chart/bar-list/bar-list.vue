@@ -90,7 +90,7 @@
 
   const SKELETON_WIDTHS = ['100%', '72%', '48%', '30%', '16%']
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-bar-list')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'bar-list')
 
   const fill = computed(() => ({ '--bar-list-fill': colorToken(props.color) }))
 
@@ -160,7 +160,7 @@
   >
     <li
       v-if="loading"
-      :data-testid="`${testId}__skeleton`"
+      :data-testid="`${testId}__loading`"
       class="flex flex-col gap-(--spacing-2xs)"
     >
       <Skeleton

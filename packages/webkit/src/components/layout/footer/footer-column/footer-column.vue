@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs, useId } from 'vue'
-
-  import { FooterInjectionKey } from '../injection-key'
+  import { computed, useAttrs, useId } from 'vue'
 
   defineOptions({
     name: 'FooterColumn',
@@ -21,13 +19,9 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(FooterInjectionKey, null)
   const titleId = useId()
 
-  const testId = computed(
-    () =>
-      (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'layout-footer'}__column`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'footer-column')
 </script>
 
 <template>

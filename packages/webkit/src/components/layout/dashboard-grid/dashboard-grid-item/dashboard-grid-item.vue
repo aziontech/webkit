@@ -32,7 +32,7 @@
   const over = ref(false)
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${board.testId}__item`
+    () => (attrs['data-testid'] as string | undefined) ?? 'dashboard-grid-item'
   )
   const entry = computed(() => board.entry(props.itemId))
   const span = computed(() => entry.value?.span ?? board.maxSpan.value)

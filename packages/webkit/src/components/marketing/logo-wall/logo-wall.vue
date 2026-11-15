@@ -64,9 +64,7 @@
   const { t } = useTranslate({ logoWall: en.logoWall })
   const linkText = computed(() => props.linkLabel || t('logoWall.link'))
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-logo-wall'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'logo-wall')
 
   const hasItems = computed(() => props.items.length > 0)
 

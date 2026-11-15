@@ -10,45 +10,45 @@ describe('CurrencyAmount', () => {
   it('renders the default testid on the root', () => {
     const { getByTestId } = render(CurrencyAmount)
     // No consumer data-testid -> the component's fallback.
-    expect(getByTestId('content-currency')).toBeTruthy()
+    expect(getByTestId('currency-amount')).toBeTruthy()
   })
 
   it('renders the value inside the value span', () => {
     const { getByTestId } = render(CurrencyAmount, { props: { value: '20' } })
-    expect(getByTestId('content-currency__value').textContent?.trim()).toBe('20')
+    expect(getByTestId('currency-amount__value').textContent?.trim()).toBe('20')
   })
 
   it('renders the default prefix ($) and shows it in the prefix span', () => {
     // prefix defaults to '$' and prefix span is v-if="prefix".
     const { getByTestId } = render(CurrencyAmount, { props: { value: '20' } })
-    expect(getByTestId('content-currency__prefix').textContent?.trim()).toBe('$')
+    expect(getByTestId('currency-amount__prefix').textContent?.trim()).toBe('$')
   })
 
   it('renders a custom prefix', () => {
     const { getByTestId } = render(CurrencyAmount, { props: { value: '99', prefix: 'R$' } })
-    expect(getByTestId('content-currency__prefix').textContent?.trim()).toBe('R$')
+    expect(getByTestId('currency-amount__prefix').textContent?.trim()).toBe('R$')
   })
 
   it('omits the prefix span when prefix is empty (v-if="prefix")', () => {
     const { queryByTestId, getByTestId } = render(CurrencyAmount, {
       props: { value: '20', prefix: '' }
     })
-    expect(queryByTestId('content-currency__prefix')).toBeNull()
+    expect(queryByTestId('currency-amount__prefix')).toBeNull()
     // value still renders regardless of prefix.
-    expect(getByTestId('content-currency__value').textContent?.trim()).toBe('20')
+    expect(getByTestId('currency-amount__value').textContent?.trim()).toBe('20')
   })
 
   it('renders the suffix span only when suffix is provided (v-if="suffix")', () => {
     const { queryByTestId } = render(CurrencyAmount, { props: { value: '20' } })
     // suffix defaults to '' -> suffix span absent.
-    expect(queryByTestId('content-currency__suffix')).toBeNull()
+    expect(queryByTestId('currency-amount__suffix')).toBeNull()
 
     const withSuffix = render(CurrencyAmount, { props: { value: '20', suffix: 'per month' } })
-    expect(withSuffix.getByTestId('content-currency__suffix').textContent?.trim()).toBe('per month')
+    expect(withSuffix.getByTestId('currency-amount__suffix').textContent?.trim()).toBe('per month')
   })
 
   it('honors a consumer-provided data-testid on the root and derives the part ids from it', () => {
-    // testId = attrs['data-testid'] ?? 'content-currency'; parts use `${testId}__*`.
+    // testId = attrs['data-testid'] ?? 'currency-amount'; parts use `${testId}__*`.
     const { getByTestId } = render(CurrencyAmount, {
       props: { value: '20', suffix: 'per month' },
       attrs: { 'data-testid': 'plan-price' }
@@ -66,9 +66,9 @@ describe('CurrencyAmount', () => {
         props: { value: '20', suffix: 'per month', size }
       })
       // Size is a purely visual token; the content contract holds for every size.
-      expect(getByTestId('content-currency__prefix').textContent?.trim()).toBe('$')
-      expect(getByTestId('content-currency__value').textContent?.trim()).toBe('20')
-      expect(getByTestId('content-currency__suffix').textContent?.trim()).toBe('per month')
+      expect(getByTestId('currency-amount__prefix').textContent?.trim()).toBe('$')
+      expect(getByTestId('currency-amount__value').textContent?.trim()).toBe('20')
+      expect(getByTestId('currency-amount__suffix').textContent?.trim()).toBe('per month')
     }
   )
 
@@ -101,15 +101,15 @@ describe('CurrencyAmount', () => {
   it('composes the Default story', () => {
     const { getByTestId } = render(Default)
     // Default args: value '20', prefix '$', suffix 'per month'.
-    expect(getByTestId('content-currency__value').textContent?.trim()).toBe('20')
-    expect(getByTestId('content-currency__prefix').textContent?.trim()).toBe('$')
-    expect(getByTestId('content-currency__suffix').textContent?.trim()).toBe('per month')
+    expect(getByTestId('currency-amount__value').textContent?.trim()).toBe('20')
+    expect(getByTestId('currency-amount__prefix').textContent?.trim()).toBe('$')
+    expect(getByTestId('currency-amount__suffix').textContent?.trim()).toBe('per month')
   })
 
   it('composes the Sizes story rendering every step of the ladder', () => {
     const { getAllByTestId } = render(Sizes)
     // Three <CurrencyAmount> instances (small + medium + large) -> three value spans.
-    const values = getAllByTestId('content-currency__value')
+    const values = getAllByTestId('currency-amount__value')
     expect(values).toHaveLength(3)
     values.forEach((v) => expect(v.textContent?.trim()).toBe('20'))
   })
@@ -120,7 +120,7 @@ describe('CurrencyAmount', () => {
     // size renders identically.
     for (const size of ['small', 'medium', 'large'] as const) {
       const { getByTestId, unmount } = render(CurrencyAmount, { props: { value: '20', size } })
-      expect(getByTestId('content-currency').getAttribute('data-size')).toBe(size)
+      expect(getByTestId('currency-amount').getAttribute('data-size')).toBe(size)
       unmount()
     }
   })

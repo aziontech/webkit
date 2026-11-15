@@ -2,8 +2,8 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import Button from '../../../actions/button/button.vue'
-  import NumberInput from '../../../inputs/number-input/number-input.vue'
+  import Button from '../../../action/button/button.vue'
+  import NumberInput from '../../../input/number-input/number-input.vue'
   import Badge from '../../badge/badge.vue'
   import Tag from '../../tag/tag.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'

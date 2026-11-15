@@ -1,6 +1,6 @@
 {
   "component": "error-boundary",
-  "title": "Components/Primitives/Feedback/ErrorBoundary",
+  "title": "Components/Feedback/ErrorBoundary",
   "examples": [
     {
       "name": "Default",

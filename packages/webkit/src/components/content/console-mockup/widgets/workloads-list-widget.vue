@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import Button from '../../../actions/button/button.vue'
+  import Button from '../../../action/button/button.vue'
   import StatusIndicator, {
     type StatusIndicatorSeverity
   } from '../../../feedback/status-indicator/status-indicator.vue'
-  import Input from '../../../inputs/input/input.vue'
+  import Input from '../../../input/input/input.vue'
   import Avatar from '../../avatar/avatar.vue'
   import Card from '../../card/card.vue'
   import ConsoleMockupShell, {
-    type ConsoleMockupConsoleMockupShellFade,
+    type ConsoleMockupShellFade,
     type ConsoleMockupShellVariant
   } from '../console-mockup-shell/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
@@ -22,7 +22,7 @@
     /** Design width of the frame from `md` up. */
     width?: number
     /** Edge the mockup fades out along. */
-    fade?: ConsoleMockupConsoleMockupShellFade
+    fade?: ConsoleMockupShellFade
     /** Whether this widget is the one showing. */
     active?: boolean
   }

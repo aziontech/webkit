@@ -10,8 +10,8 @@ import { useToastRegion } from '../../toast-region'
 useToastRegion()
 
 const toastWith = (text: string) =>
-  Array.from(document.querySelectorAll<HTMLElement>('[data-testid="feedback-toast__item"]')).find(
-    (el) => el.textContent?.includes(text)
+  Array.from(document.querySelectorAll<HTMLElement>('[data-testid="toast-item"]')).find((el) =>
+    el.textContent?.includes(text)
   )
 
 afterEach(() => {

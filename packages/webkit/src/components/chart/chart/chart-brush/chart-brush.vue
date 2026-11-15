@@ -10,9 +10,7 @@
 
   onScopeDispose(ctx.registerBrush())
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__brush`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-brush')
 
   const band = computed(() => {
     const span = ctx.selection.value

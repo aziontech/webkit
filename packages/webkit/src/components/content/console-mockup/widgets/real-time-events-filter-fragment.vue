@@ -2,9 +2,9 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import Button from '../../../actions/button/button.vue'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import Input from '../../../inputs/input/input.vue'
+  import Button from '../../../action/button/button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
+  import Input from '../../../input/input/input.vue'
   import Badge from '../../badge/badge.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'

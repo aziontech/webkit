@@ -6,7 +6,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import SitePage, { type SitePageSection, type SitePageSubmit } from './site-page.vue'
 import { resolveSectionEntry, sitePageSectionAliases, sitePageSections } from './site-page-sections'
 
-const TESTID = 'marketing-site-page'
+const TESTID = 'site-page'
 const HEADLINE = 'Deliver content fast, worldwide'
 const FAQ_TITLE = 'Frequently asked questions'
 const USES_TITLE = 'What teams use it for'
@@ -86,7 +86,7 @@ describe('SitePage', () => {
   it('draws a hatched gap before each column section and one after the last', () => {
     const { getAllByTestId } = page()
 
-    const gaps = getAllByTestId('marketing-section-gap')
+    const gaps = getAllByTestId('section-gap')
     expect(gaps).toHaveLength(3)
     for (const gap of gaps) expect(gap.getAttribute('data-hatch')).toBe('true')
   })
@@ -99,7 +99,7 @@ describe('SitePage', () => {
       ]
     })
 
-    const gaps = getAllByTestId('marketing-section-gap')
+    const gaps = getAllByTestId('section-gap')
     expect(gaps).toHaveLength(2)
     expect(gaps[0].getAttribute('data-size')).toBe('small')
     expect(gaps[1].getAttribute('data-size')).toBe('medium')
@@ -112,9 +112,9 @@ describe('SitePage', () => {
     }
     const { findByTestId, getAllByTestId } = page({ sections: [uses, closing] })
 
-    const band = await findByTestId('sections-closing-call-to-action')
+    const band = await findByTestId('closing-call-to-action')
     expect(band.querySelector('[data-hatch="true"]')).not.toBeNull()
-    expect(getAllByTestId('marketing-section-gap')).toHaveLength(2)
+    expect(getAllByTestId('section-gap')).toHaveLength(2)
   })
 
   it('binds hatch off on a closing band stacked over another, so the page closes once', async () => {
@@ -126,11 +126,11 @@ describe('SitePage', () => {
     })
 
     await waitFor(async () => expect(await findAllByRole('heading', { level: 2 })).toHaveLength(2))
-    const bands = await findAllByTestId('sections-closing-call-to-action')
+    const bands = await findAllByTestId('closing-call-to-action')
     expect(bands).toHaveLength(2)
     expect(bands[0].querySelector('[data-hatch="true"]')).toBeNull()
     expect(bands[1].querySelector('[data-hatch="true"]')).not.toBeNull()
-    expect(getAllByTestId('marketing-section-gap')).toHaveLength(2)
+    expect(getAllByTestId('section-gap')).toHaveLength(2)
   })
 
   it('draws no gap before a frame close, and no trailing gap after it', async () => {
@@ -138,9 +138,9 @@ describe('SitePage', () => {
       sections: [uses, { _id: 'closing-call-to-action', props: { variant: 'frame' } }]
     })
 
-    const frame = await findByTestId('sections-closing-call-to-action')
+    const frame = await findByTestId('closing-call-to-action')
     expect(frame.getAttribute('data-variant')).toBe('frame')
-    expect(getAllByTestId('marketing-section-gap')).toHaveLength(1)
+    expect(getAllByTestId('section-gap')).toHaveLength(1)
   })
 
   it('keeps the trailing gap after a closing band whose page data turns hatch off', async () => {
@@ -148,15 +148,15 @@ describe('SitePage', () => {
       sections: [{ _id: 'closing-call-to-action', props: { title: 'Ready?', hatch: false } }]
     })
 
-    await findByTestId('sections-closing-call-to-action')
-    expect(getAllByTestId('marketing-section-gap')).toHaveLength(2)
+    await findByTestId('closing-call-to-action')
+    expect(getAllByTestId('section-gap')).toHaveLength(2)
   })
 
   it('renders no column at all when there are no column sections', () => {
     const { queryAllByTestId, queryByTestId } = page({ sections: [] })
 
-    expect(queryAllByTestId('marketing-section-gap')).toHaveLength(0)
-    expect(queryByTestId('marketing-section-container')).toBeNull()
+    expect(queryAllByTestId('section-gap')).toHaveLength(0)
+    expect(queryByTestId('section-container')).toBeNull()
   })
 
   it('skips an unknown _id with a development warning naming it, and renders the rest', async () => {
@@ -166,7 +166,7 @@ describe('SitePage', () => {
     })
 
     expect(await findByRole('heading', { level: 2, name: FAQ_TITLE })).toBeInTheDocument()
-    expect(getAllByTestId('marketing-section-gap')).toHaveLength(2)
+    expect(getAllByTestId('section-gap')).toHaveLength(2)
     expect(warn.mock.calls.flat().join(' ')).toContain('"not-a-section-for-the-test"')
   })
 
@@ -190,7 +190,7 @@ describe('SitePage', () => {
       ]
     })
 
-    expect(await findByTestId('content-illustration')).toBeInTheDocument()
+    expect(await findByTestId('illustration')).toBeInTheDocument()
   })
 
   it.each([
@@ -229,7 +229,7 @@ describe('SitePage', () => {
     expect(
       await findByRole('heading', { level: 2, name: 'Requests take the shortest path' })
     ).toBeInTheDocument()
-    expect(queryByTestId('content-illustration')).toBeNull()
+    expect(queryByTestId('illustration')).toBeNull()
     expect(warn.mock.calls.flat().join(' ')).toContain('"NotASceneForTheTest"')
   })
 
@@ -269,7 +269,7 @@ describe('SitePage', () => {
   })
 
   it('registers every page section except the site frame', () => {
-    const folders = Object.keys(import.meta.glob('../../sections/*/*.vue'))
+    const folders = Object.keys(import.meta.glob('../../section/*/*.vue'))
       .map((path) => path.split('/')[3])
       .filter((name, index, all) => all.indexOf(name) === index)
       .filter((name) => name !== 'site-header' && name !== 'site-footer')
@@ -348,7 +348,7 @@ describe('SitePage', () => {
       sections: [uses]
     })
 
-    const band = await findByTestId('sections-hero-section')
+    const band = await findByTestId('hero-section')
     expect(band.getAttribute('data-variant')).toBe('copy-on-top-art')
     expect(warn).not.toHaveBeenCalled()
   })
@@ -364,9 +364,9 @@ describe('SitePage', () => {
       ]
     })
 
-    const band = await findByTestId('sections-template-gallery')
+    const band = await findByTestId('template-gallery')
     expect(band.querySelector('[data-hatch="true"]')).not.toBeNull()
-    expect(getAllByTestId('marketing-section-gap')).toHaveLength(2)
+    expect(getAllByTestId('section-gap')).toHaveLength(2)
   })
 
   it('has no a11y violations', async () => {

@@ -27,7 +27,7 @@ describe('Pagination', () => {
     describe('root layout landmark (no total -> pure layout, consumer fills slots)', () => {
       it('renders a <nav> with the default data-testid and aria-label', () => {
         const { getByTestId } = render(Pagination)
-        const root = getByTestId('data-pagination')
+        const root = getByTestId('pagination')
         expect(root.tagName).toBe('NAV')
         expect(root.getAttribute('aria-label')).toBe('Pagination')
       })
@@ -46,8 +46,8 @@ describe('Pagination', () => {
 
       it('does not render its own info/controls when total is undefined', () => {
         const { queryByTestId } = render(Pagination)
-        expect(queryByTestId('data-pagination__info')).toBeNull()
-        expect(queryByTestId('data-pagination__page-size')).toBeNull()
+        expect(queryByTestId('pagination-description')).toBeNull()
+        expect(queryByTestId('pagination-page-size')).toBeNull()
       })
     })
 
@@ -75,7 +75,7 @@ describe('Pagination', () => {
 
       it('a standalone PaginationDescription (no root) falls back to the default testid', () => {
         const { getByTestId } = render(PaginationDescription, { slots: { default: 'hello' } })
-        const el = getByTestId('data-pagination__info')
+        const el = getByTestId('pagination-description')
         expect(el.tagName).toBe('SPAN')
         expect(el.textContent).toContain('hello')
       })
@@ -86,10 +86,10 @@ describe('Pagination', () => {
         const { getByTestId, getByRole, getAllByRole } = render(Pagination, {
           props: { total: 30, pageSize: 10, page: 1 }
         })
-        const info = getByTestId('data-pagination__info')
+        const info = getByTestId('pagination-description')
         expect(info.textContent).toContain('Showing 1 to 10 of 30 entries')
 
-        expect(getByTestId('data-pagination__page-size')).toBeTruthy()
+        expect(getByTestId('pagination-page-size')).toBeTruthy()
         expect(getByRole('combobox', { name: 'Rows per page' })).toBeTruthy()
 
         // pageCount = ceil(30/10) = 3 -> buttons: Previous, 1, 2, 3, Next = 5.
@@ -230,14 +230,16 @@ describe('Pagination', () => {
         const { getByRole, getByTestId } = render(Pagination, { props: { total: 30 } })
         await fireEvent.click(getByRole('button', { name: /Next/i }))
         expect(getByRole('button', { name: 'Page 2' }).getAttribute('aria-current')).toBe('page')
-        expect(getByTestId('data-pagination__info').textContent).toContain('Showing 11 to 20 of 30')
+        expect(getByTestId('pagination-description').textContent).toContain(
+          'Showing 11 to 20 of 30'
+        )
       })
 
       it('the page-size selector re-windows the pages without a bound v-model:page-size', async () => {
         const { getByRole, queryByRole, getByTestId } = render(Pagination, { props: { total: 30 } })
         await fireEvent.update(getByRole('combobox', { name: 'Rows per page' }), '25')
         expect(queryByRole('button', { name: 'Page 3' })).toBeNull()
-        expect(getByTestId('data-pagination__info').textContent).toContain('Showing 1 to 25 of 30')
+        expect(getByTestId('pagination-description').textContent).toContain('Showing 1 to 25 of 30')
       })
     })
 
@@ -281,14 +283,14 @@ describe('Pagination', () => {
           props: { type: 'more' },
           slots: { default: 'SHOULD-NOT-SHOW' }
         })
-        expect(getByTestId('data-pagination__button').textContent).not.toContain('SHOULD-NOT-SHOW')
+        expect(getByTestId('pagination-button').textContent).not.toContain('SHOULD-NOT-SHOW')
       })
 
       it('type="more" is an inert decorative span: hidden, unfocusable, never emits click', async () => {
         const { getByTestId, queryByRole, emitted } = render(PaginationButton, {
           props: { type: 'more' }
         })
-        const ellipsis = getByTestId('data-pagination__button')
+        const ellipsis = getByTestId('pagination-button')
         expect(ellipsis.tagName).toBe('SPAN')
         expect(ellipsis.getAttribute('aria-hidden')).toBe('true')
         expect(ellipsis.hasAttribute('tabindex')).toBe(false)
@@ -324,7 +326,7 @@ describe('Pagination', () => {
       it('the inert overflow ellipsis has no touch-target hit area', () => {
         const { getByTestId } = render(PaginationButton, { props: { type: 'more' } })
         expect(
-          getByTestId('data-pagination__button').querySelector('[data-slot="touch-target"]')
+          getByTestId('pagination-button').querySelector('[data-slot="touch-target"]')
         ).toBeNull()
       })
 
@@ -436,7 +438,7 @@ describe('Pagination', () => {
 
       it('renders Info in the info region, the buttons in the center, and PageSize in controls', () => {
         const { getByTestId, getByRole } = render(Composed)
-        expect(getByTestId('data-pagination__info').textContent).toContain(
+        expect(getByTestId('pagination-description').textContent).toContain(
           'Showing 1 to 10 of 20 entries'
         )
         expect(getByRole('button', { name: '1' }).getAttribute('aria-current')).toBe('page')
@@ -446,15 +448,15 @@ describe('Pagination', () => {
 
       it('the composed sub-components share the root testid context (__info + __page-size)', () => {
         const { getByTestId } = render(Composed)
-        expect(getByTestId('data-pagination__info')).toBeTruthy()
-        expect(getByTestId('data-pagination__page-size')).toBeTruthy()
+        expect(getByTestId('pagination-description')).toBeTruthy()
+        expect(getByTestId('pagination-page-size')).toBeTruthy()
       })
     })
 
     describe('documented example (data-driven fixture runs in-test)', () => {
       it('DataDriven story wires v-model and renders the windowed controls (total 200)', () => {
         const { getByTestId, getByRole } = render(DataDriven)
-        expect(getByTestId('data-pagination__info').textContent).toContain(
+        expect(getByTestId('pagination-description').textContent).toContain(
           'Showing 1 to 10 of 200 entries'
         )
         expect(getByRole('button', { name: /Next/i })).toBeTruthy()
@@ -516,7 +518,7 @@ describe('Pagination', () => {
 
     const visiblePages = (view: ReturnType<typeof render>) =>
       view
-        .getAllByTestId('data-pagination__button')
+        .getAllByTestId('pagination-button')
         .filter(
           (button) =>
             button.dataset['type'] === 'number' && getComputedStyle(button).display !== 'none'
@@ -538,7 +540,7 @@ describe('Pagination', () => {
 
     it('does not overflow a 320px box with the full page list', () => {
       const view = mountIn(320)
-      const root = view.getByTestId('data-pagination')
+      const root = view.getByTestId('pagination')
 
       expect(root.scrollWidth).toBeLessThanOrEqual(root.clientWidth)
     })

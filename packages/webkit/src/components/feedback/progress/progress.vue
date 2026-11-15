@@ -43,7 +43,7 @@
       (attrs['aria-labelledby'] ? undefined : t('progress.label'))
   )
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-progress')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'progress')
 
   const percent = computed(() => Math.min(100, Math.max(0, (props.value / props.max) * 100)))
 </script>

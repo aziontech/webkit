@@ -1,6 +1,6 @@
 {
   "component": "checkbox",
-  "title": "Components/Primitives/Inputs/Checkbox",
+  "title": "Components/Input/Checkbox",
   "examples": [
     {
       "name": "Default",

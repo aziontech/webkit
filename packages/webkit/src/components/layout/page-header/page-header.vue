@@ -43,9 +43,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-page-header'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'page-header')
 </script>
 
 <template>

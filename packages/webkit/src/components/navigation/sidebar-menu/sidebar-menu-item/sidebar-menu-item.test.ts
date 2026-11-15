@@ -16,13 +16,13 @@ describe('SidebarMenuItem', () => {
   it('renders an option row (li + button) with the default testid', () => {
     const { getByTestId } = render(SidebarMenuItem, { props: { label: 'Home' } })
 
-    const root = getByTestId('navigation-sidebar-menu-item')
+    const root = getByTestId('sidebar-menu-item')
     expect(root.tagName).toBe('LI')
     // Default option with no href renders a <button>, not an <a>.
-    const button = getByTestId('navigation-sidebar-menu-item__button')
+    const button = getByTestId('sidebar-menu-item__button')
     expect(button.tagName).toBe('BUTTON')
     expect(button.getAttribute('type')).toBe('button')
-    expect(getByTestId('navigation-sidebar-menu-item__label').textContent?.trim()).toBe('Home')
+    expect(getByTestId('sidebar-menu-item__label').textContent?.trim()).toBe('Home')
   })
 
   it('honors a consumer-supplied data-testid and propagates it to child parts', () => {
@@ -38,16 +38,14 @@ describe('SidebarMenuItem', () => {
 
   it('renders the label prop, overridable by the default slot', () => {
     const withProp = render(SidebarMenuItem, { props: { label: 'FromProp' } })
-    expect(withProp.getByTestId('navigation-sidebar-menu-item__label').textContent?.trim()).toBe(
-      'FromProp'
-    )
+    expect(withProp.getByTestId('sidebar-menu-item__label').textContent?.trim()).toBe('FromProp')
     withProp.unmount()
 
     const withSlot = render(SidebarMenuItem, {
       props: { label: 'FromProp' },
       slots: { default: 'FromSlot' }
     })
-    const label = withSlot.getByTestId('navigation-sidebar-menu-item__label')
+    const label = withSlot.getByTestId('sidebar-menu-item__label')
     expect(label.textContent).toContain('FromSlot')
     expect(label.textContent).not.toContain('FromProp')
   })
@@ -55,7 +53,7 @@ describe('SidebarMenuItem', () => {
   it('emits click with the MouseEvent when an enabled option button is activated', async () => {
     const { getByTestId, emitted } = render(SidebarMenuItem, { props: { label: 'Home' } })
 
-    await fireEvent.click(getByTestId('navigation-sidebar-menu-item__button'))
+    await fireEvent.click(getByTestId('sidebar-menu-item__button'))
 
     const events = emitted().click
     expect(events).toHaveLength(1)
@@ -67,7 +65,7 @@ describe('SidebarMenuItem', () => {
       props: { label: 'Home', disabled: true }
     })
 
-    await fireEvent.click(getByTestId('navigation-sidebar-menu-item__button'))
+    await fireEvent.click(getByTestId('sidebar-menu-item__button'))
 
     expect(emitted().click).toBeUndefined()
   })
@@ -78,8 +76,8 @@ describe('SidebarMenuItem', () => {
       props: { label: 'Section' }
     })
 
-    expect(getByTestId('navigation-sidebar-menu-item').getAttribute('role')).toBeNull()
-    expect(getByTestId('navigation-sidebar-menu-item__button')).toBeTruthy()
+    expect(getByTestId('sidebar-menu-item').getAttribute('role')).toBeNull()
+    expect(getByTestId('sidebar-menu-item__button')).toBeTruthy()
   })
 
   it('reflects data-active and aria-current when active', () => {
@@ -87,20 +85,18 @@ describe('SidebarMenuItem', () => {
       props: { label: 'Home', active: true }
     })
 
-    const root = getByTestId('navigation-sidebar-menu-item')
+    const root = getByTestId('sidebar-menu-item')
     expect(root.hasAttribute('data-active')).toBe(true)
 
-    const button = getByTestId('navigation-sidebar-menu-item__button')
+    const button = getByTestId('sidebar-menu-item__button')
     expect(button.getAttribute('aria-current')).toBe('page')
   })
 
   it('omits data-active and aria-current when not active', () => {
     const { getByTestId } = render(SidebarMenuItem, { props: { label: 'Home' } })
 
-    expect(getByTestId('navigation-sidebar-menu-item').getAttribute('data-active')).toBeNull()
-    expect(
-      getByTestId('navigation-sidebar-menu-item__button').getAttribute('aria-current')
-    ).toBeNull()
+    expect(getByTestId('sidebar-menu-item').getAttribute('data-active')).toBeNull()
+    expect(getByTestId('sidebar-menu-item__button').getAttribute('aria-current')).toBeNull()
   })
 
   it('reflects data-disabled, aria-disabled and native disabled on a disabled button', () => {
@@ -108,9 +104,9 @@ describe('SidebarMenuItem', () => {
       props: { label: 'Home', disabled: true }
     })
 
-    expect(getByTestId('navigation-sidebar-menu-item').hasAttribute('data-disabled')).toBe(true)
+    expect(getByTestId('sidebar-menu-item').hasAttribute('data-disabled')).toBe(true)
 
-    const button = getByTestId('navigation-sidebar-menu-item__button') as HTMLButtonElement
+    const button = getByTestId('sidebar-menu-item__button') as HTMLButtonElement
     expect(button.getAttribute('aria-disabled')).toBe('true')
     expect(button.disabled).toBe(true)
   })
@@ -120,13 +116,13 @@ describe('SidebarMenuItem', () => {
       props: { label: 'Docs', href: 'https://azion.com' }
     })
 
-    const link = getByTestId('navigation-sidebar-menu-item__link') as HTMLAnchorElement
+    const link = getByTestId('sidebar-menu-item__link') as HTMLAnchorElement
     expect(link.tagName).toBe('A')
     expect(link.getAttribute('href')).toBe('https://azion.com')
     expect(link.getAttribute('target')).toBe('_self')
     expect(link.getAttribute('rel')).toBeNull()
     // Anchor branch replaces the button branch.
-    expect(queryByTestId('navigation-sidebar-menu-item__button')).toBeNull()
+    expect(queryByTestId('sidebar-menu-item__button')).toBeNull()
   })
 
   it('adds rel="noopener noreferrer" on an anchor when target is _blank', () => {
@@ -134,7 +130,7 @@ describe('SidebarMenuItem', () => {
       props: { label: 'Docs', href: 'https://azion.com', target: '_blank' }
     })
 
-    const link = getByTestId('navigation-sidebar-menu-item__link')
+    const link = getByTestId('sidebar-menu-item__link')
     expect(link.getAttribute('target')).toBe('_blank')
     expect(link.getAttribute('rel')).toBe('noopener noreferrer')
   })
@@ -144,7 +140,7 @@ describe('SidebarMenuItem', () => {
       props: { label: 'Docs', href: 'https://azion.com' }
     })
 
-    await fireEvent.click(getByTestId('navigation-sidebar-menu-item__link'))
+    await fireEvent.click(getByTestId('sidebar-menu-item__link'))
 
     const events = emitted().click
     expect(events).toHaveLength(1)
@@ -157,8 +153,8 @@ describe('SidebarMenuItem', () => {
       props: { label: 'Docs', href: 'https://azion.com', disabled: true }
     })
 
-    expect(queryByTestId('navigation-sidebar-menu-item__link')).toBeNull()
-    const button = getByTestId('navigation-sidebar-menu-item__button') as HTMLButtonElement
+    expect(queryByTestId('sidebar-menu-item__link')).toBeNull()
+    const button = getByTestId('sidebar-menu-item__button') as HTMLButtonElement
     expect(button.tagName).toBe('BUTTON')
     expect(button.disabled).toBe(true)
 
@@ -171,7 +167,7 @@ describe('SidebarMenuItem', () => {
       props: { label: 'Home', icon: 'ai ai-settings' }
     })
 
-    const iconBox = getByTestId('navigation-sidebar-menu-item__icon')
+    const iconBox = getByTestId('sidebar-menu-item__icon')
     expect(iconBox.getAttribute('aria-hidden')).toBe('true')
     const glyph = iconBox.querySelector('i')
     expect(glyph).toBeTruthy()
@@ -187,9 +183,9 @@ describe('SidebarMenuItem', () => {
     // Not just the glyph — the BOX is gone too. An empty 32px box would reserve a column the
     // row does not use, putting its label off the column its siblings hold and leaving a
     // nesting rail anchored to blank space.
-    expect(queryByTestId('navigation-sidebar-menu-item__icon')).toBeNull()
+    expect(queryByTestId('sidebar-menu-item__icon')).toBeNull()
     // The label then takes the menu's content column directly.
-    expect(getByTestId('navigation-sidebar-menu-item__label').textContent?.trim()).toBe('Home')
+    expect(getByTestId('sidebar-menu-item__label').textContent?.trim()).toBe('Home')
   })
 
   it('renders a trailing tag from tagValue on an option row', () => {
@@ -197,7 +193,7 @@ describe('SidebarMenuItem', () => {
       props: { label: 'Home', tagValue: 'Beta' }
     })
 
-    const tag = getByTestId('navigation-sidebar-menu-item__tag')
+    const tag = getByTestId('sidebar-menu-item__tag')
     expect(tag.textContent).toContain('Beta')
   })
 
@@ -206,9 +202,7 @@ describe('SidebarMenuItem', () => {
       const { getByTestId, unmount } = render(SidebarMenuItem, {
         props: { label: 'Home', tagValue: 'Beta', ...props }
       })
-      const tag = getByTestId('navigation-sidebar-menu-item__tag').querySelector(
-        '[data-testid="content-tag"]'
-      )
+      const tag = getByTestId('sidebar-menu-item__tag').querySelector('[data-testid="tag"]')
       const out = [tag?.getAttribute('data-severity'), tag?.getAttribute('data-variant')]
       unmount()
       return out
@@ -224,13 +218,13 @@ describe('SidebarMenuItem', () => {
       slots: { tag: 'CustomBadge' }
     })
 
-    expect(getByTestId('navigation-sidebar-menu-item__tag').textContent).toContain('CustomBadge')
+    expect(getByTestId('sidebar-menu-item__tag').textContent).toContain('CustomBadge')
   })
 
   it('does not render a trailing tag when no tagValue or tag slot is given', () => {
     const { queryByTestId } = render(SidebarMenuItem, { props: { label: 'Home' } })
 
-    expect(queryByTestId('navigation-sidebar-menu-item__tag')).toBeNull()
+    expect(queryByTestId('sidebar-menu-item__tag')).toBeNull()
   })
 
   it('merges a consumer-supplied class onto the option root li', () => {
@@ -239,9 +233,7 @@ describe('SidebarMenuItem', () => {
       attrs: { class: 'consumer-class' }
     })
 
-    expect(getByTestId('navigation-sidebar-menu-item').classList.contains('consumer-class')).toBe(
-      true
-    )
+    expect(getByTestId('sidebar-menu-item').classList.contains('consumer-class')).toBe(true)
   })
 
   it('has no a11y violations for a default option row', async () => {
@@ -266,7 +258,7 @@ describe('SidebarMenuItem', () => {
       InList({ label: 'Home', icon: 'ai ai-home', href: '/', active: true })
     )
 
-    expect(getByTestId('navigation-sidebar-menu-item')).toBeTruthy()
+    expect(getByTestId('sidebar-menu-item')).toBeTruthy()
     await expectNoA11yViolations(container)
   })
 
@@ -278,16 +270,16 @@ describe('SidebarMenuItem', () => {
         setup: () => ({ shown }),
         template: `<ul><SidebarMenuItem label="Home"><template v-if="shown" #tag><span data-testid="probe">New</span></template></SidebarMenuItem></ul>`
       })
-      expect(queryByTestId('navigation-sidebar-menu-item__tag')).toBeNull()
+      expect(queryByTestId('sidebar-menu-item__tag')).toBeNull()
 
       shown.value = true
       await nextTick()
-      expect(queryByTestId('navigation-sidebar-menu-item__tag')).not.toBeNull()
+      expect(queryByTestId('sidebar-menu-item__tag')).not.toBeNull()
       expect(queryByTestId('probe')).not.toBeNull()
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('navigation-sidebar-menu-item__tag')).toBeNull()
+      expect(queryByTestId('sidebar-menu-item__tag')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
     })
   })
@@ -295,13 +287,13 @@ describe('SidebarMenuItem', () => {
   describe('defaults', () => {
     it('renders no placeholder label and no icon when neither is set', () => {
       const { getByTestId, queryByTestId } = render(SidebarMenuItem, { props: { label: 'Logs' } })
-      expect(queryByTestId('navigation-sidebar-menu-item__icon')).toBeNull()
-      expect(getByTestId('navigation-sidebar-menu-item__label').textContent?.trim()).toBe('Logs')
+      expect(queryByTestId('sidebar-menu-item__icon')).toBeNull()
+      expect(getByTestId('sidebar-menu-item__label').textContent?.trim()).toBe('Logs')
 
       const blank = render(SidebarMenuItem)
       expect(
         blank.container
-          .querySelector('[data-testid="navigation-sidebar-menu-item__label"]')
+          .querySelector('[data-testid="sidebar-menu-item__label"]')
           ?.textContent?.trim()
       ).toBe('')
     })

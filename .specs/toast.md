@@ -9,7 +9,7 @@ setup: "One-time app-level wiring before the first toast() call — service (rec
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=478-938
   node_id: 478:938
-checksum: 236e88b0989ba72b69c57dd75eb0b2bc277d047ace51db451c3097aee7df1ffa
+checksum: 60cfb2dfbdd31d8aa68fb01d99cf9adfc759b176e29c8b282e130f2df910a62a
 created: 2026-06-23
 last_updated: 2026-11-15
 ---
@@ -211,11 +211,9 @@ The imperative API is backed by a small reactive store composable, declared here
 ## Events
 
 <!-- The Toaster has no DOM events of its own: it is driven by the imperative store, not by consumer-bound listeners.
-     Item-level events (action click, close) live on the sub-components (see Sub-components). -->
+     Item-level events (action click, close) live on the sub-components (see Sub-components): ToastAction and ToastClose emit them. -->
 
-| Event  | Payload | Notes                                                                                                    |
-| ------ | ------- | -------------------------------------------------------------------------------------------------------- |
-| _none_ | —       | The `Toaster` is store-driven; it raises no events. Item actions emit from `ToastAction` / `ToastClose`. |
+| _none_ | — | — |
 
 ## Slots
 

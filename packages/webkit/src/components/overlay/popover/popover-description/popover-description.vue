@@ -16,7 +16,7 @@
   const ctx = usePopoverContext()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__description`
+    () => (attrs['data-testid'] as string | undefined) ?? 'popover-description'
   )
 
   onMounted(() => {

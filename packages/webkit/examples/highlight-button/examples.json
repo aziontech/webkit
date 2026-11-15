@@ -1,6 +1,6 @@
 {
   "component": "highlight-button",
-  "title": "Components/Primitives/Actions/HighlightButton",
+  "title": "Components/Action/HighlightButton",
   "examples": [
     {
       "name": "Default",

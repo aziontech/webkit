@@ -1,6 +1,6 @@
 {
   "component": "filter-menu",
-  "title": "Components/Primitives/Data/FilterMenu",
+  "title": "Components/Data/FilterMenu",
   "examples": [
     {
       "name": "Default",

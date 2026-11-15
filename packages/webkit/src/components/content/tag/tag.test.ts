@@ -15,7 +15,7 @@ describe('Tag', () => {
   it('renders with the default testid, default variant and default size', () => {
     const { getByTestId } = render(Tag, { props: { label: 'Label' } })
 
-    const root = getByTestId('content-tag')
+    const root = getByTestId('tag')
     expect(root).toBeTruthy()
     expect(root.getAttribute('data-variant')).toBe('primary')
     expect(root.hasAttribute('data-severity')).toBe(false)
@@ -36,7 +36,7 @@ describe('Tag', () => {
   it('renders the value prop inside the value span when no slot is provided', () => {
     const { getByTestId } = render(Tag, { props: { label: 'Online' } })
 
-    const valueEl = getByTestId('content-tag__label')
+    const valueEl = getByTestId('tag__label')
     expect(valueEl.textContent?.trim()).toBe('Online')
   })
 
@@ -46,10 +46,10 @@ describe('Tag', () => {
       slots: { default: 'Slotted' }
     })
 
-    const root = getByTestId('content-tag')
+    const root = getByTestId('tag')
     expect(root.textContent).toContain('Slotted')
     // With a slot present the value fallback span is not rendered (v-if/v-else-if).
-    expect(queryByTestId('content-tag__label')).toBeNull()
+    expect(queryByTestId('tag__label')).toBeNull()
     expect(root.textContent).not.toContain('ignored')
   })
 
@@ -58,7 +58,7 @@ describe('Tag', () => {
       const { getByTestId, unmount } = render(Tag, {
         props: { label: 'Label', severity }
       })
-      expect(getByTestId('content-tag').getAttribute('data-severity')).toBe(severity)
+      expect(getByTestId('tag').getAttribute('data-severity')).toBe(severity)
       unmount()
     }
   })
@@ -66,7 +66,7 @@ describe('Tag', () => {
   it('reflects the variant prop on data-variant for every brand look', () => {
     for (const variant of VARIANTS) {
       const { getByTestId, unmount } = render(Tag, { props: { label: 'Label', variant } })
-      expect(getByTestId('content-tag').getAttribute('data-variant')).toBe(variant)
+      expect(getByTestId('tag').getAttribute('data-variant')).toBe(variant)
       unmount()
     }
   })
@@ -76,7 +76,7 @@ describe('Tag', () => {
       props: { label: 'Label', variant: 'highlight', severity: 'danger' }
     })
 
-    const root = getByTestId('content-tag')
+    const root = getByTestId('tag')
     expect(root.getAttribute('data-severity')).toBe('danger')
     expect(root.hasAttribute('data-variant')).toBe(false)
   })
@@ -86,7 +86,7 @@ describe('Tag', () => {
       const { getByTestId, unmount } = render(Tag, {
         props: { label: 'Label', size }
       })
-      expect(getByTestId('content-tag').getAttribute('data-size')).toBe(size)
+      expect(getByTestId('tag').getAttribute('data-size')).toBe(size)
       unmount()
     }
   })
@@ -94,11 +94,11 @@ describe('Tag', () => {
   it('sets data-rounded only when rounded is true', () => {
     const roundedOn = render(Tag, { props: { label: 'Label', rounded: true } })
     // Rendered as :data-rounded="rounded || null" → present (empty string) when true.
-    expect(roundedOn.getByTestId('content-tag').hasAttribute('data-rounded')).toBe(true)
+    expect(roundedOn.getByTestId('tag').hasAttribute('data-rounded')).toBe(true)
     roundedOn.unmount()
 
     const roundedOff = render(Tag, { props: { label: 'Label', rounded: false } })
-    expect(roundedOff.getByTestId('content-tag').getAttribute('data-rounded')).toBeNull()
+    expect(roundedOff.getByTestId('tag').getAttribute('data-rounded')).toBeNull()
   })
 
   it('renders the leading icon element with the provided class and hides it from a11y', () => {
@@ -106,7 +106,7 @@ describe('Tag', () => {
       props: { label: 'Label', icon: 'ai ai-box' }
     })
 
-    const iconEl = getByTestId('content-tag__icon')
+    const iconEl = getByTestId('tag__icon')
     expect(iconEl.getAttribute('aria-hidden')).toBe('true')
     expect(iconEl.classList.contains('ai')).toBe(true)
     expect(iconEl.classList.contains('ai-box')).toBe(true)
@@ -114,14 +114,14 @@ describe('Tag', () => {
 
   it('treats an empty icon string as no icon and keeps the tag out of the tab order', () => {
     const { queryByTestId, getByTestId } = render(Tag, { props: { label: 'Label', icon: '' } })
-    expect(queryByTestId('content-tag__icon')).toBeNull()
-    expect(getByTestId('content-tag')).not.toHaveAttribute('tabindex')
+    expect(queryByTestId('tag__icon')).toBeNull()
+    expect(getByTestId('tag')).not.toHaveAttribute('tabindex')
   })
 
   it('does not render an icon element when no icon prop is given', () => {
     const { queryByTestId } = render(Tag, { props: { label: 'Label' } })
 
-    expect(queryByTestId('content-tag__icon')).toBeNull()
+    expect(queryByTestId('tag__icon')).toBeNull()
   })
 
   it('merges a consumer-supplied class onto the root', () => {
@@ -130,7 +130,7 @@ describe('Tag', () => {
       attrs: { class: 'consumer-class' }
     })
 
-    expect(getByTestId('content-tag').classList.contains('consumer-class')).toBe(true)
+    expect(getByTestId('tag').classList.contains('consumer-class')).toBe(true)
   })
 
   it.each([...SEVERITIES])('has no a11y violations for severity "%s"', async (severity) => {
@@ -154,7 +154,7 @@ describe('Tag', () => {
       const { getByTestId, unmount } = render(Tag, {
         props: { label: 'Inactive', severity: severity as never }
       })
-      const root = getByTestId('content-tag')
+      const root = getByTestId('tag')
       expect(root.hasAttribute('data-severity')).toBe(false)
       expect(root.getAttribute('data-variant')).toBe('primary')
       unmount()
@@ -164,7 +164,7 @@ describe('Tag', () => {
   it('renders every variant and every severity in the Types example', () => {
     const { getAllByTestId } = render(Types)
 
-    const looks = getAllByTestId('content-tag').map(
+    const looks = getAllByTestId('tag').map(
       (tag) => tag.getAttribute('data-severity') ?? tag.getAttribute('data-variant')
     )
 
@@ -174,7 +174,7 @@ describe('Tag', () => {
   it('renders the Default story fixture cleanly', async () => {
     const { getByTestId, container } = render(Default)
 
-    expect(getByTestId('content-tag')).toBeTruthy()
+    expect(getByTestId('tag')).toBeTruthy()
     await expectNoA11yViolations(container)
   })
 })

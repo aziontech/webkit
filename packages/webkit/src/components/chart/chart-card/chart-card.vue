@@ -65,7 +65,7 @@
 
   const DEFAULT_COLUMNS = 12
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-chart-card')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-card')
   const titleId = `${uid}-title`
   const descriptionId = `${uid}-description`
 

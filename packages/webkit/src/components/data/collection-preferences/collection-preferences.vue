@@ -8,12 +8,12 @@
   } from '../../../composables/use-collection/lib/preferences'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
-  import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
-  import RadioGroup from '../../inputs/radio-group/radio-group.vue'
-  import RadioGroupItem from '../../inputs/radio-group/radio-group-item/radio-group-item.vue'
-  import Switch from '../../inputs/switch/switch.vue'
+  import Button from '../../action/button/button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
+  import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
+  import RadioGroup from '../../input/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../input/radio-group/radio-group-item/radio-group-item.vue'
+  import Switch from '../../input/switch/switch.vue'
   import Dialog from '../../overlay/dialog/dialog.vue'
   import DialogContent from '../../overlay/dialog/dialog-content.vue'
   import DialogTitle from '../../overlay/dialog/dialog-title.vue'
@@ -105,7 +105,7 @@
   const uid = useId()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-collection-preferences'
+    () => (attrs['data-testid'] as string | undefined) ?? 'collection-preferences'
   )
   const rootAttrs = computed(() =>
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'data-testid'))

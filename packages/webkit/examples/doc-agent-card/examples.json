@@ -1,6 +1,6 @@
 {
   "component": "doc-agent-card",
-  "title": "Components/Documentation/DocAgentCard",
+  "title": "Components/Docs/DocAgentCard",
   "examples": [
     {
       "name": "Default",

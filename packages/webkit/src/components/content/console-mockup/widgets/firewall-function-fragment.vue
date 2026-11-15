@@ -3,9 +3,9 @@
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import CodeBlock from '../../../code/code-block/code-block.vue'
-  import FieldDescription from '../../../inputs/field/field-description/field-description.vue'
-  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
-  import Input from '../../../inputs/input/input.vue'
+  import FieldDescription from '../../../input/field/field-description/field-description.vue'
+  import FieldLabel from '../../../input/field/field-label/field-label.vue'
+  import Input from '../../../input/input/input.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'

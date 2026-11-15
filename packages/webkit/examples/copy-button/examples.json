@@ -1,6 +1,6 @@
 {
   "component": "copy-button",
-  "title": "Components/Primitives/Actions/CopyButton",
+  "title": "Components/Action/CopyButton",
   "examples": [
     {
       "name": "Default",

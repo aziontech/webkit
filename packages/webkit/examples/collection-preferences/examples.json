@@ -1,6 +1,6 @@
 {
   "component": "collection-preferences",
-  "title": "Components/Primitives/Data/CollectionPreferences",
+  "title": "Components/Data/CollectionPreferences",
   "examples": [
     {
       "name": "Default",

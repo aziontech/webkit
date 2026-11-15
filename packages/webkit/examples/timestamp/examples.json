@@ -1,6 +1,6 @@
 {
   "component": "timestamp",
-  "title": "Components/Primitives/Content/Timestamp",
+  "title": "Components/Content/Timestamp",
   "examples": [
     {
       "name": "Default",

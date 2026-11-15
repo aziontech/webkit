@@ -1,6 +1,6 @@
 {
   "component": "dialog",
-  "title": "Components/Primitives/Overlay/Dialog",
+  "title": "Components/Overlay/Dialog",
   "examples": [
     {
       "name": "Default",

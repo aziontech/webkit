@@ -38,7 +38,7 @@ describe('PageTabs', () => {
     const { Harness } = harness('overview')
     const { getByTestId, getByRole, getAllByRole } = within(render(Harness).container)
 
-    expect(getByTestId('navigation-page-tabs')).toBeTruthy()
+    expect(getByTestId('page-tabs')).toBeTruthy()
     expect(getByRole('tablist')).toBeTruthy()
     expect(getAllByRole('tab')).toHaveLength(2)
   })
@@ -63,13 +63,9 @@ describe('PageTabs', () => {
   })
 
   it('renders the actions region only when given', () => {
-    expect(
-      within(render(Default).container).queryByTestId('navigation-page-tabs__actions')
-    ).toBeNull()
+    expect(within(render(Default).container).queryByTestId('page-tabs__actions')).toBeNull()
 
-    const actions = within(render(WithActions).container).getByTestId(
-      'navigation-page-tabs__actions'
-    )
+    const actions = within(render(WithActions).container).getByTestId('page-tabs__actions')
     expect(within(actions).getByRole('button', { name: 'Deploy' })).toBeTruthy()
   })
 
@@ -77,7 +73,7 @@ describe('PageTabs', () => {
     const { Harness } = harness('overview')
     const { getByTestId } = within(render(Harness).container)
 
-    expect(getByTestId('navigation-page-tabs').getAttribute('data-column')).toBe('full')
+    expect(getByTestId('page-tabs').getAttribute('data-column')).toBe('full')
   })
 
   it.each(['data', 'form', 'focused'] as const)('mirrors column=%s on the root', (column) => {
@@ -88,16 +84,14 @@ describe('PageTabs', () => {
       }).container
     )
 
-    expect(getByTestId('navigation-page-tabs').getAttribute('data-column')).toBe(column)
-    expect(
-      getByTestId('navigation-page-tabs__row').contains(getByTestId('navigation-page-tabs__tabs'))
-    ).toBe(true)
+    expect(getByTestId('page-tabs').getAttribute('data-column')).toBe(column)
+    expect(getByTestId('page-tabs__row').contains(getByTestId('page-tabs__tabs'))).toBe(true)
   })
 
   it('renders the form column example with its tabs', () => {
     const { getByTestId, getAllByRole } = within(render(FormColumn).container)
 
-    expect(getByTestId('navigation-page-tabs').getAttribute('data-column')).toBe('form')
+    expect(getByTestId('page-tabs').getAttribute('data-column')).toBe('form')
     expect(getAllByRole('tab')).toHaveLength(3)
   })
 

@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 10
 template: 2
-checksum: 7b1e186e49803843d33363f2b63aa2c4853c527e78eee528f1d2f3f0f18682c2
+checksum: d25bba67511f761ee0487a0c6f0c2d69360f26900e2271f5784164143baf09eb
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -131,7 +131,7 @@ field. That is the one applied-filters row of a table.
   - v-model: `Record<string, FilterMenuValue[]>` (default `{}`); removing a chip deletes the field's key.
   - Events: `edit: [event: MouseEvent | KeyboardEvent, field: FilterMenuField]` (a chip was activated; the linked menu opens at the field), `remove: [event: MouseEvent, field: FilterMenuField]` (a chip's remove button was pressed; the model loses the field).
   - Slots: none.
-  - `data-testid` fallback: `data-filter-menu-chip-group`; each chip `<testid>__chip-<fieldId>`.
+  - `data-testid` fallback: `filter-menu-chip-group`; each chip `<testid>__chip-<fieldId>`.
 
 Resulting layout:
 

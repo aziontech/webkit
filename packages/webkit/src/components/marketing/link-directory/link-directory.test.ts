@@ -7,10 +7,10 @@ import LinkDirectory from './index'
 import LinkDirectoryColumn from './link-directory-column/link-directory-column.vue'
 import LinkDirectoryItem from './link-directory-item/link-directory-item.vue'
 
-const TESTID = 'marketing-link-directory'
-const COLUMN_TESTID = 'marketing-link-directory-column'
+const TESTID = 'link-directory'
+const COLUMN_TESTID = 'link-directory-column'
 const COLUMN_TITLE_TESTID = `${COLUMN_TESTID}__title`
-const ITEM_TESTID = 'marketing-link-directory-item'
+const ITEM_TESTID = 'link-directory-item'
 const ROW_TESTID = `${ITEM_TESTID}__row`
 const ITEM_TITLE_TESTID = `${ITEM_TESTID}__title`
 const ITEM_DESCRIPTION_TESTID = `${ITEM_TESTID}__description`

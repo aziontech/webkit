@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { computed, inject, provide, reactive, useAttrs } from 'vue'
+  import { computed, provide, reactive, useAttrs } from 'vue'
 
-  import { type TableDensity, TableInjectionKey, TableRowGroupInjectionKey } from '../injection-key'
+  import { type TableDensity, TableRowGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableHeader',
@@ -33,12 +33,9 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__header` : 'data-table__header')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-header'
   )
 </script>
 

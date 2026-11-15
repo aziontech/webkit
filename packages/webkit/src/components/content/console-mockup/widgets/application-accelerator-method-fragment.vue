@@ -2,7 +2,7 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import Checkbox from '../../../inputs/checkbox/checkbox.vue'
+  import Checkbox from '../../../input/checkbox/checkbox.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'

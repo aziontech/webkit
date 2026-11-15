@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/timestamp/default.vue'
 import LogDetails from '../../../../examples/timestamp/log-details.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import Timestamp from './timestamp.vue'
 import { relativeText, toDate } from './timestamp-format'
 
@@ -20,14 +20,13 @@ const inProvider = (props: Record<string, unknown>, provider: Record<string, unk
       h(WebkitProvider, { now: NOW, timeZone: 'UTC', ...provider }, () => h(Timestamp, props))
   })
 
-const panel = () =>
-  document.body.querySelector<HTMLElement>('[data-testid="content-timestamp__panel"]')
+const panel = () => document.body.querySelector<HTMLElement>('[data-testid="timestamp__panel"]')
 
 describe('Timestamp', () => {
   it('renders the fallback data-testid, the local format and a time element with the ISO value', () => {
     render(inProvider({ value: VALUE }))
 
-    const root = screen.getByTestId('content-timestamp')
+    const root = screen.getByTestId('timestamp')
     expect(root).toHaveAttribute('data-format', 'local')
     expect(root).toHaveAttribute('data-state', 'closed')
     const time = root.querySelector('time')
@@ -41,7 +40,7 @@ describe('Timestamp', () => {
 
     expect(screen.getByTestId('started-at')).toBeInTheDocument()
     expect(screen.getByTestId('started-at__text')).toBeInTheDocument()
-    expect(screen.queryByTestId('content-timestamp')).toBeNull()
+    expect(screen.queryByTestId('timestamp')).toBeNull()
   })
 
   it('shows the relative phrase and follows the provider now', async () => {
@@ -53,33 +52,33 @@ describe('Timestamp', () => {
         )
     })
     render(Host)
-    expect(screen.getByTestId('content-timestamp__text')).toHaveTextContent('5 minutes ago')
+    expect(screen.getByTestId('timestamp__text')).toHaveTextContent('5 minutes ago')
 
     now.value = Date.UTC(2026, 10, 14, 12, 4, 40)
     await nextTick()
-    expect(screen.getByTestId('content-timestamp__text')).toHaveTextContent('just now')
+    expect(screen.getByTestId('timestamp__text')).toHaveTextContent('just now')
   })
 
   it('shows the UTC format regardless of the zone', () => {
     render(inProvider({ value: VALUE, format: 'utc' }, { timeZone: 'Asia/Tokyo' }))
 
-    const text = screen.getByTestId('content-timestamp__text').textContent ?? ''
+    const text = screen.getByTestId('timestamp__text').textContent ?? ''
     expect(text).toMatch(/12:04:31/)
     expect(text).toMatch(/UTC/)
   })
 
   it('reads the provider time zone, and the prop wins over it', () => {
     const tokyo = render(inProvider({ value: VALUE }, { timeZone: 'Asia/Tokyo' }))
-    expect(tokyo.getByTestId('content-timestamp__text').textContent).toMatch(/09:04:31/)
+    expect(tokyo.getByTestId('timestamp__text').textContent).toMatch(/09:04:31/)
     tokyo.unmount()
 
     render(inProvider({ value: VALUE, timeZone: 'America/New_York' }, { timeZone: 'Asia/Tokyo' }))
-    expect(screen.getByTestId('content-timestamp__text').textContent).toMatch(/07:04:31/)
+    expect(screen.getByTestId('timestamp__text').textContent).toMatch(/07:04:31/)
   })
 
   it('falls back to UTC for an unknown time zone instead of throwing', () => {
     render(inProvider({ value: VALUE, timeZone: 'Mars/Olympus' }))
-    expect(screen.getByTestId('content-timestamp__text').textContent).toMatch(/12:04:31/)
+    expect(screen.getByTestId('timestamp__text').textContent).toMatch(/12:04:31/)
   })
 
   it.each([
@@ -90,16 +89,13 @@ describe('Timestamp', () => {
     ['Date', new Date(VALUE)]
   ])('accepts %s', (_, value) => {
     render(inProvider({ value }))
-    expect(screen.getByTestId('content-timestamp').querySelector('time')).toHaveAttribute(
-      'datetime',
-      ISO
-    )
+    expect(screen.getByTestId('timestamp').querySelector('time')).toHaveAttribute('datetime', ISO)
   })
 
   it.each([undefined, '', 'not a date'])('renders a muted dash with no trigger for %s', (value) => {
     render(inProvider({ value }))
 
-    const root = screen.getByTestId('content-timestamp')
+    const root = screen.getByTestId('timestamp')
     expect(root).toHaveAttribute('data-invalid')
     expect(root).toHaveTextContent('—')
     expect(screen.queryByRole('button')).toBeNull()
@@ -117,11 +113,11 @@ describe('Timestamp', () => {
 
     await user.click(trigger)
     const dialog = screen.getByRole('dialog', { name: 'Timestamp details' })
-    const armed = screen.getByTestId('content-timestamp__text')
+    const armed = screen.getByTestId('timestamp__text')
     expect(armed).toHaveAttribute('aria-expanded', 'true')
-    expect(screen.getByTestId('content-timestamp')).toHaveAttribute('data-state', 'open')
+    expect(screen.getByTestId('timestamp')).toHaveAttribute('data-state', 'open')
 
-    const rows = [...dialog.querySelectorAll<HTMLElement>('[data-testid="content-timestamp__row"]')]
+    const rows = [...dialog.querySelectorAll<HTMLElement>('[data-testid="timestamp__row"]')]
     expect(rows.map((row) => row.dataset['row'])).toEqual(['utc', 'local', 'relative', 'raw'])
     expect(rows[0]).toHaveTextContent(ISO)
     expect(rows[1]).toHaveTextContent('UTC')
@@ -147,7 +143,7 @@ describe('Timestamp', () => {
 
     await user.click(screen.getByRole('button'))
     const ids = [
-      ...document.body.querySelectorAll<HTMLElement>('[data-testid="content-timestamp__row"]')
+      ...document.body.querySelectorAll<HTMLElement>('[data-testid="timestamp__row"]')
     ].map((row) => row.dataset['row'])
     expect(ids).toEqual(['utc', 'local', 'browser', 'relative', 'raw'])
   })

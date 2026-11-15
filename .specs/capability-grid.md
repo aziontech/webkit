@@ -1,6 +1,6 @@
 ---
 name: capability-grid
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 7

@@ -121,7 +121,7 @@ describe('trigger ARIA is in the server HTML', () => {
     test(`${example} renders aria-haspopup="${popup}" on the slotted button`, async () => {
       const mod = await server.ssrLoadModule(join(PKG, example))
       const html = await renderToString(createSSRApp(mod.default))
-      const trigger = html.match(/<span[^>]*data-testid="[^"]*__trigger"[^>]*>\s*(<button[^>]*>)/)
+      const trigger = html.match(/<span[^>]*data-testid="[^"]*-trigger"[^>]*>\s*(<button[^>]*>)/)
       assert.ok(trigger, 'trigger wrapper with a button child not found')
       const [wrapper, button] = [trigger[0].slice(0, trigger[0].indexOf('>') + 1), trigger[1]]
       assert.doesNotMatch(wrapper, /aria-|role=|tabindex=/, wrapper)
@@ -139,7 +139,7 @@ describe('trigger ARIA reaches controls behind a Tooltip and leaf components', (
     const mod = await server.ssrLoadModule(join(PKG, file))
     const html = await renderToString(createSSRApp(mod.default))
     const trigger = html.match(
-      /(<span[^>]*data-testid="[^"]*__trigger"[^>]*>)(?:\s|<!--\[-->)*(<span[^>]*data-testid="overlay-tooltip"[^>]*>)(?:\s|<!--\[-->)*(<button[^>]*>)/
+      /(<span[^>]*data-testid="[^"]*-trigger"[^>]*>)(?:\s|<!--\[-->)*(<span[^>]*data-testid="tooltip"[^>]*>)(?:\s|<!--\[-->)*(<button[^>]*>)/
     )
     assert.ok(trigger, 'trigger wrapper > tooltip wrapper > button not found')
     const [, wrapper, tooltip, button] = trigger
@@ -155,7 +155,7 @@ describe('trigger ARIA reaches controls behind a Tooltip and leaf components', (
     const mod = await server.ssrLoadModule(join(PKG, 'examples/dropdown-menu/custom-triggers.vue'))
     const html = await renderToString(createSSRApp(mod.default))
     const trigger = html.match(
-      /(<span[^>]*data-testid="[^"]*__trigger"[^>]*>)\s*<span[^>]*data-testid="content-avatar"/
+      /(<span[^>]*data-testid="[^"]*-trigger"[^>]*>)\s*<span[^>]*data-testid="avatar"/
     )
     assert.ok(trigger, 'trigger wrapper with an Avatar child not found')
     const wrapper = trigger[1]

@@ -51,7 +51,7 @@
 
   const EXTERNAL_ICON = 'ai ai-external-link'
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-link')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'link')
 
   const resolvedIcon = computed(() => {
     if (props.icon) return props.icon

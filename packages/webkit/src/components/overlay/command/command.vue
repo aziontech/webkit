@@ -66,7 +66,7 @@
   const uid = useId()
   const listId = `${uid}-list`
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-command')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'command')
 
   const openProp = computed<boolean | undefined>(() => openModel.value)
 

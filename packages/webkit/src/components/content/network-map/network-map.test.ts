@@ -5,7 +5,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import NetworkMap from './network-map.vue'
 import { NETWORK_MAP_REGIONS } from './network-map-data'
 
-const TESTID = 'content-network-map'
+const TESTID = 'network-map'
 
 const REGIONS = [
   'world',

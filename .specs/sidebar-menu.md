@@ -7,7 +7,7 @@ spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 48d7d16ac1c6d9d8120913bca85082b83a008a2cec463e7b8d2454da7a21c07d
+checksum: 1144e0befd603237fdbead3d8436f0f21675f0d48012375e8e0cab75e5749e17
 created: 2026-08-03
 last_updated: 2026-11-15
 ---
@@ -221,7 +221,7 @@ element instead of three.
   - Props: `label?: string` (default `''` — names the destination, overriding the level below on the stack; set it to name the menu root, which has no trigger to name itself).
   - Slots: `default` — replaces the label text.
 
-**Test ids.** The root derives `data-testid="navigation-sidebar-menu"` (`<category>-<name>`) and each part `navigation-sidebar-menu-<part>`. The 6.0 rename from `menu` to `sidebar-menu` also ended the old clash with the horizontal `navigation-menu`, whose root used the same `navigation-menu` string.
+**Test ids.** The root derives `data-testid="sidebar-menu"` (its own name) and each part its own name (`sidebar-menu-item`, …). The 6.0 rename from `menu` to `sidebar-menu` also ended the old clash with the horizontal `navigation-menu`, whose root used the same `navigation-menu` string.
 
 Resulting layout (no per-component `package.json` — the root `packages/webkit/package.json#exports`
 resolves every path; `.d.ts` is generated at publish time, never committed):

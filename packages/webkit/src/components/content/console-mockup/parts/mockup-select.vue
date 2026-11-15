@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed } from 'vue'
 
-  import Select from '../../../inputs/select/index'
+  import Select from '../../../input/select/index'
 
   defineOptions({ name: 'MockupSelect' })
 

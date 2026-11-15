@@ -64,9 +64,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-hero-title'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'hero-title')
 </script>
 
 <template>

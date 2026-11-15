@@ -23,8 +23,8 @@ const settle = async () => {
 
 const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
 
-const panel = () => byTestId('overlay-dialog__panel')
-const backdrop = () => byTestId('overlay-dialog__backdrop')
+const panel = () => byTestId('dialog__panel')
+const backdrop = () => byTestId('dialog__backdrop')
 
 /**
  * A realistic composed tree wired exactly like the Default example: Root >
@@ -70,8 +70,8 @@ describe('Dialog', () => {
         await settle()
 
         // The Root + Trigger render in-place; DialogContent teleports nothing until open.
-        expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
-        const trigger = getByTestId('overlay-dialog__trigger')
+        expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
+        const trigger = getByTestId('dialog__trigger')
         expect(trigger.hasAttribute('role')).toBe(false)
         expect(trigger.hasAttribute('tabindex')).toBe(false)
         const button = trigger.querySelector('button') as HTMLElement
@@ -88,11 +88,11 @@ describe('Dialog', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.click(getByTestId('overlay-dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog__trigger'))
         await settle()
 
         // Root reflects the injected open state.
-        expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('open')
+        expect(getByTestId('dialog').getAttribute('data-state')).toBe('open')
 
         const dialog = panel()
         expect(dialog).not.toBeNull()
@@ -101,8 +101,8 @@ describe('Dialog', () => {
         expect(dialog!.getAttribute('role')).toBe('dialog')
         expect(dialog!.getAttribute('aria-modal')).toBe('true')
 
-        const title = byTestId('overlay-dialog__title')!
-        const description = byTestId('overlay-dialog__description')!
+        const title = byTestId('dialog__title')!
+        const description = byTestId('dialog__description')!
         expect(dialog!.getAttribute('aria-labelledby')).toBe(title.id)
         expect(dialog!.getAttribute('aria-describedby')).toBe(description.id)
         expect(title.textContent).toContain('Delete domain')
@@ -113,7 +113,7 @@ describe('Dialog', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.keyDown(getByTestId('overlay-dialog__trigger'), { key: 'Enter' })
+        await fireEvent.keyDown(getByTestId('dialog__trigger'), { key: 'Enter' })
         await settle()
         expect(panel()).not.toBeNull()
       })
@@ -130,7 +130,7 @@ describe('Dialog', () => {
         })
         await settle()
 
-        await fireEvent.click(getByTestId('overlay-dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog__trigger'))
         await settle()
 
         expect(onUpdate).toHaveBeenCalledTimes(1)
@@ -163,17 +163,17 @@ describe('Dialog', () => {
         await settle()
 
         // Opens because parent seeds open=true (controlled).
-        expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('open')
+        expect(getByTestId('dialog').getAttribute('data-state')).toBe('open')
         expect(panel()).not.toBeNull()
 
         // DialogClose (IconButton) calls ctx.close() -> update:open(false).
-        const close = byTestId('overlay-dialog__close')!
+        const close = byTestId('dialog__close')!
         await fireEvent.click(close)
         await settle()
 
         expect(onUpdate).toHaveBeenCalledTimes(1)
         expect(onUpdate).toHaveBeenLastCalledWith(false)
-        expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
+        expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
       })
     })
 
@@ -182,7 +182,7 @@ describe('Dialog', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        const trigger = getByTestId('overlay-dialog__trigger')
+        const trigger = getByTestId('dialog__trigger')
         await fireEvent.click(trigger)
         await settle()
         expect(panel()).not.toBeNull()
@@ -191,7 +191,7 @@ describe('Dialog', () => {
         await fireEvent.keyDown(document, { key: 'Escape' })
         await settle()
 
-        expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
+        expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
         // Focus is restored to the trigger element (watch on isOpen -> triggerEl.focus()).
         await vi.waitFor(() => {
           expect(document.activeElement).toBe(trigger.querySelector('button'))
@@ -202,7 +202,7 @@ describe('Dialog', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.click(getByTestId('overlay-dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog__trigger'))
         await settle()
 
         const bd = backdrop()
@@ -212,24 +212,24 @@ describe('Dialog', () => {
         await fireEvent.click(bd!)
         await settle()
 
-        expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
+        expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
       })
 
       it('the DialogClose control closes the dialog', async () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        await fireEvent.click(getByTestId('overlay-dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog__trigger'))
         await settle()
 
-        const close = byTestId('overlay-dialog__close')!
+        const close = byTestId('dialog__close')!
         // dismissible (default) -> the IconButton is enabled.
         expect(close.hasAttribute('disabled')).toBe(false)
 
         await fireEvent.click(close)
         await settle()
 
-        expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
+        expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
       })
     })
 
@@ -238,25 +238,25 @@ describe('Dialog', () => {
         const { getByTestId } = render(composed({ dismissible: false }))
         await settle()
 
-        await fireEvent.click(getByTestId('overlay-dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog__trigger'))
         await settle()
         expect(panel()).not.toBeNull()
 
         // Escape: guarded by ctx.dismissible.
         await fireEvent.keyDown(document, { key: 'Escape' })
         await settle()
-        expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('open')
+        expect(getByTestId('dialog').getAttribute('data-state')).toBe('open')
 
         // Backdrop click: guarded by ctx.dismissible.
         await fireEvent.click(backdrop()!)
         await settle()
-        expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('open')
+        expect(getByTestId('dialog').getAttribute('data-state')).toBe('open')
 
-        const close = byTestId('overlay-dialog__close')!
+        const close = byTestId('dialog__close')!
         expect(close.hasAttribute('disabled')).toBe(false)
         await fireEvent.click(close)
         await settle()
-        expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
+        expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
       })
     })
 
@@ -268,10 +268,10 @@ describe('Dialog', () => {
           const { getByTestId } = render(composed({ defaultOpen: true, size }))
           await settle()
 
-          expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('open')
+          expect(getByTestId('dialog').getAttribute('data-state')).toBe('open')
           expect(panel()).not.toBeNull()
           // Panel shell testid is derived from the same injected testId.
-          expect(byTestId('overlay-dialog__panel-shell')).not.toBeNull()
+          expect(byTestId('dialog__panel-shell')).not.toBeNull()
         }
       )
     })
@@ -281,7 +281,7 @@ describe('Dialog', () => {
         const { getByTestId } = render(composed({ defaultOpen: true }))
         await settle()
 
-        expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('open')
+        expect(getByTestId('dialog').getAttribute('data-state')).toBe('open')
         expect(panel()).not.toBeNull()
       })
     })
@@ -298,7 +298,7 @@ describe('Dialog', () => {
         await settle()
         expect(document.body.style.overflow).toBe(before)
 
-        await fireEvent.click(getByTestId('overlay-dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog__trigger'))
         await settle()
         expect(document.body.style.overflow).toBe('hidden')
 
@@ -349,13 +349,13 @@ describe('Dialog', () => {
         const { getByTestId } = render(Default)
         await settle()
 
-        await fireEvent.click(getByTestId('overlay-dialog__trigger'))
+        await fireEvent.click(getByTestId('dialog__trigger'))
         await settle()
 
         const dialog = panel()
         expect(dialog).not.toBeNull()
         expect(dialog!.getAttribute('role')).toBe('dialog')
-        expect(byTestId('overlay-dialog__title')!.textContent).toContain('Dialog Title')
+        expect(byTestId('dialog__title')!.textContent).toContain('Dialog Title')
       })
     })
   })
@@ -389,7 +389,7 @@ describe('Dialog', () => {
     const openWithKey = async (key: string) => {
       const { getByTestId } = render(twoActions)
       await settle()
-      const trigger = getByTestId('overlay-dialog__trigger').querySelector('button')!
+      const trigger = getByTestId('dialog__trigger').querySelector('button')!
       trigger.focus()
       await userEvent.keyboard(key)
       await settle()
@@ -425,7 +425,7 @@ describe('Dialog', () => {
       const { trigger, getByTestId } = await openWithKey('{Enter}')
       await userEvent.keyboard('{Escape}')
       await settle()
-      expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
+      expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
       await vi.waitFor(() => {
         expect(document.activeElement).toBe(trigger)
       })
@@ -469,7 +469,7 @@ describe('Dialog', () => {
     it('teleports the panel inside a portal wrapper derived from the root testid', async () => {
       render(composed({ defaultOpen: true }))
       await settle()
-      const portal = byTestId('overlay-dialog__portal')
+      const portal = byTestId('dialog__portal')
       expect(portal).not.toBeNull()
       expect(portal!.parentElement).toBe(document.body)
       expect(portal!.contains(panel())).toBe(true)
@@ -486,7 +486,7 @@ describe('Dialog', () => {
       const bd = backdrop()
       expect(bd).not.toBeNull()
       expect(bd!.getAttribute('aria-hidden')).toBe('true')
-      expect(byTestId('overlay-dialog__portal')!.contains(bd)).toBe(true)
+      expect(byTestId('dialog__portal')!.contains(bd)).toBe(true)
       expect(panel()!.getAttribute('aria-modal')).toBe('true')
     })
   })
@@ -554,7 +554,7 @@ describe('Dialog', () => {
     it('forwards consumer attributes on the root', async () => {
       const { getByTestId } = render(bare({ id: 'billing-dialog', 'aria-label': 'Billing' }))
       await settle()
-      const root = getByTestId('overlay-dialog')
+      const root = getByTestId('dialog')
       expect(root.id).toBe('billing-dialog')
       expect(root.getAttribute('aria-label')).toBe('Billing')
     })
@@ -643,9 +643,9 @@ describe('Dialog', () => {
     it('renders the close button at the end of the header by default', async () => {
       render(composed({ defaultOpen: true }))
       await settle()
-      const close = byTestId('overlay-dialog__close')!
+      const close = byTestId('dialog__close')!
       expect(close).not.toBeNull()
-      expect(close.closest('header')).toBe(byTestId('overlay-dialog__panel-shell__header'))
+      expect(close.closest('header')).toBe(byTestId('dialog__panel-shell__header'))
       expect(close.hasAttribute('disabled')).toBe(false)
     })
 
@@ -655,13 +655,13 @@ describe('Dialog', () => {
       await settle()
 
       await fireEvent.keyDown(document, { key: 'Escape' })
-      await fireEvent.click(byTestId('overlay-dialog__backdrop')!)
+      await fireEvent.click(byTestId('dialog__backdrop')!)
       await settle()
-      expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('open')
+      expect(getByTestId('dialog').getAttribute('data-state')).toBe('open')
 
-      await fireEvent.click(byTestId('overlay-dialog__close')!)
+      await fireEvent.click(byTestId('dialog__close')!)
       await settle()
-      expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
+      expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
     })
 
     it('closable false removes the close button and keeps light-dismiss', async () => {
@@ -669,11 +669,11 @@ describe('Dialog', () => {
       await settle()
       await settle()
 
-      expect(byTestId('overlay-dialog__close')).toBeNull()
-      expect(byTestId('overlay-dialog__panel-shell__header')).not.toBeNull()
+      expect(byTestId('dialog__close')).toBeNull()
+      expect(byTestId('dialog__panel-shell__header')).not.toBeNull()
       await fireEvent.keyDown(document, { key: 'Escape' })
       await settle()
-      expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
+      expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
     })
 
     it('an explicit DialogClose in a custom header always closes', async () => {
@@ -684,9 +684,9 @@ describe('Dialog', () => {
         })
       )
       await settle()
-      await fireEvent.click(byTestId('overlay-dialog__close')!)
+      await fireEvent.click(byTestId('dialog__close')!)
       await settle()
-      expect(getByTestId('overlay-dialog').getAttribute('data-state')).toBe('closed')
+      expect(getByTestId('dialog').getAttribute('data-state')).toBe('closed')
     })
   })
 
@@ -714,8 +714,8 @@ describe('Dialog', () => {
       await settle()
       await fireEvent.click(view.getByRole('button', { name: 'Open dialog' }))
       await settle()
-      expect(byTestId('overlay-dialog__panel')).not.toBeNull()
-      expect(byTestId('overlay-dialog__close')).not.toBeNull()
+      expect(byTestId('dialog__panel')).not.toBeNull()
+      expect(byTestId('dialog__close')).not.toBeNull()
     })
   })
 })

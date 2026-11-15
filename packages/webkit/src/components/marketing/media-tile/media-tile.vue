@@ -49,9 +49,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-media-tile'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'media-tile')
 
   const hasMedia = () => Boolean(slots.media) || props.src.length > 0
 

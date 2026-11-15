@@ -1,6 +1,6 @@
 {
   "component": "scroll-area",
-  "title": "Components/Primitives/Layout/ScrollArea",
+  "title": "Components/Layout/ScrollArea",
   "examples": [
     {
       "name": "Default",

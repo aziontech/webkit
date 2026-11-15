@@ -1,19 +1,19 @@
 <script setup lang="ts">
   import { computed, nextTick, onMounted, ref, useId, watch } from 'vue'
 
-  import Button from '../../../actions/button/button.vue'
-  import CopyButton from '../../../actions/copy-button/copy-button.vue'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import Button from '../../../action/button/button.vue'
+  import CopyButton from '../../../action/copy-button/copy-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import StatusIndicator from '../../../feedback/status-indicator/status-indicator.vue'
-  import RadioGroup from '../../../inputs/radio-group/radio-group.vue'
-  import RadioGroupItem from '../../../inputs/radio-group/radio-group-item/radio-group-item.vue'
+  import RadioGroup from '../../../input/radio-group/radio-group.vue'
+  import RadioGroupItem from '../../../input/radio-group/radio-group-item/radio-group-item.vue'
   import type { TextureVariant } from '../../../marketing/texture/texture.vue'
   import Tabs from '../../../navigation/tabs'
   import Avatar from '../../avatar/avatar.vue'
   import Card from '../../card/card.vue'
   import Tag, { type TagSeverity } from '../../tag/tag.vue'
   import ConsoleMockupShell, {
-    type ConsoleMockupConsoleMockupShellFade
+    type ConsoleMockupShellFade
   } from '../console-mockup-shell/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
 
@@ -25,7 +25,7 @@
     /** Beat the mockup plays: the page top, the topology scrolled into view, or the deploy drawer open. */
     tab?: ConsoleMockupWorkloadOverviewTab
     /** Edge the mockup fades out along. */
-    fade?: ConsoleMockupConsoleMockupShellFade
+    fade?: ConsoleMockupShellFade
     /** Texture the frame is grounded with. */
     texture?: TextureVariant
     /** Whether this widget is the one showing. */

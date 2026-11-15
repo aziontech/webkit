@@ -7,7 +7,7 @@ spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 9d9cd2dc306d853c9b91a0d86a2e5e4e86916d8fdddbf820aa62fa01919444c3
+checksum: 7f811721894d2f7d5491a77d876da5d9f0811f1e9234ba1c28719aa4627cfa05
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -47,7 +47,7 @@ The top bar of a site: a row of links and triggers whose items open large panels
 - The `Viewport` teleports to `container` when set and to `body` otherwise, passing the selector through so the server renders the same tree the client hydrates.
 - Pin a wide panel to the page column with the viewport's `collision-padding`, not with override classes on the popup.
 - Set `aria-label` on the root (default `'Main'`) when the page has more than one navigation landmark.
-- Test ids: root fallback `navigation-navigation-menu` (`<category>-<name>`); every part derives from it (`navigation-navigation-menu__list`, `__item`, `__trigger`, `__icon` (the trigger chevron), `__content`, and inside the viewport `__portal`, `__positioner`, `__popup`, `__viewport`, `__arrow`, `__backdrop`), and a consumer `data-testid` wins on every part; one set on the `Viewport` lands on its popup.
+- Test ids: root fallback `navigation-menu` (its own name); every part uses its own name (`navigation-menu-list`, `navigation-menu-item`, `navigation-menu-trigger` with its chevron `navigation-menu__icon`, `navigation-menu-content`, `navigation-menu-viewport` and the viewport's inner `__portal`, `__positioner`, `__popup`, `__arrow`, `__backdrop`), and a consumer `data-testid` wins on every part; one set on the `Viewport` lands on its popup.
 - Attributes on the root (`id`, `aria-labelledby`, `data-*`, listeners) land on the `nav` landmark.
 - The compound has the shadcn parts only: `List`, `Item`, `Trigger`, `Content`, `Link`, `Viewport`. 6.0 folded the Base UI overlay chain (`Portal`, `Positioner`, `Popup`, `Arrow`, `Backdrop`) into `Viewport` props, and the `Icon` part into the trigger, which renders its own chevron.
 - `NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`); 6.0 removed its `native-button` prop.

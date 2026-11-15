@@ -30,7 +30,7 @@
   const sub = useDropdownSubContext()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${sub.parent.testId}__sub-trigger`
+    () => (attrs['data-testid'] as string | undefined) ?? 'dropdown-menu-sub-trigger'
   )
 
   const isOpen = computed(() => sub.isOpen.value)

@@ -37,7 +37,7 @@
   let origin: DragOrigin | null = null
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__resize-handle`
+    () => (attrs['data-testid'] as string | undefined) ?? 'chart-card-resize-handle'
   )
 
   const valueText = computed(() => {

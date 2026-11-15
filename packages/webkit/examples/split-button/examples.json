@@ -1,6 +1,6 @@
 {
   "component": "split-button",
-  "title": "Components/Primitives/Actions/SplitButton",
+  "title": "Components/Action/SplitButton",
   "examples": [
     {
       "name": "Default",

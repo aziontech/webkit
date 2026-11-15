@@ -247,7 +247,7 @@ describe('screen-reader smoke · form blocks', () => {
               - text: Origin
               - paragraph: The origin that serves this service’s content. Origins are shared across the account, so anyone on it can change one.
               - combobox "Origin" [invalid]: web-origin-prod
-              - paragraph: This origin no longer exists.
+              - alert: This origin no longer exists.
             - listitem:
               - text: Host header
               - paragraph: Identify a virtualhost sent in the Host header to the origin.

@@ -10,7 +10,7 @@ import WithActions from '../../../../examples/section-title/with-actions.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionTitle from './section-title.vue'
 
-const TESTID = 'marketing-section-title'
+const TESTID = 'section-title'
 
 const props = { title: 'Everything runs at the edge' }
 

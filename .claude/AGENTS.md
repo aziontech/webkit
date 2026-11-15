@@ -125,13 +125,13 @@ For onboarding content, prioritize the docs site's `Foundations` pages.
 
 ## 11) Webkit Layer Components (mandatory for agents)
 
-**Scope:** any file under `packages/webkit/src/components/<category>/<name>/` (categories `actions`, `ai`, `chart`, `code`, `content`, `data`, `documentation`, `feedback`, `inputs`, `layout`, `marketing`, `navigation`, `overlay`, `sections`, `utils` — the registry is [`.claude/hooks/lib/component-categories.mjs`](./hooks/lib/component-categories.mjs)).
+**Scope:** any file under `packages/webkit/src/components/<category>/<name>/` (categories `action`, `ai`, `chart`, `code`, `content`, `data`, `docs`, `feedback`, `input`, `layout`, `marketing`, `navigation`, `overlay`, `provider`, `section` — the registry is [`.claude/hooks/lib/component-categories.mjs`](./hooks/lib/component-categories.mjs)).
 
 ### 11.1) Sources of truth (read first)
 
 - `.claude/docs/DESIGN.md` — typography (generated classes such as `text-heading-md`, `text-body-sm`, `text-button-lg`), spacing (`var(--spacing-*)` from `spacing.js` only), max-width (`var(--container-*)`), shape (`var(--shape-*)`), semantic colors. In any visual conflict, **DESIGN.md wins**.
 - `.claude/docs/COMPONENT_REQUIREMENTS.md` § "Webkit Layer Pattern (in-depth)" — TypeScript pattern, JSDoc on props, naming conventions, controlled/uncontrolled states, typed slots, Composition Pattern criteria, `data-testid` BEM-style, class structure, ARIA, usability, light/dark, Code Connect, examples.
-- Canonical components: `packages/webkit/src/components/actions/button/button.vue`, `packages/webkit/src/components/actions/icon-button/icon-button.vue`, `packages/webkit/src/components/content/pricing-card/pricing-card.vue`.
+- Canonical components: `packages/webkit/src/components/action/button/button.vue`, `packages/webkit/src/components/action/icon-button/icon-button.vue`, `packages/webkit/src/components/content/pricing-card/pricing-card.vue`.
 - External reference for Composition Pattern: [shadcn-vue.com/docs/components](https://www.shadcn-vue.com/docs/components).
 
 ### 11.2) Spec-driven workflow (mandatory)
@@ -188,7 +188,7 @@ building blocks it calls.
 
 ### 11.3) Auto-invoke triggers (mandatory — do not wait for the user to mention the skill)
 
-- **Intent triggers (textual):** the user's request combines a creation verb (`criar`/`crie`/`gerar`/`adicionar`/`novo`/`create`/`add`/`make`/`build`) with a UI noun (`componente`/`component`/`button`/`botao`/`dialog`/`modal`/`drawer`/`sheet`/`tooltip`/`tabs`/`accordion`/`card`/`tag`/`badge`/`chip`/`input`/`select`/`dropdown`/`checkbox`/`radio`/`switch`/`spinner`/`toast`/`alert`/`message`/`breadcrumb`/`menu`/`popover`/`avatar`/`progress`/`skeleton`/`divider`) — or one of the categories (`actions`/`content`/`data`/`feedback`/`inputs`/`layout`/`navigation`/`overlay`/`utils`) — or any Figma reference (`figma.com/design/...`, `figma.com/proto/...`, "design", "frame", "mockup").
+- **Intent triggers (textual):** the user's request combines a creation verb (`criar`/`crie`/`gerar`/`adicionar`/`novo`/`create`/`add`/`make`/`build`) with a UI noun (`componente`/`component`/`button`/`botao`/`dialog`/`modal`/`drawer`/`sheet`/`tooltip`/`tabs`/`accordion`/`card`/`tag`/`badge`/`chip`/`input`/`select`/`dropdown`/`checkbox`/`radio`/`switch`/`spinner`/`toast`/`alert`/`message`/`breadcrumb`/`menu`/`popover`/`avatar`/`progress`/`skeleton`/`divider`) — or one of the categories (`action`/`content`/`data`/`feedback`/`input`/`layout`/`navigation`/`overlay`/`provider`) — or any Figma reference (`figma.com/design/...`, `figma.com/proto/...`, "design", "frame", "mockup").
 - **File triggers (context):** the agent is about to `Write`/`Edit` any of:
   - `packages/webkit/src/components/**/*.vue`
   - new entries in `packages/webkit/package.json#exports` (flat `./<name>` keys pointing into `src/components/<category>/<name>/`)
@@ -211,7 +211,7 @@ The trigger logic now lives in the orchestrator command [`.claude/commands/compo
 - Typography is **always** applied via the generated class from DESIGN.md (`text-heading-md`, `text-body-sm`, etc.). Never `text-(length:--text-*)`, `leading-*`, `tracking-*`, or `font-family` directly.
 - Colors, spacing, max-width, and shape come from semantic `var(--*)` tokens. No hex, no Tailwind palette names (`bg-gray-*`), no external/legacy color utilities (`text-color`, `surface-*`).
 - `defineOptions({ name, inheritAttrs: false })` + `useAttrs()`; the root merges the consumer `class` with `cn()` over a flat literal (no `rootClasses` computed, no class presets — see [`rules/styling.md`](rules/styling.md)). Never declare `class` in `defineProps`.
-- `data-testid` hierarchical, BEM-style: root with fallback `'<category>-<name>'`, children with `${testId}__<part>` (two underscores).
+- `data-testid`: the root falls back to the component's own kebab name (`'button'`, a sub-component its own name, `'dialog-header'`); inner parts are `${testId}__<part>` (two underscores). No category in a test id.
 - Composition Pattern only when the consumer needs to swap the order or omit parts (Dialog, Card composto, Tabs, Accordion, DropdownMenu, Sheet/Drawer, Form). When in doubt, stay monolithic. When applying it, ship the complete shadcn-vue anatomy (e.g. Dialog = Root + Trigger + Portal + Overlay + Content + Title + Description + Close).
 - **shadcn-vue patterns** (see COMPONENT_REQUIREMENTS § 2.5-2.9):
   - **Available today** (use immediately): `data-state`/`data-disabled`/`data-orientation` on root and stateful sub-components; `VariantProps` exported as named exports (`export type ButtonKind = ...`); `cn` helper from `@aziontech/webkit/utils/cn` for class merging; `<name>.figma.ts` Code Connect mappings (config at `packages/webkit/figma.config.json`; publishing requires `FIGMA_ACCESS_TOKEN`); `userEvent` from `@testing-library/user-event` in browser tests.

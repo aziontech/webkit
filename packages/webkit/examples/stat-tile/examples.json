@@ -1,6 +1,6 @@
 {
   "component": "stat-tile",
-  "title": "Components/Primitives/Chart/StatTile",
+  "title": "Components/Chart/StatTile",
   "examples": [
     {
       "name": "Default",

@@ -31,7 +31,7 @@
   const { t } = useTranslate({ helpPanel: en.helpPanel })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-help-panel'
+    () => (attrs['data-testid'] as string | undefined) ?? 'help-panel'
   )
 </script>
 

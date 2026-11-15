@@ -66,7 +66,7 @@ Each is a `scope: general` standard. Follow ✅, avoid ❌.
 | **Root element**        | wrapper `<div>` that swallows attrs · `as` prop                      | own the root · `inheritAttrs:false` + `$attrs` + `cn` · polymorphism via `href`         |
 | **States**              | ad-hoc spinner / "no results" string                                 | `data-*` + `Skeleton` / `EmptyState`                                                    |
 | **Accessibility**       | `<div @click>`                                                       | `<button>` + `focus-visible` + `motion-reduce:` + `useId`                               |
-| **data-testid**         | (none)                                                               | `:data-testid="testId"` → `<category>-<name>`                                           |
+| **data-testid**         | (none)                                                               | `:data-testid="testId"` → the component's own name                                      |
 | **Deprecation**         | remove/rename silently                                               | `@deprecated` (name the replacement + version) → one major → remove                     |
 
 Each links to its full rule in [`.claude/rules/`](../../../.claude/rules/) (e.g. `v-model.md`,
@@ -91,7 +91,7 @@ what they do, never in how their files are arranged:
 - **Co-locate** what only this component uses; promote to a shared `composables/` folder
   only when a second component needs it.
 - **One component per `.vue` file**; the kebab file name is the canonical name everywhere
-  (PascalCase in `defineOptions`, `<category>-<name>` in the testid).
+  (PascalCase in `defineOptions`, the kebab name itself in the testid).
 - The **`<script setup>` order is fixed** too: imports → `defineOptions` → types → props →
   emits → models → slots → inject/composables → state → computed → watchers → functions →
   `defineExpose`.

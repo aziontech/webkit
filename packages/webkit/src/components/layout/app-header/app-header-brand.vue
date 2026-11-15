@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
-
-  import { AppHeaderInjectionKey } from './injection-key'
+  import { computed, useAttrs } from 'vue'
 
   defineOptions({
     name: 'AppHeaderBrand',
@@ -13,12 +11,8 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(AppHeaderInjectionKey)
 
-  const testId = computed(
-    () =>
-      (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'layout-app-header'}__brand`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'app-header-brand')
 </script>
 
 <template>

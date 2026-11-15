@@ -36,7 +36,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-topic')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feature-item')
 
   const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 

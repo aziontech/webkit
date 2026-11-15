@@ -4,7 +4,7 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: 0c736f1ee24ec8c499fa6ecddd99b5e6ea75d449cadf7135883b771a2f864e0c
+checksum: 0ac5cc64c2de0c1031b06605e833b4c2e952cc51e92ed2fbd949a40709cfaa8e
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=8869-10008
   node_id: 8869:10008
@@ -79,7 +79,7 @@ The empty registration frame that divides two page sections. On a page with no m
 
 - Visual states: `default`
 - `data-size` mirrors the `size` prop: `small` | `medium` | `large`
-- `data-hatch` present when the hatch texture is drawn; the texture layer itself is addressable at `marketing-section-gap__hatch`
+- `data-hatch` present when the hatch texture is drawn; the texture layer itself is addressable at `section-gap__hatch`
 
 ## Motion & Animations
 

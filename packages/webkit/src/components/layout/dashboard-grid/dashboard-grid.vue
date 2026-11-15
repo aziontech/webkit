@@ -59,7 +59,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ dashboardGrid: en.dashboardGrid })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-board')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'dashboard-grid')
   const announcement = ref('')
   const draggingId = ref<string | null>(null)
   const labels = new Map<string, () => string>()

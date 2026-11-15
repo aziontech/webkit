@@ -2,9 +2,9 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import SplitButton from '../../../actions/split-button/split-button.vue'
+  import SplitButton from '../../../action/split-button/split-button.vue'
   import DataTable from '../../../data/data-table/data-table.vue'
-  import Input from '../../../inputs/input/input.vue'
+  import Input from '../../../input/input/input.vue'
   import Breadcrumb from '../../../navigation/breadcrumb/breadcrumb.vue'
   import Avatar from '../../avatar/avatar.vue'
   import Card from '../../card/card.vue'

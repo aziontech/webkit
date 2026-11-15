@@ -59,9 +59,7 @@
     bodyTargetEl.value = null
   }
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-context-menu'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'context-menu')
 
   const openProp = computed<boolean | undefined>(() => openModel.value)
 

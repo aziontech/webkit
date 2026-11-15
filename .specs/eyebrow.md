@@ -7,7 +7,7 @@ spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: 0e13e07534f6944061dc5c287802e6a9fe385bf110aae766f41ef984e68e6023
+checksum: c67b250427caa09d2841ad49a6b9af8ea73e63e3fcfe8310f2dd9326b8113f74
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -88,7 +88,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 - Cursor: a decorative, `aria-hidden` `span` after the label is rendered only when `cursor` is set; the root carries `data-cursor` and drops its end padding (`data-[cursor]:pe-0`) while the cursor is shown.
 - Wrapping: with `singleLine` (default) the root carries `data-single-line` and the prefix turns `whitespace-nowrap` and the label sits on one line because the root is `w-fit`; it wraps (with `text-pretty`) only when the container is narrower than the label. With it off the prefix may wrap too.
 - Attributes (including `class`) are forwarded to the root `div` (`inheritAttrs: false` + `v-bind="$attrs"`).
-- Test ids: root `content-overline` (consumer `data-testid` wins).
+- Test ids: root `eyebrow` (consumer `data-testid` wins).
 - Reflow: the root is capped at the width of its container, and a label that does not fit wraps instead of overflowing at any width, at 200% zoom and with translated copy (no viewport breakpoint involved).
 
 ## Motion & Animations

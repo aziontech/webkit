@@ -16,7 +16,7 @@ describe('SaveBar', () => {
   it('renders a footer with the default testid and the floating variant', () => {
     const { getByTestId } = within(render(SaveBar).container)
 
-    const root = getByTestId('layout-save-bar')
+    const root = getByTestId('save-bar')
     expect(root.tagName).toBe('FOOTER')
     expect(root.getAttribute('data-variant')).toBe('floating')
   })
@@ -47,7 +47,7 @@ describe('SaveBar', () => {
         }).container
       )
 
-      const message = getByTestId('layout-save-bar__message')
+      const message = getByTestId('save-bar__message')
       expect(message.contains(getByTestId('status'))).toBe(true)
       expect(message.textContent).not.toContain('You have unsaved changes.')
       expect(message.querySelector('.ai-circle-info')).toBeNull()
@@ -64,19 +64,19 @@ describe('SaveBar', () => {
         }).container
       )
 
-      expect(getByTestId('layout-save-bar').getAttribute('data-variant')).toBe(variant)
-      expect(getByTestId('layout-save-bar__actions').contains(getByRole('button'))).toBe(true)
+      expect(getByTestId('save-bar').getAttribute('data-variant')).toBe(variant)
+      expect(getByTestId('save-bar__actions').contains(getByRole('button'))).toBe(true)
     }
   )
 
   it('renders the status message only when the default slot is given', () => {
     const bare = within(render(SaveBar).container)
-    expect(bare.queryByTestId('layout-save-bar__message')).toBeNull()
+    expect(bare.queryByTestId('save-bar__message')).toBeNull()
 
     const withMessage = within(
       render(SaveBar, { slots: { default: 'You have unsaved changes.' } }).container
     )
-    expect(withMessage.getByTestId('layout-save-bar__message').textContent?.trim()).toBe(
+    expect(withMessage.getByTestId('save-bar__message').textContent?.trim()).toBe(
       'You have unsaved changes.'
     )
   })
@@ -98,7 +98,7 @@ describe('SaveBar', () => {
   it('renders the examples', () => {
     expect(within(render(Default).container).getByRole('button', { name: 'Save' })).toBeTruthy()
     expect(
-      within(render(Docked).container).getByTestId('layout-save-bar').getAttribute('data-variant')
+      within(render(Docked).container).getByTestId('save-bar').getAttribute('data-variant')
     ).toBe('docked')
     expect(within(render(Plain).container).getByRole('button', { name: 'Cancel' })).toBeTruthy()
   })
@@ -117,12 +117,12 @@ describe('SaveBar', () => {
 
   it('puts Cancel and Create, in reading order, inside the centered card', () => {
     const view = within(render(Centered).container)
-    const card = view.getByTestId('layout-save-bar__card')
+    const card = view.getByTestId('save-bar__card')
     const buttons = within(card).getAllByRole('button')
 
-    expect(view.getByTestId('layout-save-bar').getAttribute('data-variant')).toBe('centered')
+    expect(view.getByTestId('save-bar').getAttribute('data-variant')).toBe('centered')
     expect(buttons.map((button) => button.textContent?.trim())).toEqual(['Cancel', 'Create'])
-    expect(view.queryByTestId('layout-save-bar__message')).toBeNull()
+    expect(view.queryByTestId('save-bar__message')).toBeNull()
   })
 
   it('renders the status sentence inside the centered card when given', () => {
@@ -136,11 +136,9 @@ describe('SaveBar', () => {
       }).container
     )
 
-    expect(
-      view
-        .getByTestId('layout-save-bar__card')
-        .contains(view.getByTestId('layout-save-bar__message'))
-    ).toBe(true)
+    expect(view.getByTestId('save-bar__card').contains(view.getByTestId('save-bar__message'))).toBe(
+      true
+    )
   })
 
   it('has no accessibility violations as a create page footer', async () => {
@@ -167,7 +165,7 @@ describe('SaveBar', () => {
 
     it('stacks full-width actions under the message', () => {
       const view = mountIn(320)
-      const actions = view.getByTestId('layout-save-bar__actions')
+      const actions = view.getByTestId('save-bar__actions')
       const save = view.getByRole('button', { name: 'Save' })
 
       expect(getComputedStyle(actions).flexDirection).toBe('column-reverse')
@@ -179,9 +177,7 @@ describe('SaveBar', () => {
     it('keeps the actions in a row in a wide box', () => {
       const view = mountIn(1024)
 
-      expect(getComputedStyle(view.getByTestId('layout-save-bar__actions')).flexDirection).toBe(
-        'row'
-      )
+      expect(getComputedStyle(view.getByTestId('save-bar__actions')).flexDirection).toBe('row')
     })
   })
 
@@ -190,11 +186,9 @@ describe('SaveBar', () => {
       const view = render(Fade, { container: boxOf(320) })
       const back = view.getByRole('button', { name: 'Back' })
       const next = view.getByRole('button', { name: 'Continue' })
-      const root = view.getByTestId('layout-save-bar')
+      const root = view.getByTestId('save-bar')
 
-      expect(getComputedStyle(view.getByTestId('layout-save-bar__actions')).flexDirection).toBe(
-        'row'
-      )
+      expect(getComputedStyle(view.getByTestId('save-bar__actions')).flexDirection).toBe('row')
       expect(Math.round(back.getBoundingClientRect().top)).toBe(
         Math.round(next.getBoundingClientRect().top)
       )
@@ -262,7 +256,7 @@ describe('SaveBar', () => {
         },
         { container: host }
       )
-      const root = view.getByTestId('layout-save-bar')
+      const root = view.getByTestId('save-bar')
 
       await vi.waitFor(() => expect(root.style.height).toMatch(/^[1-9]\d*px$/))
       expect(root.style.height).toBe(inset())

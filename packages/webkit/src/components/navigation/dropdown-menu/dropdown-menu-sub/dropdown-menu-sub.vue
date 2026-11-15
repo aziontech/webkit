@@ -25,9 +25,7 @@
   const parent = useDropdownContext()
   const uid = useId()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${parent.testId}__sub`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'dropdown-menu-sub')
 
   const isOpen = computed(() => parent.activeSub.value === uid)
   const focusOnOpen = ref(false)

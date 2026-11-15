@@ -6,7 +6,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import MediaSplit from '../media-split/media-split.vue'
 import SectionStack from './section-stack.vue'
 
-const TESTID = 'marketing-section-stack'
+const TESTID = 'section-stack'
 const BAND = `[data-testid="${TESTID}__band"]`
 
 const band = (label: string) => h('p', label)
@@ -119,8 +119,8 @@ describe('SectionStack', () => {
 
     expect(frames).toHaveLength(2)
     for (const frame of frames) {
-      const copy = frame.querySelector('[data-testid="marketing-media-split__copy-cell"]')
-      const media = frame.querySelector('[data-testid="marketing-media-split__media-cell"]')
+      const copy = frame.querySelector('[data-testid="media-split__copy-cell"]')
+      const media = frame.querySelector('[data-testid="media-split__media-cell"]')
 
       expect(copy?.getAttribute('data-marks')).toBe(EVERY_CORNER)
       expect(media?.getAttribute('data-marks')).toBe(EVERY_CORNER)

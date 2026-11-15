@@ -17,9 +17,9 @@ describe('PlanFeatureList', () => {
     const view = render(PlanFeatureList, { props: { items, ariaLabel: 'Pro plan features' } })
 
     const list = view.getByRole('list', { name: 'Pro plan features' })
-    expect(view.getByTestId('content-plan-feature-list').contains(list)).toBe(true)
+    expect(view.getByTestId('plan-feature-list').contains(list)).toBe(true)
     expect(view.getAllByRole('listitem')).toHaveLength(2)
-    expect(view.getAllByTestId('content-plan-feature-list__item')).toHaveLength(2)
+    expect(view.getAllByTestId('plan-feature-list__item')).toHaveLength(2)
   })
 
   it('lets a consumer data-testid win and derives the item testid from it', () => {
@@ -30,7 +30,7 @@ describe('PlanFeatureList', () => {
 
     expect(view.getByTestId('plan-perks')).toBeTruthy()
     expect(view.getAllByTestId('plan-perks__item')).toHaveLength(2)
-    expect(view.queryByTestId('content-plan-feature-list')).toBeNull()
+    expect(view.queryByTestId('plan-feature-list')).toBeNull()
   })
 
   it('renders the label and, only when given, the description', () => {
@@ -75,7 +75,7 @@ describe('PlanFeatureList', () => {
   it('renders nothing when there are no items', () => {
     const view = render(PlanFeatureList, { props: { items: [] } })
 
-    expect(view.queryByTestId('content-plan-feature-list')).toBeNull()
+    expect(view.queryByTestId('plan-feature-list')).toBeNull()
     expect(view.queryByRole('list')).toBeNull()
   })
 

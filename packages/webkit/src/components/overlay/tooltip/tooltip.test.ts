@@ -17,7 +17,7 @@ const settle = async () => {
 
 const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
 
-const panel = () => byTestId('overlay-tooltip__panel')
+const panel = () => byTestId('tooltip__panel')
 
 // The trigger slot is a plain <button> so the trigger has something focusable
 // and interactive to hover/focus, exactly like the Default example.
@@ -45,7 +45,7 @@ describe('Tooltip', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        const trigger = getByTestId('overlay-tooltip')
+        const trigger = getByTestId('tooltip')
         expect(trigger.getAttribute('data-state')).toBe('closed')
         // aria-describedby is only wired while open.
         expect(trigger.getAttribute('aria-describedby')).toBeNull()
@@ -59,7 +59,7 @@ describe('Tooltip', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        const trigger = getByTestId('overlay-tooltip')
+        const trigger = getByTestId('tooltip')
         // @focusin="setOpen(true)" opens synchronously (bypasses the hover delay).
         await fireEvent.focusIn(trigger)
         await settle()
@@ -84,7 +84,7 @@ describe('Tooltip', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        const trigger = getByTestId('overlay-tooltip')
+        const trigger = getByTestId('tooltip')
         await fireEvent.focusIn(trigger)
         await settle()
         expect(panel()).not.toBeNull()
@@ -102,7 +102,7 @@ describe('Tooltip', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        const trigger = getByTestId('overlay-tooltip')
+        const trigger = getByTestId('tooltip')
         await fireEvent.focusIn(trigger)
         await settle()
         expect(panel()).not.toBeNull()
@@ -133,7 +133,7 @@ describe('Tooltip', () => {
           })
         )
         await settle()
-        await fireEvent.focusIn(byTestId('overlay-tooltip') as HTMLElement)
+        await fireEvent.focusIn(byTestId('tooltip') as HTMLElement)
         await settle()
         expect(panel()).not.toBeNull()
 
@@ -151,7 +151,7 @@ describe('Tooltip', () => {
         const { getByTestId } = render(composed())
         await settle()
 
-        const trigger = getByTestId('overlay-tooltip')
+        const trigger = getByTestId('tooltip')
         await fireEvent.focusIn(trigger)
         await settle()
         expect(panel()).not.toBeNull()
@@ -169,7 +169,7 @@ describe('Tooltip', () => {
       it('stays open while the pointer moves from the trigger onto the tooltip', async () => {
         const { getByTestId } = render(composed())
         await settle()
-        const trigger = getByTestId('overlay-tooltip')
+        const trigger = getByTestId('tooltip')
         await fireEvent.focusIn(trigger)
         await settle()
         await fireEvent.mouseLeave(trigger)
@@ -189,7 +189,7 @@ describe('Tooltip', () => {
         try {
           const { getByTestId } = render(composed())
           await nextTick()
-          const trigger = getByTestId('overlay-tooltip')
+          const trigger = getByTestId('tooltip')
           await fireEvent.pointerDown(trigger, { pointerType: 'touch' })
           vi.advanceTimersByTime(500)
           await nextTick()
@@ -209,7 +209,7 @@ describe('Tooltip', () => {
         try {
           const { getByTestId } = render(composed())
           await nextTick()
-          const trigger = getByTestId('overlay-tooltip')
+          const trigger = getByTestId('tooltip')
           await fireEvent.pointerDown(trigger, { pointerType: 'mouse' })
           vi.advanceTimersByTime(600)
           await nextTick()
@@ -227,7 +227,7 @@ describe('Tooltip', () => {
           const { getByTestId } = render(composed({ delay: 200 }))
           await nextTick()
 
-          const trigger = getByTestId('overlay-tooltip')
+          const trigger = getByTestId('tooltip')
           // scheduleOpen sets a timeout; nothing opens synchronously.
           await fireEvent.mouseEnter(trigger)
           await nextTick()
@@ -256,7 +256,7 @@ describe('Tooltip', () => {
         })
         await settle()
 
-        await fireEvent.focusIn(getByTestId('overlay-tooltip'))
+        await fireEvent.focusIn(getByTestId('tooltip'))
         await settle()
 
         expect(onUpdate).toHaveBeenCalledTimes(1)
@@ -269,7 +269,7 @@ describe('Tooltip', () => {
           slots: { default: () => h('button', { type: 'button' }, 'Trigger') }
         })
         await settle()
-        await fireEvent.focusIn(getByTestId('overlay-tooltip'))
+        await fireEvent.focusIn(getByTestId('tooltip'))
         await settle()
 
         expect(emitted().show).toBeUndefined()
@@ -299,7 +299,7 @@ describe('Tooltip', () => {
         await settle()
 
         // Parent seeds open=true (controlled) -> panel is shown.
-        const trigger = getByTestId('overlay-tooltip')
+        const trigger = getByTestId('tooltip')
         expect(trigger.getAttribute('data-state')).toBe('open')
         expect(panel()).not.toBeNull()
 
@@ -325,7 +325,7 @@ describe('Tooltip', () => {
         const { getByTestId } = render(composed({ disabled: true }))
         await settle()
 
-        const trigger = getByTestId('overlay-tooltip')
+        const trigger = getByTestId('tooltip')
         expect(trigger.getAttribute('data-disabled')).toBe('true')
 
         // setOpen no-ops while disabled.
@@ -345,7 +345,7 @@ describe('Tooltip', () => {
         })
         await settle()
 
-        const trigger = getByTestId('overlay-tooltip')
+        const trigger = getByTestId('tooltip')
         // setOpen guards `if (!props.content && next) return`.
         await fireEvent.focusIn(trigger)
         await settle()
@@ -370,7 +370,7 @@ describe('Tooltip', () => {
           const { getByTestId } = render(composed({ placement, defaultOpen: true }))
           await settle()
 
-          const trigger = getByTestId('overlay-tooltip')
+          const trigger = getByTestId('tooltip')
           expect(trigger.getAttribute('data-state')).toBe('open')
 
           const tip = panel()
@@ -389,7 +389,7 @@ describe('Tooltip', () => {
         const { getByTestId } = render(composed({ defaultOpen: true }))
         await settle()
 
-        expect(getByTestId('overlay-tooltip').getAttribute('data-state')).toBe('open')
+        expect(getByTestId('tooltip').getAttribute('data-state')).toBe('open')
         expect(panel()).not.toBeNull()
       })
     })
@@ -413,7 +413,7 @@ describe('Tooltip', () => {
         const { getByTestId } = render(composed({ defaultOpen: true }))
         await settle()
 
-        const trigger = getByTestId('overlay-tooltip')
+        const trigger = getByTestId('tooltip')
         // Scope axe to the trigger: validates the aria-describedby attribute value
         // and role semantics on the component's own root element.
         await expectNoA11yViolations(trigger)
@@ -425,7 +425,7 @@ describe('Tooltip', () => {
         const { getByTestId } = render(Default)
         await settle()
 
-        const trigger = getByTestId('overlay-tooltip')
+        const trigger = getByTestId('tooltip')
         await fireEvent.focusIn(trigger)
         await settle()
 

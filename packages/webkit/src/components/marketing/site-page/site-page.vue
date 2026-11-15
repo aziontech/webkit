@@ -71,9 +71,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-site-page'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'site-page')
 
   const heroEntries = computed(() => resolveEntries(props.hero))
 

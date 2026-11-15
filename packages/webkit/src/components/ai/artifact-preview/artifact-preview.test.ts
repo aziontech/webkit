@@ -9,7 +9,7 @@ const base = { title: 'cache-rules.json', description: 'Cache settings', meta: '
 
 describe('ArtifactPreview', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
-    expect(render(ArtifactPreview, { props: base }).getByTestId('ai-artifact-preview')).toBeTruthy()
+    expect(render(ArtifactPreview, { props: base }).getByTestId('artifact-preview')).toBeTruthy()
     expect(
       render(ArtifactPreview, { props: base, attrs: { 'data-testid': 'mine' } }).getByTestId('mine')
     ).toBeTruthy()
@@ -48,13 +48,13 @@ describe('ArtifactPreview', () => {
 
   it('renders the preview body only with content', () => {
     expect(
-      render(ArtifactPreview, { props: base }).queryByTestId('ai-artifact-preview__content')
+      render(ArtifactPreview, { props: base }).queryByTestId('artifact-preview__content')
     ).toBeNull()
     const withBody = render(ArtifactPreview, {
       props: base,
       slots: { default: () => '{ "ttl": 60 }' }
     })
-    expect(withBody.getByTestId('ai-artifact-preview__content')).toHaveTextContent('{ "ttl": 60 }')
+    expect(withBody.getByTestId('artifact-preview__content')).toHaveTextContent('{ "ttl": 60 }')
   })
 
   it('has no axe violations', async () => {

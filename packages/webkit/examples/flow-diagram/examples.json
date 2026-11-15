@@ -1,6 +1,6 @@
 {
   "component": "flow-diagram",
-  "title": "Components/Primitives/Data/FlowDiagram",
+  "title": "Components/Data/FlowDiagram",
   "examples": [
     {
       "name": "Default",

@@ -78,14 +78,14 @@ const mount = (extra: Record<string, unknown> = {}, dir = 'ltr') => {
     })
   )
   const cell = (row: number, id: string): HTMLElement =>
-    view.getByTestId(`data-data-grid__cell-${row}-${id}`)
+    view.getByTestId(`data-grid__cell-${row}-${id}`)
   return { view, rows, selection, events, cell }
 }
 
 describe('DataGrid', () => {
   it('renders the grid pattern with a roving tab stop and the derived test id', async () => {
     const { view, cell } = mount()
-    expect(view.getByTestId('data-data-grid')).toBeTruthy()
+    expect(view.getByTestId('data-grid')).toBeTruthy()
     const grid = view.getByRole('grid', { name: 'Customers' })
     expect(grid.getAttribute('aria-rowcount')).toBe('4')
     expect(grid.getAttribute('aria-colcount')).toBe('5')
@@ -137,7 +137,7 @@ describe('DataGrid', () => {
     await userEvent.keyboard('{Control>}{Home}{/Control}')
     expect(document.activeElement).toBe(cell(0, 'name'))
     await userEvent.keyboard('{ArrowUp}')
-    const head = view.getByTestId('data-data-grid__head-name')
+    const head = view.getByTestId('data-grid__head-name')
     expect(document.activeElement).toBe(head)
     expect(head.getAttribute('tabindex')).toBe('0')
     expect(cell(0, 'name').getAttribute('tabindex')).toBe('-1')
@@ -155,8 +155,8 @@ describe('DataGrid', () => {
 
   it('reaches a resize handle with Enter on its header and returns with Escape', async () => {
     const { view } = mount()
-    const head = view.getByTestId('data-data-grid__head-seats')
-    const handle = view.getByTestId('data-data-grid__resize-seats')
+    const head = view.getByTestId('data-grid__head-seats')
+    const handle = view.getByTestId('data-grid__resize-seats')
     expect(handle.getAttribute('tabindex')).toBe('-1')
     head.focus()
     await userEvent.keyboard('{Enter}')
@@ -177,7 +177,7 @@ describe('DataGrid', () => {
     const { view, rows, events, cell } = mount()
     cell(0, 'name').focus()
     await userEvent.keyboard('{Enter}')
-    const editor = await view.findByTestId('data-data-grid__editor')
+    const editor = await view.findByTestId('data-grid__editor')
     expect(document.activeElement).toBe(editor)
     await userEvent.clear(editor)
     await userEvent.type(editor, 'Acme Corp{Enter}')
@@ -192,21 +192,21 @@ describe('DataGrid', () => {
     const { view, rows, cell } = mount()
     cell(1, 'seats').focus()
     await userEvent.keyboard('7')
-    const editor = (await view.findByTestId('data-data-grid__editor')) as HTMLInputElement
+    const editor = (await view.findByTestId('data-grid__editor')) as HTMLInputElement
     expect(editor.value).toBe('7')
     await userEvent.keyboard('{Tab}')
     expect(rows.value[1]?.seats).toBe(7)
     await waitFor(() => expect(document.activeElement).toBe(cell(1, 'active')))
     cell(1, 'id').focus()
     await userEvent.keyboard('{ArrowLeft}{ArrowLeft}{Enter}')
-    const wrap = (await view.findByTestId('data-data-grid__editor')) as HTMLInputElement
+    const wrap = (await view.findByTestId('data-grid__editor')) as HTMLInputElement
     await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
     expect(wrap.isConnected).toBe(false)
     await waitFor(() => expect(document.activeElement).toBe(cell(1, 'plan')))
     cell(0, 'name').focus()
     await userEvent.keyboard('X{Escape}')
     expect(rows.value[0]?.name).toBe('Acme Inc.')
-    expect(view.queryByTestId('data-data-grid__editor')).toBeNull()
+    expect(view.queryByTestId('data-grid__editor')).toBeNull()
     await waitFor(() => expect(document.activeElement).toBe(cell(0, 'name')))
   })
 
@@ -214,10 +214,10 @@ describe('DataGrid', () => {
     const { view, rows, cell } = mount()
     cell(0, 'plan').focus()
     await userEvent.keyboard('{Enter}')
-    const select = (await view.findByTestId('data-data-grid__editor')) as HTMLSelectElement
+    const select = (await view.findByTestId('data-grid__editor')) as HTMLSelectElement
     await userEvent.selectOptions(select, 'free')
     expect(rows.value[0]?.plan).toBe('pro')
-    expect(view.getByTestId('data-data-grid__editor')).toBe(select)
+    expect(view.getByTestId('data-grid__editor')).toBe(select)
     select.focus()
     await userEvent.keyboard('{Enter}')
     expect(rows.value[0]?.plan).toBe('free')
@@ -236,21 +236,21 @@ describe('DataGrid', () => {
     await userEvent.keyboard('{Enter}x{Delete}')
     cell(1, 'active').focus()
     await userEvent.keyboard(' ')
-    expect(view.queryByTestId('data-data-grid__editor')).toBeNull()
+    expect(view.queryByTestId('data-grid__editor')).toBeNull()
     expect(rows.value).toEqual(seed())
     expect(events['change']).toBeUndefined()
     view.unmount()
     const editable = mount()
     editable.cell(0, 'id').focus()
     await userEvent.keyboard('{Enter}')
-    expect(editable.view.queryByTestId('data-data-grid__editor')).toBeNull()
+    expect(editable.view.queryByTestId('data-grid__editor')).toBeNull()
   })
 
   it('keeps an invalid number in its editor with a message and commits nothing', async () => {
     const { view, rows, events, cell } = mount()
     cell(0, 'seats').focus()
     await userEvent.keyboard('{Enter}')
-    const editor = (await view.findByTestId('data-data-grid__editor')) as HTMLInputElement
+    const editor = (await view.findByTestId('data-grid__editor')) as HTMLInputElement
     await userEvent.clear(editor)
     await userEvent.type(editor, 'twelve{Enter}')
     expect(rows.value[0]?.seats).toBe(12)
@@ -258,13 +258,13 @@ describe('DataGrid', () => {
     expect(editor.isConnected).toBe(true)
     expect(editor.getAttribute('aria-invalid')).toBe('true')
     expect(cell(0, 'seats').hasAttribute('data-invalid')).toBe(true)
-    const message = view.getByTestId('data-data-grid__error')
+    const message = view.getByTestId('data-grid__error')
     expect(message.textContent).toBe('Enter a number')
     expect(editor.getAttribute('aria-describedby')).toBe(message.id)
     await userEvent.clear(editor)
     await userEvent.type(editor, '14{Enter}')
     expect(rows.value[0]?.seats).toBe(14)
-    expect(view.queryByTestId('data-data-grid__error')).toBeNull()
+    expect(view.queryByTestId('data-grid__error')).toBeNull()
   })
 
   it('copies the range with a real Ctrl+C key press', async () => {
@@ -289,7 +289,7 @@ describe('DataGrid', () => {
       cancelable: true,
       clipboardData: new DataTransfer()
     })
-    view.getByTestId('data-data-grid__cell-1-plan').dispatchEvent(copy)
+    view.getByTestId('data-grid__cell-1-plan').dispatchEvent(copy)
     const [event, text] = events['copy']?.at(-1) ?? []
     expect(event).toBeInstanceOf(ClipboardEvent)
     expect(text).toBe('Acme Inc.\tpro\nJane Doe\tfree')
@@ -299,15 +299,13 @@ describe('DataGrid', () => {
   it('selects rows with the checkbox column, Space and Select all', async () => {
     const { view, selection } = mount({ selectable: true })
     expect(
-      within(view.getByTestId('data-data-grid__select-1')).getByRole('checkbox')
+      within(view.getByTestId('data-grid__select-1')).getByRole('checkbox')
     ).toHaveAccessibleName('Select row Jane Doe')
-    view.getByTestId('data-data-grid__select-0').focus()
+    view.getByTestId('data-grid__select-0').focus()
     await userEvent.keyboard(' ')
     expect(selection.value).toEqual({ '1': true })
     expect(view.getAllByRole('row')[1]?.getAttribute('aria-selected')).toBe('true')
-    await userEvent.click(
-      within(view.getByTestId('data-data-grid__select-all')).getByRole('checkbox')
-    )
+    await userEvent.click(within(view.getByTestId('data-grid__select-all')).getByRole('checkbox'))
     expect(selection.value).toEqual({ '1': true, '2': true, '3': true })
     await expectNoA11yViolations(view.container)
   })
@@ -318,7 +316,7 @@ describe('DataGrid', () => {
     expect(events['row-remove']).toBeUndefined()
     await userEvent.click(view.getByRole('button', { name: 'Add row' }))
     expect(events['row-add']?.[0]?.[0]).toBeInstanceOf(Event)
-    view.getByTestId('data-data-grid__select-1').focus()
+    view.getByTestId('data-grid__select-1').focus()
     await userEvent.keyboard(' ')
     await userEvent.click(view.getByRole('button', { name: 'Delete rows' }))
     const [event, removed] = events['row-remove']?.[0] ?? []
@@ -328,7 +326,7 @@ describe('DataGrid', () => {
 
   it('resizes a column from its separator with the keyboard', async () => {
     const { view } = mount()
-    const handle = view.getByTestId('data-data-grid__resize-name')
+    const handle = view.getByTestId('data-grid__resize-name')
     expect(handle.getAttribute('role')).toBe('separator')
     expect(handle).toHaveAccessibleName('Resize Name')
     expect(handle.getAttribute('aria-valuenow')).toBe('160')
@@ -345,7 +343,7 @@ describe('DataGrid', () => {
     expect(cell(0, 'name').getAttribute('data-frozen')).toBe('start')
     expect(cell(0, 'plan').hasAttribute('data-frozen')).toBe(false)
     const empty = render(DataGrid, { props: { columns, modelValue: [], ariaLabel: 'Empty' } })
-    expect(empty.getByTestId('data-data-grid__empty').textContent).toContain('No rows yet')
+    expect(empty.getByTestId('data-grid__empty').textContent).toContain('No rows yet')
     const grid = within(empty.container).getByRole('grid')
     expect(grid.getAttribute('aria-rowcount')).toBe('1')
     expect(within(grid).getAllByRole('row')).toHaveLength(1)
@@ -362,6 +360,6 @@ describe('DataGrid', () => {
     const readonly = render(Readonly)
     const first = readonly.getAllByRole('gridcell')[0] as HTMLElement
     await fireEvent.dblClick(first)
-    expect(readonly.queryByTestId('data-data-grid__editor')).toBeNull()
+    expect(readonly.queryByTestId('data-grid__editor')).toBeNull()
   })
 })

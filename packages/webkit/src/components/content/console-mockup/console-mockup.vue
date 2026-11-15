@@ -3,7 +3,7 @@
 
   import type { TextureVariant } from '../../marketing/texture/texture.vue'
   import type {
-    ConsoleMockupConsoleMockupShellFade,
+    ConsoleMockupShellFade,
     ConsoleMockupShellVariant
   } from './console-mockup-shell/console-mockup-shell.vue'
   import { ConsoleMockupInjectionKey } from './injection-key'
@@ -111,7 +111,7 @@
     /** Design width of a workload screen from md up; fragments keep their own width, and unset keeps the widget's own. */
     width?: number
     /** Edge a workload screen, workload-overview or application-version fades out along; fragments keep their own fade. */
-    fade?: ConsoleMockupConsoleMockupShellFade
+    fade?: ConsoleMockupShellFade
     /** Texture a full-screen widget is grounded with. */
     texture?: TextureVariant
     /** Tab a tabbed widget plays (workload-overview, application-version, functions-start); other widgets ignore it, and unset plays the first tab. */
@@ -143,9 +143,7 @@
   const declared = shallowRef<string[]>([])
   const plates = shallowRef<typeof Plates | null>(null)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-console-mockup'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'console-mockup')
 
   const plate = computed(
     () =>

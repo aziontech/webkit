@@ -54,7 +54,7 @@
   const closeTimer = ref<ReturnType<typeof setTimeout> | null>(null)
   const pressTimer = ref<ReturnType<typeof setTimeout> | null>(null)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-tooltip')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tooltip')
 
   const tooltipId = computed(() => `${uid}-tooltip`)
 

@@ -42,7 +42,7 @@ describe('Eyebrow', () => {
 
   it('spaces the prefix, label and cursor with the --spacing-2xs token', () => {
     const { getByTestId } = render(Eyebrow, { slots: { default: 'TOKENS' } })
-    const root = getByTestId('content-overline')
+    const root = getByTestId('eyebrow')
     expect(root.className).toContain('gap-(--spacing-2xs)')
     expect(root.className).toContain('ps-(--spacing-2xs)')
     expect(root.className).toContain('pe-(--spacing-2xs)')
@@ -75,7 +75,7 @@ describe('Eyebrow', () => {
       props: { cursor: true },
       slots: { default: 'MIRRORED' }
     })
-    const root = getByTestId('content-overline')
+    const root = getByTestId('eyebrow')
     expect(root).toHaveAttribute('data-cursor')
     expect(root).toHaveAttribute('data-single-line')
     expect(container.querySelector('.animate-blink')).toHaveAttribute('aria-hidden', 'true')
@@ -150,7 +150,7 @@ describe('Eyebrow', () => {
       expect(view.getByText('Trusted by mission-critical workloads').className).not.toContain(
         'whitespace-nowrap'
       )
-      expect(view.getByTestId('content-overline').className).toContain('max-w-full')
+      expect(view.getByTestId('eyebrow').className).toContain('max-w-full')
     })
   })
 

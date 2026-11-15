@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import { defineComponent, nextTick, ref } from 'vue'
 
 import Default from '../../../../examples/diagram/default.vue'
-import FlowDiagram from '../../../../examples/diagram/flow-diagram.vue'
+import Flow from '../../../../examples/diagram/flow.vue'
 import Groups from '../../../../examples/diagram/groups.vue'
 import NodeKinds from '../../../../examples/diagram/nodes.vue'
 import Spec from '../../../../examples/diagram/spec.vue'
@@ -16,7 +16,7 @@ import type { DiagramSpec } from './types'
 
 const NAMES = Object.keys(diagrams) as DiagramName[]
 
-const TESTID = 'marketing-diagram'
+const TESTID = 'diagram'
 
 const spec: DiagramSpec = {
   nodes: [
@@ -123,7 +123,7 @@ describe('Diagram', () => {
       await ready(container)
       expect(container.querySelector('[data-stack]')?.getAttribute('data-stack')).toBe('tree')
 
-      const flow = render(FlowDiagram)
+      const flow = render(Flow)
       await ready(flow.container)
       const rows = [...flow.container.querySelectorAll('[data-stack]')]
       expect(rows.map((row) => row.getAttribute('data-stack'))).toEqual(['centre'])
@@ -265,7 +265,7 @@ describe('Diagram', () => {
       ['Spec', Spec],
       ['NodeKinds', NodeKinds],
       ['Groups', Groups],
-      ['Flow', FlowDiagram]
+      ['Flow', Flow]
     ])('renders the %s story as a named image', async (_name, Story) => {
       const { findByRole } = render(Story)
 
@@ -278,14 +278,14 @@ describe('Diagram', () => {
       const { container, getAllByTestId } = render(Diagram, { props: { spec } })
       await ready(container)
 
-      const nodes = getAllByTestId(`${TESTID}__node`)
+      const nodes = getAllByTestId('diagram-node')
       expect(nodes.map((node) => node.getAttribute('data-diagram-node'))).toEqual([
         'user',
         'workload',
         'cache',
         'origin'
       ])
-      expect(getAllByTestId(`${TESTID}__layout`).length).toBeGreaterThan(0)
+      expect(getAllByTestId('diagram-layout').length).toBeGreaterThan(0)
     })
 
     it('lets a consumer override the node and layout testids', () => {
@@ -304,7 +304,7 @@ describe('Diagram', () => {
         attrs: { 'data-testid': 'custom-layout' }
       })
       expect(layout.getByTestId('custom-layout')).toBeTruthy()
-      expect(layout.getByTestId(`${TESTID}__node`)).toBeTruthy()
+      expect(layout.getByTestId('diagram-node')).toBeTruthy()
     })
   })
 })

@@ -1,10 +1,10 @@
 ---
 name: field
-category: inputs
+category: input
 structure: composition
 status: implemented
 spec_version: 8
-checksum: 4efbcb7884b24be57d9e5f781a464a266948e661fc57d67aae541006e9b2d8a3
+checksum: b75d4157a6c20d12510cec917cba124192b3468e2796ca38263c226f3e442bba
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -132,7 +132,7 @@ The root `Field` provides `FieldInjectionKey` (`injection-key.ts`): a generated 
 
 <!-- Resulting layout:
 
-  packages/webkit/src/components/inputs/field/
+  packages/webkit/src/components/input/field/
   ├── field.vue
   ├── index.ts
   ├── injection-key.ts

@@ -1,6 +1,6 @@
 {
   "component": "trace",
-  "title": "Components/Primitives/Code/Trace",
+  "title": "Components/Code/Trace",
   "examples": [
     {
       "name": "Default",

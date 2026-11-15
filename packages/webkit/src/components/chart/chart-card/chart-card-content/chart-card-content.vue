@@ -20,12 +20,12 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = useChartCardContext()
+  useChartCardContext()
 
   const unpadded = computed<boolean>(() => !props.padded)
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__content`
+    () => (attrs['data-testid'] as string | undefined) ?? 'chart-card-content'
   )
 </script>
 

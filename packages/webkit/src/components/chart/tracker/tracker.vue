@@ -52,7 +52,7 @@
   const shownIndex = ref<number | null>(null)
   const moving = ref(false)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-tracker')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tracker')
   const hasError = computed(() => !props.loading && props.error.length > 0)
   const count = computed(() => (props.loading || hasError.value ? 0 : props.items.length))
   const isEmpty = computed(() => !props.loading && !hasError.value && props.items.length === 0)
@@ -162,7 +162,7 @@
       v-if="loading"
       width="100%"
       height="2rem"
-      :data-testid="`${testId}__skeleton`"
+      :data-testid="`${testId}__loading`"
     />
     <p
       v-else-if="hasError"

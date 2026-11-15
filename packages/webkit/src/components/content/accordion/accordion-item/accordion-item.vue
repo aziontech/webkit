@@ -31,9 +31,7 @@
   const attrs = useAttrs()
   const rootEl = ref<globalThis.HTMLElement | null>(null)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-accordion-item'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'accordion-item')
 
   const open = computed(() => ctx.isOpen(props.value))
   const disabled = computed(() => props.disabled)

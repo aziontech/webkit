@@ -1,6 +1,6 @@
 ---
 name: doc-item
-category: documentation
+category: docs
 structure: monolithic
 status: implemented
 spec_version: 2

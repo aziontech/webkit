@@ -3,7 +3,7 @@
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import DataTable from '../../../data/data-table/data-table.vue'
-  import Input from '../../../inputs/input/input.vue'
+  import Input from '../../../input/input/input.vue'
   import Card from '../../card/card.vue'
   import Tag from '../../tag/tag.vue'
   import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'

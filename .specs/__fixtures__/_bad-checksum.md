@@ -1,6 +1,6 @@
 ---
 name: bad-checksum
-category: actions
+category: action
 structure: monolithic
 status: approved
 spec_version: 1
@@ -18,21 +18,21 @@ enforce-spec-exists must block.
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `kind` | `'primary'` | `'primary'` | no | Visual variant. |
+| Prop   | Type        | Default     | Required | JSDoc           |
+| ------ | ----------- | ----------- | -------- | --------------- |
+| `kind` | `'primary'` | `'primary'` | no       | Visual variant. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
+| Event   | Payload      | Notes           |
+| ------- | ------------ | --------------- |
 | `click` | `MouseEvent` | Fires on click. |
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Body. |
+| Slot      | Scope | Notes |
+| --------- | ----- | ----- |
+| `default` | —     | Body. |
 
 ## States
 
@@ -40,14 +40,14 @@ enforce-spec-exists must block.
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
+| Region     | Token (DESIGN.md) |
+| ---------- | ----------------- |
 | typography | `.text-button-lg` |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
+| -------------- | ------------------- | --------- |
 
 ## Accessibility (WCAG 2.1 AA)
 

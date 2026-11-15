@@ -1,6 +1,6 @@
 ---
 name: contact-hub
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 3

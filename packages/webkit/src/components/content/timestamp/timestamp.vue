@@ -4,7 +4,7 @@
   import { useLocale } from '../../../composables/use-locale/use-locale'
   import { LocaleInjectionKey } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import CopyButton from '../../actions/copy-button/copy-button.vue'
+  import CopyButton from '../../action/copy-button/copy-button.vue'
   import { useMinuteClock } from '../../data/table/table-cell-time/minute-clock'
   import Popover from '../../overlay/popover/popover.vue'
   import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
@@ -47,9 +47,7 @@
   const now = useMinuteClock()
   const { t, formatDate, formatRelativeTime } = useLocale({ timestamp: en.timestamp })
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-timestamp'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'timestamp')
 
   const mounted = ref<boolean>(false)
   const browserZone = ref<string>('')

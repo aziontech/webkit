@@ -43,7 +43,7 @@ const measured = (view: ReturnType<typeof render>) =>
     expect(Number(layer?.getAttribute('width'))).toBeGreaterThan(0)
   })
 
-const plotOf = (view: ReturnType<typeof render>) => view.getByTestId('chart-chart__plot')
+const plotOf = (view: ReturnType<typeof render>) => view.getByTestId('chart__plot')
 
 afterEach(() => {
   document.documentElement.removeAttribute('dir')
@@ -59,7 +59,7 @@ describe('Chart', () => {
     it('draws one dot per value in a scatter and skips gaps', async () => {
       const view = mount({}, () => [h(ChartScatter)])
       await measured(view)
-      const scatter = view.getByTestId('chart-chart__scatter')
+      const scatter = view.getByTestId('chart-scatter')
       expect(scatter.querySelectorAll('[data-series="allowed"] circle')).toHaveLength(4)
       expect(scatter.querySelectorAll('[data-series="blocked"] circle')).toHaveLength(3)
       expect(scatter.querySelector('circle')?.getAttribute('fill')).toBe('var(--chart-series-1)')
@@ -68,7 +68,7 @@ describe('Chart', () => {
     it('draws the active scatter point as one overlay dot per series', async () => {
       const view = mount({}, () => [h(ChartScatter)])
       await measured(view)
-      const scatter = view.getByTestId('chart-chart__scatter')
+      const scatter = view.getByTestId('chart-scatter')
       expect(scatter.querySelectorAll('[data-active]')).toHaveLength(0)
       const plot = plotOf(view)
       plot.focus()
@@ -93,10 +93,10 @@ describe('Chart', () => {
         () => [h(ChartScatter)]
       )
       await measured(view)
-      const xs = [...view.getByTestId('chart-chart__scatter').querySelectorAll('circle')].map(
-        (dot) => Number(dot.getAttribute('cx'))
+      const xs = [...view.getByTestId('chart-scatter').querySelectorAll('circle')].map((dot) =>
+        Number(dot.getAttribute('cx'))
       )
-      expect(view.getByTestId('chart-chart').getAttribute('data-label-scale')).toBe('linear')
+      expect(view.getByTestId('chart').getAttribute('data-label-scale')).toBe('linear')
       const [a = 0, b = 0, c = 0] = xs
       expect((b - a) / (c - a)).toBeCloseTo(0.25, 1)
     })
@@ -108,8 +108,8 @@ describe('Chart', () => {
       ])
       await measured(view)
       await fireEvent.keyDown(plotOf(view), { key: 'ArrowRight' })
-      const marker = view.getByTestId('chart-chart__line').querySelector('circle')
-      const bar = view.getByTestId('chart-chart__bar').querySelector('path') as SVGPathElement
+      const marker = view.getByTestId('chart-line').querySelector('circle')
+      const bar = view.getByTestId('chart-bar').querySelector('path') as SVGPathElement
       const box = bar.getBBox()
       expect(Number(marker?.getAttribute('cx'))).toBeCloseTo(box.x + box.width / 2, 0)
     })
@@ -120,12 +120,12 @@ describe('Chart', () => {
       const plot = plotOf(view)
       plot.focus()
       await fireEvent.keyDown(plot, { key: 'ArrowDown' })
-      const live = view.getByTestId('chart-chart__live')
+      const live = view.getByTestId('chart__live')
       expect(live.textContent).toContain('WAF requests allowed')
       expect(live.textContent).not.toContain('WAF requests blocked')
       expect(
         view
-          .getByTestId('chart-chart__line')
+          .getByTestId('chart-line')
           .querySelector('[data-series="blocked"]')
           ?.getAttribute('data-dimmed')
       ).toBe('true')
@@ -144,14 +144,12 @@ describe('Chart', () => {
       await fireEvent.keyDown(plot, { key: 'ArrowRight' })
       await fireEvent.keyDown(plot, { key: 'ArrowRight', shiftKey: true })
       await fireEvent.keyDown(plot, { key: 'ArrowRight', shiftKey: true })
-      expect(view.getByTestId('chart-chart').getAttribute('data-brushing')).toBe('true')
-      expect(view.getByTestId('chart-chart__live').textContent).toBe(
-        'Selecting from 14:00 to 14:10'
-      )
-      expect(view.getByTestId('chart-chart__brush').querySelector('rect')).toBeTruthy()
+      expect(view.getByTestId('chart').getAttribute('data-brushing')).toBe('true')
+      expect(view.getByTestId('chart__live').textContent).toBe('Selecting from 14:00 to 14:10')
+      expect(view.getByTestId('chart-brush').querySelector('rect')).toBeTruthy()
       await fireEvent.keyDown(plot, { key: 'Enter' })
       expect(onRange).toHaveBeenLastCalledWith([0, 2])
-      expect(view.getByTestId('chart-chart__live').textContent).toBe('Selected from 14:00 to 14:10')
+      expect(view.getByTestId('chart__live').textContent).toBe('Selected from 14:00 to 14:10')
     })
 
     it('selects a range by dragging across the plot', async () => {
@@ -187,7 +185,7 @@ describe('Chart', () => {
         h(ChartBar)
       ])
       await measured(view)
-      const band = view.getByTestId('chart-chart__brush').querySelector('rect')
+      const band = view.getByTestId('chart-brush').querySelector('rect')
       expect(Number(band?.getAttribute('width'))).toBeGreaterThan(0)
       await fireEvent.keyDown(plotOf(view), { key: 'Escape' })
       expect(onRange).toHaveBeenLastCalledWith(null)
@@ -204,13 +202,15 @@ describe('Chart', () => {
         'rtl'
       )
       await vi.waitFor(() => {
-        const dots = view.getByTestId('chart-chart__line').querySelectorAll('circle')
+        const dots = view.getByTestId('chart-line').querySelectorAll('circle')
         expect(dots.length).toBeGreaterThan(1)
         expect(Number(dots[0]?.getAttribute('cx'))).toBeGreaterThan(
           Number(dots[1]?.getAttribute('cx'))
         )
       })
-      const ticks = view.getByTestId('chart-chart__axis-y').querySelectorAll('text')
+      const ticks = view.container
+        .querySelector('[data-testid="chart-axis"][data-type="y"]')!
+        .querySelectorAll('text')
       const plot = plotOf(view).getBoundingClientRect()
       const tick = (ticks[0] as SVGTextElement).getBoundingClientRect()
       expect(tick.left).toBeGreaterThan(plot.left + plot.width / 2)
@@ -224,10 +224,10 @@ describe('Chart', () => {
       await vi.waitFor(async () => {
         await fireEvent.keyDown(plot, { key: 'Escape' })
         await fireEvent.keyDown(plot, { key: 'ArrowLeft' })
-        expect(view.getByTestId('chart-chart__live').textContent).toContain('14:00')
+        expect(view.getByTestId('chart__live').textContent).toContain('14:00')
       })
       await fireEvent.keyDown(plot, { key: 'ArrowLeft' })
-      expect(view.getByTestId('chart-chart__live').textContent).toContain('14:05')
+      expect(view.getByTestId('chart__live').textContent).toContain('14:05')
     })
 
     it('grows horizontal bars from the end side under rtl', async () => {
@@ -237,7 +237,7 @@ describe('Chart', () => {
         'rtl'
       )
       await vi.waitFor(() => {
-        const bar = view.getByTestId('chart-chart__bar').querySelector('path') as SVGPathElement
+        const bar = view.getByTestId('chart-bar').querySelector('path') as SVGPathElement
         const plot = plotOf(view).getBoundingClientRect()
         const box = bar.getBoundingClientRect()
         expect(box.right).toBeGreaterThan(plot.left + plot.width * 0.8)
@@ -266,7 +266,7 @@ describe('Chart', () => {
       const view = mount({}, () => [
         h(ChartReference, { value: 2000, label: 'High', severity: 'severity-high' })
       ])
-      const reference = view.getByTestId('chart-chart__reference')
+      const reference = view.getByTestId('chart-reference')
       expect(reference.querySelector('g')?.getAttribute('stroke')).toBe('var(--severity-high)')
     })
 
@@ -281,7 +281,7 @@ describe('Chart', () => {
         h(ChartReference, { value: 2000, label: 'Rate limit', severity: 'danger' })
       ])
       await measured(view)
-      const reference = view.getByTestId('chart-chart__reference')
+      const reference = view.getByTestId('chart-reference')
       expect(reference.getAttribute('data-type')).toBe('line')
       expect(reference.getAttribute('data-severity')).toBe('danger')
       const lines = reference.querySelectorAll('line')
@@ -290,17 +290,17 @@ describe('Chart', () => {
       expect(reference.querySelector('g')?.getAttribute('stroke')).toBe(
         'var(--chart-status-danger)'
       )
-      expect(view.getByTestId('chart-chart__reference-label').textContent?.trim()).toBe(
-        'Rate limit'
-      )
-      expect(view.getByTestId('chart-chart__axis-y').textContent).toContain('2K')
+      expect(view.getByTestId('chart-reference__label').textContent?.trim()).toBe('Rate limit')
+      expect(
+        view.container.querySelector('[data-testid="chart-axis"][data-type="y"]')!.textContent
+      ).toContain('2K')
       expect(summaryOf(view)).toContain('Rate limit at 2K.')
     })
 
     it('draws a band between from and to in either order', async () => {
       const view = mount({}, () => [h(ChartReference, { from: 400, to: 300, label: 'Normal' })])
       await measured(view)
-      const reference = view.getByTestId('chart-chart__reference')
+      const reference = view.getByTestId('chart-reference')
       expect(reference.getAttribute('data-type')).toBe('band')
       expect(reference.querySelectorAll('rect')).toHaveLength(1)
       expect(reference.querySelectorAll('line')).toHaveLength(2)
@@ -314,7 +314,7 @@ describe('Chart', () => {
         h(ChartReference, { value: 500 })
       ])
       await measured(view)
-      const [outside, inside] = view.getAllByTestId('chart-chart__reference')
+      const [outside, inside] = view.getAllByTestId('chart-reference')
       expect(outside?.getAttribute('data-type')).toBeNull()
       expect(outside?.querySelector('line')).toBeNull()
       expect(inside?.getAttribute('data-type')).toBe('line')
@@ -328,7 +328,7 @@ describe('Chart', () => {
         h(ChartReference, { value: 1000, label: 'Target' })
       ])
       await measured(view)
-      const line = view.getByTestId('chart-chart__reference').querySelector('line')
+      const line = view.getByTestId('chart-reference').querySelector('line')
       expect(line?.getAttribute('x1')).toBe(line?.getAttribute('x2'))
     })
 

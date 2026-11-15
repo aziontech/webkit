@@ -52,7 +52,7 @@
   const triggerEl = ref<globalThis.HTMLElement | null>(null)
   const panelEl = ref<globalThis.HTMLElement | null>(null)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'overlay-popover')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'popover')
 
   const triggerId = `${uid}-trigger`
   const contentId = `${uid}-content`

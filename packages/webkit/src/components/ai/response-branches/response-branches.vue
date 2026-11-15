@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
 
   defineOptions({
     name: 'ResponseBranches',
@@ -35,7 +35,7 @@
   const { t } = useTranslate({ responseBranches: en.responseBranches })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-response-branches'
+    () => (attrs['data-testid'] as string | undefined) ?? 'response-branches'
   )
 
   const last = computed<number>(() => Math.max(0, Math.floor(props.count) - 1))

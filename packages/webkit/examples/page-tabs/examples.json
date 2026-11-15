@@ -1,6 +1,6 @@
 {
   "component": "page-tabs",
-  "title": "Components/Primitives/Navigation/PageTabs",
+  "title": "Components/Navigation/PageTabs",
   "examples": [
     {
       "name": "Default",

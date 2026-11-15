@@ -35,7 +35,7 @@
   const { t } = useTranslate({ outcomeIcon: en.outcomeIcon })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-outcome-icon'
+    () => (attrs['data-testid'] as string | undefined) ?? 'outcome-icon'
   )
   const rootAttrs = computed(() =>
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'data-testid'))

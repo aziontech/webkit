@@ -94,7 +94,7 @@ const body = () => within(document.body)
 afterEach(() => {
   // Portal teleports into document.body; ensure nothing leaks between tests.
   document.body
-    .querySelectorAll('[data-testid="navigation-navigation-menu__portal"]')
+    .querySelectorAll('[data-testid="navigation-menu-portal"]')
     .forEach((node) => node.remove())
 })
 
@@ -118,15 +118,15 @@ describe('NavigationMenu', () => {
         renderTree(
           `<NavigationMenu><NavigationMenuList :show-highlight="false"><NavigationMenuItem value="a"><NavigationMenuTrigger>A</NavigationMenuTrigger><NavigationMenuContent>Panel</NavigationMenuContent></NavigationMenuItem></NavigationMenuList><NavigationMenuViewport variant="contrast" side="top" /></NavigationMenu>`
         )
-        expect(body().getByTestId('navigation-navigation-menu__portal')).toBeTruthy()
-        expect(body().getByTestId('navigation-navigation-menu__positioner')).toBeTruthy()
-        expect(body().getByTestId('navigation-navigation-menu__popup')).toHaveAttribute(
+        expect(body().getByTestId('navigation-menu-portal')).toBeTruthy()
+        expect(body().getByTestId('navigation-menu-positioner')).toBeTruthy()
+        expect(body().getByTestId('navigation-menu-popover')).toHaveAttribute(
           'data-variant',
           'contrast'
         )
-        expect(body().getByTestId('navigation-navigation-menu__viewport')).toBeTruthy()
-        expect(body().queryByTestId('navigation-navigation-menu__arrow')).toBeNull()
-        expect(body().queryByTestId('navigation-navigation-menu__backdrop')).toBeNull()
+        expect(body().getByTestId('navigation-menu-viewport-frame')).toBeTruthy()
+        expect(body().queryByTestId('navigation-menu-arrow')).toBeNull()
+        expect(body().queryByTestId('navigation-menu-backdrop')).toBeNull()
       })
 
       it('exposes the link part as NavigationMenu.Link', () => {
@@ -148,7 +148,7 @@ describe('NavigationMenu', () => {
           `<NavigationMenu><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
         )
 
-        const root = getByTestId('navigation-navigation-menu')
+        const root = getByTestId('navigation-menu')
         expect(root.tagName).toBe('NAV')
         expect(root).toHaveAttribute('aria-label', 'Main')
         expect(root).toHaveAttribute('data-orientation', 'horizontal')
@@ -161,7 +161,7 @@ describe('NavigationMenu', () => {
           `<NavigationMenu aria-label="Sidebar" orientation="vertical"><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
         )
 
-        const root = getByTestId('navigation-navigation-menu')
+        const root = getByTestId('navigation-menu')
         expect(root).toHaveAttribute('aria-label', 'Sidebar')
         expect(root).toHaveAttribute('data-orientation', 'vertical')
       })
@@ -172,7 +172,7 @@ describe('NavigationMenu', () => {
         const { getByRole } = renderTree(COMPOSED)
 
         const trigger = getByRole('button', { name: /Solutions/ })
-        const chevron = within(trigger).getByTestId('navigation-navigation-menu__icon')
+        const chevron = within(trigger).getByTestId('navigation-menu__icon')
         expect(chevron).toHaveAttribute('aria-hidden', 'true')
         expect(chevron).toHaveAttribute('data-state', 'closed')
         await fireEvent.click(trigger)
@@ -180,7 +180,7 @@ describe('NavigationMenu', () => {
           timeout: OPEN_TIMEOUT
         })
         const link = getByRole('link', { name: /Pricing/ })
-        expect(within(link).queryByTestId('navigation-navigation-menu__icon')).toBeNull()
+        expect(within(link).queryByTestId('navigation-menu__icon')).toBeNull()
       })
 
       it('a submenu trigger is a disclosure button with aria-expanded=false and no aria-haspopup when closed', () => {
@@ -219,7 +219,7 @@ describe('NavigationMenu', () => {
         await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'true'), {
           timeout: OPEN_TIMEOUT
         })
-        expect(getByTestId('navigation-navigation-menu')).toHaveAttribute('data-state', 'open')
+        expect(getByTestId('navigation-menu')).toHaveAttribute('data-state', 'open')
         expect(trigger).toHaveAttribute('data-popup-open', '')
 
         // Content is teleported to document.body — query it there, not the container.
@@ -233,7 +233,7 @@ describe('NavigationMenu', () => {
         )
         expect(panelLink).toHaveAttribute('href', 'https://example.com/dev')
 
-        const content = body().getByTestId('navigation-navigation-menu__content')
+        const content = body().getByTestId('navigation-menu-content')
         expect(content).toHaveAttribute('role', 'region')
         expect(content).toHaveAttribute('data-state', 'open')
       })
@@ -267,7 +267,7 @@ describe('NavigationMenu', () => {
     describe('size-aware placement (ENG-47063) — shared computePlacement geometry', () => {
       // No CSS is loaded in browser mode, so the trigger is pinned with inline styles and
       // the positioner's inline transform / CSS vars are what get asserted.
-      const positioner = () => body().getByTestId('navigation-navigation-menu__positioner')
+      const positioner = () => body().getByTestId('navigation-menu-positioner')
 
       const TALL_PANEL = (rows: number, wrapperStyle: string) => `
       <div style="${wrapperStyle}">
@@ -316,7 +316,7 @@ describe('NavigationMenu', () => {
       it('keeps the positioner box equal to the popup it carries, with no trailing line box', async () => {
         const { getByRole } = renderTree(TALL_PANEL(6, 'position:fixed;left:8px;top:8px'))
         await userEvent.click(getByRole('button', { name: /Solutions/ }))
-        const popup = await waitFor(() => body().getByTestId('navigation-navigation-menu__popup'), {
+        const popup = await waitFor(() => body().getByTestId('navigation-menu-popover'), {
           timeout: OPEN_TIMEOUT
         })
         await waitFor(
@@ -410,7 +410,7 @@ describe('NavigationMenu', () => {
         await waitFor(() => expect(trigger).toHaveAttribute('aria-expanded', 'false'), {
           timeout: OPEN_TIMEOUT
         })
-        expect(getByTestId('navigation-navigation-menu')).toHaveAttribute('data-state', 'closed')
+        expect(getByTestId('navigation-menu')).toHaveAttribute('data-state', 'closed')
       })
 
       it('ArrowRight roves to the next trigger and opens it', async () => {
@@ -499,7 +499,7 @@ describe('NavigationMenu', () => {
           timeout: OPEN_TIMEOUT
         })
 
-        const backdrop = body().getByTestId('navigation-navigation-menu__backdrop')
+        const backdrop = body().getByTestId('navigation-menu-backdrop')
         await fireEvent.click(backdrop)
 
         await waitFor(() => expect(updateValues).toContain(null), {
@@ -602,10 +602,7 @@ describe('NavigationMenu', () => {
           const { getByTestId } = renderTree(
             `<NavigationMenu orientation="${orientation}"><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
           )
-          expect(getByTestId('navigation-navigation-menu')).toHaveAttribute(
-            'data-orientation',
-            orientation
-          )
+          expect(getByTestId('navigation-menu')).toHaveAttribute('data-orientation', orientation)
         }
       )
     })
@@ -733,7 +730,7 @@ describe('NavigationMenu', () => {
       const { getByTestId } = renderTree(
         `<NavigationMenu id="site-header" aria-labelledby="nav-heading" data-track="nav"><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
       )
-      const root = getByTestId('navigation-navigation-menu')
+      const root = getByTestId('navigation-menu')
       expect(root.id).toBe('site-header')
       expect(root).toHaveAttribute('aria-labelledby', 'nav-heading')
       expect(root).toHaveAttribute('data-track', 'nav')
@@ -749,7 +746,7 @@ describe('NavigationMenu', () => {
       const id = trigger.getAttribute('aria-controls')
       expect(id).toBeTruthy()
       expect(document.getElementById(id as string)).toBe(
-        body().getByTestId('navigation-navigation-menu__content')
+        body().getByTestId('navigation-menu-content')
       )
     })
 

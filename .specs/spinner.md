@@ -1,6 +1,6 @@
 ---
 name: spinner
-category: utils
+category: feedback
 structure: monolithic
 status: implemented
 spec_version: 5

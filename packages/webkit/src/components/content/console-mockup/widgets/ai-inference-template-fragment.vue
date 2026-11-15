@@ -3,8 +3,8 @@
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import AzionLogoMin from '../../../../svg/azion/min/min.vue'
-  import Button from '../../../actions/button/button.vue'
-  import Chip from '../../../inputs/chip/chip.vue'
+  import Button from '../../../action/button/button.vue'
+  import Chip from '../../../input/chip/chip.vue'
   import Badge from '../../badge/badge.vue'
   import Card from '../../card/card.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'

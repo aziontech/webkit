@@ -2,9 +2,9 @@
   import { duration } from '@aziontech/theme/animations'
   import { computed, onMounted, onScopeDispose, provide, readonly, ref, useAttrs, watch } from 'vue'
 
-  import Button from '../../../actions/button/button.vue'
-  import HighlightButton from '../../../actions/highlight-button/highlight-button.vue'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import Button from '../../../action/button/button.vue'
+  import HighlightButton from '../../../action/highlight-button/highlight-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import Texture, {
     type TextureFade,
     type TextureVariant
@@ -19,25 +19,24 @@
   /** How the mockup is plated: a bordered console window, or bare parts floating on the host's surface. */
   export type ConsoleMockupShellVariant = 'window' | 'bare'
   /** Console generation the shell draws: the current one, or the previous one with its top bar. */
-  export type ConsoleMockupConsoleMockupShellShell = 'console' | 'legacy'
+  export type ConsoleMockupShellShell = 'console' | 'legacy'
   /** Edge the mockup fades out along; y fades top and bottom. */
-  export type ConsoleMockupConsoleMockupShellFade =
-    'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'
+  export type ConsoleMockupShellFade = 'none' | 'bottom' | 'top' | 'left' | 'right' | 'y'
   /** Duration tokens the entrance timing can be set to. */
-  export type ConsoleMockupConsoleMockupShellDuration =
+  export type ConsoleMockupShellDuration =
     'fast-01' | 'fast-02' | 'moderate-01' | 'moderate-02' | 'slow-01' | 'slow-02'
 
   interface Props {
     /** How the mockup is plated: a bordered console window, or bare parts floating on the host's surface. */
     variant?: ConsoleMockupShellVariant
     /** Console generation the shell draws: the current one, or the previous one with its top bar. */
-    shell?: ConsoleMockupConsoleMockupShellShell
+    shell?: ConsoleMockupShellShell
     /** Design width of the frame from `md` up; the frame scales to fit its host. */
     width?: number
     /** Design width of the frame below `md`. */
     mobileWidth?: number
     /** Edge the mockup fades out along; `y` fades top and bottom. */
-    fade?: ConsoleMockupConsoleMockupShellFade
+    fade?: ConsoleMockupShellFade
     /** Draws the console bar over the body. */
     chrome?: boolean
     /** Module label on the console bar; with a rail, `›` splits it into breadcrumbs. */
@@ -49,9 +48,9 @@
     /** How the frame's texture fades out before its edges. */
     textureFade?: TextureFade
     /** Duration token of each part's travel. */
-    travel?: ConsoleMockupConsoleMockupShellDuration
+    travel?: ConsoleMockupShellDuration
     /** Duration token of the gap between one part's beat and the next. */
-    beat?: ConsoleMockupConsoleMockupShellDuration
+    beat?: ConsoleMockupShellDuration
     /** Whether this mockup is the one showing; parts replay their entrance each time it becomes active. */
     active?: boolean
     /** Lets the viewer operate the controls inside instead of drawing them as an inert picture. */
@@ -151,7 +150,7 @@
   let intersection: globalThis.IntersectionObserver | null = null
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-console-mockup-shell'
+    () => (attrs['data-testid'] as string | undefined) ?? 'console-mockup-shell'
   )
 
   const crumbs = computed(() =>

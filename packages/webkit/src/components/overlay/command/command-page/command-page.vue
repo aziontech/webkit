@@ -28,9 +28,7 @@
 
   provide(CommandPageInjectionKey, props.name)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__page`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'command-page')
 
   const isActive = computed(() => ctx.page.value === props.name)
 

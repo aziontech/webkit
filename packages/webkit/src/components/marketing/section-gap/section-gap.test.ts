@@ -7,8 +7,8 @@ import Sizes from '../../../../examples/section-gap/sizes.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import SectionGap from './section-gap.vue'
 
-const TESTID = 'marketing-section-gap'
-const FRAME_TESTID = 'layout-registration-frame'
+const TESTID = 'section-gap'
+const FRAME_TESTID = 'registration-frame'
 
 describe('SectionGap', () => {
   it('renders the gap frame under its own testid, not the registration-frame fallback', () => {

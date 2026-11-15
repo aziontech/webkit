@@ -1,9 +1,9 @@
 ---
 name: webkit-provider
-category: utils
+category: provider
 structure: monolithic
 status: implemented
-checksum: e3d99a8a34298c9c52644eb402439fba480fc726b766e41438944b947088c7c3
+checksum: f2fa8d2693e58dacd5efb76aec9e8002bf9d7adfa20656bf9476e29f9d94c5a3
 spec_version: 5
 created: 2026-11-11
 last_updated: 2026-11-15
@@ -70,7 +70,7 @@ Sets the language and text direction of every WebKit component below it. It wrap
 | `messages` | `PartialMessages`          | `undefined` | false    | Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`).                                                                                                                                                             |
 | `dir`      | `'ltr' \| 'rtl' \| 'auto'` | `'auto'`    | false    | Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left).                                                                                                                                                                      |
 | `now`      | `string \| number \| Date` | `undefined` | false    | Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute. |
-| `timeZone` | `string`                   | `''`        | false    | IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone.                                                                                                        |
+| `timeZone` | `string`                   | `''`        | false    | IANA time zone every `Timestamp` below the provider shows its local time in, and every `DateRangePicker` with no `v-model:time-zone` formats in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone.                                    |
 
 ## Events
 

@@ -17,7 +17,7 @@
   const ctx = useDropdownContext()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__trigger`
+    () => (attrs['data-testid'] as string | undefined) ?? 'dropdown-menu-trigger'
   )
 
   const isOpen = computed(() => ctx.isOpen.value)

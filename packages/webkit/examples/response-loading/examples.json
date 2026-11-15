@@ -1,6 +1,6 @@
 {
   "component": "response-loading",
-  "title": "Components/Primitives/AI/ResponseLoading",
+  "title": "Components/AI/ResponseLoading",
   "examples": [
     {
       "name": "Default",

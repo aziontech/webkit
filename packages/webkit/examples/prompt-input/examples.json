@@ -1,6 +1,6 @@
 {
   "component": "prompt-input",
-  "title": "Components/Primitives/AI/PromptInput",
+  "title": "Components/AI/PromptInput",
   "examples": [
     {
       "name": "Default",

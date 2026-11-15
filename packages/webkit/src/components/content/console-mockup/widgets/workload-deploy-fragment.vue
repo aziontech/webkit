@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import Spinner from '../../../utils/spinner/spinner.vue'
+  import Spinner from '../../../feedback/spinner/spinner.vue'
   import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
   import MockupElevator from '../parts/mockup-elevator.vue'

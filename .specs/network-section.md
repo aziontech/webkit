@@ -1,6 +1,6 @@
 ---
 name: network-section
-category: sections
+category: section
 structure: monolithic
 template: 2
 status: implemented

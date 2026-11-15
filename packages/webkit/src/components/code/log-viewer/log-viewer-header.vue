@@ -4,7 +4,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Tag from '../../content/tag/tag.vue'
-  import Input from '../../inputs/input/input.vue'
+  import Input from '../../input/input/input.vue'
   import { useLogViewerContext } from './composables/use-log-viewer-context'
 
   defineOptions({
@@ -22,9 +22,7 @@
   const { t } = useTranslate({ logViewer: en.logViewer })
   const ctx = useLogViewerContext()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId.value}__header`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'log-viewer-header')
 </script>
 
 <template>

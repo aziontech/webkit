@@ -1,6 +1,6 @@
 {
   "component": "doc-changelog-entry",
-  "title": "Components/Documentation/DocChangelogEntry",
+  "title": "Components/Docs/DocChangelogEntry",
   "examples": [
     {
       "name": "Default",

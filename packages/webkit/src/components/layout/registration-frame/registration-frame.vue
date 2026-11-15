@@ -49,7 +49,7 @@
   const attrs = useAttrs()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-registration-frame'
+    () => (attrs['data-testid'] as string | undefined) ?? 'registration-frame'
   )
 
   function resolveSides(value: boolean | RegistrationFrameSides): Set<RegistrationFrameSide> {

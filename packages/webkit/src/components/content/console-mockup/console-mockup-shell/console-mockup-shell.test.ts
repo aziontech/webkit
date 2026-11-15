@@ -9,8 +9,8 @@ import { useHydrationHost } from '../../../../test/hydration-shared'
 import ConsoleMockupShell from './console-mockup-shell.vue'
 import ConsoleMockupShellItem from './console-mockup-shell-item/console-mockup-shell-item.vue'
 
-const TESTID = 'content-console-mockup-shell'
-const PART_TESTID = 'content-console-mockup-shell-item'
+const TESTID = 'console-mockup-shell'
+const PART_TESTID = 'console-mockup-shell-item'
 
 const reducedMotion = () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
 

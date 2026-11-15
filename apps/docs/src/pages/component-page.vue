@@ -14,7 +14,7 @@
   import { componentMarkdown, copyText } from '../lib/copy'
   import { cached, index, keys } from '../lib/data'
   import { messages } from '../lib/i18n'
-  import { titleCase } from '../lib/nav'
+  import { categoryLabel } from '../lib/nav'
   import type { ComponentDoc } from '../lib/types'
   import NotFound from './not-found-page.vue'
 
@@ -108,7 +108,7 @@
         :description="item.purpose"
         :breadcrumbs="[
           { label: t.components, href: '/components' },
-          { label: titleCase(item.category) }
+          { label: categoryLabel(item.category) }
         ]"
         :meta-actions="metaActions"
         @action-click="onMetaAction"

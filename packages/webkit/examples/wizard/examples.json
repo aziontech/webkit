@@ -1,6 +1,6 @@
 {
   "component": "wizard",
-  "title": "Components/Primitives/Navigation/Wizard",
+  "title": "Components/Navigation/Wizard",
   "examples": [
     {
       "name": "Default",

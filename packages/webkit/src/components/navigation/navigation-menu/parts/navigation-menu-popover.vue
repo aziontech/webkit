@@ -25,7 +25,7 @@
 
   const attrs = useAttrs()
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__popup'
+    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-popover'
   )
 
   const root = useNavigationMenuContext()

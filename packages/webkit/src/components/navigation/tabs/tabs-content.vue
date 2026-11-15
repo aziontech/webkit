@@ -25,9 +25,7 @@
     throw new Error('Tabs.Content must be used within Tabs.')
   }
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${context.testId}__panel`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tabs-content')
 
   const isActive = computed(() => context.value.value === props.value)
 

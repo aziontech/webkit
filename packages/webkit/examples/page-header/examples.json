@@ -1,6 +1,6 @@
 {
   "component": "page-header",
-  "title": "Components/Primitives/Layout/PageHeader",
+  "title": "Components/Layout/PageHeader",
   "examples": [
     {
       "name": "ListPage",

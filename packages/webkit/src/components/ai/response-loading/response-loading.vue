@@ -31,7 +31,7 @@
   const { t } = useTranslate({ responseLoading: en.responseLoading })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-response-loading'
+    () => (attrs['data-testid'] as string | undefined) ?? 'response-loading'
   )
   const text = computed<string>(() => props.label || t('responseLoading.generating'))
 

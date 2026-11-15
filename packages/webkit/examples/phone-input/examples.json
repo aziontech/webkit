@@ -1,6 +1,6 @@
 {
   "component": "phone-input",
-  "title": "Components/Primitives/Inputs/PhoneInput",
+  "title": "Components/Input/PhoneInput",
   "examples": [
     {
       "name": "Default",

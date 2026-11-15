@@ -47,7 +47,7 @@
   const attrs = useAttrs()
   const baseId = useId()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-accordion')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'accordion')
 
   const openValue = computed<AccordionValue>(() =>
     model.value === undefined ? props.defaultValue : model.value

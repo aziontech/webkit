@@ -41,7 +41,7 @@ for (const route of ROUTES) {
 }
 
 const toastTitle = (page: Page, text: string) =>
-  page.getByTestId('feedback-toast__title').filter({ hasText: text })
+  page.getByTestId('toast-title').filter({ hasText: text })
 
 test.describe('demo flows', () => {
   test.beforeEach(async ({ page }) => {

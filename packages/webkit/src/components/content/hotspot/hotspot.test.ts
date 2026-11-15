@@ -50,7 +50,7 @@ const tick = async () => {
 }
 
 const markers = () =>
-  Array.from(document.querySelectorAll<HTMLElement>('[data-testid="content-hotspot__marker"]'))
+  Array.from(document.querySelectorAll<HTMLElement>('[data-testid="hotspot__marker"]'))
 
 describe('Hotspot', () => {
   it('renders no marker while no tutorial runs', () => {
@@ -68,7 +68,7 @@ describe('Hotspot', () => {
     expect(current.querySelector('.animate-ping')).not.toBeNull()
     expect(markers()[1]?.getAttribute('aria-label')).toBe('Tutorial step: Second')
     expect(markers()[1]?.getAttribute('aria-expanded')).toBe('true')
-    const panel = document.querySelector('[data-testid="content-hotspot__popover__panel"]')
+    const panel = document.querySelector('[data-testid="hotspot__popover__panel"]')
     expect(panel?.textContent).toContain('Step 2 of 2')
     expect(panel?.textContent).toContain('Task one')
     expect(panel?.textContent).toContain('Finish')
@@ -84,7 +84,7 @@ describe('Hotspot', () => {
     marker.focus()
     await userEvent.keyboard('{Enter}')
     await tick()
-    const panel = document.querySelector('[data-testid="content-hotspot__popover__panel"]')
+    const panel = document.querySelector('[data-testid="hotspot__popover__panel"]')
     expect(panel?.textContent).toContain('First')
     expect(panel?.textContent).not.toContain('Previous')
   })
@@ -101,7 +101,7 @@ describe('Hotspot', () => {
     })
     await tick()
     const marker = container.querySelector<HTMLElement>(
-      '[data-testid="content-hotspot__marker"]'
+      '[data-testid="hotspot__marker"]'
     ) as HTMLElement
     const button = getByRole('button', { name: 'Alpha' })
     expect(marker.compareDocumentPosition(button) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
@@ -125,7 +125,7 @@ describe('Hotspot', () => {
       `
     })
     await tick()
-    expect(container.querySelectorAll('[data-testid="content-hotspot"]')).toHaveLength(1)
+    expect(container.querySelectorAll('[data-testid="hotspot"]')).toHaveLength(1)
     expect(container.querySelector('[data-testid="beta-spot"]')?.textContent).toContain('Beta')
     expect(container.querySelector('[data-testid="beta-spot__marker"]')).not.toBeNull()
   })

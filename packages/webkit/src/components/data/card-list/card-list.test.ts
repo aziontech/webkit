@@ -31,14 +31,14 @@ describe('CardList', () => {
     await fireEvent.click(view.getByLabelText('Select all items'))
     expect(view.emitted()['update:selectedKeys']?.at(-1)).toEqual([['a', 'b', 'c']])
     expect(
-      view.getAllByTestId('data-card-list__card').every((c) => c.hasAttribute('data-selected'))
+      view.getAllByTestId('card-list__card').every((c) => c.hasAttribute('data-selected'))
     ).toBe(true)
   })
 
   it('mounts a long list in chunks and still selects every item at once', async () => {
     const many = Array.from({ length: 1000 }, (_, i) => ({ id: `k${i}`, name: `Item ${i}` }))
     const view = render(CardList, { props: { items: many, selectionMode: 'multiple' }, slots })
-    const cards = view.getAllByTestId('data-card-list__card')
+    const cards = view.getAllByTestId('card-list__card')
     expect(cards.length).toBeGreaterThan(0)
     expect(cards.length).toBeLessThan(many.length)
     await fireEvent.click(view.getByLabelText('Select all items'))
@@ -50,7 +50,7 @@ describe('CardList', () => {
       props: { items, selectionMode: 'single', selectedKeys: ['a'] },
       slots
     })
-    expect(view.queryByTestId('data-card-list__select-all')).toBeNull()
+    expect(view.queryByTestId('card-list__select-all')).toBeNull()
     await fireEvent.click(view.getByRole('radio', { name: 'Charlie' }))
     expect(view.emitted()['update:selectedKeys']?.at(-1)).toEqual([['c']])
   })
@@ -61,7 +61,7 @@ describe('CardList', () => {
       slots
     })
     const radio = view.getByRole('radio', { name: 'Charlie' })
-    const card = radio.closest('[data-testid="data-card-list__card"]') as HTMLElement
+    const card = radio.closest('[data-testid="card-list__card"]') as HTMLElement
     const header = within(card).getByText('Charlie')
     expect(header.closest('label')).toBeNull()
     expect(header.compareDocumentPosition(radio) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
@@ -69,8 +69,8 @@ describe('CardList', () => {
 
   it('shows placeholders while loading and the empty state without items', () => {
     const loading = render(CardList, { props: { items, loading: true } })
-    expect(loading.getAllByTestId('data-card-list__skeleton')).toHaveLength(6)
-    expect(loading.getByTestId('data-card-list').getAttribute('aria-busy')).toBe('true')
+    expect(loading.getAllByTestId('card-list__loading')).toHaveLength(6)
+    expect(loading.getByTestId('card-list').getAttribute('aria-busy')).toBe('true')
     loading.unmount()
     const empty = render(CardList, { props: { items: [] } })
     expect(empty.getByText('No items yet')).toBeTruthy()
@@ -78,11 +78,11 @@ describe('CardList', () => {
 
   it('renders the data-testid fallback and lets a consumer data-testid win', () => {
     const fallback = render(CardList, { props: { items }, slots })
-    expect(fallback.getByTestId('data-card-list')).toBeTruthy()
+    expect(fallback.getByTestId('card-list')).toBeTruthy()
     fallback.unmount()
     const view = render(CardList, { props: { items }, slots, attrs: { 'data-testid': 'apps' } })
     expect(view.getByTestId('apps')).toBeTruthy()
-    expect(view.queryByTestId('data-card-list')).toBeNull()
+    expect(view.queryByTestId('card-list')).toBeNull()
     expect(view.getAllByTestId('apps__card')).toHaveLength(3)
   })
 

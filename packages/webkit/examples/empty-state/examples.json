@@ -1,6 +1,6 @@
 {
   "component": "empty-state",
-  "title": "Components/Primitives/Feedback/EmptyState",
+  "title": "Components/Feedback/EmptyState",
   "examples": [
     {
       "name": "Default",

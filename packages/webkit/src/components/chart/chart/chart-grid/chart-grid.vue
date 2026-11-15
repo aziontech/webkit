@@ -8,9 +8,7 @@
   const attrs = useAttrs()
   const ctx = useChartContext()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__grid`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-grid')
   const vertical = computed(() => ctx.orientation.value === 'vertical')
   const plot = computed(() => ctx.plot.value)
   const lines = computed(() =>

@@ -1,15 +1,14 @@
 <script setup lang="ts">
-  import { type Component, computed, getCurrentInstance, inject, useAttrs } from 'vue'
+  import { type Component, computed, getCurrentInstance, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import CopyButton from '../../../actions/copy-button/copy-button.vue'
+  import CopyButton from '../../../action/copy-button/copy-button.vue'
   import OverflowCount, {
     type OverflowCountItem,
     type OverflowCountNoun
   } from '../../../content/overflow-count/overflow-count.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
-  import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableCellLink',
@@ -51,12 +50,9 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableCellLink: en.tableCellLink, common: en.common })
-  const ctx = inject(TableInjectionKey, null)
   const instance = getCurrentInstance()
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__cell-link` : 'data-table__cell-link')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-cell-link'
   )
 
   const routerLink = (): Component | undefined =>

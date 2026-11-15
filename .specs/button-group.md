@@ -1,6 +1,6 @@
 ---
 name: button-group
-category: actions
+category: action
 structure: monolithic
 status: implemented
 spec_version: 8

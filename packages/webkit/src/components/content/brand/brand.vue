@@ -31,7 +31,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-brand')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'brand')
 
   const asset = computed(() => {
     if (props.variant === 'reduced') return BrandReduced

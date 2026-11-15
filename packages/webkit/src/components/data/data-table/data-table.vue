@@ -41,13 +41,13 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { downloadCsv, toCsv } from '../../../utils/csv'
-  import Button from '../../actions/button/button.vue'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import Button from '../../action/button/button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import Checkbox from '../../inputs/checkbox/checkbox.vue'
+  import Spinner from '../../feedback/spinner/spinner.vue'
+  import Checkbox from '../../input/checkbox/checkbox.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
-  import Spinner from '../../utils/spinner/spinner.vue'
   import Pagination from '../pagination/pagination.vue'
   import {
     type TableAppliedFilter,
@@ -243,7 +243,7 @@
   const hasSlot = (name: string): boolean => Boolean((slots as Record<string, unknown>)[name])
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-data-table'
+    () => (attrs['data-testid'] as string | undefined) ?? 'data-table'
   )
 
   const captionId = `${useId()}-caption`

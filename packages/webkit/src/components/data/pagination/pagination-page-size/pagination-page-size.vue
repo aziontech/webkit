@@ -1,9 +1,8 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
+  import { computed, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import { PaginationInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'PaginationPageSize',
@@ -24,12 +23,9 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ pagination: en.pagination })
-  const ctx = inject(PaginationInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__page-size` : 'data-pagination__page-size')
+    () => (attrs['data-testid'] as string | undefined) ?? 'pagination-page-size'
   )
 
   const displayOptions = computed<number[]>(() =>

@@ -4,12 +4,12 @@
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
-  import CopyButton from '../../actions/copy-button/copy-button.vue'
+  import Button from '../../action/button/button.vue'
+  import CopyButton from '../../action/copy-button/copy-button.vue'
   import Alert from '../../feedback/alert/alert.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
+  import Spinner from '../../feedback/spinner/spinner.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
-  import Spinner from '../../utils/spinner/spinner.vue'
   import { formatLogLineText } from './composables/format-log-line-text'
   import { splitTextByQuery } from './composables/split-text-by-query'
   import { useLogViewerContext } from './composables/use-log-viewer-context'
@@ -76,7 +76,7 @@
     'rounded-(--shape-control) bg-(--bg-selected) text-inherit motion-reduce:transition-none'
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId.value}__content`
+    () => (attrs['data-testid'] as string | undefined) ?? 'log-viewer-content'
   )
 </script>
 

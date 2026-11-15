@@ -57,7 +57,7 @@
   const attrs = useAttrs()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-transfer-list'
+    () => (attrs['data-testid'] as string | undefined) ?? 'transfer-list'
   )
 
   const sourceItems = computed<TransferListItems>(() => model.value?.[0] ?? [])

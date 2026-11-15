@@ -1,6 +1,6 @@
 {
   "component": "toast",
-  "title": "Components/Primitives/Feedback/Toast",
+  "title": "Components/Feedback/Toast",
   "examples": [
     {
       "name": "Default",

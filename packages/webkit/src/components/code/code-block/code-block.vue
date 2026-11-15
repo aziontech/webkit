@@ -17,7 +17,7 @@
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
   import { diffLines, pairDiffLines } from '../../../utils/line-diff'
-  import CopyButton from '../../actions/copy-button/copy-button.vue'
+  import CopyButton from '../../action/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import { resolveFileIcon } from './lib/file-icon'
   import {
@@ -141,7 +141,7 @@
   const contentEl = ref<HTMLElement | null>(null)
   const panelVersion = ref(0)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'code-code-block')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'code-block')
   const uid = useId()
   const panelId = `${uid}-panel`
   const tabId = (index: number): string => `${uid}-tab-${index}`

@@ -211,11 +211,11 @@ test('container-query-on-container stays silent when the query sits on a child',
 })
 
 test('tokenChecksApply scopes enforcement to component sources', () => {
-  assert.ok(tokenChecksApply('packages/webkit/src/components/actions/button/button.vue'))
+  assert.ok(tokenChecksApply('packages/webkit/src/components/action/button/button.vue'))
   assert.ok(tokenChecksApply('packages/webkit/src/components/data/table/injection-key.ts'))
   // Tests assert browser-serialized values (a collapsed height reads back as '0px')
   // and use @ts-expect-error to exercise type surfaces — exempt on both surfaces.
-  assert.ok(!tokenChecksApply('packages/webkit/src/components/actions/button/button.test.ts'))
-  assert.ok(!tokenChecksApply('packages/webkit/src/components/actions/button/button.spec.ts'))
+  assert.ok(!tokenChecksApply('packages/webkit/src/components/action/button/button.test.ts'))
+  assert.ok(!tokenChecksApply('packages/webkit/src/components/action/button/button.spec.ts'))
   assert.ok(!tokenChecksApply('packages/webkit/src/composables/use-controllable.ts'))
 })

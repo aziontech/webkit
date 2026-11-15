@@ -1,6 +1,6 @@
 {
   "component": "theme-switcher",
-  "title": "Components/Primitives/Inputs/ThemeSwitcher",
+  "title": "Components/Input/ThemeSwitcher",
   "examples": [
     {
       "name": "Default",

@@ -1,6 +1,6 @@
 ---
 name: subject-grid
-category: sections
+category: section
 structure: monolithic
 template: 2
 status: implemented

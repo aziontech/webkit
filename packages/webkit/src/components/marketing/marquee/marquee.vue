@@ -50,7 +50,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-marquee')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marquee')
 
   const SECONDS_PER_MARK = 2
   const SECONDS_PER_ITEM = 6

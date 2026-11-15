@@ -109,7 +109,7 @@ import Avatar from './avatar.vue'
 
 it('renders the Default example', () => {
   const { getByTestId } = render(Default)
-  expect(getByTestId('content-avatar')).toHaveAttribute('role', 'img')
+  expect(getByTestId('avatar')).toHaveAttribute('role', 'img')
 })
 
 it('has no accessibility violations', async () => {

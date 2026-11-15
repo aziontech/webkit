@@ -2,9 +2,9 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import Table from '../../../data/table/index'
-  import Input from '../../../inputs/input/input.vue'
+  import Input from '../../../input/input/input.vue'
   import Accordion from '../../accordion/index'
   import Tag from '../../tag/tag.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'

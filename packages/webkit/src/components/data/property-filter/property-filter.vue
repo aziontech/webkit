@@ -17,12 +17,12 @@
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale, useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
-  import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
-  import Chip from '../../inputs/chip/chip.vue'
-  import FieldError from '../../inputs/field/field-error/field-error.vue'
-  import Input from '../../inputs/input/input.vue'
-  import Spinner from '../../utils/spinner/spinner.vue'
+  import Button from '../../action/button/button.vue'
+  import ToggleGroup from '../../action/toggle-group/toggle-group.vue'
+  import Spinner from '../../feedback/spinner/spinner.vue'
+  import Chip from '../../input/chip/chip.vue'
+  import FieldError from '../../input/field/field-error/field-error.vue'
+  import Input from '../../input/input/input.vue'
   import {
     flatQuery,
     parseQuery,
@@ -128,7 +128,7 @@
   const { t, locale } = useTranslate({ propertyFilter: en.propertyFilter })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-property-filter'
+    () => (attrs['data-testid'] as string | undefined) ?? 'property-filter'
   )
   const rootAttrs = computed(() =>
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'data-testid'))

@@ -36,7 +36,7 @@
     return rest
   })
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-navigation-menu__trigger'
+    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-menu-trigger'
   )
 
   const root = useNavigationMenuContext()
@@ -200,7 +200,7 @@
       v-if="!isLink"
       class="inline-flex transition-[rotate] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none data-[state=open]:rotate-180"
       aria-hidden="true"
-      data-testid="navigation-navigation-menu__icon"
+      data-testid="navigation-menu__icon"
       :data-state="itemOpen ? 'open' : 'closed'"
     >
       <i class="ai ai-chevron-down" />

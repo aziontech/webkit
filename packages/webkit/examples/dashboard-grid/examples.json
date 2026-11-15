@@ -1,6 +1,6 @@
 {
   "component": "dashboard-grid",
-  "title": "Components/Primitives/Layout/DashboardGrid",
+  "title": "Components/Layout/DashboardGrid",
   "examples": [
     {
       "name": "Default",

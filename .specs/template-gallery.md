@@ -1,6 +1,6 @@
 ---
 name: template-gallery
-category: sections
+category: section
 structure: monolithic
 template: 2
 status: implemented

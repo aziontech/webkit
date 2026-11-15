@@ -8,10 +8,10 @@ import CarouselNext from './carousel-next/carousel-next.vue'
 import CarouselPrevious from './carousel-previous/carousel-previous.vue'
 import Carousel from './index'
 
-const TESTID = 'marketing-carousel'
-const ITEM_TESTID = 'marketing-carousel-item'
-const PREVIOUS_TESTID = 'marketing-carousel-previous'
-const NEXT_TESTID = 'marketing-carousel-next'
+const TESTID = 'carousel'
+const ITEM_TESTID = 'carousel-item'
+const PREVIOUS_TESTID = 'carousel-previous'
+const NEXT_TESTID = 'carousel-next'
 
 const slides = ['First slide', 'Second slide', 'Third slide', 'Fourth slide', 'Fifth slide']
 

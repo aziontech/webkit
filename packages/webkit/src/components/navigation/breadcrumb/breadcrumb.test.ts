@@ -11,7 +11,7 @@ import BreadcrumbList from './breadcrumb-list.vue'
 import BreadcrumbSeparator from './breadcrumb-separator.vue'
 import Breadcrumb from './index.js'
 
-const TESTID = 'navigation-breadcrumb'
+const TESTID = 'breadcrumb'
 
 const renderMounted = async (...args: Parameters<typeof render>) => {
   const view = render(...args)

@@ -1,13 +1,13 @@
 ---
 name: switch
-category: inputs
+category: input
 structure: monolithic
 status: implemented
 spec_version: 16
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2027-1247
   node_id: 2027:1247
-checksum: 3df629d664c02e320a85b4689f105cc6b173ac8d297b9327535ca637743cffd0
+checksum: 66db5632d39caa069fba565ff53bac4a1864e77467043d0598c718c959fe3bf8
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -68,7 +68,7 @@ Control-only pill toggle `Switch` (36×20 px). Two visual types: `default` (plai
 
 | Prop        | Type                     | Default     | Required | JSDoc                                                                                                                                                                                        |
 | ----------- | ------------------------ | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `variant`      | `'default' \| 'privacy'` | `'default'` | false    | Visual variant (`SwitchVariant`). `privacy` renders a lock icon inside the handle (closed when off, open when on).                 |
+| `variant`   | `'default' \| 'privacy'` | `'default'` | false    | Visual variant (`SwitchVariant`). `privacy` renders a lock icon inside the handle (closed when off, open when on).                                                                           |
 | `autofocus` | `boolean`                | `false`     | false    | Moves focus to the switch once, when it mounts.                                                                                                                                              |
 | `disabled`  | `boolean`                | `false`     | false    | Disables interaction and applies the disabled tokens.                                                                                                                                        |
 | `invalid`   | `boolean`                | `false`     | false    | Marks the control invalid: sets `aria-invalid` and the danger border (unchecked). An enclosing `Field`'s `invalid` sets it too.                                                              |
@@ -109,23 +109,23 @@ The handle slides toward the inline end when checked: `translate-x-3.5` in LTR, 
 
 ## Tokens
 
-| Region                              | Token (DESIGN.md)                                                                                    |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------- |
-| track (off) — background            | `var(--bg-surface)`                                                                                  |
-| track (off) — border                | `var(--border-default)`                                                                              |
-| track (on) — background             | `var(--accent)`                                                                                      |
-| handle (off) — fill                 | `var(--text-muted)`                                                                                  |
-| handle (on) — fill                  | `var(--color-base-white)` (theme-independent white knob on the `--accent` track)                     |
-| lock icon (off)                     | `var(--bg-surface)`                                                                                  |
-| lock icon (on)                      | `var(--color-base-black)` (theme-independent black on the white knob; both stay fixed across themes) |
-| track (hover) — overlay             | `var(--bg-hover)` (applies to both off and on tracks)                                                |
-| track (disabled) — background       | `var(--bg-disabled)` (over the checked `--accent`, so on/off read the same when locked)              |
-| track (disabled) — border           | `var(--border-default)`                                                                              |
-| handle (disabled) — fill            | `var(--text-disabled)`                                                                               |
-| disabled — cursor                   | `cursor-not-allowed`                                                                                 |
-| focus-visible ring | `var(--ring-color)`                                                                                  |
-| shape — track                       | `rounded-(--shape-control)` (6px)                                                                   |
-| shape — handle                      | `rounded-(--radius)` (4px — concentric with the track: track 6px − `px-0.5` inset 2px)               |
+| Region                        | Token (DESIGN.md)                                                                                    |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------- |
+| track (off) — background      | `var(--bg-surface)`                                                                                  |
+| track (off) — border          | `var(--border-default)`                                                                              |
+| track (on) — background       | `var(--accent)`                                                                                      |
+| handle (off) — fill           | `var(--text-muted)`                                                                                  |
+| handle (on) — fill            | `var(--color-base-white)` (theme-independent white knob on the `--accent` track)                     |
+| lock icon (off)               | `var(--bg-surface)`                                                                                  |
+| lock icon (on)                | `var(--color-base-black)` (theme-independent black on the white knob; both stay fixed across themes) |
+| track (hover) — overlay       | `var(--bg-hover)` (applies to both off and on tracks)                                                |
+| track (disabled) — background | `var(--bg-disabled)` (over the checked `--accent`, so on/off read the same when locked)              |
+| track (disabled) — border     | `var(--border-default)`                                                                              |
+| handle (disabled) — fill      | `var(--text-disabled)`                                                                               |
+| disabled — cursor             | `cursor-not-allowed`                                                                                 |
+| focus-visible ring            | `var(--ring-color)`                                                                                  |
+| shape — track                 | `rounded-(--shape-control)` (6px)                                                                    |
+| shape — handle                | `rounded-(--radius)` (4px — concentric with the track: track 6px − `px-0.5` inset 2px)               |
 
 ## Theme gaps
 

@@ -55,7 +55,7 @@ Seven colors, `aria-label="Organization mark"`, each card showing the generated 
 
 Square avatars: `pattern="marble"` seeded by the organization name with the card's `colors` in each radio card, the same marble in the selected colors for the organization in the wireframe, and initials for the workspace. Never hand-build the SVG or pass it as `src`.
 
-### K. Picker hint — `FieldError` (required)
+### K. Picker hint — `FieldDescription`, `FieldError` (required)
 
 Under the picker: `Generated from the organization's name. Select its color.`
 

@@ -32,7 +32,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ appHeader: en.appHeader })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'layout-app-header')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'app-header')
 
   provide(AppHeaderInjectionKey, {
     testId: testId.value

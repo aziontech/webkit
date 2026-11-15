@@ -32,7 +32,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-texture')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'texture')
 
   const BAYER = [
     [0, 8, 2, 10],

@@ -3,12 +3,12 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { type Component, defineComponent, h, ref } from 'vue'
 
 import Pagination from '../components/data/pagination/pagination.vue'
-import PhoneInput from '../components/inputs/phone-input/phone-input.vue'
-import Select from '../components/inputs/select/select.vue'
-import SelectContent from '../components/inputs/select/select-content/select-content.vue'
-import SelectItem from '../components/inputs/select/select-item/select-item.vue'
-import SelectTrigger from '../components/inputs/select/select-trigger/select-trigger.vue'
-import Slider from '../components/inputs/slider/slider.vue'
+import PhoneInput from '../components/input/phone-input/phone-input.vue'
+import Select from '../components/input/select/select.vue'
+import SelectContent from '../components/input/select/select-content/select-content.vue'
+import SelectItem from '../components/input/select/select-item/select-item.vue'
+import SelectTrigger from '../components/input/select/select-trigger/select-trigger.vue'
+import Slider from '../components/input/slider/slider.vue'
 import DropdownMenu, {
   DropdownMenuGroup,
   DropdownMenuItem,
@@ -24,7 +24,7 @@ import Popover from '../components/overlay/popover/popover.vue'
 import PopoverContent from '../components/overlay/popover/popover-content/popover-content.vue'
 import PopoverTrigger from '../components/overlay/popover/popover-trigger/popover-trigger.vue'
 import Tooltip from '../components/overlay/tooltip/tooltip.vue'
-import WebkitProvider from '../components/utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../components/provider/webkit-provider/webkit-provider.vue'
 
 const modules = {
   ...import.meta.glob<{ default: Component }>('../../blocks/**/*.vue'),
@@ -83,14 +83,14 @@ describe('arrow keys follow the reading direction', () => {
   it('Tabs: ArrowLeft moves to the next tab under RTL, ArrowRight under LTR', async () => {
     const rtl = rtlContainer('rtl')
     const { getByTestId } = render(TabsTree, { container: rtl })
-    await fireEvent.keyDown(getByTestId('tv__list'), { key: 'ArrowLeft' })
+    await fireEvent.keyDown(getByTestId('tabs-list'), { key: 'ArrowLeft' })
     expect(selectedTab(rtl)).toBe('Two')
-    await fireEvent.keyDown(getByTestId('tv__list'), { key: 'ArrowRight' })
+    await fireEvent.keyDown(getByTestId('tabs-list'), { key: 'ArrowRight' })
     expect(selectedTab(rtl)).toBe('One')
 
     const ltr = rtlContainer('ltr')
     const view = render(TabsTree, { container: ltr })
-    await fireEvent.keyDown(view.getByTestId('tv__list'), { key: 'ArrowLeft' })
+    await fireEvent.keyDown(view.getByTestId('tabs-list'), { key: 'ArrowLeft' })
     expect(selectedTab(ltr)).toBe('Three')
   })
 
@@ -162,7 +162,7 @@ const overlays = () => [
 
 const PANELS = {
   dialog: '[role="dialog"][aria-modal="true"]',
-  popover: '[data-testid="overlay-popover__panel"]',
+  popover: '[data-testid="popover__panel"]',
   tooltip: '[role="tooltip"]',
   select: '[role="listbox"]',
   menu: '[role="menu"]'
@@ -186,7 +186,7 @@ describe('overlays teleported to body keep the WebkitProvider dir and lang', () 
     await waitFor(() => expect(Object.values(panels()).every(Boolean)).toBe(true))
     for (const [name, panel] of Object.entries(panels())) {
       const host = panel?.closest('[dir]')
-      expect(host?.closest('[data-testid="utils-webkit-provider"]'), name).toBeNull()
+      expect(host?.closest('[data-testid="webkit-provider"]'), name).toBeNull()
       expect(host?.getAttribute('dir'), name).toBe('rtl')
       expect(panel?.closest('[lang]')?.getAttribute('lang'), name).toBe('ar')
     }
@@ -207,7 +207,7 @@ describe('values keep their own direction inside an rtl trigger', () => {
       container: rtlContainer('rtl'),
       props: { country: 'BR' }
     })
-    const value = getByTestId('input-select-trigger__value')
+    const value = getByTestId('select-trigger__value')
     const isolate = value.querySelector('bdi')
     expect(isolate?.getAttribute('dir')).toBe('ltr')
     expect(isolate?.textContent).toBe('+55')
@@ -225,7 +225,7 @@ describe('values keep their own direction inside an rtl trigger', () => {
       }),
       { container: rtlContainer('rtl') }
     )
-    const isolate = getByTestId('input-select-trigger__value').querySelector('bdi')
+    const isolate = getByTestId('select-trigger__value').querySelector('bdi')
     expect(isolate?.textContent).toBe('Alpha')
     expect(isolate?.hasAttribute('dir')).toBe(false)
   })

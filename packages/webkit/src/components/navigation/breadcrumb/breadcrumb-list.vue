@@ -14,9 +14,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb-list'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'breadcrumb-list')
 </script>
 
 <template>

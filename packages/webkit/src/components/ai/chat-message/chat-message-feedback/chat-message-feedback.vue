@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import type { ChatMessageFeedbackValue } from '../injection-key'
 
@@ -29,7 +29,7 @@
   const { t } = useTranslate({ chatMessage: en.chatMessage })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-chat-message-feedback'
+    () => (attrs['data-testid'] as string | undefined) ?? 'chat-message-feedback'
   )
   const submitted = computed<boolean>(() => model.value !== null && !props.loading)
   const statusText = computed<string>(() => {

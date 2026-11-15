@@ -102,7 +102,7 @@
   const LIFT = { donut: 4, pie: 0 } as const
   const GAP = 0.6
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-donut-chart')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'donut-chart')
   const summaryId = `${uid}-summary`
 
   const series = computed(() =>
@@ -268,7 +268,7 @@
       variant="circle"
       :width="size === 'small' ? '128px' : size === 'large' ? '240px' : '176px'"
       :height="size === 'small' ? '128px' : size === 'large' ? '240px' : '176px'"
-      :data-testid="`${testId}__skeleton`"
+      :data-testid="`${testId}__loading`"
     />
     <div
       v-else-if="hasError"

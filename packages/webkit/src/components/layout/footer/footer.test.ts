@@ -83,7 +83,7 @@ describe('Footer', () => {
   describe('root rendering (grounded in footer.vue)', () => {
     it('renders a <footer> contentinfo landmark carrying the default data-testid', () => {
       const { getByTestId } = render(Footer)
-      const root = getByTestId('layout-footer')
+      const root = getByTestId('footer')
       expect(root.tagName).toBe('FOOTER')
     })
 
@@ -97,35 +97,35 @@ describe('Footer', () => {
       const { getByRole, getByTestId } = render(Footer, {
         props: { ariaLabel: 'Site footer' }
       })
-      expect(getByTestId('layout-footer').getAttribute('aria-label')).toBe('Site footer')
-      expect(getByRole('contentinfo', { name: 'Site footer' })).toBe(getByTestId('layout-footer'))
+      expect(getByTestId('footer').getAttribute('aria-label')).toBe('Site footer')
+      expect(getByRole('contentinfo', { name: 'Site footer' })).toBe(getByTestId('footer'))
     })
 
     it('renders default slot content inside the columns region', () => {
       const { getByTestId } = render(Footer, {
         slots: { default: '<span data-testid="slotted">columns</span>' }
       })
-      expect(getByTestId('layout-footer__columns').contains(getByTestId('slotted'))).toBe(true)
+      expect(getByTestId('footer__columns').contains(getByTestId('slotted'))).toBe(true)
     })
 
     it('omits every optional band when only columns are provided', () => {
       const { queryByTestId } = render(Footer, {
         slots: { default: '<span>columns</span>' }
       })
-      expect(queryByTestId('layout-footer__social')).toBeNull()
-      expect(queryByTestId('layout-footer__status')).toBeNull()
-      expect(queryByTestId('layout-footer__signature')).toBeNull()
+      expect(queryByTestId('footer__social')).toBeNull()
+      expect(queryByTestId('footer__status')).toBeNull()
+      expect(queryByTestId('footer__signature')).toBeNull()
     })
 
     it('routes each slot to its own band', () => {
       const { getByTestId, getByText } = renderComposed()
       expect(
-        getByTestId('layout-footer__social').querySelector('a[aria-label="Azion on GitHub"]')
+        getByTestId('footer__social').querySelector('a[aria-label="Azion on GitHub"]')
       ).toBeTruthy()
-      const status = getByTestId('layout-footer__status')
+      const status = getByTestId('footer__status')
       expect(status.contains(getByText('All Systems Operational'))).toBe(true)
       expect(status.contains(getByText('EN'))).toBe(true)
-      const signature = getByTestId('layout-footer__signature')
+      const signature = getByTestId('footer__signature')
       expect(signature.querySelector('a[aria-label="Azion home"]')).toBeTruthy()
       expect(signature.contains(getByText('The web platform for modern workloads'))).toBe(true)
     })
@@ -141,8 +141,8 @@ describe('Footer', () => {
           </Footer>
         `
       })
-      expect(getByTestId('layout-footer__status')).toBeTruthy()
-      expect(queryByTestId('layout-footer__social')).toBeNull()
+      expect(getByTestId('footer__status')).toBeTruthy()
+      expect(queryByTestId('footer__social')).toBeNull()
     })
 
     it('renders the signature band when only the tagline slot is provided', () => {
@@ -154,7 +154,7 @@ describe('Footer', () => {
           </Footer>
         `
       })
-      expect(getByTestId('layout-footer__signature')).toBeTruthy()
+      expect(getByTestId('footer__signature')).toBeTruthy()
     })
 
     it('drops a band when its slot stops rendering', async () => {
@@ -169,34 +169,34 @@ describe('Footer', () => {
           </Footer>
         `
       })
-      expect(queryByTestId('layout-footer__signature')).toBeTruthy()
-      expect(queryByTestId('layout-footer__status')).toBeTruthy()
+      expect(queryByTestId('footer__signature')).toBeTruthy()
+      expect(queryByTestId('footer__status')).toBeTruthy()
 
       shown.value = false
       await nextTick()
 
-      expect(queryByTestId('layout-footer__signature')).toBeNull()
-      expect(queryByTestId('layout-footer__status')).toBeNull()
+      expect(queryByTestId('footer__signature')).toBeNull()
+      expect(queryByTestId('footer__status')).toBeNull()
     })
 
     it('marks the signature placement on the root, always by default', () => {
       const { getByTestId, unmount } = renderComposed()
-      expect(getByTestId('layout-footer')).toHaveAttribute('data-signature', 'always')
+      expect(getByTestId('footer')).toHaveAttribute('data-signature', 'always')
       unmount()
 
       const compact = render({
         components: compoundComponents,
         template: `<Footer signature="compact">${composedBands}</Footer>`
       })
-      expect(compact.getByTestId('layout-footer')).toHaveAttribute('data-signature', 'compact')
-      expect(compact.getByTestId('layout-footer__signature').className).toContain(
+      expect(compact.getByTestId('footer')).toHaveAttribute('data-signature', 'compact')
+      expect(compact.getByTestId('footer__signature').className).toContain(
         'group-data-[signature=compact]:lg:hidden'
       )
     })
 
     it('keeps the hatched gutters out of the a11y tree', () => {
       const { getAllByTestId } = renderComposedSite()
-      for (const gutter of getAllByTestId('layout-footer__gutter')) {
+      for (const gutter of getAllByTestId('footer__gutter')) {
         expect(gutter.getAttribute('aria-hidden')).toBe('true')
       }
     })
@@ -209,26 +209,26 @@ describe('Footer', () => {
       // which is the placement that draws no frame. The cap and the side rules are read off
       // this attribute by `group-data-[variant=site]:`; the geometry belongs to the visual gate,
       // since this env renders without Tailwind.
-      expect(getByTestId('layout-footer').getAttribute('data-variant')).toBe('content')
+      expect(getByTestId('footer').getAttribute('data-variant')).toBe('content')
     })
 
     it('marks the site placement on the root', () => {
       const { getByTestId } = render(Footer, { props: { variant: 'site' } })
-      expect(getByTestId('layout-footer').getAttribute('data-variant')).toBe('site')
+      expect(getByTestId('footer').getAttribute('data-variant')).toBe('site')
     })
 
     it('draws no frame in the content placement — no gutters, no rules, no marks', () => {
       const { queryAllByTestId, getByTestId } = renderComposed()
-      expect(queryAllByTestId('layout-footer__gutter')).toHaveLength(0)
-      const frame = getByTestId('layout-footer__frame')
+      expect(queryAllByTestId('footer__gutter')).toHaveLength(0)
+      const frame = getByTestId('footer__frame')
       expect(frame.getAttribute('data-borders')).toBe('none')
       expect(frame.getAttribute('data-marks')).toBe('none')
     })
 
     it('frames the column in the site placement, with both gutters beside it', () => {
       const { getAllByTestId, getByTestId } = renderComposedSite()
-      expect(getAllByTestId('layout-footer__gutter')).toHaveLength(2)
-      const frame = getByTestId('layout-footer__frame')
+      expect(getAllByTestId('footer__gutter')).toHaveLength(2)
+      const frame = getByTestId('footer__frame')
       expect(frame.getAttribute('data-borders')).toBe('left right')
       expect(frame.getAttribute('data-marks')).toBe('top-left top-right bottom-left bottom-right')
     })
@@ -238,10 +238,10 @@ describe('Footer', () => {
     it('keeps every band in both placements — the frame changes, the content does not', () => {
       for (const { container } of [renderComposed(), renderComposedSite()]) {
         const scope = within(container)
-        expect(scope.getAllByTestId('layout-footer__column')).toHaveLength(2)
-        expect(scope.getByTestId('layout-footer__social')).toBeTruthy()
-        expect(scope.getByTestId('layout-footer__status')).toBeTruthy()
-        expect(scope.getByTestId('layout-footer__signature')).toBeTruthy()
+        expect(scope.getAllByTestId('footer-column')).toHaveLength(2)
+        expect(scope.getByTestId('footer__social')).toBeTruthy()
+        expect(scope.getByTestId('footer__status')).toBeTruthy()
+        expect(scope.getByTestId('footer__signature')).toBeTruthy()
       }
     })
 
@@ -254,12 +254,12 @@ describe('Footer', () => {
   describe('provide/inject — the root testId flows to every part', () => {
     it('derives each part testid from the root fallback testId', () => {
       const { getAllByTestId } = renderComposed()
-      // Root fallback is 'layout-footer'; each part appends its own suffix.
-      expect(getAllByTestId('layout-footer__column')).toHaveLength(2)
-      expect(getAllByTestId('layout-footer__link')).toHaveLength(3)
+      // Root fallback is 'footer'; each part appends its own suffix.
+      expect(getAllByTestId('footer-column')).toHaveLength(2)
+      expect(getAllByTestId('footer-link')).toHaveLength(3)
     })
 
-    it('overriding the root data-testid re-keys every injected part (proves shared state)', () => {
+    it('overriding the root data-testid renames only the root', () => {
       const overriddenTemplate = `
         <Footer data-testid="site-footer">
           <FooterColumn title="Products">
@@ -272,24 +272,18 @@ describe('Footer', () => {
         template: overriddenTemplate
       })
 
-      // Root uses the overridden value; each part derives from the injected ctx.testId.
       expect(getByTestId('site-footer').tagName).toBe('FOOTER')
-      expect(getByTestId('site-footer__column')).toBeTruthy()
-      expect(getByTestId('site-footer__link')).toBeTruthy()
-
-      // The fallback keys no longer exist — the injected value drove every part.
-      expect(queryByTestId('layout-footer')).toBeNull()
-      expect(queryByTestId('layout-footer__column')).toBeNull()
-      expect(queryByTestId('layout-footer__link')).toBeNull()
+      expect(queryByTestId('footer')).toBeNull()
+      expect(getByTestId('footer-column')).toBeTruthy()
+      expect(getByTestId('footer-link')).toBeTruthy()
     })
 
-    it('a part rendered without a root falls back to the literal default testId', () => {
-      // No provider => inject() is null => ctx?.testId ?? 'layout-footer'.
+    it('a part rendered without a root keeps its own test id', () => {
       const { getByTestId } = render(Footer.Column, {
         props: { title: 'Products' },
         slots: { default: '<a href="/products">Products</a>' }
       })
-      expect(getByTestId('layout-footer__column').tagName).toBe('NAV')
+      expect(getByTestId('footer-column').tagName).toBe('NAV')
     })
 
     it('lets a part override its own testid independent of the injected context', () => {
@@ -300,7 +294,7 @@ describe('Footer', () => {
       })
       // The sub-component prefers its own attrs['data-testid'] over the derived value.
       expect(getByTestId('my-column').tagName).toBe('NAV')
-      expect(queryByTestId('layout-footer__column')).toBeNull()
+      expect(queryByTestId('footer-column')).toBeNull()
     })
   })
 
@@ -363,10 +357,10 @@ describe('Footer', () => {
     it('Default story renders the landmark with its columns and every band', () => {
       const { getByRole, getByTestId, getAllByTestId } = render(DefaultFooter)
       expect(getByRole('contentinfo', { name: 'Footer' })).toBeTruthy()
-      expect(getAllByTestId('layout-footer__column')).toHaveLength(4)
-      expect(getByTestId('layout-footer__social')).toBeTruthy()
-      expect(getByTestId('layout-footer__status')).toBeTruthy()
-      expect(getByTestId('layout-footer__signature')).toBeTruthy()
+      expect(getAllByTestId('footer-column')).toHaveLength(4)
+      expect(getByTestId('footer__social')).toBeTruthy()
+      expect(getByTestId('footer__status')).toBeTruthy()
+      expect(getByTestId('footer__signature')).toBeTruthy()
     })
 
     it('Default story has no a11y violations', async () => {

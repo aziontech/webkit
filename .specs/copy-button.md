@@ -1,6 +1,6 @@
 ---
 name: copy-button
-category: actions
+category: action
 structure: monolithic
 status: implemented
 spec_version: 7

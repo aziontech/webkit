@@ -1,6 +1,6 @@
 ---
 name: compliance-logos
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 3

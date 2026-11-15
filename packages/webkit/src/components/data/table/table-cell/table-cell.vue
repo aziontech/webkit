@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { inject, onBeforeUnmount, onMounted, ref } from 'vue'
-
-  import { TableInjectionKey } from '../injection-key'
+  import { onBeforeUnmount, onMounted, ref } from 'vue'
 
   export type TableCellType = 'default' | 'checkbox' | 'action'
   export type TableCellAlign = 'start' | 'center' | 'end'
@@ -41,8 +39,7 @@
     default(): unknown
   }>()
 
-  const ctx = inject(TableInjectionKey, null)
-  const fallbackTestId = ctx ? `${ctx.testId}__cell` : 'data-table__cell'
+  const fallbackTestId = 'table-cell'
 
   const stopOwnedClick = (event: MouseEvent) => {
     if (props.clickable || props.type === 'action' || props.type === 'checkbox')

@@ -13,7 +13,7 @@ const drawn = (root: HTMLElement) => root.querySelector('svg')!.childElementCoun
 describe('LineFigure', () => {
   it('draws the named figure and names it with its description', async () => {
     const { getByTestId } = render(Default)
-    const root = getByTestId('content-line-figure')
+    const root = getByTestId('line-figure')
     await waitFor(() => expect(drawn(root)).toBeGreaterThan(0))
     expect(root).toHaveAttribute('role', 'img')
     expect(root.getAttribute('aria-label')).toBeTruthy()
@@ -27,7 +27,7 @@ describe('LineFigure', () => {
 
   it('gives the drawing a natural 400 by 320 size, so a content-sized parent cannot collapse it', () => {
     const { getByTestId } = render(LineFigure, { props: { name: 'azion-404' } })
-    const svg = getByTestId('content-line-figure').querySelector('svg')!
+    const svg = getByTestId('line-figure').querySelector('svg')!
     expect(svg).toHaveAttribute('width', '400')
     expect(svg).toHaveAttribute('height', '320')
     expect(svg).toHaveAttribute('viewBox', '0 0 400 320')
@@ -35,14 +35,14 @@ describe('LineFigure', () => {
 
   it('renders the empty-state example with the figure in the icon slot', async () => {
     const { getByTestId } = render(InEmptyState)
-    const root = getByTestId('content-line-figure')
-    expect(getByTestId('feedback-empty-state__icon').contains(root)).toBe(true)
+    const root = getByTestId('line-figure')
+    expect(getByTestId('empty-state__icon').contains(root)).toBe(true)
     await waitFor(() => expect(drawn(root)).toBeGreaterThan(0))
   })
 
   it('draws nothing and has no role for an unknown or empty name', async () => {
     const { getByTestId } = render(LineFigure, { props: { name: 'nope' as never } })
-    const root = getByTestId('content-line-figure')
+    const root = getByTestId('line-figure')
     await new Promise((resolve) => setTimeout(resolve, 50))
     expect(drawn(root)).toBe(0)
     expect(root).not.toHaveAttribute('role')
@@ -55,7 +55,7 @@ describe('LineFigure', () => {
 
   it('swaps the drawing when the name changes', async () => {
     const { getByTestId, rerender } = render(LineFigure, { props: { name: 'cache-ttl' } })
-    const root = getByTestId('content-line-figure')
+    const root = getByTestId('line-figure')
     await waitFor(() => expect(drawn(root)).toBeGreaterThan(0))
     const first = root.getAttribute('aria-label')
     await rerender({ name: 'lb-rotor' })
@@ -67,7 +67,7 @@ describe('LineFigure', () => {
     const { getByTestId } = render({
       render: () => h('div', { dir: 'rtl' }, [h(LineFigure, { name: 'lb-rotor', play: true })])
     })
-    const root = getByTestId('content-line-figure')
+    const root = getByTestId('line-figure')
     expect(root).toHaveAttribute('data-play', 'true')
     await waitFor(() => expect(drawn(root)).toBeGreaterThan(0))
   })
@@ -78,7 +78,7 @@ describe('LineFigure', () => {
 
   it('has no axe violations', async () => {
     const { container, getByTestId } = render(Default)
-    await waitFor(() => expect(drawn(getByTestId('content-line-figure'))).toBeGreaterThan(0))
+    await waitFor(() => expect(drawn(getByTestId('line-figure'))).toBeGreaterThan(0))
     await expectNoA11yViolations(container)
   })
 })

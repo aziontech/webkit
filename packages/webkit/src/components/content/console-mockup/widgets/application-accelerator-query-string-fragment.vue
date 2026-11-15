@@ -2,9 +2,9 @@
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
-  import FieldDescription from '../../../inputs/field/field-description/field-description.vue'
-  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
-  import Textarea from '../../../inputs/textarea/textarea.vue'
+  import FieldDescription from '../../../input/field/field-description/field-description.vue'
+  import FieldLabel from '../../../input/field/field-label/field-label.vue'
+  import Textarea from '../../../input/textarea/textarea.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
   import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'

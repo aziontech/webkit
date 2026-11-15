@@ -1,6 +1,6 @@
 {
   "component": "currency-amount",
-  "title": "Components/Primitives/Content/CurrencyAmount",
+  "title": "Components/Content/CurrencyAmount",
   "examples": [
     {
       "name": "Default",

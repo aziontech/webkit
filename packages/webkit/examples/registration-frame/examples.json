@@ -1,6 +1,6 @@
 {
   "component": "registration-frame",
-  "title": "Components/Primitives/Layout/RegistrationFrame",
+  "title": "Components/Layout/RegistrationFrame",
   "examples": [
     {
       "name": "Default",

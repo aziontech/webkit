@@ -1,6 +1,6 @@
 {
   "component": "settings-row",
-  "title": "Components/Primitives/Layout/SettingsRow",
+  "title": "Components/Layout/SettingsRow",
   "examples": [
     {
       "name": "SettingsCard",

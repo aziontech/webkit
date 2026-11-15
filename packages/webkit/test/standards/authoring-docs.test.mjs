@@ -102,7 +102,7 @@ test('a bad consumer skill is flagged on every axis', () => {
     '',
     '# Skill: bad fixture',
     '',
-    'Read the exemplar at `packages/webkit/src/components/actions/button/button.vue`.',
+    'Read the exemplar at `packages/webkit/src/components/action/button/button.vue`.',
     'Use the canonicals (`button.vue`, `pricing-card.vue`) as the shape reference.',
     'To pick a component, find it in packages/webkit/package.json#exports.',
     'Or climb to ../../../src/components/ to see the source.'
@@ -186,7 +186,7 @@ test('agents are not scanned for file-as-example refs', () => {
     'description: writes components.',
     'scope: webkit',
     '---',
-    'Reference packages/webkit/src/components/actions/button/button.vue as the canonical.'
+    'Reference packages/webkit/src/components/action/button/button.vue as the canonical.'
   ].join('\n')
   assert.deepEqual(scanDoc(rel, content), [])
 })

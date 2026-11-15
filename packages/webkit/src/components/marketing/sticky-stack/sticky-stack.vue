@@ -64,9 +64,7 @@
   const sliceProgress = ref(0)
   let pending: number | null = null
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-sticky-stack'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sticky-stack')
 
   const count = computed(() => props.items.length)
   const hasItems = computed(() => count.value > 0)

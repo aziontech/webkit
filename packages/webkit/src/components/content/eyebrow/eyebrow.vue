@@ -26,7 +26,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-overline')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'eyebrow')
 </script>
 
 <template>

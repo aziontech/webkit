@@ -31,8 +31,8 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import { cn } from '../../../utils/cn'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
-  import SearchTrigger from '../../actions/search-trigger/search-trigger.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
+  import SearchTrigger from '../../action/search-trigger/search-trigger.vue'
   import Avatar from '../../content/avatar/avatar.vue'
   import Brand from '../../content/brand/brand.vue'
   import type { BreadcrumbItemData } from '../../navigation/breadcrumb/breadcrumb.vue'
@@ -199,9 +199,7 @@
 
   const NAV_VALUE = 'console-layout:nav:'
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-console-layout'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'console-layout')
 
   const leaves = computed(
     () =>

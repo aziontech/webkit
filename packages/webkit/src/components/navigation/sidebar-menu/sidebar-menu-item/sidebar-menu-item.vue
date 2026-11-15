@@ -70,9 +70,7 @@
     return rest
   })
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-sidebar-menu-item'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'sidebar-menu-item')
 
   const isAnchor = computed(() => Boolean(props.href) && !props.disabled)
   const rail = computed(() => sidebar?.rail === true)

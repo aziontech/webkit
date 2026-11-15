@@ -51,7 +51,7 @@
   let settled = false
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-wizard-step'
+    () => (attrs['data-testid'] as string | undefined) ?? 'wizard-step'
   )
 
   watch(

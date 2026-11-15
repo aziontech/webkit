@@ -504,7 +504,7 @@ function marketingPageSections(catalog, intent) {
   return catalog.subpaths
     .filter((sub) => {
       const e = catalog.getEntry(sub)
-      return e?.kind === 'component' && e.category === 'sections'
+      return e?.kind === 'component' && e.category === 'section'
     })
     .map((sub) => {
       const e = catalog.getDetails(sub)
@@ -1105,7 +1105,7 @@ function sectionSuggestion(catalog, need) {
   const ranked = catalog.subpaths
     .filter((sub) => {
       const e = catalog.getEntry(sub)
-      return e?.kind === 'component' && e.category === 'sections'
+      return e?.kind === 'component' && e.category === 'section'
     })
     .map((sub) => {
       const e = catalog.getDetails(sub)

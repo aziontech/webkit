@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 4baeb99649d1e4c80a4559e8508e8915d2605e2a8b9e9d26e83c0009adc2330c
+checksum: f6ecabbc61487ee3d591c0e861ce41bd30f03ddef3fe5393fdc7f25efc4710c4
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -18,13 +18,13 @@ The page renderer of the marketing site: it takes a page as data — the page JS
 
 It reverses the earlier rule in `.claude/docs/SECTIONS.md` ("the package ships no registry and no dispatcher"): the owner decided to ship the renderer (ROADMAP M2.10 row 44), and that doc is updated with it.
 
-**Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/sections/` except `site-header` and `site-footer` (the frame, which `shell/site` owns) to a `() => import('../../sections/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry.
+**Section registry.** `src/components/marketing/site-page/site-page-sections.ts`, beside the component, maps every folder in `src/components/section/` except `site-header` and `site-footer` (the frame, which `shell/site` owns) to a `() => import('../../section/<name>/<name>.vue')` thunk, keyed by the folder name, which is the `_id`. The component test fails when a section folder has no entry.
 
 **Retired `_id` aliases.** Page JSON lives outside this repo, so an `_id` retired by a 6.0 merge keeps rendering: `sitePageSectionAliases` in the same file maps each retired id to the section that absorbed it and an optional transform of its props (`'hero-copy-on-top-art'` and `'hero-with-opening'` → `hero-section`; `'closing-call-to-action-agents'` → `closing-call-to-action` `variant: 'primary'`; `'closing-call-to-action-templates'` → `template-gallery` `closing: true`; `'customer-spotlight'` → `client-story-columns` `reveal: 'hover'` (`items` → `cells`, `description` → `story`); `'sticky-carousel'` → `process-scroll` `pinned` (`items` → `steps`); `'sticky-scroll-code'` → `feature-scroll`; `'compare-support-tiers'` → `plan-comparison` (`tiers` → `plans`); `'article-index-blog'` / `'article-index-resource-hub'` → `article-index` `filters: 'category-search' | 'facets'`; `'use-case-links'` / `'resource-grid'` → `capability-grid`; `'code-split'` → `media-split-section`). `resolveSectionEntry(id, props)` applies it before the section is resolved and before the closing rules read the entry, and no warning is raised; the entry handed back on `submit` is the page's own. This is the only alias the package keeps: no retired export or prop is re-exported.
 
 **Scene registry.** `src/assets/scene-registry.ts` exports `sceneAssets` (scene name to a `() => import(...)` thunk), the `SceneName` union of its keys and `resolveScene(name)`, which returns one cached async component per name or `null` for a name it does not hold. It is seeded with `BrandGlobeScene` and `SpinningGlobe` (the two scenes `media-split-section` drew from a private map) and with `Diagram`, `ConsoleMockup` and `Illustration`, the components a scene slot already takes. `media-split-section` moves from its private `SCENES` constant onto it in the same change, so the system has one scene map, and a scene ported later (`ConsoleApplicationScene`, `ConsoleTraceScene`, `FunctionsHeroCanvas`) becomes drawable on every page by one entry there.
 
-**Root.** A plain `div` with no role, carrying `v-bind="$attrs"` and the `data-testid` fallback `marketing-site-page`.
+**Root.** A plain `div` with no role, carrying `v-bind="$attrs"` and the `data-testid` fallback `site-page`.
 
 ## When to use
 

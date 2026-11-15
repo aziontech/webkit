@@ -1,6 +1,6 @@
 {
   "component": "switch",
-  "title": "Components/Primitives/Inputs/Switch",
+  "title": "Components/Input/Switch",
   "examples": [
     {
       "name": "Default",

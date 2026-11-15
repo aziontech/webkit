@@ -50,7 +50,7 @@
 
   const { t } = useTranslate({ kbd: en.kbd })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'content-kbd')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'kbd')
 
   const KEY_NAMES = Object.keys(en.kbd) as KbdKeyName[]
 

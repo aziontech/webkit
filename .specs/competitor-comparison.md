@@ -1,13 +1,13 @@
 ---
 name: competitor-comparison
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 169e51b988c575d10d32983c8757144ab559156b79ffbdf3b3109ad963d82c23
+checksum: da7410b976450b94cb9e86d893665ff38b2a526fc64ddb8678f73bf2681b2dd5
 ---
 
 # CompetitorComparison — Component Spec
@@ -101,7 +101,7 @@ The capability-by-capability comparison of Azion with one competitor on a migrat
 
 - Visual states: `default`
 - A support cell is one of `full`, `partial` or `none`, mirrored on the glyph's `data-support`
-- The competitor head is a `Logo` (`data-testid="sections-competitor-comparison__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
+- The competitor head is a `Logo` (`data-testid="competitor-comparison__competitor-logo"`) whose `data-route` is `pair` (light/dark files), `single` (one file) or `wordmark` (the name as text: no logo and no registry entry, or before the registry loads)
 - Not applicable: `loading`, `error`, `disabled`, `readonly`, `invalid`, `open`/`closed` (the popovers own their open state)
 - Empty: when `groups` is empty the band renders nothing but its root — no header, no table
 

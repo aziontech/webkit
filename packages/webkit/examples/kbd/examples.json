@@ -1,6 +1,6 @@
 {
   "component": "kbd",
-  "title": "Components/Primitives/Content/Kbd",
+  "title": "Components/Content/Kbd",
   "examples": [
     {
       "name": "Default",

@@ -47,9 +47,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ breadcrumb: en.breadcrumb })
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'navigation-breadcrumb'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'breadcrumb')
 
   const navEl = ref<globalThis.HTMLElement | null>(null)
   const isCollapsed = useBreadcrumbCollapse(navEl)

@@ -45,9 +45,7 @@
   const uid = useId()
   const panelId = `${uid}-panel`
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-tool-call'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'tool-call')
   const isOpen = computed<boolean>(() => open.value ?? props.defaultOpen)
   const expandable = () => Boolean(slots.input || slots.output)
 

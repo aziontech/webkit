@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Marquee from './marquee.vue'
 
-const TESTID = 'marketing-marquee'
+const TESTID = 'marquee'
 
 const MARKS = ['itau', 'magalu', 'netshoes', 'caixa']
 

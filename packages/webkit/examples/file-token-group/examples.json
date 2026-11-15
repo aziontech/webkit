@@ -1,6 +1,6 @@
 {
   "component": "file-token-group",
-  "title": "Components/Primitives/Inputs/FileTokenGroup",
+  "title": "Components/Input/FileTokenGroup",
   "examples": [
     {
       "name": "Default",

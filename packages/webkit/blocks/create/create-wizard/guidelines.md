@@ -48,7 +48,7 @@ Each step's fields are `SettingsRow`s in an `Item.List` inside a flush `Card`, t
 
 A choice that changes what follows, such as the list type, is a `SettingsRow variant="stacked"` holding a `RadioGroup` with `variant="card"`, each option a `RadioGroup.Item` with its label and `description`. Use it for three to five options that need a sentence each.
 
-### H. Long entry — `Textarea`, `FieldDescription` (optional)
+### H. Long entry — `Textarea`, `FieldError` (optional)
 
 A stacked row with a five-row `Textarea` whose label, placeholder and guidance follow the choice above it. Its required message is a `FieldError` tied by `aria-describedby`.
 

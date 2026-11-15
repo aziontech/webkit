@@ -10,17 +10,16 @@ describe('SidebarFooter', () => {
   describe('rendering (structure grounded in the template)', () => {
     it('renders a <div> root carrying the default footer-region data-testid when rendered without a Sidebar context', () => {
       // ctx = inject(SidebarInjectionKey) is undefined standalone, so the fallback
-      // testId is `${'layout-sidebar'}__footer-region`.
+      // testId is `${'sidebar'}__footer-region`.
       const { getByTestId } = render(SidebarFooter)
 
-      const root = getByTestId('layout-sidebar__footer-region')
+      const root = getByTestId('sidebar-footer')
       expect(root.tagName).toBe('DIV')
     })
   })
 
   describe('data-testid derivation', () => {
-    it('derives the footer-region testid from the injected Sidebar context testId', () => {
-      // Template: `${ctx?.testId ?? 'layout-sidebar'}__footer-region`.
+    it('keeps its own test id inside a Sidebar with a custom test id', () => {
       const { getByTestId, queryByTestId } = render(SidebarFooter, {
         global: {
           provide: {
@@ -29,9 +28,8 @@ describe('SidebarFooter', () => {
         }
       })
 
-      expect(getByTestId('my-sidebar__footer-region').tagName).toBe('DIV')
-      // Fallback derivation must no longer apply once the context supplies a testId.
-      expect(queryByTestId('layout-sidebar__footer-region')).toBeNull()
+      expect(getByTestId('sidebar-footer').tagName).toBe('DIV')
+      expect(queryByTestId('my-sidebar__footer-region')).toBeNull()
     })
 
     it('lets a consumer-supplied data-testid override the derived one', () => {
@@ -47,7 +45,7 @@ describe('SidebarFooter', () => {
 
       expect(getByTestId('explicit-footer').tagName).toBe('DIV')
       expect(queryByTestId('my-sidebar__footer-region')).toBeNull()
-      expect(queryByTestId('layout-sidebar__footer-region')).toBeNull()
+      expect(queryByTestId('sidebar-footer')).toBeNull()
     })
   })
 
@@ -57,7 +55,7 @@ describe('SidebarFooter', () => {
         slots: { default: '<span data-testid="footer-content">Profile</span>' }
       })
 
-      const root = getByTestId('layout-sidebar__footer-region')
+      const root = getByTestId('sidebar-footer')
       const content = getByTestId('footer-content')
       expect(root.contains(content)).toBe(true)
     })
@@ -69,9 +67,7 @@ describe('SidebarFooter', () => {
         attrs: { class: 'my-custom-class' }
       })
 
-      expect(
-        getByTestId('layout-sidebar__footer-region').classList.contains('my-custom-class')
-      ).toBe(true)
+      expect(getByTestId('sidebar-footer').classList.contains('my-custom-class')).toBe(true)
     })
   })
 
@@ -87,9 +83,9 @@ describe('SidebarFooter', () => {
   describe('documented example (the story fixture that composes a SidebarFooter runs in-test)', () => {
     it('the console sidebar renders the SidebarFooter region inside the Sidebar', () => {
       // The story mounts <SidebarFooter> in the Sidebar #footer slot; with the
-      // Sidebar's default testId ("layout-sidebar"), the footer-region testid resolves.
+      // Sidebar's default testId ("sidebar"), the footer-region testid resolves.
       const { getByTestId } = render(Default)
-      expect(getByTestId('layout-sidebar__footer-region').tagName).toBe('DIV')
+      expect(getByTestId('sidebar-footer').tagName).toBe('DIV')
     })
   })
 })

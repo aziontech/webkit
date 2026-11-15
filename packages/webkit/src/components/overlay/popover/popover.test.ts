@@ -16,12 +16,11 @@ import Popover, {
 } from './index'
 
 /** The panel Teleports to <body>, escaping the render container. */
-const panel = () =>
-  document.body.querySelector<HTMLElement>('[data-testid="overlay-popover__panel"]')
+const panel = () => document.body.querySelector<HTMLElement>('[data-testid="popover__panel"]')
 
 const byTestId = (id: string) => document.body.querySelector<HTMLElement>(`[data-testid="${id}"]`)
 const control = () =>
-  document.body.querySelector<HTMLElement>('[data-testid="overlay-popover__trigger"] button')!
+  document.body.querySelector<HTMLElement>('[data-testid="popover-trigger"] button')!
 
 /**
  * Realistic composed tree mirroring the Default example: a trigger wrapping a
@@ -115,7 +114,7 @@ describe('Popover', () => {
     it('renders the root closed with default testid, placement and no panel', () => {
       const { getByTestId } = render(host())
 
-      const root = getByTestId('overlay-popover')
+      const root = getByTestId('popover')
       expect(root.getAttribute('data-state')).toBe('closed')
       expect(root.getAttribute('data-placement')).toBe('bottom-start')
       expect(root.hasAttribute('data-disabled')).toBe(false)
@@ -125,7 +124,7 @@ describe('Popover', () => {
     it('forwards aria-haspopup/expanded/controls onto the slotted button instead of wrapping it', () => {
       const { getByTestId } = render(host())
 
-      const trigger = getByTestId('overlay-popover__trigger')
+      const trigger = getByTestId('popover-trigger')
       expect(trigger.tagName).toBe('SPAN')
       expect(trigger.hasAttribute('role')).toBe(false)
       expect(trigger.hasAttribute('tabindex')).toBe(false)
@@ -152,16 +151,16 @@ describe('Popover', () => {
       expect(dialog.getAttribute('tabindex')).toBe('-1')
       expect(dialog.getAttribute('data-state')).toBe('open')
       // Teleported OUT of the component subtree.
-      expect(dialog.closest('[data-testid="overlay-popover"]')).toBeNull()
+      expect(dialog.closest('[data-testid="popover"]')).toBeNull()
 
       // PopoverContent Teleports the composed anatomy into the panel body.
-      const body = byTestId('overlay-popover__body') as HTMLElement
+      const body = byTestId('popover__body') as HTMLElement
       expect(dialog.contains(body)).toBe(true)
       expect(body.textContent).toContain('Only active domains are shown by default.')
 
       // Root + trigger reflect the injected open state; scoped slot flips.
-      expect(getByTestId('overlay-popover').getAttribute('data-state')).toBe('open')
-      const trigger = getByTestId('overlay-popover__trigger')
+      expect(getByTestId('popover').getAttribute('data-state')).toBe('open')
+      const trigger = getByTestId('popover-trigger')
       expect(control().getAttribute('aria-expanded')).toBe('true')
       expect(control().getAttribute('aria-controls')).toBe(dialog.id)
       expect(trigger.getAttribute('data-state')).toBe('open')
@@ -170,7 +169,7 @@ describe('Popover', () => {
 
     it('a second trigger click closes the panel again', async () => {
       const { getByTestId } = render(host())
-      const trigger = getByTestId('overlay-popover__trigger')
+      const trigger = getByTestId('popover-trigger')
 
       await fireEvent.click(trigger)
       await waitFor(() => expect(panel()).not.toBeNull())
@@ -183,7 +182,7 @@ describe('Popover', () => {
     it('opens on Enter and Space keydown landing directly on the trigger wrapper', async () => {
       for (const key of ['Enter', ' ']) {
         const view = render(host())
-        await fireEvent.keyDown(view.getByTestId('overlay-popover__trigger'), { key })
+        await fireEvent.keyDown(view.getByTestId('popover-trigger'), { key })
         await waitFor(() => expect(panel()).not.toBeNull())
         view.unmount()
         document.body.querySelectorAll('[data-testid$="__panel"]').forEach((el) => el.remove())
@@ -194,14 +193,14 @@ describe('Popover', () => {
     it('renders the full anatomy with semantic tags and context-derived testids', async () => {
       render(host({}, {}))
 
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
 
-      const header = byTestId('overlay-popover__header') as HTMLElement
-      const title = byTestId('overlay-popover__title') as HTMLElement
-      const description = byTestId('overlay-popover__description') as HTMLElement
-      const footer = byTestId('overlay-popover__footer') as HTMLElement
-      const close = byTestId('overlay-popover__close') as HTMLElement
+      const header = byTestId('popover-header') as HTMLElement
+      const title = byTestId('popover-title') as HTMLElement
+      const description = byTestId('popover-description') as HTMLElement
+      const footer = byTestId('popover-footer') as HTMLElement
+      const close = byTestId('popover-close') as HTMLElement
 
       expect(header.tagName).toBe('HEADER')
       expect(title.tagName).toBe('H2')
@@ -215,19 +214,19 @@ describe('Popover', () => {
 
     it('wires aria-labelledby / aria-describedby only while Title / Description are mounted', async () => {
       render(host())
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
 
       const dialog = panel() as HTMLElement
-      const title = byTestId('overlay-popover__title') as HTMLElement
-      const description = byTestId('overlay-popover__description') as HTMLElement
+      const title = byTestId('popover-title') as HTMLElement
+      const description = byTestId('popover-description') as HTMLElement
       expect(dialog.getAttribute('aria-labelledby')).toBe(title.id)
       expect(dialog.getAttribute('aria-describedby')).toBe(description.id)
     })
 
     it('is named by its trigger and omits aria-describedby when no Title / Description exist', async () => {
       render(host({}, { withTitle: false, withDescription: false }))
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
 
       const dialog = panel() as HTMLElement
@@ -240,10 +239,10 @@ describe('Popover', () => {
     // ---- Focus management -------------------------------------------------------
     it('moves focus to the first control in the panel on open', async () => {
       render(host())
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
 
-      await waitFor(() => expect(document.activeElement).toBe(byTestId('overlay-popover__close')))
+      await waitFor(() => expect(document.activeElement).toBe(byTestId('popover-close')))
     })
 
     it('does not steal focus on a first render that starts open', async () => {
@@ -257,7 +256,7 @@ describe('Popover', () => {
     it('leaves focus where it was when the panel has no focusable content', async () => {
       render(textOnlyHost)
       control().focus()
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
       await nextTick()
 
@@ -271,7 +270,7 @@ describe('Popover', () => {
       })
       const { getByTestId } = render(Outside)
 
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
 
       // Focus leaving the panel no longer closes it — only Esc / outside-click dismiss.
@@ -281,8 +280,8 @@ describe('Popover', () => {
 
     it('Shift+Tab from the first control returns to the trigger and keeps the panel open', async () => {
       render(host())
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
-      await waitFor(() => expect(document.activeElement).toBe(byTestId('overlay-popover__close')))
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
+      await waitFor(() => expect(document.activeElement).toBe(byTestId('popover-close')))
 
       await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
       expect(document.activeElement).toBe(control())
@@ -291,7 +290,7 @@ describe('Popover', () => {
 
     it('Escape closes the panel from the document level (focus on the trigger)', async () => {
       render(host())
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
 
       await fireEvent.keyDown(document, { key: 'Escape' })
@@ -303,7 +302,7 @@ describe('Popover', () => {
       const events: boolean[] = []
       render(host({ 'onUpdate:open': (v: boolean) => events.push(v) }))
 
-      const trigger = byTestId('overlay-popover__trigger') as HTMLElement
+      const trigger = byTestId('popover-trigger') as HTMLElement
       await fireEvent.click(trigger)
       await waitFor(() => expect(panel()).not.toBeNull())
       expect(events).toEqual([true])
@@ -338,7 +337,7 @@ describe('Popover', () => {
     // ---- Dismissal --------------------------------------------------------------
     it('Escape inside the panel closes it', async () => {
       render(host())
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
 
       await fireEvent.keyDown(panel() as HTMLElement, { key: 'Escape' })
@@ -347,7 +346,7 @@ describe('Popover', () => {
 
     it('a mousedown outside the trigger and panel closes it', async () => {
       render(host())
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
 
       await fireEvent.mouseDown(document.body)
@@ -358,17 +357,17 @@ describe('Popover', () => {
       const onUpdate = vi.fn()
       render(host({ 'onUpdate:open': onUpdate }))
 
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
 
-      await fireEvent.click(byTestId('overlay-popover__close') as HTMLElement)
+      await fireEvent.click(byTestId('popover-close') as HTMLElement)
       await waitFor(() => expect(panel()).toBeNull())
       expect(onUpdate).toHaveBeenLastCalledWith(false)
     })
 
     it('dismissible=false keeps the panel open on Escape and outside mousedown', async () => {
       render(host({ dismissible: false }))
-      const trigger = byTestId('overlay-popover__trigger') as HTMLElement
+      const trigger = byTestId('popover-trigger') as HTMLElement
 
       await fireEvent.click(trigger)
       await waitFor(() => expect(panel()).not.toBeNull())
@@ -388,8 +387,8 @@ describe('Popover', () => {
     it('does NOT open when disabled, and mirrors data-disabled on root + trigger', async () => {
       const { getByTestId } = render(host({ disabled: true }))
 
-      const root = getByTestId('overlay-popover')
-      const trigger = getByTestId('overlay-popover__trigger')
+      const root = getByTestId('popover')
+      const trigger = getByTestId('popover-trigger')
       expect(root.getAttribute('data-disabled')).toBe('true')
       expect(trigger.getAttribute('data-disabled')).toBe('true')
 
@@ -407,7 +406,7 @@ describe('Popover', () => {
           template: `<Popover><PopoverTrigger>Filters</PopoverTrigger><PopoverContent>Body</PopoverContent></Popover>`
         })
       )
-      const trigger = byTestId('overlay-popover__trigger') as HTMLElement
+      const trigger = byTestId('popover-trigger') as HTMLElement
       expect(trigger.getAttribute('role')).toBe('button')
       expect(trigger.getAttribute('tabindex')).toBe('0')
       expect(trigger.getAttribute('aria-haspopup')).toBe('dialog')
@@ -421,7 +420,7 @@ describe('Popover', () => {
     // ---- Width + placement presets ------------------------------------------------
     it('leaves data-width off the panel when no width preset is given', async () => {
       render(host())
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
       expect((panel() as HTMLElement).hasAttribute('data-width')).toBe(false)
     })
@@ -430,7 +429,7 @@ describe('Popover', () => {
       'mirrors size=%s onto the open panel data-width',
       async (width) => {
         render(host({ size: width }))
-        await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+        await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
         await waitFor(() => expect(panel()).not.toBeNull())
         expect((panel() as HTMLElement).getAttribute('data-width')).toBe(width)
       }
@@ -440,7 +439,7 @@ describe('Popover', () => {
       'mirrors size=%s onto the open panel data-size',
       async (size) => {
         render(host({ size }))
-        await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+        await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
         await waitFor(() => expect(panel()).not.toBeNull())
         expect((panel() as HTMLElement).getAttribute('data-size')).toBe(size)
       }
@@ -448,7 +447,7 @@ describe('Popover', () => {
 
     it('ignores a removed width attribute; only size sets the panel width', async () => {
       render(host({ width: 'small' }))
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
       expect((panel() as HTMLElement).hasAttribute('data-size')).toBe(false)
     })
@@ -484,9 +483,9 @@ describe('Popover', () => {
       'honors placement=%s verbatim when the panel fits below the trigger',
       async (placement) => {
         const { getByTestId } = render(placedHost(placement))
-        expect(getByTestId('overlay-popover').getAttribute('data-placement')).toBe(placement)
+        expect(getByTestId('popover').getAttribute('data-placement')).toBe(placement)
 
-        await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+        await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
         await waitFor(() => expect(panel()).not.toBeNull())
         expect((panel() as HTMLElement).getAttribute('data-placement')).toBe(placement)
       }
@@ -498,7 +497,7 @@ describe('Popover', () => {
         // Spacer pushes the trigger down so room exists above.
         render(placedHost(placement, 400))
 
-        await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+        await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
         await waitFor(() => expect(panel()).not.toBeNull())
         expect((panel() as HTMLElement).getAttribute('data-placement')).toBe(placement)
       }
@@ -514,7 +513,7 @@ describe('Popover', () => {
       async (placement, wrapperStyle) => {
         render(placedHost(placement, 0, 1, wrapperStyle))
 
-        await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+        await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
         await waitFor(() => expect(panel()).not.toBeNull())
         expect((panel() as HTMLElement).getAttribute('data-placement')).toBe(placement)
       }
@@ -524,7 +523,7 @@ describe('Popover', () => {
       // Trigger at the very top of the viewport: top-start cannot fit.
       render(placedHost('top-start', 0))
 
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
       expect((panel() as HTMLElement).getAttribute('data-placement')).toBe('bottom-start')
     })
@@ -534,14 +533,14 @@ describe('Popover', () => {
       // Trigger near the top; 60 x 24px rows cannot fit on either side.
       render(placedHost('bottom-start', 0, 60, 'position:fixed;top:8px;left:8px'))
 
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
       await nextTick()
       await nextTick()
 
       const p = panel() as HTMLElement
       const pr = p.getBoundingClientRect()
-      const tr = (byTestId('overlay-popover__trigger') as HTMLElement).getBoundingClientRect()
+      const tr = (byTestId('popover-trigger') as HTMLElement).getBoundingClientRect()
       expect(p.getAttribute('data-placement')).toBe('bottom-start')
       expect(pr.top).toBeGreaterThanOrEqual(tr.bottom)
       expect(pr.bottom).toBeLessThanOrEqual(window.innerHeight)
@@ -559,13 +558,13 @@ describe('Popover', () => {
           'position:fixed;top:40px;left:8px;width:400px;height:240px;overflow:auto'
         )
       )
-      const wrapper = (byTestId('overlay-popover') as HTMLElement).parentElement as HTMLElement
+      const wrapper = (byTestId('popover') as HTMLElement).parentElement as HTMLElement
       // Make the container actually scroll.
       const filler = document.createElement('div')
       filler.style.height = '1000px'
       wrapper.appendChild(filler)
 
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
       await nextTick()
       await nextTick()
@@ -578,9 +577,9 @@ describe('Popover', () => {
 
     it('placement=auto resolves to one of the four corners at open time', async () => {
       const { getByTestId } = render(host({ placement: 'auto' }))
-      expect(getByTestId('overlay-popover').getAttribute('data-placement')).toBe('auto')
+      expect(getByTestId('popover').getAttribute('data-placement')).toBe('auto')
 
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
       expect(['bottom-start', 'bottom-end', 'top-start', 'top-end']).toContain(
         (panel() as HTMLElement).getAttribute('data-placement')
@@ -617,7 +616,7 @@ describe('Popover', () => {
 
     it('does not re-measure the trigger when the panel scrolls, but does when the page does', async () => {
       render(scrollableHost())
-      const trigger = byTestId('overlay-popover__trigger') as HTMLElement
+      const trigger = byTestId('popover-trigger') as HTMLElement
       await fireEvent.click(trigger)
       await waitFor(() => expect(panel()).not.toBeNull())
 
@@ -644,11 +643,11 @@ describe('Popover', () => {
     })
 
     // ---- Consumer testid override ---------------------------------------------------
-    it('a consumer data-testid overrides the root and prefixes the sub-component testids', async () => {
+    it('a consumer data-testid overrides the root; the parts keep their own test ids', async () => {
       const { getByTestId } = render(host({}, { attrs: 'data-testid="domain-filters"' }))
 
       expect(getByTestId('domain-filters')).toBeTruthy()
-      const trigger = getByTestId('domain-filters__trigger')
+      const trigger = getByTestId('popover-trigger')
 
       await fireEvent.click(trigger)
       await waitFor(() =>
@@ -659,7 +658,7 @@ describe('Popover', () => {
     // ---- Accessibility ----------------------------------------------------------------
     it('has no axe violations on the open panel anatomy', async () => {
       render(host())
-      await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
 
       // Scope axe to the overlay subtree the component owns (role=dialog +
@@ -681,9 +680,7 @@ describe('Popover', () => {
         'true'
       )
 
-      expect((byTestId('overlay-popover__title') as HTMLElement).textContent).toContain(
-        'Popover title'
-      )
+      expect((byTestId('popover-title') as HTMLElement).textContent).toContain('Popover title')
     })
   })
 
@@ -699,7 +696,7 @@ describe('Popover', () => {
       '%s on the trigger opens the panel and moves focus to its first control',
       async (key) => {
         await openWith(key)
-        await waitFor(() => expect(document.activeElement).toBe(byTestId('overlay-popover__close')))
+        await waitFor(() => expect(document.activeElement).toBe(byTestId('popover-close')))
       }
     )
 
@@ -707,7 +704,7 @@ describe('Popover', () => {
       await openWith('{Enter}')
       control().focus()
       await userEvent.keyboard('{Tab}')
-      expect(document.activeElement).toBe(byTestId('overlay-popover__close'))
+      expect(document.activeElement).toBe(byTestId('popover-close'))
     })
 
     it('Tab on the last control closes the panel and moves on to the control after the trigger', async () => {
@@ -729,14 +726,14 @@ describe('Popover', () => {
 
     it('Shift+Tab on the first control returns focus to the trigger', async () => {
       await openWith('{Enter}')
-      byTestId('overlay-popover__close')!.focus()
+      byTestId('popover-close')!.focus()
       await userEvent.keyboard('{Shift>}{Tab}{/Shift}')
       expect(document.activeElement).toBe(control())
     })
 
     it('Escape inside the panel closes it and returns focus to the trigger', async () => {
       await openWith('{Enter}')
-      byTestId('overlay-popover__close')!.focus()
+      byTestId('popover-close')!.focus()
       await userEvent.keyboard('{Escape}')
       await waitFor(() => expect(panel()).toBeNull())
       expect(document.activeElement).toBe(control())
@@ -875,7 +872,7 @@ describe('Popover', () => {
         SelectContent,
         SelectItem,
         SelectTrigger
-      } = await import('../../inputs/select/index')
+      } = await import('../../input/select/index')
       render(
         inPopover(
           `<Select v-model="value" aria-label="Status">
@@ -889,19 +886,19 @@ describe('Popover', () => {
         )
       )
       await openPopover()
-      const trigger = byTestId('input-select-trigger')!
+      const trigger = byTestId('select-trigger')!
 
       await userEvent.click(trigger)
-      await waitFor(() => expect(byTestId('input-select-content')).not.toBeNull())
+      await waitFor(() => expect(byTestId('select-content')).not.toBeNull())
       await userEvent.click(document.body.querySelector<HTMLElement>('[role="option"]')!)
-      await waitFor(() => expect(byTestId('input-select-content')).toBeNull())
+      await waitFor(() => expect(byTestId('select-content')).toBeNull())
       expect(panel()).not.toBeNull()
       expect(trigger.textContent).toContain('Active')
 
       await userEvent.click(trigger)
-      await waitFor(() => expect(byTestId('input-select-content')).not.toBeNull())
+      await waitFor(() => expect(byTestId('select-content')).not.toBeNull())
       await userEvent.keyboard('{Escape}')
-      await waitFor(() => expect(byTestId('input-select-content')).toBeNull())
+      await waitFor(() => expect(byTestId('select-content')).toBeNull())
       expect(panel()).not.toBeNull()
 
       await userEvent.keyboard('{Escape}')
@@ -929,21 +926,17 @@ describe('Popover', () => {
         panel()!.querySelector<HTMLElement>('button:not([data-testid$="__close"])')!
       )
       await waitFor(() =>
-        expect(
-          document.body.querySelector('[data-testid="navigation-dropdown-menu__panel"]')
-        ).not.toBeNull()
+        expect(document.body.querySelector('[data-testid="dropdown-menu__panel"]')).not.toBeNull()
       )
       await userEvent.click(document.body.querySelector<HTMLElement>('[role^="menuitem"]')!)
       await waitFor(() =>
-        expect(
-          document.body.querySelector('[data-testid="navigation-dropdown-menu__panel"]')
-        ).toBeNull()
+        expect(document.body.querySelector('[data-testid="dropdown-menu__panel"]')).toBeNull()
       )
       expect(panel()).not.toBeNull()
     })
 
     it('picking a Combobox suggestion or pressing Escape in it keeps the popover open', async () => {
-      const { default: Combobox } = await import('../../inputs/combobox/combobox.vue')
+      const { default: Combobox } = await import('../../input/combobox/combobox.vue')
       render(
         defineComponent({
           components: { Popover, PopoverTrigger, PopoverContent, Combobox },

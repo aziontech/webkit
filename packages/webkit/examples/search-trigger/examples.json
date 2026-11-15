@@ -1,6 +1,6 @@
 {
   "component": "search-trigger",
-  "title": "Components/Primitives/Actions/SearchTrigger",
+  "title": "Components/Action/SearchTrigger",
   "examples": [
     {
       "name": "Default",

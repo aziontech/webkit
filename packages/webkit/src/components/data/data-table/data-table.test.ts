@@ -83,8 +83,8 @@ describe('DataTable', () => {
       })
       const table = view.getByRole('table')
       expect(table.getAttribute('aria-label')).toBe('Domains')
-      expect(view.getByTestId('data-data-table').hasAttribute('aria-label')).toBe(false)
-      expect(table.contains(view.getByTestId('data-data-table__viewport'))).toBe(false)
+      expect(view.getByTestId('data-table').hasAttribute('aria-label')).toBe(false)
+      expect(table.contains(view.getByTestId('data-table__viewport'))).toBe(false)
       expect(table.contains(view.getByRole('navigation'))).toBe(false)
       expect(table.contains(view.getByText('Refresh'))).toBe(false)
       await expectNoA11yViolations(view.container)
@@ -93,7 +93,7 @@ describe('DataTable', () => {
         props: { data: [], columns: [{ accessorKey: 'name', header: 'Name' }] }
       })
       const emptyTable = empty.getAllByRole('table').at(-1) as HTMLElement
-      expect(emptyTable.contains(empty.getByTestId('data-data-table__empty'))).toBe(false)
+      expect(emptyTable.contains(empty.getByTestId('data-table__empty'))).toBe(false)
       await expectNoA11yViolations(empty.container)
     })
 
@@ -105,19 +105,19 @@ describe('DataTable', () => {
         })
 
         const table = getByRole('table', { name: 'Domains' })
-        expect(table).toBe(getByTestId('data-data-table__table'))
-        expect(getByTestId('data-data-table').hasAttribute('aria-label')).toBe(false)
-        expect(table.contains(getByTestId('data-data-table__viewport'))).toBe(false)
-        expect(table.contains(getByTestId('data-data-table__footer'))).toBe(false)
+        expect(table).toBe(getByTestId('data-table__table'))
+        expect(getByTestId('data-table').hasAttribute('aria-label')).toBe(false)
+        expect(table.contains(getByTestId('data-table__viewport'))).toBe(false)
+        expect(table.contains(getByTestId('data-table__footer'))).toBe(false)
         expect(table.contains(getByRole('button', { name: 'Refresh' }))).toBe(false)
-        expect(getByTestId('data-data-table__footer').getAttribute('role')).toBeNull()
+        expect(getByTestId('data-table__footer').getAttribute('role')).toBeNull()
       })
 
       it('is named by its caption unless the consumer names it', async () => {
         // A composed caption registers while it mounts, after the table's
         // first render; the data-driven caption names the table from the start.
         const composed = render(CompositionTree)
-        const caption = composed.getByTestId('data-table__caption')
+        const caption = composed.getByTestId('table-caption')
         expect(caption.hasAttribute('role')).toBe(false)
         expect(await composed.findByRole('table', { name: 'My caption' })).toBeTruthy()
         composed.unmount()
@@ -171,7 +171,7 @@ describe('DataTable', () => {
       })
 
       // Root role=table; header + body rowgroups.
-      expect(getByTestId('data-data-table')).toBeTruthy()
+      expect(getByTestId('data-table')).toBeTruthy()
       // 1 header row + 3 body rows.
       expect(getAllByRole('row')).toHaveLength(4)
       // Header labels rendered as columnheaders.
@@ -186,11 +186,11 @@ describe('DataTable', () => {
 
     it('sets data-bordered only when bordered is true', () => {
       const flush = render(DataTable, { props: { data: rows, columns } })
-      expect(flush.getByTestId('data-data-table').hasAttribute('data-bordered')).toBe(false)
+      expect(flush.getByTestId('data-table').hasAttribute('data-bordered')).toBe(false)
       flush.unmount()
 
       const framed = render(DataTable, { props: { data: rows, columns, bordered: true } })
-      expect(framed.getByTestId('data-data-table').hasAttribute('data-bordered')).toBe(true)
+      expect(framed.getByTestId('data-table').hasAttribute('data-bordered')).toBe(true)
     })
 
     it('renders the default empty state when data is empty', () => {
@@ -199,12 +199,12 @@ describe('DataTable', () => {
       })
 
       // rows.length === 0 -> a presentation block, not a body row.
-      expect(getByTestId('data-data-table__empty')).toBeTruthy()
+      expect(getByTestId('data-table__empty')).toBeTruthy()
       // No body rows rendered (only the header row exists).
       const rowsFound = queryByRole('row')
       // header row still present
       expect(rowsFound).toBeTruthy()
-      expect(getByTestId('data-data-table__empty').textContent).toContain('No results yet')
+      expect(getByTestId('data-table__empty').textContent).toContain('No results yet')
     })
 
     it('emits row-click with the original record when an inert row is clicked', async () => {
@@ -422,7 +422,7 @@ describe('DataTable', () => {
       const { getByTestId } = render(Tree)
 
       // TableSearch forwards its testid down to the Input native input.
-      const input = getByTestId('data-data-table__search') as HTMLInputElement
+      const input = getByTestId('table-search') as HTMLInputElement
       expect(input.getAttribute('placeholder')).toBe('Find')
 
       // Typing drives the injected global filter through setGlobalFilter.
@@ -431,7 +431,7 @@ describe('DataTable', () => {
       // The value round-trips back out of the injected filter state.
       expect(input.value).toBe('Alpha')
       // The filter narrows the visible rows: only 'Alpha' remains.
-      const table = getByTestId('data-data-table')
+      const table = getByTestId('data-table')
       const bodyCells = within(table)
         .getAllByRole('cell')
         .map((c) => c.textContent?.trim())
@@ -458,11 +458,11 @@ describe('DataTable', () => {
         })
 
       const bare = render(treeWith(''))
-      const defaulted = within(bare.container).getByTestId('data-data-table__search')
+      const defaulted = within(bare.container).getByTestId('table-search')
       expect(defaulted.closest('[data-size]')?.getAttribute('data-size')).toBe('small')
 
       const overridden = render(treeWith('size="large"'))
-      const large = within(overridden.container).getByTestId('data-data-table__search')
+      const large = within(overridden.container).getByTestId('table-search')
       expect(large.closest('[data-size]')?.getAttribute('data-size')).toBe('large')
     })
   })
@@ -548,7 +548,7 @@ describe('DataTable', () => {
     it('renders the Default (data-driven) story with rows', () => {
       const { getByTestId, getAllByRole } = render(Default)
 
-      expect(getByTestId('data-data-table')).toBeTruthy()
+      expect(getByTestId('data-table')).toBeTruthy()
       // Header row + at least one body row.
       expect(getAllByRole('row').length).toBeGreaterThan(1)
     })
@@ -562,7 +562,7 @@ describe('DataTable', () => {
     it('renders the Empty story with the empty state', () => {
       const { getByTestId } = render(Empty)
 
-      expect(getByTestId('data-data-table__empty')).toBeTruthy()
+      expect(getByTestId('data-table__empty')).toBeTruthy()
     })
   })
 
@@ -578,16 +578,16 @@ describe('DataTable', () => {
       const view = mountIn(320)
       await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
 
-      expect(view.getByTestId('data-data-table').hasAttribute('data-stacked')).toBe(false)
-      expect(view.queryByTestId('data-data-table__stacked-label')).toBeNull()
+      expect(view.getByTestId('data-table').hasAttribute('data-stacked')).toBe(false)
+      expect(view.queryByTestId('data-table__stacked-label')).toBeNull()
     })
 
     it('renders each row as label and value pairs below --container-lg when stackable', async () => {
       const view = mountIn(320, { stackable: true })
-      const root = view.getByTestId('data-data-table')
+      const root = view.getByTestId('data-table')
 
       await waitFor(() => expect(root.hasAttribute('data-stacked')).toBe(true))
-      const labels = view.getAllByTestId('data-data-table__stacked-label')
+      const labels = view.getAllByTestId('data-table__stacked-label')
       expect(labels).toHaveLength(rows.length)
       expect(labels[0]?.textContent).toBe('Status')
       expect(labels[0]?.getAttribute('aria-hidden')).toBe('true')
@@ -601,8 +601,8 @@ describe('DataTable', () => {
       const view = mountIn(1024, { stackable: true })
       await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
 
-      expect(view.getByTestId('data-data-table').hasAttribute('data-stacked')).toBe(false)
-      expect(view.queryByTestId('data-data-table__stacked-label')).toBeNull()
+      expect(view.getByTestId('data-table').hasAttribute('data-stacked')).toBe(false)
+      expect(view.queryByTestId('data-table__stacked-label')).toBeNull()
     })
 
     it('renders the StackedRows example as cards', async () => {
@@ -612,7 +612,7 @@ describe('DataTable', () => {
       const view = render(StackedRows, { container: host })
 
       await waitFor(() =>
-        expect(view.getByTestId('data-data-table').hasAttribute('data-stacked')).toBe(true)
+        expect(view.getByTestId('data-table').hasAttribute('data-stacked')).toBe(true)
       )
     })
   })
@@ -625,7 +625,7 @@ describe('DataTable', () => {
         props: { columns, data: rows, selectable: true, stackable: true },
         container: host
       })
-      const bar = await waitFor(() => view.getByTestId('data-data-table__stacked-select-all'))
+      const bar = await waitFor(() => view.getByTestId('data-table__stacked-select-all'))
       const box = within(bar).getByLabelText('Select all rows')
       expect(view.getAllByLabelText('Select all rows')).toHaveLength(1)
       await fireEvent.click(box)
@@ -642,7 +642,7 @@ describe('DataTable', () => {
         container: host
       })
       await waitFor(() => expect(view.getAllByRole('row').length).toBe(rows.length + 1))
-      expect(view.queryByTestId('data-data-table__stacked-select-all')).toBeNull()
+      expect(view.queryByTestId('data-table__stacked-select-all')).toBeNull()
       expect(view.getAllByLabelText('Select all rows')).toHaveLength(1)
     })
   })
@@ -652,7 +652,7 @@ describe('DataTable', () => {
       const { getByTestId, getAllByRole } = render(DataTable, {
         props: { columns, data: rows, density: 'compact', wrapLines: true, striped: true }
       })
-      const root = getByTestId('data-data-table')
+      const root = getByTestId('data-table')
       expect(root.getAttribute('data-density')).toBe('compact')
       expect(root.hasAttribute('data-wrap')).toBe(true)
       const bodyRows = getAllByRole('row').slice(1)
@@ -682,9 +682,9 @@ describe('DataTable', () => {
       const rendered = view.getAllByRole('row').length - 1
       expect(rendered).toBeGreaterThan(5)
       expect(rendered).toBeLessThan(60)
-      expect(view.getByTestId('data-data-table__table').getAttribute('aria-rowcount')).toBe('10001')
+      expect(view.getByTestId('data-table__table').getAttribute('aria-rowcount')).toBe('10001')
 
-      const viewport = view.getByTestId('data-data-table__viewport')
+      const viewport = view.getByTestId('data-table__viewport')
       viewport.style.maxHeight = '480px'
       viewport.style.overflow = 'auto'
       viewport.scrollTop = 48 * 5000
@@ -724,7 +724,7 @@ describe('DataTable', () => {
         { container: host }
       )
       expect(view.getAllByRole('row').length - 1).toBeLessThan(60)
-      expect(view.getByTestId('data-data-table__table').getAttribute('aria-rowcount')).toBe('10001')
+      expect(view.getByTestId('data-table__table').getAttribute('aria-rowcount')).toBe('10001')
 
       await fireEvent.click(view.getByLabelText('Select all rows'))
       await nextTick()
@@ -764,7 +764,7 @@ describe('DataTable', () => {
         props: { columns, data: mixed, virtual: true, wrapLines: true, maxHeight: '480px' },
         container: host
       })
-      const viewport = view.getByTestId('data-data-table__viewport')
+      const viewport = view.getByTestId('data-table__viewport')
       viewport.style.maxHeight = '480px'
       viewport.style.overflow = 'auto'
       const frames = async (n = 3) => {
@@ -825,15 +825,15 @@ describe('DataTable', () => {
       const view = render(DataTable, { props: { columns, data: many }, container: host })
       const rendered = () => view.getAllByRole('row').length - 1
       expect(rendered()).toBeLessThan(100)
-      expect(view.getByTestId('data-data-table__table').getAttribute('aria-rowcount')).toBe('1001')
-      const gap = view.getByTestId('data-data-table__lazy-rows')
+      expect(view.getByTestId('data-table__table').getAttribute('aria-rowcount')).toBe('1001')
+      const gap = view.getByTestId('data-table__lazy-rows')
       expect(gap.offsetHeight).toBeGreaterThan(40 * 900)
       gap.scrollIntoView()
       await waitFor(() => expect(rendered()).toBeGreaterThan(100))
       window.scrollTo(0, document.documentElement.scrollHeight)
       await waitFor(() => expect(view.getByText('row-999')).toBeTruthy(), { timeout: 4000 })
-      await waitFor(() => expect(view.queryByTestId('data-data-table__lazy-rows')).toBeNull())
-      expect(view.getByTestId('data-data-table__table').hasAttribute('aria-rowcount')).toBe(false)
+      await waitFor(() => expect(view.queryByTestId('data-table__lazy-rows')).toBeNull())
+      expect(view.getByTestId('data-table__table').hasAttribute('aria-rowcount')).toBe(false)
       window.scrollTo(0, 0)
     })
 
@@ -848,7 +848,7 @@ describe('DataTable', () => {
       window.scrollTo(0, 0)
       await view.rerender({ columns, data: [...many].reverse() })
       await waitFor(() => expect(rendered()).toBeLessThan(200))
-      expect(view.getByTestId('data-data-table__lazy-rows')).toBeTruthy()
+      expect(view.getByTestId('data-table__lazy-rows')).toBeTruthy()
       await view.rerender({ columns, data: many, sorting: [{ id: 'name', desc: true }] })
       expect(rendered()).toBeLessThan(200)
     })
@@ -856,7 +856,7 @@ describe('DataTable', () => {
     it('renders every row of a short list at once', () => {
       const view = render(DataTable, { props: { columns, data: many.slice(0, 200) } })
       expect(view.getAllByRole('row')).toHaveLength(201)
-      expect(view.queryByTestId('data-data-table__lazy-rows')).toBeNull()
+      expect(view.queryByTestId('data-table__lazy-rows')).toBeNull()
     })
   })
 
@@ -964,7 +964,7 @@ describe('DataTable', () => {
         document.body.appendChild(host)
         const view = render(exportHarness(mode, onExport), { container: host })
         await waitFor(() => expect(view.getByText('item-10')).toBeTruthy())
-        await fireEvent.click(view.getByTestId('data-data-table__export'))
+        await fireEvent.click(view.getByTestId('table-export-button'))
         await waitFor(() => expect(onExport).toHaveBeenCalled())
         expect(onExport.mock.calls[0][0]).toBeInstanceOf(Event)
         const exported = onExport.mock.calls[0][1] as { name: string }[]
@@ -1020,19 +1020,19 @@ describe('DataTable', () => {
         setup: () => ({ shown, rows, columns }),
         template: `<DataTable :data="rows" :columns="columns"><template v-if="shown" #caption><span data-testid="probe">Three domains</span></template></DataTable>`
       })
-      const table = getByTestId('data-data-table__table')
-      expect(queryByTestId('data-data-table__caption')).toBeNull()
+      const table = getByTestId('data-table__table')
+      expect(queryByTestId('table-caption')).toBeNull()
       expect(table.hasAttribute('aria-labelledby')).toBe(false)
 
       shown.value = true
       await nextTick()
-      const caption = getByTestId('data-data-table__caption')
+      const caption = getByTestId('table-caption')
       expect(queryByTestId('probe')).not.toBeNull()
       expect(table.getAttribute('aria-labelledby')).toBe(caption.id)
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('data-data-table__caption')).toBeNull()
+      expect(queryByTestId('table-caption')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
       expect(table.hasAttribute('aria-labelledby')).toBe(false)
     })
@@ -1071,7 +1071,7 @@ describe('DataTable', () => {
         }
       })
     const chipRemove = async (view: ReturnType<typeof renderFiltered>): Promise<HTMLElement> => {
-      const chip = await view.findByTestId('data-filter-menu-chip-group__chip-status')
+      const chip = await view.findByTestId('filter-menu-chip-group__chip-status')
       return [...chip.querySelectorAll<HTMLElement>('button')].at(-1) as HTMLElement
     }
 
@@ -1094,15 +1094,15 @@ describe('DataTable', () => {
 
     it('renders the applied filters as PropertyFilter tokens with type="property", AND only', async () => {
       const view = renderFiltered('property')
-      const field = await view.findByTestId('data-data-table__filter')
+      const field = await view.findByTestId('table-filter')
       await waitFor(() => expect(field.textContent).toContain('Active'))
-      expect(view.queryByTestId('data-data-table__filter__operation')).toBeNull()
+      expect(view.queryByTestId('table-filter__operation')).toBeNull()
       expect(view.getAllByRole('row')).toHaveLength(3)
     })
 
     it('emits filter-apply as (event, filters) when a property token is removed', async () => {
       const view = renderFiltered('property')
-      const field = await view.findByTestId('data-data-table__filter')
+      const field = await view.findByTestId('table-filter')
       await waitFor(() => expect(field.textContent).toContain('Active'))
       const remove = within(field).getAllByRole('button', { name: /^Remove/ })[0] as HTMLElement
       await userEvent.click(remove)
@@ -1115,15 +1115,13 @@ describe('DataTable', () => {
 
   describe('Table.Filter (menu) and FilterMenu.ChipGroup in a DataTable', () => {
     const panel = (): HTMLElement | null =>
-      document.body.querySelector<HTMLElement>('[data-testid="data-data-table__filter__panel"]')
+      document.body.querySelector<HTMLElement>('[data-testid="table-filter__panel"]')
     const menuTrigger = (): HTMLButtonElement =>
       document.body.querySelector<HTMLButtonElement>(
-        '[data-testid="data-data-table__filter__trigger"] button'
+        '[data-testid="table-filter__trigger"] button'
       )!
     const option = (value: string): HTMLElement =>
-      document.body.querySelector<HTMLElement>(
-        `[data-testid="data-data-table__filter__option-${value}"]`
-      )!
+      document.body.querySelector<HTMLElement>(`[data-testid="table-filter__option-${value}"]`)!
     const visibleNames = (container: HTMLElement): string[] =>
       [...container.querySelectorAll('[role="row"]')]
         .slice(1)
@@ -1137,7 +1135,7 @@ describe('DataTable', () => {
         () => {
           expect(menuTrigger()).toBeTruthy()
           expect(
-            document.body.querySelector('[data-testid^="data-filter-menu-chip-group"]')
+            document.body.querySelector('[data-testid^="filter-menu-chip-group"]')
           ).toBeTruthy()
         },
         { timeout: 3000 }
@@ -1148,9 +1146,7 @@ describe('DataTable', () => {
       await fireEvent.click(menuTrigger())
       await waitFor(() => expect(panel()).not.toBeNull(), { timeout: 3000 })
       await fireEvent.click(
-        document.body.querySelector<HTMLElement>(
-          `[data-testid="data-data-table__filter__field-${id}"]`
-        )!
+        document.body.querySelector<HTMLElement>(`[data-testid="table-filter__field-${id}"]`)!
       )
       await waitFor(() =>
         expect(panel()?.querySelector(`[data-level="values:${id}"]`)).not.toBeNull()
@@ -1161,8 +1157,8 @@ describe('DataTable', () => {
       const { getByTestId } = render(FilterMenuExample)
       await ready()
       expect(menuTrigger().getAttribute('aria-label')).toBe('Filter, 1 applied')
-      expect(getByTestId('data-data-table__filter__count')).toHaveTextContent('1')
-      const chip = getByTestId('data-filter-menu-chip-group__chip-region')
+      expect(getByTestId('table-filter__count')).toHaveTextContent('1')
+      const chip = getByTestId('filter-menu-chip-group__chip-region')
       expect(chip).toHaveTextContent('Region')
       expect(chip).toHaveTextContent('us-east')
       expect(chip).toHaveTextContent('+1')
@@ -1216,13 +1212,9 @@ describe('DataTable', () => {
       await settle()
       await fireEvent.click(menuTrigger())
       await waitFor(() => expect(panel()).not.toBeNull(), { timeout: 3000 })
-      expect(
-        document.body.querySelector('[data-testid="data-data-table__filter__field-name"]')
-      ).toBeNull()
+      expect(document.body.querySelector('[data-testid="table-filter__field-name"]')).toBeNull()
       await fireEvent.click(
-        document.body.querySelector<HTMLElement>(
-          '[data-testid="data-data-table__filter__field-status"]'
-        )!
+        document.body.querySelector<HTMLElement>('[data-testid="table-filter__field-status"]')!
       )
       await waitFor(() => expect(option('Active')).toBeTruthy())
       await fireEvent.click(option('Active'))
@@ -1232,9 +1224,7 @@ describe('DataTable', () => {
       expect(applies.at(-1)?.[0]).toBeInstanceOf(Event)
       await waitFor(() => expect(panel()?.querySelector('[data-level="fields"]')).not.toBeNull())
       await fireEvent.click(
-        document.body.querySelector<HTMLElement>(
-          '[data-testid="data-data-table__filter__field-modified"]'
-        )!
+        document.body.querySelector<HTMLElement>('[data-testid="table-filter__field-modified"]')!
       )
       await waitFor(() => expect(option('30d')).toBeTruthy())
       await fireEvent.click(option('30d'))
@@ -1249,21 +1239,19 @@ describe('DataTable', () => {
     it('reopens the menu at the chip field and removes the field filter from its chip', async () => {
       const { getByTestId, queryByTestId } = render(FilterMenuExample)
       await ready()
-      const chip = getByTestId('data-filter-menu-chip-group__chip-region')
+      const chip = getByTestId('filter-menu-chip-group__chip-region')
       await settle()
       await fireEvent.click(chip.querySelector<HTMLElement>('[role="button"], button') ?? chip)
       await waitFor(() =>
         expect(panel()?.querySelector('[data-level="values:region"]')).not.toBeNull()
       )
       const remove = [
-        ...getByTestId('data-filter-menu-chip-group__chip-region').querySelectorAll<HTMLElement>(
+        ...getByTestId('filter-menu-chip-group__chip-region').querySelectorAll<HTMLElement>(
           'button'
         )
       ].at(-1)!
       await fireEvent.click(remove)
-      await waitFor(() =>
-        expect(queryByTestId('data-filter-menu-chip-group__chip-region')).toBeNull()
-      )
+      await waitFor(() => expect(queryByTestId('filter-menu-chip-group__chip-region')).toBeNull())
       expect(menuTrigger().getAttribute('aria-label')).toBe('Filter')
     })
 
@@ -1276,16 +1264,14 @@ describe('DataTable', () => {
 
   describe('CollectionPreferences in a DataTable toolbar', () => {
     const panel = (): HTMLElement | null =>
-      document.body.querySelector<HTMLElement>(
-        '[data-testid="data-collection-preferences__columns"]'
-      )
+      document.body.querySelector<HTMLElement>('[data-testid="collection-preferences__columns"]')
     const headers = (container: HTMLElement): string[] =>
       [...container.querySelectorAll('[role="columnheader"]')].map(
         (cell) => cell.textContent?.trim() ?? ''
       )
     const open = async (view: ReturnType<typeof render>): Promise<HTMLElement> => {
       await new Promise((resolve) => setTimeout(resolve, 10))
-      await fireEvent.click(view.getByTestId('data-collection-preferences__trigger'))
+      await fireEvent.click(view.getByTestId('collection-preferences__trigger'))
       await waitFor(() => expect(panel()).not.toBeNull(), { timeout: 3000 })
       return panel() as HTMLElement
     }
@@ -1294,7 +1280,7 @@ describe('DataTable', () => {
       const view = render(FilterMenuExample)
       await waitFor(() => expect(headers(view.container)).toContain('Status'))
       const columns = await open(view)
-      const rows = within(columns).getAllByTestId('data-collection-preferences__column')
+      const rows = within(columns).getAllByTestId('collection-preferences__column')
       expect(rows.map((row) => row.textContent)).toEqual(
         expect.arrayContaining([expect.stringContaining('Name'), expect.stringContaining('Status')])
       )
@@ -1302,9 +1288,7 @@ describe('DataTable', () => {
       expect(locked?.textContent).toContain('Name')
       const status = rows.find((row) => row.textContent?.includes('Status')) as HTMLElement
       await userEvent.click(within(status).getByRole('switch'))
-      await userEvent.click(
-        within(document.body).getByTestId('data-collection-preferences__confirm')
-      )
+      await userEvent.click(within(document.body).getByTestId('collection-preferences__confirm'))
       await waitFor(() => expect(headers(view.container)).not.toContain('Status'))
       expect(headers(view.container)).toContain('Name')
       expect(view.emitted()).toBeTruthy()
@@ -1390,7 +1374,7 @@ describe('DataTable', () => {
         slots: { error: ({ message }: { message: string }) => h('p', `Custom: ${message}`) }
       })
       expect(custom.getByRole('alert').textContent).toBe('Custom: Timeout')
-      expect(custom.queryByTestId('data-data-table__empty')).toBeNull()
+      expect(custom.queryByTestId('data-table__empty')).toBeNull()
     })
 
     it('round-trips getState and setState and mirrors update:state', async () => {

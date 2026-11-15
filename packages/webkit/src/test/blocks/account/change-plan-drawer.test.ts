@@ -25,7 +25,7 @@ describe('change-plan-drawer', () => {
       expect(dialog()).not.toBeNull()
       return dialog() as HTMLElement
     })
-    expect(panel.querySelectorAll('[data-testid="content-plan-feature-list"]').length).toBe(3)
+    expect(panel.querySelectorAll('[data-testid="plan-feature-list"]').length).toBe(3)
   })
 })
 

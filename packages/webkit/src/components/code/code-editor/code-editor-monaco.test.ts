@@ -13,9 +13,9 @@ import type { CodeEditorMonacoModule } from './monaco'
 const typedLoader: () => Promise<CodeEditorMonacoModule> = () => import('monaco-editor')
 
 const editors = () =>
-  [...document.querySelectorAll<HTMLElement>('[data-testid="code-code-editor"]')].map((root) => ({
+  [...document.querySelectorAll<HTMLElement>('[data-testid="code-editor"]')].map((root) => ({
     root,
-    host: root.querySelector<HTMLElement>('[data-testid="code-code-editor__monaco"]')!
+    host: root.querySelector<HTMLElement>('[data-testid="code-editor__monaco"]')!
   }))
 
 const toRgb = (color: string): string => {
@@ -181,12 +181,12 @@ describe('CodeEditor', () => {
     it('checks a JSON document against its schema and emits the problems through markers-change', async () => {
       const view = render(Schema)
       await waitFor(
-        () => expect(view.getByTestId('code-code-editor')).toHaveAttribute('data-mode', 'monaco'),
+        () => expect(view.getByTestId('code-editor')).toHaveAttribute('data-mode', 'monaco'),
         { timeout: 30_000, interval: 100 }
       )
       const error = await waitFor(
         () => {
-          const node = view.getByTestId('input-field-error')
+          const node = view.getByTestId('field-error')
           expect(node.textContent).toMatch(/^\s*Line 3: /)
           return node
         },

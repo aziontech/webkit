@@ -8,7 +8,7 @@ import WithIcon from '../../../../../examples/breadcrumb-item/with-icon.vue'
 import { expectNoA11yViolations } from '../../../../test/axe'
 import BreadcrumbItem from './breadcrumb-item.vue'
 
-const TESTID = 'navigation-breadcrumb-item'
+const TESTID = 'breadcrumb-item'
 
 describe('BreadcrumbItem', () => {
   describe('rendering', () => {

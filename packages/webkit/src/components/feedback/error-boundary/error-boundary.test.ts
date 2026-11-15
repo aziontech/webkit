@@ -7,7 +7,7 @@ import CustomFallback from '../../../../examples/error-boundary/custom-fallback.
 import Default from '../../../../examples/error-boundary/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import ErrorBoundary from './error-boundary.vue'
 
 const broken = ref(false)
@@ -34,7 +34,7 @@ describe('ErrorBoundary', () => {
     reset()
     const { getByTestId, queryByRole } = render(ErrorBoundary, { slots: { default: Region } })
     expect(getByTestId('region')).toHaveTextContent('Region content')
-    expect(getByTestId('feedback-error-boundary').hasAttribute('data-error')).toBe(false)
+    expect(getByTestId('error-boundary').hasAttribute('data-error')).toBe(false)
     expect(queryByRole('alert')).toBeNull()
   })
 
@@ -46,7 +46,7 @@ describe('ErrorBoundary', () => {
     broken.value = true
     await waitFor(() => expect(getByRole('alert')).toBeTruthy())
     expect(queryByTestId('region')).toBeNull()
-    expect(getByTestId('feedback-error-boundary').hasAttribute('data-error')).toBe(true)
+    expect(getByTestId('error-boundary').hasAttribute('data-error')).toBe(true)
     expect(getByRole('alert')).toHaveTextContent('This section failed to load')
     const events = emitted<[{ error: Error; info: string }]>().error
     expect(events).toHaveLength(1)
@@ -146,9 +146,7 @@ describe('ErrorBoundary', () => {
       await userEvent.tab()
       expect(document.activeElement).toBe(getByRole('button', { name: 'Try again' }))
       await userEvent.keyboard('{Enter}')
-      await waitFor(() =>
-        expect(document.activeElement).toBe(getByTestId('feedback-error-boundary'))
-      )
+      await waitFor(() => expect(document.activeElement).toBe(getByTestId('error-boundary')))
     })
 
     it('leaves focus alone when it was outside the region', async () => {

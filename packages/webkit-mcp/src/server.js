@@ -72,7 +72,7 @@ async function main() {
         category: z
           .string()
           .optional()
-          .describe('Restrict to one category (e.g. "actions", "data", "inputs", "feedback").'),
+          .describe('Restrict to one category (e.g. "action", "data", "input", "feedback").'),
         surface: z
           .enum(['app', 'site', 'docs'])
           .optional()

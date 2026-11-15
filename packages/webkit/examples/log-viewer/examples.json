@@ -1,6 +1,6 @@
 {
   "component": "log-viewer",
-  "title": "Components/Primitives/Code/LogViewer",
+  "title": "Components/Code/LogViewer",
   "examples": [
     {
       "name": "Default",

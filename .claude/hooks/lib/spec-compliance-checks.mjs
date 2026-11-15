@@ -104,9 +104,9 @@ function normalizeDefault(raw) {
   return null // arrow/factory/object default — not comparable
 }
 
-/** inputs category: `input-<name>`; every other category: `<category>-<name>`. */
-export function testIdFallback(category, name) {
-  return category === 'inputs' ? `input-${name}` : `${category}-${name}`
+/** The component's own kebab name: no category, so moving a component never changes its test id. */
+export function testIdFallback(name) {
+  return name
 }
 
 /**
@@ -215,8 +215,7 @@ export function collectSpecViolations(abs, ROOT, { requireSpec = false } = {}) {
       )
     }
 
-    // ---- BEM testid fallback ----
-    const expectedTestId = `'${testIdFallback(info.category, info.name)}'`
+    const expectedTestId = `'${testIdFallback(info.name)}'`
     if (!vueText.includes(expectedTestId)) {
       violations.push(
         `data-testid fallback "${expectedTestId}" not found in <script setup>. Expected: ?? ${expectedTestId}`

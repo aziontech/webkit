@@ -110,13 +110,13 @@ describe('LogViewer', () => {
       }))
       const { Host, search } = makeHost({ lines })
       const { getAllByTestId, getByTestId } = render(Host)
-      const mounted = getAllByTestId('code-log-viewer__line').length
+      const mounted = getAllByTestId('log-viewer__line').length
       expect(mounted).toBeGreaterThan(0)
       expect(mounted).toBeLessThan(2000)
-      expect(getByTestId('code-log-viewer__header__line-count').textContent).toMatch(/2[,. ]?000/)
+      expect(getByTestId('log-viewer-header__line-count').textContent).toMatch(/2[,. ]?000/)
       search.value = 'Line 1999'
       await new Promise((resolve) => setTimeout(resolve, 0))
-      expect(getAllByTestId('code-log-viewer__line')).toHaveLength(1)
+      expect(getAllByTestId('log-viewer__line')).toHaveLength(1)
     })
 
     describe('composition wiring — the public sub-components are real components sharing one context', () => {
@@ -132,12 +132,12 @@ describe('LogViewer', () => {
         const { Host } = makeHost({})
         const { getByTestId } = render(Host)
 
-        const root = getByTestId('code-log-viewer')
+        const root = getByTestId('log-viewer')
         expect(root.tagName).toBe('DIV')
 
         // Derived region testids from the injected ctx.testId.
-        const header = getByTestId('code-log-viewer__header')
-        const content = getByTestId('code-log-viewer__content')
+        const header = getByTestId('log-viewer-header')
+        const content = getByTestId('log-viewer-content')
         expect(header.tagName).toBe('HEADER')
         expect(root.contains(header)).toBe(true)
         expect(root.contains(content)).toBe(true)
@@ -148,12 +148,12 @@ describe('LogViewer', () => {
       it('sets data-bordered by default and drops it when bordered is false', () => {
         const bordered = render(LogViewer, { props: { lines: LINES } })
         expect(
-          within(bordered.container).getByTestId('code-log-viewer').getAttribute('data-bordered')
+          within(bordered.container).getByTestId('log-viewer').getAttribute('data-bordered')
         ).toBe('true')
 
         const flush = render(LogViewer, { props: { lines: LINES, bordered: false } })
         expect(
-          within(flush.container).getByTestId('code-log-viewer').hasAttribute('data-bordered')
+          within(flush.container).getByTestId('log-viewer').hasAttribute('data-bordered')
         ).toBe(false)
       })
 
@@ -168,7 +168,7 @@ describe('LogViewer', () => {
         const { Host } = makeHost({})
         const { getAllByTestId } = render(Host)
         // Template: v-for line in ctx.filteredLines -> `${testId}__line`.
-        expect(getAllByTestId('code-log-viewer__line')).toHaveLength(LINES.length)
+        expect(getAllByTestId('log-viewer__line')).toHaveLength(LINES.length)
       })
 
       it('keeps a polite log region that starts empty instead of the scrolling body', () => {
@@ -177,7 +177,7 @@ describe('LogViewer', () => {
         const log = getByRole('log')
         expect(log.getAttribute('aria-live')).toBe('polite')
         expect(log.textContent?.trim()).toBe('')
-        expect(getByTestId('code-log-viewer__content__body').hasAttribute('aria-live')).toBe(false)
+        expect(getByTestId('log-viewer-content__body').hasAttribute('aria-live')).toBe(false)
       })
 
       it('announces appended lines only, not chunks that mount on scroll', async () => {
@@ -197,10 +197,10 @@ describe('LogViewer', () => {
         })
         const { container, getAllByTestId, getByRole } = render(Host)
         const log = getByRole('log')
-        const before = getAllByTestId('code-log-viewer__line').length
+        const before = getAllByTestId('log-viewer__line').length
         container.querySelector('[data-chunk="19"]')?.scrollIntoView()
         await vi.waitFor(() => {
-          expect(getAllByTestId('code-log-viewer__line').length).toBeGreaterThan(before)
+          expect(getAllByTestId('log-viewer__line').length).toBeGreaterThan(before)
         })
         expect(log.textContent?.trim()).toBe('')
 
@@ -222,10 +222,8 @@ describe('LogViewer', () => {
         const { getByTestId } = render(Host)
         // lineCountLabel = `${filteredLines.length} lines`; one warning line -> "1 warning".
         // Header controls carry `${ctx.testId}__header__<part>` testids.
-        expect(getByTestId('code-log-viewer__header__line-count').textContent?.trim()).toBe(
-          '4 lines'
-        )
-        const filter = getByTestId('code-log-viewer__header__warnings-filter')
+        expect(getByTestId('log-viewer-header__line-count').textContent?.trim()).toBe('4 lines')
+        const filter = getByTestId('log-viewer-header__warnings-filter')
         expect(filter.textContent).toContain('1 warning')
         expect(filter.getAttribute('aria-pressed')).toBe('false')
       })
@@ -235,20 +233,16 @@ describe('LogViewer', () => {
         const { Host } = makeHost({ lines: noWarnings })
         const { queryByTestId, getByTestId } = render(Host)
         // Template: v-if="ctx.warningCount.value > 0".
-        expect(queryByTestId('code-log-viewer__header__warnings-filter')).toBeNull()
-        expect(getByTestId('code-log-viewer__header__line-count').textContent?.trim()).toBe(
-          '3 lines'
-        )
+        expect(queryByTestId('log-viewer-header__warnings-filter')).toBeNull()
+        expect(getByTestId('log-viewer-header__line-count').textContent?.trim()).toBe('3 lines')
       })
 
       it('renders the empty region (default text) when no lines are provided', () => {
         const { Host } = makeHost({ lines: [] })
         const { getByTestId, queryAllByTestId } = render(Host)
-        expect(queryAllByTestId('code-log-viewer__line')).toHaveLength(0)
-        expect(getByTestId('code-log-viewer__empty').textContent).toContain('No log lines yet.')
-        expect(
-          within(getByTestId('code-log-viewer__empty')).getByTestId('feedback-empty-state')
-        ).toBeTruthy()
+        expect(queryAllByTestId('log-viewer__line')).toHaveLength(0)
+        expect(getByTestId('log-viewer__empty').textContent).toContain('No log lines yet.')
+        expect(within(getByTestId('log-viewer__empty')).getByTestId('empty-state')).toBeTruthy()
       })
     })
 
@@ -257,7 +251,7 @@ describe('LogViewer', () => {
         const { Host, search } = makeHost({})
         const { getByTestId, getAllByTestId } = render(Host)
 
-        const input = getByTestId('code-log-viewer__header__search') as HTMLInputElement
+        const input = getByTestId('log-viewer-header__search') as HTMLInputElement
         expect(input.getAttribute('aria-label')).toBe('Search logs')
 
         // Type a query matching only the "Build finished" success line.
@@ -267,7 +261,7 @@ describe('LogViewer', () => {
         expect(search.value).toBe('Build')
 
         // ctx.filteredLines re-filtered -> only the matching row remains.
-        const rows = getAllByTestId('code-log-viewer__line')
+        const rows = getAllByTestId('log-viewer__line')
         expect(rows).toHaveLength(1)
         expect(rows[0].textContent).toContain('Build finished')
       })
@@ -276,9 +270,9 @@ describe('LogViewer', () => {
         const { Host } = makeHost({})
         const { getByTestId, getAllByTestId } = render(Host)
 
-        await fireEvent.update(getByTestId('code-log-viewer__header__search'), 'finished')
+        await fireEvent.update(getByTestId('log-viewer-header__search'), 'finished')
 
-        const rows = getAllByTestId('code-log-viewer__line')
+        const rows = getAllByTestId('log-viewer__line')
         expect(rows).toHaveLength(1)
         const mark = within(rows[0]).getByText('finished')
         expect(mark.tagName).toBe('MARK')
@@ -288,13 +282,13 @@ describe('LogViewer', () => {
         const { Host } = makeHost({})
         const { getByTestId, queryAllByTestId } = render(Host)
 
-        await fireEvent.update(getByTestId('code-log-viewer__header__search'), 'zzz-no-match-zzz')
+        await fireEvent.update(getByTestId('log-viewer-header__search'), 'zzz-no-match-zzz')
 
-        expect(queryAllByTestId('code-log-viewer__line')).toHaveLength(0)
-        const empty = getByTestId('code-log-viewer__empty')
+        expect(queryAllByTestId('log-viewer__line')).toHaveLength(0)
+        const empty = getByTestId('log-viewer__empty')
         expect(empty.textContent).toContain('No line matches “zzz-no-match-zzz”.')
         await fireEvent.click(within(empty).getByRole('button', { name: 'Clear search' }))
-        expect(queryAllByTestId('code-log-viewer__line')).toHaveLength(LINES.length)
+        expect(queryAllByTestId('log-viewer__line')).toHaveLength(LINES.length)
       })
     })
 
@@ -303,7 +297,7 @@ describe('LogViewer', () => {
         const { Host, level } = makeHost({})
         const { getByTestId, getAllByTestId } = render(Host)
 
-        const filter = getByTestId('code-log-viewer__header__warnings-filter')
+        const filter = getByTestId('log-viewer-header__warnings-filter')
         expect(filter.getAttribute('aria-pressed')).toBe('false')
 
         await fireEvent.click(filter)
@@ -313,22 +307,22 @@ describe('LogViewer', () => {
         expect(filter.getAttribute('aria-pressed')).toBe('true')
 
         // Only the single warning line survives the filter.
-        const rows = getAllByTestId('code-log-viewer__line')
+        const rows = getAllByTestId('log-viewer__line')
         expect(rows).toHaveLength(1)
         expect(rows[0].getAttribute('data-level')).toBe('warn')
-        expect(getByTestId('code-log-viewer').getAttribute('data-level')).toBe('warn')
-        expect(getByTestId('code-log-viewer').hasAttribute('data-warnings-only')).toBe(false)
+        expect(getByTestId('log-viewer').getAttribute('data-level')).toBe('warn')
+        expect(getByTestId('log-viewer').hasAttribute('data-warnings-only')).toBe(false)
 
         await fireEvent.click(filter)
         expect(level.value).toBe('')
-        expect(getAllByTestId('code-log-viewer__line')).toHaveLength(LINES.length)
+        expect(getAllByTestId('log-viewer__line')).toHaveLength(LINES.length)
       })
 
       it('toggles the warn level via keyboard (Enter) on the filter button', async () => {
         const { Host, level } = makeHost({})
         const { getByTestId } = render(Host)
 
-        const filter = getByTestId('code-log-viewer__header__warnings-filter')
+        const filter = getByTestId('log-viewer-header__warnings-filter')
         filter.focus()
         await userEvent.keyboard('{Enter}')
 
@@ -348,7 +342,7 @@ describe('LogViewer', () => {
         const { getByTestId } = render(Host)
 
         stubClipboardResolved()
-        await fireEvent.click(within(getByTestId('code-log-viewer__copy')).getByRole('button'))
+        await fireEvent.click(within(getByTestId('log-viewer__copy')).getByRole('button'))
 
         // Emitted exactly once; payload is formatLogLineText joined by newlines.
         expect(copied).toHaveLength(1)
@@ -367,7 +361,7 @@ describe('LogViewer', () => {
         const { Host } = makeHost({ copyable: false })
         const { queryByTestId } = render(Host)
         // Header template: v-if="ctx.copyable.value" on the default copy IconButton.
-        expect(queryByTestId('code-log-viewer__copy')).toBeNull()
+        expect(queryByTestId('log-viewer__copy')).toBeNull()
       })
     })
 
@@ -376,10 +370,10 @@ describe('LogViewer', () => {
         const { Host } = makeHost({ disabled: true })
         const { getByTestId } = render(Host)
 
-        expect(getByTestId('code-log-viewer').getAttribute('data-disabled')).toBe('true')
+        expect(getByTestId('log-viewer').getAttribute('data-disabled')).toBe('true')
         // <button ... :disabled="ctx.disabled.value"> on the warnings filter.
         expect(
-          (getByTestId('code-log-viewer__header__warnings-filter') as HTMLButtonElement).disabled
+          (getByTestId('log-viewer-header__warnings-filter') as HTMLButtonElement).disabled
         ).toBe(true)
       })
 
@@ -387,7 +381,7 @@ describe('LogViewer', () => {
         const { Host, level } = makeHost({ disabled: true })
         const { getByTestId } = render(Host)
 
-        await fireEvent.click(getByTestId('code-log-viewer__header__warnings-filter'))
+        await fireEvent.click(getByTestId('log-viewer-header__warnings-filter'))
         expect(level.value).toBe('')
       })
     })
@@ -397,7 +391,7 @@ describe('LogViewer', () => {
         const { Host } = makeHost({ withFooter: true })
         const { getByTestId } = render(Host)
 
-        const footer = getByTestId('code-log-viewer__footer')
+        const footer = getByTestId('log-viewer-footer')
         expect(footer.tagName).toBe('FOOTER')
         expect(footer.textContent).toContain('Footer content')
       })
@@ -435,7 +429,7 @@ describe('LogViewer', () => {
         const { container, queryByTestId } = render(Host)
         const log = container.querySelector('[data-testid$="__body"]') as globalThis.HTMLElement
         await vi.waitFor(() => expect(log.hasAttribute('data-fade')).toBe(true))
-        expect(queryByTestId('code-log-viewer__content__fade-bottom')).toBeNull()
+        expect(queryByTestId('log-viewer-content__fade-bottom')).toBeNull()
       })
     })
 
@@ -498,8 +492,8 @@ describe('LogViewer', () => {
         await fireEvent.click(info)
         expect(level.value).toBe('info')
         expect(info.getAttribute('aria-pressed')).toBe('true')
-        expect(view.getByTestId('code-log-viewer').getAttribute('data-level')).toBe('info')
-        expect(view.getAllByTestId('code-log-viewer__line').map((row) => row.textContent)).toEqual([
+        expect(view.getByTestId('log-viewer').getAttribute('data-level')).toBe('info')
+        expect(view.getAllByTestId('log-viewer__line').map((row) => row.textContent)).toEqual([
           expect.stringContaining('Request received'),
           expect.stringContaining('Response sent')
         ])
@@ -507,7 +501,7 @@ describe('LogViewer', () => {
         expect(level.value).toBe('error')
         await fireEvent.click(view.getByRole('button', { name: 'error, 1 line' }))
         expect(level.value).toBe('')
-        expect(view.getAllByTestId('code-log-viewer__line')).toHaveLength(5)
+        expect(view.getAllByTestId('log-viewer__line')).toHaveLength(5)
       })
 
       it('does not change the level while disabled', async () => {
@@ -520,7 +514,7 @@ describe('LogViewer', () => {
 
       it('renders the level column and data-level on rows, and drops an empty time', () => {
         const { view } = renderLevels()
-        const rows = view.getAllByTestId('code-log-viewer__line')
+        const rows = view.getAllByTestId('log-viewer__line')
         expect(rows.map((row) => row.getAttribute('data-level'))).toEqual([
           'info',
           'debug',
@@ -528,11 +522,11 @@ describe('LogViewer', () => {
           'error',
           'info'
         ])
-        expect(
-          within(rows[2]!).getByTestId('code-log-viewer__line-level').textContent?.trim()
-        ).toBe('warn')
-        expect(within(rows[3]!).queryByTestId('code-log-viewer__line-time')).toBeNull()
-        expect(within(rows[0]!).getByTestId('code-log-viewer__line-time').textContent?.trim()).toBe(
+        expect(within(rows[2]!).getByTestId('log-viewer__line-level').textContent?.trim()).toBe(
+          'warn'
+        )
+        expect(within(rows[3]!).queryByTestId('log-viewer__line-time')).toBeNull()
+        expect(within(rows[0]!).getByTestId('log-viewer__line-time').textContent?.trim()).toBe(
           '0 ms'
         )
       })
@@ -541,7 +535,7 @@ describe('LogViewer', () => {
         stubClipboardResolved()
         const { view, onCopy } = renderLevels()
         await fireEvent.click(view.getByRole('button', { name: 'warn, 1 line' }))
-        await fireEvent.click(within(view.getByTestId('code-log-viewer__copy')).getByRole('button'))
+        await fireEvent.click(within(view.getByTestId('log-viewer__copy')).getByRole('button'))
         await vi.waitFor(() =>
           expect(onCopy).toHaveBeenCalledWith(expect.any(MouseEvent), '180 ms WARN Slow origin')
         )
@@ -549,7 +543,7 @@ describe('LogViewer', () => {
 
       it('the Levels example has no a11y violations', async () => {
         const { container, getAllByTestId } = render(Levels)
-        expect(getAllByTestId('code-log-viewer__header__level')).toHaveLength(4)
+        expect(getAllByTestId('log-viewer-header__level')).toHaveLength(4)
         await expectNoA11yViolations(container)
       })
     })
@@ -580,9 +574,9 @@ describe('LogViewer', () => {
         })
         const status = view.getByRole('status')
         expect(status.textContent).toContain('Fetching logs')
-        expect(view.queryAllByTestId('code-log-viewer__line')).toHaveLength(0)
-        expect(view.queryByTestId('code-log-viewer__copy')).toBeNull()
-        expect(view.getByTestId('code-log-viewer').hasAttribute('data-loading')).toBe(true)
+        expect(view.queryAllByTestId('log-viewer__line')).toHaveLength(0)
+        expect(view.queryByTestId('log-viewer__copy')).toBeNull()
+        expect(view.getByTestId('log-viewer').hasAttribute('data-loading')).toBe(true)
       })
 
       it('shows the error message in place of the body and hides copy', () => {
@@ -590,13 +584,13 @@ describe('LogViewer', () => {
           props: { lines: LINES, error: 'The log could not be loaded.' },
           slots: { default: () => [h(LogViewerContent)] }
         })
-        const error = view.getByTestId('code-log-viewer__content__error')
+        const error = view.getByTestId('log-viewer-content__error')
         expect(error.textContent).toContain('The log could not be loaded.')
-        expect(view.queryAllByTestId('code-log-viewer__line')).toHaveLength(0)
-        expect(view.queryByTestId('code-log-viewer__copy')).toBeNull()
+        expect(view.queryAllByTestId('log-viewer__line')).toHaveLength(0)
+        expect(view.queryByTestId('log-viewer__copy')).toBeNull()
       })
 
-      it('takes the consumer data-testid on the root and derives the children from it', async () => {
+      it('takes the consumer data-testid on the root, which prefixes the lines; parts keep their own names', async () => {
         const testid = ref('deploy-log')
         const view = render(
           defineComponent({
@@ -608,11 +602,11 @@ describe('LogViewer', () => {
           })
         )
         expect(view.getByTestId('deploy-log')).toBeTruthy()
-        expect(view.queryByTestId('code-log-viewer')).toBeNull()
-        expect(view.getByTestId('deploy-log__header')).toBeTruthy()
+        expect(view.queryByTestId('log-viewer')).toBeNull()
+        expect(view.getByTestId('log-viewer-header')).toBeTruthy()
         testid.value = 'build-log'
         await nextTick()
-        expect(view.getByTestId('build-log__header')).toBeTruthy()
+        expect(view.getByTestId('log-viewer-header')).toBeTruthy()
         expect(view.getAllByTestId('build-log__line')).toHaveLength(LINES.length)
       })
     })
@@ -637,7 +631,7 @@ describe('LogViewer', () => {
         )
         const toggle = view.getByRole('button', { name: 'warn, 1 line' })
         await fireEvent.click(toggle)
-        const rows = view.getAllByTestId('code-log-viewer__line')
+        const rows = view.getAllByTestId('log-viewer__line')
         expect(rows).toHaveLength(1)
         expect(rows[0]?.getAttribute('data-level')).toBe('warn')
       })
@@ -646,11 +640,11 @@ describe('LogViewer', () => {
     describe('documented examples (the example file runs in-test)', () => {
       it('Default story renders the composed viewer over the deploy log with rows', () => {
         const { getByTestId, getAllByTestId } = render(Default)
-        expect(getByTestId('code-log-viewer').tagName).toBe('DIV')
-        expect(getByTestId('code-log-viewer__header')).toBeTruthy()
-        expect(getByTestId('code-log-viewer__content')).toBeTruthy()
+        expect(getByTestId('log-viewer').tagName).toBe('DIV')
+        expect(getByTestId('log-viewer-header')).toBeTruthy()
+        expect(getByTestId('log-viewer-content')).toBeTruthy()
         // The deploy log fixture has many lines.
-        expect(getAllByTestId('code-log-viewer__line').length).toBeGreaterThan(0)
+        expect(getAllByTestId('log-viewer__line').length).toBeGreaterThan(0)
       })
 
       // The frame-inside-a-frame this story exists to prevent is only visible with
@@ -659,8 +653,8 @@ describe('LogViewer', () => {
       it('Borderless story renders the shell without the outer border', () => {
         const { getByTestId } = render(Borderless)
 
-        expect(getByTestId('code-log-viewer').hasAttribute('data-bordered')).toBe(false)
-        expect(getByTestId('code-log-viewer__content')).toBeTruthy()
+        expect(getByTestId('log-viewer').hasAttribute('data-bordered')).toBe(false)
+        expect(getByTestId('log-viewer-content')).toBeTruthy()
       })
     })
 
@@ -711,7 +705,7 @@ describe('LogViewer', () => {
       it('renders one step per entry, with its status in words, and opens the running step', () => {
         const { Host } = stepsHost()
         const { getAllByTestId, getByTestId, getByText } = render(Host)
-        const items = getAllByTestId('code-log-viewer__steps__step')
+        const items = getAllByTestId('log-viewer-steps__step')
         expect(items.map((item) => item.getAttribute('data-status'))).toEqual([
           'success',
           'running',
@@ -721,7 +715,7 @@ describe('LogViewer', () => {
         expect(within(items[1]!).getByText('Running')).toBeTruthy()
         expect(within(items[2]!).getByText('Not started')).toBeTruthy()
         expect(getByText('Configuring rules')).toBeTruthy()
-        expect(getByTestId('code-log-viewer__steps').getAttribute('data-view')).toBe('phased')
+        expect(getByTestId('log-viewer-steps').getAttribute('data-view')).toBe('phased')
       })
 
       it('opens the failed step when no step runs', () => {
@@ -746,20 +740,20 @@ describe('LogViewer', () => {
       it('switches to the complete view, one log with every line', async () => {
         const { Host, view } = stepsHost()
         const { getByRole, getByTestId, getAllByTestId } = render(Host)
-        const group = getByTestId('code-log-viewer__steps__view-switch')
+        const group = getByTestId('log-viewer-steps__view-switch')
         expect(group).toBeTruthy()
         await fireEvent.click(getByRole('radio', { name: 'Complete' }))
         expect(view.value).toBe('complete')
-        expect(getByTestId('code-log-viewer__steps__complete')).toBeTruthy()
-        expect(getAllByTestId('code-log-viewer__steps__complete__line')).toHaveLength(3)
+        expect(getByTestId('log-viewer-steps__complete')).toBeTruthy()
+        expect(getAllByTestId('log-viewer-steps__complete__line')).toHaveLength(3)
       })
 
       it('hides the view switch with view-switch false and has no toolbar without a header', () => {
         const { queryByTestId } = render(LogViewerSteps, {
           props: { steps: STEPS, viewSwitch: false }
         })
-        expect(queryByTestId('code-log-viewer__steps__view-switch')).toBeNull()
-        expect(queryByTestId('code-log-viewer__steps__toolbar')).toBeNull()
+        expect(queryByTestId('log-viewer-steps__view-switch')).toBeNull()
+        expect(queryByTestId('log-viewer-steps__toolbar')).toBeNull()
       })
 
       it('shows the toolbar when a header slot appears after mount', async () => {
@@ -773,10 +767,10 @@ describe('LogViewer', () => {
             )
         })
         const { queryByTestId, findByText } = render(Host)
-        expect(queryByTestId('code-log-viewer__steps__toolbar')).toBeNull()
+        expect(queryByTestId('log-viewer-steps__toolbar')).toBeNull()
         shown.value = true
         await findByText('Run 42')
-        expect(queryByTestId('code-log-viewer__steps__toolbar')).toBeTruthy()
+        expect(queryByTestId('log-viewer-steps__toolbar')).toBeTruthy()
       })
 
       it('draws the flush progress bar valued by the share of steps done', () => {
@@ -787,7 +781,7 @@ describe('LogViewer', () => {
 
       it('shows no progress bar by default', () => {
         const { queryByTestId } = render(LogViewerSteps, { props: { steps: STEPS } })
-        expect(queryByTestId('code-log-viewer__steps__progress')).toBeNull()
+        expect(queryByTestId('log-viewer-steps__progress')).toBeNull()
       })
 
       it('waits on a pending step and says a skipped step never ran', async () => {
@@ -813,7 +807,7 @@ describe('LogViewer', () => {
           }
         })
         expect(
-          within(getByTestId('code-log-viewer__steps__toolbar')).getByText('Deployment logs')
+          within(getByTestId('log-viewer-steps__toolbar')).getByText('Deployment logs')
         ).toBeTruthy()
         expect(getByText('meta-tag')).toBeTruthy()
         expect(getByText('Stopped earlier')).toBeTruthy()
@@ -826,13 +820,13 @@ describe('LogViewer', () => {
         })
         expect(getByTestId('deploy-run')).toBeTruthy()
         expect(getByTestId('deploy-run__view-switch')).toBeTruthy()
-        expect(queryByTestId('code-log-viewer__steps')).toBeNull()
+        expect(queryByTestId('log-viewer-steps')).toBeNull()
       })
 
       it('renders the Steps, StepsRunning and StepsError examples without violations', async () => {
         for (const Example of [StepsExample, StepsRunning, StepsError]) {
           const view = render(Example)
-          expect(view.getAllByTestId('code-log-viewer__steps__step').length).toBeGreaterThan(0)
+          expect(view.getAllByTestId('log-viewer-steps__step').length).toBeGreaterThan(0)
           await expectNoA11yViolations(view.container)
           view.unmount()
         }

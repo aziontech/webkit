@@ -19,8 +19,8 @@ const read = (path) => JSON.parse(readFileSync(resolve(ROOT, path), 'utf8'))
 
 test('typesFor maps each source kind into types/', () => {
   assert.equal(
-    typesFor('./src/components/sections/site-header/site-header.vue'),
-    './types/components/sections/site-header/site-header.vue.d.ts'
+    typesFor('./src/components/section/site-header/site-header.vue'),
+    './types/components/section/site-header/site-header.vue.d.ts'
   )
   assert.equal(
     typesFor('./src/components/data/table/index.ts'),
@@ -33,14 +33,14 @@ test('typesFor maps each source kind into types/', () => {
 })
 
 test('typedEntry is idempotent and exportTarget reads both shapes', () => {
-  const once = typedEntry('./src/components/actions/button/button.vue')
+  const once = typedEntry('./src/components/action/button/button.vue')
   assert.deepEqual(once, {
-    types: './types/components/actions/button/button.vue.d.ts',
-    default: './src/components/actions/button/button.vue'
+    types: './types/components/action/button/button.vue.d.ts',
+    default: './src/components/action/button/button.vue'
   })
   assert.deepEqual(typedEntry(once), once)
   assert.equal(Object.keys(once)[0], 'types')
-  assert.equal(exportTarget(once), './src/components/actions/button/button.vue')
+  assert.equal(exportTarget(once), './src/components/action/button/button.vue')
   assert.equal(exportTarget('./catalog.json'), './catalog.json')
 })
 
@@ -52,7 +52,7 @@ test('typesVersions mirrors every typed export for node10 resolution', () => {
   const pkg = read('packages/webkit/package.json')
   assert.deepEqual(pkg.typesVersions, typesVersionsFor(pkg.exports))
   assert.deepEqual(pkg.typesVersions['*'].button, [
-    './types/components/actions/button/button.vue.d.ts'
+    './types/components/action/button/button.vue.d.ts'
   ])
   assert.equal(pkg.typesVersions['*']['catalog.json'], undefined)
   const stale = { ...pkg, typesVersions: { '*': {} } }
@@ -60,7 +60,7 @@ test('typesVersions mirrors every typed export for node10 resolution', () => {
 })
 
 test('components export their props as <Name>Props and the consumer smoke app uses them', () => {
-  const button = readFileSync(resolve(PKG, 'src/components/actions/button/button.vue'), 'utf8')
+  const button = readFileSync(resolve(PKG, 'src/components/action/button/button.vue'), 'utf8')
   assert.match(button, /export interface ButtonProps \{/)
   assert.match(button, /export type ButtonVariant = /)
   assert.match(
@@ -74,7 +74,7 @@ test('exportsProblems flags an untyped entry and a missing target', () => {
   const problems = exportsProblems(
     {
       exports: {
-        './button': './src/components/actions/button/button.vue',
+        './button': './src/components/action/button/button.vue',
         './ghost': { types: './types/ghost.vue.d.ts', default: './src/ghost.vue' }
       }
     },
@@ -146,13 +146,13 @@ test('packerToOutlive defers only a pnpm postpack', () => {
 
 test('the consumer check imports every typed export and spots WebKit sources', () => {
   const module = allExportsModule({
-    './button': typedEntry('./src/components/actions/button/button.vue'),
+    './button': typedEntry('./src/components/action/button/button.vue'),
     './catalog.json': './catalog.json'
   })
   assert.equal(module, "export type * as e0 from '@aziontech/webkit/button'\n")
   const sources = sourceFilesInProgram(
     [
-      '/app/node_modules/@aziontech/webkit/types/components/actions/button/button.vue.d.ts',
+      '/app/node_modules/@aziontech/webkit/types/components/action/button/button.vue.d.ts',
       '/app/node_modules/@aziontech/webkit/src/components/feedback/toast/index.ts',
       '/app/src/App.vue'
     ].join('\n')

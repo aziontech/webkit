@@ -1,6 +1,6 @@
 {
   "component": "data-table",
-  "title": "Components/Primitives/Data/DataTable",
+  "title": "Components/Data/DataTable",
   "examples": [
     {
       "name": "Default",

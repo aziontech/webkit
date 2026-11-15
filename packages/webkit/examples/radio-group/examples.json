@@ -1,6 +1,6 @@
 {
   "component": "radio-group",
-  "title": "Components/Primitives/Inputs/RadioGroup",
+  "title": "Components/Input/RadioGroup",
   "examples": [
     {
       "name": "Default",

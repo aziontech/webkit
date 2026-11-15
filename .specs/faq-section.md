@@ -1,13 +1,14 @@
 ---
 name: faq-section
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: a3c086dbda00f10f0a54300bc7320d74ae6f45eb28744b801d7b1cb1a4ea83ea
+checksum: 97d1bdbf8859cd3842dfd96222b78d17fc725184ee7adfb82040f7d1f6fff498
 ---
+
 # FaqSection — Component Spec
 
 ## Purpose
@@ -41,7 +42,7 @@ The frequently asked questions band near the end of a landing page: the heading 
 
 ```vue
 <script setup>
-import FaqSection from '@aziontech/webkit/faq-section'
+  import FaqSection from '@aziontech/webkit/faq-section'
 </script>
 
 <template>
@@ -50,7 +51,10 @@ import FaqSection from '@aziontech/webkit/faq-section'
     title="Frequently asked questions"
     :items="[
       { question: 'Are there cold starts?', answer: 'No. Each function runs in a V8 isolate.' },
-      { question: 'Which frameworks are compatible?', answer: 'See the full [frameworks list](/en/documentation/).' }
+      {
+        question: 'Which frameworks are compatible?',
+        answer: 'See the full [frameworks list](/en/documentation/).'
+      }
     ]"
   />
 </template>
@@ -58,11 +62,11 @@ import FaqSection from '@aziontech/webkit/faq-section'
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `anchor` | `string` | `''` | false | In-page id set on the band so a `#hash` link can scroll to it. |
-| `title` | `string` | `''` | false | Headline of the band, rendered by the FAQ as its `h2` in the left column. |
-| `items` | `FaqSectionItem[]` | `[]` | false | The questions in display order; each is `{ question, answer }` where `answer` is markdown carrying paragraphs, bullet lists, links, bold and italic text. |
+| Prop     | Type               | Default | Required | JSDoc                                                                                                                                                     |
+| -------- | ------------------ | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor` | `string`           | `''`    | false    | In-page id set on the band so a `#hash` link can scroll to it.                                                                                            |
+| `title`  | `string`           | `''`    | false    | Headline of the band, rendered by the FAQ as its `h2` in the left column.                                                                                 |
+| `items`  | `FaqSectionItem[]` | `[]`    | false    | The questions in display order; each is `{ question, answer }` where `answer` is markdown carrying paragraphs, bullet lists, links, bold and italic text. |
 
 ## Events
 
@@ -85,17 +89,17 @@ _none_
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| answer links | `.text-link` |
+| Region                         | Token (DESIGN.md)                                                |
+| ------------------------------ | ---------------------------------------------------------------- |
+| answer links                   | `.text-link`                                                     |
 | answer block gap / list indent | `var(--spacing-sm)` / `var(--spacing-2xs)` / `var(--spacing-lg)` |
-| anchor scroll offset | `var(--spacing-2xl)` |
+| anchor scroll offset           | `var(--spacing-2xl)`                                             |
 
 ## Theme gaps
 
 | Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| _none_ | — | — |
+| -------------- | ------------------- | --------- |
+| _none_         | —                   | —         |
 
 ## Accessibility (WCAG 2.1 AA)
 

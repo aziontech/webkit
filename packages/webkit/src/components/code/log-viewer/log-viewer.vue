@@ -80,7 +80,7 @@
     return rest
   })
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'code-log-viewer')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'log-viewer')
 
   const warningCount = computed(
     () => props.lines.filter((line) => lineLevel(line) === 'warn').length

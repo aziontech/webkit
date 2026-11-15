@@ -8,7 +8,7 @@ the drawn-grid, technical-drawing look — the _industrial_ register of the Azio
 Reference implementations live in
 the WebKit shells [`blocks/shell/site`](../../packages/webkit/blocks/shell/site/site.vue) and
 [`blocks/shell/docs`](../../packages/webkit/blocks/shell/docs/docs.vue), and the page sections in
-[`src/components/sections/`](../../packages/webkit/src/components/sections/); the layout primitives —
+[`src/components/section/`](../../packages/webkit/src/components/section/); the layout primitives —
 shared by Site, Hub and Docs — are in
 [`src/components/marketing/`](../../packages/webkit/src/components/marketing/) (`SectionContainer`, `SectionModule`, `CardGrid`, `Hero`)
 and [`src/components/layout/`](../../packages/webkit/src/components/layout/) (`RegistrationFrame`, `PageHeader`). The design sample these
@@ -129,7 +129,7 @@ A flat texture skips all three: `dot-grid` covers ~0.17% of the band, so there i
 headline to compete with, and the ink is a 22% mix of `--text-default` so the field carries the
 same step from the ground on either theme instead of being tuned for the dark one.
 
-([`hero-section.vue`](../../packages/webkit/src/components/sections/hero-section/hero-section.vue) — `variant="centered"` paints the dots
+([`hero-section.vue`](../../packages/webkit/src/components/section/hero-section/hero-section.vue) — `variant="centered"` paints the dots
 texture with its top fade; [`backdrop.vue`](../../packages/webkit/src/components/marketing/backdrop/backdrop.vue)
 carries the mask and scrim recipe for the heavier backdrops.)
 
@@ -147,7 +147,7 @@ carries the mask and scrim recipe for the heavier backdrops.)
 The Site hero closes with a **capability strip** — a 2/3/5-column grid separated from the copy by
 `border-t border-[var(--border-muted)]`, bold lead-in plus one supporting line per cell.
 (the client strip on the band floor: [`hero.vue`](../../packages/webkit/src/components/marketing/hero/hero.vue) `carousel`,
-`carousel-marks`, `carousel-label`; the stat cells are [`stats-section`](../../packages/webkit/src/components/sections/stats-section/stats-section.vue))
+`carousel-marks`, `carousel-label`; the stat cells are [`stats-section`](../../packages/webkit/src/components/section/stats-section/stats-section.vue))
 
 ---
 
@@ -315,7 +315,7 @@ Both containers key into [`container.js`](../../packages/theme/src/tokens/primit
 Found while documenting; **not fixed** — each changes rendered output.
 
 1. **`RegistrationFrame` is used but never imported** (design sample only; fixed in WebKit, where
-   [`closing-call-to-action.vue:146`](../../packages/webkit/src/components/sections/closing-call-to-action/closing-call-to-action.vue#L146)
+   [`closing-call-to-action.vue:146`](../../packages/webkit/src/components/section/closing-call-to-action/closing-call-to-action.vue#L146)
    imports it) — the sample's `AzionHome.vue:550` wraps the
    final CTA in `<RegistrationFrame hatch>`, but the script block imports only `Button`, `Card`,
    `PricingCard`, `CodeBlock`, `PlatformIllustrations`, `PlatformShowcase`, and

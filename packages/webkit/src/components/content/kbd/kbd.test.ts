@@ -4,7 +4,7 @@ import { defineComponent, h, nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import Kbd from './kbd.vue'
 
 // Starter suite emitted by the scaffold — a FLOOR, not the ceiling. Expand per
@@ -13,7 +13,7 @@ import Kbd from './kbd.vue'
 describe('Kbd', () => {
   it('renders and exposes the fallback data-testid', () => {
     const { getByTestId } = render(Kbd, { slots: { default: () => 'K' } })
-    expect(getByTestId('content-kbd')).toBeTruthy()
+    expect(getByTestId('kbd')).toBeTruthy()
   })
 
   it('lets a consumer override data-testid', () => {
@@ -26,7 +26,7 @@ describe('Kbd', () => {
 
   it('defaults data-size to medium', () => {
     const { getByTestId } = render(Kbd, { slots: { default: () => 'K' } })
-    expect(getByTestId('content-kbd')).toHaveAttribute('data-size', 'medium')
+    expect(getByTestId('kbd')).toHaveAttribute('data-size', 'medium')
   })
 
   it('maps size=small to the data-size attribute', () => {
@@ -34,7 +34,7 @@ describe('Kbd', () => {
       props: { size: 'small' },
       slots: { default: () => 'K' }
     })
-    expect(getByTestId('content-kbd')).toHaveAttribute('data-size', 'small')
+    expect(getByTestId('kbd')).toHaveAttribute('data-size', 'small')
   })
 
   it('renders the shift modifier glyph before the key', () => {
@@ -43,7 +43,7 @@ describe('Kbd', () => {
       slots: { default: () => 'K' }
     })
 
-    const root = getByTestId('content-kbd')
+    const root = getByTestId('kbd')
     expect(root).toHaveTextContent('⇧')
     expect(root).toHaveTextContent('K')
   })
@@ -68,10 +68,10 @@ describe('Kbd', () => {
 
     it('prints a named key from the active catalog', () => {
       const { getByTestId, unmount } = render(inProvider({ keyName: 'space' }, { locale: 'pt-BR' }))
-      expect(getByTestId('content-kbd')).toHaveTextContent('Espaço')
+      expect(getByTestId('kbd')).toHaveTextContent('Espaço')
       unmount()
       const english = render(inProvider({ keyName: 'escape' }, { locale: 'en' }))
-      expect(english.getByTestId('content-kbd')).toHaveTextContent('Esc')
+      expect(english.getByTestId('kbd')).toHaveTextContent('Esc')
     })
 
     it('renames a modifier through the provider messages (Strg)', () => {
@@ -85,28 +85,28 @@ describe('Kbd', () => {
           }
         )
       )
-      expect(getByTestId('content-kbd')).toHaveTextContent('StrgEntf')
+      expect(getByTestId('kbd')).toHaveTextContent('StrgEntf')
     })
 
     it('keeps the ⌘ symbol on macOS whatever the locale', async () => {
       vi.stubGlobal('navigator', { platform: 'MacIntel', userAgent: 'Macintosh' })
       const { getByTestId } = render(inProvider({ meta: true }, { locale: 'pt-BR' }))
       await nextTick()
-      expect(getByTestId('content-kbd')).toHaveTextContent('⌘')
+      expect(getByTestId('kbd')).toHaveTextContent('⌘')
     })
 
     it('prints the macOS glyphs for meta, ctrl and alt once mounted', async () => {
       vi.stubGlobal('navigator', { platform: 'MacIntel', userAgent: 'Macintosh' })
       const { getByTestId } = render(Kbd, { props: { meta: true, ctrl: true, alt: true } })
       await nextTick()
-      expect(getByTestId('content-kbd')).toHaveTextContent('⌘⌃⌥')
+      expect(getByTestId('kbd')).toHaveTextContent('⌘⌃⌥')
     })
 
     it('prints Ctrl and Alt for meta, ctrl and alt on other platforms', async () => {
       vi.stubGlobal('navigator', { platform: 'Win32', userAgent: 'Windows' })
       const { getByTestId } = render(Kbd, { props: { meta: true, ctrl: true, alt: true } })
       await nextTick()
-      expect(getByTestId('content-kbd')).toHaveTextContent('CtrlCtrlAlt')
+      expect(getByTestId('kbd')).toHaveTextContent('CtrlCtrlAlt')
     })
   })
 
@@ -115,35 +115,35 @@ describe('Kbd', () => {
 
     it('prints the arrow keys and the Return glyph from the catalog', () => {
       const { getByTestId } = render(Kbd, { props: { keys: ['arrow-up', 'arrow-down', 'return'] } })
-      expect(getByTestId('content-kbd')).toHaveTextContent('↑↓↵')
+      expect(getByTestId('kbd')).toHaveTextContent('↑↓↵')
     })
 
     it('matches a named key in camelCase, kebab-case or the DOM spelling', () => {
       const { getByTestId } = render(Kbd, {
         props: { keyName: 'arrowLeft', keys: ['arrowUp', 'ArrowDown', 'arrow-right'] }
       })
-      expect(getByTestId('content-kbd')).toHaveTextContent('←↑↓→')
+      expect(getByTestId('kbd')).toHaveTextContent('←↑↓→')
     })
 
     it('resolves modifiers, named keys and single characters in a keys list', async () => {
       vi.stubGlobal('navigator', { platform: 'MacIntel', userAgent: 'Macintosh' })
       const { getByTestId } = render(Kbd, { props: { keys: ['meta', 'shift', 'p', 'Enter'] } })
       await nextTick()
-      expect(getByTestId('content-kbd')).toHaveTextContent('⌘⇧PEnter')
+      expect(getByTestId('kbd')).toHaveTextContent('⌘⇧PEnter')
     })
 
     it('draws one keycap by default and one nested keycap per key with variant=separate', () => {
       const combined = render(Kbd, { props: { keys: ['ctrl', 'k'] } })
-      expect(combined.getByTestId('content-kbd')).toHaveAttribute('data-variant', 'combined')
-      expect(combined.queryAllByTestId('content-kbd__key')).toHaveLength(0)
+      expect(combined.getByTestId('kbd')).toHaveAttribute('data-variant', 'combined')
+      expect(combined.queryAllByTestId('kbd__key')).toHaveLength(0)
       combined.unmount()
 
       const { getByTestId, getAllByTestId } = render(Kbd, {
         props: { keys: ['ctrl', 'k'], variant: 'separate', size: 'small' },
         slots: { default: () => '/' }
       })
-      expect(getByTestId('content-kbd')).toHaveAttribute('data-variant', 'separate')
-      const caps = getAllByTestId('content-kbd__key')
+      expect(getByTestId('kbd')).toHaveAttribute('data-variant', 'separate')
+      const caps = getAllByTestId('kbd__key')
       expect(caps).toHaveLength(3)
       expect(caps.every((cap) => cap.tagName === 'KBD')).toBe(true)
       expect(caps.map((cap) => cap.textContent)).toEqual([expect.any(String), 'K', '/'])

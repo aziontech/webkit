@@ -1,6 +1,6 @@
 {
   "component": "tag-editor",
-  "title": "Components/Primitives/Inputs/TagEditor",
+  "title": "Components/Input/TagEditor",
   "examples": [
     {
       "name": "Default",

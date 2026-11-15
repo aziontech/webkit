@@ -5,7 +5,7 @@ import { nextTick, ref } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import MediaTile from './media-tile.vue'
 
-const TESTID = 'marketing-media-tile'
+const TESTID = 'media-tile'
 const FRAME = `${TESTID}__frame`
 
 const TITLE = 'AI workloads.'
@@ -234,16 +234,16 @@ describe('MediaTile', () => {
         setup: () => ({ shown }),
         template: `<MediaTile title="Edge"><template v-if="shown" #media><span data-testid="probe">Slotted</span></template></MediaTile>`
       })
-      expect(queryByTestId('marketing-media-tile')?.hasAttribute('data-media')).toBe(false)
+      expect(queryByTestId('media-tile')?.hasAttribute('data-media')).toBe(false)
 
       shown.value = true
       await nextTick()
-      expect(queryByTestId('marketing-media-tile')?.hasAttribute('data-media')).toBe(true)
+      expect(queryByTestId('media-tile')?.hasAttribute('data-media')).toBe(true)
       expect(queryByTestId('probe')).not.toBeNull()
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('marketing-media-tile')?.hasAttribute('data-media')).toBe(false)
+      expect(queryByTestId('media-tile')?.hasAttribute('data-media')).toBe(false)
       expect(queryByTestId('probe')).toBeNull()
     })
   })

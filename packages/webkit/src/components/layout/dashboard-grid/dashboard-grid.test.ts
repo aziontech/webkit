@@ -10,7 +10,7 @@ import ChartCard, {
   ChartCardResizeHandle,
   ChartCardTitle
 } from '../../chart/chart-card/index'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import DashboardGrid, { DashboardGridItem, type DashboardGridLayoutItem } from './index'
 
 const titles: Record<string, string> = {
@@ -87,11 +87,11 @@ describe('DashboardGrid', () => {
 
   it('renders a named list with one item per entry and the fallback test ids', () => {
     const { view } = mount()
-    const grid = view.getByTestId('layout-board__grid')
+    const grid = view.getByTestId('dashboard-grid__grid')
     expect(grid.tagName).toBe('UL')
     expect(grid.getAttribute('aria-label')).toBe('Dashboard')
-    expect(view.getAllByTestId('layout-board__item')).toHaveLength(3)
-    expect(view.getByTestId('layout-board').className).toContain('@container/dashboard-grid')
+    expect(view.getAllByTestId('dashboard-grid-item')).toHaveLength(3)
+    expect(view.getByTestId('dashboard-grid').className).toContain('@container/dashboard-grid')
   })
 
   it('hides the handles until editing', async () => {
@@ -101,12 +101,12 @@ describe('DashboardGrid', () => {
     view.unmount()
     const editing = mount({ editing: true })
     expect(editing.view.getByTestId('drag-requests')).toBeTruthy()
-    expect(editing.view.getByTestId('layout-board').hasAttribute('data-editing')).toBe(true)
+    expect(editing.view.getByTestId('dashboard-grid').hasAttribute('data-editing')).toBe(true)
   })
 
   it('sizes each item from its layout entry', () => {
     const { view } = mount()
-    const [first, , third] = view.getAllByTestId('layout-board__item')
+    const [first, , third] = view.getAllByTestId('dashboard-grid-item')
     expect(first?.style.getPropertyValue('--dashboard-grid-item-span')).toBe('8')
     expect(third?.style.getPropertyValue('--dashboard-grid-item-height')).toBe('400px')
     expect(first?.offsetWidth).toBeGreaterThan(700)
@@ -121,7 +121,7 @@ describe('DashboardGrid', () => {
     await nextTick()
     expect(order(layout)).toEqual(['regions', 'requests', 'errors'])
     expect(document.activeElement).toBe(view.getByTestId('drag-requests'))
-    expect(view.getByTestId('layout-board__live').textContent?.trim()).toBe(
+    expect(view.getByTestId('dashboard-grid__live').textContent?.trim()).toBe(
       'Requests moved to position 2 of 3.'
     )
     expect(moves).toEqual([{ id: 'requests', from: 0, to: 1 }])
@@ -190,7 +190,7 @@ describe('DashboardGrid', () => {
     expect(corner.getAttribute('aria-valuemax')).toBe('10')
     await fireEvent.keyDown(corner, { key: 'Home' })
     expect(layout.value[0]?.span).toBe(3)
-    expect(view.getByTestId('layout-board__live').textContent?.trim()).toBe(
+    expect(view.getByTestId('dashboard-grid__live').textContent?.trim()).toBe(
       'Requests resized to 3 of 12 columns.'
     )
     const errors = view.getByTestId('resize-errors')
@@ -201,7 +201,7 @@ describe('DashboardGrid', () => {
     await fireEvent.keyDown(errors, { key: 'ArrowUp' })
     await fireEvent.keyDown(errors, { key: 'ArrowUp' })
     expect(layout.value[2]?.height).toBe(280)
-    expect(view.getByTestId('layout-board__live').textContent?.trim()).toBe(
+    expect(view.getByTestId('dashboard-grid__live').textContent?.trim()).toBe(
       'Errors resized to 6 of 12 columns, 280 pixels tall.'
     )
     expect(resizes.at(-1)).toEqual({ id: 'errors', span: 6, height: 280 })
@@ -209,9 +209,9 @@ describe('DashboardGrid', () => {
 
   it('reorders when a dragged card is dropped on another item', async () => {
     const { view, layout } = mount({ editing: true })
-    const [first, , third] = view.getAllByTestId('layout-board__item')
+    const [first, , third] = view.getAllByTestId('dashboard-grid-item')
     await fireEvent.pointerDown(view.getByTestId('drag-requests'))
-    const card = first?.querySelector('[data-testid="chart-chart-card"]') as HTMLElement
+    const card = first?.querySelector('[data-testid="chart-card"]') as HTMLElement
     await fireEvent.dragStart(card)
     await fireEvent.dragOver(third as HTMLElement)
     expect(third?.hasAttribute('data-over')).toBe(true)
@@ -223,14 +223,14 @@ describe('DashboardGrid', () => {
 
   it('ignores a drop when nothing is being dragged', async () => {
     const { view, layout } = mount({ editing: true })
-    const [, second] = view.getAllByTestId('layout-board__item')
+    const [, second] = view.getAllByTestId('dashboard-grid-item')
     await fireEvent.drop(second as HTMLElement)
     expect(order(layout)).toEqual(['requests', 'regions', 'errors'])
   })
 
   it('collapses to one column in a narrow container', () => {
     const { view } = mount({ style: 'width: 360px' })
-    const grid = view.getByTestId('layout-board__grid')
+    const grid = view.getByTestId('dashboard-grid__grid')
     expect(getComputedStyle(grid).gridTemplateColumns.split(' ')).toHaveLength(1)
   })
 

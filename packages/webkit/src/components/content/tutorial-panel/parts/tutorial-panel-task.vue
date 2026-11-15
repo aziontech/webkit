@@ -43,7 +43,7 @@
   onBeforeUnmount(() => context.unregister(id))
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-tutorial-panel-task'
+    () => (attrs['data-testid'] as string | undefined) ?? 'tutorial-panel-task'
   )
 
   const statusLabel = computed<string>(() => {

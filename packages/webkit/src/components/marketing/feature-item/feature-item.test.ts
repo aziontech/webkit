@@ -5,7 +5,7 @@ import { nextTick, ref } from 'vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import FeatureItem from './feature-item.vue'
 
-const TESTID = 'marketing-topic'
+const TESTID = 'feature-item'
 const TITLE = 'Consistent global speed'
 const DESCRIPTION =
   'Serve content and run web apps across hundreds of locations with median latency under 30 ms.'
@@ -138,16 +138,16 @@ describe('FeatureItem', () => {
         setup: () => ({ shown }),
         template: `<FeatureItem title="Edge"><template v-if="shown" #default><span data-testid="probe">Slotted</span></template></FeatureItem>`
       })
-      expect(queryByTestId('marketing-topic')?.hasAttribute('data-described')).toBe(false)
+      expect(queryByTestId('feature-item')?.hasAttribute('data-described')).toBe(false)
 
       shown.value = true
       await nextTick()
-      expect(queryByTestId('marketing-topic')?.hasAttribute('data-described')).toBe(true)
+      expect(queryByTestId('feature-item')?.hasAttribute('data-described')).toBe(true)
       expect(queryByTestId('probe')).not.toBeNull()
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('marketing-topic')?.hasAttribute('data-described')).toBe(false)
+      expect(queryByTestId('feature-item')?.hasAttribute('data-described')).toBe(false)
       expect(queryByTestId('probe')).toBeNull()
     })
   })

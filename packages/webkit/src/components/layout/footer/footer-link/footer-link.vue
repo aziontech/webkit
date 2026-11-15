@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
-
-  import { FooterInjectionKey } from '../injection-key'
+  import { computed, useAttrs } from 'vue'
 
   defineOptions({
     name: 'FooterLink',
@@ -21,11 +19,8 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(FooterInjectionKey, null)
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx?.testId ?? 'layout-footer'}__link`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'footer-link')
 </script>
 
 <template>

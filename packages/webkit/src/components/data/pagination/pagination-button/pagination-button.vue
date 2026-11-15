@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
-
-  import { PaginationInjectionKey } from '../injection-key'
+  import { computed, useAttrs } from 'vue'
 
   export type PaginationButtonType = 'previous' | 'next' | 'number' | 'more'
 
@@ -34,12 +32,9 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(PaginationInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__button` : 'data-pagination__button')
+    () => (attrs['data-testid'] as string | undefined) ?? 'pagination-button'
   )
 
   const inert = computed<boolean>(() => props.type === 'more')

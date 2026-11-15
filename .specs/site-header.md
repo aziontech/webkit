@@ -1,6 +1,6 @@
 ---
 name: site-header
-category: sections
+category: section
 structure: monolithic
 status: implemented
 spec_version: 5

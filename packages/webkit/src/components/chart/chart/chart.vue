@@ -170,7 +170,7 @@
   const CATEGORY_LABEL_LIMIT = 160
   const TWIN_ROW_LIMIT = 1000
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-chart')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart')
   const summaryId = `${uid}-summary`
   const liveId = `${uid}-live`
 
@@ -639,7 +639,7 @@
       <Skeleton
         width="100%"
         height="100%"
-        :data-testid="`${testId}__skeleton`"
+        :data-testid="`${testId}__loading`"
       />
     </div>
     <div

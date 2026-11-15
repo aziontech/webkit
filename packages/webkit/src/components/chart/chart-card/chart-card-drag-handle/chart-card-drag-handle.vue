@@ -30,7 +30,7 @@
   }
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__drag-handle`
+    () => (attrs['data-testid'] as string | undefined) ?? 'chart-card-drag-handle'
   )
 
   function onKeydown(event: globalThis.KeyboardEvent) {

@@ -9,7 +9,7 @@
   import Card from '../../card/card.vue'
   import Tag from '../../tag/tag.vue'
   import ConsoleMockupShell, {
-    type ConsoleMockupConsoleMockupShellFade,
+    type ConsoleMockupShellFade,
     type ConsoleMockupShellVariant
   } from '../console-mockup-shell/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
@@ -26,7 +26,7 @@
     /** Design width of the frame from `md` up. */
     width?: number
     /** Edge the mockup fades out along. */
-    fade?: ConsoleMockupConsoleMockupShellFade
+    fade?: ConsoleMockupShellFade
     /** Whether this widget is the one showing; the deployment streams only while it is and is on screen. */
     active?: boolean
     /** Milliseconds between revealed log lines. */

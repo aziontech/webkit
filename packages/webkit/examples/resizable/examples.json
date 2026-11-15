@@ -1,6 +1,6 @@
 {
   "component": "resizable",
-  "title": "Components/Primitives/Layout/Resizable",
+  "title": "Components/Layout/Resizable",
   "examples": [
     {
       "name": "Default",

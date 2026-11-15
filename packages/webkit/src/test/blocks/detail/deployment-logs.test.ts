@@ -45,7 +45,7 @@ describe('detail/deployment-logs', () => {
     ['async-submit Failed', AsyncSubmitFailed]
   ])('%s composes LogViewer.Steps for its phased steps', (_name, block) => {
     const view = render(block)
-    expect(view.container.querySelector('[data-testid="code-log-viewer__steps"]')).toBeTruthy()
+    expect(view.container.querySelector('[data-testid="log-viewer-steps"]')).toBeTruthy()
   })
 
   it('opens a failed run on the failed step and says why the next one never ran', async () => {

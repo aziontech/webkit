@@ -56,7 +56,7 @@ const sizeClasses = {
 }
 ```
 
-Reference: `packages/webkit/src/components/actions/button/button.vue`.
+Reference: `packages/webkit/src/components/action/button/button.vue`.
 
 ### Available text styles
 
@@ -523,7 +523,7 @@ after:ease-productive-entrance active:after:opacity-100 motion-reduce:before:tra
 motion-reduce:after:transition-none
 ```
 
-Reference: `packages/webkit/src/components/actions/button/button.vue`.
+Reference: `packages/webkit/src/components/action/button/button.vue`.
 
 ### Reduced motion
 

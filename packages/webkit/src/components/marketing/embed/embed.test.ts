@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Embed from './embed.vue'
 
-const TESTID = 'marketing-embed'
+const TESTID = 'embed'
 
 const props = {
   src: 'about:blank',

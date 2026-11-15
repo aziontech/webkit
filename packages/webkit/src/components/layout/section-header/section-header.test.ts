@@ -12,7 +12,7 @@ describe('SectionHeader', () => {
       render(SectionHeader, { props: { title: 'Payment methods' } }).container
     )
 
-    expect(getByTestId('layout-section-header').tagName).toBe('HEADER')
+    expect(getByTestId('section-header').tagName).toBe('HEADER')
     expect(getByRole('heading', { level: 2 }).textContent?.trim()).toBe('Payment methods')
   })
 
@@ -29,7 +29,7 @@ describe('SectionHeader', () => {
 
   it('renders the copy-link button and the h2 id only with an anchor', () => {
     const bare = within(render(SectionHeader, { props: { title: 'General' } }).container)
-    expect(bare.queryByTestId('layout-section-header__copy-link')).toBeNull()
+    expect(bare.queryByTestId('section-header__copy-link')).toBeNull()
     expect(bare.getByRole('heading', { level: 2 }).id).toBe('')
 
     const anchored = within(
@@ -44,15 +44,15 @@ describe('SectionHeader', () => {
       render(SectionHeader, { props: { title: 'General', size } }).container
     )
 
-    expect(getByTestId('layout-section-header__title').getAttribute('data-size')).toBe(size)
-    expect(getByTestId('layout-section-header__title').className).toContain('text-(--text-default)')
-    expect(getByTestId('layout-section-header__title').className).not.toContain('text-label')
+    expect(getByTestId('section-header__title').getAttribute('data-size')).toBe(size)
+    expect(getByTestId('section-header__title').className).toContain('text-(--text-default)')
+    expect(getByTestId('section-header__title').className).not.toContain('text-label')
   })
 
   it('renders description and actions only when given', () => {
     const bare = within(render(SectionHeader, { props: { title: 'General' } }).container)
-    expect(bare.queryByTestId('layout-section-header__description')).toBeNull()
-    expect(bare.queryByTestId('layout-section-header__actions')).toBeNull()
+    expect(bare.queryByTestId('section-header__description')).toBeNull()
+    expect(bare.queryByTestId('section-header__actions')).toBeNull()
 
     const full = within(
       render(SectionHeader, {
@@ -60,9 +60,7 @@ describe('SectionHeader', () => {
         slots: { actions: '<button type="button">Update</button>' }
       }).container
     )
-    expect(full.getByTestId('layout-section-header__description').textContent?.trim()).toBe(
-      'Who you are.'
-    )
+    expect(full.getByTestId('section-header__description').textContent?.trim()).toBe('Who you are.')
     expect(full.getByRole('button', { name: 'Update' })).toBeTruthy()
   })
 
@@ -83,17 +81,15 @@ describe('SectionHeader', () => {
         slots: { actions: '<button type="button">Add</button>' }
       })
 
-      expect(view.getByTestId('layout-section-header').className).toContain(
-        '@container/section-header'
-      )
-      expect(view.getByTestId('layout-section-header__actions').className).toContain(
+      expect(view.getByTestId('section-header').className).toContain('@container/section-header')
+      expect(view.getByTestId('section-header__actions').className).toContain(
         '@md/section-header:w-auto'
       )
     })
 
     it('keeps the copy-link visible where there is no hover', () => {
       const view = render(SectionHeader, { props: { title: 'Domains', anchor: 'domains' } })
-      const wrapper = view.getByTestId('layout-section-header__copy-link').parentElement
+      const wrapper = view.getByTestId('section-header__copy-link').parentElement
 
       expect(wrapper?.className).toContain('[@media(hover:none)]:opacity-100')
     })

@@ -29,7 +29,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(() => attrs['data-testid'] ?? 'content-currency')
+  const testId = computed(() => attrs['data-testid'] ?? 'currency-amount')
 </script>
 
 <template>

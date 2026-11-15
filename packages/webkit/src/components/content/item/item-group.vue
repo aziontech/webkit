@@ -14,9 +14,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-item-group'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'item-group')
 
   provide(ItemContainerInjectionKey, { forceVariant: 'inline' })
   provide(ItemListMemberInjectionKey, true)

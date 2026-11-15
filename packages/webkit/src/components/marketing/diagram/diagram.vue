@@ -72,7 +72,7 @@
   const canvasEl = ref<globalThis.HTMLElement | null>(null)
   const named = shallowRef<DiagramSpec | null>(null)
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'marketing-diagram')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'diagram')
   const drawn = computed<DiagramSpec | null>(() => props.spec ?? named.value)
   const label = computed(() => props.ariaLabel || drawn.value?.ariaLabel || '')
   const nodes = computed<Record<string, DiagramNode>>(() =>

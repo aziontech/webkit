@@ -11,7 +11,7 @@ import Skeleton from './skeleton.vue'
 describe('Skeleton', () => {
   it('renders with the default data-testid and presentational a11y semantics', () => {
     const { getByTestId } = render(Skeleton)
-    const el = getByTestId('feedback-skeleton')
+    const el = getByTestId('skeleton')
 
     expect(el.getAttribute('role')).toBe('presentation')
     expect(el.getAttribute('aria-hidden')).toBe('true')
@@ -28,33 +28,33 @@ describe('Skeleton', () => {
   it('defaults to the rectangle geometry', () => {
     const { getByTestId } = render(Skeleton)
 
-    expect(getByTestId('feedback-skeleton').getAttribute('data-variant')).toBe('rectangle')
+    expect(getByTestId('skeleton').getAttribute('data-variant')).toBe('rectangle')
   })
 
   it('reflects variant="circle" on data-variant', () => {
     const { getByTestId } = render(Skeleton, { props: { variant: 'circle' } })
 
-    expect(getByTestId('feedback-skeleton').getAttribute('data-variant')).toBe('circle')
+    expect(getByTestId('skeleton').getAttribute('data-variant')).toBe('circle')
   })
 
   it('exposes data-animated when animated is true (the default)', () => {
     const { getByTestId } = render(Skeleton)
 
-    expect(getByTestId('feedback-skeleton').hasAttribute('data-animated')).toBe(true)
-    expect(getByTestId('feedback-skeleton').getAttribute('data-animated')).toBe('true')
+    expect(getByTestId('skeleton').hasAttribute('data-animated')).toBe(true)
+    expect(getByTestId('skeleton').getAttribute('data-animated')).toBe('true')
   })
 
   it('omits data-animated when animated is false', () => {
     const { getByTestId } = render(Skeleton, { props: { animated: false } })
 
-    expect(getByTestId('feedback-skeleton').hasAttribute('data-animated')).toBe(false)
+    expect(getByTestId('skeleton').hasAttribute('data-animated')).toBe(false)
   })
 
   it('applies width and height as inline styles', () => {
     const { getByTestId } = render(Skeleton, {
       props: { width: '240px', height: '100px' }
     })
-    const el = getByTestId('feedback-skeleton') as HTMLElement
+    const el = getByTestId('skeleton') as HTMLElement
 
     expect(el.style.width).toBe('240px')
     expect(el.style.height).toBe('100px')
@@ -62,7 +62,7 @@ describe('Skeleton', () => {
 
   it('defaults width to 100% and height to 1rem', () => {
     const { getByTestId } = render(Skeleton)
-    const el = getByTestId('feedback-skeleton') as HTMLElement
+    const el = getByTestId('skeleton') as HTMLElement
 
     expect(el.style.width).toBe('100%')
     expect(el.style.height).toBe('1rem')
@@ -71,7 +71,7 @@ describe('Skeleton', () => {
   it.each(['rectangle', 'circle'] as const)('renders the %s geometry', (variant) => {
     const { getByTestId } = render(Skeleton, { props: { variant: variant } })
 
-    expect(getByTestId('feedback-skeleton').getAttribute('data-variant')).toBe(variant)
+    expect(getByTestId('skeleton').getAttribute('data-variant')).toBe(variant)
   })
 
   it('has no a11y violations for the default rectangle', async () => {
@@ -92,7 +92,7 @@ describe('Skeleton', () => {
 
   it('renders the composed Default story', () => {
     const { getByTestId } = render(Default)
-    const el = getByTestId('feedback-skeleton')
+    const el = getByTestId('skeleton')
 
     expect(el.getAttribute('data-variant')).toBe('rectangle')
     expect(el.hasAttribute('data-animated')).toBe(true)
@@ -100,9 +100,7 @@ describe('Skeleton', () => {
 
   it('renders the composed Types story with both geometries', () => {
     const { getAllByTestId } = render(Types)
-    const variants = getAllByTestId('feedback-skeleton').map((el) =>
-      el.getAttribute('data-variant')
-    )
+    const variants = getAllByTestId('skeleton').map((el) => el.getAttribute('data-variant'))
 
     expect(variants).toContain('rectangle')
     expect(variants).toContain('circle')
@@ -111,7 +109,7 @@ describe('Skeleton', () => {
   it('renders the composed Static story without the animated attribute', () => {
     const { getByTestId } = render(Static)
 
-    expect(getByTestId('feedback-skeleton').hasAttribute('data-animated')).toBe(false)
+    expect(getByTestId('skeleton').hasAttribute('data-animated')).toBe(false)
   })
 
   // The fill is a translucent role, so one value per theme reads correctly on every
@@ -121,7 +119,7 @@ describe('Skeleton', () => {
   it('renders the composed OnSurfaces story on every surface layer', async () => {
     const { getAllByTestId, container } = render(OnSurfaces)
 
-    expect(getAllByTestId('feedback-skeleton')).toHaveLength(8)
+    expect(getAllByTestId('skeleton')).toHaveLength(8)
     await expectNoA11yViolations(container)
   })
 })

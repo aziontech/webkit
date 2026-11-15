@@ -1,6 +1,6 @@
 {
   "component": "site-page",
-  "title": "Components/Marketing/SitePage",
+  "title": "Components/Marketing/Primitives/SitePage",
   "examples": [
     {
       "name": "Default",

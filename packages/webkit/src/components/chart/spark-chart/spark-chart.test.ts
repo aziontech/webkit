@@ -14,27 +14,27 @@ const paths = (root: HTMLElement) => [...root.querySelectorAll('path')]
 describe('SparkChart', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
     const fallback = mount()
-    expect(fallback.getByTestId('chart-spark-chart')).toBeTruthy()
+    expect(fallback.getByTestId('spark-chart')).toBeTruthy()
     fallback.unmount()
     expect(mount({ 'data-testid': 'requests-spark' }).getByTestId('requests-spark')).toBeTruthy()
   })
 
   it('defaults to an area at medium size', () => {
-    const root = mount().getByTestId('chart-spark-chart')
+    const root = mount().getByTestId('spark-chart')
     expect(root.getAttribute('data-type')).toBe('area')
     expect(root.getAttribute('data-size')).toBe('medium')
   })
 
   it.each(['area', 'line', 'bar'] as const)('maps type %s to data-type', (type) => {
-    expect(mount({ type }).getByTestId('chart-spark-chart').getAttribute('data-type')).toBe(type)
+    expect(mount({ type }).getByTestId('spark-chart').getAttribute('data-type')).toBe(type)
   })
 
   it.each(['small', 'medium', 'large'] as const)('maps size %s to data-size', (size) => {
-    expect(mount({ size }).getByTestId('chart-spark-chart').getAttribute('data-size')).toBe(size)
+    expect(mount({ size }).getByTestId('spark-chart').getAttribute('data-size')).toBe(size)
   })
 
   it('draws a line as one unfilled stroked path in the chosen hue', () => {
-    const marks = paths(mount({ type: 'line', color: 3 }).getByTestId('chart-spark-chart'))
+    const marks = paths(mount({ type: 'line', color: 3 }).getByTestId('spark-chart'))
     expect(marks).toHaveLength(1)
     const [line] = marks
     expect(line?.getAttribute('d')).toMatch(/^M[\d.,-]+L/)
@@ -43,7 +43,7 @@ describe('SparkChart', () => {
   })
 
   it('draws an area as a gradient fill plus an edge', () => {
-    const root = mount({ type: 'area', color: 'success' }).getByTestId('chart-spark-chart')
+    const root = mount({ type: 'area', color: 'success' }).getByTestId('spark-chart')
     const marks = paths(root)
     expect(marks).toHaveLength(2)
     const [fill, edge] = marks
@@ -56,21 +56,21 @@ describe('SparkChart', () => {
   })
 
   it('draws one bar per finite value', () => {
-    const marks = paths(mount({ type: 'bar' }).getByTestId('chart-spark-chart'))
+    const marks = paths(mount({ type: 'bar' }).getByTestId('spark-chart'))
     expect(marks).toHaveLength(values.length)
     expect(marks.every((bar) => bar.getAttribute('fill') === 'var(--chart-series-1)')).toBe(true)
   })
 
   it('leaves no bar where a value is null', () => {
     const bars = paths(
-      mount({ type: 'bar', values: [4, 6, null, 8, 5] }).getByTestId('chart-spark-chart')
+      mount({ type: 'bar', values: [4, 6, null, 8, 5] }).getByTestId('spark-chart')
     )
     expect(bars).toHaveLength(4)
   })
 
   it('breaks the line where a value is null', () => {
     const marks = paths(
-      mount({ type: 'line', values: [4, 6, null, 8, 5] }).getByTestId('chart-spark-chart')
+      mount({ type: 'line', values: [4, 6, null, 8, 5] }).getByTestId('spark-chart')
     )
     expect(marks).toHaveLength(1)
     expect(marks[0]?.getAttribute('d')?.match(/M/g)).toHaveLength(2)
@@ -78,14 +78,14 @@ describe('SparkChart', () => {
 
   it.each(['area', 'line', 'bar'] as const)('renders no %s mark without a finite value', (type) => {
     const empty = mount({ type, values: [] })
-    expect(paths(empty.getByTestId('chart-spark-chart'))).toHaveLength(0)
+    expect(paths(empty.getByTestId('spark-chart'))).toHaveLength(0)
     empty.unmount()
     const nulls = mount({ type, values: [null, null] })
-    expect(paths(nulls.getByTestId('chart-spark-chart'))).toHaveLength(0)
+    expect(paths(nulls.getByTestId('spark-chart'))).toHaveLength(0)
   })
 
   it('is decorative without an ariaLabel', () => {
-    const svg = mount().getByTestId('chart-spark-chart').querySelector('svg')
+    const svg = mount().getByTestId('spark-chart').querySelector('svg')
     expect(svg?.getAttribute('aria-hidden')).toBe('true')
     expect(svg?.getAttribute('role')).toBeNull()
   })

@@ -1,6 +1,6 @@
 {
   "component": "field",
-  "title": "Components/Primitives/Inputs/Field",
+  "title": "Components/Input/Field",
   "examples": [
     {
       "name": "Default",

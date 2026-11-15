@@ -3,8 +3,8 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import CopyButton from '../../../actions/copy-button/copy-button.vue'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import CopyButton from '../../../action/copy-button/copy-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import Tag from '../../../content/tag/tag.vue'
   import DropdownMenu from '../../../navigation/dropdown-menu/dropdown-menu.vue'
   import DropdownMenuGroup from '../../../navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue'

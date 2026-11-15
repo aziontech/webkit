@@ -1,6 +1,6 @@
 {
   "component": "outcome-icon",
-  "title": "Components/Primitives/Feedback/OutcomeIcon",
+  "title": "Components/Feedback/OutcomeIcon",
   "examples": [
     {
       "name": "Default",

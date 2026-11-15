@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 3
 template: 2
-checksum: 83419e6671dd9a0857e7731d80a2aff5cc863c2a1e8f8bdca51bee8c4c1a0485
+checksum: 06daf5ba4b0626fd3468261402726c02c370bb54626de552c9e599592621a26f
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -89,11 +89,11 @@ Compound API through `index.ts` (`ChatMessage.Actions`, `ChatMessage.Feedback`);
 - `chat-message-actions/chat-message-actions.vue` — `role="group"` row of inline actions; renders nothing unless the message `status` is `success`.
   - Props: `ariaLabel?: string` (default `''` — empty uses `Message actions`).
   - Slot: `default` — the icon actions.
-  - `data-testid` fallback: `ai-chat-message-actions`.
+  - `data-testid` fallback: `chat-message-actions`.
 - `chat-message-feedback/chat-message-feedback.vue` — thumbs up / down (`aria-pressed`), each with a tooltip (`Helpful`, `Not helpful`); after a choice the other thumb disables and a `role="status"` line reads `Submitting feedback` (while `loading`) then `Feedback submitted`. A choice is final.
   - Props: `loading?: boolean` (default `false`).
   - v-model: `'up' | 'down' | null` through `defineModel` (default `null`; emits `update:modelValue`).
-  - `data-testid` fallback: `ai-chat-message-feedback`.
+  - `data-testid` fallback: `chat-message-feedback`.
 
 Exported types: `ChatMessageFrom`, `ChatMessageStatus`, `ChatMessageFeedbackValue`. Composed DS
 components: `avatar`, `button`, `response-loading`, `icon-button`, `tooltip`.

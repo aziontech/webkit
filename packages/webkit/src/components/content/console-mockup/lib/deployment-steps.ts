@@ -12,7 +12,7 @@ export interface DeploymentStep {
   failLogs?: DeploymentLogTuple[]
 }
 
-export type DeploymentLogViewer = 'phased' | 'complete'
+export type DeploymentLogView = 'phased' | 'complete'
 
 export const DEFAULT_DEPLOYMENT_STEPS: DeploymentStep[] = [
   {
@@ -164,7 +164,7 @@ export const DEFAULT_DEPLOYMENT_STEPS: DeploymentStep[] = [
 
 export const STEP_GAP_MS = 450
 
-export const LOG_VIEWS: { label: string; value: DeploymentLogViewer }[] = [
+export const LOG_VIEWS: { label: string; value: DeploymentLogView }[] = [
   { label: 'Phased', value: 'phased' },
   { label: 'Complete', value: 'complete' }
 ]

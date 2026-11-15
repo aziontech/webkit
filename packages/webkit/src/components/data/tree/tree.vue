@@ -118,7 +118,7 @@
 
   const SKELETON_WIDTHS = ['100%', '80%', '64%', '48%', '32%']
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'data-tree')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tree')
 
   const isEmpty = computed(() => !props.loading && props.items.length === 0)
 

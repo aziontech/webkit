@@ -53,9 +53,7 @@
 
   const EYEBROW_PREFIX = '//' as const
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-call-to-action'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'call-to-action')
 
   const hasDescription = () => Boolean(slots.default) || props.description.length > 0
 

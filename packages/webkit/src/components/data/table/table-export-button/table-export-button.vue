@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import { type TableExportButtonScope, TableInjectionKey } from '../injection-key'
 
@@ -34,9 +34,7 @@
   const ctx = inject(TableInjectionKey, null)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__export` : 'data-table__export')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-export-button'
   )
 
   const onExport = (event?: Event): void =>

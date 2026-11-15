@@ -30,9 +30,7 @@
     ctx.registerMark(() => ({ type: 'line', stacked: false, labeled: false, ids: ids.value }))
   )
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__line`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-line')
 
   const lines = computed(() => {
     const layout = ctx.category.value

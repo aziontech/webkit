@@ -1,6 +1,6 @@
 {
   "component": "tutorial-panel",
-  "title": "Components/Primitives/Content/TutorialPanel",
+  "title": "Components/Content/TutorialPanel",
   "examples": [
     {
       "name": "Default",

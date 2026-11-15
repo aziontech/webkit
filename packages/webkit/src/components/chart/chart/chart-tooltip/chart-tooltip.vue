@@ -34,9 +34,7 @@
     }
   )
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__tooltip`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-tooltip')
 
   const readout = computed(() => {
     const index = ctx.activeIndex.value

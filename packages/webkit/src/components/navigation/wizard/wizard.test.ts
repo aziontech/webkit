@@ -8,7 +8,7 @@ import { defineComponent, nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import { useWizardContext } from './composables/use-wizard-context'
 import Wizard, { WizardStep } from './index'
 
@@ -69,7 +69,7 @@ const mount = async (props: Record<string, unknown> = {}) => {
   return view
 }
 
-const rootOf = (view: ReturnType<typeof render>) => view.getByTestId('navigation-wizard')
+const rootOf = (view: ReturnType<typeof render>) => view.getByTestId('wizard')
 
 const headingOf = (view: ReturnType<typeof render>) => view.getByRole('heading', { level: 2 })
 
@@ -102,7 +102,7 @@ describe('Wizard', () => {
 
     it('renders only the active step and hides the others', async () => {
       const view = await mount()
-      const steps = view.getAllByTestId('navigation-wizard-step')
+      const steps = view.getAllByTestId('wizard-step')
 
       expect(steps).toHaveLength(3)
       expect(steps.map((step) => step.hasAttribute('data-active'))).toEqual([true, false, false])
@@ -123,9 +123,9 @@ describe('Wizard', () => {
       await nextTick()
 
       expect(view.getByTestId('create-flow')).toBeInTheDocument()
-      expect(view.queryByTestId('navigation-wizard')).not.toBeInTheDocument()
+      expect(view.queryByTestId('wizard')).not.toBeInTheDocument()
       expect(view.getByTestId('create-flow-only')).toBeInTheDocument()
-      expect(view.queryByTestId('navigation-wizard-step')).not.toBeInTheDocument()
+      expect(view.queryByTestId('wizard-step')).not.toBeInTheDocument()
     })
 
     it('omits aria-label when the consumer sets none', async () => {
@@ -330,7 +330,7 @@ describe('Wizard', () => {
     it('marks earlier steps complete and disables every later step', async () => {
       const view = await mount({ start: 1 })
       const states = view
-        .getAllByTestId('navigation-stepper-step')
+        .getAllByTestId('stepper-step')
         .map((step) =>
           step.hasAttribute('data-active') ? 'active' : step.getAttribute('data-status')
         )
@@ -361,7 +361,7 @@ describe('Wizard', () => {
       expect(railButtons(view).map((rail) => rail.disabled)).toEqual([false, false, false])
       expect(
         view
-          .getAllByTestId('navigation-stepper-step')
+          .getAllByTestId('stepper-step')
           .map((step) =>
             step.hasAttribute('data-active') ? 'active' : step.getAttribute('data-status')
           )
@@ -385,7 +385,7 @@ describe('Wizard', () => {
   describe('invalid', () => {
     it('marks an invalid step in the rail and on the step, and reads the error word to screen readers', async () => {
       const view = await mount({ start: 1, invalidStep: 0 })
-      const [first, second] = view.getAllByTestId('navigation-stepper-step')
+      const [first, second] = view.getAllByTestId('stepper-step')
 
       expect(first.getAttribute('data-status')).toBe('error')
       expect(first.hasAttribute('data-invalid')).toBe(true)
@@ -393,7 +393,7 @@ describe('Wizard', () => {
       expect(second.hasAttribute('data-invalid')).toBe(false)
       expect(railButtons(view)[0].disabled).toBe(false)
 
-      const steps = view.getAllByTestId('navigation-wizard-step')
+      const steps = view.getAllByTestId('wizard-step')
       expect(steps[0].hasAttribute('data-invalid')).toBe(true)
       expect(steps[1].hasAttribute('data-invalid')).toBe(false)
     })
@@ -402,13 +402,11 @@ describe('Wizard', () => {
       const view = await mount({ start: 1, invalidStep: 0 })
       await view.rerender({ start: 1, invalidStep: -1 })
       await nextTick()
-      const [first] = view.getAllByTestId('navigation-stepper-step')
+      const [first] = view.getAllByTestId('stepper-step')
 
       expect(first.getAttribute('data-status')).toBe('success')
       expect(first.hasAttribute('data-invalid')).toBe(false)
-      expect(view.getAllByTestId('navigation-wizard-step')[0].hasAttribute('data-invalid')).toBe(
-        false
-      )
+      expect(view.getAllByTestId('wizard-step')[0].hasAttribute('data-invalid')).toBe(false)
     })
 
     it('has no violations with an invalid step', async () => {
@@ -440,7 +438,7 @@ describe('Wizard', () => {
   describe('optional', () => {
     it('shows Optional in the rail and, on its own step, in the header', async () => {
       const view = await mount()
-      const steps = view.getAllByTestId('navigation-wizard-step')
+      const steps = view.getAllByTestId('wizard-step')
       expect(steps.map((step) => step.hasAttribute('data-optional'))).toEqual([false, true, false])
       expect(view.getAllByText('Optional')).toHaveLength(1)
 
@@ -500,8 +498,7 @@ describe('Wizard', () => {
         template: `<WebkitProvider :locale="locale" :catalogs="catalogs"><div :style="{ width }"><FlowDiagram /></div></WebkitProvider>`
       })
 
-    const progressOf = (view: ReturnType<typeof render>) =>
-      view.getByTestId('navigation-wizard__progress')
+    const progressOf = (view: ReturnType<typeof render>) => view.getByTestId('wizard__progress')
 
     it('shows a polite Step n of N line when the rail hides in a narrow box', async () => {
       const view = render(inBox(400))

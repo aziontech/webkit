@@ -43,7 +43,7 @@ When the list does not load, a danger `Alert` with Retry takes the table's place
 
 A large right `Drawer` with one `form`: General (Name, Description) and Expiration. Titled `Create Personal Token`. Footer: Cancel and `Create Personal Token`, so the label does not change on the way in. The fields lock while it submits.
 
-### H. Fields — `Field`, `Input`, `Textarea`, `Select`, `FieldError` (required)
+### H. Fields — `Field`, `Input`, `Textarea`, `Select`, `FieldDescription` (required)
 
 Name is required and unique; the error sits under the field (`This field is required.`, `A token with this name already exists. Use another name.`) and focus moves to it. Expires in is a `Select` of 7, 30, 60 and 90 days and 1 year (default 30), and the `FieldError` under it says the exact date it stops working.
 

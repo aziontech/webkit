@@ -1,9 +1,9 @@
 ---
 name: slider
-category: inputs
+category: input
 structure: monolithic
 status: implemented
-checksum: 9cbafe03f1301bb98ab7db4febe98ecbff45ced57ec1c0aa80a0a1237858493a
+checksum: ba39a68f1ec23fd79c91a2f0a391a4e35ba91f54464a764581ee08cef276bc21
 spec_version: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -113,7 +113,7 @@ Bare range control `Slider`: one thumb on a horizontal track that picks a single
 - Geometry: the native input is 40 px tall (`h-10`, the hit area) and full width; the track is 4 px tall and centred; the thumb is 16×16 px.
 - Ticks (`ticks`) and reference marks (`referenceValues`) render in an `aria-hidden` row under the track. Each mark is positioned at the thumb-centre position for its value — `thumb/2 + (100% - thumb) × fraction` — so marks line up with the thumb at both ends; the fraction is passed per mark through an inline custom property. Every reference value also draws a tick. Reference labels read `{value}{unit}`; the first label is start-aligned, the last end-aligned, the rest centred on their mark.
 - Attribute routing (as in `number-input`): consumer `class` merges onto the root wrapper; every other attribute (`id`, `name`, `aria-labelledby`, `aria-describedby`, …) is forwarded to the native input so a `Label for` and a `FieldDescription` association reach the focusable element. `data-testid` is read from attrs and applied to the root.
-- `data-testid`: root fallback `input-slider`; native input `${testId}__input`; each reference label `${testId}__reference`.
+- `data-testid`: root fallback `slider`; native input `${testId}__input`; each reference label `${testId}__reference`.
 
 ## Motion & Animations
 

@@ -25,14 +25,14 @@ All examples follow the repo's own conventions (PascalCase components, `<script 
 
 ## 1. How to run
 
-| Command (repo root)                                | What it checks                                                |
-| -------------------------------------------------- | ------------------------------------------------------------- |
-| `pnpm lint:webkit` / `lint:webkit:fix`             | ESLint (§2–§6), zero warnings / with auto-fix                 |
-| `pnpm lint-style:webkit` / `lint-style:webkit:fix` | Stylelint (§7) / with auto-fix                                |
-| `pnpm check-format:webkit` / `format:webkit`       | Prettier (§8) check / write                                   |
-| `pnpm typecheck:webkit`                           | `vue-tsc --noEmit` (§9)                                       |
-| `pnpm type-coverage:webkit`                        | type-coverage ≥ 95% (§9)                                      |
-| `pnpm gates`                                  | lint + typecheck + format check + audit — local mirror of CI |
+| Command (repo root)                                | What it checks                                               |
+| -------------------------------------------------- | ------------------------------------------------------------ |
+| `pnpm lint:webkit` / `lint:webkit:fix`             | ESLint (§2–§6), zero warnings / with auto-fix                |
+| `pnpm lint-style:webkit` / `lint-style:webkit:fix` | Stylelint (§7) / with auto-fix                               |
+| `pnpm check-format:webkit` / `format:webkit`       | Prettier (§8) check / write                                  |
+| `pnpm typecheck:webkit`                            | `vue-tsc --noEmit` (§9)                                      |
+| `pnpm type-coverage:webkit`                        | type-coverage ≥ 95% (§9)                                     |
+| `pnpm gates`                                       | lint + typecheck + format check + audit — local mirror of CI |
 
 On `git commit`, husky runs lint-staged (ESLint/Stylelint/Prettier with auto-fix on staged files) and commitlint (§10). Never bypass with `--no-verify` — forbidden by [`git-workflow.md`](../rules/git-workflow.md).
 
@@ -862,7 +862,7 @@ Deterministic, auto-fixable order: packages first (alphabetical — `@`-scoped b
 **❌ Wrong**
 
 ```ts
-import Spinner from '../../utils/spinner/spinner.vue'
+import Spinner from '../../feedback/spinner/spinner.vue'
 import { computed, useAttrs } from 'vue'
 import { cn } from '../../utils/cn'
 import { useElementVisibility } from '@vueuse/core'
@@ -875,7 +875,7 @@ import { useElementVisibility } from '@vueuse/core'
 import { computed, useAttrs } from 'vue'
 
 import { cn } from '../../utils/cn'
-import Spinner from '../../utils/spinner/spinner.vue'
+import Spinner from '../../feedback/spinner/spinner.vue'
 ```
 
 ### `simple-import-sort/exports`
@@ -1026,13 +1026,13 @@ A binding that is never reassigned is `const` — immutability by default.
 **❌ Wrong**
 
 ```ts
-let testId = attrs['data-testid'] ?? 'actions-button' // never reassigned
+let testId = attrs['data-testid'] ?? 'button' // never reassigned
 ```
 
 **✅ Correct**
 
 ```ts
-const testId = attrs['data-testid'] ?? 'actions-button'
+const testId = attrs['data-testid'] ?? 'button'
 ```
 
 ---
@@ -1439,7 +1439,7 @@ const testId = attrs.class // dot access on an index signature
 
 ```ts
 const attrs = useAttrs()
-const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'actions-button')
+const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'button')
 const consumerClass = attrs['class']
 ```
 

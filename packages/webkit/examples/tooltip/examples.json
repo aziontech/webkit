@@ -1,6 +1,6 @@
 {
   "component": "tooltip",
-  "title": "Components/Primitives/Overlay/Tooltip",
+  "title": "Components/Overlay/Tooltip",
   "examples": [
     {
       "name": "Default",

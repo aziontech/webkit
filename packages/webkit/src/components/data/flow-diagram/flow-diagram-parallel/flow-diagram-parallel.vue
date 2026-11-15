@@ -1,7 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, useAttrs } from 'vue'
-
-  import { FlowDiagramInjectionKey } from '../injection-key'
+  import { computed, useAttrs } from 'vue'
 
   defineOptions({
     name: 'FlowParallel',
@@ -25,12 +23,9 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(FlowDiagramInjectionKey)
 
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      `${ctx?.testId.value ?? 'data-flow'}__parallel`
+    () => (attrs['data-testid'] as string | undefined) ?? 'flow-diagram-parallel'
   )
 </script>
 

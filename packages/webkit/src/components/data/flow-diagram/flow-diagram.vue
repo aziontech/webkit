@@ -26,7 +26,9 @@
 
   const attrs = useAttrs()
 
-  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'data-flow')
+  const testId = computed<string>(
+    () => (attrs['data-testid'] as string | undefined) ?? 'flow-diagram'
+  )
 
   const rootEl = ref<HTMLElement | null>(null)
   const containerEl = ref<HTMLElement | null>(null)

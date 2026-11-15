@@ -1,13 +1,13 @@
 <script setup lang="ts">
-  import Button from '../../../actions/button/button.vue'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
-  import FieldDescription from '../../../inputs/field/field-description/field-description.vue'
-  import FieldLabel from '../../../inputs/field/field-label/field-label.vue'
-  import Input from '../../../inputs/input/input.vue'
+  import Button from '../../../action/button/button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
+  import FieldDescription from '../../../input/field/field-description/field-description.vue'
+  import FieldLabel from '../../../input/field/field-label/field-label.vue'
+  import Input from '../../../input/input/input.vue'
   import type { TextureVariant } from '../../../marketing/texture/texture.vue'
   import Tag from '../../tag/tag.vue'
   import ConsoleMockupShell, {
-    type ConsoleMockupConsoleMockupShellFade
+    type ConsoleMockupShellFade
   } from '../console-mockup-shell/console-mockup-shell.vue'
   import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
@@ -21,7 +21,7 @@
     /** Tab of the version editor on show. */
     tab?: ConsoleMockupApplicationVersionTab
     /** Edge the mockup fades out along. */
-    fade?: ConsoleMockupConsoleMockupShellFade
+    fade?: ConsoleMockupShellFade
     /** Texture the frame is grounded with. */
     texture?: TextureVariant
     /** Whether this widget is the one showing. */

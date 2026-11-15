@@ -4,8 +4,8 @@
   import { useLazyChunks } from '../../../composables/use-lazy-chunks'
   import { useLocale } from '../../../composables/use-locale/use-locale'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
-  import IconButton from '../../actions/icon-button/icon-button.vue'
+  import Button from '../../action/button/button.vue'
+  import IconButton from '../../action/icon-button/icon-button.vue'
   import OutcomeIcon from '../outcome-icon/outcome-icon.vue'
   import Progress from '../progress/progress.vue'
 
@@ -69,7 +69,7 @@
   const titleId = useId()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-upload-progress'
+    () => (attrs['data-testid'] as string | undefined) ?? 'upload-progress'
   )
   const rootAttrs = computed(() =>
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'data-testid'))

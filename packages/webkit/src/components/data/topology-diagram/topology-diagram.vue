@@ -63,7 +63,7 @@
   const { t } = useTranslate({ topologyDiagram: en.topologyDiagram })
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'data-topology-diagram'
+    () => (attrs['data-testid'] as string | undefined) ?? 'topology-diagram'
   )
   const rootAttrs = computed(() =>
     Object.fromEntries(Object.entries(attrs).filter(([key]) => key !== 'data-testid'))

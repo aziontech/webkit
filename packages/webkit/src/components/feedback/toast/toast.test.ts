@@ -38,7 +38,7 @@ const mountToaster = async (props: Record<string, unknown> = {}) => {
 const regionFor = async (position: string) => {
   await nextTick()
   await nextTick()
-  return document.body.querySelector<HTMLElement>(`[data-testid="feedback-toast__${position}"]`)
+  return document.body.querySelector<HTMLElement>(`[data-testid="toast__${position}"]`)
 }
 
 describe('Toast', () => {
@@ -89,11 +89,11 @@ describe('Toast', () => {
         const region = await regionFor('bottom-right')
         const scope = within(region!)
 
-        const item = scope.getByTestId('feedback-toast__item')
+        const item = scope.getByTestId('toast-item')
         expect(item.hasAttribute('role')).toBe(false)
         expect(item.getAttribute('data-severity')).toBe('neutral')
-        expect(scope.getByTestId('feedback-toast__title').textContent).toContain('Saved')
-        expect(scope.getByTestId('feedback-toast__description').textContent).toContain(
+        expect(scope.getByTestId('toast-title').textContent).toContain('Saved')
+        expect(scope.getByTestId('toast-description').textContent).toContain(
           'All changes persisted'
         )
       })
@@ -109,7 +109,7 @@ describe('Toast', () => {
         toast.dismiss(id)
         // Item stays in DOM through the exit transition, then unmounts.
         await vi.waitFor(() => {
-          region = document.body.querySelector('[data-testid="feedback-toast__bottom-right"]')
+          region = document.body.querySelector('[data-testid="toast__bottom-right"]')
           expect(region === null || within(region).queryByText('Removable') === null).toBe(true)
         })
       })
@@ -131,7 +131,7 @@ describe('Toast', () => {
           const region = await regionFor('bottom-right')
           const scope = within(region!)
 
-          const item = scope.getByTestId('feedback-toast__item')
+          const item = scope.getByTestId('toast-item')
           expect(item.getAttribute('data-severity')).toBe(severity)
           expect(item.hasAttribute('data-type')).toBe(false)
           expect(item.hasAttribute('role')).toBe(false)
@@ -147,7 +147,7 @@ describe('Toast', () => {
         const region = await regionFor('bottom-right')
         const scope = within(region!)
 
-        const item = scope.getByTestId('feedback-toast__item')
+        const item = scope.getByTestId('toast-item')
         expect(item.getAttribute('data-severity')).toBe('neutral')
         expect(item.hasAttribute('data-loading')).toBe(true)
         expect(scope.getByText('Working…')).toBeTruthy()
@@ -162,11 +162,11 @@ describe('Toast', () => {
           error: 'Failed'
         })
         const region = await regionFor('bottom-right')
-        const item = within(region!).getByTestId('feedback-toast__item')
+        const item = within(region!).getByTestId('toast-item')
         expect(item.hasAttribute('data-loading')).toBe(true)
         resolve('ok')
         await vi.waitFor(() => {
-          const settled = within(region!).getByTestId('feedback-toast__item')
+          const settled = within(region!).getByTestId('toast-item')
           expect(settled.hasAttribute('data-loading')).toBe(false)
           expect(settled.getAttribute('data-severity')).toBe('success')
         })
@@ -183,7 +183,7 @@ describe('Toast', () => {
         const scope = within(region!)
 
         // ToastAction renders a Button with the label; find and click it.
-        const actionBtn = scope.getByTestId('feedback-toast__action')
+        const actionBtn = scope.getByTestId('toast-action')
         expect(actionBtn.textContent).toContain('Undo')
         actionBtn.click()
 
@@ -206,7 +206,7 @@ describe('Toast', () => {
           ]
         })
         const region = await regionFor('bottom-right')
-        const buttons = within(region!).getAllByTestId('feedback-toast__action')
+        const buttons = within(region!).getAllByTestId('toast-action')
         expect(buttons.map((button) => button.textContent?.trim())).toEqual(['Edit', 'Redeploy'])
         buttons[1].click()
         expect(onRedeploy).toHaveBeenCalledTimes(1)
@@ -223,7 +223,7 @@ describe('Toast', () => {
         let region = await regionFor('bottom-right')
         const scope = within(region!)
 
-        const closeBtn = scope.getByTestId('feedback-toast__close')
+        const closeBtn = scope.getByTestId('toast-close')
         // IconButton renders an accessible name (source: ariaLabel="Close notification").
         expect(closeBtn.getAttribute('aria-label')).toBe('Close notification')
         closeBtn.click()
@@ -231,7 +231,7 @@ describe('Toast', () => {
         // dismiss -> store.remove -> onClose invoked, then card unmounts after exit.
         await vi.waitFor(() => {
           expect(onClose).toHaveBeenCalledTimes(1)
-          region = document.body.querySelector('[data-testid="feedback-toast__bottom-right"]')
+          region = document.body.querySelector('[data-testid="toast__bottom-right"]')
           expect(region === null || within(region).queryByText('Closable toast') === null).toBe(
             true
           )
@@ -244,7 +244,7 @@ describe('Toast', () => {
         toast('No close here')
         const region = await regionFor('bottom-right')
 
-        expect(within(region!).queryByTestId('feedback-toast__close')).toBeNull()
+        expect(within(region!).queryByTestId('toast-close')).toBeNull()
       })
 
       it('honours a per-toast closable over a Toaster that closes nothing', async () => {
@@ -258,7 +258,7 @@ describe('Toast', () => {
         const scope = within(region!)
 
         expect(scope.getByText('Deployment failed')).toBeTruthy()
-        expect(scope.getByTestId('feedback-toast__close')).toBeTruthy()
+        expect(scope.getByTestId('toast-close')).toBeTruthy()
       })
 
       it('keeps a per-toast closable through an in-place update', async () => {
@@ -268,7 +268,7 @@ describe('Toast', () => {
 
         const id = toast.loading('Deploying…')
         let region = await regionFor('bottom-right')
-        expect(within(region!).queryByTestId('feedback-toast__close')).toBeNull()
+        expect(within(region!).queryByTestId('toast-close')).toBeNull()
 
         useToastStore().update(id, {
           severity: 'danger',
@@ -278,7 +278,7 @@ describe('Toast', () => {
         })
         region = await regionFor('bottom-right')
 
-        expect(within(region!).getByTestId('feedback-toast__close')).toBeTruthy()
+        expect(within(region!).getByTestId('toast-close')).toBeTruthy()
       })
     })
 
@@ -336,7 +336,7 @@ describe('Toast', () => {
         // The slot's `dismiss` closure drives the SAME store: clicking removes it.
         slotBtn.click()
         await vi.waitFor(() => {
-          const r = document.body.querySelector('[data-testid="feedback-toast__bottom-right"]')
+          const r = document.body.querySelector('[data-testid="toast__bottom-right"]')
           expect(r === null || within(r).queryByText(/^slot:via imperative fn/) === null).toBe(true)
         })
       })
@@ -414,7 +414,7 @@ describe('Toast', () => {
 
   describe('live region (spec)', () => {
     const liveRegion = (channel: 'polite' | 'assertive') =>
-      document.body.querySelector<HTMLElement>(`[data-testid="feedback-toast__live-${channel}"]`)
+      document.body.querySelector<HTMLElement>(`[data-testid="toast__live-${channel}"]`)
 
     it('both live regions are in the DOM, empty, before the first toast arrives', async () => {
       await mountToaster({ position: 'bottom-right', duration: 0 })
@@ -521,7 +521,7 @@ describe('Toast', () => {
         components: { ToastItem },
         template: `<div><ToastItem severity="success">Saved</ToastItem><ToastItem severity="warning">Careful</ToastItem><ToastItem severity="danger">Failed</ToastItem></div>`
       })
-      const [success, warning, danger] = getAllByTestId('feedback-toast__item')
+      const [success, warning, danger] = getAllByTestId('toast-item')
       expect(success!.getAttribute('role')).toBe('status')
       expect(warning!.getAttribute('role')).toBe('status')
       expect(danger!.getAttribute('role')).toBe('alert')
@@ -567,7 +567,7 @@ describe('Toast', () => {
       await mountToaster({ position: 'bottom-right', duration: 0 })
       toast.error('Deploy failed')
       const region = await regionFor('bottom-right')
-      const item = within(region!).getByTestId('feedback-toast__item')
+      const item = within(region!).getByTestId('toast-item')
       expect(item.getAttribute('data-severity')).toBe('danger')
       expect(item.hasAttribute('data-type')).toBe(false)
       expect(useToastStore().toasts[0]!.severity).toBe('danger')
@@ -664,7 +664,7 @@ describe('Toast', () => {
 
       const bar = within(region!).getByRole('progressbar', { name: 'Uploading site-assets.zip' })
       expect(bar).toHaveAttribute('aria-valuenow', '25')
-      expect(within(region!).getByTestId('feedback-toast__progress').textContent).toContain('25%')
+      expect(within(region!).getByTestId('toast__progress').textContent).toContain('25%')
       expect(within(region!).getByText('12 of 48 MB')).toBeTruthy()
       expect(useToastStore().toasts.find((entry) => entry.id === id)?.duration).toBe(0)
     })
@@ -692,7 +692,7 @@ describe('Toast', () => {
       const region = await regionFor('bottom-right')
 
       expect(within(region!).getByRole('progressbar')).toHaveAttribute('aria-valuenow', '100')
-      expect(within(region!).getByTestId('feedback-toast__progress').textContent).toContain('100%')
+      expect(within(region!).getByTestId('toast__progress').textContent).toContain('100%')
     })
 
     it('runs the action with the click event and drops the bar once a typed toast replaces it', async () => {
@@ -716,7 +716,7 @@ describe('Toast', () => {
       toast('Saved')
       const region = await regionFor('bottom-right')
 
-      expect(within(region!).queryByTestId('feedback-toast__progress')).toBeNull()
+      expect(within(region!).queryByTestId('toast__progress')).toBeNull()
     })
 
     it('starts the Progress example upload from its button with no a11y violations', async () => {

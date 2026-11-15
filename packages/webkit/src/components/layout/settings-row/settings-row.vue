@@ -6,7 +6,7 @@
   import ItemContent from '../../content/item/item-content.vue'
   import ItemDescription from '../../content/item/item-description.vue'
   import ItemTitle from '../../content/item/item-title.vue'
-  import Hint from '../../inputs/hint/hint.vue'
+  import Hint from '../../input/hint/hint.vue'
 
   /** Where the control sits: `field` in a right cell capped at the 3xs container, `compact` hard right at its natural width, `stacked` under the copy at the full measure. */
   export type SettingsRowVariant = 'field' | 'compact' | 'stacked'
@@ -52,9 +52,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-settings-row'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'settings-row')
 </script>
 
 <template>

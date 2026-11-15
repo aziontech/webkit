@@ -6,8 +6,8 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import SectionStack from '../section-stack/section-stack.vue'
 import MediaSplit from './media-split.vue'
 
-const TESTID = 'marketing-media-split'
-const GROUND = 'marketing-texture'
+const TESTID = 'media-split'
+const GROUND = 'texture'
 
 const TITLE = 'See every request as it happens.'
 const DESCRIPTION = 'Logs stream from every edge location in real time, with no agent to install.'
@@ -289,13 +289,13 @@ describe('MediaSplit', () => {
   it('draws no frame of its own by default', () => {
     const { queryByTestId } = render(MediaSplit, { props: { title: TITLE } })
 
-    expect(queryByTestId('layout-registration-frame')).toBeNull()
+    expect(queryByTestId('registration-frame')).toBeNull()
   })
 
   it('draws its own registration frame when framed', () => {
     const { getByTestId } = render(MediaSplit, { props: { title: TITLE, framed: true } })
 
-    expect(getByTestId('layout-registration-frame')).toBeInTheDocument()
+    expect(getByTestId('registration-frame')).toBeInTheDocument()
   })
 
   it('leaves its cells unmarked by default', () => {
@@ -309,8 +309,8 @@ describe('MediaSplit', () => {
       props: { title: TITLE, src: SRC, alt: ALT, framed: true }
     })
 
-    expect(getByTestId('layout-registration-frame').getAttribute('data-borders')).toBe('bottom')
-    expect(getByTestId('layout-registration-frame').getAttribute('data-marks')).toBe('none')
+    expect(getByTestId('registration-frame').getAttribute('data-borders')).toBe('bottom')
+    expect(getByTestId('registration-frame').getAttribute('data-marks')).toBe('none')
     for (const cell of CELLS) {
       expect(getByTestId(cell).getAttribute('data-marks')).toBe(EVERY_CORNER)
       expect(getByTestId(cell).getAttribute('data-borders')).toBe('none')
@@ -331,7 +331,7 @@ describe('MediaSplit', () => {
       slots: { default: () => h(MediaSplit, { title: TITLE, src: SRC, alt: ALT }) }
     })
 
-    expect(queryByTestId('layout-registration-frame')).toBeNull()
+    expect(queryByTestId('registration-frame')).toBeNull()
     for (const cell of CELLS) {
       expect(getByTestId(cell).getAttribute('data-marks')).toBe(EVERY_CORNER)
       expect(getByTestId(cell).getAttribute('data-borders')).toBe('none')
@@ -565,16 +565,16 @@ describe('MediaSplit', () => {
         setup: () => ({ shown }),
         template: `<MediaSplit title="Edge"><template v-if="shown" #media><span data-testid="probe">Slotted</span></template></MediaSplit>`
       })
-      expect(queryByTestId('marketing-media-split__media-cell')).toBeNull()
+      expect(queryByTestId('media-split__media-cell')).toBeNull()
 
       shown.value = true
       await nextTick()
-      expect(queryByTestId('marketing-media-split__media-cell')).not.toBeNull()
+      expect(queryByTestId('media-split__media-cell')).not.toBeNull()
       expect(queryByTestId('probe')).not.toBeNull()
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('marketing-media-split__media-cell')).toBeNull()
+      expect(queryByTestId('media-split__media-cell')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
     })
   })

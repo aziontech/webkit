@@ -33,9 +33,7 @@ export const DOCUMENTED_DEPRECATIONS = [
   }
 ]
 
-export const SAME_NAME_ATTRIBUTES = [
-  { component: 'inputs/checkbox/checkbox.vue', prop: 'tabindex' }
-]
+export const SAME_NAME_ATTRIBUTES = [{ component: 'input/checkbox/checkbox.vue', prop: 'tabindex' }]
 
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.git', 'coverage', 'test', '__tests__'])
 const TEST_FILE = /\.(test|spec)\.[cm]?[jt]sx?$/

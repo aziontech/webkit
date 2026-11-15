@@ -13,7 +13,7 @@ const items = [
 describe('SuggestionGroup', () => {
   it('renders the fallback data-testid and lets a consumer override it', () => {
     expect(
-      render(SuggestionGroup, { props: { items } }).getByTestId('ai-suggestion-group')
+      render(SuggestionGroup, { props: { items } }).getByTestId('suggestion-group')
     ).toBeTruthy()
     expect(
       render(SuggestionGroup, { props: { items }, attrs: { 'data-testid': 'mine' } }).getByTestId(
@@ -51,7 +51,7 @@ describe('SuggestionGroup', () => {
 
   it('maps orientation to data-orientation', () => {
     const { getByTestId } = render(SuggestionGroup, { props: { items, orientation: 'vertical' } })
-    expect(getByTestId('ai-suggestion-group')).toHaveAttribute('data-orientation', 'vertical')
+    expect(getByTestId('suggestion-group')).toHaveAttribute('data-orientation', 'vertical')
   })
 
   it('renders nothing without items', () => {

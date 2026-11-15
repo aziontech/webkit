@@ -1,6 +1,6 @@
 ---
 name: date-range-picker
-category: inputs
+category: input
 structure: monolithic
 status: implemented
 spec_version: 6

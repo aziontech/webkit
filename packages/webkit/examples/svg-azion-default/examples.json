@@ -1,6 +1,6 @@
 {
   "component": "svg/azion/default",
-  "title": "Components/Primitives/Content/AzionLogo",
+  "title": "Components/Content/AzionLogo",
   "examples": [
     {
       "name": "Default",

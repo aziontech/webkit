@@ -1,6 +1,6 @@
 {
   "component": "sidebar",
-  "title": "Components/Primitives/Layout/Sidebar",
+  "title": "Components/Layout/Sidebar",
   "examples": [
     {
       "name": "Default",

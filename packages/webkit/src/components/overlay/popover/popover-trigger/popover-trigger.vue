@@ -16,9 +16,7 @@
   const attrs = useAttrs()
   const ctx = usePopoverContext()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__trigger`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'popover-trigger')
 
   const isOpen = computed(() => ctx.isOpen.value)
   const isDisabled = computed(() => ctx.disabled.value)

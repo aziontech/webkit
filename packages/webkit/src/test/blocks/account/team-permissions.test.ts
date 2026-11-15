@@ -58,7 +58,7 @@ describe('team-permissions#CreateTeam', () => {
   it('builds the matrix with the Table and shows an EmptyState when the filter matches nothing', async () => {
     const view = render(CreateTeam)
     const table = await view.findByRole('table', { name: 'Permissions granted by this team' })
-    expect(table.getAttribute('data-testid')).toBe('data-table__table')
+    expect(table.getAttribute('data-testid')).toBe('table__table')
     expect(view.queryByRole('button', { name: 'Account settings' })).toBeNull()
     await fireEvent.update(view.getByLabelText('Filter permissions'), 'nothing-like-this')
     await waitFor(() => expect(view.getByText('No matching permissions')).toBeTruthy())

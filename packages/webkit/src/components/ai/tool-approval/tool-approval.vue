@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
+  import Button from '../../action/button/button.vue'
   import StatusIndicator from '../../feedback/status-indicator/status-indicator.vue'
   import MarkdownInline from '../lib/markdown-inline'
   import { parseInline } from '../lib/parse-markdown'
@@ -65,7 +65,7 @@
   const phraseId = `${uid}-phrase`
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-tool-approval'
+    () => (attrs['data-testid'] as string | undefined) ?? 'tool-approval'
   )
   const headingEl = ref<HTMLElement | null>(null)
   const typed = ref<string>('')

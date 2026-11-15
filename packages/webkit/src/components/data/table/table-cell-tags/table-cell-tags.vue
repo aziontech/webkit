@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
+  import { computed, nextTick, onBeforeUnmount, onMounted, ref, useAttrs, watch } from 'vue'
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
@@ -7,7 +7,6 @@
     type OverflowCountNoun
   } from '../../../content/overflow-count/overflow-count.vue'
   import Tag from '../../../content/tag/tag.vue'
-  import { TableInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'TableCellTags',
@@ -32,11 +31,8 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ tableCellTags: en.tableCellTags })
-  const ctx = inject(TableInjectionKey, null)
   const testId = computed<string>(
-    () =>
-      (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__cell-tags` : 'data-table__cell-tags')
+    () => (attrs['data-testid'] as string | undefined) ?? 'table-cell-tags'
   )
 
   const rowEl = ref<HTMLElement | null>(null)

@@ -1,6 +1,6 @@
 {
   "component": "skeleton",
-  "title": "Components/Primitives/Feedback/Skeleton",
+  "title": "Components/Feedback/Skeleton",
   "examples": [
     {
       "name": "Default",

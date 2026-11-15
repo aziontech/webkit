@@ -9,7 +9,7 @@ import Marks from '../../../../examples/registration-frame/marks.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import RegistrationFrame from './registration-frame.vue'
 
-const TESTID = 'layout-registration-frame'
+const TESTID = 'registration-frame'
 
 /** The resolved side/corner list off a `data-*` attribute, sorted so order is not asserted. */
 const sides = (el: HTMLElement, attr: string) => {

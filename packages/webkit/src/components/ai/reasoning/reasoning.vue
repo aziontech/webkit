@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
+  import Button from '../../action/button/button.vue'
 
   defineOptions({
     name: 'Reasoning',
@@ -46,9 +46,7 @@
   const uid = useId()
   const panelId = `${uid}-panel`
 
-  const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'ai-reasoning'
-  )
+  const testId = computed<string>(() => (attrs['data-testid'] as string | undefined) ?? 'reasoning')
 
   const isOpen = computed<boolean>(() => open.value ?? props.defaultOpen)
 

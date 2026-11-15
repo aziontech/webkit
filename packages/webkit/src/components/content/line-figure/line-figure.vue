@@ -40,9 +40,7 @@
     onRead: (caption) => emit('read', caption)
   })
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-line-figure'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'line-figure')
   const label = computed(() => props.ariaLabel || definition.value?.label || '')
 </script>
 

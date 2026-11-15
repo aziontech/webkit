@@ -9,10 +9,10 @@ import Installed from '../../../../examples/card/installed.vue'
 import Integration from '../../../../examples/card/integration.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import Card from './card.vue'
 
-const TESTID = 'content-card'
+const TESTID = 'card'
 
 describe('Card', () => {
   it('renders the root section with the default data-testid', () => {
@@ -160,7 +160,7 @@ describe('Card', () => {
     it('makes its content region a named container', () => {
       const view = render(Card, { props: { title: 'Usage' }, slots: { default: 'Body' } })
 
-      expect(view.getByTestId('content-card__content').className).toContain('@container/card')
+      expect(view.getByTestId('card__content').className).toContain('@container/card')
     })
 
     it('keeps the header action visible where there is no hover', () => {
@@ -169,7 +169,7 @@ describe('Card', () => {
         slots: { 'header-actions': '<button type="button">Edit</button>' }
       })
 
-      expect(view.getByTestId('content-card__header-actions').className).toContain(
+      expect(view.getByTestId('card__header-actions').className).toContain(
         '[@media(hover:none)]:opacity-100'
       )
     })
@@ -188,14 +188,14 @@ describe('Card', () => {
     it('lays the tile out from props, with the title as an h3 and no header region', () => {
       const view = render(Card, { props: integration })
 
-      expect(view.queryByTestId('content-card__header')).toBeNull()
+      expect(view.queryByTestId('card__header')).toBeNull()
       expect(view.getByRole('heading', { level: 3 })).toHaveTextContent('Request Signer')
-      expect(view.getByTestId('content-card__vendor')).toHaveTextContent('by Northwind Labs')
+      expect(view.getByTestId('card__vendor')).toHaveTextContent('by Northwind Labs')
       expect(view.getByText('Sign every request at the edge.')).toBeTruthy()
       expect(view.getByText('Firewall')).toBeTruthy()
       expect(view.getByText('Paid')).toBeTruthy()
-      expect(view.getByTestId('content-card__logo').querySelector('.ai-key')).toBeTruthy()
-      expect(view.queryByTestId('content-card__installed')).toBeNull()
+      expect(view.getByTestId('card__logo').querySelector('.ai-key')).toBeTruthy()
+      expect(view.queryByTestId('card__installed')).toBeNull()
     })
 
     it('renders a badge as info by default, by its severity, or by its brand variant', () => {
@@ -210,7 +210,7 @@ describe('Card', () => {
         }
       })
 
-      const tagOf = (label: string) => view.getByText(label).closest('[data-testid="content-tag"]')
+      const tagOf = (label: string) => view.getByText(label).closest('[data-testid="tag"]')
       expect(tagOf('Firewall')?.getAttribute('data-severity')).toBe('info')
       expect(tagOf('Paid')?.getAttribute('data-severity')).toBe('warning')
       expect(tagOf('New')?.getAttribute('data-variant')).toBe('primary')
@@ -247,13 +247,13 @@ describe('Card', () => {
       await fireEvent.click(view.getByRole('button', { name: 'Install' }))
 
       expect(view.emitted('select')).toBeUndefined()
-      expect(view.getByTestId('content-card__actions').className).toContain('relative')
+      expect(view.getByTestId('card__actions').className).toContain('relative')
     })
 
     it('shows the installed state', () => {
       const view = render(Card, { props: { ...integration, installed: true } })
 
-      expect(view.getByTestId('content-card__installed')).toHaveTextContent('Installed')
+      expect(view.getByTestId('card__installed')).toHaveTextContent('Installed')
     })
 
     it('takes an image in the logo slot', () => {
@@ -262,8 +262,8 @@ describe('Card', () => {
         slots: { logo: '<img src="data:," alt="" />' }
       })
 
-      expect(view.getByTestId('content-card__logo').querySelector('img')).toBeTruthy()
-      expect(view.getByTestId('content-card__logo').querySelector('.ai-key')).toBeNull()
+      expect(view.getByTestId('card__logo').querySelector('img')).toBeTruthy()
+      expect(view.getByTestId('card__logo').querySelector('.ai-key')).toBeNull()
     })
 
     it('reads its strings from the provider locale', () => {
@@ -278,8 +278,8 @@ describe('Card', () => {
         })
       )
 
-      expect(view.getByTestId('content-card__vendor')).toHaveTextContent('por Northwind Labs')
-      expect(view.getByTestId('content-card__installed')).toHaveTextContent('Instalado')
+      expect(view.getByTestId('card__vendor')).toHaveTextContent('por Northwind Labs')
+      expect(view.getByTestId('card__installed')).toHaveTextContent('Instalado')
     })
 
     it('keeps the layout under dir="rtl"', async () => {
@@ -292,22 +292,22 @@ describe('Card', () => {
         })
       )
 
-      expect(view.getByTestId('content-card__actions').className).toContain('ms-auto')
+      expect(view.getByTestId('card__actions').className).toContain('ms-auto')
       await expectNoA11yViolations(view.container)
     })
 
     it('lays out the featured tile: corner badges default to primary, a glow, and the title still selects', async () => {
       const view = render(Card, { props: { ...integration, featured: true } })
-      const root = view.getByTestId('content-card')
+      const root = view.getByTestId('card')
 
       expect(root).toHaveAttribute('data-featured')
-      expect(view.getByTestId('content-card__glow')).toHaveAttribute('aria-hidden', 'true')
-      const badges = view.getByTestId('content-card__badges')
+      expect(view.getByTestId('card__glow')).toHaveAttribute('aria-hidden', 'true')
+      const badges = view.getByTestId('card__badges')
       expect(badges.textContent).toContain('Firewall')
       expect(badges.textContent).toContain('Paid')
       expect(view.getAllByText('Firewall')).toHaveLength(1)
       expect(view.getByRole('heading', { level: 3 })).toHaveTextContent('Request Signer')
-      expect(view.getByTestId('content-card__vendor')).toHaveTextContent('by Northwind Labs')
+      expect(view.getByTestId('card__vendor')).toHaveTextContent('by Northwind Labs')
 
       await fireEvent.click(view.getByRole('button', { name: 'Request Signer' }))
       expect(view.emitted('select')).toHaveLength(1)
@@ -316,8 +316,8 @@ describe('Card', () => {
     it('ignores featured outside the integration variant', () => {
       const view = render(Card, { props: { title: 'Plan', featured: true } })
 
-      expect(view.getByTestId('content-card')).not.toHaveAttribute('data-featured')
-      expect(view.queryByTestId('content-card__glow')).toBeNull()
+      expect(view.getByTestId('card')).not.toHaveAttribute('data-featured')
+      expect(view.queryByTestId('card__glow')).toBeNull()
     })
 
     it('keeps the installed tag and the action in the featured layout', () => {
@@ -326,7 +326,7 @@ describe('Card', () => {
         slots: { actions: '<button type="button">Configure</button>' }
       })
 
-      expect(view.getByTestId('content-card__installed')).toHaveTextContent('Installed')
+      expect(view.getByTestId('card__installed')).toHaveTextContent('Installed')
       expect(view.getByRole('button', { name: 'Configure' })).toBeTruthy()
     })
 
@@ -354,16 +354,16 @@ describe('Card', () => {
         setup: () => ({ shown }),
         template: `<Card title="Plan"><template v-if="shown" #footer><span data-testid="probe">Slotted</span></template></Card>`
       })
-      expect(queryByTestId('content-card__footer')).toBeNull()
+      expect(queryByTestId('card__footer')).toBeNull()
 
       shown.value = true
       await nextTick()
-      expect(queryByTestId('content-card__footer')).not.toBeNull()
+      expect(queryByTestId('card__footer')).not.toBeNull()
       expect(queryByTestId('probe')).not.toBeNull()
 
       shown.value = false
       await nextTick()
-      expect(queryByTestId('content-card__footer')).toBeNull()
+      expect(queryByTestId('card__footer')).toBeNull()
       expect(queryByTestId('probe')).toBeNull()
     })
   })

@@ -17,7 +17,7 @@
   const ctx = useHoverCardContext()
 
   const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__content`
+    () => (attrs['data-testid'] as string | undefined) ?? 'hover-card-content'
   )
 
   function setPanelEl(el: unknown) {

@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Hint from '../../inputs/hint/hint.vue'
+  import Hint from '../../input/hint/hint.vue'
 
   defineOptions({
     name: 'SettingsSection',
@@ -43,9 +43,7 @@
   const { t } = useTranslate({ settingsSection: en.settingsSection })
   const regionId = useId()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'layout-settings-section'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'settings-section')
 
   const expanded = computed(() => !props.collapsible || open.value)
 

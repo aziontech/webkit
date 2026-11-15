@@ -1,6 +1,6 @@
 ---
 name: file-dropzone
-category: inputs
+category: input
 structure: monolithic
 status: implemented
 checksum: eacc85cdf37f9cef2913c0cc9b1a6793a575b36d7ef6303a5eec802ba332431b

@@ -5,7 +5,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import Hero from './hero.vue'
 import HeroTitle from './hero-title/hero-title.vue'
 
-const TESTID = 'marketing-hero'
+const TESTID = 'hero'
 
 describe('Hero', () => {
   it('renders with the default testid and the default band configuration', () => {
@@ -95,7 +95,7 @@ describe('Hero', () => {
         props: { texture },
         slots: { default: '<h1>Headline</h1>' }
       })
-      const layer = getByTestId('marketing-texture')
+      const layer = getByTestId('texture')
 
       expect(layer).toHaveAttribute('data-variant', texture)
       expect(layer.closest('[aria-hidden="true"]')).not.toBeNull()
@@ -104,7 +104,7 @@ describe('Hero', () => {
 
   it('paints no texture by default', () => {
     const { queryByTestId } = render(Hero, { slots: { default: '<h1>Headline</h1>' } })
-    expect(queryByTestId('marketing-texture')).toBeNull()
+    expect(queryByTestId('texture')).toBeNull()
   })
 
   it('lets the background slot stand beside the texture', () => {
@@ -115,7 +115,7 @@ describe('Hero', () => {
     const backdrop = getByText('artwork').closest('[aria-hidden="true"]') as HTMLElement
 
     expect(backdrop).not.toBeNull()
-    expect(backdrop).toContainElement(getByTestId('marketing-texture'))
+    expect(backdrop).toContainElement(getByTestId('texture'))
   })
 
   it.each(['start', 'center', 'end'] as const)(
@@ -157,7 +157,7 @@ describe('Hero', () => {
       props: { texture: 'dots', textureFade: 'bottom' },
       slots: { default: '<h1>Headline</h1>' }
     })
-    expect(getByTestId('marketing-texture')).toHaveAttribute('data-fade', 'bottom')
+    expect(getByTestId('texture')).toHaveAttribute('data-fade', 'bottom')
   })
 
   it('paints the texture at the medium pitch by default', () => {
@@ -165,7 +165,7 @@ describe('Hero', () => {
       props: { texture: 'dots' },
       slots: { default: '<h1>Headline</h1>' }
     })
-    expect(getByTestId('marketing-texture')).toHaveAttribute('data-size', 'medium')
+    expect(getByTestId('texture')).toHaveAttribute('data-size', 'medium')
   })
 
   it.each(['small', 'medium', 'large'] as const)(
@@ -175,7 +175,7 @@ describe('Hero', () => {
         props: { texture: 'dots', textureSize },
         slots: { default: '<h1>Headline</h1>' }
       })
-      expect(getByTestId('marketing-texture')).toHaveAttribute('data-size', textureSize)
+      expect(getByTestId('texture')).toHaveAttribute('data-size', textureSize)
     }
   )
 
@@ -222,7 +222,7 @@ describe('Hero', () => {
         props: { floorTexture },
         slots: { default: '<h1>Headline</h1>' }
       })
-      const layer = getByTestId('marketing-texture')
+      const layer = getByTestId('texture')
 
       expect(layer).toHaveAttribute('data-variant', floorTexture)
       expect(layer.closest('[data-floor]')).not.toBeNull()
@@ -242,7 +242,7 @@ describe('Hero', () => {
       props: { texture: 'dots', floorTexture: 'pixelate' },
       slots: { default: '<h1>Headline</h1>' }
     })
-    const [backdrop, floor] = getAllByTestId('marketing-texture')
+    const [backdrop, floor] = getAllByTestId('texture')
 
     expect(backdrop).toHaveAttribute('data-variant', 'dots')
     expect(backdrop.closest('[data-floor]')).toBeNull()
@@ -260,7 +260,7 @@ describe('Hero', () => {
       },
       slots: { default: '<h1>Headline</h1>' }
     })
-    const [backdrop, floor] = getAllByTestId('marketing-texture')
+    const [backdrop, floor] = getAllByTestId('texture')
 
     expect(backdrop).toHaveAttribute('data-size', 'small')
     expect(floor).toHaveAttribute('data-size', 'large')
@@ -274,12 +274,12 @@ describe('Hero', () => {
     const window = getByTestId(TESTID).querySelector('[data-floor]') as HTMLElement
 
     expect(window).toContainElement(getByText('field'))
-    expect(window).toContainElement(getByTestId('marketing-texture'))
+    expect(window).toContainElement(getByTestId('texture'))
   })
 
   it('stands no brand strip on the floor by default', () => {
     const { queryByTestId } = render(Hero, { slots: { default: '<h1>Headline</h1>' } })
-    expect(queryByTestId('marketing-marquee')).toBeNull()
+    expect(queryByTestId('marquee')).toBeNull()
   })
 
   it('stands the brand strip on the floor when marquee is set', async () => {
@@ -287,7 +287,7 @@ describe('Hero', () => {
       props: { marquee: true, marqueeMarks: ['Itau', 'NZN'] },
       slots: { default: '<h1>Headline</h1>' }
     })
-    const strip = await findByTestId('marketing-marquee')
+    const strip = await findByTestId('marquee')
 
     expect(getByTestId(TESTID)).toContainElement(strip)
     expect(strip.closest('[aria-hidden="true"]')).toBeNull()
@@ -299,7 +299,7 @@ describe('Hero', () => {
       props: { marquee: true, marqueeMarks: ['NZN'], marqueeLabel: 'Trusted in production' },
       slots: { default: '<h1>Headline</h1>' }
     })
-    const strip = await findByTestId('marketing-marquee')
+    const strip = await findByTestId('marquee')
 
     expect(strip).toHaveTextContent('Trusted in production')
   })
@@ -309,7 +309,7 @@ describe('Hero', () => {
       props: { carousel: true, carouselMarks: ['NZN'], carouselLabel: 'Old label' },
       slots: { default: '<h1>Headline</h1>' }
     })
-    expect(queryByTestId('marketing-marquee')).toBeNull()
+    expect(queryByTestId('marquee')).toBeNull()
   })
 
   it('shares one floor between the bottom window and the strip', async () => {
@@ -317,7 +317,7 @@ describe('Hero', () => {
       props: { marquee: true, marqueeMarks: ['NZN'] },
       slots: { bottom: '<div>field</div>', default: '<h1>Headline</h1>' }
     })
-    const strip = await findByTestId('marketing-marquee')
+    const strip = await findByTestId('marquee')
 
     expect(strip.parentElement?.parentElement).toContainElement(getByText('field'))
   })
@@ -406,7 +406,7 @@ describe('Hero', () => {
       props: { marquee: true, marqueeMarks: ['NZN', 'Itau'] },
       slots: { default: '<h1>Headline</h1>' }
     })
-    await findByTestId('marketing-marquee')
+    await findByTestId('marquee')
     await expectNoA11yViolations(container)
   })
 

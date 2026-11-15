@@ -1,6 +1,6 @@
 {
   "component": "select",
-  "title": "Components/Primitives/Inputs/Select",
+  "title": "Components/Input/Select",
   "examples": [
     {
       "name": "Default",

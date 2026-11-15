@@ -13,11 +13,9 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = useLogViewerContext()
+  useLogViewerContext()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId.value}__footer`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'log-viewer-footer')
 </script>
 
 <template>

@@ -6,7 +6,7 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import Default from '../../../../examples/feedback-reason-dialog/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
-import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
+import WebkitProvider from '../../provider/webkit-provider/webkit-provider.vue'
 import FeedbackReasonDialog, {
   type FeedbackReasonDialogPayload
 } from './feedback-reason-dialog.vue'
@@ -130,9 +130,7 @@ describe('FeedbackReasonDialog', () => {
       await waitFor(() =>
         expect(document.body.querySelector('[data-testid="reason__form"]')).not.toBeNull()
       )
-      expect(
-        document.body.querySelector('[data-testid="ai-feedback-reason-dialog__form"]')
-      ).toBeNull()
+      expect(document.body.querySelector('[data-testid="feedback-reason-dialog__form"]')).toBeNull()
     })
 
     it('closes on Escape and returns focus to the trigger', async () => {

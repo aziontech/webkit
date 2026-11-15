@@ -35,7 +35,7 @@
   const valueModel = defineModel<TabsValue | null | undefined>({ default: undefined })
 
   const attrs = useAttrs()
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'navigation-tabs')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'tabs')
 
   const valueProp = computed(() => valueModel.value)
 

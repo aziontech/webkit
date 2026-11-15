@@ -1,6 +1,6 @@
 {
   "component": "footer",
-  "title": "Components/Primitives/Layout/Footer",
+  "title": "Components/Layout/Footer",
   "examples": [
     {
       "name": "Default",

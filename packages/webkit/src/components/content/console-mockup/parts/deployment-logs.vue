@@ -1,18 +1,18 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-  import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
+  import ToggleGroup from '../../../action/toggle-group/toggle-group.vue'
   import type { LogViewerLine } from '../../../code/log-viewer/injection-key'
   import LogViewer from '../../../code/log-viewer/log-viewer.vue'
   import LogViewerContent from '../../../code/log-viewer/log-viewer-content.vue'
   import Progress from '../../../feedback/progress/progress.vue'
-  import Spinner from '../../../utils/spinner/spinner.vue'
+  import Spinner from '../../../feedback/spinner/spinner.vue'
   import Accordion from '../../accordion/index'
   import Tag from '../../tag/tag.vue'
   import {
     DEFAULT_DEPLOYMENT_STEPS,
     type DeploymentLogTuple,
-    type DeploymentLogViewer,
+    type DeploymentLogView,
     type DeploymentStep,
     LOG_VIEWS,
     STEP_GAP_MS
@@ -72,7 +72,7 @@
     error: [key: string]
   }>()
 
-  const view = defineModel<DeploymentLogViewer>('view', { default: 'phased' })
+  const view = defineModel<DeploymentLogView>('view', { default: 'phased' })
 
   const tuplesFor = (step: DeploymentStep): DeploymentLogTuple[] => {
     if (step.key !== props.failAt || !step.failLogs?.length) return step.logs

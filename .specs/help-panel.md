@@ -3,7 +3,7 @@ name: help-panel
 category: content
 structure: composition
 status: implemented
-checksum: c17198f63713865c44a2a2147e36f0a44cf9d688bd196ca2fa33c6dbf8e08b80
+checksum: fef78e2e5baacfe583b635678f7e8084673eed428156b303bc324a8d24f2b017
 spec_version: 4
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -111,15 +111,15 @@ tutorial mode (`HelpPanel.Tutorial`, `HelpPanel.Task`): `TutorialPanel` owns tut
 - `help-panel-header/help-panel-header.vue` — The topic's title and an optional one-line description. Renders a `<header>` holding an `<h2>` and, when `description` is non-empty, a `<p>`. No close affordance — the host owns closing.
   - Props: `title?: string` (default `''` — the topic's name, rendered as the panel's heading), `description?: string` (default `''` — one line under the title saying what the topic covers; not rendered when empty).
   - Slot: `default` — optional extra content under the description (a `Tag` naming the product state, for example).
-  - `data-testid` fallback: `content-help-panel-header`.
+  - `data-testid` fallback: `help-panel-header`.
 - `help-panel-group/help-panel-group.vue` — One block of guidance with its own heading. Renders a `<section aria-labelledby>` holding an `<h3>` (only when `title` is non-empty) and the slot, in `text-body-sm`, with a fixed vertical rhythm between paragraphs and lists inside it.
   - Props: `title?: string` (default `''` — the question this section answers; the section renders no heading when empty).
   - Slot: `default` — the section's prose: paragraphs, short lists, inline `text-link` anchors.
-  - `data-testid` fallback: `content-help-panel-group`.
+  - `data-testid` fallback: `help-panel-group`.
 - `help-panel-footer/help-panel-footer.vue` — The "Learn more" footer: a heading over a column of `Link` items the consumer composes. Renders a `<section aria-labelledby>` holding an `<h3>` and a vertical flex column of the slot, separated from the content above by a `Separator`.
   - Props: `title?: string` (default `undefined` — the heading over the links; absent uses the locale catalog, `Learn more` in English, and an empty string renders no heading).
   - Slot: `default` — `Link` items, one per destination.
-  - `data-testid` fallback: `content-help-panel-footer`.
+  - `data-testid` fallback: `help-panel-footer`.
     Resulting layout (no per-component `package.json`; the root `packages/webkit/package.json#exports`
     resolves every path, and `.d.ts` is generated at publish time):
 

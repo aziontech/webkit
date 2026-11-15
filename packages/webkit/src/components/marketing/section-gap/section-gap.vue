@@ -26,9 +26,7 @@
 
   const attrs = useAttrs()
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'marketing-section-gap'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'section-gap')
 </script>
 
 <template>

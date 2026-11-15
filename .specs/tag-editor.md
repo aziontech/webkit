@@ -1,6 +1,6 @@
 ---
 name: tag-editor
-category: inputs
+category: input
 structure: monolithic
 status: implemented
 spec_version: 5

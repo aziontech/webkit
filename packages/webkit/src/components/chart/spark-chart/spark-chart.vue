@@ -69,7 +69,7 @@
   const BAR_GAP = 1
   const BAR_RADIUS = 1
 
-  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-spark-chart')
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'spark-chart')
   const width = computed(() =>
     measuredWidth.value > 0 ? Math.round(measuredWidth.value) : FALLBACK_WIDTH
   )

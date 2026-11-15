@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import IconButton from '../../../action/icon-button/icon-button.vue'
 
   defineOptions({
     name: 'ToastClose',
@@ -16,9 +16,7 @@
 
   const attrs = useAttrs()
   const { t } = useTranslate({ toast: en.toast })
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast__close'
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'toast-close')
 
   const onClick = (event: MouseEvent) => emit('click', event)
 </script>

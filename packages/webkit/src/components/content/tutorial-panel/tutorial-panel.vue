@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
-  import Button from '../../actions/button/button.vue'
+  import Button from '../../action/button/button.vue'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import HelpPanel from '../help-panel/help-panel.vue'
   import HelpPanelHeader from '../help-panel/help-panel-header/help-panel-header.vue'
@@ -47,7 +47,7 @@
   const uid = useId()
 
   const testId = computed<string>(
-    () => (attrs['data-testid'] as string | undefined) ?? 'content-tutorial-panel'
+    () => (attrs['data-testid'] as string | undefined) ?? 'tutorial-panel'
   )
 
   const heading = computed<string>(() => props.title || t('tutorialPanel.title'))
@@ -240,7 +240,7 @@
               :label="t('tutorialPanel.back')"
               variant="ghost"
               size="small"
-              :data-testid="`${testId}__back`"
+              :data-testid="`${testId}__previous`"
               @click="exit"
             />
           </div>

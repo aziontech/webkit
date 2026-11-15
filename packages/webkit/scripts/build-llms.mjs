@@ -26,20 +26,21 @@ const SPEC_SECTIONS = [
 ]
 
 const CATEGORY_TITLES = {
-  actions: 'Actions',
+  action: 'Actions',
+  ai: 'AI',
   chart: 'Charts',
   code: 'Code',
   content: 'Content',
   data: 'Data',
-  documentation: 'Documentation',
+  docs: 'Documentation',
   feedback: 'Feedback',
-  inputs: 'Inputs',
+  input: 'Inputs',
   layout: 'Layout',
   marketing: 'Marketing',
   navigation: 'Navigation',
   overlay: 'Overlay',
-  sections: 'Marketing sections',
-  utils: 'Utilities'
+  provider: 'Providers',
+  section: 'Marketing sections'
 }
 
 function stripComments(text) {

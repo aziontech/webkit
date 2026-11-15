@@ -48,9 +48,7 @@
     ctx.registerReference(() => (bounds.value ? { ...bounds.value, label: props.label } : null))
   )
 
-  const testId = computed(
-    () => (attrs['data-testid'] as string | undefined) ?? `${ctx.testId}__reference`
-  )
+  const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'chart-reference')
   const vertical = computed(() => ctx.orientation.value === 'vertical')
   const plot = computed(() => ctx.plot.value)
   const tone = computed(() => thresholdToken(props.severity))
@@ -123,7 +121,7 @@
           :height="Math.max(0, shape.far - shape.near)"
           :fill="tone"
           fill-opacity="0.12"
-          :data-testid="`${testId}-band`"
+          :data-testid="`${testId}__band`"
         />
         <rect
           v-else
@@ -133,7 +131,7 @@
           :height="plot.height"
           :fill="tone"
           fill-opacity="0.12"
-          :data-testid="`${testId}-band`"
+          :data-testid="`${testId}__band`"
         />
       </template>
       <g
@@ -152,7 +150,7 @@
             :x2="plot.left + plot.width"
             :y1="edge"
             :y2="edge"
-            :data-testid="`${testId}-line`"
+            :data-testid="`${testId}__line`"
           />
           <line
             v-else
@@ -160,7 +158,7 @@
             :x2="edge"
             :y1="plot.top"
             :y2="plot.top + plot.height"
-            :data-testid="`${testId}-line`"
+            :data-testid="`${testId}__line`"
           />
         </template>
       </g>
@@ -176,7 +174,7 @@
         stroke-linejoin="round"
         paint-order="stroke"
         class="text-label-sm tabular-nums"
-        :data-testid="`${testId}-label`"
+        :data-testid="`${testId}__label`"
       >
         {{ label }}
       </text>
