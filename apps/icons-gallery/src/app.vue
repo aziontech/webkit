@@ -3,10 +3,10 @@
   import colorIcons from '@aziontech/icons/color-catalog'
   import { ref, watch } from 'vue'
 
-  import ColoredIcon from './components/ColoredIcon.vue'
-  import IconCard from './components/IconCard.vue'
-  import SearchBar from './components/SearchBar.vue'
-  import { getThemeIcon, toggleTheme } from './theme'
+  import ColoredIcon from './components/colored-icon.vue'
+  import IconCard from './components/icon-card.vue'
+  import SearchBar from './components/search-bar.vue'
+  import { getThemeIcon, toggleTheme } from './lib/theme'
 
   // Reactive data
   const IconsColor = ref('rgb(133, 133, 133)')

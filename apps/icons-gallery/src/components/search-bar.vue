@@ -3,7 +3,7 @@
   import colorCatalog from '@aziontech/icons/color-catalog'
   import { ref } from 'vue'
 
-  // Same order as App.vue's iconsList so index i maps to the i-th <li>.
+  // Same order as app.vue's iconsList so index i maps to the i-th <li>.
   const icons = [...catalog, ...colorCatalog]
 
   const input = ref('')
