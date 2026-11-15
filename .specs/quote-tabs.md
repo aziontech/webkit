@@ -3,8 +3,8 @@ name: quote-tabs
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 76fa618b89ab19601496c253feaca9d6b960043bdbc2e601a67f13909661d074
+spec_version: 4
+checksum: 5b66eb5464a6731790cb2129fafa339d64fec5a69d21e59f00e547945298c0fd
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
@@ -22,6 +22,7 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
 
 ## When to use
 
+- Rendering page JSON, or you need a whole band with no custom content → the section (`client-quotes`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`quote-tabs`).
 - Use QuoteTabs in a hand-built SFC that needs the `#actions` slot.
 - To feature one client quotation at a time out of three to twelve peers, with every other client one click away on the wall below.
 - As a success-story band where the wall of customers and the quotation are the same content, not two lists.

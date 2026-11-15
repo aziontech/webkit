@@ -3,10 +3,10 @@ name: site-nav
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: feb93be436131a91375170c9e12802f714eb52bc97e472169800b91eccfc95ad
+last_updated: 2026-11-15
+checksum: fb6074a9b034375b265f7d7a15bb3ea47e31785322adc88dad808c581bd7136b
 template: 2
 ---
 
@@ -18,6 +18,7 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 
 ## When to use
 
+- Use SiteNav for the marketing site's top bar (mega-menus and mobile sheet).
 - At the top of every marketing page, once.
 
 ## When NOT to use

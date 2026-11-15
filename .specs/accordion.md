@@ -3,13 +3,13 @@ name: accordion
 category: content
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=480-876
   node_id: '480:876'
-checksum: 0f34c0c3b3e78ab0ca09334a2305786fa33ef880b65feb8e623cfd3b553871f2
+checksum: bbed8b3d5cfa96ad68fe435a3b7a6ed234ed2c9e50cdb813febf0ff32eaa02ae
 created: 2026-06-26
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Accordion — Component Spec
@@ -20,6 +20,7 @@ A vertically stacked set of disclosure items: each item has a clickable header t
 
 ## When to use
 
+- Use Accordion for expandable sections in product UI; the marketing FAQ band is FaqSection.
 - Long content splits into independent sections the reader scans by heading and opens on demand (settings groups, help topics, a details list).
 - The reader may want one section open at a time (`type="single"`) or to compare several side by side (`type="multiple"`).
 - Content should expand inline below its heading, pushing the rest of the page down.

@@ -3,11 +3,11 @@ name: section-command
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 3c202d2d377876f986769e87bf525b3bf1ad34c91547a4cf45394a1467794e43
+checksum: af72fae963dbc2d6a9252da299dabe1f92f5e25c2659f0c065c4ea1015b86832
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # SectionCommand — Component Spec
@@ -18,6 +18,7 @@ A one-line command or agent prompt with a copy button, set in a large `InputGrou
 
 ## When to use
 
+- Use SectionCommand for a one-line command or agent prompt with a copy button on a marketing page.
 - The one command that starts a product, beside or instead of a call to action.
 - A prompt to paste into an AI agent (`shell` off).
 

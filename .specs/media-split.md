@@ -3,8 +3,8 @@ name: media-split
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 3
-checksum: 2944bf28f1bf31c230dd86317a24de3708e2ff5b0e018d28519ce7160ba80b5e
+spec_version: 4
+checksum: 0156d19343b9795c4f84dfe0bc8dedc030ffc143b1c762e16f874f8b01ddc7e5
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -25,6 +25,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 
 ## When to use
 
+- Rendering page JSON, or you need a whole band with no custom content → the section (`media-split-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`media-split`).
 - Use MediaSplit (primitive) to pair copy with one piece of media in a hand-built SFC.
 - To pair one capability's explanation with a screenshot or diagram of it.
 - Down a product page, alternating `kind` so consecutive bands mirror each other.

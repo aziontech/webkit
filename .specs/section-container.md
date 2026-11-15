@@ -3,11 +3,11 @@ name: section-container
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: f01cdea6bc98330d46638e9f753b584b895aa0250ebb4d1193e6464c1251c291
+spec_version: 2
+checksum: 48a2dc0473cae7102264cf9c35540c827a3294c02b52b89b928de3121b78a71a
 style_seam: true
 created: 2026-09-23
-last_updated: 2026-11-09
+last_updated: 2026-11-15
 ---
 
 # Section Container — Component Spec
@@ -18,6 +18,7 @@ The framed content column: a centered, width-capped block carrying only its two 
 
 ## When to use
 
+- Use SectionContainer once per marketing page as the framed column below the hero.
 - As the container for every band below a `hero`, on a marketing, hub or documentation page.
 - Whenever a stack of `section-module` bricks needs one continuous frame around it.
 - For a plain prose column that should sit on the page's own measure, with `padded`.

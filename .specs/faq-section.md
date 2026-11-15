@@ -3,10 +3,10 @@ name: faq-section
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-05
-checksum: 538191be63a82810f411b0c28f95ce4962935073dcbe10b71d96a095c0036c6f
+last_updated: 2026-11-15
+checksum: aa5011bb01b337078c7984d290643c35f93d8f19d7767dccdedeb378390e158a
 ---
 # FaqSection — Component Spec
 
@@ -16,6 +16,8 @@ The frequently asked questions band near the end of a landing page: the heading 
 
 ## When to use
 
+- Use FaqSection for the questions band of a marketing page placed from page JSON (Markdown answers).
+- Rendering page JSON, or you need a whole band with no custom content → the section (`faq-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`faq`).
 - To answer the handful of questions a reader still has before the closing call to action.
 
 ## When NOT to use

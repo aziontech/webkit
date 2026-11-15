@@ -3,13 +3,13 @@ name: section-gap
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 4
-checksum: e46f3ec0c8d1b833904812e08f182335d60a21ac86f59abe469f8351221bb992
+spec_version: 5
+checksum: 2df77df3a1200a5384e80e6f2e3359b337a4d023b02cd60ba708cc3f1c0d6c9b
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=8869-10008
   node_id: 8869:10008
 created: 2026-08-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Section Gap — Component Spec
@@ -20,6 +20,7 @@ The empty registration frame that divides two page sections. On a page with no m
 
 ## When to use
 
+- Use SectionGap only between marketing page sections inside SectionContainer; in product UI use Separator.
 - Between two stacked page sections on a full-bleed, framed layout.
 - Wherever a page needs breathing room that still reads as part of the frame instead of as empty margin.
 - To change the weight of one break without touching its neighbours — a `large` gap before a new part of the page, `small` between two bands that belong together.

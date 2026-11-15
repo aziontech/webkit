@@ -3,11 +3,11 @@ name: site-footer
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 431d239f333c7fae6c8bd1d6b3ddc00b3a7018eb86ba0f3c676cd80a6f1b806a
+last_updated: 2026-11-15
+checksum: 9e779ee6a548412fb9ee851aa613cdbabe8b06a0febb5c0ecdc25bfc29e88059
 ---
 
 # SiteFooter — Component Spec
@@ -18,6 +18,8 @@ The footer under every marketing page: the link columns, then the social row bes
 
 ## When to use
 
+- Use SiteFooter for the marketing site footer from page JSON.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).
 - As the last block of every marketing page.
 
 ## When NOT to use

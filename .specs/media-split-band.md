@@ -3,11 +3,11 @@ name: media-split-band
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-15
-checksum: 27dd1a418665aa5807f293c27779f6b8b10023b428448a389394bceb308d2e7d
+checksum: 4de70e8c1b074235f09001fed49583a72249f972fc163d89a9f0c8985ed29c92
 ---
 
 # MediaSplitBand — Component Spec
@@ -18,6 +18,7 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 
 ## When to use
 
+- Rendering page JSON, or you need a whole band with no custom content → the section (`media-split-band`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`media-split`).
 - Use MediaSplitBand for one marketing claim beside its picture, scene or code.
 - To make one point beside one picture and move on (a values statement, a single product claim).
 - To set a claim beside the code that delivers it (`codeTabs`), with the files in a tab strip.
