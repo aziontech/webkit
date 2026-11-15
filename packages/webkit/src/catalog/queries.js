@@ -503,11 +503,11 @@ export function searchComponents(catalog, query, { surface } = {}) {
   const aliases = aliasHits(catalog, q)
   const concepts = conceptHits(catalog, q)
   const ranked = catalog.subpaths
-    .filter((sub) => catalog.getEntry(sub)?.kind === 'component')
+    .filter((sub) => SEARCHABLE_KINDS.has(catalog.getEntry(sub)?.kind))
     .filter((sub) => !wantedSurface || catalog.getEntry(sub)?.surface === wantedSurface)
     .map((sub) => {
       const e = catalog.getDetails(sub)
-      const base = scoreMatch(sub, e, q) + (aliases.get(sub)?.boost ?? 0) + (concepts.get(sub) ?? 0)
+      const base = nameScore(sub, e, q) + (aliases.get(sub)?.boost ?? 0) + (concepts.get(sub) ?? 0)
       const productBonus = !wantedSurface && base > 0 && isProductEntry(e) ? PRODUCT_BONUS : 0
       return { sub, score: base + productBonus }
     })
@@ -515,7 +515,7 @@ export function searchComponents(catalog, query, { surface } = {}) {
     .sort((a, b) => b.score - a.score || tieBreak(catalog, a.sub, b.sub))
     .slice(0, 10)
     .map((r) => {
-      const card = { ...componentCard(catalog, r.sub), score: r.score }
+      const card = { ...searchCard(catalog, r.sub), score: r.score }
       if (normalize(r.sub) === nq || concepts.get(r.sub) === 90) card.exact = true
       const hit = aliases.get(r.sub)
       return hit
@@ -539,6 +539,33 @@ export function searchComponents(catalog, query, { surface } = {}) {
 }
 
 const PRODUCT_BONUS = 15
+const SEARCHABLE_KINDS = new Set(['component', 'subcomponent'])
+
+function nameScore(sub, entry, query) {
+  const score = scoreMatch(sub, entry, query)
+  if (entry?.kind !== 'subcomponent' || !entry.parent) return score
+  return hasPhrase(normalize(query), normalize(entry.parent)) ? score : Math.round(score / 2)
+}
+
+function partBinding(parent, sub) {
+  const rest = sub.startsWith(`${parent}-`) ? sub.slice(parent.length + 1) : sub
+  return `${pascalCase(parent)}.${pascalCase(rest)}`
+}
+
+function searchCard(catalog, sub) {
+  const card = componentCard(catalog, sub)
+  const e = catalog.getEntry(sub)
+  if (e?.kind !== 'subcomponent' || !e.parent) return card
+  const parent = pascalCase(e.parent)
+  const compound = partBinding(e.parent, sub)
+  return {
+    ...card,
+    kind: 'subcomponent',
+    parent: e.parent,
+    compoundBinding: compound,
+    hint: `${card.binding} is a part of ${parent}: compose it inside ${parent} as ${compound} (import ${parent} from '${catalog.prefix}${e.parent}'), or import it alone from '${card.import}'.`
+  }
+}
 const popularityCache = new WeakMap()
 
 function popularity(catalog) {
