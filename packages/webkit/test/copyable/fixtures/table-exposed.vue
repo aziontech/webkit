@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import Table, { type TableColumn, type TableExposed } from '@aziontech/webkit/table'
+  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
   import { ref } from 'vue'
 
   interface Domain {
@@ -25,7 +25,7 @@
 </script>
 
 <template>
-  <Table
+  <DataTable
     ref="table"
     :data="domains"
     :columns="columns"

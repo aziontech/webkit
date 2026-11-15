@@ -9,7 +9,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Table from '@aziontech/webkit/table'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import DataTable from '@aziontech/webkit/data-table'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { ref } from 'vue'
@@ -191,7 +191,7 @@
               :padded="false"
             >
               <template #content>
-                <TableRoot
+                <DataTable
                   ref="resourcesTable"
                   v-bind="tableProps"
                   :loading="loading || fetching"
@@ -302,7 +302,7 @@
                       </template>
                     </EmptyState>
                   </template>
-                </TableRoot>
+                </DataTable>
               </template>
             </Card>
           </section>

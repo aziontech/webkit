@@ -1,5 +1,5 @@
 <script setup>
-  import TableRoot from '@aziontech/webkit/table-root'
+  import DataTable from '@aziontech/webkit/data-table'
   import { ref } from 'vue'
 
   const accounts = [
@@ -38,7 +38,7 @@
 </script>
 
 <template>
-  <TableRoot
+  <DataTable
     v-model:expanded="expanded"
     v-model:row-selection="selection"
     :data="accounts"

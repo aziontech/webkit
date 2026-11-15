@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import DataTable from '@aziontech/webkit/data-table'
   import DocProse from '@aziontech/webkit/doc-prose'
   import Field from '@aziontech/webkit/field'
   import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
@@ -253,7 +254,7 @@
               <div class="pt-(--layout-group-gap)">
                 <Card :padded="false">
                   <template #content>
-                    <Table
+                    <DataTable
                       :data="installs"
                       :columns="columns"
                       row-key="application"
@@ -280,7 +281,7 @@
                           @click="runOn(row.application)"
                         />
                       </template>
-                    </Table>
+                    </DataTable>
                   </template>
                 </Card>
               </div>

@@ -4,6 +4,8 @@
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
+  import type { TableColumn } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
@@ -20,8 +22,6 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -438,7 +438,7 @@
                 <Card :padded="false">
                   <template #content>
                     <div class="flex min-w-0 flex-col">
-                      <TableRoot
+                      <DataTable
                         :data="domains"
                         :columns="domainColumns"
                         row-key="id"
@@ -508,7 +508,7 @@
                             </DropdownMenu.Group>
                           </DropdownMenu>
                         </template>
-                      </TableRoot>
+                      </DataTable>
 
                       <div
                         class="flex flex-wrap items-center justify-between gap-(--spacing-xs) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-sm)"

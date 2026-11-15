@@ -509,7 +509,7 @@ narrow the list and the table they narrow.
           </div>
           <Card :padded="false">
             <template #content>
-              <Table
+              <DataTable
                 v-bind="tableProps"
                 :bordered="false"
               />

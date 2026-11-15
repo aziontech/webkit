@@ -8,32 +8,23 @@
     inheritAttrs: false
   })
 
-  /** Header density. */
-  export type TableHeaderKind = 'default' | 'compact'
-
   interface Props {
     /** Sticks the header to the top of the scroll container. */
     frozen?: boolean
     /** `compact` shrinks the header cells' height and padding for a denser header. */
     density?: TableDensity
-    /**
-     * Header density.
-     * @deprecated since 6.0 — use `density`. Removed in 7.0.
-     */
-    kind?: TableHeaderKind
   }
 
   const props = withDefaults(defineProps<Props>(), {
     frozen: false,
-    density: undefined,
-    kind: 'default'
+    density: undefined
   })
 
   provide(
     TableRowGroupKey,
     reactive({
       hoverable: false,
-      compact: computed(() => (props.density ?? props.kind) === 'compact')
+      compact: computed(() => props.density === 'compact')
     })
   )
 

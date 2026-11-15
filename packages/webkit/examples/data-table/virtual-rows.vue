@@ -1,5 +1,5 @@
 <script setup>
-  import TableRoot from '@aziontech/webkit/table-root'
+  import DataTable from '@aziontech/webkit/data-table'
 
   const rows = Array.from({ length: 10000 }, (_, i) => ({
     id: String(i + 1),
@@ -18,7 +18,7 @@
 </script>
 
 <template>
-  <TableRoot
+  <DataTable
     :data="rows"
     :columns="columns"
     virtual

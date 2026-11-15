@@ -2,6 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
@@ -9,7 +10,6 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import { toast } from '@aziontech/webkit/toast'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
@@ -650,7 +650,7 @@
               </template>
             </Chart>
 
-            <TableRoot
+            <DataTable
               v-if="loading || view.steps.length"
               :data="view.steps"
               :columns="stepColumns"
@@ -677,7 +677,7 @@
                   >{{ formatters.drop(row.dropoff) }} from {{ row.from }}</span
                 >
               </template>
-            </TableRoot>
+            </DataTable>
           </div>
         </ChartCard.Content>
       </ChartCard>
@@ -775,7 +775,7 @@
           </ChartCard.Action>
         </ChartCard.Header>
         <ChartCard.Content>
-          <TableRoot
+          <DataTable
             :data="view.cohorts"
             :columns="cohortColumns"
             row-key="id"
@@ -815,7 +815,7 @@
                 {{ formatters.percent(row[week.key]) }}
               </span>
             </template>
-          </TableRoot>
+          </DataTable>
         </ChartCard.Content>
       </ChartCard>
     </div>

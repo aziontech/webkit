@@ -141,7 +141,7 @@ export interface CollectionTableProps<T, C> {
   pagination: { pageIndex: number; pageSize: number }
   pageSize: number
   rowCount: number
-  rowsPerPageOptions: number[]
+  pageSizeOptions: number[]
   enableRowSelection: boolean
   rowSelection: Record<string, boolean>
   columnVisibility: Record<string, boolean>
@@ -711,7 +711,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
     },
     pageSize: paginated ? pageSize.value : DEFAULT_PAGE_SIZE,
     rowCount: totalCount.value,
-    rowsPerPageOptions: pageSizeOptions,
+    pageSizeOptions,
     enableRowSelection: selectionEnabled,
     rowSelection: rowSelection.value,
     columnVisibility: columnVisibility.value,

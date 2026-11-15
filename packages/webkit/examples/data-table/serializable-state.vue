@@ -1,6 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import DataTable from '@aziontech/webkit/data-table'
   import { ref } from 'vue'
 
   const rows = [
@@ -44,7 +44,7 @@
         @click="restore"
       />
     </div>
-    <TableRoot
+    <DataTable
       ref="table"
       v-model:state="state"
       :data="rows"

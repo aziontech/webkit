@@ -1,13 +1,13 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -205,7 +205,7 @@
               </header>
               <Card :padded="false">
                 <template #content>
-                  <TableRoot
+                  <DataTable
                     v-bind="tableProps"
                     :loading="loading || fetching"
                     enable-sorting
@@ -272,7 +272,7 @@
                         </template>
                       </EmptyState>
                     </template>
-                  </TableRoot>
+                  </DataTable>
                 </template>
               </Card>
             </section>

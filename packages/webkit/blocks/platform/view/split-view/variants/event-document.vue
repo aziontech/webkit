@@ -10,6 +10,7 @@
   import Chip from '@aziontech/webkit/chip'
   import CodeBlock from '@aziontech/webkit/code-block'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
@@ -26,7 +27,6 @@
   import Popover from '@aziontech/webkit/popover'
   import Resizable from '@aziontech/webkit/resizable'
   import Sidebar from '@aziontech/webkit/sidebar-root'
-  import TableRoot, { type TableColumn, type TableExposed } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
@@ -1479,7 +1479,7 @@
 
               <section class="flex min-h-0 min-w-0 flex-1 flex-col">
                 <div class="flex min-h-0 flex-1">
-                  <TableRoot
+                  <DataTable
                     ref="tableRef"
                     v-model:pagination="pagination"
                     :data="matchedEvents"
@@ -1579,7 +1579,7 @@
                         description="Widen the period or clear a filter to see more of the log."
                       />
                     </template>
-                  </TableRoot>
+                  </DataTable>
                 </div>
               </section>
             </div>

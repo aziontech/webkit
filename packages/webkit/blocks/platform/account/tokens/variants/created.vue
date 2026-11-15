@@ -5,6 +5,7 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import DataTable from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import DialogOverlay from '@aziontech/webkit/dialog-overlay'
@@ -415,7 +416,7 @@
           :padded="false"
         >
           <template #content>
-            <Table
+            <DataTable
               ref="tokensTable"
               v-bind="tableProps"
               :loading="loading || refreshing"
@@ -506,7 +507,7 @@
                   </template>
                 </EmptyState>
               </template>
-            </Table>
+            </DataTable>
           </template>
         </Card>
       </section>

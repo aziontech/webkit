@@ -26,9 +26,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours, Last 7 days) and a Minimum hits `Input` (numeric; "Use a whole number." under it when it is not one), each a `Field` with a visible label; a search `Input` named "Search matched requests" that grows to fill the row; and an outlined Refresh `IconButton` with its `Tooltip`. Settings apply as they change, with no Apply button. Hidden when the rule set has no match at all.
 
-### C. Matches table — `Card`, `TableRoot`, `Table.CellTags`, `EmptyState`, `Alert` (required)
+### C. Matches table — `Card`, `DataTable`, `Table.CellTags`, `EmptyState`, `Alert` (required)
 
-A flush `Card` with a data-driven `TableRoot`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells are `Table.CellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
+A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells are `Table.CellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
 
 ### D. Allow dialog — `Dialog`, `DialogPortal`, `DialogOverlay`, `DialogContent`, `DialogTitle`, `DialogClose`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 
@@ -67,7 +67,7 @@ Success closes the dialog, clears the selection, moves focus to the matched-requ
 ## Accessibility
 
 - Time range and Minimum hits have visible labels; the search and Refresh have accessible names.
-- The selection checkboxes and sort buttons come from `TableRoot` and are named per row and column.
+- The selection checkboxes and sort buttons come from `DataTable` and are named per row and column.
 - The dialog is a labelled `form`: its title names it, the reason is a required `Field` whose error is tied by `aria-describedby`, and Enter in a text field does not submit by accident because the reason is a `Textarea`.
 - The failure `Alert` is read when it appears; focus stays in the dialog and returns to the allow action on close.
 - Code-font values (rule ids, addresses, paths) are plain text; nothing depends on color.

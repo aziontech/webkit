@@ -64,7 +64,7 @@ Retention is a multi-series `Chart.Line` by week since sign-up, one series per w
 In each chart's and table's empty actions, `Clear filters` resets the period and the segment. It is the
 only recovery when the filters match nothing.
 
-### J. Step and cohort tables — `TableRoot` (required)
+### J. Step and cohort tables — `DataTable` (required)
 
 Beside the funnel, a table states each step's users, share of visitors and drop-off from the step
 before. The cohort table lists each cohort's size and its week 1 to week 6 retention in tabular

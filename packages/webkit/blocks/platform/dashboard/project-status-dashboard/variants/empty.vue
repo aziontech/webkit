@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DonutChart from '@aziontech/webkit/donut-chart'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -14,7 +15,6 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
@@ -621,7 +621,7 @@
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
-            <TableRoot
+            <DataTable
               :data="owners"
               :columns="ownerColumns"
               row-key="id"
@@ -668,7 +668,7 @@
                   >0</span
                 >
               </template>
-            </TableRoot>
+            </DataTable>
           </ChartCard.Content>
         </ChartCard>
       </div>

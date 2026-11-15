@@ -2,9 +2,9 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
-import TreeRows from '../../../../examples/table/tree-rows.vue'
+import TreeRows from '../../../../examples/data-table/tree-rows.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import Table from './index'
+import DataTable from './data-table.vue'
 
 type Node = { id: string; name: string; children?: Node[] }
 
@@ -39,7 +39,7 @@ const mountTree = (extra: Record<string, unknown> = {}, dir?: 'rtl') => {
   const Host = defineComponent({
     setup: () => () => {
       const table = h(
-        Table,
+        DataTable,
         {
           data: seed(),
           columns: [{ accessorKey: 'name', header: 'Name', enableSorting: true }],
@@ -86,7 +86,7 @@ describe('Table tree rows', () => {
   })
 
   it('keeps the plain table untouched without getSubRows', () => {
-    const view = render(Table, {
+    const view = render(DataTable, {
       props: {
         data: seed(),
         columns: [{ accessorKey: 'name', header: 'Name' }],
@@ -104,7 +104,7 @@ describe('Table tree rows', () => {
 
   it('expands and collapses with the pointer toggle and emits update:expanded', async () => {
     const { view, expanded } = mountTree()
-    const toggles = view.getAllByTestId('data-table__expand-toggle')
+    const toggles = view.getAllByTestId('data-data-table__expand-toggle')
     expect(toggles).toHaveLength(1)
     expect(toggles[0].closest('[data-tree-gutter]')?.getAttribute('aria-hidden')).toBe('true')
     const gutters = Array.from(document.querySelectorAll<HTMLElement>('[data-tree-gutter]'))
@@ -119,7 +119,7 @@ describe('Table tree rows', () => {
     expect(zulu.getAttribute('aria-posinset')).toBe('1')
     expect(zulu.getAttribute('data-depth')).toBe('1')
     expect(rowOf('a').getAttribute('aria-expanded')).toBe('true')
-    await fireEvent.click(view.getAllByTestId('data-table__expand-toggle')[0])
+    await fireEvent.click(view.getAllByTestId('data-data-table__expand-toggle')[0])
     await waitFor(() => expect(ids()).toEqual(['a', 'b']))
   })
 
@@ -154,10 +154,10 @@ describe('Table tree rows', () => {
 
   it('moves focus to the row that collapses over a focused descendant', async () => {
     const { view } = mountTree()
-    await fireEvent.click(view.getAllByTestId('data-table__expand-toggle')[0])
+    await fireEvent.click(view.getAllByTestId('data-data-table__expand-toggle')[0])
     await waitFor(() => expect(ids()).toContain('a2'))
     rowOf('a2').focus()
-    await fireEvent.click(view.getAllByTestId('data-table__expand-toggle')[0])
+    await fireEvent.click(view.getAllByTestId('data-data-table__expand-toggle')[0])
     await waitFor(() => expect(ids()).toEqual(['a', 'b']))
     await waitFor(() => expect(focusedId()).toBe('a'))
   })

@@ -20,9 +20,9 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ## Building blocks
 
-### A. Surface — `Card`, `TableRoot` (required)
+### A. Surface — `Card`, `DataTable` (required)
 
-One `Card :padded="false"` around a `TableRoot :bordered="false"` with `row-key`, `enable-sorting` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), `v-model:global-filter`, `paginated` at 50 rows (25, 50, 100), `:loading` and an `export-filename`. Name is the `principal` column; actions are `kind: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
+One `Card :padded="false"` around a `DataTable :bordered="false"` with `row-key`, `enable-sorting` with `manual-sorting` and `v-model:sorting` (the block orders the rows so `..` and the folders stay first: Size sorts on a numeric `bytes` field and Last modified on the `modifiedAt` timestamp, within folders and within files), `v-model:global-filter`, `paginated` at 50 rows (25, 50, 100), `:loading` and an `export-filename`. Name is the `principal` column; actions are `kind: 'action'` and not hideable. Everything above the rows lives in the table's `#toolbar` slot, so there is no separate page heading.
 
 ### B. Storage title and search — `TableSearch` (required)
 
@@ -72,7 +72,7 @@ Every transfer (upload, move) runs in one floating `UploadProgress` at the inlin
 
 When a transfer finishes the page reports it with a toast as well as the card, because the card may be collapsed or the person may be elsewhere. Its actions fit the files, never a deploy action: after a clean upload or move, `Open folder` (goes to the destination); after a partial upload, a danger toast `1 of 5 files weren't uploaded.` that says where the rest went and offers `Retry failed`. Storage objects are not deployed, so the async-submit Edit and Redeploy pair does not apply. Each of these toasts passes `position: 'top-right'` so it never covers the transfer card, whatever corner the app's region defaults to.
 
-### L. Selection and Move — `TableRoot`, `DropdownMenuOption` (optional)
+### L. Selection and Move — `DataTable`, `DropdownMenuOption` (optional)
 
 Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 
@@ -147,4 +147,4 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - `platform/detail/record-table` — records of a resource, not files.
 - `FileTokenGroup`, `FileDropzone` and `UploadProgress` — the upload pieces; see their component docs.
 - `platform/states/async-submit` — the rule for long actions; storage transfers follow it with item actions instead of Edit and Redeploy.
-- `TableRoot` — the data-driven table this page wraps; see `skills/webkit-tables` and `skills/webkit-lists`.
+- `DataTable` — the data-driven table this page wraps; see `skills/webkit-tables` and `skills/webkit-lists`.

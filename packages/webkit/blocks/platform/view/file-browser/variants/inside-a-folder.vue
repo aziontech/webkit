@@ -4,6 +4,11 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import DataTable, {
+    type DropdownMenuOptionValue,
+    type TableColumn,
+    type TableExposed
+  } from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -11,11 +16,6 @@
   import Input from '@aziontech/webkit/input'
   import SplitButton from '@aziontech/webkit/split-button'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, {
-    type DropdownMenuOptionValue,
-    type TableColumn,
-    type TableExposed
-  } from '@aziontech/webkit/table-root'
   import TableSearch from '@aziontech/webkit/table-search'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref, useId } from 'vue'
@@ -254,7 +254,7 @@
       <section class="flex min-h-0 flex-col">
         <Card :padded="false">
           <template #content>
-            <TableRoot
+            <DataTable
               ref="tableRef"
               v-model:sorting="sorting"
               v-model:global-filter="search"
@@ -477,7 +477,7 @@
                   </template>
                 </EmptyState>
               </template>
-            </TableRoot>
+            </DataTable>
           </template>
         </Card>
       </section>

@@ -26,7 +26,7 @@ for (const theme of THEMES) {
   test(`geometry table reorder mid-drag with frozen columns ${theme}`, async ({ page }) => {
     const mode: Mode = { theme, width: 1280 }
     await prepare(page, mode)
-    const preview = await openExample(page, 'table/reorderable-frozen', mode)
+    const preview = await openExample(page, 'data-table/reorderable-frozen', mode)
     await preview.evaluate((el) => el.scrollIntoView({ block: 'center' }))
     const grips = preview.locator('[data-reorder-handle]')
     const first = await grips.nth(0).boundingBox()
@@ -48,7 +48,7 @@ for (const theme of THEMES) {
   test(`geometry table reorder frozen columns scrolled ${theme}`, async ({ page }) => {
     const mode: Mode = { theme, width: 768 }
     await prepare(page, mode)
-    const preview = await openExample(page, 'table/reorderable-frozen', mode)
+    const preview = await openExample(page, 'data-table/reorderable-frozen', mode)
     await preview
       .locator('[data-testid$="__viewport"]')
       .first()
@@ -64,7 +64,7 @@ for (const theme of THEMES) {
     const mode: Mode = { theme, width: 1280, dir }
     test(`geometry table tree rows ${label(mode)}`, async ({ page }) => {
       await prepare(page, mode)
-      const preview = await openExample(page, 'table/tree-rows', mode)
+      const preview = await openExample(page, 'data-table/tree-rows', mode)
       await preview.locator('[data-tree-row="ws-1"] [data-testid$="__expand-toggle"]').click()
       await expect(preview.locator('[data-tree-row="cl-1"]')).toBeVisible()
       await settle(page)

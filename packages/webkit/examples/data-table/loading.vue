@@ -1,5 +1,5 @@
 <script setup>
-  import TableRoot from '@aziontech/webkit/table-root'
+  import DataTable from '@aziontech/webkit/data-table'
 
   const rows = [
     { id: '1001', name: 'Workload Alpha', status: 'Active', modified: 'Jan 1, 2026, 09:00 AM' },
@@ -15,7 +15,7 @@
 </script>
 
 <template>
-  <TableRoot
+  <DataTable
     :data="rows"
     :columns="columns"
     row-key="id"

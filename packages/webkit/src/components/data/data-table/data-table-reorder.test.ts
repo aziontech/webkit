@@ -2,11 +2,11 @@ import { cleanup, fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { defineComponent, h, ref } from 'vue'
 
-import ReorderableRows from '../../../../examples/table/reorderable-rows.vue'
+import ReorderableRows from '../../../../examples/data-table/reorderable-rows.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
 import WebkitProvider from '../../utils/webkit-provider/webkit-provider.vue'
-import Table from './index'
+import DataTable from './data-table.vue'
 
 type Row = { id: string; name: string }
 
@@ -22,14 +22,14 @@ const handles = (root: Document | HTMLElement = document): HTMLElement[] =>
 const order = (root: Document | HTMLElement = document): string[] =>
   handles(root).map((handle) => handle.getAttribute('data-reorder-handle') ?? '')
 const status = (): string =>
-  document.body.querySelector('[data-testid="data-table__reorder-status"]')?.textContent ?? ''
+  document.body.querySelector('[data-testid="data-data-table__reorder-status"]')?.textContent ?? ''
 
 const mountTable = (extra: Record<string, unknown> = {}) => {
   const data = ref<Row[]>(seed())
   const events: { from: number; to: number; row: Row }[] = []
   const Host = defineComponent({
     setup: () => () =>
-      h(Table, {
+      h(DataTable, {
         data: data.value,
         'onUpdate:data': (next: Row[]) => (data.value = next),
         onReorder: (payload: { from: number; to: number; row: Row }) => events.push(payload),
@@ -161,7 +161,7 @@ describe('Table reorderable rows', () => {
           { locale: 'pt-BR', catalogs: LOCALES },
           {
             default: () =>
-              h(Table, {
+              h(DataTable, {
                 data: seed(),
                 columns: [{ accessorKey: 'name', header: 'Nome' }],
                 rowKey: 'id',
@@ -181,7 +181,7 @@ describe('Table reorderable rows', () => {
         const data = ref<Row[]>(seed())
         return () =>
           h('div', { dir: 'rtl' }, [
-            h(Table, {
+            h(DataTable, {
               data: data.value,
               'onUpdate:data': (next: Row[]) => (data.value = next),
               columns: [{ accessorKey: 'name', header: 'Name' }],

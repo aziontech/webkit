@@ -5,6 +5,7 @@
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
   import Button from '@aziontech/webkit/button'
+  import DataTable from '@aziontech/webkit/data-table'
   import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
   import DocAccordionItem from '@aziontech/webkit/doc-accordion-item'
   import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
@@ -28,7 +29,6 @@
   import ItemList from '@aziontech/webkit/item-list'
   import Logo from '@aziontech/webkit/logo'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Table from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
@@ -482,7 +482,7 @@
           data-doc-block
           data-doc-chrome
         >
-          <Table
+          <DataTable
             :data="mcpTools"
             :columns="mcpColumns"
             row-key="id"
@@ -494,7 +494,7 @@
                 >{{ row.title }}</code
               >
             </template>
-          </Table>
+          </DataTable>
         </div>
         <DocHeading
           anchor="cli"

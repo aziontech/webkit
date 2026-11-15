@@ -3,6 +3,8 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import EmptyState from '@aziontech/webkit/empty-state'
@@ -19,8 +21,6 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
-  import type { TableColumn, TableExposed } from '@aziontech/webkit/table-root'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -502,7 +502,7 @@
             </header>
             <Card :padded="false">
               <template #content>
-                <TableRoot
+                <DataTable
                   ref="tableRef"
                   v-bind="tableProps"
                   :loading="loading || fetching"
@@ -613,7 +613,7 @@
                       </template>
                     </EmptyState>
                   </template>
-                </TableRoot>
+                </DataTable>
               </template>
             </Card>
           </section>

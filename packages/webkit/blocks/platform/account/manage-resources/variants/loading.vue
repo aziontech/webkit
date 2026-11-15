@@ -4,6 +4,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import DataTable from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import DialogOverlay from '@aziontech/webkit/dialog-overlay'
@@ -553,7 +554,7 @@
               :padded="false"
             >
               <template #content>
-                <Table
+                <DataTable
                   v-model:expanded="tableExpanded"
                   v-model:row-selection="selection"
                   :data="visibleTree"
@@ -682,7 +683,7 @@
                       </DropdownMenu.Group>
                     </Table.CellActions>
                   </template>
-                </Table>
+                </DataTable>
               </template>
             </Card>
           </template>

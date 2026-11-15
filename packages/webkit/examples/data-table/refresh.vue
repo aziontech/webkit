@@ -1,4 +1,5 @@
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
   import { onBeforeUnmount, ref, watch } from 'vue'
@@ -56,7 +57,7 @@
 </script>
 
 <template>
-  <Table
+  <DataTable
     :data="rows"
     :columns="columns"
     row-key="id"
@@ -84,5 +85,5 @@
         :severity="severityOf(value)"
       />
     </template>
-  </Table>
+  </DataTable>
 </template>

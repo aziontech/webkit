@@ -73,24 +73,22 @@ const TableRoot = Object.assign(Table, {
 }) as CompoundTable
 
 export default TableRoot
+export type { DropdownMenuOptionValue } from '../../navigation/dropdown-menu/injection-key'
 export type {
   AppliedFilter,
   FilterField,
-  TableFilterKind,
-  TableStateSnapshot
-} from './injection-key'
-export type {
-  DropdownMenuOptionValue,
   TableCellSlotProps,
   TableCellSlots,
   TableColumn,
   TableDensity,
   TableExportScope,
   TableExposed,
+  TableFilterKind,
   TableHeaderSlotProps,
   TableHeaderSlots,
+  TableStateSnapshot,
   TableToolbarSlotProps
-} from './table.vue'
+} from './injection-key'
 export type {
   TableCellAlign,
   TableCellFrozen,
@@ -105,5 +103,4 @@ export type {
   TableHeadCellKind
 } from './table-head-cell/table-head-cell.vue'
 export type { TableHeadCellProps } from './table-head-cell/table-head-cell.vue'
-export type { TableHeaderKind } from './table-header/table-header.vue'
 export type { TableSortButtonProps } from './table-sort-button/table-sort-button.vue'

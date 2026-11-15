@@ -1,4 +1,5 @@
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import Table from '@aziontech/webkit/table'
   import { ref } from 'vue'
 
@@ -47,7 +48,7 @@
 </script>
 
 <template>
-  <Table
+  <DataTable
     v-model:data="rules"
     :columns="columns"
     row-key="id"
@@ -61,5 +62,5 @@
         :severity="value === 'Active' ? 'success' : 'neutral'"
       />
     </template>
-  </Table>
+  </DataTable>
 </template>

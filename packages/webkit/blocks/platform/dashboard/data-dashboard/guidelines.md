@@ -82,7 +82,7 @@ horizontal bar chart, largest first.
 
 `Search projects`, inside the `Usage by project` card.
 
-### L. Usage by project — `TableRoot` (required)
+### L. Usage by project — `DataTable` (required)
 
 Searchable, paginated; requests and data transferred per project in tabular, right-aligned figures.
 

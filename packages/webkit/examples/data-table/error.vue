@@ -1,6 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import TableRoot from '@aziontech/webkit/table-root'
+  import DataTable from '@aziontech/webkit/data-table'
 
   const columns = [
     { accessorKey: 'name', header: 'Name' },
@@ -10,7 +10,7 @@
 </script>
 
 <template>
-  <TableRoot
+  <DataTable
     :data="[]"
     :columns="columns"
     row-key="id"
@@ -29,5 +29,5 @@
         />
       </div>
     </template>
-  </TableRoot>
+  </DataTable>
 </template>

@@ -2,6 +2,7 @@
   import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import DataTable, { type TableColumn, type TableExposed } from '@aziontech/webkit/data-table'
   import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
@@ -19,7 +20,6 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn, type TableExposed } from '@aziontech/webkit/table-root'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -313,7 +313,7 @@
               title="No matches yet"
               description="This rule set has not matched any request. Matches appear here as traffic arrives."
             />
-            <TableRoot
+            <DataTable
               v-else
               ref="tuningTable"
               v-model:global-filter="search"
@@ -378,7 +378,7 @@
                   :description="`No rule matched ${formatHits(minimumHits)} times or more in the ${rangeLabel(range).toLowerCase()}. Lower the minimum hits or widen the time range.`"
                 />
               </template>
-            </TableRoot>
+            </DataTable>
           </template>
         </Card>
       </section>

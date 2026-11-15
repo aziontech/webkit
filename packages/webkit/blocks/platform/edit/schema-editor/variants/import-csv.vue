@@ -6,6 +6,8 @@
   import Checkbox from '@aziontech/webkit/checkbox'
   import CodeEditor from '@aziontech/webkit/code-editor'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import type { TableColumn } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
@@ -26,8 +28,6 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import Table from '@aziontech/webkit/table'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -649,7 +649,7 @@
   <div class="flex flex-col gap-(--spacing-md) p-(--spacing-md)">
     <Card :padded="false">
       <template #content>
-        <TableRoot
+        <DataTable
           :data="definitionRows"
           :columns="definitionColumns"
           row-key="id"
@@ -761,7 +761,7 @@
               </DropdownMenu.Group>
             </Table.CellActions>
           </template>
-        </TableRoot>
+        </DataTable>
       </template>
     </Card>
 
@@ -864,7 +864,7 @@
                         {{ csvRows.length === 1 ? 'row' : 'rows' }} read. The first
                         {{ csvPreview.length }} below; the columns were filled from the header.
                       </p>
-                      <TableRoot
+                      <DataTable
                         :data="csvPreview"
                         :columns="csvPreviewColumns"
                         row-key="__row"

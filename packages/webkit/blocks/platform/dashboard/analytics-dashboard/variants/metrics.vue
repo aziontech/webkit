@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import Chart, { type ChartColor, type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
@@ -10,7 +11,6 @@
   import PageTabs from '@aziontech/webkit/page-tabs'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tabs, { type TabsValue } from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -1160,7 +1160,7 @@
                   />
                 </div>
 
-                <TableRoot
+                <DataTable
                   v-model:global-filter="searches[breakdown.id]"
                   :data="breakdownRows(breakdown)"
                   :columns="breakdown.columns"
@@ -1188,7 +1188,7 @@
                   <template #cell-requests="{ row }">
                     <span class="tabular-nums">{{ formatters.count(Number(row.requests)) }}</span>
                   </template>
-                </TableRoot>
+                </DataTable>
               </div>
             </ChartCard.Content>
           </ChartCard>

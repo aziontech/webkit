@@ -2,6 +2,8 @@
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
+  import type { TableColumn } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
@@ -19,8 +21,6 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SectionHeader from '@aziontech/webkit/section-header'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
-  import type { TableColumn } from '@aziontech/webkit/table-root'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -496,7 +496,7 @@
           </SectionHeader>
           <Card :padded="false">
             <template #content>
-              <TableRoot
+              <DataTable
                 :data="versions"
                 :columns="versionColumns"
                 row-key="id"
@@ -532,7 +532,7 @@
                     description="Every deploy creates a version of this application."
                   />
                 </template>
-              </TableRoot>
+              </DataTable>
             </template>
           </Card>
         </section>
@@ -547,7 +547,7 @@
           />
           <Card :padded="false">
             <template #content>
-              <TableRoot
+              <DataTable
                 :data="deployments"
                 :columns="deploymentColumns"
                 row-key="id"
@@ -570,7 +570,7 @@
                     description="Deploy this application and each run lands here."
                   />
                 </template>
-              </TableRoot>
+              </DataTable>
             </template>
           </Card>
         </section>

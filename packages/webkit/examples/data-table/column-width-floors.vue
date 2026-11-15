@@ -1,10 +1,10 @@
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
@@ -45,9 +45,9 @@
   ]
 
   const columns = [
-    { accessorKey: 'name', header: 'Name' },
-    { accessorKey: 'id', header: 'ID', enableSorting: false },
-    { accessorKey: 'status', header: 'Status' },
+    { accessorKey: 'name', header: 'Name', principal: true },
+    { accessorKey: 'status', header: 'Status', minWidth: 96 },
+    { accessorKey: 'protocol', header: 'Protocol', minWidth: 96 },
     { accessorKey: 'editor', header: 'Last Editor', enableSorting: false, grow: 2 },
     { accessorKey: 'modified', header: 'Last Modified', grow: 2 },
     { id: 'actions', header: '', kind: 'action', enableSorting: false }
@@ -72,12 +72,13 @@
 </script>
 
 <template>
-  <TableRoot
+  <DataTable
     :data="rows"
     :columns="columns"
     row-key="id"
     enable-sorting
-    density="compact"
+    paginated
+    :page-size="5"
     v-model:sorting="sorting"
     @row-click="onRowClick"
   >
@@ -123,5 +124,5 @@
         </DropdownMenuGroup>
       </DropdownMenuRoot>
     </template>
-  </TableRoot>
+  </DataTable>
 </template>

@@ -5,6 +5,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import Combobox from '@aziontech/webkit/combobox'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DialogClose from '@aziontech/webkit/dialog-close'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
@@ -34,7 +35,6 @@
   import SettingRow from '@aziontech/webkit/setting-row'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -1180,7 +1180,7 @@
                 </Accordion.Trigger>
                 <Accordion.Content>
                   <div>
-                    <TableRoot
+                    <DataTable
                       v-if="loading || group.total"
                       :data="loading ? [] : group.items"
                       :columns="columns"
@@ -1322,7 +1322,7 @@
                           </template>
                         </EmptyState>
                       </template>
-                    </TableRoot>
+                    </DataTable>
                     <EmptyState
                       v-else
                       size="small"

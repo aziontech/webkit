@@ -1,48 +1,14 @@
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
   import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import { ref } from 'vue'
 
-  const rows = [
-    {
-      id: '1001',
-      name: 'Workload Alpha',
-      status: 'Active',
-      editor: 'user1@example.com',
-      modified: 'Jan 1, 2026, 09:00 AM',
-      protocol: 'HTTP & HTTPS',
-      domains: 2,
-      origins: 1,
-      created: 'Dec 1, 2025, 10:00 AM'
-    },
-    {
-      id: '1002',
-      name: 'Workload Bravo',
-      status: 'Inactive',
-      editor: 'user2@example.com',
-      modified: 'Jan 2, 2026, 09:00 AM',
-      protocol: 'HTTP',
-      domains: 1,
-      origins: 2,
-      created: 'Dec 2, 2025, 10:00 AM'
-    },
-    {
-      id: '1003',
-      name: 'Workload Charlie',
-      status: 'Degraded',
-      editor: 'user3@example.com',
-      modified: 'Jan 3, 2026, 09:00 AM',
-      protocol: 'gRPC',
-      domains: 3,
-      origins: 1,
-      created: 'Dec 3, 2025, 10:00 AM'
-    }
-  ]
+  const rows = []
 
   const columns = [
     { accessorKey: 'name', header: 'Name' },
@@ -54,7 +20,6 @@
   ]
 
   const sorting = ref([])
-  const rowSelection = ref({})
 
   const rowActionGroups = [
     [
@@ -73,15 +38,12 @@
 </script>
 
 <template>
-  <TableRoot
+  <DataTable
     :data="rows"
     :columns="columns"
     row-key="id"
     enable-sorting
-    enable-row-selection
-    paginated
-    :page-size="5"
-    v-model:row-selection="rowSelection"
+    bordered
     v-model:sorting="sorting"
     @row-click="onRowClick"
   >
@@ -127,5 +89,5 @@
         </DropdownMenuGroup>
       </DropdownMenuRoot>
     </template>
-  </TableRoot>
+  </DataTable>
 </template>

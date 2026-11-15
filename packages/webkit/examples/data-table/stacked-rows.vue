@@ -1,5 +1,5 @@
 <script setup>
-  import TableRoot from '@aziontech/webkit/table-root'
+  import DataTable from '@aziontech/webkit/data-table'
 
   const rows = [
     { id: 'r1', name: 'Edge Functions 2.4', area: 'Build', released: 'Jan 14, 2026' },
@@ -16,7 +16,7 @@
 
 <template>
   <div class="w-full max-w-(--container-xs)">
-    <TableRoot
+    <DataTable
       :data="rows"
       :columns="columns"
       row-key="id"

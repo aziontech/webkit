@@ -3,6 +3,8 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ConsoleLayout from '@aziontech/webkit/console-layout'
+  import type { TableColumn, TableExposed } from '@aziontech/webkit/data-table'
+  import DataTable from '@aziontech/webkit/data-table'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerDescription from '@aziontech/webkit/drawer-description'
@@ -25,8 +27,6 @@
   import Select from '@aziontech/webkit/select'
   import SettingsSection from '@aziontech/webkit/settings-section'
   import SplitButton from '@aziontech/webkit/split-button'
-  import type { TableColumn, TableExposed } from '@aziontech/webkit/table-root'
-  import TableRoot from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Textarea from '@aziontech/webkit/textarea'
@@ -647,7 +647,7 @@
                       </header>
                       <Card :padded="false">
                         <template #content>
-                          <TableRoot
+                          <DataTable
                             ref="tableRef"
                             v-model:globalFilter="search"
                             :data="groups"
@@ -726,7 +726,7 @@
                                 </template>
                               </EmptyState>
                             </template>
-                          </TableRoot>
+                          </DataTable>
                         </template>
                       </Card>
                     </section>

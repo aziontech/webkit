@@ -5,6 +5,11 @@
   import Card from '@aziontech/webkit/card'
   import Combobox from '@aziontech/webkit/combobox'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import DataTable, {
+    type DropdownMenuOptionValue,
+    type TableColumn,
+    type TableExposed
+  } from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import DialogOverlay from '@aziontech/webkit/dialog-overlay'
@@ -22,11 +27,6 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SplitButton from '@aziontech/webkit/split-button'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, {
-    type DropdownMenuOptionValue,
-    type TableColumn,
-    type TableExposed
-  } from '@aziontech/webkit/table-root'
   import TableSearch from '@aziontech/webkit/table-search'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
@@ -424,7 +424,7 @@
       <section class="flex min-h-0 flex-col">
         <Card :padded="false">
           <template #content>
-            <TableRoot
+            <DataTable
               ref="tableRef"
               v-model:sorting="sorting"
               v-model:global-filter="search"
@@ -690,7 +690,7 @@
                   </template>
                 </EmptyState>
               </template>
-            </TableRoot>
+            </DataTable>
           </template>
         </Card>
       </section>

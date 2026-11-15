@@ -6,6 +6,7 @@
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
   import Button from '@aziontech/webkit/button'
+  import DataTable from '@aziontech/webkit/data-table'
   import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
@@ -21,7 +22,6 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Logo from '@aziontech/webkit/logo'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import Table from '@aziontech/webkit/table-root'
   import Tag from '@aziontech/webkit/tag'
   import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
   import { useColorMode } from '@aziontech/webkit/use-color-mode'
@@ -430,7 +430,7 @@
           data-doc-block
           data-doc-chrome
         >
-          <Table
+          <DataTable
             :data="compareRows"
             :columns="compareColumns"
             row-key="id"
@@ -481,7 +481,7 @@
                 size="small"
               />
             </template>
-          </Table>
+          </DataTable>
         </div>
         <DocCallout kind="note">
           Every agent listed connects to the Azion MCP server. The workflow columns say where the

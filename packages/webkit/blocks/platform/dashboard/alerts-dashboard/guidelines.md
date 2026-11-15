@@ -80,7 +80,7 @@ risk (`No entities at risk yet`) and the table.
 
 Ranks alert types by count, largest first, labelled `Alerts by type`.
 
-### L. Highest risk and Open alerts — `TableRoot` (required)
+### L. Highest risk and Open alerts — `DataTable` (required)
 
 Highest risk pairs each entity with its risk score and the `SeverityTag` of its worst open alert.
 Open alerts leads every row with its `SeverityTag` and sorts from critical to info by default.

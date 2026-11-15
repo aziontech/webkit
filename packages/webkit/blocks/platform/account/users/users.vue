@@ -5,6 +5,7 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
+  import DataTable from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
   import DialogDescription from '@aziontech/webkit/dialog-description'
   import DialogOverlay from '@aziontech/webkit/dialog-overlay'
@@ -433,7 +434,7 @@
           :padded="false"
         >
           <template #content>
-            <Table
+            <DataTable
               ref="usersTable"
               v-bind="tableProps"
               :loading="loading || refreshing"
@@ -572,7 +573,7 @@
                   </template>
                 </EmptyState>
               </template>
-            </Table>
+            </DataTable>
           </template>
         </Card>
 

@@ -24,15 +24,15 @@ Title `Users` and one sentence that says access comes from teams. Actions: Docum
 
 The table-view controls row (`platform/view/table-view`): a `PropertyFilter` bound with `v-bind="propertyFilterProps"` over name, email, role and status, then Refresh and Download CSV as outlined `IconButton`s with a `Tooltip` each (Download CSV writes every match through the table's `exportCsv`, and is disabled with no match), and `CollectionPreferences` bound with `v-bind="preferencesProps"` for page size and visible columns. Hidden while the list failed to load.
 
-### C. Users table — `Card`, `Table`, `Avatar`, `Tag`, `useCollection` (required)
+### C. Users table — `Card`, `DataTable`, `Table`, `Avatar`, `Tag`, `useCollection` (required)
 
-`Table` with `v-bind="tableProps"` in a flush `Card`, sortable by name, role and status. Name: a square `Avatar` with the initials and the name (or the email while the invitation is pending). Email in its own column, left to right in every language. Role is a small `Tag`: Owner (highlight), Admin (info), Developer and Viewer (secondary). Status is `Table.CellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `Table.CellTime`, or `Not signed in yet` for an invitation.
+`DataTable` with `v-bind="tableProps"` in a flush `Card`, sortable by name, role and status. Name: a square `Avatar` with the initials and the name (or the email while the invitation is pending). Email in its own column, left to right in every language. Role is a small `Tag`: Owner (highlight), Admin (info), Developer and Viewer (secondary). Status is `Table.CellStatus`: Active (success), Invited (warning), Inactive (secondary). Last active is `Table.CellTime`, or `Not signed in yet` for an invitation.
 
 ### D. Teams per person — `MultiSelect`, `Tooltip` (required)
 
 The Teams cell is a small `MultiSelect` named `Teams of <person>` whose value reads the team names. A change applies at once and raises a toast that names the new teams with Undo; clearing every team keeps the seat but removes all access, and the toast says so. The owner's teams are locked, with a `Tooltip` saying why; an inactive person's teams are disabled.
 
-### E. Row actions — `Table`, `DropdownMenu`, `ConfirmDialog` (required)
+### E. Row actions — `DataTable`, `DropdownMenu`, `ConfirmDialog` (required)
 
 `Table.CellActions` named after the person. Everyone gets `View profile`; everyone but the owner gets `Edit role`. An invited person gets `Resend invitation` (toast: the earlier link stops working) and `Cancel invitation`; everyone else but the owner gets `Remove from account`. Both removals ask in a `ConfirmDialog` that says what the person loses and what stays.
 

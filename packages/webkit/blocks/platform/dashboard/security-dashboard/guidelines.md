@@ -95,7 +95,7 @@ Blocked requests by attack category and by country, largest first, each with an 
 
 `Search addresses, networks or attacks` for the source IP table.
 
-### O. Top source IPs — `TableRoot` (required)
+### O. Top source IPs — `DataTable` (required)
 
 Searchable and paginated; addresses and counts in tabular figures.
 

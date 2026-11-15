@@ -1,4 +1,5 @@
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import StatusCode from '@aziontech/webkit/status-code'
   import Table from '@aziontech/webkit/table'
   import { onBeforeUnmount, ref, watch } from 'vue'
@@ -35,7 +36,7 @@
 </script>
 
 <template>
-  <Table
+  <DataTable
     v-model:live="live"
     :data="rows"
     :columns="columns"
@@ -54,5 +55,5 @@
         :method="row.method"
       />
     </template>
-  </Table>
+  </DataTable>
 </template>

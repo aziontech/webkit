@@ -1,4 +1,5 @@
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import Table from '@aziontech/webkit/table'
 
   const rows = [
@@ -15,7 +16,7 @@
 </script>
 
 <template>
-  <Table
+  <DataTable
     :data="rows"
     :columns="columns"
     row-key="id"
@@ -25,5 +26,5 @@
     <template #toolbar>
       <Table.Export />
     </template>
-  </Table>
+  </DataTable>
 </template>

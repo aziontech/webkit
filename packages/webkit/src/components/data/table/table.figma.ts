@@ -50,7 +50,7 @@ const pagination = instance.findInstance('_Paginator', { traverseInstances: true
 const emptyState = instance.findInstance('EmptyState', { traverseInstances: true })
 
 export default {
-  example: figma.code`<Table
+  example: figma.code`<DataTable
   :data="${template === 'empty' ? '[]' : 'rows'}"
   :columns="[${columns}
   ]"${
@@ -79,8 +79,8 @@ export default {
   </template>`
       : ''
   }
-</Table>`,
-  imports: ["import Table from '@aziontech/webkit/table'"],
+</DataTable>`,
+  imports: ["import DataTable from '@aziontech/webkit/data-table'"],
   id: 'table',
   metadata: { nestable: false }
 }

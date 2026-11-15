@@ -45,12 +45,14 @@ Tables are **data-driven**, not hand-authored rows: pass `:data` + `:columns` an
 through a `#cell-<accessorKey>` slot. Never build `<tr>`/`<td>` by hand, and never restyle the Table's
 internals — compose inside its slots.
 
-`@aziontech/webkit/table-root` is the same data-driven root without the compound parts attached, so a
-file that only renders `:data` + `:columns` imports it to stay small; `TableRoot :data :columns` is the
-data-driven `Table`, not a hand-composed one. The parts (`Table.Header`, `Table.Row`, `Table.Cell`, or
-`table-row` / `table-cell` imports) are for a component author building a new table primitive. A screen
-or block never composes rows from them, even a short static list: a hand-composed table loses the
-column model, the cell slots and the opt-in stacked layout.
+`DataTable` (`@aziontech/webkit/data-table`) is the data-driven table: `DataTable :data :columns`
+renders the header, rows, selection, paging and states, and carries the `@tanstack/vue-table` engine.
+`Table` (`@aziontech/webkit/table`) is the compound of parts DataTable renders through: import it for
+the toolbar parts (`Table.Search`, `Table.Export`) and the cell presets (`Table.CellStatus`) you put in
+DataTable's slots; the compound does not load the engine. Composing rows by hand from the parts
+(`Table.Header`, `Table.Row`, `Table.Cell`) is for a component author building a new table primitive.
+A screen or block never composes rows from them, even a short static list: a hand-composed table loses
+the column model, the cell slots and the opt-in stacked layout.
 
 ### Bind it to `useCollection` — the default for any list
 
@@ -62,6 +64,7 @@ sort, the page, the selection and the saved preferences. One `v-bind` carries al
 <script setup>
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Table from '@aziontech/webkit/table'
+  import DataTable from '@aziontech/webkit/data-table'
   import { useCollection } from '@aziontech/webkit/use-collection'
 
   const { tableProps, propertyFilterProps } = useCollection({
@@ -77,7 +80,7 @@ sort, the page, the selection and the saved preferences. One `v-bind` carries al
 
 <template>
   <PropertyFilter v-bind="propertyFilterProps" />
-  <Table
+  <DataTable
     v-bind="tableProps"
     :bordered="false"
   >
@@ -87,7 +90,7 @@ sort, the page, the selection and the saved preferences. One `v-bind` carries al
         :severity="statusSeverity(value)"
       />
     </template>
-  </Table>
+  </DataTable>
 </template>
 ```
 
@@ -102,7 +105,7 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
 </script>
 
 <template>
-  <Table
+  <DataTable
     :data="applications"
     :columns="columns"
     :filter-fields="filterFields"
@@ -121,21 +124,21 @@ arrive ordered and hidden per the saved preferences, with `density`, `wrapLines`
         :severity="statusSeverity(value)"
       />
     </template>
-  </Table>
+  </DataTable>
 </template>
 ```
 
 - Each column renders through its `#cell-<accessorKey>` slot with a cell preset (`Table.CellStatus`
   here; see Cell recipes), which is also why the import is the `table` compound. A table with no
-  cell slots and no toolbar imports `@aziontech/webkit/table-root`.
-- In a `lang="ts"` component the Table is generic over its rows: type the data
+  cell slots and no toolbar imports only `@aziontech/webkit/data-table`.
+- In a `lang="ts"` component DataTable is generic over its rows: type the data
   (`ref<Application[]>([])`, `useCollection<Application>(…)`) and every slot scope follows —
   `#cell-status="{ row, value }"` gives `row: Application` and `value: Application['status']`, the
   toolbar's `selectedRows` and the `@row-click` row are `Application` too. A column whose id is not a
   row field (`actions`) gets `value: unknown`. Keep `id` equal to `accessorKey` (or omit it); never
-  cast `row as …` or annotate the scope by hand. `TableColumn` comes from `@aziontech/webkit/table-root`.
+  cast `row as …` or annotate the scope by hand. `TableColumn` comes from `@aziontech/webkit/data-table`.
 - A template ref on the Table is `ref<TableExposed<Application> | null>(null)` (`TableExposed` from
-  `@aziontech/webkit/table-root`, typed by the row), which gives `exportCsv`, `reload`, `clearFilters`,
+  `@aziontech/webkit/data-table`, typed by the row), which gives `exportCsv`, `reload`, `clearFilters`,
   `getState` and `setState`; never declare a local `{ exportCsv(…) }` shape for it.
 - `class="h-full"` is a layout utility (allowed on a webkit tag): with `max-height="100%"` it lets the
   body scroll inside the table. See "Scroll the body internally".
@@ -238,7 +241,7 @@ refresh, says when it last loaded, and only refreshes by itself when the reader 
    (`Couldn't refresh. Showing data from 2 minutes ago.`) with **Retry**; auto-refresh stops until a
    refresh succeeds. A failure is the only refresh outcome a screen reader hears.
 
-`examples/table/refresh.vue` is the reference.
+`examples/data-table/refresh.vue` is the reference.
 
 ### Scroll the body internally — never the page
 
@@ -265,7 +268,7 @@ sideways inside its own viewport (the page never scrolls sideways). This is the 
 Azion console does on an iPhone: the reader keeps the column headers and compares rows across them.
 
 ```vue
-<Table :data="rows" :columns="columns" row-key="id" />
+<DataTable :data="rows" :columns="columns" row-key="id" />
 ```
 
 `stackable` opts a data-driven table into **stacked rows**: below `--container-lg` (552 px) of its own
@@ -291,7 +294,7 @@ mount and scroll fast. The viewport scrolls within `max-height` (40rem when unse
 `aria-rowindex`. A paged list does not need it — page instead.
 
 ```vue
-<Table :data="logLines" :columns="columns" virtual max-height="32rem" />
+<DataTable :data="logLines" :columns="columns" virtual max-height="32rem" />
 ```
 
 ### Density, wrapped lines and stripes
@@ -314,7 +317,7 @@ focus stays on the moved row's grip, and the table emits `reorder` with `{ from,
 save call.
 
 ```vue
-<Table
+<DataTable
   v-model:data="rules"
   :columns="columns"
   row-key="id"

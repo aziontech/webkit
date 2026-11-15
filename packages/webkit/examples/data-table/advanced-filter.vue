@@ -1,4 +1,5 @@
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import Table from '@aziontech/webkit/table'
   import { ref } from 'vue'
 
@@ -34,7 +35,7 @@
 </script>
 
 <template>
-  <Table
+  <DataTable
     v-model:filters="filters"
     :data="rows"
     :columns="columns"
@@ -55,5 +56,5 @@
         :severity="severityOf(value)"
       />
     </template>
-  </Table>
+  </DataTable>
 </template>

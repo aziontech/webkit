@@ -18,7 +18,7 @@ const COMPONENT_KNOWN = [
   {
     rule: 'aria-required-children',
     selector: '[role="table"]',
-    source: 'examples/table/default.vue'
+    source: 'examples/data-table/default.vue'
   },
   {
     rule: 'aria-required-children',

@@ -3,6 +3,7 @@
   import Card from '@aziontech/webkit/card'
   import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Hint from '@aziontech/webkit/hint'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -11,7 +12,6 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Table from '@aziontech/webkit/table'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { computed, ref } from 'vue'
 
@@ -681,7 +681,7 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <TableRoot
+            <DataTable
               v-if="loading || entities.length"
               :data="entities"
               :columns="entityColumns"
@@ -710,7 +710,7 @@
               <template #cell-alerts="{ row }">
                 <span class="tabular-nums">{{ row.alerts }}</span>
               </template>
-            </TableRoot>
+            </DataTable>
             <EmptyState
               v-else
               size="small"
@@ -729,7 +729,7 @@
             </span>
           </ChartCard.Header>
           <ChartCard.Content>
-            <TableRoot
+            <DataTable
               v-if="loading || alerts.length"
               :data="alerts"
               :columns="alertColumns"
@@ -754,7 +754,7 @@
                   :severity="statusSeverity[row.status]"
                 />
               </template>
-            </TableRoot>
+            </DataTable>
             <EmptyState
               v-else
               size="small"

@@ -4,6 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import CopyButton from '@aziontech/webkit/copy-button'
+  import DataTable from '@aziontech/webkit/data-table'
   import type {
     DateRangeUnit,
     DateRangeValue,
@@ -355,7 +356,7 @@
           :padded="false"
         >
           <template #content>
-            <Table
+            <DataTable
               ref="activityTable"
               v-bind="tableProps"
               :loading="loading"
@@ -412,7 +413,7 @@
                   </template>
                 </EmptyState>
               </template>
-            </Table>
+            </DataTable>
           </template>
         </Card>
       </section>

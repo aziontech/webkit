@@ -4,6 +4,7 @@
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
   import CodeEditor, { type CodeEditorMarker } from '@aziontech/webkit/code-editor'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DrawerClose from '@aziontech/webkit/drawer-close'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import DrawerOverlay from '@aziontech/webkit/drawer-overlay'
@@ -20,7 +21,6 @@
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Sidebar from '@aziontech/webkit/sidebar-root'
   import Skeleton from '@aziontech/webkit/skeleton'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -816,7 +816,7 @@ LIMIT 3;`
             </div>
 
             <div class="min-h-0 flex-1 overflow-auto">
-              <TableRoot
+              <DataTable
                 v-model:row-selection="rowSelection"
                 :data="filteredRows"
                 :columns="dataColumns"
@@ -912,7 +912,7 @@ LIMIT 3;`
                     </template>
                   </EmptyState>
                 </template>
-              </TableRoot>
+              </DataTable>
             </div>
           </div>
 
@@ -931,7 +931,7 @@ LIMIT 3;`
             </div>
             <Card :padded="false">
               <template #content>
-                <TableRoot
+                <DataTable
                   :data="schemaRows"
                   :columns="schemaColumns"
                   row-key="id"
@@ -950,7 +950,7 @@ LIMIT 3;`
                   <template #cell-constraints="{ value }">
                     <span class="text-body-sm text-(--text-muted)">{{ value || '—' }}</span>
                   </template>
-                </TableRoot>
+                </DataTable>
               </template>
             </Card>
           </div>
@@ -1189,7 +1189,7 @@ LIMIT 3;`
                 height="2rem"
               />
             </div>
-            <TableRoot
+            <DataTable
               v-else-if="resultRows.length && resultView === 'table'"
               :data="filteredResultRows"
               :columns="resultColumns"

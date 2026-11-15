@@ -39,9 +39,9 @@ Beside the filter, outlined medium `IconButton`s for Refresh (the button and the
 
 The last control of the row. `CollectionPreferences` bound with `v-bind="preferencesProps"` opens a dialog that edits a draft and applies it on Confirm: the page size (10, 25, 50), the columns (shown, hidden and reordered), wrapped lines, striped rows and density. The Name and actions columns are `hideable: false`, so the panel locks them. `preferences.storageKey` saves the choice in localStorage per list; `defaults.columns` hides the ID column until someone shows it.
 
-### E. Resource table — `Card`, `TableRoot` (required)
+### E. Resource table — `Card`, `DataTable` (required)
 
-`Card :padded="false"` around `TableRoot :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `enable-sorting` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
+`Card :padded="false"` around `DataTable :bordered="false"` bound with `v-bind="tableProps"`, which hands it one page of rows, the ordered and visible columns, the sort, the pagination footer, density, wrap and stripes; the table renders and never filters or slices on its own. `enable-sorting` makes Name, Status and Last modified sortable; `:loading` joins Refresh with the collection's own fetch. The Name column is `principal`; the actions column is `kind: 'action'`. On a phone the table keeps its grid and scrolls sideways inside the card, as the console does; do not set `stackable` on a resource index, whose rows are compared across columns.
 
 ### F. Cell presets — `Table.CellLink`, `Table.CellId`, `Table.CellStatus`, `Table.CellTime` (optional)
 
@@ -126,4 +126,4 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 - `platform/detail/details-page` — where a row name leads; its Deployments tab renders the Deployments table without the page heading.
 - `platform/delete/delete-with-confirmation` — the dialog behind the row menu's Delete.
 - `platform/states/first-use` — the module before its first resource.
-- `TableRoot` and `useCollection` — the table this page wraps and the state behind it; see `skills/webkit-tables` and `skills/webkit-lists`.
+- `DataTable` and `useCollection` — the table this page wraps and the state behind it; see `skills/webkit-tables` and `skills/webkit-lists`.

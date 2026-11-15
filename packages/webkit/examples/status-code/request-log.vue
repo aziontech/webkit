@@ -1,6 +1,6 @@
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import StatusCode from '@aziontech/webkit/status-code'
-  import Table from '@aziontech/webkit/table'
 
   const rows = [
     { id: 'r1', time: '12:04:31', method: 'GET', status: 200, path: '/', duration: '38 ms' },
@@ -48,7 +48,7 @@
 </script>
 
 <template>
-  <Table
+  <DataTable
     :data="rows"
     :columns="columns"
     density="compact"
@@ -60,5 +60,5 @@
         :method="row.method"
       />
     </template>
-  </Table>
+  </DataTable>
 </template>

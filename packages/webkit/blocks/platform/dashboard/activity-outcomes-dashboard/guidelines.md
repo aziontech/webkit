@@ -88,7 +88,7 @@ ranks. Rank by count, largest first.
 Each log row states its outcome as a `Table.CellStatus` in the same status hue as its series in the chart, so the
 chart and the log read the same scale. The card header's count (`<n> requests`) is also a `Tag`.
 
-### L. Request log — `TableRoot` (required)
+### L. Request log — `DataTable` (required)
 
 Columns: time, actor, outcome, category, severity, destination, method and the rule that decided it.
 Figures and times use tabular numbers. The rule column is what makes the page actionable: the reader

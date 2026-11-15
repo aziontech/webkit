@@ -72,7 +72,7 @@ category folds into Other; never invent a hue.
 This month's split with the total in its center (`This month`). Same category order and colors as the
 stacked chart, so the two read as one.
 
-### L. Top contributors — `TableRoot` (required)
+### L. Top contributors — `DataTable` (required)
 
 Rank, the resource behind its category glyph, the category, the amount, its share of the total and the
 change against last month. Amounts and shares use tabular numbers and align right.

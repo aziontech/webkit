@@ -2,10 +2,10 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
+  import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
-  import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
 
@@ -104,7 +104,7 @@
           </header>
           <Card :padded="false">
             <template #content>
-              <TableRoot
+              <DataTable
                 v-bind="tableProps"
                 loading
                 :bordered="false"

@@ -1,6 +1,6 @@
 <script setup>
+  import DataTable from '@aziontech/webkit/data-table'
   import StatusCode from '@aziontech/webkit/status-code'
-  import Table from '@aziontech/webkit/table'
   import { onBeforeUnmount, ref } from 'vue'
 
   const PAGE = 50
@@ -43,7 +43,7 @@
 </script>
 
 <template>
-  <Table
+  <DataTable
     :data="rows"
     :columns="columns"
     :more-rows="rows.length < TOTAL"
@@ -61,5 +61,5 @@
         :method="row.method"
       />
     </template>
-  </Table>
+  </DataTable>
 </template>
