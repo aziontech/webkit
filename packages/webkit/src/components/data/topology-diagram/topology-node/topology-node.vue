@@ -163,7 +163,7 @@
             <DropdownMenuGroup :label="options.length ? t('topologyDiagram.existing') : ''">
               <template
                 v-if="!options.length"
-                #top
+                #header
               >
                 <span class="px-(--spacing-xs) text-body-xs text-(--text-muted)">{{
                   t('topologyDiagram.noOptions')

@@ -77,11 +77,10 @@ const readNode = (
   const disabled = nodeEl.dataset['flowDisabled'] === 'true'
   const terminal = nodeEl.dataset['flowTerminal'] === 'true'
   const endEl =
-    nodeEl.querySelector<HTMLElement>('[data-flow-anchor="end"], [data-flow-anchor="both"]') ??
+    nodeEl.querySelector<HTMLElement>('[data-slot="flow-anchor"]:not([data-side="start"])') ??
     nodeEl
   const startEl =
-    nodeEl.querySelector<HTMLElement>('[data-flow-anchor="start"], [data-flow-anchor="both"]') ??
-    nodeEl
+    nodeEl.querySelector<HTMLElement>('[data-slot="flow-anchor"]:not([data-side="end"])') ?? nodeEl
   const endRect = measureRect(endEl, base)
   const startRect = measureRect(startEl, base)
 
@@ -93,10 +92,10 @@ const readNode = (
 }
 
 const readChild = (el: HTMLElement, base: Origin, rtl: boolean): FlowChild => {
-  if (el.dataset['flowKind'] === 'parallel') {
+  if (el.dataset['slot'] === 'flow-parallel') {
     const branches = Array.from(
       el.querySelectorAll<HTMLElement>(
-        ':scope > [data-flow-branches] > [data-flow-kind="node"], :scope > [data-flow-kind="node"]'
+        ':scope > [data-slot="flow-branches"] > [data-slot="flow-node"], :scope > [data-slot="flow-node"]'
       )
     ).map((branch) => readNode(branch, base, rtl))
 
@@ -138,7 +137,9 @@ export const useFlowConnectors = (containerRef: Ref<HTMLElement | null>) => {
       scale: container.offsetWidth > 0 ? rect.width / container.offsetWidth : 1
     }
     const elements = Array.from(
-      container.querySelectorAll<HTMLElement>(':scope > [data-flow-kind]')
+      container.querySelectorAll<HTMLElement>(
+        ':scope > [data-slot="flow-node"], :scope > [data-slot="flow-parallel"]'
+      )
     )
 
     elements.forEach((el, index) => {

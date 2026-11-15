@@ -66,7 +66,7 @@
     <div
       ref="containerRef"
       :data-align="align"
-      class="relative flex w-fit flex-row gap-(--spacing-xl) text-(--text-default) data-[align=center]:items-center data-[align=start]:items-start [&>[data-flow-leading]_[data-flow-port=end]]:hidden [&>[data-flow-trailing]_[data-flow-port=start]]:hidden [&_[data-flow-terminal]_[data-flow-port=start]]:hidden"
+      class="relative flex w-fit flex-row gap-(--spacing-xl) text-(--text-default) data-[align=center]:items-center data-[align=start]:items-start [&>[data-flow-leading]_[data-slot=flow-port][data-side=end]]:hidden [&>[data-flow-trailing]_[data-slot=flow-port][data-side=start]]:hidden [&_[data-flow-terminal]_[data-slot=flow-port][data-side=start]]:hidden"
     >
       <svg
         v-if="paths.length"

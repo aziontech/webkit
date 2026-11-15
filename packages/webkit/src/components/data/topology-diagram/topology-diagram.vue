@@ -162,12 +162,12 @@
         <ol
           ref="containerRef"
           :aria-hidden="loading || undefined"
-          class="relative m-0 flex w-full list-none flex-row items-start gap-(--spacing-xl) p-0 [&>[data-flow-leading]_[data-flow-port=end]]:hidden [&>[data-flow-trailing]_[data-flow-port=start]]:hidden [&_[data-flow-terminal]_[data-flow-port=start]]:hidden"
+          class="relative m-0 flex w-full list-none flex-row items-start gap-(--spacing-xl) p-0 [&>[data-flow-leading]_[data-slot=flow-port][data-side=end]]:hidden [&>[data-flow-trailing]_[data-slot=flow-port][data-side=start]]:hidden [&_[data-flow-terminal]_[data-slot=flow-port][data-side=start]]:hidden"
         >
           <li
             v-for="level in shown"
             :key="level.id"
-            data-flow-kind="parallel"
+            data-slot="flow-parallel"
             :data-testid="`${testId}__level`"
             class="flex min-w-(--size-56) flex-1 flex-col items-start gap-(--spacing-md)"
           >
@@ -179,13 +179,13 @@
             <div
               v-for="node in level.nodes"
               :key="node.id"
-              data-flow-kind="node"
+              data-slot="flow-node"
               :data-flow-terminal="node.terminal ? 'true' : null"
               class="relative z-1 w-full"
             >
               <div
                 v-if="loading"
-                data-flow-anchor="both"
+                data-slot="flow-anchor"
                 class="flex w-full flex-col gap-(--spacing-sm) rounded-(--shape-card) border border-solid border-(--border-muted) bg-(--bg-surface) p-(--spacing-md)"
               >
                 <Skeleton

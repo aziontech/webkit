@@ -58,7 +58,7 @@ describe('ConsoleTraceScene', () => {
     const { getByTestId } = render(host({ tab: 'path', animated: false }))
     const flow = getByTestId('data-flow')
 
-    expect(flow.querySelectorAll('[data-flow-kind="node"]')).toHaveLength(4)
+    expect(flow.querySelectorAll('[data-slot="flow-node"]')).toHaveLength(4)
     for (const hop of ['storefront-prod', 'storefront', 'image-optimizer', 'origin-assets']) {
       expect(flow).toHaveTextContent(hop)
     }
