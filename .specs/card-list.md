@@ -3,9 +3,9 @@ name: card-list
 category: data
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: ddc580e02f92dcf6a44e6ae6619c768dda28b5436d4663eb84043534a1d24548
+checksum: 2879f6807f23d884d255ab1add55d8b8d6f95b7315696691c3e1a9be9fc3ec61
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -125,7 +125,7 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 - Visible focus: owned by the checkbox, the radio and the links in the header slot.
 - Keyboard map: `Tab` moves through the select-all, each card's control and its content; `Space` toggles a control.
-- ARIA: the cards are a named `list` of `listitem`s; each checkbox is labelled by its card's header (`aria-labelledby`), and in single mode each card's header sits inside its `RadioGroup.Item` label, so the radio is named by it; the select-all has a visible label; the root sets `aria-busy` while loading.
+- ARIA: the cards are a named `list` of `listitem`s; each checkbox is labelled by its card's header (`aria-labelledby`), and in single mode each card's `RadioGroup.Item` has no label text and forwards `aria-labelledby` (the header id) to its radio; the select-all has a visible label; the root sets `aria-busy` while loading.
 - Selection is never conveyed by color alone: the control is checked.
 - Contrast ≥4.5:1 (text) and ≥3:1 for the selected border.
 
@@ -142,7 +142,7 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 
 ## Right-to-left
 
-- Layout: logical utilities only; the checkbox sits at the end of the header row, the single-mode radio at its start.
+- Layout: logical utilities only; the checkbox and the single-mode radio both sit at the end of the header row.
 - Icons: none of its own.
 - Keyboard: no arrow-key navigation of its own.
 - User data: the slots isolate user data (`<bdi>` around domains in the examples).

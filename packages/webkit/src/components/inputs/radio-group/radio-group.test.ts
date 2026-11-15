@@ -50,6 +50,16 @@ describe('RadioGroup', () => {
     expect(view.getAllByTestId('plan__item')).toHaveLength(3)
   })
 
+  it('forwards aria-labelledby on an item to its radio, not to the label', () => {
+    const view = host(`
+      <h3 id="plan-heading">Pro plan</h3>
+      <RadioGroup aria-label="Plan"><RadioGroupItem value="pro" aria-labelledby="plan-heading" /></RadioGroup>
+    `)
+    const radio = view.getByRole('radio', { name: 'Pro plan' })
+    expect(radio.getAttribute('aria-labelledby')).toBe('plan-heading')
+    expect(radio.closest('label')?.hasAttribute('aria-labelledby')).toBe(false)
+  })
+
   it('maps orientation to data-orientation', () => {
     const view = render(Horizontal)
     expect(view.getByRole('radiogroup').getAttribute('data-orientation')).toBe('horizontal')
