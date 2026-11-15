@@ -33,7 +33,7 @@ v6 uses the names of shadcn/ui and Radix. Never write a retired name in new code
 | `input-text` / `InputText`                              | `input` / `Input`                                                        |
 | `input-number` / `InputNumber`                          | `number-input` / `NumberInput`                                           |
 | `input-password` / `InputPassword`                      | `password-input` / `PasswordInput`                                       |
-| `box-grid-selection` / `BoxGridSelection`               | `radio-cards` / `RadioCards`                                             |
+| `box-grid-selection` / `BoxGridSelection`               | `radio-group` / `RadioGroup` with `kind="card"`                          |
 | `resizable-panel` / `ResizablePanel`                    | `resizable` / `Resizable`                                                |
 | `segmented-button` / `SegmentedButton`                  | `toggle-group` / `ToggleGroup`                                           |
 | every `field-*` wrapper (`FieldText`, `FieldSelect`, …) | one `Field` around the plain control (see [Form fields](#4-form-fields)) |
