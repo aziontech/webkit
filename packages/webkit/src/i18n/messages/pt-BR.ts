@@ -631,7 +631,7 @@ export const ptBR: Messages = {
     next: 'Próxima',
     finish: 'Concluir'
   },
-  keyValuePairs: {
+  keyValueList: {
     notSet: 'Não definido'
   },
   kbd: {

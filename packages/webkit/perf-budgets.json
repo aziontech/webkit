@@ -141,7 +141,7 @@
       "update": 240,
       "update_is": "reverse the 1k rows"
     },
-    "key-value-pairs-1k": {
+    "key-value-list-1k": {
       "mount": 170,
       "update": 90,
       "update_is": "change the 1k values"

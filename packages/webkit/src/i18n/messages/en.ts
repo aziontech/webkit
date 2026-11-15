@@ -578,7 +578,7 @@ export const hotspot = {
   finish: 'Finish'
 } as const
 
-export const keyValuePairs = {
+export const keyValueList = {
   notSet: 'Not set'
 } as const
 
@@ -1411,7 +1411,7 @@ export const en = {
   heroBand,
   heroForm,
   hotspot,
-  keyValuePairs,
+  keyValueList,
   kbd,
   link,
   listingBrowser,

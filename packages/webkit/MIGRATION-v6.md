@@ -344,6 +344,28 @@ before the rename keeps rendering. Write the new name in code:
 | `story-library`                                                         | `empty="{ title, action }"`                                                      | `emptyTitle`, `emptyActionLabel`                                                                                                                                                                                             |
 | `story-library`                                                         | `items[].key`, `facets[].key`, `items[].external`                                | `items[].id`, `facets[].id`, `items[].target="_blank"`                                                                                                                                                                       |
 
+#### Compound parts
+
+A part name comes from one closed list (Trigger, Content, Header, Body, Footer, Title, Description, Close, Item, Group, Label, Separator, List) plus the domain parts a component declares, and every part is importable on its own as `@aziontech/webkit/<root>-<part>`. The codemod rewrites the dot-notation (`<Tabs.Item>` → `<Tabs.Trigger>`), the standalone import paths and the named imports (`SelectOption` → `SelectItem`).
+
+| v5                                                                                                 | v6                                                                                                                         |
+| -------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `Tabs.Item`, `Tabs.Panel`, `Tabs.Root`                                                             | `Tabs.Trigger`, `Tabs.Content`, `Tabs` (types `TabsRootProps` → `TabsProps`)                                               |
+| `Select.Option` · `select-option` · `SelectOption`                                                 | `Select.Item` · `select-item` · `SelectItem` (`SelectOptionProps` → `SelectItemProps`)                                     |
+| `MultiSelect.Option` · `multi-select-option` · `MultiSelectOption`                                 | `MultiSelect.Item` · `multi-select-item` · `MultiSelectItem`                                                               |
+| `dropdown-menu-option` · `DropdownMenuOption`                                                      | `dropdown-menu-item` · `DropdownMenuItem` (`DropdownMenuOptionKind` / `Value` → `DropdownMenuItemKind` / `Value`)          |
+| `Panel.Content` · `panel-content` · `PanelContent`                                                 | `Panel.Body` · `panel-body` · `PanelBody` (the part `Dialog.Body` and `Drawer.Body` already were)                          |
+| `key-value-pairs` · `KeyValuePairs` (`.Item`, `.Group`)                                            | `key-value-list` · `KeyValueList` (`.Item`, `.Group`; types `KeyValueListColumns`, `KeyValueListKind`)                     |
+| `FilterMenu.Chips` · `filter-menu-chips`                                                           | `FilterMenu.ChipGroup` · `filter-menu-chip-group`                                                                          |
+| `HelpPanel.Section`, `HelpPanel.Links`                                                             | `HelpPanel.Group` (`help-panel-group`), `HelpPanel.Footer` (`help-panel-footer`)                                           |
+| `Pagination.Info` · `pagination-info`                                                              | `Pagination.Description` · `pagination-description`                                                                        |
+| `ConsoleLayout.Breadcrumbs` · `console-layout-breadcrumbs`                                         | `ConsoleLayout.Breadcrumb` · `console-layout-breadcrumb`                                                                   |
+| `Toast.Toaster`, `Breadcrumb.Root`                                                                 | `Toast` (or the named `Toaster`), `Breadcrumb`                                                                             |
+| `NavigationMenu.Portal` > `Positioner` > `Popup` > `Arrow` > `Viewport`, `NavigationMenu.Backdrop` | one `<NavigationMenu.Viewport>` with the positioner props, `kind`, `arrow` and `backdrop` (manual: the codemod reports it) |
+| `NavigationMenu.Icon` inside a trigger                                                             | delete it: `NavigationMenu.Trigger` renders its own chevron (manual: the codemod reports it)                               |
+
+New standalone paths: `tabs-list`, `tabs-trigger`, `tabs-content`, `dialog-header`, `dialog-body`, `dialog-footer`, `drawer-header`, `drawer-body`, `drawer-footer`, `navigation-menu-list`, `-item`, `-trigger`, `-content`, `-link`, `-viewport` and `password-requirements-root`. Test ids follow the part file names (`input-select-option` → `input-select-item`, `navigation-tabs-item` → `navigation-tabs-trigger`, `content-key-value-pairs` → `content-key-value-list`, `data-filter-menu-chips` → `data-filter-menu-chip-group`, `content-help-panel-section` / `-links` → `content-help-panel-group` / `-footer`).
+
 #### Slots
 
 | Component              | v5                   | v6                                                                 |
@@ -361,11 +383,11 @@ before the rename keeps rendering. Write the new name in code:
 | `card`                 | `#content`           | the default slot                                                   |
 | `command-item`         | `#prefix`, `#suffix` | `#leading`, `#trailing`                                            |
 | `input`                | `#prefix`, `#suffix` | `#leading`, `#trailing`                                            |
-| `multi-select-option`  | `#left`              | `#leading`                                                         |
+| `multi-select-item`    | `#left`              | `#leading`                                                         |
 | `multi-select-trigger` | `#prefix`            | `#leading`                                                         |
 | `number-input`         | `#prefix`, `#suffix` | `#leading`, `#trailing`                                            |
 | `password-input`       | `#prefix`, `#suffix` | `#leading`, `#trailing`                                            |
-| `select-option`        | `#left`              | `#leading`                                                         |
+| `select-item`          | `#left`              | `#leading`                                                         |
 | `select-trigger`       | `#prefix`            | `#leading`                                                         |
 
 #### Events
@@ -971,8 +993,8 @@ A child test id joins its root with two underscores, never a hyphen. These moved
 | `ButtonHighlight`             | `actions-button-highlight-loading`       | `actions-button-highlight__loading`        |
 | `RadioGroup.Item` (the radio) | `input-radio-group__item-control`        | `input-radio-group__item__control`         |
 | `Flow.Parallel` (branch list) | `data-flow__parallel-branches`           | `data-flow__parallel__branches`            |
-| `KeyValuePairs.Item`          | `content-key-value-pairs-item`           | `content-key-value-pairs__item`            |
-| `KeyValuePairs.Group`         | `content-key-value-pairs-group`          | `content-key-value-pairs__group`           |
+| `KeyValueList.Item`           | `content-key-value-pairs-item`           | `content-key-value-list__item`             |
+| `KeyValueList.Group`          | `content-key-value-pairs-group`          | `content-key-value-list__group`            |
 | `Tree` row / chevron          | `data-tree-item` / `data-tree-toggle`    | `data-tree__item` / `data-tree__toggle`    |
 | `Tree` rename / loading       | `data-tree-rename` / `data-tree-loading` | `data-tree__rename` / `data-tree__loading` |
 | `Toaster` region              | `feedback-toast-<position>`              | `feedback-toast__<position>`               |
@@ -1008,12 +1030,12 @@ to `neutral`.
 
 Defaults that showed placeholder content now default to empty: `Link` (`href`, `icon`: a same-tab
 link shows no trailing icon unless `icon` is set), `SidebarMenu.Item` (`label`, `icon`, `tagValue`: no
-home glyph on an item without `icon`), `Tabs.Item` (`label`) and `Breadcrumb.Item` (`label`, `href`).
+home glyph on an item without `icon`), `Tabs.Trigger` (`label`) and `Breadcrumb.Item` (`label`, `href`).
 `SidebarMenu.SubTrigger` `click` now also passes `{ label, href }` as its second argument.
 
 `Select` now follows the `input-<name>` rule like the rest of the inputs category: `select` →
 `input-select`, and its parts `select-trigger`, `select-content`, `select-option` and `select-group`
-→ `input-select-trigger`, `input-select-content`, `input-select-option` and `input-select-group`
+→ `input-select-trigger`, `input-select-content`, `input-select-item` and `input-select-group`
 (part ids follow, `select-trigger__value` → `input-select-trigger__value`). A `data-testid` you
 pass yourself still wins.
 
