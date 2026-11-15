@@ -2,12 +2,9 @@ import { templateBodyVisitorFactory } from '../util.js'
 
 const WEBKIT_PREFIX = '@aziontech/webkit/'
 
-const CLOSING = new Set([
-  'closing-call-to-action',
-  'closing-call-to-action-newsletter',
-  'closing-call-to-action-agents',
-  'closing-call-to-action-templates'
-])
+const CLOSING = new Set(['closing-call-to-action', 'closing-call-to-action-newsletter'])
+
+const CLOSING_WHEN_SET = new Set(['template-gallery'])
 
 const CLOSE_PARTS = new Map([
   ['section-gap', 'gap'],
@@ -31,7 +28,7 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow a SectionGap or a closing FrameBox right after a closing section (ClosingCallToAction and its variants): the section draws the hatched closing frame itself, so a trailing one doubles it. A section bound with :hatch="false" draws no frame and is skipped.'
+        'Disallow a SectionGap or a closing FrameBox right after a closing section (ClosingCallToAction, its newsletter variant, or a TemplateGallery set as closing): the section draws the hatched closing frame itself, so a trailing one doubles it. A section bound with :hatch="false" draws no frame and is skipped.'
     },
     schema: [],
     messages: {
@@ -49,7 +46,8 @@ export default {
         if (!subpath) return
         const def = node.specifiers.find((s) => s.type === 'ImportDefaultSpecifier')
         if (!def) return
-        if (CLOSING.has(subpath)) closing.set(def.local.name, def.local.name)
+        if (CLOSING.has(subpath)) closing.set(def.local.name, false)
+        if (CLOSING_WHEN_SET.has(subpath)) closing.set(def.local.name, true)
         if (CLOSE_PARTS.has(subpath)) parts.set(def.local.name, CLOSE_PARTS.get(subpath))
       }
     }
@@ -88,6 +86,15 @@ export default {
       )
     }
 
+    function closingSet(element) {
+      return (element.startTag?.attributes ?? []).some((attr) => {
+        if (!attr.directive) return attr.key?.name === 'closing'
+        if (attr.key?.name?.name !== 'bind' || attr.key.argument?.name !== 'closing') return false
+        const expression = attr.value?.expression
+        return !(expression?.type === 'Literal' && expression.value === false)
+      })
+    }
+
     function hatchOff(element) {
       return (element.startTag?.attributes ?? []).some(
         (attr) =>
@@ -104,6 +111,7 @@ export default {
         if (!closing.size || !parts.size) return
         const section = lookup(closing, node)
         if (!section || hatchOff(node)) return
+        if (closing.get(section) && !closingSet(node)) return
         const next = nextElement(node)
         if (!next || !closesThePage(next)) return
         context.report({
