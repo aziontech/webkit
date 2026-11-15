@@ -128,7 +128,7 @@ Raised through `toast` with one id for the install, so progress turns into the o
 - The Installed state is text in a `Tag`, never colour alone.
 - The drawer traps focus, is named by `DrawerTitle`, closes on Escape and returns focus to what opened it; its form has an accessible name.
 - The Application field is required and labelled; its error is tied to the `Select` through the `Field`, and focus stays on Install so the person can correct and resubmit.
-- Toasts are announced politely and never take focus; the failure toast stays until closed and its actions are reachable by keyboard.
+- Toasts never take focus and are announced politely, the failure toast assertively; the failure toast stays until closed and its actions are reachable by keyboard.
 
 ## States
 

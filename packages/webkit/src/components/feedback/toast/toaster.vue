@@ -98,6 +98,36 @@
   }
 
   const items = ref<ToastView[]>([])
+
+  const politeText = ref('')
+  const assertiveText = ref('')
+  const spoken = new Map<string, string>()
+
+  const speak = (channel: typeof politeText, texts: string[]) => {
+    if (!texts.length) return
+    channel.value = ''
+    nextTick(() => (channel.value = texts.join(' ')))
+  }
+
+  const announce = (next: ToastEntry[]) => {
+    const polite: string[] = []
+    const assertive: string[] = []
+    const ids = new Set<string>()
+    next.forEach((entry) => {
+      ids.add(entry.id)
+      const text = [entry.message, entry.description].filter(Boolean).join('. ')
+      const key = `${entry.severity}|${text}`
+      if (spoken.get(entry.id) === key) return
+      spoken.set(entry.id, key)
+      if (entry.severity === 'danger') assertive.push(text)
+      else polite.push(text)
+    })
+    spoken.forEach((_, id) => {
+      if (!ids.has(id)) spoken.delete(id)
+    })
+    speak(politeText, polite)
+    speak(assertiveText, assertive)
+  }
   const removalTimers = new Map<string, ReturnType<typeof setTimeout>>()
 
   const cardEls = new Map<string, HTMLElement>()
@@ -125,7 +155,6 @@
       store.toasts.map((t) => ({
         id: t.id,
         severity: t.severity,
-        type: t.type,
         message: t.message,
         description: t.description,
         action: t.action,
@@ -136,6 +165,7 @@
         progress: t.progress
       })),
     (next) => {
+      announce(next as ToastEntry[])
       const nextIds = new Set(next.map((t) => t.id))
       next.forEach((entry) => {
         const item = items.value.find((i) => i.entry.id === entry.id)
@@ -392,6 +422,26 @@
   <Teleport to="body">
     <template v-if="isActive">
       <div
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+        :data-testid="`${testId}__live-polite`"
+        :lang="portalLocale.lang"
+        class="sr-only"
+      >
+        {{ politeText }}
+      </div>
+      <div
+        role="alert"
+        aria-live="assertive"
+        aria-atomic="true"
+        :data-testid="`${testId}__live-assertive`"
+        :lang="portalLocale.lang"
+        class="sr-only"
+      >
+        {{ assertiveText }}
+      </div>
+      <div
         v-for="region in regions"
         :key="region.position"
         :dir="portalLocale.dir"
@@ -402,9 +452,6 @@
         data-toast-region
         :role="region.all.length ? 'region' : undefined"
         :aria-label="region.all.length ? regionLabel : undefined"
-        aria-live="polite"
-        aria-relevant="additions text"
-        aria-atomic="false"
         :ref="(el) => setRegionEl(region.position, el)"
         :style="regionStyle(region)"
         class="transition-[height] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
@@ -420,7 +467,6 @@
           :data-toast-id="item.entry.id"
           :data-front="region.live.indexOf(item) === 0 || null"
           :data-severity="item.entry.severity"
-          :data-type="item.entry.type"
           :data-removing="item.removing || null"
           :tabindex="region.live.indexOf(item) === 0 ? -1 : undefined"
           :style="toastStyle(region, item, indexInAll)"
@@ -444,7 +490,7 @@
                   <Progress
                     :value="progressOf(item.entry)"
                     :aria-label="item.entry.message"
-                    shape="rounded"
+                    kind="rounded"
                     class="min-w-0 flex-1"
                   />
                   <span
