@@ -3,23 +3,24 @@ name: tooltip
 category: overlay
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: be270c4495c8c6016f0be3788a9bb09a35f114d22d423cfdf591a88a59407865
+checksum: 35fff4b762fd6681f1fe7bc2eaa01a99afc7a4d38a923956dc4d879410f95eac
 created: 2026-06-02
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Tooltip — Component Spec
 
 ## Purpose
 
-Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `overlay/popover` instead.
+Surfaces a short hint anchored to a trigger element when the user hovers, focuses, or long-presses it. Use for icon-only buttons, abbreviations, or any control whose meaning is not obvious from its label alone. **Not** for rich content or interactive children — use `popover` instead.
 
 ## When to use
 
+- Use Tooltip for a one-line plain-text name or hint on a control, shown on hover or focus; it cannot hold links. For rich or interactive content opened by a click use Popover; for a read-only rich preview on hover use HoverCard.
 - Naming an icon-only control on hover and focus.
 - Revealing the full text of a truncated label, or expanding an abbreviation.
 - One short, plain-text hint that the user can do without.
@@ -51,45 +52,48 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 
 ```vue
 <script setup>
-import Tooltip from '@aziontech/webkit/tooltip'
-import IconButton from '@aziontech/webkit/icon-button'
+  import Tooltip from '@aziontech/webkit/tooltip'
+  import IconButton from '@aziontech/webkit/icon-button'
 </script>
 
 <template>
-  <Tooltip text="Delete" placement="top">
-    <IconButton icon="pi pi-trash" aria-label="Delete" />
+  <Tooltip
+    text="Delete"
+    placement="top"
+  >
+    <IconButton
+      icon="pi pi-trash"
+      aria-label="Delete"
+    />
   </Tooltip>
 </template>
 ```
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `text` | `string` | — | true | Plain text shown inside the tooltip. |
-| `placement` | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false | Anchor side relative to the trigger; `auto` picks the side with room. |
-| `delay` | `number` | `200` | false | Hover-open delay in milliseconds. |
-| `disabled` | `boolean` | `false` | false | Disables tooltip activation. |
-| `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled. |
+| Prop          | Type                                               | Default | Required | JSDoc                                                                 |
+| ------------- | -------------------------------------------------- | ------- | -------- | --------------------------------------------------------------------- |
+| `text`        | `string`                                           | —       | true     | Plain text shown inside the tooltip.                                  |
+| `placement`   | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false    | Anchor side relative to the trigger; `auto` picks the side with room. |
+| `delay`       | `number`                                           | `200`   | false    | Hover-open delay in milliseconds.                                     |
+| `disabled`    | `boolean`                                          | `false` | false    | Disables tooltip activation.                                          |
+| `defaultOpen` | `boolean`                                          | `false` | false    | Initial open state when uncontrolled.                                 |
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                                                               |
+| -------------- | --------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (hover, focus, `Esc`). While unbound the tooltip is uncontrolled and starts at `defaultOpen`. |
 
 ## Events
 
-| Event | Payload | Notes |
-|---|---|---|
-| `show` | `void` | Emitted right after the open transition starts. **@deprecated since 6.0 — use `update:open` (`v-model:open`). Removed in 7.0.** It echoes `update:open`. |
-| `hide` | `void` | Emitted right after the close transition starts. **@deprecated since 6.0 — use `update:open` (`v-model:open`). Removed in 7.0.** It echoes `update:open`. |
+_No events of its own: `v-model:open` emits `update:open` (6.0 removed the `show` / `hide` echoes)._
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | The trigger element. Tooltip anchors to its bounding box. |
+| Slot      | Scope | Notes                                                     |
+| --------- | ----- | --------------------------------------------------------- |
+| `default` | —     | The trigger element. Tooltip anchors to its bounding box. |
 
 ## States
 
@@ -101,11 +105,11 @@ import IconButton from '@aziontech/webkit/icon-button'
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token | Reduced-motion fallback |
-|---|---|---|---|
-| open | `animate-popup-scale-in` | semantic (150ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
-| close | `animate-popup-scale-out` | semantic (110ms · cubic-bezier) | `motion-reduce:animate-none` (instant) |
-| re-anchor while open (the text changed size) | `transition-[translate] duration-fast-02 ease-productive-entrance`, gated on `data-anchored` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| Trigger                                      | Animation / Transition                                                                       | Token                                           | Reduced-motion fallback                |
+| -------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------- | -------------------------------------- |
+| open                                         | `animate-popup-scale-in`                                                                     | semantic (150ms · cubic-bezier)                 | `motion-reduce:animate-none` (instant) |
+| close                                        | `animate-popup-scale-out`                                                                    | semantic (110ms · cubic-bezier)                 | `motion-reduce:animate-none` (instant) |
+| re-anchor while open (the text changed size) | `transition-[translate] duration-fast-02 ease-productive-entrance`, gated on `data-anchored` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none`        |
 
 `--popup-origin` is set per instance based on `placement` (e.g. `top` → `bottom center`).
 
@@ -113,23 +117,23 @@ The panel is positioned with the standalone **`translate`** property, never `top
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| typography (label) | `.text-body-sm` |
-| surface | `var(--bg-surface)` |
-| text | `var(--text-default)` |
-| border | `var(--border-muted)` |
-| padding | `var(--spacing-xs)` |
-| max-width | `var(--container-3xs)` |
-| shape | `var(--shape-elements)` |
-| ring | `var(--ring-color)` |
+| Region             | Token (DESIGN.md)       |
+| ------------------ | ----------------------- |
+| typography (label) | `.text-body-sm`         |
+| surface            | `var(--bg-surface)`     |
+| text               | `var(--text-default)`   |
+| border             | `var(--border-muted)`   |
+| padding            | `var(--spacing-xs)`     |
+| max-width          | `var(--container-3xs)`  |
+| shape              | `var(--shape-elements)` |
+| ring               | `var(--ring-color)`     |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `bg-contrast` | `bg-(--bg-surface)` | `TODO: tokenizar` (add `--bg-contrast` to DESIGN.md when contrast surface diverges) |
-| `text-contrast` | `text-(--text-default)` | `TODO: tokenizar` (add `--text-contrast` to DESIGN.md when contrast text diverges) |
+| Figma variable  | Temporary primitive     | Follow-up                                                                           |
+| --------------- | ----------------------- | ----------------------------------------------------------------------------------- |
+| `bg-contrast`   | `bg-(--bg-surface)`     | `TODO: tokenizar` (add `--bg-contrast` to DESIGN.md when contrast surface diverges) |
+| `text-contrast` | `text-(--text-default)` | `TODO: tokenizar` (add `--text-contrast` to DESIGN.md when contrast text diverges)  |
 
 ## Accessibility (WCAG 2.1 AA)
 

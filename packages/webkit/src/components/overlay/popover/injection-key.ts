@@ -21,12 +21,6 @@ export type PopoverPlacementInput = PopoverPlacement | 'auto'
 /** Panel width preset. */
 export type PopoverSize = 'small' | 'medium' | 'large'
 
-/**
- * Legacy name of the panel width preset.
- * @deprecated since 6.0 — use `PopoverSize`. Removed in 7.0.
- */
-export type PopoverWidth = PopoverSize
-
 export interface PopoverContext {
   /** Stable test-id prefix derived from the root component. */
   testId: string

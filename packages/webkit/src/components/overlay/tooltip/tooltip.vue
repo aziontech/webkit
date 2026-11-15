@@ -39,19 +39,6 @@
     defaultOpen: false
   })
 
-  const emit = defineEmits<{
-    /**
-     * Emitted right after the open transition starts.
-     * @deprecated since 6.0 — use `update:open` (v-model:open). Removed in 7.0.
-     */
-    show: []
-    /**
-     * Emitted right after the close transition starts.
-     * @deprecated since 6.0 — use `update:open` (v-model:open). Removed in 7.0.
-     */
-    hide: []
-  }>()
-
   const CLOSE_GRACE_MS = 100
   const LONG_PRESS_MS = 500
   const TOUCH_HIDE_MS = 1500
@@ -243,8 +230,6 @@
     <Transition
       enter-active-class="animate-popup-scale-in motion-reduce:animate-none"
       leave-active-class="animate-popup-scale-out motion-reduce:animate-none"
-      @before-enter="emit('show')"
-      @before-leave="emit('hide')"
     >
       <div
         v-if="isOpen && text"

@@ -3,23 +3,24 @@ name: popover
 category: overlay
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-954
   node_id: 482:954
-checksum: 708a5a084c96174a444a9807e164f2ead5945159aed3141d7a81493d64b90eb4
+checksum: 57cab9b6d76b60ef96217598fc044370729b3bb41c6c16b4b642bedbd639a220
 created: 2026-06-30
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Popover — Component Spec
 
 ## Purpose
 
-Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `overlay/tooltip` (plain text, non-interactive) and `overlay/dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.
+Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and renders rich, interactive content — a header (title + optional description + close), a free-form body, and a footer for actions — in a floating panel anchored to the trigger. Use for inline forms, filter builders, and contextual detail or confirmation that needs interactive children. Unlike `tooltip` (plain text, non-interactive) and `dialog` (modal, centered, focus-trapped), the popover leaves the page interactive, anchors to its trigger, and closes on `Esc` or outside-click. It differs from `navigation/dropdown`, which renders a menu of selectable options rather than free-form content.
 
 ## When to use
 
+- Use Popover for rich or interactive content (a form, actions) opened by a click and closed on purpose; a one-line hint is a Tooltip and a read-only hover preview is a HoverCard.
 - Interactive content anchored to a trigger while the page stays usable: an inline form, a filter builder, a quick edit of one field.
 - Contextual detail or a light confirmation that needs buttons or links inside it.
 
@@ -53,8 +54,8 @@ Anchored, **non-modal** overlay that opens from a consumer-supplied trigger and 
 
 ```vue
 <script setup>
-import Popover from '@aziontech/webkit/popover'
-import Button from '@aziontech/webkit/button'
+  import Popover from '@aziontech/webkit/popover'
+  import Button from '@aziontech/webkit/button'
 </script>
 
 <template>
@@ -81,14 +82,14 @@ Tree-shaking alternative — the standalone root + each sub-component from its o
 
 ```vue
 <script setup>
-import Popover from '@aziontech/webkit/popover-root'
-import PopoverTrigger from '@aziontech/webkit/popover-trigger'
-import PopoverContent from '@aziontech/webkit/popover-content'
-import PopoverHeader from '@aziontech/webkit/popover-header'
-import PopoverTitle from '@aziontech/webkit/popover-title'
-import PopoverDescription from '@aziontech/webkit/popover-description'
-import PopoverClose from '@aziontech/webkit/popover-close'
-import PopoverFooter from '@aziontech/webkit/popover-footer'
+  import Popover from '@aziontech/webkit/popover-root'
+  import PopoverTrigger from '@aziontech/webkit/popover-trigger'
+  import PopoverContent from '@aziontech/webkit/popover-content'
+  import PopoverHeader from '@aziontech/webkit/popover-header'
+  import PopoverTitle from '@aziontech/webkit/popover-title'
+  import PopoverDescription from '@aziontech/webkit/popover-description'
+  import PopoverClose from '@aziontech/webkit/popover-close'
+  import PopoverFooter from '@aziontech/webkit/popover-footer'
 </script>
 ```
 
@@ -167,22 +168,21 @@ export default Object.assign(Popover, {
 
 ## Props
 
-| Prop | Type | Default | Required | JSDoc |
-|---|---|---|---|---|
-| `placement` | `PopoverPlacementInput` | `'bottom-start'` | false | Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment. |
-| `offset` | `number` | `4` | false | Pixel gap between the trigger and the panel. |
-| `disabled` | `boolean` | `false` | false | Prevents the trigger from opening the panel and applies disabled tokens. |
-| `size` | `PopoverSize` (`'small' \| 'medium' \| 'large'`) | `undefined` | false | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`. |
-| `width` | `PopoverWidth` | `undefined` | false | **@deprecated since 6.0 — use `size`. Removed in 7.0.** Same values as `size`; read only when `size` is unset. |
-| `defaultOpen` | `boolean` | `false` | false | Initial open state when uncontrolled (`v-model:open` unbound). |
-| `dismissible` | `boolean` | `true` | false | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it. |
+| Prop          | Type                                             | Default          | Required | JSDoc                                                                                                                                                                                                                                                                                                                                         |
+| ------------- | ------------------------------------------------ | ---------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `placement`   | `PopoverPlacementInput`                          | `'bottom-start'` | false    | Where the panel opens relative to the trigger: a side (`top`, `right`, `bottom`, `left`), optionally aligned to its `start` or `end`, or `'auto'`, which picks the best-fitting of the four vertical corners at open time based on available viewport space. A placement that does not fit flips to the opposite side, keeping its alignment. |
+| `offset`      | `number`                                         | `4`              | false    | Pixel gap between the trigger and the panel.                                                                                                                                                                                                                                                                                                  |
+| `disabled`    | `boolean`                                        | `false`          | false    | Prevents the trigger from opening the panel and applies disabled tokens.                                                                                                                                                                                                                                                                      |
+| `size`        | `PopoverSize` (`'small' \| 'medium' \| 'large'`) | `undefined`      | false    | Panel width preset mapped to container tokens: `'small'` (`var(--container-xs)`), `'medium'` (`var(--container-sm)`), `'large'` (`var(--container-md)`). When omitted, the panel sizes fluidly between `var(--container-3xs)` and `var(--container-xs)`. Same name as the size preset of `Dialog`, `Drawer` and `ConfirmDialog`.              |
+| `defaultOpen` | `boolean`                                        | `false`          | false    | Initial open state when uncontrolled (`v-model:open` unbound).                                                                                                                                                                                                                                                                                |
+| `dismissible` | `boolean`                                        | `true`           | false    | Light-dismiss: when `true`, the panel closes on outside-click and `Esc`. Set `false` to keep it open until the trigger or `PopoverClose` closes it.                                                                                                                                                                                           |
 
 Types (exported from `@aziontech/webkit/popover`): `PopoverPlacement` is `'top' | 'top-start' | 'top-end' | 'right' | 'right-start' | 'right-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'left' | 'left-start' | 'left-end'`; `PopoverPlacementInput` is `PopoverPlacement | 'auto'`.
 
 ## v-model
 
-| Model | Type | Default | Emits | Notes |
-|---|---|---|---|---|
+| Model          | Type                   | Default     | Emits         | Notes                                                                                                                                                                                                                                                                                                               |
+| -------------- | ---------------------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model:open` | `boolean \| undefined` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void`. Fires on every open/closed transition: trigger toggle, `Popover.Close`, `Esc`, and outside-click. While unbound (`undefined`) the popover is uncontrolled and starts at `defaultOpen`. |
 
 ## Events
@@ -191,9 +191,9 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 
 ## Slots
 
-| Slot | Scope | Notes |
-|---|---|---|
-| `default` | — | Place `<Popover.Trigger>` followed by `<Popover.Content>`. |
+| Slot      | Scope | Notes                                                      |
+| --------- | ----- | ---------------------------------------------------------- |
+| `default` | —     | Place `<Popover.Trigger>` followed by `<Popover.Content>`. |
 
 ## States
 
@@ -201,45 +201,45 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 - `data-state` values (root, trigger, floating panel): `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop on root and trigger
 - Cursor: the trigger wrapper shows `pointer`, and `not-allowed` with `data-disabled`
-- `data-size` on the floating panel mirrors the resolved `size` (or the deprecated `width`)
+- `data-size` on the floating panel mirrors `size`
 - `data-placement` on the root mirrors the `placement` prop (`'auto'` stays as `'auto'`)
 - `data-placement` on the floating panel mirrors the resolved placement (any `PopoverPlacement`; `'auto'` resolves to one of `'bottom-start' | 'bottom-end' | 'top-start' | 'top-end'`)
 
 ## Motion & Animations
 
-| Trigger | Animation / Transition | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback |
-|---|---|---|---|
-| panel open | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`) | `motion-reduce:animate-none` (instant) |
-| panel close | `animate-popup-scale-out` | semantic (`fast-02` · `productive-exit`) | `motion-reduce:animate-none` (instant) |
-| trigger / close hover / focus | `transition-colors duration-150 ease-out` | inline (matches catalog) | `motion-reduce:transition-none` |
+| Trigger                       | Animation / Transition                                  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
+| ----------------------------- | ------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
+| panel open                    | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)  | `motion-reduce:animate-none` (instant) |
+| panel close                   | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)          | `motion-reduce:animate-none` (instant) |
+| trigger / close hover / focus | `transition-colors duration-150 ease-out`               | inline (matches catalog)                          | `motion-reduce:transition-none`        |
 
 `--popup-origin` is set per instance from the resolved `placement` (e.g. `bottom-start` → `top left`).
 
 ## Tokens
 
-| Region | Token (DESIGN.md) |
-|---|---|
-| panel surface | `var(--bg-surface-raised)` |
-| panel border | `var(--border-default)` |
-| panel shape | `var(--shape-elements)` |
-| panel shadow | `var(--shadow-sm)` |
-| header / footer divider | `border-(--border-default)` |
-| header / footer spacing.y | `var(--spacing-sm)` |
-| header / footer spacing.x | `var(--spacing-md)` |
-| title typography | `.text-body-sm` |
-| title text | `var(--text-default)` |
-| description typography | `.text-body-xs` |
-| description text | `var(--text-muted)` |
-| footer button gap | `var(--spacing-xs)` |
-| close button shape | `var(--shape-button)` |
-| popup origin | `var(--popup-origin)` |
-| focus ring | `var(--ring-color)` |
+| Region                    | Token (DESIGN.md)           |
+| ------------------------- | --------------------------- |
+| panel surface             | `var(--bg-surface-raised)`  |
+| panel border              | `var(--border-default)`     |
+| panel shape               | `var(--shape-elements)`     |
+| panel shadow              | `var(--shadow-sm)`          |
+| header / footer divider   | `border-(--border-default)` |
+| header / footer spacing.y | `var(--spacing-sm)`         |
+| header / footer spacing.x | `var(--spacing-md)`         |
+| title typography          | `.text-body-sm`             |
+| title text                | `var(--text-default)`       |
+| description typography    | `.text-body-xs`             |
+| description text          | `var(--text-muted)`         |
+| footer button gap         | `var(--spacing-xs)`         |
+| close button shape        | `var(--shape-button)`       |
+| popup origin              | `var(--popup-origin)`       |
+| focus ring                | `var(--ring-color)`         |
 
 ## Theme gaps
 
-| Figma variable | Temporary primitive | Follow-up |
-|---|---|---|
-| `Typography/Heading/xss` (14px Rubik Regular) | `.text-body-sm` | `TODO: tokenizar` — DESIGN.md documents headings only down to `text-heading-sm` (responsive ≤18px); add a flat-14px heading role if popover titles need a true heading class. |
+| Figma variable                                | Temporary primitive | Follow-up                                                                                                                                                                     |
+| --------------------------------------------- | ------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Typography/Heading/xss` (14px Rubik Regular) | `.text-body-sm`     | `TODO: tokenizar` — DESIGN.md documents headings only down to `text-heading-sm` (responsive ≤18px); add a flat-14px heading role if popover titles need a true heading class. |
 
 ## Accessibility (WCAG 2.1 AA)
 

@@ -426,9 +426,9 @@ describe('Popover (compound / overlay)', () => {
   })
 
   it.each(['small', 'medium', 'large'] as const)(
-    'mirrors width=%s onto the open panel data-width',
+    'mirrors size=%s onto the open panel data-width',
     async (width) => {
-      render(host({ width }))
+      render(host({ size: width }))
       await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
       expect((panel() as HTMLElement).getAttribute('data-width')).toBe(width)
@@ -445,11 +445,11 @@ describe('Popover (compound / overlay)', () => {
     }
   )
 
-  it('size wins over the deprecated width', async () => {
-    render(host({ size: 'large', width: 'small' }))
+  it('ignores a removed width attribute; only size sets the panel width', async () => {
+    render(host({ width: 'small' }))
     await fireEvent.click(byTestId('overlay-popover__trigger') as HTMLElement)
     await waitFor(() => expect(panel()).not.toBeNull())
-    expect((panel() as HTMLElement).getAttribute('data-size')).toBe('large')
+    expect((panel() as HTMLElement).hasAttribute('data-size')).toBe(false)
   })
 
   it('opens at defaultOpen when uncontrolled', async () => {
