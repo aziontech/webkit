@@ -1,15 +1,15 @@
 ---
-name: doc-pagination
+name: doc-prev-next
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: e8ffa4d48dc21f1fea1fec4ed184c575eaef8357bd916d955f2331395e099a89
+spec_version: 2
+checksum: 2b39e94c2101179777bae850251fa52699717c804ab54e602bbe566735e61a74
 created: 2026-08-22
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
-# DocPagination — Component Spec
+# DocPrevNext — Component Spec
 
 ## Purpose
 
@@ -17,6 +17,7 @@ The previous / next pair that closes a documentation page. Each side is a link c
 
 ## When to use
 
+- Use DocPrevNext only at the foot of a documentation page to link the previous and next documents.
 - At the foot of a page that sits in a reading order — a guide, a tutorial, a numbered series.
 - Whenever "what do I read next" has a single obvious answer in each direction.
 
@@ -40,11 +41,11 @@ The previous / next pair that closes a documentation page. Each side is a link c
 
 ```vue
 <script setup>
-  import DocPagination from '@aziontech/webkit/doc-pagination'
+  import DocPrevNext from '@aziontech/webkit/doc-prev-next'
 </script>
 
 <template>
-  <DocPagination
+  <DocPrevNext
     :previous="{ title: 'Deploy an application', href: '/docs/deploy' }"
     :next="{ title: 'Bind a domain', href: '/docs/domains' }"
     @navigate="(event, page) => router.push(page.href)"

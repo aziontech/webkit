@@ -7,7 +7,7 @@
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocHero from '@aziontech/webkit/doc-hero'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
-  import DocPagination from '@aziontech/webkit/doc-pagination'
+  import DocPrevNext from '@aziontech/webkit/doc-prev-next'
   import DocProse from '@aziontech/webkit/doc-prose'
   import Footer from '@aziontech/webkit/footer'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -440,7 +440,7 @@
         </div>
       </DocProse>
       <div class="mt-(--spacing-xxl)">
-        <DocPagination :next="{ title: 'Agent setup', href: '/docs/agent-setup' }" />
+        <DocPrevNext :next="{ title: 'Agent setup', href: '/docs/agent-setup' }" />
       </div>
     </article>
 

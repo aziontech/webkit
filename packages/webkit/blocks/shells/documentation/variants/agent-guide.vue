@@ -17,7 +17,7 @@
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocMarkdown from '@aziontech/webkit/doc-markdown'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocPagination from '@aziontech/webkit/doc-pagination'
+  import DocPrevNext from '@aziontech/webkit/doc-prev-next'
   import DocPrompt from '@aziontech/webkit/doc-prompt'
   import DocProse from '@aziontech/webkit/doc-prose'
   import DocStep from '@aziontech/webkit/doc-step'
@@ -636,7 +636,7 @@
           </DocCard>
         </DocCardGroup>
       </DocProse>
-      <DocPagination
+      <DocPrevNext
         :previous="{ title: 'Agent setup', href: '/docs/agent-setup' }"
         :next="{ title: 'Cursor', href: '/docs/agent-setup/cursor' }"
       />

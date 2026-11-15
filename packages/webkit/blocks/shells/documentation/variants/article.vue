@@ -9,7 +9,7 @@
   import DocItem from '@aziontech/webkit/doc-item'
   import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
-  import DocPagination from '@aziontech/webkit/doc-pagination'
+  import DocPrevNext from '@aziontech/webkit/doc-prev-next'
   import DocPrompt from '@aziontech/webkit/doc-prompt'
   import DocProse from '@aziontech/webkit/doc-prose'
   import DocStep from '@aziontech/webkit/doc-step'
@@ -314,7 +314,7 @@
           </ItemList>
         </FrameBox>
       </DocProse>
-      <DocPagination
+      <DocPrevNext
         :previous="{ title: 'Create an account', href: '/docs/get-started/create-an-account' }"
         :next="{ title: 'Migrate to Azion', href: '/docs/get-started/migrate-to-azion' }"
       />

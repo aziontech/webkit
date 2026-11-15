@@ -8,7 +8,7 @@
    * The previous / next pair closing a docs page. A side with no destination
    * leaves its half of the row empty, so the remaining link stays on its edge.
    */
-  defineOptions({ name: 'DocPagination', inheritAttrs: false })
+  defineOptions({ name: 'DocPrevNext', inheritAttrs: false })
 
   /** A neighbouring page. */
   export type DocPageLink = {
@@ -42,11 +42,11 @@
   }>()
 
   const attrs = useAttrs()
-  const { t } = useTranslate({ docPagination: en.docPagination })
+  const { t } = useTranslate({ docPrevNext: en.docPrevNext })
 
-  const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-pagination')
+  const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-prev-next')
 
-  const ariaLabel = computed(() => (attrs['aria-label'] as string) ?? t('docPagination.label'))
+  const ariaLabel = computed(() => (attrs['aria-label'] as string) ?? t('docPrevNext.label'))
 </script>
 
 <template>
@@ -64,7 +64,7 @@
       @click="emit('navigate', $event, previous)"
     >
       <span class="ps-5 text-label-sm text-(--text-muted)">{{
-        previousLabel || t('docPagination.previous')
+        previousLabel || t('docPrevNext.previous')
       }}</span>
       <span class="flex items-center gap-(--spacing-xxs)">
         <i
@@ -83,7 +83,7 @@
       @click="emit('navigate', $event, next)"
     >
       <span class="pe-5 text-label-sm text-(--text-muted)">{{
-        nextLabel || t('docPagination.next')
+        nextLabel || t('docPrevNext.next')
       }}</span>
       <span class="flex items-center gap-(--spacing-xxs)">
         <span class="text-label-md text-(--text-default)">{{ next.title }}</span>

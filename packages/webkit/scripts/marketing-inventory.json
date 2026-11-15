@@ -1,5 +1,6 @@
 {
   "renamed": {
+    "doc-pagination": "doc-prev-next (dup plan DO-2)",
     "sample:shared/ui/banners/GlobeBanner": "banner-art (kind=\"globe\")",
     "sample:shared/ui/banners/GlobeDisc": "banner-art (kind=\"globe\") on assets/spinning-globe",
     "sample:shared/ui/banners/MapBanner": "banner-art (kind=\"map\") on network-map",
