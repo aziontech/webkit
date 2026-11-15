@@ -4,7 +4,7 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import SitePage, { type SitePageSection, type SitePageSubmit } from './site-page.vue'
-import { sitePageSections } from './site-page-sections'
+import { resolveSectionEntry, sitePageSectionAliases, sitePageSections } from './site-page-sections'
 
 const TESTID = 'marketing-site-page'
 const HEADLINE = 'Deliver content fast, worldwide'
@@ -273,6 +273,97 @@ describe('SitePage', () => {
       .sort()
 
     expect(Object.keys(sitePageSections).sort()).toEqual(folders)
+  })
+
+  it('maps every retired _id to a registered section, and registers no retired one', () => {
+    for (const [id, alias] of Object.entries(sitePageSectionAliases)) {
+      expect(Object.keys(sitePageSections)).toContain(alias.target)
+      expect(Object.keys(sitePageSections)).not.toContain(id)
+    }
+  })
+
+  it.each([
+    ['hero-copy-on-top-art', { title: 'T' }, 'hero-band', { kind: 'copy-on-top-art' }],
+    ['hero-with-opening', { title: 'T' }, 'hero-band', { kind: 'title-band', size: 'large' }],
+    [
+      'closing-call-to-action-agents',
+      { title: 'T' },
+      'closing-call-to-action',
+      { kind: 'primary' }
+    ],
+    ['closing-call-to-action-templates', { title: 'T' }, 'template-gallery', { closing: true }],
+    [
+      'sticky-carousel',
+      { items: [{ title: 'Plan' }] },
+      'process-scroll',
+      { steps: [{ title: 'Plan' }], pinned: true }
+    ],
+    ['sticky-scroll-code', { title: 'T' }, 'feature-scroll', { title: 'T' }],
+    [
+      'compare-support-tiers',
+      { tiers: [{ name: 'Pro' }] },
+      'compare-plans',
+      { plans: [{ name: 'Pro' }] }
+    ],
+    ['article-index-blog', {}, 'article-index', { filters: 'category-search' }],
+    ['article-index-resource-hub', {}, 'article-index', { filters: 'facets' }],
+    ['use-case-links', { items: [] }, 'capability-grid', { titleKind: 'left' }],
+    [
+      'resource-grid',
+      { items: [{ title: 'A' }, {}] },
+      'capability-grid',
+      { items: [{ title: 'A' }] }
+    ],
+    [
+      'code-split',
+      { primaryAction: { label: 'Go' } },
+      'media-split-band',
+      { primaryAction: { kind: 'secondary', label: 'Go' } }
+    ],
+    [
+      'customer-spotlight',
+      { items: [{ name: 'Acme', description: 'Story' }] },
+      'client-mosaic-columns',
+      { reveal: 'hover', cells: [{ name: 'Acme', story: 'Story' }] }
+    ]
+  ])('renders the retired _id %s with its successor', (id, props, target, expected) => {
+    const resolved = resolveSectionEntry(id, props)
+    expect(resolved.id).toBe(target)
+    expect(resolved.props).toMatchObject(expected)
+    expect(resolved.props).not.toHaveProperty('tiers')
+  })
+
+  it('leaves a current _id and its props untouched', () => {
+    const props = { title: 'T' }
+    expect(resolveSectionEntry('faq-section', props)).toEqual({ id: 'faq-section', props })
+  })
+
+  it('renders an entry under a retired _id with its successor, without a warning', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const { findByTestId } = page({
+      hero: [{ _id: 'hero-copy-on-top-art', props: { title: HEADLINE } }],
+      sections: [uses]
+    })
+
+    const band = await findByTestId('sections-hero-band')
+    expect(band.getAttribute('data-kind')).toBe('copy-on-top-art')
+    expect(warn).not.toHaveBeenCalled()
+  })
+
+  it('closes the page on a template gallery set as closing, with no trailing gap after it', async () => {
+    const { findByTestId, getAllByTestId } = page({
+      sections: [
+        uses,
+        {
+          _id: 'closing-call-to-action-templates',
+          props: { title: 'Start from a template', templates: [{ title: 'Astro', href: '#' }] }
+        }
+      ]
+    })
+
+    const band = await findByTestId('sections-template-gallery')
+    expect(band.querySelector('[data-hatch="true"]')).not.toBeNull()
+    expect(getAllByTestId('marketing-section-gap')).toHaveLength(2)
   })
 
   it('has no a11y violations', async () => {
