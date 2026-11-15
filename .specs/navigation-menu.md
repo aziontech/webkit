@@ -3,13 +3,13 @@ name: navigation-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 05926531a324903b42b435947b90f754d4c25688db87c4ab6d72a3d9e1144357
+checksum: c452fa9ecf236b215aac59646fd3b5fb031cf2bcdb1b9994af445bf4ecad12fe
 created: 2026-05-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Navigation Menu — Component Spec
@@ -26,7 +26,7 @@ The top bar of a site: a row of links and triggers whose items open large panels
 
 ## When NOT to use
 
-- It is the persistent vertical navigation of an app → use `sidebar` with `menu`.
+- It is the persistent vertical navigation of an app → use `sidebar` with `sidebar-menu`.
 - It is a list of actions or options opened from a button → use `dropdown-menu`.
 - It shows where the current page sits in a hierarchy → use `breadcrumb`.
 - It is the marketing site's whole navigation bar → use `site-nav`, which already composes this menu.
@@ -36,7 +36,7 @@ The top bar of a site: a row of links and triggers whose items open large panels
 - `site-nav` — the marketing navigation band built on `global-header`, `brand` and `navigation-menu`.
 - `global-header` — the bar layout this menu usually sits in.
 - `dropdown` — a single-trigger option menu, not a site-wide navigation bar.
-- `menu` — vertical, hierarchical navigation rows for a sidebar.
+- `sidebar-menu` — vertical, hierarchical navigation rows for a sidebar.
 
 ## Best practices
 

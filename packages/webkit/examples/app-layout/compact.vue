@@ -4,11 +4,11 @@
   import GlobalHeader from '@aziontech/webkit/global-header'
   import HelpPanel from '@aziontech/webkit/help-panel'
   import IconButton from '@aziontech/webkit/icon-button'
-  import MenuGroup from '@aziontech/webkit/menu-group'
-  import MenuItem from '@aziontech/webkit/menu-item'
-  import MenuRoot from '@aziontech/webkit/menu-root'
   import PageHeader from '@aziontech/webkit/page-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
+  import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
+  import SidebarMenuItem from '@aziontech/webkit/sidebar-menu-item'
+  import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'
   import Sidebar from '@aziontech/webkit/sidebar-root'
   import { ref } from 'vue'
 
@@ -25,21 +25,21 @@
           :resizable="!drawer"
           :collapsible="!drawer"
         >
-          <MenuRoot role="presentation">
-            <MenuGroup>
-              <MenuItem
+          <SidebarMenuRoot role="presentation">
+            <SidebarMenuGroup>
+              <SidebarMenuItem
                 label="Home"
                 icon="ai ai-home"
                 href="#"
                 selected
               />
-              <MenuItem
+              <SidebarMenuItem
                 label="Services"
                 icon="ai ai-edge-application"
                 href="#"
               />
-            </MenuGroup>
-          </MenuRoot>
+            </SidebarMenuGroup>
+          </SidebarMenuRoot>
         </Sidebar>
       </template>
 

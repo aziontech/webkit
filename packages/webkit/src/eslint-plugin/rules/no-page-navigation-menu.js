@@ -3,14 +3,14 @@ import { templateBodyVisitorFactory } from '../util.js'
 const WEBKIT_PREFIX = '@aziontech/webkit/'
 
 const MENU_ENTRIES = new Set([
-  'menu',
-  'menu-root',
-  'menu-group',
-  'menu-sub',
-  'menu-sub-trigger',
-  'menu-sub-content',
-  'menu-back',
-  'menu-item'
+  'sidebar-menu',
+  'sidebar-menu-root',
+  'sidebar-menu-group',
+  'sidebar-menu-sub',
+  'sidebar-menu-sub-trigger',
+  'sidebar-menu-sub-content',
+  'sidebar-menu-back',
+  'sidebar-menu-item'
 ])
 
 const PAGE_CHROME = new Set(['page-header', 'page-tabs'])
@@ -101,7 +101,7 @@ export default {
 
     const menuSource = (name) =>
       menuImports.find((node) => localNames(node).includes(name))?.source.value ??
-      WEBKIT_PREFIX + 'menu'
+      WEBKIT_PREFIX + 'sidebar-menu'
 
     return factory(
       {

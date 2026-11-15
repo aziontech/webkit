@@ -3,23 +3,23 @@ name: doc-layout
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: 351eebe5df6900e292932d0b3e722605f476a3aca88ceb1ce3b285db38113397
+checksum: 4abac895ea0fe852329e55464638d4da9196e8134dcfd36790c4ce0c04c80ce0
 created: 2026-11-12
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DocLayout — Component Spec
 
 ## Purpose
 
-The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `Menu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it, and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article, rendered through the default slot.
+The documentation chrome, composed once in the app: a sticky header (the Azion Docs mark, the section links, `SearchTrigger` and the app's actions), the navigation rail (`Sidebar` + `SidebarMenu`) on the inline start, resizable by dragging its edge and collapsible to a thin edge that brings it back, the article in the layout's `<main>`, the "On this page" rail (`DocOnThisPage`) on the inline end with its own slot below it, and the footer under the article. The **document** scrolls: the header and both rails are sticky, so a full-page capture shows the whole article, the browser's find and scroll restoration work, and the dark canvas is painted to the end. The outline follows the reading position, a jump clears the sticky header, and below `lg` the rail moves into a drawer opened from the header. The `Command` palette lists every navigation page. Doc pages are only their article, rendered through the default slot.
 
 ## When to use
 
 - Every documentation page (guide, reference, legal, changelog): put one `DocLayout` in the app's root (around `RouterView`) and render each page's article as its default slot.
-- A docs site that needs the navigation rail, the outline and the search palette without hand-composing `GlobalHeader`, `Sidebar`, `Menu`, `DocOnThisPage`, `Drawer` and `Command`.
+- A docs site that needs the navigation rail, the outline and the search palette without hand-composing `GlobalHeader`, `Sidebar`, `SidebarMenu`, `DocOnThisPage`, `Drawer` and `Command`.
 
 ## When NOT to use
 
@@ -31,7 +31,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 - `DocOnThisPage` — the outline rail; `outline` and `outlineGroups` are bound onto it.
 - `DocHeading` — headings whose anchor links the layout scrolls to, clearing the sticky header.
 - `DocPageHeader`, `DocProse`, `DocPagination` — the article parts rendered in the default slot.
-- `Sidebar`, `Menu` — the navigation rail; `navigation` is mapped onto `Menu` groups.
+- `Sidebar`, `SidebarMenu` — the navigation rail; `navigation` is mapped onto `SidebarMenu` groups.
 - `SearchTrigger`, `Command` — the header search and the palette it opens.
 - `shells/documentation` — the block that shows this layout with a sample docs tree.
 
@@ -172,9 +172,9 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 - Layout: logical utilities only; the navigation rail sits at the inline start, the outline at the inline end, and the drawer opens from the inline start.
 - Resize: dragging and the arrow keys follow the inline direction (`Sidebar` mirrors them under `dir="rtl"`); the collapse and expand glyphs mirror.
-- Icons: the mark is not mirrored; `Menu` and `DocOnThisPage` mirror their own glyphs.
-- Keyboard: arrow handling is `Menu`'s and `Command`'s, both direction-aware.
-- User data: labels render with `dir="auto"` inside `Menu`, `DocOnThisPage` and `Command`.
+- Icons: the mark is not mirrored; `SidebarMenu` and `DocOnThisPage` mirror their own glyphs.
+- Keyboard: arrow handling is `SidebarMenu`'s and `Command`'s, both direction-aware.
+- User data: labels render with `dir="auto"` inside `SidebarMenu`, `DocOnThisPage` and `Command`.
 
 ## Responsive
 
@@ -185,7 +185,7 @@ The documentation chrome, composed once in the app: a sticky header (the Azion D
 
 ## Performance
 
-- Bundle budget: 65 KB gzip for `./doc-layout` in `.size-limit.json` (63.6 KB measured; it pulls `GlobalHeader`, `NavigationMenu`, `Sidebar`, `Menu`, `Drawer`, `DocOnThisPage` and `Command`).
+- Bundle budget: 65 KB gzip for `./doc-layout` in `.size-limit.json` (63.6 KB measured; it pulls `GlobalHeader`, `NavigationMenu`, `Sidebar`, `SidebarMenu`, `Drawer`, `DocOnThisPage` and `Command`).
 - Runtime budget: the rail's pointer listeners exist only while dragging (owned by `Sidebar`); one passive `scroll` listener (throttled to one read per animation frame) while `outline` is not empty; one `popstate` listener without a router.
 - Heavy parts: none beyond the composed components.
 

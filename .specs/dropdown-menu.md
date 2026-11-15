@@ -3,12 +3,12 @@ name: dropdown-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: 04a897fcb984a9d9d29032da283592613c7720444da41954af427ba906fb4b1a
+checksum: 7adf048eb9b958a1e443601132f47f3012d977932cba4c128b51a2435f36eab6
 created: 2026-06-26
 last_updated: 2026-11-15
 ---
@@ -30,7 +30,7 @@ Overlay menu that opens from a consumer-supplied trigger and renders a list of s
 - A primary action joined to a menu of alternatives → use `split-button`.
 - A searchable palette of commands → use `command`.
 - Free-form or interactive content such as forms or filters → use `popover`.
-- Vertical application navigation → use `menu`.
+- Vertical application navigation → use `sidebar-menu`.
 
 ## Related
 

@@ -3,10 +3,10 @@ name: item
 category: content
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-05-24
-last_updated: 2026-11-13
-checksum: dc0b1ccb151b2d18d55dee333e28c06e1e87fb71ac54d77350e7bc657739fdbf
+last_updated: 2026-11-15
+checksum: bfc2af59e41c0fc96249cc89eeebe0ee6eb7b04cc27c9b09bf5c74da18f65b69
 ---
 
 # Item — Component Spec
@@ -25,7 +25,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 ## When NOT to use
 
 - Records that share columns and need sorting, selection or paging → use `table`.
-- Hierarchical navigation rows in a sidebar → use `menu`.
+- Hierarchical navigation rows in a sidebar → use `sidebar-menu`.
 - A grid of selectable option cards → use `radio-cards`.
 - A single surface that frames arbitrary content → use `card`.
 
@@ -33,7 +33,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 
 - `card` — the surface an `Item.List` sits in (with `:padded="false"`).
 - `table` — columnar data; below `sm`, `listing-table` swaps its table rows for `item` rows.
-- `menu` — navigation rows with nesting and drill levels.
+- `sidebar-menu` — navigation rows with nesting and drill levels.
 - `avatar` — the usual leading media for people rows inside `Item.Media`.
 
 ## Best practices

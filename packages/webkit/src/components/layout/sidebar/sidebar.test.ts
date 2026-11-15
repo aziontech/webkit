@@ -7,9 +7,9 @@ import Default from '../../../../examples/sidebar/default.vue'
 import IconRail from '../../../../examples/sidebar/icon-rail.vue'
 import Resizable from '../../../../examples/sidebar/resizable.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import Menu from '../../navigation/menu/menu.vue'
-import MenuGroup from '../../navigation/menu/menu-group/menu-group.vue'
-import MenuItem from '../../navigation/menu/menu-item/menu-item.vue'
+import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
+import SidebarMenuGroup from '../../navigation/sidebar-menu/sidebar-menu-group/sidebar-menu-group.vue'
+import SidebarMenuItem from '../../navigation/sidebar-menu/sidebar-menu-item/sidebar-menu-item.vue'
 import SidebarCompound from './index'
 import Sidebar from './sidebar.vue'
 import SidebarFooter from './sidebar-footer.vue'
@@ -236,10 +236,10 @@ describe('Sidebar', () => {
       expect(getByRole('complementary', { name: 'Console' })).toBeTruthy()
     })
 
-    it('the navigation is a Menu that gives up the landmark to the sidebar', () => {
+    it('the navigation is a SidebarMenu that gives up the landmark to the sidebar', () => {
       const { getByTestId, getAllByRole } = render(Default)
 
-      const menu = getByTestId('navigation-menu')
+      const menu = getByTestId('navigation-sidebar-menu')
       expect(menu.getAttribute('role')).toBe('presentation')
       expect(menu.getAttribute('aria-label')).toBeNull()
       expect(getAllByRole('navigation')).toHaveLength(1)
@@ -594,19 +594,19 @@ describe('Sidebar slot presence', () => {
 
 describe('Sidebar icon rail (collapsible="icon") and the toggle shortcut', () => {
   const railMenu = {
-    components: { Sidebar, Menu, MenuGroup, MenuItem },
+    components: { Sidebar, SidebarMenu, SidebarMenuGroup, SidebarMenuItem },
     setup() {
       const collapsed = ref(true)
       return { collapsed }
     },
     template: `
       <Sidebar v-model:collapsed="collapsed" collapsible="icon" shortcut>
-        <Menu role="presentation">
-          <MenuGroup label="Build">
-            <MenuItem label="Applications" icon="ai ai-edge-application" href="/applications" />
-            <MenuItem label="No glyph" icon="" href="/plain" />
-          </MenuGroup>
-        </Menu>
+        <SidebarMenu role="presentation">
+          <SidebarMenuGroup label="Build">
+            <SidebarMenuItem label="Applications" icon="ai ai-edge-application" href="/applications" />
+            <SidebarMenuItem label="No glyph" icon="" href="/plain" />
+          </SidebarMenuGroup>
+        </SidebarMenu>
         <template #footer="{ rail }"><span data-testid="footer-scope">{{ rail ? 'rail' : 'full' }}</span></template>
       </Sidebar>
       <input data-testid="field" />
@@ -627,7 +627,7 @@ describe('Sidebar icon rail (collapsible="icon") and the toggle shortcut', () =>
   it('keeps each row reachable by its label and hides rows without an icon', () => {
     const { getByRole, getAllByTestId } = render(railMenu)
     expect(getByRole('link', { name: 'Applications' })).toBeTruthy()
-    const rows = getAllByTestId('navigation-menu-item')
+    const rows = getAllByTestId('navigation-sidebar-menu-item')
     expect(rows.every((row) => row.hasAttribute('data-rail'))).toBe(true)
   })
 

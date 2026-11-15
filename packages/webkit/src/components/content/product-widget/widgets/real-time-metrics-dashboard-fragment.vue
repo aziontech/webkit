@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
-  import Menu from '../../../navigation/menu/index'
+  import SidebarMenu from '../../../navigation/sidebar-menu/index'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
@@ -160,24 +160,24 @@
         :style="scrollStyle"
         class="relative py-(--spacing-xs) transition-[translate] duration-slow-01 ease-productive-entrance motion-reduce:transition-none"
       >
-        <Menu aria-label="Real-Time Metrics">
+        <SidebarMenu aria-label="Real-Time Metrics">
           <ShellMockupPart
             v-for="(group, index) in GROUPS"
             :key="group.label || 'overview'"
             :order="index"
             :data-anchor="group.label === 'Secure' || undefined"
           >
-            <Menu.Group :label="group.label">
-              <Menu.Item
+            <SidebarMenu.Group :label="group.label">
+              <SidebarMenu.Item
                 v-for="item in group.items"
                 :key="item.id"
                 :label="item.label"
                 :selected="frame.selected === item.id"
                 :data-cursor="item.id"
               />
-            </Menu.Group>
+            </SidebarMenu.Group>
           </ShellMockupPart>
-        </Menu>
+        </SidebarMenu>
       </div>
 
       <MockupCursor

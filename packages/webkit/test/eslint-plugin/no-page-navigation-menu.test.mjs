@@ -21,7 +21,7 @@ const vue = new RuleTester({
 const sfc = (script, template = '<div />') =>
   `<script setup lang="ts">\n${script}\n</script>\n<template>${template}</template>\n`
 
-const MENU = "import Menu from '@aziontech/webkit/menu'"
+const MENU = "import SidebarMenu from '@aziontech/webkit/sidebar-menu'"
 const PAGE_TABS = "import PageTabs from '@aziontech/webkit/page-tabs'"
 const PAGE_HEADER = "import PageHeader from '@aziontech/webkit/page-header'"
 
@@ -45,58 +45,63 @@ test('no-page-navigation-menu', () => {
       {
         code: sfc(
           `${MENU}\n${PAGE_HEADER}\nimport Sidebar from '@aziontech/webkit/sidebar'`,
-          '<div><Sidebar><Menu><Menu.Item label="Home" /></Menu></Sidebar><PageHeader /></div>'
+          '<div><Sidebar><SidebarMenu><SidebarMenu.Item label="Home" /></SidebarMenu></Sidebar><PageHeader /></div>'
         ),
         filename: 'examples/app-layout/default.vue'
       },
       {
         code: sfc(
-          `import MenuRoot from '@aziontech/webkit/menu-root'\nimport ConsoleLayout from '@aziontech/webkit/console-layout'`,
-          '<console-layout><template #rail><menu-root /></template></console-layout>'
+          `import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'\nimport ConsoleLayout from '@aziontech/webkit/console-layout'`,
+          '<console-layout><template #rail><sidebar-menu-root /></template></console-layout>'
         ),
         filename: 'src/views/ShellView.vue'
       },
       { code: sfc(MENU, '<div />'), filename: 'src/views/Unused.vue' },
       {
-        code: sfc("import Menu from '@aziontech/webkit/menu-button-like'"),
+        code: sfc("import SidebarMenu from '@aziontech/webkit/sidebar-menu-button-like'"),
         filename: 'src/views/a.vue'
       },
-      { code: sfc("import Menu from 'other/menu'"), filename: 'src/views/a.vue' }
+      { code: sfc("import SidebarMenu from 'other/menu'"), filename: 'src/views/a.vue' }
     ],
     invalid: [
       {
         code: sfc(
           `${MENU}\n${PAGE_HEADER}\nimport Sidebar from '@aziontech/webkit/sidebar'`,
-          '<div><Sidebar /><PageHeader /><Menu><Menu.Item label="Rules" /></Menu></div>'
+          '<div><Sidebar /><PageHeader /><SidebarMenu><SidebarMenu.Item label="Rules" /></SidebarMenu></div>'
         ),
         filename: 'src/components/PolicyBody.vue',
-        errors: [{ messageId: 'pageMenu', data: { source: '@aziontech/webkit/menu' }, line: 6 }]
+        errors: [
+          { messageId: 'pageMenu', data: { source: '@aziontech/webkit/sidebar-menu' }, line: 6 }
+        ]
       },
       {
-        code: sfc(MENU, '<Menu />'),
+        code: sfc(MENU, '<SidebarMenu />'),
         filename: 'src/views/PolicyView.vue',
-        errors: [{ messageId: 'pageMenu', data: { source: '@aziontech/webkit/menu' } }]
+        errors: [{ messageId: 'pageMenu', data: { source: '@aziontech/webkit/sidebar-menu' } }]
       },
       {
-        code: sfc("import MenuRoot from '@aziontech/webkit/menu-root'", '<menu-root />'),
+        code: sfc(
+          "import SidebarMenuRoot from '@aziontech/webkit/sidebar-menu-root'",
+          '<sidebar-menu-root />'
+        ),
         filename: 'src/pages/policy/[id].vue',
         errors: [{ messageId: 'pageMenu' }]
       },
       {
         code: sfc(
-          `${PAGE_TABS}\nimport MenuItem from '@aziontech/webkit/menu-item'\n${MENU}`,
-          '<div><MenuItem label="Rules" /></div>'
+          `${PAGE_TABS}\nimport SidebarMenuItem from '@aziontech/webkit/sidebar-menu-item'\n${MENU}`,
+          '<div><SidebarMenuItem label="Rules" /></div>'
         ),
         filename: 'src/components/PolicyBody.vue',
-        errors: [{ messageId: 'pageMenu', data: { source: '@aziontech/webkit/menu-item' } }]
+        errors: [{ messageId: 'pageMenu', data: { source: '@aziontech/webkit/sidebar-menu-item' } }]
       },
       {
-        code: sfc(`${MENU}\n${PAGE_HEADER}`, '<Menu />'),
+        code: sfc(`${MENU}\n${PAGE_HEADER}`, '<SidebarMenu />'),
         filename: 'src/components/PolicyBody.vue',
         errors: [{ messageId: 'pageMenu' }]
       },
       {
-        code: sfc(`// webkit-local-navigation\n${MENU}`, '<Menu />'),
+        code: sfc(`// webkit-local-navigation\n${MENU}`, '<SidebarMenu />'),
         filename: 'C:\\app\\src\\views\\PolicyView.vue',
         errors: [{ messageId: 'pageMenu' }]
       }
@@ -107,7 +112,7 @@ test('no-page-navigation-menu', () => {
     valid: [{ code: MENU, filename: 'src/router/navigation.ts' }],
     invalid: [
       {
-        code: `${PAGE_HEADER}\nimport MenuGroup from '@aziontech/webkit/menu-group'`,
+        code: `${PAGE_HEADER}\nimport SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'`,
         filename: 'src/components/body.js',
         errors: [{ messageId: 'pageMenu' }]
       }

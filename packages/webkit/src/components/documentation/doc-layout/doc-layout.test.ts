@@ -271,7 +271,7 @@ describe('DocLayout — Back in the rail', () => {
 
   const back = (view: ReturnType<typeof mount>) =>
     within(view.getByTestId('documentation-doc-layout__navigation')).getByTestId(
-      'navigation-menu-back'
+      'navigation-sidebar-menu-back'
     )
 
   it('names the docs root on the first drill level', async () => {

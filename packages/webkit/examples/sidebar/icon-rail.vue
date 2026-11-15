@@ -1,14 +1,14 @@
 <script setup>
   import Avatar from '@aziontech/webkit/avatar'
-  import MenuBack from '@aziontech/webkit/menu-back'
-  import MenuGroup from '@aziontech/webkit/menu-group'
-  import MenuItem from '@aziontech/webkit/menu-item'
-  import Menu from '@aziontech/webkit/menu-root'
-  import MenuSub from '@aziontech/webkit/menu-sub'
-  import MenuSubContent from '@aziontech/webkit/menu-sub-content'
-  import MenuSubTrigger from '@aziontech/webkit/menu-sub-trigger'
   import Sidebar from '@aziontech/webkit/sidebar'
   import SidebarFooter from '@aziontech/webkit/sidebar-footer'
+  import SidebarMenuBack from '@aziontech/webkit/sidebar-menu-back'
+  import SidebarMenuGroup from '@aziontech/webkit/sidebar-menu-group'
+  import SidebarMenuItem from '@aziontech/webkit/sidebar-menu-item'
+  import SidebarMenu from '@aziontech/webkit/sidebar-menu-root'
+  import SidebarMenuSub from '@aziontech/webkit/sidebar-menu-sub'
+  import SidebarMenuSubContent from '@aziontech/webkit/sidebar-menu-sub-content'
+  import SidebarMenuSubTrigger from '@aziontech/webkit/sidebar-menu-sub-trigger'
   import { ref } from 'vue'
 
   const open = ref(false)
@@ -23,69 +23,69 @@
         shortcut
         aria-label="Console"
       >
-        <Menu role="presentation">
-          <MenuBack />
-          <MenuGroup>
-            <MenuItem
+        <SidebarMenu role="presentation">
+          <SidebarMenuBack />
+          <SidebarMenuGroup>
+            <SidebarMenuItem
               label="Home"
               icon="ai ai-home"
               href="/"
               selected
             />
-            <MenuItem
+            <SidebarMenuItem
               label="Marketplace"
               icon="ai ai-marketplace"
               href="/marketplace"
             />
-          </MenuGroup>
-          <MenuGroup label="Build">
-            <MenuItem
+          </SidebarMenuGroup>
+          <SidebarMenuGroup label="Build">
+            <SidebarMenuItem
               label="Applications"
               icon="ai ai-edge-application"
               href="/applications"
             />
-            <MenuItem
+            <SidebarMenuItem
               label="Variables"
               icon="ai ai-variables"
               href="/variables"
             />
-          </MenuGroup>
-          <MenuGroup label="Store">
-            <MenuItem
+          </SidebarMenuGroup>
+          <SidebarMenuGroup label="Store">
+            <SidebarMenuItem
               label="Object Storage"
               icon="ai ai-edge-storage"
               href="/object-storage"
             />
-            <MenuItem
+            <SidebarMenuItem
               label="SQL Database"
               icon="ai ai-edge-sql"
               href="/sql-database"
               tag-value="Preview"
               tag-severity="primary"
             />
-          </MenuGroup>
-          <MenuGroup label="Account">
-            <MenuSub>
-              <MenuSubTrigger
+          </SidebarMenuGroup>
+          <SidebarMenuGroup label="Account">
+            <SidebarMenuSub>
+              <SidebarMenuSubTrigger
                 label="Settings"
                 icon="pi pi-cog"
                 kind="drill"
               />
-              <MenuSubContent>
-                <MenuGroup label="Organization">
-                  <MenuItem
+              <SidebarMenuSubContent>
+                <SidebarMenuGroup label="Organization">
+                  <SidebarMenuItem
                     label="General"
                     href="/settings/general"
                   />
-                  <MenuItem
+                  <SidebarMenuItem
                     label="Members"
                     href="/settings/members"
                   />
-                </MenuGroup>
-              </MenuSubContent>
-            </MenuSub>
-          </MenuGroup>
-        </Menu>
+                </SidebarMenuGroup>
+              </SidebarMenuSubContent>
+            </SidebarMenuSub>
+          </SidebarMenuGroup>
+        </SidebarMenu>
         <template #footer="{ rail }">
           <SidebarFooter>
             <div class="flex items-center gap-(--spacing-xs)">

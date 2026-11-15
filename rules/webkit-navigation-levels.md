@@ -32,7 +32,7 @@ The breadcrumb is not a level: it names where the reader is.
 
 ## Do not
 
-- Do not render a free `Menu` in a page body, least of all one whose rows repeat the rail.
+- Do not render a free `SidebarMenu` in a page body, least of all one whose rows repeat the rail.
 - Do not add rail rows that route into a resource, not even as shortcuts into a default resource.
   When a module needs a shortcut, the rail row opens the resource list or the resource itself.
 - Do not add a fourth level, or a second local navigation in one tab.
@@ -58,7 +58,7 @@ const navigation = [
 
 ## Wrong
 
-A rail drill level whose rows route into one default policy, repeated by a `Menu` inside that
+A rail drill level whose rows route into one default policy, repeated by a `SidebarMenu` inside that
 policy's tab:
 
 ```ts
@@ -88,12 +88,12 @@ const navigation = [
 
 ## Enforced
 
-- `webkit/no-page-navigation-menu` (ESLint, warning) flags a `Menu` rendered in a page body (under
+- `webkit/no-page-navigation-menu` (ESLint, warning) flags a `SidebarMenu` rendered in a page body (under
   `views/` or `pages/`, or with a `PageHeader` / `PageTabs` import) outside a navigation host
   (`Sidebar`, `ConsoleLayout`, `DocLayout`, `AppLayout`), unless the file is the
   `platform/detail/sectioned-resource` block or carries `/* webkit-local-navigation */`. It is
   static and approximate, so it warns.
-- `ConsoleLayout` warns in development when a `Menu` in its default slot has a row whose `href`
+- `ConsoleLayout` warns in development when a `SidebarMenu` in its default slot has a row whose `href`
   matches a rail row, naming both labels and the route.
 - `npx @aziontech/webkit check --url <url,...>` and `/webkit-ui-verify` fail a visited route with a duplicate
   destination, more than one `aria-current="page"` in one control, or two controls whose current rows

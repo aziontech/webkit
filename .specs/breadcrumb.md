@@ -3,13 +3,13 @@ name: breadcrumb
 category: navigation
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: a833205346f99ddccf24bccb4200434d8a6fe16637dad9a72c2262c2c6f23991
+checksum: 4e5037b2debc6f75ff38cc271bbfde21eff1697211c830c7864fa1cf9b99465a
 created: 2026-05-25
-last_updated: 2026-11-13
+last_updated: 2026-11-15
 ---
 
 # Breadcrumb — Component Spec
@@ -26,7 +26,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 ## When NOT to use
 
-- It is the app's primary navigation → use `navigation-menu` or `sidebar` with `menu`.
+- It is the app's primary navigation → use `navigation-menu` or `sidebar` with `sidebar-menu`.
 - It moves between sibling views of the same page → use `tabs`.
 - It is the previous / next pair at the end of a docs page → use `doc-pagination`.
 

@@ -3,8 +3,8 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: bdd779224ebac3833fe3a772ec044d0a7441cf2ac4de6c50e3b8aa74301fbb47
-spec_version: 4
+checksum: 87d1ef8280f09a2da40b18281130dc0f6959ffdce29d2a3d73d474797955a7f6
+spec_version: 5
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron. It renders a nested `items` data structure on its own (recursively, through one internal row template) and follows the WAI-ARIA tree pattern, so it fits file and object browsers: the objects of a bucket, the source files of a deployment, the routes of an application. Unlike `menu` it navigates data, not the app, and unlike `accordion` its nodes are rows of the same kind at any depth, not panels of free content.
+A hierarchical list of nodes, each row a name with an optional glyph and one line of detail, where a parent row folds its children open and closed under a chevron. It renders a nested `items` data structure on its own (recursively, through one internal row template) and follows the WAI-ARIA tree pattern, so it fits file and object browsers: the objects of a bucket, the source files of a deployment, the routes of an application. Unlike `sidebar-menu` it navigates data, not the app, and unlike `accordion` its nodes are rows of the same kind at any depth, not panels of free content.
 
 ## When to use
 
@@ -26,7 +26,7 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
 
 ## When NOT to use
 
-- Navigation between views of the app → use `menu` inside `sidebar`.
+- Navigation between views of the app → use `sidebar-menu` inside `sidebar`.
 - Flat records with several attributes each → use `table`.
 - A few sections of free content that open and close → use `accordion`.
 - A two- or three-level directory of destinations on a marketing page → use `column-navigation`.
@@ -34,7 +34,7 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
 ## Related
 
 - `table` — the flat, multi-column view of the same records; switch to it when columns matter more than nesting.
-- `menu` — the hierarchical list for app navigation, with routes and active state instead of selection.
+- `sidebar-menu` — the hierarchical list for app navigation, with routes and active state instead of selection.
 - `accordion` — disclosure of free content panels rather than rows of one kind.
 - `empty-state` — what the tree renders when `items` is empty.
 - `skeleton` — the rows the tree renders while `loading`.

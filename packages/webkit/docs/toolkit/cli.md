@@ -113,7 +113,7 @@ npx @aziontech/webkit check [--json] [--max-warnings <n>] [--no-lint] [--url <ur
   opened in headless Chromium through the project's own `playwright` (`npm i -D playwright && npx
 playwright install chromium`; without it the check is an error saying so). On each route it
   collects the links of every visible navigation control (`nav` / `role="navigation"`, such as the
-  rail with its current drill level and an in-page `Menu`, and `role="tablist"`; the breadcrumb,
+  rail with its current drill level and an in-page `SidebarMenu`, and `role="tablist"`; the breadcrumb,
   pagination, hidden or inert levels and `#anchor` links are left out) and reports an error, named
   after both controls and the route, for rule `webkit-navigation-levels`: a route (path without
   query or hash) offered by two controls, a control with more than one `aria-current="page"`, or

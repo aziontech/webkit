@@ -76,7 +76,7 @@ await page.route('**/api/workloads', (r) => r.fulfill({ json: [] })) // empty
   `role="tablist"`; the breadcrumb, pagination, hidden or inert levels and `#anchor` links are left
   out) and fails on:
   - **a route offered twice**: the same path (query and hash ignored) in two controls, such as a rail
-    row and an in-page `Menu` row (rule 2);
+    row and an in-page `SidebarMenu` row (rule 2);
   - **more than one current row** (`aria-current="page"`) in one control (rule 5);
   - **current rows that disagree**: two controls whose current rows point at different routes, where
     neither is a parent of the other (rule 5).
