@@ -177,6 +177,15 @@ which only pre-bundled `vee-validate`, still works but is deprecated and removed
 `optimizeDeps: { include: ['vee-validate'] }` in your own Vite config, or drop the import if you do
 not use `vee-validate`.
 
+### The MCP server is its own package: `@aziontech/webkit-mcp`
+
+v5 shipped the MCP server inside `@aziontech/webkit` (bin `webkit-mcp`), so every app downloaded
+`@modelcontextprotocol/sdk`, `zod` and their HTTP libraries (about 90 packages). v6 moves it to
+`@aziontech/webkit-mcp`; `@aziontech/webkit` no longer has the `webkit-mcp` bin. Point `.mcp.json`
+at the new package: `{ "command": "npx", "args": ["-y", "@aziontech/webkit-mcp"] }` (re-running
+`npx @aziontech/webkit init` rewrites the v5 entry for you; `webkit doctor` fails until it is fixed).
+The tools and their answers are unchanged.
+
 ### Form fields: one `Field` replaces the `field-*` family
 
 The codemod lists every `field-*` import as `MANUAL`. Replace each one with `Field` around the plain

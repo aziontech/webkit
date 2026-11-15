@@ -70,16 +70,13 @@
     "figma:unpublish": "figma connect unpublish"
   },
   "bin": {
-    "webkit": "./src/cli/cli.js",
-    "webkit-mcp": "./src/mcp/server.js"
+    "webkit": "./src/cli/cli.js"
   },
   "dependencies": {
-    "@modelcontextprotocol/sdk": "^1.31.0",
     "@tanstack/vue-table": "^8.21.3",
     "@vueuse/core": "^10.11.1",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^3.6.0",
-    "zod": "^4.6.7"
+    "tailwind-merge": "^3.6.0"
   },
   "peerDependencies": {
     "@aziontech/icons": "^4.4.0",
@@ -153,6 +150,10 @@
   ],
   "exports": {
     "./catalog.json": "./catalog.json",
+    "./catalog-queries": {
+      "types": "./types/catalog/index.d.ts",
+      "default": "./src/catalog/index.js"
+    },
     "./package.json": "./package.json",
     "./docs/STYLEGUIDE.md": "./docs/STYLEGUIDE.md",
     "./eslint-plugin": {
@@ -2540,6 +2541,9 @@
   },
   "typesVersions": {
     "*": {
+      "catalog-queries": [
+        "./types/catalog/index.d.ts"
+      ],
       "eslint-plugin": [
         "./types/eslint-plugin/index.d.ts"
       ],
