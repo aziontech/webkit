@@ -53,7 +53,7 @@ for (const block of blocks()) {
 for (const mode of DOCS_MODES) {
   test(`block shell/docs landing agent card ${label(mode)}`, async ({ page }) => {
     await prepare(page, mode)
-    await page.goto(`${DOCS}/frame/landing/shell/docs${query(mode)}`)
+    await page.goto(`${DOCS}/frame/block/shell/docs/landing${query(mode)}`)
     await settle(page)
     await page.getByTestId('doc-agent-card').scrollIntoViewIfNeeded()
     await settle(page)
