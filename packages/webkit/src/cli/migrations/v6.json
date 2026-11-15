@@ -73,6 +73,10 @@
     }
   },
   "removed": {
+    "dialog-portal": "delete the <DialogPortal> wrapper (keep its children): DialogContent renders the portal and the overlay itself",
+    "dialog-overlay": "delete the <DialogOverlay /> element: DialogContent renders the portal and the overlay itself",
+    "drawer-portal": "delete the <DrawerPortal> wrapper (keep its children): DrawerContent renders the portal and the overlay itself",
+    "drawer-overlay": "delete the <DrawerOverlay /> element: DrawerContent renders the portal and the overlay itself",
     "field-text": "Field + FieldLabel + Input + FieldDescription",
     "field-textarea": "Field + FieldLabel + Textarea + FieldDescription",
     "field-select": "Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription",

@@ -1631,14 +1631,6 @@
       "types": "./types/components/overlay/dialog/dialog-description.vue.d.ts",
       "default": "./src/components/overlay/dialog/dialog-description.vue"
     },
-    "./dialog-overlay": {
-      "types": "./types/components/overlay/dialog/dialog-overlay.vue.d.ts",
-      "default": "./src/components/overlay/dialog/dialog-overlay.vue"
-    },
-    "./dialog-portal": {
-      "types": "./types/components/overlay/dialog/dialog-portal.vue.d.ts",
-      "default": "./src/components/overlay/dialog/dialog-portal.vue"
-    },
     "./dialog-title": {
       "types": "./types/components/overlay/dialog/dialog-title.vue.d.ts",
       "default": "./src/components/overlay/dialog/dialog-title.vue"
@@ -1670,14 +1662,6 @@
     "./drawer-description": {
       "types": "./types/components/overlay/drawer/drawer-description.vue.d.ts",
       "default": "./src/components/overlay/drawer/drawer-description.vue"
-    },
-    "./drawer-overlay": {
-      "types": "./types/components/overlay/drawer/drawer-overlay.vue.d.ts",
-      "default": "./src/components/overlay/drawer/drawer-overlay.vue"
-    },
-    "./drawer-portal": {
-      "types": "./types/components/overlay/drawer/drawer-portal.vue.d.ts",
-      "default": "./src/components/overlay/drawer/drawer-portal.vue"
     },
     "./drawer-title": {
       "types": "./types/components/overlay/drawer/drawer-title.vue.d.ts",
@@ -3647,12 +3631,6 @@
       "dialog-description": [
         "./types/components/overlay/dialog/dialog-description.vue.d.ts"
       ],
-      "dialog-overlay": [
-        "./types/components/overlay/dialog/dialog-overlay.vue.d.ts"
-      ],
-      "dialog-portal": [
-        "./types/components/overlay/dialog/dialog-portal.vue.d.ts"
-      ],
       "dialog-title": [
         "./types/components/overlay/dialog/dialog-title.vue.d.ts"
       ],
@@ -3676,12 +3654,6 @@
       ],
       "drawer-description": [
         "./types/components/overlay/drawer/drawer-description.vue.d.ts"
-      ],
-      "drawer-overlay": [
-        "./types/components/overlay/drawer/drawer-overlay.vue.d.ts"
-      ],
-      "drawer-portal": [
-        "./types/components/overlay/drawer/drawer-portal.vue.d.ts"
       ],
       "drawer-title": [
         "./types/components/overlay/drawer/drawer-title.vue.d.ts"
