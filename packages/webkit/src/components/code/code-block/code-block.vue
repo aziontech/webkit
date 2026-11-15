@@ -16,6 +16,7 @@
   import { useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
   import { cn } from '../../../utils/cn'
+  import { diffLines, pairDiffLines } from '../../../utils/line-diff'
   import CopyButton from '../../actions/copy-button/copy-button.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
   import {
@@ -43,7 +44,6 @@
     getDiffMarker,
     resolveLineState
   } from './utils/line-decorations'
-  import { diffLines, pairDiffLines } from './utils/line-diff'
 
   export type { CodeBlockLineChange }
 

@@ -4,9 +4,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import ComputedDiff from '../../../../examples/code-block/computed-diff.vue'
 import Default from '../../../../examples/code-block/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { diffLines, pairDiffLines } from '../../../utils/line-diff'
 import CodeBlock from './code-block.vue'
 import { highlightCodeLine } from './utils/highlight-code'
-import { diffLines, pairDiffLines } from './utils/line-diff'
 
 // The real Clipboard API rejects in headless Chromium ("Document is not
 // focused"), so writeText is stubbed to resolve. This is NOT a layout/focus

@@ -1,19 +1,19 @@
-export type CodeBlockDiffChange = 'unchanged' | 'added' | 'removed'
+export type LineDiffChange = 'unchanged' | 'added' | 'removed'
 
-export type CodeBlockDiffLine = {
-  change: CodeBlockDiffChange
+export type LineDiffLine = {
+  change: LineDiffChange
   oldNumber: number | null
   newNumber: number | null
 }
 
-export type CodeBlockDiffSide = {
-  change: CodeBlockDiffChange
+export type LineDiffSide = {
+  change: LineDiffChange
   number: number
 }
 
-export type CodeBlockDiffPair = {
-  left: CodeBlockDiffSide | null
-  right: CodeBlockDiffSide | null
+export type LineDiffPair = {
+  left: LineDiffSide | null
+  right: LineDiffSide | null
 }
 
 const MAX_EDITS = 1000
@@ -91,10 +91,10 @@ const myers = (
   return steps.reverse()
 }
 
-const settle = (lines: CodeBlockDiffLine[]): CodeBlockDiffLine[] => {
-  const out: CodeBlockDiffLine[] = []
-  let removed: CodeBlockDiffLine[] = []
-  let added: CodeBlockDiffLine[] = []
+const settle = (lines: LineDiffLine[]): LineDiffLine[] => {
+  const out: LineDiffLine[] = []
+  let removed: LineDiffLine[] = []
+  let added: LineDiffLine[] = []
   const flush = () => {
     out.push(...removed, ...added)
     removed = []
@@ -116,7 +116,7 @@ export const diffLines = (
   original: string,
   modified: string,
   maxEdits = MAX_EDITS
-): CodeBlockDiffLine[] => {
+): LineDiffLine[] => {
   const before = original.split('\n')
   const after = modified.split('\n')
   let head = 0
@@ -129,7 +129,7 @@ export const diffLines = (
   )
     tail += 1
 
-  const same = (from: number, to: number, shift: number): CodeBlockDiffLine[] =>
+  const same = (from: number, to: number, shift: number): LineDiffLine[] =>
     Array.from({ length: to - from }, (_, index) => ({
       change: 'unchanged',
       oldNumber: from + index + 1,
@@ -143,7 +143,7 @@ export const diffLines = (
     ...Array.from(a, (_, index) => ['-', index, 0] as ['-', number, number]),
     ...Array.from(b, (_, index) => ['+', 0, index] as ['+', number, number])
   ]
-  const middle: CodeBlockDiffLine[] = steps.map(([op, x, y]) => {
+  const middle: LineDiffLine[] = steps.map(([op, x, y]) => {
     if (op === '-') return { change: 'removed', oldNumber: head + x + 1, newNumber: null }
     if (op === '+') return { change: 'added', oldNumber: null, newNumber: head + y + 1 }
     return { change: 'unchanged', oldNumber: head + x + 1, newNumber: head + y + 1 }
@@ -156,10 +156,10 @@ export const diffLines = (
   ]
 }
 
-export const pairDiffLines = (lines: CodeBlockDiffLine[]): CodeBlockDiffPair[] => {
-  const pairs: CodeBlockDiffPair[] = []
-  let removed: CodeBlockDiffSide[] = []
-  let added: CodeBlockDiffSide[] = []
+export const pairDiffLines = (lines: LineDiffLine[]): LineDiffPair[] => {
+  const pairs: LineDiffPair[] = []
+  let removed: LineDiffSide[] = []
+  let added: LineDiffSide[] = []
   const flush = () => {
     for (let index = 0; index < Math.max(removed.length, added.length); index += 1)
       pairs.push({ left: removed[index] ?? null, right: added[index] ?? null })

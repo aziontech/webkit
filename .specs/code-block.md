@@ -3,12 +3,12 @@ name: code-block
 category: code
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: e0a2d32377ee1d22e3db1374ef35406c9039193b838eaaf70f9b588ca94e28b3
+checksum: cc56acd13f31c75488b7a52b8f145a88d04734005125762b42f2bed63dbd785e
 created: 2026-05-28
 last_updated: 2026-11-15
 ---
@@ -16,6 +16,8 @@ last_updated: 2026-11-15
 # CodeBlock — Component Spec
 
 ## Purpose
+
+Use CodeBlock to show code, config or JSON the person reads or copies, including read-only diffs (a tab's `original`); for code the person edits use CodeEditor, and for build, deploy or runtime log lines use LogView.
 
 Read-only code viewer for docs, API examples, and configuration previews. Supports four Figma-documented layouts that share one monolithic shell:
 
