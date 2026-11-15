@@ -111,8 +111,8 @@
     "limit": "13.75 KB"
   },
   {
-    "name": "cards",
-    "path": "src/components/data/cards/cards.vue",
+    "name": "card-list",
+    "path": "src/components/data/card-list/card-list.vue",
     "limit": "19 KB"
   },
   {
@@ -1342,7 +1342,7 @@
   {
     "name": "code-editor",
     "path": "src/components/code/code-editor/code-editor.vue",
-    "limit": "9.45 KB"
+    "limit": "10.4 KB"
   },
   {
     "name": "button-group",
@@ -1645,7 +1645,7 @@
   {
     "name": "log-view",
     "path": "src/components/code/log-view/index.ts",
-    "limit": "35.65 KB"
+    "limit": "42.05 KB"
   },
   {
     "name": "log-view-root",
@@ -1656,6 +1656,11 @@
     "name": "log-view-footer",
     "path": "src/components/code/log-view/log-view-footer.vue",
     "limit": "0.65 KB"
+  },
+  {
+    "name": "log-view-steps",
+    "path": "src/components/code/log-view/log-view-steps.vue",
+    "limit": "40 KB"
   },
   {
     "name": "log-view-header",
