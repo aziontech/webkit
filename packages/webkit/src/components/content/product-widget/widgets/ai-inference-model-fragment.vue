@@ -164,7 +164,7 @@
         </ShellMockupPart>
 
         <ShellMockupPart :order="1">
-          <h3 class="text-heading-xxs text-(--text-default)">Template Settings</h3>
+          <h3 class="text-heading-2xs text-(--text-default)">Template Settings</h3>
         </ShellMockupPart>
 
         <ShellMockupPart :order="2">
@@ -177,7 +177,7 @@
             <span
               :data-focused="frame.focused || null"
               data-cursor="model"
-              class="flex rounded-(--shape-elements) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
+              class="flex rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
             >
               <Input
                 id="ai-inference-model"

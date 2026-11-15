@@ -145,7 +145,7 @@
   <section
     v-bind="$attrs"
     :id="anchor || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
     :data-testid="testId"
     :aria-label="title || undefined"
   >
@@ -249,7 +249,7 @@
                   <span class="min-w-0 max-sm:truncate">{{ item.capability }}</span>
                   <span
                     v-if="item.definition"
-                    class="-my-(--spacing-xxs) inline-flex shrink-0"
+                    class="-my-(--spacing-2xs) inline-flex shrink-0"
                   >
                     <Popover placement="auto">
                       <PopoverTrigger>
@@ -261,7 +261,7 @@
                         />
                       </PopoverTrigger>
                       <PopoverContent>
-                        <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-sm)">
+                        <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-sm)">
                           <PopoverTitle>{{ item.capability }}</PopoverTitle>
                           <PopoverDescription>{{ item.definition }}</PopoverDescription>
                         </div>
@@ -279,7 +279,7 @@
                   <i
                     :data-support="item[platform] ?? 'none'"
                     :class="iconOf(item[platform])"
-                    class="text-body-md data-[support=full]:text-(--success-contrast) data-[support=none]:text-(--text-muted) data-[support=partial]:text-(--warning-contrast)"
+                    class="text-body-md data-[support=full]:text-(--success-foreground) data-[support=none]:text-(--text-muted) data-[support=partial]:text-(--warning-foreground)"
                     aria-hidden="true"
                   />
                 </Tooltip>

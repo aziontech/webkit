@@ -114,7 +114,7 @@
         <h3
           v-if="title"
           :id="headingId"
-          class="text-heading-xxs text-(--text-default)"
+          class="text-heading-2xs text-(--text-default)"
         >
           {{ title }}
         </h3>

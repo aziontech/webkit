@@ -82,7 +82,7 @@
         class="m-0 flex h-full flex-col justify-center gap-(--spacing-sm) bg-(--bg-canvas) p-(--spacing-xl)"
       >
         <div
-          class="flex min-w-0 flex-wrap items-end gap-(--spacing-xxs) group-data-[size=large]:text-big-number-lg group-data-[size=medium]:text-big-number-md group-data-[size=small]:text-big-number-sm"
+          class="flex min-w-0 flex-wrap items-end gap-(--spacing-2xs) group-data-[size=large]:text-big-number-lg group-data-[size=medium]:text-big-number-md group-data-[size=small]:text-big-number-sm"
         >
           <span
             v-if="item.prefix"

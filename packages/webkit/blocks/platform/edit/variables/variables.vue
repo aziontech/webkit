@@ -792,7 +792,7 @@
                 </template>
 
                 <template #cell-scope="{ value }">
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span
                       v-for="item in scopeSummary(value)"
                       :key="item.label"
@@ -892,7 +892,7 @@
           @submit.prevent="submit"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DrawerTitle>{{ drawerTitle }}</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
                 {{ drawerDescription }}
@@ -961,7 +961,7 @@
                       aria-label="Variables"
                     >
                       <template #row="{ index, remove, removable, removeLabel }">
-                        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                           <Field>
                             <InputGroupRoot
                               size="large"

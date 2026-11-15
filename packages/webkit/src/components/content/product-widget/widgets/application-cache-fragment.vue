@@ -202,7 +202,7 @@
       >
         <span class="flex items-start gap-(--spacing-sm)">
           <LegacySwitch :checked="frame.stale" />
-          <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <span class="text-label-md text-(--text-default)">Stale cache</span>
             <span class="text-body-xs text-(--text-muted)">
               Enable stale cache to serve expired content temporarily while fetching updated content
@@ -218,7 +218,7 @@
       >
         <span class="flex items-start gap-(--spacing-sm)">
           <LegacySwitch :checked="true" />
-          <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <span class="text-label-md text-(--text-default)">Large file optimization</span>
             <span class="text-body-xs text-(--text-muted)">
               Optimize caching for large files by splitting them into smaller fragments for

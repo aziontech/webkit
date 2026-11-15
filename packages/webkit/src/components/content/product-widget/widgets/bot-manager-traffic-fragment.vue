@@ -74,7 +74,7 @@
         <Card>
           <template #content>
             <div class="flex flex-col gap-(--spacing-md)">
-              <div class="flex flex-col gap-(--spacing-xxs)">
+              <div class="flex flex-col gap-(--spacing-2xs)">
                 <span class="flex items-center gap-(--spacing-xs)">
                   <span class="text-label-md text-(--text-default)">Top Bot Traffic</span>
                   <i
@@ -129,17 +129,17 @@
                   </span>
                 </span>
 
-                <ul class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+                <ul class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
                   <li
                     v-for="slice in SLICES"
                     :key="slice.key"
                     :data-dimmed="dimmed(slice.key) || null"
                     :data-focused="(focused && slice.key === FOCUS) || null"
-                    class="flex items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) transition-[opacity,background-color] duration-moderate-02 ease-productive-entrance data-dimmed:opacity-50 data-focused:bg-(--bg-hover) motion-reduce:transition-none"
+                    class="flex items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) transition-[opacity,background-color] duration-moderate-02 ease-productive-entrance data-dimmed:opacity-50 data-focused:bg-(--bg-hover) motion-reduce:transition-none"
                   >
                     <span
                       :data-slice="slice.key"
-                      class="size-2.5 shrink-0 rounded-(--shape-elements) bg-(--border-default) data-[slice=bad-bot]:bg-(--primary) data-[slice=good-bot]:bg-(--text-default) data-[slice=legitimate]:bg-(--text-muted)"
+                      class="size-2.5 shrink-0 rounded-(--shape-control) bg-(--border-default) data-[slice=bad-bot]:bg-(--primary) data-[slice=good-bot]:bg-(--text-default) data-[slice=legitimate]:bg-(--text-muted)"
                     />
                     <span class="min-w-0 flex-1 truncate text-body-sm text-(--text-default)">
                       {{ slice.label }}

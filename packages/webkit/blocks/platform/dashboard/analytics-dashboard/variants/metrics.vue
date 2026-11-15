@@ -1029,7 +1029,7 @@
             :span="6"
           >
             <ChartCard.Header>
-              <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ panel.title }}</ChartCard.Title>
                 <Hint :text="panel.hint" />
               </span>
@@ -1098,7 +1098,7 @@
             :span="12"
           >
             <ChartCard.Header>
-              <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ breakdown.title }}</ChartCard.Title>
                 <Hint :text="breakdown.hint" />
               </span>

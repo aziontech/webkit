@@ -55,7 +55,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <SitePage :sections="sections" />
     <SitePage :sections="legal" />
   </div>

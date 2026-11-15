@@ -265,7 +265,7 @@
           <a
             href="/home"
             aria-label="Azion home"
-            class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
               kind="default"
@@ -380,7 +380,7 @@
                       <ul
                         v-if="members.length"
                         aria-label="Members"
-                        class="m-0 flex list-none flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-muted) p-0"
+                        class="m-0 flex list-none flex-col overflow-hidden rounded-(--shape-control) border border-(--border-muted) p-0"
                       >
                         <li
                           v-for="email in members"
@@ -414,7 +414,7 @@
                       </ul>
                       <p
                         v-else
-                        class="m-0 rounded-(--shape-elements) border border-dashed border-(--border-muted) px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
+                        class="m-0 rounded-(--shape-control) border border-dashed border-(--border-muted) px-(--spacing-md) py-(--spacing-lg) text-center text-body-sm text-(--text-muted)"
                       >
                         No members. The team grants nothing until someone joins it.
                       </p>

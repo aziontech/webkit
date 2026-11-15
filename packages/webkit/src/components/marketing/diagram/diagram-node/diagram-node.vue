@@ -34,7 +34,7 @@
       :data-testid="testId"
       :data-diagram-node="node.key"
       :data-lit="node.lit || null"
-      class="relative inline-flex h-(--size-7) items-center gap-(--spacing-xxs) rounded-full border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm whitespace-nowrap text-(--text-default) shadow-(--shadow-xs) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
+      class="relative inline-flex h-(--size-7) items-center gap-(--spacing-2xs) rounded-full border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm whitespace-nowrap text-(--text-default) shadow-(--shadow-xs) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
     >
       <i
         v-if="node.icon"
@@ -75,7 +75,7 @@
     :data-diagram-node="node.key"
     class="flex w-full max-w-(--size-72) flex-col gap-(--spacing-sm) rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) p-(--spacing-sm) [mask-image:linear-gradient(to_bottom,black_60%,transparent)] @5xl:w-(--size-44)"
   >
-    <span class="flex gap-(--spacing-xxs)">
+    <span class="flex gap-(--spacing-2xs)">
       <span class="size-(--size-2) rounded-full bg-(--bg-placeholder)" />
       <span class="size-(--size-2) rounded-full bg-(--bg-placeholder)" />
       <span class="size-(--size-2) rounded-full bg-(--bg-placeholder)" />
@@ -85,7 +85,7 @@
       <span class="h-(--size-2) w-4/5 rounded-full bg-(--bg-placeholder)" />
       <span class="h-(--size-2) w-3/5 rounded-full bg-(--bg-placeholder)" />
     </span>
-    <span class="h-(--size-14) rounded-(--shape-elements) bg-(--bg-placeholder)" />
+    <span class="h-(--size-14) rounded-(--shape-control) bg-(--bg-placeholder)" />
     <span class="flex flex-col gap-(--spacing-xs) pb-(--spacing-xs)">
       <span class="h-(--size-2) w-3/5 rounded-full bg-(--bg-placeholder)" />
       <span class="h-(--size-2) w-2/5 rounded-full bg-(--bg-placeholder)" />
@@ -145,7 +145,7 @@
     class="relative flex w-full max-w-(--size-72) flex-col rounded-(--shape-card) border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface) shadow-(--shadow-xs) @5xl:w-(--size-60) data-[lit]:border-(--primary) data-[lit]:before:pointer-events-none data-[lit]:before:absolute data-[lit]:before:inset-0 data-[lit]:before:rounded-[inherit] data-[lit]:before:content-[''] data-[lit]:before:shadow-[calc(var(--spacing-5)*-1)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--accent),var(--spacing-5)_0_var(--spacing-11)_calc(var(--spacing-4)*-1)_var(--primary),0_0_var(--spacing-5)_calc(var(--spacing-2)*-1)_var(--primary)]"
   >
     <span
-      class="flex w-full min-w-0 items-center gap-(--spacing-xxs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs)"
+      class="flex w-full min-w-0 items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
     >
       <span
         v-if="node.mark"

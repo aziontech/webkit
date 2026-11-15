@@ -196,7 +196,7 @@
               >
                 <Item.Media>
                   <span
-                    class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                    class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                   >
                     <i
                       class="ai ai-box text-body-md leading-none text-(--text-default)"
@@ -249,7 +249,7 @@
 
             <div
               v-if="projectPicker.remaining"
-              class="border-t border-(--border-default) p-(--spacing-xxs)"
+              class="border-t border-(--border-default) p-(--spacing-2xs)"
             >
               <Button
                 type="button"

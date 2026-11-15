@@ -156,11 +156,11 @@
             >
               <i
                 v-if="step.status === 'done'"
-                class="ai ai-check-circle text-(--success-contrast)"
+                class="ai ai-check-circle text-(--success-foreground)"
               />
               <i
                 v-else-if="step.status === 'failed'"
-                class="ai ai-times-circle text-(--danger-contrast)"
+                class="ai ai-times-circle text-(--danger-foreground)"
               />
               <i
                 v-else-if="step.status === 'skipped'"
@@ -190,7 +190,7 @@
               <span
                 v-if="step.description"
                 :data-status="step.status"
-                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[status=failed]:whitespace-normal data-[status=failed]:text-pretty data-[status=failed]:text-(--danger-contrast) data-[status=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[status=running]:motion-safe:bg-[length:200%_100%] data-[status=running]:motion-safe:bg-clip-text data-[status=running]:motion-safe:text-transparent data-[status=running]:motion-safe:animate-shimmer motion-reduce:animate-none"
+                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[status=failed]:whitespace-normal data-[status=failed]:text-pretty data-[status=failed]:text-(--danger-foreground) data-[status=running]:motion-safe:bg-[linear-gradient(90deg,var(--text-muted)_0%,var(--text-muted)_35%,var(--text-default)_50%,var(--text-muted)_65%,var(--text-muted)_100%)] data-[status=running]:motion-safe:bg-[length:200%_100%] data-[status=running]:motion-safe:bg-clip-text data-[status=running]:motion-safe:text-transparent data-[status=running]:motion-safe:animate-shimmer motion-reduce:animate-none"
               >
                 {{ step.description }}
               </span>

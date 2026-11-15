@@ -28,7 +28,7 @@ Site JSON: [`site-with-link.json`](./site-with-link.json)
 
 <hr
   style={{
-    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    margin: 'var(--spacing-2xl) 0 var(--spacing-lg)',
     border: 0,
     borderTop: '1px solid var(--border-default)'
   }}
@@ -54,7 +54,7 @@ Site JSON: [`site-plain.json`](./site-plain.json)
 
 <hr
   style={{
-    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    margin: 'var(--spacing-2xl) 0 var(--spacing-lg)',
     border: 0,
     borderTop: '1px solid var(--border-default)'
   }}

@@ -44,7 +44,7 @@
             />
           </div>
           <p
-            class="m-0 flex items-center justify-center gap-(--spacing-xxs) text-body-xs text-(--text-muted)"
+            class="m-0 flex items-center justify-center gap-(--spacing-2xs) text-body-xs text-(--text-muted)"
           >
             Error reference:
             <bdi class="text-label-code-sm text-(--text-default)">{{ reference }}</bdi>

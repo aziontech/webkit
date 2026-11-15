@@ -38,7 +38,7 @@
   >
     <div
       v-if="label"
-      class="flex items-center px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+      class="flex items-center px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
       :data-testid="`${testId}__label`"
     >
       {{ label }}

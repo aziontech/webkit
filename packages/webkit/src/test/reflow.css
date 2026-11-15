@@ -1,4 +1,4 @@
-@import '../../../theme/dist/v4/globals.css';
+@import '../../../theme/dist/globals.css';
 @source '../components';
 @source '../../blocks';
 @source '../../examples';

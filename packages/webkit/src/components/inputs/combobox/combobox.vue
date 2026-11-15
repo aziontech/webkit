@@ -493,7 +493,7 @@
         :ariaLabel="t('combobox.clear')"
         kind="transparent"
         size="small"
-        class="absolute end-(--spacing-xxs) top-1/2 -translate-y-1/2"
+        class="absolute end-(--spacing-2xs) top-1/2 -translate-y-1/2"
         :data-testid="`${testId}__clear`"
         @click="clear"
       />
@@ -521,7 +521,7 @@
           :aria-busy="loading || undefined"
           :data-testid="`${testId}__listbox`"
           :style="panelSizing"
-          class="fixed z-(--z-input-overlay) m-0 flex max-h-80 list-none flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-xxs) shadow-(--shadow-xs)"
+          class="fixed z-(--z-control-overlay) m-0 flex max-h-80 list-none flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-(--spacing-2xs) shadow-(--shadow-xs)"
           @mousedown.prevent
         >
           <li
@@ -540,7 +540,7 @@
             <ul
               :role="section.title ? 'group' : 'presentation'"
               :aria-labelledby="section.title ? section.id : undefined"
-              class="m-0 flex list-none flex-col gap-(--spacing-xxs) p-0"
+              class="m-0 flex list-none flex-col gap-(--spacing-2xs) p-0"
             >
               <LazyNodes
                 :ref="setLazy"
@@ -558,7 +558,7 @@
                   :data-disabled="isDisabledRow(row) || null"
                   :data-kind="row.kind"
                   :data-testid="`${testId}__option`"
-                  class="flex min-h-8 cursor-pointer select-none items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xxs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent motion-reduce:transition-none pointer-coarse:min-h-11"
+                  class="flex min-h-8 cursor-pointer select-none items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-2xs) text-start text-label-sm text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) data-[active]:bg-(--bg-hover) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:hover:bg-transparent motion-reduce:transition-none pointer-coarse:min-h-11"
                   @click="commitRow($event, row)"
                   @keydown.enter.prevent="commitRow($event, row)"
                   @mousemove="active = isDisabledRow(row) ? active : rows.indexOf(row)"

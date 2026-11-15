@@ -91,7 +91,7 @@
       :aria-expanded="isOpen ? 'true' : 'false'"
       :aria-controls="panelId"
       :data-testid="`${testId}__trigger`"
-      class="inline-flex w-fit items-center gap-(--spacing-xs) rounded-(--shape-elements) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+      class="inline-flex w-fit items-center gap-(--spacing-xs) rounded-(--shape-control) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
       @click="toggle"
     >
       <i
@@ -118,11 +118,11 @@
         :key="`${i}-${item.title}`"
         tabindex="-1"
         :data-testid="`${testId}__item`"
-        class="flex items-start gap-(--spacing-xs) rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+        class="flex items-start gap-(--spacing-xs) rounded-(--shape-control) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
       >
         <span
           aria-hidden="true"
-          class="inline-flex min-w-5 shrink-0 items-center justify-center rounded-(--shape-elements) bg-(--bg-surface-raised) px-1 text-label-sm text-(--text-muted)"
+          class="inline-flex min-w-5 shrink-0 items-center justify-center rounded-(--shape-control) bg-(--bg-surface-raised) px-1 text-label-sm text-(--text-muted)"
         >
           {{ i + 1 }}
         </span>

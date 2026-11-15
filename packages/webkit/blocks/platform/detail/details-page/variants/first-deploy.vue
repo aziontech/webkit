@@ -85,35 +85,35 @@
         <div
           class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-2 gap-(--spacing-sm) sm:grid-cols-3 lg:grid-cols-6"
         >
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
             <span class="text-label-sm text-(--text-muted)">Deployment</span>
             <div class="flex min-h-7 min-w-0 items-center">
               <span class="truncate text-body-sm text-(--text-muted)">None</span>
             </div>
           </div>
 
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
             <span class="text-label-sm text-(--text-muted)">Domains</span>
             <div class="flex min-h-7 min-w-0 items-center">
               <span class="truncate text-body-sm text-(--text-muted)">None</span>
             </div>
           </div>
 
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
             <span class="text-label-sm text-(--text-muted)">Status</span>
             <div class="flex min-h-7 min-w-0 items-center">
               <span class="truncate text-body-sm text-(--text-muted)">Not deployed</span>
             </div>
           </div>
 
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
             <span class="text-label-sm text-(--text-muted)">Created</span>
             <div class="flex min-h-7 min-w-0 items-center">
               <span class="truncate text-body-sm text-(--text-muted)">Not yet</span>
             </div>
           </div>
 
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
             <span class="text-label-sm text-(--text-muted)">Source</span>
             <div class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-sm)">
               <a
@@ -122,7 +122,7 @@
               >
                 <span class="truncate">Connect Git repository</span>
               </a>
-              <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
+              <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
                 <i
                   class="ai ai-cloud-upload shrink-0 text-(--text-muted)"
                   aria-hidden="true"
@@ -132,7 +132,7 @@
             </div>
           </div>
 
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs) lg:col-span-2">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs) lg:col-span-2">
             <span class="text-label-sm text-(--text-muted)">Framework</span>
             <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
               <i
@@ -195,7 +195,7 @@
                   :href="`https://${service.domain}`"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                  class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                 >
                   <span class="truncate underline-offset-2 group-hover/link:underline">{{
                     service.domain
@@ -266,14 +266,14 @@
         <div
           class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-2 gap-(--spacing-sm) sm:grid-cols-4"
         >
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <span class="text-label-sm text-(--text-muted)">Custom domains</span>
             <div class="flex min-h-7 min-w-0 items-center">
               <span class="truncate text-body-sm text-(--text-muted)">None</span>
             </div>
           </div>
 
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <span class="text-label-sm text-(--text-muted)">Status</span>
             <div class="flex min-h-7 min-w-0 items-center">
               <StatusIndicator
@@ -290,7 +290,7 @@
             </div>
           </div>
 
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <span class="text-label-sm text-(--text-muted)">Service ID</span>
             <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
               <span class="truncate text-body-sm tabular-nums text-(--text-default)">{{
@@ -306,7 +306,7 @@
             </div>
           </div>
 
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <span class="text-label-sm text-(--text-muted)">Created</span>
             <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
               <span class="truncate text-body-sm text-(--text-default)">

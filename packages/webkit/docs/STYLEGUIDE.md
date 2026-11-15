@@ -50,8 +50,8 @@ the answer, and using it is what makes light/dark theming work for free.
 | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ |
 | Color      | `var(--primary)` · `var(--bg-surface)` · `var(--text-default)` · `var(--border-default)` · feedback `--success/--warning/--danger/--info` (+ `-contrast`/`-border`) | `#f3652b` · `rgb(…)` · `hsl(…)` · Tailwind palette (`text-blue-600`, `bg-gray-500`)        |
 | Typography | generated classes — `text-heading-md`, `text-body-sm`, `text-button-lg`, `text-label-md`, `text-overline-md` (font + size + line-height + tracking bundled)         | `text-sm` · `leading-*` · `tracking-*` · `font-family` · `text-[length:…]`                 |
-| Spacing    | the semantic scale `var(--spacing-xxs…xxl)` — `p-(--spacing-md)`, `gap-(--spacing-sm)`                                                                              | the primitive numeric scale (`--spacing-1…-96`) · `p-4` when a token applies · `p-[13px]`  |
-| Shape      | `rounded-(--shape-button)` · `--shape-card` · `--shape-elements` · `rounded-[inherit]` for pseudo-elements                                                          | `rounded-lg` · numeric radii                                                               |
+| Spacing    | the semantic scale `var(--spacing-2xs…2xl)` — `p-(--spacing-md)`, `gap-(--spacing-sm)`                                                                              | the primitive numeric scale (`--spacing-1…-96`) · `p-4` when a token applies · `p-[13px]`  |
+| Shape      | `rounded-(--shape-button)` · `--shape-card` · `--shape-control` · `rounded-[inherit]` for pseudo-elements                                                           | `rounded-lg` · numeric radii                                                               |
 | Shadow     | `shadow-(--shadow-md)`                                                                                                                                              | bare `shadow-md` · hex/rgb elevation · legacy `--card-shadow`                              |
 | Motion     | catalogued `animate-*` utilities + `transition-*` with token durations; **every** motion class pairs with `motion-reduce:`                                          | local `@keyframes` · `animate-[…]` / `duration-[…]` arbitrary values · animation libraries |
 
@@ -349,7 +349,7 @@ blocks, no component-local CSS.**
   :data-disabled="disabled || null"
   class="inline-flex items-center rounded-(--shape-button)
     transition-colors duration-150 ease-out motion-reduce:transition-none
-    data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-contrast)
+    data-[kind=primary]:bg-(--primary) data-[kind=primary]:text-(--primary-foreground)
     data-[kind=secondary]:bg-(--secondary)
     data-[disabled]:bg-(--bg-disabled) data-[disabled]:cursor-not-allowed"
 >

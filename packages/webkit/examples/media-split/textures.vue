@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <MediaSplit
       eyebrow="grid"
       title="The default: a drafting lattice."

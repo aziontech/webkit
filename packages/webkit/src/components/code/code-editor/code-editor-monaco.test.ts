@@ -162,7 +162,7 @@ describe('CodeEditor · real monaco-editor (lazy loader with workers)', () => {
         (node) => node.textContent === text
       )
     const expected = toRgb(
-      getComputedStyle(functionEditor.root).getPropertyValue('--code-sintax-function').trim()
+      getComputedStyle(functionEditor.root).getPropertyValue('--code-syntax-function').trim()
     )
     await waitFor(() => expect(getComputedStyle(span('handleRequest')!).color).toBe(expected), {
       timeout: 10_000

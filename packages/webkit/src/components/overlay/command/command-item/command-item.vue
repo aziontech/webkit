@@ -175,7 +175,7 @@
     :data-active="active || undefined"
     :data-disabled="disabled || undefined"
     :style="ctx.ranking.value ? { order } : undefined"
-    class="flex min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none data-[active]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
+    class="flex min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none data-[active]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled)"
     @click="!disabled && activate($event)"
     @keydown.enter.prevent="!disabled && activate($event)"
     @keydown.space.prevent="!disabled && activate($event)"

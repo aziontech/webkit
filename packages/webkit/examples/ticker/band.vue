@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <div class="relative overflow-hidden bg-(--bg-canvas) pt-(--spacing-xxl)">
+  <div class="relative overflow-hidden bg-(--bg-canvas) pt-(--spacing-2xl)">
     <TextureMaterial
       kind="dots"
       size="small"

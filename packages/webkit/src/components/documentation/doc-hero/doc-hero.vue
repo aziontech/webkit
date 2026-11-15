@@ -37,7 +37,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     data-doc-chrome
-    class="flex w-full flex-col pt-(--spacing-xl) pb-(--spacing-xxl) sm:pt-(--spacing-xxl)"
+    class="flex w-full flex-col pt-(--spacing-xl) pb-(--spacing-2xl) sm:pt-(--spacing-2xl)"
   >
     <h1
       :data-testid="`${testId}__title`"

@@ -40,7 +40,7 @@
     role="group"
     :aria-label="ariaLabel || t('chatMessage.actions')"
     :data-testid="testId"
-    class="flex flex-wrap items-center gap-(--spacing-xxs)"
+    class="flex flex-wrap items-center gap-(--spacing-2xs)"
   >
     <slot />
   </div>

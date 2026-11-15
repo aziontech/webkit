@@ -273,7 +273,7 @@ mr+L2DBwFXtW2qJfNedf/9rU
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DrawerTitle>Create Certificate</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Import a TLS certificate to serve your domains or to verify client certificates.

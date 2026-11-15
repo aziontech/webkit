@@ -126,7 +126,7 @@
     :data-testid="testId"
     :data-kind="kind"
     :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="title.length > 0"
@@ -154,7 +154,7 @@
 
         <div class="relative flex h-full flex-col">
           <div
-            class="relative flex min-h-[38rem] flex-col justify-between gap-(--spacing-xl) p-(--spacing-xxl) md:min-h-[clamp(36rem,60vh,40rem)] lg:min-h-[clamp(340px,52vh,620px)]"
+            class="relative flex min-h-[38rem] flex-col justify-between gap-(--spacing-xl) p-(--spacing-2xl) md:min-h-[clamp(36rem,60vh,40rem)] lg:min-h-[clamp(340px,52vh,620px)]"
           >
             <SectionTitle
               :framed="false"
@@ -166,7 +166,7 @@
             />
 
             <div
-              class="relative -mx-(--spacing-xxl) min-h-48 flex-1 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_75%,transparent)] md:hidden"
+              class="relative -mx-(--spacing-2xl) min-h-48 flex-1 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_75%,transparent)] md:hidden"
             >
               <NetworkMap
                 region="world"
@@ -196,7 +196,7 @@
                   v-for="claim in chips"
                   :key="claim.label"
                   :data-mobile="claim.mobile ? null : 'hidden'"
-                  class="inline-flex h-6 items-center rounded-(--shape-elements) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default) max-md:data-[mobile=hidden]:hidden sm:h-7 sm:px-(--spacing-sm) sm:text-label-md"
+                  class="inline-flex h-6 items-center rounded-(--shape-control) border border-(--primary) bg-[color-mix(in_srgb,var(--primary)_10%,var(--bg-canvas))] px-(--spacing-xs) text-label-sm text-(--text-default) max-md:data-[mobile=hidden]:hidden sm:h-7 sm:px-(--spacing-sm) sm:text-label-md"
                 >
                   {{ claim.label }}
                 </li>

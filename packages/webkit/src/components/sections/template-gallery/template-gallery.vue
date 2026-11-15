@@ -105,7 +105,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="hasCards"
@@ -144,7 +144,7 @@
                     class="group/template relative flex h-full min-w-0 flex-col gap-(--spacing-md) bg-(--bg-surface) p-(--spacing-xl) data-[linked]:cursor-pointer"
                   >
                     <span
-                      class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                      class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                     >
                       <i
                         v-if="template.icon"
@@ -154,7 +154,7 @@
                         class="text-[1.25rem] leading-none text-(--text-default) data-[invert]:[[data-theme=dark]_&]:invert"
                       />
                     </span>
-                    <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                       <span class="text-body-md text-(--text-default)">{{ template.title }}</span>
                       <span
                         v-if="template.description"
@@ -251,7 +251,7 @@
       borders="none"
       marks="all"
       data-hatch="true"
-      class="h-[calc(var(--spacing-xxl)*2)]"
+      class="h-[calc(var(--spacing-2xl)*2)]"
     >
       <TextureMaterial kind="lines" />
     </FrameBox>

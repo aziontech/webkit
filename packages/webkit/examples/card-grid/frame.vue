@@ -14,7 +14,9 @@
       kind="none"
       :padded="false"
     >
-      <div class="flex h-full items-center justify-center bg-(--primary) text-(--primary-contrast)">
+      <div
+        class="flex h-full items-center justify-center bg-(--primary) text-(--primary-foreground)"
+      >
         A cell that paints itself
       </div>
     </CardGridCell>

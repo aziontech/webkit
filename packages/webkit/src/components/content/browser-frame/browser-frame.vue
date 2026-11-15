@@ -276,7 +276,7 @@
         :aria-controls="viewportId"
         :aria-label="widthHandleAriaLabel || t('browserFrame.resizeWidth')"
         :data-testid="`${testId}__width-handle`"
-        class="group/handle absolute inset-y-0 end-0 flex w-6 cursor-col-resize touch-none items-center justify-center rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+        class="group/handle absolute inset-y-0 end-0 flex w-6 cursor-col-resize touch-none items-center justify-center rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         @keydown="onWidthKeydown"
         @focus="focused = true"
         @blur="focused = false"
@@ -287,7 +287,7 @@
         @lostpointercapture="stopResize"
       >
         <span
-          class="h-8 w-1 rounded-(--shape-elements) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
+          class="h-8 w-1 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
         />
       </div>
       <div
@@ -301,7 +301,7 @@
         :aria-controls="viewportId"
         :aria-label="heightHandleAriaLabel || t('browserFrame.resizeHeight')"
         :data-testid="`${testId}__height-handle`"
-        class="group/handle absolute inset-x-0 bottom-0 flex h-6 cursor-row-resize touch-none items-center justify-center rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+        class="group/handle absolute inset-x-0 bottom-0 flex h-6 cursor-row-resize touch-none items-center justify-center rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
         @keydown="onHeightKeydown"
         @focus="focused = true"
         @blur="focused = false"
@@ -312,13 +312,13 @@
         @lostpointercapture="stopResize"
       >
         <span
-          class="h-1 w-8 rounded-(--shape-elements) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
+          class="h-1 w-8 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-focus-visible/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
         />
       </div>
       <div
         aria-hidden="true"
         :data-testid="`${testId}__corner-handle`"
-        class="group/handle absolute end-0 bottom-0 z-1 flex size-6 cursor-nwse-resize touch-none items-center justify-center rounded-(--shape-elements)"
+        class="group/handle absolute end-0 bottom-0 z-1 flex size-6 cursor-nwse-resize touch-none items-center justify-center rounded-(--shape-control)"
         @pointerdown="startResize($event, 'both')"
         @pointermove="moveResize"
         @pointerup="stopResize"
@@ -326,7 +326,7 @@
         @lostpointercapture="stopResize"
       >
         <span
-          class="size-2 rounded-(--shape-elements) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
+          class="size-2 rounded-(--shape-control) bg-(--border-strong) transition-colors duration-150 ease-out group-hover/handle:bg-(--text-default) group-data-[resizing]:bg-(--text-default) motion-reduce:transition-none"
         />
       </div>
     </div>

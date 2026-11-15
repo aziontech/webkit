@@ -127,7 +127,7 @@
           @submit.prevent="submit"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DrawerTitle>Add Origin</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
                 An origin is a server storefront fetches content from. Name it, then say how to
@@ -144,7 +144,7 @@
               <legend class="sr-only">Add Origin</legend>
 
               <section class="flex flex-col gap-(--layout-group-gap)">
-                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
+                <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">General</p>
                 <Card :padded="false">
                   <template #content>
                     <Item.List>
@@ -198,7 +198,7 @@
               </section>
 
               <section class="flex flex-col gap-(--layout-group-gap)">
-                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Connection</p>
+                <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Connection</p>
                 <Card :padded="false">
                   <template #content>
                     <Item.List>
@@ -278,7 +278,7 @@
               </section>
 
               <section class="flex flex-col gap-(--layout-group-gap)">
-                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Options</p>
+                <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Options</p>
                 <Card :padded="false">
                   <template #content>
                     <Item.List>

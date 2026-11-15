@@ -49,19 +49,19 @@
       value: 'yellow',
       label: 'Yellow',
       ariaLabel: 'Yellow mark',
-      colors: ['var(--warning-border)', 'var(--warning)', 'var(--warning-contrast)']
+      colors: ['var(--warning-border)', 'var(--warning)', 'var(--warning-foreground)']
     },
     {
       value: 'red',
       label: 'Red',
       ariaLabel: 'Red mark',
-      colors: ['var(--danger-border)', 'var(--danger)', 'var(--danger-contrast)']
+      colors: ['var(--danger-border)', 'var(--danger)', 'var(--danger-foreground)']
     },
     {
       value: 'green',
       label: 'Green',
       ariaLabel: 'Green mark',
-      colors: ['var(--success-border)', 'var(--success)', 'var(--success-contrast)']
+      colors: ['var(--success-border)', 'var(--success)', 'var(--success-foreground)']
     },
     {
       value: 'blue',
@@ -195,7 +195,7 @@
           <a
             href="/home"
             aria-label="Azion home"
-            class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
               kind="default"
@@ -313,7 +313,7 @@
                           <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
                             <p class="m-0 text-overline-sm text-(--text-muted)">In the header</p>
                             <span
-                              class="inline-flex min-w-0 max-w-(--container-3xs) items-center gap-(--spacing-xs) self-start rounded-(--shape-button) border border-(--border-muted) bg-(--bg-canvas) px-(--spacing-xs) py-(--spacing-xxs)"
+                              class="inline-flex min-w-0 max-w-(--container-3xs) items-center gap-(--spacing-xs) self-start rounded-(--shape-button) border border-(--border-muted) bg-(--bg-canvas) px-(--spacing-xs) py-(--spacing-2xs)"
                               data-testid="create-organization__preview"
                             >
                               <span

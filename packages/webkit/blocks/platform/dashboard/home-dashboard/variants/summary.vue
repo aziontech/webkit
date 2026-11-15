@@ -250,7 +250,7 @@
             </li>
           </ul>
 
-          <p class="text-end text-body-xxs text-pretty text-(--text-muted)">
+          <p class="text-end text-body-2xs text-pretty text-(--text-muted)">
             {{ metricsRange }}
           </p>
         </section>
@@ -421,7 +421,7 @@
             >
               <div class="flex min-w-0 items-center gap-(--spacing-sm)">
                 <span
-                  class="flex size-6 shrink-0 items-center justify-center rounded-(--shape-elements) bg-(--bg-surface-raised) text-(--primary)"
+                  class="flex size-6 shrink-0 items-center justify-center rounded-(--shape-control) bg-(--bg-surface-raised) text-(--primary)"
                 >
                   <i
                     :class="featured.icon"
@@ -438,7 +438,7 @@
               <p class="text-body-xs text-pretty text-(--text-muted)">
                 {{ featured.description }}
               </p>
-              <p class="flex items-center gap-(--spacing-md) text-body-xxs text-(--text-muted)">
+              <p class="flex items-center gap-(--spacing-md) text-body-2xs text-(--text-muted)">
                 <span>
                   By
                   <span class="text-(--text-default)">{{ featured.vendor }}</span>

@@ -438,7 +438,7 @@
             </Select.Option>
             <p
               v-if="!environmentMatches.length"
-              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+              class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
             >
               No environments match "{{ environmentQuery }}".
             </p>
@@ -518,7 +518,7 @@
                           target="_blank"
                           rel="noopener noreferrer"
                           data-link
-                          class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                          class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                         >
                           <span class="truncate underline-offset-2 group-hover/link:underline"
                             >service-01.example.com</span
@@ -553,7 +553,7 @@
                         </div>
 
                         <div
-                          class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
+                          class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-2xs)"
                         >
                           <a
                             v-for="domain in domains"
@@ -561,7 +561,7 @@
                             :href="`https://${domain}`"
                             target="_blank"
                             rel="noopener noreferrer"
-                            class="flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                            class="flex items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-default) hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                           >
                             <span class="truncate">{{ domain }}</span>
                             <i
@@ -604,7 +604,7 @@
                         >
                           <DropdownMenu.Trigger>
                             <span
-                              class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
+                              class="flex h-8 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:border-(--border-strong)"
                             >
                               <i
                                 class="ai ai-layers shrink-0 text-(--text-muted)"
@@ -702,8 +702,8 @@
                 <div
                   class="@container/band border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md) grid grid-cols-2 gap-(--spacing-sm) sm:grid-cols-4"
                 >
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
-                    <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
+                    <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                       <span class="text-label-sm text-(--text-muted)">Custom domains</span>
                       <Tooltip text="Add a custom domain">
                         <IconButton
@@ -719,7 +719,7 @@
                     </div>
                   </div>
 
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span class="text-label-sm text-(--text-muted)">Status</span>
                     <div class="flex min-h-7 min-w-0 items-center">
                       <StatusIndicator
@@ -729,7 +729,7 @@
                     </div>
                   </div>
 
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span class="text-label-sm text-(--text-muted)">Service ID</span>
                     <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                       <span class="truncate text-body-sm tabular-nums text-(--text-default)">
@@ -745,7 +745,7 @@
                     </div>
                   </div>
 
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span class="text-label-sm text-(--text-muted)">Created</span>
                     <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                       <span class="truncate text-body-sm text-(--text-default)">
@@ -781,7 +781,7 @@
                         </Accordion.Trigger>
 
                         <div
-                          class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-xxs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) @lg/band:pb-0"
+                          class="flex flex-wrap items-center gap-x-(--spacing-sm) gap-y-(--spacing-2xs) px-(--spacing-md) pb-(--spacing-md) @lg/band:pointer-events-none @lg/band:absolute @lg/band:inset-y-0 @lg/band:end-0 @lg/band:max-w-[calc(100%-12rem)] @lg/band:justify-end @lg/band:px-0 @lg/band:pe-(--spacing-md) @lg/band:pb-0"
                         >
                           <Tag
                             label="Shared · 3 services"
@@ -793,7 +793,7 @@
                             <Tooltip text="Open acme-production in Build and deployment settings">
                               <a
                                 href="/account/build-deployment"
-                                class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
+                                class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                               >
                                 <span
                                   class="truncate underline-offset-2 group-hover/link:underline"
@@ -822,27 +822,27 @@
                         <div
                           class="grid grid-cols-1 gap-(--spacing-lg) px-(--spacing-md) pt-(--spacing-xs) pb-(--spacing-md) sm:grid-cols-2 lg:grid-cols-4"
                         >
-                          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                             <span class="text-label-sm text-(--text-muted)">Binding policy</span>
-                            <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                            <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                               <span class="truncate text-body-sm text-(--text-default)">
                                 Strict
                               </span>
                             </span>
                           </div>
-                          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                             <span class="text-label-sm text-(--text-muted)">Deployment policy</span>
-                            <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                            <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                               <span class="truncate text-body-sm text-(--text-default)">
                                 Single
                               </span>
                             </span>
                           </div>
-                          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                             <span class="text-label-sm text-(--text-muted)">Canary</span>
-                            <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                            <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                               <svg
-                                class="h-(--size-4) w-(--size-4) shrink-0 text-(--success-contrast)"
+                                class="h-(--size-4) w-(--size-4) shrink-0 text-(--success-foreground)"
                                 viewBox="0 0 16 16"
                                 fill="currentColor"
                                 fill-rule="evenodd"
@@ -857,11 +857,11 @@
                               </span>
                             </span>
                           </div>
-                          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                             <span class="text-label-sm text-(--text-muted)">Skew protection</span>
-                            <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                            <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                               <svg
-                                class="h-(--size-4) w-(--size-4) shrink-0 text-(--success-contrast)"
+                                class="h-(--size-4) w-(--size-4) shrink-0 text-(--success-foreground)"
                                 viewBox="0 0 16 16"
                                 fill="currentColor"
                                 fill-rule="evenodd"
@@ -964,7 +964,7 @@
             >
               <DrawerContent>
                 <PanelHeader class="w-full">
-                  <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+                  <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
                     <div class="flex min-w-0 items-center gap-(--spacing-sm)">
                       <DrawerTitle>Ship to production</DrawerTitle>
                       <Tag
@@ -995,7 +995,7 @@
                     >
                       <Item.Media>
                         <span
-                          class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-data-done/item:border-(--primary) group-data-done/item:bg-transparent group-data-done/item:text-(--primary) motion-reduce:transition-none"
+                          class="flex size-8 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-data-done/item:border-(--primary) group-data-done/item:bg-transparent group-data-done/item:text-(--primary) motion-reduce:transition-none"
                           aria-hidden="true"
                         >
                           <i
@@ -1152,7 +1152,7 @@
                 <li
                   v-for="change in stagedChanges"
                   :key="change.key"
-                  class="flex flex-wrap items-center justify-between gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
+                  class="flex flex-wrap items-center justify-between gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
                 >
                   <span class="text-body-sm text-(--text-default)">{{ change.kind }}</span>
                   <span class="text-body-sm text-(--text-muted)"

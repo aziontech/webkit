@@ -34,7 +34,7 @@
     :data-testid="testId"
     class="flex min-w-0 flex-col gap-(--spacing-sm)"
   >
-    <dt class="text-heading-xxs text-(--text-default)">{{ title }}</dt>
+    <dt class="text-heading-2xs text-(--text-default)">{{ title }}</dt>
     <dd class="min-w-0">
       <dl class="flex flex-col gap-(--spacing-sm)">
         <slot />

@@ -26,7 +26,7 @@ test('zero-with-unit fires on a zero length carrying a unit', () => {
 
 test('the completed unit list catches the logical/root-relative units (ENG-46996)', () => {
   // Representative new units; the theme test (zero-unit.test.mjs) pins the full set. Kept
-  // in sync with LENGTH_UNITS in packages/theme/src/scripts/zero-unit.mjs.
+  // in sync with LENGTH_UNITS in packages/theme/scripts/lib/zero-unit.mjs.
   for (const unit of ['vi', 'vb', 'svi', 'dvb', 'rex', 'rch', 'ric', 'rcap']) {
     assert.ok(ids(`x: 0${unit}`).includes('zero-with-unit'), `0${unit} slipped through`)
   }

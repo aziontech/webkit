@@ -81,7 +81,7 @@
       >
         <div class="layout-column-content my-auto flex flex-col gap-(--spacing-xl)">
           <header
-            class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-xxs)"
+            class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-2xs)"
           >
             <h1 class="text-balance text-heading-lg text-(--text-default)">Resource deployed</h1>
             <p
@@ -104,10 +104,10 @@
                 <div class="flex flex-col gap-(--spacing-md) sm:flex-row">
                   <div
                     aria-hidden="true"
-                    class="relative flex aspect-16/10 w-full shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-canvas) sm:w-56"
+                    class="relative flex aspect-16/10 w-full shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-canvas) sm:w-56"
                   >
                     <span
-                      class="relative flex size-10 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
+                      class="relative flex size-10 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface)"
                     >
                       <i
                         class="ai ai-globe text-body-md leading-none text-(--text-default)"
@@ -118,7 +118,7 @@
 
                   <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
                     <div class="flex flex-wrap items-start justify-between gap-(--spacing-sm)">
-                      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                      <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                         <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
                           <h2 class="min-w-0 truncate text-heading-xs text-(--text-default)">
                             web-app
@@ -192,7 +192,7 @@
                             </Tooltip>
                           </div>
                         </span>
-                        <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                        <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                           <i
                             class="ai ai-branch shrink-0 text-(--text-muted)"
                             aria-hidden="true"
@@ -218,7 +218,7 @@
                     >
                       <Item.Media>
                         <span
-                          class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
+                          class="flex size-8 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface)"
                         >
                           <i
                             :class="resource.icon"

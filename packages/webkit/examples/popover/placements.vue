@@ -10,7 +10,7 @@
 
 <template>
   <div
-    class="grid grid-cols-2 gap-(--spacing-xxl) place-items-center min-h-[24rem] p-(--spacing-xxl)"
+    class="grid grid-cols-2 gap-(--spacing-2xl) place-items-center min-h-[24rem] p-(--spacing-2xl)"
   >
     <PopoverRoot placement="bottom-start">
       <PopoverTrigger>

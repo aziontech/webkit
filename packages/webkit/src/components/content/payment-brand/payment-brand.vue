@@ -107,7 +107,7 @@
     :data-size="size"
     :data-glyph="glyph"
     :class="attrs.class"
-    class="inline-flex shrink-0 items-center justify-center overflow-clip rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) text-(--text-default) data-[size=medium]:h-7 data-[size=medium]:w-10 data-[size=small]:h-5 data-[size=small]:w-8 [&>svg]:block [&>svg]:h-auto [&>svg]:w-3/5 [&>svg]:max-h-4/5"
+    class="inline-flex shrink-0 items-center justify-center overflow-clip rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) text-(--text-default) data-[size=medium]:h-7 data-[size=medium]:w-10 data-[size=small]:h-5 data-[size=small]:w-8 [&>svg]:block [&>svg]:h-auto [&>svg]:w-3/5 [&>svg]:max-h-4/5"
   >
     <svg
       v-if="id === 'visa'"

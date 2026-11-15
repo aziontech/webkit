@@ -78,7 +78,7 @@
           <template #content>
             <div class="flex h-full flex-col p-(--spacing-sm)">
               <div
-                class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <Illustration name="modern-frontends" />
               </div>
@@ -108,7 +108,7 @@
           <template #content>
             <div class="flex h-full flex-col p-(--spacing-sm)">
               <div
-                class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <Illustration name="dns-protection" />
               </div>
@@ -202,7 +202,7 @@
           <template #content>
             <div class="flex h-full flex-col p-(--spacing-sm)">
               <div
-                class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                class="flex aspect-4/3 shrink-0 items-center justify-center overflow-hidden rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <Illustration name="ai-applications" />
               </div>

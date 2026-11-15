@@ -705,7 +705,7 @@
           <a
             href="/home"
             aria-label="Azion home"
-            class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
               kind="default"
@@ -842,7 +842,7 @@
                         >
                           <Item.Media>
                             <span
-                              class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                              class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                             >
                               <i
                                 class="ai ai-box text-body-md leading-none text-(--text-default)"
@@ -895,7 +895,7 @@
 
                       <div
                         v-if="projectPicker.remaining"
-                        class="border-t border-(--border-default) p-(--spacing-xxs)"
+                        class="border-t border-(--border-default) p-(--spacing-2xs)"
                       >
                         <Button
                           type="button"
@@ -1132,7 +1132,7 @@
                     <Item size="small">
                       <Item.Media>
                         <span
-                          class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                          class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                         >
                           <i
                             class="ai ai-box text-body-md leading-none text-(--text-default)"
@@ -1234,7 +1234,7 @@
                     <p class="text-label-sm text-(--text-default)">Traffic arrives on</p>
                     <div
                       :data-empty="!names.domain || null"
-                      class="flex min-h-10 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) data-[empty]:border-dashed"
+                      class="flex min-h-10 min-w-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-sm) data-[empty]:border-dashed"
                     >
                       <i
                         class="ai ai-globe shrink-0 text-(--text-muted)"
@@ -1277,7 +1277,7 @@
                           id="environment-label"
                           kind="label"
                         >
-                          <span class="inline-flex items-center gap-(--spacing-xxs)">
+                          <span class="inline-flex items-center gap-(--spacing-2xs)">
                             Environment
                             <Hint text="Which environment this binding lands on." />
                           </span>
@@ -1363,7 +1363,7 @@
                         <Item size="small">
                           <Item.Media>
                             <span
-                              class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                              class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                             >
                               <i
                                 class="ai ai-cloud-upload text-body-md leading-none text-(--text-default)"
@@ -1428,7 +1428,7 @@
                           >
                             <Item.Media>
                               <span
-                                class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                                class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                               >
                                 <i
                                   class="ai ai-cloud-upload text-body-md leading-none text-(--text-default)"
@@ -1481,7 +1481,7 @@
 
                         <div
                           v-if="deploymentPicker.remaining"
-                          class="border-t border-(--border-default) p-(--spacing-xxs)"
+                          class="border-t border-(--border-default) p-(--spacing-2xs)"
                         >
                           <Button
                             type="button"

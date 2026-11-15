@@ -81,7 +81,7 @@
           <a
             href="/home"
             aria-label="Azion home"
-            class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
               kind="default"
@@ -111,13 +111,13 @@
       class="animate-page-enter motion-reduce:animate-none relative min-w-0 flex-1 overflow-auto"
     >
       <div
-        class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-xxl)"
+        class="layout-column-focused relative flex min-h-full flex-col items-center gap-(--spacing-xl) px-(--spacing-md) py-(--spacing-2xl)"
       >
         <Card class="w-full">
           <template #content>
             <div class="flex w-full items-start gap-(--spacing-md)">
               <span
-                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                class="flex size-10 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
               >
                 <i
                   class="ai ai-arrow-right-arrow-left text-body-lg leading-none text-(--text-default)"
@@ -128,7 +128,7 @@
               <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-md)">
                 <div class="flex w-full min-w-0 flex-col overflow-hidden">
                   <span class="flex items-center gap-(--spacing-xs)">
-                    <span class="truncate text-heading-xxs text-(--text-default)"
+                    <span class="truncate text-heading-2xs text-(--text-default)"
                       >Origin Proxy</span
                     >
                   </span>
@@ -138,10 +138,10 @@
                   </span>
                 </div>
 
-                <div class="flex w-full flex-col gap-(--spacing-xxs)">
-                  <span class="truncate text-body-xxs text-(--text-muted)">Adds to</span>
+                <div class="flex w-full flex-col gap-(--spacing-2xs)">
+                  <span class="truncate text-body-2xs text-(--text-muted)">Adds to</span>
                   <span
-                    class="flex h-5 items-center gap-(--spacing-xxs) text-label-sm text-(--text-default)"
+                    class="flex h-5 items-center gap-(--spacing-2xs) text-label-sm text-(--text-default)"
                   >
                     <i
                       class="ai ai-server text-[length:inherit] leading-none"
@@ -162,7 +162,7 @@
           <Card class="w-full">
             <template #content>
               <div class="flex flex-col gap-(--spacing-lg)">
-                <div class="flex flex-col gap-(--spacing-xxs)">
+                <div class="flex flex-col gap-(--spacing-2xs)">
                   <h1 class="text-heading-xs text-(--text-default)">Configure Origin Proxy</h1>
                   <p class="text-body-sm text-pretty text-(--text-muted)">
                     An integration template adds records and a rule to a service you already run.
@@ -218,7 +218,7 @@
                 <Item size="small">
                   <Item.Media>
                     <span
-                      class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface-raised)"
+                      class="flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
                     >
                       <i
                         class="ai ai-sliders-h text-body-md leading-none text-(--text-default)"
@@ -241,7 +241,7 @@
               </Item.List>
 
               <ul
-                class="m-0 flex list-none flex-wrap gap-(--spacing-xxs) p-(--spacing-md) pt-0"
+                class="m-0 flex list-none flex-wrap gap-(--spacing-2xs) p-(--spacing-md) pt-0"
                 aria-label="Behaviors"
               >
                 <li

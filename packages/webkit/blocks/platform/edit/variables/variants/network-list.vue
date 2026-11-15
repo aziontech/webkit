@@ -282,7 +282,7 @@
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DrawerTitle>Create Network List</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               A list of addresses, ASNs or countries that firewall rules allow or refuse.
@@ -363,7 +363,7 @@
                     </Field>
                     <div
                       :id="`${pasteId}-report`"
-                      class="flex flex-col gap-(--spacing-xxs)"
+                      class="flex flex-col gap-(--spacing-2xs)"
                     >
                       <HelperText
                         key="found"

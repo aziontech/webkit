@@ -28,7 +28,7 @@
     :id="id"
     data-slot="field-title"
     :data-testid="testId"
-    class="flex w-fit items-center gap-(--spacing-xxs) text-body-sm text-(--text-default)"
+    class="flex w-fit items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
   >
     <slot />
   </div>

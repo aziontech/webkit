@@ -241,7 +241,7 @@
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DrawerTitle>Add Environment</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               A domain is what puts an environment on this resource. Say where it answers, and name

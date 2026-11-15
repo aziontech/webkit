@@ -73,7 +73,7 @@
             <template v-if="row.environment">{{ value }}</template>
           </template>
           <template #cell-certificate="{ value }">
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <i
                 class="ai ai-verified shrink-0 text-(--text-muted)"
                 aria-hidden="true"

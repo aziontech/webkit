@@ -546,7 +546,7 @@
                     </div>
                     <Separator />
                     <div
-                      class="flex flex-col gap-(--spacing-xxs) px-(--spacing-lg) py-(--spacing-md)"
+                      class="flex flex-col gap-(--spacing-2xs) px-(--spacing-lg) py-(--spacing-md)"
                     >
                       <div class="flex flex-wrap items-baseline justify-between gap-(--spacing-sm)">
                         <span class="text-label-md text-(--text-default)">Due today</span>
@@ -570,7 +570,7 @@
                   <div class="flex flex-col gap-(--spacing-lg) px-(--spacing-lg) py-(--spacing-lg)">
                     <div
                       v-if="!editingCard"
-                      class="flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
+                      class="flex min-h-14 flex-wrap items-center gap-(--spacing-md) rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs)"
                     >
                       <PaymentBrand brand="visa" />
                       <p class="min-w-0 flex-1 text-label-md text-(--text-default)">

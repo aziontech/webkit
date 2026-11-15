@@ -161,7 +161,7 @@
               />
               <span class="flex min-w-0 flex-col">
                 <span class="text-label-md text-(--text-default)">Cache vary by Query String</span>
-                <span class="flex gap-(--spacing-xxs)">
+                <span class="flex gap-(--spacing-2xs)">
                   <span class="text-body-sm text-(--text-muted)">Behavior:</span>
                   <span class="text-label-sm text-(--text-default)">{{ frame.behavior }}</span>
                 </span>
@@ -210,7 +210,7 @@
                     >
                     <span
                       :data-focused="frame.typing || null"
-                      class="flex rounded-(--shape-elements) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
+                      class="flex rounded-(--shape-control) ring-(--ring-color) ring-offset-(--bg-surface) transition-shadow duration-fast-02 ease-productive-entrance data-focused:ring-2 data-focused:ring-offset-2 motion-reduce:transition-none"
                     >
                       <Textarea
                         id="accelerator-query-string-fields"
@@ -234,7 +234,7 @@ product_id"
               <ShellMockupPart :order="2">
                 <span class="flex items-start gap-(--spacing-sm) pt-(--spacing-lg)">
                   <LegacySwitch :checked="true" />
-                  <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                  <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span class="text-label-md text-(--text-default)">Sort</span>
                     <span class="text-body-xs text-(--text-muted)">
                       Enable sorting of query string parameters to ensure consistent cache behavior

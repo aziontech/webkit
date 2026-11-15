@@ -15,14 +15,14 @@ export type CodeBlockHighlightToken = {
 }
 
 const TOKEN_CLASS: Record<CodeBlockHighlightTokenType, string> = {
-  keyword: 'text-(--code-sintax-keyword)',
-  string: 'text-(--code-sintax-string)',
-  function: 'text-(--code-sintax-function)',
-  type: 'text-(--code-sintax-type)',
-  punctuation: 'text-(--code-sintax-punctuation)',
-  identifier: 'text-(--code-sintax-identifier)',
-  comment: 'text-(--code-sintax-comment)',
-  prompt: 'text-(--code-sintax-line-number) select-none',
+  keyword: 'text-(--code-syntax-keyword)',
+  string: 'text-(--code-syntax-string)',
+  function: 'text-(--code-syntax-function)',
+  type: 'text-(--code-syntax-type)',
+  punctuation: 'text-(--code-syntax-punctuation)',
+  identifier: 'text-(--code-syntax-identifier)',
+  comment: 'text-(--code-syntax-comment)',
+  prompt: 'text-(--code-syntax-line-number) select-none',
   output: 'text-(--text-muted)'
 }
 

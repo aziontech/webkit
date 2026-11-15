@@ -131,7 +131,7 @@
                 :checked="frame.expiring"
                 data-cursor="expiration"
               />
-              <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+              <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                 <span class="text-label-md text-(--text-default)">Expiration</span>
                 <span class="text-body-xs text-(--text-muted)">
                   Expire the key automatically after a set time.

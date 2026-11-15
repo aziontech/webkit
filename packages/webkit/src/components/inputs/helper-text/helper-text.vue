@@ -36,7 +36,7 @@
     :data-testid="testId"
     :data-kind="kind"
     :class="attrs.class"
-    class="inline-flex items-center text-label-sm data-[kind=helper]:text-(--text-muted) data-[kind=disabled]:text-(--text-muted) data-[kind=invalid]:text-(--danger-contrast) data-[kind=required]:text-(--warning-contrast) data-[kind=disabled]:gap-(--spacing-xxs)"
+    class="inline-flex items-center text-label-sm data-[kind=helper]:text-(--text-muted) data-[kind=disabled]:text-(--text-muted) data-[kind=invalid]:text-(--danger-foreground) data-[kind=required]:text-(--warning-foreground) data-[kind=disabled]:gap-(--spacing-2xs)"
   >
     <i
       v-if="kind === 'disabled'"

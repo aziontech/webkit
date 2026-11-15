@@ -522,7 +522,7 @@
           @submit.prevent="submit"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DrawerTitle>Create Personal Token</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
                 The token acts as you, with your permissions, until it expires or you revoke it.

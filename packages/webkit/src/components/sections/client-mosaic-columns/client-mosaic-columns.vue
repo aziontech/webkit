@@ -140,7 +140,7 @@
   <section
     v-bind="$attrs"
     :id="anchor || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
     :data-testid="testId"
   >
     <SectionModule
@@ -206,7 +206,7 @@
                   </p>
                   <span
                     aria-hidden="true"
-                    class="mt-(--spacing-md) flex translate-y-1 items-center gap-(--spacing-xxs) text-overline-md whitespace-nowrap text-(--text-default) uppercase opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-focus-within/spot:translate-y-0 group-focus-within/spot:opacity-100 group-hover/spot:translate-y-0 group-hover/spot:opacity-100 motion-reduce:transition-none max-lg:translate-y-0 max-lg:opacity-100"
+                    class="mt-(--spacing-md) flex translate-y-1 items-center gap-(--spacing-2xs) text-overline-md whitespace-nowrap text-(--text-default) uppercase opacity-0 transition-[opacity,translate] duration-moderate-01 ease-productive-entrance group-focus-within/spot:translate-y-0 group-focus-within/spot:opacity-100 group-hover/spot:translate-y-0 group-hover/spot:opacity-100 motion-reduce:transition-none max-lg:translate-y-0 max-lg:opacity-100"
                   >
                     {{ story }}
                     <i class="ai ai-arrow-up-right leading-none rtl:-scale-x-100" />

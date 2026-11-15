@@ -232,7 +232,7 @@
           aria-hidden="true"
           :data-testid="`${testId}__highlight`"
           :style="highlightStyle"
-          class="pointer-events-none absolute z-0 rounded-(--shape-elements) bg-(--bg-hover) transition-[top,left,width,height,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
+          class="pointer-events-none absolute z-0 rounded-(--shape-control) bg-(--bg-hover) transition-[top,left,width,height,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
         />
 
         <ul
@@ -258,7 +258,7 @@
               :href="`#${item.id}`"
               :aria-current="item.id === activeId ? 'location' : undefined"
               :data-active="item.id === activeId || null"
-              class="block w-full rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted) no-underline transition-colors duration-moderate-01 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color) data-[active]:text-(--text-default) motion-reduce:transition-none"
+              class="block w-full rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted) no-underline transition-colors duration-moderate-01 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color) data-[active]:text-(--text-default) motion-reduce:transition-none"
               @click="emit('select', $event, item)"
             >
               {{ item.text }}
@@ -287,7 +287,7 @@
             :href="link.href"
             :target="isExternal(link.href) ? '_blank' : undefined"
             :rel="isExternal(link.href) ? 'noreferrer' : undefined"
-            class="flex w-full items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted) no-underline transition-colors duration-moderate-01 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
+            class="flex w-full items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted) no-underline transition-colors duration-moderate-01 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none"
           >
             <i
               v-if="link.icon"

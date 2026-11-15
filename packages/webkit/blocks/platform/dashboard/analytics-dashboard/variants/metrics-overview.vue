@@ -463,7 +463,7 @@
             :span="6"
           >
             <ChartCard.Header>
-              <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+              <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
                 <ChartCard.Title>{{ card.title }}</ChartCard.Title>
                 <Hint :text="card.hint" />
               </span>
@@ -558,7 +558,7 @@
     >
       <DialogContent>
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DialogTitle>{{ expandedCard?.title }}</DialogTitle>
             <DialogDescription>{{ expandedCard?.hint }}</DialogDescription>
           </div>

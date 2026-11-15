@@ -184,7 +184,7 @@
 
         <ShellMockupPart :order="2">
           <div class="flex flex-col gap-(--spacing-sm)">
-            <span class="flex flex-col gap-(--spacing-xxs)">
+            <span class="flex flex-col gap-(--spacing-2xs)">
               <span class="text-label-md text-(--text-default)">Arguments</span>
               <span class="text-body-xs text-(--text-muted)">
                 Configure the function arguments to customize its behavior.

@@ -123,7 +123,7 @@
       <PopoverTrigger
         :aria-label="triggerLabel"
         :data-testid="`${testId}__trigger`"
-        class="rounded-(--shape-elements)"
+        class="rounded-(--shape-control)"
         @click.stop
       >
         <Tag
@@ -163,7 +163,7 @@
 
         <ul
           :data-testid="`${testId}__list`"
-          class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-xxs)"
+          class="max-h-(--container-xs) overflow-auto overscroll-contain p-(--spacing-2xs)"
         >
           <li
             v-for="(entry, index) in visible"
@@ -181,7 +181,7 @@
                 :href="entry.href"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="flex min-h-7 items-center gap-(--spacing-xxs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                class="flex min-h-7 items-center gap-(--spacing-2xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-default) no-underline transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
               >
                 <span
                   dir="auto"
@@ -197,7 +197,7 @@
               <span
                 v-else
                 dir="auto"
-                class="block min-h-7 truncate px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-default)"
+                class="block min-h-7 truncate px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-default)"
                 >{{ entry.label }}</span
               >
             </slot>
@@ -213,7 +213,7 @@
 
         <div
           v-if="remaining > 0"
-          class="border-t-(length:--border-width-default) border-solid border-(--border-default) p-(--spacing-xxs)"
+          class="border-t-(length:--border-width-default) border-solid border-(--border-default) p-(--spacing-2xs)"
         >
           <Button
             :label="t('overflowCount.loadMore', { count: nextBatch })"

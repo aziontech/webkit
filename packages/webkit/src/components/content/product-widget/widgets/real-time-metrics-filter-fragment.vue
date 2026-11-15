@@ -163,7 +163,7 @@
           >
             <div
               v-if="frame.open"
-              class="absolute top-full start-0 z-1 mt-1 flex min-w-(--container-3xs) flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) [--popup-origin:top_left]"
+              class="absolute top-full start-0 z-1 mt-1 flex min-w-(--container-3xs) flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-sm) [--popup-origin:top_left]"
             >
               <div
                 class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
@@ -193,13 +193,13 @@
                 </Input>
               </div>
 
-              <div class="flex flex-col gap-(--spacing-xxs) p-(--spacing-xxs)">
+              <div class="flex flex-col gap-(--spacing-2xs) p-(--spacing-2xs)">
                 <span
                   v-for="(period, index) in PERIODS"
                   :key="period"
                   :data-cursor="`option-${index}`"
                   :data-highlighted="frame.highlight === index || null"
-                  class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-highlighted:bg-(--bg-hover) motion-reduce:transition-none"
+                  class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance data-highlighted:bg-(--bg-hover) motion-reduce:transition-none"
                 >
                   <span class="grow truncate">{{ period }}</span>
                   <i
@@ -210,9 +210,9 @@
                 </span>
               </div>
 
-              <div class="border-t border-(--border-default) p-(--spacing-xxs)">
+              <div class="border-t border-(--border-default) p-(--spacing-2xs)">
                 <span
-                  class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"
+                  class="flex w-full items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-label-sm text-(--text-default)"
                 >
                   <i
                     class="ai ai-filter-slash text-(--text-muted)"
@@ -235,7 +235,7 @@
               removable
               data-cursor="chip"
             >
-              <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+              <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                 <span class="truncate text-(--text-muted)">Period</span>
                 <span class="truncate">{{ frame.period }}</span>
               </span>
@@ -252,11 +252,11 @@
             >
               <Card>
                 <template #content>
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span class="min-w-0 truncate text-body-sm text-(--text-muted)">
                       {{ metric.label }}
                     </span>
-                    <p class="flex items-baseline gap-(--spacing-xxs)">
+                    <p class="flex items-baseline gap-(--spacing-2xs)">
                       <span class="text-heading-lg text-(--text-default)">{{ metric.value }}</span>
                       <span class="text-body-md text-(--text-muted)">{{ metric.unit }}</span>
                     </p>

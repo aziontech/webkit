@@ -94,7 +94,7 @@
     :data-testid="testId"
     :data-pinned="pinned || null"
     :style="{ height: runwayHeight || undefined, '--process-scroll-offset': headerOffset }"
-    class="scroll-mt-(--spacing-xxl) group/process"
+    class="scroll-mt-(--spacing-2xl) group/process"
   >
     <div
       ref="band"
@@ -150,7 +150,7 @@
                 />
                 <span
                   aria-hidden="true"
-                  class="relative self-start pb-(--spacing-xxl) text-big-number-lg text-(--text-default) tabular-nums lg:pb-(--spacing-lg)"
+                  class="relative self-start pb-(--spacing-2xl) text-big-number-lg text-(--text-default) tabular-nums lg:pb-(--spacing-lg)"
                 >
                   {{ stepNumber(index) }}
                 </span>

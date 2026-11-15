@@ -82,7 +82,7 @@
               width="7rem"
               height="2rem"
             />
-            <div class="flex flex-col gap-(--spacing-xxs)">
+            <div class="flex flex-col gap-(--spacing-2xs)">
               <Skeleton
                 width="12rem"
                 height="1rem"

@@ -155,12 +155,12 @@
         :data-state="ctx.open.value ? 'open' : 'closed'"
         :class="attrs.class"
         :style="panelStyle"
-        class="fixed z-(--z-input-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs)"
+        class="fixed z-(--z-control-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs)"
         @keydown="onKeydown"
       >
         <div
           v-if="$slots['search']"
-          class="flex shrink-0 items-center justify-center p-(--spacing-xxs)"
+          class="flex shrink-0 items-center justify-center p-(--spacing-2xs)"
           :data-testid="`${testId}__search`"
         >
           <slot name="search" />
@@ -172,7 +172,7 @@
           :aria-label="listLabel"
           :aria-labelledby="listLabelledby"
           :aria-busy="ctx.loading.value || undefined"
-          class="group/options flex max-h-60 flex-col items-stretch px-(--spacing-xxs) py-(--spacing-xs)"
+          class="group/options flex max-h-60 flex-col items-stretch px-(--spacing-2xs) py-(--spacing-xs)"
           :data-testid="`${testId}__list`"
         >
           <LazyNodes
@@ -189,7 +189,7 @@
             aria-selected="false"
             data-kind="create"
             :data-testid="`${testId}__create`"
-            class="flex h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-default) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
+            class="flex h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-default) outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color)"
             @click="onCreateClick"
             @keydown="onCreateKeydown"
           >
@@ -233,7 +233,7 @@
         </ScrollArea>
         <div
           v-if="$slots['footer']"
-          class="flex shrink-0 items-center justify-center p-(--spacing-xxs)"
+          class="flex shrink-0 items-center justify-center p-(--spacing-2xs)"
           :data-testid="`${testId}__footer`"
         >
           <slot name="footer" />

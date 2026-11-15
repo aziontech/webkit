@@ -354,7 +354,7 @@
       </DropdownMenu.Group>
       <DropdownMenu.Group>
         <div
-          class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
+          class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs)"
         >
           <span class="flex-1 truncate text-start text-label-sm text-(--text-default)">Theme</span>
           <ThemeSwitcher
@@ -388,7 +388,7 @@
         </DropdownMenu.Item>
       </DropdownMenu.Group>
       <DropdownMenu.Group>
-        <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
+        <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-2xs) py-(--spacing-2xs)">
           <Button
             label="Upgrade to Pro"
             kind="secondary"
@@ -449,7 +449,7 @@
             </Select.Option>
             <p
               v-if="!environmentMatches.length"
-              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+              class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
             >
               No environments match "{{ environmentQuery }}".
             </p>

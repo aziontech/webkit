@@ -60,7 +60,7 @@
       :href="linked ? href : undefined"
       :data-linked="linked || null"
       :data-testid="`${testId}__row`"
-      class="group mx-[calc((var(--spacing-md)+1px)*-1)] flex min-h-(--size-11) items-center gap-[calc(var(--spacing-md)+var(--spacing-xxs))] rounded-(--shape-card) border border-transparent px-(--spacing-md) py-(--spacing-sm) transition-colors duration-fast-02 ease-productive-entrance focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) focus-visible:outline-none data-[linked]:hover:border-(--border-default) data-[linked]:hover:bg-(--bg-hover) motion-reduce:transition-none"
+      class="group mx-[calc((var(--spacing-md)+1px)*-1)] flex min-h-(--size-11) items-center gap-[calc(var(--spacing-md)+var(--spacing-2xs))] rounded-(--shape-card) border border-transparent px-(--spacing-md) py-(--spacing-sm) transition-colors duration-fast-02 ease-productive-entrance focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) focus-visible:outline-none data-[linked]:hover:border-(--border-default) data-[linked]:hover:bg-(--bg-hover) motion-reduce:transition-none"
       @click="onClick"
     >
       <i
@@ -71,7 +71,7 @@
       />
 
       <span
-        class="flex min-w-0 flex-1 flex-col justify-center gap-[calc(var(--spacing-xxs)/2)] break-words"
+        class="flex min-w-0 flex-1 flex-col justify-center gap-[calc(var(--spacing-2xs)/2)] break-words"
       >
         <span
           :data-testid="`${testId}__title`"

@@ -239,7 +239,7 @@ test('no-hardcoded-motion (script + template)', () => {
   js.run('no-hardcoded-motion', noHardcodedMotion, {
     valid: [
       // catalogued utility + tokens: fine
-      "const c = 'animate-slide-in-left motion-reduce:animate-none'",
+      "const c = 'animate-slide-in-start motion-reduce:animate-none'",
       "const c = 'transition-colors duration-150 ease-out motion-reduce:transition-none'",
       // timing from tokens in a style string: fine
       "const s = 'transition: opacity var(--duration-fast-01)'",
@@ -264,7 +264,7 @@ test('no-hardcoded-motion (script + template)', () => {
     valid: [
       // motion + escape on the same static class string
       {
-        code: '<template><aside class="animate-slide-in-left motion-reduce:animate-none">x</aside></template>',
+        code: '<template><aside class="animate-slide-in-start motion-reduce:animate-none">x</aside></template>',
         filename: 'a.vue'
       },
       // no motion at all
@@ -281,7 +281,7 @@ test('no-hardcoded-motion (script + template)', () => {
     invalid: [
       // static class with motion and no reduced-motion escape
       {
-        code: '<template><aside class="animate-slide-in-left">x</aside></template>',
+        code: '<template><aside class="animate-slide-in-start">x</aside></template>',
         filename: 'd.vue',
         errors: [{ messageId: 'pairing' }]
       },

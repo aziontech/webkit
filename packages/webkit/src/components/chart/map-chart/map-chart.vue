@@ -492,13 +492,13 @@
           <tr>
             <th
               scope="col"
-              class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-start text-label-sm text-(--text-muted)"
+              class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-start text-label-sm text-(--text-muted)"
             >
               {{ t('mapChart.name') }}
             </th>
             <th
               scope="col"
-              class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-end text-label-sm text-(--text-muted)"
+              class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-end text-label-sm text-(--text-muted)"
             >
               {{ t('mapChart.value') }}
             </th>
@@ -511,12 +511,12 @@
           >
             <th
               scope="row"
-              class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-xxs) text-start text-body-sm"
+              class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-2xs) text-start text-body-sm"
             >
               {{ item.name }}
             </th>
             <td
-              class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-xxs) text-end tabular-nums"
+              class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-2xs) text-end tabular-nums"
             >
               {{ valueText(item.value) }}
             </td>
@@ -535,7 +535,7 @@
         :aria-describedby="describedBy"
         :data-testid="`${testId}__plot`"
         :style="{ aspectRatio: `${box.width} / ${box.height}` }"
-        class="relative w-full min-w-0 rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+        class="relative w-full min-w-0 rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
         @keydown="onKeydown"
         @click="onClick"
       >
@@ -619,7 +619,7 @@
         >
           <div
             :data-side="readout.side"
-            class="flex w-max max-w-(--container-3xs) -translate-y-1/2 flex-col overflow-hidden rounded-(--shape-elements) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) text-(--chart-tooltip-text) shadow-(--shadow-sm) data-[side=end]:translate-x-(--spacing-sm) data-[side=start]:-translate-x-[calc(100%+var(--spacing-sm))]"
+            class="flex w-max max-w-(--container-3xs) -translate-y-1/2 flex-col overflow-hidden rounded-(--shape-control) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) text-(--chart-tooltip-text) shadow-(--shadow-sm) data-[side=end]:translate-x-(--spacing-sm) data-[side=start]:-translate-x-[calc(100%+var(--spacing-sm))]"
           >
             <span
               class="border-b border-(--chart-tooltip-border) px-(--spacing-sm) py-(--spacing-xs) text-label-md"
@@ -640,7 +640,7 @@
         <span aria-hidden="true">{{ legend.min }}</span>
         <span
           aria-hidden="true"
-          class="flex overflow-hidden rounded-(--shape-elements)"
+          class="flex overflow-hidden rounded-(--shape-control)"
         >
           <span
             v-for="color in legend.bins"

@@ -246,7 +246,7 @@
             </Select.Option>
             <p
               v-if="!matches.length"
-              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+              class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
             >
               No versions match"{{ query }}".
             </p>
@@ -330,7 +330,7 @@
               </Select.Option>
               <p
                 v-if="!matches.length"
-                class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
               >
                 No versions match"{{ query }}".
               </p>
@@ -517,7 +517,7 @@
                   class="layout-boundary-inline flex min-w-0 flex-1 items-center gap-(--spacing-sm) py-(--spacing-xs)"
                 >
                   <span
-                    class="hidden size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) md:flex"
+                    class="hidden size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) md:flex"
                     aria-hidden="true"
                   >
                     <Spinner />
@@ -604,12 +604,12 @@
                     aria-hidden="true"
                   />
                   <span
-                    class="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-(--accent) text-(--accent-contrast)"
+                    class="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-(--accent) text-(--accent-foreground)"
                     aria-hidden="true"
                   >
                     <i class="ai ai-code text-body-xs" />
                   </span>
-                  <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) pt-0.5">
+                  <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <span class="truncate text-label-md text-(--text-default)">
                         {{ version.name }}
@@ -666,7 +666,7 @@
                     >
                       <i class="ai ai-code text-body-xs" />
                     </span>
-                    <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) pt-0.5">
+                    <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
                       <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                         <span
                           class="truncate text-label-md text-(--text-default) group-hover:underline"

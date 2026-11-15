@@ -143,7 +143,7 @@
       tabindex="0"
       :aria-label="ariaLabel || t('conversation.label')"
       :data-testid="`${testId}__viewport`"
-      class="min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-(--shape-elements) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
+      class="min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-(--shape-control) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
       @scroll.passive="onScroll"
       @wheel.passive="markIntent"
       @touchmove.passive="markIntent"

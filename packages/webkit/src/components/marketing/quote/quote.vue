@@ -161,12 +161,12 @@
         >
           <span
             v-if="name"
-            class="px-(--spacing-xxs) text-(--text-primary)"
+            class="px-(--spacing-2xs) text-(--text-primary)"
             >{{ name }}</span
           >
           <span
             v-if="jobTitle"
-            class="px-(--spacing-xxs) text-(--text-muted)"
+            class="px-(--spacing-2xs) text-(--text-muted)"
             >{{ jobTitle }}</span
           >
         </span>

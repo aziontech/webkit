@@ -138,7 +138,7 @@
               />
               <span class="flex min-w-0 flex-col">
                 <span class="text-label-md text-(--text-default)">Cache vary by Method</span>
-                <span class="flex gap-(--spacing-xxs)">
+                <span class="flex gap-(--spacing-2xs)">
                   <span class="text-body-sm text-(--text-muted)">Method:</span>
                   <span class="text-label-sm text-(--text-default)">{{ summary }}</span>
                 </span>
@@ -154,7 +154,7 @@
                 <span class="flex items-start gap-(--spacing-sm)">
                   <span
                     :data-cursor="method.key"
-                    class="flex pt-(--spacing-xxs)"
+                    class="flex pt-(--spacing-2xs)"
                   >
                     <Checkbox
                       :model-value="checked(method.key)"
@@ -186,7 +186,7 @@
             />
             <span class="flex min-w-0 flex-col">
               <span class="text-label-md text-(--text-default)">Cache vary by Query String</span>
-              <span class="flex gap-(--spacing-xxs)">
+              <span class="flex gap-(--spacing-2xs)">
                 <span class="text-body-sm text-(--text-muted)">Behavior:</span>
                 <span class="text-label-sm text-(--text-default)">Allowlist</span>
               </span>

@@ -4,7 +4,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <CallToAction
       eyebrow="Get started"
       title="Run your first application at the edge today."

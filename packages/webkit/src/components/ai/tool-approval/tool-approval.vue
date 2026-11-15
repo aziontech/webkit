@@ -124,16 +124,16 @@
     <div class="flex items-start gap-(--spacing-sm)">
       <i
         :data-kind="kind"
-        class="ai ai-shield mt-0.5 shrink-0 text-(--text-muted) data-[kind=danger]:text-(--danger-contrast)"
+        class="ai ai-shield mt-0.5 shrink-0 text-(--text-muted) data-[kind=danger]:text-(--danger-foreground)"
         aria-hidden="true"
       />
-      <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+      <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
         <h3
           :id="titleId"
           ref="heading"
           tabindex="-1"
           :data-testid="`${testId}__title`"
-          class="m-0 text-heading-xxs text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+          class="m-0 text-heading-2xs text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
         >
           <MarkdownInline :nodes="titleNodes" />
         </h3>
@@ -156,7 +156,7 @@
     <template v-if="state === 'pending'">
       <div
         v-if="confirmationPhrase"
-        class="flex flex-col gap-(--spacing-xxs)"
+        class="flex flex-col gap-(--spacing-2xs)"
       >
         <label
           :for="phraseId"
@@ -172,7 +172,7 @@
           spellcheck="false"
           :disabled="loading"
           :data-testid="`${testId}__phrase`"
-          class="h-8 w-full rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:bg-(--bg-disabled)"
+          class="h-8 w-full rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-body-sm text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) disabled:bg-(--bg-disabled)"
         />
       </div>
       <div class="flex flex-wrap justify-end gap-(--spacing-xs)">

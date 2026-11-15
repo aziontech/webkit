@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <div>
       <FrameBox>
         <div class="p-(--spacing-lg) text-center text-body-md text-(--text-muted)">

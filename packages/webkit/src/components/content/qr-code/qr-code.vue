@@ -83,7 +83,7 @@
     :data-modules="grid ? modules : undefined"
     data-theme="light"
     :class="attrs.class"
-    class="inline-flex aspect-square max-w-full shrink-0 overflow-clip rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) text-(--text-default) forced-color-adjust-none data-[size=small]:w-32 data-[size=medium]:w-40 data-[size=large]:w-56"
+    class="inline-flex aspect-square max-w-full shrink-0 overflow-clip rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) text-(--text-default) forced-color-adjust-none data-[size=small]:w-32 data-[size=medium]:w-40 data-[size=large]:w-56"
   >
     <svg
       :viewBox="`0 0 ${modules + QUIET * 2} ${modules + QUIET * 2}`"

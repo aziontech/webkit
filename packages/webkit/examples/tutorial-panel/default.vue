@@ -104,7 +104,7 @@
         >
           <h2
             id="new-service-title"
-            class="text-heading-xxs text-(--text-default)"
+            class="text-heading-2xs text-(--text-default)"
           >
             New service
           </h2>

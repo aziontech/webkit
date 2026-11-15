@@ -40,7 +40,7 @@
     :data-width="maxWidth"
     :data-bordered="props.bordered || null"
     :data-padded="props.padded || null"
-    class="mx-auto w-full data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:layout-column-site data-[bordered]:border-x data-[bordered]:border-(--border-default) data-[padded]:px-(--layout-boundary-inline) data-[padded]:py-(--spacing-xxl)"
+    class="mx-auto w-full data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:layout-column-site data-[bordered]:border-x data-[bordered]:border-(--border-default) data-[padded]:px-(--layout-boundary-inline) data-[padded]:py-(--spacing-2xl)"
   >
     <slot />
   </div>

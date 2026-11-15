@@ -53,12 +53,12 @@
       :data-testid="testId"
       class="flex flex-col [&:not(:first-child)]:mt-(--spacing-sm) [&:not(:first-child)]:border-t [&:not(:first-child)]:border-(--border-default) [&:not(:first-child)]:pt-(--spacing-xs)"
     >
-      <div class="flex flex-col px-(--spacing-xxs)">
+      <div class="flex flex-col px-(--spacing-2xs)">
         <div
           v-if="hasLabel"
           :id="labelId"
           :data-testid="`${testId}__label`"
-          class="px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+          class="px-(--spacing-sm) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
         >
           {{ label }}
         </div>
@@ -66,7 +66,7 @@
         <div
           v-if="$slots['top']"
           :data-testid="`${testId}__top`"
-          class="px-(--spacing-sm) py-(--spacing-xxs)"
+          class="px-(--spacing-sm) py-(--spacing-2xs)"
         >
           <slot name="top" />
         </div>
@@ -76,7 +76,7 @@
         <div
           v-if="$slots['bottom']"
           :data-testid="`${testId}__bottom`"
-          class="px-(--spacing-sm) py-(--spacing-xxs)"
+          class="px-(--spacing-sm) py-(--spacing-2xs)"
         >
           <slot name="bottom" />
         </div>

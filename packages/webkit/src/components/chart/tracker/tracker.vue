@@ -155,7 +155,7 @@
     :aria-describedby="summary ? summaryId : undefined"
     :data-error="hasError || null"
     tabindex="0"
-    class="relative w-full min-w-0 rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)"
+    class="relative w-full min-w-0 rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-surface)"
     @keydown="onKeydown"
   >
     <Skeleton
@@ -168,7 +168,7 @@
       v-else-if="hasError"
       role="alert"
       :data-testid="`${testId}__error`"
-      class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--danger-border) bg-(--danger) px-(--spacing-sm) text-label-sm text-(--danger-contrast) forced-color-adjust-none"
+      class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--danger-border) bg-(--danger) px-(--spacing-sm) text-label-sm text-(--danger-foreground) forced-color-adjust-none"
     >
       <i
         class="ai ai-exclamation-triangle shrink-0"
@@ -184,7 +184,7 @@
         :data-moving="moving || null"
         aria-hidden="true"
         :style="{ left: 0, translate: readout.translate }"
-        class="pointer-events-none absolute bottom-full mb-(--spacing-xs) w-max max-w-(--container-3xs) rounded-(--shape-elements) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) px-(--spacing-sm) py-(--spacing-xs) text-label-md text-(--chart-tooltip-text) opacity-0 shadow-(--shadow-sm) transition-opacity duration-fast-02 ease-productive-entrance data-[moving]:transition-[translate,opacity] data-[visible]:opacity-100 motion-reduce:transition-none motion-reduce:data-[moving]:transition-none"
+        class="pointer-events-none absolute bottom-full mb-(--spacing-xs) w-max max-w-(--container-3xs) rounded-(--shape-control) border border-(--chart-tooltip-border) bg-(--chart-tooltip-bg) px-(--spacing-sm) py-(--spacing-xs) text-label-md text-(--chart-tooltip-text) opacity-0 shadow-(--shadow-sm) transition-opacity duration-fast-02 ease-productive-entrance data-[moving]:transition-[translate,opacity] data-[visible]:opacity-100 motion-reduce:transition-none motion-reduce:data-[moving]:transition-none"
       >
         {{ readout.label }}
       </div>
@@ -203,7 +203,7 @@
           :data-active="(activeIndex !== null && index === activeIndex) || null"
           :data-dimmed="(activeIndex !== null && index !== activeIndex) || null"
           :style="{ '--tracker-block': block.color }"
-          class="h-full min-w-0 flex-1 bg-(--tracker-block) forced-color-adjust-none transition-opacity duration-fast-02 ease-productive-entrance first:rounded-s-(--shape-elements) last:rounded-e-(--shape-elements) data-[dimmed]:opacity-40 motion-reduce:transition-none"
+          class="h-full min-w-0 flex-1 bg-(--tracker-block) forced-color-adjust-none transition-opacity duration-fast-02 ease-productive-entrance first:rounded-s-(--shape-control) last:rounded-e-(--shape-control) data-[dimmed]:opacity-40 motion-reduce:transition-none"
         />
       </div>
     </template>

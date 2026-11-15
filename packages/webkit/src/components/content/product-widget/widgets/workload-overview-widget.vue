@@ -215,7 +215,7 @@
                       aria-hidden="true"
                     />
                     <span
-                      class="inline-flex items-center gap-(--spacing-xxs) text-body-sm text-(--text-default)"
+                      class="inline-flex items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
                     >
                       {{ FACTS.domain }}
                       <i
@@ -232,7 +232,7 @@
                       icon="ai ai-external-link"
                     />
                     <span
-                      class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default)"
+                      class="flex h-8 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) text-label-sm text-(--text-default)"
                     >
                       <i
                         class="ai ai-layers shrink-0 text-(--text-muted)"
@@ -256,9 +256,9 @@
                 <div
                   class="grid grid-cols-4 gap-(--spacing-sm) border-t border-(--border-muted) px-(--spacing-md) py-(--spacing-md)"
                 >
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span
-                      class="flex items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                      class="flex items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"
                     >
                       Custom domains
                       <i
@@ -270,7 +270,7 @@
                       <span class="text-body-sm text-(--text-disabled)">None</span>
                     </div>
                   </div>
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span class="text-label-sm text-(--text-muted)">Status</span>
                     <div class="flex min-h-7 items-center">
                       <StatusIndicator
@@ -279,7 +279,7 @@
                       />
                     </div>
                   </div>
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span class="text-label-sm text-(--text-muted)">Workload ID</span>
                     <div class="flex min-h-7 items-center gap-(--spacing-xs)">
                       <span class="text-body-sm tabular-nums text-(--text-default)">{{
@@ -293,7 +293,7 @@
                       />
                     </div>
                   </div>
-                  <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                  <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                     <span class="text-label-sm text-(--text-muted)">Created</span>
                     <div class="flex min-h-7 items-center gap-(--spacing-xs)">
                       <span class="truncate text-body-sm text-(--text-default)">{{
@@ -317,7 +317,7 @@
                   />
                   <span class="text-label-md text-(--text-default)">Deployment Settings</span>
                   <span
-                    class="ms-auto inline-flex items-center gap-(--spacing-xxs) text-body-sm text-(--text-default)"
+                    class="ms-auto inline-flex items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
                   >
                     Azion Default
                     <i
@@ -404,7 +404,7 @@
                         class="min-w-0 self-start rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) shadow-sm data-dashed:border-dashed data-focus:border-(--primary) data-gap:mb-(--spacing-sm)"
                       >
                         <div
-                          class="flex w-full items-center gap-(--spacing-xxs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs)"
+                          class="flex w-full items-center gap-(--spacing-2xs) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs)"
                         >
                           <i
                             :class="node.icon"
@@ -429,7 +429,7 @@
                           class="flex min-w-0 items-center gap-(--spacing-xs) px-(--spacing-md) pb-(--spacing-sm)"
                         >
                           <span
-                            class="inline-flex min-w-0 items-center gap-(--spacing-xxs) text-body-sm text-(--text-default)"
+                            class="inline-flex min-w-0 items-center gap-(--spacing-2xs) text-body-sm text-(--text-default)"
                           >
                             <span class="truncate">{{ node.name || '—' }}</span>
                             <i
@@ -470,7 +470,7 @@
         <div
           class="flex shrink-0 items-start gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-lg) py-(--spacing-md)"
         >
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <h2 class="m-0 text-heading-xs text-(--text-default)">Deploy</h2>
             <p class="m-0 text-body-sm text-(--text-muted)">
               Publish storefront-prod. Review what this release carries and where it lands.
@@ -503,7 +503,7 @@
             >
               <div class="flex items-center gap-(--spacing-sm) p-(--spacing-sm)">
                 <span
-                  class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-default)"
+                  class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default)"
                 >
                   <i
                     class="ai ai-edge-application text-body-md leading-none text-(--text-default)"
@@ -523,7 +523,7 @@
                   <span class="text-body-sm text-(--text-muted)">AWFBBZ1Q</span>
                 </span>
                 <span
-                  class="ms-auto flex h-8 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-elements) border border-(--border-default) px-(--spacing-sm) text-label-sm text-(--text-default)"
+                  class="ms-auto flex h-8 shrink-0 items-center gap-(--spacing-xs) rounded-(--shape-control) border border-(--border-default) px-(--spacing-sm) text-label-sm text-(--text-default)"
                 >
                   Change Version
                   <i
@@ -543,7 +543,7 @@
               </div>
               <div class="flex items-center gap-(--spacing-sm) p-(--spacing-sm)">
                 <span
-                  class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-elements) border border-(--border-default)"
+                  class="inline-flex size-8 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-default)"
                 >
                   <i
                     class="ai ai-edge-storage text-body-md leading-none text-(--text-default)"

@@ -692,7 +692,7 @@
   <div
     :class="
       cn(
-        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-elements) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default) data-[kind=output]:bg-(--bg-canvas)',
+        'group/code-block flex h-[var(--code-block-height,auto)] w-full @container flex-col overflow-hidden rounded-(--shape-control) bg-(--bg-surface) data-[border]:border data-[border]:border-(--border-default) data-[kind=output]:bg-(--bg-canvas)',
         attrs.class as string | undefined
       )
     "
@@ -725,18 +725,18 @@
 
     <div
       v-if="showTabHeader"
-      class="relative shrink-0 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-xxs)"
+      class="relative shrink-0 border-b border-(--border-default) bg-(--bg-canvas) p-(--spacing-2xs)"
       :data-testid="`${testId}__header`"
     >
       <div
         ref="tabListRef"
         role="tablist"
-        class="relative flex items-center gap-(--spacing-xxs)"
+        class="relative flex items-center gap-(--spacing-2xs)"
         :data-testid="`${testId}__tabs`"
       >
         <span
           v-show="indicatorVisible"
-          class="pointer-events-none absolute inset-y-0 z-1 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm) motion-reduce:transition-none"
+          class="pointer-events-none absolute inset-y-0 z-1 rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm) motion-reduce:transition-none"
           :style="[indicatorTransitionStyle, indicatorTransformStyle]"
           :data-testid="`${testId}__indicator`"
           aria-hidden="true"
@@ -748,7 +748,7 @@
           type="button"
           role="tab"
           :id="tabId(index)"
-          class="relative z-2 inline-flex h-8 shrink-0 items-center justify-center rounded-(--shape-elements) px-(--spacing-sm) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[state=active]:text-(--text-default) motion-reduce:transition-none"
+          class="relative z-2 inline-flex h-8 shrink-0 items-center justify-center rounded-(--shape-control) px-(--spacing-sm) text-label-sm text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[state=active]:text-(--text-default) motion-reduce:transition-none"
           :aria-selected="index === activeTabIndex"
           :aria-controls="index === activeTabIndex ? panelId : undefined"
           :tabindex="index === activeTabIndex ? 0 : -1"
@@ -857,7 +857,7 @@
                 <div
                   v-for="(line, offset) in chunk.items"
                   :key="`${activeTab.value}-${panelVersion}-${chunk.start + offset}`"
-                  class="group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-xxs) text-label-code-sm data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40"
+                  class="group relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-lg) py-(--spacing-2xs) text-label-code-sm data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40"
                   :class="getLineMotionClasses(chunk.start + offset)"
                   :style="getLineMotionStyle(chunk.start + offset)"
                   :data-testid="`${testId}__line`"
@@ -869,7 +869,7 @@
                   />
                   <span
                     v-if="showDiffGutter"
-                    class="relative z-1 w-2 shrink-0 text-center group-data-[state=added]:text-(--success-contrast) group-data-[state=removed]:text-(--danger-contrast)"
+                    class="relative z-1 w-2 shrink-0 text-center group-data-[state=added]:text-(--success-foreground) group-data-[state=removed]:text-(--danger-foreground)"
                     :data-testid="`${testId}__diff-marker`"
                     aria-hidden="true"
                   >
@@ -877,7 +877,7 @@
                   </span>
                   <span
                     v-if="gutter"
-                    class="relative z-1 w-4 shrink-0 text-center text-(--code-sintax-line-number)"
+                    class="relative z-1 w-4 shrink-0 text-center text-(--code-syntax-line-number)"
                     :data-testid="`${testId}__line-number`"
                   >
                     {{ formatLineNumber(line.number) }}
@@ -947,12 +947,12 @@
                     <div
                       v-for="(pair, offset) in chunk.items"
                       :key="`${activeTab.value}-${side}-${chunk.start + offset}`"
-                      class="relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-xxs) text-label-code-sm data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40 data-[state=empty]:bg-(--bg-canvas)"
+                      class="relative flex min-w-full w-max shrink-0 items-center gap-(--spacing-xs) px-(--spacing-sm) py-(--spacing-2xs) text-label-code-sm data-[state=added]:bg-(--success)/40 data-[state=removed]:bg-(--danger)/40 data-[state=highlighted]:bg-(--info)/40 data-[state=empty]:bg-(--bg-canvas)"
                       :data-state="pair[side]?.state ?? 'empty'"
                       :data-testid="`${testId}__split-line`"
                     >
                       <span
-                        class="w-2 shrink-0 text-center in-data-[state=added]:text-(--success-contrast) in-data-[state=removed]:text-(--danger-contrast)"
+                        class="w-2 shrink-0 text-center in-data-[state=added]:text-(--success-foreground) in-data-[state=removed]:text-(--danger-foreground)"
                         aria-hidden="true"
                         >{{
                           getDiffMarker((pair[side]?.state ?? 'default') as CodeBlockLineState)
@@ -960,7 +960,7 @@
                       >
                       <span
                         v-if="gutter"
-                        class="w-4 shrink-0 text-center text-(--code-sintax-line-number)"
+                        class="w-4 shrink-0 text-center text-(--code-syntax-line-number)"
                         >{{ pair[side] ? formatLineNumber(pair[side].number) : '' }}</span
                       >
                       <span

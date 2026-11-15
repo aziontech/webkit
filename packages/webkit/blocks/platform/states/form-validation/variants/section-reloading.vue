@@ -165,7 +165,7 @@
           <a
             href="/home"
             aria-label="Azion home"
-            class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
+            class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface) motion-reduce:transition-none"
           >
             <Brand
               kind="default"
@@ -417,8 +417,8 @@
                 <div
                   class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)"
                 >
-                  <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-                    <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                  <div class="flex min-w-0 grow flex-col gap-(--spacing-2xs)">
+                    <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
                       <h2
                         id="ev-origin-heading"
                         class="scroll-mt-(--spacing-xl) text-balance text-heading-xs text-(--text-default)"

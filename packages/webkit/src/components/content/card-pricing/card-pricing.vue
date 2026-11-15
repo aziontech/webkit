@@ -118,7 +118,7 @@
         </div>
 
         <div
-          class="flex w-full shrink-0 flex-col items-start gap-(--spacing-xxs) group-data-[slot-position=bottom]/card:min-h-11 group-data-[slot-position=middle]/card:min-h-16"
+          class="flex w-full shrink-0 flex-col items-start gap-(--spacing-2xs) group-data-[slot-position=bottom]/card:min-h-11 group-data-[slot-position=middle]/card:min-h-16"
           :data-testid="`${testId}__pricing`"
         >
           <Transition

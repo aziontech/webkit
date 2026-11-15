@@ -515,7 +515,7 @@
                       class="ai ai-database shrink-0 text-body-lg text-(--text-muted)"
                       aria-hidden="true"
                     />
-                    <h1 class="min-w-0 truncate text-heading-xxs text-(--text-default)">
+                    <h1 class="min-w-0 truncate text-heading-2xs text-(--text-default)">
                       {{ rootName }}
                     </h1>
                   </div>
@@ -783,7 +783,7 @@
     >
       <DialogContent>
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DialogTitle>{{
               uploadMode === 'folder' ? 'Upload folder' : 'Upload files'
             }}</DialogTitle>

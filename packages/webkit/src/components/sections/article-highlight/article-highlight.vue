@@ -199,7 +199,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="current"
@@ -215,7 +215,7 @@
           :data-autoplay="running || null"
           :data-paused="(autoplaying && paused) || null"
           :data-fill="fill || null"
-          class="group/highlight relative flex flex-col lg:data-[fill]:h-[calc(100dvh-var(--layout-header-height)-var(--spacing-xxl)*2)]"
+          class="group/highlight relative flex flex-col lg:data-[fill]:h-[calc(100dvh-var(--layout-header-height)-var(--spacing-2xl)*2)]"
           @pointerenter="pointerInside = true"
           @pointerleave="pointerInside = false"
           @focusin="onFocusIn"
@@ -254,7 +254,7 @@
                     class="block min-w-0 aspect-video lg:aspect-4/3 lg:group-data-[fill]/highlight:aspect-auto"
                   />
                   <div
-                    class="flex flex-col gap-(--spacing-sm) p-(--spacing-xl) lg:p-(--spacing-xxl) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:py-(--spacing-lg)"
+                    class="flex flex-col gap-(--spacing-sm) p-(--spacing-xl) lg:p-(--spacing-2xl) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:py-(--spacing-lg)"
                   >
                     <span class="text-overline-sm">{{ item.meta }}</span>
                     <span class="text-heading-lg">{{ item.title }}</span>
@@ -290,7 +290,7 @@
                     />
                   </div>
                   <div
-                    class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance group-hover/article:bg-(--bg-surface-raised) motion-reduce:transition-none lg:p-(--spacing-xxl) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:py-(--spacing-lg)"
+                    class="flex min-w-0 flex-col justify-center gap-(--spacing-sm) p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance group-hover/article:bg-(--bg-surface-raised) motion-reduce:transition-none lg:p-(--spacing-2xl) lg:[@media(max-height:50rem)]:group-data-[fill]/highlight:py-(--spacing-lg)"
                   >
                     <span class="text-overline-sm text-(--text-muted)">{{ current.meta }}</span>
                     <h2 class="m-0 text-balance text-heading-lg text-(--text-default)">
@@ -361,7 +361,7 @@
                   @keydown="onKeydown($event, index)"
                 >
                   <span class="text-overline-sm text-(--text-muted)">{{ item.meta }}</span>
-                  <span class="line-clamp-3 text-balance text-heading-xxs text-(--text-default)">
+                  <span class="line-clamp-3 text-balance text-heading-2xs text-(--text-default)">
                     {{ item.title }}
                   </span>
                 </button>

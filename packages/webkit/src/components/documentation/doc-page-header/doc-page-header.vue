@@ -127,11 +127,11 @@
     <div
       v-if="updatedLabel || metaActions.length"
       :data-undated="updatedLabel ? null : ''"
-      class="flex flex-wrap items-center gap-(--spacing-xxs) data-[undated]:-ms-(--spacing-xs)"
+      class="flex flex-wrap items-center gap-(--spacing-2xs) data-[undated]:-ms-(--spacing-xs)"
     >
       <p
         v-if="updatedLabel"
-        class="m-0 flex items-center gap-(--spacing-xxs) text-label-sm text-(--text-muted)"
+        class="m-0 flex items-center gap-(--spacing-2xs) text-label-sm text-(--text-muted)"
       >
         <i
           class="ai ai-history shrink-0 text-label-sm leading-none"
@@ -149,7 +149,7 @@
         <span
           v-if="updatedLabel || index > 0"
           aria-hidden="true"
-          class="mx-(--spacing-xxs) hidden h-4 items-center md:flex"
+          class="mx-(--spacing-2xs) hidden h-4 items-center md:flex"
         >
           <Separator orientation="vertical" />
         </span>

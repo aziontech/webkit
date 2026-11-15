@@ -144,10 +144,10 @@
   watch(() => model.value, scheduleIndicatorSync)
 
   const ROOT_CLASS =
-    'relative inline-flex h-7 w-fit items-center gap-(--spacing-xxs) p-(--spacing-xxs) rounded-full border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface)'
+    'relative inline-flex h-7 w-fit items-center gap-(--spacing-2xs) p-(--spacing-2xs) rounded-full border-solid border-(length:--border-width-default) border-(--border-default) bg-(--bg-surface)'
 
   const SEGMENT_CLASS =
-    'relative z-(--z-input-field) inline-flex h-5 w-7 shrink-0 items-center justify-center rounded-full cursor-pointer text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) [&:not([data-state=active])]:hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
+    'relative z-(--z-control) inline-flex h-5 w-7 shrink-0 items-center justify-center rounded-full cursor-pointer text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) [&:not([data-state=active])]:hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)'
 </script>
 
 <template>

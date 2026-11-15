@@ -498,7 +498,7 @@
         >
           <div
             v-if="groupReorderShown"
-            class="flex items-center gap-(--spacing-xxs)"
+            class="flex items-center gap-(--spacing-2xs)"
             :data-testid="`${testId}__group-reorder`"
           >
             <button
@@ -564,7 +564,7 @@
                 class="min-w-0 truncate"
                 >{{ column.label }}</span
               >
-              <span class="flex justify-end gap-(--spacing-xxs)">
+              <span class="flex justify-end gap-(--spacing-2xs)">
                 <span
                   v-for="slot in actionCount(group)"
                   :key="slot"
@@ -580,7 +580,7 @@
               <li
                 v-for="(item, index) in group"
                 :key="rowKey(item)"
-                class="relative flex min-w-0 flex-col gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-sm) first:border-t-0 first:pt-0 @md/attribute-editor:border-t-0 @md/attribute-editor:pt-0 data-[joined]:border-t-0 data-[joined]:pt-0 data-[dragging]:rounded-(--shape-card) data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-offset-2 data-[dragging]:outline-(--accent) data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:h-0.5 data-[drop]:before:bg-(--accent) data-[drop]:before:content-[''] data-[drop=before]:before:-top-(--spacing-xxs) data-[drop=after]:before:-bottom-(--spacing-xxs)"
+                class="relative flex min-w-0 flex-col gap-(--spacing-sm) border-t border-(--border-muted) pt-(--spacing-sm) first:border-t-0 first:pt-0 @md/attribute-editor:border-t-0 @md/attribute-editor:pt-0 data-[joined]:border-t-0 data-[joined]:pt-0 data-[dragging]:rounded-(--shape-card) data-[dragging]:opacity-60 data-[dragging]:outline-dashed data-[dragging]:outline-2 data-[dragging]:outline-offset-2 data-[dragging]:outline-(--accent) data-[drop]:before:pointer-events-none data-[drop]:before:absolute data-[drop]:before:inset-x-0 data-[drop]:before:h-0.5 data-[drop]:before:bg-(--accent) data-[drop]:before:content-[''] data-[drop=before]:before:-top-(--spacing-2xs) data-[drop=after]:before:-bottom-(--spacing-2xs)"
                 :data-row="index"
                 :data-group="grouped ? groupIndex : undefined"
                 :data-joined="grouped && index > 0 ? '' : undefined"
@@ -673,7 +673,7 @@
                         }}</FieldError
                       >
                     </Field>
-                    <div class="flex justify-end gap-(--spacing-xxs)">
+                    <div class="flex justify-end gap-(--spacing-2xs)">
                       <template v-if="rowReorderShown(group)">
                         <button
                           type="button"

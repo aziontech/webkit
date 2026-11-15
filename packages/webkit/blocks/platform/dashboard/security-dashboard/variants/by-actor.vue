@@ -703,7 +703,7 @@
       >
         <ChartCard :span="12">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Outcomes over time</ChartCard.Title>
               <Hint text="Requests per hour, stacked by the outcome the rules gave them." />
             </span>
@@ -742,7 +742,7 @@
 
         <ChartCard :span="4">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Actors</ChartCard.Title>
               <Hint text="Requests per actor, every outcome included." />
             </span>
@@ -760,7 +760,7 @@
 
         <ChartCard :span="4">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Categories</ChartCard.Title>
               <Hint text="Requests per category of action, every outcome included." />
             </span>
@@ -779,7 +779,7 @@
 
         <ChartCard :span="4">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Destinations</ChartCard.Title>
               <Hint text="Requests per destination host, every outcome included." />
             </span>
@@ -798,7 +798,7 @@
 
         <ChartCard :span="12">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Requests</ChartCard.Title>
               <Hint
                 text="The latest requests, newest first, with the rule that decided each one."

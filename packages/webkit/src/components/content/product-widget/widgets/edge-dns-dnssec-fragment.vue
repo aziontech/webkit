@@ -150,7 +150,7 @@
               <span
                 data-cursor="dnssec"
                 :data-focused="frame.focused || null"
-                class="inline-flex rounded-(--shape-elements) data-[focused]:ring-2 data-[focused]:ring-(--ring-color) data-[focused]:ring-offset-2 data-[focused]:ring-offset-(--bg-canvas)"
+                class="inline-flex rounded-(--shape-control) data-[focused]:ring-2 data-[focused]:ring-(--ring-color) data-[focused]:ring-offset-2 data-[focused]:ring-offset-(--bg-canvas)"
               >
                 <Switch
                   :model-value="frame.dnssec"

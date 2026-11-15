@@ -367,7 +367,7 @@
     :outline-groups="outlineGroups"
   >
     <article
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-xxl)"
+      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-2xl)"
     >
       <DocPageHeader
         title="Agent setup"

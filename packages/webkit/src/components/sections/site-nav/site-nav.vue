@@ -223,7 +223,7 @@
           <a
             :href="home"
             :aria-label="t('siteNav.home')"
-            class="inline-flex shrink-0 items-center self-center rounded-(--shape-elements) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+            class="inline-flex shrink-0 items-center self-center rounded-(--shape-control) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
           >
             <Brand
               kind="default"
@@ -238,7 +238,7 @@
           aria-label="Azion"
           class="min-w-0"
         >
-          <NavigationMenuList class="hidden items-center gap-(--spacing-xxs) xl:flex">
+          <NavigationMenuList class="hidden items-center gap-(--spacing-2xs) xl:flex">
             <NavigationMenuItem
               v-for="menu in menus"
               :key="menu.value"

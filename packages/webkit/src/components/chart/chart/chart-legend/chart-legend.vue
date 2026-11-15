@@ -38,7 +38,7 @@
     v-if="entries.length > 1"
     v-bind="$attrs"
     :data-testid="testId"
-    class="col-start-1 row-start-2 m-0 mt-(--spacing-sm) flex list-none flex-wrap gap-x-(--spacing-sm) gap-y-(--spacing-xxs) p-0"
+    class="col-start-1 row-start-2 m-0 mt-(--spacing-sm) flex list-none flex-wrap gap-x-(--spacing-sm) gap-y-(--spacing-2xs) p-0"
   >
     <li
       v-for="entry in entries"
@@ -49,7 +49,7 @@
         :aria-pressed="!entry.hidden"
         :data-hidden="entry.hidden || null"
         :data-testid="`${testId}__item`"
-        class="relative inline-flex min-h-6 items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] gap-(--spacing-xs) rounded-(--shape-elements) px-(--spacing-xxs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[hidden]:text-(--text-muted)"
+        class="relative inline-flex min-h-6 items-center before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] gap-(--spacing-xs) rounded-(--shape-control) px-(--spacing-2xs) text-body-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[hidden]:text-(--text-muted)"
         @click="ctx.toggleSeries($event, entry.id)"
         @pointerenter="ctx.setEmphasized(entry.hidden ? null : entry.id)"
         @pointerleave="ctx.setEmphasized(null)"
@@ -60,7 +60,7 @@
           :data-hidden="entry.hidden || null"
           :data-dimmed="entry.dimmed || null"
           :style="{ '--chart-legend-key': entry.color }"
-          class="size-2.5 shrink-0 rounded-(--shape-elements) bg-(--chart-legend-key) forced-color-adjust-none transition-opacity duration-moderate-01 motion-reduce:transition-none data-[dimmed]:opacity-30 data-[hidden]:opacity-30"
+          class="size-2.5 shrink-0 rounded-(--shape-control) bg-(--chart-legend-key) forced-color-adjust-none transition-opacity duration-moderate-01 motion-reduce:transition-none data-[dimmed]:opacity-30 data-[hidden]:opacity-30"
         />
         <span>{{ entry.name }}</span>
         <span

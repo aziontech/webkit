@@ -156,7 +156,7 @@
               :active="hover || !canHover"
             >
               <template #default="{ index }">
-                <div class="flex items-start gap-(--spacing-sm) py-(--spacing-xxs)">
+                <div class="flex items-start gap-(--spacing-sm) py-(--spacing-2xs)">
                   <span class="w-24 shrink-0 text-body-xs text-(--text-muted)">
                     {{ EVENTS[index].time }}
                   </span>
@@ -169,7 +169,7 @@
                       class="me-(--spacing-sm)"
                     >
                       <span class="bg-(--bg-surface-raised)">{{ field.key }}:</span>
-                      <span class="ms-(--spacing-xxs)">{{ field.value }}</span>
+                      <span class="ms-(--spacing-2xs)">{{ field.value }}</span>
                     </span>
                   </span>
                 </div>

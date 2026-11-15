@@ -83,7 +83,7 @@
         :aria-controls="bodyId"
         :data-state="open ? 'open' : 'closed'"
         :data-testid="`${testId}__node-trigger`"
-        class="group flex w-full items-center gap-(--spacing-xxs) rounded-t-(--shape-card) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-xxs) text-start outline-none transition-colors duration-moderate-01 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none"
+        class="group flex w-full items-center gap-(--spacing-2xs) rounded-t-(--shape-card) px-(--spacing-md) pt-(--spacing-sm) pb-(--spacing-2xs) text-start outline-none transition-colors duration-moderate-01 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset motion-reduce:transition-none"
         @click="emit('toggle')"
       >
         <i
@@ -121,7 +121,7 @@
         v-else-if="node.href"
         :href="node.href"
         :data-testid="`${testId}__node-link`"
-        class="group/link inline-flex min-w-0 items-center gap-(--spacing-xxs) rounded-(--shape-elements) text-label-sm text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+        class="group/link inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-control) text-label-sm text-(--text-default) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
       >
         <span
           dir="auto"
@@ -141,7 +141,7 @@
       >
       <div
         v-if="node.bindable || $slots['actions']"
-        class="ms-auto flex shrink-0 items-center gap-(--spacing-xxs)"
+        class="ms-auto flex shrink-0 items-center gap-(--spacing-2xs)"
       >
         <slot name="actions" />
         <template v-if="node.bindable">
@@ -220,7 +220,7 @@
           <div
             v-for="field in node.fields ?? []"
             :key="field.label"
-            class="flex flex-col gap-(--spacing-xxs)"
+            class="flex flex-col gap-(--spacing-2xs)"
           >
             <span class="text-label-sm text-(--text-muted)">{{ field.label }}</span>
             <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -230,7 +230,7 @@
                 target="_blank"
                 rel="noopener noreferrer"
                 dir="auto"
-                class="min-w-0 truncate rounded-(--shape-elements) text-body-xs text-(--text-default) underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
+                class="min-w-0 truncate rounded-(--shape-control) text-body-xs text-(--text-default) underline-offset-2 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-(--ring-color)"
                 >{{ field.value }}</a
               >
               <span

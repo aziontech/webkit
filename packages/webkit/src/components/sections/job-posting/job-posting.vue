@@ -322,7 +322,7 @@
     :data-loading="loading || null"
     :data-submitted="submitted || null"
     :data-error="error || null"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <template v-if="title">
       <SectionModule
@@ -359,7 +359,7 @@
                     <i
                       v-if="facet.icon"
                       :class="facet.icon"
-                      class="mt-(--spacing-xxs) shrink-0 text-body-sm text-(--text-muted)"
+                      class="mt-(--spacing-2xs) shrink-0 text-body-sm text-(--text-muted)"
                       aria-hidden="true"
                     />
                     {{ facet.label }}
@@ -389,7 +389,7 @@
                 class="border-(--border-default) data-[ruled]:border-t"
               >
                 <div
-                  class="flex max-w-(--layout-measure-content) flex-col gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-xxl)"
+                  class="flex max-w-(--layout-measure-content) flex-col gap-(--spacing-lg) px-(--spacing-xl) py-(--spacing-2xl)"
                 >
                   <SectionTitle
                     :framed="false"
@@ -433,7 +433,7 @@
         :divided="false"
         :padded="false"
         :data-testid="`${testId}__apply`"
-        class="scroll-mt-(--spacing-xxl)"
+        class="scroll-mt-(--spacing-2xl)"
       >
         <template #header>
           <FrameBox
@@ -441,7 +441,7 @@
             borders="y"
             marks="bottom"
           >
-            <div class="max-w-(--layout-measure-content) px-(--spacing-xl) py-(--spacing-xxl)">
+            <div class="max-w-(--layout-measure-content) px-(--spacing-xl) py-(--spacing-2xl)">
               <SectionTitle
                 :framed="false"
                 kind="left"
@@ -457,7 +457,7 @@
           borders="y"
           marks="bottom"
         >
-          <div class="max-w-(--layout-measure-form) px-(--spacing-xl) py-(--spacing-xxl)">
+          <div class="max-w-(--layout-measure-form) px-(--spacing-xl) py-(--spacing-2xl)">
             <form
               novalidate
               class="flex flex-col gap-(--spacing-xl)"

@@ -57,13 +57,13 @@
     class="group/heading @container/section-header flex flex-col"
   >
     <div class="flex flex-wrap items-start justify-between gap-(--spacing-md) px-(--spacing-xs)">
-      <div class="flex min-w-0 grow flex-col gap-(--spacing-xxs)">
-        <div class="flex min-w-0 items-center gap-(--spacing-xxs)">
+      <div class="flex min-w-0 grow flex-col gap-(--spacing-2xs)">
+        <div class="flex min-w-0 items-center gap-(--spacing-2xs)">
           <h2
             :id="anchor || undefined"
             :data-testid="`${testId}__title`"
             :data-size="size"
-            class="scroll-mt-(--spacing-xl) text-balance text-(--text-default) data-[size=medium]:text-heading-xs data-[size=small]:text-heading-xxs"
+            class="scroll-mt-(--spacing-xl) text-balance text-(--text-default) data-[size=medium]:text-heading-xs data-[size=small]:text-heading-2xs"
           >
             {{ title }}
           </h2>

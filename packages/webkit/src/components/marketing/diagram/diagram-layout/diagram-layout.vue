@@ -38,7 +38,7 @@
     :data-align="item.align ?? 'center'"
     :data-gap="item.gap ?? 'default'"
     :data-stack="tree || item.row.some((child) => 'branches' in child) ? 'tree' : 'centre'"
-    class="flex flex-col items-center gap-(--spacing-xl) self-stretch data-[stack=tree]:items-start @5xl:flex-row @5xl:gap-(--spacing-xl) @5xl:self-auto @5xl:data-[align=center]:items-center @5xl:data-[align=start]:items-start @5xl:data-[gap=wide]:gap-(--spacing-xxl)"
+    class="flex flex-col items-center gap-(--spacing-xl) self-stretch data-[stack=tree]:items-start @5xl:flex-row @5xl:gap-(--spacing-xl) @5xl:self-auto @5xl:data-[align=center]:items-center @5xl:data-[align=start]:items-start @5xl:data-[gap=wide]:gap-(--spacing-2xl)"
   >
     <DiagramLayout
       v-for="(child, index) in item.row"

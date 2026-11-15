@@ -95,7 +95,7 @@
         leave-from-class="opacity-100"
         leave-to-class="opacity-0"
         :leave-active-class="itemTransitionActive"
-        class="m-0 flex min-h-[14rem] list-none flex-col gap-(--spacing-xxs) overflow-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) data-[disabled]:bg-(--bg-disabled)"
+        class="m-0 flex min-h-[14rem] list-none flex-col gap-(--spacing-2xs) overflow-auto rounded-(--shape-card) border border-(--border-default) bg-(--bg-surface) p-(--spacing-xs) data-[disabled]:bg-(--bg-disabled)"
       >
         <li
           v-if="loading"
@@ -117,7 +117,7 @@
           :data-selected="ctx.isSelected(side, index) || null"
           :data-testid="`${testId}__option`"
           :style="itemTransitionStyle"
-          class="cursor-pointer select-none rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-body-md text-(--text-default) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[selected]:bg-(--bg-selected) aria-disabled:cursor-not-allowed"
+          class="cursor-pointer select-none rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-body-md text-(--text-default) hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) data-[selected]:bg-(--bg-selected) aria-disabled:cursor-not-allowed"
           @click="ctx.toggleSelection(side, index)"
           @dblclick="ctx.itemDoubleClick($event, side, index)"
           @keydown="onKeydown(index, $event)"

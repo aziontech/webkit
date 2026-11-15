@@ -290,7 +290,7 @@
           v-if="filteredCountries.length === 0"
           role="status"
           :data-testid="`${testId}__search-empty`"
-          class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+          class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
         >
           {{ searchEmptyLabel || t('phoneInput.empty') }}
         </p>

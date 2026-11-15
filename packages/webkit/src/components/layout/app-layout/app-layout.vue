@@ -372,16 +372,16 @@
               :aria-valuemax="maxSize"
               :data-testid="`${testId}__split-separator`"
               :data-resizing="resizing || null"
-              class="absolute inset-x-0 top-0 z-10 h-(--spacing-xxs) cursor-row-resize bg-transparent outline-none transition-colors duration-fast-02 ease-productive-entrance before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) data-[resizing]:bg-(--accent) motion-reduce:transition-none"
+              class="absolute inset-x-0 top-0 z-10 h-(--spacing-2xs) cursor-row-resize bg-transparent outline-none transition-colors duration-fast-02 ease-productive-entrance before:absolute before:inset-x-0 before:-inset-y-2 before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) data-[resizing]:bg-(--accent) motion-reduce:transition-none"
               @pointerdown="startResize"
               @keydown="nudge"
             />
             <div
-              class="flex h-(--spacing-xxl) shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"
+              class="flex h-(--spacing-2xl) shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"
             >
               <h2
                 :id="splitTitleId"
-                class="m-0 min-w-0 flex-1 truncate text-heading-xxs text-(--text-default)"
+                class="m-0 min-w-0 flex-1 truncate text-heading-2xs text-(--text-default)"
               >
                 {{ splitPanelTitle || t('appLayout.splitPanel') }}
               </h2>
@@ -434,16 +434,16 @@
             :aria-valuemax="maxSize"
             :data-testid="`${testId}__split-separator`"
             :data-resizing="resizing || null"
-            class="absolute inset-y-0 start-0 z-10 w-(--spacing-xxs) cursor-col-resize bg-transparent outline-none transition-colors duration-fast-02 ease-productive-entrance before:absolute before:inset-y-0 before:-inset-x-2 before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) data-[resizing]:bg-(--accent) motion-reduce:transition-none"
+            class="absolute inset-y-0 start-0 z-10 w-(--spacing-2xs) cursor-col-resize bg-transparent outline-none transition-colors duration-fast-02 ease-productive-entrance before:absolute before:inset-y-0 before:-inset-x-2 before:content-[''] hover:bg-(--border-strong) focus-visible:bg-(--accent) data-[resizing]:bg-(--accent) motion-reduce:transition-none"
             @pointerdown="startResize"
             @keydown="nudge"
           />
           <div
-            class="flex h-(--spacing-xxl) shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"
+            class="flex h-(--spacing-2xl) shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"
           >
             <h2
               :id="splitTitleId"
-              class="m-0 min-w-0 flex-1 truncate text-heading-xxs text-(--text-default)"
+              class="m-0 min-w-0 flex-1 truncate text-heading-2xs text-(--text-default)"
             >
               {{ splitPanelTitle || t('appLayout.splitPanel') }}
             </h2>
@@ -482,11 +482,11 @@
           :style="{ width: `${toolsWidth}px` }"
         >
           <div
-            class="flex h-(--spacing-xxl) shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"
+            class="flex h-(--spacing-2xl) shrink-0 items-center gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md)"
           >
             <h2
               :id="toolsTitleId"
-              class="m-0 min-w-0 flex-1 truncate text-heading-xxs text-(--text-default)"
+              class="m-0 min-w-0 flex-1 truncate text-heading-2xs text-(--text-default)"
             >
               {{ toolsLabel || t('appLayout.tools') }}
             </h2>

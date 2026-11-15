@@ -1101,10 +1101,10 @@
             </Popover.Trigger>
             <Popover.Content>
               <div
-                class="flex flex-col gap-(--spacing-xs) p-(--spacing-xxs)"
+                class="flex flex-col gap-(--spacing-xs) p-(--spacing-2xs)"
                 data-testid="saved-queries"
               >
-                <h2 class="px-(--spacing-xs) pt-(--spacing-xxs) text-label-sm text-(--text-muted)">
+                <h2 class="px-(--spacing-xs) pt-(--spacing-2xs) text-label-sm text-(--text-muted)">
                   Saved queries
                 </h2>
                 <ul
@@ -1115,7 +1115,7 @@
                   <li
                     v-for="entry in savedQueries"
                     :key="entry.id"
-                    class="flex min-w-0 items-center gap-(--spacing-xxs)"
+                    class="flex min-w-0 items-center gap-(--spacing-2xs)"
                   >
                     <Item
                       clickable
@@ -1152,7 +1152,7 @@
                   No saved queries yet. Name the current query to keep it.
                 </p>
                 <div
-                  class="flex items-center gap-(--spacing-xs) border-t border-(--border-default) px-(--spacing-xxs) pt-(--spacing-xs)"
+                  class="flex items-center gap-(--spacing-xs) border-t border-(--border-default) px-(--spacing-2xs) pt-(--spacing-xs)"
                 >
                   <div class="min-w-0 flex-1">
                     <Input
@@ -1201,10 +1201,10 @@
             </Popover.Trigger>
             <Popover.Content>
               <div
-                class="flex flex-col gap-(--spacing-xs) p-(--spacing-xxs)"
+                class="flex flex-col gap-(--spacing-xs) p-(--spacing-2xs)"
                 data-testid="recent-queries"
               >
-                <h2 class="px-(--spacing-xs) pt-(--spacing-xxs) text-label-sm text-(--text-muted)">
+                <h2 class="px-(--spacing-xs) pt-(--spacing-2xs) text-label-sm text-(--text-muted)">
                   Recent queries
                 </h2>
                 <ul
@@ -1244,7 +1244,7 @@
                 </p>
                 <div
                   v-if="recentQueries.length"
-                  class="border-t border-(--border-default) pt-(--spacing-xxs)"
+                  class="border-t border-(--border-default) pt-(--spacing-2xs)"
                 >
                   <Button
                     label="Clear history"
@@ -1290,7 +1290,7 @@
 
       <p
         role="status"
-        class="text-body-sm text-(--danger-contrast) empty:hidden"
+        class="text-body-sm text-(--danger-foreground) empty:hidden"
         data-testid="query-notice"
       >
         {{ queryNotice }}
@@ -1344,7 +1344,7 @@
 
                 <div>
                   <div
-                    class="flex items-baseline justify-between gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xxs) pt-(--spacing-xxs)"
+                    class="flex items-baseline justify-between gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-2xs) pt-(--spacing-2xs)"
                   >
                     <span class="text-label-sm text-(--text-muted)">Shown</span>
                     <span class="text-label-sm text-(--text-muted)">Values</span>
@@ -1353,7 +1353,7 @@
                   <div
                     v-for="field in shownFields"
                     :key="field.id"
-                    class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                    class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
                   >
                     <div class="min-w-0 flex-1">
                       <Field
@@ -1388,9 +1388,9 @@
                       </div>
 
                       <Popover.Content>
-                        <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
+                        <div class="flex min-w-0 flex-col p-(--spacing-2xs)">
                           <p
-                            class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                            class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                           >
                             {{ field.label }} · top values
                           </p>
@@ -1424,7 +1424,7 @@
 
                           <p
                             v-if="fieldValueOverflow(field.id)"
-                            class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                            class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
                           >
                             {{ fieldValueOverflow(field.id) }} more values in this window.
                           </p>
@@ -1434,7 +1434,7 @@
 
                     <span
                       v-else
-                      class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
+                      class="shrink-0 px-(--spacing-2xs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
                       :data-empty="fieldCounts[field.id] ? null : true"
                       :aria-label="`${fieldCounts[field.id]} distinct values`"
                     >
@@ -1475,7 +1475,7 @@
                           <div
                             v-for="field in category.fields"
                             :key="field.id"
-                            class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                            class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
                           >
                             <div class="min-w-0 flex-1">
                               <Field orientation="horizontal">
@@ -1507,9 +1507,9 @@
                               </div>
 
                               <Popover.Content>
-                                <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
+                                <div class="flex min-w-0 flex-col p-(--spacing-2xs)">
                                   <p
-                                    class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                                    class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                                   >
                                     {{ field.label }} · top values
                                   </p>
@@ -1545,7 +1545,7 @@
 
                                   <p
                                     v-if="fieldValueOverflow(field.id)"
-                                    class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                                    class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
                                   >
                                     {{ fieldValueOverflow(field.id) }} more values in this window.
                                   </p>
@@ -1555,7 +1555,7 @@
 
                             <span
                               v-else
-                              class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
+                              class="shrink-0 px-(--spacing-2xs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
                               :data-empty="fieldCounts[field.id] ? null : true"
                               :aria-label="`${fieldCounts[field.id]} distinct values`"
                             >
@@ -1592,7 +1592,7 @@
                     <div class="flex flex-col">
                       <dt class="text-label-sm text-(--text-muted)">Errors</dt>
                       <dd
-                        class="m-0 text-heading-xs tabular-nums text-(--text-default) data-raised:text-(--danger-contrast)"
+                        class="m-0 text-heading-xs tabular-nums text-(--text-default) data-raised:text-(--danger-foreground)"
                         :data-raised="summary.errors ? true : null"
                         :aria-label="`${summary.errors} errors, ${errorShareLabel}`"
                       >
@@ -1692,7 +1692,7 @@
 
                     <template #cell-status="{ value }">
                       <span
-                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[tone=error]:text-(--danger-contrast) data-[tone=warn]:text-(--warning-contrast)"
+                        class="min-w-0 truncate text-label-code-sm tabular-nums text-(--text-default) data-[tone=error]:text-(--danger-foreground) data-[tone=warn]:text-(--warning-foreground)"
                         :data-tone="statusTone(value)"
                       >
                         {{ formatEventValue(statusField, value) }}
@@ -1767,7 +1767,7 @@
             >
               <h2
                 id="event-document-title"
-                class="min-w-0 truncate text-heading-xxs text-(--text-default)"
+                class="min-w-0 truncate text-heading-2xs text-(--text-default)"
               >
                 Event
               </h2>

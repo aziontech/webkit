@@ -238,7 +238,7 @@
             v-for="item in TABS"
             :key="item.value"
             :data-active="item.value === tab || null"
-            class="inline-flex h-8 items-center rounded-(--shape-elements) px-3 text-body-sm font-semibold text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance data-active:bg-(--bg-contrast) data-active:font-bold data-active:text-(--text-contrast) motion-reduce:transition-none"
+            class="inline-flex h-8 items-center rounded-(--shape-control) px-3 text-body-sm font-semibold text-(--text-muted) transition-colors duration-fast-02 ease-productive-entrance data-active:bg-(--bg-contrast) data-active:font-bold data-active:text-(--text-contrast) motion-reduce:transition-none"
           >
             {{ item.label }}
           </span>
@@ -257,7 +257,7 @@
           >
             <template v-if="tab === 'main-settings'">
               <fieldset
-                class="m-0 flex min-w-0 gap-16 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-14"
+                class="m-0 flex min-w-0 gap-16 rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-14"
               >
                 <div class="flex w-107.5 shrink-0 flex-col gap-(--spacing-xs)">
                   <div class="text-heading-md font-medium text-(--text-default)">General</div>
@@ -280,7 +280,7 @@
               </fieldset>
 
               <fieldset
-                class="m-0 flex min-w-0 gap-16 rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) p-14"
+                class="m-0 flex min-w-0 gap-16 rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) p-14"
               >
                 <div class="flex w-107.5 shrink-0 flex-col gap-(--spacing-xs)">
                   <div class="text-heading-md font-medium text-(--text-default)">Modules</div>
@@ -294,19 +294,19 @@
                   <div
                     v-for="module in MODULES"
                     :key="module.key"
-                    class="flex items-start gap-(--spacing-sm) rounded-(--shape-elements) border border-[color-mix(in_srgb,var(--primary)_32%,transparent)] bg-(--bg-surface-raised) p-(--spacing-md)"
+                    class="flex items-start gap-(--spacing-sm) rounded-(--shape-control) border border-[color-mix(in_srgb,var(--primary)_32%,transparent)] bg-(--bg-surface-raised) p-(--spacing-md)"
                   >
                     <LegacySwitch
                       checked
                       disabled
                       class="mt-0.5"
                     />
-                    <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                    <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                       <span class="text-label-lg text-(--text-default)">{{ module.label }}</span>
                       <span class="text-body-sm text-(--text-muted)">{{ module.description }}</span>
                       <span
                         v-if="module.locked"
-                        class="mt-1 inline-flex w-fit items-center gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) px-2 py-1 text-body-xs text-(--text-default)"
+                        class="mt-1 inline-flex w-fit items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) px-2 py-1 text-body-xs text-(--text-default)"
                       >
                         <i
                           class="ai ai-lock text-body-xs"
@@ -333,7 +333,7 @@
 
             <div
               v-else
-              class="overflow-hidden rounded-(--shape-elements) border border-(--border-default)"
+              class="overflow-hidden rounded-(--shape-control) border border-(--border-default)"
             >
               <div
                 class="flex items-center gap-(--spacing-xs) bg-(--bg-surface-raised) px-(--spacing-sm) py-(--spacing-sm)"
@@ -436,7 +436,7 @@
                     aria-hidden="true"
                   />
                   <span
-                    class="inline-flex h-8 w-9 items-center justify-center rounded-(--shape-elements) bg-(--bg-hover) text-(--text-default)"
+                    class="inline-flex h-8 w-9 items-center justify-center rounded-(--shape-control) bg-(--bg-hover) text-(--text-default)"
                     >1</span
                   >
                   <i
@@ -448,7 +448,7 @@
                     aria-hidden="true"
                   />
                   <span
-                    class="inline-flex h-8 w-16 items-center justify-between rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) text-(--text-default)"
+                    class="inline-flex h-8 w-16 items-center justify-between rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) text-(--text-default)"
                   >
                     50
                     <i
@@ -457,7 +457,7 @@
                     />
                   </span>
                   <span
-                    class="inline-flex h-8 w-9 items-center justify-center rounded-(--shape-elements) bg-(--bg-hover) text-(--text-default)"
+                    class="inline-flex h-8 w-9 items-center justify-center rounded-(--shape-control) bg-(--bg-hover) text-(--text-default)"
                     >1</span
                   >
                 </span>
@@ -472,14 +472,14 @@
           class="flex items-center gap-(--spacing-md) border-t border-(--border-default) bg-(--bg-surface-raised) px-(--spacing-xl) py-(--spacing-md)"
         >
           <span
-            class="inline-flex size-9 shrink-0 items-center justify-center rounded-(--shape-elements) bg-(--bg-canvas)"
+            class="inline-flex size-9 shrink-0 items-center justify-center rounded-(--shape-control) bg-(--bg-canvas)"
           >
             <i
               class="ai ai-check-circle text-body-lg text-(--text-muted)"
               aria-hidden="true"
             />
           </span>
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <span
               class="flex items-center gap-(--spacing-xs) text-body-sm font-medium text-(--text-default)"
             >
@@ -491,7 +491,7 @@
                 icon="ai ai-circle-fill"
               />
               <span
-                class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) px-2 py-0.5 text-body-xs text-(--text-muted)"
+                class="inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) px-2 py-0.5 text-body-xs text-(--text-muted)"
               >
                 <i
                   class="ai ai-lock text-body-xs"

@@ -120,7 +120,7 @@
   }))
 
   const ROOT_CLASS =
-    'group relative inline-flex w-fit max-w-full min-w-0 items-stretch gap-(--spacing-xxs) rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-xxs) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[fluid]:flex data-[fluid]:w-full'
+    'group relative inline-flex w-fit max-w-full min-w-0 items-stretch gap-(--spacing-2xs) rounded-(--shape-button) border border-(--border-muted) bg-(--bg-surface) p-(--spacing-2xs) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 data-[fluid]:flex data-[fluid]:w-full'
 
   const resolveOptionElement = (
     element: globalThis.Element | ComponentPublicInstance | null

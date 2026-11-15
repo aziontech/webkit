@@ -304,7 +304,7 @@
     >
       <p
         v-if="label"
-        class="shrink-0 text-heading-xxs text-(--text-default)"
+        class="shrink-0 text-heading-2xs text-(--text-default)"
       >
         {{ label }}
       </p>
@@ -361,12 +361,12 @@
             <span class="flex size-5 shrink-0 items-center justify-center">
               <i
                 v-if="stepStatus(i) === 'done'"
-                class="ai ai-check-circle text-(--success-contrast)"
+                class="ai ai-check-circle text-(--success-foreground)"
                 aria-hidden="true"
               />
               <i
                 v-else-if="stepStatus(i) === 'failed'"
-                class="ai ai-times-circle text-(--danger-contrast)"
+                class="ai ai-times-circle text-(--danger-foreground)"
                 aria-hidden="true"
               />
               <i
@@ -403,7 +403,7 @@
               />
               <span
                 :data-state="stepStatus(i)"
-                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-contrast) data-[state=running]:text-(--text-default)"
+                class="min-w-0 truncate text-body-sm text-(--text-muted) data-[state=failed]:whitespace-normal data-[state=failed]:text-pretty data-[state=failed]:text-(--danger-foreground) data-[state=running]:text-(--text-default)"
               >
                 {{ step.description }}
               </span>

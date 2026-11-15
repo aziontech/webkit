@@ -399,7 +399,7 @@
           href="/account/resources/new-group"
         />
         <span
-          class="mx-(--spacing-xxs) h-(--size-5) w-px bg-(--border-muted)"
+          class="mx-(--spacing-2xs) h-(--size-5) w-px bg-(--border-muted)"
           aria-hidden="true"
         />
         <Button
@@ -635,7 +635,7 @@
                     >
                   </template>
                   <template #header-charges>
-                    <span class="inline-flex items-center gap-(--spacing-xxs)">
+                    <span class="inline-flex items-center gap-(--spacing-2xs)">
                       Charges
                       <Tooltip text="Estimated month-to-date charges.">
                         <i
@@ -838,7 +838,7 @@
     >
       <DialogContent>
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DialogTitle>{{
               moving.length === 1
                 ? `Move ${moving[0].name}`
@@ -906,7 +906,7 @@
     >
       <DialogContent>
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DialogTitle>{{
               labelling.length === 1
                 ? `Labels of ${labelling[0].name}`

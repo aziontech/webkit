@@ -108,7 +108,7 @@
                     <span class="shrink-0 text-body-sm text-(--text-muted)">Last 24 hours</span>
                   </div>
 
-                  <p class="flex items-baseline gap-(--spacing-xxs)">
+                  <p class="flex items-baseline gap-(--spacing-2xs)">
                     <span class="text-heading-md text-(--text-default)">
                       {{ latest(PANELS[index].series) }}
                     </span>

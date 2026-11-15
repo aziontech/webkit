@@ -44,9 +44,9 @@
   )
 
   const ROOT_CLASS =
-    'group relative flex h-8 w-fit max-w-full shrink-0 items-center gap-(--spacing-xxs) ' +
+    'group relative flex h-8 w-fit max-w-full shrink-0 items-center gap-(--spacing-2xs) ' +
     'mb-(--spacing-sm) ' +
-    'rounded-(--shape-elements) px-(--spacing-sm) ' +
+    'rounded-(--shape-control) px-(--spacing-sm) ' +
     'text-(--text-default) ' +
     "before:pointer-events-none before:absolute before:inset-0 before:rounded-[inherit] before:bg-(--bg-hover) before:opacity-0 before:content-[''] before:transition-opacity before:duration-fast-02 before:ease-productive-entrance " +
     "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance " +

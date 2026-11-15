@@ -137,7 +137,7 @@
           @submit.prevent="submitParent"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DrawerTitle>Add Rule</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
                 A rule sends the requests it matches to one origin of this resource. Select the
@@ -154,7 +154,7 @@
               <legend class="sr-only">Add Rule</legend>
 
               <section class="flex flex-col gap-(--layout-group-gap)">
-                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
+                <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">General</p>
                 <Card :padded="false">
                   <template #content>
                     <Item.List>
@@ -191,7 +191,7 @@
               </section>
 
               <section class="flex flex-col gap-(--layout-group-gap)">
-                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">Behavior</p>
+                <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">Behavior</p>
                 <Card :padded="false">
                   <template #content>
                     <Item.List>
@@ -287,7 +287,7 @@
           @submit.prevent="submitChild"
         >
           <PanelHeader class="w-full">
-            <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+            <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DrawerTitle>Create Origin</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
                 An origin is a host this resource fetches content from. Once saved, the rule sends
@@ -304,7 +304,7 @@
               <legend class="sr-only">Create Origin</legend>
 
               <section class="flex flex-col gap-(--layout-group-gap)">
-                <p class="px-(--spacing-xs) text-heading-xxs text-(--text-default)">General</p>
+                <p class="px-(--spacing-xs) text-heading-2xs text-(--text-default)">General</p>
                 <Card :padded="false">
                   <template #content>
                     <Item.List>

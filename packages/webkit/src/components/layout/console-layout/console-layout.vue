@@ -506,7 +506,7 @@
 
           <div
             ref="navEl"
-            class="-mt-(--spacing-xxs) pt-(--layout-boundary-start)"
+            class="-mt-(--spacing-2xs) pt-(--layout-boundary-start)"
           >
             <SidebarMenu
               v-model:path="menuPath"
@@ -583,7 +583,7 @@
                   <a
                     :href="home"
                     :aria-label="t('consoleLayout.home')"
-                    class="flex h-6 w-fit shrink-0 items-center @max-xs:hidden rounded-(--shape-button) px-(--spacing-xxs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
+                    class="flex h-6 w-fit shrink-0 items-center @max-xs:hidden rounded-(--shape-button) px-(--spacing-2xs) transition-opacity duration-fast-02 ease-productive-entrance hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none"
                   >
                     <Brand
                       kind="default"

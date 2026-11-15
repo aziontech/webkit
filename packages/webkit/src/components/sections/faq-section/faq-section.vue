@@ -133,7 +133,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="items.length > 0"
@@ -173,7 +173,7 @@
               :key="blockIndex"
               :role="block.list ? 'list' : undefined"
               :data-list="block.list || null"
-              class="block data-[list]:space-y-(--spacing-xxs) data-[list]:ps-(--spacing-lg)"
+              class="block data-[list]:space-y-(--spacing-2xs) data-[list]:ps-(--spacing-lg)"
             >
               <span
                 v-for="(entry, entryIndex) in block.entries"

@@ -693,7 +693,7 @@
           <tr>
             <th
               scope="col"
-              class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-start text-label-sm text-(--text-muted)"
+              class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-start text-label-sm text-(--text-muted)"
             >
               {{ t('chart.label') }}
             </th>
@@ -701,7 +701,7 @@
               v-for="entry in visibleSeries"
               :key="entry.id"
               scope="col"
-              class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-end text-label-sm text-(--text-muted)"
+              class="border-b border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-end text-label-sm text-(--text-muted)"
             >
               {{ entry.name }}
             </th>
@@ -714,14 +714,14 @@
           >
             <th
               scope="row"
-              class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-xxs) text-start text-body-sm"
+              class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-2xs) text-start text-body-sm"
             >
               {{ labelText(label) }}
             </th>
             <td
               v-for="entry in visibleSeries"
               :key="entry.id"
-              class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-xxs) text-end tabular-nums"
+              class="border-b border-(--border-muted) px-(--spacing-xs) py-(--spacing-2xs) text-end tabular-nums"
             >
               {{ formatCell(entry.values[index]) }}
             </td>
@@ -741,7 +741,7 @@
         :data-testid="`${testId}__plot`"
         :data-brush="hasBrush || null"
         :style="{ minHeight: `${height}px` }"
-        class="col-start-1 row-start-1 min-h-0 min-w-0 cursor-crosshair rounded-(--shape-elements) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[brush]:touch-pan-y"
+        class="col-start-1 row-start-1 min-h-0 min-w-0 cursor-crosshair rounded-(--shape-control) outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[brush]:touch-pan-y"
         @pointerdown="onPointerDown"
         @pointermove="onPointerMove"
         @pointerup="onPointerUp"

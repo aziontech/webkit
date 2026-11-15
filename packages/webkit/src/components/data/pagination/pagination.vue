@@ -156,7 +156,7 @@
     </div>
     <div class="flex flex-auto flex-wrap items-center justify-end gap-(--spacing-xs)">
       <div
-        class="inline-flex items-center rounded-(--shape-elements) border-(length:--border-width-default) border-solid border-(--border-default)"
+        class="inline-flex items-center rounded-(--shape-control) border-(length:--border-width-default) border-solid border-(--border-default)"
         @keydown="onControlsKeydown"
       >
         <template v-if="dataDriven">

@@ -83,7 +83,7 @@
     class="group"
   >
     <div
-      class="flex flex-col items-start gap-(--spacing-xl) group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-xxl) group-data-[framed]:group-data-[padding=small]:py-(--spacing-xl) group-data-[kind=centered]:items-center"
+      class="flex flex-col items-start gap-(--spacing-xl) group-data-[framed]:px-(--spacing-xl) group-data-[framed]:py-(--spacing-2xl) group-data-[framed]:group-data-[padding=small]:py-(--spacing-xl) group-data-[kind=centered]:items-center"
     >
       <div
         v-if="kind === 'horizontal'"

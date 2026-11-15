@@ -64,14 +64,14 @@
       <p
         v-if="title"
         :id="titleId"
-        class="m-0 text-heading-xxs text-(--text-default)"
+        class="m-0 text-heading-2xs text-(--text-default)"
       >
         {{ title }}
       </p>
 
       <p
         v-if="slots.default || label"
-        class="m-0 mt-(--spacing-xxs) text-body-xs text-(--text-muted)"
+        class="m-0 mt-(--spacing-2xs) text-body-xs text-(--text-muted)"
       >
         <slot>{{ label }}</slot>
       </p>

@@ -19,7 +19,7 @@
     </DropdownMenuTrigger>
 
     <template #top>
-      <div class="p-(--spacing-xxs)">
+      <div class="p-(--spacing-2xs)">
         <Input
           placeholder="Search options…"
           size="small"
@@ -43,7 +43,7 @@
     </DropdownMenuGroup>
 
     <template #bottom>
-      <div class="flex justify-end p-(--spacing-xxs)">
+      <div class="flex justify-end p-(--spacing-2xs)">
         <Button
           kind="transparent"
           size="small"

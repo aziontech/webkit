@@ -153,7 +153,7 @@
     :id="anchor || undefined"
     :data-testid="testId"
     :data-kind="kind"
-    class="group scroll-mt-(--spacing-xxl)"
+    class="group scroll-mt-(--spacing-2xl)"
   >
     <template v-if="title && !isFrame">
       <SectionModule
@@ -241,7 +241,7 @@
       borders="none"
       marks="all"
       data-hatch="true"
-      class="h-[calc(var(--spacing-xxl)*2)] group-data-[kind=panel]:h-(--spacing-xxl)"
+      class="h-[calc(var(--spacing-2xl)*2)] group-data-[kind=panel]:h-(--spacing-2xl)"
     >
       <TextureMaterial kind="lines" />
     </FrameBox>

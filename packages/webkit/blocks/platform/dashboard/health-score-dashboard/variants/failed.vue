@@ -73,7 +73,7 @@
       >
         <ChartCard :span="12">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Overall score</ChartCard.Title>
               <Hint
                 text="Average of every sample in the period, out of 100. Good is 80 or more, fair 50 to 79, poor under 50."
@@ -100,7 +100,7 @@
 
         <ChartCard :span="6">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Score per application</ChartCard.Title>
               <Hint text="Lowest first, with the cause of most poor samples." />
             </span>
@@ -117,7 +117,7 @@
 
         <ChartCard :span="6">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Score per location</ChartCard.Title>
               <Hint text="Lowest first, with the cause of most poor samples." />
             </span>
@@ -134,7 +134,7 @@
 
         <ChartCard :span="12">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Hourly score</ChartCard.Title>
               <Hint text="One block per hour for each application, colored by its band." />
             </span>

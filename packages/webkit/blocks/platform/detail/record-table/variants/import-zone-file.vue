@@ -1019,7 +1019,7 @@ legacy  IN HINFO "PC" "Linux"`
                       }}</span>
                     </template>
                     <template #cell-value="{ row }">
-                      <span class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+                      <span class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                         <span
                           v-if="row.value"
                           class="truncate font-(family-name:--font-code) text-body-sm"

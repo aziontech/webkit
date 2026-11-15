@@ -44,7 +44,7 @@
     },
     {
       "name": "Shell",
-      "summary": "A CLI snippet under `language: \"bash\"`. A command line has a different shape from an expression, so it is read as one: the first word is the program being run, flags modify it, an operator hands off to the next program, and the rest is data — mapped onto the same code-sintax palette JavaScript uses, with no new syntax token. `sh`, `shell`, `zsh` and `console` resolve here too.",
+      "summary": "A CLI snippet under `language: \"bash\"`. A command line has a different shape from an expression, so it is read as one: the first word is the program being run, flags modify it, an operator hands off to the next program, and the rest is data — mapped onto the same code-syntax palette JavaScript uses, with no new syntax token. `sh`, `shell`, `zsh` and `console` resolve here too.",
       "file": "shell.vue"
     },
     {

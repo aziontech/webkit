@@ -82,7 +82,7 @@
         class="grid lg:grid-cols-[minmax(0,7fr)_minmax(0,3fr)]"
       >
         <div
-          class="flex flex-col justify-between gap-(--spacing-xxl) bg-(--bg-surface-raised) p-(--spacing-xl)"
+          class="flex flex-col justify-between gap-(--spacing-2xl) bg-(--bg-surface-raised) p-(--spacing-xl)"
         >
           <div class="flex flex-col gap-(--spacing-lg)">
             <Overline
@@ -110,7 +110,7 @@
         </div>
 
         <div
-          class="flex flex-col justify-between gap-(--spacing-xxl) border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-s"
+          class="flex flex-col justify-between gap-(--spacing-2xl) border-t border-(--border-default) p-(--spacing-xl) lg:border-t-0 lg:border-s"
         >
           <p
             v-if="hasDescription()"
@@ -176,7 +176,7 @@
           </div>
 
           <div
-            class="relative z-10 flex justify-center px-(--spacing-xl) py-[calc(var(--spacing-xxl)*1.5)] md:py-[calc(var(--spacing-xxl)*2)] [&_h2]:max-w-(--container-xl) [&_h2+p]:max-w-(--container-md)"
+            class="relative z-10 flex justify-center px-(--spacing-xl) py-[calc(var(--spacing-2xl)*1.5)] md:py-[calc(var(--spacing-2xl)*2)] [&_h2]:max-w-(--container-xl) [&_h2+p]:max-w-(--container-md)"
           >
             <SectionTitle
               :framed="false"
@@ -214,7 +214,7 @@
         class="flex flex-col md:flex-row"
       >
         <div
-          class="flex flex-col justify-between gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-xxl) md:basis-2/3 md:grow"
+          class="flex flex-col justify-between gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-2xl) md:basis-2/3 md:grow"
         >
           <SectionTitle
             :framed="false"
@@ -233,7 +233,7 @@
 
         <div
           v-if="hasDescription()"
-          class="bg-(--bg-surface-raised) p-(--spacing-xxl) md:basis-1/3 md:shrink-0"
+          class="bg-(--bg-surface-raised) p-(--spacing-2xl) md:basis-1/3 md:shrink-0"
         >
           <p class="m-0 text-pretty text-heading-sm text-(--text-muted)">
             <slot>{{ description }}</slot>
@@ -243,7 +243,7 @@
 
       <div
         v-else
-        class="flex flex-col gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-xxl) md:flex-row md:items-center md:justify-between"
+        class="flex flex-col gap-(--spacing-xl) bg-(--bg-surface) p-(--spacing-2xl) md:flex-row md:items-center md:justify-between"
       >
         <SectionTitle
           :framed="false"

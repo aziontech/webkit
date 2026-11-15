@@ -120,7 +120,7 @@
     :id="anchor || undefined"
     :data-testid="testId"
     :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="hasItems"
@@ -222,7 +222,7 @@
                   </div>
                   <div
                     v-else-if="items[index].code"
-                    class="w-full min-w-0 rounded-(--shape-elements) shadow-(--shadow-sm)"
+                    class="w-full min-w-0 rounded-(--shape-control) shadow-(--shadow-sm)"
                   >
                     <CodeBlock
                       :tabs="sampleTabs(items[index].code)"

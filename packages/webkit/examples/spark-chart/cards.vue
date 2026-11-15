@@ -23,7 +23,7 @@
       <span class="w-16 shrink-0 text-end text-label-md text-(--text-default) tabular-nums"
         >3.4M</span
       >
-      <span class="w-14 shrink-0 text-end text-label-sm text-(--success-contrast) tabular-nums"
+      <span class="w-14 shrink-0 text-end text-label-sm text-(--success-foreground) tabular-nums"
         >+8.2%</span
       >
     </li>
@@ -44,7 +44,7 @@
       <span class="w-16 shrink-0 text-end text-label-md text-(--text-default) tabular-nums"
         >48.2K</span
       >
-      <span class="w-14 shrink-0 text-end text-label-sm text-(--success-contrast) tabular-nums"
+      <span class="w-14 shrink-0 text-end text-label-sm text-(--success-foreground) tabular-nums"
         >-12.4%</span
       >
     </li>
@@ -65,7 +65,7 @@
       <span class="w-16 shrink-0 text-end text-label-md text-(--text-default) tabular-nums"
         >96.2%</span
       >
-      <span class="w-14 shrink-0 text-end text-label-sm text-(--success-contrast) tabular-nums"
+      <span class="w-14 shrink-0 text-end text-label-sm text-(--success-foreground) tabular-nums"
         >+1.6%</span
       >
     </li>
@@ -84,7 +84,7 @@
       <span class="w-16 shrink-0 text-end text-label-md text-(--text-default) tabular-nums"
         >132 ms</span
       >
-      <span class="w-14 shrink-0 text-end text-label-sm text-(--success-contrast) tabular-nums"
+      <span class="w-14 shrink-0 text-end text-label-sm text-(--success-foreground) tabular-nums"
         >-4.3%</span
       >
     </li>

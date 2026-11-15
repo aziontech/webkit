@@ -104,7 +104,7 @@
     :data-disabled="isDisabled || null"
     :data-invalid="isInvalid || null"
     :class="attrs.class"
-    class="group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-(--shape-elements) border border-(--border-input) bg-(--bg-surface) px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[invalid]:not-data-[checked]:border-(--danger-border) data-[checked]:border-transparent data-[checked]:bg-(--accent) forced-colors:border-[CanvasText] forced-colors:data-[checked]:border-[Highlight] data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) data-[disabled]:hover:shadow-none after:absolute after:inset-[min(0rem,calc(50%-12px))] pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]"
+    class="group relative inline-flex h-5 w-9 shrink-0 cursor-pointer items-center rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) px-0.5 transition-colors duration-150 ease-out motion-reduce:transition-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) hover:shadow-[inset_0_0_0_999px_var(--bg-hover)] data-[invalid]:not-data-[checked]:border-(--danger-border) data-[checked]:border-transparent data-[checked]:bg-(--accent) forced-colors:border-[CanvasText] forced-colors:data-[checked]:border-[Highlight] data-[disabled]:cursor-not-allowed data-[disabled]:border-(--border-input) data-[disabled]:bg-(--bg-disabled) data-[disabled]:hover:shadow-none after:absolute after:inset-[min(0rem,calc(50%-12px))] pointer-coarse:after:inset-[min(0rem,calc(50%-22px))]"
     v-bind="passthroughAttrs"
     @click="handleToggle"
     @keydown="handleKeydown"
@@ -118,12 +118,12 @@
         <i
           aria-hidden="true"
           :data-testid="`${testId}__lock`"
-          class="ai ai-lock text-body-xxs leading-none text-(--bg-surface) group-data-[checked]:hidden"
+          class="ai ai-lock text-body-2xs leading-none text-(--bg-surface) group-data-[checked]:hidden"
         />
         <i
           aria-hidden="true"
           :data-testid="`${testId}__lock-open`"
-          class="ai ai-lock-open hidden text-body-xxs leading-none text-(--color-base-black) group-data-[checked]:inline"
+          class="ai ai-lock-open hidden text-body-2xs leading-none text-(--color-base-black) group-data-[checked]:inline"
         />
       </template>
     </span>

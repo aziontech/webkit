@@ -170,7 +170,7 @@
         :key="`${index}-${relativePathOf(item.file)}`"
         :data-testid="`${testId}__token`"
         :data-status="statusOf(item)"
-        class="flex min-w-0 flex-col gap-(--spacing-xxs) rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[status=warning]:border-(--warning-border) data-[status=error]:border-(--danger-border) group-data-[orientation=horizontal]/ftg:w-(--container-3xs) group-data-[orientation=horizontal]/ftg:max-w-full"
+        class="flex min-w-0 flex-col gap-(--spacing-2xs) rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface) px-(--spacing-sm) py-(--spacing-xs) transition-colors duration-fast-02 ease-productive-entrance motion-reduce:transition-none data-[status=warning]:border-(--warning-border) data-[status=error]:border-(--danger-border) group-data-[orientation=horizontal]/ftg:w-(--container-3xs) group-data-[orientation=horizontal]/ftg:max-w-full"
       >
         <div class="flex min-w-0 items-center gap-(--spacing-xs)">
           <i
@@ -220,7 +220,7 @@
           :id="messageId(index)"
           :data-testid="`${testId}__message`"
           :data-status="item.error ? 'error' : 'warning'"
-          class="m-0 flex items-center gap-(--spacing-xxs) text-label-sm text-(--warning-contrast) data-[status=error]:text-(--danger-contrast)"
+          class="m-0 flex items-center gap-(--spacing-2xs) text-label-sm text-(--warning-foreground) data-[status=error]:text-(--danger-foreground)"
         >
           <i
             :class="item.error ? 'ai ai-times-circle' : 'ai ai-exclamation-triangle'"

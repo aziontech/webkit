@@ -37,10 +37,10 @@
     v-bind="$attrs"
     :data-testid="testId"
     :data-size="size"
-    class="group/currency inline-flex items-center whitespace-nowrap data-[size=small]:gap-(--spacing-xxs) data-[size=medium]:gap-(--spacing-xs) data-[size=large]:items-end data-[size=large]:gap-(--spacing-xs)"
+    class="group/currency inline-flex items-center whitespace-nowrap data-[size=small]:gap-(--spacing-2xs) data-[size=medium]:gap-(--spacing-xs) data-[size=large]:items-end data-[size=large]:gap-(--spacing-xs)"
   >
     <span
-      class="inline-flex items-center gap-(--spacing-xxs) group-data-[size=large]/currency:gap-0"
+      class="inline-flex items-center gap-(--spacing-2xs) group-data-[size=large]/currency:gap-0"
     >
       <span
         v-if="prefix"

@@ -320,7 +320,7 @@
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DrawerTitle>{{ title }}</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               An instance runs a function on this resource with its own arguments.

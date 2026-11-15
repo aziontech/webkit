@@ -139,7 +139,7 @@
     v-if="renders"
     v-bind="$attrs"
     :id="anchor || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
     :data-testid="testId"
     :data-kind="kind"
     :aria-label="title || undefined"

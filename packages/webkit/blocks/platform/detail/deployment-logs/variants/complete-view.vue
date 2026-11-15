@@ -251,7 +251,7 @@
     :steps="steps"
   >
     <template #header>
-      <h2 class="m-0 shrink-0 text-heading-xxs text-(--text-default)">Deployment logs</h2>
+      <h2 class="m-0 shrink-0 text-heading-2xs text-(--text-default)">Deployment logs</h2>
       <div class="ms-auto flex min-w-0 items-center gap-(--spacing-sm)">
         <Tag
           label="Completed"

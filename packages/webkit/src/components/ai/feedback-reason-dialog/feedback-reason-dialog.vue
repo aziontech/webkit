@@ -120,7 +120,7 @@
   >
     <DialogContent>
       <PanelHeader class="w-full">
-        <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+        <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
           <DialogTitle>{{ title || t('feedbackReason.title') }}</DialogTitle>
           <DialogDescription>{{ t('feedbackReason.description') }}</DialogDescription>
         </div>

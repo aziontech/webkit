@@ -210,7 +210,7 @@
     :data-level="level || null"
     :class="
       cn(
-        'flex h-fit min-h-0 w-full min-w-0 max-w-full flex-col overflow-hidden data-[border]:rounded-(--shape-elements) data-[border]:border data-[border]:border-(--border-muted)',
+        'flex h-fit min-h-0 w-full min-w-0 max-w-full flex-col overflow-hidden data-[border]:rounded-(--shape-control) data-[border]:border data-[border]:border-(--border-muted)',
         attrs.class
       )
     "

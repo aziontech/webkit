@@ -820,7 +820,7 @@
 
                 <div>
                   <div
-                    class="flex items-baseline justify-between gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-xxs) pt-(--spacing-xxs)"
+                    class="flex items-baseline justify-between gap-(--spacing-xs) px-(--spacing-xs) pb-(--spacing-2xs) pt-(--spacing-2xs)"
                   >
                     <span class="text-label-sm text-(--text-muted)">Shown</span>
                     <span class="text-label-sm text-(--text-muted)">Values</span>
@@ -829,7 +829,7 @@
                   <div
                     v-for="field in shownFields"
                     :key="field.id"
-                    class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                    class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
                   >
                     <div class="min-w-0 flex-1">
                       <Field
@@ -864,9 +864,9 @@
                       </div>
 
                       <Popover.Content>
-                        <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
+                        <div class="flex min-w-0 flex-col p-(--spacing-2xs)">
                           <p
-                            class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                            class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                           >
                             {{ field.label }} · top values
                           </p>
@@ -900,7 +900,7 @@
 
                           <p
                             v-if="fieldValueOverflow(field.id)"
-                            class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                            class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
                           >
                             {{ fieldValueOverflow(field.id) }} more values in this window.
                           </p>
@@ -910,7 +910,7 @@
 
                     <span
                       v-else
-                      class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
+                      class="shrink-0 px-(--spacing-2xs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
                       :data-empty="fieldCounts[field.id] ? null : true"
                       :aria-label="`${fieldCounts[field.id]} distinct values`"
                     >
@@ -951,7 +951,7 @@
                           <div
                             v-for="field in category.fields"
                             :key="field.id"
-                            class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-xxs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
+                            class="group flex items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-xs) py-(--spacing-2xs) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) motion-reduce:transition-none"
                           >
                             <div class="min-w-0 flex-1">
                               <Field orientation="horizontal">
@@ -983,9 +983,9 @@
                               </div>
 
                               <Popover.Content>
-                                <div class="flex min-w-0 flex-col p-(--spacing-xxs)">
+                                <div class="flex min-w-0 flex-col p-(--spacing-2xs)">
                                   <p
-                                    class="px-(--spacing-xs) py-(--spacing-xxs) text-label-sm text-(--text-muted)"
+                                    class="px-(--spacing-xs) py-(--spacing-2xs) text-label-sm text-(--text-muted)"
                                   >
                                     {{ field.label }} · top values
                                   </p>
@@ -1021,7 +1021,7 @@
 
                                   <p
                                     v-if="fieldValueOverflow(field.id)"
-                                    class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                                    class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
                                   >
                                     {{ fieldValueOverflow(field.id) }} more values in this window.
                                   </p>
@@ -1031,7 +1031,7 @@
 
                             <span
                               v-else
-                              class="shrink-0 px-(--spacing-xxs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
+                              class="shrink-0 px-(--spacing-2xs) text-label-code-sm tabular-nums text-(--text-muted) data-empty:text-(--text-disabled)"
                               :data-empty="fieldCounts[field.id] ? null : true"
                               :aria-label="`${fieldCounts[field.id]} distinct values`"
                             >
@@ -1085,7 +1085,7 @@
             >
               <h2
                 id="event-document-title"
-                class="min-w-0 truncate text-heading-xxs text-(--text-default)"
+                class="min-w-0 truncate text-heading-2xs text-(--text-default)"
               >
                 Event
               </h2>

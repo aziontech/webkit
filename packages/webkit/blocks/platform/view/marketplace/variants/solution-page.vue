@@ -227,7 +227,7 @@
                   class="flex flex-col gap-(--spacing-xs) border-b border-(--border-muted) pb-(--layout-group-gap) last:border-b-0"
                 >
                   <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-                    <h2 class="m-0 text-heading-xxs text-(--text-default)">
+                    <h2 class="m-0 text-heading-2xs text-(--text-default)">
                       {{ entry.version }}
                     </h2>
                     <Tag
@@ -238,7 +238,7 @@
                     />
                     <span class="text-body-sm text-(--text-muted)">{{ entry.date }}</span>
                   </div>
-                  <ul class="m-0 flex flex-col gap-(--spacing-xxs) ps-(--spacing-lg)">
+                  <ul class="m-0 flex flex-col gap-(--spacing-2xs) ps-(--spacing-lg)">
                     <li
                       v-for="note in entry.notes"
                       :key="note"

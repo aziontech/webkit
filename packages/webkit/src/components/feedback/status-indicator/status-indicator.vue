@@ -47,7 +47,7 @@
     :data-testid="testId"
     :data-severity="severity"
     :data-loading="loading || null"
-    class="group inline-flex items-center gap-(--spacing-3) rounded-(--shape-elements) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
+    class="group inline-flex items-center gap-(--spacing-3) rounded-(--shape-control) text-body-sm text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)"
   >
     <Spinner
       v-if="loading"
@@ -59,7 +59,7 @@
       aria-hidden="true"
       :data-testid="`${testId}__dot`"
       :data-severity="severity"
-      class="size-2 shrink-0 rounded-full data-[severity=success]:bg-(--success-contrast) data-[severity=info]:bg-(--info-contrast) data-[severity=neutral]:bg-(--text-muted) data-[severity=warning]:bg-(--warning-contrast) data-[severity=danger]:bg-(--danger-contrast) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText]"
+      class="size-2 shrink-0 rounded-full data-[severity=success]:bg-(--success-foreground) data-[severity=info]:bg-(--info-foreground) data-[severity=neutral]:bg-(--text-muted) data-[severity=warning]:bg-(--warning-foreground) data-[severity=danger]:bg-(--danger-foreground) forced-colors:forced-color-adjust-none forced-colors:bg-[CanvasText]"
     />
     <span
       class="whitespace-nowrap group-data-[loading]:text-(--text-muted)"

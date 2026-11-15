@@ -343,7 +343,7 @@
     :data-testid="testId"
     :data-kind="kind"
     :data-title-measure="narrowTitle ? 'narrow' : null"
-    class="scroll-mt-(--spacing-xxl) data-[title-measure=narrow]:[&_h1]:max-w-(--container-lg) data-[kind=pixel-floor]:[--banner-floor-bg:var(--bg-surface)] data-[kind=pixel-floor]:[--texture-pool-a:95%_64%] data-[kind=pixel-floor]:[--texture-pool-b:-2%_38%]"
+    class="scroll-mt-(--spacing-2xl) data-[title-measure=narrow]:[&_h1]:max-w-(--container-lg) data-[kind=pixel-floor]:[--banner-floor-bg:var(--bg-surface)] data-[kind=pixel-floor]:[--texture-pool-a:95%_64%] data-[kind=pixel-floor]:[--texture-pool-b:-2%_38%]"
   >
     <Hero
       v-if="title"
@@ -417,7 +417,7 @@
       >
         <div class="@container">
           <div
-            class="flex animate-content-enter justify-center pb-(--spacing-xxl) [--content-enter-delay:120ms] motion-reduce:animate-none @max-2xl:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]"
+            class="flex animate-content-enter justify-center pb-(--spacing-2xl) [--content-enter-delay:120ms] motion-reduce:animate-none @max-2xl:[mask-image:linear-gradient(to_right,transparent,black_15%,black_85%,transparent)]"
           >
             <slot name="bottom">
               <HeroBandTopology :columns="scene()" />

@@ -222,7 +222,7 @@
     v-bind="$attrs"
     :id="anchor || undefined"
     :data-testid="testId"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="title"
@@ -257,7 +257,7 @@
           />
           <div
             v-else-if="media === 'code'"
-            class="-mb-(--spacing-xl) h-[20rem] w-full min-w-0 overflow-hidden rounded-t-(--shape-elements) border-x border-t border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm)"
+            class="-mb-(--spacing-xl) h-[20rem] w-full min-w-0 overflow-hidden rounded-t-(--shape-control) border-x border-t border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm)"
           >
             <CodeBlock
               :tabs="tabs"

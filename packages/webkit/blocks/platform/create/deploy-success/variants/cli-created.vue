@@ -171,7 +171,7 @@ jobs:
       >
         <div class="layout-column-content my-auto flex flex-col gap-(--spacing-xl)">
           <header
-            class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-xxs)"
+            class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-2xs)"
           >
             <h1 class="text-balance text-heading-lg text-(--text-default)">Resource created</h1>
             <p
@@ -196,7 +196,7 @@ jobs:
                     >
                       <Item.Media>
                         <span
-                          class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface)"
+                          class="flex size-8 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface)"
                         >
                           <i
                             :class="resource.icon"
@@ -294,7 +294,7 @@ jobs:
                           <p class="text-pretty text-body-sm text-(--text-muted)">
                             {{ step.description }}
                           </p>
-                          <div class="mt-(--spacing-xxs) min-w-0">
+                          <div class="mt-(--spacing-2xs) min-w-0">
                             <CodeBlock
                               :tabs="step.tabs"
                               :line-numbers="false"

@@ -468,7 +468,7 @@
       ref="triggerRef"
       :data-disabled="isDisabled || null"
       :data-invalid="field.invalid.value || null"
-      class="inline-flex max-w-full items-stretch overflow-hidden rounded-(--shape-elements) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[invalid]:border-(--danger-border) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
+      class="inline-flex max-w-full items-stretch overflow-hidden rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) transition-colors duration-150 ease-out [&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong) data-[invalid]:border-(--danger-border) data-[disabled]:cursor-not-allowed data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
     >
       <button
         v-if="showStep"
@@ -573,10 +573,10 @@
 
           <fieldset
             v-if="panelMode === 'relative'"
-            class="m-0 flex min-w-0 flex-col gap-(--spacing-xxs) border-0 p-(--spacing-sm)"
+            class="m-0 flex min-w-0 flex-col gap-(--spacing-2xs) border-0 p-(--spacing-sm)"
             :data-testid="`${testId}__relative`"
           >
-            <legend class="text-label-sm mb-(--spacing-xxs) p-0 text-(--text-muted)">
+            <legend class="text-label-sm mb-(--spacing-2xs) p-0 text-(--text-muted)">
               {{ t('dateRangePicker.quickRanges') }}
             </legend>
             <label
@@ -584,7 +584,7 @@
               :key="option.key"
               :data-selected="draftKey === option.key || null"
               :data-testid="`${testId}__option`"
-              class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+              class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
             >
               <input
                 v-model="draftKey"
@@ -603,7 +603,7 @@
             <label
               :data-selected="draftKey === CUSTOM || null"
               :data-testid="`${testId}__option`"
-              class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
+              class="text-label-sm flex min-h-8 cursor-pointer items-center justify-between gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs) text-(--text-default) transition-colors duration-150 ease-out hover:bg-(--bg-hover) has-[:focus-visible]:ring-2 has-[:focus-visible]:ring-(--ring-color) data-[selected]:bg-(--bg-selected) motion-reduce:transition-none pointer-coarse:min-h-11"
             >
               <input
                 v-model="draftKey"
@@ -623,7 +623,7 @@
               v-if="draftKey === CUSTOM"
               class="flex items-end gap-(--spacing-xs) pt-(--spacing-xs)"
             >
-              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
                 <label
                   :for="customAmountId"
                   class="text-label-sm text-(--text-muted)"
@@ -639,7 +639,7 @@
                   :data-testid="`${testId}__amount`"
                 />
               </div>
-              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+              <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
                 <label
                   :for="customUnitId"
                   class="text-label-sm text-(--text-muted)"
@@ -651,7 +651,7 @@
                     v-model="customUnit"
                     :data-size="size"
                     :data-testid="`${testId}__unit`"
-                    class="text-label-sm w-full appearance-none rounded-(--shape-elements) border border-(--border-input) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-lg) text-(--text-default) transition-colors duration-150 ease-out [&:not(:focus)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
+                    class="text-label-sm w-full appearance-none rounded-(--shape-control) border border-(--border-input) bg-(--bg-surface) ps-(--spacing-sm) pe-(--spacing-lg) text-(--text-default) transition-colors duration-150 ease-out [&:not(:focus)]:hover:border-(--border-strong) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10 motion-reduce:transition-none"
                   >
                     <option
                       v-for="unit in DATE_RANGE_UNITS"
@@ -692,7 +692,7 @@
               :id="errorId"
               role="alert"
               :data-testid="`${testId}__error`"
-              class="text-body-sm m-0 text-(--danger-contrast)"
+              class="text-body-sm m-0 text-(--danger-foreground)"
             >
               {{ draftError }}
             </p>

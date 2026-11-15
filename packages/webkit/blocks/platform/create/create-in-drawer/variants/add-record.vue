@@ -137,7 +137,7 @@
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DrawerTitle>Add Record</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               A new record in example.com, and how the zone should answer requests for it.

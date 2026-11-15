@@ -600,8 +600,8 @@ LIMIT 3;`
           <template #header>
             <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xs)">
               <div class="flex items-center justify-between gap-(--spacing-xs)">
-                <span class="text-heading-xxs text-(--text-default)">Tables</span>
-                <div class="flex items-center gap-(--spacing-xxs)">
+                <span class="text-heading-2xs text-(--text-default)">Tables</span>
+                <div class="flex items-center gap-(--spacing-2xs)">
                   <Tooltip text="Refresh tables">
                     <IconButton
                       icon="ai ai-refresh"
@@ -660,12 +660,12 @@ LIMIT 3;`
             </EmptyState>
             <div
               v-else
-              class="flex flex-col gap-(--spacing-xxs)"
+              class="flex flex-col gap-(--spacing-2xs)"
             >
               <div
                 v-for="table in filteredTables"
                 :key="table.id"
-                class="group flex items-center gap-(--spacing-xxs)"
+                class="group flex items-center gap-(--spacing-2xs)"
               >
                 <Item
                   clickable
@@ -751,7 +751,7 @@ LIMIT 3;`
                 class="ai ai-table shrink-0 text-(--text-muted)"
                 aria-hidden="true"
               />
-              <span class="truncate text-heading-xxs text-(--text-default)">{{
+              <span class="truncate text-heading-2xs text-(--text-default)">{{
                 selectedTable.name
               }}</span>
             </div>
@@ -832,7 +832,7 @@ LIMIT 3;`
                   :key="column.id"
                   #[`header-${column.name}`]
                 >
-                  <span class="flex min-w-0 items-center gap-(--spacing-xxs)">
+                  <span class="flex min-w-0 items-center gap-(--spacing-2xs)">
                     <span class="truncate">{{ column.name }}</span>
                     <span class="shrink-0 text-body-xs text-(--text-muted)">{{ column.type }}</span>
                     <i
@@ -918,7 +918,7 @@ LIMIT 3;`
             class="flex min-h-0 flex-1 flex-col gap-(--layout-group-gap) overflow-auto p-(--spacing-md)"
           >
             <div class="flex items-center justify-between gap-(--spacing-sm)">
-              <p class="text-heading-xxs text-(--text-default)">Columns</p>
+              <p class="text-heading-2xs text-(--text-default)">Columns</p>
               <Button
                 label="Add column"
                 kind="outlined"
@@ -972,7 +972,7 @@ LIMIT 3;`
         >
           <template #header>
             <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xs)">
-              <span class="text-heading-xxs text-(--text-default)">Query history</span>
+              <span class="text-heading-2xs text-(--text-default)">Query history</span>
               <Input
                 v-model="historySearch"
                 size="medium"
@@ -998,12 +998,12 @@ LIMIT 3;`
             </p>
             <div
               v-else
-              class="flex flex-col gap-(--spacing-xxs)"
+              class="flex flex-col gap-(--spacing-2xs)"
             >
               <div
                 v-for="item in filteredHistory"
                 :key="item.id"
-                class="flex items-center gap-(--spacing-xxs)"
+                class="flex items-center gap-(--spacing-2xs)"
               >
                 <Item
                   clickable
@@ -1113,7 +1113,7 @@ LIMIT 3;`
           <div
             class="flex flex-wrap items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
           >
-            <span class="shrink-0 text-heading-xxs text-(--text-default)"> Results </span>
+            <span class="shrink-0 text-heading-2xs text-(--text-default)"> Results </span>
             <div class="flex ms-(--spacing-sm) min-w-0 flex-1 md:max-w-(--container-sm)">
               <Input
                 v-model="resultSearch"
@@ -1233,7 +1233,7 @@ LIMIT 3;`
     >
       <DrawerContent>
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DrawerTitle>SQL quick templates</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Pick a snippet to load it into the editor.

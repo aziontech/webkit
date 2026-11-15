@@ -13,7 +13,7 @@
       :value="uri"
       :aria-label="`QR code to add ${account} to an authenticator app`"
     />
-    <div class="flex flex-col gap-(--spacing-xxs)">
+    <div class="flex flex-col gap-(--spacing-2xs)">
       <p class="text-label-sm text-(--text-default)">Can't scan the code?</p>
       <div class="flex items-center gap-(--spacing-xs)">
         <code

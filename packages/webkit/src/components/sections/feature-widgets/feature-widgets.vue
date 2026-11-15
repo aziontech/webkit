@@ -140,7 +140,7 @@
     :data-testid="testId"
     :id="anchor || undefined"
     :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       v-if="hasItems"

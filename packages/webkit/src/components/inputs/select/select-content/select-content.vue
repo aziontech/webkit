@@ -106,12 +106,12 @@
         :class="attrs.class"
         :style="panelStyle"
         :data-kind="ctx.kind.value"
-        class="fixed z-(--z-input-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs) data-[kind=transparent]:min-w-(--container-3xs)"
+        class="fixed z-(--z-control-overlay) flex max-h-[20rem] flex-col overflow-hidden rounded-(--shape-control) border border-(--border-default) bg-(--bg-surface-raised) shadow-(--shadow-xs) data-[kind=transparent]:min-w-(--container-3xs)"
         @keydown="onKeydown"
       >
         <div
           v-if="$slots['search']"
-          class="flex shrink-0 items-center justify-center p-(--spacing-xxs)"
+          class="flex shrink-0 items-center justify-center p-(--spacing-2xs)"
           :data-testid="`${testId}__search`"
         >
           <slot name="search" />
@@ -121,7 +121,7 @@
           role="listbox"
           :aria-label="listLabel"
           :aria-labelledby="listLabelledby"
-          class="group/options flex max-h-60 flex-col items-stretch px-(--spacing-xxs) py-(--spacing-xs)"
+          class="group/options flex max-h-60 flex-col items-stretch px-(--spacing-2xs) py-(--spacing-xs)"
           :data-testid="`${testId}__list`"
         >
           <LazyNodes
@@ -133,7 +133,7 @@
         </ScrollArea>
         <div
           v-if="$slots['footer']"
-          class="flex shrink-0 items-center justify-center p-(--spacing-xxs)"
+          class="flex shrink-0 items-center justify-center p-(--spacing-2xs)"
           :data-testid="`${testId}__footer`"
         >
           <slot name="footer" />

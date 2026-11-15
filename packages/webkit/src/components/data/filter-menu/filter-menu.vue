@@ -285,7 +285,7 @@
   })
 
   const ROW_CLASS =
-    'flex w-full min-h-8 pointer-coarse:min-h-11 items-center gap-(--spacing-sm) rounded-(--shape-elements) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
+    'flex w-full min-h-8 pointer-coarse:min-h-11 items-center gap-(--spacing-sm) rounded-(--shape-control) px-(--spacing-sm) py-(--spacing-xs) text-start text-label-sm text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance hover:bg-(--bg-hover) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) motion-reduce:transition-none'
 
   defineExpose({
     /** Opens the menu, at a field's values when fieldId names one, returning focus to returnFocus on close. */
@@ -413,7 +413,7 @@
                 </div>
 
                 <div
-                  class="flex max-h-(--container-3xs) flex-col gap-(--spacing-xxs) overflow-y-auto overscroll-contain p-(--spacing-xxs)"
+                  class="flex max-h-(--container-3xs) flex-col gap-(--spacing-2xs) overflow-y-auto overscroll-contain p-(--spacing-2xs)"
                 >
                   <template v-if="!activeField">
                     <button
@@ -444,7 +444,7 @@
                     v-else
                     :role="activeKind === 'multi' ? 'group' : 'radiogroup'"
                     :aria-label="activeField.label"
-                    class="flex flex-col gap-(--spacing-xxs)"
+                    class="flex flex-col gap-(--spacing-2xs)"
                   >
                     <button
                       v-for="option in optionRows"
@@ -508,7 +508,7 @@
 
                 <div
                   v-if="activeField && isApplied(model, activeField)"
-                  class="border-t border-(--border-default) p-(--spacing-xxs)"
+                  class="border-t border-(--border-default) p-(--spacing-2xs)"
                 >
                   <button
                     type="button"

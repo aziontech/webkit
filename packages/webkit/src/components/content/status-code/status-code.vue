@@ -63,7 +63,7 @@
     dir="ltr"
     class="shrink-0 whitespace-nowrap"
   >
-    <span class="inline-flex items-center gap-(--spacing-xxs) text-label-code-sm">
+    <span class="inline-flex items-center gap-(--spacing-2xs) text-label-code-sm">
       <span
         v-if="methodText"
         :data-testid="`${testId}__method`"

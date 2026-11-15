@@ -152,7 +152,7 @@
             />
           </span>
           <span
-            class="rounded-(--shape-elements) border border-(--border-default) px-(--spacing-xs) py-(--spacing-xxs) text-body-xs text-(--text-default) tabular-nums"
+            class="rounded-(--shape-control) border border-(--border-default) px-(--spacing-xs) py-(--spacing-2xs) text-body-xs text-(--text-default) tabular-nums"
           >
             {{ records }} records found
           </span>

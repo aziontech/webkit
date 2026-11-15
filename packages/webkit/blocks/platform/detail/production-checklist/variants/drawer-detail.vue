@@ -133,7 +133,7 @@
   >
     <DrawerContent>
       <PanelHeader class="w-full">
-        <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+        <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs)">
           <div class="flex min-w-0 items-center gap-(--spacing-sm)">
             <DrawerTitle>Ship to production</DrawerTitle>
             <Tag
@@ -159,7 +159,7 @@
           >
             <Item.Media>
               <span
-                class="flex size-8 items-center justify-center rounded-(--shape-elements) border border-(--border-muted) bg-(--bg-surface) text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-data-done/item:border-(--primary) group-data-done/item:bg-transparent group-data-done/item:text-(--primary) motion-reduce:transition-none"
+                class="flex size-8 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface) text-(--text-default) transition-colors duration-fast-02 ease-productive-entrance group-data-done/item:border-(--primary) group-data-done/item:bg-transparent group-data-done/item:text-(--primary) motion-reduce:transition-none"
                 aria-hidden="true"
               >
                 <i

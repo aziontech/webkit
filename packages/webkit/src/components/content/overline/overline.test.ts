@@ -40,12 +40,12 @@ describe('Overline', () => {
     expect(getByText('COMMENT STYLE').closest('[aria-hidden]')).toBeNull()
   })
 
-  it('spaces the prefix, label and cursor with the --spacing-xxs token', () => {
+  it('spaces the prefix, label and cursor with the --spacing-2xs token', () => {
     const { getByTestId } = render(Overline, { slots: { default: 'TOKENS' } })
     const root = getByTestId('content-overline')
-    expect(root.className).toContain('gap-(--spacing-xxs)')
-    expect(root.className).toContain('ps-(--spacing-xxs)')
-    expect(root.className).toContain('pe-(--spacing-xxs)')
+    expect(root.className).toContain('gap-(--spacing-2xs)')
+    expect(root.className).toContain('ps-(--spacing-2xs)')
+    expect(root.className).toContain('pe-(--spacing-2xs)')
   })
 
   it('renders angle-bracket and closing-tag prefixes verbatim', () => {

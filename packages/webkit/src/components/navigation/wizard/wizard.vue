@@ -195,7 +195,7 @@
     :data-testid="testId"
     :data-loading="loading || null"
     :data-active-step="shown"
-    class="@container/wizard flex w-full gap-(--spacing-xxl)"
+    class="@container/wizard flex w-full gap-(--spacing-2xl)"
   >
     <div class="@max-2xl/wizard:hidden @2xl/wizard:w-(--container-3xs) @2xl/wizard:shrink-0">
       <Stepper v-model="railValue">
@@ -222,7 +222,7 @@
           :data-testid="`${testId}__progress`"
           aria-live="polite"
           aria-atomic="true"
-          class="hidden text-overline-xs text-(--text-muted) @max-2xl/wizard:block @max-2xl/wizard:pb-(--spacing-xxs)"
+          class="hidden text-overline-xs text-(--text-muted) @max-2xl/wizard:block @max-2xl/wizard:pb-(--spacing-2xs)"
         >
           {{ progressText }}
         </p>

@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="flex flex-col gap-(--spacing-xxl)">
+  <div class="flex flex-col gap-(--spacing-2xl)">
     <DocPageHeader
       title="No breadcrumb"
       description="The trail is optional; the masthead closes up rather than leaving a gap."

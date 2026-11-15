@@ -84,13 +84,13 @@
     <span class="text-heading-xs text-(--text-default)">{{ title }}</span>
     <span
       v-if="$slots['default'] || label"
-      class="mt-(--spacing-xxs) text-pretty text-body-sm text-(--text-muted) [&>*:first-child]:pt-0! [&_p]:text-body-sm!"
+      class="mt-(--spacing-2xs) text-pretty text-body-sm text-(--text-muted) [&>*:first-child]:pt-0! [&_p]:text-body-sm!"
     >
       <slot>{{ label }}</slot>
     </span>
     <span
       v-if="linkLabel"
-      class="mt-auto flex items-center gap-(--spacing-xxs) pt-(--spacing-sm) text-label-md text-(--text-link)"
+      class="mt-auto flex items-center gap-(--spacing-2xs) pt-(--spacing-sm) text-label-md text-(--text-link)"
     >
       {{ linkLabel }}
       <i

@@ -215,7 +215,7 @@
     :data-testid="testId"
     :data-kind="kind"
     :data-size="size"
-    class="inline-flex max-w-full min-w-0 flex-wrap items-center gap-(--spacing-xxs)"
+    class="inline-flex max-w-full min-w-0 flex-wrap items-center gap-(--spacing-2xs)"
     @focusin="onFocusIn"
     @keydown="onKeydown"
   >

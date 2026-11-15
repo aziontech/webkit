@@ -122,7 +122,7 @@
     :data-submitted="submitted || null"
     :data-error="error || null"
     :aria-label="title || undefined"
-    class="scroll-mt-(--spacing-xxl)"
+    class="scroll-mt-(--spacing-2xl)"
   >
     <SectionModule
       :divided="false"
@@ -134,7 +134,7 @@
         marks="all"
       >
         <div
-          class="grid gap-(--spacing-xxl) bg-(--bg-surface) p-(--spacing-xl) lg:grid-cols-[minmax(0,1fr)_minmax(0,var(--container-md))] lg:items-start"
+          class="grid gap-(--spacing-2xl) bg-(--bg-surface) p-(--spacing-xl) lg:grid-cols-[minmax(0,1fr)_minmax(0,var(--container-md))] lg:items-start"
         >
           <div class="flex flex-col gap-(--spacing-lg)">
             <Overline
@@ -233,7 +233,7 @@
 
         <div
           aria-hidden="true"
-          class="relative isolate h-[calc(var(--spacing-xxl)*2.5)] overflow-clip border-t border-(--border-default) bg-(--bg-canvas) [--texture-pool-a:20%_110%] [--texture-pool-b:80%_110%] [--texture-wave-gain:3] [--texture-wave-pace:5]"
+          class="relative isolate h-[calc(var(--spacing-2xl)*2.5)] overflow-clip border-t border-(--border-default) bg-(--bg-canvas) [--texture-pool-a:20%_110%] [--texture-pool-b:80%_110%] [--texture-wave-gain:3] [--texture-wave-pace:5]"
         >
           <TextureMaterial
             kind="pixelate"
@@ -247,7 +247,7 @@
       borders="none"
       marks="all"
       data-hatch="true"
-      class="h-[calc(var(--spacing-xxl)*2)]"
+      class="h-[calc(var(--spacing-2xl)*2)]"
     >
       <TextureMaterial kind="lines" />
     </FrameBox>

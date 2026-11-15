@@ -154,7 +154,7 @@
     :data-required="isRequired || null"
     :class="[
       'relative inline-flex w-full items-center overflow-hidden',
-      'rounded-(--shape-elements)',
+      'rounded-(--shape-control)',
       'border border-(--border-input) bg-(--bg-surface) text-(--text-default)',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
       '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong)',
@@ -168,7 +168,7 @@
   >
     <span
       v-if="$slots['prefix']"
-      class="relative z-(--z-input-field) flex items-center ps-(--spacing-md) text-(--text-muted)"
+      class="relative z-(--z-control) flex items-center ps-(--spacing-md) text-(--text-muted)"
     >
       <slot name="prefix" />
     </span>
@@ -190,21 +190,21 @@
       :data-testid="testId"
       dir="auto"
       v-bind="{ ...PASSWORD_MANAGER_IGNORE, ...passthroughAttrs }"
-      class="relative z-(--z-input-field) w-full min-w-0 border-0 bg-transparent outline-none px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+      class="relative z-(--z-control) w-full min-w-0 border-0 bg-transparent outline-none px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted) disabled:cursor-not-allowed disabled:text-(--text-disabled) read-only:cursor-default [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
       @input="handleInput"
       @change="handleChange"
     />
 
     <span
       v-if="$slots['suffix']"
-      class="relative z-(--z-input-field) flex items-center pe-(--spacing-md) text-(--text-muted)"
+      class="relative z-(--z-control) flex items-center pe-(--spacing-md) text-(--text-muted)"
     >
       <slot name="suffix" />
     </span>
 
     <span
       v-if="isDisabled"
-      class="relative z-(--z-input-field) flex items-center pe-(--spacing-md) text-(--text-disabled)"
+      class="relative z-(--z-control) flex items-center pe-(--spacing-md) text-(--text-disabled)"
       aria-hidden="true"
     >
       <i class="ai ai-lock text-label-sm leading-none" />
@@ -212,7 +212,7 @@
 
     <span
       v-if="showButtons"
-      class="relative z-(--z-input-field) flex h-full w-12 shrink-0 flex-col self-stretch border-s border-(--border-input)"
+      class="relative z-(--z-control) flex h-full w-12 shrink-0 flex-col self-stretch border-s border-(--border-input)"
     >
       <button
         type="button"

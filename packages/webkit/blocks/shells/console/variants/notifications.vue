@@ -345,7 +345,7 @@
         <span
           v-if="unread"
           aria-hidden="true"
-          class="pointer-events-none absolute -end-(--spacing-xxs) -top-(--spacing-xxs)"
+          class="pointer-events-none absolute -end-(--spacing-2xs) -top-(--spacing-2xs)"
         >
           <Badge
             :label="String(unread)"
@@ -433,7 +433,7 @@
       </DropdownMenu.Group>
       <DropdownMenu.Group>
         <div
-          class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs)"
+          class="flex h-8 min-h-8 items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-2xs)"
         >
           <span class="flex-1 truncate text-start text-label-sm text-(--text-default)">Theme</span>
           <ThemeSwitcher
@@ -467,7 +467,7 @@
         </DropdownMenu.Item>
       </DropdownMenu.Group>
       <DropdownMenu.Group>
-        <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-xxs) py-(--spacing-xxs)">
+        <div class="flex flex-col gap-(--spacing-sm) px-(--spacing-2xs) py-(--spacing-2xs)">
           <Button
             label="Upgrade to Pro"
             kind="secondary"
@@ -520,7 +520,7 @@
           class="flex shrink-0 items-center justify-between gap-(--spacing-xs) border-b border-(--border-default) px-(--spacing-md) py-(--spacing-xs)"
         >
           <span class="text-label-sm text-(--text-muted)">{{ unread }} unread</span>
-          <div class="flex items-center gap-(--spacing-xxs)">
+          <div class="flex items-center gap-(--spacing-2xs)">
             <Button
               label="Mark all as read"
               kind="transparent"

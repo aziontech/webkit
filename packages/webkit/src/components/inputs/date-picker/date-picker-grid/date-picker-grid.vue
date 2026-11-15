@@ -357,12 +357,12 @@
         {{ monthGrid.label }}
       </span>
 
-      <div class="flex shrink-0 items-center gap-(--spacing-xxs)">
+      <div class="flex shrink-0 items-center gap-(--spacing-2xs)">
         <button
           type="button"
           :disabled="disabledAll"
           :aria-label="t('datePicker.previousMonth')"
-          class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
+          class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
           @click="goToPreviousMonth"
         >
           <i
@@ -375,7 +375,7 @@
           type="button"
           :disabled="disabledAll"
           :aria-label="t('datePicker.nextMonth')"
-          class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
+          class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-control) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
           @click="goToNextMonth"
         >
           <i
@@ -422,7 +422,7 @@
               </span>
             </div>
 
-            <div class="flex flex-col items-start gap-(--spacing-xxs)">
+            <div class="flex flex-col items-start gap-(--spacing-2xs)">
               <div
                 v-for="(week, weekIndex) in monthGrid.weeks"
                 :key="`week-${weekIndex}`"
@@ -448,7 +448,7 @@
                     :data-disabled="day.disabled || null"
                     data-testid="input-date-picker__day"
                     :tabindex="!day.outside && day.time === activeTime ? 0 : -1"
-                    class="flex items-center justify-center text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md data-[band=none]:rounded-(--shape-elements) data-[band=none]:hover:bg-(--bg-hover) data-[band=single]:rounded-(--shape-elements) data-[band=single]:bg-(--secondary-selected) data-[band=single]:text-(--secondary-contrast) data-[band=start]:rounded-s-(--shape-elements) data-[band=start]:bg-(--secondary-selected) data-[band=start]:text-(--secondary-contrast) data-[band=end]:rounded-e-(--shape-elements) data-[band=end]:bg-(--secondary-selected) data-[band=end]:text-(--secondary-contrast) data-[band=middle]:bg-(--bg-selected) data-[outside]:text-(--text-muted) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
+                    class="flex items-center justify-center text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md data-[band=none]:rounded-(--shape-control) data-[band=none]:hover:bg-(--bg-hover) data-[band=single]:rounded-(--shape-control) data-[band=single]:bg-(--secondary-selected) data-[band=single]:text-(--secondary-foreground) data-[band=start]:rounded-s-(--shape-control) data-[band=start]:bg-(--secondary-selected) data-[band=start]:text-(--secondary-foreground) data-[band=end]:rounded-e-(--shape-control) data-[band=end]:bg-(--secondary-selected) data-[band=end]:text-(--secondary-foreground) data-[band=middle]:bg-(--bg-selected) data-[outside]:text-(--text-muted) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
                     @click="selectDay(day)"
                     @keydown="onDayKeydown($event, day)"
                   >

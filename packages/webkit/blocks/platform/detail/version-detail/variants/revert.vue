@@ -352,7 +352,7 @@
             </Select.Option>
             <p
               v-if="!matches.length"
-              class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+              class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
             >
               No versions match"{{ query }}".
             </p>
@@ -436,7 +436,7 @@
               </Select.Option>
               <p
                 v-if="!matches.length"
-                class="px-(--spacing-xs) py-(--spacing-xxs) text-body-sm text-(--text-muted)"
+                class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
               >
                 No versions match"{{ query }}".
               </p>
@@ -623,7 +623,7 @@
                                         href="https://example.com/contact-sales"
                                         target="_blank"
                                         rel="noopener noreferrer"
-                                        class="inline-flex items-center gap-(--spacing-xxs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                                        class="inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
                                       >
                                         Contact sales
                                         <i
@@ -768,7 +768,7 @@
                             What changes against AEO25I38
                           </h3>
                           <ul
-                            class="flex min-w-0 flex-col divide-y divide-(--border-muted) rounded-(--shape-elements) border border-(--border-default)"
+                            class="flex min-w-0 flex-col divide-y divide-(--border-muted) rounded-(--shape-control) border border-(--border-default)"
                           >
                             <li
                               v-for="change in changes"
@@ -850,12 +850,12 @@
                     aria-hidden="true"
                   />
                   <span
-                    class="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-(--accent) text-(--accent-contrast)"
+                    class="relative flex size-7 shrink-0 items-center justify-center rounded-full bg-(--accent) text-(--accent-foreground)"
                     aria-hidden="true"
                   >
                     <i class="ai ai-code text-body-xs" />
                   </span>
-                  <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) pt-0.5">
+                  <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
                     <div class="flex min-w-0 items-center gap-(--spacing-xs)">
                       <span class="truncate text-label-md text-(--text-default)">
                         {{ version.name }}
@@ -913,7 +913,7 @@
                     >
                       <i class="ai ai-code text-body-xs" />
                     </span>
-                    <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs) pt-0.5">
+                    <span class="flex min-w-0 flex-1 flex-col gap-(--spacing-2xs) pt-0.5">
                       <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                         <span
                           class="truncate text-label-md text-(--text-default) group-hover:underline"

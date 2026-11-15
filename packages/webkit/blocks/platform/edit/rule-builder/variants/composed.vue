@@ -551,7 +551,7 @@
         @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
-          <div class="flex min-w-0 flex-col gap-(--spacing-xxs)">
+          <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
             <DrawerTitle>Edit Rule</DrawerTitle>
             <p class="text-body-sm text-(--text-muted)">
               Handle the conditional execution of behaviors through logical operators.
@@ -817,7 +817,7 @@
                             />
                             <div
                               v-else-if="argument?.kind === 'select'"
-                              class="flex w-full flex-col gap-(--spacing-xxs)"
+                              class="flex w-full flex-col gap-(--spacing-2xs)"
                             >
                               <Select
                                 v-model="form.behaviors[index][argument.field]"

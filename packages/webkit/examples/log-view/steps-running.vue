@@ -41,14 +41,14 @@
 </script>
 
 <template>
-  <div class="w-full rounded-(--shape-elements) border border-(--border-default)">
+  <div class="w-full rounded-(--shape-control) border border-(--border-default)">
     <LogView.Steps
       :steps="steps"
       :view-switch="false"
       progress
     >
       <template #header>
-        <h2 class="m-0 text-heading-xxs text-(--text-default)">Deployment logs</h2>
+        <h2 class="m-0 text-heading-2xs text-(--text-default)">Deployment logs</h2>
         <span class="text-label-sm text-(--text-muted)">Step 2 of 4: Build</span>
       </template>
     </LogView.Steps>

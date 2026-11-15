@@ -30,7 +30,7 @@ Site JSON: [`site-split.json`](./site-split.json)
 
 <hr
   style={{
-    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    margin: 'var(--spacing-2xl) 0 var(--spacing-lg)',
     border: 0,
     borderTop: '1px solid var(--border-default)'
   }}
@@ -56,7 +56,7 @@ Site JSON: [`site-panel.json`](./site-panel.json)
 
 <hr
   style={{
-    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    margin: 'var(--spacing-2xl) 0 var(--spacing-lg)',
     border: 0,
     borderTop: '1px solid var(--border-default)'
   }}
@@ -102,7 +102,7 @@ Site JSON: [`site-audiences.json`](./site-audiences.json)
 
 <hr
   style={{
-    margin: 'var(--spacing-xxl) 0 var(--spacing-lg)',
+    margin: 'var(--spacing-2xl) 0 var(--spacing-lg)',
     border: 0,
     borderTop: '1px solid var(--border-default)'
   }}

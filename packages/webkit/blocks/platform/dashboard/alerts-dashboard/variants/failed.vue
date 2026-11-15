@@ -139,7 +139,7 @@
       >
         <ChartCard :span="8">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Alerts per day</ChartCard.Title>
               <Hint text="Alerts raised each day, stacked by severity level." />
             </span>
@@ -169,7 +169,7 @@
 
         <ChartCard :span="4">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>By type</ChartCard.Title>
               <Hint text="Alerts raised in the period, by the kind of behavior that raised them." />
             </span>
@@ -186,7 +186,7 @@
 
         <ChartCard :span="8">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Highest risk</ChartCard.Title>
               <Hint
                 text="The entities with the highest risk score, from the severity and number of their open alerts."
@@ -205,7 +205,7 @@
 
         <ChartCard :span="12">
           <ChartCard.Header>
-            <span class="inline-flex min-w-0 items-center gap-(--spacing-xxs)">
+            <span class="inline-flex min-w-0 items-center gap-(--spacing-2xs)">
               <ChartCard.Title>Open alerts</ChartCard.Title>
               <Hint text="Every open alert, most severe first." />
             </span>
