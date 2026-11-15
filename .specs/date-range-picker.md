@@ -3,11 +3,11 @@ name: date-range-picker
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 23d50c80d3c5839c5119eddaba7ebbb2f4fb0b339543241fac143c75f10716d6
+checksum: 14de3a28755d681ef4861b3e66158a27c375e10a6238b1d84de172fde07fa5a6
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DateRangePicker — Component Spec
@@ -171,6 +171,8 @@ _none_ — the trigger, the panel and its two tabs are fixed parts.
 | `dateRangePicker.outOfBounds`             | Choose a range inside the allowed dates.      | —                      |
 | `dateRangePicker.invalidAmount`           | Enter a whole number greater than 0.          | —                      |
 
+- Active locale: the nearest `WebkitProvider`'s `locale`, else the device locale (`navigator.language`); the server render and the hydrating client use `en-US`, and the device locale applies right after mount.
+- What the person sends stays unambiguous: an absolute `v-model` carries `start` and `end` as ISO 8601 instants (`2026-11-15T00:00:00.000Z`) and a relative one carries `amount` and `unit`, whatever the display format.
 - Formatting: the absolute range goes through `Intl.DateTimeFormat` in the active locale; the relative labels through the plural rules of the active locale; the grid, the date and time fields and the time zone selector use the `calendar` keys.
 
 ## Right-to-left

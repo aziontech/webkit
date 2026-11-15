@@ -1,6 +1,8 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
+  import { useLocale } from '../../../../composables/use-locale'
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
@@ -17,8 +19,9 @@
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
-  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  const canHover = useMediaQuery('(hover: hover)', true)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
+  const { formatNumber } = useLocale()
 
   const LEVEL_ORDER = ['Error', 'Warning', 'Info', 'Debug'] as const
   const STACK_ORDER = [...LEVEL_ORDER].reverse()
@@ -87,9 +90,9 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover)
+  const wanted = () => props.active && (props.hover || !canHover.value)
 
-  const step = ref(reduced || !canHover ? LAST : 0)
+  const step = ref(0)
   const stage = ref<globalThis.HTMLElement | null>(null)
 
   const frame = computed(() => FRAMES[step.value])
@@ -119,7 +122,7 @@
     halt()
     const target = wanted() ? LAST : 0
     if (step.value === target) return
-    if (reduced) {
+    if (reduced.value || !canHover.value) {
       step.value = target
       return
     }
@@ -156,13 +159,13 @@
           <div class="flex flex-col">
             <dt class="text-label-sm text-(--text-muted)">Events</dt>
             <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-              {{ TOTAL.toLocaleString('en-US') }}
+              {{ formatNumber(TOTAL) }}
             </dd>
           </div>
           <div class="flex flex-col">
             <dt class="text-label-sm text-(--text-muted)">Errors</dt>
             <dd class="m-0 text-heading-xs tabular-nums text-(--danger-contrast)">
-              {{ ERRORS.toLocaleString('en-US') }}
+              {{ formatNumber(ERRORS) }}
             </dd>
           </div>
           <div class="flex flex-col">

@@ -1,12 +1,16 @@
 import { render, within } from '@testing-library/vue'
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest'
-import { defineComponent, nextTick, ref } from 'vue'
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
+import { computed, createSSRApp, defineComponent, h, nextTick, onMounted, provide, ref } from 'vue'
+import { renderToString, type SSRContext } from 'vue/server-renderer'
 
 import Default from '../../../../examples/product-widget/default.vue'
 import Types from '../../../../examples/product-widget/types.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
+import { useHydrationHost } from '../../../test/hydration-shared'
+import { ProductWidgetInjectionKey } from './injection-key'
 import ProductWidget, { type ProductWidgetName } from './product-widget.vue'
 import { productWidgets } from './registry'
+import ObjectStorageBrowser from './widgets/object-storage-browser-fragment.vue'
 
 const TESTID = 'content-product-widget'
 const FRAME_TESTID = 'content-shell-mockup'
@@ -350,5 +354,49 @@ describe('ProductWidget', () => {
     expect(frame.hasAttribute('aria-hidden')).toBe(false)
     expect(within(frame).getAllByRole('button').length).toBeGreaterThan(0)
     await expectNoA11yViolations(view.container)
+  })
+})
+
+describe('ProductWidget scenes on a touch screen', () => {
+  const touchScreen = (query: string) => ({
+    matches: query === '(hover: none)',
+    media: query,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined
+  })
+
+  const Scene = defineComponent({
+    setup() {
+      provide(ProductWidgetInjectionKey, { cursor: computed(() => false) })
+      return () => h(ObjectStorageBrowser)
+    }
+  })
+
+  const { hydrate } = useHydrationHost()
+
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('hydrates the server render without a mismatch, then shows the last frame', async () => {
+    vi.stubGlobal('matchMedia', undefined)
+    const ctx: SSRContext = {}
+    const html = await renderToString(createSSRApp(Scene), ctx)
+    expect(html).not.toContain('data-cursor="row-.."')
+    vi.stubGlobal('matchMedia', touchScreen)
+    const shown: boolean[] = []
+    const Probe = defineComponent({
+      setup() {
+        onMounted(() =>
+          nextTick(() => shown.push(Boolean(document.querySelector('[data-cursor="row-.."]'))))
+        )
+        return () => h(Scene)
+      }
+    })
+
+    const mismatches = await hydrate(Probe, html, ctx.teleports ?? {})
+
+    expect(mismatches, mismatches.join('\n')).toEqual([])
+    expect(shown).toEqual([true])
   })
 })

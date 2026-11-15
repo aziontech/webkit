@@ -15,6 +15,7 @@
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
 
   type DeployStatus = 'queued' | 'deploying' | 'done' | 'failed'
@@ -66,14 +67,17 @@
     { path: 'dist/robots.txt', size: 68 }
   ]
 
-  const sizeFormat = new Intl.NumberFormat('en', {
-    style: 'unit',
-    unit: 'kilobyte',
-    unitDisplay: 'short',
-    maximumFractionDigits: 1
-  })
+  const { formatNumber } = useLocale()
 
-  const formatSize = (bytes: number) => sizeFormat.format(bytes / 1000)
+  const sizeFormat = (value: number) =>
+    formatNumber(value, {
+      style: 'unit',
+      unit: 'kilobyte',
+      unitDisplay: 'short',
+      maximumFractionDigits: 1
+    })
+
+  const formatSize = (bytes: number) => sizeFormat(bytes / 1000)
 
   const FILE_LIMIT = 100
   const shownFiles = droppedFiles.slice(0, FILE_LIMIT)

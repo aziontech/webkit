@@ -11,6 +11,7 @@
   import StatTile from '@aziontech/webkit/stat-tile'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import { toast } from '@aziontech/webkit/toast'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
@@ -414,12 +415,15 @@
     }
   ]
 
-  const grouped = new Intl.NumberFormat('en-US')
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
+  const { formatNumber } = useLocale()
+
+  const grouped = (value: number) => formatNumber(value)
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
 
   const formatters = {
-    number: (value: number) => grouped.format(value),
-    compact: (value: number) => compact.format(value),
+    number: (value: number) => grouped(value),
+    compact: (value: number) => compact(value),
     percent: (value: number | null) => (value === null ? '—' : `${value.toFixed(0)}%`),
     share: (value: number) => `${value.toFixed(1)}%`,
     drop: (value: number) => `−${value.toFixed(1)}%`

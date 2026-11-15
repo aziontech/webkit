@@ -1,14 +1,17 @@
 <script setup>
   import Tracker from '@aziontech/webkit/tracker'
+  import { useLocale } from '@aziontech/webkit/use-locale'
 
   const DAYS = 90
   const DEGRADED_DAY = 52
   const OUTAGE_DAY = 73
 
+  const { formatDate } = useLocale()
+
   const days = Array.from({ length: DAYS }, (_, index) => {
     const date = new Date(Date.UTC(2026, 10, 10 - (DAYS - 1 - index)))
     const id = date.toISOString().slice(0, 10)
-    const day = date.toLocaleDateString('en-US', {
+    const day = formatDate(date, {
       month: 'short',
       day: 'numeric',
       timeZone: 'UTC'

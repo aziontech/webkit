@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
   import Tag from '../../tag/tag.vue'
@@ -15,7 +16,7 @@
 
   withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
+  const canHover = useMediaQuery('(hover: hover)', true)
 
   const ROWS = [
     { key: 'ip:203.0.113.24', type: 'String', expiration: 'EX 86400' },

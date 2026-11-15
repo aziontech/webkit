@@ -3,6 +3,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import ErrorBoundary from '@aziontech/webkit/error-boundary'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { ref } from 'vue'
 
   const items = [
@@ -14,8 +15,9 @@
   const broken = ref(false)
   const reported = ref('')
 
-  const format = (value) =>
-    new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 }).format(value)
+  const { formatNumber } = useLocale()
+
+  const format = (value) => formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
 
   const failingFormat = () => {
     throw new Error('The response held a value the list could not read.')

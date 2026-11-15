@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import HelperText from '../../../inputs/helper-text/helper-text.vue'
   import Label from '../../../inputs/label/label.vue'
@@ -21,8 +22,8 @@
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
-  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  const canHover = useMediaQuery('(hover: hover)', true)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   interface Frame {
     anchor: number
@@ -44,7 +45,7 @@
   const LAST = FRAMES.length - 1
   const LEAD = 24
 
-  const wanted = () => props.active && (props.hover || !canHover)
+  const wanted = () => props.active && (props.hover || !canHover.value)
 
   const step = ref(0)
   const frame = computed(() => FRAMES[step.value])
@@ -83,7 +84,7 @@
     halt()
     const target = wanted() ? LAST : 0
     if (step.value === target) return
-    if (reduced) {
+    if (reduced.value) {
       step.value = target
       return
     }

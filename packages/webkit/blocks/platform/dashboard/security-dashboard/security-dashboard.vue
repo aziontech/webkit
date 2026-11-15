@@ -23,6 +23,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
@@ -55,8 +56,11 @@
     action: { label: string; href: string }
   }
 
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
-  const formatCount = (value: number) => compact.format(value)
+  const { formatNumber } = useLocale()
+
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
+  const formatCount = (value: number) => compact(value)
   const formatPercent = (value: number) => `${value.toFixed(value >= 10 ? 0 : 1)}%`
 
   const requestsBlocked = 49277

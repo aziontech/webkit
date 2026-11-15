@@ -332,7 +332,7 @@ export function planDoctor(projectDir) {
     provided ? 'ok' : 'warn',
     provided
       ? 'WebkitProvider is mounted'
-      : 'no WebkitProvider in src/ — components fall back to English and left-to-right. Wrap the app root in `<WebkitProvider :locale="locale">` from \'@aziontech/webkit/webkit-provider\'.'
+      : 'no WebkitProvider in src/ — components read English text, left-to-right, and format for the device locale. Wrap the app root in `<WebkitProvider :catalogs="catalogs">` from \'@aziontech/webkit/webkit-provider\' (add `:locale` for a language the user chose).'
   )
 
   let usesToast = false

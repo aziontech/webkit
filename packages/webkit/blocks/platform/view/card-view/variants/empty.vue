@@ -13,6 +13,7 @@
   import PropertyFilter from '@aziontech/webkit/property-filter'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, useId, watch } from 'vue'
 
   type ApplicationStatus = 'Active' | 'Degraded' | 'Inactive'
@@ -93,7 +94,9 @@
       .filter((field): field is Field => field !== undefined)
   )
 
-  const requestsFormat = new Intl.NumberFormat('en-US', { notation: 'compact' })
+  const { formatNumber } = useLocale()
+
+  const requestsFormat = (value: number) => formatNumber(value, { notation: 'compact' })
   const severityOf = (value: ApplicationStatus): TagSeverity =>
     value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'neutral'
 
@@ -285,7 +288,7 @@
                       <span
                         v-else-if="field.id === 'requests'"
                         class="tabular-nums"
-                        >{{ requestsFormat.format(item.requests) }}</span
+                        >{{ requestsFormat(item.requests) }}</span
                       >
                       <template v-else>{{ item[field.id] }}</template>
                     </dd>

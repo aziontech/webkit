@@ -1,4 +1,6 @@
 <script setup lang="ts">
+  import { useLocale } from '../../../../composables/use-locale'
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -15,7 +17,8 @@
 
   withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
+  const canHover = useMediaQuery('(hover: hover)', true)
+  const { formatNumber } = useLocale()
 
   const WIDTH = 100
   const HEIGHT = 32
@@ -71,7 +74,9 @@
 
   const latest = (series: number[]) => {
     const value = series[series.length - 1]
-    return value >= 100 ? Math.round(value).toLocaleString('en-US') : value.toFixed(2)
+    return value >= 100
+      ? formatNumber(Math.round(value))
+      : formatNumber(value, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
   }
 </script>
 

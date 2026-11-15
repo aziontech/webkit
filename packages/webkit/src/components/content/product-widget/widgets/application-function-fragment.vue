@@ -2,6 +2,7 @@
   import { duration } from '@aziontech/theme/animations'
   import { computed, onMounted, onScopeDispose, ref, watch } from 'vue'
 
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import CodeBlock from '../../../code/code-block/code-block.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -17,7 +18,7 @@
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
+  const canHover = useMediaQuery('(hover: hover)', true)
 
   const CODE = `async function handleRequest(request) {
   const { pathname } = new URL(request.url)
@@ -66,10 +67,10 @@ addEventListener("fetch", (event) => {
 
   const host = ref<globalThis.HTMLElement | null>(null)
 
-  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
   const GLIDE = globalThis.parseFloat(duration['slow-04'])
 
-  const scrolled = computed(() => props.active && (props.hover || !canHover))
+  const scrolled = computed(() => props.active && (props.hover || !canHover.value))
 
   const scroller = () => {
     const area = host.value?.querySelector<globalThis.HTMLElement>('[data-testid$="__scroll"]')
@@ -89,7 +90,7 @@ addEventListener("fetch", (event) => {
     if (!element) return
     const from = element.scrollTop
     const to = toEnd ? element.scrollHeight - element.clientHeight : 0
-    if (reduced) {
+    if (reduced.value) {
       element.scrollTop = to
       return
     }

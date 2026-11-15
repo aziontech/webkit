@@ -5,6 +5,7 @@ import { renderToString } from 'vue/server-renderer'
 
 import CustomMessages from '../../../../examples/webkit-provider/custom-messages.vue'
 import Default from '../../../../examples/webkit-provider/default.vue'
+import DeviceLocale from '../../../../examples/webkit-provider/device-locale.vue'
 import RightToLeft from '../../../../examples/webkit-provider/right-to-left.vue'
 import { useLocale } from '../../../composables/use-locale'
 import { ptBR } from '../../../locales/pt-BR'
@@ -43,9 +44,9 @@ describe('WebkitProvider', () => {
       expect(root.getAttribute('dir')).toBe('ltr')
     })
 
-    it('defaults to English, left to right', () => {
+    it('defaults to the device locale (pinned to en-US in this suite), left to right', () => {
       const { getByTestId } = render(WebkitProvider)
-      expect(getByTestId('utils-webkit-provider').getAttribute('lang')).toBe('en')
+      expect(getByTestId('utils-webkit-provider').getAttribute('lang')).toBe('en-US')
       expect(getByTestId('utils-webkit-provider').getAttribute('dir')).toBe('ltr')
     })
 
@@ -185,6 +186,34 @@ describe('WebkitProvider', () => {
       }
     })
 
+    it('with no locale, renders en-US on the server, hydrates cleanly, then follows the device', async () => {
+      vi.spyOn(navigator, 'language', 'get').mockReturnValue('pt-BR')
+      const App = withProvider({}, () => h(Pagination, { total: 1200 }))
+      const html = await renderToString(createSSRApp(App))
+      expect(html).toContain('lang="en-US"')
+      expect(html).toContain('Showing 1 to 10 of 1,200 entries')
+      const host = document.createElement('div')
+      host.innerHTML = html
+      document.body.appendChild(host)
+      const messages: string[] = []
+      const collect = (...args: unknown[]) => messages.push(args.map(String).join(' '))
+      vi.spyOn(console, 'warn').mockImplementation(collect)
+      vi.spyOn(console, 'error').mockImplementation(collect)
+      try {
+        const app = createSSRApp(App)
+        app.mount(host)
+        await settle()
+        expect(messages.filter((m) => /hydration/i.test(m))).toEqual([])
+        expect(host.querySelector('[lang]')?.getAttribute('lang')).toBe('pt-BR')
+        expect(host.querySelector('[aria-label="Próxima página"]')).toBeTruthy()
+        expect(host.textContent).toContain('1.200')
+        app.unmount()
+      } finally {
+        vi.restoreAllMocks()
+        host.remove()
+      }
+    })
+
     it('messages overrides one string and keeps the rest of the catalog', () => {
       const { getByLabelText } = render(
         withProvider({ locale: 'pt-BR', messages: { pagination: { next: 'Seguinte' } } }, () =>
@@ -286,6 +315,21 @@ describe('WebkitProvider', () => {
     it('RightToLeft turns the subtree right to left', () => {
       const { getByTestId } = render(RightToLeft)
       expect(getByTestId('utils-webkit-provider').getAttribute('dir')).toBe('rtl')
+    })
+
+    it('DeviceLocale prints the range for the device and keeps ISO instants in the value', async () => {
+      vi.spyOn(navigator, 'language', 'get').mockReturnValue('pt-BR')
+      try {
+        const view = render(DeviceLocale)
+        await settle()
+        expect(view.getByTestId('utils-webkit-provider').getAttribute('lang')).toBe('pt-BR')
+        expect(view.container.textContent).toContain('nov.')
+        expect(view.container.textContent).toContain(
+          'Sent to the server: 2026-11-10T12:00:00.000Z to 2026-11-10T18:30:00.000Z'
+        )
+      } finally {
+        vi.restoreAllMocks()
+      }
     })
   })
 })

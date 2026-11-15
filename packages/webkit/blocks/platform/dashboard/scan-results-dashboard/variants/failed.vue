@@ -6,6 +6,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
   import StatTile from '@aziontech/webkit/stat-tile'
+  import { useLocale } from '@aziontech/webkit/use-locale'
 
   const loading = false
   const figures = [
@@ -47,15 +48,18 @@
     }
   ]
 
-  const count = new Intl.NumberFormat('en-US')
+  const { formatNumber } = useLocale()
 
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
+  const count = (value: number) => formatNumber(value)
+
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
 
   const UNITS = ['B', 'KB', 'MB', 'GB']
 
   const formatters: Record<string, (value: number) => string> = {
-    count: (value: number) => count.format(value),
-    compact: (value: number) => compact.format(value),
+    count: (value: number) => count(value),
+    compact: (value: number) => compact(value),
     score: (value: number | null) => (value === null ? '—' : String(value)),
     size: (value: number) => {
       let size = value

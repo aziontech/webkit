@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed } from 'vue'
 
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import ToggleGroup from '../../../actions/toggle-group/toggle-group.vue'
   import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -17,7 +18,7 @@
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
+  const canHover = useMediaQuery('(hover: hover)', true)
 
   const DASHBOARDS = [
     { label: 'Overview', value: 'overview' },
@@ -55,7 +56,7 @@
   ]
 
   const dashboard = computed(() =>
-    props.active && (props.hover || !canHover) ? 'breakdown' : 'overview'
+    props.active && (props.hover || !canHover.value) ? 'breakdown' : 'overview'
   )
 </script>
 

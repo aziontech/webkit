@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed } from 'vue'
 
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Card from '../../card/card.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
   import ShellMockupPart from '../../shell-mockup/shell-mockup-part/shell-mockup-part.vue'
@@ -16,7 +17,7 @@
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
+  const canHover = useMediaQuery('(hover: hover)', true)
 
   const SLICES = [
     {
@@ -52,7 +53,7 @@
     offset: 25 - SLICES.slice(0, index).reduce((total, previous) => total + previous.share, 0)
   }))
 
-  const focused = computed(() => props.active && (props.hover || !canHover))
+  const focused = computed(() => props.active && (props.hover || !canHover.value))
 
   const dimmed = (key: string) => focused.value && key !== FOCUS
 </script>

@@ -8,6 +8,7 @@
   import Select, { type SelectOptionItem } from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { ref } from 'vue'
 
   const loading = false
@@ -90,8 +91,10 @@
 
   const atRisk: unknown[] = []
 
+  const { formatNumber } = useLocale()
+
   const formatters: Record<string, (value: number) => string> = {
-    count: (value: number) => new Intl.NumberFormat('en-US').format(value),
+    count: (value: number) => formatNumber(value),
     percentage: (value: number) => `${value.toFixed(0)}%`,
     points: (value: number) => `${value} pts`
   }

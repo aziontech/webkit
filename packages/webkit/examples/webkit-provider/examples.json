@@ -16,6 +16,11 @@
       "name": "RightToLeft",
       "summary": "`locale=\"ar\"` derives `dir=\"rtl\"`: the subtree reads right to left and strings with no Arabic catalog fall back to English.",
       "file": "right-to-left.vue"
+    },
+    {
+      "name": "DeviceLocale",
+      "summary": "No `locale`: the picker prints dates in the device's language and format (Portuguese or Spanish when the device uses them, `en-US` on the server and until mount), while `v-model` keeps ISO 8601 instants for the server.",
+      "file": "device-locale.vue"
     }
   ]
 }

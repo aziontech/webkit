@@ -691,8 +691,13 @@ English does not download them: import the ones your app offers and pass them th
 (`{ 'pt-BR': ptBR, es }`). A `pt-BR` or `es` locale with no registered catalog renders English and
 warns once in development. v5 had no provider, so there is nothing to rewrite and no codemod step.
 
-Without a provider nothing changes: components default to English. Label props you already pass still
-win. Props whose default was an English string (`ariaLabel: 'Close'`, `confirmLabel: 'Confirm'`,
+Dates, numbers and relative times follow the person's device by default: with no provider, or a
+provider with no `locale`, they format for `navigator.language` (and read its catalog when you
+registered one). The server render and hydration use `en-US`, and the device locale applies right
+after mount. Pass `locale="en"` to keep v5's English output, or the user's saved choice. Only what
+people read changes: send the `v-model` value to your server (Calendar a `Date`, DateRangePicker ISO
+8601 instants, TagEditor `key`/`value` pairs), never a printed label. Label props you already pass
+still win. Props whose default was an English string (`ariaLabel: 'Close'`, `confirmLabel: 'Confirm'`,
 `emptyTitle: 'No data available'`, `placeholder: 'Search'`…) now default to `''` and fall back to the
 catalog, so an empty string no longer removes the label; `HelpPanel.Links` `title` defaults to
 `undefined` and still hides its heading when you pass `''`. The pagination line formats its numbers

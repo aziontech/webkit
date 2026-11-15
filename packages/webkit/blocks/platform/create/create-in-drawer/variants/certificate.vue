@@ -15,6 +15,7 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup, { type ToggleGroupOption } from '@aziontech/webkit/toggle-group'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
   interface DerNode {
@@ -142,8 +143,10 @@ mr+L2DBwFXtW2qJfNedf/9rU
       return { invalid: true }
     }
   }
+  const { formatDate: formatLocaleDate } = useLocale()
+
   const formatDate = (date: Date) =>
-    new Intl.DateTimeFormat('en-US', { dateStyle: 'medium', timeZone: 'UTC' }).format(date)
+    formatLocaleDate(date, { dateStyle: 'medium', timeZone: 'UTC' })
 
   const blankForm = (): CertificateForm => ({
     name: '',

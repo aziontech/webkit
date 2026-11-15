@@ -16,6 +16,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
   const fallbackPeriod = {
@@ -36,8 +37,11 @@
   )
   const periodComparison = computed(() => currentPeriod.value.comparison)
 
-  const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 1 })
-  const formatCount = (value: number) => compact.format(value)
+  const { formatNumber } = useLocale()
+
+  const compact = (value: number) =>
+    formatNumber(value, { notation: 'compact', maximumFractionDigits: 1 })
+  const formatCount = (value: number) => compact(value)
   const formatPercent = (value: number) => `${value.toFixed(value >= 10 ? 0 : 1)}%`
 
   const requestsBlocked = null

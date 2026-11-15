@@ -3,6 +3,7 @@
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
   interface Period {
@@ -95,16 +96,18 @@
     })
   }
 
+  const { formatNumber } = useLocale()
+
   const formatFixed = (decimals: number) => (value: number) =>
-    value.toLocaleString('en-US', {
+    formatNumber(value, {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals
     })
 
   const formatLatest = (value: number) =>
     value >= 100
-      ? Math.round(value).toLocaleString('en-US')
-      : value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      ? formatNumber(Math.round(value))
+      : formatNumber(value, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
 
   const period = ref('24h')
 

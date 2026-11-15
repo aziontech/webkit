@@ -1,4 +1,13 @@
-import { computed, type ComputedRef, inject, type InjectionKey } from 'vue'
+import {
+  computed,
+  type ComputedRef,
+  getCurrentInstance,
+  inject,
+  type InjectionKey,
+  onMounted,
+  type Ref,
+  ref
+} from 'vue'
 
 import type {
   Direction,
@@ -25,7 +34,7 @@ export interface LocaleContext {
 
 /** What `useTranslate()` returns. */
 export interface UseTranslateReturn {
-  /** Active BCP 47 locale tag (`en` with no provider). */
+  /** Active BCP 47 locale tag (the device locale with no provider, `en-US` until mount). */
   locale: ComputedRef<string>
   /** Active text direction (`ltr` with no provider). */
   dir: ComputedRef<Direction>
@@ -36,6 +45,31 @@ export interface UseTranslateReturn {
 export const LocaleInjectionKey: InjectionKey<LocaleContext> = Symbol('WebkitLocale')
 
 export const DEFAULT_LOCALE = 'en'
+
+export const SERVER_LOCALE = 'en-US'
+
+const deviceTag = ref(SERVER_LOCALE)
+
+const readDevice = () => {
+  try {
+    deviceTag.value =
+      Intl.getCanonicalLocales(navigator.language || SERVER_LOCALE)[0] ?? SERVER_LOCALE
+  } catch {
+    deviceTag.value = SERVER_LOCALE
+  }
+}
+
+export function useDeviceLocale(): Readonly<Ref<string>> {
+  const mounted = ref(false)
+  const start = () => {
+    if (typeof window === 'undefined') return
+    readDevice()
+    mounted.value = true
+  }
+  if (getCurrentInstance()) onMounted(start)
+  else start()
+  return computed(() => (mounted.value ? deviceTag.value : SERVER_LOCALE))
+}
 
 export const intlLocale = (tag: string): string =>
   !tag || /-u-(\w+-)*nu-/.test(tag) ? tag : tag.replace(/-u-|$/, (u) => `-u-nu-latn${u && '-'}`)
@@ -118,7 +152,7 @@ export function createMessageHelpers(
 export interface UseLocaleContextReturn {
   /** The provider's context, or null with no provider. */
   context: LocaleContext | null
-  /** Active BCP 47 locale tag (`en` with no provider). */
+  /** Active BCP 47 locale tag (the device locale with no provider, `en-US` until mount). */
   locale: ComputedRef<string>
   /** Active text direction (`ltr` with no provider). */
   dir: ComputedRef<Direction>
@@ -126,9 +160,10 @@ export interface UseLocaleContextReturn {
 
 export function useLocaleContext(): UseLocaleContextReturn {
   const context = inject(LocaleInjectionKey, null)
+  const device = context ? null : useDeviceLocale()
   return {
     context,
-    locale: computed(() => context?.locale.value ?? DEFAULT_LOCALE),
+    locale: computed(() => context?.locale.value ?? device?.value ?? SERVER_LOCALE),
     dir: computed<Direction>(() => context?.dir.value ?? 'ltr')
   }
 }

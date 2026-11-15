@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import Button from '../../../actions/button/button.vue'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
   import ShellMockup from '../../shell-mockup/shell-mockup.vue'
@@ -17,8 +18,8 @@
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
-  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  const canHover = useMediaQuery('(hover: hover)', true)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const ADDRESSES = [
     { address: 'origin-aws.example.com', role: 'primary', weight: 2 },
@@ -43,7 +44,7 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover)
+  const wanted = () => props.active && (props.hover || !canHover.value)
 
   const step = ref(0)
   const goingBack = ref(false)
@@ -69,7 +70,7 @@
     halt()
     const target = wanted() ? LAST : 0
     if (step.value === target) return
-    if (reduced) {
+    if (reduced.value) {
       step.value = target
       return
     }

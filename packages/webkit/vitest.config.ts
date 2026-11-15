@@ -42,7 +42,7 @@ export default defineConfig({
     retry: process.env.CI ? 2 : 0,
     browser: {
       enabled: true,
-      provider: playwright(),
+      provider: playwright({ contextOptions: { locale: 'en-US' } }),
       headless: true,
       instances: [{ browser: 'chromium' }],
       commands: { ariaSnapshot, emulateMedia, renderOnServer }

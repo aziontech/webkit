@@ -35,6 +35,7 @@
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { matchesQuery } from '@aziontech/webkit/use-collection'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
   type EventSource = 'http' | 'security' | 'services' | 'access'
@@ -128,23 +129,27 @@
 
   const timeZones = ['UTC', 'America/Sao_Paulo', 'America/New_York', 'Europe/Lisbon', 'Asia/Tokyo']
 
+  const { formatDate, formatNumber } = useLocale()
+
   const zoneFormats = computed(() => {
     const zone = timeZone.value || undefined
     return {
-      day: new Intl.DateTimeFormat('en-US', { month: 'short', day: '2-digit', timeZone: zone }),
-      clock: new Intl.DateTimeFormat('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-        timeZone: zone
-      }),
-      axis: new Intl.DateTimeFormat('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-        timeZone: zone
-      })
+      day: (value: Date) => formatDate(value, { month: 'short', day: '2-digit', timeZone: zone }),
+      clock: (value: Date) =>
+        formatDate(value, {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: false,
+          timeZone: zone
+        }),
+      axis: (value: Date) =>
+        formatDate(value, {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false,
+          timeZone: zone
+        })
     }
   })
 
@@ -152,12 +157,9 @@
     value instanceof Date && !Number.isNaN(value.getTime())
 
   const formatEventTime = (date: Date) =>
-    isDate(date)
-      ? `${zoneFormats.value.day.format(date)}, ${zoneFormats.value.clock.format(date)}`
-      : ''
+    isDate(date) ? `${zoneFormats.value.day(date)}, ${zoneFormats.value.clock(date)}` : ''
 
-  const formatEventClock = (date: unknown) =>
-    isDate(date) ? zoneFormats.value.axis.format(date) : ''
+  const formatEventClock = (date: unknown) => (isDate(date) ? zoneFormats.value.axis(date) : '')
 
   const eventSources: Record<EventSource, string> = {
     http: 'HTTP Requests',
@@ -190,12 +192,12 @@
     if (!value || typeof value !== 'object') return ''
     const { start, end } = value
     if (!start) return end ? `Until ${formatEventClock(end)}` : ''
-    const sameDay = end && zoneFormats.value.day.format(start) === zoneFormats.value.day.format(end)
-    const from = `${zoneFormats.value.day.format(start)}, ${formatEventClock(start)}`
+    const sameDay = end && zoneFormats.value.day(start) === zoneFormats.value.day(end)
+    const from = `${zoneFormats.value.day(start)}, ${formatEventClock(start)}`
     if (!end) return `Since ${from}`
     return sameDay
       ? `${from} to ${formatEventClock(end)}`
-      : `${from} to ${zoneFormats.value.day.format(end)}, ${formatEventClock(end)}`
+      : `${from} to ${zoneFormats.value.day(end)}, ${formatEventClock(end)}`
   }
 
   const eventFieldCategories: { id: EventFieldCategory; label: string }[] = [
@@ -233,7 +235,7 @@
       category: 'response',
       align: 'end',
       minWidth: 80,
-      format: (value) => value.toLocaleString('en-US')
+      format: (value) => formatNumber(value)
     },
     { id: 'cacheStatus', label: 'Cache status', category: 'cache', minWidth: 80, mono: true },
     { id: 'country', label: 'Country', category: 'geolocation', minWidth: 80 },
@@ -1584,7 +1586,7 @@
                     <div class="flex flex-col">
                       <dt class="text-label-sm text-(--text-muted)">Events</dt>
                       <dd class="m-0 text-heading-xs tabular-nums text-(--text-default)">
-                        {{ summary.total.toLocaleString('en-US') }}
+                        {{ formatNumber(summary.total) }}
                       </dd>
                     </div>
                     <div class="flex flex-col">
@@ -1594,7 +1596,7 @@
                         :data-raised="summary.errors ? true : null"
                         :aria-label="`${summary.errors} errors, ${errorShareLabel}`"
                       >
-                        {{ summary.errors.toLocaleString('en-US') }}
+                        {{ formatNumber(summary.errors) }}
                       </dd>
                     </div>
                     <div class="flex flex-col">

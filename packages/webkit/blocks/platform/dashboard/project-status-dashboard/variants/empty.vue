@@ -16,6 +16,7 @@
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { ref } from 'vue'
 
   type FigureFormat = 'count' | 'percentage'
@@ -197,8 +198,10 @@
 
   const atRisk: RiskItem[] = []
 
+  const { formatNumber } = useLocale()
+
   const formatters = {
-    count: (value: number) => new Intl.NumberFormat('en-US').format(value),
+    count: (value: number) => formatNumber(value),
     percentage: (value: number) => `${value.toFixed(0)}%`,
     points: (value: number) => `${value} pts`
   }

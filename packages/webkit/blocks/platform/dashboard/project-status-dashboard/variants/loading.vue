@@ -17,6 +17,7 @@
   import TableRoot, { type TableColumn } from '@aziontech/webkit/table-root'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
 
@@ -369,8 +370,10 @@
     }
   ]
 
+  const { formatNumber } = useLocale()
+
   const formatters = {
-    count: (value: number) => new Intl.NumberFormat('en-US').format(value),
+    count: (value: number) => formatNumber(value),
     percentage: (value: number) => `${value.toFixed(0)}%`,
     points: (value: number) => `${value} pts`
   }

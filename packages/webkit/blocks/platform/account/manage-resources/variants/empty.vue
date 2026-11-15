@@ -26,6 +26,7 @@
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, useId } from 'vue'
 
   type ResourceType = 'organization' | 'group' | 'workspace'
@@ -211,7 +212,9 @@
   }
   const statusSeverity = (status?: ResourceStatus): TagSeverity =>
     status ? statusSeverities[status] : 'neutral'
-  const money = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
+  const { formatNumber } = useLocale()
+
+  const money = (value: number) => formatNumber(value, { style: 'currency', currency: 'USD' })
   const initials = (name: string) =>
     name
       .split(/\s+/)
@@ -627,7 +630,7 @@
                     <span
                       class="tabular-nums text-(--text-default) data-[empty]:text-(--text-muted)"
                       :data-empty="!value || null"
-                      >{{ value ? money.format(value) : '—' }}</span
+                      >{{ value ? money(value) : '—' }}</span
                     >
                   </template>
                   <template #header-charges>

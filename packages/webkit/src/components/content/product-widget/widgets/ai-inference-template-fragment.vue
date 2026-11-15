@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, onScopeDispose, ref, watch } from 'vue'
 
+  import { useMediaQuery } from '../../../../composables/use-media-query'
   import AzionLogoMin from '../../../../svg/azion/min/min.vue'
   import Button from '../../../actions/button/button.vue'
   import Chip from '../../../inputs/chip/chip.vue'
@@ -22,8 +23,8 @@
 
   const props = withDefaults(defineProps<Props>(), { active: true, hover: false })
 
-  const canHover = globalThis.matchMedia?.('(hover: hover)').matches ?? true
-  const reduced = globalThis.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+  const canHover = useMediaQuery('(hover: hover)', true)
+  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)')
 
   const DARK_INK = '[[data-theme=dark]_&]:invert'
 
@@ -102,9 +103,9 @@
 
   const LAST = FRAMES.length - 1
 
-  const wanted = () => props.active && (props.hover || !canHover)
+  const wanted = () => props.active && (props.hover || !canHover.value)
 
-  const step = ref(reduced || !canHover ? LAST : 0)
+  const step = ref(0)
   const stage = ref<globalThis.HTMLElement | null>(null)
   const column = ref<globalThis.HTMLElement | null>(null)
   const offset = ref(0)
@@ -130,7 +131,7 @@
     measure()
     const target = wanted() ? LAST : 0
     if (step.value === target) return
-    if (reduced) {
+    if (reduced.value || !canHover.value) {
       step.value = target
       measure()
       return

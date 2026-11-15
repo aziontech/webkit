@@ -32,6 +32,7 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, reactive, ref } from 'vue'
 
   interface Token {
@@ -54,8 +55,10 @@
   const referenceTime = Date.UTC(2026, 10, 10, 12)
   const daysFrom = (days: number) => new Date(referenceTime + days * DAY)
 
+  const { formatDate: formatLocaleDate } = useLocale()
+
   const formatDate = (date: Date) =>
-    date.toLocaleDateString('en-US', {
+    formatLocaleDate(date, {
       month: 'short',
       day: 'numeric',
       year: 'numeric',
