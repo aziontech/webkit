@@ -155,6 +155,7 @@
       store.toasts.map((t) => ({
         id: t.id,
         severity: t.severity,
+        loading: t.loading,
         message: t.message,
         description: t.description,
         action: t.action,
@@ -448,7 +449,7 @@
         :lang="portalLocale.lang"
         :data-testid="`${testId}__${region.position}`"
         :data-position="region.position"
-        :data-expanded="isExpanded(region) || null"
+        :data-state="isExpanded(region) ? 'open' : 'closed'"
         data-toast-region
         :role="region.all.length ? 'region' : undefined"
         :aria-label="region.all.length ? regionLabel : undefined"
@@ -477,7 +478,10 @@
               :toast="item.entry"
               :dismiss="() => dismiss(item.entry.id)"
             >
-              <ToastItem :severity="item.entry.severity">
+              <ToastItem
+                :severity="item.entry.severity"
+                :loading="item.entry.loading"
+              >
                 <ToastTitle>{{ item.entry.message }}</ToastTitle>
                 <ToastDescription v-if="item.entry.description">{{
                   item.entry.description
