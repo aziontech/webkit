@@ -78,7 +78,7 @@ The entire public surface, from `package.json#exports`:
 | Path                            | What it is                                                                 |
 | ------------------------------- | -------------------------------------------------------------------------- |
 | `@aziontech/theme`              | the compiled stylesheet (`dist/v4/globals.css`)                            |
-| `@aziontech/theme/colors`       | color primitives: `primitives`, `brandPrimitives`, `surfacePrimitives`     |
+| `@aziontech/theme/colors`       | color primitives: `primitives`, `brandPrimitives`                          |
 | `@aziontech/theme/animations`   | motion primitives: `animate`, `curve`, `duration`, `useWhen`               |
 | `@aziontech/theme/texts`        | `textsData` — font-size/line-height/weight bundles per text style          |
 | `@aziontech/theme/theme-colors` | semantic compiler: `compileThemeVars`, `compileThemeCss`, `injectThemeCss` |
@@ -88,7 +88,7 @@ The entire public surface, from `package.json#exports`:
 ### Color primitives
 
 ```javascript
-import { primitives, brandPrimitives, surfacePrimitives } from '@aziontech/theme/colors'
+import { primitives, brandPrimitives } from '@aziontech/theme/colors'
 
 primitives.orange[500] // '#F3652B' — primary brand
 primitives.blue[500] // '#0072F5' — accent
@@ -97,12 +97,9 @@ primitives.gray[900] // '#141414'
 
 brandPrimitives.primary[500] // '#F3652B'
 brandPrimitives.absolute.white // '#FFFFFF'
-
-surfacePrimitives.surface[0] // '#FFFFFF'
-surfacePrimitives.surface[950] // '#0A0A0A'
 ```
 
-Available palettes: `base`, `blue`, `gray`, `slate`, `orange`, `violet`, `yellow`, `green`, `red` — plus the `brand`, `surface`, and `alpha` groups.
+Available palettes: `base`, `blue`, `gray`, `slate`, `orange`, `violet`, `yellow`, `green`, `red` — plus the `brand` and `alpha` groups.
 
 ### Motion primitives
 
@@ -173,18 +170,20 @@ Use them directly:
 
 Utility equivalents are generated in the same stylesheet (e.g. `@utility text-default`), so `class="text-default"` works wherever Tailwind runs.
 
-### Deprecated variables
+### Variables removed in 6.0
 
-These variables still ship in 5.x and are removed in 6.0. Nothing in WebKit reads them.
+Nothing in WebKit read these, so 6.0 removes them. Replace any use in your own CSS:
 
-| Deprecated                                     | Use instead                                                                                                                                                                  |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--surface-0` … `--surface-950` (18 variables) | a semantic role (`--bg-canvas`, `--bg-surface`, `--border-default`, `--text-muted`…), or `--color-gray-<step>` for a fixed ramp step (`--surface-0` is `--color-base-white`) |
-| `--height-2` … `--height-96` (28 variables)    | the Tailwind `h-<n>` utilities, or `calc(var(--spacing) * <n>)`                                                                                                              |
-| `--width-3xs` … `--width-7xl` (13 variables)   | `--container-3xs` … `--container-7xl` (same values)                                                                                                                          |
-| `--z-input-popup`                              | `--z-input-overlay`                                                                                                                                                          |
+| Removed                                              | Use instead                                                                                                                         |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `--surface-0` … `--surface-950` (18 variables)       | a semantic role (`--bg-canvas`, `--bg-surface`, `--border-default`, `--text-muted`…), or `--color-gray-<step>` for a fixed step     |
+| `--color-surface-0` … `--color-surface-950` (12)     | the same step of `--color-gray-*` (identical values; `--color-surface-0` is `--color-base-white`); the `surface-*` utilities go too |
+| `--height-2` … `--height-96` (28 variables)          | the Tailwind `h-<n>` utilities, or `calc(var(--spacing) * <n>)`                                                                     |
+| `--width-3xs` … `--width-7xl` (13 variables)         | `--container-3xs` … `--container-7xl` (same values)                                                                                 |
+| `--z-input-popup`                                    | `--z-input-overlay`                                                                                                                 |
+| `surfacePrimitives` (from `@aziontech/theme/colors`) | `primitives.gray`                                                                                                                   |
 
-The `--color-surface-*` primitive ramp and the `--illustration-*` roles stay.
+The `--illustration-*` roles stay.
 
 ## Breakpoints and container sizes
 
@@ -272,7 +271,7 @@ packages/theme/
 ├── tokens.js                    # in-repo JS barrel (not shipped — use the subpath exports)
 ├── src/
 │   ├── tokens/
-│   │   ├── primitives/          # colors (brand/surface/alpha), typography, shape, effects, animations, …
+│   │   ├── primitives/          # colors (brand/alpha), typography, shape, effects, animations, …
 │   │   ├── semantic/            # texts/containers/spacings/z-indices data + semantic color refs
 │   │   ├── theme/               # light/dark semantic groups (primary, background, text, ring, feedback/…)
 │   │   └── README.md            # in-depth token documentation

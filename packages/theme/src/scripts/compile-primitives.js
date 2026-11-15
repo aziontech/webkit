@@ -12,12 +12,10 @@ import { shadow } from '../tokens/primitives/effects/shadow.js'
 import { ringOffset } from '../tokens/primitives/ring-offset.js'
 import { aspectVideo } from '../tokens/primitives/shape/aspect-video.js'
 import { container } from '../tokens/primitives/shape/container.js'
-import { height } from '../tokens/primitives/shape/height.js'
 import { radius } from '../tokens/primitives/shape/radius.js'
 import { shape as shapeAliases } from '../tokens/primitives/shape/shape.js'
 import { size } from '../tokens/primitives/shape/size.js'
 import { spacing } from '../tokens/primitives/shape/spacing.js'
-import { width } from '../tokens/primitives/shape/width.js'
 import { fontFamily } from '../tokens/primitives/typography/font-family.js'
 import { fontSize } from '../tokens/primitives/typography/font-size.js'
 import { fontWeight } from '../tokens/primitives/typography/font-weight.js'
@@ -37,11 +35,9 @@ export const buildTrees = () => {
 
   const shape = {
     container,
-    height,
     radius,
     size,
     spacing,
-    width,
     'aspect-video': aspectVideo,
     ...shapeAliases
   }
