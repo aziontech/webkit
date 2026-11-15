@@ -115,4 +115,4 @@ When an answer produces something longer than a message (a query, a configuratio
 - `platform/ai/ai-chat-drawer` — the same conversation in a drawer over a resource page.
 - `platform/ai/ai-action-approval` — when a response proposes a change the reader must authorize.
 - `platform/states/async-submit` — long-running work outside a conversation.
-- `skills/webkit-genai` — the rules this block follows: loading stages, streaming, citations, feedback, authorization.
+- `skills/webkit-ai-surfaces` — the rules this block follows: loading stages, streaming, citations, feedback, authorization.

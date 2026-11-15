@@ -1,13 +1,13 @@
 ---
-name: webkit-baseline-ui
+name: webkit-quick-cleanup
 description: Fast deslop pass for UI built on @aziontech/webkit — enforce components-only, tokens-only (typography/color/shape/spacing/shadow), correct typography hierarchy, and consistent spacing rhythm. Use for a quick cleanup or polish review.
 status: active
-last_updated: 2026-11-12
+last_updated: 2026-11-15
 scope: general
 enforced_by: [webkit-tokens, webkit-prefer-over-custom, webkit-styling]
 ---
 
-# Skill: webkit-baseline-ui
+# Skill: webkit-quick-cleanup
 
 ## Purpose
 
@@ -17,9 +17,9 @@ hand-rolled, nothing hardcoded.
 
 ## How to use
 
-- `/webkit-baseline-ui`
+- `/webkit-quick-cleanup`
   Apply the constraints below to any UI work in this conversation.
-- `/webkit-baseline-ui <file>`
+- `/webkit-quick-cleanup <file>`
   Review the file against every constraint and output, per violation:
   - the exact line / snippet (quoted),
   - why it matters (1 short sentence),
@@ -162,7 +162,7 @@ Two rules from that system are worth repeating here because they are the ones a 
 
 ## Review output
 
-For `/webkit-baseline-ui <file>`, group findings by constraint section. Each finding:
+For `/webkit-quick-cleanup <file>`, group findings by constraint section. Each finding:
 
 ```
 ✗ <file>:<line>  `bg-[#0a0a0a] text-blue-500`
@@ -181,7 +181,7 @@ End with a one-line verdict: `clean` or `N violations across <sections>`.
 - Variant / styling discipline: drive variants from `data-*` attributes, and compose classes with
   `@aziontech/webkit/utils/cn` — never a JS class-preset object.
 - For deeper UX (states, heuristics) → `/webkit-ux-heuristics`; for motion → `/webkit-motion-polish`;
-  for final sign-off → `/webkit-impeccable-polish`.
+  for final sign-off → `/webkit-final-polish`.
 
 ## Definition of Done
 

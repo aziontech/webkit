@@ -1,13 +1,13 @@
 ---
-name: webkit-genai
+name: webkit-ai-surfaces
 description: Generative AI surfaces on @aziontech/webkit — a chat page or drawer, a streamed response, thinking and loading states, citations, feedback, follow-up questions, generated artifacts and actions the assistant may only run after the reader approves. Picks the right AI component for each moment (Conversation, ChatMessage, PromptInput, StreamingResponse, Reasoning, Sources, Citation, SuggestionGroup, ToolCall, ToolApproval, ArtifactPreview, AiLoading), wires the message lifecycle (pending → streaming → complete or error) and holds the safety line — model output is never rendered as HTML and nothing with side effects runs without an explicit approval. Use when building or reviewing anything where a person talks with an AI assistant or reads its output.
 status: active
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 scope: general
 enforced_by: [webkit-accessibility, webkit-component-states, ui-verify]
 ---
 
-# Skill: webkit-genai
+# Skill: webkit-ai-surfaces
 
 ## Purpose
 
@@ -22,8 +22,8 @@ shadcn's AI Elements.
 
 ## How to use
 
-- `/webkit-genai` — apply these rules to the AI surface you are building in this conversation.
-- `/webkit-genai <file>` — review the file and report, per gap: the quoted line, the rule it breaks
+- `/webkit-ai-surfaces` — apply these rules to the AI surface you are building in this conversation.
+- `/webkit-ai-surfaces <file>` — review the file and report, per gap: the quoted line, the rule it breaks
   (from **Hard rules**), and the concrete fix with the component that solves it.
 
 ## How to find the components

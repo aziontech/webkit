@@ -46,7 +46,7 @@ Run every route through all of them, in both themes and at 2–3 widths. A pass 
 width, or a state did not verify the screen.
 
 - **Visual, both themes × widths.** Screenshot in **light** and in `data-theme="dark"`, at **375**,
-  **768**, and **1280** px. This is the check `webkit-theming-dark-mode` and `webkit-baseline-ui`
+  **768**, and **1280** px. This is the check `webkit-theming-dark-mode` and `webkit-quick-cleanup`
   (responsive widths) defer to — two-theme screenshots catch the dark-only regression; multi-width catches the layout that
   only breaks on a phone. Look at every shot; a saved file is not a passed check.
 - **Console, zero tolerance.** Collect `console` errors, `pageerror`, and `requestfailed` on load

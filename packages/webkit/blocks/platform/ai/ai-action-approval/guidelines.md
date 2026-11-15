@@ -91,4 +91,4 @@ A new response that says what changed (or that nothing ran), with Copy in its ac
 - `platform/ai/ai-chat` — the conversation this card lives in.
 - `platform/ai/ai-chat-drawer` — the same flow in a drawer over a resource page.
 - `platform/delete/delete-with-confirmation` — confirming a destructive action the reader started.
-- `skills/webkit-genai` — when to ask, what to show and how to record the outcome.
+- `skills/webkit-ai-surfaces` — when to ask, what to show and how to record the outcome.

@@ -34,7 +34,7 @@ shape, the empty layout, the error affordance) and how **async behavior** sequen
 
 ## When to invoke
 
-- Designing or reviewing a flow, form, list, or screen — **before** `/webkit-baseline-ui` /
+- Designing or reviewing a flow, form, list, or screen — **before** `/webkit-quick-cleanup` /
   `/webkit-motion-polish`.
 - The user asks "is this good UX", "what am I missing", "review this flow".
 
@@ -212,7 +212,7 @@ one renders, and how the async sequence behaves, lives in `/webkit-ui-states`.
   and Load more; overflow is never a wrapped inline list.
 - More than 7 options → search on; 7 or fewer → no search box.
 - No motion or delight here — this pass is structure only. Defer ornament to `/webkit-motion-polish` /
-  `/webkit-impeccable-polish`.
+  `/webkit-final-polish`.
 - Component discovery is always the webkit MCP `suggest_component` or
   `node_modules/@aziontech/webkit/catalog.json` (`imports`) — never a source path.
 

@@ -139,10 +139,10 @@ before any polish:
 - **Structure:** `/webkit-ux-heuristics` (right component per moment) · `/webkit-ui-states` (state surface + async behavior) · `/webkit-form` · `/webkit-create-surface` (where a create lives: page vs drawer, Advanced, the commit bar) · `/webkit-errors` (where a failure goes: field, section Alert, toast, auth card) · `/webkit-tables` (data-driven `<Table>` + cell recipes) · `/webkit-lists` (the index page around it + the filter system) · `/webkit-navigation` (shells, navigation levels, breadcrumb, and when a drawer may open: never as the way into a resource, `large` then one `medium`)
 - **Layout:** `/webkit-layout` (the page container system: measure, boundary, rhythm — a page never writes its own `mx-auto max-w-*`)
 - **Words:** `/webkit-microcopy` (Azion product copy: punctuation, sentence case, label vs message, one word per concept)
-- **Foundation:** `/webkit-baseline-ui` (tokens, typography hierarchy, spacing rhythm)
-- **Cross-cutting quality:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-genai` (chat, streamed responses, citations, feedback, actions the reader approves)
-- **Polish:** `/webkit-motion-polish` · `/webkit-impeccable-polish` (finish + earned delight)
-- **Verify + migrate:** `/webkit-ui-verify` (runtime axe + both themes + states) · `/webkit-ds-adoption`
+- **Foundation:** `/webkit-quick-cleanup` (tokens, typography hierarchy, spacing rhythm)
+- **Cross-cutting quality:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-ai-surfaces` (chat, streamed responses, citations, feedback, actions the reader approves)
+- **Polish:** `/webkit-motion-polish` · `/webkit-final-polish` (finish + earned delight)
+- **Verify + migrate:** `/webkit-ui-verify` (runtime axe + both themes + states) · `/webkit-adoption`
 
 Mechanics of consuming the package (imports, tokens, tree-shaking) live in `/webkit-usage`.
 

@@ -97,4 +97,4 @@ At the foot of the drawer above a divider: four rows at most, a placeholder that
 - `platform/ai/ai-chat` — the full-page assistant.
 - `platform/ai/ai-action-approval` — authorization of an action the assistant proposes.
 - `platform/create/create-in-drawer` — the drawer for forms, not conversations.
-- `skills/webkit-genai` — the rules for generative AI surfaces.
+- `skills/webkit-ai-surfaces` — the rules for generative AI surfaces.

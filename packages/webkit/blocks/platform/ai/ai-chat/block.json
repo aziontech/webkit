@@ -35,7 +35,7 @@
     "artefato gerado",
     "full page chat"
   ],
-  "skills": ["webkit-genai", "webkit-ui-states", "webkit-microcopy"],
+  "skills": ["webkit-ai-surfaces", "webkit-ui-states", "webkit-microcopy"],
   "primary": {
     "name": "Empty",
     "file": "ai-chat.vue"

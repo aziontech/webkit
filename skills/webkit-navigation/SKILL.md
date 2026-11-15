@@ -1059,7 +1059,7 @@ End with: `navigation sound` or `N gaps — fix before polish`.
 - **Companion skills:** `webkit-layout` (the boundary and column of the body), `webkit-lists` (the
   index page around the table), `webkit-form` (what fills a focused flow), `webkit-errors` (where a
   failure on the page goes), `webkit-ux-heuristics` (states + feedback), `webkit-ui-states` (locking +
-  toast), `webkit-baseline-ui` (components + tokens).
+  toast), `webkit-quick-cleanup` (components + tokens).
 
 ## Definition of Done
 

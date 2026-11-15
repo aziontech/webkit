@@ -24,7 +24,7 @@
     "ask about this page",
     "assistant side panel"
   ],
-  "skills": ["webkit-genai", "webkit-ui-states", "webkit-microcopy"],
+  "skills": ["webkit-ai-surfaces", "webkit-ui-states", "webkit-microcopy"],
   "primary": {
     "name": "Empty",
     "file": "ai-chat-drawer.vue"

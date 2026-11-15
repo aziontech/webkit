@@ -108,12 +108,12 @@ Structure and states first, polish last:
   (where a failure goes) · `/webkit-tables` · `/webkit-lists` · `/webkit-navigation` (shells,
   levels, breadcrumb, and drawers: never the way into a resource; `large`, then at most one `medium`)
 - **Layout:** `/webkit-layout` · **Words:** `/webkit-microcopy`
-- **Foundation:** `/webkit-baseline-ui` (tokens, typography, spacing rhythm)
-- **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-genai` (AI chat
+- **Foundation:** `/webkit-quick-cleanup` (tokens, typography, spacing rhythm)
+- **Cross-cutting:** `/webkit-theming-dark-mode` · `/webkit-data-viz` · `/webkit-ai-surfaces` (AI chat
   and agent actions)
-- **Polish:** `/webkit-motion-polish` → `/webkit-impeccable-polish`
+- **Polish:** `/webkit-motion-polish` → `/webkit-final-polish`
 - **Verify:** `/webkit-ui-verify` (real browser, both themes, several widths, axe)
-- **Adopting WebKit in an existing app:** `/webkit-ds-adoption`
+- **Adopting WebKit in an existing app:** `/webkit-adoption`
 
 ## How to find a component
 

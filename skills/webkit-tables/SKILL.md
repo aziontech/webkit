@@ -37,7 +37,7 @@ or `node_modules/@aziontech/webkit/catalog.json` — never by reading a componen
 - Building or reviewing any list/index page, resource table, or any `<Table>` with cell slots.
 - The user asks "the copy button is misaligned", "how do I lay out this cell", "the table overflows the
   page", "which toolbar controls", "how do actions/status/domain cells look".
-- After `/webkit-ui-states` establishes the empty/loading/error states, and before `/webkit-impeccable-polish`.
+- After `/webkit-ui-states` establishes the empty/loading/error states, and before `/webkit-final-polish`.
 
 ## The Table — data-driven, one shape
 
@@ -615,4 +615,4 @@ visually hidden header (`#header-actions` → `<span class="sr-only">Actions</sp
 
 - `/webkit-form` — form layout & accessibility (the create/edit view a table's "New" button opens).
 - `/webkit-ui-states` — the loading / empty / error states a table must render.
-- `/webkit-impeccable-polish` — final rhythm/alignment pass over the assembled table.
+- `/webkit-final-polish` — final rhythm/alignment pass over the assembled table.

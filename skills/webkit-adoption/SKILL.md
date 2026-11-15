@@ -1,13 +1,13 @@
 ---
-name: webkit-ds-adoption
+name: webkit-adoption
 description: Migrating an existing app onto @aziontech/webkit is a sequence of small, shippable stories in dependency order — never a big-bang rewrite. Use when adopting webkit into a legacy screen or app: decompose the migration, check the catalog before building custom, track a coverage scorecard per screen, and file gaps instead of forking. Drives each screen from custom toward webkit, story by story.
 status: active
-last_updated: 2026-07-20
+last_updated: 2026-11-15
 scope: general
 enforced_by: [webkit-prefer-over-custom, webkit-prop-vocabulary, webkit-style-override, review]
 ---
 
-# Skill: webkit-ds-adoption
+# Skill: webkit-adoption
 
 ## Purpose
 
@@ -21,9 +21,9 @@ live in **webkit-usage** — this skill is about _what to migrate, in what order
 
 ## How to use
 
-- `/webkit-ds-adoption` — plan and execute the next migration story on the code in this conversation:
+- `/webkit-adoption` — plan and execute the next migration story on the code in this conversation:
   pick the smallest shippable slice in dependency order and do it.
-- `/webkit-ds-adoption <screen-or-dir>` — audit the target, produce its **coverage scorecard**
+- `/webkit-adoption <screen-or-dir>` — audit the target, produce its **coverage scorecard**
   (webkit vs custom), and propose the migration stories in order.
 
 ## Check the catalog before you build anything
@@ -127,7 +127,7 @@ Six PRs, each shippable, each raising the score — no rewrite, no long-lived br
 
 ## Review output
 
-For `/webkit-ds-adoption <screen-or-dir>`, lead with the scorecard, then the ordered stories:
+For `/webkit-adoption <screen-or-dir>`, lead with the scorecard, then the ordered stories:
 
 ```
 Screen: WorkloadsList.vue — webkit 4 / custom 6 → 40%
