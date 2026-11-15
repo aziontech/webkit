@@ -22,6 +22,7 @@ import {
   migrateIcons,
   migrateLintRules,
   migrateSource,
+  migrateTestIds,
   planMigrate,
   renameSubpath
 } from '../../src/cli/migrate.js'
@@ -104,7 +105,7 @@ test('migrateSource turns kind into variant (the look) or type (the sort of part
   assert.match(source, /<Button :variant="primary \? 'primary' : 'ghost'" label="Back" \/>/)
   assert.match(source, /<Table\.Cell type="checkbox" \/>/)
   assert.match(source, /<Pagination\.Button type="next" \/>/)
-  assert.match(source, /<ConsolePanel title-variant="left" \/>/)
+  assert.match(source, /<ConsoleShowcase title-variant="left" \/>/)
   assert.match(source, /<Skeleton aria-label="one kind of row" variant="circle" \/>/)
   assert.equal(migrateSource(source, v6).source, source)
 })
@@ -228,6 +229,23 @@ test('migrateSource moves a static value to another prop from a moves map', () =
   assert.match(source, /<Tag :severity="level" \/>/)
   assert.match(source, /<Tag :severity="t\('x'\)" variant="accent" \/>/)
   assert.equal(migrateSource(source, { ...migration, ...rules }).source, source)
+})
+
+test('migrateTestIds maps category test ids to the component name, parts included', () => {
+  const { testids } = loadMigration(6)
+  const spec = [
+    "page.getByTestId('actions-button').click()",
+    'page.locator(\'[data-testid="feedback-toast__title"]\')',
+    "screen.getByTestId('content-item__title')",
+    "screen.getByTestId('my-button')"
+  ].join('\n')
+  const { source, changes } = migrateTestIds(spec, testids)
+  assert.match(source, /getByTestId\('button'\)/)
+  assert.match(source, /data-testid="toast-title"/)
+  assert.match(source, /getByTestId\('item-title'\)/)
+  assert.match(source, /getByTestId\('my-button'\)/)
+  assert.ok(changes.includes('data-testid "actions-button" → "button"'))
+  assert.equal(migrateTestIds(source, testids).source, source)
 })
 
 test('migrateIcons rewrites PrimeIcons pairs to the Azion set and flags what it cannot', () => {
@@ -705,7 +723,8 @@ test('every renamed compound part points at a member the v6 compound attaches', 
         new RegExp(`^\\s+${from}:`, 'm'),
         `${subpath}.${from} still attached`
       )
-      if (typeof to === 'string' && to) assert.match(text, new RegExp(`(^\\s+${to}:|\\.${to} =)`, 'm'), `${subpath}.${to}`)
+      if (typeof to === 'string' && to)
+        assert.match(text, new RegExp(`(^\\s+${to}:|\\.${to} =)`, 'm'), `${subpath}.${to}`)
     }
   }
 })
