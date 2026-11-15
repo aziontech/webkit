@@ -7,58 +7,58 @@ export const routes: RouteRecordRaw[] = [
   {
     path: '/onboarding',
     name: 'onboarding',
-    component: () => import('./views/OnboardingForm.vue'),
+    component: () => import('./pages/onboarding-form-page.vue'),
     meta: focused
   },
   {
     path: '/onboarding/plan',
     name: 'onboarding-plan',
-    component: () => import('./views/OnboardingFormPlan.vue'),
+    component: () => import('./pages/onboarding-form-plan-page.vue'),
     meta: focused
   },
   {
     path: '/onboarding/profile',
     name: 'onboarding-profile',
-    component: () => import('./views/OnboardingFormProfile.vue'),
+    component: () => import('./pages/onboarding-form-profile-page.vue'),
     meta: focused
   },
-  { path: '/resources', name: 'resources', component: () => import('./views/TableView.vue') },
+  { path: '/resources', name: 'resources', component: () => import('./pages/table-view-page.vue') },
   {
     path: '/resources/:id/delete',
     name: 'resource-delete',
     components: {
-      default: () => import('./views/TableView.vue'),
-      dialog: () => import('./views/DeleteWithConfirmation.vue')
+      default: () => import('./pages/table-view-page.vue'),
+      dialog: () => import('./pages/delete-with-confirmation-page.vue')
     }
   },
   {
     path: '/resources/new',
     name: 'resource-create',
-    component: () => import('./views/SinglePageCreate.vue'),
+    component: () => import('./pages/single-page-create-page.vue'),
     meta: focused
   },
   {
     path: '/resources/:id',
     name: 'resource',
-    component: () => import('./views/DetailsPage.vue')
+    component: () => import('./pages/details-page.vue')
   },
   {
     path: '/resources/:id/edit',
     name: 'resource-edit',
-    component: () => import('./views/EditResource.vue')
+    component: () => import('./pages/edit-resource-page.vue')
   },
   {
     path: '/resources/:id/deploy',
     name: 'resource-deploy',
-    component: () => import('./views/AsyncSubmit.vue')
+    component: () => import('./pages/async-submit-page.vue')
   },
   {
     path: '/settings',
     name: 'settings',
-    component: () => import('./views/SettingsForm.vue'),
+    component: () => import('./pages/settings-form-page.vue'),
     meta: { breadcrumbs: [{ label: 'Account settings' }, { label: 'Profile' }] }
   },
-  { path: '/assistant', name: 'assistant', component: () => import('./views/AiChat.vue') },
+  { path: '/assistant', name: 'assistant', component: () => import('./pages/ai-chat-page.vue') },
   { path: '/:path(.*)*', redirect: '/resources' }
 ]
 

@@ -14,7 +14,7 @@
   import { computed } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
-  import DemoBar from './components/DemoBar.vue'
+  import DemoBar from './components/demo-bar.vue'
   import { account, navigation } from './lib/navigation'
   import { settings } from './lib/settings'
   import { resources } from './lib/store'

@@ -1,6 +1,6 @@
 @import 'tailwindcss/utilities' source(none);
 @reference "@aziontech/theme";
-@source './';
+@source '../';
 
 html,
 body {
