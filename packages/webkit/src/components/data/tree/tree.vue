@@ -63,19 +63,19 @@
     /** A node activated by a row click, or Enter or Space on the focused node. */
     'item-click': [event: MouseEvent | KeyboardEvent, item: TreeItem]
     /** A node was double-clicked, to open or preview it. */
-    'item-dblclick': [event: MouseEvent, item: TreeItem]
+    'item-double-click': [event: MouseEvent, item: TreeItem]
     /** An in-place rename was submitted with a new, non-empty label. */
     rename: [event: KeyboardEvent | FocusEvent, payload: TreeRenamePayload]
   }>()
 
-  /** Ids of the expanded parents. */
-  const expanded = defineModel<string[]>('expanded', { default: () => [] })
+  /** Ids of the open parents. */
+  const openKeys = defineModel<string[]>('openKeys', { default: () => [] })
 
   /** Id of the selected node; empty when nothing is selected. */
   const selected = defineModel<string>('selected', { default: '' })
 
   /** Ids of the selected nodes while selectable is multiple. */
-  const selectedIds = defineModel<string[]>('selectedIds', { default: () => [] })
+  const selectedKeys = defineModel<string[]>('selectedKeys', { default: () => [] })
 
   const slots = defineSlots<{
     /** Replaces the label region of every row; receives the node, its level and whether it is expanded. */
@@ -100,17 +100,17 @@
     return props.selectable ? 'single' : 'none'
   })
 
-  const selectedSet = computed(() => new Set(mode.value === 'multiple' ? selectedIds.value : []))
+  const selectedSet = computed(() => new Set(mode.value === 'multiple' ? selectedKeys.value : []))
 
   const activeSelection = computed(() => {
     if (mode.value === 'single') return selected.value
-    if (mode.value === 'multiple') return selectedIds.value[0] ?? ''
+    if (mode.value === 'multiple') return selectedKeys.value[0] ?? ''
     return ''
   })
 
   const navigation = useTreeNavigation<TreeItem>({
     items: () => props.items,
-    expanded: () => expanded.value,
+    expanded: () => openKeys.value,
     selected: activeSelection
   })
 
@@ -137,7 +137,7 @@
 
   const anchorId = ref('')
 
-  const expandedSet = computed(() => new Set(expanded.value))
+  const expandedSet = computed(() => new Set(openKeys.value))
 
   function isExpanded(id: string) {
     return navigation.isParent(id) && expandedSet.value.has(id)
@@ -156,8 +156,8 @@
   function writeSelection(ids: string[]) {
     const next = [...new Set(ids)]
     const same =
-      next.length === selectedIds.value.length && next.every((id) => selectedSet.value.has(id))
-    if (!same) selectedIds.value = next
+      next.length === selectedKeys.value.length && next.every((id) => selectedSet.value.has(id))
+    if (!same) selectedKeys.value = next
   }
 
   function rangeTo(id: string) {
@@ -173,14 +173,17 @@
     anchorId.value = id
     writeSelection(
       selectedSet.value.has(id)
-        ? selectedIds.value.filter((key) => key !== id)
-        : [...selectedIds.value, id]
+        ? selectedKeys.value.filter((key) => key !== id)
+        : [...selectedKeys.value, id]
     )
   }
 
   function selectMultiple(event: MouseEvent | KeyboardEvent, id: string) {
     if (event.shiftKey) {
-      writeSelection([...(event.ctrlKey || event.metaKey ? selectedIds.value : []), ...rangeTo(id)])
+      writeSelection([
+        ...(event.ctrlKey || event.metaKey ? selectedKeys.value : []),
+        ...rangeTo(id)
+      ])
       return
     }
     if (event instanceof MouseEvent && (event.ctrlKey || event.metaKey)) {
@@ -193,7 +196,7 @@
 
   function setExpanded(id: string, open: boolean) {
     if (!navigation.isParent(id) || isExpanded(id) === open) return
-    expanded.value = open ? [...expanded.value, id] : expanded.value.filter((key) => key !== id)
+    openKeys.value = open ? [...openKeys.value, id] : openKeys.value.filter((key) => key !== id)
   }
 
   function toggle(id: string) {
@@ -244,7 +247,7 @@
     if (!id) return
     focusItem(id)
     if (!isEnabled(id)) return
-    writeSelection([...selectedIds.value, id])
+    writeSelection([...selectedKeys.value, id])
   }
 
   function selectAll() {
@@ -273,8 +276,8 @@
 
   function cellsOf(row: globalThis.HTMLElement | null): globalThis.HTMLElement[] {
     if (!row) return []
-    const label = row.querySelector<globalThis.HTMLElement>('[data-tree-cell]')
-    const actions = row.querySelector<globalThis.HTMLElement>('[data-tree-actions]')
+    const label = row.querySelector<globalThis.HTMLElement>('[data-slot="tree-cell"]')
+    const actions = row.querySelector<globalThis.HTMLElement>('[data-slot="tree-actions"]')
     const controls = actions
       ? Array.from(actions.querySelectorAll<globalThis.HTMLElement>(CELL_CONTROLS))
       : []
@@ -333,8 +336,13 @@
   function onClick(event: MouseEvent) {
     const target = event.target
     if (!(target instanceof globalThis.Element)) return
-    if (target.closest('[data-tree-toggle], [data-tree-actions], [data-tree-rename]')) return
-    const row = target.closest('[data-tree-row]')
+    if (
+      target.closest(
+        '[data-slot="tree-toggle"], [data-slot="tree-actions"], [data-slot="tree-rename"]'
+      )
+    )
+      return
+    const row = target.closest('[data-slot="tree-row"]')
     const id = row?.closest<globalThis.HTMLElement>('[data-item-id]')?.dataset['itemId'] ?? ''
     if (!id) return
     focusItem(id)
@@ -344,13 +352,18 @@
   function onDblclick(event: MouseEvent) {
     const target = event.target
     if (!(target instanceof globalThis.Element)) return
-    if (target.closest('[data-tree-toggle], [data-tree-actions], [data-tree-rename]')) return
-    const row = target.closest('[data-tree-row]')
+    if (
+      target.closest(
+        '[data-slot="tree-toggle"], [data-slot="tree-actions"], [data-slot="tree-rename"]'
+      )
+    )
+      return
+    const row = target.closest('[data-slot="tree-row"]')
     const entry = navigation.entry(
       row?.closest<globalThis.HTMLElement>('[data-item-id]')?.dataset['itemId'] ?? ''
     )
     if (!entry || entry.item.disabled) return
-    emit('item-dblclick', event, entry.item)
+    emit('item-double-click', event, entry.item)
   }
 
   function onKeydown(event: KeyboardEvent) {

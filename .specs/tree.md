@@ -3,8 +3,8 @@ name: tree
 category: data
 structure: monolithic
 status: implemented
-checksum: d4da02b0ab67a096c8f712f6e954c8e238ddc765ce3908ef1cf94adf8e110d83
-spec_version: 8
+checksum: 59863e07f45cba4cbec0da4115c710ff2f5c77a3b064b4b9b2cf4c70345d82ed
+spec_version: 10
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -22,7 +22,7 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
 - Browsing a hierarchy whose depth is not fixed: bucket objects under folders, the source tree of a deployment, functions grouped by application.
 - Picking one node out of a hierarchy (`selectable`) to show its detail beside the tree, or several (`selectable="multiple"`) to act on them together (move, delete, download).
 - A hierarchy too large to send at once: mark unloaded parents `lazy` and fetch their children when they open.
-- A file browser where people rename nodes where they are (`editable`) and open a node with a double-click (`item-dblclick`).
+- A file browser where people rename nodes where they are (`editable`) and open a node with a double-click (`item-double-click`).
 - A hierarchy the user expands piece by piece, where showing every level at once would bury the node they are after.
 
 ## When NOT to use
@@ -42,14 +42,14 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
 
 ## Best practices
 
-- Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:expanded`, `v-model:selected` and focus are keyed by it.
-- Seed `v-model:expanded` with the path to the node the user is most likely after (the open folder, the selected file), not with every parent.
+- Give every node an `id` that is unique across the whole tree, not only among its siblings; `v-model:open-keys`, `v-model:selected` and focus are keyed by it.
+- Seed `v-model:open-keys` with the path to the node the user is most likely after (the open folder, the selected file), not with every parent.
 - Keep labels short and put secondary detail (size, count, modified date) in `description` so rows scan as names first.
 - Use `selectable` only when the selection drives something on the screen (a detail pane, a preview); for a tree whose rows only lead somewhere, listen to `item-click` instead.
 - Put per-row controls in the `actions` slot (an `IconButton` that opens a `dropdown`), never inside the `item` slot, so they do not take over the row's activation.
-- For children loaded on demand, mark the node `lazy`, listen to `update:expanded`, set `loading` on the node while the request runs, then patch `children` in (an empty array when it has none) and clear `loading`.
+- For children loaded on demand, mark the node `lazy`, listen to `update:openKeys`, set `loading` on the node while the request runs, then patch `children` in (an empty array when it has none) and clear `loading`.
 - With `editable`, apply the new label from the `rename` event yourself (the tree does not mutate `items`); offer a `Rename` entry in the row actions that calls the exposed `startRename(id)` so the feature is discoverable beyond F2.
-- Use `item-dblclick` for a secondary "open" action only; single click and Enter stay `item-click`, so nothing requires a double-click.
+- Use `item-double-click` for a secondary "open" action only; single click and Enter stay `item-click`, so nothing requires a double-click.
 
 ## Usage
 
@@ -83,7 +83,7 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
 
 <template>
   <Tree
-    v-model:expanded="expanded"
+    v-model:open-keys="expanded"
     aria-label="Bucket objects"
     :items="items"
   />
@@ -95,7 +95,7 @@ A hierarchical list of nodes, each row a name with an optional glyph and one lin
 | Prop               | Type                        | Default | Required | JSDoc                                                                                                                                                                                           |
 | ------------------ | --------------------------- | ------- | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `items`            | `TreeItem[]`                | `[]`    | false    | Nodes to render; each is `{ id: string; label: string; icon?: string; description?: string; disabled?: boolean; children?: TreeItem[] }`. A node with a non-empty `children` array is a parent. |
-| `selectable`       | `boolean \| TreeSelectable` | `false` | false    | Enables selection: `true` or `'single'` writes one id to `v-model:selected`; `'multiple'` writes ids to `v-model:selected-ids`. Every treeitem then carries `aria-selected`.                    |
+| `selectable`       | `boolean \| TreeSelectable` | `false` | false    | Enables selection: `true` or `'single'` writes one id to `v-model:selected`; `'multiple'` writes ids to `v-model:selected-keys`. Every treeitem then carries `aria-selected`.                    |
 | `editable`         | `boolean`                   | `false` | false    | Lets the user rename a node in place with F2, or through the exposed `startRename(id)`; the result arrives as the `rename` event.                                                               |
 | `loading`          | `boolean`                   | `false` | false    | Renders Skeleton rows in place of the tree and sets `aria-busy`.                                                                                                                                |
 | `emptyTitle`       | `string`                    | `''`    | false    | Title of the default empty state shown when `items` is empty. Empty uses the locale catalog (`No items`).                                                                                       |
@@ -108,8 +108,8 @@ Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: 
 
 | Model                  | Type       | Default | Emits                | Notes                                                                                                                                                                                                                                                                                                                               |
 | ---------------------- | ---------- | ------- | -------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:expanded`     | `string[]` | `[]`    | `update:expanded`    | Ids of the expanded parents, via `defineModel<string[]>('expanded', { default: () => [] })`. Uncontrolled when unbound. Ids of leaves or of unknown nodes are ignored. Collapsing a parent removes only its own id: descendants keep theirs, so re-expanding restores the subtree as it was. Always emits a new array.              |
-| `v-model:selected-ids` | `string[]` | `[]`    | `update:selectedIds` | Ids of the selected nodes while `selectable="multiple"`, via `defineModel<string[]>('selectedIds', { default: () => [] })`. Ordered by selection (range and select-all in visible order), without duplicates; emits only when the set changes. Disabled nodes are never added.                                                      |
+| `v-model:open-keys`     | `string[]` | `[]`    | `update:openKeys`    | Ids of the open parents, via `defineModel<string[]>('openKeys', { default: () => [] })`. Uncontrolled when unbound. Ids of leaves or of unknown nodes are ignored. Collapsing a parent removes only its own id: descendants keep theirs, so re-expanding restores the subtree as it was. Always emits a new array.              |
+| `v-model:selected-keys` | `string[]` | `[]`    | `update:selectedKeys` | Ids of the selected nodes while `selectable="multiple"`, via `defineModel<string[]>('selectedKeys', { default: () => [] })`. Ordered by selection (range and select-all in visible order), without duplicates; emits only when the set changes. Disabled nodes are never added.                                                      |
 | `v-model:selected`     | `string`   | `''`    | `update:selected`    | Id of the selected node, via `defineModel<string>('selected', { default: '' })`. Written only while `selectable`; read only while `selectable` (otherwise no node is marked selected). `''` means nothing is selected. Emits only when the id changes. Single selection only; activating the selected node again does not clear it. |
 
 ## Events
@@ -117,7 +117,7 @@ Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: 
 | Event           | Payload                                                            | Notes                                                                                                                                                                                                                                                                                                                                                              |
 | --------------- | ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `item-click`    | `(event: MouseEvent \| KeyboardEvent, item: TreeItem)`             | A node activated: click on its row, or Enter / Space on the focused node. `item` is the consumer's own node object. Fires after `update:selected` when `selectable`. Not fired for a `disabled` node, nor for a click on the chevron, inside the `actions` region or in the rename field. With `selectable="multiple"`, Space toggles selection without firing it. |
-| `item-dblclick` | `(event: MouseEvent, item: TreeItem)`                              | A row was double-clicked, to open or preview the node. Not fired for a `disabled` node, the chevron, the `actions` region or the rename field. The two clicks before it still fire `item-click`.                                                                                                                                                                   |
+| `item-double-click` | `(event: MouseEvent, item: TreeItem)`                              | A row was double-clicked, to open or preview the node. Not fired for a `disabled` node, the chevron, the `actions` region or the rename field. The two clicks before it still fire `item-click`.                                                                                                                                                                   |
 | `rename`        | `(event: KeyboardEvent \| FocusEvent, payload: TreeRenamePayload)` | An in-place rename was submitted (Enter, or the field losing focus) with a trimmed label that is non-empty and differs from `item.label`. `payload.item` is the consumer's node. Escape, an empty label or an unchanged one closes the field without emitting.                                                                                                     |
 
 ## Slots
@@ -141,11 +141,11 @@ Exported types (declared in `tree.vue` with `export type`): `TreeItem` = `{ id: 
 - `data-loading` on the root mirrors `loading`; `data-empty` on the root when `items` is empty and not loading.
 - `data-selectable` on the root while selection is on; `data-multiple` while `selectable="multiple"`.
 - Lazy loading: a `lazy` node is a parent (chevron, `aria-expanded`) even with no `children`; while it is expanded and `loading`, its group renders one loading row — a Skeleton bar plus a visually hidden `role="status"` reading the locale's `tree.loadingChildren` (`Loading`) — instead of the children, and carries `aria-busy="true"`. The loading row is not a treeitem and is not part of keyboard navigation (`<testId>__loading`).
-- Renaming: the label region of the node being renamed is a text field (`<testId>__rename`, `data-tree-rename`), focused with its text selected; the chevron, glyph slot and `actions` stay. One field at a time.
+- Renaming: the label region of the node being renamed is a text field (`<testId>__rename`, `data-slot="tree-rename"`), focused with its text selected; the chevron, glyph slot and `actions` stay. One field at a time.
 - `data-state="open|closed"` on each parent row and its chevron (drives the rotation); absent on leaves. The tree is not an overlay, so this is disclosure state only.
 - `data-selected` on the selected row (only while `selectable`); `data-disabled` on a disabled row.
 - Collapsed children are not rendered (`v-if`), so they cost nothing and are out of the accessibility tree.
-- A disabled node can still be focused (arrow keys) and, if it is a parent, expanded and collapsed; it cannot be selected, renamed, or emit `item-click` / `item-dblclick`.
+- A disabled node can still be focused (arrow keys) and, if it is a parent, expanded and collapsed; it cannot be selected, renamed, or emit `item-click` / `item-double-click`.
 - `data-testid`: the root falls back to `data-tree` (a consumer `data-testid` wins); parts derive from the resolved root id — `<testId>__item` on every treeitem, `<testId>__toggle` on every chevron. Each treeitem also carries `data-item-id="<item.id>"` so a test reaches one node without depending on DOM order.
 - Loading renders five Skeleton rows (`kind="rectangle"`, row height, descending widths) at top level.
 
@@ -190,7 +190,7 @@ Layout: each row is `min-h-8` (32px), full width of its group. The chevron and t
 - Structure (WAI-ARIA tree pattern): the tree is a `<ul role="tree">` named by `ariaLabel` (or `tree.label` when it is empty), inside the root wrapper that carries `data-testid` and `$attrs`. Each node is an `<li role="treeitem">` with `aria-level` (1-based), `aria-setsize` and `aria-posinset` (among its siblings), and `aria-labelledby` pointing at its label region (ids from `useId()`), so the name excludes the children and the actions. A parent carries `aria-expanded="true|false"` and, when expanded, renders its children in a nested `<ul role="group">` inside its `<li>`. Leaves carry no `aria-expanded`.
 - Selection: while `selectable`, every treeitem carries `aria-selected="true|false"`; otherwise none does. With `selectable="multiple"` the tree carries `aria-multiselectable="true"`.
 - Disabled: a disabled node carries `aria-disabled="true"`.
-- Roving tabindex: exactly one treeitem has `tabindex="0"`, every other `-1`. The tab stop is the selected node when it is visible, else the last focused node when visible, else the first node. When the tab-stop node is hidden by a collapse (from the keyboard or from a `v-model:expanded` change), the tab stop moves to its nearest visible ancestor. Clicking a row moves the tab stop and focus to it.
+- Roving tabindex: exactly one treeitem has `tabindex="0"`, every other `-1`. The tab stop is the selected node when it is visible, else the last focused node when visible, else the first node. When the tab-stop node is hidden by a collapse (from the keyboard or from a `v-model:open-keys` change), the tab stop moves to its nearest visible ancestor. Clicking a row moves the tab stop and focus to it.
 - Keyboard map (required, on the focused treeitem):
   - `ArrowDown` / `ArrowUp` — focus the next / previous visible node, without wrapping.
   - `ArrowRight` — on a collapsed parent, expand it (focus stays); on an expanded parent, focus its first child; on a leaf, nothing.
@@ -213,7 +213,7 @@ Layout: each row is `min-h-8` (32px), full width of its group. The chevron and t
 - Loading: the root carries `aria-busy="true"`; the Skeleton rows are `aria-hidden`, and no `role="tree"` is rendered without treeitems.
 - Glyphs (`item.icon`), the chevron and the indent guide are decorative (`aria-hidden="true"`).
 - The rename field is named `Rename <label>` (`tree.renameLabel`); the loading row announces `Loading` once through its polite status.
-- Double-click is never the only way: `item-dblclick` duplicates an action the app also offers through `item-click`, `Enter` or the row actions.
+- Double-click is never the only way: `item-double-click` duplicates an action the app also offers through `item-click`, `Enter` or the row actions.
 - Contrast ≥4.5:1 for label and description on the canvas, the hover fill and `var(--bg-selected)` in both themes; disabled text follows the disabled-token exemption.
 - `motion-reduce:transition-none` on the chevron and selection transitions; `motion-reduce:before:transition-none` on the hover layer.
 - Touch target: rows are 32px tall and full width (the same deviation as `bar-list`), justified by row density in file trees; the whole row is the activation target and the chevron box extends to the row height.
@@ -227,14 +227,14 @@ Layout: each row is `min-h-8` (32px), full width of its group. The chevron and t
 
 ## Examples
 
-- Default — a bucket-like file tree (folders with nested files three levels deep, glyphs and size descriptions) with one folder seeded in `v-model:expanded`.
+- Default — a bucket-like file tree (folders with nested files three levels deep, glyphs and size descriptions) with one folder seeded in `v-model:open-keys`.
 - Selectable — `selectable` with `v-model:selected` bound and the selected id shown beside the tree; justified because selection changes the row state, the ARIA (`aria-selected`) and the activation behavior.
 - Custom Item — the `item` slot rendering the label with a `Tag` (status) and the `actions` slot rendering an `IconButton` per row; justified because the two scoped slots are the component's only customization surface and need a worked, copy-paste example.
 - Loading — `loading`.
 - Empty — `items` empty, showing the default `EmptyState` with `emptyTitle` / `emptyDescription`; justified because the empty state is a distinct presentation owned by the component.
-- Lazy Children — `lazy` folders whose listings load on expand behind the loading row; justified because the loading row and the `update:expanded` → patch flow are a distinct state and a copy-paste pattern.
-- Rename — `editable` with F2, a per-row `Rename` `IconButton` calling `startRename`, and `item-dblclick` opening a file; justified because the field, its keys and the exposed method need a worked example.
-- Multi Select — `selectable="multiple"` with `v-model:selected-ids` and the count beside the tree; justified because multi-selection changes the ARIA, the keyboard map and the model.
+- Lazy Children — `lazy` folders whose listings load on expand behind the loading row; justified because the loading row and the `update:openKeys` → patch flow are a distinct state and a copy-paste pattern.
+- Rename — `editable` with F2, a per-row `Rename` `IconButton` calling `startRename`, and `item-double-click` opening a file; justified because the field, its keys and the exposed method need a worked example.
+- Multi Select — `selectable="multiple"` with `v-model:selected-keys` and the count beside the tree; justified because multi-selection changes the ARIA, the keyboard map and the model.
 
 ## Open questions
 
@@ -245,7 +245,7 @@ Decisions taken in this draft that a reviewer should confirm before approval:
 3. **Indent guide lines are on**, as a `var(--border-muted)` hairline per nested group. Drop them if the design wants a cleaner Vercel-style tree.
 4. **Row actions use the `treegrid` pattern** (resolved in 6.0): with the `actions` slot the tree is a treegrid, the controls are reached with the arrow keys inside the row, and they stay always visible (no hover reveal, so touch users see them).
 5. **Disabled parents still expand and collapse**, so enabled descendants stay reachable. Confirm, or make `disabled` freeze expansion too.
-6. **Lazy children (load on expand)** — resolved in spec v2: `TreeItem.lazy` + `TreeItem.loading`; the app still owns the fetch (no data loading in the DS) and patches `items` from `update:expanded`.
+6. **Lazy children (load on expand)** — resolved in spec v2: `TreeItem.lazy` + `TreeItem.loading`; the app still owns the fetch (no data loading in the DS) and patches `items` from `update:openKeys`.
 7. **Multi-select range anchor** is the last node clicked, toggled or Enter-activated; `Shift+Arrow` extends without moving it. Confirm against the console's file browser.
 8. **Rename commits on blur** (the VS Code behavior). Confirm, or make blur cancel.
 9. **`emptyTitle` default** is `'No items'` (bar-list and donut-chart use `'No data available'`); align with the console microcopy standard if it differs.

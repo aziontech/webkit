@@ -12,7 +12,7 @@
   const { cardListProps, paginationProps, selectedCount } = useCollection({
     items: edges,
     pagination: { pageSize: 6 },
-    selection: { mode: 'multi' }
+    selection: { mode: 'multiple' }
   })
 </script>
 

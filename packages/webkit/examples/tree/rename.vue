@@ -41,12 +41,12 @@
   <div class="flex max-w-(--container-sm) flex-col gap-(--spacing-md)">
     <Tree
       ref="tree"
-      v-model:expanded="expanded"
+      v-model:open-keys="expanded"
       :items="items"
       editable
       aria-label="Project files"
       @rename="onRename"
-      @item-dblclick="onOpen"
+      @item-double-click="onOpen"
     >
       <template #actions="{ item }">
         <IconButton

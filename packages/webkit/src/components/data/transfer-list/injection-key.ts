@@ -6,8 +6,8 @@ export type TransferListSide = 'source' | 'target'
 export type MoveDirection = 'to-target' | 'to-source'
 
 export interface TransferListContext {
-  /** Item field that uniquely identifies a record (`trackBy`); enables stable keys. */
-  trackBy: ComputedRef<string>
+  /** Item field that uniquely identifies a record (`itemKey`); enables stable keys. */
+  keyField: ComputedRef<string>
   /** Whether the whole control is disabled. */
   disabled: ComputedRef<boolean>
   /** True while either list is loading (locks the move controls). */
@@ -27,9 +27,9 @@ export interface TransferListContext {
   /** Whether `side` has at least one selected option. */
   hasSelection: (side: TransferListSide) => boolean
   /** Moves the current selection of the originating list across. */
-  move: (direction: MoveDirection) => void
+  move: (event: Event, direction: MoveDirection) => void
   /** Moves every item of the originating list across. */
-  moveAll: (direction: MoveDirection) => void
+  moveAll: (event: Event, direction: MoveDirection) => void
   /** Handles a double-click on the option at `index` in `side`: emits `item-double-click` and, unless cancelled, moves that item to the opposite list. */
   itemDoubleClick: (event: MouseEvent, side: TransferListSide, index: number) => void
   /** Reads the loading flag a list reported. */

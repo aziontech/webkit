@@ -15,7 +15,7 @@
 <template>
   <TransferList
     v-model="model"
-    track-by="id"
+    item-key="id"
     disabled
   >
     <TransferList.Source title="Available">

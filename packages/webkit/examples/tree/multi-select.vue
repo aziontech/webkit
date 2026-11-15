@@ -36,20 +36,20 @@
   ]
 
   const expanded = ref(['assets', 'reports'])
-  const selectedIds = ref(['assets/hero.webp', 'assets/logo.svg'])
+  const selectedKeys = ref(['assets/hero.webp', 'assets/logo.svg'])
 </script>
 
 <template>
   <div class="flex max-w-(--container-sm) flex-col gap-(--spacing-md)">
     <Tree
-      v-model:expanded="expanded"
-      v-model:selected-ids="selectedIds"
+      v-model:open-keys="expanded"
+      v-model:selected-keys="selectedKeys"
       :items="items"
       selectable="multiple"
       aria-label="Bucket objects"
     />
     <p class="text-body-sm text-(--text-muted)">
-      {{ selectedIds.length }} selected: {{ selectedIds.join(', ') || 'none' }}
+      {{ selectedKeys.length }} selected: {{ selectedKeys.join(', ') || 'none' }}
     </p>
   </div>
 </template>

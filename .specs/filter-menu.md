@@ -3,9 +3,9 @@ name: filter-menu
 category: data
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 template: 2
-checksum: fc15c9c8d90a069049364587efc1f51ec023573c33b0bc8bebdce9f62ca18b51
+checksum: 8daaf41826bf148f8653fab212eb953fbf333c8fa41aac76cc59a11c5351c1ec
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-15
 
 The list filter of a console list: a Filter button that carries the number of applied filters and
 opens a drill-in menu. The first level lists the fields, each with a summary of what is applied to
-it; picking a field slides to its values (check rows for a `multi` field, radio rows for a `single`
+it; picking a field slides to its values (check rows for a `multiple` field, radio rows for a `single`
 one, an optional avatar per value, a search box and a no-match line), and a `date` field offers
 periods plus a custom whole-day range on a `DateRangePicker` (`range-selector-mode="absolute-only"`, no times, no zone selector). Back returns to the fields, Clear removes the field's
 filter, and the panel's height follows each level. `FilterMenu.Chips` shows the applied fields as
@@ -161,7 +161,7 @@ Exports:
 Exported types (from `index.ts`):
 
 - `FilterMenuOption = { value: string | number; label: string; avatar?: string }` — `avatar` present (an image URL, or `''` for initials from `label`) draws an `Avatar` on the row and in the chip.
-- `FilterMenuField = { id: string; label: string; kind?: 'multi' | 'single' | 'date'; options?: FilterMenuOption[] }` — `kind` defaults to `multi`. A `date` field without `options` offers the built-in periods (`24h`, `7d`, `30d`, `3m`); with `options` it offers those instead. Every `date` field ends with a Custom range row.
+- `FilterMenuField = { id: string; label: string; kind?: 'multiple' | 'single' | 'date'; options?: FilterMenuOption[] }` — `kind` defaults to `multiple`. A `date` field without `options` offers the built-in periods (`24h`, `7d`, `30d`, `3m`); with `options` it offers those instead. Every `date` field ends with a Custom range row.
 - `FilterMenuRange = { start: Date | null; end: Date | null }` — a custom date range.
 - `FilterMenuValue = string | number | FilterMenuRange`.
 - `FilterMenuModel = Record<string, FilterMenuValue[]>` — a field with no key (or an empty array) is not applied.
@@ -241,7 +241,7 @@ Imperative API (root, `defineExpose`): `open(fieldId?: string, returnFocus?: HTM
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Pattern: a disclosure button that opens a non-modal dialog (`Popover`, named by a visually hidden `Popover.Title` with the trigger label). Fields are buttons; a `multi` field's values are `role="checkbox"` buttons with `aria-checked` inside a `role="group"` named by the field; a `single` or `date` field's values are `role="radio"` buttons with `aria-checked` inside a `role="radiogroup"`. The Custom range row is a plain button.
+- Pattern: a disclosure button that opens a non-modal dialog (`Popover`, named by a visually hidden `Popover.Title` with the trigger label). Fields are buttons; a `multiple` field's values are `role="checkbox"` buttons with `aria-checked` inside a `role="group"` named by the field; a `single` or `date` field's values are `role="radio"` buttons with `aria-checked` inside a `role="radiogroup"`. The Custom range row is a plain button.
 - Trigger name: the label, plus the count when filters apply (`Filter, 2 applied`); the badge is `aria-hidden`. Field rows read `<field> <summary>`.
 - Keyboard map: `Enter` / `Space` on the trigger toggles the panel; `ArrowDown` / `ArrowUp` move between the rows of the current level and wrap; `Enter` / `Space` on a field row opens its values, on a value row toggles it; focus moves to the first row of every new level; `Tab` / `Shift+Tab` cycle the search box, rows, Back and Clear inside the panel (Popover's trap); `Escape` closes the panel and returns focus to the trigger, or to the chip that opened it while that chip still exists. While the custom range calendar is open, `Escape` closes the calendar first. On a chip, `Enter` / `Space` reopen the menu at its field and the remove button clears it.
 - Visible focus: rows and Back use `focus-visible:ring-2 focus-visible:ring-(--ring-color)`; the trigger, search box, chips and calendar carry their own rings.

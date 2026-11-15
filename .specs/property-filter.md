@@ -3,9 +3,9 @@ name: property-filter
 category: data
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 88efab9ffc71b8bf6990a0cb5ec1774258d120f66b1167ad45dc98e3782d348d
+checksum: 3df8f23b1eb76728ac755a72c613401284096889c493eb48c887725521fe521a
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -137,7 +137,7 @@ Query mode:
 | `validate`       | `(text: string) => string`                                                       | undefined  | false    | Checks the query string in query mode: '' when valid, else the message shown under the field. Replaces the built-in check.                         |
 | `suggest`        | `(text: string, caret: number) => PropertyFilterQuerySuggestion[]`               | undefined  | false    | Suggestions for the word at the caret in query mode. Replaces the built-in field, operator, value and AND / OR suggestions.                        |
 | `grouped`        | `boolean`                                                                        | `false`    | false    | Tokens mode: tokens go into groups with their own Match all / Match any; Add group starts the next one.                                            |
-| `hideOperations` | `boolean`                                                                        | `false`    | false    | Hides the Match all / Match any toggle, so the tokens always combine with AND (a model that holds only AND conditions, such as a table's filters). |
+| `showOperations` | `boolean`                                                                        | `true`     | false    | Shows the Match all / Match any toggle; false keeps the tokens combined with AND (a model that holds only AND conditions, such as a table's filters). |
 | `loadValues`     | `(property: FilteringProperty, text: string) => Promise<PropertyFilterOption[]>` | undefined  | false    | Fetches the values of a property for the typed text, after the operator. Replaces its `options` in the suggestions.                                |
 
 Types (from `@aziontech/webkit/use-collection`): `PropertyFilterQuery = { tokens: PropertyFilterToken[]; operation: 'and' | 'or' }`; `PropertyFilterToken = { propertyKey?: string; operator: '=' | '!=' | ':' | '!:' | '^' | '!^' | '>' | '<' | '>=' | '<='; value: string }`; `FilteringProperty = { key: string; label: string; operators?: PropertyFilterOperator[]; options?: PropertyFilterOption[]; type?: 'text' | 'number' | 'date'; customValue?: boolean }`; `PropertyFilterOption = { value: string; label?: string; count?: number }`. Since v4, `PropertyFilterQuery` may carry `groups?: PropertyFilterTokenGroup[]` (`{ tokens, operation }`): each group is one condition next to the tokens, combined with the query's `operation`; `useCollection` matches it, sends it to `fetch` and keeps it in the URL (`groups` key). From `@aziontech/webkit/property-filter`: `PropertyFilterQuerySuggestion = { label: string; insert: string; description?: string }` (`insert` replaces the word at the caret); `PropertyFilterSubmit = { text: string; query: PropertyFilterQuery | null }`.

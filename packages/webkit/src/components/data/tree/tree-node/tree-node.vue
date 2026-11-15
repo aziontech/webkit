@@ -130,7 +130,7 @@
   >
     <div
       v-bind="grid ? focusAttrs : {}"
-      data-tree-row
+      data-slot="tree-row"
       :data-state="state"
       :data-selected="selected || null"
       :data-disabled="item.disabled || null"
@@ -139,7 +139,7 @@
       <span
         :role="grid ? 'gridcell' : undefined"
         :tabindex="grid ? -1 : undefined"
-        :data-tree-cell="grid ? '' : undefined"
+        data-slot="tree-cell"
         class="flex min-w-0 flex-1 items-center gap-(--spacing-xs) self-stretch rounded-(--shape-control) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color)"
       >
         <span class="flex w-4 shrink-0 items-center justify-center self-stretch">
@@ -148,7 +148,7 @@
             type="button"
             tabindex="-1"
             aria-hidden="true"
-            data-tree-toggle
+            data-slot="tree-toggle"
             :data-testid="`${ctx.testId.value}__toggle`"
             :data-state="state"
             class="flex h-full w-full cursor-pointer items-center justify-center border-0 bg-transparent p-0 text-(--text-muted) group-data-[disabled]/tree-row:text-(--text-disabled)"
@@ -169,7 +169,7 @@
             v-if="renaming"
             :ref="mountRenameField"
             type="text"
-            data-tree-rename
+            data-slot="tree-rename"
             :data-testid="`${ctx.testId.value}__rename`"
             :value="item.label"
             :aria-label="ctx.renameLabel(item.label)"
@@ -190,7 +190,7 @@
         v-if="actionable"
         ref="actionsRef"
         :role="grid ? 'gridcell' : undefined"
-        data-tree-actions
+        data-slot="tree-actions"
         class="ms-auto flex shrink-0 items-center gap-(--spacing-2xs)"
         @mousedown.self.prevent
       >

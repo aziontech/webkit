@@ -106,7 +106,7 @@
   const customField = computed<FilterMenuField | undefined>(() =>
     customId.value ? activeField.value : undefined
   )
-  const activeKind = computed(() => (activeField.value ? kindOf(activeField.value) : 'multi'))
+  const activeKind = computed(() => (activeField.value ? kindOf(activeField.value) : 'multiple'))
 
   const levelKey = computed<string>(() => {
     if (customId.value) return `custom:${customId.value}`
@@ -200,7 +200,7 @@
 
   const pick = (field: FilterMenuField, option: FilterMenuOption): void => {
     model.value = toggleValue(model.value, field, option.value)
-    if (kindOf(field) !== 'multi') back()
+    if (kindOf(field) !== 'multiple') back()
   }
 
   const commitCustom = (value: unknown): void => {
@@ -326,7 +326,7 @@
           <Badge
             :data-testid="`${testId}__count`"
             :label="String(count)"
-            severity="primary"
+            variant="primary"
             size="small"
             class="w-full"
           />
@@ -442,7 +442,7 @@
 
                   <div
                     v-else
-                    :role="activeKind === 'multi' ? 'group' : 'radiogroup'"
+                    :role="activeKind === 'multiple' ? 'group' : 'radiogroup'"
                     :aria-label="activeField.label"
                     class="flex flex-col gap-(--spacing-2xs)"
                   >
@@ -452,7 +452,7 @@
                       type="button"
                       data-filter-row
                       :data-testid="`${testId}__option-${option.value}`"
-                      :role="activeKind === 'multi' ? 'checkbox' : 'radio'"
+                      :role="activeKind === 'multiple' ? 'checkbox' : 'radio'"
                       :aria-checked="isPicked(option.value)"
                       :class="ROW_CLASS"
                       @click="pick(activeField, option)"
@@ -468,8 +468,8 @@
                       />
                       <bdi class="grow truncate">{{ option.label }}</bdi>
                       <i
-                        class="ai ai-check shrink-0 text-(--text-default) data-[picked=false]:invisible"
-                        :data-picked="isPicked(option.value)"
+                        class="ai ai-check shrink-0 text-(--text-default) data-[selected=false]:invisible"
+                        :data-selected="isPicked(option.value)"
                         aria-hidden="true"
                       />
                     </button>

@@ -3,9 +3,9 @@ name: card-list
 category: data
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: cc3f8c6da9bd150b54fc459605d32a39067490d10c725669438426616bae24fc
+checksum: 2b4f73c443f8b73b61fd08220b592ed52128de32a0bf1ea37f9e4365b53fd7ed
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-15
 
 Use CardList to show a collection of records as selectable cards instead of table rows; for one bordered box use Card, and for the frame of a dashboard chart use ChartCard.
 
-A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `trackBy`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardListProps`, and selection (single or multi, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.
+A collection shown as cards, after Cloudscape's cards: one card per item, named by its `header` slot, with the item's fields in the default slot. It follows Cloudscape's collection model — `items`, `itemKey`, `selectedKeys` (a key array) — which is not yet the same as Table's (`data`, `rowKey`, `rowSelection` record); `useCollection` binds it through `cardListProps`, and selection (single or multiple, with a visible select-all) survives paging. Four cards a row in a wide container, then three, two and one as the container narrows.
 
 ## When to use
 
@@ -40,7 +40,7 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 
 - Put the item's name, as a link to the item, in the `header` slot: it also names the selection control.
 - Keep each card to a handful of label and value pairs; let `collection-preferences` choose which.
-- Use `selectionMode="multi"` only when a bulk action exists next to the list.
+- Use `selectionMode="multiple"` only when a bulk action exists next to the list.
 - Pass items typed with your own interface (`Domain[]`): the slots read `item.name` with that type, so never cast `item` in a slot or widen the items to `Record<string, unknown>[]`.
 
 ## Usage
@@ -68,16 +68,16 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 | Prop            | Type                            | Default  | Required | JSDoc                                                                  |
 | --------------- | ------------------------------- | -------- | -------- | ---------------------------------------------------------------------- |
 | `items`         | `TItem[]`                       | `[]`     | false    | The items, one card each.                                              |
-| `trackBy`       | `string`                        | `'id'`   | false    | Field that identifies an item; selection keys read it.                 |
-| `selectionMode` | `'none' \| 'single' \| 'multi'` | `'none'` | false    | No selection, one card, or several cards with a select-all above them. |
+| `itemKey`       | `string`                        | `'id'`   | false    | Field that identifies an item; selection keys read it.                 |
+| `selectionMode` | `'none' \| 'single' \| 'multiple'` | `'none'` | false    | No selection, one card, or several cards with a select-all above them. |
 | `loading`       | `boolean`                       | `false`  | false    | Shows placeholder cards and sets aria-busy while true.                 |
 | `ariaLabel`     | `string`                        | `''`     | false    | Accessible name of the list. Empty uses the locale catalog.            |
 
-The component is generic over the item: `TItem extends object`, inferred from `items` (default `Record<string, unknown>`), so the `header` and `default` slots receive `item` typed as the consumer's own interface. Types (exported from `@aziontech/webkit/card-list`): `CardListSelectionMode = 'none' | 'single' | 'multi'`; `CardListItemSlotProps<TItem> = { item: TItem; index: number; selected: boolean }`.
+The component is generic over the item: `TItem extends object`, inferred from `items` (default `Record<string, unknown>`), so the `header` and `default` slots receive `item` typed as the consumer's own interface. Types (exported from `@aziontech/webkit/card-list`): `CardListSelectionMode = 'none' | 'single' | 'multiple'`; `CardListItemSlotProps<TItem> = { item: TItem; index: number; selected: boolean }`.
 
 ## v-model
 
-- **`v-model:selected-keys`** — `string[]`, default `[]`. Keys (`item[trackBy]`) of the selected cards; keys of items not on the current page are kept.
+- **`v-model:selected-keys`** — `string[]`, default `[]`. Keys (`item[itemKey]`) of the selected cards; keys of items not on the current page are kept.
 
 ## Events
 
@@ -163,7 +163,7 @@ _none_ — `update:selectedKeys` (payload `string[]`) comes from `v-model:select
 ## Examples
 
 - Default — four cards, no selection.
-- Selectable — bound to `useCollection` with multi selection and pagination; justified because the binding is the main use.
+- Selectable — bound to `useCollection` with multiple selection and pagination; justified because the binding is the main use.
 - SingleSelection — `selection-mode="single"`: one radio per card and no select-all; justified because the single mode changes the control and drops the select-all.
 - Loading — placeholder cards while `loading`.
 - Empty — the `empty` slot replacing the default empty state; justified because `empty` is a state the component owns.

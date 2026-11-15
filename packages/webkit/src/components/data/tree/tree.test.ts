@@ -60,8 +60,8 @@ const Harness = defineComponent({
         ariaLabel: 'Bucket objects',
         items: ITEMS,
         selectable: true,
-        expanded: expanded.value,
-        'onUpdate:expanded': (value: string[]) => (expanded.value = value),
+        openKeys: expanded.value,
+        'onUpdate:openKeys': (value: string[]) => (expanded.value = value),
         selected: selected.value,
         'onUpdate:selected': (value: string) => (selected.value = value)
       }),
@@ -109,7 +109,7 @@ describe('Tree', () => {
   })
 
   it('renders nested groups at least two levels deep', () => {
-    const view = mount({ expanded: ['assets', 'assets/img'] })
+    const view = mount({ openKeys: ['assets', 'assets/img'] })
     expect(view.getAllByRole('group')).toHaveLength(2)
     const logo = node(view.container, LOGO.id)
     expect(logo.getAttribute('aria-level')).toBe('3')
@@ -124,9 +124,9 @@ describe('Tree', () => {
   })
 
   it('draws the indent guide under the parent chevron and outside the nested rows', () => {
-    const view = mount({ expanded: ['assets'] })
+    const view = mount({ openKeys: ['assets'] })
     const chevron = node(view.container, 'assets')
-      .querySelector<HTMLElement>('[data-tree-toggle]')!
+      .querySelector<HTMLElement>('[data-slot="tree-toggle"]')!
       .getBoundingClientRect()
     const group = view.getByRole('group').getBoundingClientRect()
     const guideCenter = group.left + 0.5
@@ -135,8 +135,8 @@ describe('Tree', () => {
     expect(group.left + 1).toBeLessThanOrEqual(nestedRow.left)
   })
 
-  it('ignores unknown and leaf ids in expanded', () => {
-    const view = mount({ expanded: ['nope', CONFIG.id] })
+  it('ignores unknown and leaf ids in openKeys', () => {
+    const view = mount({ openKeys: ['nope', CONFIG.id] })
     expect(view.queryByRole('group')).toBeNull()
     expect(node(view.container, CONFIG.id).hasAttribute('aria-expanded')).toBe(false)
   })
@@ -147,7 +147,7 @@ describe('Tree', () => {
   })
 
   it('moves focus with the arrow keys, Home and End', async () => {
-    const view = mount({ expanded: ['assets'] })
+    const view = mount({ openKeys: ['assets'] })
     node(view.container, 'assets').focus()
     await userEvent.keyboard('{ArrowDown}')
     expect(document.activeElement).toBe(node(view.container, IMG.id))
@@ -170,7 +170,7 @@ describe('Tree', () => {
     const view = mount()
     node(view.container, 'src').focus()
     await userEvent.keyboard('{ArrowRight}')
-    expect(view.emitted()['update:expanded']?.[0]).toEqual([['src']])
+    expect(view.emitted()['update:openKeys']?.[0]).toEqual([['src']])
     expect(node(view.container, 'src').getAttribute('aria-expanded')).toBe('true')
     expect(document.activeElement).toBe(node(view.container, 'src'))
     await userEvent.keyboard('{ArrowRight}')
@@ -180,12 +180,12 @@ describe('Tree', () => {
     await userEvent.keyboard('{ArrowLeft}')
     expect(document.activeElement).toBe(node(view.container, 'src'))
     await userEvent.keyboard('{ArrowLeft}')
-    expect(view.emitted()['update:expanded']?.[1]).toEqual([[]])
+    expect(view.emitted()['update:openKeys']?.[1]).toEqual([[]])
     expect(node(view.container, 'src').getAttribute('aria-expanded')).toBe('false')
     expect(document.activeElement).toBe(node(view.container, 'src'))
     await userEvent.keyboard('{ArrowLeft}')
     expect(document.activeElement).toBe(node(view.container, 'src'))
-    expect(view.emitted()['update:expanded']).toHaveLength(2)
+    expect(view.emitted()['update:openKeys']).toHaveLength(2)
   })
 
   it('activates the focused node with Enter and Space', async () => {
@@ -224,16 +224,18 @@ describe('Tree', () => {
 
   it('toggles a parent from its chevron without emitting item-click', async () => {
     const view = mount()
-    const toggle = rowOf(view.container, 'assets').querySelector<HTMLElement>('[data-tree-toggle]')
+    const toggle = rowOf(view.container, 'assets').querySelector<HTMLElement>(
+      '[data-slot="tree-toggle"]'
+    )
     expect(toggle?.getAttribute('aria-hidden')).toBe('true')
     expect(toggle?.getAttribute('tabindex')).toBe('-1')
     expect(toggle?.getAttribute('data-state')).toBe('closed')
     await userEvent.click(toggle as HTMLElement)
-    expect(view.emitted()['update:expanded']?.[0]).toEqual([['assets']])
+    expect(view.emitted()['update:openKeys']?.[0]).toEqual([['assets']])
     expect(toggle?.getAttribute('data-state')).toBe('open')
     expect(node(view.container, IMG.id)).toBeTruthy()
     await userEvent.click(toggle as HTMLElement)
-    expect(view.emitted()['update:expanded']?.[1]).toEqual([[]])
+    expect(view.emitted()['update:openKeys']?.[1]).toEqual([[]])
     expect(view.emitted()['item-click']).toBeUndefined()
   })
 
@@ -257,7 +259,7 @@ describe('Tree', () => {
     expect(view.emitted()['update:selected']).toBeUndefined()
   })
 
-  it('round-trips v-model:expanded and v-model:selected', async () => {
+  it('round-trips v-model:openKeys and v-model:selected', async () => {
     const view = render(Harness)
     const state = view.getByTestId('state')
     node(view.container, 'assets').focus()
@@ -284,7 +286,7 @@ describe('Tree', () => {
 
   it('passes the item scope and keeps actions clicks out of activation', async () => {
     const view = mount(
-      { expanded: ['assets'] },
+      { openKeys: ['assets'] },
       {
         slots: {
           item: (scope: { item: TreeItem; level: number; expanded: boolean }) =>
@@ -347,7 +349,7 @@ describe('Tree', () => {
     })
 
     it('renders a treegrid of rows and gridcells, and a plain tree without actions', () => {
-      const view = withActions({ expanded: ['assets'] })
+      const view = withActions({ openKeys: ['assets'] })
       const grid = view.getByRole('treegrid', { name: 'Bucket objects' })
       expect(view.queryByRole('tree')).toBeNull()
       expect(view.queryAllByRole('treeitem')).toHaveLength(0)
@@ -419,8 +421,8 @@ describe('Tree', () => {
       const view = withActions({
         items: [...ITEMS, lazy],
         selectable: 'multiple',
-        selectedIds: [LOGO.id],
-        expanded: ['assets', IMG.id, 'remote']
+        selectedKeys: [LOGO.id],
+        openKeys: ['assets', IMG.id, 'remote']
       })
       await nextTick()
       expect(view.getByRole('status')).toBeTruthy()
@@ -429,7 +431,7 @@ describe('Tree', () => {
   })
 
   it('moves focus to the next visible node whose label starts with the typed text', async () => {
-    const view = mount({ expanded: ['assets'] })
+    const view = mount({ openKeys: ['assets'] })
     node(view.container, 'assets').focus()
     await userEvent.keyboard('h')
     expect(document.activeElement).toBe(node(view.container, HERO.id))
@@ -444,7 +446,7 @@ describe('Tree', () => {
     expect(row.textContent).toContain('azion.config.js')
     expect(row.textContent).toContain('612 B')
     expect(rowOf(view.container, 'assets').querySelector('i.ai-folder')).toBeTruthy()
-    expect(view.container.querySelector('[data-tree-actions]')).toBeNull()
+    expect(view.container.querySelector('[data-slot="tree-actions"]')).toBeNull()
   })
 
   it('renders five skeleton rows and aria-busy while loading', () => {
@@ -477,7 +479,7 @@ describe('Tree', () => {
     const plain = mount()
     await expectNoA11yViolations(plain.container)
     plain.unmount()
-    const nested = mount({ selectable: true, selected: LOGO.id, expanded: ['assets', IMG.id] })
+    const nested = mount({ selectable: true, selected: LOGO.id, openKeys: ['assets', IMG.id] })
     await expectNoA11yViolations(nested.container)
     nested.unmount()
     const loading = mount({ loading: true })
@@ -490,7 +492,7 @@ describe('Tree', () => {
   describe('lazy children, rename, double-click and multi-select', () => {
     it('treats a lazy node as a parent and renders a loading row while it loads', async () => {
       const lazy: TreeItem = { id: 'logs', label: 'logs', lazy: true, loading: true }
-      const view = mount({ items: [lazy, CONFIG], expanded: ['logs'] })
+      const view = mount({ items: [lazy, CONFIG], openKeys: ['logs'] })
       const logs = node(view.container, 'logs')
       expect(logs.getAttribute('aria-expanded')).toBe('true')
       const group = logs.querySelector('[role="group"]') as HTMLElement
@@ -508,10 +510,10 @@ describe('Tree', () => {
       expect(node(view.container, 'logs/a.log')).toBeTruthy()
     })
 
-    it('emits update:expanded when a collapsed lazy node is expanded with ArrowRight', async () => {
+    it('emits update:openKeys when a collapsed lazy node is expanded with ArrowRight', async () => {
       const lazy: TreeItem = { id: 'logs', label: 'logs', lazy: true }
       const onExpanded = vi.fn()
-      const view = mount({ items: [lazy], 'onUpdate:expanded': onExpanded })
+      const view = mount({ items: [lazy], 'onUpdate:openKeys': onExpanded })
       node(view.container, 'logs').focus()
       await userEvent.keyboard('{ArrowRight}')
       expect(onExpanded).toHaveBeenCalledWith(['logs'])
@@ -568,29 +570,29 @@ describe('Tree', () => {
       expect(plain.queryByRole('textbox')).toBeNull()
     })
 
-    it('emits item-dblclick on a row, but not on a disabled node or the chevron', async () => {
-      const onDblclick = vi.fn()
-      const view = mount({ 'onItem-dblclick': onDblclick })
+    it('emits item-double-click on a row, but not on a disabled node or the chevron', async () => {
+      const onDoubleClick = vi.fn()
+      const view = mount({ 'onItem-double-click': onDoubleClick })
       await userEvent.dblClick(rowOf(view.container, 'azion.config.js'))
-      expect(onDblclick).toHaveBeenCalledWith(expect.any(MouseEvent), CONFIG)
+      expect(onDoubleClick).toHaveBeenCalledWith(expect.any(MouseEvent), CONFIG)
       await userEvent.dblClick(rowOf(view.container, 'locked.txt'))
       await userEvent.dblClick(view.getAllByTestId('data-tree__toggle')[0])
-      expect(onDblclick).toHaveBeenCalledTimes(1)
+      expect(onDoubleClick).toHaveBeenCalledTimes(1)
     })
 
     const MultiHarness = defineComponent({
       setup() {
-        const selectedIds = ref<string[]>([])
+        const selectedKeys = ref<string[]>([])
         return () => [
           h(Tree, {
             ariaLabel: 'Bucket objects',
             items: ITEMS,
             selectable: 'multiple',
-            expanded: ['assets'],
-            selectedIds: selectedIds.value,
-            'onUpdate:selectedIds': (value: string[]) => (selectedIds.value = value)
+            openKeys: ['assets'],
+            selectedKeys: selectedKeys.value,
+            'onUpdate:selectedKeys': (value: string[]) => (selectedKeys.value = value)
           }),
-          h('output', { 'data-testid': 'ids' }, selectedIds.value.join(','))
+          h('output', { 'data-testid': 'ids' }, selectedKeys.value.join(','))
         ]
       }
     })
@@ -632,7 +634,7 @@ describe('Tree', () => {
       }))
       const user = userEvent.setup()
       const onIds = vi.fn()
-      const view = mount({ items: big, selectable: 'multiple', 'onUpdate:selectedIds': onIds })
+      const view = mount({ items: big, selectable: 'multiple', 'onUpdate:selectedKeys': onIds })
       await user.click(rowOf(view.container, 'n0'))
       await user.keyboard('{Shift>}')
       await user.click(rowOf(view.container, 'n1199'))

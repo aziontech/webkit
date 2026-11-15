@@ -21,7 +21,7 @@
       /** The items, one card each. */
       items?: TItem[]
       /** Field that identifies an item; selection keys read it. */
-      trackBy?: string
+      itemKey?: string
       /** No selection, one card, or several cards with a select-all above them. */
       selectionMode?: CardListSelectionMode
       /** Shows placeholder cards and sets aria-busy while true. */
@@ -31,7 +31,7 @@
     }>(),
     {
       items: () => [],
-      trackBy: 'id',
+      itemKey: 'id',
       selectionMode: 'none',
       loading: false,
       ariaLabel: ''
@@ -59,7 +59,7 @@
   )
 
   const keyOf = (item: TItem): string =>
-    String((item as Record<string, unknown>)[props.trackBy] ?? '')
+    String((item as Record<string, unknown>)[props.itemKey] ?? '')
 
   const selectedKeys = defineModel<string[]>('selectedKeys', { default: () => [] })
   const selected = computed<string[]>(() => selectedKeys.value)
@@ -115,7 +115,7 @@
     class="@container/card-list flex w-full min-w-0 flex-col gap-(--spacing-sm)"
   >
     <div
-      v-if="selectionMode === 'multi' && !loading && items.length > 0"
+      v-if="selectionMode === 'multiple' && !loading && items.length > 0"
       :data-testid="`${testId}__select-all`"
       class="flex min-h-10 items-center gap-(--spacing-xs)"
     >
@@ -199,7 +199,7 @@
                 />
               </div>
               <Checkbox
-                v-if="selectionMode === 'multi'"
+                v-if="selectionMode === 'multiple'"
                 :model-value="on"
                 :aria-labelledby="headerId(index)"
                 :data-testid="`${testId}__select`"

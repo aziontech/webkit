@@ -15,7 +15,7 @@
 <template>
   <TransferList
     v-model="model"
-    track-by="id"
+    item-key="id"
   >
     <TransferList.Source title="Available">
       <template #item="{ item }">{{ item.label }}</template>

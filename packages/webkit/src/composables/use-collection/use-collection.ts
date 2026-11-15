@@ -81,7 +81,7 @@ export interface CollectionExportParams {
 export type CollectionStatus = 'loading' | 'error' | 'empty' | 'no-match' | 'ready'
 
 /** Single or multiple selection. */
-export type CollectionSelectionMode = 'single' | 'multi'
+export type CollectionSelectionMode = 'single' | 'multiple'
 
 export interface UseCollectionOptions<
   T extends object,
@@ -142,7 +142,7 @@ export interface CollectionTableProps<T, C> {
   pageSize: number
   rowCount: number
   pageSizeOptions: number[]
-  enableRowSelection: boolean
+  selectable: boolean
   rowSelection: Record<string, boolean>
   columnVisibility: Record<string, boolean>
   wrapLines: boolean
@@ -191,7 +191,7 @@ export interface CollectionPreferencesProps {
 
 export interface CollectionCardListProps<T> {
   items: T[]
-  trackBy: string
+  itemKey: string
   loading: boolean
   selectionMode: 'none' | CollectionSelectionMode
   selectedKeys: string[]
@@ -277,7 +277,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
   const paginated = Boolean(options.pagination)
   const pageSizeOptions = options.pagination?.pageSizeOptions ?? DEFAULT_PAGE_SIZES
   const multiSort = options.sorting?.multiple ?? false
-  const selectionMode = options.selection?.mode ?? 'multi'
+  const selectionMode = options.selection?.mode ?? 'multiple'
   const selectionEnabled = Boolean(options.selection)
 
   const columns = computed<C[]>(() => [...(toValue(options.columns) ?? [])])
@@ -712,7 +712,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
     pageSize: paginated ? pageSize.value : DEFAULT_PAGE_SIZE,
     rowCount: totalCount.value,
     pageSizeOptions,
-    enableRowSelection: selectionEnabled,
+    selectable: selectionEnabled,
     rowSelection: rowSelection.value,
     columnVisibility: columnVisibility.value,
     wrapLines: preferences.value.wrapLines,
@@ -769,7 +769,7 @@ export function useCollection<T extends object, C extends CollectionColumn = Col
 
   const cardListProps = computed<CollectionCardListProps<T>>(() => ({
     items: items.value,
-    trackBy,
+    itemKey: trackBy,
     loading: loading.value,
     selectionMode: selectionEnabled ? selectionMode : 'none',
     selectedKeys: pageKeys.value.filter(isSelected),

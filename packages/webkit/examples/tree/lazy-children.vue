@@ -90,10 +90,10 @@
 <template>
   <div class="max-w-(--container-sm)">
     <Tree
-      :expanded="expanded"
+      :open-keys="expanded"
       :items="items"
       aria-label="Bucket objects"
-      @update:expanded="onExpanded"
+      @update:open-keys="onExpanded"
     />
   </div>
 </template>

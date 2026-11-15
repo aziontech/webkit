@@ -16,7 +16,7 @@
 
   interface Props {
     /** Item field that uniquely identifies a record (the same name as Cards); keys the selection and the rows. */
-    trackBy?: string
+    itemKey?: string
     /** Disables all selection and move controls and applies disabled tokens. */
     disabled?: boolean
     /** When true (default), double-clicking an item moves it to the opposite list. Set false to keep `item-double-click` firing without the move. */
@@ -24,13 +24,13 @@
   }
 
   const props = withDefaults(defineProps<Props>(), {
-    trackBy: '',
+    itemKey: '',
     disabled: false,
     moveOnDoubleClick: true
   })
 
   const emit = defineEmits<{
-    move: [payload: { direction: MoveDirection; items: TransferListItems }]
+    move: [event: Event, payload: { direction: MoveDirection; items: TransferListItems }]
     'item-double-click': [
       event: MouseEvent,
       payload: { list: TransferListSide; item: unknown; index: number }
@@ -42,8 +42,8 @@
 
   defineSlots<{
     default(props: {
-      move: (direction: MoveDirection) => void
-      moveAll: (direction: MoveDirection) => void
+      move: (event: Event, direction: MoveDirection) => void
+      moveAll: (event: Event, direction: MoveDirection) => void
       hasSelection: (side: TransferListSide) => boolean
       count: (side: TransferListSide) => number
       disabled: boolean
@@ -78,9 +78,9 @@
   const selectionFor = (side: TransferListSide) =>
     side === 'source' ? selectedSource : selectedTarget
 
-  const keyField = computed<string>(() => props.trackBy)
+  const keyField = computed<string>(() => props.itemKey)
 
-  const itemKey = (item: unknown, index: number): string | number => {
+  const keyOf = (item: unknown, index: number): string | number => {
     if (keyField.value && item && typeof item === 'object') {
       const value = (item as Record<string, unknown>)[keyField.value]
       if (typeof value === 'string' || typeof value === 'number') return value
@@ -89,7 +89,7 @@
   }
 
   const keyAt = (side: TransferListSide, index: number): string | number =>
-    itemKey(items(side)[index], index)
+    keyOf(items(side)[index], index)
 
   const isSelected = (side: TransferListSide, index: number): boolean =>
     selectionFor(side).value.has(keyAt(side, index))
@@ -123,7 +123,7 @@
       .map((_, index) => index)
       .filter((index) => isSelected(side, index))
 
-  const move = (direction: MoveDirection): void => {
+  const move = (event: Event, direction: MoveDirection): void => {
     if (props.disabled || anyLoading.value) return
     const fromSide: TransferListSide = direction === 'to-target' ? 'source' : 'target'
     const indexes = pickSelectedIndexes(fromSide)
@@ -143,10 +143,10 @@
     else emitModel([to, remaining])
 
     selectionFor(fromSide).value = new Set()
-    emit('move', { direction, items: moved })
+    emit('move', event, { direction, items: moved })
   }
 
-  const moveAll = (direction: MoveDirection): void => {
+  const moveAll = (event: Event, direction: MoveDirection): void => {
     if (props.disabled || anyLoading.value) return
     const fromSide: TransferListSide = direction === 'to-target' ? 'source' : 'target'
     const from = direction === 'to-target' ? [...sourceItems.value] : [...targetItems.value]
@@ -158,10 +158,10 @@
     else emitModel([to, []])
 
     selectionFor(fromSide).value = new Set()
-    emit('move', { direction, items: from })
+    emit('move', event, { direction, items: from })
   }
 
-  const moveItem = (fromSide: TransferListSide, index: number): void => {
+  const moveItem = (event: Event, fromSide: TransferListSide, index: number): void => {
     if (props.disabled || anyLoading.value) return
     const fromItems = fromSide === 'source' ? [...sourceItems.value] : [...targetItems.value]
     if (index < 0 || index >= fromItems.length) return
@@ -175,7 +175,7 @@
     else emitModel([toItems, remaining])
 
     selectionFor(fromSide).value = new Set()
-    emit('move', {
+    emit('move', event, {
       direction: fromSide === 'source' ? 'to-target' : 'to-source',
       items: [moved]
     })
@@ -186,16 +186,16 @@
     const item = items(side)[index]
     emit('item-double-click', event, { list: side, item, index })
     if (!props.moveOnDoubleClick) return
-    moveItem(side, index)
+    moveItem(event, side, index)
   }
 
   provide(transferListContextKey, {
-    trackBy: keyField,
+    keyField,
     disabled: computed(() => props.disabled),
     anyLoading,
     items,
     count,
-    itemKey,
+    itemKey: keyOf,
     isSelected,
     toggleSelection,
     setSelected,

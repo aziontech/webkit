@@ -14,7 +14,7 @@ export interface FilterMenuSummary {
 
 export const DATE_PERIODS = ['24h', '7d', '30d', '3m'] as const
 
-export const kindOf = (field: FilterMenuField): FilterMenuFieldKind => field.kind ?? 'multi'
+export const kindOf = (field: FilterMenuField): FilterMenuFieldKind => field.kind ?? 'multiple'
 
 export const isRange = (value: FilterMenuValue | undefined): value is FilterMenuRange =>
   typeof value === 'object' && value !== null
@@ -57,7 +57,7 @@ export const toggleValue = (
 ): FilterMenuModel => {
   const current = valuesOf(model, field)
   const next =
-    kindOf(field) === 'multi'
+    kindOf(field) === 'multiple'
       ? current.includes(value)
         ? current.filter((entry) => entry !== value)
         : [...current, value]

@@ -116,7 +116,7 @@
     :properties="properties"
     :aria-label="title"
     :free-text="false"
-    hide-operations
+    :show-operations="false"
     :query="query"
     class="min-w-0 flex-1"
     @update:query="onQueryChange"
