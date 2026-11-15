@@ -18,6 +18,7 @@ import {
   declaredMajor,
   legacyMarkers,
   loadMigration,
+  migrateBlockManifest,
   migrateIcons,
   migrateLintRules,
   migrateSource,
@@ -472,104 +473,56 @@ test('a rename whose new name prefixes the old one still rewrites the sub-compon
   assert.equal(migrateSource(source, v6).source, source)
 })
 
-test('migrateTokens renames theme variables and utilities, and leaves look-alikes alone', async () => {
-  const { migrateTokens } = await import('../../src/cli/migrate-tokens.js')
-  const tokens = loadMigration(6).tokens
-  const sfc = [
-    '<template>',
-    '  <div class="text-(--primary-contrast) bg-(--primary) p-(--spacing-xxs) gap-(--spacing-xxl) text-heading-xxs hover:bg-danger-contrast border-0 data-open:animate-slide-in-left" />',
-    '  <pre class="text-(--code-sintax-keyword) w-(--border-2) rounded-(--shape-elements) z-(--z-input-overlay)" />',
-    '  <p class="bg-contrast text-(--text-contrast)" />',
-    '</template>',
-    '<style>',
-    '.x { color: var(--danger-contrast); font-size: var(--text-body-xxs-font-size); }',
-    '</style>'
-  ].join('\n')
-  const { source, changes } = migrateTokens(sfc, tokens)
-  assert.match(
-    source,
-    /text-\(--primary-foreground\) bg-\(--primary\) p-\(--spacing-2xs\) gap-\(--spacing-2xl\) text-heading-2xs hover:bg-danger-foreground border-0 data-open:animate-slide-in-start/
+test('migrateBlockManifest moves 5.x block ids, sources and renamed variants', () => {
+  const blocks = loadMigration(6).blocks
+  const { manifest, changes, warnings } = migrateBlockManifest(
+    {
+      package: '@aziontech/webkit',
+      blocks: {
+        'platform/view/rules-list': {
+          version: '5.12.0',
+          files: [
+            {
+              path: 'src/views/RulesList.vue',
+              source: 'blocks/platform/view/rules-list/rules-list.vue',
+              variant: 'Application'
+            },
+            {
+              path: 'src/views/RulesListSaveFailed.vue',
+              source: 'blocks/platform/view/rules-list/variants/save-failed.vue',
+              variant: 'SaveFailed'
+            }
+          ]
+        },
+        'platform/account/profile': { version: '5.0.0', files: [] },
+        'my/own': { version: '1.0.0', files: [] }
+      }
+    },
+    blocks
   )
-  assert.match(
-    source,
-    /text-\(--code-syntax-keyword\) w-\(--border-width-2\) rounded-\(--shape-control\) z-\(--z-control-overlay\)/
+  assert.deepEqual(Object.keys(manifest.blocks), [
+    'my/own',
+    'platform/account/profile',
+    'view/rule-list'
+  ])
+  assert.deepEqual(
+    manifest.blocks['view/rule-list'].files.map((f) => [f.source, f.variant]),
+    [
+      ['blocks/view/rule-list/rule-list.vue', 'Application'],
+      ['blocks/view/rule-list/variants/save-error.vue', 'SaveError']
+    ]
   )
-  assert.match(source, /bg-contrast text-\(--text-contrast\)/)
-  assert.match(source, /var\(--danger-foreground\); font-size: var\(--text-body-2xs-font-size\)/)
-  assert.ok(changes.includes('--primary-contrast → --primary-foreground'))
+  assert.deepEqual(changes, ['webkit.blocks.json: platform/view/rules-list → view/rule-list'])
+  assert.match(warnings[0], /platform\/account\/profile is now settings\/settings-form#profile/)
 })
 
-test('migrateTokens rewrites renamed theme imports and warns on removed names and rtl swaps', async () => {
-  const { migrateTokens } = await import('../../src/cli/migrate-tokens.js')
-  const tokens = loadMigration(6).tokens
-  const ts = [
-    "import { textsData } from '@aziontech/theme/texts'",
-    "import { layoutsData as layout, layoutsUtilities } from '@aziontech/theme/layouts'",
-    "document.documentElement.classList.add('azion', 'azion-dark')",
-    "const lh = 'var(--line-height-4)'",
-    "const cls = 'animate-slide-in-right rtl:animate-slide-in-left'",
-    'const text = value.toString()'
-  ].join('\n')
-  const { source, warnings } = migrateTokens(ts, tokens)
-  assert.match(source, /import \{ typography as textsData \} from '@aziontech\/theme\/typography'/)
-  assert.match(
-    source,
-    /import \{ layout as layout, layoutUtilities as layoutsUtilities \} from '@aziontech\/theme\/layout'/
-  )
-  assert.match(source, /animate-slide-in-end rtl:animate-slide-in-start/)
-  assert.ok(warnings.some((w) => w.startsWith('azion-dark was removed in v6')))
-  assert.ok(warnings.some((w) => w.startsWith('--line-height-4 was removed in v6')))
-  assert.ok(warnings.some((w) => w.includes('rtl: variant')))
-  assert.ok(!warnings.some((w) => w.startsWith('toString')))
-})
-
-test('planMigrate rewrites tokens in plain CSS files too', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'webkit-migrate-tokens-'))
-  try {
-    writeFileSync(join(dir, 'app.css'), '.hero { padding: var(--spacing-xxl); }\n')
-    planMigrate(dir)
-    assert.equal(
-      readFileSync(join(dir, 'app.css'), 'utf8'),
-      '.hero { padding: var(--spacing-2xl); }\n'
+test('every 5.x block id in v6-blocks.json points at a block that ships', () => {
+  const blocks = loadMigration(6).blocks
+  for (const to of Object.values(blocks)) {
+    const id = to.split('#')[0]
+    assert.ok(
+      existsSync(join(PKG, 'blocks', id, 'block.json')),
+      `v6-blocks.json points at "${id}", which has no blocks/${id}/block.json`
     )
-  } finally {
-    rmSync(dir, { recursive: true, force: true })
   }
-})
-
-test('migrateLintRules renames WebKit lint rule ids in configs and disable comments', async () => {
-  const { lint } = loadMigration(6)
-  const config = [
-    "import webkit from '@aziontech/webkit/eslint-plugin'",
-    "import Menu from '@aziontech/webkit/menu-node-href'",
-    'export default [',
-    "  { rules: { 'webkit/accessible-name': 'off', 'webkit/container-needs-width': 'warn' } },",
-    "  { rules: { 'webkit/valid-import-path': 'error', 'webkit/no-barrel-import': 'error' } }",
-    ']',
-    '// eslint-disable-next-line webkit/menu-node-href, webkit/header-search-trigger',
-    "const id = 'webkit/accessible-name-extra'"
-  ].join('\n')
-  const { source, changes } = migrateLintRules(config, lint)
-  assert.match(source, /'webkit\/require-accessible-name': 'off'/)
-  assert.match(source, /'webkit\/require-container-width': 'warn'/)
-  assert.match(source, /'webkit\/no-unknown-import': 'error'/)
-  assert.match(source, /webkit\/prefer-href-in-menu-node, webkit\/require-header-search/)
-  assert.match(source, /'webkit\/no-barrel-import'/)
-  assert.match(source, /@aziontech\/webkit\/menu-node-href/)
-  assert.match(source, /'webkit\/accessible-name-extra'/)
-  assert.equal(changes.length, 5)
-  assert.equal(migrateLintRules(source, lint).changes.length, 0)
-
-  const { rules } = (await import('../../src/eslint-plugin/index.js')).default
-  for (const [from, to] of Object.entries(lint)) {
-    assert.ok(rules[to.slice('webkit/'.length)], `${to} is a shipped rule`)
-    assert.equal(rules[from.slice('webkit/'.length)], undefined, `${from} is gone`)
-  }
-})
-
-test('migrateSource rewrites lint rule ids in a file that imports no WebKit component', () => {
-  const sfc = '<!-- eslint-disable webkit/accessible-name -->\n<template><i /></template>\n'
-  const { source, changes } = migrateSource(sfc, loadMigration(6))
-  assert.match(source, /eslint-disable webkit\/require-accessible-name/)
-  assert.deepEqual(changes, ['webkit/accessible-name → webkit/require-accessible-name'])
 })

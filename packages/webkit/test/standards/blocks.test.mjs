@@ -58,7 +58,7 @@ const SFC = [
 function guide({ blocks, states, drop, empty } = {}) {
   const body = {
     'When to use': '- A list of resources.',
-    'When not to use': '- One record: use `platform/detail/details-page`.',
+    'When not to use': '- One record: use `detail/resource-detail`.',
     'Building blocks':
       blocks ??
       [
@@ -72,7 +72,7 @@ function guide({ blocks, states, drop, empty } = {}) {
     Copy: '- **Title:** the plural resource name, e.g. "Workloads".',
     Accessibility: '- The heading is the page h1.',
     States: states ?? '- Default: rows exist.\n- Empty: no rows.',
-    Related: '- `platform/create/single-page-create` — where Create leads.'
+    Related: '- `create/create-page` — where Create leads.'
   }
   const sections = GUIDELINE_SECTIONS.filter((name) => name !== drop).map(
     (name) => `## ${name}\n${name === empty ? '' : body[name]}\n`
@@ -127,7 +127,7 @@ test('importsOf leaves out type-only imports, which render nothing', () => {
 test('readBlocks builds a block from block.json, the primary SFC and every variant file', () => {
   const pkg = mkdtempSync(join(tmpdir(), 'blocks-'))
   try {
-    const dir = join(pkg, 'blocks/platform/auth/sign-in')
+    const dir = join(pkg, 'blocks/auth/sign-in')
     mkdirSync(join(dir, 'variants'), { recursive: true })
     const sfc = (tag) =>
       `<script setup>\nimport ${tag} from '@aziontech/webkit/${tag.toLowerCase()}'\n</script>\n<template>\n  <${tag} />\n</template>\n`
@@ -136,7 +136,7 @@ test('readBlocks builds a block from block.json, the primary SFC and every varia
     writeFileSync(
       join(dir, 'block.json'),
       JSON.stringify({
-        id: 'platform/auth/sign-in',
+        id: 'auth/sign-in',
         name: 'SignIn',
         title: 'Blocks/Auth/SignIn',
         summary: 'Sign in.',
@@ -147,16 +147,16 @@ test('readBlocks builds a block from block.json, the primary SFC and every varia
         variants: [{ name: 'Password', summary: '', file: 'variants/password.vue' }]
       })
     )
-    assert.equal('guidelines' in readBlocks(pkg)['platform/auth/sign-in'], false)
+    assert.equal('guidelines' in readBlocks(pkg)['auth/sign-in'], false)
     writeFileSync(
       join(dir, 'guidelines.md'),
       '# Sign in\nGet back into the account.\n\n## Do\n- x\n'
     )
-    const entry = readBlocks(pkg)['platform/auth/sign-in']
+    const entry = readBlocks(pkg)['auth/sign-in']
     assert.match(entry.guidelines, /^# Sign in/)
     assert.equal(entry.guidelinesSummary, 'Get back into the account.')
-    assert.equal(entry.source, 'blocks/platform/auth/sign-in/sign-in.vue')
-    assert.equal(entry.surface, 'product')
+    assert.equal(entry.source, 'blocks/auth/sign-in/sign-in.vue')
+    assert.equal(entry.surface, 'app')
     assert.deepEqual(entry.intents, ['login'])
     assert.deepEqual(entry.steps, ['email', 'password'])
     assert.deepEqual(entry.components, ['Button', 'Separator'])
@@ -354,7 +354,7 @@ test('rendersToastRegion finds a Toaster under any binding, and ignores toast ca
   )
 })
 
-test('checkToastRegion flags a page body that renders a Toaster and allows an app root in shells/', () => {
+test('checkToastRegion flags a page body that renders a Toaster and allows an app root in shell/', () => {
   const page = toastSfc(["import { toast } from '@aziontech/webkit/toast'"], '<p />')
   const own = toastSfc(["import { toast, Toaster } from '@aziontech/webkit/toast'"], '<Toaster />')
   const toastBlock = { primary: 'Default', sfc: page, variants: [{ name: 'Saved', sfc: own }] }
@@ -365,11 +365,11 @@ test('checkToastRegion flags a page body that renders a Toaster and allows an ap
     /^blocks\/platform\/view\/x \(Saved\): renders a `Toaster` in a page body/
   )
   assert.match(errors[0], /ToastPlugin/)
-  assert.deepEqual(checkToastRegion('shells/console', toastBlock), [])
-  assert.deepEqual(checkToastRegion('platform/view/x', { ...toastBlock, variants: [] }), [])
+  assert.deepEqual(checkToastRegion('shell/console', pattern), [])
+  assert.deepEqual(checkToastRegion('platform/view/x', { ...pattern, variants: [] }), [])
 })
 
-test('no block outside shells/ renders a Toaster', () => {
+test('no block outside shell/ renders a Toaster', () => {
   const blocks = readBlocks(fileURLToPath(new URL('../..', import.meta.url)))
   assert.deepEqual(checkToastRegions(blocks), [])
 })
@@ -382,10 +382,16 @@ test('compareToBaseline only reports counts above the baseline', () => {
   ])
 })
 
-test('the catalog carries one entry per block in top-bars, shells and platform', () => {
+test('the catalog carries one pattern per block, each under one job group', () => {
   const ids = Object.keys(catalog.blocks)
   assert.ok(ids.length >= 58)
-  assert.ok(ids.every((id) => /^(top-bars|shells|platform)\//.test(id)))
+  assert.ok(
+    ids.every((id) =>
+      /^(account|ai|auth|create|dashboard|detail|edit|settings|state|view|shell|top-bar)\/[a-z0-9-]+$/.test(
+        id
+      )
+    )
+  )
   for (const p of Object.values(catalog.blocks)) {
     const part = JSON.parse(readFileSync(new URL(`../../${p.file}`, import.meta.url), 'utf-8'))
     assert.ok(part.sfc.includes('<template>'))
@@ -526,10 +532,10 @@ test('checkBlockGuidelines skips pending blocks, flags stale and unknown pending
 })
 
 test('parseCheckArgs reads --update, --warn-intents and repeated --only prefixes', () => {
-  assert.deepEqual(parseCheckArgs(['--only', 'platform/view,platform/edit', '--only=headers/']), {
+  assert.deepEqual(parseCheckArgs(['--only', 'view,edit', '--only=headers/']), {
     update: false,
     warnIntents: false,
-    only: ['platform/view', 'platform/edit', 'headers/']
+    only: ['view', 'edit', 'headers/']
   })
   assert.equal(parseCheckArgs(['--update']).update, true)
 })

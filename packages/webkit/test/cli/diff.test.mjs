@@ -6,7 +6,7 @@ import { join } from 'node:path'
 import { lineDiff, unifiedDiff } from '../../src/cli/text-diff.js'
 import { cleanup, cli, cliJson, makeProject } from './_helpers/cli-project.mjs'
 
-const BLOCK = 'platform/delete/delete-with-confirmation'
+const BLOCK = 'edit/delete-dialog'
 
 test('unifiedDiff renders hunks with context and line ranges', () => {
   const a = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'].join('\n')
@@ -44,16 +44,16 @@ test('diff reports identical copies with exit 0 and edits as a unified diff with
     assert.equal(same.code, 0, same.stderr)
     assert.match(same.stdout, /identical/)
 
-    const file = join(dir, 'src/views/DeleteWithConfirmation.vue')
+    const file = join(dir, 'src/views/DeleteDialog.vue')
     const src = readFileSync(file, 'utf8')
     writeFileSync(file, src.replace('<template>', '<template>\n  <!-- local -->'))
-    const changed = cli(dir, 'diff', 'src/views/DeleteWithConfirmation.vue')
+    const changed = cli(dir, 'diff', 'src/views/DeleteDialog.vue')
     assert.equal(changed.code, 1)
     assert.match(changed.stdout, /\+1 -0/)
     assert.match(changed.stdout, /^\+  <!-- local -->$/m)
     assert.ok(!changed.stdout.includes('\x1b['), 'no colour when not a TTY')
 
-    const json = cliJson(dir, 'diff', 'delete-with-confirmation')
+    const json = cliJson(dir, 'diff', 'delete-dialog')
     assert.equal(json.code, 1)
     assert.equal(json.json.differs, true)
     assert.equal(json.json.files[0].status, 'modified')
@@ -76,7 +76,7 @@ test('diff flags a canonical block that changed since the copy, and unknown targ
     const r = cli(dir, 'diff', BLOCK)
     assert.match(r.stdout, /changed since it was copied \(0\.0\.1 →/)
 
-    const missing = cli(dir, 'diff', 'platform/auth/sign-in')
+    const missing = cli(dir, 'diff', 'auth/no-such-block')
     assert.equal(missing.code, 2)
     assert.match(missing.stderr, /not recorded in webkit\.blocks\.json/)
   } finally {

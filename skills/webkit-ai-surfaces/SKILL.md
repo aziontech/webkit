@@ -28,7 +28,7 @@ shadcn's AI Elements.
 
 ## How to find the components
 
-Never guess an import path. Ask the **webkit MCP** — `get_block platform/ai/ai-chat` (or
+Never guess an import path. Ask the **webkit MCP** — `get_block ai/ai-chat` (or
 `ai-chat-drawer`, `ai-action-approval`) returns the full screen to copy; `suggest_component` with the
 moment in plain words ("streamed answer", "ask before running a command") returns the component. Or
 read the `imports` keys in **`node_modules/@aziontech/webkit/catalog.json`**: a subpath that is not a
@@ -38,9 +38,9 @@ key there does not exist.
 
 | The surface                                                   | Copy                             |
 | ------------------------------------------------------------- | -------------------------------- |
-| The assistant as a page of its own                            | `platform/ai/ai-chat`            |
-| The assistant beside a resource page, about what is on screen | `platform/ai/ai-chat-drawer`     |
-| The assistant proposes a change the reader must allow         | `platform/ai/ai-action-approval` |
+| The assistant as a page of its own                            | `ai/ai-chat`            |
+| The assistant beside a resource page, about what is on screen | `ai/ai-chat-drawer`     |
+| The assistant proposes a change the reader must allow         | `ai/ai-action-approval` |
 
 Each block has the empty, streaming, error and long-thread states (or pending, approved, denied,
 expired and irreversible for approval) as variants. Adapt the words and the data; keep the structure.
@@ -141,7 +141,7 @@ End with the count of Safety findings first; any Safety finding blocks the chang
 
 ## Definition of Done
 
-- [ ] The screen started from a `platform/ai/*` block.
+- [ ] The screen started from a `ai/*` block.
 - [ ] Every thread is a `Conversation`; every turn a `ChatMessage` with the real lifecycle `state`.
 - [ ] Model text renders through `StreamingResponse`; no `v-html` anywhere near model output.
 - [ ] Citations share an `anchor` with their `Sources`.

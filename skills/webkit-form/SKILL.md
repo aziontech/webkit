@@ -208,15 +208,15 @@ save** — a Drawer, a Dialog, or an ItemGroup (whether a single flush block **o
 into independently-committed cards — the **Card with independent saves** type — has **one save per
 card**, each locking off its own `submitting` flag (the `/webkit-ui-states` contract).
 
-Each form type has its block in the `webkit` MCP (`get_block`): the Drawer form and the Nested
-drawer are `platform/create/create-in-drawer` (variant `NestedDrawer` for the stacked child); the
-Dialog form is `platform/delete/delete-with-confirmation` (variant `LabelledField` for the labelled
+Each form type has its pattern in the `webkit` MCP (`get_block`): the Drawer form and the Nested
+drawer are `create/create-drawer` (variant `NestedDrawer` for the stacked child); the
+Dialog form is `edit/delete-dialog` (variant `SettingsRow` for the labelled
 typed confirmation); ItemGroup settings and Card with independent saves are
-`platform/settings/settings-form`, whose primary `SaveAll` is the default one-save model and whose
+`settings/settings-form`, whose primary `SaveAll` is the default one-save model and whose
 `SavePerGroup` and `SavePerCard` variants are the split ones. A resource's own settings tab is
-`platform/edit/edit-resource`; every submit state is `platform/states/form-validation`; a server
+`edit/edit-resource`; every submit state is `state/form-validation`; a server
 rejection that one section owns is its SectionRejected variant; a save that starts a long run (build,
-deploy) is `platform/states/async-submit`.
+deploy) is `state/async-submit`.
 
 ### Example — Card with its own save
 
@@ -424,7 +424,7 @@ A drawer form whose `Select` points at a resource or an item that the user may n
 a "Create …" affordance in the `Select`'s footer opens a **second, smaller drawer** on top. The child
 creates the item, appends it to the `Select`'s options, selects it back into the parent, and closes; the
 parent form is exactly as the user left it. This is the pattern behind _Rules Engine → Add Rule → Origin →
-Create Origin_ on a resource (`platform/create/create-in-drawer`, variant `NestedDrawer`): the rule and the
+Create Origin_ on a resource (`create/create-drawer`, variant `NestedDrawer`): the rule and the
 origin both live inside the storefront resource, so both create in a drawer.
 
 **First-level resources too.** When the missing thing is a first-level resource (a Certificate, a
@@ -992,7 +992,7 @@ Rules:
 - **Report the request result where the user is looking** — `toast.success` on the happy path,
   `toast.error` with a Retry on failure. Field errors stay inline.
 
-### Form errors — the server rejects one section (`platform/states/form-validation`, SectionRejected)
+### Form errors — the server rejects one section (`state/form-validation`, SectionRejected)
 
 The design sample's `/forms/error-validation` screen is the standard. When the server rejects the save
 because of one section (a linked resource another user deleted, a value only that section owns), the
@@ -1013,7 +1013,7 @@ exists.`), wired by `aria-describedby`. After the reload clears the stale value 
 
 Where each error renders, row by row, is `/webkit-errors`.
 
-### Unsaved changes — `useUnsavedChanges` (`platform/edit/edit-resource`)
+### Unsaved changes — `useUnsavedChanges` (`edit/edit-resource`)
 
 Every edit form keeps a saved baseline and asks before its edits are lost. Do not hand-roll
 `JSON.stringify` baselines or `beforeunload` listeners: use the composable.

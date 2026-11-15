@@ -59,12 +59,12 @@ The chrome is composed **once**, in `App.vue`, around `RouterView`, from the lay
   (`kind: 'drill'`) opens in place and the rail's Back reads `Back to Docs` (`rootLabel` renames it);
   never add a hand-made Back row.
 
-The shell blocks (`shells/console`, `shells/website`, `shells/documentation`) are these layouts with
+The shell blocks (`shell/console`, `shell/site`, `shell/docs`) are these layouts with
 the real navigation: copy one as your `App.vue` and replace its stand-in body with `<RouterView />`.
 A page never renders its own `<main>`, `AppLayout`, `Sidebar`, `GlobalHeader`, `SiteNav`,
 `SiteFooter` or `Command`. Every platform block is a page body; the one exception is a screen with no rail — a
-create flow (`platform/create/*`, headed by the `top-bars/creation-bar` bar) or a
-signed-out screen (`platform/auth`): route it outside the layout (a route meta `App.vue` reads), and
+create flow (`create/*`, headed by the `top-bar/creation-bar` bar) or a
+signed-out screen (`auth/sign-in`): route it outside the layout (a route meta `App.vue` reads), and
 it keeps its own bar and `<main>` (`webkit-navigation`).
 
 ## A screen begins from a block
@@ -89,8 +89,8 @@ keeping to the guidelines. Only when no block fits, compose from components (bel
   (`@aziontech/webkit/search-trigger`) first in `GlobalHeader.End`, opening a `Command` palette;
   it draws `Search … ⌘K` (`Ctrl K` off macOS) on a wide bar and the magnifier on a narrow one, and
   binds the shortcut. `ConsoleLayout`, `SiteLayout` and `DocLayout` already carry it, wired to
-  their palette (rule `webkit-header-search`, lint `webkit/require-header-search`).
-- **A docs home is `shells/documentation --variant Landing`.** It opens on `DocHero` (display
+  their palette (rule `webkit-header-search`, lint `webkit/header-search-trigger`).
+- **A docs home is `shell/docs --variant Landing`.** It opens on `DocHero` (display
   title with air above it, deck, `Get started` then `CopyPromptButton` — the dark "Copy prompt"
   chip carrying the Claude, ChatGPT, Gemini and Cursor marks — and a note), then the first section
   opens on `DocAgentCard` ("Your AI agent, fluent in Azion" with the inline Copy prompt; "Prefer the

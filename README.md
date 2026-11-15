@@ -42,7 +42,7 @@ Pick the path by what you are about to do.
    `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state). It copies the
    reviewed SFC into your views, checks its imports against the installed version, records it in
    `webkit.blocks.json` and prints the route to add. Change only the content. Do not build the
-   screen from scratch. (The MCP gives an agent the same blocks: `search_blocks`, `get_block`.) Blocks are grouped by task (`platform/<auth|account|create|view|detail|edit|delete|settings|states|dashboard>/…`),
+   screen from scratch. (The MCP gives an agent the same blocks: `search_blocks`, `get_block`.) Blocks are grouped by job (`<account|ai|auth|create|dashboard|detail|edit|settings|state|view|shell|top-bar>/…`),
    one per job with its states as variants; an id from before v6 still resolves, with a `note`
    naming the new one.
 3. A single piece: `suggest_component`, then `get_component`.

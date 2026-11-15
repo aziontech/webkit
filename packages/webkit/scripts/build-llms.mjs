@@ -542,7 +542,7 @@ function blockPage(catalog, id, { full = true } = {}) {
     out.push(`> ${summary.replace(/\n+/g, ' ')}`, '')
   }
   const facts = [
-    `Surface: ${p.surface ?? 'product'}`,
+    `Surface: ${p.surface ?? 'app'}`,
     `Source: \`${p.source}\` in \`@aziontech/webkit\``,
     `MCP: \`get_block("${id}")\``
   ]

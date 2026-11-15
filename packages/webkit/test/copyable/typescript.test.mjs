@@ -21,17 +21,17 @@ const require = createRequire(import.meta.url)
 const TYPESCRIPT_FOLDERS = [
   'blocks/top-bars',
   'blocks/shells',
-  'blocks/platform/account',
-  'blocks/platform/ai',
-  'blocks/platform/auth',
-  'blocks/platform/create',
-  'blocks/platform/dashboard',
-  'blocks/platform/delete',
-  'blocks/platform/detail',
-  'blocks/platform/edit',
-  'blocks/platform/settings',
-  'blocks/platform/states',
-  'blocks/platform/view'
+  'blocks/account',
+  'blocks/ai',
+  'blocks/auth/sign-in',
+  'blocks/create',
+  'blocks/dashboard',
+  'blocks/edit',
+  'blocks/detail',
+  'blocks/edit',
+  'blocks/settings',
+  'blocks/state',
+  'blocks/view'
 ]
 
 // Type errors that come from a component's own typings, not from the copied file: { id, pattern }.

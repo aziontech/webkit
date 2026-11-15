@@ -87,7 +87,7 @@ test('a component page carries the API, guidance, accessibility and code', () =>
 })
 
 test('a block page carries guidelines, variants and the primary SFC', () => {
-  const page = files['blocks/platform/auth.md']
+  const page = files['blocks/auth/sign-in.md']
   assert.match(page, /## When to use/)
   assert.match(page, /## Variants/)
   assert.match(page, /## Code \(`Login`\)\n\n```vue\n<script setup( lang="ts")?>/)
@@ -121,12 +121,12 @@ test('llms-full.txt cuts repeats and detail, the per-page files keep them', () =
   assert.ok((files[multi].match(/```vue\n/g) || []).length > 1, multi)
   assert.equal((entry(multi).match(/```vue\n/g) || []).length, 1, multi)
 
-  const auth = entry('blocks/platform/auth.md')
-  assert.match(files['blocks/platform/auth.md'], /^### A\. Signed-out bar/m)
+  const auth = entry('blocks/auth/sign-in.md')
+  assert.match(files['blocks/auth/sign-in.md'], /^### A\. Signed-out bar/m)
   assert.match(auth, /^- A\. Signed-out bar — `GlobalHeader` \(required\)$/m)
   assert.doesNotMatch(auth, /^### /m)
   assert.doesNotMatch(auth, /```vue/)
-  assert.match(files['blocks/platform/auth.md'], /## Code \(`Login`\)/)
+  assert.match(files['blocks/auth/sign-in.md'], /## Code \(`Login`\)/)
 
   for (const m of full.matchAll(/\]\(([^)\s]+\.(?:md|json))\)/g)) {
     if (/^https?:/.test(m[1])) continue

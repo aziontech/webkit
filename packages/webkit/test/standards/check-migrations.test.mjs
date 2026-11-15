@@ -29,10 +29,10 @@ test('apiFromCatalog keeps export ids, block ids and component props', () => {
       button: { kind: 'component', props: [{ name: 'kind', type: "'primary' | 'danger'" }] },
       'assets/logo.svg': { kind: 'asset' }
     },
-    blocks: { 'platform/auth': {} }
+    blocks: { 'auth/sign-in': {} }
   })
   assert.deepEqual(out.exports, ['assets/logo.svg', 'button'])
-  assert.deepEqual(out.blocks, ['platform/auth'])
+  assert.deepEqual(out.patterns, ['auth/sign-in'])
   assert.deepEqual(out.props, { button: { kind: ['danger', 'primary'] } })
 })
 

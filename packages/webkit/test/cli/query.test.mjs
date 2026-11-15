@@ -9,7 +9,7 @@ test('search returns blocks, components and examples', () => {
     const r = cliJson(dir, 'search', 'delete', 'confirmation')
     assert.equal(r.code, 0)
     assert.equal(r.json.query, 'delete confirmation')
-    assert.equal(r.json.blocks[0].id, 'platform/delete/delete-with-confirmation')
+    assert.equal(r.json.blocks[0].id, 'edit/delete-dialog')
     assert.ok(r.json.components.some((c) => c.name === 'confirm-dialog'))
     const text = cli(dir, 'search', 'button')
     assert.match(text.stdout, /Components \(\d+\)\n {2}button /)
@@ -29,12 +29,9 @@ test('view shows a component API with an example, and a block with guidelines an
     const text = cli(dir, 'view', 'button')
     assert.match(text.stdout, /import Button from '@aziontech\/webkit\/button'/)
 
-    const block = cli(dir, 'view', 'platform/create/create-hub', '--variant', 'Connected')
+    const block = cli(dir, 'view', 'create/create-hub', '--variant', 'Connected')
     assert.equal(block.code, 0, block.stderr)
-    assert.match(
-      block.stdout,
-      /npx @aziontech\/webkit add platform\/create\/create-hub --variant Connected/
-    )
+    assert.match(block.stdout, /npx @aziontech\/webkit add create\/create-hub --variant Connected/)
     assert.match(block.stdout, /--- guidelines ---/)
     assert.match(block.stdout, /--- Connected\.vue ---\n<script setup/)
 

@@ -89,7 +89,7 @@ test('an exact block id or name ranks first', () => {
   for (const id of Object.keys(catalog.blocks)) {
     assert.equal(searchBlocks(catalog, id).matches[0].id, id, id)
   }
-  assert.equal(searchBlocks(catalog, 'TableView').matches[0].id, 'platform/view/table-view')
+  assert.equal(searchBlocks(catalog, 'TableView').matches[0].id, 'view/table-view')
 })
 
 test('the surface filter keeps only blocks and components of that surface', () => {
@@ -97,11 +97,11 @@ test('the surface filter keeps only blocks and components of that surface', () =
   assert.equal(docs.surface, 'docs')
   assert.ok(docs.matches.length > 0)
   assert.ok(docs.matches.every((m) => m.surface === 'docs'))
-  const marketing = searchComponents(catalog, 'card', { surface: 'marketing' })
+  const marketing = searchComponents(catalog, 'card', { surface: 'site' })
   assert.ok(marketing.matches.length > 0)
-  assert.ok(marketing.matches.every((m) => m.surface === 'marketing'))
-  const product = suggestComponent(catalog, 'login page', { surface: 'product' })
-  assert.equal(product.block.id, 'platform/auth')
+  assert.ok(marketing.matches.every((m) => m.surface === 'site'))
+  const product = suggestComponent(catalog, 'login page', { surface: 'app' })
+  assert.equal(product.pattern.id, 'auth/sign-in')
 })
 
 test('a translated component name answers with the component, not a block', () => {

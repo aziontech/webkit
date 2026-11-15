@@ -32,7 +32,7 @@ committed by hand. This skill is that end-to-end flow.
 ## Inputs
 
 - **Branch or PR** — a branch name, or a PR number/URL (`gh pr view <n> --json headRefName`).
-- **Grep (optional)** — a Playwright title pattern (`example table`, `block platform/ai`,
+- **Grep (optional)** — a Playwright title pattern (`example table`, `block ai`,
   `demo resources`, `geometry`) to regenerate only part of the suite. Empty = the whole suite.
 
 ## Workflow
@@ -84,7 +84,7 @@ Added (2)
 - apps/visual/baselines/examples/date-picker/default--light-1280.png
 - apps/visual/baselines/examples/date-picker/default--dark-1280.png
 Modified (1)
-- apps/visual/baselines/blocks/platform/auth/login--dark-1280.png
+- apps/visual/baselines/blocks/auth/sign-in/login--dark-1280.png
 Removed (0)
 
 Why each change: <one line per group, tied to the branch's scope>

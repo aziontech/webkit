@@ -1,6 +1,6 @@
 ---
 name: webkit-navigation
-description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `top-bars/creation-bar` block every platform/create block carries) heads create flows (`platform/create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: one owner per level (rail, PageTabs, at most one local navigation — the `platform/detail/sectioned-resource` block, only past 7 sibling pages), a destination offered once per screen (no in-page `SidebarMenu` repeating rail rows), no rail row that routes into a resource, and active rows that agree with the route. Fixes where drawers sit in that path: a drawer opens only over the screen that owns its item (a tab of a resource), never as the first surface of a product or resource — Configure, Settings and Edit navigate to the resource's page — and the stack is one `large` drawer plus at most one `medium` nested drawer, never a third.
+description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one GlobalHeader with back + brand + breadcrumb + avatar — the `top-bar/creation-bar` block every create block carries) heads create flows (`create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE GlobalHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: one owner per level (rail, PageTabs, at most one local navigation — the `detail/sectioned-resource` block, only past 7 sibling pages), a destination offered once per screen (no in-page `SidebarMenu` repeating rail rows), no rail row that routes into a resource, and active rows that agree with the route. Fixes where drawers sit in that path: a drawer opens only over the screen that owns its item (a tab of a resource), never as the first surface of a product or resource — Configure, Settings and Edit navigate to the resource's page — and the stack is one `large` drawer plus at most one `medium` nested drawer, never a third.
 status: active
 last_updated: 2026-11-15
 scope: general
@@ -49,12 +49,12 @@ every webkit primitive the same way:
 (`@aziontech/webkit/console-layout`), plus `useConsoleLayout` (`@aziontech/webkit/use-console-layout`)
 for a page that opens its search palette. It already composes `AppLayout`, `Sidebar`, `SidebarMenu`,
 `GlobalHeader`, `Breadcrumb`, `SearchTrigger` and `Command`, so you never assemble those into a shell
-of your own. Start it from the `shells/console` block (`npx @aziontech/webkit add shells/console`, or
+of your own. Start it from the `shell/console` block (`npx @aziontech/webkit add shell/console`, or
 `get_block`): the block is the `App.vue`, with the real console navigation.
 
-**The focused creation shell is a block, not a component:** `top-bars/creation-bar`
-(`npx @aziontech/webkit view top-bars/creation-bar`), built from `global-header`, `icon-button`,
-`brand`, `breadcrumb` and `avatar`. Every `platform/create/*` block already renders it above its own
+**The focused creation shell is a block, not a component:** `top-bar/creation-bar`
+(`npx @aziontech/webkit view top-bar/creation-bar`), built from `global-header`, `icon-button`,
+`brand`, `breadcrumb` and `avatar`. Every `create/*` block already renders it above its own
 `<main>`.
 
 The page bodies use `page-header`, `page-tabs`, `tabs`, `card`, `table` — all resolved the same way.
@@ -67,14 +67,14 @@ A page picks **exactly one**. The choice is not stylistic — it follows from wh
 
 |                      | **Persistent console shell**                                                                       | **Focused creation shell**                                                                                 |
 | -------------------- | -------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| What it is           | `ConsoleLayout`, composed **once** in `App.vue` around `RouterView`                                | The `top-bars/creation-bar` bar: one `GlobalHeader` (back + brand + breadcrumb + avatar), no rail        |
+| What it is           | `ConsoleLayout`, composed **once** in `App.vue` around `RouterView`                                | The `top-bar/creation-bar` bar: one `GlobalHeader` (back + brand + breadcrumb + avatar), no rail        |
 | Use for              | Hubs, lists, dashboards, settings — anywhere the user _browses_ and moves laterally                | Create / import / deploy a template / wizard — a single task with a start and an end                       |
 | Rail                 | **Yes** — the layout's navigation rail, built from your `navigation` data                          | **No** — removed so the task is the only focus                                                             |
 | Header               | The layout's: `breadcrumbs`, `SearchTrigger` (⌘K palette), your `actions` slot, the account avatar | `GlobalHeader`: back button + Azion brand + breadcrumb + account avatar                                    |
 | Way out              | Lateral — pick any other module from the rail or the ⌘K palette                                    | Linear — the **back** button (and breadcrumb) returns to where the flow started                            |
 | Signed-in user       | The rail footer (account + `account-menu`) **and** the header avatar, both from `account`          | Header avatar (end of the bar)                                                                             |
 | Where the page lives | In the layout's default slot: the page is **only its body** (no `<main>`, no chrome)               | A route rendered **outside** `ConsoleLayout`; the flow is a whole screen and owns its bar and its `<main>` |
-| Typical pages        | dashboards, list / index pages, settings hubs, resource-detail pages                               | create / edit forms, multi-step wizards, deploy / publish flows (`platform/create/*`)                      |
+| Typical pages        | dashboards, list / index pages, settings hubs, resource-detail pages                               | create / edit forms, multi-step wizards, deploy / publish flows (`create/*`)                      |
 
 ### Shell 1 — persistent console: `ConsoleLayout`
 
@@ -273,18 +273,18 @@ do compose yourself follows rule `webkit-header-search` (lint `webkit/require-he
   says _where you are_ once you are below a module; the `PageHeader` is the page's own title +
   description + actions.
 
-### Shell 2 — focused creation: the `top-bars/creation-bar` bar
+### Shell 2 — focused creation: the `top-bar/creation-bar` bar
 
 For a **single task** — create a resource, import, deploy a template, a wizard step. Editing an existing resource and watching its deploy stay inside `ConsoleLayout` as page bodies. The rail is gone so nothing competes with
 the form. The only chrome is one `GlobalHeader`: a **back** button, the Azion brand, the flow
 breadcrumb and the account avatar.
 
-There is no layout component for it today. It is the `top-bars/creation-bar` block, and every
-`platform/create/*` block (`single-page-create`, `multipage-create`, `create-hub`,
+There is no layout component for it today. It is the `top-bar/creation-bar` block, and every
+`create/*` block (`create-page`, `create-wizard`, `create-hub`,
 `deploy-template`) already renders that bar above its own `<main>`. Route these flows
 **outside** `ConsoleLayout` (`meta: { shell: 'focused' }` in the `App.vue` above), so the rail never
 renders: a focused flow is a whole screen, the one kind of page that owns its header and its `<main>`.
-Signed-out screens (`platform/auth`, headed by `top-bars/auth-bar`) are routed outside the layout
+Signed-out screens (`auth/sign-in`, headed by `top-bar/auth-bar`) are routed outside the layout
 the same way.
 
 ```ts
@@ -300,7 +300,7 @@ const routes = [
 ```
 
 When several flows share the bar, lift it once into your own shell, copied from the block
-(`npx @aziontech/webkit add top-bars/creation-bar`):
+(`npx @aziontech/webkit add top-bar/creation-bar`):
 
 ```vue
 <!-- components/CreationShell.vue — the creation-header block, lifted once for
@@ -401,7 +401,7 @@ A create page uses **your** shell and wires the exit:
     account="jane.doe@example.com"
     @back="cancel"
   >
-    <!-- the focused task: the body of a platform/create/* block -->
+    <!-- the focused task: the body of a create/* block -->
   </CreationShell>
 </template>
 ```
@@ -533,7 +533,7 @@ narrow the list and the table they narrow.
   already inside the module, so it carries only the action that level can perform; reference material
   a band needs is a `documentation` link on that band's own section heading instead.
 - The full list page — `useCollection`, the property filter, the preferences, the empty and no-match
-  states — is `/webkit-lists` and the `platform/view/table-view` block.
+  states — is `/webkit-lists` and the `view/table-view` block.
 
 ## Second-level navigation — tabs, and where the primary button goes
 
@@ -645,7 +645,7 @@ is not a level; it names where the reader is (below).
 | ----- | --------------------------------------------------------------- | ------------------------------------------------ |
 | 1     | the rail: `ConsoleLayout` `navigation`, its drill levels too    | modules and first-level pages                    |
 | 2     | `PageTabs` of a resource or of a split module                   | the pages of that resource or module             |
-| 3     | the `platform/detail/sectioned-resource` block, in one tab body | more than 7 sibling pages of that tab, in groups |
+| 3     | the `detail/sectioned-resource` block, in one tab body | more than 7 sibling pages of that tab, in groups |
 
 1. **One owner per level.** At most one control per level on a screen: the rail, one `PageTabs`, and
    at most one local navigation inside the active tab.
@@ -659,7 +659,7 @@ is not a level; it names where the reader is (below).
    a shortcut opens the resource list or the resource itself.
 4. **Local navigation is a block, not a free `SidebarMenu`.** Only when a tab holds more than 7 sibling
    pages does its body carry one local navigation, and that is the
-   `platform/detail/sectioned-resource` block, allowed only when rules 2 and 3 hold. Seven or fewer
+   `detail/sectioned-resource` block, allowed only when rules 2 and 3 hold. Seven or fewer
    siblings are tabs, a `ToggleGroup` or sections of one page.
 5. **Active states agree with the route.** Each level marks exactly one row `aria-current="page"`,
    derived from the route, and the marked rows of all levels describe the same place. A level whose
@@ -675,7 +675,7 @@ column of the tab with 16 rows, the same pages again. The rail rows pointed at t
 the rail marked "Server groups" while the page showed "Access rules" of another policy; three columns
 of navigation left the table about 45% of the width, cut at the right edge at 1440 px. The fix: drop
 the rail rows (the rail opens Policies), keep the pages inside the policy, and render them through the
-`platform/detail/sectioned-resource` block in the tab.
+`detail/sectioned-resource` block in the tab.
 
 Rule `webkit-navigation-levels` states the invariant. The lint `webkit/no-page-navigation-menu` warns
 on a `SidebarMenu` in a page body, `ConsoleLayout` warns in development when an in-page `SidebarMenu` repeats a rail
@@ -737,7 +737,7 @@ certificate, the drawer closes, and the new certificate is already selected in t
 workload form is exactly as they left it.
 
 - **Every field that points at another resource offers the create.** A `Select` shows a
-  `Create <noun>` option in its `#footer`; a `platform/create/resource-picker` band shows it as its
+  `Create <noun>` option in its `#footer`; a `create/resource-picker` band shows it as its
   New mode, and the New mode opens the drawer when the resource needs more than a name. With nothing
   to pick yet, the field still renders and says so: `No certificates yet.` plus the create option.
 - **It applies to first-level resources too.** A certificate, a function, a firewall or an
@@ -778,7 +778,7 @@ certificate` on the Certificates list). When another form needs it, the same for
 | Nested drawer (at most one) | `medium` | 672 px    | the create of one resource or item the parent's field needs |
 | —                           | `small`  | 384 px    | not part of this stack: a narrow panel that holds no form   |
 
-**One drawer is not an item drawer: the AI assistant.** The `platform/ai/ai-chat-drawer` block opens
+**One drawer is not an item drawer: the AI assistant.** The `ai/ai-chat-drawer` block opens
 a conversation beside the page, not an item of it, so it stays `medium`: a chat reads as a narrow
 column, and the page it talks about must stay visible. It never opens a nested drawer.
 
@@ -788,7 +788,7 @@ column, and the page it talks about must stay visible. It never opens a nested d
   room, so one item never reflows between drawers of different widths.
 - **Depth two, never three.** The nested drawer is the last layer. A third layer means the flow is a
   page: open the create page in a new tab (the drawers keep their typing) or bind the field with the
-  `platform/create/resource-picker`. A nested drawer may create any missing resource whose create
+  `create/resource-picker`. A nested drawer may create any missing resource whose create
   fits in one drawer, first-level ones included (above).
 - **The child is one step narrower than the parent.** At `medium` over `large`, 352 px of the parent
   stays visible at its start edge, so the reader sees which form the child returns to. Never stack two
@@ -970,7 +970,7 @@ With Vue Router, keep the rows real links and let the router do the navigation:
 - **A tabbed page renders no `PageHeader`.** The tab bar is navigation; each tab's heading lives
   inside that tab's view. The active tab travels in `?tab=`.
 - **One navigation per level.** Rail, `PageTabs`, at most one local navigation (the
-  `platform/detail/sectioned-resource` block); a destination appears once per screen, and the rail
+  `detail/sectioned-resource` block); a destination appears once per screen, and the rail
   never routes into a resource (rule `webkit-navigation-levels`).
 - **A drawer is never the way in.** Opening, configuring or editing a product or a resource navigates
   to its page; a drawer opens only over the screen that owns its item (a tab of the resource, the list
@@ -1016,7 +1016,7 @@ For `/webkit-navigation <file>`, list gaps. Each:
 
 ✗ PolicyPage.vue:22  in-page SidebarMenu repeats 12 rail destinations
   rule: A destination appears once per screen; local navigation is the sectioned-resource block.
-  fix: move the pages into the resource (block platform/detail/sectioned-resource) and drop the rail rows.
+  fix: move the pages into the resource (block detail/sectioned-resource) and drop the rail rows.
 
 ✗ navigation.ts:31  rail row /policy-pages/... routes into a resource
   rule: The rail never routes into a resource — those pages are reached through the resource.
@@ -1036,7 +1036,7 @@ For `/webkit-navigation <file>`, list gaps. Each:
 
 ✗ OriginDrawer.vue:120  a third Drawer opens from the nested one
   rule: Depth two, never three; a third layer means the flow is a page.
-  fix: open the create page in a new tab, or bind the field with platform/create/resource-picker.
+  fix: open the create page in a new tab, or bind the field with create/resource-picker.
 ```
 
 End with: `navigation sound` or `N gaps — fix before polish`.
@@ -1046,10 +1046,10 @@ End with: `navigation sound` or `N gaps — fix before polish`.
 - **Persistent console shell** — `ConsoleLayout` (`@aziontech/webkit/console-layout`): the rail, the
   header, the ⌘K palette, the account and the single `<main>`, composed once in `App.vue`; its spec
   lists every prop, slot and event. `useConsoleLayout` (`@aziontech/webkit/use-console-layout`) opens
-  its palette from a page. Start from the `shells/console` block (states `ListPage`, `DetailPage`,
+  its palette from a page. Start from the `shell/console` block (states `ListPage`, `DetailPage`,
   `Notifications`, `AccountSwitch`).
-- **Focused creation shell** — the `top-bars/creation-bar` block (one `GlobalHeader` with back,
-  brand, flow breadcrumb and avatar, no rail), carried by every `platform/create/*` block; lift it into
+- **Focused creation shell** — the `top-bar/creation-bar` block (one `GlobalHeader` with back,
+  brand, flow breadcrumb and avatar, no rail), carried by every `create/*` block; lift it into
   your own `CreationShell` when several flows share it.
 - **The other app layouts** — `SiteLayout` (`@aziontech/webkit/site-layout`) for the marketing site and
   `DocLayout` (`@aziontech/webkit/doc-layout`) for documentation: same story, composed once around
@@ -1086,7 +1086,7 @@ End with: `navigation sound` or `N gaps — fix before polish`.
 - [ ] The breadcrumb matches the level (no trail at first level; `module › resource name` at second
       level), every non-last crumb links, and no tab appears in the trail.
 - [ ] One control per navigation level (rail, `PageTabs`, at most one local navigation from the
-      `platform/detail/sectioned-resource` block, only past 7 siblings); no route appears twice on the
+      `detail/sectioned-resource` block, only past 7 siblings); no route appears twice on the
       screen, and each level's `aria-current="page"` row agrees with the route.
 - [ ] No rail row routes into a resource (a default policy, zone or application); those pages are
       reached through the resource's list row, tabs or local navigation.

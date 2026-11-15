@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: 2879f6807f23d884d255ab1add55d8b8d6f95b7315696691c3e1a9be9fc3ec61
+checksum: cc3f8c6da9bd150b54fc459605d32a39067490d10c725669438426616bae24fc
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -21,7 +21,7 @@ A collection shown as cards, after Cloudscape's cards: one card per item, named 
 ## When to use
 
 - Items people recognise by a few fields or a picture rather than compare column by column (applications, templates, environments).
-- The card form of a list page (`platform/view/card-view`), filtered and paged by `useCollection`.
+- The card form of a list page (`view/card-view`), filtered and paged by `useCollection`.
 
 ## When NOT to use
 

@@ -5,7 +5,7 @@ structure: composition
 status: implemented
 spec_version: 10
 template: 2
-checksum: 6865c3dc3fc1f30bc1a66cc83a2cceff31ce761eaac83eb7fd0e532fc0913a32
+checksum: 0ecba612f1ac86eb28956d5c6e6e370cc6c08860fb8cd8ac54ce742c05f8d8d9
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -34,7 +34,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - `Sidebar`, `SidebarMenu` — the rail and the data-driven navigation tree (`navigation` is mapped onto `SidebarMenu` groups).
 - `SearchTrigger`, `Command` — the header search and the palette it opens; the palette lists every navigation page.
 - `Breadcrumb` — the header trail on wide layouts (`breadcrumbs`).
-- `shells/console` — the block that shows this layout with sample console navigation.
+- `shell/console` — the block that shows this layout with sample console navigation.
 
 ## Best practices
 
@@ -52,7 +52,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 - A page body that also renders on its own (a block preview, a docs example, a test) calls `useConsoleLayout({ optional: true })`, which returns `null` outside a layout, and guards the call (`layout?.openSearch()`). Never wrap `useConsoleLayout()` in `try` / `catch`.
 - The page entrance (`animate-page-enter`) plays on every route path change: the `<main>` is keyed on the path, so the page body remounts when the path changes and is kept when only the query or the hash changes. Keep state that must survive a path change (a list filter, a draft) in the route query or in the app's store, not in the page body; a `KeepAlive` belongs inside a page body (tabbed views), not around `RouterView`.
 - The page body renders no `<main>` of its own and no `AppLayout`: the layout owns the landmark. Frame the body with `layout-boundary` + `layout-column` for list and form pages, or flush (`PageTabs` first) for detail pages.
-- A destination appears once per screen (rule `webkit-navigation-levels`, rule 2): never render a `SidebarMenu` in the page body whose rows repeat the layout's navigation; local navigation inside a resource is the `platform/detail/sectioned-resource` block. In development builds the layout scans the `SidebarMenu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as a `navigation` row on screen (the top level, its inline children and the open drill level; a closed drill level is not on screen), it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`).
+- A destination appears once per screen (rule `webkit-navigation-levels`, rule 2): never render a `SidebarMenu` in the page body whose rows repeat the layout's navigation; local navigation inside a resource is the `detail/sectioned-resource` block. In development builds the layout scans the `SidebarMenu`s in its `<main>` after mount, on each route change and on page mutations, and when a row `href` has the same path (query and hash ignored) as a `navigation` row on screen (the top level, its inline children and the open drill level; a closed drill level is not on screen), it calls `console.warn` once per route with both labels and the route. Production builds drop the check (`import.meta.env.DEV`).
 
 ## Usage
 

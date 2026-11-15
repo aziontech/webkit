@@ -50,9 +50,9 @@ Unknown flags are rejected (so a typo'd `--dryrun` never becomes a real write ru
 
 ```bash
 npx @aziontech/webkit search delete confirmation          # blocks, components, examples
-npx @aziontech/webkit view platform/delete/delete-with-confirmation   # guidelines, variants, SFC
-npx @aziontech/webkit add platform/delete/delete-with-confirmation [--variant LabelledField]
-npx @aziontech/webkit diff delete-with-confirmation       # your copy vs the canonical block
+npx @aziontech/webkit view edit/delete-dialog   # guidelines, variants, SFC
+npx @aziontech/webkit add edit/delete-dialog [--variant SettingsRow]
+npx @aziontech/webkit diff delete-dialog       # your copy vs the canonical block
 ```
 
 - **`search <query>`** runs the MCP queries (`search_blocks`, `search_components`, plus the

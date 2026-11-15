@@ -780,44 +780,81 @@ you copied those blocks, copy them again or keep your version.
 
 ### Block ids
 
-Product blocks are grouped by task: `platform/auth`, `platform/account/*`, `platform/create/*`,
-`platform/view/*`, `platform/detail/*`, `platform/edit/*`, `platform/delete/*`,
-`platform/settings/*`, `platform/states/*` and `platform/dashboard/*`. Blocks that did the same job
-are one block whose states are variants: the drawer forms are `platform/create/create-in-drawer`,
-the save strategies are `platform/settings/settings-form`, the two details pages are
-`platform/detail/details-page`, the labelled delete dialog is a variant of
-`platform/delete/delete-with-confirmation`, the server rejection is a variant of
-`platform/states/form-validation` and the sectioned Import from Git form is a variant of
-`platform/create/deploy-template`.
+Blocks are grouped by job, one folder level under `blocks/`: `account/*`, `ai/*`, `auth/*`,
+`create/*`, `dashboard/*`, `detail/*`, `edit/*`, `settings/*`, `state/*`, `view/*`, `shell/*` and
+`top-bar/*`. There is no surface folder (`platform/`, `shells/`, `top-bars/` are gone): the surface
+is `block.json#surface` (`app`, `docs` or `site`), and the catalog and the MCP `surface` filter
+use the same words (`product` → `app`, `marketing` → `site`).
+
+Every 5.x id moved up one level (`platform/view/table-view` → `view/table-view`,
+`platform/states/*` → `state/*`, `shells/*` → `shell/*`, `top-bars/*` → `top-bar/*`). These were
+also renamed:
+
+| 5.x id                                     | 6.0 id                          |
+| ------------------------------------------ | ------------------------------- |
+| `platform/auth`                            | `auth/sign-in`                  |
+| `platform/account/build-deployment`        | `account/deployment-settings`   |
+| `platform/account/mfa-management`          | `account/mfa-settings`          |
+| `platform/account/manage-resources`        | `account/account-hierarchy`     |
+| `platform/account/tokens`                  | `account/personal-tokens`       |
+| `platform/create/create-in-drawer`         | `create/create-drawer`          |
+| `platform/create/multipage-create`         | `create/create-wizard`          |
+| `platform/create/single-page-create`       | `create/create-page`            |
+| `platform/dashboard/composition-dashboard` | `dashboard/breakdown-dashboard` |
+| `platform/delete/delete-with-confirmation` | `edit/delete-dialog`            |
+| `platform/detail/details-page`             | `detail/resource-detail`        |
+| `platform/detail/record-table`             | `detail/dns-zone-detail`        |
+| `platform/states/page-wires`               | `state/page-skeleton`           |
+| `platform/view/rules-list`                 | `view/rule-list`                |
+| `shells/documentation`                     | `shell/docs`                    |
+| `shells/website`                           | `shell/site`                    |
+
+Variant states use one word set, `loading`, `empty`, `error`, `success`, written
+`<subject>-<state>`: `Failed` → `Error`, `<Subject>Failed` → `<Subject>Error` (`LoadFailed` →
+`LoadError`, `SaveFailed` → `SaveError`, …), `FailedCompleteView` → `CompleteViewError`,
+`PartialFailure` → `PartialError`, `Succeeded` → `Success`, `LoadingRepositories` →
+`RepositoriesLoading`, `LoadingSettings` → `SettingsLoading`, query-editor's `EmptyDatabase` →
+`NoTables`, production-checklist's `Complete` → `Completed` and delete-dialog's `LabelledField` →
+`SettingsRow`. A `#variant` fragment and `add --variant` take the variant file name
+(`view/table-view#error`); the PascalCase name still works. Your `webkit.blocks.json` keeps the old
+ids: `add <old id>` resolves them with a note.
+
+Blocks that did the same job
+are one block whose states are variants: the drawer forms are `create/create-drawer`,
+the save strategies are `settings/settings-form`, the two details pages are
+`detail/resource-detail`, the labelled delete dialog is a variant of
+`edit/delete-dialog`, the server rejection is a variant of
+`state/form-validation` and the sectioned Import from Git form is a variant of
+`create/deploy-template`.
 
 One block per job (6.0):
 
-- Starting a project is one flow, `platform/create/create-hub` then
-  `platform/create/deploy-template`. `source-wizard` is removed: its Where it runs chooser and
+- Starting a project is one flow, `create/create-hub` then
+  `create/deploy-template`. `source-wizard` is removed: its Where it runs chooser and
   its integration install step are the deploy-template variants `WhereItRuns` and
-  `InstallIntegration`; single-page-create drops `ImportFromGit` and `ImportFromGitSubmitted`
+  `InstallIntegration`; create-page drops `ImportFromGit` and `ImportFromGitSubmitted`
   (deploy-template's `ImportFromGit`).
-- `platform/create/multipage-create` runs on `Wizard`; `provision-wizard` is its
+- `create/create-wizard` runs on `Wizard`; `provision-wizard` is its
   `CreateAndDeploy` variant. `onboarding-form` keeps its frame and uses `Wizard` for its steps.
 - `platform/account/profile` is the settings-form variants `Profile`, `ProfileLoading` and
-  `ProfileFailed`.
+  `ProfileError`.
 - `platform/states/form-error` is the form-validation variants `SectionRejected`,
   `SectionReloading` and `SectionReloaded`.
 - `platform/create/deployment-flow` is the deployment-logs variants `InCreateFlow` and
-  `InCreateFlowFailed`; details-page's `DeploymentDetail`, `DeploymentFailed` and
-  `DeploymentQueued` moved to `platform/detail/deployment-logs`, and its `Invocation` variant is
-  `platform/detail/invocations`. Every phased deploy log composes `LogView.Steps`.
-- `platform/view/marketplace` lists integrations only (its `Integrations` state is now the
-  default); templates live in `platform/view/template-browser`, and its `TemplatesNoMatch` and
+  `InCreateFlowError`; resource-detail's `DeploymentDetail`, `DeploymentError` and
+  `DeploymentQueued` moved to `detail/deployment-logs`, and its `Invocation` variant is
+  `detail/invocations`. Every phased deploy log composes `LogView.Steps`.
+- `view/marketplace` lists integrations only (its `Integrations` state is now the
+  default); templates live in `view/template-browser`, and its `TemplatesNoMatch` and
   `TemplatePage` variants are template-browser's `NoMatch` and deploy-template's `Form`.
 - `data-dashboard` is analytics-dashboard's `Usage` (its RealUser page is health-score-dashboard's
   `RealUser`); `activity-outcomes-dashboard` is security-dashboard's `ByActor`;
   `project-status-dashboard` and `funnel-cohort-dashboard` are removed (off-domain for the console).
 - `headers/site-header`, `headers/docs-header` and `headers/resource-header` are removed: SiteLayout,
-  DocLayout and ConsoleLayout already draw those bars (`shells/*`). The other two are renamed:
-  `headers/auth-header` → `top-bars/auth-bar`, `headers/creation-header` → `top-bars/creation-bar`.
-- `platform/edit/attribute-editor` → `platform/edit/variables` and `platform/edit/code-editor` →
-  `platform/edit/function-editor` (the names belonged to the components they compose).
+  DocLayout and ConsoleLayout already draw those bars (`shell/*`). The other two are renamed:
+  `headers/auth-header` → `top-bar/auth-bar`, `headers/creation-header` → `top-bar/creation-bar`.
+- `platform/edit/attribute-editor` → `edit/variables` and `platform/edit/code-editor` →
+  `edit/function-editor` (the names belonged to the components they compose).
 - `resource-picker`, `payment-method-card`, `get-started`, `production-checklist` and
   `attached-resources` carry `kind: "fragment"`: cards placed inside a page, not screens.
 
@@ -974,8 +1011,8 @@ split view or a card these change:
   rather than writing a raw `@min-[…]:`. Width utilities (`max-w-md`, `w-2xl`,
   `max-w-(--container-md)`) already read the theme values and do not change. In WebKit itself
   `Hero.Title` keeps its actions in a row from `@2xs`, the wide `Diagram` layout now starts at
-  `@5xl` and `CardList` shows four columns from `@6xl`; the `get-started` steps (`platform/detail/get-started`, the Overview of
-  `platform/detail/details-page`) sit side by side from `@4xl` (1024 px), so a 1280 px console
+  `@5xl` and `CardList` shows four columns from `@6xl`; the `get-started` steps (`detail/get-started`, the Overview of
+  `detail/resource-detail`) sit side by side from `@4xl` (1024 px), so a 1280 px console
   window stacks them.
 
 - **Stacked table (opt-in).** A data-driven `Table` keeps its horizontally scrolling grid at
@@ -1304,8 +1341,8 @@ in a `computed` and rewound the page in a `watch` becomes one call:
 - `Table` keeps its API. It gains `density`, `wrapLines`, `striped`, `virtual` and
   `estimateRowHeight` (all off by default), and in the stacked layout its select-all is a visible
   checkbox above the rows instead of a screen-reader-only header cell.
-- The `platform/view/table-view` block runs on `useCollection` with `PropertyFilter` and
-  `CollectionPreferences`; `platform/view/card-view` is new. Copy them again through the MCP
+- The `view/table-view` block runs on `useCollection` with `PropertyFilter` and
+  `CollectionPreferences`; `view/card-view` is new. Copy them again through the MCP
   (`get_block`) to pick the change up.
 
 ## 7. Unchanged

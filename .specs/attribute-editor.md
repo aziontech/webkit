@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 7
 template: 2
-checksum: b4037decfa5c031f811e9eaa5b26a5f04b40173eb4e698a8d4776843888d85ff
+checksum: 2724f911595842bf580e087d41f9471e532b12836307d2bbd79196cd0680cd1b
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -30,7 +30,7 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 - A fixed set of named settings on one resource → use `field` controls in a form.
 - Many records the user browses, filters and acts on → use `data-table` with row actions.
 - Many cells of many records edited in place, spreadsheet-style → use `data-grid`.
-- An ordered list of actions whose argument fields change per type → compose it by hand as in the behaviors of the `platform/edit/rule-builder` block.
+- An ordered list of actions whose argument fields change per type → compose it by hand as in the behaviors of the `edit/rule-builder` block.
 
 ## Related
 
@@ -39,7 +39,7 @@ An editable list of rows with the same fields, after Cloudscape's attribute edit
 - `input` — the default control of a cell; any control can replace it through `cell-<key>`.
 - `button`, `icon-button` — Add and Remove.
 - `separator` — the "or" between groups in grouped mode.
-- `platform/edit/rule-builder` (block) — its criteria are this component in grouped mode (AND rows inside a group, OR between groups), with a `Combobox` variable cell.
+- `edit/rule-builder` (block) — its criteria are this component in grouped mode (AND rows inside a group, OR between groups), with a `Combobox` variable cell.
 
 ## Best practices
 

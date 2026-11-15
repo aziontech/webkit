@@ -38,6 +38,7 @@ Do not re-add `@aziontech/theme/globals.css` to `setup.ts` without also wiring t
 ## Conventions
 
 - **Location:** `packages/webkit/src/components/<category>/<name>/<name>.test.ts` (sibling of the `.vue` / `index.ts`).
+- **Blocks:** `packages/webkit/src/test/blocks/<block-id>.test.ts`, named by the block id (`blocks/view/table-view.test.ts`); a suite over several blocks of one group is `src/test/blocks/<group>.test.ts`. A cross-cutting suite is `src/test/<concern>.test.ts` (`rtl`, `reflow`, `screen-reader`, `a11y-*`).
 - **Imports:** `describe`/`it`/`expect` from `vitest` (explicit — no `globals`); `render`/`fireEvent`/`screen` from `@testing-library/vue`; `userEvent` from `@testing-library/user-event` (or `vitest/browser`) for realistic keyboard/pointer; the example SFCs by relative import from `packages/webkit/examples/<name>/` (never from `apps/`); `expectNoA11yViolations` from the relative `test/axe`; the component via relative `./...`.
 - **Example import is a RELATIVE path**, never a vite alias — `validate-references.mjs` cannot resolve an alias and will block the write. If a component has no example that fits, test it directly with `render(Component, { props })`.
 - **Local runs** (when node_modules is symlinked into a worktree) set `PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false CI=` so pnpm's deps check doesn't abort against symlinks.

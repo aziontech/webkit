@@ -142,7 +142,7 @@ export function checkGuidelines(id, block) {
 }
 
 const TOAST_SOURCE = /^@aziontech\/webkit\/toast(?:-root)?$/
-const APP_ROOT_BLOCKS = /^shells\//
+const APP_ROOT_BLOCKS = /^shell\//
 
 function toastRegionNames(sfc) {
   const names = new Set(['Toaster'])
@@ -181,6 +181,6 @@ export function checkToastRegion(id, block) {
     .filter((v) => rendersToastRegion(v.sfc))
     .map(
       (v) =>
-        `blocks/${id} (${v.name}): renders a \`Toaster\` in a page body. Only the first Toaster to mount is active and it gives the role up when it unmounts, so a page's copy is inert or silences every toast once the user leaves. Call \`toast\` only; the app mounts the one region (ToastPlugin, or one Toaster at its root, as blocks/shells/console does).`
+        `blocks/${id} (${v.name}): renders a \`Toaster\` in a page body. Only the first Toaster to mount is active and it gives the role up when it unmounts, so a page's copy is inert or silences every toast once the user leaves. Call \`toast\` only; the app mounts the one region (ToastPlugin, or one Toaster at its root, as blocks/shell/console does).`
     )
 }

@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 5
 template: 2
-checksum: dba42b91b0e954b074b356d3e813889b1113f956a206dc0dfbfe20e0ae26e736
+checksum: 293d9633deab5cacf85c3b6886a43b5aba189fa320458e06b48ebba195a2160c
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -25,7 +25,7 @@ A form rendered from a JSON schema: each property of an object schema becomes a 
 
 ## When NOT to use
 
-- A form with a fixed, designed layout (settings sections, create pages) → compose `field`, `input`, `select` and `switch` by hand (`platform/edit/edit-resource`, `platform/create/single-page-create`).
+- A form with a fixed, designed layout (settings sections, create pages) → compose `field`, `input`, `select` and `switch` by hand (`edit/edit-resource`, `create/create-page`).
 - Rows of key/value pairs the user adds and removes → use `attribute-editor`.
 - Editing the schema itself, or raw JSON → use `code-editor`.
 - A single choice or value → use the control directly inside a `field`.

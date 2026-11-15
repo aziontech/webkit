@@ -8,7 +8,7 @@ the extra column squeezes the content.
 | ----- | ------------------------------------------------------------ | ------------------------------------------------ |
 | 1     | the rail: `ConsoleLayout` `navigation`, its drill levels too | modules and first-level pages                    |
 | 2     | `PageTabs` of a resource or of a split module                | the pages of that resource or module             |
-| 3     | the `platform/detail/sectioned-resource` block, in one tab   | more than 7 sibling pages of that tab, in groups |
+| 3     | the `detail/sectioned-resource` block, in one tab            | more than 7 sibling pages of that tab, in groups |
 
 The breadcrumb is not a level: it names where the reader is.
 
@@ -28,7 +28,7 @@ drawer (medium)`.
   of a zone, the settings of one application) are reached through that resource: its list row, its
   tabs, its local navigation.
 - Put 7 or fewer sibling pages on tabs, a `ToggleGroup` or sections of one page. Only past 7 does a
-  tab carry a local navigation, and only as the `platform/detail/sectioned-resource` block: a
+  tab carry a local navigation, and only as the `detail/sectioned-resource` block: a
   `--container-3xs` column that folds into a labelled `Select` below `@3xl` of the tab body.
 - Derive every active row from the route. Each level marks exactly one row `aria-current="page"`,
   the marked rows of all levels describe the same place, and a level whose rows do not hold the
@@ -37,7 +37,7 @@ drawer (medium)`.
   resource (Configure, Settings, Edit), on the tab that holds it (`?tab=settings`).
 - Open a drawer only over the screen that owns its item: a tab of the resource, or the list that
   holds it. The first drawer is `size="large"`; a nested drawer is `size="medium"`, and there is at
-  most one. The AI assistant drawer (`platform/ai/ai-chat-drawer`) is the one first drawer that
+  most one. The AI assistant drawer (`ai/ai-chat-drawer`) is the one first drawer that
   stays `medium`.
 - Offer `Create <noun>` on every field that needs a resource that may not exist yet. It opens a
   drawer with that resource's create form over the form that needs it (`large` from a page, `medium`
@@ -112,7 +112,7 @@ const navigation = [
 - `webkit/no-page-navigation-menu` (ESLint, warning) flags a `SidebarMenu` rendered in a page body (under
   `views/` or `pages/`, or with a `PageHeader` / `PageTabs` import) outside a navigation host
   (`Sidebar`, `ConsoleLayout`, `DocLayout`, `AppLayout`), unless the file is the
-  `platform/detail/sectioned-resource` block or carries `/* webkit-local-navigation */`. It is
+  `detail/sectioned-resource` block or carries `/* webkit-local-navigation */`. It is
   static and approximate, so it warns.
 - `ConsoleLayout` warns in development when a `SidebarMenu` in its default slot has a row whose `href`
   matches a rail row, naming both labels and the route.

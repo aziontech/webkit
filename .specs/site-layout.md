@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 3
 template: 2
-checksum: 41f308b8645ee68e818ca87b0e56b8633d6cfffff9c23b14c77e142daf533350
+checksum: 597f2de08677978ed8a3e05d84b10ca75db316d6dfb8afc81ba0a5f68fdc9620
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -33,7 +33,7 @@ The marketing site's chrome, composed once in the app: `SiteNav` on top, the pag
 - `SiteFooter` — the footer; `footer` is bound onto it (`kind="site"` closes a framed page).
 - `SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
 - `Command` — the search palette the bar's search button opens.
-- `shells/website` — the block that shows this layout with the azion.com navigation and footer.
+- `shell/site` — the block that shows this layout with the azion.com navigation and footer.
 
 ## Best practices
 
