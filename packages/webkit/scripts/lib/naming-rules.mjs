@@ -1064,8 +1064,13 @@ export function checkI18n(rel, text, ctx) {
   return out
 }
 
-export function checkExampleIndex(rel, text) {
+const EXAMPLE_PROP_WORDS = { type: 'type', types: 'type', levels: 'level' }
+
+export function checkExampleIndex(rel, text, ctx = {}) {
   const out = []
+  const comp = rel.split('/').slice(-2)[0]
+  const ownsProp = (word) =>
+    Boolean(EXAMPLE_PROP_WORDS[word] && ctx.specProps?.[comp]?.has(EXAMPLE_PROP_WORDS[word]))
   let json
   try {
     json = JSON.parse(text)
@@ -1088,7 +1093,7 @@ export function checkExampleIndex(rel, text) {
       out.push(v('example-file', rel, 1, `example "${file}" is not kebab-case (${RULE_DOC}).`))
       continue
     }
-    const bad = stem.split('-').find((w) => Object.hasOwn(EXAMPLE_RENAMES, w))
+    const bad = stem.split('-').find((w) => Object.hasOwn(EXAMPLE_RENAMES, w) && !ownsProp(w))
     if (bad && !(bad === 'read' && !stem.includes('read-only')))
       out.push(
         v(
@@ -1626,7 +1631,7 @@ export function checkFile(rel, text, ctx = {}) {
   if (rel === 'packages/webkit/src/cli/cli.js') out.push(...checkCliCommands(rel, text))
   if (rel === 'packages/webkit/scripts/build-catalog.mjs') out.push(...checkCatalogWords(rel, text))
   if (/^packages\/webkit\/examples\/[^/]+\/examples\.json$/.test(rel))
-    out.push(...checkExampleIndex(rel, text))
+    out.push(...checkExampleIndex(rel, text, ctx))
   if (/^packages\/webkit\/blocks\/.+\/block\.json$/.test(rel))
     out.push(...checkBlockFile(rel, text))
   if (/^packages\/webkit\/src\/i18n\/messages\/[^/]+\.ts$/.test(rel))
@@ -1757,6 +1762,18 @@ export function loadContext(root) {
   const retired = retiredNames(
     readJson(join(root, 'packages/webkit/src/cli/migrations/v6.json')) || {}
   )
+  const specProps = {}
+  const specDir = join(root, '.specs')
+  if (existsSync(specDir)) {
+    for (const f of readdirSync(specDir)) {
+      if (!f.endsWith('.md')) continue
+      const spec = readFileSync(join(specDir, f), 'utf8')
+      const props = new Set()
+      if (/`type\??`|`type\?:/.test(spec)) props.add('type')
+      if (/`level\??`|`level\?:/.test(spec)) props.add('level')
+      if (props.size) specProps[f.replace(/\.md$/, '')] = props
+    }
+  }
   const parts = []
   const componentNames = new Set()
   const marketingPrimitives = new Set()
@@ -1785,7 +1802,8 @@ export function loadContext(root) {
     parts,
     componentNames,
     marketingPrimitives,
-    tokenKeys
+    tokenKeys,
+    specProps
   }
 }
 

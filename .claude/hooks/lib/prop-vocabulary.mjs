@@ -14,8 +14,16 @@ export const CONCEPTS = [
   {
     concept: 'visual variant (the look); a sort of part is `type`',
     canonical: 'variant',
-    aliases: ['appearance', 'intent', 'headerVariant', 'mediaKind', 'cardStyle'],
-    staged: ['kind', 'look', 'styleVariant']
+    aliases: [
+      'appearance',
+      'intent',
+      'headerVariant',
+      'mediaKind',
+      'cardStyle',
+      'kind',
+      'look',
+      'styleVariant'
+    ]
   },
   {
     concept: 'severity (colour meaning: neutral | info | success | warning | danger)',
@@ -235,10 +243,7 @@ export const VALUES = {
     waiting: 'pending',
     'in-progress': 'running',
     progress: 'running'
-  }
-}
-
-export const STAGED_VALUES = {
+  },
   variant: {
     outlined: 'outline',
     transparent: 'ghost',
@@ -247,6 +252,8 @@ export const STAGED_VALUES = {
     error: 'danger'
   }
 }
+
+export const STAGED_VALUES = {}
 
 const POSITION = {
   left: 'leading',

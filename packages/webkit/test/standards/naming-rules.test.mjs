@@ -164,7 +164,7 @@ const FIXTURES = {
   ],
   'type-name': [
     `${C}/action/button/button.vue`,
-    sfc("export type ButtonKind = 'primary'\nexport type Props = {}\nexport type Agent = 'x'"),
+    sfc("export type ButtonVariant = 'primary'\nexport type Props = {}\nexport type Agent = 'x'"),
     sfc(
       "export type ButtonVariant = 'primary'\nexport type ButtonType = 'submit'\nexport interface ButtonProps {}"
     )
@@ -368,15 +368,20 @@ test('the enforced stage blocks the finished vocabulary; staged entries are repo
   ]
   assert.deepEqual(
     checkPropVocabulary(props).map((x) => x.prop),
-    ['current']
+    ['kind', 'current']
   )
   const all = checkPropVocabulary(props, { stage: 'all' })
   assert.deepEqual(
     all.map((x) => [x.prop, x.staged]),
     [
-      ['kind', true],
+      ['kind', false],
       ['current', false]
     ]
+  )
+  assert.equal(
+    checkPropVocabulary([{ name: 'variant', type: "'primary' | 'outlined' | 'transparent'" }])[0]
+      ?.rule,
+    'prop-value'
   )
   assert.equal(checkPropVocabulary([{ name: 'appearance' }]).length, 1)
   assert.equal(checkPropVocabulary([{ name: 'severity', type: "'error'" }]).length, 1)
