@@ -120,10 +120,6 @@
     tickerLabel?: string
     /** Registry names of the client marks, in order; the ticker renders only when there are marks. */
     tickerMarks?: string[]
-    /** @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. */
-    carouselLabel?: string
-    /** @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. */
-    carouselMarks?: string[]
     /** The site is sending the values: the button shows its loading state and a submit is ignored. */
     loading?: boolean
     /** The site sent the values: the form gives way to `messages.success`. */
@@ -148,8 +144,6 @@
     submitLabel: '',
     tickerLabel: '',
     tickerMarks: () => [],
-    carouselLabel: '',
-    carouselMarks: () => [],
     loading: false,
     submitted: false,
     error: false
@@ -246,8 +240,6 @@
     }
     emit('submit', event as SubmitEvent, collected)
   }
-
-  const marks = computed(() => (props.tickerMarks.length ? props.tickerMarks : props.carouselMarks))
 </script>
 
 <template>
@@ -267,9 +259,9 @@
       align="center"
       :padded="false"
       :aria-label="title"
-      :ticker="marks.length > 0"
-      :ticker-label="tickerLabel || carouselLabel"
-      :ticker-marks="marks"
+      :ticker="tickerMarks.length > 0"
+      :ticker-label="tickerLabel"
+      :ticker-marks="tickerMarks"
       bottom-height="clamp(7rem,16dvh,14rem)"
     >
       <div

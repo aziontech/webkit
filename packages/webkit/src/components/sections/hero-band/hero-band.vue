@@ -87,10 +87,6 @@
     tickerLabel?: string
     /** Registry names of the client marks on the band floor, in order; the ticker renders only when it has marks. */
     tickerMarks?: string[]
-    /** @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. */
-    carouselLabel?: string
-    /** @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. */
-    carouselMarks?: string[]
     /** Registry name of the illustration set beside the copy in the `copy-beside-art` layout. */
     illustration?: string
     /** Accessible description of the illustration. */
@@ -120,8 +116,6 @@
     secondaryAction: undefined,
     tickerLabel: '',
     tickerMarks: () => [],
-    carouselLabel: '',
-    carouselMarks: () => [],
     illustration: '',
     illustrationAriaLabel: '',
     image: undefined,
@@ -288,8 +282,6 @@
   const secondary = computed(() =>
     props.secondaryAction?.label && props.secondaryAction.href ? props.secondaryAction : null
   )
-
-  const marks = computed(() => (props.tickerMarks.length ? props.tickerMarks : props.carouselMarks))
 </script>
 
 <template>
@@ -314,9 +306,9 @@
       :padded="kind !== 'copy-on-top-art'"
       :media-align="kind === 'copy-beside-art' ? 'end' : 'center'"
       :offset="isScreen ? headerOffset : ''"
-      :ticker="marks.length > 0"
-      :ticker-marks="marks"
-      :ticker-label="tickerLabel || carouselLabel || t('heroBand.carouselLabel')"
+      :ticker="tickerMarks.length > 0"
+      :ticker-marks="tickerMarks"
+      :ticker-label="tickerLabel || t('heroBand.carouselLabel')"
       :aria-label="headline"
     >
       <HeroTitle

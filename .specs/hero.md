@@ -3,8 +3,8 @@ name: hero
 category: marketing
 structure: composition
 status: implemented
-spec_version: 4
-checksum: b8335431aaabc22bfa9f65816d37caa91726eb407c3554fa598baa153dfa892c
+spec_version: 5
+checksum: 38d8a7345c745ae91d4526d18d40ebdada1f1e1ead6b1ab2c55541fdadf6fd7a
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -106,11 +106,8 @@ The standalone imports stay available and are the tree-shaking path — `@aziont
 | `offset`           | `string`              | `''`       | false    | Height of the fixed chrome above the band, subtracted from the viewport when `kind` is `screen`; any CSS length.                                                       |
 | `bottomHeight`     | `string`              | `''`       | false    | Height of the window under the content, where the brand strip and the floor texture stand; any CSS length.                                                             |
 | `ticker`           | `boolean`             | `false`    | false    | Stand the brand ticker on the band's floor, under the `bottom` window.                                                                                                 |
-| `carousel`         | `boolean`             | `false`    | false    | @deprecated since 6.0 — use `ticker`. Removed in 7.0. Read only when `ticker` is empty.                                                                                |
 | `tickerMarks`      | `string[]`            | `[]`       | false    | Registry names of the marks the ticker shows, in order.                                                                                                                |
-| `carouselMarks`    | `string[]`            | `[]`       | false    | @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty.                                                                      |
 | `tickerLabel`      | `string`              | `''`       | false    | Overline above the brand ticker, stating the claim the marks make.                                                                                                     |
-| `carouselLabel`    | `string`              | `''`       | false    | @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty.                                                                      |
 
 ## Events
 

@@ -157,11 +157,9 @@ describe('HeroBand', () => {
     expect(queryAllByRole('link')).toHaveLength(0)
   })
 
-  it('still reads the deprecated carouselMarks and carouselLabel', async () => {
-    const { findByTestId } = band({ carouselMarks: MARKS, carouselLabel: 'Old label' })
-    expect(await findByTestId('marketing-ticker', {}, { timeout: 5000 })).toHaveTextContent(
-      'Old label'
-    )
+  it('ignores the removed carouselMarks and carouselLabel', () => {
+    const { queryByTestId } = band({ carouselMarks: MARKS, carouselLabel: 'Old label' })
+    expect(queryByTestId('marketing-ticker')).toBeNull()
   })
 
   it('renders the client strip only when it has marks', async () => {
@@ -198,7 +196,7 @@ describe('HeroBand', () => {
   })
 
   it('labels the client strip from the locale catalog when no label is set', async () => {
-    const { getByText } = band({ carouselMarks: MARKS })
+    const { getByText } = band({ tickerMarks: MARKS })
 
     await waitFor(
       () => expect(getByText('Proven on mission-critical workloads')).toBeInTheDocument(),

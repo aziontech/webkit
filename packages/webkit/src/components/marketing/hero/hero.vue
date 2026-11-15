@@ -64,12 +64,6 @@
     tickerMarks?: string[]
     /** Overline above the brand ticker, stating the claim the marks make. */
     tickerLabel?: string
-    /** @deprecated since 6.0 — use `ticker`. Removed in 7.0. */
-    carousel?: boolean
-    /** @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. */
-    carouselMarks?: string[]
-    /** @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. */
-    carouselLabel?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -89,10 +83,7 @@
     bottomHeight: '',
     ticker: false,
     tickerMarks: () => [],
-    tickerLabel: '',
-    carousel: false,
-    carouselMarks: () => [],
-    carouselLabel: ''
+    tickerLabel: ''
   })
 
   const slots = defineSlots<{
@@ -114,10 +105,6 @@
   const hasBackdrop = () => Boolean(slots.background) || props.texture !== 'none'
   const hasMedia = () => Boolean(slots.media)
   const hasFloorTexture = computed(() => props.floorTexture !== 'none')
-
-  const showTicker = computed(() => props.ticker || props.carousel)
-  const marks = computed(() => (props.tickerMarks.length ? props.tickerMarks : props.carouselMarks))
-  const marksLabel = computed(() => props.tickerLabel || props.carouselLabel)
 </script>
 
 <template>
@@ -195,7 +182,7 @@
     </div>
 
     <div
-      v-if="slots.bottom || hasFloorTexture || showTicker"
+      v-if="slots.bottom || hasFloorTexture || ticker"
       class="relative w-full shrink-0 [background-color:var(--banner-floor-bg,transparent)] [z-index:var(--banner-z-bottom,1)]"
     >
       <div
@@ -219,13 +206,13 @@
       </div>
 
       <div
-        v-if="showTicker"
+        v-if="ticker"
         class="w-full [background-color:var(--banner-floor-bg,var(--bg-canvas))]"
       >
         <Ticker
           :data-width="maxWidth"
-          :marks="marks"
-          :label="marksLabel"
+          :marks="tickerMarks"
+          :label="tickerLabel"
           size="small"
           class="mx-auto w-full px-(--layout-boundary-inline) py-(--spacing-xl) data-[width=3xl]:max-w-(--container-3xl) data-[width=4xl]:max-w-(--container-4xl) data-[width=5xl]:max-w-(--container-5xl) data-[width=6xl]:max-w-(--container-6xl) data-[width=7xl]:max-w-(--container-7xl) data-[width=site]:max-w-(--layout-measure-site) data-[width=full]:max-w-none"
         />

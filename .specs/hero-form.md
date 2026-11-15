@@ -3,10 +3,10 @@ name: hero-form
 category: sections
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 created: 2026-11-05
-last_updated: 2026-11-14
-checksum: 81e70e393d2c6ef8122b2ff38e06f819cdd4a2ae0c0d0a149682d8fe24eb5159
+last_updated: 2026-11-15
+checksum: c0e4d2f96f5513d7ab5149452868bfd2fccfea6b4300dbb6b21d02038b7e2d7b
 template: 2
 ---
 
@@ -113,9 +113,7 @@ The opening band of a lead-capture page, where the form is the reason for the pa
 | `fields`           | `HeroFormField[]`  | `[]`        | false    | The form fields in order; each is `{ name, kind, label, placeholder?, required?, half?, options?, country?, visuallyHiddenLabel? }`; `visuallyHiddenLabel` keeps the label as the accessible name but does not draw it. |
 | `submitLabel`      | `string`           | `''`        | false    | Label of the submit button.                                                                                                                                                                                             |
 | `tickerLabel`      | `string`           | `''`        | false    | Overline above the client ticker.                                                                                                                                                                                       |
-| `carouselLabel`    | `string`           | `''`        | false    | @deprecated since 6.0 — use `tickerLabel`. Removed in 7.0. Read only when `tickerLabel` is empty.                                                                                                                       |
 | `tickerMarks`      | `string[]`         | `[]`        | false    | Registry names of the client marks, in order; the ticker renders only when there are marks.                                                                                                                             |
-| `carouselMarks`    | `string[]`         | `[]`        | false    | @deprecated since 6.0 — use `tickerMarks`. Removed in 7.0. Read only when `tickerMarks` is empty.                                                                                                                       |
 | `loading`          | `boolean`          | `false`     | false    | The site is sending the values: the button shows its loading state and a submit is ignored.                                                                                                                             |
 | `submitted`        | `boolean`          | `false`     | false    | The site sent the values: the form gives way to `messages.success`.                                                                                                                                                     |
 | `error`            | `boolean`          | `false`     | false    | The site could not send the values: `messages.error` shows under the form.                                                                                                                                              |

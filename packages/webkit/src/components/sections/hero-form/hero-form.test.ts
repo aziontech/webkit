@@ -63,7 +63,7 @@ describe('HeroForm', () => {
     expect(queryByTestId(TESTID)).toBeNull()
   })
 
-  it('stands the client ticker on the floor, from tickerMarks or the deprecated carouselMarks', async () => {
+  it('stands the client ticker on the floor from tickerMarks and ignores the removed carouselMarks', async () => {
     const current = band()
     expect(await current.findByTestId('marketing-ticker', {}, { timeout: 5000 })).toHaveTextContent(
       'Trusted by teams'
@@ -76,9 +76,7 @@ describe('HeroForm', () => {
       carouselLabel: 'Old label',
       carouselMarks: ['itau']
     })
-    expect(await old.findByTestId('marketing-ticker', {}, { timeout: 5000 })).toHaveTextContent(
-      'Old label'
-    )
+    expect(old.queryByTestId('marketing-ticker')).toBeNull()
   })
 
   it('names the hero region by the title and renders the h1', () => {
