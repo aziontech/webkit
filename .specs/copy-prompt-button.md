@@ -3,9 +3,9 @@ name: copy-prompt-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: 9cd84537504904d288e63cd5adae81571e825ead117d92c81dcf2fe2ebdbfb15
+checksum: 339ea26a2b969d8132772a75194fe89564ec979f30c1452f4bf4c3eb21f76485
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -18,6 +18,7 @@ The "Copy prompt" button of a docs or product home: one dark chip that copies a 
 
 ## When to use
 
+- Use CopyPromptButton to copy a ready-made agent prompt without showing its text; a visible value gets a CopyButton.
 - The hero of a documentation home or a product landing, beside the primary action (`Get started`), when the page hands its reader a prompt for their agent.
 - Inside `DocAgentCard`, the "Your AI agent, fluent in Azion" card of a docs home (it renders this button by default).
 

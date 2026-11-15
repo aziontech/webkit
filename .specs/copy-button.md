@@ -3,9 +3,9 @@ name: copy-button
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: adfa3a902cea4fbce7e7f2744deda921abdd9fa613ef840efa29bd3e4151eae4
+checksum: 4bd55e76e9d3a3f95f3c41db8861cf4351f351bdb3d8e809f88b492843cedddf
 created: 2026-06-02
 last_updated: 2026-11-15
 ---
@@ -18,6 +18,7 @@ Icon-only control that copies a string to the clipboard and briefly confirms suc
 
 ## When to use
 
+- Use CopyButton next to any value (API key, ID, snippet) to copy it; to copy a ready-made agent prompt without showing it use CopyPromptButton.
 - Next to a value the user will paste elsewhere: an ID, a domain, a token, a CLI command.
 - Inside key/value rows, terminal mocks and code samples that need a one-click copy.
 

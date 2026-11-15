@@ -7,7 +7,7 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5993-33335
   node_id: '5993:33335'
-checksum: 2699b3606a1533184684071d36c7ce30685781ecf4364415768575d3ed5b9a36
+checksum: 865752c1f64b84b6946697a6178d3dcea8d2159ccfc9c09ebd0cf88390fb9372
 created: 2026-08-03
 last_updated: 2026-11-15
 ---
@@ -34,6 +34,7 @@ mapping is in Tokens, and the single value with no token behind it is in Theme g
 
 ## When to use
 
+- Use SidebarMenu only for the navigation tree inside Sidebar, ConsoleLayout or DocLayout; a nested data hierarchy is a Tree, and row actions are a DropdownMenu.
 - Any navigation region grouped by product or concern — placed inside `Sidebar` (a drawer included), the rail of `ConsoleLayout` or `DocLayout`, or the `platform/detail/sectioned-resource` block.
 - A documentation tree that nests two or three levels and must show its indentation structurally.
 - A settings-style area where activating a row should replace the menu with that row's own menu, then return.

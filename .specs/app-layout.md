@@ -3,11 +3,11 @@ name: app-layout
 category: layout
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 2cb5592000e422f8116e6386eb420914102188713131d2c8b418610d70b0012f
+checksum: 7771ae293cef288b0e7b1e411faed7b74a5f7a0a166a9362eb9c1c80a2d4a9a2
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # AppLayout — Component Spec
@@ -23,6 +23,7 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
 
 ## When to use
 
+- Use AppLayout only to build a signed-in app shell other than the console; the console uses ConsoleLayout.
 - A product shell needs a navigation rail, a global header and a scrolling content area that turn into a drawer-based layout on phones.
 - A page offers contextual help beside the work (`HelpPanel` in the tools region) that the reader opens and closes.
 - A list or table needs a resizable detail panel under it or beside it (the split panel), showing the selected item without leaving the page.
@@ -119,27 +120,27 @@ keeps its own `Sidebar`, `GlobalHeader` and page content and only hands the fram
 
 ## Props
 
-| Prop                 | Type                 | Default    | Required | JSDoc                                                                                                                      |
-| -------------------- | -------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `navigationLabel`    | `string`             | `''`       | false    | Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`).                                    |
-| `toolsLabel`         | `string`             | `''`       | false    | Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`).                                    |
-| `toolsWidth`         | `number`             | `320`      | false    | Width of the tools region in pixels while not compact.                                                                     |
-| `splitPanelTitle`    | `string`             | `''`       | false    | Title of the split panel, shown in its header. Empty uses the locale catalog (`Details`).                                  |
-| `storageKey`         | `string`             | `''`       | false    | When set, the split panel size and position and the navigation and tools open state are kept in `localStorage` under it.   |
-| `compactBelow`       | `number`             | `768`      | false    | Width of the layout itself, in pixels, under which navigation and tools become drawers and the split panel moves down.     |
+| Prop              | Type     | Default | Required | JSDoc                                                                                                                    |
+| ----------------- | -------- | ------- | -------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `navigationLabel` | `string` | `''`    | false    | Accessible name of the navigation drawer. Empty uses the locale catalog (`Navigation`).                                  |
+| `toolsLabel`      | `string` | `''`    | false    | Title of the tools region, shown in its header. Empty uses the locale catalog (`Help`).                                  |
+| `toolsWidth`      | `number` | `320`   | false    | Width of the tools region in pixels while not compact.                                                                   |
+| `splitPanelTitle` | `string` | `''`    | false    | Title of the split panel, shown in its header. Empty uses the locale catalog (`Details`).                                |
+| `storageKey`      | `string` | `''`    | false    | When set, the split panel size and position and the navigation and tools open state are kept in `localStorage` under it. |
+| `compactBelow`    | `number` | `768`   | false    | Width of the layout itself, in pixels, under which navigation and tools become drawers and the split panel moves down.   |
 
 ## v-model
 
 Each two-way value is a named `defineModel`, so its `update:*` event is generated, not hand-declared.
 Unbound, each one keeps its own local state.
 
-| Model                          | Type                 | Default    | Emits                       | Notes                                                                                                                                     |
-| ------------------------------ | -------------------- | ---------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| Model                          | Type                 | Default    | Emits                       | Notes                                                                                                                                       |
+| ------------------------------ | -------------------- | ---------- | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
 | `v-model:navigation-open`      | `boolean`            | `true`     | `update:navigationOpen`     | Whether the navigation region shows beside the content. Not used while compact, where navigation is a drawer. Same name on `ConsoleLayout`. |
-| `v-model:tools-open`           | `boolean`            | `false`    | `update:toolsOpen`          | Whether the tools region (help) is open; while compact it drives the tools drawer.                                                        |
-| `v-model:split-panel-open`     | `boolean`            | `false`    | `update:splitPanelOpen`     | Whether the split panel is open.                                                                                                          |
-| `v-model:split-panel-position` | `'bottom' \| 'side'` | `'bottom'` | `update:splitPanelPosition` | Where the split panel sits: under the content or beside it. Bottom while compact.                                                         |
-| `v-model:split-panel-size`     | `number`             | `320`      | `update:splitPanelSize`     | Height (bottom) or width (side) of the split panel in pixels; emitted on every step.                                                     |
+| `v-model:tools-open`           | `boolean`            | `false`    | `update:toolsOpen`          | Whether the tools region (help) is open; while compact it drives the tools drawer.                                                          |
+| `v-model:split-panel-open`     | `boolean`            | `false`    | `update:splitPanelOpen`     | Whether the split panel is open.                                                                                                            |
+| `v-model:split-panel-position` | `'bottom' \| 'side'` | `'bottom'` | `update:splitPanelPosition` | Where the split panel sits: under the content or beside it. Bottom while compact.                                                           |
+| `v-model:split-panel-size`     | `number`             | `320`      | `update:splitPanelSize`     | Height (bottom) or width (side) of the split panel in pixels; emitted on every step.                                                        |
 
 ## Events
 
@@ -149,15 +150,15 @@ The only events are the `update:*` of the models above.
 
 ## Slots
 
-| Slot            | Scope                                                                                                     | Notes                                                                                                 |
-| --------------- | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Slot            | Scope                                                                                                     | Notes                                                                                                                                                                                                      |
+| --------------- | --------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `default`       | —                                                                                                         | The page content (the consumer's `<main>`). Fills the content region under the breadcrumbs, so a full-height body (`min-h-full`) takes the rest of the height without overflowing; taller content scrolls. |
-| `navigation`    | `{ drawer: boolean, closeNavigation: () => void }`                                                        | The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact. `closeNavigation` closes the drawer, e.g. after an item is chosen. |
-| `header`        | `{ compact: boolean, openNavigation: () => void, toggleNavigation: () => void, toggleTools: () => void }` | The global header, above content, tools and split panel.                                              |
-| `notifications` | —                                                                                                         | Flash messages (`Alert`) above the breadcrumbs and the content; stays in place while content scrolls. |
-| `breadcrumbs`   | —                                                                                                         | Breadcrumbs above the content, inside the scroll area; the page body fills the height left under them. |
-| `tools`         | —                                                                                                         | The tools region's body, usually a `HelpPanel`.                                                       |
-| `split-panel`   | —                                                                                                         | The split panel's body.                                                                               |
+| `navigation`    | `{ drawer: boolean, closeNavigation: () => void }`                                                        | The navigation rail. Rendered once: beside the content, or inside the navigation drawer when compact. `closeNavigation` closes the drawer, e.g. after an item is chosen.                                   |
+| `header`        | `{ compact: boolean, openNavigation: () => void, toggleNavigation: () => void, toggleTools: () => void }` | The global header, above content, tools and split panel.                                                                                                                                                   |
+| `notifications` | —                                                                                                         | Flash messages (`Alert`) above the breadcrumbs and the content; stays in place while content scrolls.                                                                                                      |
+| `breadcrumbs`   | —                                                                                                         | Breadcrumbs above the content, inside the scroll area; the page body fills the height left under them.                                                                                                     |
+| `tools`         | —                                                                                                         | The tools region's body, usually a `HelpPanel`.                                                                                                                                                            |
+| `split-panel`   | —                                                                                                         | The split panel's body.                                                                                                                                                                                    |
 
 ## States
 

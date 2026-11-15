@@ -3,14 +3,14 @@ name: button-highlight
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4313-20621
   node_id: 4313:20500
-checksum: 4cdbddf1ac71ba9d77ef45b6197905ea0b9320aecb2a79589170f1d910ee26ab
+checksum: deef77f24efe08a6e4cb064d1152703fb6580d77ee97aec173809d0917f7ebb4
 created: 2026-06-01
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Button Highlight — Component Spec
@@ -21,6 +21,7 @@ Visually emphasized action trigger built on a brand-accent gradient with a conti
 
 ## When to use
 
+- Use ButtonHighlight only for the one AI entry point on a screen (Copilot); every other action is Button.
 - The single entry point to an AI assistant or highlight flow (for example "Ask Azion") that must stand out from the actions around it.
 - A headline action in a header or marketing band where a primary `button` would blend in.
 

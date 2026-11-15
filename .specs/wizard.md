@@ -3,10 +3,10 @@ name: wizard
 category: navigation
 structure: composition
 status: implemented
-checksum: 99226567151132f878ab0686e9921d26b42bb9d02f910de9318bb6b4f7410448
-spec_version: 3
+checksum: d9150aebc9040b76ed15854d465c1995642669d512c37bca68802e64ccd5c9b8
+spec_version: 4
 created: 2026-11-10
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Wizard — Component Spec
@@ -24,6 +24,7 @@ completion.
 
 ## When to use
 
+- Use Wizard for any ordered multi-step create: Stepper + step content + Cancel/Previous/Next footer; compose Stepper alone only when the footer and gating must be custom.
 - Creating a resource takes several ordered decisions, and showing them all at once would overwhelm the
   reader (a create page split into Configure → Settings → Review).
 - The reader has to finish a step before moving on. Validation runs on Next and can stop the move.

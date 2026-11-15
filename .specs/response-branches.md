@@ -3,11 +3,11 @@ name: response-branches
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 022ebaafa9d3560ddd95e8ac0e68b04a2239dde6d37b0b5d40a1f33a0e3d43d4
+checksum: 62831ee3112b2022a917f8ce6db96086a63772b036ae89645bc5486917abad5c
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # ResponseBranches — Component Spec
@@ -18,6 +18,7 @@ Pages through alternative versions of one assistant response: after Regenerate, 
 
 ## When to use
 
+- Use ResponseBranches to page through alternative versions of one AI response; rows of a table or list use Pagination.
 - A response was regenerated and the earlier versions stay available to compare.
 - A model returned several candidates and the person picks the one to keep reading.
 

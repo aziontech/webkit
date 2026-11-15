@@ -3,13 +3,13 @@ name: pagination
 category: data
 structure: composition
 status: implemented
-spec_version: 3
+spec_version: 4
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=483-929
   node_id: 483:929
-checksum: 74bffcfb07b64d8eff262c84141dd79dd87d53c6bad4140aba87f39e7d4910ec
+checksum: 267993108611a517922928db5e16bee8ba86aa3b1dc4e9c2acd7370ce6d4eaba
 created: 2026-06-16
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # Pagination — Component Spec
@@ -20,6 +20,7 @@ Pagination controls for tables and lists, pixel-perfect to Figma, in two modes. 
 
 ## When to use
 
+- Use Pagination to page through the rows of a table or list; alternative versions of one AI response use ResponseBranches.
 - A list or table outside `table`'s own footer needs page navigation and a rows-per-page selector.
 - You know the item count — pass `total` and bind `v-model:page` / `v-model:page-size`; the component renders the info text, the windowed page numbers and the selector.
 - The page strip needs custom content (a different info line, extra controls) — compose `Pagination.Info`, `Pagination.Button` and `Pagination.PageSize` through the slots.

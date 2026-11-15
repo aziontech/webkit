@@ -3,9 +3,9 @@ name: command
 category: overlay
 structure: composition
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: a1e961126a1658c0ca2c5f9f300b9375fec4e425ed2828451a030ea7889c66d8
+checksum: 078911ab01945032067ec2ad456f4b35eaf35f27ad0bbf3730ffd9682fcd1781
 created: 2026-07-23
 last_updated: 2026-11-15
 ---
@@ -18,6 +18,7 @@ Command Menu is a ⌘K command palette: a modal overlay with a search input and 
 
 ## When to use
 
+- Use Command for the searchable ⌘K palette of actions and destinations; a short list of actions opened from a button is a DropdownMenu.
 - Provide a global ⌘K launcher for navigating to pages or running actions across an app.
 - Let users filter a large, grouped list of commands by typing, then activate with the keyboard.
 

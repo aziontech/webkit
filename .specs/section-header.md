@@ -3,10 +3,10 @@ name: section-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: 183320cd4c3e8f41759c7fee364a76ec9d22b200818ca76f4448a0155fe64627
-spec_version: 2
+checksum: d59ef6dad8b49a6be7fe3abf69d9e1689f707a6ad5f1d8e79d84bc3de5ddf91a
+spec_version: 3
 created: 2026-11-10
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # SectionHeader — Component Spec
@@ -17,6 +17,7 @@ The heading of one band inside a page: an h2 with a one-line description, a copy
 
 ## When to use
 
+- Use SectionHeader for the h2 heading of one band inside a console page; for marketing pages use SectionTitle, and for a settings band use SettingsSection.
 - A band of a page that holds a card, a table or a list: Payment information on Billing, Get started on a resource, General in a create form.
 - A band that someone should be able to link to (`anchor`).
 

@@ -8,7 +8,7 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: 8c871a349b862d525ca625aa88924fee1677dc22d7a54fa6f3cf4a40b90694ec
+checksum: 3f971af87d3f0a21067401fa210bef6e17b432483a03411b64c57c84a0cd3262
 created: 2026-06-30
 last_updated: 2026-11-15
 ---
@@ -116,7 +116,7 @@ A primary command button visually joined to a chevron toggle that opens an overl
 | ------------------------- | ------------------------------------------------------------------------------ | ------------------------------------------------- | ------------------------------- |
 | hover/active state change | `transition-opacity` ghost layer (`duration-fast-02 ease-productive-entrance`) | semantic (matches `Button`)                       | `motion-reduce:transition-none` |
 | hover/focus state change  | `transition-colors duration-150 ease-out`                                      | inline (matches catalog)                          | `motion-reduce:transition-none` |
-| menu open / close         | provided by the composed `navigation/dropdown-menu` overlay                    | semantic (owned by `DropdownMenu`)                | owned by `DropdownMenu`         |
+| menu open / close         | provided by the composed `dropdown-menu` overlay                               | semantic (owned by `DropdownMenu`)                | owned by `DropdownMenu`         |
 
 ## Tokens
 

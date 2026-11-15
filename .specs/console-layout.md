@@ -3,9 +3,9 @@ name: console-layout
 category: layout
 structure: composition
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
-checksum: 7b98ffb1df7b0b7527b9d404e1af35162b5c6b41a2f98777299825f13c070147
+checksum: dcac9ca3f0a65cffe824cb1c805c6fa865501967f7e417d08a5dccd0b3b784b8
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -18,6 +18,7 @@ The console chrome, composed once in the app: `AppLayout` with the navigation ra
 
 ## When to use
 
+- Use ConsoleLayout once at the app root of the Azion console; every page is its body.
 - Every signed-in console page: put one `ConsoleLayout` in the app's root (around `RouterView`) and render each page block as its default slot.
 - A product area that needs the console navigation, breadcrumbs, the ⌘K palette and the account menu without hand-composing `AppLayout`, `Sidebar`, `SidebarMenu`, `GlobalHeader`, `SearchTrigger` and `Command`.
 

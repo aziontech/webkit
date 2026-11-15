@@ -3,8 +3,8 @@ name: page-header
 category: layout
 structure: monolithic
 status: implemented
-checksum: a80ef113a3b417de3aa447c69920a7013dfac72a47babca04670c84e1a4342d5
-spec_version: 2
+checksum: 7ec248bc55e743fb43d19ec926cb3bfb482fc048ac4aae47b4295210f0bfa091
+spec_version: 3
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -18,6 +18,7 @@ The heading that opens a console page: an h1 whose `size` picks the heading toke
 
 ## When to use
 
+- Use PageHeader once per console page for the h1, description and page actions; a band inside the page uses SectionHeader.
 - The top of any console page: a first-level list (`medium`), a detail tab or settings sub-page (`small`), a creation hub headline (`large`).
 - A page that owns actions (Documentation, a create action) that belong next to its title.
 - A resource detail page whose header carries the trail back to the list, the resource's icon, its status and the tabs of its sections (`breadcrumb`, `icon`, `meta`, `tabs`).

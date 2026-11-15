@@ -3,9 +3,9 @@ name: context-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: bebf45c94aa6fa59c108e10c5ea2f54b50bcfb4b9a5d6af733049f4e58969212
+checksum: eaceee457245228ba2e4292665b0d1137829cf1f5047bb43dc46046aa3c1615e
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -18,6 +18,7 @@ Menu of actions that opens at the pointer when the user right-clicks an area, pr
 
 ## When to use
 
+- Use ContextMenu for the same actions as a DropdownMenu, opened by right-click or long-press on an item; opened from a button use DropdownMenu.
 - Secondary actions on an object the user is pointing at: a table row, a file in a browser, a tree node, a canvas.
 - Power-user shortcuts that also exist elsewhere in the interface.
 
@@ -116,28 +117,28 @@ Tree-shaking alternative — the root and trigger as standalone imports, with th
 
 ## Props
 
-| Prop        | Type      | Default | Required | JSDoc                                                                                     |
-| ----------- | --------- | ------- | -------- | ----------------------------------------------------------------------------------------- |
-| `disabled`  | `boolean` | `false` | false    | Leaves the area to the browser's native context menu and never opens the panel.            |
-| `ariaLabel` | `string`  | `''`    | false    | Accessible name of the menu panel; when empty the panel has no name of its own.            |
+| Prop        | Type      | Default | Required | JSDoc                                                                           |
+| ----------- | --------- | ------- | -------- | ------------------------------------------------------------------------------- |
+| `disabled`  | `boolean` | `false` | false    | Leaves the area to the browser's native context menu and never opens the panel. |
+| `ariaLabel` | `string`  | `''`    | false    | Accessible name of the menu panel; when empty the panel has no name of its own. |
 
 ## v-model
 
-| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                            |
-| -------------- | --------- | ----------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                              |
+| -------------- | --------- | ----------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`. While unbound the menu is uncontrolled and starts closed. Opened from the model without a pointer position, the panel anchors at the trigger area's inline-start top corner. |
 
 ## Events
 
-| Event    | Payload                                                                | Notes                                                                                                                                                                                  |
-| -------- | ---------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Event    | Payload                                                                | Notes                                                                                                                                                                                    |
+| -------- | ---------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated, at any sub-menu depth. The panel closes and focus returns to the element that was focused in the area, except for checkbox and radio options. |
 
 ## Slots
 
-| Slot      | Scope | Notes                                                                                       |
-| --------- | ----- | ------------------------------------------------------------------------------------------- |
-| `default` | —     | Place `<ContextMenu.Trigger>` (the area) followed by one or more `<ContextMenu.Group>`.     |
+| Slot      | Scope | Notes                                                                                   |
+| --------- | ----- | --------------------------------------------------------------------------------------- |
+| `default` | —     | Place `<ContextMenu.Trigger>` (the area) followed by one or more `<ContextMenu.Group>`. |
 
 ## States
 
@@ -149,23 +150,23 @@ Tree-shaking alternative — the root and trigger as standalone imports, with th
 
 ## Motion & Animations
 
-| Trigger                        | Animation / Transition                                  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
-| ------------------------------ | ------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
-| panel open                     | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)  | `motion-reduce:animate-none` (instant) |
-| panel close                    | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)          | `motion-reduce:animate-none` (instant) |
+| Trigger     | Animation / Transition                                  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback                |
+| ----------- | ------------------------------------------------------- | ------------------------------------------------- | -------------------------------------- |
+| panel open  | `animate-popup-scale-in` (origin from `--popup-origin`) | semantic (`moderate-01` · `productive-entrance`)  | `motion-reduce:animate-none` (instant) |
+| panel close | `animate-popup-scale-out`                               | semantic (`fast-02` · `productive-exit`)          | `motion-reduce:animate-none` (instant) |
 
 ## Tokens
 
-| Region            | Token (DESIGN.md)                                                       |
-| ----------------- | ----------------------------------------------------------------------- |
-| panel surface     | `var(--bg-surface)`                                                     |
-| panel border      | `var(--border-default)`                                                 |
-| panel shape       | `var(--shape-card)`                                                     |
-| panel shadow      | `var(--shadow-sm)`                                                      |
-| panel spacing.y   | `var(--spacing-xs)`                                                     |
-| panel width       | `--container-3xs` to `--container-2xs`                                  |
-| popup origin      | `var(--popup-origin)`                                                   |
-| item rows         | as `dropdown-menu` (shared parts)                                       |
+| Region          | Token (DESIGN.md)                      |
+| --------------- | -------------------------------------- |
+| panel surface   | `var(--bg-surface)`                    |
+| panel border    | `var(--border-default)`                |
+| panel shape     | `var(--shape-card)`                    |
+| panel shadow    | `var(--shadow-sm)`                     |
+| panel spacing.y | `var(--spacing-xs)`                    |
+| panel width     | `--container-3xs` to `--container-2xs` |
+| popup origin    | `var(--popup-origin)`                  |
+| item rows       | as `dropdown-menu` (shared parts)      |
 
 ## Theme gaps
 

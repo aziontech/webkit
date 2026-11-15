@@ -3,11 +3,11 @@ name: search-trigger
 category: actions
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 57109c0a763f75dc82e7ebfe2dad59495760fcc98b282deb1bbad709d1c19033
+checksum: f9d0e33f84afae2da24722ff5079d0ec90faa08764f55903c2b63a17d2ab9395
 created: 2026-11-12
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # SearchTrigger — Component Spec
@@ -18,6 +18,7 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 
 ## When to use
 
+- Use SearchTrigger only in the top bar to open the ⌘K palette (Command); search over one table is Table.Search.
 - The search entry of every app header — console, demo, docs or site top bar (`GlobalHeader.End`) — that opens the `Command` palette or a search dialog. A header without it is incomplete.
 - Anywhere a shortcut-backed launcher should look like a field without being one.
 
@@ -64,17 +65,17 @@ The field-shaped button in a top bar that opens search: a magnifier, a muted lab
 
 ## Props
 
-| Prop          | Type      | Default | Required | JSDoc                                                                                                                  |
-| ------------- | --------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `label`       | `string`  | `''`    | false    | Visible muted text and accessible name; empty uses the catalog's `Search`.                                             |
+| Prop          | Type      | Default | Required | JSDoc                                                                                                                                                                                                |
+| ------------- | --------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`       | `string`  | `''`    | false    | Visible muted text and accessible name; empty uses the catalog's `Search`.                                                                                                                           |
 | `shortcut`    | `string`  | `'K'`   | false    | Key that opens search with ⌘ or Ctrl: drawn in the keycap, announced through `aria-keyshortcuts` and bound on the window unless a mounted `Command` already listens for it; empty removes all three. |
 | `collapsible` | `boolean` | `false` | false    | Folds to the magnifier alone while the nearest container is narrower than 47rem (752px, the `--container-2xl` token); the label stays the accessible name and shows as a tooltip on hover and focus. |
-| `disabled`    | `boolean` | `false` | false    | Disables the button and its shortcut; `open` is not emitted. |
+| `disabled`    | `boolean` | `false` | false    | Disables the button and its shortcut; `open` is not emitted.                                                                                                                                         |
 
 ## Events
 
-| Event   | Payload      | Notes                                                                               |
-| ------- | ------------ | ----------------------------------------------------------------------------------- |
+| Event  | Payload                       | Notes                                                                                                                                                 |
+| ------ | ----------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `open` | `MouseEvent \| KeyboardEvent` | Fires when the button is activated (pointer, Enter or Space) and on ⌘K / Ctrl K when no mounted `Command` claims that shortcut; not while `disabled`. |
 
 ## Slots
