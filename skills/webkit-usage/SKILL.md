@@ -3,8 +3,15 @@ name: webkit-usage
 description: Entry point for building UI on @aziontech/webkit. Use when adding or reviewing UI in a project that depends on @aziontech/webkit — compose the app layout once (ConsoleLayout, SiteLayout, DocLayout) and start each screen from a pattern, find the right component, import it with the flat path, style with @aziontech/theme tokens, keep bundles small, and pick the focused skill for each task (forms, tables, lists, errors, states, layout, copy, polish, verification).
 scope: general
 status: active
-last_updated: 2026-11-12
-enforced_by: [webkit-imports, webkit-tokens, webkit-style-override, webkit-prefer-over-custom, webkit-performance]
+last_updated: 2026-11-15
+enforced_by:
+  [
+    webkit-imports,
+    webkit-tokens,
+    webkit-style-override,
+    webkit-prefer-over-custom,
+    webkit-performance
+  ]
 ---
 
 # Skill: webkit-usage
@@ -154,7 +161,7 @@ In your own components, `useLocale()` from `@aziontech/webkit/use-locale` return
 - ✅ PascalCase binding matching the last path segment: `@aziontech/webkit/mini-button` -> `MiniButton`.
 - ✅ One `WebkitProvider` at the app root with the user's locale and the catalogs of every language the app offers.
 - ✅ Color, spacing, radius, and typography from `@aziontech/theme` tokens (`var(--primary)`, `var(--spacing-md)`, `text-button-lg`).
-- ✅ `import '@aziontech/theme'` and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
+- ✅ `import '@aziontech/theme'`, `import '@aziontech/theme/fonts.css'` (unless the app hosts its own fonts) and `import '@aziontech/icons'` once near the app entry (e.g. `src/main.ts`).
 - ✅ The tree-shakeable `<name>-root` path (or specific sub-components) when you only need the root.
 - ✅ Icons via the `@aziontech/icons` font: side-effect import once (`import '@aziontech/icons'`) + the icon CSS classes.
 - ✅ Artwork and icon names from the published lists: `node_modules/@aziontech/webkit/llms/foundations/` (`illustrations.md`, `diagrams.md`, `line-figures.md`, `brand-marks.md`, `icons.md`) or the MCP `list_assets` (`kind`, plus a `query` such as "ddos" or "delete"). Icon classes are `ai ai-<name>`, `pi pi-<name>`, and `ai-cor ai-<name>` for a colour brand icon.
@@ -260,6 +267,7 @@ site: your app does not serve it (lint `webkit/no-root-relative-asset`).
 ```ts
 // src/main.ts
 import '@aziontech/theme'
+import '@aziontech/theme/fonts.css' // the Azion font faces; leave out when the app hosts its own fonts
 import '@aziontech/icons'
 ```
 

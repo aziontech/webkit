@@ -190,6 +190,10 @@ function styleEntryContent() {
   return `/* @aziontech/webkit design-system styles. Import this once from your app entry. */
 @import '@aziontech/theme';
 
+/* The Azion fonts (Rubik, Roboto Mono, …) from fonts.azion.com. Delete this line if your app
+   hosts its own font files. */
+@import '@aziontech/theme/fonts.css';
+
 /* webkit is consumed as source — this registers it with Tailwind so its component classes compile. */
 @import '@aziontech/webkit/styles';
 
@@ -582,7 +586,7 @@ export function planInit(projectDir, opts = {}) {
   actions.push({
     type: 'advise',
     message:
-      'Theme: the design system defaults to LIGHT. For dark mode set <html data-theme="dark"> (or toggle it at runtime); the tokens also respond to the `.dark` class.'
+      'Theme: the design system follows the device setting (light or dark) by default. To pin one, set <html data-theme="light"> or <html data-theme="dark"> (or toggle it at runtime); the tokens also respond to the `.dark` class.'
   })
 
   return actions

@@ -153,6 +153,33 @@ WebKit (`npm install @aziontech/theme@^5.2.2`; `npx @aziontech/webkit init` adds
 fails when a nested copy is left or the installed theme misses the range. `init` now writes caret
 ranges for every dependency it adds, never `latest`.
 
+### Theme: dark mode follows the device, fonts are a separate import, unused variables are gone
+
+The theme that ships with WebKit 6 changes three things your app can see:
+
+- **Dark mode follows the device.** With no theme pinned, a user whose device is set to dark now gets
+  the dark tokens (before, a page without `data-theme` was always light). It is CSS only, so there is
+  no flash. An app that never checked its screens in dark keeps the old look with one attribute:
+  `<html data-theme="light">`. `data-theme="dark"` pins dark; `ThemeSwitcher` and `useColorMode()`
+  already default to `system`.
+- **Fonts are their own file.** `@import '@aziontech/theme'` no longer loads the Azion fonts from
+  `fonts.azion.com`. Add `@import '@aziontech/theme/fonts.css';` next to it (or
+  `import '@aziontech/theme/fonts.css'` in `main.ts`) to keep them; leave it out if your app hosts its
+  own fonts. `npx @aziontech/webkit init` writes the line.
+- **Removed variables** (nothing in WebKit read them). Replace any use in your own CSS:
+
+  | Removed                                            | Use instead                                                                     |
+  | -------------------------------------------------- | ------------------------------------------------------------------------------- |
+  | `--surface-0` … `--surface-950`                    | a semantic role (`--bg-surface`, `--border-default`…) or `--color-gray-<step>`  |
+  | `--color-surface-*` (and `bg-surface-*` utilities) | the same step of `--color-gray-*` (`--color-surface-0` is `--color-base-white`) |
+  | `--height-<n>`                                     | `h-<n>` or `calc(var(--spacing) * <n>)`                                         |
+  | `--width-3xs` … `--width-7xl`                      | `--container-3xs` … `--container-7xl`                                           |
+  | `--z-input-popup`                                  | `--z-input-overlay`                                                             |
+  | `surfacePrimitives` (`@aziontech/theme/colors`)    | `primitives.gray`                                                               |
+
+Two additions need nothing from you: `--border-input` is the outline token of every form field (same
+value as `--border-default`), and dark mode has its own, visible elevation shadows (`--shadow-*`).
+
 ### TypeScript reads declarations
 
 Every `@aziontech/webkit/<name>` export now has a `types` condition that points at a declaration
@@ -799,7 +826,6 @@ in a `computed` and rewound the page in a `watch` becomes one call:
 
 ## 7. Unchanged
 
-Theme tokens (apart from the sans stack and the container variants above), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style
-(`@aziontech/webkit/<name>`) are the same. `@aziontech/theme` deprecates the unused `--surface-*`, `--height-*`, `--width-*` and
-`--z-input-popup` variables; they still ship in theme 5.x, and its README lists the replacements. The AI bundle (`skills/`, `rules/`) is updated by
+Theme tokens (apart from the sans stack, the container variants above and the theme changes in section 4), icons, the `init` / `doctor` / `report` / `sync` commands and the flat import style
+(`@aziontech/webkit/<name>`) are the same. The theme's removed variables, fonts entry and device-default dark mode are in section 4. The AI bundle (`skills/`, `rules/`) is updated by
 `npx @aziontech/webkit sync`.

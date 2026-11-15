@@ -123,6 +123,8 @@ test('planInit wires the Tailwind + PostCSS pipeline and a CSS entry', () => {
     const cssEntry = plan.find((a) => a.type === 'write' && a.path === 'src/webkit.css')
     assert.ok(cssEntry, 'expected src/webkit.css write action')
     assert.match(cssEntry.content, /@import '@aziontech\/theme'/)
+    // The font faces are their own entry, so an app that hosts its fonts can drop the line.
+    assert.match(cssEntry.content, /@import '@aziontech\/theme\/fonts\.css'/)
     // Critically, it must register webkit's source so component classes compile — via the
     // package-name import (the @source ships inside webkit), never a ../node_modules path.
     assert.match(cssEntry.content, /@import '@aziontech\/webkit\/styles'/)
@@ -156,17 +158,18 @@ test('an existing postcss config is advised, not overwritten', () => {
   }
 })
 
-test('planInit advises the LIGHT default + data-theme dark opt-in', () => {
+test('planInit advises the device default and how to pin light or dark', () => {
   const dir = makeProject()
   try {
     const plan = planInit(dir, {})
     const advise = plan.find(
       (a) =>
         a.type === 'advise' &&
-        /defaults to LIGHT/.test(a.message) &&
+        /follows the device/.test(a.message) &&
+        /data-theme="light"/.test(a.message) &&
         /data-theme="dark"/.test(a.message)
     )
-    assert.ok(advise, 'expected a theme-selection advice mentioning the dark opt-in')
+    assert.ok(advise, 'expected a theme-selection advice naming the device default and both pins')
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }

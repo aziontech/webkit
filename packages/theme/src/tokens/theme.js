@@ -1,4 +1,4 @@
-import { brandPrimitives, primitives, surfacePrimitives } from './primitives/colors/colors.js'
+import { brandPrimitives, primitives } from './primitives/colors/colors.js'
 import { semanticColors } from './semantic/colors.js'
 
 export const theme = {
@@ -12,7 +12,6 @@ export const theme = {
         primary: brandPrimitives.primary,
         accent: brandPrimitives.accent
       },
-      surface: surfacePrimitives.surface,
       orange: primitives.orange,
       violet: primitives.violet,
       neutral: primitives.neutral,

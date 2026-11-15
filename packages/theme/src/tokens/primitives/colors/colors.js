@@ -120,29 +120,10 @@ export const primitives = {
     950: '#170303'
   },
   brand,
-  surface: {
-    0: '#FFFFFF',
-    50: '#FAFAFA',
-    100: '#F5F5F5',
-    200: '#E5E5E5',
-    300: '#B2B2B2',
-    400: '#999999',
-    500: '#808080',
-    600: '#666666',
-    700: '#4D4D4D',
-    800: '#1A1A1A',
-    900: '#141414',
-    950: '#0A0A0A'
-  },
   alpha
-}
-
-export const surfacePrimitives = {
-  surface: primitives.surface
 }
 
 export default {
   primitives,
-  surfacePrimitives,
   brandPrimitives
 }

@@ -56,18 +56,16 @@ src/
 │   ├── primitives/
 │   │   ├── colors/
 │   │   │   ├── colors.js        # base, blue, gray, violet, orange, slate, yellow,
-│   │   │   │                    # green, red + surface palettes + brand re-export
-│   │   │   ├── brand.js         # primary, accent, surfaces, absolute
+│   │   │   │                    # green, red palettes + brand re-export
+│   │   │   ├── brand.js         # primary, accent, absolute
 │   │   │   └── alpha.js         # alpha variants for each palette
 │   │   ├── shape/
 │   │   │   ├── aspect-video.js
 │   │   │   ├── container.js     # container-3xs … container-7xl
-│   │   │   ├── height.js        # h-2 … h-96
 │   │   │   ├── radius.js        # none, sm, DEFAULT, md, lg, xl, 2xl, 3xl, full
 │   │   │   ├── shape.js         # shape aliases (`max-w-*`, etc.)
 │   │   │   ├── size.js          # size-2 … size-96
-│   │   │   ├── spacing.js       # spacing-1 … spacing-96
-│   │   │   └── width.js         # w-3xs … w-7xl (alias → container.X)
+│   │   │   └── spacing.js       # spacing-1 … spacing-96
 │   │   ├── typography/
 │   │   │   ├── font-family.js   # sans, mono, code
 │   │   │   ├── font-size.js     # text-xs … text-9xl
@@ -92,7 +90,6 @@ src/
 │   │   ├── primary.js           # primary, primary-mask/hover/contrast
 │   │   ├── secondary.js
 │   │   ├── accent.js
-│   │   ├── surfaces.js          # surface-0 … surface-950 (alias for gray)
 │   │   ├── background.js        # bg-canvas, bg-surface, bg-mask, …
 │   │   ├── border.js            # border-default/muted/strong/selected
 │   │   ├── text.js              # text-default, text-muted
@@ -336,7 +333,7 @@ Bundles with `fontSize: 'inherit'` are omitted from the Tailwind `fontSize` pres
 | `brand.primary.primary-N` | `brandPrimitives.primary[N]` (e.g., `brand.primary.primary-500` → `#FE601F`)                           |
 | `brand.accent.accent-N`   | `brandPrimitives.accent[N]`                                                                            |
 | `brand.absolute.X`        | `brandPrimitives.absolute.X` (`black` / `white`)                                                       |
-| `theme.surfaces.X`        | the variant's pre-resolved surfaces group (`tokens/theme/surfaces.js`)                                 |
+| `theme.<group>.X`         | an earlier semantic token of the same variant (emitted as `var(--X)`)                                  |
 
 A ref that does not resolve — unknown prefix or dead path — **fails the build**: the compilers collect every miss and throw one aggregated `--var → ref` list (`assertResolvedRefs` in `scripts/refs.js`).
 

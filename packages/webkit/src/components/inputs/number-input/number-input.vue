@@ -153,14 +153,14 @@
     :class="[
       'relative inline-flex w-full items-center overflow-hidden',
       'rounded-(--shape-elements)',
-      'border border-(--border-default) bg-(--bg-surface) text-(--text-default)',
+      'border border-(--border-input) bg-(--bg-surface) text-(--text-default)',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
       '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong)',
       'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas)',
       'data-[size=small]:h-7 data-[size=medium]:h-8 data-[size=large]:h-10',
       'data-[invalid]:border-(--danger-border)',
       'data-[required]:border-(--warning-border)',
-      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
+      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
       attrs['class']
     ]"
   >
@@ -210,14 +210,14 @@
 
     <span
       v-if="showButtons"
-      class="relative z-(--z-input-field) flex h-full w-12 shrink-0 flex-col self-stretch border-s border-(--border-default)"
+      class="relative z-(--z-input-field) flex h-full w-12 shrink-0 flex-col self-stretch border-s border-(--border-input)"
     >
       <button
         type="button"
         tabindex="-1"
         :aria-label="t('numberInput.increment')"
         :disabled="isDisabled || readonly"
-        class="flex flex-1 items-center justify-center border-b border-(--border-default) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
+        class="flex flex-1 items-center justify-center border-b border-(--border-input) text-(--text-default) transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) disabled:cursor-not-allowed disabled:text-(--text-disabled)"
         @click="handleIncrement"
       >
         <i

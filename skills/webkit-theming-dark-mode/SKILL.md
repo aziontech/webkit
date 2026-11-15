@@ -2,7 +2,7 @@
 name: webkit-theming-dark-mode
 description: Every screen in a @aziontech/webkit app works in BOTH light and dark with zero per-theme edits, because it is styled only through semantic tokens (var(--bg-surface), var(--text-default), var(--primary)…) that carry a role and swap value per theme — never a hex, rgb/hsl, Tailwind palette color, or a value that reads in one theme only. Use when building or reviewing any screen, and before calling one done. Covers the data-theme mechanism, elevation-in-dark, and the two-theme check.
 status: active
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 scope: general
 enforced_by: [webkit-tokens, ui-verify]
 ---
@@ -36,16 +36,18 @@ Never guess a token or an import path. Resolve both from the contract, not from 
 - Components: ask the **webkit MCP** (`suggest_component`) or read
   **`node_modules/@aziontech/webkit/catalog.json`** — every key under `imports` is a real subpath.
 
-## How theming works — light is default, dark is opt-in
+## How theming works — the device decides, an attribute pins
 
-The tokens default to **light**: the light values live in `:root` (and `[data-theme=light]`). **Dark
-is opt-in** — set `data-theme="dark"` on the `<html>` element (the tokens also respond to a `.dark`
-class on any ancestor). Nothing else changes; the same `var(--bg-surface)` now resolves to its dark
-value.
+With no theme pinned, the tokens **follow the device**: light values by default, dark values while the
+OS prefers dark (`prefers-color-scheme`, in CSS alone, so there is no flash). **Pin a theme** with
+`data-theme="light"` or `data-theme="dark"` on the `<html>` element (the tokens also respond to a
+`.dark` class on any ancestor). Nothing else changes; the same `var(--bg-surface)` resolves to the
+value of whichever theme applies. So every screen must work in both themes from day one: a user on a
+dark device sees dark without you doing anything.
 
 ```html
-<!-- dark from the first paint -->
-<html data-theme="dark"></html>
+<!-- an app that has not been checked in dark yet: pin light -->
+<html data-theme="light"></html>
 ```
 
 A runtime toggle is just a write to that attribute — the whole tree re-themes with no re-render:
@@ -57,8 +59,8 @@ function toggleTheme() {
 }
 ```
 
-To follow the operating system, set `data-theme="system"`: the dark values apply while the OS prefers
-dark, in CSS alone. Each theme sets `color-scheme`, so native scrollbars and form controls match, and
+`data-theme="system"` follows the device explicitly (the same as no attribute; useful on a subtree
+inside a pinned page). Each theme sets `color-scheme`, so native scrollbars and form controls match, and
 Tailwind's `dark:` variant follows the same three hooks. For a settings control, let
 `useColorMode()` store the choice (`system`, `light` or `dark`) and bind it to `ThemeSwitcher`; inline
 `colorModeScript` in the document head so the stored choice applies before the first paint:
@@ -198,8 +200,8 @@ production; the two-theme screenshot is what catches it first.
 
 - Style through **semantic tokens** only — no hex, `rgb()`/`hsl()`, or Tailwind palette color
   (`bg-white`, `text-zinc-900`, `border-slate-200`) anywhere on the screen.
-- Dark is `data-theme="dark"` on `<html>` (or a `.dark` ancestor), `data-theme="system"` follows the
-  OS, and light is the default `:root`. Don't ship a second stylesheet or a JS color map for dark.
+- With no attribute the theme follows the device; `data-theme="light"` / `data-theme="dark"` on
+  `<html>` (or a `.dark` ancestor) pins it. Don't ship a second stylesheet or a JS color map for dark.
 - Depth in dark comes from **lighter surface tokens** (`--bg-surface-raised` / `--bg-surface-overlay`),
   not a heavier shadow.
 - No `dark:` override for a role a token already covers; reserve `dark:` for the property no token

@@ -2,6 +2,7 @@ import {
   brandPrimitives,
   primitives as colorPrimitives
 } from '../tokens/primitives/colors/colors.js'
+import { shadowDark } from '../tokens/primitives/effects/shadow.js'
 import { accent } from '../tokens/theme/accent.js'
 import { background } from '../tokens/theme/background.js'
 import { border } from '../tokens/theme/border.js'
@@ -16,7 +17,6 @@ import { primary } from '../tokens/theme/primary.js'
 import { ring } from '../tokens/theme/ring.js'
 import { secondary } from '../tokens/theme/secondary.js'
 import { severity } from '../tokens/theme/severity.js'
-import { surfaces } from '../tokens/theme/surfaces.js'
 import { text } from '../tokens/theme/text.js'
 import { assertResolvedRefs, isTokenRef } from './refs.js'
 
@@ -43,7 +43,7 @@ const semanticGroups = {
   info
 }
 
-const resolveRef = (ref, surfacesResolved, semanticResolved = {}) => {
+const resolveRef = (ref, semanticResolved = {}) => {
   if (ref.startsWith('primitives.')) {
     const v = getValueByPath(colorPrimitives, ref.slice('primitives.'.length))
     return typeof v === 'string' || typeof v === 'number' ? String(v) : null
@@ -60,23 +60,19 @@ const resolveRef = (ref, surfacesResolved, semanticResolved = {}) => {
     const name = ref.slice('brand.absolute.'.length)
     return brandPrimitives.absolute[name] ?? null
   }
-  if (ref.startsWith('theme.surfaces.')) {
-    const key = ref.slice('theme.surfaces.'.length)
-    return surfacesResolved[key] ?? null
-  }
   if (ref.startsWith('theme.')) {
     return semanticResolved[ref.slice('theme.'.length)] ?? null
   }
   return null
 }
 
-const isAliasRef = (ref) => ref.startsWith('theme.') && !ref.startsWith('theme.surfaces.')
+const isAliasRef = (ref) => ref.startsWith('theme.')
 
-const resolveGroup = (group, surfacesResolved, variant, unresolved, semanticResolved, aliases) => {
+const resolveGroup = (group, variant, unresolved, semanticResolved, aliases) => {
   const result = {}
   Object.entries(group).forEach(([key, value]) => {
     if (!isTokenRef(value)) return
-    const resolved = resolveRef(value.__ref, surfacesResolved, semanticResolved)
+    const resolved = resolveRef(value.__ref, semanticResolved)
     if (resolved == null) {
       unresolved.push(`[${variant}] --${key} → ${value.__ref}`)
       return
@@ -90,30 +86,12 @@ const resolveGroup = (group, surfacesResolved, variant, unresolved, semanticReso
 }
 
 const compileVariant = (variant, unresolved) => {
-  const surfacesResolved = {}
-  Object.entries(surfaces[variant]).forEach(([key, value]) => {
-    if (!isTokenRef(value)) return
-    const v = resolveRef(value.__ref, {})
-    if (v != null) surfacesResolved[key] = String(v)
-    else unresolved.push(`[${variant}] --${key} → ${value.__ref}`)
-  })
-
   const vars = {}
   const aliases = {}
-  Object.entries(surfacesResolved).forEach(([k, v]) => {
-    vars[`--${k}`] = v
-  })
 
   const semanticResolved = {}
   Object.entries(semanticGroups).forEach(([name, group]) => {
-    const resolved = resolveGroup(
-      group[variant],
-      surfacesResolved,
-      variant,
-      unresolved,
-      semanticResolved,
-      aliases
-    )
+    const resolved = resolveGroup(group[variant], variant, unresolved, semanticResolved, aliases)
     Object.assign(vars, resolved)
     Object.entries(resolved).forEach(([key, value]) => {
       semanticResolved[`${name}.${key.slice(2)}`] = value
@@ -122,23 +100,9 @@ const compileVariant = (variant, unresolved) => {
 
   Object.assign(
     vars,
-    resolveGroup(
-      illustration[variant],
-      surfacesResolved,
-      variant,
-      unresolved,
-      semanticResolved,
-      aliases
-    ),
-    resolveGroup(chart[variant], surfacesResolved, variant, unresolved, semanticResolved, aliases),
-    resolveGroup(
-      severity[variant],
-      surfacesResolved,
-      variant,
-      unresolved,
-      semanticResolved,
-      aliases
-    )
+    resolveGroup(illustration[variant], variant, unresolved, semanticResolved, aliases),
+    resolveGroup(chart[variant], variant, unresolved, semanticResolved, aliases),
+    resolveGroup(severity[variant], variant, unresolved, semanticResolved, aliases)
   )
   return { vars, aliases }
 }
@@ -155,11 +119,17 @@ export const compileThemeVars = () => {
   return Object.fromEntries(VARIANTS.map((v) => [v, compiled[v].vars]))
 }
 
+const darkShadows = Object.fromEntries(
+  Object.entries(shadowDark).map(([key, value]) => [`--shadow-${key}`, value])
+)
+
 export const compileThemeCssVars = () => {
   const compiled = compileAll()
-  return Object.fromEntries(
+  const css = Object.fromEntries(
     VARIANTS.map((v) => [v, { ...compiled[v].vars, ...compiled[v].aliases }])
   )
+  Object.assign(css.dark, darkShadows)
+  return css
 }
 
 const fmt = (vars, indent = '  ') =>
@@ -170,13 +140,15 @@ const fmt = (vars, indent = '  ') =>
 export const LIGHT_SELECTOR = ':root, [data-theme=light], .azion.azion-light'
 export const DARK_SELECTOR = '[data-theme=dark], .dark, .azion.azion-dark'
 export const SYSTEM_SELECTOR = '[data-theme=system]'
+export const UNPINNED_ROOT = ':root:not([data-theme=light], .azion-light)'
+export const LIGHT_PIN = '[data-theme=light], .azion-light'
 
 export const compileThemeCss = () => {
   const { light, dark } = compileThemeCssVars()
   return [
     `${LIGHT_SELECTOR} {\n  color-scheme: light;\n${fmt(light)}\n}`,
     `${DARK_SELECTOR} {\n  color-scheme: dark;\n${fmt(dark)}\n}`,
-    `@media (prefers-color-scheme: dark) {\n  ${SYSTEM_SELECTOR} {\n    color-scheme: dark;\n${fmt(dark, '    ')}\n  }\n}`
+    `@media (prefers-color-scheme: dark) {\n  ${UNPINNED_ROOT}, ${SYSTEM_SELECTOR} {\n    color-scheme: dark;\n${fmt(dark, '    ')}\n  }\n}`
   ].join('\n\n')
 }
 

@@ -128,13 +128,13 @@
       'group relative inline-flex items-center w-full h-10',
       'gap-(--spacing-xs) pe-(--spacing-xs)',
       'rounded-(--shape-elements)',
-      'border border-(--border-default) bg-(--bg-surface) text-(--text-default)',
+      'border border-(--border-input) bg-(--bg-surface) text-(--text-default)',
       'transition-colors duration-150 ease-out motion-reduce:transition-none',
       '[&:not(:focus-within):not([data-disabled])]:hover:border-(--border-strong)',
       'focus-within:outline-none focus-within:ring-2 focus-within:ring-(--ring-color) focus-within:ring-offset-2 focus-within:ring-offset-(--bg-canvas)',
       'data-[invalid]:border-(--danger-border)',
       'data-[required]:border-(--warning-border)',
-      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-default) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
+      'data-[disabled]:bg-(--bg-disabled) data-[disabled]:text-(--text-disabled) data-[disabled]:cursor-not-allowed data-[disabled]:hover:border-(--border-input) data-[disabled]:focus-within:ring-0 data-[disabled]:focus-within:ring-offset-0',
       attrs.class
     ]"
   >

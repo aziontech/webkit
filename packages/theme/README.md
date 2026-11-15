@@ -24,17 +24,23 @@ In your app's root CSS:
 
 ```css
 @import '@aziontech/theme';
+@import '@aziontech/theme/fonts.css';
 ```
 
 or from JavaScript (Vite and friends):
 
 ```javascript
 import '@aziontech/theme'
+import '@aziontech/theme/fonts.css'
 ```
 
-That single import provides:
+`@aziontech/theme/fonts.css` holds the `@font-face` declarations for the Azion type system
+(Rubik, Roboto, Roboto Mono, Noto Sans Arabic…), served from `fonts.azion.com`. Leave it out when
+your app hosts its own font files or its Content Security Policy blocks that host; the font stacks
+then fall back to your faces or the system ones.
 
-- the `@font-face` declarations for the Azion type system (no separate font imports needed);
+The main import provides:
+
 - every primitive CSS variable (colors, spacing, shape, typography, effects, breakpoints);
 - the semantic light/dark variables (`--primary`, `--text-default`, `--bg-surface`…);
 - text-style utilities (`text-heading-2xl`, `text-big-number-md`, …) with responsive sizes;
@@ -42,7 +48,23 @@ That single import provides:
 
 ### 2. Switch themes
 
-Light is the default (`:root`). Dark mode activates on any of these hooks:
+With no theme pinned, the page follows the device: light tokens by default, dark tokens while
+`prefers-color-scheme: dark` matches. This is CSS alone, so there is no flash of the wrong theme and no
+script. Pin a theme with one attribute on `<html>`:
+
+```html
+<html data-theme="light">
+  <!-- always light, whatever the device says -->
+</html>
+<html data-theme="dark">
+  <!-- always dark -->
+</html>
+<html data-theme="system">
+  <!-- follow the device (same as no attribute) -->
+</html>
+```
+
+Dark mode also activates on the older hooks:
 
 ```html
 <html data-theme="dark">
@@ -59,14 +81,14 @@ Light is the default (`:root`). Dark mode activates on any of these hooks:
 document.documentElement.dataset.theme = 'dark' // or 'light'
 ```
 
-Light-mode selectors: `:root`, `[data-theme='light']`, `.azion.azion-light`.
-Dark-mode selectors: `[data-theme='dark']`, `.dark`, `.azion.azion-dark`.
+Light-mode selectors: `:root`, `[data-theme='light']`, `.azion.azion-light` (the last two pin light).
+Dark-mode selectors: `[data-theme='dark']`, `.dark`, `.azion.azion-dark`, and, on a dark device,
+`:root` without a light pin and `[data-theme='system']`.
 
-To follow the operating system, set `data-theme="system"`: the dark tokens apply while
-`prefers-color-scheme: dark` matches, in CSS alone, with no flash and no script. Each theme also sets
-`color-scheme`, so native scrollbars and form controls match, and Tailwind's `dark:` variant follows the
-same hooks (`data-theme="dark"`, `.dark`, and `data-theme="system"` on a dark OS). In a Vue app,
-`useColorMode()` from `@aziontech/webkit/use-color-mode` stores the choice and drives a `ThemeSwitcher`.
+Each theme also sets `color-scheme`, so native scrollbars and form controls match, and Tailwind's
+`dark:` variant follows the same rules. In a Vue app, `useColorMode()` from
+`@aziontech/webkit/use-color-mode` stores the choice (`system` by default) and drives a
+`ThemeSwitcher`.
 
 Derived tokens reference their source (`--border-selected: var(--primary)`), so overriding `--primary`
 rebrands them too.
@@ -78,7 +100,8 @@ The entire public surface, from `package.json#exports`:
 | Path                            | What it is                                                                 |
 | ------------------------------- | -------------------------------------------------------------------------- |
 | `@aziontech/theme`              | the compiled stylesheet (`dist/v4/globals.css`)                            |
-| `@aziontech/theme/colors`       | color primitives: `primitives`, `brandPrimitives`, `surfacePrimitives`     |
+| `@aziontech/theme/fonts.css`    | the `@font-face` declarations (`dist/v4/fonts.css`), optional              |
+| `@aziontech/theme/colors`       | color primitives: `primitives`, `brandPrimitives`                          |
 | `@aziontech/theme/animations`   | motion primitives: `animate`, `curve`, `duration`, `useWhen`               |
 | `@aziontech/theme/texts`        | `textsData` — font-size/line-height/weight bundles per text style          |
 | `@aziontech/theme/theme-colors` | semantic compiler: `compileThemeVars`, `compileThemeCss`, `injectThemeCss` |
@@ -88,7 +111,7 @@ The entire public surface, from `package.json#exports`:
 ### Color primitives
 
 ```javascript
-import { primitives, brandPrimitives, surfacePrimitives } from '@aziontech/theme/colors'
+import { primitives, brandPrimitives } from '@aziontech/theme/colors'
 
 primitives.orange[500] // '#F3652B' — primary brand
 primitives.blue[500] // '#0072F5' — accent
@@ -97,12 +120,9 @@ primitives.gray[900] // '#141414'
 
 brandPrimitives.primary[500] // '#F3652B'
 brandPrimitives.absolute.white // '#FFFFFF'
-
-surfacePrimitives.surface[0] // '#FFFFFF'
-surfacePrimitives.surface[950] // '#0A0A0A'
 ```
 
-Available palettes: `base`, `blue`, `gray`, `slate`, `orange`, `violet`, `yellow`, `green`, `red` — plus the `brand`, `surface`, and `alpha` groups.
+Available palettes: `base`, `blue`, `gray`, `slate`, `orange`, `violet`, `yellow`, `green`, `red` — plus the `brand` and `alpha` groups.
 
 ### Motion primitives
 
@@ -173,18 +193,20 @@ Use them directly:
 
 Utility equivalents are generated in the same stylesheet (e.g. `@utility text-default`), so `class="text-default"` works wherever Tailwind runs.
 
-### Deprecated variables
+### Variables removed in 6.0
 
-These variables still ship in 5.x and are removed in 6.0. Nothing in WebKit reads them.
+Nothing in WebKit read these, so 6.0 removes them. Replace any use in your own CSS:
 
-| Deprecated                                     | Use instead                                                                                                                                                                  |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `--surface-0` … `--surface-950` (18 variables) | a semantic role (`--bg-canvas`, `--bg-surface`, `--border-default`, `--text-muted`…), or `--color-gray-<step>` for a fixed ramp step (`--surface-0` is `--color-base-white`) |
-| `--height-2` … `--height-96` (28 variables)    | the Tailwind `h-<n>` utilities, or `calc(var(--spacing) * <n>)`                                                                                                              |
-| `--width-3xs` … `--width-7xl` (13 variables)   | `--container-3xs` … `--container-7xl` (same values)                                                                                                                          |
-| `--z-input-popup`                              | `--z-input-overlay`                                                                                                                                                          |
+| Removed                                              | Use instead                                                                                                                         |
+| ---------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `--surface-0` … `--surface-950` (18 variables)       | a semantic role (`--bg-canvas`, `--bg-surface`, `--border-default`, `--text-muted`…), or `--color-gray-<step>` for a fixed step     |
+| `--color-surface-0` … `--color-surface-950` (12)     | the same step of `--color-gray-*` (identical values; `--color-surface-0` is `--color-base-white`); the `surface-*` utilities go too |
+| `--height-2` … `--height-96` (28 variables)          | the Tailwind `h-<n>` utilities, or `calc(var(--spacing) * <n>)`                                                                     |
+| `--width-3xs` … `--width-7xl` (13 variables)         | `--container-3xs` … `--container-7xl` (same values)                                                                                 |
+| `--z-input-popup`                                    | `--z-input-overlay`                                                                                                                 |
+| `surfacePrimitives` (from `@aziontech/theme/colors`) | `primitives.gray`                                                                                                                   |
 
-The `--color-surface-*` primitive ramp and the `--illustration-*` roles stay.
+The `--illustration-*` roles stay.
 
 ## Breakpoints and container sizes
 
@@ -272,7 +294,7 @@ packages/theme/
 ├── tokens.js                    # in-repo JS barrel (not shipped — use the subpath exports)
 ├── src/
 │   ├── tokens/
-│   │   ├── primitives/          # colors (brand/surface/alpha), typography, shape, effects, animations, …
+│   │   ├── primitives/          # colors (brand/alpha), typography, shape, effects, animations, …
 │   │   ├── semantic/            # texts/containers/spacings/z-indices data + semantic color refs
 │   │   ├── theme/               # light/dark semantic groups (primary, background, text, ring, feedback/…)
 │   │   └── README.md            # in-depth token documentation
