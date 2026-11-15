@@ -3,11 +3,11 @@ name: schema-form
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 5
 template: 2
-checksum: b14423c4ec4f14fa13c6427b99ee975bdf5afbc21d7e6536aa07ece737808806
+checksum: ca38bb9fbd9237eb6e0702dcb2e0a74f239d34aff6f0c2179d074909787e478f
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # SchemaForm — Component Spec
@@ -46,7 +46,7 @@ A form rendered from a JSON schema: each property of an object schema becomes a 
 - Keep the default `validate-on="blur"` for short forms; use `submit` when the form sits in a drawer or dialog with one Save.
 - Call `validate()` on submit and stop when it returns `valid: false`; it shows every message and focuses the first invalid field.
 - Pass server rejections in `errors` keyed by path (`origin.host`): the field turns invalid with that message until the user edits it (the form-error rule). Put a section-level failure in an `Alert` above the form, not in `errors`.
-- Use a `field:<path>` slot for a control the schema cannot express (`RadioCards`, a resource picker); the slot keeps the label, description and messages.
+- Use a `field:<path>` slot for a control the schema cannot express (`RadioGroup` cards, a resource picker); the slot keeps the label, description and messages.
 - Do not rely on unsupported keywords (`$ref`, `anyOf`, `allOf`, `if`/`then`/`else`, `uniqueItems`, `multipleOf`, `patternProperties`, a `oneOf` without a `discriminator`): they are ignored, so validate them on the server. Express an `if`/`then` as `ui[path].when`.
 - Define `ui` once in the script, not inline in the template: a new `ui` object rebuilds the fields and seeds defaults again.
 - Keep a `when` predicate pure and cheap (it runs on every change); read the second argument (the object holding the field) inside a repeat item.
@@ -294,7 +294,7 @@ Justification: SchemaForm has no `kind` or `size` axis. WithValidation shows the
 - **Repeat is opt-in, maps are not.** An array of objects stays a JSON field unless `ui[path].widget` is `repeat`, so forms that relied on the JSON text keep it; a string map was an ignored keyword before, so it now opens as key/value rows (`widget: 'json'` brings the text back).
 - **Hidden values leave the value.** Stripping them as they hide (and restoring them when shown) keeps `v-model` equal to what a submit sends, so the app needs no separate "submitted value".
 - **A multiple `options` field does not search.** `MultiSelect` has no search box; it loads once with an empty query. A searchable multiple picker waits for one in `multi-select`.
-- **Dates are typed, not picked.** `format: date` is a text field checked as `YYYY-MM-DD`; a `Calendar` popover would add a heavy dependency to every form.
+- **Dates are typed, not picked.** `format: date` is a text field checked as `YYYY-MM-DD`; a `DatePicker` popover would add a heavy dependency to every form.
 
 ## Constraints — DO NOT
 

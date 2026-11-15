@@ -1,5 +1,5 @@
 import { intlLocale } from '../../../composables/use-locale/use-translate'
-import type { CalendarMode, CalendarRange, CalendarValue } from './injection-key'
+import type { DatePickerDraft, DatePickerMode, DatePickerRange } from './injection-key'
 
 export const startOfDay = (date: Date): Date =>
   new Date(date.getFullYear(), date.getMonth(), date.getDate())
@@ -19,7 +19,7 @@ export const sameDay = (a: Date | null | undefined, b: Date | null | undefined):
   )
 }
 
-export const asRange = (value: CalendarValue): CalendarRange => {
+export const asRange = (value: DatePickerDraft): DatePickerRange => {
   if (value && !(value instanceof Date)) {
     return value
   }
@@ -27,7 +27,7 @@ export const asRange = (value: CalendarValue): CalendarRange => {
   return { start: null, end: null }
 }
 
-export const asSingle = (value: CalendarValue): Date | null =>
+export const asSingle = (value: DatePickerDraft): Date | null =>
   value instanceof Date ? value : null
 
 export const withTime = (date: Date, source: Date | null, isEnd: boolean): Date => {
@@ -92,8 +92,8 @@ const isWholeMonth = (start: Date, end: Date): boolean =>
   isDefaultEndTime(end)
 
 export const formatValueLabel = (
-  value: CalendarValue,
-  mode: CalendarMode,
+  value: DatePickerDraft,
+  mode: DatePickerMode,
   timezone = '',
   locale = 'en-US'
 ): string => {
@@ -153,8 +153,8 @@ const formatClock = (date: Date, timezone = '', locale = 'en-US'): string =>
   }).format(date)
 
 export const formatWindowLabel = (
-  value: CalendarValue,
-  mode: CalendarMode,
+  value: DatePickerDraft,
+  mode: DatePickerMode,
   timezone = '',
   locale = 'en-US'
 ): string => {

@@ -1,6 +1,5 @@
 <script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
-  import type { CalendarRange } from '@aziontech/webkit/calendar'
   import Chart, {
     type ChartColor,
     type ChartRange,
@@ -27,6 +26,11 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
+
+  interface TimeRange {
+    start: Date | null
+    end: Date | null
+  }
 
   type EventSource = 'http' | 'security' | 'services' | 'access'
   type EventLevel = 'Error' | 'Warning' | 'Info' | 'Debug'
@@ -89,7 +93,7 @@
     format?: (value: number) => string
   }
 
-  type AppliedValue = string | number | CalendarRange
+  type AppliedValue = string | number | TimeRange
 
   type FilterState = Record<string, AppliedValue[]>
 
@@ -187,7 +191,7 @@
 
   const fullWindowMinutes = periodMinutes['24h']
 
-  const withinRange = (date: Date, range: CalendarRange | null) => {
+  const withinRange = (date: Date, range: TimeRange | null) => {
     if (!range) return true
     const { start, end } = range
     if (!start && !end) return true
@@ -482,7 +486,7 @@
     return 32
   }
 
-  const eventBuckets = (list: EventRecord[], range: CalendarRange | null): EventBucket[] => {
+  const eventBuckets = (list: EventRecord[], range: TimeRange | null): EventBucket[] => {
     const end = (range?.end ?? new Date(referenceNow)).getTime()
     const start = (range?.start ?? new Date(end - fullWindowMinutes * 60000)).getTime()
     const span = Math.max(1, end - start)
@@ -632,7 +636,7 @@
     return eventPeriods.find((option) => option.value === period)?.label ?? 'Last 24 hours'
   })
 
-  const selectTimeRange = ({ start, end }: CalendarRange) => {
+  const selectTimeRange = ({ start, end }: TimeRange) => {
     filters.value = { ...filters.value, period: [{ start, end }] }
   }
 

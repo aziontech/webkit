@@ -22,21 +22,21 @@
   import * as en from '../../../i18n/messages/en'
   import Button from '../../actions/button/button.vue'
   import ToggleGroup from '../../actions/toggle-group/toggle-group.vue'
-  import CalendarFields from '../calendar/calendar-fields/calendar-fields.vue'
-  import CalendarGrid from '../calendar/calendar-grid/calendar-grid.vue'
-  import CalendarTimezone from '../calendar/calendar-timezone/calendar-timezone.vue'
+  import DatePickerFields from '../date-picker/date-picker-fields/date-picker-fields.vue'
+  import DatePickerGrid from '../date-picker/date-picker-grid/date-picker-grid.vue'
+  import DatePickerTimezone from '../date-picker/date-picker-timezone/date-picker-timezone.vue'
   import {
     asRange,
     formatValueLabel,
     localTimezone,
     startOfDay,
     withTime
-  } from '../calendar/format'
+  } from '../date-picker/format'
   import {
-    CalendarInjectionKey,
-    type CalendarRange,
-    type CalendarValue
-  } from '../calendar/injection-key'
+    type DatePickerDraft,
+    DatePickerInjectionKey,
+    type DatePickerRange
+  } from '../date-picker/injection-key'
   import Input from '../input/input.vue'
   import {
     DATE_RANGE_UNITS,
@@ -70,6 +70,8 @@
     timeZones?: string[]
     /** Shows the time zone selector in the panel. */
     showTimeZone?: boolean
+    /** Shows the start and end time fields of an absolute range. Off, a range covers whole days (a report or billing period). */
+    showTime?: boolean
     /** Shows Previous and Next buttons that move the range back or forward by its own length. */
     showStep?: boolean
     /** Which kinds of range the panel offers. */
@@ -99,6 +101,7 @@
     relativeOptions: () => DEFAULT_RELATIVE_OPTIONS,
     timeZones: () => [],
     showTimeZone: true,
+    showTime: true,
     showStep: false,
     rangeSelectorMode: 'default',
     min: undefined,
@@ -123,7 +126,10 @@
     disabled: () => props.disabled
   })
   const isDisabled = computed(() => field.disabled.value)
-  const { t, locale } = useTranslate({ dateRangePicker: en.dateRangePicker, calendar: en.calendar })
+  const { t, locale } = useTranslate({
+    dateRangePicker: en.dateRangePicker,
+    datePicker: en.datePicker
+  })
   const { context: localeContext } = useLocaleContext()
 
   const testId = computed<string>(
@@ -143,7 +149,10 @@
     mounted.value = true
   })
 
-  const zone = computed<string>(() => timeZone.value || (mounted.value ? localTimezone() : 'UTC'))
+  const zone = computed<string>(
+    () =>
+      timeZone.value || localeContext?.timeZone?.value || (mounted.value ? localTimezone() : 'UTC')
+  )
   const clock = (): Date => {
     if (props.now) return props.now
     const provided = localeContext?.now?.value
@@ -195,7 +204,7 @@
   const draftKey = ref<string>('')
   const customAmount = ref<string>('1')
   const customUnit = ref<DateRangeUnit>('hour')
-  const draftRange = ref<CalendarRange>({ start: null, end: null })
+  const draftRange = ref<DatePickerRange>({ start: null, end: null })
   const draftZone = ref<string>('')
   const showError = ref(false)
 
@@ -343,7 +352,7 @@
     }
   }
 
-  const selectValue = (_event: Event, value: Date | CalendarRange): void => {
+  const selectValue = (_event: Event, value: Date | DatePickerRange): void => {
     const range = value instanceof Date ? { start: value, end: value } : value
     draftRange.value = { start: range.start, end: range.end }
   }
@@ -365,16 +374,16 @@
     draftZone.value = next
   }
 
-  provide(CalendarInjectionKey, {
+  provide(DatePickerInjectionKey, {
     testId: testId.value,
     mode: computed(() => 'range' as const),
     size: computed(() => props.size),
     disabled: isDisabled,
     min: minWall,
     max: maxWall,
-    showTime: computed(() => true),
+    showTime: computed(() => props.showTime),
     horizontal: computed(() => false),
-    draft: computed<CalendarValue>(() => draftRange.value),
+    draft: computed<DatePickerDraft>(() => draftRange.value),
     hasSelection: computed(() => Boolean(draftRange.value.start || draftRange.value.end)),
     timezone: computed(() => draftZone.value),
     timezones: computed(() => props.timeZones),
@@ -667,17 +676,17 @@
             :data-testid="`${testId}__absolute`"
           >
             <div class="p-(--spacing-sm)">
-              <CalendarGrid />
+              <DatePickerGrid />
             </div>
             <div class="border-t border-(--border-default) p-(--spacing-sm)">
-              <CalendarFields />
+              <DatePickerFields />
             </div>
           </div>
 
           <div
             class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm)"
           >
-            <CalendarTimezone v-if="showTimeZone && panelMode === 'absolute'" />
+            <DatePickerTimezone v-if="showTimeZone && panelMode === 'absolute'" />
             <p
               v-if="showError && draftError"
               :id="errorId"

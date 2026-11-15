@@ -10,7 +10,6 @@ export const MARKET_ALIASES = {
   'config-provider': 'webkit-provider',
   'data-table': 'table',
   datatable: 'table',
-  'date-picker': 'calendar',
   'input-otp': 'otp-input',
   keyboard: 'kbd',
   loader: 'spinner',
@@ -22,7 +21,7 @@ export const MARKET_ALIASES = {
   snackbar: 'toast',
   steps: 'stepper',
   'text-field': 'input',
-  tiles: 'radio-cards',
+  tiles: 'radio-group',
   toggle: 'toggle-group'
 }
 

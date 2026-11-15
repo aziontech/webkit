@@ -4,16 +4,16 @@
   import { useTranslate } from '../../../../composables/use-locale/use-translate'
   import * as en from '../../../../i18n/messages/en'
   import { cityName, defaultTimezones, formatTimezoneLabel, localTimezone } from '../format'
-  import { CalendarInjectionKey } from '../injection-key'
+  import { DatePickerInjectionKey } from '../injection-key'
 
   defineOptions({
-    name: 'CalendarTimezone',
+    name: 'DatePickerTimezone',
     inheritAttrs: false
   })
 
-  const { t } = useTranslate({ calendar: en.calendar })
+  const { t } = useTranslate({ datePicker: en.datePicker })
 
-  const ctx = inject(CalendarInjectionKey, null)
+  const ctx = inject(DatePickerInjectionKey, null)
 
   const size = computed(() => ctx?.size.value ?? 'medium')
   const disabled = computed(() => ctx?.disabled.value ?? false)
@@ -34,7 +34,7 @@
   })
 
   const optionLabel = (zone: string): string => {
-    const local = t('calendar.localTimezone')
+    const local = t('datePicker.localTimezone')
     if (mounted.value) return formatTimezoneLabel(zone, local)
     return zone ? cityName(zone) : local
   }
@@ -48,9 +48,9 @@
 <template>
   <label
     class="flex flex-col gap-(--spacing-xxs)"
-    data-testid="input-calendar__timezone"
+    data-testid="input-date-picker__timezone"
   >
-    <span class="text-label-sm text-(--text-muted)"> {{ t('calendar.timezone') }} </span>
+    <span class="text-label-sm text-(--text-muted)"> {{ t('datePicker.timezone') }} </span>
     <span class="relative inline-flex w-full items-center">
       <select
         :value="value"

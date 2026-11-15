@@ -5,17 +5,17 @@
   import * as en from '../../../../i18n/messages/en'
   import Input from '../../input/input.vue'
   import { asRange, asSingle, formatDate, formatTime } from '../format'
-  import { CalendarInjectionKey } from '../injection-key'
+  import { DatePickerInjectionKey } from '../injection-key'
   import { parseFixedDate, parseTime } from '../parse-period'
 
   defineOptions({
-    name: 'CalendarFields',
+    name: 'DatePickerFields',
     inheritAttrs: false
   })
 
-  const { t, locale } = useTranslate({ calendar: en.calendar })
+  const { t, locale } = useTranslate({ datePicker: en.datePicker })
 
-  const ctx = inject(CalendarInjectionKey, null)
+  const ctx = inject(DatePickerInjectionKey, null)
 
   const mode = computed(() => ctx?.mode.value ?? 'single')
   const showTime = computed(() => ctx?.showTime.value ?? false)
@@ -38,10 +38,10 @@
   const endDateId = useId()
 
   const startLabel = computed(() =>
-    mode.value === 'range' ? t('calendar.start') : t('calendar.date')
+    mode.value === 'range' ? t('datePicker.start') : t('datePicker.date')
   )
   const startTimeLabel = computed(() =>
-    mode.value === 'range' ? t('calendar.startTime') : t('calendar.time')
+    mode.value === 'range' ? t('datePicker.startTime') : t('datePicker.time')
   )
 
   const syncFromDraft = () => {
@@ -100,7 +100,7 @@
 <template>
   <div
     class="flex flex-col gap-(--spacing-sm) [--input-ring-offset:var(--bg-surface-raised)]"
-    data-testid="input-calendar__fields"
+    data-testid="input-date-picker__fields"
   >
     <div class="flex flex-col gap-(--spacing-xxs)">
       <label
@@ -146,7 +146,7 @@
         :for="endDateId"
         class="text-label-sm text-(--text-muted)"
       >
-        {{ t('calendar.end') }}
+        {{ t('datePicker.end') }}
       </label>
       <div class="flex items-center gap-(--spacing-xs)">
         <div class="min-w-0 flex-1">
@@ -168,7 +168,7 @@
             :model-value="endTimeText"
             :size="size"
             :disabled="disabled"
-            :aria-label="t('calendar.endTime')"
+            :aria-label="t('datePicker.endTime')"
             :placeholder="endTimePlaceholder"
             @update:model-value="endTimeText = $event"
             @change="commitTime('end', endTimeText)"

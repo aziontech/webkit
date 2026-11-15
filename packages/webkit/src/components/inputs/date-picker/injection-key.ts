@@ -1,46 +1,43 @@
 import type { ComputedRef, InjectionKey } from 'vue'
 
-/** Selection mode for the calendar grid. */
-export type CalendarMode = 'single' | 'range'
+/** Selection mode of the shared grid: DatePicker picks one day, DateRangePicker a range. */
+export type DatePickerMode = 'single' | 'range'
 
 /** Size token; affects the trigger, day-cell hit-area, and typography. */
-export type CalendarSize = 'small' | 'medium' | 'large'
+export type DatePickerSize = 'small' | 'medium' | 'large'
 
 /** Where the fields and Apply column sit relative to the calendar grid. */
-export type CalendarOrientation = 'vertical' | 'horizontal'
+export type DatePickerOrientation = 'vertical' | 'horizontal'
 
-/** Range value emitted and accepted in range mode. */
-export interface CalendarRange {
+/** A start and end the shared grid builds for DateRangePicker. */
+export interface DatePickerRange {
   start: Date | null
   end: Date | null
 }
 
 /** Visible month payload emitted on navigation. month is 0-indexed. */
-export interface CalendarMonth {
+export interface DatePickerMonth {
   year: number
   month: number
 }
 
-/** v-model value: a Date (or null) in single mode, a range object in range mode. */
-export type CalendarValue = Date | null | CalendarRange
+/** v-model value of DatePicker: the picked date, or null. */
+export type DatePickerValue = Date | null
 
-/** A data-driven preset shortcut rendered in the presets rail. */
-export interface CalendarPresetItem {
-  label: string
-  value: Date | CalendarRange
-}
+/** What the shared grid and fields edit: one date, or a range for DateRangePicker. */
+export type DatePickerDraft = Date | null | DatePickerRange
 
 /**
  * Shared state the root picker provides. Sub-components inject it and drive the
  * popover's DRAFT selection (staged until Apply) so the consumer wires nothing.
  */
-export interface CalendarContext {
+export interface DatePickerContext {
   /** Root data-testid; sub-components derive BEM-suffixed ids from it. */
   testId: string
   /** Selection mode. */
-  mode: ComputedRef<CalendarMode>
+  mode: ComputedRef<DatePickerMode>
   /** Active size token. */
-  size: ComputedRef<CalendarSize>
+  size: ComputedRef<DatePickerSize>
   /** Whether the whole picker is disabled. */
   disabled: ComputedRef<boolean>
   /** Earliest selectable date (or undefined). */
@@ -52,7 +49,7 @@ export interface CalendarContext {
   /** Whether the popover uses the horizontal (side-by-side) layout. */
   horizontal: ComputedRef<boolean>
   /** Staged (pre-Apply) selection the popover edits. */
-  draft: ComputedRef<CalendarValue>
+  draft: ComputedRef<DatePickerDraft>
   /** Whether the draft has any selection (drives the clear control). */
   hasSelection: ComputedRef<boolean>
   /** Selected IANA timezone (display only). */
@@ -63,7 +60,7 @@ export interface CalendarContext {
   selectDay: (date: Date) => void
   /** Apply a full value (preset / period) to the draft; `periodLabel` records the
    * relative token (e.g. `45m`) so the trigger can show it above the resolved window. */
-  selectValue: (event: Event, value: Date | CalendarRange, periodLabel?: string) => void
+  selectValue: (event: Event, value: Date | DatePickerRange, periodLabel?: string) => void
   /** Set a range endpoint (or the single value) from the date/time fields. */
   setEndpoint: (which: 'start' | 'end', date: Date | null) => void
   /** Clear the draft selection. */
@@ -71,7 +68,7 @@ export interface CalendarContext {
   /** Update the selected timezone. */
   setTimezone: (timezone: string) => void
   /** Notify the root that the first visible month changed. */
-  changeMonth: (month: CalendarMonth) => void
+  changeMonth: (month: DatePickerMonth) => void
 }
 
-export const CalendarInjectionKey: InjectionKey<CalendarContext> = Symbol('CalendarContext')
+export const DatePickerInjectionKey: InjectionKey<DatePickerContext> = Symbol('DatePickerContext')

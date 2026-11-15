@@ -1,14 +1,13 @@
 <script setup>
-  import CalendarRoot from '@aziontech/webkit/calendar-root'
+  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
   import { ref } from 'vue'
 
-  const range = ref(null)
+  const date = ref(null)
 </script>
 
 <template>
-  <CalendarRoot
-    v-model="range"
-    mode="range"
+  <DatePickerRoot
+    v-model="date"
     orientation="horizontal"
     clearable
     show-time

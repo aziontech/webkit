@@ -3,8 +3,8 @@ name: field
 category: inputs
 structure: composition
 status: implemented
-spec_version: 4
-checksum: 6040ce853a2cb0b361cfb9820c841ec3ba8acefb1c77b6456e34e7204a39d926
+spec_version: 5
+checksum: d63dc2989b5b7a6d66b57f21e90ea1c0233cb1078204a01512f9753545cd8061
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -13,14 +13,14 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `Calendar`, `DateRangePicker`, `Checkbox`, `RadioButton`, `RadioCards`, `Switch`, `Slider` — with its label, description and error. The root `Field` owns the field state (`invalid`, `disabled`, `required`) and the ids, and shares them through `provide`/`inject`: the control picks up its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from the Field, `Field.Label` points its `for` at the control and shows the Required marker, and `Field.Description` / `Field.Error` register themselves so the control is described by them. Grouping parts (`Field.Set`, `Field.Legend`, `Field.Group`, `Field.Content`, `Field.Title`, `Field.Separator`) build fieldsets, choice cards and settings rows. It replaces the v5 `field-*` family (`field-text`, `field-select`, `field-checkbox-block`, …), one wrapper per control, with a single anatomy.
+One composable form field that wraps **any** control — `Input`, `Textarea`, `Select`, `MultiSelect`, `NumberInput`, `PasswordInput`, `PhoneInput`, `InputGroup`, `Combobox`, `DatePicker`, `DateRangePicker`, `Checkbox`, `RadioGroup`, `Switch`, `Slider` — with its label, description and error. The root `Field` owns the field state (`invalid`, `disabled`, `required`) and the ids, and shares them through `provide`/`inject`: the control picks up its `id`, `aria-describedby`, `aria-invalid`, `disabled` and `required` from the Field, `Field.Label` points its `for` at the control and shows the Required marker, and `Field.Description` / `Field.Error` register themselves so the control is described by them. Grouping parts (`Field.Set`, `Field.Legend`, `Field.Group`, `Field.Content`, `Field.Title`, `Field.Separator`) build fieldsets, choice cards and settings rows. One anatomy serves every control, so there is no per-control field wrapper.
 
 ## When to use
 
 - Use Field (Field.Label, Field.Description, Field.Error) around every form control; it wires the id, the required marker and the error for you. Under a control that is not inside Field use HelperText; for a one-sentence explanation beside a label use Hint.
 - Any labelled form control: a text input, a select, a textarea, a password, a phone number, a slider.
 - A checkbox, radio or switch with its label beside it (`orientation="horizontal"`).
-- A selectable choice card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants).
+- A selectable checkbox or switch card: `Field.Label` wrapping a horizontal `Field` (replaces the v5 `*-block` variants). For one choice among cards use `RadioGroup kind="card"`, never a radio inside a `Field.Label`.
 - A group of related controls under one caption (`Field.Set` + `Field.Legend`), or a form section (`Field.Group`).
 
 ## When NOT to use
@@ -33,7 +33,7 @@ One composable form field that wraps **any** control — `Input`, `Textarea`, `S
 
 - `helper-text` — the tone-aware helper line that `Field.Description` and `Field.Error` render.
 - `input-group` — wraps an input with addons; put it inside a `Field` and use `InputGroup.Input` as the control.
-- `phone-input`, `password-requirements` — the controls that replaced `field-phone-number` and the requirements row of `field-password`.
+- `phone-input`, `password-requirements` — a phone number control and the live password rules row, each placed inside a `Field`.
 
 ## Best practices
 
@@ -126,7 +126,7 @@ The root `Field` provides `fieldContextKey` (`injection-key.ts`): a generated `c
   - Events: _none_. Slots: `default`.
 - `field-content/field-content.vue` — column that holds the label/title and descriptions beside a control in a horizontal Field.
   - Props: _none_. Events: _none_. Slots: `default`.
-- `field-title/field-title.vue` — title inside a choice card; registers its id with the Field so the card's `Checkbox`, `RadioButton` or `Switch` is named by it through `aria-labelledby` (the wrapping `Field.Label` makes the whole card the click target).
+- `field-title/field-title.vue` — title inside a choice card; registers its id with the Field so the card's `Checkbox` or `Switch` is named by it through `aria-labelledby` (the wrapping `Field.Label` makes the whole card the click target).
   - Props: _none_. Events: _none_. Slots: `default`.
 - `field-separator/field-separator.vue` — horizontal rule between fields, with optional centred text.
   - Props: _none_. Events: _none_. Slots: `default` — optional text.

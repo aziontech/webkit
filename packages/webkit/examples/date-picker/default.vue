@@ -1,14 +1,13 @@
 <script setup>
-  import CalendarRoot from '@aziontech/webkit/calendar-root'
+  import DatePickerRoot from '@aziontech/webkit/date-picker-root'
   import { ref } from 'vue'
 
   const date = ref(null)
 </script>
 
 <template>
-  <CalendarRoot
+  <DatePickerRoot
     v-model="date"
-    mode="single"
-    placeholder="Select date"
+    aria-label="Start date"
   />
 </template>

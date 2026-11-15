@@ -1,6 +1,6 @@
 import { intlLocale } from '../../../composables/use-locale/use-translate'
 import { endOfDay, startOfDay } from './format'
-import type { CalendarRange } from './injection-key'
+import type { DatePickerRange } from './injection-key'
 
 export interface ParseOptions {
   locale?: string
@@ -142,7 +142,7 @@ export function parsePeriod(
   input: string,
   now: Date = new Date(),
   options: ParseOptions = {}
-): CalendarRange | null {
+): DatePickerRange | null {
   const text = normalizeText(input)
   if (!text) return null
 
@@ -165,7 +165,7 @@ export function parsePeriod(
   return single ? { start: startOfDay(single), end: endOfDay(single) } : null
 }
 
-function parseRelative(text: string, now: Date, vocabulary: Vocabulary): CalendarRange | null {
+function parseRelative(text: string, now: Date, vocabulary: Vocabulary): DatePickerRange | null {
   const match = text.match(/^(\d+)\s*(\p{L}[\p{L}.\s]*)$/u)
   if (!match) return null
 
@@ -184,7 +184,7 @@ function parseRelative(text: string, now: Date, vocabulary: Vocabulary): Calenda
   return { start, end: new Date(now.getTime()) }
 }
 
-function parseKeyword(text: string, now: Date, vocabulary: Vocabulary): CalendarRange | null {
+function parseKeyword(text: string, now: Date, vocabulary: Vocabulary): DatePickerRange | null {
   switch (vocabulary.keywords.get(bare(text))) {
     case 'today':
       return { start: startOfDay(now), end: endOfDay(now) }

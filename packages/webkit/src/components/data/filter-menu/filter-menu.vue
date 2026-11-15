@@ -13,6 +13,7 @@
   import IconButton from '../../actions/icon-button/icon-button.vue'
   import Avatar from '../../content/avatar/avatar.vue'
   import Badge from '../../content/badge/badge.vue'
+  import type { DateRangeValue } from '../../inputs/date-range-picker/date-range'
   import Input from '../../inputs/input/input.vue'
   import Popover from '../../overlay/popover/popover.vue'
   import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
@@ -68,7 +69,9 @@
     }
   })
 
-  const Calendar = defineAsyncComponent(() => import('../../inputs/calendar/calendar.vue'))
+  const DateRangePicker = defineAsyncComponent(
+    () => import('../../inputs/date-range-picker/date-range-picker.vue')
+  )
 
   const attrs = useAttrs()
   const { t, dir, locale, optionsOf, summaryText } = useFilterMenuLabels()
@@ -78,7 +81,7 @@
   const activeId = ref<string | null>(null)
   const customId = ref<string | null>(null)
   const calendarOpen = ref<boolean>(false)
-  const customRange = ref<FilterMenuRange | null>(null)
+  const customRange = ref<DateRangeValue | null>(null)
   const query = ref<string>('')
   const direction = ref<'forward' | 'back'>('forward')
   const panelRef = ref<HTMLElement | null>(null)
@@ -203,7 +206,11 @@
   const commitCustom = (value: unknown): void => {
     const field = customField.value
     if (!field) return
-    const range = value as FilterMenuRange | null
+    const picked = value as DateRangeValue | null
+    const range: FilterMenuRange | null =
+      picked?.type === 'absolute'
+        ? { start: new Date(picked.start), end: new Date(picked.end) }
+        : null
     const next = { ...model.value }
     if (range?.start || range?.end) next[field.id] = [{ start: range.start, end: range.end }]
     else delete next[field.id]
@@ -372,13 +379,14 @@
                 v-if="customField"
                 class="px-(--spacing-md) py-(--spacing-sm)"
               >
-                <Calendar
+                <DateRangePicker
                   v-model="customRange"
                   v-model:open="calendarOpen"
                   :data-testid="`${testId}__calendar`"
-                  mode="range"
+                  range-selector-mode="absolute-only"
                   size="medium"
-                  :show-fields="false"
+                  :show-time="false"
+                  :show-time-zone="false"
                   :placeholder="t('filterMenu.pickRange')"
                   class="w-full"
                   @update:model-value="commitCustom"

@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import { computed, inject, useAttrs } from 'vue'
 
-  import { CalendarInjectionKey } from '../injection-key'
+  import { DatePickerInjectionKey } from '../injection-key'
 
   defineOptions({
-    name: 'CalendarClear',
+    name: 'DatePickerClear',
     inheritAttrs: false
   })
 
@@ -13,12 +13,12 @@
   }>()
 
   const attrs = useAttrs()
-  const ctx = inject(CalendarInjectionKey, null)
+  const ctx = inject(DatePickerInjectionKey, null)
 
   const testId = computed<string>(
     () =>
       (attrs['data-testid'] as string | undefined) ??
-      (ctx ? `${ctx.testId}__clear` : 'input-calendar__clear')
+      (ctx ? `${ctx.testId}__clear` : 'input-date-picker__clear')
   )
 
   const disabled = computed<boolean>(

@@ -13,14 +13,14 @@
     type TabsSlideDirection
   } from '../../../navigation/tabs/presets/transitions'
   import { asRange, asSingle, sameDay, startOfDay } from '../format'
-  import { CalendarInjectionKey } from '../injection-key'
+  import { DatePickerInjectionKey } from '../injection-key'
 
   defineOptions({
-    name: 'CalendarGrid',
+    name: 'DatePickerGrid',
     inheritAttrs: false
   })
 
-  const { t, locale } = useTranslate({ calendar: en.calendar })
+  const { t, locale } = useTranslate({ datePicker: en.datePicker })
   const { context: localeContext } = useLocaleContext()
   const now = (): Date => new Date(localeContext?.now?.value ?? Date.now())
   const monthLabel = computed(
@@ -34,7 +34,7 @@
     )
   )
 
-  const ctx = inject(CalendarInjectionKey, null)
+  const ctx = inject(DatePickerInjectionKey, null)
 
   const MS_PER_DAY = 86_400_000
 
@@ -115,9 +115,9 @@
   }
   const isOutOfBounds = (date: Date): boolean => isBeforeMin(date) || isAfterMax(date)
 
-  type CalendarDayBand = 'none' | 'single' | 'start' | 'middle' | 'end'
+  type DatePickerDayBand = 'none' | 'single' | 'start' | 'middle' | 'end'
 
-  interface CalendarDay {
+  interface DatePickerDay {
     date: Date
     time: number
     label: number
@@ -125,18 +125,18 @@
     disabled: boolean
     today: boolean
     selected: boolean
-    band: CalendarDayBand
+    band: DatePickerDayBand
   }
 
-  interface CalendarMonthGrid {
+  interface DatePickerMonthGrid {
     key: string
     year: number
     month: number
     label: string
-    weeks: CalendarDay[][]
+    weeks: DatePickerDay[][]
   }
 
-  const dayBand = (date: Date): CalendarDayBand => {
+  const dayBand = (date: Date): DatePickerDayBand => {
     if (mode.value !== 'range') {
       return sameDay(date, asSingle(draft.value)) ? 'single' : 'none'
     }
@@ -168,13 +168,13 @@
     return 'none'
   }
 
-  const buildWeeks = (year: number, month: number): CalendarDay[][] => {
+  const buildWeeks = (year: number, month: number): DatePickerDay[][] => {
     const firstOfMonth = new Date(year, month, 1)
     const gridStart = new Date(year, month, 1 - firstOfMonth.getDay())
-    const rows: CalendarDay[][] = []
+    const rows: DatePickerDay[][] = []
 
     for (let row = 0; row < 6; row += 1) {
-      const cells: CalendarDay[] = []
+      const cells: DatePickerDay[] = []
       for (let col = 0; col < 7; col += 1) {
         const date = new Date(
           gridStart.getFullYear(),
@@ -200,7 +200,7 @@
     return rows
   }
 
-  const monthGrid = computed<CalendarMonthGrid>(() => {
+  const monthGrid = computed<DatePickerMonthGrid>(() => {
     const date = new Date(viewYear.value, viewMonth.value, 1)
     const year = date.getFullYear()
     const month = date.getMonth()
@@ -215,7 +215,7 @@
 
   const focusedTime = ref<number | null>(null)
 
-  const inMonthDays = computed<CalendarDay[]>(() =>
+  const inMonthDays = computed<DatePickerDay[]>(() =>
     monthGrid.value.weeks.flat().filter((day) => !day.outside)
   )
 
@@ -277,7 +277,7 @@
     goToMonth(viewYear.value, viewMonth.value + 1)
   }
 
-  const selectDay = (day: CalendarDay) => {
+  const selectDay = (day: DatePickerDay) => {
     if (day.disabled) {
       return
     }
@@ -297,7 +297,7 @@
     focusActiveCell()
   }
 
-  const onDayKeydown = (event: globalThis.KeyboardEvent, day: CalendarDay) => {
+  const onDayKeydown = (event: globalThis.KeyboardEvent, day: DatePickerDay) => {
     switch (logicalArrowKey(event.key, eventDirection(event))) {
       case 'ArrowLeft':
         event.preventDefault()
@@ -349,7 +349,7 @@
 <template>
   <div
     ref="gridRef"
-    data-testid="input-calendar__grid"
+    data-testid="input-date-picker__grid"
     class="flex flex-col items-start gap-(--spacing-md)"
   >
     <div class="flex w-full items-center justify-between gap-(--spacing-xs)">
@@ -361,7 +361,7 @@
         <button
           type="button"
           :disabled="disabledAll"
-          :aria-label="t('calendar.previousMonth')"
+          :aria-label="t('datePicker.previousMonth')"
           class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
           @click="goToPreviousMonth"
         >
@@ -374,7 +374,7 @@
         <button
           type="button"
           :disabled="disabledAll"
-          :aria-label="t('calendar.nextMonth')"
+          :aria-label="t('datePicker.nextMonth')"
           class="inline-flex size-7 shrink-0 items-center justify-center rounded-(--shape-elements) text-(--text-muted) transition-colors duration-150 ease-out hover:bg-(--bg-hover) hover:text-(--text-default) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) disabled:cursor-not-allowed disabled:text-(--text-disabled) motion-reduce:transition-none"
           @click="goToNextMonth"
         >
@@ -446,7 +446,7 @@
                     :data-today="day.today || null"
                     :data-outside="day.outside || null"
                     :data-disabled="day.disabled || null"
-                    data-testid="input-calendar__day"
+                    data-testid="input-date-picker__day"
                     :tabindex="!day.outside && day.time === activeTime ? 0 : -1"
                     class="flex items-center justify-center text-(--text-default) transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-surface-raised) data-[size=small]:size-8 data-[size=small]:text-body-xs data-[size=medium]:size-9 data-[size=medium]:text-body-sm data-[size=large]:size-10 data-[size=large]:text-body-md data-[band=none]:rounded-(--shape-elements) data-[band=none]:hover:bg-(--bg-hover) data-[band=single]:rounded-(--shape-elements) data-[band=single]:bg-(--secondary-selected) data-[band=single]:text-(--secondary-contrast) data-[band=start]:rounded-s-(--shape-elements) data-[band=start]:bg-(--secondary-selected) data-[band=start]:text-(--secondary-contrast) data-[band=end]:rounded-e-(--shape-elements) data-[band=end]:bg-(--secondary-selected) data-[band=end]:text-(--secondary-contrast) data-[band=middle]:bg-(--bg-selected) data-[outside]:text-(--text-muted) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) motion-reduce:transition-none"
                     @click="selectDay(day)"
