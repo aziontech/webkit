@@ -3,11 +3,11 @@ name: code-editor
 category: code
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 68682f2927332f399f9ebf658c1384a2dc5873ea4d2c2102ae74158e63532c2c
+checksum: b1a5eff2f2f3be0a525a29daec89ea56fe1170c1536fdef20011dfd90545124f
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # CodeEditor — Component Spec
@@ -19,7 +19,7 @@ An editable code surface with line numbers, diagnostics and a read-only and a di
 ## When to use
 
 - Editing a function, a script, a SQL query, a JSON or YAML document inside the product.
-- Showing the change between two versions of code side by side (diff mode), for example before a deploy or a revert.
+- Editing code beside the version it changes (diff mode): the saved version stays on the left, read-only, and the edit happens on the right, for example a function changed before a deploy.
 - Code that the server validates: the diagnostics come back as `markers` and show on their lines and in a list.
 - A JSON document with a known shape (a function's argument schema, a configuration file): pass its JSON Schema as `schema` and Monaco checks the document against it as the user types.
 - A read-only view of code that still needs the editor's navigation (find, folding) once Monaco is loaded.
@@ -27,6 +27,7 @@ An editable code surface with line numbers, diagnostics and a read-only and a di
 ## When NOT to use
 
 - Showing a snippet to copy, with tabs and a file name → use `code-block`.
+- Showing a read-only change between two versions (what a release or a revert changes, a configuration before and after) → use `code-block` with the tab's `original`; diff mode is for editing beside the original, not for reviewing a change nobody edits.
 - A one-line value such as a header, a regex or a path → use `input` inside a `field`.
 - Free prose or a description → use `textarea`.
 - A stream of log lines → use `log-view`.
@@ -51,7 +52,7 @@ An editable code surface with line numbers, diagnostics and a read-only and a di
 - Set `:bordered="false"` when the editor fills a pane that already frames it (a resizable pane, a full-page function editor, a drawer body); keep the default frame inside a form.
 - Give the editor a fixed `height`, or `fill` inside a flex column that has its own height; never let it grow with the content.
 - Use `readonly` for code the user may read and select but not change; use `disabled` only when the whole form is locked.
-- In diff mode, `original` is the left side and `v-model` the right side; keep the right side editable only when the change can still be edited.
+- In diff mode, `original` is the left side and `v-model` the right side, which stays editable. A diff nobody edits is a `code-block` with `original`, which marks every added and removed line without loading an editor.
 
 ## Usage
 

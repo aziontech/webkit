@@ -106,6 +106,10 @@ export interface TableContext {
   clearSelection: () => void
   /** Loading flag (data-driven); toolbar controls reflect it. */
   loading: ComputedRef<boolean>
+  /** Live tail state (backs the `live` model); Table.LiveButton reflects it. */
+  live?: ComputedRef<boolean>
+  /** Turns the live tail on or off (Table.LiveButton). */
+  setLive?: (value: boolean) => void
   /** Field catalog the built-in filter builder offers (falls back to Table.Filter's own `fields`). */
   filterFields: ComputedRef<FilterField[]>
   /** Committed structured filters (backs the `filters` model). */

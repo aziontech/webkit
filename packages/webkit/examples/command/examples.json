@@ -26,6 +26,16 @@
       "name": "Disabled",
       "summary": "A disabled item alongside enabled ones — skipped by roving navigation and never activated. Opens from a button; `shortcut=\"\"` opts out of the global binding.",
       "file": "disabled.vue"
+    },
+    {
+      "name": "Ranking",
+      "summary": "Fuzzy, ranked search: type `set`, `dpl` or `team` to see prefix matches rise above word and in-order abbreviation matches, groups reorder by their best item, `keywords` match words that are not in the label, and the matched characters are emphasized. Opens from a button; `shortcut=\"\"` opts out of the global binding.",
+      "file": "ranking.vue"
+    },
+    {
+      "name": "Pages",
+      "summary": "An item with `page` opens a nested \"Switch project\" list; the search bar shows a back control with the page heading, and Backspace in an empty field or Esc returns. `v-model:page` lets the second button open straight on the page. Opens from a button; `shortcut=\"\"` opts out of the global binding.",
+      "file": "pages.vue"
     }
   ]
 }

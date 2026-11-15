@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, useAttrs, useSlots, watch } from 'vue'
 
+  import type { DropdownMenuOptionKind } from '../injection-key'
   import { DropdownMenuGroupInjectionKey, useDropdownContext } from '../injection-key'
 
   defineOptions({
@@ -31,10 +32,12 @@
     command?: string
     /** Disables interaction and applies disabled tokens. */
     disabled?: boolean
-    /** Marks the option as checked: a menuitemradio with aria-checked and a check mark. */
+    /** Marks the option as checked: a radio-style check on a default option, the check or dot on a checkbox or radio option. */
     selected?: boolean
     /** Destination URL; the option renders as a link that still emits select. */
     href?: string
+    /** Item role: a plain action that closes the menu, or a checkbox or radio item that keeps it open. */
+    kind?: DropdownMenuOptionKind
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -42,7 +45,8 @@
     command: '',
     disabled: false,
     selected: false,
-    href: ''
+    href: '',
+    kind: 'default'
   })
 
   const attrs = useAttrs()
@@ -59,13 +63,36 @@
   const hasLeading = () => Boolean(slots['leading'] || slots['left'])
   const hasTrailing = () => Boolean(slots['trailing'] || slots['right'])
 
+  const checkable = computed(() => props.kind !== 'default')
+
+  const role = computed(() =>
+    props.kind === 'checkbox'
+      ? 'menuitemcheckbox'
+      : props.kind === 'radio' || props.selected
+        ? 'menuitemradio'
+        : 'menuitem'
+  )
+
+  const ariaChecked = computed<'true' | 'false' | undefined>(() => {
+    if (checkable.value) return props.selected ? 'true' : 'false'
+    return props.selected ? 'true' : undefined
+  })
+
   function activate(event: globalThis.MouseEvent | globalThis.KeyboardEvent) {
     if (props.disabled) return
-    ctx.selectOption(props.value, event)
+    ctx.selectOption(props.value, event, !checkable.value)
   }
 
   function onClick(event: globalThis.MouseEvent) {
     activate(event)
+  }
+
+  function onPointerenter() {
+    ctx.setActiveSub(null, true)
+  }
+
+  function onFocus() {
+    ctx.setActiveSub(null)
   }
 
   function onKeydown(event: globalThis.KeyboardEvent) {
@@ -110,18 +137,37 @@
       :is="isLink ? 'a' : 'div'"
       v-bind="attrs"
       :href="isLink ? href : undefined"
-      :role="selected ? 'menuitemradio' : 'menuitem'"
+      :role="role"
       tabindex="-1"
-      :aria-checked="selected ? 'true' : undefined"
+      :aria-checked="ariaChecked"
       :aria-disabled="disabled || undefined"
       :data-testid="testId"
+      :data-kind="kind"
       :data-selected="selected || null"
       :data-disabled="disabled || null"
       :data-ungrouped="inGroup ? null : ''"
-      class="flex h-8 min-h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-default) no-underline outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[ungrouped]:mx-(--spacing-xxs)"
+      class="flex h-8 min-h-8 cursor-pointer select-none items-center gap-(--spacing-xs) rounded-(--shape-button) px-(--spacing-sm) py-(--spacing-xxs) text-label-sm text-(--text-default) no-underline outline-none transition-colors duration-150 ease-out motion-reduce:transition-none hover:bg-(--bg-hover) focus-visible:bg-(--bg-hover) focus-visible:ring-2 focus-visible:ring-(--ring-color) data-[kind=default]:data-[selected]:bg-(--bg-selected) data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[ungrouped]:mx-(--spacing-xxs)"
       @click="onClick"
       @keydown="onKeydown"
+      @pointerenter="onPointerenter"
+      @focus="onFocus"
     >
+      <span
+        v-if="checkable"
+        aria-hidden="true"
+        :data-testid="`${testId}__indicator`"
+        class="flex size-4 shrink-0 items-center justify-center"
+      >
+        <i
+          v-if="kind === 'checkbox' && selected"
+          class="pi pi-check text-[length:inherit] leading-none"
+        />
+        <span
+          v-else-if="kind === 'radio' && selected"
+          class="size-1.5 rounded-full bg-current"
+        />
+      </span>
+
       <span
         v-if="hasLeading()"
         :data-testid="`${testId}__leading`"
@@ -151,7 +197,7 @@
       </span>
 
       <i
-        v-if="selected"
+        v-if="selected && !checkable"
         :data-testid="`${testId}__check`"
         class="pi pi-check shrink-0 text-body-xs text-(--text-default)"
         aria-hidden="true"

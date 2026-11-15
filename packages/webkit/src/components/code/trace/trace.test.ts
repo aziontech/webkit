@@ -6,7 +6,9 @@ import Default from '../../../../examples/trace/default.vue'
 import Empty from '../../../../examples/trace/empty.vue'
 import Loading from '../../../../examples/trace/loading.vue'
 import Selected from '../../../../examples/trace/selected.vue'
+import SpanEvents from '../../../../examples/trace/span-events.vue'
 import WithError from '../../../../examples/trace/with-error.vue'
+import Zoom from '../../../../examples/trace/zoom.vue'
 import { BUILT_IN_CATALOGS, provideLocale } from '../../../composables/use-locale'
 import { expectNoA11yViolations } from '../../../test/axe'
 import { LOCALES } from '../../../test/locales'
@@ -228,10 +230,107 @@ describe('Trace', () => {
   })
 
   it('has no axe violations in its examples', async () => {
-    for (const example of [Default, WithError, Selected, Empty, Loading]) {
+    for (const example of [Default, WithError, Selected, Empty, Loading, Zoom, SpanEvents]) {
       const view = render(example)
       await expectNoA11yViolations(view.container)
       view.unmount()
     }
+  })
+})
+
+describe('Trace zoom, span events and slowest span', () => {
+  const offsets = (view: ReturnType<typeof render>) =>
+    rows(view).map((row) => Number(row.style.getPropertyValue('--span-offset')))
+
+  it('places bars, ticks and hides spans outside a range window', () => {
+    const view = render(Trace, { props: { spans, range: [200, 400] } })
+    const [root, a, a1, b] = rows(view) as HTMLElement[]
+    expect(root?.style.getPropertyValue('--span-offset')).toBe('0')
+    expect(root?.style.getPropertyValue('--span-width')).toBe('1')
+    expect(a?.style.getPropertyValue('--span-width')).toBe(String(10 / 200))
+    expect(Number(b?.style.getPropertyValue('--span-offset'))).toBeCloseTo(0.1)
+    const bars = view.getAllByTestId('code-trace__bar')
+    expect(bars[2]?.hasAttribute('data-outside')).toBe(true)
+    expect(a1?.getAttribute('aria-label')).toBe('dns, +10 ms, 20 ms')
+    expect(view.getByTestId('code-trace__axis').textContent).toContain('200 ms')
+    expect(view.getByTestId('code-trace__axis').textContent).toContain('400 ms')
+    expect(view.queryByTestId('code-trace__minimap')).toBeNull()
+  })
+
+  it('widens a range narrower than 1% of the run', () => {
+    const view = render(Trace, { props: { spans, range: [100, 100] } })
+    expect(view.getByTestId('code-trace__axis').textContent).toContain('117 ms')
+    expect(offsets(view).every(Number.isFinite)).toBe(true)
+  })
+
+  it('moves the window edges from the keyboard and resets the zoom', async () => {
+    const view = render(Trace, { props: { spans, zoomable: true } })
+    const emitted = () => view.emitted('update:range') as unknown[][]
+    const [start, end] = view.getAllByRole('slider') as HTMLElement[]
+    expect(start?.getAttribute('aria-label')).toBe('Zoom start')
+    expect(end?.getAttribute('aria-valuenow')).toBe('1720')
+    expect(view.queryByTestId('code-trace__reset-zoom')).toBeNull()
+    await fireEvent.keyDown(start as HTMLElement, { key: 'PageUp' })
+    expect(emitted().at(-1)?.[0]).toEqual([172, 1720])
+    await view.rerender({ spans, zoomable: true, range: [172, 1720] })
+    await fireEvent.keyDown(end as HTMLElement, { key: 'Home' })
+    expect(emitted().at(-1)?.[0]).toEqual([172, 172 + 17.2])
+    expect(view.getByTestId('code-trace__minimap').hasAttribute('data-zoomed')).toBe(true)
+    await fireEvent.click(view.getByRole('button', { name: 'Reset zoom' }))
+    expect(emitted().at(-1)?.[0]).toBeNull()
+  })
+
+  it('draws a window on the minimap track with the pointer', async () => {
+    const view = render({
+      components: { Trace },
+      setup: () => ({ spans }),
+      template: `<div style="width: 800px"><Trace :spans="spans" zoomable /></div>`
+    })
+    const track = view.getByTestId('code-trace__track')
+    const box = track.getBoundingClientRect()
+    const at = (share: number) => box.left + box.width * share
+    await fireEvent.pointerDown(track, { button: 0, clientX: at(0.25), pointerId: 1 })
+    await fireEvent.pointerMove(track, { clientX: at(0.5), pointerId: 1 })
+    await fireEvent.pointerUp(track, { pointerId: 1 })
+    const sliders = view.getAllByRole('slider')
+    expect(Number(sliders[0]?.getAttribute('aria-valuenow'))).toBeCloseTo(430, -1)
+    expect(Number(sliders[1]?.getAttribute('aria-valuenow'))).toBeCloseTo(860, -1)
+  })
+
+  it('draws span events as markers and lists them in the details', () => {
+    const view = render(Trace, {
+      props: {
+        selected: 'a',
+        spans: [
+          spans[0],
+          {
+            ...spans[1],
+            events: [
+              { at: 110, name: 'first-byte' },
+              { at: 30, name: 'cache-miss' }
+            ]
+          }
+        ]
+      }
+    })
+    const marks = view.getAllByTestId('code-trace__event')
+    expect(marks).toHaveLength(2)
+    expect(marks[0]?.style.getPropertyValue('--event-at')).toBe(String(110 / 400))
+    expect(rows(view)[1]?.getAttribute('aria-label')).toBe(
+      'fetch, Network, +10 ms, 200 ms, 2 events'
+    )
+    const list = view.getByTestId('code-trace__events')
+    expect(list.textContent).toMatch(/\+30 ms\s*cache-miss[\s\S]*\+110 ms\s*first-byte/)
+  })
+
+  it('flags the slowest span under the root only when asked', () => {
+    const plain = render(Trace, { props: { spans } })
+    expect(plain.queryByTestId('code-trace__slowest')).toBeNull()
+    plain.unmount()
+    const view = render(Trace, { props: { spans, highlightSlowest: true, selected: 'b' } })
+    const flagged = rows(view).filter((row) => row.hasAttribute('data-slowest'))
+    expect(flagged.map((row) => row.getAttribute('data-span-id'))).toEqual(['b'])
+    expect(flagged[0]?.getAttribute('aria-label')).toBe('encode, +220 ms, 1.50 s, Failed, Slowest')
+    expect(view.getByTestId('code-trace__slowest-tag').textContent).toContain('Slowest')
   })
 })

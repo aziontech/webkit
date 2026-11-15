@@ -1,0 +1,21 @@
+{
+  "component": "context-menu",
+  "title": "Components/Primitives/Navigation/ContextMenu",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A list of resources inside `ContextMenu.Trigger`. Right-click a row, press `Shift+F10` or the context-menu key on a focused row, or long-press it on touch: the menu opens at the pointer (or under the row) and focus returns to the row on close. Read which row was targeted from a native `@contextmenu` on the row.",
+      "file": "default.vue"
+    },
+    {
+      "name": "WithSubMenu",
+      "summary": "Panel forced open (`:open=\"true\"`) to show the anatomy it shares with `DropdownMenu`: groups, a `command` hint, an open `Sub` (`default-open`) and `kind=\"checkbox\"` items that keep the panel open.",
+      "file": "with-sub-menu.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "`disabled` leaves the area to the browser: right-click shows the native context menu and the panel never opens.",
+      "file": "disabled.vue"
+    }
+  ]
+}

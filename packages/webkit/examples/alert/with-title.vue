@@ -3,10 +3,30 @@
 </script>
 
 <template>
-  <Alert
-    severity="danger"
-    title="Deploy failed"
-    label="The build step exited with code 1. Check the logs, fix the error and deploy again."
-    action-label="View logs"
-  />
+  <div class="flex w-full flex-col gap-4">
+    <Alert
+      severity="info"
+      title="Maintenance scheduled"
+      label="The dashboard is read-only on March 4 from 02:00 to 03:00 UTC. Traffic keeps flowing."
+    />
+    <Alert
+      severity="success"
+      title="Domain verified"
+      label="app.example.com now serves traffic over HTTPS."
+    />
+    <Alert
+      severity="warning"
+      title="Request limit at 90%"
+      action-label="Upgrade plan"
+    >
+      Requests above the limit are throttled until the cycle resets.
+      <a href="/billing/usage">Review usage</a>.
+    </Alert>
+    <Alert
+      severity="danger"
+      title="Deploy failed"
+      label="The build stopped at step 3 of 5. Check the logs and deploy again."
+      closable
+    />
+  </div>
 </template>

@@ -43,7 +43,8 @@
     type ChartAxisKind,
     ChartInjectionKey,
     type ChartMarkRegistration,
-    type ChartOrientation
+    type ChartOrientation,
+    type ChartReferenceRegistration
   } from './injection-key'
 
   defineOptions({ name: 'Chart', inheritAttrs: false })
@@ -121,7 +122,7 @@
   const range = defineModel<ChartRange | null>('range', { default: null })
 
   defineSlots<{
-    /** The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Crosshair, Tooltip, Legend, in paint order. */
+    /** The parts: Grid, Axis, Brush, Line, Area, Bar, Scatter, Reference, Crosshair, Tooltip, Legend, in paint order. */
     default(): unknown
     /** Replaces the default EmptyState. */
     empty(): unknown
@@ -156,6 +157,7 @@
   const marks = shallowReactive(new Map<symbol, () => ChartMarkRegistration>())
   const axes = shallowReactive(new Map<symbol, () => ChartAxisKind>())
   const brushes = shallowReactive(new Set<symbol>())
+  const references = shallowReactive(new Map<symbol, () => ChartReferenceRegistration | null>())
   const emphasized = ref<string | null>(null)
   const focusedSeries = ref<string | null>(null)
   const draft = ref<ChartRange | null>(null)
@@ -230,11 +232,19 @@
     }, 0)
   })
 
-  const ticks = computed(() => niceTicks(props.min, props.max ?? dataMax.value, 4))
+  const referenceList = computed(() =>
+    [...references.values()]
+      .map((read) => read())
+      .filter((entry): entry is ChartReferenceRegistration => entry !== null)
+  )
+  const referenceMax = computed(() => maxOf(referenceList.value.map((entry) => entry.high)))
+  const extentMax = computed(() => Math.max(dataMax.value, referenceMax.value))
+
+  const ticks = computed(() => niceTicks(props.min, props.max ?? extentMax.value, 4))
   const fitted = computed(() => markList.value.some((mark) => mark.fit))
   const domainMax = computed(() => {
     if (props.max !== undefined) return props.max
-    return fitted.value && dataMax.value > props.min ? dataMax.value : ticks.value.max
+    return fitted.value && extentMax.value > props.min ? extentMax.value : ticks.value.max
   })
   const valueTicks = computed(() =>
     ticks.value.ticks.filter((tick) => tick >= props.min && tick <= domainMax.value)
@@ -323,11 +333,22 @@
       first !== undefined && last !== undefined
         ? t('chart.summaryRange', { from: labelText(first), to: labelText(last) })
         : ''
-    return t('chart.summary', {
+    const text = t('chart.summary', {
       series: visibleSeries.value.length,
       points: count.value,
       range
     })
+    const notes = referenceList.value.map((entry) => {
+      const label = entry.label || t('chart.reference')
+      return entry.band
+        ? t('chart.referenceBand', {
+            label,
+            from: valueText(entry.low),
+            to: valueText(entry.high)
+          })
+        : t('chart.referenceLine', { label, value: valueText(entry.high) })
+    })
+    return [text, ...notes].join(' ')
   })
 
   const pointAt = (index: number): ChartPoint => ({
@@ -458,6 +479,14 @@
     }
   }
 
+  function registerReference(read: () => ChartReferenceRegistration | null) {
+    const key = Symbol('reference')
+    references.set(key, read)
+    return () => {
+      references.delete(key)
+    }
+  }
+
   function indexAtPointer(event: globalThis.PointerEvent): number | null {
     const stage = stageRef.value
     if (!stage || !count.value) return null
@@ -579,7 +608,8 @@
     toggleSeries,
     registerMark,
     registerAxis,
-    registerBrush
+    registerBrush,
+    registerReference
   })
 </script>
 

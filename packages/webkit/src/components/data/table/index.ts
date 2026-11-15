@@ -15,6 +15,7 @@ import TableFilter from './table-filter/table-filter.vue'
 import TableFooter from './table-footer/table-footer.vue'
 import TableHeadCell from './table-head-cell/table-head-cell.vue'
 import TableHeader from './table-header/table-header.vue'
+import TableLiveButton from './table-live-button/table-live-button.vue'
 import TableRefreshButton from './table-refresh-button/table-refresh-button.vue'
 import TableRow from './table-row/table-row.vue'
 import TableSearch from './table-search/table-search.vue'
@@ -43,6 +44,7 @@ type CompoundTable = typeof Table & {
   ColumnSelector: typeof TableColumnSelector
   Export: typeof TableExport
   RefreshButton: typeof TableRefreshButton
+  LiveButton: typeof TableLiveButton
 }
 
 const TableRoot = Object.assign(Table, {
@@ -66,7 +68,8 @@ const TableRoot = Object.assign(Table, {
   AppliedFilters: TableAppliedFilters,
   ColumnSelector: TableColumnSelector,
   Export: TableExport,
-  RefreshButton: TableRefreshButton
+  RefreshButton: TableRefreshButton,
+  LiveButton: TableLiveButton
 }) as CompoundTable
 
 export default TableRoot

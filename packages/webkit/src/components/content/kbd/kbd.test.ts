@@ -109,4 +109,45 @@ describe('Kbd', () => {
       expect(getByTestId('content-kbd')).toHaveTextContent('CtrlCtrlAlt')
     })
   })
+
+  describe('keys and kind', () => {
+    afterEach(() => vi.unstubAllGlobals())
+
+    it('prints the arrow keys and the Return glyph from the catalog', () => {
+      const { getByTestId } = render(Kbd, { props: { keys: ['arrow-up', 'arrow-down', 'return'] } })
+      expect(getByTestId('content-kbd')).toHaveTextContent('↑↓↵')
+    })
+
+    it('resolves modifiers, named keys and single characters in a keys list', async () => {
+      vi.stubGlobal('navigator', { platform: 'MacIntel', userAgent: 'Macintosh' })
+      const { getByTestId } = render(Kbd, { props: { keys: ['meta', 'shift', 'p', 'Enter'] } })
+      await nextTick()
+      expect(getByTestId('content-kbd')).toHaveTextContent('⌘⇧PEnter')
+    })
+
+    it('draws one keycap by default and one nested keycap per key with kind=separate', () => {
+      const combined = render(Kbd, { props: { keys: ['ctrl', 'k'] } })
+      expect(combined.getByTestId('content-kbd')).toHaveAttribute('data-kind', 'combined')
+      expect(combined.queryAllByTestId('content-kbd__key')).toHaveLength(0)
+      combined.unmount()
+
+      const { getByTestId, getAllByTestId } = render(Kbd, {
+        props: { keys: ['ctrl', 'k'], kind: 'separate', size: 'small' },
+        slots: { default: () => '/' }
+      })
+      expect(getByTestId('content-kbd')).toHaveAttribute('data-kind', 'separate')
+      const caps = getAllByTestId('content-kbd__key')
+      expect(caps).toHaveLength(3)
+      expect(caps.every((cap) => cap.tagName === 'KBD')).toBe(true)
+      expect(caps.map((cap) => cap.textContent)).toEqual([expect.any(String), 'K', '/'])
+      expect(caps[0]).toHaveAttribute('data-size', 'small')
+    })
+
+    it('has no axe violations with separate keycaps', async () => {
+      const { container } = render(Kbd, {
+        props: { keys: ['arrow-left', 'arrow-right'], kind: 'separate' }
+      })
+      await expectNoA11yViolations(container)
+    })
+  })
 })

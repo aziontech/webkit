@@ -10,6 +10,7 @@ import Chart, {
   ChartBrush,
   ChartCrosshair,
   ChartLine,
+  ChartReference,
   ChartScatter,
   ChartTooltip
 } from './index'
@@ -246,6 +247,81 @@ describe('Chart types', () => {
       h(ChartScatter),
       h(ChartCrosshair),
       h(ChartTooltip)
+    ])
+    await measured(view)
+    await expectNoA11yViolations(view.container)
+  })
+})
+
+describe('Chart.Reference', () => {
+  const summaryOf = (view: ReturnType<typeof render>) => {
+    const id = plotOf(view).getAttribute('aria-describedby') ?? ''
+    return document.getElementById(id)?.textContent ?? ''
+  }
+
+  it('attaches Reference to the root for dot notation', () => {
+    expect(Chart.Reference).toBe(ChartReference)
+  })
+
+  it('draws a labelled line and extends the value axis to show it', async () => {
+    const view = mount({}, () => [
+      h(ChartAxis, { kind: 'y' }),
+      h(ChartLine),
+      h(ChartReference, { value: 2000, label: 'Rate limit', severity: 'danger' })
+    ])
+    await measured(view)
+    const reference = view.getByTestId('chart-chart__reference')
+    expect(reference.getAttribute('data-kind')).toBe('line')
+    expect(reference.getAttribute('data-severity')).toBe('danger')
+    const lines = reference.querySelectorAll('line')
+    expect(lines).toHaveLength(1)
+    expect(lines[0]?.getAttribute('y1')).toBe(lines[0]?.getAttribute('y2'))
+    expect(reference.querySelector('g')?.getAttribute('stroke')).toBe('var(--chart-status-danger)')
+    expect(view.getByTestId('chart-chart__reference-label').textContent?.trim()).toBe('Rate limit')
+    expect(view.getByTestId('chart-chart__axis-y').textContent).toContain('2K')
+    expect(summaryOf(view)).toContain('Rate limit at 2K.')
+  })
+
+  it('draws a band between from and to in either order', async () => {
+    const view = mount({}, () => [h(ChartReference, { from: 400, to: 300, label: 'Normal' })])
+    await measured(view)
+    const reference = view.getByTestId('chart-chart__reference')
+    expect(reference.getAttribute('data-kind')).toBe('band')
+    expect(reference.querySelectorAll('rect')).toHaveLength(1)
+    expect(reference.querySelectorAll('line')).toHaveLength(2)
+    expect(reference.querySelector('g')?.getAttribute('stroke')).toBe('var(--chart-label)')
+    expect(summaryOf(view)).toContain('Normal from 300 to 400.')
+  })
+
+  it('skips a reference outside a fixed axis and names an unlabelled one', async () => {
+    const view = mount({ max: 1000 }, () => [
+      h(ChartReference, { value: 5000 }),
+      h(ChartReference, { value: 500 })
+    ])
+    await measured(view)
+    const [outside, inside] = view.getAllByTestId('chart-chart__reference')
+    expect(outside?.getAttribute('data-kind')).toBeNull()
+    expect(outside?.querySelector('line')).toBeNull()
+    expect(inside?.getAttribute('data-kind')).toBe('line')
+    expect(inside?.querySelector('text')).toBeNull()
+    expect(summaryOf(view)).toContain('Reference at 500.')
+  })
+
+  it('draws across the categories in a horizontal chart', async () => {
+    const view = mount({ orientation: 'horizontal', series: [threats[0]] }, () => [
+      h(ChartBar),
+      h(ChartReference, { value: 1000, label: 'Target' })
+    ])
+    await measured(view)
+    const line = view.getByTestId('chart-chart__reference').querySelector('line')
+    expect(line?.getAttribute('x1')).toBe(line?.getAttribute('x2'))
+  })
+
+  it('has no a11y violations with a line and a band', async () => {
+    const view = mount({}, () => [
+      h(ChartReference, { from: 200, to: 600, label: 'Normal' }),
+      h(ChartLine),
+      h(ChartReference, { value: 1800, label: 'Quota', severity: 'warning' })
     ])
     await measured(view)
     await expectNoA11yViolations(view.container)

@@ -683,6 +683,30 @@ describe('ConsoleLayout — navigation rail state', () => {
     expect(rail(view).hasAttribute('data-collapsed')).toBe(false)
   })
 
+  it('toggles navigationOpen with Ctrl+B / Cmd+B on wide layouts', async () => {
+    const onExpanded = vi.fn()
+    const view = mount({ 'onUpdate:navigationOpen': onExpanded })
+    await fireEvent.keyDown(document.body, { key: 'b', ctrlKey: true })
+    expect(onExpanded).toHaveBeenLastCalledWith(false)
+    await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(true))
+    await fireEvent.keyDown(document.body, { key: 'b', metaKey: true })
+    expect(onExpanded).toHaveBeenLastCalledWith(true)
+    await waitFor(() => expect(rail(view).hasAttribute('data-collapsed')).toBe(false))
+  })
+
+  it('does not handle Ctrl+B while the navigation is the compact drawer', async () => {
+    const onExpanded = vi.fn()
+    const view = mount({ 'onUpdate:navigationOpen': onExpanded }, { width: 480 })
+    await waitFor(() =>
+      expect(
+        within(view.getByRole('banner')).getByRole('button', { name: 'Open navigation' })
+      ).toBeTruthy()
+    )
+    await fireEvent.keyDown(document.body, { key: 'b', ctrlKey: true })
+    await nextTick()
+    expect(onExpanded).not.toHaveBeenCalled()
+  })
+
   it('folds and restores the rail from the palette in the NavigationExpanded example', async () => {
     const view = render(
       defineComponent({

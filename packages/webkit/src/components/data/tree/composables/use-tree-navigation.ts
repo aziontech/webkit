@@ -3,6 +3,7 @@ import { computed, type MaybeRefOrGetter, readonly, type Ref, ref, toValue, watc
 export interface TreeNavigationItem<T> {
   id: string
   children?: T[]
+  lazy?: boolean
 }
 
 export interface TreeNavigationEntry<T> {
@@ -31,7 +32,7 @@ export interface UseTreeNavigationReturn<T> {
 }
 
 const hasChildren = <T extends TreeNavigationItem<T>>(item: T): boolean =>
-  Array.isArray(item.children) && item.children.length > 0
+  item.lazy === true || (Array.isArray(item.children) && item.children.length > 0)
 
 export function useTreeNavigation<T extends TreeNavigationItem<T>>(
   options: UseTreeNavigationOptions<T>

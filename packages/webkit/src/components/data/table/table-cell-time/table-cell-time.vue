@@ -4,6 +4,7 @@
   import { useLocale } from '../../../../composables/use-locale/use-locale'
   import * as en from '../../../../i18n/messages/en'
   import Avatar from '../../../content/avatar/avatar.vue'
+  import { relativeText, toDate } from '../../../content/timestamp/timestamp-format'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
   import { TableInjectionKey } from '../injection-key'
   import { useMinuteClock } from './minute-clock'
@@ -29,10 +30,6 @@
     }
   )
 
-  const JUST_NOW_MS = 45_000
-  const MINUTE_MS = 60_000
-  const HOUR_MS = 60 * MINUTE_MS
-
   const attrs = useAttrs()
   const now = useMinuteClock()
   const { t, formatDate, formatRelativeTime } = useLocale({ tableCellTime: en.tableCellTime })
@@ -43,18 +40,12 @@
       (ctx ? `${ctx.testId}__cell-time` : 'data-table__cell-time')
   )
 
-  const date = computed<Date | null>(() => {
-    if (props.value === undefined || props.value === null || props.value === '') return null
-    const parsed = props.value instanceof Date ? props.value : new Date(props.value)
-    return Number.isNaN(parsed.getTime()) ? null : parsed
-  })
-  const relative = computed<string>(() => {
-    if (!date.value) return ''
-    const diff = date.value.getTime() - now.value
-    if (Math.abs(diff) < JUST_NOW_MS) return t('tableCellTime.justNow')
-    if (Math.abs(diff) < HOUR_MS) return formatRelativeTime(Math.round(diff / MINUTE_MS), 'minute')
-    return formatRelativeTime(date.value)
-  })
+  const date = computed<Date | null>(() => toDate(props.value))
+  const relative = computed<string>(() =>
+    date.value
+      ? relativeText(date.value, now.value, t('tableCellTime.justNow'), formatRelativeTime)
+      : ''
+  )
   const mounted = ref(false)
   onMounted(() => (mounted.value = true))
   const absolute = computed<string>(() =>

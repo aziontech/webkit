@@ -21,6 +21,11 @@
       "update": 50,
       "update_is": "collapse one of 50 expanded folders of 99 nodes"
     },
+    "tree-5k-multi-select": {
+      "mount": 320,
+      "update": 160,
+      "update_is": "select all 5k ids with 1k visible rows"
+    },
     "select-1k": {
       "mount": 30,
       "update": 160,
@@ -35,6 +40,11 @@
       "mount": 100,
       "update": 350,
       "update_is": "toggle 20 options one by one with all 1k options selected"
+    },
+    "multi-select-1k-typed": {
+      "mount": 30,
+      "update": 630,
+      "update_is": "mount a searchable chips field with 3 selected values, open it, then type a filter"
     },
     "dropdown-menu-1k": {
       "mount": 1190,
@@ -70,6 +80,11 @@
       "mount": 180,
       "update": 170,
       "update_is": "sort 1k rows under useCollection (the table renders the first 50 rows; the rest load on scroll)"
+    },
+    "code-block-diff-5k-lines": {
+      "mount": 260,
+      "update": 45,
+      "update_is": "switch the 5k-line computed diff from split to unified"
     },
     "table-10k-virtual": {
       "mount": 110,
@@ -225,6 +240,11 @@
       "mount": 300,
       "update": 280,
       "update_is": "sort 1k rows of link and tag preset cells (the table renders the first 50 rows; the rest load on scroll)"
+    },
+    "timestamp-1k": {
+      "mount": 360,
+      "update": 60,
+      "update_is": "change the provider time zone of 1k timestamps"
     }
   }
 }

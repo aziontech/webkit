@@ -10,7 +10,8 @@ export type {
   PropertyFilterOperator,
   PropertyFilterOption,
   PropertyFilterQuery,
-  PropertyFilterToken
+  PropertyFilterToken,
+  PropertyFilterTokenGroup
 } from './property-filter'
 export { matchesQuery, matchesText, parseFilterText, tokenText } from './property-filter'
 export type { CollectionUrlAdapter, RouterLike } from './url'

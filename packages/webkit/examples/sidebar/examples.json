@@ -11,6 +11,11 @@
       "name": "Resizable",
       "summary": "The same console rail with the gesture on. Drag the trailing edge to size it between `--container-3xs` and `--container-sm`; keep pulling past the minimum and it drops out of the layout, keeping the width it had for when it comes back. The handle is a focusable separator that reports its position, so arrows nudge it and `ArrowLeft` past the boundary collapses — double-click does too. The collapse trigger sits at the bottom, trailing the account row so the two read as one footer. While collapsed the rail is `inert` and `aria-hidden` (it stays mounted so its width can animate), which is exactly why the way back is a sibling. Collapse it, then rest the pointer on the left edge: the rail **previews itself** back in to `--size-10` and the page morphs with it, with the grab bar and the expand button on top of the sliver. The zone grows to the sliver so it never slips out from under the pointer, and the sliver stays `inert` — it shows you the way back, the button takes it.",
       "file": "resizable.vue"
+    },
+    {
+      "name": "IconRail",
+      "summary": "With `collapsible=\"icon\"` a collapsed sidebar stays in the layout as a `--size-14` icon rail instead of leaving it. Each row keeps its icon, its label moves into a `Tooltip` on hover and focus (and stays the accessible name), group labels and rows without an icon step aside, and the footer trigger turns into the expand button. `shortcut` lets Ctrl+B or Cmd+B toggle the rail; the slots receive `{ rail }` so the footer drops the account name while collapsed.",
+      "file": "icon-rail.vue"
     }
   ]
 }

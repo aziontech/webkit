@@ -359,6 +359,64 @@ describe('useCollection — URL', () => {
   })
 })
 
+describe('useCollection — token groups', () => {
+  it('matches each group by its own operation and combines groups with the query operation', () => {
+    const item = { status: 'Active', requests: 50 }
+    const active = { propertyKey: 'status', operator: '=' as const, value: 'Active' }
+    const inactive = { propertyKey: 'status', operator: '=' as const, value: 'Inactive' }
+    const many = { propertyKey: 'requests', operator: '>' as const, value: '40' }
+    const few = { propertyKey: 'requests', operator: '<' as const, value: '10' }
+    const query = {
+      tokens: [],
+      operation: 'and' as const,
+      groups: [
+        { operation: 'or' as const, tokens: [active, inactive] },
+        { operation: 'or' as const, tokens: [many, few] }
+      ]
+    }
+    expect(matchesQuery(item, query, properties)).toBe(true)
+    expect(matchesQuery({ status: 'Active', requests: 20 }, query, properties)).toBe(false)
+    expect(
+      matchesQuery({ status: 'Active', requests: 20 }, { ...query, operation: 'or' }, properties)
+    ).toBe(true)
+    expect(matchesQuery(item, { tokens: [], operation: 'and', groups: [] }, properties)).toBe(true)
+  })
+
+  it('filters by groups and keeps them through the URL', async () => {
+    const url = memoryUrl('')
+    const c = setup({ items: rows, propertyFiltering: { properties }, url })
+    c.setQuery({
+      tokens: [],
+      operation: 'and',
+      groups: [
+        {
+          operation: 'or',
+          tokens: [
+            { propertyKey: 'requests', operator: '<', value: '10' },
+            { propertyKey: 'requests', operator: '>', value: '90' }
+          ]
+        },
+        { operation: 'and', tokens: [{ propertyKey: 'status', operator: '=', value: 'Active' }] }
+      ]
+    })
+    await flush()
+    expect(c.filtersActive.value).toBe(true)
+    expect(
+      c.items.value.every(
+        (row) => row.status === 'Active' && (row.requests < 10 || row.requests > 90)
+      )
+    ).toBe(true)
+    const params = new URLSearchParams(url.search())
+    expect(JSON.parse(params.get('groups') ?? '[]')).toHaveLength(2)
+    const again = setup({
+      items: rows,
+      propertyFiltering: { properties },
+      url: memoryUrl(url.search())
+    })
+    expect(again.query.value.groups).toEqual(c.query.value.groups)
+  })
+})
+
 describe('useCollection — server mode', () => {
   const server = (delay = 0) => {
     const calls: Omit<CollectionFetchParams, 'signal'>[] = []

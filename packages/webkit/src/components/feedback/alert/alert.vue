@@ -22,6 +22,8 @@
     size?: AlertSize
     /** Fallback message copy when the default slot is empty. */
     label?: string
+    /** Bold heading above the message copy; hidden when empty. */
+    title?: string
     /** PrimeIcons class override for the leading icon. */
     icon?: string
     /** Label for the built-in secondary action button; hidden when empty. */
@@ -30,19 +32,17 @@
     closable?: boolean
     /** Duration in milliseconds before auto-dismiss; `0` disables auto-dismiss. */
     life?: number
-    /** Optional bold first line above the copy; hidden when empty. */
-    title?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
     severity: 'info',
     size: 'medium',
     label: '',
+    title: '',
     icon: '',
     actionLabel: '',
     closable: false,
-    life: 0,
-    title: ''
+    life: 0
   })
 
   const emit = defineEmits<{
@@ -166,6 +166,7 @@
       :data-severity="normalizedSeverity"
       :data-size="size"
       :data-trailing="hasTrailingControl() || null"
+      :data-titled="title ? true : null"
       tabindex="-1"
       class="@container/alert relative box-border flex w-full flex-wrap items-center gap-(--spacing-sm) break-words rounded-(--shape-button) border border-[length:var(--border-width-default,1px)] py-1.5 shadow-(--shadow-xs) data-[size=small]:min-h-8 data-[size=small]:px-(--spacing-xs) data-[size=medium]:min-h-9 data-[size=medium]:px-(--spacing-sm) data-[trailing]:pe-(--spacing-xs) data-[severity=info]:border-(--info-border) data-[severity=info]:bg-(--info) data-[severity=success]:border-(--success-border) data-[severity=success]:bg-(--success) data-[severity=warning]:border-(--warning-border) data-[severity=warning]:bg-(--warning) data-[severity=danger]:border-(--danger-border) data-[severity=danger]:bg-(--danger)"
       @keydown="handleEscape"
@@ -182,19 +183,23 @@
             aria-hidden="true"
           />
         </span>
-        <div
-          :data-size="size"
-          class="m-0 min-w-0 flex-1 text-(--text-default) data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:[--text-link-color:currentColor] [&_a]:[--text-link-hover:currentColor] [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
-          :data-testid="`${testId}__content`"
-        >
-          <strong
+        <div class="flex min-w-0 flex-1 flex-col gap-(--spacing-xxs)">
+          <div
             v-if="title"
+            class="text-heading-xxs text-(--text-default)"
             :data-testid="`${testId}__title`"
-            class="block font-medium"
-            >{{ title }}</strong
           >
-          <slot v-if="$slots['default']" />
-          <template v-else>{{ label }}</template>
+            {{ title }}
+          </div>
+          <div
+            v-if="$slots['default'] || label || !title"
+            :data-size="size"
+            class="m-0 min-w-0 text-(--text-default) data-[size=small]:text-label-sm data-[size=medium]:text-label-md [&_a]:text-link [&_a]:[--text-link-color:currentColor] [&_a]:[--text-link-hover:currentColor] [&_a]:underline [&_a]:underline-offset-2 [&_a]:motion-reduce:transition-none"
+            :data-testid="`${testId}__content`"
+          >
+            <slot v-if="$slots['default']" />
+            <template v-else>{{ label }}</template>
+          </div>
         </div>
       </div>
       <div

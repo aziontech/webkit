@@ -3,14 +3,19 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { userEvent } from 'vitest/browser'
 import { defineComponent, h, nextTick, ref } from 'vue'
 
+import CheckableOptions from '../../../../examples/dropdown-menu/checkable-options.vue'
 import Default from '../../../../examples/dropdown-menu/default.vue'
 import Groups from '../../../../examples/dropdown-menu/groups.vue'
 import OptionAffordances from '../../../../examples/dropdown-menu/option-affordances.vue'
+import SubMenus from '../../../../examples/dropdown-menu/sub-menus.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DropdownMenu, {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuOption,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger
 } from './index'
 
@@ -765,5 +770,184 @@ describe('DropdownMenu audit fixes', () => {
     document.body.focus()
     press()
     expect(onSelect).toHaveBeenLastCalledWith('copy-0')
+  })
+})
+
+const SubHost = defineComponent({
+  props: {
+    onSelect: { type: Function, default: undefined }
+  },
+  setup(props) {
+    return () =>
+      h(DropdownMenu, { onSelect: props.onSelect }, () => [
+        h(DropdownMenuTrigger, null, () => h('button', { type: 'button' }, 'Menu')),
+        h(DropdownMenuGroup, null, () => [
+          h(DropdownMenuOption, { value: 'edit', label: 'Edit' }),
+          h(DropdownMenuSub, null, () => [
+            h(DropdownMenuSubTrigger, { label: 'Move to' }),
+            h(DropdownMenuSubContent, null, () => [
+              h(DropdownMenuGroup, null, () => [
+                h(DropdownMenuOption, { value: 'production', label: 'production' }),
+                h(DropdownMenuOption, { value: 'staging', label: 'staging' })
+              ])
+            ])
+          ]),
+          h(DropdownMenuSub, null, () => [
+            h(DropdownMenuSubTrigger, { label: 'Share', disabled: true }),
+            h(DropdownMenuSubContent, null, () => [
+              h(DropdownMenuGroup, null, () => [
+                h(DropdownMenuOption, { value: 'copy', label: 'Copy link' })
+              ])
+            ])
+          ]),
+          h(DropdownMenuOption, { value: 'delete', label: 'Delete' })
+        ])
+      ])
+  }
+})
+
+const subTrigger = (name: string) =>
+  Array.from(
+    document.body.querySelectorAll<HTMLElement>(
+      '[data-testid="navigation-dropdown-menu__sub-trigger"]'
+    )
+  ).find((el) => el.textContent?.includes(name)) as HTMLElement
+
+const subPanels = () =>
+  Array.from(
+    document.body.querySelectorAll<HTMLElement>(
+      '[data-testid="navigation-dropdown-menu__sub-panel"]'
+    )
+  )
+
+async function openSubHost(onSelect?: (...args: unknown[]) => void) {
+  render(SubHost, { props: { onSelect } })
+  await userEvent.click(control())
+  await waitFor(() => expect(subTrigger('Move to')).toBeTruthy())
+}
+
+describe('DropdownMenu — sub-menus', () => {
+  it('renders the sub-trigger as a menuitem that announces a closed sub-menu', async () => {
+    await openSubHost()
+    const row = subTrigger('Move to')
+    expect(row.getAttribute('role')).toBe('menuitem')
+    expect(row.getAttribute('aria-haspopup')).toBe('menu')
+    expect(row.getAttribute('aria-expanded')).toBe('false')
+    expect(subPanels()).toHaveLength(0)
+  })
+
+  it('ArrowRight opens the sub-menu, focuses its first item, and ArrowLeft returns', async () => {
+    await openSubHost()
+    subTrigger('Move to').focus()
+    await userEvent.keyboard('{ArrowRight}')
+    await waitFor(() => expect(subPanels()).toHaveLength(1))
+    const panel = subPanels()[0]
+    const menu = panel.querySelector('[role="menu"]') as HTMLElement
+    expect(menu.getAttribute('aria-labelledby')).toBe(subTrigger('Move to').id)
+    expect(subTrigger('Move to').getAttribute('aria-controls')).toBe(menu.id)
+    expect(subTrigger('Move to').getAttribute('aria-expanded')).toBe('true')
+    await waitFor(() => expect(document.activeElement?.textContent).toContain('production'))
+    await userEvent.keyboard('{ArrowDown}')
+    expect(document.activeElement?.textContent).toContain('staging')
+    await userEvent.keyboard('{ArrowLeft}')
+    await waitFor(() => expect(subPanels()).toHaveLength(0))
+    expect(document.activeElement).toBe(subTrigger('Move to'))
+    expect(getPanel()).not.toBeNull()
+  })
+
+  it('Escape inside a sub-menu closes only the sub-menu', async () => {
+    await openSubHost()
+    subTrigger('Move to').focus()
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(document.activeElement?.textContent).toContain('production'))
+    await userEvent.keyboard('{Escape}')
+    await waitFor(() => expect(subPanels()).toHaveLength(0))
+    expect(getPanel()).not.toBeNull()
+    expect(document.activeElement).toBe(subTrigger('Move to'))
+  })
+
+  it('hover opens the sub-menu and a click inside it does not dismiss the menu', async () => {
+    await openSubHost()
+    await userEvent.hover(subTrigger('Move to'))
+    await waitFor(() => expect(subPanels()).toHaveLength(1))
+    await fireEvent.mouseDown(subPanels()[0])
+    await nextTick()
+    expect(getPanel()).not.toBeNull()
+  })
+
+  it('selecting an item inside the sub-menu emits select and closes the whole menu', async () => {
+    const calls: unknown[][] = []
+    await openSubHost((...args: unknown[]) => calls.push(args))
+    await userEvent.click(subTrigger('Move to'))
+    await waitFor(() => expect(subPanels()).toHaveLength(1))
+    const staging = within(subPanels()[0]).getByText('staging')
+    await userEvent.click(staging)
+    expect(calls).toHaveLength(1)
+    expect(calls[0][0]).toBeInstanceOf(MouseEvent)
+    expect(calls[0][1]).toBe('staging')
+    await waitFor(() => expect(getPanel()).toBeNull())
+    expect(subPanels()).toHaveLength(0)
+  })
+
+  it('a disabled sub-trigger does not open its sub-menu', async () => {
+    await openSubHost()
+    const row = subTrigger('Share')
+    expect(row.getAttribute('aria-disabled')).toBe('true')
+    await fireEvent.click(row)
+    await fireEvent.keyDown(row, { key: 'ArrowRight' })
+    await nextTick()
+    expect(subPanels()).toHaveLength(0)
+  })
+
+  it('the SubMenus example renders two levels with no a11y violations', async () => {
+    render(SubMenus)
+    await waitFor(() => expect(subPanels()).toHaveLength(1))
+    expect(subTrigger('Move to').dataset['state']).toBe('open')
+    await userEvent.hover(subTrigger('Other workspaces'))
+    await waitFor(() => expect(subPanels()).toHaveLength(2))
+    await expectNoA11yViolations(getPanel() as HTMLElement)
+    for (const panel of subPanels()) await expectNoA11yViolations(panel)
+  })
+})
+
+describe('DropdownMenu — checkable options', () => {
+  it('maps kind to menuitemcheckbox / menuitemradio with aria-checked', async () => {
+    render(CheckableOptions)
+    await waitFor(() => expect(getPanel()).not.toBeNull())
+    const boxes = Array.from(document.body.querySelectorAll('[role="menuitemcheckbox"]'))
+    const radios = Array.from(document.body.querySelectorAll('[role="menuitemradio"]'))
+    expect(boxes).toHaveLength(3)
+    expect(radios).toHaveLength(2)
+    expect(boxes.map((el) => el.getAttribute('aria-checked'))).toEqual(['true', 'true', 'false'])
+    expect(radios.map((el) => el.getAttribute('aria-checked'))).toEqual(['true', 'false'])
+    expect(boxes[0].hasAttribute('aria-current')).toBe(false)
+    await expectNoA11yViolations(getPanel() as HTMLElement)
+  })
+
+  it('activating a checkable option keeps the panel open and the consumer toggles it', async () => {
+    render(CheckableOptions)
+    await waitFor(() => expect(getPanel()).not.toBeNull())
+    const updated = within(getPanel() as HTMLElement)
+      .getByText('Last updated')
+      .closest('[role="menuitemcheckbox"]') as HTMLElement
+    await userEvent.click(updated)
+    await waitFor(() => expect(updated.getAttribute('aria-checked')).toBe('true'))
+    expect(getPanel()).not.toBeNull()
+    const compact = within(getPanel() as HTMLElement)
+      .getByText('Compact')
+      .closest('[role="menuitemradio"]') as HTMLElement
+    compact.focus()
+    await userEvent.keyboard('{Enter}')
+    await waitFor(() => expect(compact.getAttribute('aria-checked')).toBe('true'))
+    expect(getPanel()).not.toBeNull()
+  })
+
+  it('arrow keys move across checkable items like any other item', async () => {
+    render(CheckableOptions)
+    await waitFor(() => expect(getPanel()).not.toBeNull())
+    const first = document.body.querySelector('[role="menuitemcheckbox"]') as HTMLElement
+    first.focus()
+    await userEvent.keyboard('{End}')
+    expect(document.activeElement?.textContent).toContain('Compact')
   })
 })

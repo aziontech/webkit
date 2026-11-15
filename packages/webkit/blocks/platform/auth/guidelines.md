@@ -7,6 +7,8 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 - `/login`, `/signup` and `/signup/verify`, and the reset-password link the user follows from their inbox.
 - Re-entering after a session expired: the same card opens on the password step with the address already filled.
 - Any signed-out step that asks for credentials (sign in, MFA, set a new password).
+- The OAuth authorize screen (`OauthConsent`): a third-party app asks to act on the signed-in account, and the person allows or denies the scopes it lists.
+- Device and CLI sign-in (`DeviceAuthorization`): a terminal or a device without a browser printed a code, and the person confirms it here.
 
 ## When not to use
 
@@ -14,6 +16,7 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 - Changing the password or email of a signed-in user: use `platform/account/profile`.
 - Signing out an expired session over a console page: the shell wire is `platform/states/page-wires` (Session); this block is where it lands.
 - Any signed-in form: use `platform/states/form-validation` for the submit states and `platform/settings/settings-form` for settings.
+- Listing or revoking the apps a person already authorized: that is a settings table, not this card.
 
 ## Building blocks
 
@@ -109,6 +112,11 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - On a code screen, put the code in one `OtpInput` (autofill reads `autocomplete="one-time-code"`), submit on `complete`, and keep a Verify button.
 - Give every QR code a typed alternative: the setup key with a copy button.
 
+- On the consent screen, name the app, its publisher and site in the heading block, the account it will act on (with Switch account), and every scope as a row with a glyph, a title that starts with a verb and one sentence of what it covers.
+- Say where Allow sends the person (the redirect URL as code text) and where to revoke access later.
+- Put Deny and Allow side by side at the foot of the card, Allow on the inline end; lock both while either answer is in flight, and keep both locked once the notice reports the outcome.
+- On device authorization, show the code the terminal printed in large mono type, grouped `XXXX-XXXX`, with the request details (application, device, IP address, time) so the person can spot a request they did not start.
+
 ## Don't
 
 - Don't toast. Not for errors, not for success, not for the session-expired notice.
@@ -121,6 +129,10 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 
 - Don't split a one-time code into separate inputs or move focus between them by hand; `OtpInput` is one field.
 - Don't toast a rejected code; it is the field's reason, and the field is cleared and focused.
+
+- Don't preselect or let the person untick single scopes on the consent screen; the app asked for a set, and Allow grants that set or Deny grants nothing.
+- Don't hide which account will be authorized; Switch account sits beside it before Allow.
+- Don't make the device code an input on the confirm step; it is text to compare. Typing it is the fallback, behind the link.
 
 ## Copy
 
@@ -137,6 +149,11 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - **Session expired:** `Your session expired. Sign in again to pick up where you left off.`
 - **Providers loading:** the status name says what is happening, no ellipsis: `Preparing sign-in providers`.
 - **Action in a notice:** `Retry`, never "Try again" (the console and assistant blocks use the same word).
+- **Consent heading:** `Authorize Acme Deploy`; the lead names publisher and site: `Acme Deploy by Acme Inc. (deploy.example.com) wants to access your account.`
+- **Scope rows:** title starts with a verb (`Read your workloads`, `Deploy your applications`), the description says what is in and, when it matters, what is not: `Names, domains and status. Not their settings or secrets.`
+- **Consent actions:** `Deny` and `Allow`. Outcomes: `Access granted. Returning to Acme Deploy.` / `Access denied. Returning to Acme Deploy with no access to your account.`
+- **Device actions:** `Cancel` and `Confirm`. Outcomes: `Device connected. Go back to your terminal; you can close this tab.` / `Request cancelled. The device was not connected.`
+- **Device code errors:** `Enter the code your terminal shows.`, `Enter all 8 characters of the code.`, `That code is not valid or has expired. Check your terminal, or start the sign-in again there.`
 
 ## Accessibility
 
@@ -152,6 +169,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Social buttons are `type="button"` so Enter in the email field submits the email, not a provider.
 
 - MFA: the code field is named by its label (`Authentication code`, `Recovery code`) and described by the reason when rejected; the QR code is an image named after the account, and the setup key is real text.
+- Consent and device authorization: the card body is a `section` named by its `h1` (`aria-labelledby`); the scope list is an `Item.List` named by its heading (`Acme Deploy will be able to`), each scope a `listitem` with a decorative glyph; the request details are a `KeyValuePairs` named `Request details`.
 
 ## States
 
@@ -168,6 +186,8 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
 - MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
 - MfaCode: the sign-in challenge after the password: a 6-digit `OtpInput`, focused when the challenge opens (not with `autofocus`), that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
+- OauthConsent: the authorize screen. The app (square `Avatar` with its initials, name, publisher, site), the signed-in account in an outlined `Item` with Switch account, the scopes in an `Item.List`, the redirect URL and where to revoke, then Deny / Allow. The pressed answer shows its loading state and locks the other; the outcome lands in the notice slot (`success` for Allow, `info` for Deny) and both stay locked.
+- DeviceAuthorization: device or CLI sign-in. The code the terminal printed (`WDJB-MJHT`) in large mono text, the request details in a split `KeyValuePairs`, the account and the two scopes, Cancel / Confirm. `The code does not match? Enter the code from your terminal` swaps to an 8-character alphanumeric `OtpInput` grouped by 4: a rejected code (`00000000` in the demo) is the field's reason, cleared and focused; no answer (`99999999`) is a warning notice with Retry; an accepted code returns to the confirm step showing it. Confirm reports `success`, Cancel `info`.
 
 ## Related
 

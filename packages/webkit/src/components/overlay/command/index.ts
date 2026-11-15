@@ -4,6 +4,7 @@ import CommandGroup from './command-group/command-group.vue'
 import CommandInput from './command-input/command-input.vue'
 import CommandItem from './command-item/command-item.vue'
 import CommandList from './command-list/command-list.vue'
+import CommandPage from './command-page/command-page.vue'
 import CommandSeparator from './command-separator/command-separator.vue'
 
 interface CommandStatic {
@@ -13,6 +14,7 @@ interface CommandStatic {
   Item: typeof CommandItem
   Empty: typeof CommandEmpty
   Separator: typeof CommandSeparator
+  Page: typeof CommandPage
 }
 
 const Command = CommandRoot as typeof CommandRoot & CommandStatic
@@ -22,7 +24,16 @@ Command.Group = CommandGroup
 Command.Item = CommandItem
 Command.Empty = CommandEmpty
 Command.Separator = CommandSeparator
+Command.Page = CommandPage
 
 export default Command
-export { CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList, CommandSeparator }
+export {
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandPage,
+  CommandSeparator
+}
 export type { CommandItemValue } from './injection-key'

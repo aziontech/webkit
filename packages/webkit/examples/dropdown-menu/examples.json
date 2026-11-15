@@ -43,6 +43,16 @@
       "file": "groups-with-top-and-bottom-slots.vue"
     },
     {
+      "name": "SubMenus",
+      "summary": "`DropdownMenu.Sub` nests a menu: `SubTrigger` is the row with the chevron and `SubContent` the panel beside it. It opens on hover, click, `Enter`, `Space` or `ArrowRight`; `ArrowLeft` or `Esc` closes it. Here `Move to` starts open (`default-open`) and holds a second level; `Share` is disabled.",
+      "file": "sub-menus.vue"
+    },
+    {
+      "name": "CheckableOptions",
+      "summary": "`kind=\"checkbox\"` and `kind=\"radio\"` turn options into `menuitemcheckbox` / `menuitemradio` items with a check or dot and `aria-checked`. They keep the panel open on activation, so several columns can be toggled in a row; `selected` comes from your own state in the `select` handler.",
+      "file": "checkable-options.vue"
+    },
+    {
       "name": "CustomTriggers",
       "summary": "`DropdownMenu.Trigger` is abstract — it wires `aria-haspopup`/`aria-expanded`/`aria-controls` and the open/close click onto whatever element you put inside its default slot. Here it wraps an `IconButton` (row actions) and an `Avatar` (account menu).",
       "file": "custom-triggers.vue"

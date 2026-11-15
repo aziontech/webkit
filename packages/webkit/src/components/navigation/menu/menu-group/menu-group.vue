@@ -2,6 +2,7 @@
   import { computed, inject, useAttrs, useId } from 'vue'
 
   import { cn } from '../../../../utils/cn'
+  import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
   import { useMenuContext } from '../composables/use-menu-context'
   import { MenuSubInjectionKey } from '../injection-key'
   import { getMenuLevelTransitionStyle, MENU_LEVEL_ENTER_MS } from '../presets/transitions'
@@ -30,6 +31,8 @@
 
   const ctx = useMenuContext()
   const attrs = useAttrs()
+  const sidebar = inject(SidebarInjectionKey, null)
+  const rail = computed(() => sidebar?.rail === true)
 
   const uid = useId()
   const labelId = `${uid}-label`
@@ -89,7 +92,8 @@
         v-if="hasLabel()"
         :id="labelId"
         :data-testid="`${testId}__label`"
-        class="flex min-h-8 w-full shrink-0 items-center px-(--spacing-sm) text-label-sm text-(--text-muted)"
+        :data-rail="rail ? '' : undefined"
+        class="flex min-h-8 w-full shrink-0 items-center px-(--spacing-sm) text-label-sm text-(--text-muted) data-[rail]:sr-only"
       >
         <span class="min-w-0 flex-1 truncate">
           <slot name="label">{{ label }}</slot>

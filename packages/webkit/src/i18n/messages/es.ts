@@ -226,7 +226,10 @@ export const es: Messages = {
     otherSeries: 'Otros',
     rangeDraft: 'Seleccionando de {from} a {to}',
     rangeSelected: 'Seleccionado de {from} a {to}',
-    total: 'Total'
+    total: 'Total',
+    reference: 'Referencia',
+    referenceLine: '{label} en {value}.',
+    referenceBand: '{label} de {from} a {to}.'
   },
   chartCard: {
     resize: 'Redimensionar tarjeta',
@@ -240,7 +243,11 @@ export const es: Messages = {
   },
   codeBlock: {
     copy: 'Copiar código',
-    output: 'Salida'
+    output: 'Salida',
+    added: 'Añadida',
+    removed: 'Eliminada',
+    original: 'Original',
+    modified: 'Modificado'
   },
   codeEditor: {
     label: 'Editor de código',
@@ -296,6 +303,7 @@ export const es: Messages = {
     }
   },
   command: {
+    back: 'Volver de {page}',
     empty: 'No se encontraron resultados.',
     placeholder: 'Buscar en todo',
     title: 'Menú de comandos'
@@ -646,7 +654,12 @@ export const es: Messages = {
     space: 'Espacio',
     tab: 'Tab',
     backspace: 'Retroceso',
-    delete: 'Supr'
+    delete: 'Supr',
+    return: '↵',
+    'arrow-up': '↑',
+    'arrow-down': '↓',
+    'arrow-left': '←',
+    'arrow-right': '→'
   },
   label: {
     required: '(Obligatorio)'
@@ -694,6 +707,16 @@ export const es: Messages = {
   },
   miniButton: {
     label: 'Más información'
+  },
+  multiSelect: {
+    empty: 'Sin resultados',
+    loading: 'Cargando opciones',
+    add: 'Añadir "{value}"',
+    more: '+{count} más',
+    count: {
+      one: '{count} opción',
+      other: '{count} opciones'
+    }
   },
   navigationMenu: {
     label: 'Principal'
@@ -804,7 +827,17 @@ export const es: Messages = {
     greater: 'Mayor que',
     less: 'Menor que',
     greaterOrEqual: 'Mayor o igual que',
-    lessOrEqual: 'Menor o igual que'
+    lessOrEqual: 'Menor o igual que',
+    equality: 'Igualdad',
+    comparison: 'Comparación',
+    textMatch: 'Texto',
+    addGroup: 'Añadir grupo',
+    newGroup: 'Nuevo grupo',
+    group: 'Grupo de filtros {index}',
+    groupOperation: 'Combinar filtros del grupo {index}',
+    loadingValues: 'Cargando valores',
+    valuesError: 'No se pudieron cargar los valores',
+    valueEditor: 'Valor de {property}'
   },
   resizable: {
     handle: 'Redimensionar panel'
@@ -993,6 +1026,14 @@ export const es: Messages = {
   tableCellTime: {
     justNow: 'justo ahora'
   },
+  tableLiveButton: {
+    label: 'En vivo'
+  },
+  tableLoadMore: {
+    loading: 'Cargando más filas',
+    action: 'Cargar más',
+    end: 'No hay más filas'
+  },
   tableReorder: {
     column: 'Orden',
     handle: 'Reordenar {name}, posición {position} de {total}',
@@ -1044,6 +1085,16 @@ export const es: Messages = {
     dark: 'Oscuro',
     light: 'Claro'
   },
+  timestamp: {
+    title: 'Detalles de la marca de tiempo',
+    utc: 'UTC',
+    local: 'Local',
+    browser: 'Tu navegador',
+    relative: 'Relativo',
+    raw: 'Valor sin procesar',
+    copy: 'Copiar {label}',
+    justNow: 'justo ahora'
+  },
   toast: {
     close: 'Cerrar notificación',
     region: 'Notificaciones ({hotkey})'
@@ -1070,7 +1121,17 @@ export const es: Messages = {
     running: 'En ejecución',
     attributes: 'Atributos',
     milliseconds: '{value} ms',
-    seconds: '{value} s'
+    seconds: '{value} s',
+    zoom: 'Zoom',
+    resetZoom: 'Restablecer zoom',
+    zoomStart: 'Inicio del zoom',
+    zoomEnd: 'Fin del zoom',
+    slowest: 'Más lento',
+    events: 'Eventos',
+    eventCount: {
+      one: '{count} evento',
+      other: '{count} eventos'
+    }
   },
   topologyDiagram: {
     label: 'Topología de despliegue',
@@ -1096,7 +1157,9 @@ export const es: Messages = {
   },
   tree: {
     label: 'Árbol',
-    emptyTitle: 'No hay elementos'
+    emptyTitle: 'No hay elementos',
+    loadingChildren: 'Cargando',
+    renameLabel: 'Cambiar el nombre de {label}'
   },
   unsavedChanges: {
     title: 'Cambios sin guardar',

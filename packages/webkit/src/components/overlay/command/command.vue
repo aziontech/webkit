@@ -6,6 +6,7 @@
     onBeforeUnmount,
     onMounted,
     provide,
+    type Ref,
     ref,
     shallowRef,
     useAttrs,
@@ -56,6 +57,9 @@
   /** Controlled open state. Use with v-model:open; while unbound the palette starts at defaultOpen. */
   const openModel = defineModel<boolean>('open', { default: undefined as never })
 
+  /** Current page name; `''` is the first page. Use with v-model:page. */
+  const pageModel = defineModel<string>('page', { default: '' })
+
   defineSlots<{
     default(): unknown
   }>()
@@ -86,6 +90,15 @@
     return Array.from(registry)
   })
   const previousActiveElement = ref<HTMLElement | null>(null)
+  const pageStack = ref<string[]>([])
+  const pageHeadings = shallowRef(new Map<string, Ref<string>>())
+  let pageChangedWhileClosed = false
+
+  const ranking = computed(() => query.value.trim().length > 0)
+  const page = computed(() => pageModel.value)
+  const pageHeading = computed(
+    () => pageHeadings.value.get(pageModel.value)?.value || pageModel.value
+  )
 
   const isMac = computed(
     () =>
@@ -93,40 +106,65 @@
       /mac/i.test(navigator.platform || navigator.userAgent || '')
   )
 
-  const precedes = (left: HTMLElement | null, right: HTMLElement | null) =>
-    !left || !right || !(left.compareDocumentPosition(right) & Node.DOCUMENT_POSITION_PRECEDING)
+  const groupStats = computed(() => {
+    const stats = new Map<string, { visible: boolean; order: number }>()
+    for (const item of items.value) {
+      if (item.groupId === null) continue
+      const current = stats.get(item.groupId) ?? { visible: false, order: Infinity }
+      if (item.isVisible.value) {
+        current.visible = true
+        current.order = Math.min(current.order, item.order.value)
+      }
+      stats.set(item.groupId, current)
+    }
+    return stats
+  })
 
-  const orderedItems = computed<CommandRegisteredItem[]>(() => {
-    const list = items.value
-    const inOrder = list.every(
-      (item, index) => index === 0 || precedes(list[index - 1]!.el.value, item.el.value)
-    )
-    if (inOrder) return list
-    return list
+  function topOrder(item: CommandRegisteredItem) {
+    if (item.groupId === null) return item.order.value
+    return groupStats.value.get(item.groupId)?.order ?? item.order.value
+  }
+
+  function domOrder(left: HTMLElement | null, right: HTMLElement | null) {
+    if (!left || !right) return 0
+    const position = left.compareDocumentPosition(right)
+    if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1
+    if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1
+    return 0
+  }
+
+  const visibleItems = computed(() => {
+    const visible = items.value.filter((item) => item.isVisible.value)
+    const ranked = ranking.value
+    const inOrder =
+      !ranked &&
+      visible.every(
+        (item, index) => index === 0 || domOrder(visible[index - 1]!.el.value, item.el.value) <= 0
+      )
+    if (inOrder) return visible
+    return visible
       .map((item, index) => ({ item, index }))
       .sort((a, b) => {
-        const left = a.item.el.value
-        const right = b.item.el.value
-        if (!left || !right) return a.index - b.index
-        const position = left.compareDocumentPosition(right)
-        if (position & Node.DOCUMENT_POSITION_FOLLOWING) return -1
-        if (position & Node.DOCUMENT_POSITION_PRECEDING) return 1
-        return a.index - b.index
+        if (ranked) {
+          const byTop = topOrder(a.item) - topOrder(b.item)
+          if (byTop !== 0) return byTop
+          if (a.item.groupId !== null && a.item.groupId === b.item.groupId) {
+            const byOwn = a.item.order.value - b.item.order.value
+            if (byOwn !== 0) return byOwn
+          }
+        }
+        return domOrder(a.item.el.value, b.item.el.value) || a.index - b.index
       })
       .map((entry) => entry.item)
   })
 
-  const navigableItems = computed(() =>
-    orderedItems.value.filter((item) => item.isVisible.value && !item.disabled.value)
+  const navigableItems = computed(() => visibleItems.value.filter((item) => !item.disabled.value))
+
+  const leadingGroupId = computed(() =>
+    ranking.value ? (visibleItems.value[0]?.groupId ?? null) : null
   )
 
-  const visibleGroups = computed(() => {
-    const groups = new Set<string | null>()
-    for (const item of items.value) if (item.isVisible.value) groups.add(item.groupId)
-    return groups
-  })
-
-  const hasVisibleItems = computed(() => visibleGroups.value.size > 0)
+  const hasVisibleItems = computed(() => visibleItems.value.length > 0)
 
   function setOpen(value: boolean) {
     isOpen.set(value)
@@ -145,7 +183,44 @@
   }
 
   function groupHasVisibleItems(groupId: string) {
-    return visibleGroups.value.has(groupId)
+    return groupStats.value.get(groupId)?.visible ?? false
+  }
+
+  function groupOrder(groupId: string) {
+    const order = groupStats.value.get(groupId)?.order ?? 0
+    return Number.isFinite(order) ? order : 0
+  }
+
+  function goToPage(name: string) {
+    pageModel.value = name
+    query.value = ''
+    nextTick(() => resetActive())
+  }
+
+  function pushPage(name: string) {
+    if (!name || name === pageModel.value) return
+    pageStack.value = [...pageStack.value, pageModel.value]
+    goToPage(name)
+  }
+
+  function popPage() {
+    if (pageModel.value === '') return false
+    const stack = [...pageStack.value]
+    const previous = stack.pop() ?? ''
+    pageStack.value = stack
+    goToPage(previous)
+    return true
+  }
+
+  function registerPage(name: string, heading: Ref<string>) {
+    const next = new Map(pageHeadings.value)
+    next.set(name, heading)
+    pageHeadings.value = next
+    return () => {
+      const rest = new Map(pageHeadings.value)
+      if (rest.get(name) === heading) rest.delete(name)
+      pageHeadings.value = rest
+    }
   }
 
   function resetActive() {
@@ -200,6 +275,12 @@
         if (list.length) activeValue.value = list[list.length - 1].value
         break
       }
+      case 'Backspace':
+        if (query.value === '' && popPage()) event.preventDefault()
+        break
+      case 'Escape':
+        if (popPage()) event.preventDefault()
+        break
       case 'Enter': {
         event.preventDefault()
         const active = navigableItems.value.find((item) => item.value === activeValue.value)
@@ -283,12 +364,19 @@
         previousActiveElement.value =
           typeof document !== 'undefined' ? (document.activeElement as HTMLElement | null) : null
         query.value = ''
+        if (!pageChangedWhileClosed) pageModel.value = ''
+        pageChangedWhileClosed = false
+        pageStack.value = []
         nextTick(() => resetActive())
       } else if (wasOpen) {
         nextTick(() => previousActiveElement.value?.focus?.())
       }
     }
   )
+
+  watch(pageModel, () => {
+    if (!isOpen.value) pageChangedWhileClosed = true
+  })
 
   provide(CommandInjectionKey, {
     testId: testId.value,
@@ -305,6 +393,14 @@
     isActive,
     hasVisibleItems,
     groupHasVisibleItems,
+    ranking,
+    groupOrder,
+    leadingGroupId,
+    page,
+    pageHeading,
+    pushPage,
+    popPage,
+    registerPage,
     onInputKeydown
   })
 </script>

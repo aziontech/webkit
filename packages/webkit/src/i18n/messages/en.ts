@@ -154,7 +154,10 @@ export const chart = {
   otherSeries: 'Other',
   rangeDraft: 'Selecting from {from} to {to}',
   rangeSelected: 'Selected from {from} to {to}',
-  total: 'Total'
+  total: 'Total',
+  reference: 'Reference',
+  referenceLine: '{label} at {value}.',
+  referenceBand: '{label} from {from} to {to}.'
 } as const
 
 export const chartCard = {
@@ -171,7 +174,11 @@ export const chip = {
 
 export const codeBlock = {
   copy: 'Copy code',
-  output: 'Output'
+  output: 'Output',
+  added: 'Added',
+  removed: 'Removed',
+  original: 'Original',
+  modified: 'Modified'
 } as const
 
 export const codeEditor = {
@@ -231,6 +238,7 @@ export const combobox = {
 } as const
 
 export const command = {
+  back: 'Back from {page}',
   empty: 'No results found.',
   placeholder: 'Search everything',
   title: 'Command menu'
@@ -594,7 +602,12 @@ export const kbd = {
   space: 'Space',
   tab: 'Tab',
   backspace: 'Backspace',
-  delete: 'Del'
+  delete: 'Del',
+  return: '↵',
+  'arrow-up': '↑',
+  'arrow-down': '↓',
+  'arrow-left': '←',
+  'arrow-right': '→'
 } as const
 
 export const label = {
@@ -649,6 +662,17 @@ export const menu = {
 
 export const miniButton = {
   label: 'Learn more'
+} as const
+
+export const multiSelect = {
+  empty: 'No matches',
+  loading: 'Loading options',
+  add: 'Add "{value}"',
+  more: '+{count} more',
+  count: {
+    one: '{count} option',
+    other: '{count} options'
+  }
 } as const
 
 export const navigationMenu = {
@@ -757,7 +781,17 @@ export const propertyFilter = {
   greater: 'Greater than',
   less: 'Less than',
   greaterOrEqual: 'Greater than or equal to',
-  lessOrEqual: 'Less than or equal to'
+  lessOrEqual: 'Less than or equal to',
+  equality: 'Equality',
+  comparison: 'Comparison',
+  textMatch: 'Text match',
+  addGroup: 'Add group',
+  newGroup: 'New group',
+  group: 'Filter group {index}',
+  groupOperation: 'Combine filters in group {index}',
+  loadingValues: 'Loading values',
+  valuesError: 'Could not load values',
+  valueEditor: 'Value of {property}'
 } as const
 
 export const propertyFilterQuery = {
@@ -985,6 +1019,16 @@ export const tableCellTime = {
   justNow: 'just now'
 } as const
 
+export const tableLiveButton = {
+  label: 'Live'
+} as const
+
+export const tableLoadMore = {
+  loading: 'Loading more rows',
+  action: 'Load more',
+  end: 'No more rows'
+} as const
+
 export const tableReorder = {
   column: 'Order',
   handle: 'Reorder {name}, position {position} of {total}',
@@ -1042,6 +1086,17 @@ export const themeSwitcher = {
   light: 'Light'
 } as const
 
+export const timestamp = {
+  title: 'Timestamp details',
+  utc: 'UTC',
+  local: 'Local',
+  browser: 'Your browser',
+  relative: 'Relative',
+  raw: 'Raw value',
+  copy: 'Copy {label}',
+  justNow: 'just now'
+} as const
+
 export const toast = {
   close: 'Close notification',
   region: 'Notifications ({hotkey})'
@@ -1070,7 +1125,17 @@ export const trace = {
   running: 'Running',
   attributes: 'Attributes',
   milliseconds: '{value} ms',
-  seconds: '{value} s'
+  seconds: '{value} s',
+  zoom: 'Zoom',
+  resetZoom: 'Reset zoom',
+  zoomStart: 'Zoom start',
+  zoomEnd: 'Zoom end',
+  slowest: 'Slowest',
+  events: 'Events',
+  eventCount: {
+    one: '{count} event',
+    other: '{count} events'
+  }
 } as const
 
 export const tracker = {
@@ -1096,7 +1161,9 @@ export const topologyDiagram = {
 
 export const tree = {
   label: 'Tree',
-  emptyTitle: 'No items'
+  emptyTitle: 'No items',
+  loadingChildren: 'Loading',
+  renameLabel: 'Rename {label}'
 } as const
 
 export const unsavedChanges = {
@@ -1399,6 +1466,7 @@ export const en = {
   mapChart,
   menu,
   miniButton,
+  multiSelect,
   navigationMenu,
   numberInput,
   outcomeMark,
@@ -1442,12 +1510,15 @@ export const en = {
   tableCellLink,
   tableCellTags,
   tableCellTime,
+  tableLiveButton,
+  tableLoadMore,
   tableReorder,
   tableSearch,
   tableSortButton,
   tabs,
   tagEditor,
   themeSwitcher,
+  timestamp,
   toast,
   toggleGroup,
   trace,

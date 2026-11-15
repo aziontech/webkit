@@ -3,10 +3,10 @@ name: webkit-provider
 category: utils
 structure: monolithic
 status: implemented
-checksum: cc5cbe170edc1fb843c26d380ab0a07bad5a5fe584778db66472a1ceaad9cc4c
-spec_version: 1
+checksum: 7d57d83638489b0c94e2f37d0cf07cb94f7afbbc38ed02cfbe70457280e4bcac
+spec_version: 2
 created: 2026-11-11
-last_updated: 2026-11-12
+last_updated: 2026-11-14
 ---
 
 # WebkitProvider — Component Spec
@@ -70,6 +70,7 @@ Sets the language and text direction of every WebKit component below it. It wrap
 | `messages` | `PartialMessages`          | `undefined` | false    | Partial catalog deep-merged over the built-in one, keyed by component group (`{ pagination: { next: 'Seguinte' } }`).                                                                                                                                                             |
 | `dir`      | `'ltr' \| 'rtl' \| 'auto'` | `'auto'`    | false    | Text direction of the subtree; `auto` derives it from the locale (`ar`, `he`, `fa`, `ur` are right-to-left).                                                                                                                                                                      |
 | `now`      | `string \| number \| Date` | `undefined` | false    | Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`, the day groups of `ConversationHistory`, the relative ranges of `DateRangePicker` when their own `now` is unset); unset reads the real clock, ticking each minute. |
+| `timeZone` | `string`                   | `''`        | false    | IANA time zone every `Timestamp` below the provider shows its local time in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone.                                                                                                        |
 
 ## Events
 
@@ -85,6 +86,7 @@ Sets the language and text direction of every WebKit component below it. It wrap
 
 - No visual states; the root carries `lang` (the locale) and `dir` (`ltr` | `rtl`).
 - `now` set: every relative time below reads it instead of the real clock; changing it re-renders them. An empty or unparseable value reads the real clock.
+- `timeZone` set: every `Timestamp` below shows its local time in that zone and renders it on the server too; `useLocale().formatDate` and the other formatters are unchanged. Empty reads the browser's zone after mount.
 
 ## Motion & Animations
 
@@ -114,6 +116,7 @@ _none_
 - CustomMessages — `messages` overrides one built-in string; justified because the override is the provider's second job.
 - RightToLeft — `locale="ar"` turns the subtree right-to-left; justified because `dir` is derived from the locale.
 - `now` is shown by `table/cell-presets` (a fixed reference around a table whose `Table.CellTime` cells count back from it), not by a provider example of its own.
+- `timeZone` is shown by `timestamp/time-zone` (a time zone picker bound to the provider around a few timestamps), not by a provider example of its own.
 
 ## Constraints — DO NOT
 

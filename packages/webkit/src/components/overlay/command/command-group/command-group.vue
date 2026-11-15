@@ -45,7 +45,10 @@
     role="group"
     :aria-labelledby="hasHeading ? headingId : undefined"
     :data-testid="testId"
-    class="flex flex-col [:not([role=separator])+&]:mt-(--spacing-sm)"
+    :data-ranked="ctx.ranking.value || undefined"
+    :data-leading="ctx.leadingGroupId.value === groupId || undefined"
+    :style="ctx.ranking.value ? { order: ctx.groupOrder(groupId) } : undefined"
+    class="flex flex-col [:not([role=separator])+&]:mt-(--spacing-sm) [&[data-ranked]]:mt-(--spacing-sm) [&[data-ranked][data-leading]]:mt-0"
   >
     <div
       v-if="hasHeading"

@@ -25,6 +25,8 @@
     dir?: DirectionSetting
     /** Reference time for every relative time below the provider (`Table.CellTime`, `useLocale().formatRelativeTime`); unset reads the real clock, ticking each minute. */
     now?: string | number | Date
+    /** IANA time zone every `Timestamp` below the provider shows its local time in (`America/New_York`, `UTC`), for an app-wide time zone picker; empty reads the browser's zone. */
+    timeZone?: string
   }
 
   const props = withDefaults(defineProps<Props>(), {
@@ -32,7 +34,8 @@
     catalogs: undefined,
     messages: undefined,
     dir: 'auto',
-    now: undefined
+    now: undefined,
+    timeZone: ''
   })
 
   defineSlots<{
@@ -47,7 +50,8 @@
     messages: () => props.messages,
     dir: () => props.dir,
     catalogs: () => ({ en, ...props.catalogs }),
-    now: () => props.now
+    now: () => props.now,
+    timeZone: () => props.timeZone
   })
 
   const testId = computed(

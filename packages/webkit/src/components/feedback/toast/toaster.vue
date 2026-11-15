@@ -13,6 +13,7 @@
 
   import { usePortalLocale, useTranslate } from '../../../composables/use-locale/use-translate'
   import * as en from '../../../i18n/messages/en'
+  import Progress from '../progress/progress.vue'
   import { ToastInjectionKey } from './injection-key'
   import { TOAST_UNMOUNT_MS } from './presets/transitions'
   import ToastAction from './toast-action/toast-action.vue'
@@ -71,6 +72,14 @@
   const attrs = useAttrs()
   const testId = computed(() => (attrs['data-testid'] as string | undefined) ?? 'feedback-toast')
 
+  const progressOf = (entry: ToastEntry) => Math.min(100, Math.max(0, entry.progress ?? 0))
+
+  const percentOf = (entry: ToastEntry) =>
+    new Intl.NumberFormat(portalLocale.value.lang || undefined, {
+      style: 'percent',
+      maximumFractionDigits: 0
+    }).format(progressOf(entry) / 100)
+
   const actionsOf = (entry: ToastEntry) =>
     (entry.actions?.length ? entry.actions : entry.action ? [entry.action] : []).slice(0, 2)
 
@@ -123,7 +132,8 @@
         actions: t.actions,
         duration: t.duration,
         position: t.position,
-        closable: t.closable
+        closable: t.closable,
+        progress: t.progress
       })),
     (next) => {
       const nextIds = new Set(next.map((t) => t.id))
@@ -426,6 +436,23 @@
                 <ToastDescription v-if="item.entry.description">{{
                   item.entry.description
                 }}</ToastDescription>
+                <div
+                  v-if="item.entry.progress !== undefined"
+                  :data-testid="`${testId}__progress`"
+                  class="flex items-center gap-(--spacing-xs) pt-(--spacing-xxs)"
+                >
+                  <Progress
+                    :value="progressOf(item.entry)"
+                    :aria-label="item.entry.message"
+                    shape="rounded"
+                    class="min-w-0 flex-1"
+                  />
+                  <span
+                    aria-hidden="true"
+                    class="shrink-0 text-body-xs text-(--text-muted) tabular-nums"
+                    >{{ percentOf(item.entry) }}</span
+                  >
+                </div>
                 <template #trailing>
                   <ToastAction
                     v-for="(entryAction, actionIndex) in actionsOf(item.entry)"

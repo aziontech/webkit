@@ -21,6 +21,16 @@
       "name": "Disabled",
       "summary": "`disabled` keeps the applied tokens readable but locks the field, the tokens, the Match all / Match any switch and Clear filters: nothing is added, removed or submitted.",
       "file": "disabled.vue"
+    },
+    {
+      "name": "Groups",
+      "summary": "`grouped` nests conditions one level deep: each bordered group has its own Match all / Match any, the groups combine with the outer switch, and Add group starts the next one. Bound to `useCollection`, which matches the groups and keeps them in the URL.",
+      "file": "groups.vue"
+    },
+    {
+      "name": "AsyncValues",
+      "summary": "`loadValues` fetches the values of Host for the typed text, with a loading row, an error row and a count per value. Created is marked `customValue`, so its value comes from a date field in the `value` slot.",
+      "file": "async-values.vue"
     }
   ]
 }

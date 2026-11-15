@@ -1,0 +1,21 @@
+{
+  "component": "hover-card",
+  "title": "Components/Primitives/Overlay/HoverCard",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A user link inside a sentence. Rest the pointer on it or tab to it: after `openDelay` (500 ms) the card shows who the person is; it stays while the pointer moves onto it and closes after `closeDelay` (300 ms) or on `Esc`.",
+      "file": "default.vue"
+    },
+    {
+      "name": "ResourcePreview",
+      "summary": "Card forced open (`default-open`) on a resource name, the main use in tables: status, region, last deploy and domain, the same facts the resource page shows.",
+      "file": "resource-preview.vue"
+    },
+    {
+      "name": "Disabled",
+      "summary": "`disabled` keeps the link and never opens the card.",
+      "file": "disabled.vue"
+    }
+  ]
+}

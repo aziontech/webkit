@@ -2,6 +2,8 @@
   import {
     type ComponentPublicInstance,
     computed,
+    type FunctionalComponent,
+    inject,
     onMounted,
     shallowRef,
     useAttrs,
@@ -13,6 +15,7 @@
   import * as en from '../../../../i18n/messages/en'
   import { cn } from '../../../../utils/cn'
   import IconButton from '../../../actions/icon-button/icon-button.vue'
+  import { SidebarInjectionKey } from '../../../layout/sidebar/injection-key'
   import { useMenuSubContext } from '../composables/use-menu-sub-context'
   import type { MenuSubKind } from '../injection-key'
 
@@ -51,6 +54,7 @@
   }>()
 
   const sub = useMenuSubContext()
+  const sidebar = inject(SidebarInjectionKey, null)
   const attrs = useAttrs()
   const dir = useDirection()
   const { t } = useTranslate({ menu: en.menu })
@@ -66,6 +70,19 @@
   const hasReference = computed(() => props.href.length > 0)
 
   const showIcon = computed(() => Boolean(props.icon) && !isInline.value)
+
+  const rail = computed(() => sidebar?.rail === true)
+
+  const Passthrough: FunctionalComponent = (_, { slots: inner }) => inner['default']?.()
+
+  const tip = computed(() =>
+    rail.value && sidebar?.tooltip
+      ? {
+          is: sidebar.tooltip,
+          props: { text: props.label, placement: sidebar.tooltipPlacement ?? 'right' }
+        }
+      : { is: Passthrough, props: {} }
+  )
 
   const arrowAriaLabel = computed(() => {
     const name = props.label
@@ -125,14 +142,27 @@
     showIcon.value ? 'ps-(--spacing-xxs)' : 'ps-(--spacing-sm)'
   )
 
-  const rowClass = computed(() => cn(ROW_CLASS, attrs.class as string | undefined))
+  const rowClass = computed(() =>
+    cn(
+      ROW_CLASS,
+      rail.value && 'justify-center',
+      rail.value && !showIcon.value && 'hidden',
+      attrs.class as string | undefined
+    )
+  )
 
   const labelClass = computed(() =>
-    cn(
-      CONTROL_CLASS,
-      'w-full min-w-0 pe-[calc(var(--spacing-xxs)*3+1.75rem)]',
-      contentColumnClass.value
-    )
+    rail.value
+      ? cn(CONTROL_CLASS, 'size-8 justify-center p-0')
+      : cn(
+          CONTROL_CLASS,
+          'w-full min-w-0 pe-[calc(var(--spacing-xxs)*3+1.75rem)]',
+          contentColumnClass.value
+        )
+  )
+
+  const labelTextClass = computed(() =>
+    rail.value ? 'sr-only' : 'min-w-0 flex-1 truncate text-start text-label-md'
   )
 
   const register = () => {
@@ -152,6 +182,7 @@
 
   const reveal = () => {
     if (props.disabled) return
+    if (rail.value) sidebar?.expand?.()
     if (isInline.value) sub.toggle()
     else sub.push()
   }
@@ -192,41 +223,47 @@
     :class="rowClass"
   >
     <component
-      :is="hasReference ? 'a' : 'button'"
-      ref="labelEl"
-      :id="sub.triggerId"
-      :type="hasReference ? undefined : 'button'"
-      :href="hasReference && !disabled ? href : undefined"
-      :disabled="hasReference ? undefined : disabled || undefined"
-      :tabindex="disabled && hasReference ? -1 : undefined"
-      :aria-expanded="!hasReference && isInline ? sub.open.value : undefined"
-      :aria-controls="!hasReference && isInline ? sub.contentId : undefined"
-      :aria-disabled="disabled || undefined"
-      :data-testid="`${testId}__${hasReference ? 'reference' : 'control'}`"
-      :data-disabled="disabled ? '' : undefined"
-      :class="labelClass"
-      @click="hasReference ? activate($event) : reveal()"
-      @keydown="onKeydown"
+      :is="tip.is"
+      v-bind="tip.props"
     >
-      <span
-        v-if="showIcon"
-        :class="ICON_BOX_CLASS"
-        aria-hidden="true"
-        :data-testid="`${testId}__icon`"
+      <component
+        :is="hasReference ? 'a' : 'button'"
+        ref="labelEl"
+        :id="sub.triggerId"
+        :type="hasReference ? undefined : 'button'"
+        :href="hasReference && !disabled ? href : undefined"
+        :disabled="hasReference ? undefined : disabled || undefined"
+        :tabindex="disabled && hasReference ? -1 : undefined"
+        :aria-expanded="!hasReference && isInline ? sub.open.value : undefined"
+        :aria-controls="!hasReference && isInline ? sub.contentId : undefined"
+        :aria-disabled="disabled || undefined"
+        :data-testid="`${testId}__${hasReference ? 'reference' : 'control'}`"
+        :data-disabled="disabled ? '' : undefined"
+        :class="labelClass"
+        @click="hasReference ? activate($event) : reveal()"
+        @keydown="onKeydown"
       >
-        <i
-          :class="iconClass"
+        <span
+          v-if="showIcon"
+          :class="ICON_BOX_CLASS"
           aria-hidden="true"
-        />
-      </span>
-      <span
-        class="min-w-0 flex-1 truncate text-start text-label-md"
-        :data-testid="`${testId}__label`"
-      >
-        <slot>{{ label }}</slot>
-      </span>
+          :data-testid="`${testId}__icon`"
+        >
+          <i
+            :class="iconClass"
+            aria-hidden="true"
+          />
+        </span>
+        <span
+          :class="labelTextClass"
+          :data-testid="`${testId}__label`"
+        >
+          <slot>{{ label }}</slot>
+        </span>
+      </component>
     </component>
     <IconButton
+      v-if="!rail"
       ref="arrowEl"
       :icon="arrowIcon"
       kind="transparent"

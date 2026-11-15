@@ -43,6 +43,11 @@
       "file": "brush.vue"
     },
     {
+      "name": "Threshold",
+      "summary": "p95 latency against its limits: the normal range as a neutral band under the line, and the SLO as a danger line over it. The value axis grows to show the SLO above the data, and the chart summary reads both references.",
+      "file": "threshold.vue"
+    },
+    {
       "name": "TooltipTotal",
       "summary": "Event volume by level, each level coloured from the severity ramp. The tooltip adds a Total row that sums the visible levels in the bucket and a footer hint that says what a click or a drag on the plot does.",
       "file": "tooltip-total.vue"

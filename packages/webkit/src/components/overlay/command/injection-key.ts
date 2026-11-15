@@ -19,6 +19,8 @@ export interface CommandRegisteredItem {
    *  order (a group mounted after the palette opened registers last but renders where the
    *  consumer put it). `null` only in the tick before it mounts. */
   el: Ref<HTMLElement | null>
+  /** Rank while the query is not empty: a CSS `order` value, lower ranks first (0 when not ranked). */
+  order: Ref<number>
   /** Activates the item, emitting the root `select` event. */
   activate: (event: globalThis.MouseEvent | globalThis.KeyboardEvent) => void
 }
@@ -52,6 +54,22 @@ export interface CommandContext {
   hasVisibleItems: Ref<boolean>
   /** Whether the given group has at least one visible item. */
   groupHasVisibleItems: (groupId: string) => boolean
+  /** Whether the query is not empty, so the list shows items in ranked order. */
+  ranking: Ref<boolean>
+  /** The CSS `order` of a group: the order of its best visible item. */
+  groupOrder: (groupId: string) => number
+  /** The group ranked first while searching, or `null`. */
+  leadingGroupId: Ref<string | null>
+  /** The current page name; `''` is the first page. */
+  page: Ref<string>
+  /** The heading of the current page, for the back control. */
+  pageHeading: Ref<string>
+  /** Opens a nested page, remembering the current one. */
+  pushPage: (name: string) => void
+  /** Returns to the previous page; `false` when already on the first page. */
+  popPage: () => boolean
+  /** Registers a page heading with the root; returns an unregister function. */
+  registerPage: (name: string, heading: Ref<string>) => () => void
   /** Keyboard handler for the input — Arrow/Home/End roving nav + Enter activation. */
   onInputKeydown: (event: globalThis.KeyboardEvent) => void
 }
@@ -59,6 +77,8 @@ export interface CommandContext {
 export const CommandInjectionKey: InjectionKey<CommandContext> = Symbol('CommandContext')
 
 export const CommandGroupIdKey: InjectionKey<string | null> = Symbol('CommandGroupId')
+
+export const CommandPageKey: InjectionKey<string> = Symbol('CommandPage')
 
 export function useCommandMenuContext(): CommandContext {
   const ctx = inject(CommandInjectionKey)

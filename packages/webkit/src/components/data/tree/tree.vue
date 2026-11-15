@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, provide, ref, useAttrs } from 'vue'
+  import { computed, nextTick, provide, ref, useAttrs } from 'vue'
 
   import { eventDirection, logicalArrowKey } from '../../../composables/use-direction'
   import { useTranslate } from '../../../composables/use-locale/use-translate'
@@ -12,7 +12,7 @@
 
   defineOptions({ name: 'Tree', inheritAttrs: false })
 
-  /** One node of the tree; a node with a non-empty children array is a parent. */
+  /** One node of the tree; a node with a non-empty children array, or lazy, is a parent. */
   export type TreeItem = {
     id: string
     label: string
@@ -20,13 +20,25 @@
     description?: string
     disabled?: boolean
     children?: TreeItem[]
+    /** The node is a parent whose children load on demand; it shows a chevron while children is empty. */
+    lazy?: boolean
+    /** While expanded, renders a loading row in place of the children. */
+    loading?: boolean
   }
+
+  /** Selection model: single writes v-model:selected, multiple writes v-model:selected-ids. */
+  export type TreeSelectable = 'single' | 'multiple'
+
+  /** Payload of the rename event: the node and its new, trimmed label. */
+  export type TreeRenamePayload = { item: TreeItem; label: string }
 
   interface Props {
     /** Nodes to render; a node with a non-empty children array is a parent. */
     items?: TreeItem[]
-    /** Enables single selection: activating a node writes its id to v-model:selected and marks it aria-selected. */
-    selectable?: boolean
+    /** Enables selection: true or single writes one id to v-model:selected; multiple writes ids to v-model:selected-ids. */
+    selectable?: boolean | TreeSelectable
+    /** Lets the user rename a node in place with F2, or through the exposed startRename. */
+    editable?: boolean
     /** Renders Skeleton rows in place of the tree and sets aria-busy. */
     loading?: boolean
     /** Title of the default empty state shown when items is empty. Empty uses the locale catalog (`No items`). */
@@ -40,6 +52,7 @@
   const props = withDefaults(defineProps<Props>(), {
     items: () => [],
     selectable: false,
+    editable: false,
     loading: false,
     emptyTitle: '',
     emptyDescription: '',
@@ -49,6 +62,10 @@
   const emit = defineEmits<{
     /** A node activated by a row click, or Enter or Space on the focused node. */
     'item-click': [event: MouseEvent | KeyboardEvent, item: TreeItem]
+    /** A node was double-clicked, to open or preview it. */
+    'item-dblclick': [event: MouseEvent, item: TreeItem]
+    /** An in-place rename was submitted with a new, non-empty label. */
+    rename: [event: KeyboardEvent | FocusEvent, payload: TreeRenamePayload]
   }>()
 
   /** Ids of the expanded parents. */
@@ -56,6 +73,9 @@
 
   /** Id of the selected node; empty when nothing is selected. */
   const selected = defineModel<string>('selected', { default: '' })
+
+  /** Ids of the selected nodes while selectable is multiple. */
+  const selectedIds = defineModel<string[]>('selectedIds', { default: () => [] })
 
   const slots = defineSlots<{
     /** Replaces the label region of every row; receives the node, its level and whether it is expanded. */
@@ -75,7 +95,18 @@
   const ActionsOutlet = (outlet: { scope: { item: TreeItem; level: number } }): unknown =>
     slots.actions?.(outlet.scope)
 
-  const activeSelection = computed(() => (props.selectable ? selected.value : ''))
+  const mode = computed(() => {
+    if (props.selectable === 'multiple') return 'multiple'
+    return props.selectable ? 'single' : 'none'
+  })
+
+  const selectedSet = computed(() => new Set(mode.value === 'multiple' ? selectedIds.value : []))
+
+  const activeSelection = computed(() => {
+    if (mode.value === 'single') return selected.value
+    if (mode.value === 'multiple') return selectedIds.value[0] ?? ''
+    return ''
+  })
 
   const navigation = useTreeNavigation<TreeItem>({
     items: () => props.items,
@@ -91,7 +122,15 @@
 
   const isEmpty = computed(() => !props.loading && props.items.length === 0)
 
-  const selectable = computed(() => props.selectable)
+  const selectionOn = computed(() => mode.value !== 'none')
+
+  const multiple = computed(() => mode.value === 'multiple')
+
+  const editable = computed(() => props.editable)
+
+  const renamingId = ref('')
+
+  const anchorId = ref('')
 
   const expandedSet = computed(() => new Set(expanded.value))
 
@@ -100,7 +139,51 @@
   }
 
   function isSelected(id: string) {
-    return props.selectable && selected.value !== '' && selected.value === id
+    if (mode.value === 'multiple') return selectedSet.value.has(id)
+    return mode.value === 'single' && selected.value !== '' && selected.value === id
+  }
+
+  function isEnabled(id: string) {
+    const entry = navigation.entry(id)
+    return Boolean(entry && !entry.item.disabled)
+  }
+
+  function writeSelection(ids: string[]) {
+    const next = [...new Set(ids)]
+    const same =
+      next.length === selectedIds.value.length && next.every((id) => selectedSet.value.has(id))
+    if (!same) selectedIds.value = next
+  }
+
+  function rangeTo(id: string) {
+    const visible = navigation.visible.value
+    const from = visible.indexOf(anchorId.value || id)
+    const to = visible.indexOf(id)
+    if (from === -1 || to === -1) return [id]
+    const [start, end] = from < to ? [from, to] : [to, from]
+    return visible.slice(start, end + 1).filter(isEnabled)
+  }
+
+  function toggleSelected(id: string) {
+    anchorId.value = id
+    writeSelection(
+      selectedSet.value.has(id)
+        ? selectedIds.value.filter((key) => key !== id)
+        : [...selectedIds.value, id]
+    )
+  }
+
+  function selectMultiple(event: MouseEvent | KeyboardEvent, id: string) {
+    if (event.shiftKey) {
+      writeSelection([...(event.ctrlKey || event.metaKey ? selectedIds.value : []), ...rangeTo(id)])
+      return
+    }
+    if (event instanceof MouseEvent && (event.ctrlKey || event.metaKey)) {
+      toggleSelected(id)
+      return
+    }
+    anchorId.value = id
+    writeSelection([id])
   }
 
   function setExpanded(id: string, open: boolean) {
@@ -124,8 +207,45 @@
   function activate(event: MouseEvent | KeyboardEvent, id: string) {
     const entry = navigation.entry(id)
     if (!entry || entry.item.disabled) return
-    if (props.selectable && selected.value !== id) selected.value = id
+    if (mode.value === 'single' && selected.value !== id) selected.value = id
+    if (mode.value === 'multiple') selectMultiple(event, id)
     emit('item-click', event, entry.item)
+  }
+
+  function startRename(id: string) {
+    const entry = navigation.entry(id)
+    if (!props.editable || !entry || entry.item.disabled) return
+    renamingId.value = id
+  }
+
+  function endRename(id: string, refocus: boolean) {
+    if (renamingId.value !== id) return
+    renamingId.value = ''
+    if (refocus) nextTick(() => focusItem(id))
+  }
+
+  function commitRename(event: KeyboardEvent | FocusEvent, id: string, value: string) {
+    const entry = navigation.entry(id)
+    const label = value.trim()
+    endRename(id, event.type === 'keydown')
+    if (!entry || !label || label === entry.item.label) return
+    emit('rename', event, { item: entry.item, label })
+  }
+
+  function cancelRename(id: string) {
+    endRename(id, true)
+  }
+
+  function extendTo(id: string) {
+    if (!id) return
+    focusItem(id)
+    if (!isEnabled(id)) return
+    writeSelection([...selectedIds.value, id])
+  }
+
+  function selectAll() {
+    anchorId.value = navigation.visible.value[0] ?? ''
+    writeSelection(navigation.visible.value.filter(isEnabled))
   }
 
   function treeitemOf(target: EventTarget | null) {
@@ -142,7 +262,7 @@
   function onClick(event: MouseEvent) {
     const target = event.target
     if (!(target instanceof globalThis.Element)) return
-    if (target.closest('[data-tree-toggle], [data-tree-actions]')) return
+    if (target.closest('[data-tree-toggle], [data-tree-actions], [data-tree-rename]')) return
     const row = target.closest('[data-tree-row]')
     const id = treeitemOf(row?.parentElement ?? null)
     if (!id) return
@@ -150,16 +270,34 @@
     activate(event, id)
   }
 
+  function onDblclick(event: MouseEvent) {
+    const target = event.target
+    if (!(target instanceof globalThis.Element)) return
+    if (target.closest('[data-tree-toggle], [data-tree-actions], [data-tree-rename]')) return
+    const row = target.closest('[data-tree-row]')
+    const entry = navigation.entry(treeitemOf(row?.parentElement ?? null))
+    if (!entry || entry.item.disabled) return
+    emit('item-dblclick', event, entry.item)
+  }
+
   function onKeydown(event: KeyboardEvent) {
     const id = treeitemOf(event.target)
     if (!id) return
     const parent = navigation.isParent(id)
+    const extend = multiple.value && event.shiftKey
+    if (multiple.value && (event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'a') {
+      selectAll()
+      event.preventDefault()
+      return
+    }
     switch (logicalArrowKey(event.key, eventDirection(event))) {
       case 'ArrowDown':
-        focusItem(navigation.sibling(id, 1))
+        if (extend) extendTo(navigation.sibling(id, 1))
+        else focusItem(navigation.sibling(id, 1))
         break
       case 'ArrowUp':
-        focusItem(navigation.sibling(id, -1))
+        if (extend) extendTo(navigation.sibling(id, -1))
+        else focusItem(navigation.sibling(id, -1))
         break
       case 'ArrowRight':
         if (parent && !isExpanded(id)) setExpanded(id, true)
@@ -175,8 +313,18 @@
       case 'End':
         focusItem(navigation.last())
         break
-      case 'Enter':
+      case 'F2':
+        if (!props.editable) return
+        startRename(id)
+        break
       case ' ':
+        if (multiple.value) {
+          if (isEnabled(id)) toggleSelected(id)
+          break
+        }
+        activate(event, id)
+        break
+      case 'Enter':
         activate(event, id)
         break
       default:
@@ -214,12 +362,23 @@
 
   provide(TreeInjectionKey, {
     testId,
-    selectable,
+    selectable: selectionOn,
+    editable,
+    renamingId,
+    loadingLabel: computed(() => t('tree.loadingChildren')),
+    renameLabel: (label: string) => t('tree.renameLabel', { label }),
+    commitRename,
+    cancelRename,
     tabStop: navigation.tabStop,
     isExpanded,
     isSelected,
     toggle,
     focusItem
+  })
+
+  defineExpose({
+    /** Opens the in-place rename field on the node with this id, when editable. */
+    startRename
   })
 </script>
 
@@ -229,7 +388,8 @@
     :data-testid="testId"
     :data-loading="loading || null"
     :data-empty="isEmpty || null"
-    :data-selectable="selectable || null"
+    :data-selectable="selectionOn || null"
+    :data-multiple="multiple || null"
     :aria-busy="loading || undefined"
     class="flex w-full min-w-0 flex-col"
   >
@@ -259,8 +419,10 @@
       ref="treeRef"
       role="tree"
       :aria-label="ariaLabel || t('tree.label')"
+      :aria-multiselectable="multiple || undefined"
       class="m-0 flex list-none flex-col p-0"
       @click="onClick"
+      @dblclick="onDblclick"
       @keydown="onKeydown"
       @focusin="onFocusin"
     >

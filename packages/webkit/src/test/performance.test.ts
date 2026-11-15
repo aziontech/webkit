@@ -30,6 +30,7 @@ import ItemList from '../components/content/item/item-list.vue'
 import ItemTitle from '../components/content/item/item-title.vue'
 import KeyValuePairs from '../components/content/key-value-pairs/key-value-pairs.vue'
 import KeyValuePairsItem from '../components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue'
+import Timestamp from '../components/content/timestamp/timestamp.vue'
 import Cards from '../components/data/cards/cards.vue'
 import FilterMenu from '../components/data/filter-menu/filter-menu.vue'
 import PickList, { PickListSource, PickListTarget } from '../components/data/pick-list'
@@ -60,6 +61,7 @@ import Command, {
 } from '../components/overlay/command'
 import ListingBrowser from '../components/sections/listing-browser/listing-browser.vue'
 import ListingTable from '../components/sections/listing-table/listing-table.vue'
+import WebkitProvider from '../components/utils/webkit-provider/webkit-provider.vue'
 import { useCollection, type UseCollectionReturn } from '../composables/use-collection'
 
 type Scenario = keyof typeof budgets.scenarios
@@ -219,6 +221,37 @@ function treeCase(expandAll = false): Case {
   }
 }
 
+function treeMultiSelectCase(): Case {
+  const items = Array.from({ length: 50 }, (_, f) => ({
+    id: `f${f}`,
+    label: `folder-${f}`,
+    icon: 'pi pi-folder',
+    children: Array.from({ length: 99 }, (_, c) => ({
+      id: `f${f}/c${c}`,
+      label: `file-${c}.txt`,
+      icon: 'pi pi-file'
+    }))
+  }))
+  const ids = items.flatMap((folder) => [folder.id, ...folder.children.map((child) => child.id)])
+  const selectedIds = ref<string[]>([])
+  return {
+    mount: () => ({
+      render: () =>
+        h(Tree, {
+          items,
+          expanded: ['f0', 'f1', 'f2', 'f3', 'f4', 'f5', 'f6', 'f7', 'f8', 'f9'],
+          selectable: 'multiple',
+          selectedIds: selectedIds.value,
+          'onUpdate:selectedIds': (v: string[]) => (selectedIds.value = v),
+          ariaLabel: 'Objects'
+        })
+    }),
+    update: () => {
+      selectedIds.value = ids
+    }
+  }
+}
+
 function selectCase(multiple: boolean): Case {
   const options = Array.from({ length: 1000 }, (_, i) => ({ value: `v${i}`, label: `Option ${i}` }))
   const open = ref(false)
@@ -256,6 +289,46 @@ function selectCase(multiple: boolean): Case {
       open.value = true
       await settle()
       search.value = '1'
+    }
+  }
+}
+
+function multiSelectTypedCase(): Case {
+  const options = Array.from({ length: 1000 }, (_, i) => ({ value: `v${i}`, label: `Option ${i}` }))
+  const open = ref(false)
+  return {
+    mount: () => ({
+      render: () =>
+        h(
+          MultiSelect,
+          {
+            modelValue: ['v1', 'v2', 'v3'],
+            kind: 'chips',
+            searchable: true,
+            open: open.value,
+            'onUpdate:open': (v: boolean) => (open.value = v),
+            'aria-label': 'Options'
+          },
+          {
+            default: () => [
+              h(MultiSelect.Trigger),
+              h(MultiSelect.Content, null, {
+                default: () =>
+                  options.map((o) =>
+                    h(MultiSelect.Option, { key: o.value, value: o.value }, () => o.label)
+                  )
+              })
+            ]
+          }
+        )
+    }),
+    update: async () => {
+      open.value = true
+      await settle()
+      const input = document.querySelector<HTMLInputElement>('input[role="combobox"]')
+      if (!input) throw new Error('searchable input missing')
+      input.value = '1'
+      input.dispatchEvent(new Event('input', { bubbles: true }))
     }
   }
 }
@@ -412,6 +485,54 @@ function codeBlockCase(): Case {
     }),
     update: () => {
       active.value = 'ts'
+    }
+  }
+}
+
+function codeBlockDiffCase(): Case {
+  const before = Array.from(
+    { length: 5000 },
+    (_, i) => `export const value${i} = await fetch('/api/${i}').then((r) => r.json()) // ${i}`
+  )
+  const after = before.map((line, i) => (i % 25 === 0 ? line.replace('fetch', 'retry') : line))
+  const view = ref<'split' | 'unified'>('split')
+  const tabs = [
+    {
+      label: 'Release',
+      value: 'release',
+      language: 'javascript',
+      code: after.join('\n'),
+      original: before.join('\n')
+    }
+  ]
+  return {
+    mount: () => ({
+      render: () => h(CodeBlock, { tabs, diffView: view.value, lineNumbers: true })
+    }),
+    update: () => {
+      view.value = 'unified'
+    }
+  }
+}
+
+function timestampCase(): Case {
+  const start = Date.UTC(2026, 10, 14, 12)
+  const values = Array.from({ length: 1000 }, (_, i) => (start - i * 61_000) * 1000)
+  const zone = ref('UTC')
+  return {
+    mount: () => ({
+      render: () =>
+        h(WebkitProvider, { now: start, timeZone: zone.value }, () =>
+          h(
+            'ul',
+            values.map((value, i) =>
+              h('li', { key: i }, [h(Timestamp, { value, format: i % 2 ? 'relative' : 'local' })])
+            )
+          )
+        )
+    }),
+    update: () => {
+      zone.value = 'America/New_York'
     }
   }
 }
@@ -1192,11 +1313,17 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('Tree with 5k nodes all expanded: collapse one folder', async () => {
     check('tree-5k-expanded', await measure(() => treeCase(true)))
   })
+  it('Tree with 5k nodes, 1k visible: select all in multi-select', async () => {
+    check('tree-5k-multi-select', await measure(treeMultiSelectCase))
+  })
   it('Select with 1k options: open and filter', async () => {
     check('select-1k', await measure(() => selectCase(false)))
   })
   it('MultiSelect with 1k options: open and filter', async () => {
     check('multi-select-1k', await measure(() => selectCase(true)))
+  })
+  it('MultiSelect searchable chips with 1k options: open and type', async () => {
+    check('multi-select-1k-typed', await measure(multiSelectTypedCase))
   })
   it('MultiSelect with 1k options all selected: toggle 20 of them', async () => {
     check('multi-select-1k-toggle', await measure(multiSelectToggleCase))
@@ -1213,8 +1340,14 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('LogView with 10k lines and a search: tail 20 appended lines', async () => {
     check('log-view-10k-tail', await measure(logViewTailCase))
   })
+  it('Timestamp with 1k values: mount and change the time zone', async () => {
+    check('timestamp-1k', await measure(timestampCase))
+  })
   it('CodeBlock with a 5k-line file: mount and switch tab', async () => {
     check('code-block-5k-lines', await measure(codeBlockCase))
+  })
+  it('CodeBlock with a 5k-line computed diff: mount split and switch to unified', async () => {
+    check('code-block-diff-5k-lines', await measure(codeBlockDiffCase))
   })
   it('UploadProgress with 1k files: mount and one progress tick', async () => {
     check('upload-progress-1k', await measure(uploadProgressCase))

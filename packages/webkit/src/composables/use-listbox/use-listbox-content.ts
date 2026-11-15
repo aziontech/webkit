@@ -24,10 +24,18 @@ export interface UseListboxContentOptions {
   pendingFocus: Ref<ListboxFocusIntent>
   /** Fields inside the panel whose keystrokes are text, not typeahead. */
   textFieldSelector: string
+  /** Element that takes focus back on close and on Tab; defaults to the trigger. */
+  focusTarget?: Readonly<Ref<globalThis.HTMLElement | null>>
+  /** Keeps focus in the focus target on Tab instead of moving on, for a typed field. */
+  holdTab?: MaybeRefOrGetter<boolean>
+  /** Leaves focus where it is on open unless a first or last intent asks for an option. */
+  keepFocusOnOpen?: MaybeRefOrGetter<boolean>
 }
 
 export interface UseListboxContentReturn {
   onKeydown: (event: globalThis.KeyboardEvent) => void
+  /** Moves focus among the visible options: ArrowDown, ArrowUp, Home or End. */
+  navigate: (key: string) => void
 }
 
 const OPTION_SELECTOR = '[role="option"]:not([data-disabled])'
@@ -35,11 +43,14 @@ const OPTION_SELECTOR = '[role="option"]:not([data-disabled])'
 export function useListboxContent(options: UseListboxContentOptions): UseListboxContentReturn {
   const { root, lazy, setOpen, triggerRef, pendingFocus } = options
   const isOpen = () => toValue(options.open)
+  const focusBack = () => (options.focusTarget?.value ?? triggerRef.value)?.focus()
 
   useOverlayLayer(() => isOpen(), { element: root })
 
   const enabledOptions = (): globalThis.HTMLElement[] =>
-    Array.from(root.value?.querySelectorAll<globalThis.HTMLElement>(OPTION_SELECTOR) ?? [])
+    Array.from(root.value?.querySelectorAll<globalThis.HTMLElement>(OPTION_SELECTOR) ?? []).filter(
+      (option) => option.style.display !== 'none'
+    )
 
   const activeElement = (): globalThis.HTMLElement | null =>
     document.activeElement instanceof HTMLElement ? document.activeElement : null
@@ -92,9 +103,9 @@ export function useListboxContent(options: UseListboxContentOptions): UseListbox
       return
     }
     if (event.key === 'Tab') {
-      if (event.shiftKey) event.preventDefault()
+      if (event.shiftKey || toValue(options.holdTab)) event.preventDefault()
       setOpen(false)
-      triggerRef.value?.focus()
+      focusBack()
       return
     }
     if (
@@ -115,13 +126,16 @@ export function useListboxContent(options: UseListboxContentOptions): UseListbox
     )
       return
     event.preventDefault()
+    navigate(event.key)
+  }
+
+  function navigate(key: string) {
     if (lazy.value?.hasHidden()) {
       lazy.value.revealAll()
-      const key = event.key
       void nextTick(() => moveFocus(key))
       return
     }
-    moveFocus(event.key)
+    moveFocus(key)
   }
 
   const onDocumentPointerDown = (event: globalThis.PointerEvent) => {
@@ -139,6 +153,7 @@ export function useListboxContent(options: UseListboxContentOptions): UseListbox
     if (!el) return
     const intent = pendingFocus.value
     pendingFocus.value = ''
+    if (toValue(options.keepFocusOnOpen) && intent !== 'first' && intent !== 'last') return
     const search = el.querySelector<globalThis.HTMLElement>(
       'input:not([type="checkbox"]):not([type="radio"]):not([disabled])'
     )
@@ -174,7 +189,7 @@ export function useListboxContent(options: UseListboxContentOptions): UseListbox
         document.removeEventListener('pointerdown', onDocumentPointerDown, true)
         if (hadFocus) {
           await nextTick()
-          triggerRef.value?.focus()
+          focusBack()
         }
       }
     }
@@ -188,5 +203,5 @@ export function useListboxContent(options: UseListboxContentOptions): UseListbox
     document.removeEventListener('pointerdown', onDocumentPointerDown, true)
   })
 
-  return { onKeydown }
+  return { onKeydown, navigate }
 }
