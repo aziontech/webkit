@@ -1,4 +1,4 @@
-import { expect, test } from '@playwright/test'
+import { expect, type Page, test } from '@playwright/test'
 
 import { DEMOS, label, type Mode, prepare, query, settle, shot } from './lib'
 
@@ -40,6 +40,9 @@ for (const route of ROUTES) {
   }
 }
 
+const toastTitle = (page: Page, text: string) =>
+  page.getByTestId('feedback-toast__title').filter({ hasText: text })
+
 test.describe('demo flows', () => {
   test.beforeEach(async ({ page }) => {
     await prepare(page, { theme: 'dark', width: 1280 })
@@ -54,7 +57,7 @@ test.describe('demo flows', () => {
     await page.getByRole('button', { name: 'Save', exact: true }).click()
     await expect(page).toHaveURL(/\/resources\/\d+$/)
     await expect(page.getByText('shop.example.com').first()).toBeVisible()
-    await expect(page.getByText('shop-api was created.')).toBeVisible()
+    await expect(toastTitle(page, 'shop-api was created.')).toBeVisible()
   })
 
   test('detail → edit → save', async ({ page }) => {
@@ -63,28 +66,28 @@ test.describe('demo flows', () => {
     await name.fill('resource-01-renamed')
     await page.getByRole('button', { name: 'Save', exact: true }).click()
     await expect(page).toHaveURL(new RegExp(`/resources/${FIRST}$`))
-    await expect(page.getByText('resource-01-renamed was saved.')).toBeVisible()
+    await expect(toastTitle(page, 'resource-01-renamed was saved.')).toBeVisible()
   })
 
   test('list → delete with confirmation', async ({ page }) => {
     await page.goto(`${DEMOS}/resources/${FIRST}/delete`)
-    const dialog = page.getByRole('dialog', { name: 'Delete resource' })
+    const dialog = page.getByRole('alertdialog', { name: 'Delete resource' })
     await expect(dialog).toBeVisible()
     await dialog.getByRole('textbox').fill('resource-01')
     await dialog.getByRole('button', { name: 'Delete resource' }).click()
     await expect(page).toHaveURL(/\/resources$/)
-    await expect(page.getByText('resource-01 was deleted.')).toBeVisible()
+    await expect(toastTitle(page, 'resource-01 was deleted.')).toBeVisible()
     await expect(page.getByRole('link', { name: 'resource-01', exact: true })).toHaveCount(0)
   })
 
   test('deploy → toast with Edit and Redeploy', async ({ page }) => {
     await page.goto(`${DEMOS}/resources/${FIRST}/deploy`)
     await page.getByRole('button', { name: 'Deploy', exact: true }).first().click()
-    await expect(page.getByText('Deploying resource-01…')).toBeVisible()
+    await expect(toastTitle(page, 'Deploying resource-01…')).toBeVisible()
     await page.getByRole('link', { name: 'Resources', exact: true }).first().click()
     await expect(page).toHaveURL(/\/resources$/)
-    await expect(page.getByText('resource-01 is live.')).toBeVisible({ timeout: 15_000 })
-    const toast = page.locator('[data-type="success"]', { hasText: 'resource-01 is live.' })
+    await expect(toastTitle(page, 'resource-01 is live.')).toBeVisible({ timeout: 15_000 })
+    const toast = page.locator('[data-severity="success"]', { hasText: 'resource-01 is live.' })
     await expect(toast.getByRole('button', { name: 'Redeploy' })).toBeVisible()
     await toast.getByRole('button', { name: 'Edit' }).click()
     await expect(page).toHaveURL(new RegExp(`/resources/${FIRST}/edit$`))

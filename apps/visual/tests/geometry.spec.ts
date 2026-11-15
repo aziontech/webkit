@@ -218,11 +218,12 @@ for (const theme of THEMES) {
       const signature = footer.locator('[data-testid="layout-footer__signature"]')
       const social = footer.locator('[data-testid="layout-footer__social"]')
       const home = 'a[aria-label="Azion home"]'
-      await expect(signature).toBeHidden()
-      if (width >= 768) {
+      if (width >= 1024) {
+        await expect(signature).toBeHidden()
         await expect(social.locator(home)).toBeVisible()
       } else {
-        await expect(footer.locator(home)).toBeHidden()
+        await expect(signature).toBeVisible()
+        await expect(social.locator(home)).toBeHidden()
       }
       if (width >= 1024) {
         const footerBox = await footer.boundingBox()
