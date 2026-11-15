@@ -3,10 +3,10 @@ name: doc-card-group
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 6a3745fdeef9ef56defdf6a552a1164c2e9ffd4e006c2f57e1415858e5627709
+spec_version: 3
+checksum: 1c4ff8702ffe2ed6caadbc88b7e775027b4675a3a9b6b5c758e49d13add2c913
 created: 2026-08-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DocCardGroup — Component Spec
@@ -69,8 +69,7 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 
 | Prop            | Type               | Default     | Required | JSDoc                                                                                                                          |
 | --------------- | ------------------ | ----------- | -------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `columns`       | `1 \| 2 \| 3 \| 4` | `undefined` | false    | Column count at the large breakpoint. Unset falls back to the deprecated `cols`.                                               |
-| `cols`          | `1 \| 2 \| 3 \| 4` | `2`         | false    | @deprecated since 6.0 — use `columns` instead. Removed in 7.0. The `cols` attribute of a Markdown `CardGroup` still maps here. |
+| `columns`       | `1 \| 2 \| 3 \| 4` | `2`         | false    | Column count at the large breakpoint. A Markdown `CardGroup cols` attribute maps here (through DocMarkdown). |
 | `mobileColumns` | `1 \| 2`           | `1`         | false    | Column count on a phone. Two only pays when the cells are a mark plus a word.                                                  |
 
 ## Events
@@ -86,7 +85,7 @@ The framed, responsive grid a `DocCard` set sits in. The group is the frame, not
 ## States
 
 - Visual states: `default` (the component is not interactive and holds no state)
-- `data-columns` and `data-mobile-columns` mirror the column count (`columns`, else `cols`) and `mobileColumns`; Tailwind data-variants switch the grid's column count on them at the `sm` and `lg` breakpoints
+- `data-columns` and `data-mobile-columns` mirror `columns` and `mobileColumns`; Tailwind data-variants switch the grid's column count on them at the `sm` and `lg` breakpoints
 - `data-doc-block` is the `DocProse` contract (the group takes the block rung of the ladder)
 
 ## Motion & Animations

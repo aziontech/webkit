@@ -3,10 +3,10 @@ name: doc-card
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 1798e8dbadc863ce70cac75e931ad18653cae88319ac903d008f5ee1c76b181f
+spec_version: 2
+checksum: 5abfee5ebc8f5fc8e268f4780b2215e53a78ec7fa9586c9863173bdb8e2d102e
 created: 2026-08-22
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # DocCard — Component Spec
@@ -17,6 +17,7 @@ One cell of the grid a documentation page scans across: a leading glyph, an opti
 
 ## When to use
 
+- Use DocCard only inside DocCardGroup on documentation pages; product UI uses Card.
 - A grid of peer destinations: "what you can build", the product tiles a landing section opens with.
 - A set of short, scannable entries whose titles carry most of the meaning.
 

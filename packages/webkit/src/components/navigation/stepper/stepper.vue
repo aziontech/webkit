@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import { computed, provide, ref, useAttrs } from 'vue'
+  import { computed, provide, useAttrs } from 'vue'
 
   import { useTranslate } from '../../../composables/use-locale/use-translate'
+  import { useStepRegistry } from '../../../composables/use-step-registry'
   import * as en from '../../../i18n/messages/en'
-  import type { StepperStepHandle } from './injection-key'
   import { StepperInjectionKey } from './injection-key'
 
   defineOptions({
@@ -31,40 +31,7 @@
   const attrs = useAttrs()
   const { t } = useTranslate({ stepper: en.stepper })
 
-  const steps = ref<symbol[]>([])
-  const elements = new Map<symbol, HTMLElement>()
-
-  const ordered = computed(() =>
-    [...steps.value].sort((a, b) => {
-      const left = elements.get(a)
-      const right = elements.get(b)
-      if (!left || !right) return 0
-      const relation = left.compareDocumentPosition(right)
-      if (relation & Node.DOCUMENT_POSITION_FOLLOWING) return -1
-      if (relation & Node.DOCUMENT_POSITION_PRECEDING) return 1
-      return 0
-    })
-  )
-
-  const register = (id: symbol): StepperStepHandle => {
-    steps.value.push(id)
-    return {
-      index: computed(() => ordered.value.indexOf(id) + 1),
-      isLast: computed(() => ordered.value.indexOf(id) === ordered.value.length - 1)
-    }
-  }
-
-  const attach = (id: symbol, el: HTMLElement | null) => {
-    if (el) elements.set(id, el)
-    else elements.delete(id)
-    steps.value = [...steps.value]
-  }
-
-  const unregister = (id: symbol) => {
-    elements.delete(id)
-    const at = steps.value.indexOf(id)
-    if (at !== -1) steps.value.splice(at, 1)
-  }
+  const { register, attach, unregister } = useStepRegistry()
 
   const select = (value: string) => {
     model.value = value

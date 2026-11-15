@@ -14,6 +14,10 @@
   import * as en from '../../../i18n/messages/en'
   import ItemList from '../../content/item/item-list.vue'
   import FrameBox from '../../layout/frame-box/frame-box.vue'
+  import Link from '../../navigation/link/link.vue'
+  import HoverCard from '../../overlay/hover-card/hover-card.vue'
+  import HoverCardContent from '../../overlay/hover-card/hover-card-content/hover-card-content.vue'
+  import HoverCardTrigger from '../../overlay/hover-card/hover-card-trigger/hover-card-trigger.vue'
   import DocCallout from '../doc-callout/doc-callout.vue'
   import DocCard from '../doc-card/doc-card.vue'
   import DocCardGroup from '../doc-card-group/doc-card-group.vue'
@@ -21,7 +25,6 @@
   import DocHeading from '../doc-heading/doc-heading.vue'
   import DocStep from '../doc-step/doc-step.vue'
   import DocSteps from '../doc-steps/doc-steps.vue'
-  import DocTooltip from '../doc-tooltip/doc-tooltip.vue'
   import DocUpdate from '../doc-update/doc-update.vue'
   import {
     type DocMarkdownAttributes,
@@ -100,7 +103,35 @@
 
   const INLINE_BODY = new Set<Component>([DocCallout, DocItem, DocPrompt])
 
-  const INLINE_COMPONENTS: Record<string, Component> = { Tooltip: DocTooltip }
+  const TOOLTIP_TERM_CLASS =
+    'm-0 cursor-help rounded-(--shape-flat) border-0 bg-transparent p-0 text-start text-(--text-default) underline decoration-dotted decoration-(--border-strong) underline-offset-4 transition-colors duration-150 ease-out hover:decoration-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color) motion-reduce:transition-none'
+
+  const text = (value: unknown): string => (typeof value === 'string' ? value : '')
+
+  const renderTooltip = (attributes: DocMarkdownAttributes, children: VNodeChild[]): VNodeChild => {
+    const title = text(attributes['title'])
+    const tip = text(attributes['tip'])
+    const href = text(attributes['href'])
+    const linkLabel = text(attributes['linkLabel'])
+    return h(HoverCard, { 'data-testid': `${testId.value}__tooltip`, openDelay: 150 }, () => [
+      h(HoverCardTrigger, null, () =>
+        h('button', { type: 'button', 'data-doc-chrome': '', class: TOOLTIP_TERM_CLASS }, children)
+      ),
+      h(HoverCardContent, { 'data-doc-chrome': '', class: 'gap-(--spacing-xxs)' }, () => [
+        title ? h('span', { class: 'text-body-sm text-(--text-default)' }, title) : null,
+        tip ? h('span', { class: 'text-pretty text-body-sm text-(--text-muted)' }, tip) : null,
+        href && linkLabel
+          ? h(Link, {
+              label: linkLabel,
+              href,
+              size: 'small',
+              icon: 'pi pi-chevron-right',
+              class: 'self-start'
+            })
+          : null
+      ])
+    ])
+  }
 
   const TABLE_CLASS =
     'w-full border-separate border-spacing-0 overflow-hidden rounded-(--shape-elements) border border-(--border-default) bg-(--bg-surface) text-(--text-default)'
@@ -147,10 +178,8 @@
         case 'citation':
           return `[${token.index}]`
         case 'component': {
-          const component = INLINE_COMPONENTS[token.name]
-          if (!component) return null
-          const children = renderTokens(token.children)
-          return h(component, { ...token.props }, { default: () => children })
+          if (token.name !== 'Tooltip') return null
+          return renderTooltip(token.props, renderTokens(token.children))
         }
       }
     })
@@ -194,6 +223,10 @@
     if (!component) return null
     const kind = !override ? CALLOUT_KINDS[node.name] : undefined
     const values: Record<string, unknown> = kind ? { kind, ...node.props } : { ...node.props }
+    if (!override && node.name === 'CardGroup' && 'cols' in values) {
+      values['columns'] ??= values['cols']
+      delete values['cols']
+    }
     const slots: Record<string, () => VNodeChild> = {}
     if (!override && node.name === 'Frame' && typeof values['caption'] === 'string') {
       const caption = values['caption']

@@ -1,6 +1,11 @@
 {
   "version": 6,
   "components": {
+    "doc-pagination": {
+      "to": "doc-prev-next",
+      "from": "DocPagination",
+      "binding": "DocPrevNext"
+    },
     "paginator": {
       "to": "pagination",
       "from": "Paginator",
@@ -91,7 +96,8 @@
     "field-switch": "Field orientation=horizontal + Switch + FieldContent (FieldLabel + FieldDescription)",
     "field-checkbox-block": "FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription)",
     "field-radio-block": "FieldLabel wrapping Field orientation=horizontal + RadioButton + FieldContent (FieldTitle + FieldDescription)",
-    "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)"
+    "field-switch-block": "FieldLabel wrapping Field orientation=horizontal + Switch + FieldContent (FieldTitle + FieldDescription)",
+    "doc-tooltip": "HoverCard + HoverCard.Trigger + HoverCard.Content (DocMarkdown renders the MDX <Tooltip> tag as one)"
   },
   "types": {
     "BoxGridSelectionItem": "RadioCardsItem",
@@ -99,6 +105,7 @@
     "CommandMenuItemValue": "CommandItemValue",
     "CommandMenuRegisteredItem": "CommandRegisteredItem",
     "DocCardGroupMobileCols": "DocCardGroupMobileColumns",
+    "DocCardGroupCols": "DocCardGroupColumns",
     "DropdownContext": "DropdownMenuContext",
     "DropdownOptionValue": "DropdownMenuOptionValue",
     "DropdownPlacement": "DropdownMenuPlacement",

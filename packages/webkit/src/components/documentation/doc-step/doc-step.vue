@@ -1,13 +1,8 @@
 <script setup lang="ts">
-  import { computed, onBeforeUnmount, useAttrs } from 'vue'
+  import { computed, onBeforeUnmount, onMounted, ref, useAttrs } from 'vue'
 
   import { useDocStepsContext } from '../doc-steps/composables/use-doc-steps-context'
 
-  /**
-   * One numbered step. The number comes from the DocSteps context — the step
-   * registers itself in setup and reads its reactive index back, so reordering
-   * the page renumbers it. Outside a DocSteps provider it throws, loudly.
-   */
   defineOptions({ name: 'DocStep', inheritAttrs: false })
 
   interface Props {
@@ -30,14 +25,17 @@
 
   const id = Symbol('DocStep')
   const { index } = context.register(id)
+  const root = ref<globalThis.HTMLElement | null>(null)
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-step')
 
+  onMounted(() => context.attach(id, root.value))
   onBeforeUnmount(() => context.unregister(id))
 </script>
 
 <template>
   <div
+    ref="root"
     v-bind="$attrs"
     :data-testid="testId"
     class="flex w-full items-stretch gap-(--spacing-md) last:[&_[data-step-body]]:pb-0 last:[&_[data-step-connector]]:hidden"

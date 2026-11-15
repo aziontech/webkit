@@ -3,11 +3,11 @@ name: streaming-response
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: 69b444afc1094b38b977b87e0c2aec515a1c6d643d42d714bebbdce3cd1067fa
+checksum: 8be7d900baa70ca91baa2153841985269c7812c63ad0ec58b4b30ee1f73c7bd3
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # StreamingResponse — Component Spec
@@ -29,6 +29,7 @@ Numbered citations `[1]` become `Citation` references resolved against `sources`
 
 ## When to use
 
+- Use StreamingResponse for model Markdown that arrives while it renders; a whole documentation page written in MDX uses DocMarkdown.
 - The content of every assistant `ChatMessage`.
 - Any generated text on a page (an explanation, a summary) that arrives token by token.
 

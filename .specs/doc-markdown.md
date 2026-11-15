@@ -3,21 +3,22 @@ name: doc-markdown
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: 67d14593371dcca421dd98136f6e794b9110ff44d0743870772c0750fa5f0ba2
+checksum: 003099034fa9998ce7b10c55f6ebc9e3f833dd7d29610caaa6f09c529463a067
 created: 2026-11-14
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DocMarkdown — Component Spec
 
 ## Purpose
 
-Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `DocTabs`, `DocCodeGroup`, `DocUpdate`, `DocTooltip` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for `DocOnThisPage` / `DocLayout`'s `outline`) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
+Renders a documentation page written in Markdown with Mintlify-style MDX component tags into the documentation components. Prose becomes plain semantic HTML (headings, paragraphs, lists, block quotes, rules, tables, inline code, links, bold, italic) that the surrounding `DocProse` styles, and the component tags (`<Note>`, `<Steps>`, `<CardGroup>`, `<Tabs>`, `<CodeGroup>`, `<Update>`, `<Tooltip>` …) mount `DocCallout`, `DocSteps`, `DocCardGroup`, `DocTabs`, `DocCodeGroup`, `DocUpdate`, `HoverCard` and the rest. Headings render as `DocHeading` with unique slug ids, and the named export `parseDocMarkdown` returns the same headings (for `DocOnThisPage` / `DocLayout`'s `outline`) and the frontmatter (for `DocPageHeader`). It is a small in-house reader of a fixed MDX subset, not an MDX compiler: no JSX expressions, no imports, no script, and no `v-html`, so a page's source can never run code.
 
 ## When to use
 
+- Use DocMarkdown for a whole documentation page written in MDX; model Markdown that arrives while it renders uses StreamingResponse.
 - A docs page whose content is authored as `.mdx` / Markdown text (a content folder, a CMS field, a string in data) instead of hand-composed Doc components.
 - Copy held in data that carries inline markup (a sentence with code and a link in a block's fixture) and should render the same as a page paragraph.
 
@@ -34,7 +35,8 @@ Renders a documentation page written in Markdown with Mintlify-style MDX compone
 - `DocHeading` — every Markdown heading renders as one, with the slug id the outline points at.
 - `DocLayout`, `DocOnThisPage` — take `parseDocMarkdown(source).headings` as `outline` / `items`.
 - `DocPageHeader` — takes the frontmatter's `title` and `description`.
-- `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordionItem`, `DocTabs`, `DocTab`, `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocUpdate`, `DocTooltip` — what the tags mount.
+- `DocCallout`, `DocSteps`, `DocStep`, `DocCardGroup`, `DocCard`, `DocItem`, `DocAccordionGroup`, `DocAccordionItem`, `DocTabs`, `DocTab`, `DocCodeGroup`, `DocFrame`, `DocPrompt`, `DocUpdate` — what the tags mount.
+- `HoverCard` — an inline `<Tooltip tip title linkLabel href>` tag renders as a HoverCard: the term is a dotted-underlined button, the card shows the title, the definition and an optional link.
 - `FrameBox`, `ItemList` — the frame and list an `<ItemGroup>` renders its `<Item>` rows in.
 - `StreamingResponse` — renders chat Markdown with the AI layer's reader; this component reuses that reader's inline tokenizer and `safeHref` and adds the MDX block tags, document heading levels and anchors a docs page needs, which a chat bubble must not have.
 
@@ -156,7 +158,7 @@ You need an Acme account. Run \`acme login\` first.
 
 ## Performance
 
-- Bundle budget: 15 KB gzip for the initial chunk of `./doc-markdown` in `.size-limit.json` (`entryOnly`; 14.5 KB measured). It statically imports `DocHeading`, `DocCallout`, `DocCard`, `DocCardGroup`, `DocSteps`, `DocStep`, `DocUpdate`, `DocTooltip`, `FrameBox` and `ItemList`.
+- Bundle budget: 15 KB gzip for the initial chunk of `./doc-markdown` in `.size-limit.json` (`entryOnly`; 14.5 KB measured). It statically imports `DocHeading`, `DocCallout`, `DocCard`, `DocCardGroup`, `DocSteps`, `DocStep`, `DocUpdate`, `HoverCard`, `FrameBox` and `ItemList`.
 - Runtime budget: parsing is linear in the source length and recomputed only when `source` or `components` changes; a 1,000-line page parses in well under one frame.
 - Heavy parts: `DocCodeGroup`, `DocTabs`, `DocTab`, `DocAccordionGroup`, `DocAccordionItem`, `DocFrame`, `DocItem` and `DocPrompt` are async chunks (`defineAsyncComponent`), loaded only when the page uses their tag; the server render and hydration render them in place. Syntax highlighting is `DocCodeGroup`'s own lazy chunk.
 

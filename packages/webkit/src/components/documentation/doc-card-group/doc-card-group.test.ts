@@ -65,21 +65,9 @@ describe('DocCardGroup', () => {
       expect(grid?.getAttribute('data-mobile-columns')).toBe('2')
     })
 
-    it('still reads the deprecated cols, and columns wins over it', () => {
-      const legacy = render(DocCardGroup, {
-        props: { cols: 3 },
-        slots: { default: '<span>Cell</span>' }
-      })
-      expect(legacy.getByTestId('documentation-doc-card-group')).toHaveAttribute(
-        'data-columns',
-        '3'
-      )
-      legacy.unmount()
-      const both = render(DocCardGroup, {
-        props: { cols: 3, columns: 1 },
-        slots: { default: '<span>Cell</span>' }
-      })
-      expect(both.getByTestId('documentation-doc-card-group')).toHaveAttribute('data-columns', '1')
+    it('defaults to two columns', () => {
+      const { getByTestId } = render(DocCardGroup, { slots: { default: '<span>Cell</span>' } })
+      expect(getByTestId('documentation-doc-card-group')).toHaveAttribute('data-columns', '2')
     })
 
     it('renders the slot children as the grid cells', () => {

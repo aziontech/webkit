@@ -55,6 +55,7 @@ the paths it moved onto a name a v3 wrapper also used (`button`, `card`, `dialog
 | `@aziontech/webkit/box-grid-selection` | `@aziontech/webkit/radio-cards`    | `BoxGridSelection` | `RadioCards`    |
 | `@aziontech/webkit/resizable-panel`    | `@aziontech/webkit/resizable`      | `ResizablePanel`   | `Resizable`     |
 | `@aziontech/webkit/segmented-button`   | `@aziontech/webkit/toggle-group`   | `SegmentedButton`  | `ToggleGroup`   |
+| `@aziontech/webkit/doc-pagination`     | `@aziontech/webkit/doc-prev-next`  | `DocPagination`    | `DocPrevNext`   |
 
 The AI tooling knows the old names too: the MCP and `catalog.json#aliases` resolve a retired or
 market name (`paginator`, `message`, `modal`, `sheet`, `tiles`, `segmented-control`, …) to the v6
@@ -79,8 +80,6 @@ component.
 | `doc-card-group`  | `mobileCols`       | `mobileColumns`      |
 | `doc-card`        | `link`             | `linkLabel`          |
 | `doc-card`        | `overline`         | `eyebrow`            |
-| `doc-tooltip`     | `cta`              | `linkLabel`          |
-| `doc-tooltip`     | `headline`         | `title`              |
 | `item`            | `kind="outline"`   | `kind="outlined"`    |
 | `log-view`        | `border`           | `bordered`           |
 | `log-view`        | `showCopy`         | `copyable`           |
@@ -125,9 +124,11 @@ booleans; move them by hand.
 
 These also keep working in 6.x and are marked `@deprecated` in the types:
 
-- The old prop names in the table above that are marked as aliases: `card-pricing` `planTitle`,
-  `doc-card-group` `cols` and `overline` `showCursor`. The new name wins when both are set; the codemod
-  writes the new name.
+- The old prop names in the table above that are marked as aliases: `card-pricing` `planTitle`
+  and `overline` `showCursor`. The new name wins when both are set; the codemod writes the new name.
+  (`doc-card-group` `cols` and the `DocCardGroupCols` type are removed in 6.0; the codemod writes
+  `columns` and `DocCardGroupColumns`, and a Markdown `<CardGroup cols>` still works through
+  `DocMarkdown`.)
 
 `Illustration` keeps eight retired scene names as aliases of the renamed scenes; `name` resolves
 them through 6.x and they are removed in 7.0:
@@ -253,6 +254,17 @@ state on its own.
 New pieces that came out of the old wrappers: `PhoneInput` (`@aziontech/webkit/phone-input`),
 `PasswordRequirements` (`@aziontech/webkit/password-requirements`) and `InputGroup.Input`
 (`@aziontech/webkit/input-group-input`). `HelperText`, `Label` and `Hint` remain.
+
+### Documentation components
+
+`doc-tooltip` is removed. A glossed term in a docs page is a `HoverCard`: in MDX, `DocMarkdown`
+renders the `<Tooltip tip title linkLabel href>` tag as one, so Markdown sources need no change. In
+an SFC, compose `<HoverCard><HoverCard.Trigger>…</HoverCard.Trigger><HoverCard.Content>…</HoverCard.Content></HoverCard>`.
+The codemod lists the import as `MANUAL`.
+
+`doc-pagination` is now `doc-prev-next` (`DocPrevNext`); the codemod rewrites it. Its locale catalog
+key and test id moved with it: override `docPrevNext.*` instead of `docPagination.*`, and select
+`documentation-doc-prev-next` instead of `documentation-doc-pagination`.
 
 ### Page fragments are components now
 
@@ -748,7 +760,6 @@ props in section 3; move the rest by hand:
   (the same names `DateRangePicker` uses).
 - `Checkbox`: a boolean `v-model` needs no `binary` (leave `value` unset); `tabindex` is an
   attribute, not a prop.
-- `DocCardGroup`: the `DocCardGroupCols` type → `DocCardGroupColumns`.
 - `Input`, `PasswordInput`, `Select.Trigger`, `MultiSelect.Trigger`: the `#iconLeft` slot →
   `#prefix`, `#iconRight` → `#suffix`.
 - `MiniButton`: `:show-icon="false"` → `icon=""`.

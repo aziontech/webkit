@@ -9,7 +9,7 @@
     },
     {
       "name": "Columns",
-      "summary": "The `cols` axis at three: one column on a phone, two at the small breakpoint, three at the large one. The ring-per-cell rules stay correct at every width, and an incomplete last row is simply empty rather than a rule-coloured hole.",
+      "summary": "The `columns` axis at three: one column on a phone, two at the small breakpoint, three at the large one. The ring-per-cell rules stay correct at every width, and an incomplete last row is simply empty rather than a rule-coloured hole.",
       "file": "columns.vue"
     }
   ]

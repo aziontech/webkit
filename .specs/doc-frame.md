@@ -3,10 +3,10 @@ name: doc-frame
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
-checksum: 216666069eacab99fdda42cee6108f87ae54dfa075bc45a68b9a273ed2107cce
+spec_version: 2
+checksum: a8eed2bb5889710dd1628f2aee0052dfe6eaeb9317a6e8310d371eadf902cd38
 created: 2026-08-22
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # DocFrame — Component Spec
@@ -17,6 +17,7 @@ The bordered surface every screenshot, diagram and clip in a documentation page 
 
 ## When to use
 
+- Use DocFrame for a screenshot or clip inside documentation; to run live components use BrowserFrame, for third-party iframe content use Embed.
 - Any screenshot, diagram or screen recording inside documentation prose — every one of them, so the page's media all shares one border, radius and inset.
 - A composed panel or mock the page wants presented as a figure rather than as live UI: fill the default slot.
 - A clip that decorates a step (`autoplay`) or one the reader chooses to play (default, with controls).

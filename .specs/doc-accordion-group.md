@@ -3,11 +3,11 @@ name: doc-accordion-group
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: cdbb0fa1a3538b3250ac4686819023baacbf0e0add22ee759aeed110146bb061
+checksum: edc8df3071ed5a4aafb2d22eb63f8e0c3439cd8f6331becc3d0ddecb3a80b440
 created: 2026-11-11
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DocAccordionGroup — Component Spec
@@ -18,6 +18,7 @@ The FAQ and "expand for detail" block of a documentation page. It reads the `tit
 
 ## When to use
 
+- Use DocAccordionGroup only inside documentation pages (Markdown AccordionGroup); product UI uses Accordion.
 - A list of questions with answers at the end of a guide.
 - Optional detail that would interrupt the main path of a page (edge cases, troubleshooting).
 

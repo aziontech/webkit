@@ -7,9 +7,9 @@ spec_version: 3
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6301
   node_id: 3374:6301
-checksum: a833205346f99ddccf24bccb4200434d8a6fe16637dad9a72c2262c2c6f23991
+checksum: 64d1a8934f527e791005cc6727dd3736265d62cd89b642c596f38a556e6357af
 created: 2026-05-25
-last_updated: 2026-11-13
+last_updated: 2026-11-15
 ---
 
 # Breadcrumb — Component Spec
@@ -28,7 +28,7 @@ Shows the page hierarchy so users can navigate back to parent views. Composes `B
 
 - It is the app's primary navigation → use `navigation-menu` or `sidebar` with `menu`.
 - It moves between sibling views of the same page → use `tabs`.
-- It is the previous / next pair at the end of a docs page → use `doc-pagination`.
+- It is the previous / next pair at the end of a docs page → use `doc-prev-next`.
 
 ## Related
 

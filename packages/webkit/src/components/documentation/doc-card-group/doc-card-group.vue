@@ -12,25 +12,18 @@
 
   /** Column count at the large breakpoint. */
   export type DocCardGroupColumns = 1 | 2 | 3 | 4
-  /** @deprecated since 6.0 — use `DocCardGroupColumns` instead. Removed in 7.0. */
-  export type DocCardGroupCols = DocCardGroupColumns
   /** Column count on a phone. */
   export type DocCardGroupMobileColumns = 1 | 2
 
   interface Props {
-    /** Column count at the large breakpoint. Unset falls back to the deprecated `cols`. */
+    /** Column count at the large breakpoint. */
     columns?: DocCardGroupColumns
-    /**
-     * @deprecated since 6.0 — use `columns` instead. Removed in 7.0. The `cols` attribute of a Markdown `CardGroup` still maps here.
-     */
-    cols?: DocCardGroupColumns
     /** Column count on a phone. Two only pays when the cells are a mark plus a word. */
     mobileColumns?: DocCardGroupMobileColumns
   }
 
-  const props = withDefaults(defineProps<Props>(), {
-    columns: undefined,
-    cols: 2,
+  withDefaults(defineProps<Props>(), {
+    columns: 2,
     mobileColumns: 1
   })
 
@@ -42,8 +35,6 @@
   const attrs = useAttrs()
 
   const testId = computed(() => (attrs['data-testid'] as string) ?? 'documentation-doc-card-group')
-
-  const count = computed<DocCardGroupColumns>(() => props.columns ?? props.cols)
 </script>
 
 <template>
@@ -51,12 +42,12 @@
     v-bind="$attrs"
     :data-testid="testId"
     data-doc-block
-    :data-columns="count"
+    :data-columns="columns"
     class="w-full"
   >
     <div
       class="grid w-full gap-px [&>*]:ring-1 [&>*]:ring-(--border-default) data-[mobile-columns=1]:grid-cols-1 data-[mobile-columns=2]:grid-cols-2 data-[columns=2]:sm:grid-cols-2 data-[columns=3]:sm:grid-cols-2 data-[columns=3]:lg:grid-cols-3 data-[columns=4]:sm:grid-cols-2 data-[columns=4]:lg:grid-cols-4"
-      :data-columns="count"
+      :data-columns="columns"
       :data-mobile-columns="mobileColumns"
     >
       <slot />

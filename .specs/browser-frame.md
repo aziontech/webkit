@@ -3,10 +3,10 @@ name: browser-frame
 category: content
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 created: 2026-10-20
-last_updated: 2026-11-11
-checksum: 549b10821455ec995d4a5c1c1fac531354b7f006209e75a45f96c8c6c0c8e7fb
+last_updated: 2026-11-15
+checksum: fbb31979a49bbbbc43a3372e12850191931269d5211f591d49010fe408776b03
 ---
 
 # BrowserFrame — Component Spec
@@ -17,6 +17,7 @@ A browser window that renders live webkit components inside a viewport of its ow
 
 ## When to use
 
+- Use BrowserFrame to run real components inside a resizable device viewport (docs, stories); for a screenshot or clip in documentation use DocFrame, for third-party iframe content use Embed.
 - Showing a real screen — a site band, a console page, a template — built from webkit components, at a device size you choose.
 - Letting a reader drag a layout from desktop to tablet to mobile to see how it responds, on a documentation page.
 - Pinning a composed example to a device size (`v-model:width` + `v-model:height`) so a story or page always shows the tablet or mobile layout.

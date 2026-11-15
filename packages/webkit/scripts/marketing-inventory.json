@@ -1,5 +1,6 @@
 {
   "renamed": {
+    "doc-pagination": "doc-prev-next (dup plan DO-2)",
     "sample:shared/ui/banners/GlobeBanner": "banner-art (kind=\"globe\")",
     "sample:shared/ui/banners/GlobeDisc": "banner-art (kind=\"globe\") on assets/spinning-globe",
     "sample:shared/ui/banners/MapBanner": "banner-art (kind=\"map\") on network-map",
@@ -70,6 +71,7 @@
     "sample:site/ui/sections/StickyCarousel": "sticky-carousel"
   },
   "removed": {
+    "doc-tooltip": "HoverCard; DocMarkdown renders the MDX <Tooltip> tag as one (dup plan DO-1)",
     "sample:shared/ui/banners/map-framing": "the deck slide crop; decks are product tooling and are not ported (m2.9-inventory section 6)",
     "sample:shared/ui/line-figure/LineFigureBench": "a development bench for tuning figures; the line-figure examples (default, play, gallery) replace it"
   },

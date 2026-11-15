@@ -473,7 +473,7 @@ export const ptBR: Messages = {
   docPageHeader: {
     lastUpdated: 'Atualizado em'
   },
-  docPagination: {
+  docPrevNext: {
     label: 'Navegação entre páginas',
     previous: 'Anterior',
     next: 'Próxima'

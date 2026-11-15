@@ -401,7 +401,7 @@ export const docPageHeader = {
   lastUpdated: 'Last updated'
 } as const
 
-export const docPagination = {
+export const docPrevNext = {
   label: 'Page navigation',
   previous: 'Previous',
   next: 'Next'
@@ -1438,7 +1438,7 @@ export const en = {
   docMarkdown,
   docOnThisPage,
   docPageHeader,
-  docPagination,
+  docPrevNext,
   docPrompt,
   docProse,
   donutChart,

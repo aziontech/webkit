@@ -71,7 +71,6 @@ The `field-*` wrappers are not in it: v6 replaces them with a single `Field`.
 | `shell-mockup`                                                         | `still`                        | `animated` (inverted)          |
 | `doc-card`                                                             | `overline`, `link`             | `eyebrow`, `linkLabel`         |
 | `doc-card-group`                                                       | `mobileCols`                   | `mobileColumns`                |
-| `doc-tooltip`                                                          | `headline`, `cta`              | `title`, `linkLabel`           |
 
 **Not banned — legitimate competing uses:** `type` for native pass-throughs (`<input type>`)
 is fine — only a _variant_ named `type` is wrong (rename to `kind`). `value` is fine for

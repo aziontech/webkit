@@ -3,10 +3,10 @@ name: doc-callout
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 8b0353ed79dcc7dc0f9799cda30fc80225a36e973498937d39f9b5e597f1bf1b
+spec_version: 3
+checksum: 0d26e89b62a63144fa7273fa729e01510659495ee4383230b27e89a113263093
 created: 2026-08-22
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 ---
 
 # DocCallout — Component Spec
@@ -17,6 +17,7 @@ The admonition a documentation page interrupts itself with — Note, Info, Tip, 
 
 ## When to use
 
+- Use DocCallout only in documentation prose (Note, Tip, Warning); console pages use Alert.
 - An aside the reader must not miss mid-prose: a caveat, a prerequisite, a warning about data loss.
 - A short confirmation that a step worked (`check`), or a shortcut worth knowing (`tip`).
 

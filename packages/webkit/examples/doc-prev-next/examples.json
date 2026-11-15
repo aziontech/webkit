@@ -1,6 +1,6 @@
 {
-  "component": "doc-pagination",
-  "title": "Components/Documentation/DocPagination",
+  "component": "doc-prev-next",
+  "title": "Components/Documentation/DocPrevNext",
   "examples": [
     {
       "name": "Default",

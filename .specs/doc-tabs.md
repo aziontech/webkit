@@ -3,11 +3,11 @@ name: doc-tabs
 category: documentation
 structure: monolithic
 status: implemented
-spec_version: 1
+spec_version: 2
 template: 2
-checksum: f57ebe14568712209aeca2a11b81e304b6bcbaf9cad67d46609d4eff2d90a24b
+checksum: 4444db8553a6fafbeb6598e809b05c5769b6e98f11dd3d6bf12c56f5ca4a60fa
 created: 2026-11-11
-last_updated: 2026-11-11
+last_updated: 2026-11-15
 ---
 
 # DocTabs — Component Spec
@@ -18,6 +18,7 @@ Alternative paths through the same instruction ("macOS / Linux / Windows", "Cons
 
 ## When to use
 
+- Use DocTabs only in documentation prose for alternative paths through one instruction (macOS / Linux); product UI uses Tabs.
 - The same procedure that differs per platform or per tool.
 
 ## When NOT to use
