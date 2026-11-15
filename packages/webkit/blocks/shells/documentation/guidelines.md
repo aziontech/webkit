@@ -70,7 +70,7 @@ In the footer's language slot, trigger labelled `Language`.
 - Build a docs home from the Landing variant: `DocHero` with `CopyPromptButton`, then `DocAgentCard` above the Console / CLI / API cards; pass no `outline`.
 - Build an index of peers (agents, SDKs, integrations) from AgentSetup: pick (a `DocTabs` filter over a `DocCardGroup`), compare (a `Table`), understand (glossary `DocCard`s). Give each peer its own page from AgentGuide.
 - Render copy authored as Markdown with MDX tags (a content file, a CMS field, a sentence in data) with `DocMarkdown` inside `DocProse`, and build the `outline` from `parseDocMarkdown(source).headings`; AgentGuide uses it for its step bodies and accordion answers.
-- Show a comparison of peers or a list of tools as the data-driven `Table` (`bordered`, imported from `table-root`) inside an element with `data-doc-block data-doc-chrome`, so the prose rules stay off it; a yes/no cell is a check or minus glyph with a visually hidden `Yes` / `No`, a category cell a `Tag` with `severity="secondary"`.
+- Show a comparison of peers or a list of tools as the data-driven `Table` (`bordered`, imported from `table-root`) inside an element with `data-doc-block data-doc-chrome`, so the prose rules stay off it; a yes/no cell is a check or minus glyph with a visually hidden `Yes` / `No`, a category cell a `Tag` with `severity="neutral"`.
 - Write the deck as the outcome (`By the end of this tutorial, …`), one action per `DocStep`, with its command as a `CodeBlock` inside the same step.
 
 ## Don't
