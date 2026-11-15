@@ -8,7 +8,7 @@ const COLOR_DIR = './src/svg-raw/ai-color'
 const INK_LIGHT = '#141414'
 const INK_DARK = '#FAFAFA'
 
-const DARK_SELECTORS = ['[data-theme=dark]', '.dark', '.azion.azion-dark']
+const DARK_SELECTORS = ['[data-theme=dark]', '.dark']
 
 mkdirSync(DIST_DIR, { recursive: true })
 
