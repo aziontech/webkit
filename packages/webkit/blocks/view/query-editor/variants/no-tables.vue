@@ -14,7 +14,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Sidebar from '@aziontech/webkit/sidebar-root'
   import Skeleton from '@aziontech/webkit/skeleton'
@@ -436,7 +436,7 @@ LIMIT 3;`
     class="flex h-dvh min-h-0 flex-col"
   >
     <PageTabs v-model="activeTab">
-      <Tabs.Item
+      <Tabs.Trigger
         v-for="tab in tabs"
         :key="tab.value"
         :value="tab.value"
@@ -1100,7 +1100,7 @@ LIMIT 3;`
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <Input
               v-model="templateQuery"
@@ -1159,7 +1159,7 @@ LIMIT 3;`
               </template>
             </EmptyState>
           </div>
-        </PanelContent>
+        </PanelBody>
       </DrawerContent>
     </Drawer>
   </div>

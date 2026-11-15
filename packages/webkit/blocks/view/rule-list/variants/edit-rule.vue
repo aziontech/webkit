@@ -20,7 +20,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
@@ -1384,7 +1384,7 @@
         <PanelHeader class="w-full">
           <DialogTitle>Review changes</DialogTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
             <Alert
               v-if="saveFailed"
@@ -1420,7 +1420,7 @@
               </ul>
             </section>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
             <div class="w-full md:w-fit">
@@ -1470,7 +1470,7 @@
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="submitting"
@@ -1590,13 +1590,13 @@
                     >
                       <Select.Trigger />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="op in OPERATORS"
                           :key="op.value"
                           :value="op.value"
                         >
                           {{ op.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                   </template>
@@ -1681,13 +1681,13 @@
                                       </template>
                                     </Input>
                                   </template>
-                                  <Select.Option
+                                  <Select.Item
                                     v-for="option in behaviorMatches(behavior.id)"
                                     :key="option.value"
                                     :value="option.value"
                                   >
                                     {{ option.label }}
-                                  </Select.Option>
+                                  </Select.Item>
                                   <p
                                     v-if="!behaviorMatches(behavior.id).length"
                                     class="px-(--spacing-sm) py-(--spacing-xs) text-body-sm text-(--text-muted)"
@@ -1735,7 +1735,7 @@
                                       :aria-label="selectArgument(behavior.type).label"
                                     />
                                     <Select.Content>
-                                      <Select.Option
+                                      <Select.Item
                                         v-for="option in optionsFor(
                                           selectArgument(behavior.type).source
                                         )"
@@ -1743,7 +1743,7 @@
                                         :value="option.value"
                                       >
                                         {{ option.label }}
-                                      </Select.Option>
+                                      </Select.Item>
                                     </Select.Content>
                                   </Select>
                                   <HelperText
@@ -1885,7 +1885,7 @@
                 </Card>
               </SettingsSection>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">

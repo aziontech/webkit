@@ -5,7 +5,7 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DrawerTrigger from '@aziontech/webkit/drawer-trigger'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import { reactive, watch } from 'vue'
@@ -51,11 +51,11 @@
         <PanelHeader class="w-full">
           <DrawerTitle>{{ sizeLabels[size] }}</DrawerTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <DrawerDescription>
             Panel max-width preset for the {{ size }} drawer. Height is always 100% viewport.
           </DrawerDescription>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
             <Button

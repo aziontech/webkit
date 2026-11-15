@@ -8,7 +8,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
@@ -146,7 +146,7 @@
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
               :disabled="submitting"
@@ -220,21 +220,21 @@
                                 "
                               />
                               <Select.Content>
-                                <Select.Option
+                                <Select.Item
                                   v-for="origin in origins"
                                   :key="origin.value"
                                   :value="origin.value"
                                 >
                                   {{ origin.label }}
-                                </Select.Option>
+                                </Select.Item>
                                 <template #footer>
-                                  <Select.Option
+                                  <Select.Item
                                     :value="CREATE_ORIGIN"
                                     icon="ai ai-circle-plus"
                                     class="w-full"
                                   >
                                     Create Origin
-                                  </Select.Option>
+                                  </Select.Item>
                                 </template>
                               </Select.Content>
                             </Select>
@@ -252,7 +252,7 @@
                 </Card>
               </section>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div
@@ -296,7 +296,7 @@
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
               :disabled="childSubmitting"
@@ -370,7 +370,7 @@
                 </Card>
               </section>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div

@@ -8,7 +8,7 @@ import Disabled from '../../../../examples/select/disabled.vue'
 import Ghost from '../../../../examples/select/ghost.vue'
 import Groups from '../../../../examples/select/groups.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import Select, { SelectContent, SelectGroup, SelectOption, SelectTrigger } from './index'
+import Select, { SelectContent, SelectGroup, SelectItem, SelectTrigger } from './index'
 
 const OPTIONS = [
   { value: 'opt-1', label: 'Option 1' },
@@ -70,7 +70,7 @@ const Host = defineComponent({
             // the composed tree is axe-clean (the component does not name it).
             h(SelectTrigger, { 'aria-label': props.placeholder }),
             h(SelectContent, null, () =>
-              options.map((o) => h(SelectOption, { key: o.value, value: o.value }, () => o.label))
+              options.map((o) => h(SelectItem, { key: o.value, value: o.value }, () => o.label))
             )
           ]
         )
@@ -83,7 +83,7 @@ const getContent = () =>
   document.body.querySelector('[data-testid="input-select-content"]') as HTMLElement | null
 
 const getOptions = () =>
-  Array.from(document.body.querySelectorAll('[data-testid="input-select-option"]')) as HTMLElement[]
+  Array.from(document.body.querySelectorAll('[data-testid="input-select-item"]')) as HTMLElement[]
 
 afterEach(() => {
   // Teleported content leaks across tests when a wrapper unmounts mid-transition;
@@ -146,7 +146,7 @@ describe('Select', () => {
                     search: () => h('input', { type: 'search', 'aria-label': 'Search regions' }),
                     default: () =>
                       OPTIONS.map((o) =>
-                        h(SelectOption, { key: o.value, value: o.value }, () => o.label)
+                        h(SelectItem, { key: o.value, value: o.value }, () => o.label)
                       )
                   })
                 ]
@@ -182,7 +182,7 @@ describe('Select', () => {
       expect(Select.Trigger).toBe(SelectTrigger)
       expect(Select.Content).toBe(SelectContent)
       expect(Select.Group).toBe(SelectGroup)
-      expect(Select.Option).toBe(SelectOption)
+      expect(Select.Item).toBe(SelectItem)
     })
 
     // ---- Root renders + reflects state via data-* -----------------------------
@@ -302,7 +302,7 @@ describe('Select', () => {
     })
 
     // ---- Option selection drives injected modelValue --------------------------
-    it('renders one role=option per Select.Option through the injected context', async () => {
+    it('renders one role=option per Select.Item through the injected context', async () => {
       render(Host, { props: { startOpen: true } })
 
       const options = getOptions()
@@ -333,8 +333,8 @@ describe('Select', () => {
       expect(options[1].getAttribute('aria-selected')).toBe('true')
       expect(options[1].hasAttribute('data-selected')).toBe(true)
       // the check indicator only renders on the selected option
-      expect(within(options[1]).getByTestId('input-select-option__check')).toBeTruthy()
-      expect(within(options[0]).queryByTestId('input-select-option__check')).toBeNull()
+      expect(within(options[1]).getByTestId('input-select-item__check')).toBeTruthy()
+      expect(within(options[0]).queryByTestId('input-select-item__check')).toBeNull()
     })
 
     it('ignores the removed multiple prop: one pick replaces the value and closes the panel', async () => {
@@ -355,7 +355,7 @@ describe('Select', () => {
               () => [
                 h(SelectTrigger, { 'aria-label': 'Pick' }),
                 h(SelectContent, null, () =>
-                  OPTIONS.map((o) => h(SelectOption, { value: o.value }, () => o.label))
+                  OPTIONS.map((o) => h(SelectItem, { value: o.value }, () => o.label))
                 )
               ]
             )
@@ -407,7 +407,7 @@ describe('Select', () => {
           default: () => [
             h(SelectTrigger),
             h(SelectContent, null, () =>
-              OPTIONS.map((o) => h(SelectOption, { key: o.value, value: o.value }, () => o.label))
+              OPTIONS.map((o) => h(SelectItem, { key: o.value, value: o.value }, () => o.label))
             )
           ]
         }
@@ -429,7 +429,7 @@ describe('Select', () => {
             h(SelectTrigger),
             h(SelectContent, null, () => [
               h(SelectGroup, { label: 'Fruits' }, () => [
-                h(SelectOption, { value: 'apple' }, () => 'Apple')
+                h(SelectItem, { value: 'apple' }, () => 'Apple')
               ])
             ])
           ]
@@ -675,8 +675,8 @@ describe('Select', () => {
             h(Select, { open: open.value, placeholder: 'Pick' }, () => [
               h(SelectTrigger, { 'aria-label': 'Pick' }),
               h(SelectContent, null, () => [
-                h(SelectOption, { value: 'a', icon: 'ai ai-heart' }, () => 'With icon'),
-                h(SelectOption, { value: 'b' }, () => 'Without icon')
+                h(SelectItem, { value: 'a', icon: 'ai ai-heart' }, () => 'With icon'),
+                h(SelectItem, { value: 'b' }, () => 'Without icon')
               ])
             ])
         }
@@ -686,7 +686,7 @@ describe('Select', () => {
       await nextTick()
 
       const boxes = Array.from(
-        document.body.querySelectorAll('[data-testid="input-select-option__leading"]')
+        document.body.querySelectorAll('[data-testid="input-select-item__leading"]')
       ) as HTMLElement[]
       expect(boxes).toHaveLength(2)
 
@@ -714,8 +714,8 @@ describe('Select', () => {
             h(Select, { open: open.value, placeholder: 'Pick' }, () => [
               h(SelectTrigger, { 'aria-label': 'Pick' }),
               h(SelectContent, null, () => [
-                h(SelectGroup, { label: 'A' }, () => [h(SelectOption, { value: 'a' }, () => 'A1')]),
-                h(SelectGroup, { label: 'B' }, () => [h(SelectOption, { value: 'b' }, () => 'B1')])
+                h(SelectGroup, { label: 'A' }, () => [h(SelectItem, { value: 'a' }, () => 'A1')]),
+                h(SelectGroup, { label: 'B' }, () => [h(SelectItem, { value: 'b' }, () => 'B1')])
               ])
             ])
         }
@@ -848,7 +848,7 @@ describe('Select', () => {
     const parts = () => [
       h(SelectTrigger, { 'aria-label': 'Pick' }),
       h(SelectContent, null, () =>
-        OPTIONS.map((o) => h(SelectOption, { key: o.value, value: o.value }, () => o.label))
+        OPTIONS.map((o) => h(SelectItem, { key: o.value, value: o.value }, () => o.label))
       )
     ]
 
@@ -925,10 +925,10 @@ describe('Select', () => {
 
     it('keeps a consumer displayValue over the option label', async () => {
       const { getByTestId } = render({
-        components: { Select, SelectTrigger, SelectContent, SelectOption },
+        components: { Select, SelectTrigger, SelectContent, SelectItem },
         template: `<Select model-value="opt-1" :display-value="(v) => 'Picked ' + v">
         <SelectTrigger aria-label="Pick" />
-        <SelectContent><SelectOption value="opt-1">Option 1</SelectOption></SelectContent>
+        <SelectContent><SelectItem value="opt-1">Option 1</SelectItem></SelectContent>
       </Select>`
       })
       await nextTick()
@@ -964,7 +964,7 @@ describe('Select', () => {
 
   describe('native form submit', () => {
     const FormHost = defineComponent({
-      components: { Select, SelectTrigger, SelectContent, SelectOption },
+      components: { Select, SelectTrigger, SelectContent, SelectItem },
       props: {
         initial: { type: null, default: undefined },
         required: { type: Boolean, default: false },
@@ -978,7 +978,7 @@ describe('Select', () => {
         <Select v-model="value" name="plan" :required="required" :disabled="disabled">
           <SelectTrigger aria-label="Plan" />
           <SelectContent>
-            <SelectOption v-for="o in options" :key="o.value" :value="o.value">{{ o.label }}</SelectOption>
+            <SelectItem v-for="o in options" :key="o.value" :value="o.value">{{ o.label }}</SelectItem>
           </SelectContent>
         </Select>
       </form>

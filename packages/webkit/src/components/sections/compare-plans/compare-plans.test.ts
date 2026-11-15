@@ -197,8 +197,8 @@ describe('ComparePlans', () => {
       return field as HTMLInputElement
     })
     const optionNames = () =>
-      Array.from(document.body.querySelectorAll('[data-testid="input-select-option"]')).map(
-        (node) => node.textContent?.trim()
+      Array.from(document.body.querySelectorAll('[data-testid="input-select-item"]')).map((node) =>
+        node.textContent?.trim()
       )
 
     await fireEvent.update(search, 'ent')
@@ -253,7 +253,7 @@ describe('ComparePlans', () => {
 
     await fireEvent.click(getByTestId('input-select-trigger'))
     const option = Array.from(
-      document.body.querySelectorAll('[data-testid="input-select-option"]')
+      document.body.querySelectorAll('[data-testid="input-select-item"]')
     ).find((node) => node.textContent?.trim() === 'Enterprise') as HTMLElement
     await fireEvent.click(option)
 

@@ -559,7 +559,7 @@
       "removed": "set icon to show a trailing glyph (icon=\"ai ai-external-link\"); leave it empty to hide it"
     }
   },
-  "tabs-item": {
+  "tabs-trigger": {
     "selected": {
       "removed": "a row of pressed pills outside a Tabs root is ToggleGroup; inside a root the root v-model selects the item"
     }
@@ -945,10 +945,10 @@
     "#prefix": "leading",
     "#suffix": "trailing"
   },
-  "select-option": {
+  "select-item": {
     "#left": "leading"
   },
-  "multi-select-option": {
+  "multi-select-item": {
     "#left": "leading"
   },
   "select-trigger": {

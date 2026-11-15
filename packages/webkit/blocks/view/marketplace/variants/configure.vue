@@ -165,11 +165,11 @@
             >
               <Select.Trigger class="w-full" />
               <Select.Content>
-                <Select.Option
+                <Select.Item
                   v-for="option in SESSION_OPTIONS"
                   :key="option.value"
                   :value="option.value"
-                  >{{ option.label }}</Select.Option
+                  >{{ option.label }}</Select.Item
                 >
               </Select.Content>
             </Select>

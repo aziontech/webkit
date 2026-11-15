@@ -19,7 +19,7 @@ The detail page of a resource that owns a long list of records, here a DNS zone.
 
 ### A. Tab bar — `PageTabs`, `Tabs` (required)
 
-A full-bleed `PageTabs` with one `Tabs.Item` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/webkit-navigation`.
+A full-bleed `PageTabs` with one `Tabs.Trigger` per tab, Main settings first and Records second, in a `sticky top-0` wrapper on the canvas fill: each tab panel scrolls in the layout's content region under the bar, and only the open tab is mounted. See `skills/webkit-navigation`.
 
 ### B. Settings sections — `SettingsSection`, `Card`, `ItemList`, `SettingRow`, `Input`, `HelperText` (required)
 
@@ -53,7 +53,7 @@ One row above the table: a `PropertyFilter` ("Filter records") that takes free t
 
 The table's `#empty` slot tells the two cases apart through `useCollection`'s `status`. A filter that matches nothing shows "No matching records" with Clear filters; a zone with no records shows "No records yet" with Add Record and Import zone file.
 
-### J. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
+### J. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
 `Table.CellActions`, named after the record ("Actions for www"), opens a menu placed `bottom-end` with Edit in the first group and Delete alone in the last.
 

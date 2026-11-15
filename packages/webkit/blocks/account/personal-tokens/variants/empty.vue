@@ -13,14 +13,14 @@
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import HelperText from '@aziontech/webkit/helper-text'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PasswordInput from '@aziontech/webkit/password-input'
@@ -221,7 +221,7 @@
   const deleteOpen = ref(false)
   const working = ref(false)
 
-  const onAction = (value: DropdownMenuOptionValue, row: Token) => {
+  const onAction = (value: DropdownMenuItemValue, row: Token) => {
     pending.value = row
     if (value === 'revoke') revokeOpen.value = true
     if (value === 'delete') deleteOpen.value = true
@@ -486,7 +486,7 @@
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="submitting"
@@ -540,13 +540,13 @@
                       aria-describedby="token-expiry-hint"
                     />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="option in expiryOptions"
                         :key="option.value"
                         :value="option.value"
                       >
                         {{ option.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                   <HelperText
@@ -557,7 +557,7 @@
                 </Field>
               </SettingsSection>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">
@@ -591,7 +591,7 @@
         <PanelHeader class="w-full">
           <DialogTitle>Copy your new token</DialogTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <DialogDescription>
               “{{ revealed.name }}” is ready. This is the only time the token is shown.
@@ -631,7 +631,7 @@
               </p>
             </Field>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end">
             <Button

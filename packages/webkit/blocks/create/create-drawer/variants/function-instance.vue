@@ -13,7 +13,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SchemaForm, { type SchemaFormSchema } from '@aziontech/webkit/schema-form'
@@ -328,7 +328,7 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <fieldset
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
@@ -356,13 +356,13 @@
                       aria-describedby="instance-function-helper"
                     />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="option in FUNCTIONS"
                         :key="option.value"
                         :value="option.value"
                       >
                         {{ option.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                   <HelperText
@@ -452,7 +452,7 @@
               </div>
             </SettingsSection>
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">

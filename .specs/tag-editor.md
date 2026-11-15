@@ -3,9 +3,9 @@ name: tag-editor
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
-checksum: a9159032881da6f542e2e5a3d50660ef26de37d9820146b383289900e6df3b94
+checksum: 21ce02cb1980155d2d54655997051ccf97e501ef787b7c34c3ddc28c27d62606
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -25,7 +25,7 @@ Key and value tags of one resource, after Cloudscape's tag editor, built on `Att
 ## When NOT to use
 
 - Environment variables, headers or any pairs without tag rules → use `attribute-editor`.
-- Showing tags read-only → use `tag` (or `key-value-pairs`).
+- Showing tags read-only → use `tag` (or `key-value-list`).
 - Picking from a fixed list of labels → use `multi-select`.
 
 ## Related

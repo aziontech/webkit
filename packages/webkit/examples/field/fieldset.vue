@@ -28,9 +28,9 @@
         <Select v-model="region">
           <Select.Trigger />
           <Select.Content>
-            <Select.Option value="sa-east">sa-east</Select.Option>
-            <Select.Option value="us-east">us-east</Select.Option>
-            <Select.Option value="eu-west">eu-west</Select.Option>
+            <Select.Item value="sa-east">sa-east</Select.Item>
+            <Select.Item value="us-east">us-east</Select.Item>
+            <Select.Item value="eu-west">eu-west</Select.Item>
           </Select.Content>
         </Select>
       </Field>

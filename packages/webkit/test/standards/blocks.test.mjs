@@ -313,9 +313,7 @@ test('rendersToastRegion finds a Toaster under any binding, and ignores toast ca
     true
   )
   assert.equal(
-    rendersToastRegion(
-      toastSfc(["import Toast from '@aziontech/webkit/toast'"], '<Toast.Toaster />')
-    ),
+    rendersToastRegion(toastSfc(["import Toast from '@aziontech/webkit/toast'"], '<Toast />')),
     true
   )
   assert.equal(

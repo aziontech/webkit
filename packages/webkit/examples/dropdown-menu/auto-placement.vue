@@ -1,7 +1,7 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
 </script>
@@ -24,11 +24,11 @@
           />
         </DropdownMenuTrigger>
         <DropdownMenuGroup>
-          <DropdownMenuOption
+          <DropdownMenuItem
             value="a"
             label="Option A"
           />
-          <DropdownMenuOption
+          <DropdownMenuItem
             value="b"
             label="Option B"
           />
@@ -45,11 +45,11 @@
           />
         </DropdownMenuTrigger>
         <DropdownMenuGroup>
-          <DropdownMenuOption
+          <DropdownMenuItem
             value="a"
             label="Option A"
           />
-          <DropdownMenuOption
+          <DropdownMenuItem
             value="b"
             label="Option B"
           />
@@ -66,11 +66,11 @@
           />
         </DropdownMenuTrigger>
         <DropdownMenuGroup>
-          <DropdownMenuOption
+          <DropdownMenuItem
             value="a"
             label="Option A"
           />
-          <DropdownMenuOption
+          <DropdownMenuItem
             value="b"
             label="Option B"
           />
@@ -87,11 +87,11 @@
           />
         </DropdownMenuTrigger>
         <DropdownMenuGroup>
-          <DropdownMenuOption
+          <DropdownMenuItem
             value="a"
             label="Option A"
           />
-          <DropdownMenuOption
+          <DropdownMenuItem
             value="b"
             label="Option B"
           />

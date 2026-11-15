@@ -1,6 +1,6 @@
 <script setup>
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -17,16 +17,16 @@
       />
     </DropdownMenuTrigger>
     <DropdownMenuGroup label="Affordances">
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="plain"
         label="Plain label"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="command"
         label="With command hint"
         command="⌘P"
       />
-      <DropdownMenuOption value="leading">
+      <DropdownMenuItem value="leading">
         <template #leading>
           <i
             class="ai ai-user"
@@ -34,21 +34,21 @@
           />
         </template>
         Leading icon
-      </DropdownMenuOption>
-      <DropdownMenuOption
+      </DropdownMenuItem>
+      <DropdownMenuItem
         value="trailing"
         label="Trailing slot"
       >
         <template #trailing>
           <Tag label="New" />
         </template>
-      </DropdownMenuOption>
-      <DropdownMenuOption
+      </DropdownMenuItem>
+      <DropdownMenuItem
         value="selected"
         label="Selected"
         selected
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="disabled"
         label="Disabled"
         disabled

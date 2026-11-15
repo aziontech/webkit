@@ -3,8 +3,8 @@ name: page-tabs
 category: navigation
 structure: monolithic
 status: implemented
-checksum: bd5997d8e2da06218325f5beb73a695e1ef8f1f9c1bf57a96e713441ff1c62a6
-spec_version: 6
+checksum: 67a0616952deefdf394fb5013cdb868ea5c811d705aec833fd4148e4c8c4679d
+spec_version: 7
 template: 2
 created: 2026-11-10
 last_updated: 2026-11-15
@@ -30,13 +30,13 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
 
 ## Related
 
-- `tabs` — the tablist it renders; pass one `Tabs.Item` per section in the default slot.
+- `tabs` — the tablist it renders; pass one `Tabs.Trigger` per section in the default slot.
 - `page-header` — the page heading under the strip.
 - `tag` and `button` — the usual content of the `actions` slot.
 
 ## Best practices
 
-- Bind `v-model` to the route (or a ref) and render the section below from it. PageTabs renders only the tab list, so it takes no `Tabs.Content` / `Tabs.Panel`: the page renders the active section itself from the `v-model` value.
+- Bind `v-model` to the route (or a ref) and render the section below from it. PageTabs renders only the tab list, so it takes no `Tabs.Content`: the page renders the active section itself from the `v-model` value.
 - Keep the labels to one word where possible.
 - Put only actions that apply to the whole resource in `actions`; page-level actions go in the `page-header`.
 - Set `column` to the column the page body uses (`form` over a settings form, `data` over a list) so the tabs start where the content starts.
@@ -55,11 +55,11 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
 
 <template>
   <PageTabs v-model="activeTab">
-    <Tabs.Item
+    <Tabs.Trigger
       value="overview"
       label="Overview"
     />
-    <Tabs.Item
+    <Tabs.Trigger
       value="settings"
       label="Settings"
     />
@@ -93,7 +93,7 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
 
 | Slot      | Scope | Notes                                                                                         |
 | --------- | ----- | --------------------------------------------------------------------------------------------- |
-| `default` | —     | One Tabs.Item per section of the resource.                                                    |
+| `default` | —     | One Tabs.Trigger per section of the resource.                                                 |
 | `actions` | —     | The actions the whole resource owns, on the right of the strip: a staged-changes Tag, Deploy. |
 
 ## States
@@ -120,7 +120,7 @@ _none_
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Visible focus: owned by `Tabs.Item` and the actions.
+- Visible focus: owned by `Tabs.Trigger` and the actions.
 - Keyboard map: the tablist follows `tabs` (arrows move between tabs, `Home`/`End` jump); `Tab` leaves the tablist for the actions.
 - ARIA: `role="tablist"` and `role="tab"` come from `tabs`.
 - Contrast ≥4.5:1, owned by `tabs`.

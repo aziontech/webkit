@@ -3,12 +3,12 @@ name: data-grid
 category: data
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: c539ebce2899e179524a0bdeacbaa675c7c55a542fc0e3712882987a70f77fe2
+checksum: 912df382624e6730df421414960335a4554010fa260815722f1765550367ce1f
 created: 2026-11-15
 last_updated: 2026-11-15
 ---
@@ -34,7 +34,7 @@ An editable, spreadsheet-like grid: rows of records and typed columns where peop
 - People read, sort, filter, select and act on records but do not edit cells → use `data-table` (or a hand-composed `table`).
 - A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.
 - One record edited field by field → use a form with `field` controls.
-- Key and value pairs shown for reading → use `key-value-pairs`.
+- Key and value pairs shown for reading → use `key-value-list`.
 
 ## Related
 

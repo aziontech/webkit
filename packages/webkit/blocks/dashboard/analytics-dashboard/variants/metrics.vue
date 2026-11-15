@@ -959,13 +959,13 @@
           >
             <Select.Trigger aria-label="Period" />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in periodOptions"
                 :key="option.value"
                 :value="option.value"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </template>
@@ -975,7 +975,7 @@
         :model-value="activeProduct"
         @update:model-value="selectProduct"
       >
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="entry in products"
           :key="entry.id"
           :value="entry.id"

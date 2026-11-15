@@ -89,14 +89,14 @@
               :style="highlightStyle"
               class="absolute inset-x-0 top-0 -z-1 h-8 rounded-(--shape-control) bg-(--bg-hover) opacity-0 transition-[translate,opacity] duration-moderate-01 ease-productive-entrance data-highlighted:opacity-100 motion-reduce:transition-none"
             />
-            <Select.Option
+            <Select.Item
               v-for="(option, index) in options"
               :key="option"
               :value="option"
               :data-cursor="`option-${index}`"
             >
               {{ option }}
-            </Select.Option>
+            </Select.Item>
           </span>
         </span>
       </Transition>

@@ -17,9 +17,9 @@ A drawer where the user writes one rule of a rules engine: when it runs (the pha
 
 ## Building blocks
 
-### A. Drawer and trigger — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent` (required)
+### A. Drawer and trigger — `Drawer`, `DrawerTrigger`, `Button`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
-A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add Rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelContent` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
+A right-side `Drawer` at `size="large"`. The `DrawerTrigger` wraps an outlined medium `Add Rule` `Button` that fills the width on a phone. `DrawerContent` holds one `form` named like the title; `PanelHeader` carries the `DrawerTitle` and the drawer's own close button, and `PanelBody` scrolls the five sections. The form resets each time the drawer opens, so content stays in place while it closes. See `skills/webkit-create-surface`.
 
 ### B. General — `SettingsSection`, `Field`, `Input` (required)
 
@@ -43,7 +43,7 @@ A flush `Card` with an `Item.List` holding one `SettingRow` titled Active with a
 
 ### G. Footer — `PanelFooter`, `Button`, `Alert` (required)
 
-`PanelFooter` with one primary medium Save `Button` at the end, which submits the form and shows its loading state. A save that fails keeps the drawer open with every field and a danger `Alert` at the top of `PanelContent` ("Rule not saved. You are offline; check your connection and save again."); Save retries.
+`PanelFooter` with one primary medium Save `Button` at the end, which submits the form and shows its loading state. A save that fails keeps the drawer open with every field and a danger `Alert` at the top of `PanelBody` ("Rule not saved. You are offline; check your connection and save again."); Save retries.
 
 ## Do
 

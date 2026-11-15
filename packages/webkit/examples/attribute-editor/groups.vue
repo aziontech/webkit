@@ -47,11 +47,11 @@
       >
         <Select.Trigger />
         <Select.Content>
-          <Select.Option
+          <Select.Item
             v-for="operator in operators"
             :key="operator.value"
             :value="operator.value"
-            >{{ operator.label }}</Select.Option
+            >{{ operator.label }}</Select.Item
           >
         </Select.Content>
       </Select>

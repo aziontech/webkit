@@ -9,7 +9,7 @@
   import DialogDescription from '../dialog/dialog-description.vue'
   import DialogTitle from '../dialog/dialog-title.vue'
   import DialogTrigger from '../dialog/dialog-trigger.vue'
-  import PanelContent from '../panel/panel-content.vue'
+  import PanelBody from '../panel/panel-body.vue'
   import PanelFooter from '../panel/panel-footer.vue'
   import PanelHeader from '../panel/panel-header.vue'
 
@@ -118,10 +118,10 @@
       <PanelHeader class="w-full">
         <DialogTitle>{{ title }}</DialogTitle>
       </PanelHeader>
-      <PanelContent>
+      <PanelBody>
         <DialogDescription v-if="description">{{ description }}</DialogDescription>
         <slot />
-      </PanelContent>
+      </PanelBody>
       <PanelFooter>
         <div
           :data-testid="`${testId}__actions`"

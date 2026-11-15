@@ -7,21 +7,15 @@ import { defineComponent, ref } from 'vue'
 import Default from '../../../../examples/navigation-menu/default.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import NavigationMenu from './index'
-import NavigationMenuArrow from './navigation-menu-arrow.vue'
-import NavigationMenuBackdrop from './navigation-menu-backdrop.vue'
 import NavigationMenuContent from './navigation-menu-content.vue'
-import NavigationMenuIcon from './navigation-menu-icon.vue'
 import NavigationMenuItem from './navigation-menu-item.vue'
 import NavigationMenuLink from './navigation-menu-link.vue'
 import NavigationMenuList from './navigation-menu-list.vue'
-import NavigationMenuPopup from './navigation-menu-popup.vue'
-import NavigationMenuPortal from './navigation-menu-portal.vue'
-import NavigationMenuPositioner from './navigation-menu-positioner.vue'
 import NavigationMenuTrigger from './navigation-menu-trigger.vue'
 import NavigationMenuViewport from './navigation-menu-viewport.vue'
 
-// Content teleports (twice: Portal -> body, Content -> the popup viewport target
-// which itself lives in body). Open/close transitions run ~400ms (slow-01), so
+// Content teleports (twice: the Viewport's portal -> body, Content -> the popup
+// viewport target which itself lives in body). Open/close transitions run ~400ms (slow-01), so
 // state assertions poll via waitFor with a generous timeout.
 const OPEN_TIMEOUT = 3000
 
@@ -36,14 +30,8 @@ const COMPONENTS = {
   NavigationMenuList,
   NavigationMenuItem,
   NavigationMenuTrigger,
-  NavigationMenuIcon,
   NavigationMenuContent,
-  NavigationMenuPortal,
-  NavigationMenuPositioner,
-  NavigationMenuPopup,
   NavigationMenuViewport,
-  NavigationMenuArrow,
-  NavigationMenuBackdrop,
   NavigationMenuLink
 }
 
@@ -51,15 +39,14 @@ const renderTree = (template: string) =>
   render(defineComponent({ components: COMPONENTS, template }))
 
 // A realistic composed tree: two submenu items (Solutions/Products) each with a
-// panel, plus a plain link item (Pricing). Portal -> Positioner -> Popup ->
-// Viewport is the overlay host that Content teleports into.
+// panel, plus a plain link item (Pricing). The Viewport is the overlay host that
+// Content teleports into.
 const COMPOSED = `
   <NavigationMenu aria-label="Primary">
     <NavigationMenuList :show-highlight="false">
       <NavigationMenuItem value="solutions">
         <NavigationMenuTrigger>
           Solutions
-          <NavigationMenuIcon><span>v</span></NavigationMenuIcon>
         </NavigationMenuTrigger>
         <NavigationMenuContent>
           <NavigationMenuList label="By use case">
@@ -97,14 +84,7 @@ const COMPOSED = `
       </NavigationMenuItem>
     </NavigationMenuList>
 
-    <NavigationMenuPortal>
-      <NavigationMenuPositioner side="bottom" align="start">
-        <NavigationMenuPopup>
-          <NavigationMenuArrow />
-          <NavigationMenuViewport />
-        </NavigationMenuPopup>
-      </NavigationMenuPositioner>
-    </NavigationMenuPortal>
+    <NavigationMenuViewport side="bottom" align="start" arrow />
   </NavigationMenu>
 `
 
@@ -122,18 +102,31 @@ describe('NavigationMenu', () => {
   describe('composition, overlay and recursive', () => {
     describe('compound API — Object.assign dot-notation (index.js)', () => {
       it('attaches every public sub-component to the root compound', () => {
-        // index.js attaches these members onto the root (NavigationMenuRoot).
         expect(NavigationMenu.List).toBe(NavigationMenuList)
         expect(NavigationMenu.Item).toBe(NavigationMenuItem)
         expect(NavigationMenu.Trigger).toBe(NavigationMenuTrigger)
-        expect(NavigationMenu.Icon).toBe(NavigationMenuIcon)
         expect(NavigationMenu.Content).toBe(NavigationMenuContent)
-        expect(NavigationMenu.Portal).toBe(NavigationMenuPortal)
-        expect(NavigationMenu.Backdrop).toBe(NavigationMenuBackdrop)
-        expect(NavigationMenu.Positioner).toBe(NavigationMenuPositioner)
-        expect(NavigationMenu.Popup).toBe(NavigationMenuPopup)
         expect(NavigationMenu.Viewport).toBe(NavigationMenuViewport)
-        expect(NavigationMenu.Arrow).toBe(NavigationMenuArrow)
+      })
+
+      it('attaches the shadcn parts only: the overlay chain lives inside the Viewport', () => {
+        const members = Object.keys(NavigationMenu).filter((key) => /^[A-Z]/.test(key))
+        expect(members.sort()).toEqual(['Content', 'Item', 'Link', 'List', 'Trigger', 'Viewport'])
+      })
+
+      it('renders the overlay chain from one Viewport, with the arrow and backdrop on request', () => {
+        renderTree(
+          `<NavigationMenu><NavigationMenuList :show-highlight="false"><NavigationMenuItem value="a"><NavigationMenuTrigger>A</NavigationMenuTrigger><NavigationMenuContent>Panel</NavigationMenuContent></NavigationMenuItem></NavigationMenuList><NavigationMenuViewport variant="contrast" side="top" /></NavigationMenu>`
+        )
+        expect(body().getByTestId('navigation-navigation-menu__portal')).toBeTruthy()
+        expect(body().getByTestId('navigation-navigation-menu__positioner')).toBeTruthy()
+        expect(body().getByTestId('navigation-navigation-menu__popup')).toHaveAttribute(
+          'data-variant',
+          'contrast'
+        )
+        expect(body().getByTestId('navigation-navigation-menu__viewport')).toBeTruthy()
+        expect(body().queryByTestId('navigation-navigation-menu__arrow')).toBeNull()
+        expect(body().queryByTestId('navigation-navigation-menu__backdrop')).toBeNull()
       })
 
       it('exposes the link part as NavigationMenu.Link', () => {
@@ -149,7 +142,7 @@ describe('NavigationMenu', () => {
       })
     })
 
-    describe('root landmark rendering (navigation-menu-root.vue)', () => {
+    describe('root landmark rendering (navigation-menu.vue)', () => {
       it('renders as a nav with the default aria-label, orientation and testid', () => {
         const { getByTestId } = renderTree(
           `<NavigationMenu><NavigationMenuList :show-highlight="false"><NavigationMenuItem><NavigationMenuTrigger href="https://example.com">A</NavigationMenuTrigger></NavigationMenuItem></NavigationMenuList></NavigationMenu>`
@@ -175,6 +168,21 @@ describe('NavigationMenu', () => {
     })
 
     describe('trigger a11y wiring (navigation-menu-trigger.vue)', () => {
+      it('a submenu trigger renders its own chevron, which follows the open state; a link trigger has none', async () => {
+        const { getByRole } = renderTree(COMPOSED)
+
+        const trigger = getByRole('button', { name: /Solutions/ })
+        const chevron = within(trigger).getByTestId('navigation-navigation-menu__icon')
+        expect(chevron).toHaveAttribute('aria-hidden', 'true')
+        expect(chevron).toHaveAttribute('data-state', 'closed')
+        await fireEvent.click(trigger)
+        await waitFor(() => expect(chevron).toHaveAttribute('data-state', 'open'), {
+          timeout: OPEN_TIMEOUT
+        })
+        const link = getByRole('link', { name: /Pricing/ })
+        expect(within(link).queryByTestId('navigation-navigation-menu__icon')).toBeNull()
+      })
+
       it('a submenu trigger is a disclosure button with aria-expanded=false and no aria-haspopup when closed', () => {
         const { getByRole } = renderTree(COMPOSED)
 
@@ -280,13 +288,7 @@ describe('NavigationMenu', () => {
               </NavigationMenuContent>
             </NavigationMenuItem>
           </NavigationMenuList>
-          <NavigationMenuPortal>
-            <NavigationMenuPositioner side="bottom" align="start">
-              <NavigationMenuPopup>
-                <NavigationMenuViewport />
-              </NavigationMenuPopup>
-            </NavigationMenuPositioner>
-          </NavigationMenuPortal>
+          <NavigationMenuViewport side="bottom" align="start" />
         </NavigationMenu>
       </div>
     `
@@ -347,18 +349,7 @@ describe('NavigationMenu', () => {
               </NavigationMenuContent>
             </NavigationMenuItem>
           </NavigationMenuList>
-          <NavigationMenuPortal>
-            <NavigationMenuPositioner
-              side="bottom"
-              align="start"
-              :side-offset="12"
-              :collision-padding="{ x: 200, y: 8 }"
-            >
-              <NavigationMenuPopup>
-                <NavigationMenuViewport />
-              </NavigationMenuPopup>
-            </NavigationMenuPositioner>
-          </NavigationMenuPortal>
+          <NavigationMenuViewport side="bottom" align="start" :side-offset="12" :collision-padding="{ x: 200, y: 8 }" />
         </NavigationMenu>
       </div>
     `
@@ -444,7 +435,7 @@ describe('NavigationMenu', () => {
       })
     })
 
-    describe('events on real user actions (navigation-menu-root.vue emits)', () => {
+    describe('events on real user actions (navigation-menu.vue emits)', () => {
       it('emits update:modelValue with the item value when a submenu opens', async () => {
         const updateValues: Array<unknown> = []
 
@@ -463,11 +454,7 @@ describe('NavigationMenu', () => {
                 <NavigationMenuContent>Panel</NavigationMenuContent>
               </NavigationMenuItem>
             </NavigationMenuList>
-            <NavigationMenuPortal>
-              <NavigationMenuPositioner>
-                <NavigationMenuPopup><NavigationMenuViewport /></NavigationMenuPopup>
-              </NavigationMenuPositioner>
-            </NavigationMenuPortal>
+            <NavigationMenuViewport />
           </NavigationMenu>
         `
         })
@@ -500,14 +487,7 @@ describe('NavigationMenu', () => {
                 <NavigationMenuContent>Panel</NavigationMenuContent>
               </NavigationMenuItem>
             </NavigationMenuList>
-            <NavigationMenuPortal>
-              <NavigationMenuPositioner>
-                <NavigationMenuPopup>
-                  <NavigationMenuBackdrop />
-                  <NavigationMenuViewport />
-                </NavigationMenuPopup>
-              </NavigationMenuPositioner>
-            </NavigationMenuPortal>
+            <NavigationMenuViewport backdrop />
           </NavigationMenu>
         `
         })
@@ -556,11 +536,7 @@ describe('NavigationMenu', () => {
                 </NavigationMenuContent>
               </NavigationMenuItem>
             </NavigationMenuList>
-            <NavigationMenuPortal>
-              <NavigationMenuPositioner>
-                <NavigationMenuPopup><NavigationMenuViewport /></NavigationMenuPopup>
-              </NavigationMenuPositioner>
-            </NavigationMenuPortal>
+            <NavigationMenuViewport />
           </NavigationMenu>
         `
         })

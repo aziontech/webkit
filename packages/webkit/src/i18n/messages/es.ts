@@ -631,7 +631,7 @@ export const es: Messages = {
     next: 'Siguiente',
     finish: 'Finalizar'
   },
-  keyValuePairs: {
+  keyValueList: {
     notSet: 'Sin definir'
   },
   kbd: {

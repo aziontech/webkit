@@ -285,13 +285,13 @@
                               "
                             />
                             <MultiSelect.Content>
-                              <MultiSelect.Option
+                              <MultiSelect.Item
                                 v-for="option in httpPortOptions"
                                 :key="option.value"
                                 :value="option.value"
                               >
                                 {{ option.label }}
-                              </MultiSelect.Option>
+                              </MultiSelect.Item>
                             </MultiSelect.Content>
                           </MultiSelect>
                           <HelperText
@@ -318,13 +318,13 @@
                         >
                           <MultiSelect.Trigger aria-label="HTTPS ports" />
                           <MultiSelect.Content>
-                            <MultiSelect.Option
+                            <MultiSelect.Item
                               v-for="option in httpsPortOptions"
                               :key="option.value"
                               :value="option.value"
                             >
                               {{ option.label }}
-                            </MultiSelect.Option>
+                            </MultiSelect.Item>
                           </MultiSelect.Content>
                         </MultiSelect>
                       </div>

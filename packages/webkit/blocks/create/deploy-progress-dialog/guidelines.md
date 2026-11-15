@@ -25,7 +25,7 @@ Titled "New production deployment" (the environment in lower case), with the dia
 
 `size="medium"` and always `dismissible`: the run keeps going in the background, and the toast reports it once the dialog is hidden. The title counts: "Deploying 2 of 5…" while running, "Deployed 5 Deployment Settings" or "Deployed 4 of 5 Deployment Settings" once settled. The description is the tally and the rule that the ones that succeeded stay live. Once settled a large `OutcomeMark` stands before the title: success when all deployed, warning when some failed.
 
-### C. Progress — `PanelContent`, `Progress` (required)
+### C. Progress — `PanelBody`, `Progress` (required)
 
 The share of settled settings, named "Deploy progress", with "Deploying <name>" under it while one runs.
 

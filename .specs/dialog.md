@@ -3,11 +3,11 @@ name: dialog
 category: overlay
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 8
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=482-935
   node_id: 482:935
-checksum: 4377e5703502d7e1657cb02367e770a7b8a21b0fc33ee16eb20ac30780c46adb
+checksum: 9e6c68a3f2fb2ca92bcc93d510de235545cb00e4b17327b34e5630de7c0c000b
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -89,11 +89,11 @@ The compound import leads: every part hangs off the root (`Dialog.Trigger`, `Dia
 </template>
 ```
 
-Tree-shaking: `@aziontech/webkit/dialog-root` is the root alone (nothing attached), and every part keeps its own path (`@aziontech/webkit/dialog-trigger`, `-content`, `-title`, `-description`, `-close`, and `@aziontech/webkit/panel-header`, `panel-content`, `panel-footer` for the regions). There is no portal or overlay part: `dialog-content` renders both.
+Tree-shaking: `@aziontech/webkit/dialog-root` is the root alone (nothing attached), and every part keeps its own path (`@aziontech/webkit/dialog-trigger`, `-content`, `-title`, `-description`, `-close`, and `@aziontech/webkit/dialog-header`, `dialog-body`, `dialog-footer` for the regions, which resolve to the shared Panel files). There is no portal or overlay part: `dialog-content` renders both.
 
 ## Sub-components
 
-- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Dialog.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Dialog.Header` (`panel-header`), `Dialog.Body` (`panel-content`) and `Dialog.Footer` (`panel-footer`). It adds no component of its own. Exported at `@aziontech/webkit/dialog`; the root alone is `@aziontech/webkit/dialog-root`. The parts stay in the root folder (flat).
+- `index.ts` — the compound: the root with every part attached by `Object.assign` (`Dialog.Trigger`, `.Content`, `.Title`, `.Description`, `.Close`), plus the shared Panel regions as `Dialog.Header`, `Dialog.Body` and `Dialog.Footer`, each importable on its own as `@aziontech/webkit/dialog-header`, `dialog-body` and `dialog-footer` (the same `panel-header`, `panel-body` and `panel-footer` files). It adds no component of its own. Exported at `@aziontech/webkit/dialog`; the root alone is `@aziontech/webkit/dialog-root`. The parts stay in the root folder (flat).
 - `dialog-close.vue` — Public sub-component `dialog-close`: the close (X) `IconButton`. `Dialog.Content` puts one at the end of its `PanelHeader` while `closable` is true, so a consumer places it by hand only in a custom header with `:closable="false"`. It always closes the dialog.
 - `dialog-content.vue` — Public sub-component `dialog-content`: the modal itself. It teleports to `body` (kept mounted through the exit transition), renders the overlay (`aria-hidden`, `__backdrop` test id; a click on it closes the dialog when `dismissible`) and the `role="dialog"` panel, traps focus, scroll-locks the page and restores focus on close.
 - `dialog-description.vue` — Public sub-component `dialog-description`.
@@ -137,7 +137,7 @@ _No events of its own: `update:open` comes from `v-model:open` (see v-model abov
 ### Mobile sheet, height and scroll
 
 - Below `md` the dialog is a bottom sheet, capped at 80% of the **visible** viewport (`dvh`, not `vh`: on mobile browsers `vh` is the largest viewport with the toolbars retracted, so a `vh` sheet can extend under the URL bar with its footer off-screen).
-- Exactly one element caps the sheet (the panel) and exactly one element scrolls (`panel-content`), so the title and footer actions stay reachable while the body scrolls. The motion wrapper only positions and animates; it declares no cap and no scroll of its own.
+- Exactly one element caps the sheet (the panel) and exactly one element scrolls (`panel-body`), so the title and footer actions stay reachable while the body scrolls. The motion wrapper only positions and animates; it declares no cap and no scroll of its own.
 - The page behind the overlay is scroll-locked while the dialog is open, and the lock is released on close.
 - Phones: below `md` the panel is a bottom sheet (full width, 80 dvh); below `sm` it becomes a full-height, full-width sheet (`h-dvh`, no radius, no border). The `PanelFooter` stays pinned under the scrolling content, its direct children stretch to equal widths and it keeps `env(safe-area-inset-bottom)` clear.
 - Server render and hydration: the phone layout and its motion timing are CSS breakpoints (`max-md:` / `md:` utilities), so the server HTML and the hydrated DOM are identical at every width.

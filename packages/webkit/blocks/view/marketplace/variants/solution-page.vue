@@ -4,7 +4,7 @@
   import DataTable from '@aziontech/webkit/data-table'
   import DocProse from '@aziontech/webkit/doc-prose'
   import Field from '@aziontech/webkit/field'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
   import Select from '@aziontech/webkit/select'
@@ -158,27 +158,27 @@
       <div
         class="layout-section-start grid min-w-0 grid-cols-1 gap-(--layout-section-gap) lg:grid-cols-[minmax(0,1fr)_var(--container-2xs)]"
       >
-        <Tabs.Root v-model="activeTab">
+        <Tabs v-model="activeTab">
           <Tabs.List>
-            <Tabs.Item
+            <Tabs.Trigger
               value="overview"
               label="Overview"
             />
-            <Tabs.Item
+            <Tabs.Trigger
               value="usage"
               label="Usage"
             />
-            <Tabs.Item
+            <Tabs.Trigger
               value="changelog"
               label="Changelog"
             />
-            <Tabs.Item
+            <Tabs.Trigger
               value="applications"
               label="Applications"
             />
           </Tabs.List>
           <div class="relative isolate w-full">
-            <Tabs.Panel value="overview">
+            <Tabs.Content value="overview">
               <div class="pt-(--layout-group-gap)">
                 <DocProse>
                   <p>{{ integration.description }}</p>
@@ -194,8 +194,8 @@
                   </ul>
                 </DocProse>
               </div>
-            </Tabs.Panel>
-            <Tabs.Panel value="usage">
+            </Tabs.Content>
+            <Tabs.Content value="usage">
               <div class="pt-(--layout-group-gap)">
                 <DocProse>
                   <h2>Set the capacity</h2>
@@ -215,8 +215,8 @@
                   </p>
                 </DocProse>
               </div>
-            </Tabs.Panel>
-            <Tabs.Panel value="changelog">
+            </Tabs.Content>
+            <Tabs.Content value="changelog">
               <ol
                 class="m-0 flex list-none flex-col gap-(--layout-group-gap) p-0 pt-(--layout-group-gap)"
                 aria-label="Version history"
@@ -249,8 +249,8 @@
                   </ul>
                 </li>
               </ol>
-            </Tabs.Panel>
-            <Tabs.Panel value="applications">
+            </Tabs.Content>
+            <Tabs.Content value="applications">
               <div class="pt-(--layout-group-gap)">
                 <Card :padded="false">
                   <template #default>
@@ -285,9 +285,9 @@
                   </template>
                 </Card>
               </div>
-            </Tabs.Panel>
+            </Tabs.Content>
           </div>
-        </Tabs.Root>
+        </Tabs>
 
         <aside
           class="flex min-w-0 flex-col gap-(--layout-group-gap)"
@@ -313,7 +313,7 @@
                   >
                     <Select.Trigger class="w-full" />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="option in options"
                         :key="option.value"
                         :value="option.value"
@@ -330,7 +330,7 @@
                             size="small"
                           />
                         </template>
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                   <Field.Error v-if="applicationInvalid">
@@ -349,17 +349,15 @@
               </form>
             </template>
           </Card>
-          <KeyValuePairs aria-label="Integration details">
-            <KeyValuePairs.Item label="Publisher"
-              ><bdi>{{ integration.vendor }}</bdi></KeyValuePairs.Item
+          <KeyValueList aria-label="Integration details">
+            <KeyValueList.Item label="Publisher"
+              ><bdi>{{ integration.vendor }}</bdi></KeyValueList.Item
             >
-            <KeyValuePairs.Item label="Category">{{ integration.category }}</KeyValuePairs.Item>
-            <KeyValuePairs.Item label="Context">{{ integration.context }}</KeyValuePairs.Item>
-            <KeyValuePairs.Item label="Latest version">{{
-              integration.version
-            }}</KeyValuePairs.Item>
-            <KeyValuePairs.Item label="Updated">{{ integration.updated }}</KeyValuePairs.Item>
-          </KeyValuePairs>
+            <KeyValueList.Item label="Category">{{ integration.category }}</KeyValueList.Item>
+            <KeyValueList.Item label="Context">{{ integration.context }}</KeyValueList.Item>
+            <KeyValueList.Item label="Latest version">{{ integration.version }}</KeyValueList.Item>
+            <KeyValueList.Item label="Updated">{{ integration.updated }}</KeyValueList.Item>
+          </KeyValueList>
         </aside>
       </div>
     </div>

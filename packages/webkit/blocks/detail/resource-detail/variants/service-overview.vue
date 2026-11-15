@@ -16,7 +16,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Popover from '@aziontech/webkit/popover'
@@ -381,7 +381,7 @@
 
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
-    <ConsoleLayout.Breadcrumbs
+    <ConsoleLayout.Breadcrumb
       :items="[
         { label: 'Services', href: '/services' },
         { label: SERVICE.name, href: '/services/1020655' }
@@ -422,7 +422,7 @@
             </Input>
           </template>
           <Select.Group label="Environments">
-            <Select.Option
+            <Select.Item
               v-for="option in environmentMatches"
               :key="option.name"
               :value="option.name"
@@ -435,7 +435,7 @@
                   size="small"
                 />
               </template>
-            </Select.Option>
+            </Select.Item>
             <p
               v-if="!environmentMatches.length"
               class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
@@ -444,7 +444,7 @@
             </p>
           </Select.Group>
           <template #footer>
-            <Select.Option
+            <Select.Item
               value="__add-environment__"
               class="w-full"
             >
@@ -455,14 +455,14 @@
                 />
                 Add Environment
               </span>
-            </Select.Option>
+            </Select.Item>
           </template>
         </Select.Content>
       </Select>
-    </ConsoleLayout.Breadcrumbs>
+    </ConsoleLayout.Breadcrumb>
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
           :value="tab.value"
@@ -987,7 +987,7 @@
                   </div>
                 </PanelHeader>
 
-                <PanelContent>
+                <PanelBody>
                   <div class="flex flex-col gap-(--spacing-sm)">
                     <Item
                       v-for="step in productionSteps"
@@ -1034,7 +1034,7 @@
                       </Item.Footer>
                     </Item>
                   </div>
-                </PanelContent>
+                </PanelBody>
 
                 <PanelFooter>
                   <div class="flex w-full items-center justify-end gap-(--spacing-sm)">
@@ -1131,7 +1131,7 @@
         <PanelHeader class="w-full">
           <DrawerTitle>Deploy {{ SERVICE.name }}</DrawerTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <DrawerDescription>
               The service goes to Production with the changes below. The deployment that is live
@@ -1170,7 +1170,7 @@
               </p>
             </section>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button

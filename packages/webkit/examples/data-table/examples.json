@@ -94,7 +94,7 @@
     },
     {
       "name": "FilterMenu",
-      "summary": "`Table.Filter` (the menu type, the default) opens the drill-in `FilterMenu` over the table's filter fields (Status picks one value, Region several, Last modified a period or a custom range) and each pick writes the table's `filters`; `FilterMenu.Chips` in the `filters` slot shows the applied fields as chips, linked to the table with no wiring. Beside it, `CollectionPreferences` with only its columns section reads the table's columns from context: Name cannot hide, so it stays locked, and Confirm writes the visible columns and their order back to the table.",
+      "summary": "`Table.Filter` (the menu type, the default) opens the drill-in `FilterMenu` over the table's filter fields (Status picks one value, Region several, Last modified a period or a custom range) and each pick writes the table's `filters`; `FilterMenu.ChipGroup` in the `filters` slot shows the applied fields as chips, linked to the table with no wiring. Beside it, `CollectionPreferences` with only its columns section reads the table's columns from context: Name cannot hide, so it stays locked, and Confirm writes the visible columns and their order back to the table.",
       "file": "filter-menu.vue"
     },
     {

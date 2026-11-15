@@ -20,9 +20,9 @@
 </script>
 
 <template>
-  <Tabs.Root v-model="active">
+  <Tabs v-model="active">
     <Tabs.List :align="align">
-      <Tabs.Item
+      <Tabs.Trigger
         v-for="view in views"
         :key="view.value"
         :value="view.value"
@@ -32,12 +32,12 @@
       />
     </Tabs.List>
     <div class="relative isolate w-full">
-      <Tabs.Panel value="overview">Overview</Tabs.Panel>
+      <Tabs.Content value="overview">Overview</Tabs.Content>
     </div>
-  </Tabs.Root>
+  </Tabs>
 
   <!-- @vue-expect-error a tab value is a string or a number -->
-  <Tabs.Item :value="true" />
+  <Tabs.Trigger :value="true" />
 
   <!-- @vue-expect-error align is start or center -->
   <Tabs.List align="end" />

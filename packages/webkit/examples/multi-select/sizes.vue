@@ -1,6 +1,6 @@
 <script setup>
   import MultiSelectContent from '@aziontech/webkit/multi-select-content'
-  import MultiSelectOption from '@aziontech/webkit/multi-select-option'
+  import MultiSelectItem from '@aziontech/webkit/multi-select-item'
   import MultiSelectRoot from '@aziontech/webkit/multi-select-root'
   import MultiSelectTrigger from '@aziontech/webkit/multi-select-trigger'
   import { ref } from 'vue'
@@ -28,11 +28,11 @@
     >
       <MultiSelectTrigger />
       <MultiSelectContent>
-        <MultiSelectOption
+        <MultiSelectItem
           v-for="o in options"
           :key="o.value"
           :value="o.value"
-          >{{ o.label }}</MultiSelectOption
+          >{{ o.label }}</MultiSelectItem
         >
       </MultiSelectContent>
     </MultiSelectRoot>

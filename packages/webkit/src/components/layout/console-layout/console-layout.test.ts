@@ -11,13 +11,13 @@ import PageBreadcrumbsExample from '../../../../examples/console-layout/page-bre
 import SidebarHeaderExample from '../../../../examples/console-layout/sidebar-header.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
 import DropdownMenuGroup from '../../navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue'
-import DropdownMenuOption from '../../navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue'
+import DropdownMenuItem from '../../navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue'
 import SidebarMenu from '../../navigation/sidebar-menu/sidebar-menu.vue'
 import CommandGroup from '../../overlay/command/command-group/command-group.vue'
 import CommandItem from '../../overlay/command/command-item/command-item.vue'
 import { useConsoleLayout } from './composables/use-console-layout'
 import ConsoleLayout, { type ConsoleLayoutNavGroup } from './console-layout.vue'
-import ConsoleLayoutBreadcrumbs from './console-layout-breadcrumbs/console-layout-breadcrumbs.vue'
+import ConsoleLayoutBreadcrumb from './console-layout-breadcrumb/console-layout-breadcrumb.vue'
 import ConsoleLayoutCompound from './index'
 
 const navigation: ConsoleLayoutNavGroup[] = [
@@ -311,8 +311,8 @@ describe('ConsoleLayout', () => {
 
     const accountMenu = () =>
       h(DropdownMenuGroup, null, () => [
-        h(DropdownMenuOption, { value: 'settings', label: 'Account settings' }),
-        h(DropdownMenuOption, { value: 'logout', label: 'Log out' })
+        h(DropdownMenuItem, { value: 'settings', label: 'Account settings' }),
+        h(DropdownMenuItem, { value: 'logout', label: 'Log out' })
       ])
 
     it('emits account-select when an account option is chosen with the keyboard', async () => {
@@ -742,7 +742,7 @@ describe('ConsoleLayout', () => {
   describe('page trail', () => {
     const pageTrail = (control?: () => unknown) =>
       h(
-        ConsoleLayoutBreadcrumbs,
+        ConsoleLayoutBreadcrumb,
         {
           items: [
             { label: 'Applications', href: '/applications' },
@@ -752,8 +752,8 @@ describe('ConsoleLayout', () => {
         control ? { default: control } : undefined
       )
 
-    it('attaches Breadcrumbs to the compound root', () => {
-      expect(ConsoleLayoutCompound.Breadcrumbs).toBe(ConsoleLayoutBreadcrumbs)
+    it('attaches Breadcrumb to the compound root', () => {
+      expect(ConsoleLayoutCompound.Breadcrumb).toBe(ConsoleLayoutBreadcrumb)
     })
 
     it('replaces the layout trail with the page trail and ends on its control crumb', async () => {
@@ -880,8 +880,8 @@ describe('ConsoleLayout', () => {
         {},
         {
           default: () => [
-            h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'First page' }] }),
-            second.value ? h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'Second page' }] }) : null
+            h(ConsoleLayoutBreadcrumb, { items: [{ label: 'First page' }] }),
+            second.value ? h(ConsoleLayoutBreadcrumb, { items: [{ label: 'Second page' }] }) : null
           ]
         }
       )
@@ -895,7 +895,7 @@ describe('ConsoleLayout', () => {
     it('clears a kept-alive page trail while the page is deactivated', async () => {
       const PageA = defineComponent({
         name: 'PageA',
-        render: () => h(ConsoleLayoutBreadcrumbs, { items: [{ label: 'Page A' }] })
+        render: () => h(ConsoleLayoutBreadcrumb, { items: [{ label: 'Page A' }] })
       })
       const PageB = defineComponent({ name: 'PageB', render: () => h('p', 'Page B body') })
       const current = ref<'a' | 'b'>('a')

@@ -3,11 +3,11 @@ name: navigation-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 11
+spec_version: 12
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: 46ccf351d127f225df8f512848c299d0a1dba59fd96a76298a269c6625e69b28
+checksum: ab864e1085d75a0e4216dfd5969fa5eec752db3496552880feb43b91cfb6e252
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -43,13 +43,13 @@ The top bar of a site: a row of links and triggers whose items open large panels
 
 - Give every panel item a stable `value` on `NavigationMenu.Item`; `v-model` and `default-value` refer to it, and an omitted value is auto-generated and cannot be controlled.
 - A top-level item with no panel is a `NavigationMenu.Trigger` with an `href`; inside panels use `NavigationMenu.Item` with `layout="entry"`, an `href`, an optional `description` and `close-on-click`.
-- Render the popup chain exactly once per root: `Portal` → `Positioner` → `Popup` → `Viewport`. Each `Content` is moved into the shared `Viewport`, so a missing chain renders no panel.
-- `Portal` teleports to `container` when set and to `body` otherwise, passing the selector through so the server renders the same chain the client hydrates.
-- Pin a wide panel to the page column with the positioner's `collision-padding`, not with override classes on the popup.
+- Render one `NavigationMenu.Viewport` per root, after the list (the shadcn shape). It holds the whole overlay: it teleports, positions the popup on the active trigger, sizes it and hosts every panel. Each `Content` is moved into it, so a menu without a `Viewport` renders no panel.
+- The `Viewport` teleports to `container` when set and to `body` otherwise, passing the selector through so the server renders the same tree the client hydrates.
+- Pin a wide panel to the page column with the viewport's `collision-padding`, not with override classes on the popup.
 - Set `aria-label` on the root (default `'Main'`) when the page has more than one navigation landmark.
-- Test ids: root fallback `navigation-navigation-menu` (`<category>-<name>`); every part derives from it (`navigation-navigation-menu__list`, `__item`, `__trigger`, `__content`, `__portal`, `__positioner`, `__popup`, `__viewport`, `__arrow`, `__backdrop`, `__icon`), and a consumer `data-testid` wins on every part.
+- Test ids: root fallback `navigation-navigation-menu` (`<category>-<name>`); every part derives from it (`navigation-navigation-menu__list`, `__item`, `__trigger`, `__icon` (the trigger chevron), `__content`, and inside the viewport `__portal`, `__positioner`, `__popup`, `__viewport`, `__arrow`, `__backdrop`), and a consumer `data-testid` wins on every part; one set on the `Viewport` lands on its popup.
 - Attributes on the root (`id`, `aria-labelledby`, `data-*`, listeners) land on the `nav` landmark.
-- `Portal`, `Backdrop`, `Positioner`, `Popup`, `Viewport` and `Arrow` are the overlay chain that hosts every panel. They stay public so a page can place, pad and decorate the one shared popup; most pages copy the chain from the Usage block unchanged.
+- The compound has the shadcn parts only: `List`, `Item`, `Trigger`, `Content`, `Link`, `Viewport`. 6.0 folded the Base UI overlay chain (`Portal`, `Positioner`, `Popup`, `Arrow`, `Backdrop`) into `Viewport` props, and the `Icon` part into the trigger, which renders its own chevron.
 - `NavigationMenu.Trigger` always renders a `button` (or an anchor with `href`); 6.0 removed its `native-button` prop.
 
 ## Usage
@@ -69,12 +69,6 @@ The top bar of a site: a row of links and triggers whose items open large panels
       <NavigationMenu.Item value="products">
         <NavigationMenu.Trigger>
           Products
-          <NavigationMenu.Icon>
-            <i
-              class="ai ai-chevron-down"
-              aria-hidden="true"
-            />
-          </NavigationMenu.Icon>
         </NavigationMenu.Trigger>
         <NavigationMenu.Content>
           <NavigationMenu.List label="Build">
@@ -105,37 +99,28 @@ The top bar of a site: a row of links and triggers whose items open large panels
       </NavigationMenu.Item>
     </NavigationMenu.List>
 
-    <NavigationMenu.Portal>
-      <NavigationMenu.Backdrop />
-      <NavigationMenu.Positioner
-        side="bottom"
-        align="start"
-        :side-offset="12"
-      >
-        <NavigationMenu.Popup>
-          <NavigationMenu.Arrow />
-          <NavigationMenu.Viewport />
-        </NavigationMenu.Popup>
-      </NavigationMenu.Positioner>
-    </NavigationMenu.Portal>
+    <NavigationMenu.Viewport
+      side="bottom"
+      align="start"
+      :side-offset="12"
+      arrow
+      backdrop
+    />
   </NavigationMenu>
 </template>
 ```
 
 ## Sub-components
 
-- `navigation-menu-arrow.vue` — Public sub-component `navigation-menu-arrow`.
-- `navigation-menu-backdrop.vue` — Public sub-component `navigation-menu-backdrop`.
-- `navigation-menu-content.vue` — Public sub-component `navigation-menu-content`.
-- `navigation-menu-icon.vue` — Public sub-component `navigation-menu-icon`.
-- `navigation-menu-item.vue` — Public sub-component `navigation-menu-item`.
-- `navigation-menu-link.vue` — Public sub-component `navigation-menu-link`, reached as `NavigationMenu.Link`: a top-level link of the bar (`href`, `active`, `close-on-click`) that renders the same anchor as a trigger with an `href`. Attributes it does not declare still flow to the trigger it renders, so a `NavigationMenu.Link` written as a panel trigger keeps working.
+Every part is attached to the compound (`NavigationMenu.List`, …) and importable on its own as `@aziontech/webkit/navigation-menu-<part>`; `@aziontech/webkit/navigation-menu-root` is the root file (`navigation-menu.vue`) alone.
+
 - `navigation-menu-list.vue` — Public sub-component `navigation-menu-list`; `show-highlight` (default `true`) shows the sliding highlight on the root horizontal list.
-- `navigation-menu-popup.vue` — Public sub-component `navigation-menu-popup`.
-- `navigation-menu-portal.vue` — Public sub-component `navigation-menu-portal`.
-- `navigation-menu-positioner.vue` — Public sub-component `navigation-menu-positioner`; `side` is `top | end | bottom | start` (logical: `start`/`end` follow the reading direction) and `track-anchor` (default `true`) keeps the popup on the active trigger.
-- `navigation-menu-trigger.vue` — Public sub-component `navigation-menu-trigger`.
-- `navigation-menu-viewport.vue` — Public sub-component `navigation-menu-viewport`.
+- `navigation-menu-item.vue` — Public sub-component `navigation-menu-item`.
+- `navigation-menu-trigger.vue` — Public sub-component `navigation-menu-trigger`. A panel trigger (no `href`) renders a trailing `ai ai-chevron-down` in an `aria-hidden` span (`__icon`) whose `data-state="open|closed"` follows its panel and turns 180° when open; a link trigger (`href`) has no chevron.
+- `navigation-menu-content.vue` — Public sub-component `navigation-menu-content`.
+- `navigation-menu-link.vue` — Public sub-component `navigation-menu-link`, reached as `NavigationMenu.Link`: a top-level link of the bar (`href`, `active`, `close-on-click`) that renders the same anchor as a trigger with an `href`. Attributes it does not declare still flow to the trigger it renders, so a `NavigationMenu.Link` written as a panel trigger keeps working.
+- `navigation-menu-viewport.vue` — Public sub-component `navigation-menu-viewport`, the one overlay that hosts every panel. It teleports (`container`, default `body`; `keep-mounted`, default `true`), places the popup on the active trigger and renders the popup surface with the shared panel frame. Props: `side?: NavigationMenuSide` (`top | end | bottom | start`, logical: `start`/`end` follow the reading direction; default `'bottom'`), `align?: NavigationMenuAlign` (`start | center | end`, default `'center'`), `sideOffset?: number` (default `8`), `alignOffset?: number` (default `0`), `arrowPadding?: number` (default `8`), `collisionPadding?: NavigationMenuCollisionPadding` (default `8`), `sticky?: boolean` (default `false`), `trackAnchor?: boolean` (default `true`, keeps the popup on the active trigger), `kind?: NavigationMenuPopupVariant` (`default | contrast`, default `'default'`, the popup surface), `arrow?: boolean` (default `false`, an arrow pointing at the trigger), `backdrop?: boolean` (default `false`, a dimmed layer behind the popup; a click on it closes the menu), `container?: object | string` (default `undefined`), `keepMounted?: boolean` (default `true`). Attributes it does not declare land on the popup.
+- `parts/` — private, not exported: `navigation-menu-portal.vue`, `navigation-menu-positioner.vue`, `navigation-menu-popup.vue`, `navigation-menu-arrow.vue`, `navigation-menu-backdrop.vue` and `navigation-menu-viewport-frame.vue`, the pieces the `Viewport` composes.
 
 ## Props
 
@@ -168,8 +153,8 @@ The top bar of a site: a row of links and triggers whose items open large panels
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- `data-state` values: `open` | `closed` — on the root, the list, each trigger icon, the content, the popup and the backdrop (no `data-open` / `data-closed`)
-- `data-side` on the positioner and the arrow: `top` | `end` | `bottom` | `start`
+- `data-state` values: `open` | `closed` — on the root, the list, each trigger chevron, the content, the popup and the backdrop (no `data-open` / `data-closed`)
+- `data-side` on the viewport's positioner and arrow: `top` | `end` | `bottom` | `start`
 
 ## Motion & Animations
 
@@ -198,7 +183,7 @@ animation silently snaps. Only the positioner, whose placement is an inline
 | popup box morph between panels      | `transition-[width,height]` driven by `--popup-width` / `--popup-height`                       | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 | positioner move between triggers    | `transition-[transform]` (placement is a `translate3d`); suppressed on the first placement     | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 | panel content swap                  | `transition-[opacity,translate]`, directional 24px slide keyed on `data-activation-direction`  | `duration-moderate-01` · `ease-productive-entrance` | `motion-reduce:transition-none` |
-| chevron icon                        | `transition-transform` (180° on open)                                                          | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
+| trigger chevron                     | `transition-[rotate]` (180° on open)                                                           | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 | list sliding highlight              | `transition-[left,top,width,height,opacity]`                                                   | `duration-moderate-02` · `ease-productive-entrance` | `motion-reduce:transition-none` |
 
 ## Tokens
@@ -235,7 +220,7 @@ animation silently snaps. Only the positioner, whose placement is an inline
 - Keyboard: on a horizontal menu `ArrowRight`/`ArrowLeft` move to the next/previous trigger, swapped under `dir="rtl"` (`useDirection` passed to the root composable); vertical menus keep `ArrowDown`/`ArrowUp`.
 - Motion: the content slides in from the side the pointer came from; the forward/back direction is computed in reading order, so under `rtl` moving to a later trigger slides from the start edge.
 - User data: none.
-- Teleported content: the `NavigationMenu.Portal` wrapper binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
+- Teleported content: the `NavigationMenu.Viewport` portal binds `dir` and `lang` from the nearest `WebkitProvider` (`usePortalLocale`), so it keeps the provider's direction and language although it renders under `body`. With no provider nothing is set and the document's own `dir` and `lang` apply.
 
 ## Examples
 

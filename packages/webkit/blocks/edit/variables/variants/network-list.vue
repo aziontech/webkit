@@ -9,7 +9,7 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import Input from '@aziontech/webkit/input'
   import MultiSelect from '@aziontech/webkit/multi-select'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SettingsSection from '@aziontech/webkit/settings-section'
@@ -290,7 +290,7 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <fieldset
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
@@ -453,13 +453,13 @@
                   >
                     <MultiSelect.Trigger aria-label="Countries" />
                     <MultiSelect.Content>
-                      <MultiSelect.Option
+                      <MultiSelect.Item
                         v-for="option in COUNTRIES"
                         :key="option.value"
                         :value="option.value"
                       >
                         {{ option.label }}
-                      </MultiSelect.Option>
+                      </MultiSelect.Item>
                     </MultiSelect.Content>
                   </MultiSelect>
                   <Field.Error v-if="countriesMissing">Select at least one country.</Field.Error>
@@ -467,7 +467,7 @@
               </div>
             </SettingsSection>
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter
           ><div class="flex w-full justify-end">

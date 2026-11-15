@@ -218,6 +218,56 @@
     },
     "assets/todocartoes-extended-reversed.svg": {
       "to": "assets/todo-cartoes-extended-reversed.svg"
+    },
+    "dropdown-menu-option": {
+      "to": "dropdown-menu-item",
+      "from": "DropdownMenuOption",
+      "binding": "DropdownMenuItem"
+    },
+    "multi-select-option": {
+      "to": "multi-select-item",
+      "from": "MultiSelectOption",
+      "binding": "MultiSelectItem"
+    },
+    "select-option": {
+      "to": "select-item",
+      "from": "SelectOption",
+      "binding": "SelectItem"
+    },
+    "panel-content": {
+      "to": "panel-body",
+      "from": "PanelContent",
+      "binding": "PanelBody"
+    },
+    "key-value-pairs": {
+      "to": "key-value-list",
+      "from": "KeyValuePairs",
+      "binding": "KeyValueList"
+    },
+    "filter-menu-chips": {
+      "to": "filter-menu-chip-group",
+      "from": "FilterMenuChips",
+      "binding": "FilterMenuChipGroup"
+    },
+    "help-panel-section": {
+      "to": "help-panel-group",
+      "from": "HelpPanelSection",
+      "binding": "HelpPanelGroup"
+    },
+    "help-panel-links": {
+      "to": "help-panel-footer",
+      "from": "HelpPanelLinks",
+      "binding": "HelpPanelFooter"
+    },
+    "pagination-info": {
+      "to": "pagination-description",
+      "from": "PaginationInfo",
+      "binding": "PaginationDescription"
+    },
+    "console-layout-breadcrumbs": {
+      "to": "console-layout-breadcrumb",
+      "from": "ConsoleLayoutBreadcrumbs",
+      "binding": "ConsoleLayoutBreadcrumb"
     }
   },
   "removed": {
@@ -227,7 +277,7 @@
     "drawer-overlay": "delete the <DrawerOverlay /> element: DrawerContent renders the portal and the overlay itself",
     "field-text": "Field + FieldLabel + Input + FieldDescription",
     "field-textarea": "Field + FieldLabel + Textarea + FieldDescription",
-    "field-select": "Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription",
+    "field-select": "Field + FieldLabel + Select (Trigger/Content/Item) + FieldDescription",
     "field-password": "Field + FieldLabel + PasswordInput + FieldDescription (+ PasswordRequirements for the rules row)",
     "field-phone-number": "Field + FieldLabel + PhoneInput + FieldDescription",
     "field-time": "Field + FieldLabel + Input + FieldDescription",
@@ -245,7 +295,7 @@
     "mini-button": "Link (label, href, icon) for a text link that navigates; Button variant=\"link\" for a text action without href",
     "help-panel-tutorial": "TutorialPanel (with TutorialPanel.Provider and Hotspot) owns tutorials; HelpPanel has no tutorial mode",
     "help-panel-task": "TutorialPanel: give each tutorial its tasks and steps as data",
-    "table-applied-filters": "FilterMenu.Chips with no fields in the DataTable filters slot (menu type); the property type shows its own tokens",
+    "table-applied-filters": "FilterMenu.ChipGroup with no fields in the DataTable filters slot (menu type); the property kind shows its own tokens",
     "table-column-selector": "CollectionPreferences with no columns in the DataTable toolbar (:sections=\"['columns']\" for columns only)",
     "label": "use Field.Label inside a Field, or FieldLabel with for (and required) beside its control",
     "calendar-preset": "DatePicker picks one date and has no presets; for preset ranges use DateRangePicker with relative-options",
@@ -281,7 +331,7 @@
     "DocCardGroupMobileCols": "DocCardGroupMobileColumns",
     "DocCardGroupCols": "DocCardGroupColumns",
     "DropdownContext": "DropdownMenuContext",
-    "DropdownOptionValue": "DropdownMenuOptionValue",
+    "DropdownOptionValue": "DropdownMenuItemValue",
     "DropdownPlacement": "DropdownMenuPlacement",
     "DropdownPlacementInput": "DropdownMenuPlacementInput",
     "InputNumberSize": "NumberInputSize",
@@ -379,7 +429,7 @@
     "BrandKind": "BrandVariant",
     "LogoKind": "LogoVariant",
     "KbdKind": "KbdVariant",
-    "KeyValuePairsKind": "KeyValuePairsVariant",
+    "KeyValuePairsKind": "KeyValueListVariant",
     "ShellMockupKind": "ShellMockupVariant",
     "NavigationMenuPopupKind": "NavigationMenuPopupVariant",
     "FooterKind": "FooterVariant",
@@ -425,7 +475,7 @@
     "TableCellKind": "TableCellType",
     "TableHeadCellKind": "TableHeadCellType",
     "TableFilterKind": "TableFilterType",
-    "DropdownMenuOptionKind": "DropdownMenuOptionType",
+    "DropdownMenuOptionKind": "DropdownMenuItemType",
     "ChartAxisKind": "ChartAxisType",
     "ChartBarKind": "ChartBarType",
     "FieldLegendKind": "FieldLegendType",
@@ -449,7 +499,12 @@
     "FilterMenuFieldKind": "FilterMenuFieldType",
     "HeroFormFieldKind": "HeroFormFieldType",
     "JobPostingFieldKind": "JobPostingFieldType",
-    "DiagramNodeKind": "DiagramNodeType"
+    "DiagramNodeKind": "DiagramNodeType",
+    "DropdownMenuOptionValue": "DropdownMenuItemValue",
+    "SelectOptionProps": "SelectItemProps",
+    "MultiSelectOptionProps": "MultiSelectItemProps",
+    "KeyValuePairsColumns": "KeyValueListColumns",
+    "TabsRootProps": "TabsProps"
   },
   "legacy": {
     "major": 3,
@@ -508,7 +563,7 @@
       "overlay/dropdown-menu-group": "dropdown-menu-group",
       "overlay/dropdown-menu-trigger": "dropdown-menu-trigger",
       "overlay/panel": "panel",
-      "overlay/panel-content": "panel-content",
+      "overlay/panel-content": "panel-body",
       "overlay/panel-footer": "panel-footer",
       "overlay/panel-header": "panel-header",
       "utils/spinner": "spinner"
@@ -523,12 +578,12 @@
       "box-grid-selection": "work-in-progress component; use RadioGroup variant=\"card\"",
       "breadcrumb": "PrimeVue Breadcrumb (model prop); use Breadcrumb with Breadcrumb.Item children",
       "button": "PrimeVue Button (label, severity, outlined, text); use Button with kind and size, the label in the slot",
-      "button-cancel": "preset button; use Button kind=\"secondary\" with your own label",
+      "button-cancel": "preset button; use Button variant=\"secondary\" with your own label",
       "button-clone": "preset button; use Button with your own label and icon",
       "button-copy": "preset button; use CopyButton",
-      "button-create": "preset button; use Button kind=\"primary\" with your own label",
-      "button-delete": "preset button; use Button kind=\"danger\" with your own label",
-      "button-save": "preset button; use Button kind=\"primary\" with your own label, or SaveBar",
+      "button-create": "preset button; use Button variant=\"primary\" with your own label",
+      "button-delete": "preset button; use Button variant=\"danger\" with your own label",
+      "button-save": "preset button; use Button variant=\"primary\" with your own label, or SaveBar",
       "calendar": "PrimeVue Calendar; use DatePicker for one date, DateRangePicker for a range",
       "card": "PrimeVue Card; use Card (title prop, default and footer slots)",
       "card-box": "form CardBox; use Card",
@@ -561,13 +616,13 @@
       "datatable": "PrimeVue DataTable; use DataTable (data, columns, sort, selection) or the table-view block",
       "dialog": "PrimeVue Dialog; use Dialog with DialogContent, PanelHeader and PanelFooter",
       "divider": "PrimeVue Divider (layout, align, type); use Separator with orientation",
-      "dropdown": "PrimeVue Dropdown (a select, options prop); use Select with Select.Trigger / Content / Option, not DropdownMenu",
+      "dropdown": "PrimeVue Dropdown (a select, options prop); use Select with Select.Trigger / Content / Item, not DropdownMenu",
       "dynamic-dialog": "PrimeVue DynamicDialog service; render a Dialog from your own state",
       "empty-results-block": "work-in-progress block; use EmptyState",
       "field-auto-complete": "Field + FieldLabel + Input + Popover with Command (no v6 autocomplete) + FieldDescription",
       "field-checkbox-block": "FieldLabel wrapping Field orientation=horizontal + Checkbox + FieldContent (FieldTitle + FieldDescription)",
-      "field-dropdown": "Field + FieldLabel + Select (Trigger/Content/Option) + FieldDescription",
-      "field-dropdown-icon": "Field + FieldLabel + Select with an icon in each Option + FieldDescription",
+      "field-dropdown": "Field + FieldLabel + Select (Trigger/Content/Item) + FieldDescription",
+      "field-dropdown-icon": "Field + FieldLabel + Select with an icon in each Item + FieldDescription",
       "field-dropdown-lazy-loader": "Field + FieldLabel + Select, loading the options in your own code + FieldDescription",
       "field-dropdown-lazy-loader-dynamic": "Field + FieldLabel + Select, loading the options in your own code + FieldDescription",
       "field-dropdown-lazy-loader-with-filter": "Field + FieldLabel + Select, loading and filtering the options in your own code + FieldDescription",
@@ -591,7 +646,7 @@
       "field-text-privacy": "Field + FieldLabel + PasswordInput + FieldDescription",
       "inlinemessage": "PrimeVue InlineMessage; use Alert, or FieldError inside a Field",
       "inputnumber": "PrimeVue InputNumber; use NumberInput",
-      "inputs/dropdown": "use Select with Select.Trigger / Content / Option",
+      "inputs/dropdown": "use Select with Select.Trigger / Content / Item",
       "inputswitch": "PrimeVue InputSwitch; use Switch",
       "inputtext": "PrimeVue InputText; use Input",
       "label": "form Label; use Field.Label inside a Field, or FieldLabel",
@@ -602,7 +657,7 @@
       "listbox": "PrimeVue Listbox; use RadioGroup variant=\"card\", a Command list or Select",
       "menu": "PrimeVue Menu (model prop); use SidebarMenu or DropdownMenu",
       "message": "PrimeVue Message; use Alert (severity, title, description)",
-      "multiselect": "PrimeVue MultiSelect; use MultiSelect with MultiSelect.Trigger / Content / Option",
+      "multiselect": "PrimeVue MultiSelect; use MultiSelect with MultiSelect.Trigger / Content / Item",
       "overlay/dropdown-menu-content": "put DropdownMenu.Item children straight in DropdownMenu",
       "overlay/dropdown-menu-factory": "build DropdownMenu.Item items from your array with v-for",
       "overlay/dropdown-menu-from-model": "build DropdownMenu.Item items from your array with v-for",
@@ -629,8 +684,8 @@
       "splitbutton": "PrimeVue SplitButton (model prop); use SplitButton",
       "steps": "PrimeVue Steps; use Stepper",
       "tabmenu": "PrimeVue TabMenu; use PageTabs",
-      "tabpanel": "PrimeVue TabPanel; use Tabs.Item + Tabs.Panel",
-      "tabview": "PrimeVue TabView; use Tabs with Tabs.List / Item / Panel and v-model",
+      "tabpanel": "PrimeVue TabPanel; use Tabs.Trigger + Tabs.Content",
+      "tabview": "PrimeVue TabView; use Tabs with Tabs.List / Trigger / Content and v-model",
       "tag": "work-in-progress Tag; use Tag",
       "templates/onboarding-form": "template removed; copy the matching block from the catalog",
       "templates/plan-success": "template removed; copy the matching block from the catalog",
@@ -644,6 +699,74 @@
       "tooltip": "v-tooltip directive; use the Tooltip component",
       "use-dialog": "PrimeVue DialogService; render a Dialog from your own state",
       "use-toast": "PrimeVue ToastService; use toast() / useToast from @aziontech/webkit/toast"
+    }
+  },
+  "named": {
+    "DropdownMenuOption": "DropdownMenuItem",
+    "SelectOption": "SelectItem",
+    "MultiSelectOption": "MultiSelectItem",
+    "PanelContent": "PanelBody",
+    "KeyValuePairsGroup": "KeyValueListGroup",
+    "KeyValuePairsItem": "KeyValueListItem",
+    "FilterMenuChips": "FilterMenuChipGroup",
+    "HelpPanelSection": "HelpPanelGroup",
+    "HelpPanelLinks": "HelpPanelFooter",
+    "PaginationInfo": "PaginationDescription",
+    "ConsoleLayoutBreadcrumbs": "ConsoleLayoutBreadcrumb"
+  },
+  "members": {
+    "tabs": {
+      "Root": "",
+      "Item": "Trigger",
+      "Panel": "Content"
+    },
+    "breadcrumb": {
+      "Root": ""
+    },
+    "toast": {
+      "Toaster": ""
+    },
+    "select": {
+      "Option": "Item"
+    },
+    "multi-select": {
+      "Option": "Item"
+    },
+    "panel": {
+      "Content": "Body"
+    },
+    "filter-menu": {
+      "Chips": "ChipGroup"
+    },
+    "help-panel": {
+      "Section": "Group",
+      "Links": "Footer"
+    },
+    "pagination": {
+      "Info": "Description"
+    },
+    "console-layout": {
+      "Breadcrumbs": "Breadcrumb"
+    },
+    "navigation-menu": {
+      "Portal": {
+        "removed": "replace the Portal > Positioner > Popup > Arrow > Viewport chain with one <NavigationMenu.Viewport>, moving the positioner props (side, align, side-offset, collision-padding, …) and the popup kind onto it; add arrow / backdrop for the Arrow and Backdrop"
+      },
+      "Positioner": {
+        "removed": "replace the Portal > Positioner > Popup > Arrow > Viewport chain with one <NavigationMenu.Viewport>, moving the positioner props (side, align, side-offset, collision-padding, …) and the popup kind onto it; add arrow / backdrop for the Arrow and Backdrop"
+      },
+      "Popup": {
+        "removed": "replace the Portal > Positioner > Popup > Arrow > Viewport chain with one <NavigationMenu.Viewport>, moving the positioner props (side, align, side-offset, collision-padding, …) and the popup kind onto it; add arrow / backdrop for the Arrow and Backdrop"
+      },
+      "Arrow": {
+        "removed": "replace the Portal > Positioner > Popup > Arrow > Viewport chain with one <NavigationMenu.Viewport>, moving the positioner props (side, align, side-offset, collision-padding, …) and the popup kind onto it; add arrow / backdrop for the Arrow and Backdrop"
+      },
+      "Backdrop": {
+        "removed": "replace the Portal > Positioner > Popup > Arrow > Viewport chain with one <NavigationMenu.Viewport>, moving the positioner props (side, align, side-offset, collision-padding, …) and the popup kind onto it; add arrow / backdrop for the Arrow and Backdrop"
+      },
+      "Icon": {
+        "removed": "delete it: NavigationMenu.Trigger renders its own chevron"
+      }
     }
   }
 }

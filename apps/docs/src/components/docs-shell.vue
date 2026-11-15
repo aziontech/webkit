@@ -5,7 +5,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import GlobalHeader from '@aziontech/webkit/global-header'
   import IconButton from '@aziontech/webkit/icon-button'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SearchTrigger from '@aziontech/webkit/search-trigger'
   import Select from '@aziontech/webkit/select'
@@ -133,13 +133,13 @@
                 </template>
               </Select.Trigger>
               <Select.Content>
-                <Select.Option
+                <Select.Item
                   v-for="option in LOCALES"
                   :key="option.value"
                   :value="option.value"
                 >
                   {{ option.label }}
-                </Select.Option>
+                </Select.Item>
               </Select.Content>
             </Select>
           </div>
@@ -203,7 +203,7 @@
         <PanelHeader class="w-full">
           <DrawerTitle>{{ t.navigation }}</DrawerTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <div class="flex flex-wrap gap-(--spacing-xs)">
               <a
@@ -220,7 +220,7 @@
             />
             <SideNav />
           </div>
-        </PanelContent>
+        </PanelBody>
       </DrawerContent>
     </Drawer>
 

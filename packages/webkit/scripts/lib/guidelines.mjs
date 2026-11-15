@@ -167,7 +167,7 @@ function toastRegionNames(sfc) {
 export function rendersToastRegion(sfc) {
   const template = String(sfc).replace(/<script\b[\s\S]*?<\/script>/g, '')
   const tags = toastRegionNames(sfc).map((n) => n.replace(/\$/g, '\\$'))
-  const re = new RegExp(`<(?:(?:${tags.join('|')})(?:\\.Toaster)?|toaster)(?=[\\s/>])`)
+  const re = new RegExp(`<(?:(?:${tags.join('|')})|toaster)(?=[\\s/>])`)
   return re.test(template)
 }
 

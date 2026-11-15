@@ -13,7 +13,7 @@
   import Hero from '../../marketing/hero/hero.vue'
   import HeroTitle from '../../marketing/hero/hero-title/hero-title.vue'
   import Topic from '../../marketing/topic/topic.vue'
-  import HeroFormSelect from './hero-form-select/hero-form-select.vue'
+  import HeroFormSelect from './parts/hero-form-select.vue'
 
   defineOptions({
     name: 'HeroForm',

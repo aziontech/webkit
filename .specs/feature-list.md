@@ -3,9 +3,9 @@ name: feature-list
 category: content
 structure: monolithic
 status: implemented
-spec_version: 3
+spec_version: 4
 template: 2
-checksum: d31a103b1b847f86975d457f96fcb372226080bfca0674681e05ae12332bc496
+checksum: e961958ebf0b0ccc18143b8054aaa1a0e8a294b870b35ad7ec82ef859a694ead
 created: 2026-11-12
 last_updated: 2026-11-15
 ---
@@ -14,7 +14,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Use FeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValuePairs.
+Use FeatureList only for what a plan includes; any other list of rows is Item rows, and facts about one resource are KeyValueList.
 
 The features a plan, product or upgrade includes, each behind a check mark, in one or two columns. It is the "what you get" list of a plan card, an upgrade card or a change-plan drawer: short labels, an optional one-line description under each, and a check that says "included", never "done". It replaces the hand-written `ul` with a `ai ai-check` per row that the billing pages and the change-plan drawer drew with different icon colours.
 
@@ -28,13 +28,13 @@ The features a plan, product or upgrade includes, each behind a check mark, in o
 
 - Steps or tasks with a done/not-done state (a production checklist, a setup guide) → use `outcome-mark` per row, or the `stepper`.
 - A comparison of features across plans → use `compare-plans` or `table`.
-- Label and value facts → use `key-value-pairs`.
+- Label and value facts → use `key-value-list`.
 - Rows that navigate or carry actions → use `item`.
 - Marketing pricing cards on the site → use `card-pricing` / `pricing-plans`, which carry their own feature lists.
 
 ## Related
 
-- `key-value-pairs` — the plan facts that sit next to the feature list in a billing card.
+- `key-value-list` — the plan facts that sit next to the feature list in a billing card.
 - `card` — the surface the list sits in; FeatureList brings no surface of its own.
 - `outcome-mark` — the mark for a step that finished, which this check is not.
 
@@ -156,8 +156,8 @@ No built-in strings: every visible text comes from `items`, and the accessible n
 Self-review by the lane agent acting as `spec-reviewer` (`.claude/agents/spec-reviewer.md`), 2026-11-12:
 
 1. Naming — `feature-list`, kebab, singular concept, flat export `./feature-list`; no collision in `catalog.json` (the marketing `feature-*` sections are page bands, not lists). Pass.
-2. Reuse — `item` rows carry padding and a media slot for navigable rows; `key-value-pairs` is label/value; `outcome-mark` states an outcome; `card-pricing` / `pricing-plans` are site sections with their own lists. No export draws an included-feature list; the design sample (`console/pages/account/panels/Billing.vue`, `components/billing/PlanUpgradeDrawer.vue`) and WebKit's own `account/change-plan-drawer` block hand-write it three times. Pass.
-3. Prop vocabulary — `items` (data), `columns` (same name and meaning as `key-value-pairs`), `ariaLabel`. No banned alias. Pass.
+2. Reuse — `item` rows carry padding and a media slot for navigable rows; `key-value-list` is label/value; `outcome-mark` states an outcome; `card-pricing` / `pricing-plans` are site sections with their own lists. No export draws an included-feature list; the design sample (`console/pages/account/panels/Billing.vue`, `components/billing/PlanUpgradeDrawer.vue`) and WebKit's own `account/change-plan-drawer` block hand-write it three times. Pass.
+3. Prop vocabulary — `items` (data), `columns` (same name and meaning as `key-value-list`), `ariaLabel`. No banned alias. Pass.
 4. States — static list; empty renders nothing, stated. Pass.
 5. Internationalization — no built-in strings. Pass.
 6. Right-to-left — logical utilities, non-mirrored check, `dir="auto"` on user text. Pass.

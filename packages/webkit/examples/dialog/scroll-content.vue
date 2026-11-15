@@ -5,7 +5,7 @@
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import { ref } from 'vue'
@@ -29,7 +29,7 @@
       <PanelHeader class="w-full">
         <DialogTitle>Domain settings</DialogTitle>
       </PanelHeader>
-      <PanelContent>
+      <PanelBody>
         <DialogDescription>Body taller than the dialog, so it has to scroll.</DialogDescription>
         <p>
           Setting 1 — the body is the only region that scrolls, so the title and the footer actions
@@ -103,7 +103,7 @@
           Setting 18 — the body is the only region that scrolls, so the title and the footer actions
           stay reachable.
         </p>
-      </PanelContent>
+      </PanelBody>
       <PanelFooter>
         <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
           <Button

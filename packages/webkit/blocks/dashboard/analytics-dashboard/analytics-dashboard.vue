@@ -12,7 +12,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
   import StatTile from '@aziontech/webkit/stat-tile'
@@ -472,13 +472,13 @@
           >
             <Select.Trigger aria-label="Period" />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in periods"
                 :key="option.value"
                 :value="option.value"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </template>
@@ -892,7 +892,7 @@
             <DialogDescription>{{ expandedReport.description }}</DialogDescription>
           </div>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex min-w-0 flex-col gap-(--spacing-md)">
             <div v-if="expandedId === 'requests' || expandedId === 'status-codes'">
               <ToggleGroup
@@ -988,7 +988,7 @@
               </template>
             </DataTable>
           </div>
-        </PanelContent>
+        </PanelBody>
       </DialogContent>
     </Dialog>
   </div>

@@ -39,17 +39,17 @@ A `ul` grid, one to three tiles a row by width, of `Card variant="integration"`:
 
 When `status` is `no-match`, the grid gives way to a medium `EmptyState` with the filter-slash glyph, "No matching integrations", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`.
 
-### F. Integration drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
+### F. Integration drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter` (required)
 
-A large right `Drawer` controlled by `v-model:open`. Its content is a `form` named `Install <name>` with `novalidate`. `PanelHeader` holds the logo, the name as `DrawerTitle`, "by" the publisher and the drawer's own close button. `PanelContent` scrolls; `PanelFooter` holds, at the end, Configure (outlined, a link to the integration's settings) when it is installed somewhere, and the primary submit Install while an application is left.
+A large right `Drawer` controlled by `v-model:open`. Its content is a `form` named `Install <name>` with `novalidate`. `PanelHeader` holds the logo, the name as `DrawerTitle`, "by" the publisher and the drawer's own close button. `PanelBody` scrolls; `PanelFooter` holds, at the end, Configure (outlined, a link to the integration's settings) when it is installed somewhere, and the primary submit Install while an application is left.
 
 ### G. Install outcome — `Alert` (required)
 
 The inline half of the async-submit outcome, at the top of the drawer: a success `Alert` naming the application ("Rate Guard is installed on storefront. It runs from the next request."), or a danger `Alert` with the server's reason and a Reinstall action. Nothing shows while idle or running; the button and the toast carry the running state.
 
-### H. Integration facts — `KeyValuePairs` (required)
+### H. Integration facts — `KeyValueList` (required)
 
-A two-column `KeyValuePairs` named "Integration details": Publisher (in `bdi`), Category, Context, Version, Updated and Installed on (the applications, or "Not installed").
+A two-column `KeyValueList` named "Integration details": Publisher (in `bdi`), Category, Context, Version, Updated and Installed on (the applications, or "Not installed").
 
 ### I. Overview — `DocProse` (required)
 
@@ -59,9 +59,9 @@ An "Overview" `h3` over the publisher's text in `DocProse`, ending on what insta
 
 An "Install" `h3` ("Install on another application" once installed somewhere) over a required `Field` labelled Application with a `Select` of the applications it is not installed on yet. Submitting without a choice marks the `Field` invalid and shows `Field.Error` ("Select the application to install Rate Guard on."); otherwise `Field.Description` says where it runs. While the run lasts the `Field` is disabled. When no application is left, the field gives way to one sentence and the footer drops Install.
 
-### K. Solution page — `Card`, `Select`, `Field`, `KeyValuePairs`, `DocProse` (optional)
+### K. Solution page — `Card`, `Select`, `Field`, `KeyValueList`, `DocProse` (optional)
 
-The drawer's content as a page, for the integration's own URL (the variant adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `Table.CellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValuePairs`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
+The drawer's content as a page, for the integration's own URL (the variant adds `Tabs`, `Link`, `Table` and `Tag`). A `Link` back to Marketplace, the `PageHeader`, then `Tabs` for Overview (`DocProse`), Usage (how to set it up, with the setting names in code), Changelog (an ordered version history, newest first, `Latest` as an info `Tag`) and Applications (a `Table` of the applications running it with their version, `Table.CellStatus` Up to date or Update available, and an `Update to <version>` button). Beside it, an install card: a required Application `Select` whose options carry an `Installed` or `Update available` `Tag` (installed and current ones are disabled) and a submit that reads Install or Update; under it the facts in `KeyValueList`. Install and Update are async runs with the same toast as the drawer (Configure, Open application).
 
 ### L. Configure screen — `Field`, `Select`, `Alert`, `Button` (optional)
 

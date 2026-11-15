@@ -1,19 +1,19 @@
 import HelpPanel from './help-panel.vue'
+import HelpPanelFooter from './help-panel-footer/help-panel-footer.vue'
+import HelpPanelGroup from './help-panel-group/help-panel-group.vue'
 import HelpPanelHeader from './help-panel-header/help-panel-header.vue'
-import HelpPanelLinks from './help-panel-links/help-panel-links.vue'
-import HelpPanelSection from './help-panel-section/help-panel-section.vue'
 
 type CompoundHelpPanel = typeof HelpPanel & {
   Header: typeof HelpPanelHeader
-  Section: typeof HelpPanelSection
-  Links: typeof HelpPanelLinks
+  Group: typeof HelpPanelGroup
+  Footer: typeof HelpPanelFooter
 }
 
 const HelpPanelRoot = Object.assign(HelpPanel, {
   Header: HelpPanelHeader,
-  Section: HelpPanelSection,
-  Links: HelpPanelLinks
+  Group: HelpPanelGroup,
+  Footer: HelpPanelFooter
 }) as CompoundHelpPanel
 
 export default HelpPanelRoot
-export { HelpPanelHeader, HelpPanelLinks, HelpPanelSection }
+export { HelpPanelFooter, HelpPanelGroup, HelpPanelHeader }

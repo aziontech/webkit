@@ -43,17 +43,13 @@ const TRAIL = [
 describe('Breadcrumb', () => {
   describe('composition, data-driven root', () => {
     describe('compound API', () => {
-      it('attaches Root, List, Item and Separator to the compound root', async () => {
-        // Grounded in index.js: Breadcrumb.Root/List/Item/Separator are assigned.
+      it('attaches List, Item and Separator to the compound root', async () => {
         const compound = Breadcrumb
-        expect(compound).toBeTruthy()
-        expect(compound.Root).toBeTruthy()
         expect(compound.List).toBe(BreadcrumbList)
         expect(compound.Item).toBe(BreadcrumbItem)
-        expect(compound.Separator).toBeTruthy()
         expect(compound.Separator).toBe(BreadcrumbSeparator)
-        // The compound default export IS the root component.
-        expect(compound).toBe(compound.Root)
+        const members = Object.keys(compound).filter((key) => /^[A-Z]/.test(key))
+        expect(members.sort()).toEqual(['Item', 'List', 'Separator'])
       })
     })
 
@@ -291,7 +287,7 @@ describe('Breadcrumb', () => {
     })
 
     describe('manual composition via compound sub-components', () => {
-      it('renders a hand-composed trail through Root/List/Item/Separator', async () => {
+      it('renders a hand-composed trail through the root, List, Item and Separator', async () => {
         const { getByTestId, getByText } = await renderMounted({
           components: {
             BreadcrumbRoot: Breadcrumb,

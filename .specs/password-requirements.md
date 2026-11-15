@@ -3,8 +3,8 @@ name: password-requirements
 category: inputs
 structure: monolithic
 status: implemented
-spec_version: 2
-checksum: 56501914b406b626aed2b151e126c506bc8f26bd570a6b3a5efa096a36df143b
+spec_version: 3
+checksum: 81d290d88e30145c931bc3cd11c8694cc2f3a64630ba4cf8f10380a3bcb1d932
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -13,7 +13,7 @@ last_updated: 2026-11-15
 
 ## Purpose
 
-Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirement` type so a form validates with the same rules it shows. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirement[]`, whose `test` may be a predicate.
+Live checklist of password rules shown under a `PasswordInput`: a caption followed by one chip per rule, each chip turning to the success tone with a check as the typed value satisfies it. Put it in the same `Field` as the `PasswordInput`, under it; the entry also exports `DEFAULT_PASSWORD_REQUIREMENTS` and the `PasswordRequirement` type so a form validates with the same rules it shows. `@aziontech/webkit/password-requirements` resolves to the `index.ts` that adds those exports; `@aziontech/webkit/password-requirements-root` is the component file alone. `DEFAULT_PASSWORD_REQUIREMENTS` is typed `PasswordPatternRequirement[]` (exported too): every built-in rule has a `key` and a `RegExp` `test`, so `rule.test.test(value)` type-checks without narrowing; a custom rule list stays `PasswordRequirement[]`, whose `test` may be a predicate.
 
 ## When to use
 

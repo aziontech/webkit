@@ -45,14 +45,17 @@ describe('Toast', () => {
   describe('composition and imperative store', () => {
     describe('compound API (Object.assign dot-notation)', () => {
       it('attaches every public sub-component to the root compound', () => {
-        // Grounded in index.ts: Object.assign(Toaster, { Toaster, Item, Title,
-        // Description, Action, Close }).
-        expect(Toast.Toaster).toBe(Toaster)
+        expect(Toast).toBe(Toaster)
         expect(Toast.Item).toBe(ToastItem)
         expect(Toast.Title).toBe(ToastTitle)
         expect(Toast.Description).toBe(ToastDescription)
         expect(Toast.Action).toBe(ToastAction)
         expect(Toast.Close).toBe(ToastClose)
+      })
+
+      it('attaches only the parts, not the root under a second name', () => {
+        const members = Object.keys(Toast).filter((key) => /^[A-Z]/.test(key))
+        expect(members.sort()).toEqual(['Action', 'Close', 'Description', 'Item', 'Title'])
       })
 
       it('exposes the imperative toast fn and its composables as named exports', () => {

@@ -58,7 +58,7 @@ Only on `Matched requests over time`.
 
 Names Expand and More options.
 
-### H. Expand — `IconButton`, `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `PanelContent` (optional)
+### H. Expand — `IconButton`, `Dialog`, `DialogContent`, `PanelHeader`, `DialogTitle`, `DialogDescription`, `PanelBody` (optional)
 
 Its `aria-label` names the card (`Expand Matched requests over time`). It opens one large `Dialog`
 with the card title, its Hint sentence as the description, and the region at full size: the matched
@@ -111,7 +111,7 @@ Variant ByActor only; it adds `FilterMenu`, `Button`, `Table` and `SeverityTag` 
 decided each request. Title `Request activity`. The heading's actions hold the time range `Select`
 (named `Time range`) and a Refresh `IconButton` (`aria-label="Refresh"`, the block emits `refresh`).
 Under it, one `FilterMenu` with three multi-choice fields (Actor, Outcome, Category) in a container
-labelled `Filters`, its `FilterMenu.Chips` on the row below, and a destination `Input` named
+labelled `Filters`, its `FilterMenu.ChipGroup` on the row below, and a destination `Input` named
 `Destination host`. The filters are global: every tile, chart, breakdown and the log read them; when
 they match nothing, the chart and the log show `No requests match these filters` with an outlined
 `Clear filters` `Button`, and the tiles show a dash.

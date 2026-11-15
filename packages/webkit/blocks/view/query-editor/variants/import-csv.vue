@@ -16,7 +16,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
@@ -830,7 +830,7 @@ LIMIT 3;`
     class="flex h-dvh min-h-0 flex-col"
   >
     <PageTabs v-model="activeTab">
-      <Tabs.Item
+      <Tabs.Trigger
         v-for="tab in tabs"
         :key="tab.value"
         :value="tab.value"
@@ -1501,7 +1501,7 @@ LIMIT 3;`
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <Input
               v-model="templateQuery"
@@ -1560,7 +1560,7 @@ LIMIT 3;`
               </template>
             </EmptyState>
           </div>
-        </PanelContent>
+        </PanelBody>
       </DrawerContent>
     </Drawer>
 
@@ -1586,7 +1586,7 @@ LIMIT 3;`
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="importing"
@@ -1677,9 +1677,9 @@ LIMIT 3;`
                           >
                             <Select.Trigger :aria-label="`Table column for ${header}`" />
                             <Select.Content>
-                              <Select.Option :value="SKIP">Skip</Select.Option>
+                              <Select.Item :value="SKIP">Skip</Select.Item>
                               <Select.Group :label="`Columns of ${selectedTable?.name}`">
-                                <Select.Option
+                                <Select.Item
                                   v-for="column in selectedTable?.columns ?? []"
                                   :key="column.id"
                                   :value="column.name"
@@ -1695,7 +1695,7 @@ LIMIT 3;`
                                       }}</span
                                     >
                                   </span>
-                                </Select.Option>
+                                </Select.Item>
                               </Select.Group>
                             </Select.Content>
                           </Select>
@@ -1771,7 +1771,7 @@ LIMIT 3;`
                 </SettingsSection>
               </template>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">

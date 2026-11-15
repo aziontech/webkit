@@ -28,8 +28,8 @@ import Item from '../components/content/item/item.vue'
 import ItemContent from '../components/content/item/item-content.vue'
 import ItemList from '../components/content/item/item-list.vue'
 import ItemTitle from '../components/content/item/item-title.vue'
-import KeyValuePairs from '../components/content/key-value-pairs/key-value-pairs.vue'
-import KeyValuePairsItem from '../components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue'
+import KeyValueList from '../components/content/key-value-list/key-value-list.vue'
+import KeyValueListItem from '../components/content/key-value-list/key-value-list-item/key-value-list-item.vue'
 import Timestamp from '../components/content/timestamp/timestamp.vue'
 import CardList from '../components/data/card-list/card-list.vue'
 import DataGrid from '../components/data/data-grid/data-grid.vue'
@@ -267,7 +267,7 @@ function selectCase(multiple: boolean): Case {
   const Root = (multiple ? MultiSelect : Select) as typeof Select
   const Content = (multiple ? MultiSelect.Content : Select.Content) as typeof Select.Content
   const Trigger = (multiple ? MultiSelect.Trigger : Select.Trigger) as typeof Select.Trigger
-  const Option = (multiple ? MultiSelect.Option : Select.Option) as typeof Select.Option
+  const Option = (multiple ? MultiSelect.Item : Select.Item) as typeof Select.Item
   return {
     mount: () => ({
       render: () =>
@@ -319,7 +319,7 @@ function multiSelectTypedCase(): Case {
               h(MultiSelect.Content, null, {
                 default: () =>
                   options.map((o) =>
-                    h(MultiSelect.Option, { key: o.value, value: o.value }, () => o.label)
+                    h(MultiSelect.Item, { key: o.value, value: o.value }, () => o.label)
                   )
               })
             ]
@@ -356,7 +356,7 @@ function multiSelectToggleCase(): Case {
               h(MultiSelect.Content, null, {
                 default: () =>
                   options.map((o) =>
-                    h(MultiSelect.Option, { key: o.value, value: o.value }, () => o.label)
+                    h(MultiSelect.Item, { key: o.value, value: o.value }, () => o.label)
                   )
               })
             ]
@@ -888,7 +888,7 @@ function itemListCase(): Case {
   }
 }
 
-function keyValuePairsCase(): Case {
+function keyValueListCase(): Case {
   const rows = ref(
     Array.from({ length: 1000 }, (_, i) => ({ label: `Key ${i}`, value: `Value ${i}` }))
   )
@@ -896,9 +896,9 @@ function keyValuePairsCase(): Case {
     mount: () =>
       defineComponent({
         setup: () => () =>
-          h(KeyValuePairs, { 'aria-label': 'Details' }, () =>
+          h(KeyValueList, { 'aria-label': 'Details' }, () =>
             rows.value.map((row) =>
-              h(KeyValuePairsItem, { key: row.label, label: row.label }, () => row.value)
+              h(KeyValueListItem, { key: row.label, label: row.label }, () => row.value)
             )
           )
       }),
@@ -1439,8 +1439,8 @@ describe('runtime budgets (perf-budgets.json)', () => {
   it('Item.List with 1k items: mount and reorder', async () => {
     check('item-list-1k', await measure(itemListCase))
   })
-  it('KeyValuePairs with 1k pairs: mount and update values', async () => {
-    check('key-value-pairs-1k', await measure(keyValuePairsCase))
+  it('KeyValueList with 1k pairs: mount and update values', async () => {
+    check('key-value-list-1k', await measure(keyValueListCase))
   })
   it('ListingTable with 1k rows: mount and replace', async () => {
     check('listing-table-1k', await measure(listingTableCase))

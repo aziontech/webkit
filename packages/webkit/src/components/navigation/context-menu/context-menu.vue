@@ -6,14 +6,11 @@
   import { type MenuPlacement, useMenuRoot } from '../../../composables/use-menu-root'
   import { usePlacement } from '../../../composables/use-placement'
   import { usePortalLocale } from '../../../composables/use-translate'
-  import type { DropdownMenuOptionValue } from '../dropdown-menu/injection-key'
+  import type { DropdownMenuItemValue } from '../dropdown-menu/injection-key'
   import { DropdownMenuInjectionKey } from '../dropdown-menu/injection-key'
   import { ContextMenuInjectionKey } from './injection-key'
 
-  export type {
-    DropdownMenuOptionType,
-    DropdownMenuOptionValue
-  } from '../dropdown-menu/injection-key'
+  export type { DropdownMenuItemType, DropdownMenuItemValue } from '../dropdown-menu/injection-key'
 
   defineOptions({
     name: 'ContextMenu',
@@ -37,10 +34,7 @@
   })
 
   const emit = defineEmits<{
-    select: [
-      event: globalThis.MouseEvent | globalThis.KeyboardEvent,
-      value: DropdownMenuOptionValue
-    ]
+    select: [event: globalThis.MouseEvent | globalThis.KeyboardEvent, value: DropdownMenuItemValue]
   }>()
 
   /** Controlled open state. Use with v-model:open; while unbound the menu is uncontrolled and starts closed. */

@@ -6,7 +6,7 @@
   import * as en from '../../../i18n/messages/en'
   import { PaginationInjectionKey } from './injection-key'
   import PaginationButton from './pagination-button/pagination-button.vue'
-  import PaginationInfo from './pagination-info/pagination-info.vue'
+  import PaginationDescription from './pagination-description/pagination-description.vue'
   import PaginationPageSize from './pagination-page-size/pagination-page-size.vue'
 
   type PageItem = { type: 'page' | 'more'; value: number; key: string }
@@ -149,9 +149,9 @@
   >
     <div class="flex min-w-0 items-center">
       <slot name="info">
-        <PaginationInfo v-if="dataDriven">
+        <PaginationDescription v-if="dataDriven">
           {{ t('pagination.info', { start: rangeStart, end: rangeEnd, total: total ?? 0 }) }}
-        </PaginationInfo>
+        </PaginationDescription>
       </slot>
     </div>
     <div class="flex flex-auto flex-wrap items-center justify-end gap-(--spacing-xs)">

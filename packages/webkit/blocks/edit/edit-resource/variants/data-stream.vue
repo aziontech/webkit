@@ -427,13 +427,13 @@
                     >
                       <Select.Trigger aria-label="Data source" />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="option in sourceOptions"
                           :key="option.value"
                           :value="option.value"
                         >
                           {{ option.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                   </SettingRow>
@@ -588,13 +588,13 @@
                     >
                       <Select.Trigger aria-label="Template" />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="option in templateOptions"
                           :key="option.value"
                           :value="option.value"
                         >
                           {{ option.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                   </SettingRow>
@@ -734,13 +734,13 @@
                         aria-label="Connector"
                       />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="option in connectorOptions"
                           :key="option.value"
                           :value="option.value"
                         >
                           {{ option.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                   </SettingRow>

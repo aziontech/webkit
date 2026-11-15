@@ -115,13 +115,13 @@
                       aria-label="Language"
                     />
                     <Select.Content>
-                      <Select.Option
+                      <Select.Item
                         v-for="option in languages"
                         :key="option.value"
                         :value="option.value"
                       >
                         {{ option.label }}
-                      </Select.Option>
+                      </Select.Item>
                     </Select.Content>
                   </Select>
                 </div>

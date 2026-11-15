@@ -275,7 +275,7 @@ export async function handleRequest(request) {
   >
     <h1 class="sr-only">{{ form.name }}</h1>
     <PageTabs v-model="activeTab">
-      <Tabs.Item
+      <Tabs.Trigger
         v-for="tab in tabs"
         :key="tab.value"
         :value="tab.value"
@@ -615,13 +615,13 @@ export async function handleRequest(request) {
                                                     >
                                                       <Select.Trigger aria-label="Type" />
                                                       <Select.Content>
-                                                        <Select.Option
+                                                        <Select.Item
                                                           v-for="option in fieldTypes"
                                                           :key="option.value"
                                                           :value="option.value"
                                                         >
                                                           {{ option.label }}
-                                                        </Select.Option>
+                                                        </Select.Item>
                                                       </Select.Content>
                                                     </Select>
                                                   </SettingRow>
@@ -711,13 +711,13 @@ export async function handleRequest(request) {
                                                                 aria-label="Default"
                                                               />
                                                               <Select.Content>
-                                                                <Select.Option
+                                                                <Select.Item
                                                                   v-for="option in field.options"
                                                                   :key="option"
                                                                   :value="option"
                                                                 >
                                                                   {{ option }}
-                                                                </Select.Option>
+                                                                </Select.Item>
                                                               </Select.Content>
                                                             </Select>
                                                             <div
@@ -876,13 +876,13 @@ export async function handleRequest(request) {
                                                     >
                                                       <Select.Trigger aria-label="List of" />
                                                       <Select.Content>
-                                                        <Select.Option
+                                                        <Select.Item
                                                           v-for="option in itemTypes"
                                                           :key="option.value"
                                                           :value="option.value"
                                                         >
                                                           {{ option.label }}
-                                                        </Select.Option>
+                                                        </Select.Item>
                                                       </Select.Content>
                                                     </Select>
                                                   </SettingRow>

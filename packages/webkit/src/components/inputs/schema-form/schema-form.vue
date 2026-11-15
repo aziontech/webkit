@@ -21,12 +21,12 @@
   import Input from '../input/input.vue'
   import MultiSelect from '../multi-select/multi-select.vue'
   import MultiSelectContent from '../multi-select/multi-select-content/multi-select-content.vue'
-  import MultiSelectOption from '../multi-select/multi-select-option/multi-select-option.vue'
+  import MultiSelectItem from '../multi-select/multi-select-item/multi-select-item.vue'
   import MultiSelectTrigger from '../multi-select/multi-select-trigger/multi-select-trigger.vue'
   import PasswordInput from '../password-input/password-input.vue'
   import Select from '../select/select.vue'
   import SelectContent from '../select/select-content/select-content.vue'
-  import SelectOption from '../select/select-option/select-option.vue'
+  import SelectItem from '../select/select-item/select-item.vue'
   import SelectTrigger from '../select/select-trigger/select-trigger.vue'
   import Switch from '../switch/switch.vue'
   import Textarea from '../textarea/textarea.vue'
@@ -706,11 +706,11 @@
           >
             <MultiSelectTrigger />
             <MultiSelectContent>
-              <MultiSelectOption
+              <MultiSelectItem
                 v-for="option in optionsOf(node)"
                 :key="String(option.value)"
                 :value="option.value"
-                >{{ option.label || option.value }}</MultiSelectOption
+                >{{ option.label || option.value }}</MultiSelectItem
               >
             </MultiSelectContent>
           </MultiSelect>
@@ -737,13 +737,13 @@
           >
             <SelectTrigger />
             <SelectContent>
-              <SelectOption
+              <SelectItem
                 v-for="option in node.options"
                 :key="String(option)"
                 :value="String(option)"
               >
                 {{ optionLabelOf(node, option) }}
-              </SelectOption>
+              </SelectItem>
             </SelectContent>
           </Select>
           <Textarea

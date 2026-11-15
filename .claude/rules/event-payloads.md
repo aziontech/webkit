@@ -24,7 +24,7 @@ The `item` is a per-component decision — pick the smallest thing that unambigu
 | Emits a matched entry from a `model` array (`split-button` item-click)                     | the matched item object                                                                            |
 | Emits an applied filter/tag being removed or edited                                        | the filter object                                                                                  |
 | A menu selection carrying a value (`dropdown` select)                                      | the selected `value`                                                                               |
-| A leaf that owns a `value` (`tabs-item`)                                                   | its `value`                                                                                        |
+| A leaf that owns a `value` (`tabs-trigger`)                                                   | its `value`                                                                                        |
 | A leaf identified only by display fields (`chip`, `menu-item`, `breadcrumb-item`)          | `label` / `href` — or `{ label, href }` when more than one is needed                               |
 | A structured activation (`transfer-list` item-double-click)                                    | `(event, { list, item, index })` — the existing payload object, with `event` promoted to first arg |
 | A lone control with no subject (`button`, `icon-button`, `link`, a pagination page button) | nothing — emit `(event)`                                                                           |
@@ -56,7 +56,7 @@ emit('row-click', event, row.original)
 
 ```ts
 // Leaf components: the item is whatever says which one
-emit('click', event, value) // tabs-item — owns a value
+emit('click', event, value) // tabs-trigger — owns a value
 emit('click', event, label) // chip — identified by its label
 emit('click', event, { label, href }) // menu-item / breadcrumb-item — needs both
 ```

@@ -3,12 +3,12 @@
   import Card from '@aziontech/webkit/card'
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import DataTable, {
-    type DropdownMenuOptionValue,
+    type DropdownMenuItemValue,
     type TableColumn,
     type TableExposed
   } from '@aziontech/webkit/data-table'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -212,7 +212,7 @@
     window.location.assign(`/deployments/${row.id}`)
   }
 
-  const onRowAction = (value: DropdownMenuOptionValue, row: Deployment) => {
+  const onRowAction = (value: DropdownMenuItemValue, row: Deployment) => {
     if (value === 'view') openDeployment(row)
   }
 </script>
@@ -382,7 +382,7 @@
                       @select="(_event, value) => onRowAction(value, row)"
                     >
                       <DropdownMenuGroup>
-                        <DropdownMenuOption
+                        <DropdownMenuItem
                           value="view"
                           label="View details"
                         >
@@ -391,8 +391,8 @@
                               class="ai ai-eye"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
-                        <DropdownMenuOption
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                           value="redeploy"
                           label="Redeploy"
                         >
@@ -401,8 +401,8 @@
                               class="ai ai-refresh"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
-                        <DropdownMenuOption
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
                           value="promote"
                           label="Promote to production"
                           :disabled="row.environment === 'Production' || row.status !== 'Ready'"
@@ -412,7 +412,7 @@
                               class="ai ai-circle-arrow-up"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
+                        </DropdownMenuItem>
                       </DropdownMenuGroup>
                     </Table.CellActions>
                   </template>

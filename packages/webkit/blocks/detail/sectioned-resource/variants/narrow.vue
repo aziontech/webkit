@@ -189,7 +189,7 @@
   <div class="flex min-h-0 flex-1 flex-col">
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
           :value="tab.value"
@@ -231,13 +231,13 @@
                     :key="section.label"
                     :label="section.label"
                   >
-                    <Select.Option
+                    <Select.Item
                       v-for="sibling in section.items"
                       :key="sibling.id"
                       :value="hrefOf(sibling)"
                     >
                       {{ sibling.label }}
-                    </Select.Option>
+                    </Select.Item>
                   </Select.Group>
                 </Select.Content>
               </Select>

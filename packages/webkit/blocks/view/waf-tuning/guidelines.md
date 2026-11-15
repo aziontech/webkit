@@ -30,7 +30,7 @@ A wrapping row above the table: a Time range `Select` (Last hour, Last 24 hours,
 
 A flush `Card` with a data-driven `DataTable`: row selection, sorting (Hits high to low by default), `row-key` the rule id. Columns: Rule ID (principal, code font), Threat, Hits (tabular, grouped thousands), Top IP addresses and Top paths (code font), Top countries; list cells are `Table.CellTags`: as many values as fit, and a `+N` that opens the rest in a popover named by its noun (IP addresses, countries, paths). The `empty` slot is a small `EmptyState`: with a search set, No matching rules with an outlined Clear search; otherwise it names the minimum and the range and says how to widen them. When the matches fail to load, a danger `Alert` with Retry takes the card's place.
 
-### D. Allow dialog — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelContent`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
+### D. Allow dialog — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `Alert`, `Field`, `Textarea`, `Button` (required)
 
 A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says requests these rules matched on their paths will no longer be blocked and how many allowed rules will be created (one per rule and path); a list of the selected rules with their threat and path count; and a required Reason `Textarea` with a description saying it is kept with the allowed rules. "Enter why these requests are legitimate." shows under it only after Allow rules is pressed with it empty, and focus moves to it. Footer: Cancel and primary Allow rules, which shows its loading state; the dialog cannot be dismissed while it runs.
 

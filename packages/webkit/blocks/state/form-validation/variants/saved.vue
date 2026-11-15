@@ -198,13 +198,13 @@
             >
               <Select.Trigger :id="fieldIds.environment" />
               <Select.Content>
-                <Select.Option
+                <Select.Item
                   v-for="option in environments"
                   :key="String(option.value)"
                   :value="option.value"
                 >
                   {{ option.label }}
-                </Select.Option>
+                </Select.Item>
               </Select.Content>
             </Select>
             <Field.Description>

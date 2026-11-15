@@ -34,7 +34,7 @@
   const open = defineModel<boolean>('open', { default: undefined as never })
 
   const slots = defineSlots<{
-    /** The parameters the tool is called with, usually a `CodeBlock` or `KeyValuePairs`. */
+    /** The parameters the tool is called with, usually a `CodeBlock` or `KeyValueList`. */
     input?(): unknown
     /** What the tool returned, or the error it failed with. */
     output?(): unknown

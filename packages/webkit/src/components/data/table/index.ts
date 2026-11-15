@@ -67,7 +67,7 @@ const TableRoot = Object.assign(Table, {
 }) as CompoundTable
 
 export default TableRoot
-export type { DropdownMenuOptionValue } from '../../navigation/dropdown-menu/injection-key'
+export type { DropdownMenuItemValue } from '../../navigation/dropdown-menu/injection-key'
 export type {
   AppliedFilter,
   FilterField,

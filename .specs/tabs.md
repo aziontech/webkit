@@ -3,11 +3,11 @@ name: tabs
 category: navigation
 structure: composition
 status: implemented
-spec_version: 7
+spec_version: 9
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: c134940b5a63eafcf48d897198f5dd41bc51da32531eae69d1a2c0753052a243
+checksum: 37c4031dd8d5a1618ceb786f653f7ecdd8c0a5a157c8489c20cb462bd6c7d10c
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -40,14 +40,14 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
 
 ## Best practices
 
-- Give each `Tabs.Item` (also exposed as `Tabs.Trigger`, the shadcn / Radix name) and its `Tabs.Content` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility. `Tabs.Content` with a `value` is the `role="tabpanel"`; `Tabs.Panel` renders the same panel and stays as an equivalent name.
+- Give each `Tabs.Trigger` and its `Tabs.Content` the same `value`; the panel is linked to its tab by that value for `aria-labelledby` and visibility. `Tabs.Content` is the `role="tabpanel"`. The compound has exactly three parts, the shadcn / Radix names: `List`, `Trigger`, `Content` (6.0 removed the `Item`, `Panel` and `Root` members, synonyms of these).
 - Any string or number is a valid `value`, spaces and punctuation included: the tab and panel ids are derived from it with every character outside `A-Z a-z 0-9 -` encoded, so `aria-controls` / `aria-labelledby` stay valid id tokens.
 - Type a variable that holds the active tab or a list of tab definitions with the exported `TabsValue` (`ref<TabsValue>('overview')`), never `string | number` spelled out or a cast.
 - Drive the active tab with `v-model` on the root, or seed it with `default-value`; with neither, the first enabled tab is selected on mount.
 - `closable` only emits `close` with `(event, value)` — remove the tab and its panel from your data yourself; when the active tab unmounts, the root moves to the first enabled tab.
 - `dirty` only marks the tab (a dot after the label, "Unsaved changes" for screen readers); guard the switch itself with `useUnsavedChanges().confirmLeave()` in the setter of the root's `v-model` when leaving must ask first.
-- The selection always comes from the root's value. A row of pressed / unpressed pills outside a `Tabs` root is a `ToggleGroup`, not loose `Tabs.Item`s (6.0 removed the item's `selected` prop).
-- Put spacing between the list and the panels on an element of your own around the panels (or on each `Tabs.Content`), not inside each panel. `Tabs.Content` always renders the panel and needs a `value` (6.0 removed its wrapper mode).
+- The selection always comes from the root's value. A row of pressed / unpressed pills outside a `Tabs` root is a `ToggleGroup`, not loose `Tabs.Trigger`s (6.0 removed the item's `selected` prop).
+- Put spacing between the list and the panels on an element of your own around the panels (or on each `Tabs.Content`), not inside each panel. It always renders the panel and needs a `value` (6.0 removed its wrapper mode).
 - Centre the tab row with `<Tabs.List align="center">`, never with a `justify-center` class or a centring wrapper; keep the default `start` for tabs that head a resource page or a settings form.
 
 ## Usage
@@ -61,17 +61,17 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
 </script>
 
 <template>
-  <Tabs.Root v-model="active">
+  <Tabs v-model="active">
     <Tabs.List>
-      <Tabs.Item
+      <Tabs.Trigger
         value="overview"
         label="Overview"
       />
-      <Tabs.Item
+      <Tabs.Trigger
         value="settings"
         label="Settings"
       />
-      <Tabs.Item
+      <Tabs.Trigger
         value="logs"
         label="Logs"
         disabled
@@ -82,16 +82,16 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
       <Tabs.Content value="settings">Settings content</Tabs.Content>
       <Tabs.Content value="logs">Logs content</Tabs.Content>
     </div>
-  </Tabs.Root>
+  </Tabs>
 </template>
 ```
 
 ## Sub-components
 
-- `tabs-item.vue` — Public sub-component `tabs-item`, attached as `Tabs.Item` and as its alias `Tabs.Trigger` (the same component). `label` defaults to `''` (an item with neither `label` nor default slot renders an empty label). It has no selection of its own: the root's value selects it. The disabled state is read reactively: toggling `disabled` after mount updates the arrow-key path. Props include `dirty: boolean` (default `false`): a `size-1.5` `var(--warning-foreground)` dot after the label (`aria-hidden`, `CanvasText` under forced colors) plus a `sr-only` "Unsaved changes" from the `tabs.unsaved` catalog key, and `data-dirty` on the tab.
-- `tabs-list.vue` — Public sub-component `tabs-list`. Prop `align: 'start' | 'center'` (default `'start'`): `center` centres the tabs in the row (`data-align="center"`, `justify-center-safe`, so a row that overflows still scrolls from its first tab), for a page whose content below is centred, such as a catalog of cards.
-- `tabs-content.vue` — Public sub-component `tabs-content`, attached as `Tabs.Content`. Prop `value: TabsValue` (required). It renders the `role="tabpanel"` for that tab (the same element as `Tabs.Panel`, attributes forwarded to it).
-- `tabs-panel.vue` — Public sub-component `tabs-panel`, attached as `Tabs.Panel`; the `role="tabpanel"` for its `value`. Equivalent to `Tabs.Content` with a `value`.
+- `tabs-trigger.vue` — Public sub-component `tabs-trigger` (`@aziontech/webkit/tabs-trigger`), attached as `Tabs.Trigger`. `label` defaults to `''` (an item with neither `label` nor default slot renders an empty label). It has no selection of its own: the root's value selects it. The disabled state is read reactively: toggling `disabled` after mount updates the arrow-key path. Props include `dirty: boolean` (default `false`): a `size-1.5` `var(--warning-foreground)` dot after the label (`aria-hidden`, `CanvasText` under forced colors) plus a `sr-only` "Unsaved changes" from the `tabs.unsaved` catalog key, and `data-dirty` on the tab.
+- `tabs-list.vue` — Public sub-component `tabs-list` (`@aziontech/webkit/tabs-list`), attached as `Tabs.List`. Prop `align: 'start' | 'center'` (default `'start'`): `center` centres the tabs in the row (`data-align="center"`, `justify-center-safe`, so a row that overflows still scrolls from its first tab), for a page whose content below is centred, such as a catalog of cards.
+- `tabs-content.vue` — Public sub-component `tabs-content` (`@aziontech/webkit/tabs-content`), attached as `Tabs.Content`. Prop `value: TabsValue` (required). It renders the `role="tabpanel"` for that tab, attributes forwarded to it; its testid derives from the root's (`<testId>__panel`).
+- The root file is `tabs.vue`; `@aziontech/webkit/tabs-root` resolves to it with no part attached (the tree-shaking path).
 - Every part spreads the consumer's attributes (`id`, `aria-*`, `dir`, `data-*`, listeners) on its own root element (`inheritAttrs: false` + `v-bind="$attrs"`), with `class` merged through `cn`.
 
 ## Props
@@ -101,7 +101,7 @@ Switches between peer views of one page or panel, showing one at a time: Overvie
 | `defaultValue`   | `TabsValue \| null`       | `null`        | false    | Initial active tab when uncontrolled.                                                                                                                                                  |
 | `activationMode` | `'automatic' \| 'manual'` | `'automatic'` | false    | `automatic` selects a tab as the arrow keys focus it; `manual` only moves focus, and `Enter` or `Space` selects (APG tabs with manual activation, for panels that are slow to render). |
 
-Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, `TabsActivationMode = 'automatic' | 'manual'`, the value of a tab and of its panel; `TabsListAlign = 'start' | 'center'`. The compound is typed from `index.ts` (`Tabs.Root`, `Tabs.List`, `Tabs.Item`, `Tabs.Trigger`, `Tabs.Content`, `Tabs.Panel`), so a wrong prop on a part is a type error.
+Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, `TabsActivationMode = 'automatic' | 'manual'`, the value of a tab and of its panel; `TabsListAlign = 'start' | 'center'`. The compound is typed from `index.ts` (`Tabs`, `Tabs.List`, `Tabs.Trigger`, `Tabs.Content`), so a wrong prop on a part is a type error.
 
 ## v-model
 
@@ -125,7 +125,7 @@ Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, `
 - `data-state` values on panels: `active` | `inactive`
 - Root: `data-tabs-root` (and the legacy `data-tab-view-root`, kept for selectors written against the v5 name).
 - Panel motion: the incoming panel's inner element carries `data-motion="enter"` and `data-slide="start|end"` for the frame before it slides in; the attributes drop on the next animation frame.
-- Dirty: `data-dirty` on a `Tabs.Item` with `dirty`; the dot is not the only cue for assistive tech (a hidden "Unsaved changes" joins the tab's name).
+- Dirty: `data-dirty` on a `Tabs.Trigger` with `dirty`; the dot is not the only cue for assistive tech (a hidden "Unsaved changes" joins the tab's name).
 - Responsive: the tab list (`Tabs.List`) scrolls **horizontally** when the tabs exceed the available width (mobile / narrow viewports) instead of overflowing or wrapping; the scrollbar is visually hidden and the active indicator stays aligned while scrolling. Tabs keep their intrinsic width (`shrink-0`). A gradient edge-fade overlay on the scrollable side(s) (mirrored on `data-fade-start` / `data-fade-end`) hints at off-screen tabs; it fades in / out with the semantic `animate-fade-in` / `animate-fade-out` utilities, and a non-scrollable edge renders no overlay so the first / last tab is never covered at rest.
 
 ## Motion & Animations
@@ -159,7 +159,7 @@ Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, `
 - Visible focus: `focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas)`
 - Keyboard map (inside `Tabs.List`): `Tab` moves into the list onto the selected tab and out of it to the panel (roving `tabindex`: only the selected tab is `0`); `ArrowRight`/`ArrowLeft` select and focus the next/previous enabled tab in DOM order (a tab inserted later with `v-if`, or moved by a keyed list, takes its rendered place) and wrap, swapped under `dir="rtl"` (`useDirection`); `Home`/`End` select the first/last enabled tab; `Enter`/`Space` activate the focused tab; with `activationMode="manual"` the arrow keys and `Home`/`End` move focus only, from the focused tab, and the selection changes on `Enter`/`Space` or a click; `Delete` on a `closable` tab emits `close` (the tab carries `aria-keyshortcuts="Delete"`). Focus after a close is the consumer's call (the neighbouring tab, as `split-view#Sessions` does).
 - Close control: the `closable` glyph is a pointer target only (`aria-hidden="true"`, no role, no `tabindex`, a `title` with "Close tab"); keyboard and screen-reader users close with `Delete`, the WAI-ARIA tabs pattern. A focusable close button cannot sit next to the tab: anything focusable inside `role="tablist"` that is not a `tab` fails axe `aria-required-children` (unallowed child), and inside the tab it is `nested-interactive`.
-- ARIA: inside `Tabs.List` each item is `role="tab"` with `aria-selected` and `aria-controls` (when its panel is mounted); a `Tabs.Item` rendered on its own, outside any `Tabs`, is a toggle `<button>` with `aria-pressed` and no `tab` role, because a `tab` outside a `tablist` fails `aria-required-parent`. `Tabs.Panel` is `role="tabpanel"` labelled by its tab.
+- ARIA: inside `Tabs.List` each item is `role="tab"` with `aria-selected` and `aria-controls` (when its panel is mounted); a `Tabs.Trigger` rendered on its own, outside any `Tabs`, is a toggle `<button>` with `aria-pressed` and no `tab` role, because a `tab` outside a `tablist` fails `aria-required-parent`. `Tabs.Content` is `role="tabpanel"` labelled by its tab.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons), including disabled state. The dirty dot is `var(--warning-foreground)` (≥3:1 on the canvas in both themes) and the tab's accessible name carries "Unsaved changes", so colour is never the only cue.
 - `motion-reduce:transition-none motion-reduce:transform-none` on animated states.
 - Touch target: the tab item is 32 px tall (`var(--size-8)`) — a justified deviation from 40×40 px matching the Figma tab-item size token, mitigated by the full label + padding being the hit area and by the tab list's own keyboard model.
@@ -192,7 +192,7 @@ Types (exported from `@aziontech/webkit/tabs`): `TabsValue = string | number`, `
 - Do not create class presets in JavaScript (`const kindClasses = {...}`, `const sharedClasses = [...]`, `const sizeClasses = {...}`, `const rootClasses = computed(...)`). Variants live on `data-*` attributes consumed by Tailwind `data-[attr=value]:`. All utilities live inline on the root element's `class` attribute. No `<style>` block, no component-local `.css`/`.scss`. See `.claude/rules/styling.md`.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
-- Do not add examples beyond Default + per `kind` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
+- Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
 - Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

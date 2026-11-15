@@ -248,13 +248,13 @@
                       >
                         <Select.Trigger aria-label="Browser cache behavior" />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="option in browserBehaviors"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </Select.Option>
+                          </Select.Item>
                         </Select.Content>
                       </Select>
                     </SettingRow>
@@ -306,13 +306,13 @@
                       >
                         <Select.Trigger aria-label="Edge cache behavior" />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="option in edgeBehaviors"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </Select.Option>
+                          </Select.Item>
                         </Select.Content>
                       </Select>
                     </SettingRow>
@@ -414,13 +414,13 @@
                       >
                         <Select.Trigger aria-label="Tiered cache topology" />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="option in topologies"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </Select.Option>
+                          </Select.Item>
                         </Select.Content>
                       </Select>
                     </SettingRow>
@@ -456,13 +456,13 @@
                       >
                         <MultiSelect.Trigger aria-label="Cache by HTTP method" />
                         <MultiSelect.Content>
-                          <MultiSelect.Option
+                          <MultiSelect.Item
                             v-for="option in methods"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </MultiSelect.Option>
+                          </MultiSelect.Item>
                         </MultiSelect.Content>
                       </MultiSelect>
                     </SettingRow>
@@ -479,13 +479,13 @@
                       >
                         <Select.Trigger aria-label="Cache by query string" />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="option in varyBehaviors"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </Select.Option>
+                          </Select.Item>
                         </Select.Content>
                       </Select>
                     </SettingRow>
@@ -532,13 +532,13 @@
                       >
                         <Select.Trigger aria-label="Cache by cookies" />
                         <Select.Content>
-                          <Select.Option
+                          <Select.Item
                             v-for="option in varyBehaviors"
                             :key="option.value"
                             :value="option.value"
                           >
                             {{ option.label }}
-                          </Select.Option>
+                          </Select.Item>
                         </Select.Content>
                       </Select>
                     </SettingRow>

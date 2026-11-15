@@ -16,7 +16,7 @@
   import DialogContent from '../../overlay/dialog/dialog-content.vue'
   import DialogDescription from '../../overlay/dialog/dialog-description.vue'
   import DialogTitle from '../../overlay/dialog/dialog-title.vue'
-  import PanelContent from '../../overlay/panel/panel-content.vue'
+  import PanelBody from '../../overlay/panel/panel-body.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
 
@@ -131,7 +131,7 @@
         :data-testid="`${testId}__form`"
         @submit.prevent="send"
       >
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-lg)">
             <FieldSet
               :aria-describedby="missing ? `${uid}-error` : undefined"
@@ -167,7 +167,7 @@
               />
             </Field>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter class="flex-col md:flex-row md:justify-end">
           <Button
             class="w-full md:w-auto"

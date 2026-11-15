@@ -261,7 +261,7 @@
 
 <template>
   <div class="flex min-h-0 flex-1 flex-col">
-    <ConsoleLayout.Breadcrumbs
+    <ConsoleLayout.Breadcrumb
       :items="[
         { label: 'Resources', href: '/resources' },
         { label: record.name, href: '/resources/1020655' }
@@ -302,7 +302,7 @@
             </Input>
           </template>
           <Select.Group label="Environments">
-            <Select.Option
+            <Select.Item
               v-for="option in environmentMatches"
               :key="option.name"
               :value="option.name"
@@ -315,7 +315,7 @@
                   size="small"
                 />
               </template>
-            </Select.Option>
+            </Select.Item>
             <p
               v-if="!environmentMatches.length"
               class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
@@ -324,7 +324,7 @@
             </p>
           </Select.Group>
           <template #footer>
-            <Select.Option
+            <Select.Item
               value="__add-environment__"
               class="w-full"
             >
@@ -335,14 +335,14 @@
                 />
                 Add Environment
               </span>
-            </Select.Option>
+            </Select.Item>
           </template>
         </Select.Content>
       </Select>
-    </ConsoleLayout.Breadcrumbs>
+    </ConsoleLayout.Breadcrumb>
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
           :value="tab.value"
@@ -602,13 +602,13 @@
                                   :aria-label="`Deployment Settings for ${environment.name}`"
                                 />
                                 <Select.Content>
-                                  <Select.Option
+                                  <Select.Item
                                     v-for="option in environment.options"
                                     :key="option.value"
                                     :value="option.value"
                                   >
                                     {{ option.label }}
-                                  </Select.Option>
+                                  </Select.Item>
                                 </Select.Content>
                               </Select>
                             </SettingRow>
@@ -640,13 +640,13 @@
                             >
                               <MultiSelect.Trigger aria-label="HTTP ports" />
                               <MultiSelect.Content>
-                                <MultiSelect.Option
+                                <MultiSelect.Item
                                   v-for="option in httpPortOptions"
                                   :key="option.value"
                                   :value="option.value"
                                 >
                                   {{ option.label }}
-                                </MultiSelect.Option>
+                                </MultiSelect.Item>
                               </MultiSelect.Content>
                             </MultiSelect>
                             <HelperText
@@ -684,13 +684,13 @@
                             >
                               <MultiSelect.Trigger aria-label="HTTPS ports" />
                               <MultiSelect.Content>
-                                <MultiSelect.Option
+                                <MultiSelect.Item
                                   v-for="option in httpsPortOptions"
                                   :key="option.value"
                                   :value="option.value"
                                 >
                                   {{ option.label }}
-                                </MultiSelect.Option>
+                                </MultiSelect.Item>
                               </MultiSelect.Content>
                             </MultiSelect>
                             <HelperText
@@ -728,13 +728,13 @@
                             >
                               <MultiSelect.Trigger aria-label="HTTP/3 ports" />
                               <MultiSelect.Content>
-                                <MultiSelect.Option
+                                <MultiSelect.Item
                                   v-for="option in http3PortOptions"
                                   :key="option.value"
                                   :value="option.value"
                                 >
                                   {{ option.label }}
-                                </MultiSelect.Option>
+                                </MultiSelect.Item>
                               </MultiSelect.Content>
                             </MultiSelect>
                             <HelperText
@@ -762,13 +762,13 @@
                                 aria-label="Minimum TLS version"
                               />
                               <Select.Content>
-                                <Select.Option
+                                <Select.Item
                                   v-for="option in tlsVersionOptions"
                                   :key="option.value"
                                   :value="option.value"
                                 >
                                   {{ option.label }}
-                                </Select.Option>
+                                </Select.Item>
                               </Select.Content>
                             </Select>
                           </SettingRow>
@@ -790,13 +790,13 @@
                                 aria-label="Cipher suite"
                               />
                               <Select.Content>
-                                <Select.Option
+                                <Select.Item
                                   v-for="option in cipherSuiteOptions"
                                   :key="option.value"
                                   :value="option.value"
                                 >
                                   {{ option.label }}
-                                </Select.Option>
+                                </Select.Item>
                               </Select.Content>
                             </Select>
                           </SettingRow>
@@ -866,13 +866,13 @@
                                 aria-label="Trusted CA certificate"
                               />
                               <Select.Content>
-                                <Select.Option
+                                <Select.Item
                                   v-for="option in trustedCaOptions"
                                   :key="option.value"
                                   :value="option.value"
                                 >
                                   {{ option.label }}
-                                </Select.Option>
+                                </Select.Item>
                               </Select.Content>
                             </Select>
                             <HelperText
@@ -898,13 +898,13 @@
                             >
                               <MultiSelect.Trigger aria-label="Certificate revocation list" />
                               <MultiSelect.Content>
-                                <MultiSelect.Option
+                                <MultiSelect.Item
                                   v-for="option in revocationListOptions"
                                   :key="option.value"
                                   :value="option.value"
                                 >
                                   {{ option.label }}
-                                </MultiSelect.Option>
+                                </MultiSelect.Item>
                               </MultiSelect.Content>
                             </MultiSelect>
                           </SettingRow>

@@ -6,16 +6,16 @@
 </script>
 
 <template>
-  <Tabs.Root
+  <Tabs
     v-model="active"
     class="w-full max-w-[40rem]"
   >
     <Tabs.List align="center">
-      <Tabs.Item
+      <Tabs.Trigger
         value="templates"
         label="Templates"
       />
-      <Tabs.Item
+      <Tabs.Trigger
         value="integrations"
         label="Integrations"
       />
@@ -32,5 +32,5 @@
         </p>
       </Tabs.Content>
     </div>
-  </Tabs.Root>
+  </Tabs>
 </template>

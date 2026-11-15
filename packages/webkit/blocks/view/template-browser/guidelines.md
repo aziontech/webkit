@@ -38,13 +38,13 @@ One `section` per category that still has matches, labelled by its `h2` in the m
 
 When `status` is `no-match`, the sections give way to a medium `EmptyState` with the filter-slash glyph, "No matching templates", one sentence, and an outlined small Clear filters `Button` bound to `clearFilters`. The filter keeps its tokens, so the person can see what hid the tiles.
 
-### E. Preview drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter` (required)
+### E. Preview drawer — `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter` (required)
 
-A large right `Drawer` controlled by `v-model:open`, opened by the tile. `PanelHeader` carries the mark, the template name as `DrawerTitle` and the drawer's own close button; `PanelContent` scrolls; `PanelFooter` holds the actions at the end: View repository (outlined, trailing external-link icon, new tab) and the primary Deploy. Deploy is a link to the deploy template flow with the template's id; the drawer never runs the deploy itself.
+A large right `Drawer` controlled by `v-model:open`, opened by the tile. `PanelHeader` carries the mark, the template name as `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls; `PanelFooter` holds the actions at the end: View repository (outlined, trailing external-link icon, new tab) and the primary Deploy. Deploy is a link to the deploy template flow with the template's id; the drawer never runs the deploy itself.
 
-### F. Template facts — `KeyValuePairs` (required)
+### F. Template facts — `KeyValueList` (required)
 
-Under the description, a two-column `KeyValuePairs` named "Template details": Framework, Category, Repository (in `bdi`) and Updated. Keep it to facts that help choose; settings belong to the deploy form.
+Under the description, a two-column `KeyValueList` named "Template details": Framework, Category, Repository (in `bdi`) and Updated. Keep it to facts that help choose; settings belong to the deploy form.
 
 ### G. README — `Card`, `DocProse` (required)
 

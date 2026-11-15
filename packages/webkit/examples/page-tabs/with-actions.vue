@@ -15,7 +15,7 @@
 
 <template>
   <PageTabs v-model="activeTab">
-    <Tabs.Item
+    <Tabs.Trigger
       v-for="tab in tabs"
       :key="tab.value"
       :value="tab.value"

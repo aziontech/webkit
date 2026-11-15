@@ -3,9 +3,9 @@ name: timestamp
 category: content
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: f89c9ae394b5cc5727f37a3fd7e5ea8d6d85e0962431ad57e270ecc4b145cf1e
+checksum: d621478431ecaea64d1d714cc081186e62432beba3e32a18ef2b1383b915017a
 created: 2026-11-14
 last_updated: 2026-11-15
 ---
@@ -167,7 +167,7 @@ _none_
 
 - Default — one timestamp in each format, with a fixed `now` and time zone on the provider.
 - Time zone — a `Select` of time zones bound to the provider's `time-zone` above a few timestamps; changing the zone changes every local time at once. Justified addition: the app-wide time zone is the component's second job and only a composed picker shows it.
-- Log details — Timestamp inside a `KeyValuePairs` panel of one request, next to a `StatusCode`, where people copy the UTC value into a query. Justified addition: it shows the copyable panel in the context it is built for.
+- Log details — Timestamp inside a `KeyValueList` panel of one request, next to a `StatusCode`, where people copy the UTC value into a query. Justified addition: it shows the copyable panel in the context it is built for.
 
 ## Constraints — DO NOT
 

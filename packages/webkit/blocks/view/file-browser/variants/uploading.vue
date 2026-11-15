@@ -6,7 +6,7 @@
   import CollectionPreferences from '@aziontech/webkit/collection-preferences'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, {
-    type DropdownMenuOptionValue,
+    type DropdownMenuItemValue,
     type TableColumn,
     type TableExposed
   } from '@aziontech/webkit/data-table'
@@ -15,13 +15,13 @@
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
   import FileTokenGroup, { type FileTokenGroupItem } from '@aziontech/webkit/file-token-group'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SplitButton, { type SplitButtonItem } from '@aziontech/webkit/split-button'
@@ -163,7 +163,7 @@
     () => pending.value !== null && confirmation.value.trim() === pending.value.name
   )
 
-  const onRowAction = (value: DropdownMenuOptionValue, row: FileRow) => {
+  const onRowAction = (value: DropdownMenuItemValue, row: FileRow) => {
     if (value === 'open') enterFolder(row.name)
     if (value !== 'delete') return
     pending.value = row
@@ -647,7 +647,7 @@
                   @select="(_event, value) => onRowAction(value, row)"
                 >
                   <DropdownMenuGroup>
-                    <DropdownMenuOption
+                    <DropdownMenuItem
                       v-if="row.kind === 'folder'"
                       key="open"
                       value="open"
@@ -658,8 +658,8 @@
                           class="ai ai-folder-open"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenuOption>
-                    <DropdownMenuOption
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
                       v-else
                       key="download"
                       value="download"
@@ -670,10 +670,10 @@
                           class="ai ai-download"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenuOption>
+                    </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuGroup>
-                    <DropdownMenuOption
+                    <DropdownMenuItem
                       value="delete"
                       label="Delete"
                     >
@@ -682,7 +682,7 @@
                           class="ai ai-trash"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenuOption>
+                    </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </Table.CellActions>
               </template>
@@ -794,7 +794,7 @@
             </DialogDescription>
           </div>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <FileDropzone
               :directories="uploadMode === 'folder'"
@@ -846,7 +846,7 @@
               @remove="(_event, { index }) => removePicked(index)"
             />
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button

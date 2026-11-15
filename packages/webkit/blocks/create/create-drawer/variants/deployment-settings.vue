@@ -8,7 +8,7 @@
   import HelperText from '@aziontech/webkit/helper-text'
   import Hint from '@aziontech/webkit/hint'
   import Input from '@aziontech/webkit/input'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import RadioGroup from '@aziontech/webkit/radio-group'
@@ -113,7 +113,7 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <fieldset
             class="m-0 flex min-w-0 flex-col border-0 p-0"
             :disabled="submitting"
@@ -245,7 +245,7 @@
               </div>
             </SettingsSection>
           </fieldset>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">

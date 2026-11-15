@@ -1,4 +1,4 @@
-import PanelContent from '../panel/panel-content.vue'
+import PanelBody from '../panel/panel-body.vue'
 import PanelFooter from '../panel/panel-footer.vue'
 import PanelHeader from '../panel/panel-header.vue'
 import Drawer from './drawer.vue'
@@ -15,7 +15,7 @@ export default Object.assign(Drawer, {
   Title: DrawerTitle,
   Description: DrawerDescription,
   Close: DrawerClose,
-  Body: PanelContent,
+  Body: PanelBody,
   Footer: PanelFooter
 })
 

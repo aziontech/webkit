@@ -2,8 +2,8 @@
   import { computed, useAttrs } from 'vue'
 
   import type { TabsValue } from '../tabs/injection-key'
+  import TabsRoot from '../tabs/tabs.vue'
   import TabsList from '../tabs/tabs-list.vue'
-  import TabsRoot from '../tabs/tabs-root.vue'
 
   defineOptions({
     name: 'PageTabs',
@@ -25,7 +25,7 @@
   const value = defineModel<TabsValue | null>({ default: null })
 
   defineSlots<{
-    /** One Tabs.Item per section of the resource. */
+    /** One Tabs.Trigger per section of the resource. */
     default(): unknown
     /** The actions the whole resource owns, on the right of the strip: a staged-changes Tag, Deploy. */
     actions(): unknown

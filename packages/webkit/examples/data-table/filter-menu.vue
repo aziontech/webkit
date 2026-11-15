@@ -74,7 +74,7 @@
       <CollectionPreferences :sections="['columns']" />
     </template>
     <template #filters>
-      <FilterMenu.Chips />
+      <FilterMenu.ChipGroup />
     </template>
     <template #cell-status="{ value }">
       <Table.CellStatus

@@ -35,7 +35,7 @@ Holds the title at the top of each drawer, and the drawer adds its close button 
 
 Names the task: `Change plan`, `Upgrade to Pro`. It labels the drawer for assistive technology.
 
-### F. Body — `PanelContent` (required)
+### F. Body — `PanelBody` (required)
 
 The scrolling body of each drawer, between header and footer.
 

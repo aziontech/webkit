@@ -1118,7 +1118,7 @@
         class="relative flex min-w-0 flex-wrap items-center gap-(--spacing-xs) empty:hidden"
         data-testid="filter-chips"
       >
-        <FilterMenu.Chips
+        <FilterMenu.ChipGroup
           v-model="filters"
           :fields="menuFields"
         />

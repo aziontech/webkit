@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The Filter button opens a drill-in menu: pick a field, then its values. Author is a `multi` field with avatars, Status a `single` field and Last modified a `date` field with periods and a custom range. `FilterMenu.Chips` below shows each applied field; activate a chip to reopen the menu at that field, or remove it to clear the field.",
+      "summary": "The Filter button opens a drill-in menu: pick a field, then its values. Author is a `multi` field with avatars, Status a `single` field and Last modified a `date` field with periods and a custom range. `FilterMenu.ChipGroup` below shows each applied field; activate a chip to reopen the menu at that field, or remove it to clear the field.",
       "file": "default.vue"
     },
     {

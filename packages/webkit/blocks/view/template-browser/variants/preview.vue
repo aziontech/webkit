@@ -6,9 +6,9 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -311,25 +311,25 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--layout-section-gap)">
             <p class="m-0 text-body-sm text-(--text-muted)">{{ selected.description }}</p>
 
-            <KeyValuePairs
+            <KeyValueList
               :columns="2"
               aria-label="Template details"
             >
-              <KeyValuePairs.Item label="Framework">{{
+              <KeyValueList.Item label="Framework">{{
                 FRAMEWORKS[selected.framework]
-              }}</KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Category">{{
+              }}</KeyValueList.Item>
+              <KeyValueList.Item label="Category">{{
                 categoryLabel(selected.category)
-              }}</KeyValuePairs.Item>
-              <KeyValuePairs.Item label="Repository"
-                ><bdi>{{ selected.repository }}</bdi></KeyValuePairs.Item
+              }}</KeyValueList.Item>
+              <KeyValueList.Item label="Repository"
+                ><bdi>{{ selected.repository }}</bdi></KeyValueList.Item
               >
-              <KeyValuePairs.Item label="Updated">{{ selected.updated }}</KeyValuePairs.Item>
-            </KeyValuePairs>
+              <KeyValueList.Item label="Updated">{{ selected.updated }}</KeyValueList.Item>
+            </KeyValueList>
 
             <section
               class="flex flex-col gap-(--layout-group-gap)"
@@ -363,7 +363,7 @@ npm run dev</code></pre>
               </Card>
             </section>
           </div>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-end gap-(--spacing-sm)">

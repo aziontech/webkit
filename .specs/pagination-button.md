@@ -3,8 +3,8 @@ name: pagination-button
 category: data
 structure: monolithic
 status: implemented
-spec_version: 5
-checksum: 8157827e0cd33593980676847c3f500ec54aff6fcbefc80073049e996f076e14
+spec_version: 6
+checksum: f058401af889efda9b95a708cf0ebceaf72691892cf51d3e01b5d6ec1cf515bb
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -31,7 +31,7 @@ PaginationButton is one segment of the pagination's numbers strip: a 28px-tall n
 ## Related
 
 - `pagination` — the root that frames the strip and, in data-driven mode, renders these buttons; re-exports this component as `Pagination.Button`.
-- `pagination-info` — the page-info text that sits beside the strip.
+- `pagination-description` — the page-info text that sits beside the strip.
 - `pagination-page-size` — the rows-per-page selector placed in the pagination's `controls` slot.
 - `icon-button` — a standalone icon-only action with its own frame and radius.
 

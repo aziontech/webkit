@@ -3,12 +3,12 @@ name: card
 category: content
 structure: monolithic
 status: implemented
-spec_version: 10
+spec_version: 11
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=562-6473
   node_id: 562:6473
-checksum: 43dd7f2ac565ed3ba91d5910a752754eb75ccde05d94ac2670bb0d554a7b397d
+checksum: b913ad820df2c381429df7c2c68eed2a2a6fe37ab6fd0f4387ab517aee86150b
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -154,7 +154,7 @@ A bordered surface that groups related content under a title, with a header, a b
 ## States
 
 - Visual states: `default`, `hover`, `focus-visible`, `active`, `disabled`
-- Responsive: the content region is the `@container/card`, so `KeyValuePairs`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
+- Responsive: the content region is the `@container/card`, so `KeyValueList`, `Field orientation="responsive"` and any `@sm:`/`@md:` utility inside follow the card, not the window. A card used as a shrink-to-fit flex item must get an explicit width (`flex-1`, `w-full`, a grid track): inline-size containment gives the content no intrinsic width.
 - Hover-free devices: the `header-actions` slot stays visible where the pointer cannot hover (`@media (hover: none)`).
 - Integration variant: `hover` shades the surface, `focus-visible` rings the whole tile (the ring sits on the stretched title target), `installed` adds the success Installed tag.
 - Featured (`featured`, integration variant only): the surface is raised; `hover` strengthens the border and brightens the top glow instead of shading the surface; the layout is centred and the badges sit in the top end corner. `data-featured` on the root drives the styles.

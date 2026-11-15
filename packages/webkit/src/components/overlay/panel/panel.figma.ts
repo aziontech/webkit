@@ -24,13 +24,13 @@ export default {
   </PanelHeader>`
       : ''
   }
-  <PanelContent>${
+  <PanelBody>${
     content
       ? figma.code`
     ${content}`
       : ''
   }
-  </PanelContent>${
+  </PanelBody>${
     showFooter
       ? figma.code`
   <PanelFooter>${
@@ -46,7 +46,7 @@ export default {
   imports: [
     "import Panel from '@aziontech/webkit/panel'",
     "import PanelHeader from '@aziontech/webkit/panel-header'",
-    "import PanelContent from '@aziontech/webkit/panel-content'",
+    "import PanelBody from '@aziontech/webkit/panel-body'",
     "import PanelFooter from '@aziontech/webkit/panel-footer'"
   ],
   id: 'panel',

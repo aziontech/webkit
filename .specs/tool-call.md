@@ -5,7 +5,7 @@ structure: monolithic
 status: implemented
 spec_version: 6
 template: 2
-checksum: d5de557fd4d51da3dffefa908d8eb2da6752c70b248dcc6e1aa0507692e99bcf
+checksum: 7b817ca005c41660955d3defe0a20beca15236eee3e1f36b28104066112d2881
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -34,7 +34,7 @@ collapsible panel. It is the record of what the agent did; authorization before 
 
 - `tool-approval` — the authorization step before a sensitive call.
 - `status-indicator` — the status the row shows.
-- `code-block`, `key-value-pairs` — what goes in the input and output slots.
+- `code-block`, `key-value-list` — what goes in the input and output slots.
 
 ## Best practices
 
@@ -93,10 +93,10 @@ _No events._
 
 ## Slots
 
-| Slot     | Scope | Notes                                                                  |
-| -------- | ----- | ---------------------------------------------------------------------- |
-| `input`  | —     | The parameters the tool is called with (`CodeBlock`, `KeyValuePairs`). |
-| `output` | —     | What the tool returned, or the error it failed with.                   |
+| Slot     | Scope | Notes                                                                 |
+| -------- | ----- | --------------------------------------------------------------------- |
+| `input`  | —     | The parameters the tool is called with (`CodeBlock`, `KeyValueList`). |
+| `output` | —     | What the tool returned, or the error it failed with.                  |
 
 ## States
 

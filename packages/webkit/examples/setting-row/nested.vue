@@ -85,13 +85,13 @@
               aria-label="Minimum TLS version"
             />
             <Select.Content>
-              <Select.Option
+              <Select.Item
                 v-for="option in tlsVersions"
                 :key="option.value"
                 :value="option.value"
               >
                 {{ option.label }}
-              </Select.Option>
+              </Select.Item>
             </Select.Content>
           </Select>
         </SettingRow>

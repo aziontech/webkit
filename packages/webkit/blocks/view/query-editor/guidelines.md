@@ -22,7 +22,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 ### A. Page tabs — `PageTabs`, `Tabs` (required)
 
-`PageTabs` bound with `v-model` holds two `Tabs.Item`s, Tables and Editor. The tabs are the page's top level; each one swaps the side panel and the working pane together.
+`PageTabs` bound with `v-model` holds two `Tabs.Trigger`s, Tables and Editor. The tabs are the page's top level; each one swaps the side panel and the working pane together.
 
 ### B. Tables panel — `Sidebar`, `Tooltip`, `IconButton`, `Input`, `DropdownMenu` (required)
 
@@ -52,7 +52,7 @@ A toolbar with the primary Run query `Button` (`:loading` while it runs) and out
 
 A Results band with its own search `Input`, a `ToggleGroup` switching Table and JSON, and Refresh, Download and Columns `IconButton`s named by `Tooltip`s. A SELECT shows its rows in a `DataTable` paged at 50 (10, 25, 50 and 100 per page), and JSON shows them in a copyable `CodeBlock`; any other statement shows a success `Alert` with what ran; a statement the database rejects shows a danger `Alert` with the reason and what to do (`The statement wasn't executed: near "SELEC", a syntax error. Check the statement and run it again.`), and the statement stays in the editor; before anything runs an `EmptyState` reads Ready to execute, and while a query runs `Skeleton` lines hold the band. A visually hidden `role="status"` announces the outcome (`3 rows returned.` or the error).
 
-### I. Templates drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent`, `Input`, `Item` (optional)
+### I. Templates drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody`, `Input`, `Item` (optional)
 
 Templates opens a large right `Drawer` titled SQL quick templates with a one-line description, a Search templates `Input` and one outlined clickable `Item` per snippet (a small `EmptyState` with Clear search when none matches). Choosing a card loads its SQL into the editor and closes the drawer.
 

@@ -13,7 +13,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SectionHeader from '@aziontech/webkit/section-header'
@@ -303,7 +303,7 @@
   <div class="flex min-h-0 flex-1 flex-col">
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
           :value="tab.value"
@@ -611,7 +611,7 @@
         <PanelHeader class="w-full">
           <DrawerTitle>Deploy {{ APP.name }}</DrawerTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <DrawerDescription>
               Version {{ APP.version }} goes to Production. The version that is live keeps serving
@@ -650,7 +650,7 @@
               </p>
             </section>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button

@@ -129,13 +129,13 @@
             >
               <Select.Trigger aria-label="Period" />
               <Select.Content>
-                <Select.Option
+                <Select.Item
                   v-for="option in periods"
                   :key="option.label"
                   :value="option.label"
                 >
                   {{ option.label }}
-                </Select.Option>
+                </Select.Item>
               </Select.Content>
             </Select>
           </div>

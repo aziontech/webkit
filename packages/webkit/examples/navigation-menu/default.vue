@@ -17,26 +17,7 @@
         >
           <NavigationMenu.List>
             <NavigationMenu.Item value="solucoes">
-              <NavigationMenu.Trigger>
-                Soluções
-                <NavigationMenu.Icon>
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M3 4.5L6 7.5L9 4.5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </NavigationMenu.Icon>
-              </NavigationMenu.Trigger>
+              <NavigationMenu.Trigger> Soluções </NavigationMenu.Trigger>
               <NavigationMenu.Content class="w-full">
                 <div class="grid grid-cols-2 gap-(--spacing-6) p-(--spacing-2)">
                   <NavigationMenu.List label="Por Caso de Uso">
@@ -70,26 +51,7 @@
             </NavigationMenu.Item>
 
             <NavigationMenu.Item value="produtos">
-              <NavigationMenu.Trigger>
-                Produtos
-                <NavigationMenu.Icon>
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M3 4.5L6 7.5L9 4.5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </NavigationMenu.Icon>
-              </NavigationMenu.Trigger>
+              <NavigationMenu.Trigger> Produtos </NavigationMenu.Trigger>
               <NavigationMenu.Content class="w-full">
                 <div class="grid grid-cols-2 gap-(--spacing-6) p-(--spacing-2)">
                   <NavigationMenu.List label="Construir">
@@ -133,18 +95,12 @@
             </NavigationMenu.Trigger>
           </div>
 
-          <NavigationMenu.Portal>
-            <NavigationMenu.Positioner
-              side="bottom"
-              align="start"
-              :side-offset="12"
-            >
-              <NavigationMenu.Popup>
-                <NavigationMenu.Arrow />
-                <NavigationMenu.Viewport />
-              </NavigationMenu.Popup>
-            </NavigationMenu.Positioner>
-          </NavigationMenu.Portal>
+          <NavigationMenu.Viewport
+            side="bottom"
+            align="start"
+            :side-offset="12"
+            arrow
+          />
         </NavigationMenu>
       </div>
     </header>

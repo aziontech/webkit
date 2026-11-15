@@ -12,7 +12,7 @@
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import HelperText, { type HelperTextType } from '@aziontech/webkit/helper-text'
@@ -23,7 +23,7 @@
   import InputGroupRoot from '@aziontech/webkit/input-group-root'
   import MultiSelect from '@aziontech/webkit/multi-select'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -256,7 +256,7 @@
     toast.success(`${key} deleted.`)
   }
 
-  const onRowAction = (value: DropdownMenuOptionValue, row: Variable) => {
+  const onRowAction = (value: DropdownMenuItemValue, row: Variable) => {
     if (value === 'edit') {
       editing.value = row
       drawerOpen.value = true
@@ -900,7 +900,7 @@
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <div
               v-if="saveError"
               class="mb-(--spacing-md)"
@@ -1182,13 +1182,13 @@
                                 </template>
                               </Input>
                             </template>
-                            <MultiSelect.Option
+                            <MultiSelect.Item
                               v-for="option in visibleScopeOptions(scope)"
                               :key="option.value"
                               :value="option.value"
                             >
                               {{ option.label }}
-                            </MultiSelect.Option>
+                            </MultiSelect.Item>
                           </MultiSelect.Content>
                         </MultiSelect>
                       </div>
@@ -1211,7 +1211,7 @@
                 </div>
               </SettingsSection>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">

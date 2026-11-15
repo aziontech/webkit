@@ -1,6 +1,6 @@
 <script setup>
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuRoot from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -16,16 +16,16 @@
       />
     </DropdownMenuTrigger>
     <DropdownMenuGroup label="Option states">
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="default"
         label="Default"
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="selected"
         label="Selected"
         selected
       />
-      <DropdownMenuOption
+      <DropdownMenuItem
         value="disabled"
         label="Disabled"
         disabled

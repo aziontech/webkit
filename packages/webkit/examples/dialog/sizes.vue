@@ -5,7 +5,7 @@
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DialogTrigger from '@aziontech/webkit/dialog-trigger'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import { reactive, watch } from 'vue'
@@ -45,11 +45,11 @@
         <PanelHeader class="w-full">
           <DialogTitle>{{ sizeLabels[size] }}</DialogTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <DialogDescription>
             Panel max-width preset for the {{ size }} dialog, applied from the md breakpoint up.
           </DialogDescription>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
             <Button

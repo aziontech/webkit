@@ -1,15 +1,15 @@
 import FilterMenuRoot from './filter-menu.vue'
-import FilterMenuChips from './filter-menu-chips/filter-menu-chips.vue'
+import FilterMenuChipGroup from './filter-menu-chip-group/filter-menu-chip-group.vue'
 
 interface FilterMenuStatic {
-  Chips: typeof FilterMenuChips
+  ChipGroup: typeof FilterMenuChipGroup
 }
 
 const FilterMenu = FilterMenuRoot as typeof FilterMenuRoot & FilterMenuStatic
-FilterMenu.Chips = FilterMenuChips
+FilterMenu.ChipGroup = FilterMenuChipGroup
 
 export default FilterMenu
-export { FilterMenuChips }
+export { FilterMenuChipGroup }
 export type {
   FilterMenuField,
   FilterMenuFieldType,

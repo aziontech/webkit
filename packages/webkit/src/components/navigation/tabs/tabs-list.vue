@@ -28,7 +28,7 @@
   const context = inject(TabsInjectionKey) as TabsContext | null
 
   if (!context) {
-    throw new Error('Tabs.List must be used within Tabs (Root).')
+    throw new Error('Tabs.List must be used within Tabs.')
   }
 
   const listEl = ref<HTMLElement | null>(null)

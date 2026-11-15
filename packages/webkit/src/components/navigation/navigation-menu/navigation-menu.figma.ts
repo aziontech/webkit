@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3782-18192
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/navigation-menu/navigation-menu-root.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/navigation-menu/navigation-menu.vue
 // component=NavigationMenu
 import figma from 'figma'
 
@@ -22,7 +22,6 @@ const items = entries
     <NavigationMenu.Item>
       <NavigationMenu.Trigger>
         ${entry.label}
-        <NavigationMenu.Icon><i class="ai ai-chevron-down" aria-hidden="true" /></NavigationMenu.Icon>
       </NavigationMenu.Trigger>
       <NavigationMenu.Content />
     </NavigationMenu.Item>`
@@ -35,13 +34,7 @@ const items = entries
 
 const viewport = hasSubmenu
   ? `
-  <NavigationMenu.Portal>
-    <NavigationMenu.Positioner>
-      <NavigationMenu.Popup>
-        <NavigationMenu.Viewport />
-      </NavigationMenu.Popup>
-    </NavigationMenu.Positioner>
-  </NavigationMenu.Portal>`
+  <NavigationMenu.Viewport />`
   : ''
 
 export default {

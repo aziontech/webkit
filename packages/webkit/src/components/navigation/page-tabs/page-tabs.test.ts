@@ -6,7 +6,7 @@ import Default from '../../../../examples/page-tabs/default.vue'
 import FormColumn from '../../../../examples/page-tabs/form-column.vue'
 import WithActions from '../../../../examples/page-tabs/with-actions.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import TabsItem from '../tabs/tabs-item.vue'
+import TabsTrigger from '../tabs/tabs-trigger.vue'
 import PageTabs from './page-tabs.vue'
 
 const harness = (initial: string, testId?: string) => {
@@ -24,8 +24,8 @@ const harness = (initial: string, testId?: string) => {
         },
         {
           default: () => [
-            h(TabsItem, { value: 'overview', label: 'Overview' }),
-            h(TabsItem, { value: 'settings', label: 'Settings' })
+            h(TabsTrigger, { value: 'overview', label: 'Overview' }),
+            h(TabsTrigger, { value: 'settings', label: 'Settings' })
           ]
         }
       )
@@ -84,7 +84,7 @@ describe('PageTabs', () => {
     const { getByTestId } = within(
       render(PageTabs, {
         props: { column },
-        slots: { default: () => h(TabsItem, { value: 'overview', label: 'Overview' }) }
+        slots: { default: () => h(TabsTrigger, { value: 'overview', label: 'Overview' }) }
       }).container
     )
 

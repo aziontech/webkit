@@ -565,7 +565,7 @@ opens flush on the tab bar:
        content scrolls under it. NO PageHeader and NO main on this page. -->
   <div class="sticky top-0 z-1 bg-(--bg-canvas)">
     <PageTabs v-model="activeTab">
-      <Tabs.Item
+      <Tabs.Trigger
         v-for="tab in tabs"
         :key="tab.value"
         :value="tab.value"
@@ -831,7 +831,7 @@ exception. We take that and set three numbers of our own:
 ## Breadcrumb — first level and second-level resource nav
 
 In the console the trail is `ConsoleLayout`'s `breadcrumbs` prop, derived from the route meta. A
-page that owns its trail (a loaded resource name, a control crumb) renders `ConsoleLayout.Breadcrumbs`
+page that owns its trail (a loaded resource name, a control crumb) renders `ConsoleLayout.Breadcrumb`
 with `items` instead: it replaces the layout's trail while the page is mounted. The trail is
 top chrome that says _where you are_ below a module; it is not the page's title block, and it is
 hidden while the layout is compact (the brand takes its place).
@@ -859,7 +859,7 @@ These rules hold across every row:
    the trail.
 5. **A switcher that ends the trail reads as a crumb.** A resource that lives in several environments
    (or versions) ends its trail on the current one as a switcher: `Workloads › workload_01 ›
-Production ⌄`. The page composes it in the default slot of its `ConsoleLayout.Breadcrumbs`
+Production ⌄`. The page composes it in the default slot of its `ConsoleLayout.Breadcrumb`
    (never `App.vue`'s `breadcrumbs` slot): `<Select variant="ghost" size="small">` with
    `aria-label` on `Select.Trigger` ("Switch environment"): no border or fill until hover, sized to
    its value. Never a bordered `Select` in

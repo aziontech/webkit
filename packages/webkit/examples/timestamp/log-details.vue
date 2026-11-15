@@ -1,5 +1,5 @@
 <script setup>
-  import KeyValuePairs from '@aziontech/webkit/key-value-pairs'
+  import KeyValueList from '@aziontech/webkit/key-value-list'
   import StatusCode from '@aziontech/webkit/status-code'
   import Timestamp from '@aziontech/webkit/timestamp'
   import WebkitProvider from '@aziontech/webkit/webkit-provider'
@@ -12,24 +12,24 @@
     :now="NOW"
     time-zone="UTC"
   >
-    <KeyValuePairs aria-label="Request details">
-      <KeyValuePairs.Item label="Request">
+    <KeyValueList aria-label="Request details">
+      <KeyValueList.Item label="Request">
         <StatusCode
           :code="503"
           method="POST"
         />
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Path">/api/orders</KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Started">
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Path">/api/orders</KeyValueList.Item>
+      <KeyValueList.Item label="Started">
         <Timestamp :value="1794657871204000" />
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Received">
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Received">
         <Timestamp
           value="2026-11-14T12:04:31.204Z"
           format="relative"
         />
-      </KeyValuePairs.Item>
-      <KeyValuePairs.Item label="Host">app.example.com</KeyValuePairs.Item>
-    </KeyValuePairs>
+      </KeyValueList.Item>
+      <KeyValueList.Item label="Host">app.example.com</KeyValueList.Item>
+    </KeyValueList>
   </WebkitProvider>
 </template>

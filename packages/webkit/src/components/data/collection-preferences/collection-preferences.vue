@@ -20,7 +20,7 @@
   import Drawer from '../../overlay/drawer/drawer.vue'
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
-  import PanelContent from '../../overlay/panel/panel-content.vue'
+  import PanelBody from '../../overlay/panel/panel-body.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
   import { TableInjectionKey } from '../table/injection-key'
@@ -294,7 +294,7 @@
         <PanelHeader class="w-full">
           <component :is="Title">{{ heading }}</component>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div
             :data-testid="`${testId}__sections`"
             class="@container/preferences flex flex-col gap-(--spacing-lg)"
@@ -449,7 +449,7 @@
               </div>
             </template>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="@container/preferences-actions w-full">
             <div

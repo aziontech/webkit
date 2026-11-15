@@ -8,7 +8,7 @@
   import Command from '@aziontech/webkit/command-root'
   import CommandSeparator from '@aziontech/webkit/command-separator'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -195,17 +195,17 @@
                     >
                   </div>
                 </template>
-                <DropdownMenuOption
+                <DropdownMenuItem
                   value="settings"
                   label="Account Settings"
                 />
-                <DropdownMenuOption
+                <DropdownMenuItem
                   value="personal-tokens"
                   label="Personal Tokens"
                 />
               </DropdownMenuGroup>
               <DropdownMenuGroup>
-                <DropdownMenuOption
+                <DropdownMenuItem
                   value="logout"
                   label="Log Out"
                 >
@@ -214,7 +214,7 @@
                       class="ai ai-log-out"
                       aria-hidden="true"
                   /></template>
-                </DropdownMenuOption>
+                </DropdownMenuItem>
               </DropdownMenuGroup>
             </DropdownMenu>
           </div>

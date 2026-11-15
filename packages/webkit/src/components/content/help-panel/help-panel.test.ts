@@ -3,14 +3,14 @@ import { describe, expect, it } from 'vitest'
 import { defineComponent } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
-import HelpPanel, { HelpPanelHeader, HelpPanelLinks, HelpPanelSection } from './index'
+import HelpPanel, { HelpPanelFooter, HelpPanelGroup, HelpPanelHeader } from './index'
 
 const Topic = defineComponent({
   components: {
     HelpPanel,
     HelpPanelHeader,
-    HelpPanelSection,
-    HelpPanelLinks
+    HelpPanelGroup,
+    HelpPanelFooter
   },
   props: {
     loading: { type: Boolean, default: false }
@@ -21,16 +21,16 @@ const Topic = defineComponent({
         title="Workloads"
         description="Where your domains meet the applications that answer them."
       />
-      <HelpPanelSection title="What is a workload?">
+      <HelpPanelGroup title="What is a workload?">
         <p>A workload binds one or more domains to an application.</p>
-      </HelpPanelSection>
-      <HelpPanelSection title="Who can edit it?">
+      </HelpPanelGroup>
+      <HelpPanelGroup title="Who can edit it?">
         <p>Anyone with the Workloads permission.</p>
-      </HelpPanelSection>
-      <HelpPanelLinks>
+      </HelpPanelGroup>
+      <HelpPanelFooter>
         <a href="https://www.azion.com/en/documentation/">Workloads documentation</a>
         <a href="https://www.azion.com/en/documentation/">Domains and certificates</a>
-      </HelpPanelLinks>
+      </HelpPanelFooter>
     </HelpPanel>
   `
 })
@@ -39,8 +39,8 @@ describe('HelpPanel', () => {
   describe('compound API', () => {
     it('attaches every part to the root for dot-notation', () => {
       expect(HelpPanel.Header).toBe(HelpPanelHeader)
-      expect(HelpPanel.Section).toBe(HelpPanelSection)
-      expect(HelpPanel.Links).toBe(HelpPanelLinks)
+      expect(HelpPanel.Group).toBe(HelpPanelGroup)
+      expect(HelpPanel.Footer).toBe(HelpPanelFooter)
     })
 
     it('no longer carries a tutorial mode; TutorialPanel owns tutorials', () => {
@@ -106,20 +106,20 @@ describe('HelpPanel', () => {
       const view = render(Topic)
       expect(view.getByRole('region', { name: 'What is a workload?' })).toBeTruthy()
       expect(view.getByRole('region', { name: 'Who can edit it?' })).toBeTruthy()
-      expect(view.getAllByTestId('content-help-panel-section')).toHaveLength(2)
+      expect(view.getAllByTestId('content-help-panel-group')).toHaveLength(2)
     })
 
     it('renders the links under a Learn more heading', () => {
       const view = render(Topic)
       const links = view.getByRole('region', { name: 'Learn more' })
-      expect(links.getAttribute('data-testid')).toBe('content-help-panel-links')
+      expect(links.getAttribute('data-testid')).toBe('content-help-panel-footer')
       expect(links.querySelectorAll('a')).toHaveLength(2)
     })
 
     it('renders no section heading when the title is empty', () => {
-      const view = render(HelpPanelSection, { slots: { default: '<p>Body</p>' } })
+      const view = render(HelpPanelGroup, { slots: { default: '<p>Body</p>' } })
       expect(view.queryByRole('heading')).toBeNull()
-      expect(view.getByTestId('content-help-panel-section').hasAttribute('aria-labelledby')).toBe(
+      expect(view.getByTestId('content-help-panel-group').hasAttribute('aria-labelledby')).toBe(
         false
       )
     })

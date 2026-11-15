@@ -30,7 +30,7 @@ A data-driven `DataTable :bordered="false"` given `:data`, `:columns` and `row-k
 
 One chip per row, following `skills/webkit-tables`: Environment is a `Tag` with `severity="neutral"`, `size="medium"`, `rounded` and the layers glyph. Policy is plain text and Certificate is the verified glyph beside plain text, so the row keeps one chip. A record without an environment leaves its Environment and Policy cells empty instead of printing a placeholder.
 
-### D. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuOption` (required)
+### D. Row actions — `Table.CellActions`, `DropdownMenuGroup`, `DropdownMenuItem` (required)
 
 `Table.CellActions`, named after the record ("Actions for shop.example.com"), opens a menu placed `bottom-end`: Edit in the first group, Delete alone in the last. A record the platform generated (the default domain) has no menu, because it cannot be edited or deleted.
 

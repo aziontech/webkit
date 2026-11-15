@@ -181,7 +181,7 @@
             class="-ms-(--spacing-xs) min-w-0 flex-1"
           >
             <Tabs.List>
-              <Tabs.Item
+              <Tabs.Trigger
                 v-for="tab in TABS"
                 :key="tab.value"
                 :value="tab.value"

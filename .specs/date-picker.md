@@ -3,12 +3,12 @@ name: date-picker
 category: inputs
 structure: composition
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5087-17336
   node_id: 5087:17336
-checksum: 9dfded9de800d9ccbefdfce6f3c59f1a3526f96924acf69cb37fcc328aebbe83
+checksum: e20097b6e36e88510e4a720da632d356c8171d1baf858f430f5fe802632caca5
 created: 2026-06-25
 last_updated: 2026-11-15
 ---
@@ -90,7 +90,7 @@ Tree-shaking alternative — the standalone root + the sub-component from its ow
 
 - `date-picker-clear/date-picker-clear.vue` — context-aware button that clears the draft selection through injected context; disabled when there is no selection. Placed in the `footer` slot.
 
-Internal parts, not exported, shared with `date-range-picker`: `date-picker-grid/` (the month grid), `date-picker-fields/` (the date and time fields, a Start/End pair for a range), `date-picker-timezone/` (the time zone selector `date-range-picker` shows).
+Internal parts, not exported, shared with `date-range-picker`, in `parts/`: `parts/date-picker-grid.vue` (the month grid), `parts/date-picker-fields.vue` (the date and time fields, a Start/End pair for a range), `parts/date-picker-timezone.vue` (the time zone selector `date-range-picker` shows). A private part lives in `parts/`, so it is not mistaken for a public `date-picker-<part>`.
 
 ## Props
 

@@ -6,7 +6,7 @@
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import IconButton from '@aziontech/webkit/icon-button'
   import Item from '@aziontech/webkit/item'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Tag from '@aziontech/webkit/tag'
@@ -149,7 +149,7 @@
         </div>
       </PanelHeader>
 
-      <PanelContent>
+      <PanelBody>
         <div class="flex flex-col gap-(--spacing-sm)">
           <Item
             v-for="step in steps"
@@ -205,7 +205,7 @@
             </Item.Footer>
           </Item>
         </div>
-      </PanelContent>
+      </PanelBody>
 
       <PanelFooter>
         <div class="flex w-full items-center justify-end gap-(--spacing-sm)">

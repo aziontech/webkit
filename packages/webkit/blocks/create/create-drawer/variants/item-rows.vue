@@ -8,7 +8,7 @@
   import Input from '@aziontech/webkit/input'
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
@@ -136,7 +136,7 @@
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col gap-(--layout-section-gap) border-0 p-0"
               :disabled="submitting"
@@ -226,13 +226,13 @@
                                 "
                               />
                               <Select.Content>
-                                <Select.Option
+                                <Select.Item
                                   v-for="option in protocols"
                                   :key="option.value"
                                   :value="option.value"
                                 >
                                   {{ option.label }}
-                                </Select.Option>
+                                </Select.Item>
                               </Select.Content>
                             </Select>
                             <HelperText
@@ -261,13 +261,13 @@
                               aria-label="Region"
                             />
                             <Select.Content>
-                              <Select.Option
+                              <Select.Item
                                 v-for="option in regions"
                                 :key="option.value"
                                 :value="option.value"
                               >
                                 {{ option.label }}
-                              </Select.Option>
+                              </Select.Item>
                             </Select.Content>
                           </Select>
                         </div>
@@ -309,7 +309,7 @@
                 </Card>
               </section>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div

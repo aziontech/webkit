@@ -11,9 +11,9 @@
   import FlowAnchor from '../../../components/data/flow/flow-anchor/flow-anchor.vue'
   import FlowNode from '../../../components/data/flow/flow-node/flow-node.vue'
   import StatusIndicator from '../../../components/feedback/status-indicator/status-indicator.vue'
-  import TabsItem from '../../../components/navigation/tabs/tabs-item.vue'
+  import TabsRoot from '../../../components/navigation/tabs/tabs.vue'
   import TabsList from '../../../components/navigation/tabs/tabs-list.vue'
-  import TabsRoot from '../../../components/navigation/tabs/tabs-root.vue'
+  import TabsTrigger from '../../../components/navigation/tabs/tabs-trigger.vue'
   import {
     CONSOLE_TRACE_FUNCTION,
     CONSOLE_TRACE_LOGS,
@@ -104,7 +104,7 @@
       <div class="shrink-0 border-b border-(--border-default) px-(--spacing-md)">
         <TabsRoot :model-value="step.value">
           <TabsList>
-            <TabsItem
+            <TabsTrigger
               v-for="entry in CONSOLE_TRACE_STEPS"
               :key="entry.value"
               :value="entry.value"

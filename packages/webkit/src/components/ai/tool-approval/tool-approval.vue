@@ -53,7 +53,7 @@
   }>()
 
   const slots = defineSlots<{
-    /** What exactly will run: a `CodeBlock` with the command, or `KeyValuePairs` with the parameters. */
+    /** What exactly will run: a `CodeBlock` with the command, or `KeyValueList` with the parameters. */
     default?(): unknown
   }>()
 

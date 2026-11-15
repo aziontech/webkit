@@ -3,9 +3,9 @@ name: feedback-reason-dialog
 category: ai
 structure: monolithic
 status: implemented
-spec_version: 4
+spec_version: 5
 template: 2
-checksum: 0ec19fed5004d65087d4c1a32a4e6fe78657f7aaf89fa5f5335edfbe225bb6b3
+checksum: a3c523f2cb3a7323af72fcea3b1317da658cd593b19f8ae4b464878c4af97feb
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -140,7 +140,7 @@ _none_
 
 ## Responsive
 
-- Container queries: the dialog body is the `@container/panel` from `PanelContent`.
+- Container queries: the dialog body is the `@container/panel` from `PanelBody`.
 - Narrow: the dialog is the `small` size and becomes full width under `sm`; the footer buttons stretch (from `PanelFooter`).
 - Touch: radios and buttons keep their 40 px targets.
 - Reflow: no horizontal scroll at 320 px.

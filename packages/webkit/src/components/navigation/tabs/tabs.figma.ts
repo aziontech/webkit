@@ -1,5 +1,5 @@
 // url=https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
-// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/tabs/tabs-root.vue
+// source=https://github.com/aziontech/webkit/blob/main/packages/webkit/src/components/navigation/tabs/tabs.vue
 // component=Tabs
 import figma from 'figma'
 
@@ -23,20 +23,20 @@ const items = tabs
   .map(
     (tab) =>
       `
-    <Tabs.Item value="${tab.value}" label="${tab.label}"${tab.closable ? ' closable' : ''} />`
+    <Tabs.Trigger value="${tab.value}" label="${tab.label}"${tab.closable ? ' closable' : ''} />`
   )
   .join('')
 
 export default {
-  example: figma.code`<Tabs.Root default-value="${active}">
+  example: figma.code`<Tabs default-value="${active}">
   <Tabs.List>${items}
   </Tabs.List>
   <div class="relative isolate w-full">
-    <Tabs.Panel value="${active}">
+    <Tabs.Content value="${active}">
       ${panel}
-    </Tabs.Panel>
+    </Tabs.Content>
   </div>
-</Tabs.Root>`,
+</Tabs>`,
   imports: ["import Tabs from '@aziontech/webkit/tabs'"],
   id: 'tabs',
   metadata: { nestable: true }

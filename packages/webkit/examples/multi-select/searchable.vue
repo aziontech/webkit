@@ -24,11 +24,11 @@
     >
       <MultiSelect.Trigger />
       <MultiSelect.Content>
-        <MultiSelect.Option
+        <MultiSelect.Item
           v-for="label in labels"
           :key="label"
           :value="label"
-          >{{ label }}</MultiSelect.Option
+          >{{ label }}</MultiSelect.Item
         >
       </MultiSelect.Content>
     </MultiSelect>

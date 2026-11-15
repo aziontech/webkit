@@ -5,7 +5,7 @@ import { nextTick } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
 import ClosingCallToAction from './closing-call-to-action.vue'
-import ClosingCallToActionAudiences from './closing-call-to-action-audiences/closing-call-to-action-audiences.vue'
+import ClosingCallToActionAudiences from './parts/closing-call-to-action-audiences.vue'
 
 const TESTID = 'sections-closing-call-to-action'
 const TITLE = 'Build once.'

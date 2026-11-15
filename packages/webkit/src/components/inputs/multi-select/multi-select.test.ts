@@ -8,7 +8,7 @@ import { expectNoA11yViolations } from '../../../test/axe'
 import MultiSelect, {
   MultiSelectContent,
   MultiSelectGroup,
-  MultiSelectOption,
+  MultiSelectItem,
   MultiSelectTrigger
 } from './index'
 
@@ -69,8 +69,8 @@ const Harness = defineComponent({
                 { label: 'Group A' },
                 {
                   default: () => [
-                    h(MultiSelectOption, { value: 'opt-1' }, { default: () => 'Option 1' }),
-                    h(MultiSelectOption, { value: 'opt-2' }, { default: () => 'Option 2' })
+                    h(MultiSelectItem, { value: 'opt-1' }, { default: () => 'Option 1' }),
+                    h(MultiSelectItem, { value: 'opt-2' }, { default: () => 'Option 2' })
                   ]
                 }
               ),
@@ -80,7 +80,7 @@ const Harness = defineComponent({
                 {
                   default: () => [
                     h(
-                      MultiSelectOption,
+                      MultiSelectItem,
                       { value: 'opt-3', disabled: true },
                       { default: () => 'Option 3 (disabled)' }
                     )
@@ -110,7 +110,7 @@ describe('MultiSelect', () => {
                 h(MultiSelectContent, null, {
                   default: () =>
                     Array.from({ length: 1000 }, (_, i) =>
-                      h(MultiSelectOption, { key: i, value: i }, { default: () => `Option ${i}` })
+                      h(MultiSelectItem, { key: i, value: i }, { default: () => `Option ${i}` })
                     )
                 })
               ]
@@ -132,7 +132,7 @@ describe('MultiSelect', () => {
       expect(MultiSelect.Trigger).toBe(MultiSelectTrigger)
       expect(MultiSelect.Content).toBe(MultiSelectContent)
       expect(MultiSelect.Group).toBe(MultiSelectGroup)
-      expect(MultiSelect.Option).toBe(MultiSelectOption)
+      expect(MultiSelect.Item).toBe(MultiSelectItem)
     })
 
     // A transform on an ancestor of the Teleport target becomes the fixed panel's
@@ -199,7 +199,7 @@ describe('MultiSelect', () => {
                     h(MultiSelectContent, null, {
                       default: () =>
                         Array.from({ length: 200 }, (_, i) =>
-                          h(MultiSelectOption, { key: i, value: `o-${i}` }, () => `Option ${i}`)
+                          h(MultiSelectItem, { key: i, value: `o-${i}` }, () => `Option ${i}`)
                         )
                     })
                   ]
@@ -326,7 +326,7 @@ describe('MultiSelect', () => {
       expect(options[0].getAttribute('aria-selected')).toBe('true')
       expect(options[0].getAttribute('data-selected')).toBe('true')
       expect(options[1].getAttribute('aria-selected')).toBe('false')
-      expect(panel.querySelector('[data-testid="multi-select-option__indicator"]')).not.toBeNull()
+      expect(panel.querySelector('[data-testid="multi-select-item__indicator"]')).not.toBeNull()
 
       cleanupTeleported()
     })
@@ -522,8 +522,8 @@ describe('MultiSelect', () => {
             h(MultiSelect, { open: open.value, modelValue: [] }, () => [
               h(MultiSelectTrigger, { 'aria-label': 'Pick' }),
               h(MultiSelectContent, null, () => [
-                h(MultiSelectOption, { value: 'a', icon: 'ai ai-heart' }, () => 'With icon'),
-                h(MultiSelectOption, { value: 'b' }, () => 'Without icon')
+                h(MultiSelectItem, { value: 'a', icon: 'ai ai-heart' }, () => 'With icon'),
+                h(MultiSelectItem, { value: 'b' }, () => 'Without icon')
               ])
             ])
         }
@@ -533,7 +533,7 @@ describe('MultiSelect', () => {
       await nextTick()
 
       const boxes = Array.from(
-        document.body.querySelectorAll('[data-testid="multi-select-option__leading"]')
+        document.body.querySelectorAll('[data-testid="multi-select-item__leading"]')
       ) as HTMLElement[]
       expect(boxes).toHaveLength(2)
 
@@ -562,10 +562,10 @@ describe('MultiSelect', () => {
               h(MultiSelectTrigger, { 'aria-label': 'Pick' }),
               h(MultiSelectContent, null, () => [
                 h(MultiSelectGroup, { label: 'A' }, () => [
-                  h(MultiSelectOption, { value: 'a' }, () => 'A1')
+                  h(MultiSelectItem, { value: 'a' }, () => 'A1')
                 ]),
                 h(MultiSelectGroup, { label: 'B' }, () => [
-                  h(MultiSelectOption, { value: 'b' }, () => 'B1')
+                  h(MultiSelectItem, { value: 'b' }, () => 'B1')
                 ])
               ])
             ])
@@ -701,8 +701,8 @@ describe('MultiSelect', () => {
     const parts = () => [
       h(MultiSelectTrigger, { 'aria-label': 'Pick' }),
       h(MultiSelectContent, null, () => [
-        h(MultiSelectOption, { value: 'a' }, () => 'Alpha'),
-        h(MultiSelectOption, { value: 'b' }, () => 'Beta')
+        h(MultiSelectItem, { value: 'a' }, () => 'Alpha'),
+        h(MultiSelectItem, { value: 'b' }, () => 'Beta')
       ])
     ]
     const options = () => Array.from(document.body.querySelectorAll<HTMLElement>('[role="option"]'))
@@ -764,15 +764,15 @@ describe('MultiSelect', () => {
     it('submits every selected value under its name', () => {
       const { getByTestId } = render(
         defineComponent({
-          components: { MultiSelect, MultiSelectTrigger, MultiSelectContent, MultiSelectOption },
+          components: { MultiSelect, MultiSelectTrigger, MultiSelectContent, MultiSelectItem },
           setup: () => ({ value: ref(['edge', 'storage']) }),
           template: `
           <form data-testid="form">
             <MultiSelect v-model="value" name="products">
               <MultiSelectTrigger aria-label="Products" />
               <MultiSelectContent>
-                <MultiSelectOption value="edge">Edge</MultiSelectOption>
-                <MultiSelectOption value="storage">Storage</MultiSelectOption>
+                <MultiSelectItem value="edge">Edge</MultiSelectItem>
+                <MultiSelectItem value="storage">Storage</MultiSelectItem>
               </MultiSelectContent>
             </MultiSelect>
           </form>
@@ -857,7 +857,7 @@ describe('MultiSelect', () => {
             h(MultiSelectContent, null, {
               default: () =>
                 options.map((o) =>
-                  h(MultiSelectOption, { key: o.value, value: o.value }, () => o.label)
+                  h(MultiSelectItem, { key: o.value, value: o.value }, () => o.label)
                 )
             })
           ]

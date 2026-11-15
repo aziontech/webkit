@@ -418,13 +418,13 @@
                             :aria-label="place.label"
                           />
                           <Select.Content>
-                            <Select.Option
+                            <Select.Item
                               v-for="option in place.options"
                               :key="option.value"
                               :value="option.value"
                             >
                               {{ option.label }}
-                            </Select.Option>
+                            </Select.Item>
                           </Select.Content>
                         </Select>
                       </SettingRow>
@@ -570,13 +570,13 @@
                             aria-label="Font family"
                           />
                           <Select.Content>
-                            <Select.Option
+                            <Select.Item
                               v-for="option in fonts"
                               :key="option.value"
                               :value="option.value"
                             >
                               {{ option.label }}
-                            </Select.Option>
+                            </Select.Item>
                           </Select.Content>
                         </Select>
                       </SettingRow>
@@ -597,13 +597,13 @@
                             aria-label="System appearance"
                           />
                           <Select.Content>
-                            <Select.Option
+                            <Select.Item
                               v-for="option in appearances"
                               :key="option.value"
                               :value="option.value"
                             >
                               {{ option.label }}
-                            </Select.Option>
+                            </Select.Item>
                           </Select.Content>
                         </Select>
                       </SettingRow>

@@ -57,7 +57,7 @@ When the chosen dashboard owns its period (Executive summary, Spend, Project sta
 
 An outlined medium `IconButton` at the end of the row, named Refresh by its `Tooltip` and `aria-label`; it shows `loading` while the body refetches.
 
-### F. Applied period — `FilterMenu.Chips` (required)
+### F. Applied period — `FilterMenu.ChipGroup` (required)
 
 The applied period as a chip under the controls (`Period: Last 24 hours`), bound to the same model as the menu. Removing it returns the dashboard to the default period (Last 24 hours) and the chip leaves. Hidden with the filter.
 

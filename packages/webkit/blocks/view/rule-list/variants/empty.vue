@@ -13,7 +13,7 @@
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
   import PageHeader from '@aziontech/webkit/page-header'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SaveBar from '@aziontech/webkit/save-bar'
@@ -586,7 +586,7 @@
         <PanelHeader class="w-full">
           <DialogTitle>Review changes</DialogTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex min-w-0 flex-col gap-(--spacing-lg)">
             <Alert
               v-if="saveFailed"
@@ -622,7 +622,7 @@
               </ul>
             </section>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
             <div class="w-full md:w-fit">

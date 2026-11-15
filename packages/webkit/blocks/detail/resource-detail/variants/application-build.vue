@@ -18,7 +18,7 @@
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SaveBar from '@aziontech/webkit/save-bar'
@@ -241,7 +241,7 @@
   >
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
           :value="tab.value"
@@ -810,7 +810,7 @@
         <PanelHeader class="w-full">
           <DrawerTitle>Deploy {{ APP.name }}</DrawerTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <DrawerDescription>
               We build a new version of {{ APP.name }} from {{ deploySource }}, then it goes live in
@@ -829,7 +829,7 @@
               </dd>
             </dl>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button

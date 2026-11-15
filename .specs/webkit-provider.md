@@ -3,8 +3,8 @@ name: webkit-provider
 category: utils
 structure: monolithic
 status: implemented
-checksum: 124e200362caed99d6563d50129b682fc34b133af3acbcffd6d8e560d4109d72
-spec_version: 4
+checksum: e3d99a8a34298c9c52644eb402439fba480fc726b766e41438944b947088c7c3
+spec_version: 5
 created: 2026-11-11
 last_updated: 2026-11-15
 ---
@@ -107,7 +107,7 @@ _none_
 
 - `lang` on the root lets screen readers pick the right voice and pronunciation (WCAG 3.1.1 / 3.1.2).
 - `dir` on the root mirrors reading order for right-to-left languages.
-- Overlays that teleport to `body` (Dialog, Drawer, Popover, Tooltip, DropdownMenu, Select, MultiSelect, Toaster, DatePicker, DateRangePicker, PropertyFilter, NavigationMenu.Portal, the doc overlays) read the provider through `usePortalLocale()` (`@aziontech/webkit/use-locale`) and set the same `dir` and `lang` on their teleported root, so they do not fall back to the document's direction and language. A consumer's own `<Teleport>` does the same with `v-bind="usePortalLocale().value"` on its root.
+- Overlays that teleport to `body` (Dialog, Drawer, Popover, Tooltip, DropdownMenu, Select, MultiSelect, Toaster, DatePicker, DateRangePicker, PropertyFilter, NavigationMenu.Viewport, the doc overlays) read the provider through `usePortalLocale()` (`@aziontech/webkit/use-locale`) and set the same `dir` and `lang` on their teleported root, so they do not fall back to the document's direction and language. A consumer's own `<Teleport>` does the same with `v-bind="usePortalLocale().value"` on its root.
 - Every assistive label WebKit ships (close buttons, pagination, sort state, empty states) is read in the provider's language.
 - No focusable element of its own; it adds no role and no landmark.
 

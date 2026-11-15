@@ -27,9 +27,9 @@ An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the servic
 
 `DrawerTitle` reads Deploy, or Build and deployment while a version is being built first. The drawer's own close button sits on the right; no Cancel anywhere.
 
-### C. Sections — `PanelContent`, `SettingsSection` (required)
+### C. Sections — `PanelBody`, `SettingsSection` (required)
 
-`PanelContent` holds one `fieldset` of `SettingsSection` bands, each with a title and a `hint`: Resources, Project, Environment, Projects impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches.
+`PanelBody` holds one `fieldset` of `SettingsSection` bands, each with a title and a `hint`: Resources, Project, Environment, Projects impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches.
 
 ### D. Resources card — `Card`, `Separator`, `Item`, `Tag`, `DropdownMenu`, `Input`, `Avatar`, `Button` (required)
 

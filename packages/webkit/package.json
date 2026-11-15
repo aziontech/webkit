@@ -476,13 +476,13 @@
       "types": "./types/components/content/help-panel/help-panel-header/help-panel-header.vue.d.ts",
       "default": "./src/components/content/help-panel/help-panel-header/help-panel-header.vue"
     },
-    "./help-panel-section": {
-      "types": "./types/components/content/help-panel/help-panel-section/help-panel-section.vue.d.ts",
-      "default": "./src/components/content/help-panel/help-panel-section/help-panel-section.vue"
+    "./help-panel-group": {
+      "types": "./types/components/content/help-panel/help-panel-group/help-panel-group.vue.d.ts",
+      "default": "./src/components/content/help-panel/help-panel-group/help-panel-group.vue"
     },
-    "./help-panel-links": {
-      "types": "./types/components/content/help-panel/help-panel-links/help-panel-links.vue.d.ts",
-      "default": "./src/components/content/help-panel/help-panel-links/help-panel-links.vue"
+    "./help-panel-footer": {
+      "types": "./types/components/content/help-panel/help-panel-footer/help-panel-footer.vue.d.ts",
+      "default": "./src/components/content/help-panel/help-panel-footer/help-panel-footer.vue"
     },
     "./hotspot": {
       "types": "./types/components/content/hotspot/hotspot.vue.d.ts",
@@ -580,9 +580,9 @@
       "types": "./types/components/content/kbd/kbd.vue.d.ts",
       "default": "./src/components/content/kbd/kbd.vue"
     },
-    "./key-value-pairs": {
-      "types": "./types/components/content/key-value-pairs/index.d.ts",
-      "default": "./src/components/content/key-value-pairs/index.ts"
+    "./key-value-list": {
+      "types": "./types/components/content/key-value-list/index.d.ts",
+      "default": "./src/components/content/key-value-list/index.ts"
     },
     "./overflow-count": {
       "types": "./types/components/content/overflow-count/overflow-count.vue.d.ts",
@@ -596,17 +596,17 @@
       "types": "./types/components/content/qr-code/qr-code.vue.d.ts",
       "default": "./src/components/content/qr-code/qr-code.vue"
     },
-    "./key-value-pairs-root": {
-      "types": "./types/components/content/key-value-pairs/key-value-pairs.vue.d.ts",
-      "default": "./src/components/content/key-value-pairs/key-value-pairs.vue"
+    "./key-value-list-root": {
+      "types": "./types/components/content/key-value-list/key-value-list.vue.d.ts",
+      "default": "./src/components/content/key-value-list/key-value-list.vue"
     },
-    "./key-value-pairs-item": {
-      "types": "./types/components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue.d.ts",
-      "default": "./src/components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue"
+    "./key-value-list-item": {
+      "types": "./types/components/content/key-value-list/key-value-list-item/key-value-list-item.vue.d.ts",
+      "default": "./src/components/content/key-value-list/key-value-list-item/key-value-list-item.vue"
     },
-    "./key-value-pairs-group": {
-      "types": "./types/components/content/key-value-pairs/key-value-pairs-group/key-value-pairs-group.vue.d.ts",
-      "default": "./src/components/content/key-value-pairs/key-value-pairs-group/key-value-pairs-group.vue"
+    "./key-value-list-group": {
+      "types": "./types/components/content/key-value-list/key-value-list-group/key-value-list-group.vue.d.ts",
+      "default": "./src/components/content/key-value-list/key-value-list-group/key-value-list-group.vue"
     },
     "./network-map": {
       "types": "./types/components/content/network-map/network-map.vue.d.ts",
@@ -764,9 +764,9 @@
       "types": "./types/components/data/pagination/pagination-button/pagination-button.vue.d.ts",
       "default": "./src/components/data/pagination/pagination-button/pagination-button.vue"
     },
-    "./pagination-info": {
-      "types": "./types/components/data/pagination/pagination-info/pagination-info.vue.d.ts",
-      "default": "./src/components/data/pagination/pagination-info/pagination-info.vue"
+    "./pagination-description": {
+      "types": "./types/components/data/pagination/pagination-description/pagination-description.vue.d.ts",
+      "default": "./src/components/data/pagination/pagination-description/pagination-description.vue"
     },
     "./pagination-page-size": {
       "types": "./types/components/data/pagination/pagination-page-size/pagination-page-size.vue.d.ts",
@@ -937,8 +937,8 @@
       "default": "./src/components/feedback/toast/index.ts"
     },
     "./toast-root": {
-      "types": "./types/components/feedback/toast/toaster.vue.d.ts",
-      "default": "./src/components/feedback/toast/toaster.vue"
+      "types": "./types/components/feedback/toast/toast.vue.d.ts",
+      "default": "./src/components/feedback/toast/toast.vue"
     },
     "./toast-item": {
       "types": "./types/components/feedback/toast/toast-item/toast-item.vue.d.ts",
@@ -1096,13 +1096,17 @@
       "types": "./types/components/data/filter-menu/filter-menu.vue.d.ts",
       "default": "./src/components/data/filter-menu/filter-menu.vue"
     },
-    "./filter-menu-chips": {
-      "types": "./types/components/data/filter-menu/filter-menu-chips/filter-menu-chips.vue.d.ts",
-      "default": "./src/components/data/filter-menu/filter-menu-chips/filter-menu-chips.vue"
+    "./filter-menu-chip-group": {
+      "types": "./types/components/data/filter-menu/filter-menu-chip-group/filter-menu-chip-group.vue.d.ts",
+      "default": "./src/components/data/filter-menu/filter-menu-chip-group/filter-menu-chip-group.vue"
     },
     "./password-requirements": {
       "types": "./types/components/inputs/password-requirements/index.d.ts",
       "default": "./src/components/inputs/password-requirements/index.ts"
+    },
+    "./password-requirements-root": {
+      "types": "./types/components/inputs/password-requirements/password-requirements.vue.d.ts",
+      "default": "./src/components/inputs/password-requirements/password-requirements.vue"
     },
     "./radio-group": {
       "types": "./types/components/inputs/radio-group/index.d.ts",
@@ -1168,9 +1172,9 @@
       "types": "./types/components/navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue.d.ts",
       "default": "./src/components/navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue"
     },
-    "./dropdown-menu-option": {
-      "types": "./types/components/navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue.d.ts",
-      "default": "./src/components/navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue"
+    "./dropdown-menu-item": {
+      "types": "./types/components/navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue.d.ts",
+      "default": "./src/components/navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue"
     },
     "./dropdown-menu-sub": {
       "types": "./types/components/navigation/dropdown-menu/dropdown-menu-sub/dropdown-menu-sub.vue.d.ts",
@@ -1204,9 +1208,9 @@
       "types": "./types/components/inputs/multi-select/multi-select-group/multi-select-group.vue.d.ts",
       "default": "./src/components/inputs/multi-select/multi-select-group/multi-select-group.vue"
     },
-    "./multi-select-option": {
-      "types": "./types/components/inputs/multi-select/multi-select-option/multi-select-option.vue.d.ts",
-      "default": "./src/components/inputs/multi-select/multi-select-option/multi-select-option.vue"
+    "./multi-select-item": {
+      "types": "./types/components/inputs/multi-select/multi-select-item/multi-select-item.vue.d.ts",
+      "default": "./src/components/inputs/multi-select/multi-select-item/multi-select-item.vue"
     },
     "./select": {
       "types": "./types/components/inputs/select/index.d.ts",
@@ -1228,9 +1232,9 @@
       "types": "./types/components/inputs/select/select-group/select-group.vue.d.ts",
       "default": "./src/components/inputs/select/select-group/select-group.vue"
     },
-    "./select-option": {
-      "types": "./types/components/inputs/select/select-option/select-option.vue.d.ts",
-      "default": "./src/components/inputs/select/select-option/select-option.vue"
+    "./select-item": {
+      "types": "./types/components/inputs/select/select-item/select-item.vue.d.ts",
+      "default": "./src/components/inputs/select/select-item/select-item.vue"
     },
     "./separator": {
       "types": "./types/components/layout/separator/separator.vue.d.ts",
@@ -1272,9 +1276,9 @@
       "types": "./types/components/layout/console-layout/console-layout.vue.d.ts",
       "default": "./src/components/layout/console-layout/console-layout.vue"
     },
-    "./console-layout-breadcrumbs": {
-      "types": "./types/components/layout/console-layout/console-layout-breadcrumbs/console-layout-breadcrumbs.vue.d.ts",
-      "default": "./src/components/layout/console-layout/console-layout-breadcrumbs/console-layout-breadcrumbs.vue"
+    "./console-layout-breadcrumb": {
+      "types": "./types/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue.d.ts",
+      "default": "./src/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue"
     },
     "./use-console-layout": {
       "types": "./types/components/layout/console-layout/composables/use-console-layout.d.ts",
@@ -1521,8 +1525,20 @@
       "default": "./src/components/navigation/tabs/index.ts"
     },
     "./tabs-root": {
-      "types": "./types/components/navigation/tabs/tabs-root.vue.d.ts",
-      "default": "./src/components/navigation/tabs/tabs-root.vue"
+      "types": "./types/components/navigation/tabs/tabs.vue.d.ts",
+      "default": "./src/components/navigation/tabs/tabs.vue"
+    },
+    "./tabs-list": {
+      "types": "./types/components/navigation/tabs/tabs-list.vue.d.ts",
+      "default": "./src/components/navigation/tabs/tabs-list.vue"
+    },
+    "./tabs-trigger": {
+      "types": "./types/components/navigation/tabs/tabs-trigger.vue.d.ts",
+      "default": "./src/components/navigation/tabs/tabs-trigger.vue"
+    },
+    "./tabs-content": {
+      "types": "./types/components/navigation/tabs/tabs-content.vue.d.ts",
+      "default": "./src/components/navigation/tabs/tabs-content.vue"
     },
     "./page-tabs": {
       "types": "./types/components/navigation/page-tabs/page-tabs.vue.d.ts",
@@ -1557,8 +1573,32 @@
       "default": "./src/components/navigation/navigation-menu/index.ts"
     },
     "./navigation-menu-root": {
-      "types": "./types/components/navigation/navigation-menu/navigation-menu-root.vue.d.ts",
-      "default": "./src/components/navigation/navigation-menu/navigation-menu-root.vue"
+      "types": "./types/components/navigation/navigation-menu/navigation-menu.vue.d.ts",
+      "default": "./src/components/navigation/navigation-menu/navigation-menu.vue"
+    },
+    "./navigation-menu-list": {
+      "types": "./types/components/navigation/navigation-menu/navigation-menu-list.vue.d.ts",
+      "default": "./src/components/navigation/navigation-menu/navigation-menu-list.vue"
+    },
+    "./navigation-menu-item": {
+      "types": "./types/components/navigation/navigation-menu/navigation-menu-item.vue.d.ts",
+      "default": "./src/components/navigation/navigation-menu/navigation-menu-item.vue"
+    },
+    "./navigation-menu-trigger": {
+      "types": "./types/components/navigation/navigation-menu/navigation-menu-trigger.vue.d.ts",
+      "default": "./src/components/navigation/navigation-menu/navigation-menu-trigger.vue"
+    },
+    "./navigation-menu-content": {
+      "types": "./types/components/navigation/navigation-menu/navigation-menu-content.vue.d.ts",
+      "default": "./src/components/navigation/navigation-menu/navigation-menu-content.vue"
+    },
+    "./navigation-menu-link": {
+      "types": "./types/components/navigation/navigation-menu/navigation-menu-link.vue.d.ts",
+      "default": "./src/components/navigation/navigation-menu/navigation-menu-link.vue"
+    },
+    "./navigation-menu-viewport": {
+      "types": "./types/components/navigation/navigation-menu/navigation-menu-viewport.vue.d.ts",
+      "default": "./src/components/navigation/navigation-menu/navigation-menu-viewport.vue"
     },
     "./tooltip": {
       "types": "./types/components/overlay/tooltip/tooltip.vue.d.ts",
@@ -1628,6 +1668,18 @@
       "types": "./types/components/overlay/dialog/dialog-trigger.vue.d.ts",
       "default": "./src/components/overlay/dialog/dialog-trigger.vue"
     },
+    "./dialog-header": {
+      "types": "./types/components/overlay/panel/panel-header.vue.d.ts",
+      "default": "./src/components/overlay/panel/panel-header.vue"
+    },
+    "./dialog-body": {
+      "types": "./types/components/overlay/panel/panel-body.vue.d.ts",
+      "default": "./src/components/overlay/panel/panel-body.vue"
+    },
+    "./dialog-footer": {
+      "types": "./types/components/overlay/panel/panel-footer.vue.d.ts",
+      "default": "./src/components/overlay/panel/panel-footer.vue"
+    },
     "./confirm-dialog": {
       "types": "./types/components/overlay/confirm-dialog/confirm-dialog.vue.d.ts",
       "default": "./src/components/overlay/confirm-dialog/confirm-dialog.vue"
@@ -1660,6 +1712,18 @@
       "types": "./types/components/overlay/drawer/drawer-trigger.vue.d.ts",
       "default": "./src/components/overlay/drawer/drawer-trigger.vue"
     },
+    "./drawer-header": {
+      "types": "./types/components/overlay/panel/panel-header.vue.d.ts",
+      "default": "./src/components/overlay/panel/panel-header.vue"
+    },
+    "./drawer-body": {
+      "types": "./types/components/overlay/panel/panel-body.vue.d.ts",
+      "default": "./src/components/overlay/panel/panel-body.vue"
+    },
+    "./drawer-footer": {
+      "types": "./types/components/overlay/panel/panel-footer.vue.d.ts",
+      "default": "./src/components/overlay/panel/panel-footer.vue"
+    },
     "./panel": {
       "types": "./types/components/overlay/panel/index.d.ts",
       "default": "./src/components/overlay/panel/index.ts"
@@ -1668,9 +1732,9 @@
       "types": "./types/components/overlay/panel/panel.vue.d.ts",
       "default": "./src/components/overlay/panel/panel.vue"
     },
-    "./panel-content": {
-      "types": "./types/components/overlay/panel/panel-content.vue.d.ts",
-      "default": "./src/components/overlay/panel/panel-content.vue"
+    "./panel-body": {
+      "types": "./types/components/overlay/panel/panel-body.vue.d.ts",
+      "default": "./src/components/overlay/panel/panel-body.vue"
     },
     "./panel-footer": {
       "types": "./types/components/overlay/panel/panel-footer.vue.d.ts",
@@ -2720,11 +2784,11 @@
       "help-panel-header": [
         "./types/components/content/help-panel/help-panel-header/help-panel-header.vue.d.ts"
       ],
-      "help-panel-section": [
-        "./types/components/content/help-panel/help-panel-section/help-panel-section.vue.d.ts"
+      "help-panel-group": [
+        "./types/components/content/help-panel/help-panel-group/help-panel-group.vue.d.ts"
       ],
-      "help-panel-links": [
-        "./types/components/content/help-panel/help-panel-links/help-panel-links.vue.d.ts"
+      "help-panel-footer": [
+        "./types/components/content/help-panel/help-panel-footer/help-panel-footer.vue.d.ts"
       ],
       "hotspot": [
         "./types/components/content/hotspot/hotspot.vue.d.ts"
@@ -2798,8 +2862,8 @@
       "kbd": [
         "./types/components/content/kbd/kbd.vue.d.ts"
       ],
-      "key-value-pairs": [
-        "./types/components/content/key-value-pairs/index.d.ts"
+      "key-value-list": [
+        "./types/components/content/key-value-list/index.d.ts"
       ],
       "overflow-count": [
         "./types/components/content/overflow-count/overflow-count.vue.d.ts"
@@ -2810,14 +2874,14 @@
       "qr-code": [
         "./types/components/content/qr-code/qr-code.vue.d.ts"
       ],
-      "key-value-pairs-root": [
-        "./types/components/content/key-value-pairs/key-value-pairs.vue.d.ts"
+      "key-value-list-root": [
+        "./types/components/content/key-value-list/key-value-list.vue.d.ts"
       ],
-      "key-value-pairs-item": [
-        "./types/components/content/key-value-pairs/key-value-pairs-item/key-value-pairs-item.vue.d.ts"
+      "key-value-list-item": [
+        "./types/components/content/key-value-list/key-value-list-item/key-value-list-item.vue.d.ts"
       ],
-      "key-value-pairs-group": [
-        "./types/components/content/key-value-pairs/key-value-pairs-group/key-value-pairs-group.vue.d.ts"
+      "key-value-list-group": [
+        "./types/components/content/key-value-list/key-value-list-group/key-value-list-group.vue.d.ts"
       ],
       "network-map": [
         "./types/components/content/network-map/network-map.vue.d.ts"
@@ -2936,8 +3000,8 @@
       "pagination-button": [
         "./types/components/data/pagination/pagination-button/pagination-button.vue.d.ts"
       ],
-      "pagination-info": [
-        "./types/components/data/pagination/pagination-info/pagination-info.vue.d.ts"
+      "pagination-description": [
+        "./types/components/data/pagination/pagination-description/pagination-description.vue.d.ts"
       ],
       "pagination-page-size": [
         "./types/components/data/pagination/pagination-page-size/pagination-page-size.vue.d.ts"
@@ -3066,7 +3130,7 @@
         "./types/components/feedback/toast/index.d.ts"
       ],
       "toast-root": [
-        "./types/components/feedback/toast/toaster.vue.d.ts"
+        "./types/components/feedback/toast/toast.vue.d.ts"
       ],
       "toast-item": [
         "./types/components/feedback/toast/toast-item/toast-item.vue.d.ts"
@@ -3185,11 +3249,14 @@
       "filter-menu-root": [
         "./types/components/data/filter-menu/filter-menu.vue.d.ts"
       ],
-      "filter-menu-chips": [
-        "./types/components/data/filter-menu/filter-menu-chips/filter-menu-chips.vue.d.ts"
+      "filter-menu-chip-group": [
+        "./types/components/data/filter-menu/filter-menu-chip-group/filter-menu-chip-group.vue.d.ts"
       ],
       "password-requirements": [
         "./types/components/inputs/password-requirements/index.d.ts"
+      ],
+      "password-requirements-root": [
+        "./types/components/inputs/password-requirements/password-requirements.vue.d.ts"
       ],
       "radio-group": [
         "./types/components/inputs/radio-group/index.d.ts"
@@ -3239,8 +3306,8 @@
       "dropdown-menu-group": [
         "./types/components/navigation/dropdown-menu/dropdown-menu-group/dropdown-menu-group.vue.d.ts"
       ],
-      "dropdown-menu-option": [
-        "./types/components/navigation/dropdown-menu/dropdown-menu-option/dropdown-menu-option.vue.d.ts"
+      "dropdown-menu-item": [
+        "./types/components/navigation/dropdown-menu/dropdown-menu-item/dropdown-menu-item.vue.d.ts"
       ],
       "dropdown-menu-sub": [
         "./types/components/navigation/dropdown-menu/dropdown-menu-sub/dropdown-menu-sub.vue.d.ts"
@@ -3266,8 +3333,8 @@
       "multi-select-group": [
         "./types/components/inputs/multi-select/multi-select-group/multi-select-group.vue.d.ts"
       ],
-      "multi-select-option": [
-        "./types/components/inputs/multi-select/multi-select-option/multi-select-option.vue.d.ts"
+      "multi-select-item": [
+        "./types/components/inputs/multi-select/multi-select-item/multi-select-item.vue.d.ts"
       ],
       "select": [
         "./types/components/inputs/select/index.d.ts"
@@ -3284,8 +3351,8 @@
       "select-group": [
         "./types/components/inputs/select/select-group/select-group.vue.d.ts"
       ],
-      "select-option": [
-        "./types/components/inputs/select/select-option/select-option.vue.d.ts"
+      "select-item": [
+        "./types/components/inputs/select/select-item/select-item.vue.d.ts"
       ],
       "separator": [
         "./types/components/layout/separator/separator.vue.d.ts"
@@ -3317,8 +3384,8 @@
       "console-layout-root": [
         "./types/components/layout/console-layout/console-layout.vue.d.ts"
       ],
-      "console-layout-breadcrumbs": [
-        "./types/components/layout/console-layout/console-layout-breadcrumbs/console-layout-breadcrumbs.vue.d.ts"
+      "console-layout-breadcrumb": [
+        "./types/components/layout/console-layout/console-layout-breadcrumb/console-layout-breadcrumb.vue.d.ts"
       ],
       "use-console-layout": [
         "./types/components/layout/console-layout/composables/use-console-layout.d.ts"
@@ -3504,7 +3571,16 @@
         "./types/components/navigation/tabs/index.d.ts"
       ],
       "tabs-root": [
-        "./types/components/navigation/tabs/tabs-root.vue.d.ts"
+        "./types/components/navigation/tabs/tabs.vue.d.ts"
+      ],
+      "tabs-list": [
+        "./types/components/navigation/tabs/tabs-list.vue.d.ts"
+      ],
+      "tabs-trigger": [
+        "./types/components/navigation/tabs/tabs-trigger.vue.d.ts"
+      ],
+      "tabs-content": [
+        "./types/components/navigation/tabs/tabs-content.vue.d.ts"
       ],
       "page-tabs": [
         "./types/components/navigation/page-tabs/page-tabs.vue.d.ts"
@@ -3531,7 +3607,25 @@
         "./types/components/navigation/navigation-menu/index.d.ts"
       ],
       "navigation-menu-root": [
-        "./types/components/navigation/navigation-menu/navigation-menu-root.vue.d.ts"
+        "./types/components/navigation/navigation-menu/navigation-menu.vue.d.ts"
+      ],
+      "navigation-menu-list": [
+        "./types/components/navigation/navigation-menu/navigation-menu-list.vue.d.ts"
+      ],
+      "navigation-menu-item": [
+        "./types/components/navigation/navigation-menu/navigation-menu-item.vue.d.ts"
+      ],
+      "navigation-menu-trigger": [
+        "./types/components/navigation/navigation-menu/navigation-menu-trigger.vue.d.ts"
+      ],
+      "navigation-menu-content": [
+        "./types/components/navigation/navigation-menu/navigation-menu-content.vue.d.ts"
+      ],
+      "navigation-menu-link": [
+        "./types/components/navigation/navigation-menu/navigation-menu-link.vue.d.ts"
+      ],
+      "navigation-menu-viewport": [
+        "./types/components/navigation/navigation-menu/navigation-menu-viewport.vue.d.ts"
       ],
       "tooltip": [
         "./types/components/overlay/tooltip/tooltip.vue.d.ts"
@@ -3584,6 +3678,15 @@
       "dialog-trigger": [
         "./types/components/overlay/dialog/dialog-trigger.vue.d.ts"
       ],
+      "dialog-header": [
+        "./types/components/overlay/panel/panel-header.vue.d.ts"
+      ],
+      "dialog-body": [
+        "./types/components/overlay/panel/panel-body.vue.d.ts"
+      ],
+      "dialog-footer": [
+        "./types/components/overlay/panel/panel-footer.vue.d.ts"
+      ],
       "confirm-dialog": [
         "./types/components/overlay/confirm-dialog/confirm-dialog.vue.d.ts"
       ],
@@ -3608,14 +3711,23 @@
       "drawer-trigger": [
         "./types/components/overlay/drawer/drawer-trigger.vue.d.ts"
       ],
+      "drawer-header": [
+        "./types/components/overlay/panel/panel-header.vue.d.ts"
+      ],
+      "drawer-body": [
+        "./types/components/overlay/panel/panel-body.vue.d.ts"
+      ],
+      "drawer-footer": [
+        "./types/components/overlay/panel/panel-footer.vue.d.ts"
+      ],
       "panel": [
         "./types/components/overlay/panel/index.d.ts"
       ],
       "panel-root": [
         "./types/components/overlay/panel/panel.vue.d.ts"
       ],
-      "panel-content": [
-        "./types/components/overlay/panel/panel-content.vue.d.ts"
+      "panel-body": [
+        "./types/components/overlay/panel/panel-body.vue.d.ts"
       ],
       "panel-footer": [
         "./types/components/overlay/panel/panel-footer.vue.d.ts"

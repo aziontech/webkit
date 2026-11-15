@@ -193,8 +193,8 @@ contexts** in Azion products:
   single flush block** (all rows in one container, for shorter or flat settings). Used for Billing,
   Integrations, Account Settings — "define and manage personal account preferences and profile config".
   The read-only cards beside them are components too, never a hand-written `dl` or `ul`: plan
-  facts (Plan Price, Billing Period, Next Invoice) are `KeyValuePairs variant="split"`
-  (`@aziontech/webkit/key-value-pairs`, label at the start, value at the end of each row), and
+  facts (Plan Price, Billing Period, Next Invoice) are `KeyValueList variant="split"`
+  (`@aziontech/webkit/key-value-list`, label at the start, value at the end of each row), and
   the perks of an upgrade card are `FeatureList` (`@aziontech/webkit/feature-list`, a check per
   included feature, `:columns="2"` in a wide card).
 
@@ -268,11 +268,11 @@ link on the left and Save on the right. Canonical pattern:
             >
               <Select.Trigger id="tb-preprod" />
               <Select.Content>
-                <Select.Option
+                <Select.Item
                   v-for="o in options"
                   :key="o.value"
                   :value="o.value"
-                  >{{ o.label }}</Select.Option
+                  >{{ o.label }}</Select.Item
                 >
               </Select.Content>
             </Select>
@@ -286,11 +286,11 @@ link on the left and Save on the right. Canonical pattern:
             >
               <Select.Trigger id="tb-prod" />
               <Select.Content>
-                <Select.Option
+                <Select.Item
                   v-for="o in options"
                   :key="o.value"
                   :value="o.value"
-                  >{{ o.label }}</Select.Option
+                  >{{ o.label }}</Select.Item
                 >
               </Select.Content>
             </Select>
@@ -339,7 +339,7 @@ Canonical pattern:
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import Input from '@aziontech/webkit/input'
   import Alert from '@aziontech/webkit/alert'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import { computed, ref } from 'vue'
@@ -367,7 +367,7 @@ Canonical pattern:
       </PanelHeader>
 
       <!-- compact modal body: --spacing-md between blocks, on your own wrapper -->
-      <PanelContent>
+      <PanelBody>
         <div class="flex flex-col gap-(--spacing-md)">
           <Alert
             severity="warning"
@@ -390,7 +390,7 @@ Canonical pattern:
             class="w-full"
           />
         </div>
-      </PanelContent>
+      </PanelBody>
 
       <PanelFooter>
         <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
@@ -441,7 +441,7 @@ Three decisions make it safe:
   drawer). Submitting the child never locks the parent, and the parent's save never touches the child.
 - **A controlled Select + a sentinel value.** The parent `Select` is **controlled** (`:model-value`, not
   `v-model`) so picking the quick-add never commits a real value. The quick-add is a normal
-  `Select.Option` in the `#footer` slot carrying a sentinel value; `@update:model-value` intercepts it,
+  `Select.Item` in the `#footer` slot carrying a sentinel value; `@update:model-value` intercepts it,
   closes the dropdown, and opens the child instead of assigning `form.*`.
 - **Stacking is built in.** The child `Drawer` portals after the parent, so it sits over it at the same
   layer, and a `Select.Content` teleports at `--z-control-overlay` (above every drawer). Add no `z-*`
@@ -513,17 +513,17 @@ Canonical pattern:
       aria-label="Origin"
     />
     <Select.Content>
-      <Select.Option
+      <Select.Item
         v-for="origin in origins"
         :key="origin.value"
         :value="origin.value"
-        >{{ origin.label }}</Select.Option
+        >{{ origin.label }}</Select.Item
       >
       <template #footer>
-        <Select.Option
+        <Select.Item
           :value="CREATE_ORIGIN"
           icon="ai ai-circle-plus"
-          >Create Origin</Select.Option
+          >Create Origin</Select.Item
         >
       </template>
     </Select.Content>
@@ -561,7 +561,7 @@ Rules:
 - **Parent and child are two independent forms.** Each has its own `submitting` flag, `<fieldset :disabled>`,
   and Save `:loading`; neither save locks the other. Guard each handler and release in `finally`.
 - **The parent `Select` is controlled + intercepted.** Use `:model-value` (not `v-model`), a sentinel
-  value for the quick-add `Select.Option` (in the `#footer` slot), and an `@update:model-value` that opens
+  value for the quick-add `Select.Item` (in the `#footer` slot), and an `@update:model-value` that opens
   the child on the sentinel and only otherwise assigns `form.*` and clears the error.
 - **Close the dropdown before opening the child.** Control the parent `Select`'s open state
   (`v-model:open`) and set it `false` in the same handler that opens the child, so the popup doesn't linger
@@ -801,7 +801,7 @@ Pointing `<label for>` at the `<Select>` wrapper labels nothing. This holds in *
 >
   <Select.Trigger id="app-country" />
   <Select.Content>
-    <Select.Option v-for="o in countries" :key="o.value" :value="o.value">{{ o.label }}</Select.Option>
+    <Select.Item v-for="o in countries" :key="o.value" :value="o.value">{{ o.label }}</Select.Item>
   </Select.Content>
 </Select>
 ```
@@ -1030,7 +1030,7 @@ const guard = useUnsavedChanges(() => form, {
 onBeforeRouteLeave(() => guard.confirmLeave())
 ```
 
-- `isDirty` shows the `SaveBar` and the `dirty` mark on the section's `Tabs.Item`; `commit()` after a
+- `isDirty` shows the `SaveBar` and the `dirty` mark on the section's `Tabs.Trigger`; `commit()` after a
   successful save, `discard()` for the bar's Discard (a ref source is restored in place, a getter
   source goes through `onDiscard`).
 - `confirmLeave()` resolves `true` at once while clean; while dirty it opens the dialog and resolves

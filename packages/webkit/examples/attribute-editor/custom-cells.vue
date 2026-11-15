@@ -41,11 +41,11 @@
       >
         <Select.Trigger />
         <Select.Content>
-          <Select.Option
+          <Select.Item
             v-for="action in actions"
             :key="action.value"
             :value="action.value"
-            >{{ action.label }}</Select.Option
+            >{{ action.label }}</Select.Item
           >
         </Select.Content>
       </Select>

@@ -20,7 +20,7 @@
   import DialogContent from '../../overlay/dialog/dialog-content.vue'
   import DialogDescription from '../../overlay/dialog/dialog-description.vue'
   import DialogTitle from '../../overlay/dialog/dialog-title.vue'
-  import PanelContent from '../../overlay/panel/panel-content.vue'
+  import PanelBody from '../../overlay/panel/panel-body.vue'
   import PanelFooter from '../../overlay/panel/panel-footer.vue'
   import PanelHeader from '../../overlay/panel/panel-header.vue'
 
@@ -584,11 +584,11 @@
           <PanelHeader class="w-full">
             <DialogTitle>{{ messages.successTitle }}</DialogTitle>
           </PanelHeader>
-          <PanelContent>
+          <PanelBody>
             <DialogDescription class="m-0 text-body-sm text-(--text-muted)">
               {{ messages.successDescription }}
             </DialogDescription>
-          </PanelContent>
+          </PanelBody>
           <PanelFooter class="flex-col md:flex-row md:justify-end">
             <Button
               v-if="secondaryAction"

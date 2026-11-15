@@ -1643,7 +1643,7 @@
 </script>
 
 <script lang="ts">
-  export type { DropdownMenuOptionValue } from '../../navigation/dropdown-menu/injection-key'
+  export type { DropdownMenuItemValue } from '../../navigation/dropdown-menu/injection-key'
   export type {
     TableCellSlotProps,
     TableCellSlots,

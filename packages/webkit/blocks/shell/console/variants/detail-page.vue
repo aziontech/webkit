@@ -405,7 +405,7 @@
       </DropdownMenu.Group>
     </template>
 
-    <ConsoleLayout.Breadcrumbs :items="leadingCrumbs">
+    <ConsoleLayout.Breadcrumb :items="leadingCrumbs">
       <Select
         :model-value="environment"
         :display-value="environmentLabel"
@@ -433,7 +433,7 @@
             </Input>
           </template>
           <Select.Group label="Environments">
-            <Select.Option
+            <Select.Item
               v-for="entry in environmentMatches"
               :key="entry.name"
               :value="entry.name"
@@ -446,7 +446,7 @@
                   size="small"
                 />
               </template>
-            </Select.Option>
+            </Select.Item>
             <p
               v-if="!environmentMatches.length"
               class="px-(--spacing-xs) py-(--spacing-2xs) text-body-sm text-(--text-muted)"
@@ -455,7 +455,7 @@
             </p>
           </Select.Group>
           <template #footer>
-            <Select.Option
+            <Select.Item
               value="__create-environment__"
               class="w-full"
             >
@@ -466,15 +466,15 @@
                 />
                 Add Environment
               </span>
-            </Select.Option>
+            </Select.Item>
           </template>
         </Select.Content>
       </Select>
-    </ConsoleLayout.Breadcrumbs>
+    </ConsoleLayout.Breadcrumb>
 
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
           :value="tab.value"

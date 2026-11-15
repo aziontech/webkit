@@ -2,7 +2,7 @@
   import { computed, ref, shallowRef, useAttrs, watch } from 'vue'
 
   import { useDiagramConnectors } from './composables/use-diagram-connectors'
-  import DiagramLayout from './diagram-layout/diagram-layout.vue'
+  import DiagramLayout from './parts/diagram-layout.vue'
   import type { DiagramNode, DiagramSpec } from './types'
 
   defineOptions({ name: 'Diagram', inheritAttrs: false })

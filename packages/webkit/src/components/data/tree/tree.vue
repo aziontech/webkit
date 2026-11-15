@@ -8,7 +8,7 @@
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
   import { useTreeNavigation } from './composables/use-tree-navigation'
   import { TreeInjectionKey } from './injection-key'
-  import TreeNode from './tree-node/tree-node.vue'
+  import TreeNode from './parts/tree-node.vue'
 
   defineOptions({ name: 'Tree', inheritAttrs: false })
 

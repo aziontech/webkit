@@ -11,7 +11,7 @@
   import PopoverTitle from '@aziontech/webkit/popover-title'
   import PopoverTrigger from '@aziontech/webkit/popover-trigger'
   import SelectContent from '@aziontech/webkit/select-content'
-  import SelectOption from '@aziontech/webkit/select-option'
+  import SelectItem from '@aziontech/webkit/select-item'
   import SelectRoot from '@aziontech/webkit/select-root'
   import SelectTrigger from '@aziontech/webkit/select-trigger'
   import { ref } from 'vue'
@@ -74,11 +74,11 @@
             >
               <SelectTrigger aria-label="Field" />
               <SelectContent>
-                <SelectOption
+                <SelectItem
                   v-for="option in fields"
                   :key="option.value"
                   :value="option.value"
-                  >{{ option.label }}</SelectOption
+                  >{{ option.label }}</SelectItem
                 >
               </SelectContent>
             </SelectRoot>
@@ -91,11 +91,11 @@
             >
               <SelectTrigger aria-label="Operator" />
               <SelectContent>
-                <SelectOption
+                <SelectItem
                   v-for="option in operators"
                   :key="option.value"
                   :value="option.value"
-                  >{{ option.label }}</SelectOption
+                  >{{ option.label }}</SelectItem
                 >
               </SelectContent>
             </SelectRoot>

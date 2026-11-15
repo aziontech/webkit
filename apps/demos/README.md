@@ -30,7 +30,7 @@ pnpm preview:demos   # preview the build on http://localhost:4174
 with the demo's navigation (`src/lib/navigation.ts`), the breadcrumbs from the route meta, the ⌘K
 palette (recent resources, Create Resource, Switch theme) and the account menu. Every browse route
 (list, detail, edit, deploy, settings, assistant) renders only its page body in the layout's default
-slot; the detail, edit and deploy pages set their own trail with `ConsoleLayout.Breadcrumbs`. The
+slot; the detail, edit and deploy pages set their own trail with `ConsoleLayout.Breadcrumb`. The
 focused flows (create and the onboarding steps) carry `meta: { shell: 'focused' }` and render
 outside the layout, with their own header and no rail.
 

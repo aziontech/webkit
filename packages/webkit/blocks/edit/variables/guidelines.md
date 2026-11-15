@@ -34,9 +34,9 @@ The same controls row as `view/table-view`, all bound to one client-mode `useCol
 
 `Table.CellActions`, named after the variable ("Actions for API_URL"), opens its menu of `DropdownMenu.Group`s placed `bottom-end`: Edit and Clone in the first group, Delete alone in the last. Edit opens the drawer on that variable; Clone inserts a copy right below it with `_COPY` appended to the key; Delete opens the confirmation dialog.
 
-### E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelContent` (required)
+### E. Create and edit drawer — `Drawer`, `DrawerContent`, `PanelHeader`, `DrawerTitle`, `PanelBody` (required)
 
-A right-side `Drawer` whose content is one `form` labeled Create Variable or Edit Variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelContent` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create Variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
+A right-side `Drawer` whose content is one `form` labeled Create Variable or Edit Variable. `PanelHeader` holds the `DrawerTitle` and the drawer's own close button; `PanelBody` scrolls the Variables and Scope sections. The form resets every time the drawer opens: from Create Variable, one empty pair, the Form view, Global the only scope on; from a row's Edit, that variable's pair and scopes, with no Upload, view toggle or Add variable. A saved secret is never shown: its value starts empty, an empty value keeps the saved secret, and the Secret checkbox is locked. See `skills/webkit-create-surface`.
 
 ### F. Variables section — `SettingsSection`, `Button`, `ToggleGroup` (required)
 
@@ -60,7 +60,7 @@ A `SettingsSection` titled Scope with one large `InputGroupRoot` per scope type:
 
 ### K. Drawer footer — `PanelFooter`, `Button` (required)
 
-`PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving. When the save fails, the drawer stays open with every row kept and a danger `Alert` at the top of `PanelContent` says why ("Variables not saved. You are offline; check your connection and save again."); pressing Save again retries.
+`PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving. When the save fails, the drawer stays open with every row kept and a danger `Alert` at the top of `PanelBody` says why ("Variables not saved. You are offline; check your connection and save again."); pressing Save again retries.
 
 ### L. List states — `EmptyState`, `Button` (required)
 

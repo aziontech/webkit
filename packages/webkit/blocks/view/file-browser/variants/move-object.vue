@@ -7,7 +7,7 @@
   import Combobox from '@aziontech/webkit/combobox'
   import ConfirmDialog from '@aziontech/webkit/confirm-dialog'
   import DataTable, {
-    type DropdownMenuOptionValue,
+    type DropdownMenuItemValue,
     type TableColumn,
     type TableExposed
   } from '@aziontech/webkit/data-table'
@@ -16,12 +16,12 @@
   import Dialog from '@aziontech/webkit/dialog-root'
   import DialogTitle from '@aziontech/webkit/dialog-title'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import SplitButton from '@aziontech/webkit/split-button'
@@ -151,7 +151,7 @@
     () => pending.value !== null && confirmation.value.trim() === pending.value.name
   )
 
-  const onRowAction = (value: DropdownMenuOptionValue, row: FileRow) => {
+  const onRowAction = (value: DropdownMenuItemValue, row: FileRow) => {
     if (value === 'open') enterFolder(row.name)
     if (value === 'move') openMove([row])
     if (value !== 'delete') return
@@ -604,7 +604,7 @@
                   @select="(_event, value) => onRowAction(value, row)"
                 >
                   <DropdownMenuGroup>
-                    <DropdownMenuOption
+                    <DropdownMenuItem
                       v-if="row.kind === 'folder'"
                       key="open"
                       value="open"
@@ -615,8 +615,8 @@
                           class="ai ai-folder-open"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenuOption>
-                    <DropdownMenuOption
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
                       v-else
                       key="download"
                       value="download"
@@ -627,8 +627,8 @@
                           class="ai ai-download"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenuOption>
-                    <DropdownMenuOption
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
                       v-if="row.kind === 'file'"
                       key="move"
                       value="move"
@@ -639,10 +639,10 @@
                           class="ai ai-arrow-right-left"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenuOption>
+                    </DropdownMenuItem>
                   </DropdownMenuGroup>
                   <DropdownMenuGroup>
-                    <DropdownMenuOption
+                    <DropdownMenuItem
                       value="delete"
                       label="Delete"
                     >
@@ -651,7 +651,7 @@
                           class="ai ai-trash"
                           aria-hidden="true"
                       /></template>
-                    </DropdownMenuOption>
+                    </DropdownMenuItem>
                   </DropdownMenuGroup>
                 </Table.CellActions>
               </template>
@@ -759,7 +759,7 @@
             </DialogDescription>
           </div>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <form
             class="flex flex-col gap-(--spacing-md)"
             novalidate
@@ -798,7 +798,7 @@
               <Field.Error v-if="destinationError">{{ destinationError }}</Field.Error>
             </Field>
           </form>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button

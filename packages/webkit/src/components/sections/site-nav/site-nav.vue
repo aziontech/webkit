@@ -23,15 +23,10 @@
   import GlobalHeaderEnd from '../../layout/global-header/global-header-end.vue'
   import GlobalHeaderStart from '../../layout/global-header/global-header-start.vue'
   import ScrollArea from '../../layout/scroll-area/scroll-area.vue'
-  import NavigationMenuArrow from '../../navigation/navigation-menu/navigation-menu-arrow.vue'
+  import NavigationMenu from '../../navigation/navigation-menu/navigation-menu.vue'
   import NavigationMenuContent from '../../navigation/navigation-menu/navigation-menu-content.vue'
-  import NavigationMenuIcon from '../../navigation/navigation-menu/navigation-menu-icon.vue'
   import NavigationMenuItem from '../../navigation/navigation-menu/navigation-menu-item.vue'
   import NavigationMenuList from '../../navigation/navigation-menu/navigation-menu-list.vue'
-  import NavigationMenuPopup from '../../navigation/navigation-menu/navigation-menu-popup.vue'
-  import NavigationMenuPortal from '../../navigation/navigation-menu/navigation-menu-portal.vue'
-  import NavigationMenuPositioner from '../../navigation/navigation-menu/navigation-menu-positioner.vue'
-  import NavigationMenu from '../../navigation/navigation-menu/navigation-menu-root.vue'
   import NavigationMenuTrigger from '../../navigation/navigation-menu/navigation-menu-trigger.vue'
   import NavigationMenuViewport from '../../navigation/navigation-menu/navigation-menu-viewport.vue'
   import type {
@@ -247,23 +242,6 @@
             >
               <NavigationMenuTrigger>
                 {{ menu.label }}
-                <NavigationMenuIcon>
-                  <svg
-                    width="12"
-                    height="12"
-                    viewBox="0 0 12 12"
-                    fill="none"
-                    aria-hidden="true"
-                  >
-                    <path
-                      d="M3 4.5L6 7.5L9 4.5"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                    />
-                  </svg>
-                </NavigationMenuIcon>
               </NavigationMenuTrigger>
               <NavigationMenuContent class="w-full">
                 <div
@@ -311,19 +289,14 @@
             </NavigationMenuItem>
           </NavigationMenuList>
 
-          <NavigationMenuPortal>
-            <NavigationMenuPositioner
-              side="bottom"
-              align="start"
-              :side-offset="12"
-              :collision-padding="{ x: columnInset, y: 8 }"
-            >
-              <NavigationMenuPopup variant="contrast">
-                <NavigationMenuArrow />
-                <NavigationMenuViewport />
-              </NavigationMenuPopup>
-            </NavigationMenuPositioner>
-          </NavigationMenuPortal>
+          <NavigationMenuViewport
+            side="bottom"
+            align="start"
+            :side-offset="12"
+            :collision-padding="{ x: columnInset, y: 8 }"
+            variant="contrast"
+            arrow
+          />
         </NavigationMenu>
       </GlobalHeaderCenter>
 

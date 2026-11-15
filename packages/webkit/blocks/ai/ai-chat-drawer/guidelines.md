@@ -18,7 +18,7 @@ The generative AI assistant beside the work: the reader is on a resource page �
 
 ## Building blocks
 
-### A. Page behind — `PageHeader`, `Card`, `KeyValuePairs`, `StatusIndicator`
+### A. Page behind — `PageHeader`, `Card`, `KeyValueList`, `StatusIndicator`
 
 The resource page the reader is on. The assistant's support prompts and answers refer to it, so keep it visible and undimmed: the drawer has no overlay.
 

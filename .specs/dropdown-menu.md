@@ -3,12 +3,12 @@ name: dropdown-menu
 category: navigation
 structure: composition
 status: implemented
-spec_version: 11
+spec_version: 12
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3775-16746&m=dev
   node_id: 3775:16746
-checksum: c95fabc77ee59d57f4f8d7b7d20811711f3b8a7c3d07eee6581925fe94f1f0d8
+checksum: 807bc0c79e72ee11aef6db91f77d47e3d6d4883681915f4c0377d8bfc488f648
 created: 2026-06-26
 last_updated: 2026-11-15
 ---
@@ -109,7 +109,7 @@ Tree-shaking alternative — the same sub-components as standalone imports:
   import DropdownMenu from '@aziontech/webkit/dropdown-menu-root'
   import DropdownMenuTrigger from '@aziontech/webkit/dropdown-menu-trigger'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import DropdownMenuSub from '@aziontech/webkit/dropdown-menu-sub'
   import DropdownMenuSubTrigger from '@aziontech/webkit/dropdown-menu-sub-trigger'
   import DropdownMenuSubContent from '@aziontech/webkit/dropdown-menu-sub-content'
@@ -169,7 +169,7 @@ Sub-menus and checkable options:
   - Props: `label: string` default `''` — section label rendered above the options. Omit for an unlabeled group.
   - Events: _none_.
   - Slots: `default` — one or more `<DropdownMenu.Item>`; `header` — inline region rendered between the group label and the options (e.g. a per-section search or description); `footer` — inline region rendered after the options (e.g. a "see all" link).
-- `dropdown-menu-option/dropdown-menu-option.vue` — selectable row, attached as `DropdownMenu.Item`. Renders the leading slot, the label, the trailing slot, an optional `command` hint and, when `selected`, a check mark. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`. Every row is `tabindex="-1"`; the root moves focus with the arrows and typeahead. Outside a group the row teleports itself into the panel body (`data-ungrouped`, with the group's horizontal inset).
+- `dropdown-menu-item/dropdown-menu-item.vue` — selectable row, attached as `DropdownMenu.Item`. Renders the leading slot, the label, the trailing slot, an optional `command` hint and, when `selected`, a check mark. Calls injected `selectOption(value, event)` on click / `Enter` / `Space`. Every row is `tabindex="-1"`; the root moves focus with the arrows and typeahead. Outside a group the row teleports itself into the panel body (`data-ungrouped`, with the group's horizontal inset).
   - Props:
     - `value: string | number` (required) — identifier emitted on the root `select` event when this option is activated.
     - `label: string` default `''` — plain-text label; falls back to the default slot when omitted.
@@ -177,7 +177,7 @@ Sub-menus and checkable options:
     - `disabled: boolean` default `false` — disables interaction and applies disabled tokens.
     - `selected: boolean` default `false` — marks the option as checked: `role="menuitemradio"` with `aria-checked="true"`, the selected background and a trailing `ai ai-check`.
     - `href: string` default `''` — destination URL; the row renders as an anchor (still `role="menuitem"`) that emits `select` and then follows the link, so it can be opened in a new tab. `Enter` follows it natively; `Space` clicks it.
-    - `type: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuOptionType`.
+    - `type: 'default' | 'checkbox' | 'radio'` default `'default'` — item role. `default` renders `role="menuitem"` (`menuitemradio` with `aria-checked="true"` and a trailing check when `selected`) and closes the panel on activation; `checkbox` renders `role="menuitemcheckbox"` and `radio` renders `role="menuitemradio"`, both with a leading check / dot indicator column instead of the trailing check, `aria-checked` mirroring `selected`, and the panel kept open on activation (`select` still fires). Exported as `DropdownMenuItemType`.
   - Events: _none_ (root emits `select`).
   - Slots: `default` (override of the `label` prop, for rich label content), `leading` (icon / avatar before the label), `trailing` (icon / badge after the label; mutually exclusive with `command`).
 - `dropdown-menu-sub/dropdown-menu-sub.vue` — sub-menu scope. Owns the open state of one nested menu and shares it with its `SubTrigger` and `SubContent`. Renders a `display: contents` wrapper carrying `data-testid` (`<root>__sub`) and `data-state`. Only one sub-menu per menu level is open at a time: hovering or focusing a sibling item closes it after a 150 ms grace period, so a pointer moving diagonally toward the sub-panel does not close it; entering the sub-panel cancels the close. Closing the root closes every sub-menu.
@@ -210,11 +210,11 @@ Sub-menus and checkable options:
 
 ## Events
 
-| Event    | Payload                                                                | Notes                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| -------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuOptionValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `type="checkbox"` / `type="radio"` options, which keep it open. Options inside a sub-menu emit on the same root event. |
+| Event    | Payload                                                              | Notes                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| -------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `select` | `(event: MouseEvent \| KeyboardEvent, value: DropdownMenuItemValue)` | Fires when an enabled option is activated (click, `Enter`/`Space`, or a `command` shortcut). `event` is the activation event; `value` is the activated option's identifier. The panel closes automatically and focus returns to the trigger when activated from inside the open panel, except for `type="checkbox"` / `type="radio"` options, which keep it open. Options inside a sub-menu emit on the same root event. |
 
-**Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuOptionValue` (`string | number`, the `select` payload and `DropdownMenu.Item`'s `value`), `DropdownMenuPlacement` and `DropdownMenuPlacementInput` (the `placement` prop), so a `select` handler is typed without a local alias.
+**Types.** `@aziontech/webkit/dropdown-menu` (and `-root`) export `DropdownMenuItemValue` (`string | number`, the `select` payload and `DropdownMenu.Item`'s `value`), `DropdownMenuPlacement` and `DropdownMenuPlacementInput` (the `placement` prop), so a `select` handler is typed without a local alias.
 
 ## Slots
 

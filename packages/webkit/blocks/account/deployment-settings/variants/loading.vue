@@ -9,7 +9,7 @@
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import DropdownMenu, { type DropdownMenuOptionValue } from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import IconButton from '@aziontech/webkit/icon-button'
@@ -17,7 +17,7 @@
   import Item from '@aziontech/webkit/item'
   import PageHeader from '@aziontech/webkit/page-header'
   import Pagination from '@aziontech/webkit/pagination-root'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -517,7 +517,7 @@
     toast.success(`${row.name} deleted.`)
   }
 
-  const onAction = (value: DropdownMenuOptionValue, row: SettingRowData) => {
+  const onAction = (value: DropdownMenuItemValue, row: SettingRowData) => {
     if (value === 'edit') {
       openEdit(row)
       return
@@ -610,13 +610,13 @@
                     >
                       <Select.Trigger aria-label="Binding policy" />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="policy in BINDING_POLICIES"
                           :key="policy.value"
                           :value="policy.value"
                         >
                           {{ policy.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                   </SettingRow>
@@ -638,13 +638,13 @@
                     >
                       <Select.Trigger aria-label="Deployment policy" />
                       <Select.Content>
-                        <Select.Option
+                        <Select.Item
                           v-for="policy in DEPLOYMENT_POLICIES"
                           :key="policy.value"
                           :value="policy.value"
                         >
                           {{ policy.label }}
-                        </Select.Option>
+                        </Select.Item>
                       </Select.Content>
                     </Select>
                   </SettingRow>
@@ -786,14 +786,14 @@
                                   :aria-label="`Deployment Setting for ${service.name} ${environment.name}`"
                                 />
                                 <Select.Content>
-                                  <Select.Option
+                                  <Select.Item
                                     v-for="option in optionsFor(environment)"
                                     :key="option.id"
                                     :value="option.id"
                                     :disabled="option.status === 'Inactive'"
                                   >
                                     {{ option.name }}
-                                  </Select.Option>
+                                  </Select.Item>
                                 </Select.Content>
                               </Select>
                               <Tag
@@ -1055,7 +1055,7 @@
             </div>
           </PanelHeader>
 
-          <PanelContent>
+          <PanelBody>
             <fieldset
               class="m-0 flex min-w-0 flex-col border-0 p-0"
               :disabled="submitting"
@@ -1158,7 +1158,7 @@
                 </div>
               </SettingsSection>
             </fieldset>
-          </PanelContent>
+          </PanelBody>
 
           <PanelFooter>
             <div class="flex w-full justify-end gap-(--spacing-xs)">

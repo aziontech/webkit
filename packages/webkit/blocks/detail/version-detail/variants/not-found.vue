@@ -8,7 +8,7 @@
 
 <template>
   <div class="layout-boundary flex min-h-0 flex-1 flex-col">
-    <ConsoleLayout.Breadcrumbs
+    <ConsoleLayout.Breadcrumb
       :items="[
         { label: 'Resources', href: '/resources' },
         { label: 'web-app', href: '/resources/1784552864' },

@@ -11,7 +11,7 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import DropdownMenuGroup from '@aziontech/webkit/dropdown-menu-group'
-  import DropdownMenuOption from '@aziontech/webkit/dropdown-menu-option'
+  import DropdownMenuItem from '@aziontech/webkit/dropdown-menu-item'
   import EmptyState from '@aziontech/webkit/empty-state'
   import Field from '@aziontech/webkit/field'
   import FileDropzone from '@aziontech/webkit/file-dropzone'
@@ -22,7 +22,7 @@
   import ItemList from '@aziontech/webkit/item-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import PageTabs from '@aziontech/webkit/page-tabs'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
@@ -457,7 +457,7 @@ legacy  IN HINFO "PC" "Linux"`
   <div class="flex min-h-0 flex-1 flex-col">
     <div class="sticky top-0 z-1 bg-(--bg-canvas)">
       <PageTabs v-model="activeTab">
-        <Tabs.Item
+        <Tabs.Trigger
           v-for="tab in tabs"
           :key="tab.value"
           :value="tab.value"
@@ -822,7 +822,7 @@ legacy  IN HINFO "PC" "Linux"`
                   <template #cell-actions="{ row }">
                     <Table.CellActions :name="row.name">
                       <DropdownMenuGroup>
-                        <DropdownMenuOption
+                        <DropdownMenuItem
                           value="edit"
                           label="Edit"
                         >
@@ -831,10 +831,10 @@ legacy  IN HINFO "PC" "Linux"`
                               class="ai ai-pencil"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
+                        </DropdownMenuItem>
                       </DropdownMenuGroup>
                       <DropdownMenuGroup>
-                        <DropdownMenuOption
+                        <DropdownMenuItem
                           value="delete"
                           label="Delete"
                         >
@@ -843,7 +843,7 @@ legacy  IN HINFO "PC" "Linux"`
                               class="ai ai-trash"
                               aria-hidden="true"
                           /></template>
-                        </DropdownMenuOption>
+                        </DropdownMenuItem>
                       </DropdownMenuGroup>
                     </Table.CellActions>
                   </template>
@@ -909,7 +909,7 @@ legacy  IN HINFO "PC" "Linux"`
         <PanelHeader class="w-full">
           <DrawerTitle>Import zone file</DrawerTitle>
         </PanelHeader>
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-lg)">
             <DrawerDescription>
               Records in BIND format are added to example.com. Nothing changes until you import, and
@@ -1047,7 +1047,7 @@ legacy  IN HINFO "PC" "Linux"`
               </Card>
             </section>
           </div>
-        </PanelContent>
+        </PanelBody>
         <PanelFooter>
           <div class="flex w-full justify-end gap-(--spacing-xs)">
             <Button

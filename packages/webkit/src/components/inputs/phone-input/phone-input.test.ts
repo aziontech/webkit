@@ -15,7 +15,7 @@ const getContent = () =>
   document.body.querySelector('[data-testid="input-select-content"]') as HTMLElement | null
 
 const getOptions = () =>
-  Array.from(document.body.querySelectorAll('[data-testid="input-select-option"]')) as HTMLElement[]
+  Array.from(document.body.querySelectorAll('[data-testid="input-select-item"]')) as HTMLElement[]
 
 const optionText = (option: HTMLElement) =>
   [
@@ -245,7 +245,7 @@ describe('PhoneInput', () => {
 
       const br = getOptions()[0]
       const dialCode = br.querySelector('[data-testid="input-phone-input__dial-code"]')
-      const check = br.querySelector('[data-testid="input-select-option__check"]')
+      const check = br.querySelector('[data-testid="input-select-item__check"]')
       expect(check).not.toBeNull()
       expect(dialCode?.compareDocumentPosition(check as Node)).toBe(
         Node.DOCUMENT_POSITION_FOLLOWING

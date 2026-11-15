@@ -7,7 +7,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import Item from '@aziontech/webkit/item'
   import OutcomeMark, { type OutcomeMarkSeverity } from '@aziontech/webkit/outcome-mark'
-  import PanelContent from '@aziontech/webkit/panel-content'
+  import PanelBody from '@aziontech/webkit/panel-body'
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Progress from '@aziontech/webkit/progress'
@@ -299,7 +299,7 @@
           <DialogTitle>New production deployment</DialogTitle>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
               <div class="flex min-w-0 items-center gap-(--spacing-xs)">
@@ -364,7 +364,7 @@
               </ul>
             </div>
           </div>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">
@@ -416,7 +416,7 @@
           </div>
         </PanelHeader>
 
-        <PanelContent>
+        <PanelBody>
           <div class="flex flex-col gap-(--spacing-md)">
             <div class="flex min-w-0 flex-col gap-(--spacing-xs)">
               <Progress
@@ -502,7 +502,7 @@
               {{ running ? '' : title }}
             </span>
           </div>
-        </PanelContent>
+        </PanelBody>
 
         <PanelFooter>
           <div class="flex w-full flex-col gap-(--spacing-sm) md:flex-row md:justify-end">

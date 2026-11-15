@@ -59,7 +59,7 @@ Square avatars: `pattern="marble"` seeded by the organization name with the card
 
 Under the picker: `Generated from the organization's name. Select its color.`
 
-### L. Plan step — `Tag`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelContent`, `PanelFooter`, `FeatureList`, `ToggleGroup`, `Select`, `Checkbox`, `PaymentBrand`, `Separator`, `Link` (required)
+### L. Plan step — `Tag`, `Drawer`, `DrawerContent`, `DrawerTitle`, `PanelHeader`, `PanelBody`, `PanelFooter`, `FeatureList`, `ToggleGroup`, `Select`, `Checkbox`, `PaymentBrand`, `Separator`, `Link` (required)
 
 The plans are full-width `RadioGroup` cards, each with its name `Tag` and price. Free selects directly; Pro or Enterprise opens the upgrade `Drawer`, the Checkout of `account/change-plan-drawer` (What's included as a `FeatureList`, the billing period `ToggleGroup`, the payment method with its `PaymentBrand`, the billing address `Select`s and the `Checkbox` that reuses the account's address, the pricing `Link`s), and selects only once Upgrade is pressed.
 

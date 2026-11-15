@@ -16,7 +16,7 @@
     v-model="activeTab"
     column="form"
   >
-    <Tabs.Item
+    <Tabs.Trigger
       v-for="tab in tabs"
       :key="tab.value"
       :value="tab.value"
