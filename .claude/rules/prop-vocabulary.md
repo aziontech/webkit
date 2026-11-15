@@ -16,14 +16,14 @@ names.
 
 Every banned name or value is in one of two stages:
 
-- **Enforced** (`aliases`, `VALUES`) — blocked today by `validate-spec-compliance` (write time)
-  and the `check-authoring` ratchet (CI).
-- **Staged** (`staged`, `STAGED_VALUES`, `VALUE_PATTERNS`, `PATTERNS`, `GROUP_LABEL`, `SLOTS`,
-  `EVENT_WORDS`, `DATA_ATTRIBUTES`) — the 6.0 standard. The naming check
-  (`check:naming`, rules `prop-name`, `prop-value`, `event-name`, `slot-name`,
-  `data-attribute`) reports them now, while the rename lanes still carry the old names, and
-  blocks them once the lead sets `NAMING_STAGED_BLOCKS` to `true` in
-  `packages/webkit/scripts/lib/naming-rules.mjs`.
+- **Enforced** (`aliases`, `VALUES`, the `enforced` `VALUE_PATTERNS`, `PATTERNS`, `SLOTS`,
+  `EVENT_WORDS`) — blocked today by `validate-spec-compliance` (write time) and the
+  `check-authoring` ratchet (CI). The naming check reports them too.
+- **Staged** (`staged`, `STAGED_VALUES`, the other `VALUE_PATTERNS`, `GROUP_LABEL`,
+  `DATA_ATTRIBUTES`) — the rest of the 6.0 standard, still being applied by the rename lanes.
+  The naming check (`check:naming`, rules `prop-name`, `prop-value`, `event-name`,
+  `slot-name`, `data-attribute`) reports them now and blocks them once the lead sets
+  `NAMING_STAGED_BLOCKS` to `true` in `packages/webkit/scripts/lib/naming-rules.mjs`.
 
 In the tables below, staged entries are marked _(staged)_.
 
@@ -33,16 +33,17 @@ In the tables below, staged entries are marked _(staged)_.
 | -------------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
 | Visual variant (the look)                    | `variant`                                                              | component union                                            | `appearance`, `intent`, `headerVariant`, `mediaKind`, `cardStyle`; _(staged)_ `kind`, `look`, `styleVariant` |
 | Sort of part (cell, page button, axis)       | `type`                                                                 | component union                                            | `kind` _(staged, via the look entry)_                                                                        |
-| Severity (colour meaning)                    | `severity`                                                             | `neutral · info · success · warning · danger`              | _(staged)_ `tone`                                                                                            |
-| Job or step status                           | `status`                                                               | `pending · running · success · error · canceled · skipped` | _(staged)_ `state`, `phase`, `outcome`                                                                       |
+| Severity (colour meaning)                    | `severity`                                                             | `neutral · info · success · warning · danger`              | `tone`                                                                                                       |
+| Job or step status                           | `status`                                                               | `pending · running · success · error · canceled · skipped` | `state`, `phase`, `outcome`                                                                                  |
 | Light-dismiss (outside-click / Esc)          | `dismissible`                                                          | `boolean`                                                  | `dismissable`, `closeable`                                                                                   |
 | Explicit close affordance (X)                | `closable`                                                             | `boolean`                                                  | — (a different concept from `dismissible`)                                                                   |
 | Primary heading text                         | `title`                                                                | `string`                                                   | `heading`, `header`; _(staged)_ `headline`                                                                   |
 | Primary two-way value                        | `modelValue` (`v-model`)                                               | per component                                              | `isToggled`; `v-model:value` for the primary value (review)                                                  |
-| Anything that opens                          | `open` (`v-model:open`, seed `defaultOpen`)                            | `boolean`                                                  | _(staged)_ `expanded`, `visible`, `show`, `opened`, `shown`                                                  |
-| The page or item you are on (`aria-current`) | `active`                                                               | `boolean`                                                  | _(staged)_ `current`, `activated`, `isCurrent`                                                               |
+| Anything that opens                          | `open` (`v-model:open`, seed `defaultOpen`)                            | `boolean`                                                  | `expanded`, `visible`, `show`, `opened`, `shown`                                                             |
+| Ids of the parts that are open               | `openKeys` (`v-model:openKeys`)                                        | `string[]`                                                 | `expandedKeys`, `expandedIds`, `openIds`, `expandedItems`                                                    |
+| The page or item you are on (`aria-current`) | `active`                                                               | `boolean`                                                  | `current`, `activated`, `isCurrent`                                                                          |
 | Picked single key                            | `selected` (`v-model:selected`)                                        | key                                                        | — (review)                                                                                                   |
-| Picked keys of a multi-selection             | `selectedKeys` (`v-model:selectedKeys`)                                | `string[]`                                                 | _(staged)_ `selectedIds`, `selectedValues`, `checkedKeys`, `selectedItems`                                   |
+| Picked keys of a multi-selection             | `selectedKeys` (`v-model:selectedKeys`)                                | `string[]`                                                 | `selectedIds`, `selectedValues`, `checkedKeys`, `selectedItems`                                              |
 | Disabled                                     | `disabled`                                                             | `boolean`                                                  | `isDisabled` (prefix rule); _(staged)_ `enabled`                                                             |
 | Loading                                      | `loading`                                                              | `boolean`                                                  | `isLoading` (prefix rule)                                                                                    |
 | Leading or trailing glyph                    | `icon`                                                                 | `string` (icon name)                                       | _(staged)_ `iconName`, `leadingIcon`, `trailingIcon`                                                         |
@@ -52,20 +53,20 @@ In the tables below, staged entries are marked _(staged)_.
 | Outline around the box                       | `bordered`                                                             | `boolean`                                                  | `border`, `hasBorder`                                                                                        |
 | Copy affordance                              | `copyable`                                                             | `boolean`                                                  | `showCopy`                                                                                                   |
 | Self-advancing media                         | `autoplay`                                                             | `boolean`                                                  | `autoPlay`                                                                                                   |
-| Self-advancing interval (ms)                 | `autoplayInterval`                                                     | `number`                                                   | `autoPlayInterval`; _(staged)_ `interval`                                                                    |
+| Self-advancing interval (ms)                 | `autoplayInterval`                                                     | `number`                                                   | `autoPlayInterval`; `interval`                                                                               |
 | Motion on / off                              | `animated`                                                             | `boolean`                                                  | `still`                                                                                                      |
 | Short label above a heading                  | `eyebrow`                                                              | `string`                                                   | `overline`; _(staged)_ `kicker`, `tagline`                                                                   |
 | Text of a link or call-to-action             | `linkLabel` (`actionLabel` for a button)                               | `string`                                                   | `link`, `cta`                                                                                                |
 | Column count below `md`                      | `mobileColumns`                                                        | number union                                               | `mobileCols`                                                                                                 |
 | Number of grid columns                       | `columns`                                                              | number union                                               | _(staged)_ `cols`                                                                                            |
 | Choices the user picks from                  | `options` (`items` for displayed lists, `data` + `columns` for tables) | array                                                      | _(staged)_ `model`, `choices`                                                                                |
-| Identity key                                 | `itemKey` (lists), `rowKey` (tables)                                   | `string`                                                   | _(staged)_ `trackBy`, `dataKey`, `keyField`, `idKey`                                                         |
-| Empty-state text                             | `emptyTitle` (+ `emptyDescription`, `emptyActionLabel`)                | `string`                                                   | _(staged)_ `emptyText`, `emptyMessage`, `emptyLabel`, `noResultsText`, `noDataText`, `empty`                 |
+| Identity key                                 | `itemKey` (lists), `rowKey` (tables)                                   | `string`                                                   | `trackBy`, `dataKey`, `keyField`, `idKey`                                                                    |
+| Empty-state text                             | `emptyTitle` (+ `emptyDescription`, `emptyActionLabel`)                | `string`                                                   | `emptyText`, `emptyMessage`, `emptyLabel`, `noResultsText`, `noDataText`, `empty`                            |
 | Main call-to-action object                   | `primaryAction`                                                        | one shared action type                                     | _(staged)_ `mainAction`, `primaryCta`, `primaryButton`                                                       |
 | Second call-to-action object                 | `secondaryAction`                                                      | the same type                                              | _(staged)_ `secondaryCta`, `secondaryButton`                                                                 |
 | Heading level of a rendered title            | `headingLevel`                                                         | `1 … 6`                                                    | _(staged)_ `titleLevel`, `headingTag`, `headerLevel`                                                         |
-| Where a link opens                           | `target`                                                               | `string`                                                   | _(staged)_ `external`, `newTab`, `openInNewTab`, `blank`                                                     |
-| More than one may be picked                  | `multiple`                                                             | `boolean`                                                  | _(staged)_ `multi`                                                                                           |
+| Where a link opens                           | `target`                                                               | `string`                                                   | `external`, `newTab`, `openInNewTab`, `blank`                                                                |
+| More than one may be picked                  | `multiple`                                                             | `boolean`                                                  | `multi`                                                                                                      |
 | Accessible name                              | `ariaLabel` (+ `xAriaLabel`)                                           | `string`, `''` default                                     | `aria-label` as a prop (see [`accessibility.md`](./accessibility.md))                                        |
 
 **Group header text.** On a part whose name ends in `-group`, the header text is `label`
@@ -83,7 +84,7 @@ mandatory name.
 - Positive polarity (enforced): `hidden` → `show<Part>`, `invisible` → `show<Part>`,
   `closed` → `open`, `inactive` → `active`, `collapsed` → `open`. `disabled` and `readonly`
   are the accepted exceptions.
-- Shapes that read backwards _(staged, `PATTERNS`)_: `hide<X>` → `show<X>`; `enable<X>` → the
+- Shapes that read backwards (`PATTERNS`): `hide<X>` → `show<X>`; `enable<X>` → the
   `-able` adjective (`enableSorting` → `sortable`); `disable<X>` → the positive form.
 - A toggle that renders an optional part is `show<Part>` (`showHeader`, `showLineNumbers`); a
   toggle that turns on a capability is an `-able` adjective (`copyable`, `closable`,
@@ -94,16 +95,16 @@ mandatory name.
 The same look gets the same token on every component. A prop's string-literal union is checked
 against its value map.
 
-| Prop                           | Canonical values                                                           | Banned values                                                                                                                                                                                                                     |
-| ------------------------------ | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `variant`                      | `primary · secondary · outline · ghost · danger · link`                    | _(staged)_ `outlined`→`outline`, `transparent`→`ghost`, `text`→`ghost`, `destructive`→`danger`, `error`→`danger`                                                                                                                  |
-| `severity`                     | `neutral · info · success · warning · danger`                              | `error`→`danger`, `destructive`→`danger`; _(staged)_ `default`, `secondary`, `alt` → `neutral`                                                                                                                                    |
-| `status`                       | `pending · running · success · error · canceled · skipped` (+ `streaming`) | _(staged)_ `done`, `ok`, `complete`, `completed`, `succeeded`, `finished` → `success`; `failed`, `failure`, `errored` → `error`; `cancelled` → `canceled`; `queued`, `waiting` → `pending`; `in-progress`, `progress` → `running` |
-| any `*Position`                | `leading · trailing`                                                       | _(staged)_ `left`, `start`, `before`, `prefix` → `leading`; `right`, `end`, `after`, `suffix` → `trailing`                                                                                                                        |
-| `align`, `alignment`, `*Align` | `start · center · end`                                                     | _(staged)_ `left`, `top` → `start`; `right`, `bottom` → `end`; `centered` → `center`                                                                                                                                              |
-| `side`, `*Side`                | `start · end` (+ `top · bottom` for block sides)                           | _(staged)_ `left` → `start`, `right` → `end`                                                                                                                                                                                      |
-| `selectionMode`, `*Mode`       | `none · single · multiple`                                                 | _(staged)_ `multi` → `multiple`                                                                                                                                                                                                   |
-| `treatment`, `*Treatment`      | `color · monochrome · knockout`                                            | _(staged)_ `as-is`, `original` → `color`; `invert-light` → `knockout`                                                                                                                                                             |
+| Prop                           | Canonical values                                                           | Banned values                                                                                                                                                                                                          |
+| ------------------------------ | -------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`                      | `primary · secondary · outline · ghost · danger · link`                    | _(staged)_ `outlined`→`outline`, `transparent`→`ghost`, `text`→`ghost`, `destructive`→`danger`, `error`→`danger`                                                                                                       |
+| `severity`                     | `neutral · info · success · warning · danger`                              | `error`→`danger`, `destructive`→`danger`; `default`, `secondary`, `alt` → `neutral`                                                                                                                                    |
+| `status`                       | `pending · running · success · error · canceled · skipped` (+ `streaming`) | `done`, `ok`, `complete`, `completed`, `succeeded`, `finished` → `success`; `failed`, `failure`, `errored` → `error`; `cancelled` → `canceled`; `queued`, `waiting` → `pending`; `in-progress`, `progress` → `running` |
+| any `*Position`                | `leading · trailing`                                                       | `left`, `start`, `before`, `prefix` → `leading`; `right`, `end`, `after`, `suffix` → `trailing`                                                                                                                        |
+| `align`, `alignment`, `*Align` | `start · center · end`                                                     | `left`, `top` → `start`; `right`, `bottom` → `end`; `centered` → `center`                                                                                                                                              |
+| `side`, `*Side`                | `start · end` (+ `top · bottom` for block sides)                           | `left` → `start`, `right` → `end`                                                                                                                                                                                      |
+| `selectionMode`, `*Mode`       | `none · single · multiple`                                                 | `multi` → `multiple`                                                                                                                                                                                                   |
+| `treatment`, `*Treatment`      | `color · monochrome · knockout`                                            | _(staged)_ `as-is`, `original` → `color`; `invert-light` → `knockout`                                                                                                                                                  |
 
 > `outline`, `ghost` and `link` are the shadcn and Supabase words. `danger` stays over
 > shadcn's `destructive` because it matches our colour names. Code ported from shadcn maps
@@ -123,7 +124,7 @@ House default: **actions and links** (button, icon-button, link, …) default to
 `closable` house default: `true` on `dialog` and `drawer` (modal overlays always show a way
 out), `false` everywhere else.
 
-## Slots _(staged)_
+## Slots
 
 Slots are kebab-case. Adornments before and after the content are `leading` / `trailing`;
 sides of a bar are `start` / `end`.
@@ -149,7 +150,7 @@ sides of a bar are `start` / `end`.
 - kebab-case (enforced); an `update:<prop>` model event is exempt.
 - **No redundant echo** (enforced): no `<x>-change` when `update:<x>` exists. A distinct commit
   event (commit-on-blur) is a bare `change`.
-- **Event words** _(staged, `EVENT_WORDS`)_, matched per `-`-segment: `dblclick` →
+- **Event words** (`EVENT_WORDS`), matched per `-`-segment: `dblclick` →
   `double-click`, `finish` / `finished` / `done` → `complete`, `failed` / `fail` → `error`,
   `dismiss` → `close`, `delete` → `remove`.
 
@@ -189,7 +190,9 @@ sides of a bar are `start` / `end`.
 Per [`migration.md`](./migration.md), a name inherited from another system (`kind`,
 `sm/md/lg`, `onValueChange`, `prefix`) is rewritten to ours, never carried over. The full
 old → new map, with value renames, is `packages/webkit/src/cli/migrations/v6-props.json`
-(`{ "<subpath>": { "<old>": "<new>" } }`); `webkit migrate` applies it to apps and
+(`{ "<subpath>": { "<old>": "<new>" } }`; a `#<slot>` key renames a slot, an
+`@<event>` key a listener, and a rule's `moves` sends a static value to another prop);
+`webkit migrate` applies it to apps and
 `webkit/no-deprecated-name` flags what is left.
 
 ## What is enforced, and where
@@ -197,11 +200,12 @@ old → new map, with value renames, is `packages/webkit/src/cli/migrations/v6-p
 - **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** (PostToolUse on
   `Write|Edit|MultiEdit`) blocks a root `.vue` whose `defineProps` uses an enforced alias, an
   `is`/`has` boolean, a negative boolean, an enforced banned value, a non-canonical or
-  reordered `size` union, a camelCase event or a redundant echo; and flags default drift (spec
+  reordered `size` union, a camelCase event, a redundant echo, an enforced event word or an
+  enforced slot name; and flags default drift (spec
   Props "Default" column ≠ `withDefaults`). The `check-authoring` CI ratchet runs the same
   engine repo-wide.
 - **The naming check** (`check:naming`, `.claude/hooks/validate-naming.mjs`) runs the vocabulary
-  with `{ stage: 'all' }` over every spec and `.vue`, reporting the staged entries (see
+  with `{ stage: 'all' }` over every spec and `.vue`, reporting enforced and staged entries (see
   [`naming.md`](./naming.md)).
 - **[`_schema.json`](../../.specs/_schema.json)** + the `spec-validate` skill reject aliases at
   spec-authoring time.

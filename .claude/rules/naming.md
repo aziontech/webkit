@@ -162,7 +162,7 @@ The full dictionary (concept → canonical name, banned aliases, values) is
 - **Job and step status is `status`** (N5); colour meaning stays `severity`.
 - **`active`** = the page or item you are on (renders `aria-current`); **`selected`** = picked
   items (`v-model:selected`, `v-model:selectedKeys`); **`open`** = anything that opens
-  (`v-model:open`). No `current`, `activated`, `expanded`, `visible`, `show`, `opened` (N6).
+  (`v-model:open`, and `v-model:openKeys` for the ids of open parts). No `current`, `activated`, `expanded`, `visible`, `show`, `opened` (N6).
 - **`<part>Position`** takes `leading | trailing` (`iconPosition`); sides and alignment take
   `start | end` (`align: 'start' | 'center' | 'end'`) (N7).
 - **Booleans are positive and unprefixed**: no `is`/`has`, no `hide*` (→ `show<Part>`), no
