@@ -1,4 +1,4 @@
-import { inject, type InjectionKey, type Ref } from 'vue'
+import { type InjectionKey, type Ref } from 'vue'
 
 /** State the context-menu root shares with its trigger area. */
 export interface ContextMenuContext {
@@ -15,9 +15,3 @@ export interface ContextMenuContext {
 }
 
 export const ContextMenuInjectionKey: InjectionKey<ContextMenuContext> = Symbol('ContextMenu')
-
-export function useContextMenuContext(): ContextMenuContext {
-  const ctx = inject(ContextMenuInjectionKey)
-  if (!ctx) throw new Error('ContextMenu.Trigger must be used inside <ContextMenu>.')
-  return ctx
-}

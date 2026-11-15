@@ -2,7 +2,8 @@
   import { computed, useAttrs } from 'vue'
 
   import { usePortalLocale } from '../../../../composables/use-translate'
-  import { HOVER_CARD_FOCUSABLE, useHoverCardContext } from '../injection-key'
+  import { useHoverCardContext } from '../composables/use-hover-card-context'
+  import { HOVER_CARD_FOCUSABLE } from '../injection-key'
 
   defineOptions({
     name: 'HoverCardContent',

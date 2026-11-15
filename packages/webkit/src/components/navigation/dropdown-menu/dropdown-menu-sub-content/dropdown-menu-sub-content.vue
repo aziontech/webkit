@@ -5,12 +5,9 @@
   import { focusMenuItem, useMenuLevel } from '../../../../composables/use-menu-root'
   import { usePlacement } from '../../../../composables/use-placement'
   import { usePortalLocale } from '../../../../composables/use-translate'
-  import {
-    DropdownMenuGroupInjectionKey,
-    DropdownMenuInjectionKey,
-    useDropdownContext,
-    useDropdownSubContext
-  } from '../injection-key'
+  import { useDropdownContext } from '../composables/use-dropdown-context'
+  import { useDropdownSubContext } from '../composables/use-dropdown-sub-context'
+  import { DropdownMenuGroupInjectionKey, DropdownMenuInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'DropdownMenuSubContent',

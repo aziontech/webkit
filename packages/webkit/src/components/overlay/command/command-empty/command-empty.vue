@@ -3,7 +3,7 @@
 
   import { useTranslate } from '../../../../composables/use-translate'
   import * as en from '../../../../locales/en'
-  import { useCommandMenuContext } from '../injection-key'
+  import { useCommandMenuContext } from '../composables/use-command-menu-context'
 
   defineOptions({
     name: 'CommandEmpty',

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { usePopoverContext } from '../injection-key'
+  import { usePopoverContext } from '../composables/use-popover-context'
 
   defineOptions({
     name: 'PopoverFooter',

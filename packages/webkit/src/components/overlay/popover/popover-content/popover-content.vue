@@ -2,7 +2,7 @@
   import { type ComponentPublicInstance } from 'vue'
 
   import { usePortalLocale } from '../../../../composables/use-translate'
-  import { usePopoverContext } from '../injection-key'
+  import { usePopoverContext } from '../composables/use-popover-context'
 
   defineOptions({
     name: 'PopoverContent',

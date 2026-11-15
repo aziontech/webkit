@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed, useAttrs } from 'vue'
 
-  import { useCommandMenuContext } from '../injection-key'
+  import { useCommandMenuContext } from '../composables/use-command-menu-context'
 
   defineOptions({
     name: 'CommandList',

@@ -1,4 +1,4 @@
-import { inject, type InjectionKey, type Ref } from 'vue'
+import { type InjectionKey, type Ref } from 'vue'
 
 /** Identifier a Command Menu item carries and emits on activation. */
 export type CommandItemValue = string | number
@@ -79,11 +79,3 @@ export const CommandInjectionKey: InjectionKey<CommandContext> = Symbol('Command
 export const CommandGroupInjectionKey: InjectionKey<string | null> = Symbol('CommandGroup')
 
 export const CommandPageInjectionKey: InjectionKey<string> = Symbol('CommandPage')
-
-export function useCommandMenuContext(): CommandContext {
-  const ctx = inject(CommandInjectionKey)
-  if (!ctx) {
-    throw new Error('Command.* sub-components must be used inside <Command>.')
-  }
-  return ctx
-}

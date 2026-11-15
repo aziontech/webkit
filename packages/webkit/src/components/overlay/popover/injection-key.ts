@@ -1,4 +1,4 @@
-import { inject, type InjectionKey, type Ref } from 'vue'
+import { type InjectionKey, type Ref } from 'vue'
 
 /** Side of the trigger the panel opens on, optionally aligned to its start or end. */
 export type PopoverPlacementSide =
@@ -60,11 +60,3 @@ export interface PopoverContext {
 }
 
 export const PopoverInjectionKey: InjectionKey<PopoverContext> = Symbol('Popover')
-
-export function usePopoverContext(): PopoverContext {
-  const ctx = inject(PopoverInjectionKey)
-  if (!ctx) {
-    throw new Error('Popover.* sub-components must be used inside <Popover>.')
-  }
-  return ctx
-}

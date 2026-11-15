@@ -2,11 +2,11 @@
   import { computed, onMounted, ref, useAttrs } from 'vue'
 
   import { useLocale } from '../../../../composables/use-locale/use-locale'
+  import { useMinuteClock } from '../../../../composables/use-minute-clock'
   import * as en from '../../../../locales/en'
   import Avatar from '../../../content/avatar/avatar.vue'
   import { relativeText, toDate } from '../../../content/timestamp/timestamp-format'
   import Tooltip from '../../../overlay/tooltip/tooltip.vue'
-  import { useMinuteClock } from './minute-clock'
 
   defineOptions({
     name: 'TableCellTime',
