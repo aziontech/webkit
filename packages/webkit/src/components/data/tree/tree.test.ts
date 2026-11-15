@@ -481,7 +481,7 @@ describe('Tree lazy children, rename, double-click and multi-select', () => {
     await userEvent.dblClick(rowOf(view.container, 'azion.config.js'))
     expect(onDblclick).toHaveBeenCalledWith(expect.any(MouseEvent), CONFIG)
     await userEvent.dblClick(rowOf(view.container, 'locked.txt'))
-    await userEvent.dblClick(view.getAllByTestId('data-tree-toggle')[0])
+    await userEvent.dblClick(view.getAllByTestId('data-tree__toggle')[0])
     expect(onDblclick).toHaveBeenCalledTimes(1)
   })
 
