@@ -5,8 +5,8 @@
   import Button from '../../../action/button/button.vue'
   import Tag from '../../tag/tag.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
   import MockupCursor from '../parts/mockup-cursor.vue'
 
@@ -147,7 +147,7 @@
     variant="bare"
     shell="legacy"
     :fade="atRest ? 'bottom' : 'y'"
-    class="[--mockup-fade-edge:20%] [--mockup-fade-start:74%]"
+    class="[--console-mockup-fade-edge:20%] [--console-mockup-fade-start:74%]"
     :chrome="false"
     :active="active"
     :width="420"

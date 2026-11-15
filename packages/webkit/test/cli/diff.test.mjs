@@ -44,10 +44,10 @@ test('diff reports identical copies with exit 0 and edits as a unified diff with
     assert.equal(same.code, 0, same.stderr)
     assert.match(same.stdout, /identical/)
 
-    const file = join(dir, 'src/views/DeleteDialog.vue')
+    const file = join(dir, 'src/views/delete-dialog.vue')
     const src = readFileSync(file, 'utf8')
     writeFileSync(file, src.replace('<template>', '<template>\n  <!-- local -->'))
-    const changed = cli(dir, 'diff', 'src/views/DeleteDialog.vue')
+    const changed = cli(dir, 'diff', 'src/views/delete-dialog.vue')
     assert.equal(changed.code, 1)
     assert.match(changed.stdout, /\+1 -0/)
     assert.match(changed.stdout, /^\+  <!-- local -->$/m)

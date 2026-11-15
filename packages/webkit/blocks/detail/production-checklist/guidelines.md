@@ -73,7 +73,7 @@ A large right-side `Drawer` that the expand button and every row open. `PanelHea
 ## States
 
 - Card: some gates done; the card lists every gate with the count in its tag, and the expand button and every row open the drawer.
-- Completed: every gate done; the tag reads Ready for production and the rows are gone.
+- Success: every gate done; the tag reads Ready for production and the rows are gone.
 - DrawerDetail: the expand button opened the right-side drawer with every step, its description and its action or its Done tag and note, over a Done footer; a card row opens the same drawer.
 
 ## Related

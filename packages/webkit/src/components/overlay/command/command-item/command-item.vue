@@ -16,11 +16,11 @@
 
   import Kbd, { type KbdKeyName } from '../../../content/kbd/kbd.vue'
   import { matchCommand, splitByRanges } from '../command-match'
+  import { useCommandMenuContext } from '../composables/use-command-menu-context'
   import {
     CommandGroupInjectionKey,
     type CommandItemValue,
-    CommandPageInjectionKey,
-    useCommandMenuContext
+    CommandPageInjectionKey
   } from '../injection-key'
 
   defineOptions({

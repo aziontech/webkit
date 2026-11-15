@@ -6,7 +6,7 @@
   import * as en from '../../../locales/en'
   import EmptyState from '../../feedback/empty-state/empty-state.vue'
   import Skeleton from '../../feedback/skeleton/skeleton.vue'
-  import { useFlowDiagramConnectors } from '../flow-diagram/connectors'
+  import { useFlowDiagramConnectors } from '../flow-diagram/composables/use-flow-diagram-connectors'
   import TopologyDiagramNode from './parts/topology-node.vue'
   import type { TopologyDiagramLevel, TopologyDiagramNodeData } from './types'
 

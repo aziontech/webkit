@@ -28,7 +28,7 @@ For a whole component:
 
 ## 6.0 is the clean break
 
-WebKit 6.0 is the one **clean-break major**: every name marked `@deprecated` before it, and every rename made for it, is removed outright in 6.0 — no alias, no "Removed in 7.0". Apps migrate once, with [`MIGRATION-v6.md`](../../packages/webkit/MIGRATION-v6.md) and `npx @aziontech/webkit migrate v6` (maps in `packages/webkit/src/cli/migrations/v6*.json`). **From 6.0 on**, the lifecycle above applies to every public part: mark → at least one major → remove. The only names 6.0 still resolves are **data aliases** read from external content (a site page's old section `_id`, an old `Illustration` scene name, a Markdown `<CardGroup cols>`), kept so stored page data keeps rendering; they carry no `@deprecated` tag and no removal version.
+WebKit 6.0 is the one **clean-break major**: every name marked `@deprecated` before it, and every rename made for it, is removed outright in 6.0 — no alias, no "Removed in 7.0". Apps migrate once, with [`MIGRATION_V6.md`](../../packages/webkit/MIGRATION_V6.md) and `npx @aziontech/webkit migrate v6` (maps in `packages/webkit/src/cli/migrations/v6*.json`). **From 6.0 on**, the lifecycle above applies to every public part: mark → at least one major → remove. The only names 6.0 still resolves are **data aliases** read from external content (a site page's old section `_id`, an old `Illustration` scene name, a Markdown `<CardGroup cols>`), kept so stored page data keeps rendering; they carry no `@deprecated` tag and no removal version.
 
 ## Tag details
 

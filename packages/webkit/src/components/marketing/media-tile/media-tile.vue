@@ -75,7 +75,7 @@
       :data-testid="`${testId}__frame`"
       :data-variant="variant"
       :data-padded="padded || null"
-      class="overflow-hidden data-[variant=frame]:min-h-64 data-[variant=plain]:min-h-32 [--console-mockup-fill:var(--bg-canvas)] data-[variant=frame]:bg-(--bg-canvas) data-[variant=frame]:data-[padded]:p-(--spacing-xl) data-[variant=plain]:data-[padded]:px-(--spacing-lg) data-[variant=plain]:data-[padded]:pt-(--spacing-lg)"
+      class="overflow-hidden data-[variant=frame]:min-h-64 data-[variant=plain]:min-h-32 data-[variant=frame]:bg-(--bg-canvas) data-[variant=frame]:data-[padded]:p-(--spacing-xl) data-[variant=plain]:data-[padded]:px-(--spacing-lg) data-[variant=plain]:data-[padded]:pt-(--spacing-lg)"
     >
       <div
         :data-testid="`${testId}__media`"

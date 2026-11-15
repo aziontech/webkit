@@ -2,7 +2,7 @@
   import { computed, onBeforeUnmount, useAttrs } from 'vue'
 
   import { TriggerHost } from '../../parts/trigger-host'
-  import { usePopoverContext } from '../injection-key'
+  import { usePopoverContext } from '../composables/use-popover-context'
 
   defineOptions({
     name: 'PopoverTrigger',

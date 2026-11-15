@@ -202,7 +202,7 @@
           />
           <div
             :data-variant="variant"
-            class="relative z-10 w-full data-[variant=console]:aspect-square data-[variant=diagram]:flex data-[variant=diagram]:min-h-(--size-96) data-[variant=diagram]:items-center data-[variant=diagram]:justify-center md:data-[variant=console]:-mb-(--console-showcase-crop) md:data-[variant=console]:aspect-[1.9/1] md:data-[variant=console]:[--mockup-fade-end:var(--console-showcase-fade-end)] md:data-[variant=console]:[--mockup-fade-start:var(--console-showcase-fade-start)]"
+            class="relative z-10 w-full data-[variant=console]:aspect-square data-[variant=diagram]:flex data-[variant=diagram]:min-h-(--size-96) data-[variant=diagram]:items-center data-[variant=diagram]:justify-center md:data-[variant=console]:-mb-(--console-showcase-crop) md:data-[variant=console]:aspect-[1.9/1] md:data-[variant=console]:[--console-mockup-fade-end:var(--console-showcase-fade-end)] md:data-[variant=console]:[--console-mockup-fade-start:var(--console-showcase-fade-start)]"
             :style="cropStyle"
           >
             <slot

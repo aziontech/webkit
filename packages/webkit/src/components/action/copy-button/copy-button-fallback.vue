@@ -4,7 +4,7 @@
   import { useTranslate } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import Input from '../../input/input/input.vue'
-  import { usePopoverContext } from '../../overlay/popover/injection-key'
+  import { usePopoverContext } from '../../overlay/popover/composables/use-popover-context'
   import Popover from '../../overlay/popover/popover.vue'
   import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
   import PopoverDescription from '../../overlay/popover/popover-description/popover-description.vue'

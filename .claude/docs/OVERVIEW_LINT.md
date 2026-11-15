@@ -177,7 +177,7 @@ Two complementary gates:
 
    `packages/webkit/tsconfig.json` adds `noPropertyAccessFromIndexSignature` and declaration emit (`declaration` + `emitDeclarationOnly`) — the same compiler that gates PRs also generates the published `.d.ts` at release time. Tests, `.figma.ts`, and `src/test/` are excluded from emit.
 
-2. **`type-coverage -p . --at-least 95`** (`pnpm type-coverage:webkit`) — measures how many expressions have a real (non-`any`) type and **fails below 95%**. This closes the gap `no-explicit-any` can't see: _implicit_ `any` leaking through inference.
+2. **`type-coverage -p . --at-least 95`** (`pnpm check:webkit:type-coverage`) — measures how many expressions have a real (non-`any`) type and **fails below 95%**. This closes the gap `no-explicit-any` can't see: _implicit_ `any` leaking through inference.
 
 ---
 
@@ -326,9 +326,9 @@ Honest footnotes worth a slide (all low-risk, none affect CI):
 | Command (repo root)                                | What it does                                                            |
 | -------------------------------------------------- | ----------------------------------------------------------------------- |
 | `pnpm lint:webkit` / `lint:webkit:fix`             | ESLint over webkit source (zero warnings) / with auto-fix               |
-| `pnpm lint-style:webkit` / `lint-style:webkit:fix` | Stylelint / with auto-fix                                               |
-| `pnpm format:webkit` / `check-format:webkit`       | Prettier write / check                                                  |
+| `pnpm lint:webkit:style` / `lint:webkit:style:fix` | Stylelint / with auto-fix                                               |
+| `pnpm format:webkit` / `check:webkit:format`       | Prettier write / check                                                  |
 | `pnpm typecheck:webkit`                            | `vue-tsc --noEmit`                                                      |
-| `pnpm type-coverage:webkit`                        | type-coverage, fails < 95%                                              |
+| `pnpm check:webkit:type-coverage`                        | type-coverage, fails < 95%                                              |
 | `pnpm audit`                                       | `pnpm audit --audit-level=high`                                         |
 | `pnpm gates`                                       | lint + typecheck + format check + audit — the local mirror of CI's gate |

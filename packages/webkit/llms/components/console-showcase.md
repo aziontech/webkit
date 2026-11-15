@@ -59,7 +59,7 @@
 
 - `data-variant` mirrors `variant`.
 - The first tab is selected on render.
-- `--mockup-fade-start` / `--mockup-fade-end` are set for a `ConsoleMockup` scene when cropped.
+- `--console-mockup-fade-start` / `--console-mockup-fade-end` are set for a `ConsoleMockup` scene when cropped.
 
 ## Accessibility
 

@@ -32,10 +32,10 @@ const Grouped = defineComponent({
   components: { KeyValueList, KeyValueListGroup, KeyValueListItem },
   template: `
     <KeyValueList :columns="2" aria-label="Workload details">
-      <KeyValueListGroup title="General">
+      <KeyValueListGroup label="General">
         <KeyValueListItem label="Status">Active</KeyValueListItem>
       </KeyValueListGroup>
-      <KeyValueListGroup title="Networking" data-testid="networking">
+      <KeyValueListGroup label="Networking" data-testid="networking">
         <KeyValueListItem label="Domain">shop.example.com</KeyValueListItem>
       </KeyValueListGroup>
     </KeyValueList>
@@ -237,7 +237,7 @@ describe('KeyValueList', () => {
         components: { KeyValueList, KeyValueListGroup, KeyValueListItem },
         template: `
           <KeyValueList variant="split" aria-label="Plan">
-            <KeyValueListGroup title="Plan">
+            <KeyValueListGroup label="Plan">
               <KeyValueListItem label="Plan Price">$0.00 / month</KeyValueListItem>
             </KeyValueListGroup>
           </KeyValueList>

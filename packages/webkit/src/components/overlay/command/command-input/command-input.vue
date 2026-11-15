@@ -5,7 +5,7 @@
   import * as en from '../../../../locales/en'
   import Kbd from '../../../content/kbd/kbd.vue'
   import Input from '../../../input/input/input.vue'
-  import { useCommandMenuContext } from '../injection-key'
+  import { useCommandMenuContext } from '../composables/use-command-menu-context'
 
   defineOptions({
     name: 'CommandInput',

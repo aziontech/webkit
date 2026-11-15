@@ -3,7 +3,7 @@
 </script>
 
 <template>
-  <div class="[--banner-top-height:42%]">
+  <div class="[--hero-banner-top-height:42%]">
     <Hero
       variant="screen"
       align="center"

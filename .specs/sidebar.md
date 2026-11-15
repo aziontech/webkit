@@ -3,12 +3,12 @@ name: sidebar
 category: layout
 structure: composition
 status: implemented
-spec_version: 12
+spec_version: 13
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3735-14866
   node_id: 3735:14866
-checksum: 223b3b8e01105838a827d28f3e0154b243f733ac402477116c6462a4be637f6b
+checksum: 573ae5c7d83c04172f08d1275d613ca6f42bdc3f3eb5e5e7c1829bbbf69be48f
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -76,7 +76,7 @@ Two details are what make the pair correct, and neither costs more than one attr
   `aria-label` along with the role, so the sidebar's `ariaLabel` remains the one name for the
   region — nothing else to unset.
 - **Nothing to wire for focus rings.** The sidebar hands its own surface down as
-  `--menu-ring-offset` / `--menu-item-ring-offset`, so every row's focus ring is offset against the
+  `--sidebar-menu-ring-offset` / `--sidebar-menu-item-ring-offset`, so every row's focus ring is offset against the
   sidebar fill rather than the page canvas.
 
 ```vue
@@ -545,7 +545,7 @@ fallback for the brief pre-hydration window, not a replacement for the handle's 
 | expand button offset past the edge | `var(--spacing-2xs)` (container padding, so the boxes stay flush)                      |
 
 The `<nav>` region hands its own fill down to the rows inside it as
-`--menu-item-ring-offset` and `--menu-ring-offset`, both `var(--bg-surface)`. That is what makes a
+`--sidebar-menu-item-ring-offset` and `--sidebar-menu-ring-offset`, both `var(--bg-surface)`. That is what makes a
 focus ring on a `SidebarMenuItem` or any `SidebarMenu` row read against the sidebar rather than against the page
 canvas the tokens fall back to.
 
@@ -669,7 +669,7 @@ Every story composes `SidebarMenu` for its rows and groups.
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

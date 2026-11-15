@@ -55,8 +55,8 @@
 
   const ROOT_CLASS =
     'relative z-10 flex w-full flex-col my-(--spacing-sm) first-of-type:my-0 translate-x-0 ' +
-    'data-[motion=push]:bg-[var(--menu-slide-surface,var(--bg-surface))] ' +
-    'data-[motion=pop]:bg-[var(--menu-slide-surface,var(--bg-surface))] ' +
+    'data-[motion=push]:bg-[var(--sidebar-menu-slide-surface,var(--bg-surface))] ' +
+    'data-[motion=pop]:bg-[var(--sidebar-menu-slide-surface,var(--bg-surface))] ' +
     'aria-hidden:z-0 ' +
     'aria-hidden:absolute aria-hidden:inset-x-0 aria-hidden:top-0 aria-hidden:-translate-x-full rtl:aria-hidden:translate-x-full ' +
     'aria-hidden:opacity-0 aria-hidden:motion-reduce:hidden ' +

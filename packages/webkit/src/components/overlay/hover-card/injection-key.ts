@@ -1,4 +1,4 @@
-import { inject, type InjectionKey, type Ref } from 'vue'
+import { type InjectionKey, type Ref } from 'vue'
 
 import type { Placement } from '../../../composables/use-placement'
 
@@ -40,9 +40,3 @@ export const HOVER_CARD_FOCUSABLE =
   'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
 
 export const HoverCardInjectionKey: InjectionKey<HoverCardContext> = Symbol('HoverCard')
-
-export function useHoverCardContext(): HoverCardContext {
-  const ctx = inject(HoverCardInjectionKey)
-  if (!ctx) throw new Error('HoverCard.* sub-components must be used inside <HoverCard>.')
-  return ctx
-}

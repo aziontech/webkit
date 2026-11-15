@@ -8,8 +8,8 @@
   import Input from '../../../input/input/input.vue'
   import Select from '../../../input/select/index'
   import Card from '../../card/card.vue'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
 
   defineOptions({ name: 'SqlDatabaseTableFragment' })
 
@@ -114,7 +114,7 @@
   <ConsoleMockupShell
     variant="bare"
     fade="bottom"
-    class="[--mockup-fade-start:78%]"
+    class="[--console-mockup-fade-start:78%]"
     :chrome="false"
     :active="active"
     :width="520"

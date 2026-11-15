@@ -578,7 +578,7 @@ Some components may require Vue Router for navigation or routing features.
 - [Vue 3 Composition API](https://vuejs.org/api/composition-api-setup.html)
 - [Vue Router Documentation](https://router.vuejs.org/)
 - [shadcn/ui Field](https://ui.shadcn.com/docs/components/field)
-- [`MIGRATION-v6.md`](../../packages/webkit/MIGRATION-v6.md)
+- [`MIGRATION_V6.md`](../../packages/webkit/MIGRATION_V6.md)
 
 ---
 
@@ -873,9 +873,9 @@ For every new component, generate `<name>.figma.ts` next to the `.vue` mapping F
 
 CLI scripts (in `packages/webkit/package.json`):
 
-- `pnpm --filter @aziontech/webkit run parse:figma` — verify all `.figma.ts` files parse.
+- `pnpm --filter @aziontech/webkit run check:figma` — verify all `.figma.ts` files parse.
 - `pnpm --filter @aziontech/webkit run publish:figma` — publish mappings to Figma. **Requires `FIGMA_ACCESS_TOKEN`** in the environment.
-- `pnpm --filter @aziontech/webkit run unpublish:figma` — remove published mappings.
+- `pnpm --filter @aziontech/webkit run clean:figma` — remove published mappings.
 
 Authoring the `.figma.ts` file works without the token; only publishing needs it.
 
@@ -1091,7 +1091,7 @@ The spec lists which `variant` / `size` examples exist. Do **not** add visual pe
 #### Validação
 
 - [ ] `<name>.figma.ts` created next to the `.vue` (Code Connect available — see § 12).
-- [ ] `pnpm lint:webkit && typecheck:webkit && type-coverage:webkit && pnpm --filter @aziontech/webkit test:ssr` all pass.
+- [ ] `pnpm lint:webkit && typecheck:webkit && check:webkit:type-coverage && pnpm --filter @aziontech/webkit test:ssr` all pass.
 
 ---
 

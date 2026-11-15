@@ -9,8 +9,8 @@
   import Badge from '../../badge/badge.vue'
   import Card from '../../card/card.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import MockupCursor from '../parts/mockup-cursor.vue'
 
   defineOptions({ name: 'RealTimeMetricsFilterFragment' })
@@ -123,7 +123,7 @@
   <ConsoleMockupShell
     variant="bare"
     fade="bottom"
-    class="[--mockup-fade-start:78%]"
+    class="[--console-mockup-fade-start:78%]"
     :chrome="false"
     :active="active"
     :width="420"

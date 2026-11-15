@@ -1,5 +1,5 @@
 import type { ConsoleMockupName } from './console-mockup.vue'
-import type { ConsoleMockupShellVariant } from './console-mockup-shell/console-mockup-shell.vue'
+import type { ConsoleMockupShellVariant } from './parts/console-mockup-shell.vue'
 
 export { default as ConsoleMockupPlate } from './parts/widget-plate.vue'
 

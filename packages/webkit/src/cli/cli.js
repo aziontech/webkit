@@ -401,7 +401,7 @@ function runMigrate(projectDir, target, { dryRun, from }) {
     for (const w of warnings) process.stdout.write(`  MANUAL: ${w}\n`)
   }
   process.stdout.write(
-    `\n${changed} file(s) ${dryRun ? 'to rewrite' : 'rewritten'}, ${manual} file(s) need a manual change. See MIGRATION-v6.md.\n`
+    `\n${changed} file(s) ${dryRun ? 'to rewrite' : 'rewritten'}, ${manual} file(s) need a manual change. See MIGRATION_V6.md.\n`
   )
   return 0
 }

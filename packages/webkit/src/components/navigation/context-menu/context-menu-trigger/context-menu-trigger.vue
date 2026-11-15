@@ -2,7 +2,7 @@
   import { computed, onBeforeUnmount, useAttrs } from 'vue'
 
   import { resolveDirection } from '../../../../composables/use-direction'
-  import { useContextMenuContext } from '../injection-key'
+  import { useContextMenuContext } from '../composables/use-context-menu-context'
 
   defineOptions({
     name: 'ContextMenuTrigger',

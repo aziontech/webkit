@@ -3,8 +3,8 @@ name: hero
 category: marketing
 structure: composition
 status: implemented
-spec_version: 7
-checksum: f5217661105e5d6fc4a0877c5bc6185409a33319f8fc87caf7536ea3308b3c21
+spec_version: 8
+checksum: 5a428d5e0515c79f88c002ab4026feda2b21d92c39faf3ea6326b6c2c2ae4250
 created: 2026-09-22
 last_updated: 2026-11-15
 ---
@@ -146,12 +146,12 @@ The root `Hero` owns the band — the full-bleed section, the capped column, the
 - `data-media` present when the `media` slot is filled and the content column is split into two equal halves from `md` up, the copy leading and the media trailing; stacked below `md`
 - `data-media-align` carries where the `media` slot sits in its column (`center` or `end`); it takes effect only with `data-media`. With `end`, from `md` up, the media cell extends through the end-side inline inset so its end edge lands on the container boundary — the same line the frames of the section below draw — and media narrower than the cell is set against that edge. Stacked below `md`, the media keeps the inset
 - `data-align` carries where the content column sits vertically in a `screen` band. The column takes the band's leftover height, (`start`, `center` or `end`), so `center` is the centre of the space actually available — a `bottom` asset reserves its height and the copy centres above it, while a `top` asset overlays and claims none
-- The band is an `isolate` stacking context, so its layer order never leaks into the page. Layer tokens set that order: `--banner-z-background` (0), `--banner-z-top` / `--banner-z-bottom` (1), `--banner-z-content` (10)
-- Each asset window clips its slotted child, so an asset larger than the band shows only the part the window frames. Custom properties place it: `--banner-top-height` / `--banner-bottom-height` size the window, and `--banner-top-x` / `-y`, `--banner-bottom-x` / `-y`, `--banner-background-x` / `-y` move the asset inside it
+- The band is an `isolate` stacking context, so its layer order never leaks into the page. Layer tokens set that order: `--hero-banner-z-background` (0), `--hero-banner-z-top` / `--hero-banner-z-bottom` (1), `--hero-banner-z-content` (10)
+- Each asset window clips its slotted child, so an asset larger than the band shows only the part the window frames. Custom properties place it: `--hero-banner-top-height` / `--hero-banner-bottom-height` size the window, and `--hero-banner-top-x` / `-y`, `--hero-banner-bottom-x` / `-y`, `--hero-banner-background-x` / `-y` move the asset inside it
 - The backdrop sets `--texture-fade-lead: transparent`, so a `top` / `bottom` fade on the `texture` layer — or on a `texture` in the `background` slot — ramps in from zero at its leading edge as well as fading out: the opening band sits under the site header, and the texture must clear it. Outside a hero the same fades stay single
-- `data-floor` present when `floorTexture` paints the floor window. The window then takes a fluid default height (`clamp(9rem, 30dvh, 34rem)`) so a `screen` band still measures one screen on a laptop and caps at the design's field where there is room; with no floor texture it stays `auto` and is sized by its slotted child. `--banner-bottom-height` overrides either, and `--banner-floor-ink` (0.6) sets how strongly the texture reads
-- The floor holds the `bottom` window and the `marquee` strip in one block, so a single ground covers both: `--banner-floor-bg` (transparent by default) paints it, which is how a design plinths the floor a shade off the band's own canvas
-- The `marquee` strip stands on `--bg-canvas` edge to edge, so a `texture` backdrop or `background` slot never shows through the marks; a `--banner-floor-bg` plinth replaces that ground so the floor still reads as one block
+- `data-floor` present when `floorTexture` paints the floor window. The window then takes a fluid default height (`clamp(9rem, 30dvh, 34rem)`) so a `screen` band still measures one screen on a laptop and caps at the design's field where there is room; with no floor texture it stays `auto` and is sized by its slotted child. `--hero-banner-bottom-height` overrides either, and `--hero-banner-floor-ink` (0.6) sets how strongly the texture reads
+- The floor holds the `bottom` window and the `marquee` strip in one block, so a single ground covers both: `--hero-banner-floor-bg` (transparent by default) paints it, which is how a design plinths the floor a shade off the band's own canvas
+- The `marquee` strip stands on `--bg-canvas` edge to edge, so a `texture` backdrop or `background` slot never shows through the marks; a `--hero-banner-floor-bg` plinth replaces that ground so the floor still reads as one block
 - `marquee` loads the strip on demand, so a band without one pulls in neither the strip nor its mark registry
 - `marqueeLabel` names what the strip is evidence of; left empty the marks stand alone, which is the right register when the band's copy has already said it
 
@@ -164,10 +164,10 @@ _none_
 | Region                             | Token (DESIGN.md)                                                                               |
 | ---------------------------------- | ----------------------------------------------------------------------------------------------- |
 | band fill                          | `var(--bg-canvas)`                                                                              |
-| band floor ground                  | `var(--banner-floor-bg, transparent)` — set by the consumer                                     |
-| floor strip ground                 | `var(--banner-floor-bg, var(--bg-canvas))`                                                      |
+| band floor ground                  | `var(--hero-banner-floor-bg, transparent)` — set by the consumer                                     |
+| floor strip ground                 | `var(--hero-banner-floor-bg, var(--bg-canvas))`                                                      |
 | floor strip rhythm                 | `var(--spacing-xl)`                                                                             |
-| floor texture ink                  | `var(--banner-floor-ink, 0.6)`                                                                  |
+| floor texture ink                  | `var(--hero-banner-floor-ink, 0.6)`                                                                  |
 | band rule                          | `var(--border-default)`                                                                         |
 | band inset                         | `var(--layout-boundary-inline)`                                                                 |
 | band rhythm (`size` medium)        | `var(--spacing-2xl)`                                                                            |
@@ -179,7 +179,7 @@ _none_
 | accent phrase                      | `var(--color-orange-400)`, `var(--primary)`, `var(--color-orange-600)`                          |
 | description                        | `.text-body-lg`, `var(--text-muted)`                                                            |
 | headline to description            | `var(--spacing-md)` gap plus `var(--spacing-md)` margin                                         |
-| asset window clip                  | — (geometry, set by the consumer's `--banner-*` properties)                                     |
+| asset window clip                  | — (geometry, set by the consumer's `--hero-banner-*` properties)                                     |
 | width cap                          | `var(--container-3xl)` … `var(--container-7xl)`                                                 |
 
 ## Theme gaps
@@ -206,7 +206,7 @@ _none_
 - MediaMobileCentered — the `media` band with `Hero.Title` `mobile-align="center"` set, opened at the mobile viewport (justified: the copy only re-aligns below `md`, where the media stacks under it, so the default `Media` story cannot show it)
 - Background — the band with a backdrop in its `background` slot (justified: the layering of backdrop beneath copy is the band's one non-obvious behaviour)
 - Backdrops — composite story rendering every `texture` value (justified: a texture is a multi-option axis, and the canonical composite story for it)
-- AssetWindows — the `top` and `bottom` slots filled (justified: the clipping windows and their `--banner-*` geometry cannot be read from the prop table)
+- AssetWindows — the `top` and `bottom` slots filled (justified: the clipping windows and their `--hero-banner-*` geometry cannot be read from the prop table)
 - Alignment — composite story rendering every `align` value (justified: a multi-option axis whose effect only exists in a `screen` band)
 - PageLanguage — the band above a `section-container` (justified: the band's `border-b` is another component's top edge, and that handoff is the reason the band exists)
 - Carousel — the band with a `floorTexture` field and the brand strip on its floor (justified: the strip is a floor region the prop table cannot show, and its plinth ground is set by a custom property rather than a prop)
@@ -227,7 +227,7 @@ _none_
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

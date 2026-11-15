@@ -39,7 +39,7 @@
   // Data
   const showCheckIcon = ref(false)
   const showImageCheckIcon = ref(false)
-  const mySlot = ref(null)
+  const slotEl = ref(null)
 
   // Extrai pixels de "20px" → 20
   function getPixelSize(sizeClass) {
@@ -232,7 +232,7 @@
       <a
         class="absolute inset-0 flex items-center justify-center"
         id="svg"
-        ref="mySlot"
+        ref="slotEl"
       >
         <slot></slot>
       </a>

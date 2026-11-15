@@ -8,11 +8,11 @@
 
   export interface HelpPanelGroupProps {
     /** The question this section answers; the section renders no heading when empty. */
-    title?: string
+    label?: string
   }
 
   withDefaults(defineProps<HelpPanelGroupProps>(), {
-    title: ''
+    label: ''
   })
 
   defineSlots<{
@@ -31,16 +31,16 @@
 <template>
   <section
     v-bind="$attrs"
-    :aria-labelledby="title ? headingId : undefined"
+    :aria-labelledby="label ? headingId : undefined"
     :data-testid="testId"
     class="flex w-full flex-col gap-(--spacing-xs)"
   >
     <h3
-      v-if="title"
+      v-if="label"
       :id="headingId"
       class="text-heading-2xs text-(--text-default)"
     >
-      {{ title }}
+      {{ label }}
     </h3>
     <div
       class="flex flex-col gap-(--spacing-sm) text-body-sm text-(--text-default) [&_ul]:list-disc [&_ul]:ps-(--spacing-lg) [&_ol]:list-decimal [&_ol]:ps-(--spacing-lg) [&_a]:text-link"

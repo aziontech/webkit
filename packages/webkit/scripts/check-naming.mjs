@@ -85,8 +85,8 @@ if (invoked) {
     console.log(formatReport(staged, args))
     console.log(
       args.strict
-        ? 'Staged rules block (--strict or NAMING_STAGED_BLOCKS).'
-        : 'Staged rules are reported, not blocking, until the rename lanes merge (--strict to block, --rule <id> --all to list one rule, --json for everything).'
+        ? 'Every rule blocks (NAMING_STAGED_BLOCKS); --rule <id> --all lists one rule, --json everything.'
+        : 'Staged rules are reported, not blocking (--strict to block, --rule <id> --all to list one rule, --json for everything).'
     )
   }
   if (errors.length) {

@@ -1,8 +1,9 @@
 <script setup lang="ts">
   import { computed, inject, onBeforeUnmount, useAttrs, useSlots, watch } from 'vue'
 
+  import { useDropdownContext } from '../composables/use-dropdown-context'
   import type { DropdownMenuItemType } from '../injection-key'
-  import { DropdownMenuGroupInjectionKey, useDropdownContext } from '../injection-key'
+  import { DropdownMenuGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'DropdownMenuItem',

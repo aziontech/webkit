@@ -280,10 +280,10 @@
   const artStyle = computed(() => {
     if (!props.illustration) {
       return {
-        '--hero-art-width': '100%',
-        '--hero-art-bleed': '0%',
-        '--hero-art-trim-top': '0%',
-        '--hero-art-trim-bottom': '0%'
+        '--hero-section-art-width': '100%',
+        '--hero-section-art-bleed': '0%',
+        '--hero-section-art-trim-top': '0%',
+        '--hero-section-art-trim-bottom': '0%'
       }
     }
     const {
@@ -301,10 +301,10 @@
       ? width * (1 - (start + end) / 2 / canvas) - 0.5
       : (width * (canvas - end)) / canvas
     return {
-      '--hero-art-width': percent(width),
-      '--hero-art-bleed': percent(bleed),
-      '--hero-art-trim-top': percent((width * top) / canvas),
-      '--hero-art-trim-bottom': percent(rows ? (width * (rows - bottom)) / canvas : 0)
+      '--hero-section-art-width': percent(width),
+      '--hero-section-art-bleed': percent(bleed),
+      '--hero-section-art-trim-top': percent((width * top) / canvas),
+      '--hero-section-art-trim-bottom': percent(rows ? (width * (rows - bottom)) / canvas : 0)
     }
   })
 
@@ -337,7 +337,7 @@
     :data-testid="testId"
     :data-variant="variant"
     :data-title-measure="narrowTitle ? 'narrow' : null"
-    class="scroll-mt-(--spacing-2xl) data-[title-measure=narrow]:[&_h1]:max-w-(--container-lg) data-[variant=pixel-floor]:[--banner-floor-bg:var(--bg-surface)] data-[variant=pixel-floor]:[--texture-pool-a:95%_64%] data-[variant=pixel-floor]:[--texture-pool-b:-2%_38%]"
+    class="scroll-mt-(--spacing-2xl) data-[title-measure=narrow]:[&_h1]:max-w-(--container-lg) data-[variant=pixel-floor]:[--hero-banner-floor-bg:var(--bg-surface)] data-[variant=pixel-floor]:[--texture-pool-a:95%_64%] data-[variant=pixel-floor]:[--texture-pool-b:-2%_38%]"
   >
     <Hero
       v-if="title"
@@ -426,7 +426,7 @@
       >
         <div
           :style="artStyle"
-          class="w-full md:-mt-(--hero-art-trim-top) md:-mb-(--hero-art-trim-bottom) md:w-(--hero-art-width) md:max-w-none md:shrink-0 md:-me-(--hero-art-bleed)"
+          class="w-full md:-mt-(--hero-section-art-trim-top) md:-mb-(--hero-section-art-trim-bottom) md:w-(--hero-section-art-width) md:max-w-none md:shrink-0 md:-me-(--hero-section-art-bleed)"
         >
           <Illustration
             v-if="illustration"

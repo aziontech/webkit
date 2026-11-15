@@ -1,28 +1,28 @@
 import { createRequire } from 'node:module'
 
-import composableReadonlyReturn from '../rules/composable-readonly-return.js'
-import composableScopeCleanup from '../rules/composable-scope-cleanup.js'
 import noPolymorphicAsProp from '../rules/no-polymorphic-as-prop.js'
+import requireComposableScopeCleanup from '../rules/require-composable-scope-cleanup.js'
+import requireReadonlyComposableReturn from '../rules/require-readonly-composable-return.js'
 import { isComposableFile } from './composable-file.js'
 
 export const SIGNATURE_RULES = {
-  'composable-readonly-return': composableReadonlyReturn,
-  'composable-scope-cleanup': composableScopeCleanup,
+  'require-readonly-composable-return': requireReadonlyComposableReturn,
+  'require-composable-scope-cleanup': requireComposableScopeCleanup,
   'no-polymorphic-as-prop': noPolymorphicAsProp
 }
 
 export const SIGNATURE_MESSAGES = {
-  'composable-readonly-return':
+  'require-readonly-composable-return':
     'Exported composable returns `reactive()`, a raw `ref()`, or has no explicit return type. Return refs/computed/functions, wrap escaping state in `readonly()`, and declare the return type (composables.md).',
-  'composable-scope-cleanup':
+  'require-composable-scope-cleanup':
     'Composable registers a listener, timer, animation frame or observer with no `onScopeDispose` in the file. Tear it down in `onScopeDispose` or use the VueUse primitive that owns its cleanup (composables.md).',
   'no-polymorphic-as-prop':
     '`defineProps` declares `as` / `asChild`. A component owns its root: switch anchor vs. button on `href` with `<component :is>` (root-element.md).'
 }
 
 export const STANDARD_BY_SIGNATURE = {
-  'composable-readonly-return': 'composables',
-  'composable-scope-cleanup': 'composables',
+  'require-readonly-composable-return': 'composables',
+  'require-composable-scope-cleanup': 'composables',
   'no-polymorphic-as-prop': 'root-element'
 }
 

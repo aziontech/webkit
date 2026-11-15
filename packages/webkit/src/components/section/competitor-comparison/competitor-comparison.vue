@@ -171,7 +171,7 @@
         marks="all"
       >
         <table
-          class="w-full table-fixed border-separate border-spacing-0 text-start [--compare-head:3.5rem] sm:[--compare-head:5rem]"
+          class="w-full table-fixed border-separate border-spacing-0 text-start [--competitor-comparison-head:3.5rem] sm:[--competitor-comparison-head:5rem]"
         >
           <caption
             v-if="caption"
@@ -190,14 +190,14 @@
             <tr>
               <th
                 scope="col"
-                class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-xl) py-0 align-middle font-normal h-(--compare-head)"
+                class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-xl) py-0 align-middle font-normal h-(--competitor-comparison-head)"
               >
                 <span class="text-overline-md text-(--text-muted)">{{ columnLabel }}</span>
               </th>
               <th
                 scope="col"
                 aria-label="Azion"
-                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 text-center align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
+                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-head) sm:px-(--spacing-lg)"
               >
                 <Brand
                   variant="default"
@@ -209,7 +209,7 @@
               <th
                 scope="col"
                 :aria-label="competitor.name"
-                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 text-center align-middle font-normal h-(--compare-head) sm:px-(--spacing-lg)"
+                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-head) sm:px-(--spacing-lg)"
               >
                 <Logo
                   :name="competitorMark.name"
@@ -230,7 +230,7 @@
               <th
                 scope="colgroup"
                 colspan="3"
-                class="sticky top-[calc(3.5rem+var(--compare-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) py-(--spacing-sm) text-start font-normal"
+                class="sticky top-[calc(3.5rem+var(--competitor-comparison-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) py-(--spacing-sm) text-start font-normal"
               >
                 <span class="text-overline-md text-(--text-primary)">{{ group.title }}</span>
               </th>

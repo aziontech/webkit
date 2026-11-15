@@ -7,8 +7,8 @@
   import Input from '../../../input/input/input.vue'
   import Select from '../../../input/select/index'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import MockupCursor from '../parts/mockup-cursor.vue'
   import MockupSelect from '../parts/mockup-select.vue'
 
@@ -163,7 +163,7 @@
     variant="bare"
     shell="legacy"
     fade="bottom"
-    class="[--mockup-fade-start:72%]"
+    class="[--console-mockup-fade-start:72%]"
     :chrome="false"
     :active="active"
     :width="420"

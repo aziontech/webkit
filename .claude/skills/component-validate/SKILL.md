@@ -30,7 +30,7 @@ Run the four checks in this fixed order; stop on the first failure and surface i
 |---|---|---|
 | 1 | `pnpm lint:webkit` | ESLint reports an error or warning that crosses the project threshold. |
 | 2 | `pnpm typecheck:webkit` | `vue-tsc` reports a TypeScript error in the component, its sub-components, or the consuming exports. |
-| 3 | `pnpm type-coverage:webkit` | Type coverage below the threshold (project default: 95%). |
+| 3 | `pnpm check:webkit:type-coverage` | Type coverage below the threshold (project default: 95%). |
 | 4 | `pnpm --filter @aziontech/webkit test:ssr` | An example of the new component does not render (or compile) with `vue/server-renderer`. |
 
 For each command, capture the exit code and the last 40 lines of stdout/stderr. Emit a table:
@@ -40,7 +40,7 @@ For each command, capture the exit code and the last 40 lines of stdout/stderr. 
 |---|---|---|
 | `pnpm lint:webkit` | ✅ pass | 0 warnings |
 | `pnpm typecheck:webkit` | ✅ pass | — |
-| `pnpm type-coverage:webkit` | ✅ pass | 97.2% (threshold 95%) |
+| `pnpm check:webkit:type-coverage` | ✅ pass | 97.2% (threshold 95%) |
 | `pnpm --filter @aziontech/webkit test:ssr` | ✅ pass | every block and example rendered |
 ```
 

@@ -27,9 +27,9 @@
   },
   "variants": [
     {
-      "name": "Completed",
+      "name": "Success",
       "summary": "Every gate done: the Tag turns into a success Ready for production, the rows are gone and the header loses its bottom border, so the card closes down to its title and the expand button.",
-      "file": "variants/completed.vue"
+      "file": "variants/success.vue"
     },
     {
       "name": "DrawerDetail",

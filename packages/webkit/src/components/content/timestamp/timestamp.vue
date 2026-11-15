@@ -2,10 +2,10 @@
   import { computed, inject, nextTick, onMounted, ref, useAttrs } from 'vue'
 
   import { useLocale } from '../../../composables/use-locale/use-locale'
+  import { useMinuteClock } from '../../../composables/use-minute-clock'
   import { LocaleInjectionKey } from '../../../composables/use-translate'
   import * as en from '../../../locales/en'
   import CopyButton from '../../action/copy-button/copy-button.vue'
-  import { useMinuteClock } from '../../data/table/table-cell-time/minute-clock'
   import Popover from '../../overlay/popover/popover.vue'
   import PopoverContent from '../../overlay/popover/popover-content/popover-content.vue'
   import PopoverTitle from '../../overlay/popover/popover-title/popover-title.vue'

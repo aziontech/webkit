@@ -66,14 +66,14 @@ from step 2, with the existing spec:
   payload). Put `!` in the PR title (`feat(webkit)!: …`): merges are squashed, so the title is the
   commit release-please reads, and it cuts a major. Ship a codemod entry in
   `packages/webkit/src/cli/migrations/` (the `webkit migrate` map), or, when no codemod can do it,
-  a new line naming the component in the migration guide (`packages/webkit/MIGRATION-v6.md` for
+  a new line naming the component in the migration guide (`packages/webkit/MIGRATION_V6.md` for
   the current major). Bump `spec_version` too. Prefer a deprecation cycle (below) to a direct
   break.
 
 ### Deprecate
 
 Follow [`.claude/rules/deprecation.md`](./.claude/rules/deprecation.md). 6.0 was the one clean
-break: it removed every old name outright, and apps migrate once with `MIGRATION-v6.md` and
+break: it removed every old name outright, and apps migrate once with `MIGRATION_V6.md` and
 `webkit migrate`. From 6.0 on, a removal goes through this cycle:
 
 1. Mark the part `@deprecated` in its JSDoc (a prop) or on `defineOptions` (a component), naming
@@ -114,7 +114,7 @@ Two more gates hold the Change and Remove stages to their rules:
 - `api-diff` compares the public API (exports, props, events, slots, models, sub-components)
   with the PR's base branch. A breaking change fails without `!` in the PR title and a
   migration: a codemod entry, or a new line naming the component in
-  `packages/webkit/MIGRATION-v<N>.md`. Any API change, breaking or not, fails without a
+  `packages/webkit/MIGRATION_V<N>.md`. Any API change, breaking or not, fails without a
   `spec_version` bump in that component's spec. Run it locally with
   `PR_TITLE='feat(webkit)!: …' pnpm --filter @aziontech/webkit run check:api-diff`.
 - The PR title must pass commitlint; CI checks it.
@@ -266,10 +266,10 @@ Before opening a PR, all of these must pass:
 
 ```bash
 pnpm lint:webkit            # ESLint, max-warnings 0
-pnpm lint-style:webkit      # Stylelint
+pnpm lint:webkit:style      # Stylelint
 pnpm typecheck:webkit      # vue-tsc --noEmit
-pnpm type-coverage:webkit   # type-coverage >= 95%
-pnpm check-format:webkit    # Prettier
+pnpm check:webkit:type-coverage   # type-coverage >= 95%
+pnpm check:webkit:format    # Prettier
 pnpm --filter @aziontech/webkit test:ssr   # renders every block and example (SFC compile errors invisible to vue-tsc)
 pnpm build:docs             # the docs site, every route prerendered
 ```
@@ -324,7 +324,7 @@ pnpm test:visual             # compare with apps/visual/baselines
 step is the baseline. Baselines are committed and are valid only when taken in
 `mcr.microsoft.com/playwright:v1.62.0-noble` (the image the CI `visual` job runs in): dispatch
 `.github/workflows/visual-baselines.yml` with `update_baselines=true`
-(`pnpm regenerate:baselines`), review the `visual-baselines` artifact and commit it
+(`pnpm update:baselines`), review the `visual-baselines` artifact and commit it
 (`/baselines-regenerate`). Failed comparisons upload the Playwright report (with diffs) as an artifact.
 
 ## Commit convention

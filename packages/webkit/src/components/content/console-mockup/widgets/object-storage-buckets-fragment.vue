@@ -6,8 +6,8 @@
   import Input from '../../../input/input/input.vue'
   import Card from '../../card/card.vue'
   import Tag from '../../tag/tag.vue'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
 
   defineOptions({ name: 'ObjectStorageBucketsFragment' })
 
@@ -120,7 +120,7 @@
   <ConsoleMockupShell
     variant="bare"
     fade="bottom"
-    class="[--mockup-fade-start:82%]"
+    class="[--console-mockup-fade-start:82%]"
     :chrome="false"
     :active="active"
     :width="560"

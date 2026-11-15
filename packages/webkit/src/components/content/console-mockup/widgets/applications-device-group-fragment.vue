@@ -7,8 +7,8 @@
   import Hint from '../../../input/hint/hint.vue'
   import Input from '../../../input/input/input.vue'
   import Textarea from '../../../input/textarea/textarea.vue'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
 
   defineOptions({ name: 'ApplicationsDeviceGroupFragment' })
 
@@ -86,7 +86,7 @@
   <ConsoleMockupShell
     variant="bare"
     :fade="lifted ? 'y' : 'bottom'"
-    class="[--mockup-fade-edge:14%] [--mockup-fade-start:80%]"
+    class="[--console-mockup-fade-edge:14%] [--console-mockup-fade-start:80%]"
     :chrome="false"
     :active="active"
     :width="420"

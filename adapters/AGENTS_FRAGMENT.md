@@ -148,7 +148,7 @@ Mechanics of consuming the package (imports, tokens, tree-shaking) live in `/web
 
 ### Agents (Claude Code) — delegate a whole task
 
-`webkit-expert` (which component + how) · `webkit-adopter` (the init/adoption flow) · `webkit-reviewer`
+`webkit-advisor` (which component + how) · `webkit-adopter` (the init/adoption flow) · `webkit-reviewer`
 (review a diff for correct/performant usage) · `webkit-ui-verifier` (drive the screen: both themes,
 widths, console, axe, states) · `webkit-adoption-auditor` (coverage scorecard: custom → webkit).
 

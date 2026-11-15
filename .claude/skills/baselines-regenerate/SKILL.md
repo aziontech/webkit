@@ -39,7 +39,7 @@ committed by hand. This skill is that end-to-end flow.
 
 1. **Resolve + preflight.** Confirm the branch exists on origin; the workflow runs its **HEAD**,
    so push the `main` merge first.
-2. **Trigger** (`pnpm regenerate:baselines` does the same for the current branch):
+2. **Trigger** (`pnpm update:baselines` does the same for the current branch):
    ```sh
    gh workflow run visual-baselines.yml --ref <branch> -f update_baselines=true [-f grep=<pattern>]
    gh run list --workflow=visual-baselines.yml --branch <branch> --limit 1 --json databaseId,status,url,headSha

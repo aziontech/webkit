@@ -143,7 +143,7 @@ test('hook, CI ratchet, and consumer lint all share the single authoring-checks 
 
   // consumer lint rule → the package engine
   const rule = readFileSync(
-    join(ROOT, 'packages/webkit/src/eslint-plugin/rules/authoring-standards.js'),
+    join(ROOT, 'packages/webkit/src/eslint-plugin/rules/require-authoring-standards.js'),
     'utf-8'
   )
   assert.match(

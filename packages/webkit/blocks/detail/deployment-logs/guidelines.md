@@ -78,8 +78,8 @@ A page body for `ConsoleLayout`, with no tabs: a status banner (success; danger 
 - Running: the run is in flight; the toolbar shows 3/8 steps and Build, Build is open with the spinner and the progress bar runs along the bottom.
 - Success: every step checked, the last one open, a Completed tag with Deployed in 42s and the view switch, copy on every step log.
 - Error: the Routing Rules step is open on its error output with a Failed tag, the steps after it read Skipped and the toolbar names the failed step.
-- CompleteView: a finished run in the Complete view, every line as one `LogViewer` with its copy button.
-- CompleteViewError: the failed run in the Complete view, the lines up to the error and nothing from the skipped steps.
+- ContinuousLog: a finished run in the Complete view, every line as one `LogViewer` with its copy button.
+- ContinuousLogError: the failed run in the Complete view, the lines up to the error and nothing from the skipped steps.
 - InCreateFlow: Deploy was just pressed in a create flow; the Deployment card with a Cloning indicator on the cloning splash.
 - InCreateFlowError: the create-flow card after a failure, the switch in the header, the failed step open and Edit and Redeploy in the footer.
 - DeploymentDetail: a deployment that went live, the success banner, the Deployment details card and the Deployment logs card.

@@ -406,7 +406,7 @@ block off-pattern usage at commit; the same lint runs in the project's CI.
 `no-unknown-import` (with typo suggestions), `no-deep-internal-import`,
 `no-barrel-import`, `no-whole-icon-set-import`, `no-hardcoded-color`,
 `prefer-tree-shakeable-root`, plus the shipped construction standards
-(`authoring-standards`) and `prefer-webkit-component` (adoption steering). Deterministic
+(`require-authoring-standards`) and `prefer-webkit-component` (adoption steering). Deterministic
 import rules are **autofixable**. Presets: `strict` (default), `recommended`,
 `performance` — in every preset the correctness rules are `error`, never `warn`.
 
@@ -431,7 +431,7 @@ major ahead; `doctor` reports the resolved versions to pin.
 <summary><b>▸ Details — deprecation policy and staying current</b></summary>
 
 - 6.0 is the clean-break major: it removed every old name outright, and an app migrates
-  once with `MIGRATION-v6.md` and `webkit migrate v6`.
+  once with `MIGRATION_V6.md` and `webkit migrate v6`.
 - From 6.0 on, per [deprecation](../rules/deprecation.md): a renamed/removed API ships one
   major with a `@deprecated` JSDoc naming the replacement and the removal version; the
   consumer lint flags usage of deprecated members, so migration happens before the removal

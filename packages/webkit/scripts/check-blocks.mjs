@@ -98,7 +98,7 @@ async function consumerLinter() {
   ])
   const rules = Object.fromEntries(
     Object.keys(plugin.rules)
-      .filter((rule) => rule !== 'authoring-standards')
+      .filter((rule) => rule !== 'require-authoring-standards')
       .map((rule) => [`webkit/${rule}`, 'error'])
   )
   const config = [

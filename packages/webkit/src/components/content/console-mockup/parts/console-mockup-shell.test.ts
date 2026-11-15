@@ -7,7 +7,7 @@ import Default from '../../../../../examples/console-mockup/default.vue'
 import { expectNoA11yViolations } from '../../../../test/axe'
 import { useHydrationHost } from '../../../../test/hydration-shared'
 import ConsoleMockupShell from './console-mockup-shell.vue'
-import ConsoleMockupShellItem from './console-mockup-shell-item/console-mockup-shell-item.vue'
+import ConsoleMockupShellItem from './console-mockup-shell-item.vue'
 
 const TESTID = 'console-mockup-shell'
 const PART_TESTID = 'console-mockup-shell-item'

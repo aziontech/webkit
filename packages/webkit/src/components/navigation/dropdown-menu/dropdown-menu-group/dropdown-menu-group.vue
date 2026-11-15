@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import { computed, inject, provide, useAttrs, useId } from 'vue'
 
-  import { DropdownMenuGroupInjectionKey, useDropdownContext } from '../injection-key'
+  import { useDropdownContext } from '../composables/use-dropdown-context'
+  import { DropdownMenuGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'DropdownMenuGroup',

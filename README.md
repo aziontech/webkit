@@ -297,10 +297,10 @@ pnpm test:visual            # Styled visual regression against the baselines
 
 # Webkit quality gates
 pnpm lint:webkit            # ESLint (max-warnings 0)
-pnpm lint-style:webkit      # Stylelint
+pnpm lint:webkit:style      # Stylelint
 pnpm typecheck:webkit      # vue-tsc --noEmit
-pnpm type-coverage:webkit   # type-coverage >= 95%
-pnpm check-format:webkit    # Prettier check
+pnpm check:webkit:type-coverage   # type-coverage >= 95%
+pnpm check:webkit:format    # Prettier check
 
 # Aggregate
 pnpm gates             # Lint + type-check + format + audit
@@ -308,7 +308,7 @@ pnpm gates             # Lint + type-check + format + audit
 
 #### Troubleshooting
 
-- **Stale or half-installed dependencies** — `pnpm reset` deletes `pnpm-lock.yaml` and `node_modules/`, then reinstalls from scratch.
+- **Stale or half-installed dependencies** — `pnpm clean:install` deletes `pnpm-lock.yaml` and `node_modules/`, then reinstalls from scratch.
 - **pnpm aborts a script with a deps-verify error** (common when `node_modules` is symlinked, e.g. in a git worktree) — prefix the command with `PNPM_CONFIG_VERIFY_DEPS_BEFORE_RUN=false`.
 
 ### Development flow

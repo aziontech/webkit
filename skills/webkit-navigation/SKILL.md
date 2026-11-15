@@ -195,7 +195,7 @@ export const account = { name: 'Jane Doe', email: 'jane.doe@example.com' }
 A browse page then renders **only its body** — no shell import, no `<main>`, no header:
 
 ```vue
-<!-- views/ApplicationsView.vue — a page body in ConsoleLayout's default slot -->
+<!-- views/applications-view.vue — a page body in ConsoleLayout's default slot -->
 <template>
   <div class="layout-boundary">
     <div class="layout-column flex min-w-0 flex-col">

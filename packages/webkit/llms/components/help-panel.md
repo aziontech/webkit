@@ -70,8 +70,8 @@ tutorial mode (`HelpPanel.Tutorial`, `HelpPanel.Task`): `TutorialPanel` owns tut
   - Props: `title?: string` (default `''` — the topic's name, rendered as the panel's heading), `description?: string` (default `''` — one line under the title saying what the topic covers; not rendered when empty).
   - Slot: `default` — optional extra content under the description (a `Tag` naming the product state, for example).
   - `data-testid` fallback: `help-panel-header`.
-- `help-panel-group/help-panel-group.vue` — One block of guidance with its own heading. Renders a `<section aria-labelledby>` holding an `<h3>` (only when `title` is non-empty) and the slot, in `text-body-sm`, with a fixed vertical rhythm between paragraphs and lists inside it.
-  - Props: `title?: string` (default `''` — the question this section answers; the section renders no heading when empty).
+- `help-panel-group/help-panel-group.vue` — One block of guidance with its own heading. Renders a `<section aria-labelledby>` holding an `<h3>` (only when `label` is non-empty) and the slot, in `text-body-sm`, with a fixed vertical rhythm between paragraphs and lists inside it.
+  - Props: `label?: string` (default `''` — the question this section answers; the section renders no heading when empty).
   - Slot: `default` — the section's prose: paragraphs, short lists, inline `text-link` anchors.
   - `data-testid` fallback: `help-panel-group`.
 - `help-panel-footer/help-panel-footer.vue` — The "Learn more" footer: a heading over a column of `Link` items the consumer composes. Renders a `<section aria-labelledby>` holding an `<h3>` and a vertical flex column of the slot, separated from the content above by a `Separator`.
@@ -149,13 +149,13 @@ name.
         title="Cache settings"
         description="How long content stays at the edge before it is fetched again."
       />
-      <HelpPanel.Group title="What does the cache TTL control?">
+      <HelpPanel.Group label="What does the cache TTL control?">
         <p>
           The TTL sets how many seconds an object is served from the edge before the origin is asked
           for a fresh copy.
         </p>
       </HelpPanel.Group>
-      <HelpPanel.Group title="When should I bypass the cache?">
+      <HelpPanel.Group label="When should I bypass the cache?">
         <p>Bypass it for responses that change per user, such as carts and account pages.</p>
       </HelpPanel.Group>
       <HelpPanel.Footer>
@@ -193,13 +193,13 @@ name.
         title="Cache settings"
         description="How long content stays at the edge before it is fetched again."
       />
-      <HelpPanel.Group title="What does the cache TTL control?">
+      <HelpPanel.Group label="What does the cache TTL control?">
         <p>
           The TTL sets how many seconds an object is served from the edge before the origin is asked
           for a fresh copy.
         </p>
       </HelpPanel.Group>
-      <HelpPanel.Group title="When should I bypass the cache?">
+      <HelpPanel.Group label="When should I bypass the cache?">
         <p>Bypass it for responses that change per user, such as carts and account pages.</p>
       </HelpPanel.Group>
       <HelpPanel.Footer>

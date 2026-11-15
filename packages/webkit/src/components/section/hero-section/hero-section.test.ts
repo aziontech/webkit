@@ -322,9 +322,9 @@ describe('HeroSection', () => {
       const view = band({ variant: 'copy-beside-art', illustration })
       const box = view
         .getByTestId(HERO_TESTID)
-        .querySelector<HTMLElement>('[style*="--hero-art-width"]')
+        .querySelector<HTMLElement>('[style*="--hero-section-art-width"]')
       const vars = ['width', 'bleed', 'trim-top', 'trim-bottom'].map((name) =>
-        box?.style.getPropertyValue(`--hero-art-${name}`)
+        box?.style.getPropertyValue(`--hero-section-art-${name}`)
       )
       view.unmount()
       return vars

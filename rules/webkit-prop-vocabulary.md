@@ -6,7 +6,7 @@ calls it `variant` and another `kind`, or one says `state` and another `status`,
 relearns the API per component and AI-generated code guesses wrong. On WebKit tags the
 ESLint rule **`webkit/no-deprecated-name`** flags a prop or value renamed in 6.0 and names
 its replacement; in your own components the vocabulary is held in review. The adjacent
-authoring shape _is_ enforced: `webkit/authoring-standards` blocks a manual `modelValue` prop
+authoring shape _is_ enforced: `webkit/require-authoring-standards` blocks a manual `modelValue` prop
 
 - `update:modelValue` emit — use `defineModel` / `v-model` instead.
 
@@ -96,7 +96,7 @@ message string; `level` on a heading component; `label` on a group part.
   is fine, a reorder is not. Default `size` to `large` on actions/links, `medium` elsewhere.
 - Name booleans positively and unprefixed: `showHeader`, `active`, `open` — not `hideHeader`,
   `isActive`, `collapsed` (`disabled`/`readonly` are the accepted exceptions).
-- Use `defineModel` for two-way values; the ESLint rule `webkit/authoring-standards` blocks
+- Use `defineModel` for two-way values; the ESLint rule `webkit/require-authoring-standards` blocks
   the manual `modelValue` + `update:modelValue` pair.
 - When migrating code from another design system, rewrite its names to this vocabulary
   (`kind` → `variant`, `sm/md/lg` → `small/medium/large`, `prefix` → `leading`) — never carry

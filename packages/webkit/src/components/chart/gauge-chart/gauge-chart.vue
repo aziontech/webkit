@@ -276,8 +276,8 @@
             pathLength="100"
             :data-entered="entered || null"
             :data-testid="`${testId}__arc`"
-            :style="{ '--gauge-dash': `${filled} 100` }"
-            class="[stroke-dasharray:0_100] transition-[stroke-dasharray,stroke] duration-slow-02 ease-productive-entrance motion-reduce:transition-none data-[entered]:[stroke-dasharray:var(--gauge-dash)]"
+            :style="{ '--gauge-chart-dash': `${filled} 100` }"
+            class="[stroke-dasharray:0_100] transition-[stroke-dasharray,stroke] duration-slow-02 ease-productive-entrance motion-reduce:transition-none data-[entered]:[stroke-dasharray:var(--gauge-chart-dash)]"
           />
           <line
             v-for="tick in ticks"

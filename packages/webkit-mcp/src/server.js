@@ -211,7 +211,7 @@ async function main() {
       title: 'Suggest a webkit component for a need',
       description:
         'Given a plain-language need, suggest the single best-fitting component (plus runners-up) so ' +
-        'the AI uses a real webkit component instead of reinventing one or reaching for PrimeVue. ' +
+        'the AI uses a real webkit component instead of reinventing one or reaching for another UI kit. ' +
         'When the need is a whole screen it returns the block first (recommendation "block"); ' +
         'for a marketing band it returns the page section (recommendation "section").',
       inputSchema: {
@@ -301,7 +301,7 @@ async function main() {
       description:
         'Validate an import path (real / denied / unknown + suggestions) and/or a class string ' +
         '(scanned against the catalog token rules: hex, rgb/hsl, tailwind palette, raw text size, ' +
-        'PrimeVue color). With `component`, also checks the classes against the layout utilities ' +
+        'legacy UI-kit color). With `component`, also checks the classes against the layout utilities ' +
         'allowed on a webkit tag. Returns { ok, problems }.',
       inputSchema: {
         import: z

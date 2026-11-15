@@ -3,8 +3,8 @@ name: key-value-list
 category: content
 structure: composition
 status: implemented
-checksum: 5826d5c5756ee6b7d5e7dcedc826adfe015b81c6f90ce30bf11edf149e519b66
-spec_version: 5
+checksum: 5b4218717e1e36c2b389a27a9a6e52297a3164e315a4d0844f9baea88fb11416
+spec_version: 6
 created: 2026-11-10
 last_updated: 2026-11-15
 ---
@@ -70,7 +70,7 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
     :columns="2"
     aria-label="Workload details"
   >
-    <KeyValueList.Group title="General">
+    <KeyValueList.Group label="General">
       <KeyValueList.Item label="Workload ID">
         <span>1752167890</span>
         <CopyButton
@@ -86,7 +86,7 @@ A grid of labelled facts about one subject: each pair is a key (the term) and it
       </KeyValueList.Item>
       <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
     </KeyValueList.Group>
-    <KeyValueList.Group title="Networking">
+    <KeyValueList.Group label="Networking">
       <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
@@ -129,8 +129,8 @@ Markup is valid HTML in both shapes: an Item is a `<div>` wrapping one `<dt>` an
   - Slots: `default` — the value (text or composed components); fallback is the empty-value marker (`<span aria-hidden="true">—</span><span class="sr-only">Not set</span>`), shown when the slot is omitted or renders nothing. `info` — optional affordance after the label text inside the `<dt>`, such as a `Hint`.
   - While the root is `loading`, the `<dd>` renders a `Skeleton` in place of the value; the label stays visible.
   - `data-testid` fallback `${rootTestId}__item`; a consumer `data-testid` on the Item wins.
-- `key-value-list-group/key-value-list-group.vue` — a titled column: `<div>` → `<dt>` (title) + `<dd>` → nested `<dl>` stacking its Items in one column.
-  - Props: `title: string` (required — the group's term, shown above its Items).
+- `key-value-list-group/key-value-list-group.vue` — a titled column: `<div>` → `<dt>` (label) + `<dd>` → nested `<dl>` stacking its Items in one column.
+  - Props: `label: string` (required — the group's term, shown above its Items).
   - Events: _none_.
   - Slots: `default` — the group's `KeyValueList.Item` children.
   - Occupies one cell of the root grid, so `columns` sets how many groups sit side by side.
@@ -260,7 +260,7 @@ Decisions taken while drafting (non-interactive run):
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + Types + Sizes + state examples (`Loading`, `Disabled`) for the props the component actually declares, unless the spec's "Examples" section explicitly justifies the addition. Do not split Types/Sizes into one-example-per-variant — the composite examples are the canonical pattern.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not export composition sub-components without attaching them to the root compound (`index.ts` via `Object.assign`; vue-tsc generates `index.d.ts` — never hand-write it); the root export points at `index.ts`, and a standalone `./<name>-root` export points at the root `.vue` (tree-shaking). Do not invent overlay part names (`Trigger` / `Content`) on a component with no `data-state=open|closed`, and do not collapse a slot-shaped concern into a config-array prop. See `.claude/rules/compound-api.md`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.

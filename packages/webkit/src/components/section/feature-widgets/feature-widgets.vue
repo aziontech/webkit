@@ -189,7 +189,7 @@
             >
               <div
                 v-if="scenes[index]"
-                class="h-80 w-full min-w-0 overflow-x-visible overflow-y-clip px-(--spacing-xl) pt-(--spacing-xl) [--mockup-fade-color:var(--bg-surface)]"
+                class="h-80 w-full min-w-0 overflow-x-visible overflow-y-clip px-(--spacing-xl) pt-(--spacing-xl) [--console-mockup-fade-color:var(--bg-surface)]"
               >
                 <component
                   :is="scenes[index]"

@@ -11,7 +11,7 @@ enforced_by: [release-types, git-workflow]
 
 ## Purpose
 
-`pnpm audit --audit-level=high` is a required gate in CI — the **Security Scans** job in [`.github/workflows/governance.yml`](../../../.github/workflows/governance.yml) (and the local `pnpm run audit`). When it exits non-zero, at least one **high** or **critical** advisory matched a package in the workspace dependency graph.
+`pnpm audit --audit-level=high` is a required gate in CI — the **Security Scans** job in [`.github/workflows/governance.yml`](../../../.github/workflows/governance.yml) (and the local `pnpm run check:audit`). When it exits non-zero, at least one **high** or **critical** advisory matched a package in the workspace dependency graph.
 
 This skill takes the failing audit, finds the **minimal** version bump that clears every high+ advisory, applies it to the **owning** workspace project, and verifies the gate passes again — while honoring a strict **semver** policy so a fix never silently performs a risky major upgrade.
 
@@ -19,7 +19,7 @@ Scope discipline: `--audit-level=high` ignores `low` / `moderate`. Those stay re
 
 ## When to invoke
 
-- CI's "Audit dependencies" step fails, or `pnpm run audit` exits non-zero locally.
+- CI's "Audit dependencies" step fails, or `pnpm run check:audit` exits non-zero locally.
 - A dependency review surfaces a new high/critical advisory you want remediated.
 
 ## Inputs

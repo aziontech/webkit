@@ -19,7 +19,7 @@
 | -------------- | ------ | ----- | ------------------------------------------------ |
 | **azionicons** | `ai`   | 421   | Azion UI, product, platform, and ecosystem icons |
 
-For WebKit 6 the package ships only the Azion set: the PrimeIcons font (`pi`, `@aziontech/icons/primeicons`) is gone, and the glyph names follow [Lucide](https://lucide.dev/icons) (`ai-x`, `ai-menu`, `ai-settings`, `ai-circle-check`, `ai-chevron-down`). `npx @aziontech/webkit migrate v6` rewrites `pi pi-*` classes, the v5 `ai` names (`ai ai-times` → `ai ai-x`) and the colored base class (`ai-cor` → `ai-color`) in your source; the full map is `src/cli/migrations/v6-icons.json` in `@aziontech/webkit`.
+For WebKit 6 the package ships only the Azion set: the legacy `pi` font and its `@aziontech/icons/primeicons` entry are gone, and the glyph names follow [Lucide](https://lucide.dev/icons) (`ai-x`, `ai-menu`, `ai-settings`, `ai-circle-check`, `ai-chevron-down`). `npx @aziontech/webkit migrate v6` rewrites `pi pi-*` classes, the v5 `ai` names (`ai ai-times` → `ai ai-x`) and the colored base class (`ai-cor` → `ai-color`) in your source; the full map is `src/cli/migrations/v6-icons.json` in `@aziontech/webkit`.
 
 Icons are distributed as **woff2 icon fonts** with matching CSS class utilities, making them framework-agnostic — usable in plain HTML, Vue, React, or any web project.
 

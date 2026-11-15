@@ -2,7 +2,7 @@
   import { computed, onBeforeUnmount, useAttrs, watch } from 'vue'
 
   import { triggerControl } from '../../../../utils/trigger-control'
-  import { useHoverCardContext } from '../injection-key'
+  import { useHoverCardContext } from '../composables/use-hover-card-context'
 
   defineOptions({
     name: 'HoverCardTrigger',

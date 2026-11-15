@@ -5,7 +5,7 @@
   import LogViewerContent from '../../../components/code/log-viewer/log-viewer-content.vue'
   import LogViewerHeader from '../../../components/code/log-viewer/log-viewer-header.vue'
   import Trace from '../../../components/code/trace/trace.vue'
-  import ConsoleMockupShell from '../../../components/content/console-mockup/console-mockup-shell/console-mockup-shell.vue'
+  import ConsoleMockupShell from '../../../components/content/console-mockup/parts/console-mockup-shell.vue'
   import Tag from '../../../components/content/tag/tag.vue'
   import FlowDiagram from '../../../components/data/flow-diagram/flow-diagram.vue'
   import FlowDiagramAnchor from '../../../components/data/flow-diagram/flow-diagram-anchor/flow-diagram-anchor.vue'

@@ -440,6 +440,8 @@ before the rename keeps rendering. Write the new name in code:
 | `code-block`                                                               | `lineNumbers`                                                                    | `showLineNumbers`                                                                                                                                                                                                            |
 | `code-editor`                                                              | `lineNumbers`                                                                    | `showLineNumbers`                                                                                                                                                                                                            |
 | `command-group`                                                            | `heading`                                                                        | `label`                                                                                                                                                                                                                      |
+| `help-panel-group`                                                         | `title`                                                                          | `label` (a group part names its header text `label`)                                                                                                                                                                         |
+| `key-value-list-group`                                                     | `title`                                                                          | `label` (a group part names its header text `label`)                                                                                                                                                                         |
 | `command-page`                                                             | `heading`                                                                        | `title`                                                                                                                                                                                                                      |
 | `hint`                                                                     | `text`                                                                           | `content`                                                                                                                                                                                                                    |
 | `tooltip`                                                                  | `text`                                                                           | `content`                                                                                                                                                                                                                    |
@@ -1238,13 +1240,15 @@ also renamed:
 
 Variant states use one word set, `loading`, `empty`, `error`, `success`, written
 `<subject>-<state>`: `Failed` → `Error`, `<Subject>Failed` → `<Subject>Error` (`LoadFailed` →
-`LoadError`, `SaveFailed` → `SaveError`, …), `FailedCompleteView` → `CompleteViewError`,
+`LoadError`, `SaveFailed` → `SaveError`, …), `CompleteView` → `ContinuousLog`, `FailedCompleteView` → `ContinuousLogError`,
 `PartialFailure` → `PartialError`, `Succeeded` → `Success`, `LoadingRepositories` →
 `RepositoriesLoading`, `LoadingSettings` → `SettingsLoading`, query-editor's `EmptyDatabase` →
-`NoTables`, production-checklist's `Complete` → `Completed` and delete-dialog's `LabelledField` →
+`NoTables`, production-checklist's `Complete` → `Success` and delete-dialog's `LabelledField` →
 `SettingsRow`. A `#variant` fragment and `add --variant` take the variant file name
 (`view/table-view#error`); the PascalCase name still works. Your `webkit.blocks.json` keeps the old
-ids: `add <old id>` resolves them with a note.
+ids: `add <old id>` resolves them with a note. `add` now writes kebab-case files named after the
+block: `create-hub.vue`, and `create-hub-connected.vue` for a variant (was `CreateHub.vue` and
+`CreateHubConnected.vue`); a PascalCase `--dest` file keeps its casing.
 
 Blocks that did the same job
 are one block whose states are variants: the drawer forms are `create/create-drawer`,
@@ -1626,26 +1630,38 @@ new folders and reports the old ones as orphans; delete the old folders in `.cla
 | `webkit-baseline-ui`       | `webkit-quick-cleanup` |
 | `webkit-impeccable-polish` | `webkit-final-polish`  |
 
+The Claude Code agent `webkit-expert` is `webkit-advisor` (an agent name ends in an agent noun):
+`sync` writes `.claude/agents/webkit-advisor.md`; delete the old `webkit-expert.md`.
+
 ### Lint rules renamed
 
 Every rule of `@aziontech/webkit/eslint-plugin` starts with a `no-`, `prefer-` or `require-` verb.
 The old ids are gone, so a config or `eslint-disable` comment that names one reports an unknown rule;
-`migrate v6` rewrites them. Only `valid-import-path` shipped in 5.x; the other four existed only in
-6.0 previews.
+`migrate v6` rewrites them. `valid-import-path` and `authoring-standards` shipped in 5.x; the others
+existed only in 6.0 previews.
 
-| Old rule                       | 6.0 rule                          |
-| ------------------------------ | --------------------------------- |
-| `webkit/accessible-name`       | `webkit/require-accessible-name`  |
-| `webkit/container-needs-width` | `webkit/require-container-width`  |
-| `webkit/header-search-trigger` | `webkit/require-header-search`    |
-| `webkit/menu-node-href`        | `webkit/prefer-href-in-menu-node` |
-| `webkit/valid-import-path`     | `webkit/no-unknown-import`        |
+| Old rule                            | 6.0 rule                                    |
+| ----------------------------------- | ------------------------------------------- |
+| `webkit/authoring-standards`        | `webkit/require-authoring-standards`        |
+| `webkit/composable-readonly-return` | `webkit/require-readonly-composable-return` |
+| `webkit/composable-scope-cleanup`   | `webkit/require-composable-scope-cleanup`   |
+| `webkit/accessible-name`            | `webkit/require-accessible-name`            |
+| `webkit/container-needs-width`      | `webkit/require-container-width`            |
+| `webkit/header-search-trigger`      | `webkit/require-header-search`              |
+| `webkit/menu-node-href`             | `webkit/prefer-href-in-menu-node`           |
+| `webkit/valid-import-path`          | `webkit/no-unknown-import`                  |
 
 ### Component CSS variables carry the component name
 
 A CSS variable a component reads is named `--<component>-<part>-<property>`. The one you may set
 yourself changed: a sticky bar above a `Hero` declares its height as `--hero-banner-offset`
-(was `--banner-offset`), so a `variant="screen"` band still measures one screen beneath it.
+(was `--banner-offset`), so a `variant="screen"` band still measures one screen beneath it. The
+other `Hero` variables follow (`--banner-top-height`, `--banner-floor-bg`, `--banner-z-top`… →
+`--hero-banner-top-height`, `--hero-banner-floor-bg`, `--hero-banner-z-top`…), the console
+mockup fades a host sets are `--console-mockup-fade-start` / `-end` / `-edge` / `-color` (was
+`--mockup-fade-*`), and the sidebar menu's focus-ring offsets are `--sidebar-menu-ring-offset` /
+`--sidebar-menu-item-ring-offset` (was `--menu-ring-offset` / `--menu-item-ring-offset`).
+`migrate v6` rewrites all of them.
 
 ## 5. Field report: Azion Console
 

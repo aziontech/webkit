@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import { computed, provide, useAttrs, useId } from 'vue'
 
-  import { CommandGroupInjectionKey, useCommandMenuContext } from '../injection-key'
+  import { useCommandMenuContext } from '../composables/use-command-menu-context'
+  import { CommandGroupInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'CommandGroup',

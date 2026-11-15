@@ -14,20 +14,20 @@ test('add copies the primary SFC into src/views and records it in the manifest',
   try {
     const r = cli(dir, 'add', BLOCK)
     assert.equal(r.code, 0, r.stderr)
-    const copied = readFileSync(join(dir, 'src/views/CreateHub.vue'), 'utf8')
+    const copied = readFileSync(join(dir, 'src/views/create-hub.vue'), 'utf8')
     assert.equal(copied, canonical('create-hub.vue'))
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
     const entry = manifest.blocks[BLOCK]
     assert.equal(entry.version, JSON.parse(readFileSync(join(PKG_ROOT, 'package.json'))).version)
     assert.deepEqual(entry.files, [
       {
-        path: 'src/views/CreateHub.vue',
+        path: 'src/views/create-hub.vue',
         source: `blocks/${BLOCK}/create-hub.vue`,
         variant: 'Default',
         checksum: checksum(copied)
       }
     ])
-    assert.match(r.stdout, /component: \(\) => import\('\.\/views\/CreateHub\.vue'\)/)
+    assert.match(r.stdout, /component: \(\) => import\('\.\/views\/create-hub\.vue'\)/)
     assert.match(r.stderr, /not installed in this project/)
   } finally {
     cleanup(dir)
@@ -40,17 +40,17 @@ test('add resolves a short name, copies the chosen variant and the guidelines si
     const r = cli(dir, 'add', 'create-hub', '--variant', 'connected', '--with-guidelines')
     assert.equal(r.code, 0, r.stderr)
     assert.equal(
-      readFileSync(join(dir, 'src/views/CreateHubConnected.vue'), 'utf8'),
+      readFileSync(join(dir, 'src/views/create-hub-connected.vue'), 'utf8'),
       canonical('variants/connected.vue')
     )
-    const guide = readFileSync(join(dir, 'src/views/CreateHub.guidelines.md'), 'utf8')
+    const guide = readFileSync(join(dir, 'src/views/create-hub.guidelines.md'), 'utf8')
     assert.ok(!guide.startsWith('#'), 'the H1 heading is stripped')
     assert.ok(canonical('guidelines.md').endsWith(guide))
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
-    assert.deepEqual(
-      manifest.blocks[BLOCK].files.map((f) => f.variant),
-      ['Default', 'Connected']
-    )
+    assert.deepEqual(manifest.blocks[BLOCK].files.map((f) => f.variant).sort(), [
+      'Connected',
+      'Default'
+    ])
   } finally {
     cleanup(dir)
   }
@@ -61,37 +61,37 @@ test('add --variant after the primary was added keeps the primary copy and adds 
   try {
     assert.equal(cli(dir, 'add', BLOCK).code, 0)
     const edited = canonical('create-hub.vue') + '<!-- mine -->\n'
-    writeFileSync(join(dir, 'src/views/CreateHub.vue'), edited)
+    writeFileSync(join(dir, 'src/views/create-hub.vue'), edited)
     const r = cli(dir, 'add', BLOCK, '--variant', 'connected')
     assert.equal(r.code, 0, r.stderr)
-    assert.match(r.stderr, /src\/views\/CreateHub\.vue was added before and is kept/)
-    assert.equal(readFileSync(join(dir, 'src/views/CreateHub.vue'), 'utf8'), edited)
+    assert.match(r.stderr, /src\/views\/create-hub\.vue was added before and is kept/)
+    assert.equal(readFileSync(join(dir, 'src/views/create-hub.vue'), 'utf8'), edited)
     assert.equal(
-      readFileSync(join(dir, 'src/views/CreateHubConnected.vue'), 'utf8'),
+      readFileSync(join(dir, 'src/views/create-hub-connected.vue'), 'utf8'),
       canonical('variants/connected.vue')
     )
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
-    assert.deepEqual(
-      manifest.blocks[BLOCK].files.map((f) => f.variant),
-      ['Default', 'Connected']
-    )
+    assert.deepEqual(manifest.blocks[BLOCK].files.map((f) => f.variant).sort(), [
+      'Connected',
+      'Default'
+    ])
   } finally {
     cleanup(dir)
   }
 })
 
 test('add never overwrites without --force', () => {
-  const dir = makeProject({ 'src/views/CreateHub.vue': 'mine\n' })
+  const dir = makeProject({ 'src/views/create-hub.vue': 'mine\n' })
   try {
     const r = cli(dir, 'add', BLOCK)
     assert.equal(r.code, 1)
     assert.match(r.stderr, /already exists: pass --force/)
-    assert.equal(readFileSync(join(dir, 'src/views/CreateHub.vue'), 'utf8'), 'mine\n')
+    assert.equal(readFileSync(join(dir, 'src/views/create-hub.vue'), 'utf8'), 'mine\n')
     assert.ok(!existsSync(join(dir, 'webkit.blocks.json')))
     const forced = cli(dir, 'add', BLOCK, '--force')
     assert.equal(forced.code, 0, forced.stderr)
     assert.equal(
-      readFileSync(join(dir, 'src/views/CreateHub.vue'), 'utf8'),
+      readFileSync(join(dir, 'src/views/create-hub.vue'), 'utf8'),
       canonical('create-hub.vue')
     )
   } finally {
@@ -107,17 +107,40 @@ test('add --dry-run writes nothing; --dest and the router views dir pick the tar
   try {
     const dry = cliJson(dir, 'add', BLOCK, '--dry-run')
     assert.equal(dry.code, 0)
-    assert.equal(dry.json.files[0].path, 'src/pages/CreateHub.vue')
+    assert.equal(dry.json.files[0].path, 'src/pages/create-hub.vue')
     assert.equal(
       dry.json.route.entry,
-      "{ path: '/create-hub', name: 'create-hub', component: () => import('@/pages/CreateHub.vue') }"
+      "{ path: '/create-hub', name: 'create-hub', component: () => import('@/pages/create-hub.vue') }"
     )
     assert.deepEqual(dry.json.written, [])
-    assert.ok(!existsSync(join(dir, 'src/pages/CreateHub.vue')))
+    assert.ok(!existsSync(join(dir, 'src/pages/create-hub.vue')))
 
     const dest = cli(dir, 'add', BLOCK, '--dest', 'src/screens/Hub.vue')
     assert.equal(dest.code, 0, dest.stderr)
     assert.ok(existsSync(join(dir, 'src/screens/Hub.vue')))
+
+    const named = cliJson(
+      dir,
+      'add',
+      BLOCK,
+      '--variant',
+      'connected',
+      '--dest',
+      'src/screens/Hub.vue',
+      '--dry-run'
+    )
+    assert.equal(named.json.files.at(-1).path, 'src/screens/HubConnected.vue')
+    const kebab = cliJson(
+      dir,
+      'add',
+      BLOCK,
+      '--variant',
+      'connected',
+      '--dest',
+      'src/screens',
+      '--dry-run'
+    )
+    assert.equal(kebab.json.files.at(-1).path, 'src/screens/create-hub-connected.vue')
   } finally {
     cleanup(dir)
   }

@@ -1,10 +1,8 @@
 <script setup lang="ts">
   import { type Component, computed } from 'vue'
 
-  import ConsoleMockupShell, {
-    type ConsoleMockupShellVariant
-  } from '../console-mockup-shell/console-mockup-shell.vue'
   import type { ConsoleMockupPlating } from '../plates'
+  import ConsoleMockupShell, { type ConsoleMockupShellVariant } from './console-mockup-shell.vue'
 
   defineOptions({ name: 'WidgetPlate' })
 
@@ -57,12 +55,12 @@
     :active="values['active'] !== false"
     :width="468"
     :mobile-width="428"
-    style="--mockup-fade-start: 80%"
+    style="--console-mockup-fade-start: 80%"
   >
     <div
       :data-testid="`${testId}__frame-body`"
       class="h-full w-full px-(--spacing-lg) pt-(--spacing-lg)"
-      style="--mockup-fade-color: var(--bg-canvas); --mockup-fade-start: initial"
+      style="--console-mockup-fade-color: var(--bg-canvas); --console-mockup-fade-start: initial"
     >
       <component
         :is="widget"

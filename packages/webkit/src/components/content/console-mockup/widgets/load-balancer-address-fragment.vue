@@ -7,8 +7,8 @@
   import FieldLabel from '../../../input/field/field-label/field-label.vue'
   import NumberInput from '../../../input/number-input/number-input.vue'
   import Select from '../../../input/select/index'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
 
   defineOptions({ name: 'LoadBalancerAddressFragment' })
@@ -119,7 +119,7 @@
     variant="bare"
     shell="legacy"
     :fade="atRest ? 'bottom' : 'y'"
-    class="[--mockup-fade-edge:16%] [--mockup-fade-start:80%]"
+    class="[--console-mockup-fade-edge:16%] [--console-mockup-fade-start:80%]"
     :chrome="false"
     :active="active"
     :width="420"

@@ -376,7 +376,7 @@ spell brands out.
 | `ai-color ai-openai` | `ai-cor ai-open`             |
 | `ai ai-scissors`     | `ai ai-scizors` (typo)       |
 
-The PrimeIcons set is removed; `v6-icons.json` maps every old name.
+The old `pi` icon set is removed; `v6-icons.json` maps every old name.
 
 > Supabase uses Lucide (`x`, `menu`, `settings`); Material says `close` — we follow Lucide
 > because that is the set agents and designers reach for.
@@ -470,8 +470,10 @@ Frontmatter is governed by [`authoring-docs.md`](./authoring-docs.md).
 
 ## How it is checked
 
-One engine checks every rule that a machine can decide. The four `enforced` rules block
-today; the `staged` rules are reported now and block once the rename lanes have merged.
+One engine checks every rule that a machine can decide, and every rule blocks: the four
+`enforced` rules from the start, the `staged` ones since the rename lanes merged
+(`NAMING_STAGED_BLOCKS` is `true`). The write-time hook blocks a violation a write adds, and
+`check:naming` fails CI on any violation in the tree.
 
 | Rule id            | Checks                                                                         | Decision       |
 | ------------------ | ------------------------------------------------------------------------------ | -------------- |
@@ -504,7 +506,7 @@ today; the `staged` rules are reported now and block once the rename lanes have 
 | `private-folder`   | a component's private helpers in `lib/`, never `_lib`, `utils`, `helpers`      | N16            |
 | `css-variable`     | component CSS variables carry the component prefix, no abbreviations           | N16            |
 | `token-name`       | `2xs`/`2xl`, `-foreground`, `code-syntax`, every fill has a foreground pair    | N4, N15        |
-| `icon-name`        | used icon names exist in the icons package; no legacy or PrimeIcons names      | N14            |
+| `icon-name`        | used icon names exist in the icons package; no legacy or `pi` names            | N14            |
 | `file-name`        | kebab files and folders in packages and apps                                   | N18            |
 | `script-name`      | `<verb>:<target>` scripts named after their script file                        | N17            |
 | `filter-name`      | `pnpm --filter` with the full package name                                     | N17            |

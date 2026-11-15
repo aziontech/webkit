@@ -7,7 +7,7 @@ export default {
   meta: {
     type: 'suggestion',
     docs: {
-      description: 'Prefer @aziontech/webkit components over foreign UI libraries (e.g. PrimeVue).'
+      description: 'Prefer @aziontech/webkit components over third-party UI libraries.'
     },
     schema: [
       {

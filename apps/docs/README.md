@@ -11,7 +11,7 @@ right-to-left toggle and a language switch (English, Português, Español) throu
 pnpm dev:docs       # Vite dev server
 pnpm build:docs     # static build into apps/docs/dist (one HTML file per route)
 pnpm preview:docs   # serve apps/docs/dist on http://localhost:4173
-pnpm smoke:docs     # Playwright over every built route + axe on a sample
+pnpm test:docs:smoke     # Playwright over every built route + axe on a sample
 pnpm lint:docs
 ```
 
@@ -67,16 +67,16 @@ in the browser. The output is plain static files:
 
 ## Smoke test
 
-`pnpm smoke:docs` serves `dist/`, opens every route in Chromium (Playwright), fails on any console
+`pnpm test:docs:smoke` serves `dist/`, opens every route in Chromium (Playwright), fails on any console
 error, uncaught exception or same-origin request that answers 4xx/5xx, and runs axe (WCAG 2.1 A and
 AA) on the index pages and one route in every eight (`SMOKE_AXE_EVERY`), in dark and light, with
 transitions off. A violation inside a live example or block frame whose rule
 `packages/webkit/src/test/a11y-known.json` already lists for that source file is counted as known
 WebKit debt instead of failing (the list only shrinks, so these expire as WebKit fixes them);
 the same goes for a finding of a WebKit component used anywhere
-(`COMPONENT_KNOWN` in `scripts/smoke.mjs`: `Table`, `NavigationMenu`) while `a11y-known.json` still
+(`COMPONENT_KNOWN` in `scripts/test-smoke.mjs`: `Table`, `NavigationMenu`) while `a11y-known.json` still
 lists it for that component's example. Everything else fails. `SMOKE_ONLY=/blocks` limits it to matching routes. It needs a Playwright Chromium; in this repository's container:
 
 ```bash
-docker run --rm --ipc=host -v "$PWD":/w -w /w/apps/docs mcr.microsoft.com/playwright:v1.62.0-noble node scripts/smoke.mjs
+docker run --rm --ipc=host -v "$PWD":/w -w /w/apps/docs mcr.microsoft.com/playwright:v1.62.0-noble node scripts/test-smoke.mjs
 ```

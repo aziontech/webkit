@@ -36,7 +36,7 @@ enough to catch a legend swatch.
 `baselines/` is committed and is the CI contract. Screenshots differ between machines (font
 rasterization), so baselines are generated only in `mcr.microsoft.com/playwright:v1.62.0-noble`,
 the image the `visual` job in `.github/workflows/governance.yml` runs in. To regenerate them for a
-branch, dispatch `.github/workflows/visual-baselines.yml` (`pnpm regenerate:baselines`) and
+branch, dispatch `.github/workflows/visual-baselines.yml` (`pnpm update:baselines`) and
 commit the artifact after reviewing it; the `baselines-regenerate` skill describes the flow. Locally,
 run the suite inside the same image:
 

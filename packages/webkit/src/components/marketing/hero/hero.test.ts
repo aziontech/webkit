@@ -52,7 +52,7 @@ describe('Hero', () => {
     const root = getByTestId(TESTID)
 
     expect(root.style.getPropertyValue('--hero-banner-offset')).toBe('3.5rem')
-    expect(root.style.getPropertyValue('--banner-bottom-height')).toBe('8rem')
+    expect(root.style.getPropertyValue('--hero-banner-bottom-height')).toBe('8rem')
   })
 
   it('sets no custom properties when offset and bottomHeight are empty', () => {
@@ -60,7 +60,7 @@ describe('Hero', () => {
     const root = getByTestId(TESTID)
 
     expect(root.style.getPropertyValue('--hero-banner-offset')).toBe('')
-    expect(root.style.getPropertyValue('--banner-bottom-height')).toBe('')
+    expect(root.style.getPropertyValue('--hero-banner-bottom-height')).toBe('')
   })
 
   it('drops its bottom rule when bordered is false', () => {

@@ -3,7 +3,7 @@
   import { computed, provide, ref, useAttrs } from 'vue'
 
   import { cn } from '../../../utils/cn'
-  import { useFlowDiagramConnectors } from './connectors'
+  import { useFlowDiagramConnectors } from './composables/use-flow-diagram-connectors'
   import { type FlowDiagramAlign, FlowDiagramInjectionKey } from './injection-key'
 
   defineOptions({

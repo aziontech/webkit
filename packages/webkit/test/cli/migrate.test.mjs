@@ -508,7 +508,7 @@ test('an import that v6 does not export is MANUAL, and comments keep their words
   assert.match(source, /\/\/ Paginator below/)
   assert.match(source, /<Pagination \/>/)
   assert.deepEqual(warnings, [
-    '@aziontech/webkit/ghost-widget is not an export of v6: find its replacement in the catalog (MIGRATION-v6.md)'
+    '@aziontech/webkit/ghost-widget is not an export of v6: find its replacement in the catalog (MIGRATION_V6.md)'
   ])
 })
 

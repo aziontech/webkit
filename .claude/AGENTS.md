@@ -102,7 +102,7 @@ Run the minimum relevant validations for the scope of your change.
 - Any change in `packages/webkit/src/components/**`:
   - `pnpm lint:webkit`
   - `pnpm typecheck:webkit`
-  - `pnpm type-coverage:webkit`
+  - `pnpm check:webkit:type-coverage`
   - `pnpm --filter @aziontech/webkit test:ssr`
 
 If a full validation is too expensive, run targeted checks and document what was/was not validated.
@@ -232,7 +232,7 @@ renders each beside its source; the first is screenshotted in light and dark by 
 ```bash
 pnpm lint:webkit
 pnpm typecheck:webkit
-pnpm type-coverage:webkit
+pnpm check:webkit:type-coverage
 pnpm --filter @aziontech/webkit test:ssr
 ```
 
@@ -252,7 +252,7 @@ Eight hooks in [`.claude/hooks/`](hooks/) act as physical guard rails on top of 
 
 ### 12.1) Tokens, references and authoring
 
-- **[`.claude/hooks/validate-tokens.mjs`](hooks/validate-tokens.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — blocks new content introducing hex/rgb/hsl colors, Tailwind palette names, raw typography (`text-xs|sm|...`, `text-(length:--text-*)`, `leading-*`, `tracking-*`, `font-family`), PrimeVue color utilities, `class` in `defineProps`, `any`, or `@ts-ignore`. Pre-existing violations are not retroactively flagged.
+- **[`.claude/hooks/validate-tokens.mjs`](hooks/validate-tokens.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — blocks new content introducing hex/rgb/hsl colors, Tailwind palette names, raw typography (`text-xs|sm|...`, `text-(length:--text-*)`, `leading-*`, `tracking-*`, `font-family`), legacy UI-kit color utilities (`text-color`, `surface-*`), `class` in `defineProps`, `any`, or `@ts-ignore`. Pre-existing violations are not retroactively flagged.
 - **[`.claude/hooks/validate-references.mjs`](hooks/validate-references.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — blocks imports that don't resolve: `@aziontech/webkit/<subpath>` without a matching `package.json#exports`, relative paths to no file, uninstalled npm packages, missing workspaces.
 - **[`.claude/hooks/validate-authoring.mjs`](hooks/validate-authoring.mjs)** (PreToolUse `Write|Edit|MultiEdit`) — runs the shared authoring checks (prose comments, composable signatures, `as`/`asChild` props) over every write under `packages/` and blocks a write that adds a violation; the CI ratchet `check-authoring.mjs` runs the same engine.
 - **[`.claude/hooks/enforce-component-create.mjs`](hooks/enforce-component-create.mjs)** (PreToolUse `Write`) — blocks the first `Write` of a new `.vue` under `packages/webkit/src/components/<category>/<name>/` when the session transcript shows no reference to the `component-create` skill/command. Forces the agent to invoke the orchestrator first.

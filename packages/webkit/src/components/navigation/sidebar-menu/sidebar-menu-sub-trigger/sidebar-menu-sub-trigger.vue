@@ -105,12 +105,12 @@
     "after:pointer-events-none after:absolute after:inset-0 after:rounded-[inherit] after:bg-(--bg-active) after:opacity-0 after:content-[''] after:transition-opacity after:duration-fast-02 after:ease-productive-entrance " +
     'hover:before:opacity-100 group-hover/row:before:opacity-100 active:after:opacity-100 ' +
     'motion-reduce:before:transition-none motion-reduce:after:transition-none ' +
-    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))] ' +
+    'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-[var(--sidebar-menu-ring-offset,var(--bg-canvas))] ' +
     'data-[disabled]:cursor-not-allowed data-[disabled]:text-(--text-disabled) data-[disabled]:before:hidden data-[disabled]:after:hidden'
 
   const ARROW_CLASS =
     'absolute! end-(--spacing-2xs) top-1/2 -translate-y-1/2 ' +
-    'focus-visible:ring-offset-1! focus-visible:ring-offset-[var(--menu-ring-offset,var(--bg-canvas))]!'
+    'focus-visible:ring-offset-1! focus-visible:ring-offset-[var(--sidebar-menu-ring-offset,var(--bg-canvas))]!'
 
   const ARROW_DISABLED_CLASS = 'bg-transparent!'
 

@@ -1,4 +1,7 @@
 {
+  "webkit/authoring-standards": "webkit/require-authoring-standards",
+  "webkit/composable-readonly-return": "webkit/require-readonly-composable-return",
+  "webkit/composable-scope-cleanup": "webkit/require-composable-scope-cleanup",
   "webkit/accessible-name": "webkit/require-accessible-name",
   "webkit/container-needs-width": "webkit/require-container-width",
   "webkit/header-search-trigger": "webkit/require-header-search",

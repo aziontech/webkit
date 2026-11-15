@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import { computed, onBeforeUnmount, provide, toRef, useAttrs } from 'vue'
 
-  import { CommandPageInjectionKey, useCommandMenuContext } from '../injection-key'
+  import { useCommandMenuContext } from '../composables/use-command-menu-context'
+  import { CommandPageInjectionKey } from '../injection-key'
 
   defineOptions({
     name: 'CommandPage',

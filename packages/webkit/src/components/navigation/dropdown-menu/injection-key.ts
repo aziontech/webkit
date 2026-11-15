@@ -1,4 +1,4 @@
-import { inject, type InjectionKey, type Ref } from 'vue'
+import { type InjectionKey, type Ref } from 'vue'
 
 import type {
   MenuContext,
@@ -44,21 +44,3 @@ export const DropdownMenuInjectionKey: InjectionKey<DropdownMenuContext> = Symbo
 
 export const DropdownMenuSubInjectionKey: InjectionKey<DropdownMenuSubContext> =
   Symbol('DropdownMenuSub')
-
-export function useDropdownContext(): DropdownMenuContext {
-  const ctx = inject(DropdownMenuInjectionKey)
-  if (!ctx) {
-    throw new Error('DropdownMenu.* sub-components must be used inside <DropdownMenu>.')
-  }
-  return ctx
-}
-
-export function useDropdownSubContext(): DropdownMenuSubContext {
-  const ctx = inject(DropdownMenuSubInjectionKey)
-  if (!ctx) {
-    throw new Error(
-      'DropdownMenu.SubTrigger and SubContent must be used inside <DropdownMenu.Sub>.'
-    )
-  }
-  return ctx
-}

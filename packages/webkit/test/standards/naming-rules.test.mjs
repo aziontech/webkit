@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url'
 import test from 'node:test'
 
 import {
+  NAMING_STAGED_BLOCKS,
   RULES,
   addedViolations,
   checkFile,
@@ -319,6 +320,73 @@ for (const [rule, fixture] of Object.entries(FIXTURES)) {
   })
 }
 
+test('false positives the checker skips: test artifacts, element ids, kept tokens, migration tooling', () => {
+  assert.deepEqual(
+    checkFile(
+      'packages/webkit/src/components/action/button/__screenshots__/Button Default 1.png',
+      '',
+      ctx
+    ),
+    []
+  )
+  assert.deepEqual(
+    hits(
+      `${C}/action/button/button.vue`,
+      sfc('', `<input :aria-describedby="error ? 'data-stream-apiKey-message' : undefined" />`),
+      'data-attribute'
+    ),
+    []
+  )
+  assert.equal(
+    hits(`${C}/action/button/button.vue`, sfc('', '<div :data-hasIcon="x" />'), 'data-attribute')
+      .length,
+    1
+  )
+  assert.deepEqual(
+    hits(
+      `${C}/overlay/tooltip/tooltip.vue`,
+      sfc('', '<div class="bg-(--bg-contrast) text-(--text-contrast)" />'),
+      'token-name'
+    ),
+    []
+  )
+  const legacy = "const help = 'pi pi-times becomes ai ai-x; ai-cor becomes ai-color'\n"
+  for (const rel of [
+    'packages/webkit/src/cli/cli.js',
+    'packages/webkit/src/cli/migrate.js',
+    'packages/webkit/src/cli/migrations/v6-icons.js'
+  ])
+    assert.deepEqual(hits(rel, legacy, 'icon-name'), [], rel)
+  assert.ok(hits('packages/webkit/src/cli/add.js', legacy, 'icon-name').length > 0)
+})
+
+test('handler-name: sample code inside a template literal is not a handler', () => {
+  const rel = `${C}/content/code-panel/code-panel.vue`
+  const text = sfc('const CODE = `async function handleRequest(request) {\n  return request\n}`')
+  assert.deepEqual(hits(rel, text, 'handler-name'), [])
+  assert.equal(hits(rel, sfc('async function handleRequest() {}'), 'handler-name').length, 1)
+})
+
+test('css-variable: a component may set a variable another component or the theme owns', () => {
+  const owned = {
+    ...ctx,
+    cssVarReaders: new Map([
+      ['texture-pool-a', new Set(['texture'])],
+      ['cols', new Set(['card-grid'])]
+    ]),
+    themeVars: new Set(['bg-canvas', 'popup-origin', 'text-label-lg-font-weight'])
+  }
+  const rel = `${C}/section/hero-section/hero-section.vue`
+  const text = sfc(
+    '',
+    '<div class="[--texture-pool-a:1%] [--bg-canvas:red] [--popup-origin:top] [--text-label-lg-font-weight:500] [--cols:2]" />'
+  )
+  const found = checkFile(rel, text, owned)
+    .filter((x) => x.rule === 'css-variable')
+    .map((x) => x.message.match(/"--([a-z0-9-]+)"/)[1])
+  assert.deepEqual([...new Set(found)], ['cols'])
+})
+
 test('every rule in the registry has a fixture, and no fixture names an unknown rule', () => {
   assert.deepEqual(Object.keys(FIXTURES).sort(), Object.keys(RULES).sort())
 })
@@ -402,10 +470,11 @@ test('the catalog vocabulary stamps the 6.0 standard', () => {
   assert.ok(!snap.props.some((p) => p.aliases.includes('status')))
 })
 
-test('only staged rules wait for the switch; enforced rules always block', () => {
+test('the switch is on: every rule blocks, staged and enforced alike', () => {
+  assert.equal(NAMING_STAGED_BLOCKS, true)
   assert.equal(isBlocking('export-kebab'), true)
-  assert.equal(isBlocking('prop-name'), false)
-  assert.equal(isBlocking('prop-name', { strict: true }), true)
+  assert.equal(isBlocking('prop-name'), true)
+  assert.equal(isBlocking('css-variable'), true)
 })
 
 test('addedViolations counts only what a write adds', () => {
@@ -415,11 +484,10 @@ test('addedViolations counts only what a write adds', () => {
   assert.deepEqual(addedViolations([a, a], [a]), [])
 })
 
-test('the repo scan reports by rule (report mode on the current tree)', () => {
+test('the repo scan is clean on every rule', () => {
   const counts = countByRule(scanRepo(ROOT, loadContext(ROOT)))
   assert.deepEqual(Object.keys(counts).sort(), Object.keys(RULES).sort())
-  for (const id of ['export-kebab', 'export-synonym', 'export-retired', 'block-id'])
-    assert.equal(counts[id], 0, `${id} is enforced and must be clean`)
+  for (const [id, n] of Object.entries(counts)) assert.equal(n, 0, `${id} must be clean`)
 })
 
 const hook = (input, env = {}) =>
@@ -430,7 +498,7 @@ const hook = (input, env = {}) =>
     env: { ...process.env, ...env }
   })
 
-test('validate-naming hook: blocks an added enforced violation, passes staged ones until the switch', () => {
+test('validate-naming hook: blocks an added violation of any rule', () => {
   const add = {
     tool_name: 'Edit',
     tool_input: {
@@ -449,10 +517,14 @@ test('validate-naming hook: blocks an added enforced violation, passes staged on
       content: sfc('function handleClick() {}')
     }
   }
-  assert.equal(hook(write).status, 0)
-  const strict = hook(write, { WEBKIT_NAMING_STRICT: '1' })
-  assert.equal(strict.status, 2)
-  assert.match(strict.stderr, /\[handler-name\]/)
+  const staged = hook(write)
+  assert.equal(staged.status, 2)
+  assert.match(staged.stderr, /\[handler-name\]/)
+  const clean = {
+    ...write,
+    tool_input: { ...write.tool_input, content: sfc('function onClick() {}') }
+  }
+  assert.equal(hook(clean).status, 0)
 })
 
 test('validate-naming hook: an edit that keeps existing debt is not blocked, and bad input fails open', () => {

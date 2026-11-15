@@ -8,8 +8,8 @@
   import RadioGroup from '../../../input/radio-group/radio-group.vue'
   import RadioGroupItem from '../../../input/radio-group/radio-group-item/radio-group-item.vue'
   import Textarea from '../../../input/textarea/textarea.vue'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
 
   defineOptions({ name: 'NetworkShieldIpListFragment' })
 
@@ -141,7 +141,7 @@
     variant="bare"
     shell="legacy"
     :fade="atRest ? 'bottom' : 'y'"
-    class="[--mockup-fade-edge:16%] [--mockup-fade-start:74%]"
+    class="[--console-mockup-fade-edge:16%] [--console-mockup-fade-start:74%]"
     :chrome="false"
     :active="active"
     :width="420"

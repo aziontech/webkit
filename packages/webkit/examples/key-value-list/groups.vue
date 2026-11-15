@@ -11,7 +11,7 @@
     :columns="3"
     aria-label="Workload details"
   >
-    <KeyValueList.Group title="General">
+    <KeyValueList.Group label="General">
       <KeyValueList.Item label="Workload ID">
         <span>1752167890</span>
         <CopyButton
@@ -28,7 +28,7 @@
       </KeyValueList.Item>
       <KeyValueList.Item label="Created">Nov 10, 2026, 14:32</KeyValueList.Item>
     </KeyValueList.Group>
-    <KeyValueList.Group title="Networking">
+    <KeyValueList.Group label="Networking">
       <KeyValueList.Item label="Domain">
         <Link
           label="shop.example.com"
@@ -44,7 +44,7 @@
       </KeyValueList.Item>
       <KeyValueList.Item label="Custom certificate" />
     </KeyValueList.Group>
-    <KeyValueList.Group title="Source">
+    <KeyValueList.Group label="Source">
       <KeyValueList.Item label="Repository">acme/storefront</KeyValueList.Item>
       <KeyValueList.Item label="Branch">main</KeyValueList.Item>
       <KeyValueList.Item label="Framework">Next.js</KeyValueList.Item>

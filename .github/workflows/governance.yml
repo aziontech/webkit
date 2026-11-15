@@ -81,7 +81,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Audit dependencies
-        run: pnpm run audit
+        run: pnpm run check:audit
 
       - name: Run TruffleHog (secret detection)
         uses: trufflesecurity/trufflehog@20652fbbdefffcdaa493a5bf57ab2ac6b1db715b # main
@@ -142,10 +142,10 @@ jobs:
         run: pnpm run lint:webkit
 
       - name: Run Stylelint
-        run: pnpm run lint-style:webkit
+        run: pnpm run lint:webkit:style
 
       - name: Prettier check (fail on diff)
-        run: pnpm run check-format:webkit
+        run: pnpm run check:webkit:format
 
   types:
     name: Types and type coverage
@@ -174,7 +174,7 @@ jobs:
         run: pnpm run typecheck:docs
 
       - name: Type coverage (enforce 95% threshold)
-        run: pnpm run type-coverage:webkit
+        run: pnpm run check:webkit:type-coverage
 
   build:
     name: Build

@@ -2,7 +2,7 @@
   import { computed, onBeforeUnmount, useAttrs } from 'vue'
 
   import { eventDirection } from '../../../../composables/use-direction'
-  import { useDropdownSubContext } from '../injection-key'
+  import { useDropdownSubContext } from '../composables/use-dropdown-sub-context'
 
   defineOptions({
     name: 'DropdownMenuSubTrigger',

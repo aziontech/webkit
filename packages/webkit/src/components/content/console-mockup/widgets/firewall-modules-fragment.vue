@@ -3,8 +3,8 @@
 
   import { useMediaQuery } from '../../../../composables/use-media-query'
   import Tag from '../../tag/tag.vue'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
 
   defineOptions({ name: 'FirewallModulesFragment' })
@@ -136,7 +136,7 @@
     variant="bare"
     shell="legacy"
     :fade="frame.scrolled ? 'y' : 'bottom'"
-    class="[--mockup-fade-edge:16%] [--mockup-fade-start:74%]"
+    class="[--console-mockup-fade-edge:16%] [--console-mockup-fade-start:74%]"
     :chrome="false"
     :active="active"
     :width="420"

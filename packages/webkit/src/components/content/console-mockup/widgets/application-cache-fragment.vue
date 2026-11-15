@@ -7,8 +7,8 @@
   import NumberInput from '../../../input/number-input/number-input.vue'
   import RadioGroup from '../../../input/radio-group/radio-group.vue'
   import RadioGroupItem from '../../../input/radio-group/radio-group-item/radio-group-item.vue'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
 
   defineOptions({ name: 'ApplicationCacheFragment' })
@@ -124,7 +124,7 @@
     variant="bare"
     shell="legacy"
     :fade="atRest ? 'bottom' : 'y'"
-    class="[--mockup-fade-edge:24%]"
+    class="[--console-mockup-fade-edge:24%]"
     :chrome="false"
     :active="active"
     :width="420"

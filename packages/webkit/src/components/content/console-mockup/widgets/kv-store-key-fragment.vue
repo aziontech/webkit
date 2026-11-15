@@ -8,8 +8,8 @@
   import NumberInput from '../../../input/number-input/number-input.vue'
   import Textarea from '../../../input/textarea/textarea.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import LegacySwitch from '../parts/legacy-switch.vue'
   import MockupCursor from '../parts/mockup-cursor.vue'
   import MockupSelect from '../parts/mockup-select.vue'
@@ -96,7 +96,7 @@
     variant="bare"
     shell="legacy"
     fade="bottom"
-    class="[--mockup-fade-start:72%]"
+    class="[--console-mockup-fade-start:72%]"
     :chrome="false"
     :active="active"
     :width="420"

@@ -4,7 +4,7 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: e9a96dd5a744ae3c4eae7242d709fc4057ad82b5412d0757e722b65dd731eb43
+checksum: 2962984f2a2213bc4e271c3639e028272dafefe2b9e5df8eece4aefd2855abf1
 created: 2026-05-22
 last_updated: 2026-11-15
 ---
@@ -134,7 +134,7 @@ _none_ — the amount's `-0.08em` letter-spacing, previously shipped without, is
 - Do not inherit artifacts as-is from another design system, Figma file, library, or pre-existing `CONTRACT.md` / `README.md`. Rewrite to our conventions. See `.claude/rules/migration.md`.
 - Do not add Figma references to examples. No Figma URLs or node IDs in `examples/<name>/` files or `examples.json`. The Figma link is owned by `<name>.figma.ts` (Code Connect). See `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not add examples beyond Default + per `variant` + per `size` + Disabled, unless the spec's "Examples" section explicitly justifies the addition.
-- Do not edit `.claude/docs/DESIGN.md`, `.claude/docs/COMPONENT_REQUIREMENTS.md`, or `.claude/docs/PRIMEVUE_ABSTRACTION.md`.
+- Do not edit `.claude/docs/DESIGN.md` or `.claude/docs/COMPONENT_REQUIREMENTS.md`.
 - Do not edit the root `package.json` or `.github/workflows/*`.
 - Do not change `structure` after `status: approved`. To change structure, bump `spec_version` and re-author the spec.
 - Do not create files outside the paths declared by your task (the orchestrator tells you exactly which files to write).

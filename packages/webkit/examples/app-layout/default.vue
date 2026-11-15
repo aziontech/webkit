@@ -161,7 +161,7 @@
             title="Services"
             description="Where your domains meet the code that answers them."
           />
-          <HelpPanel.Group title="What is a service?">
+          <HelpPanel.Group label="What is a service?">
             <p>A service binds one or more domains to the code and rules that answer them.</p>
           </HelpPanel.Group>
           <HelpPanel.Footer>

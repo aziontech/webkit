@@ -62,7 +62,7 @@ jobs:
 
       - name: Build with Azion
         run: |
-          npm run build-azion:icons-gallery
+          npm run build:icons-gallery:azion
 
       - name: Deploy with Azion
         run: |

@@ -7,7 +7,7 @@ export default [
   ...webkitPlugin.configs.strict,
   {
     files: ['*.config.{js,cjs,mjs,ts,cts,mts}'],
-    rules: { 'webkit/authoring-standards': 'off' }
+    rules: { 'webkit/require-authoring-standards': 'off' }
   },
   { ignores: ['dist/**'] }
 ]

@@ -25,7 +25,7 @@
       />
     </Hero>
 
-    <div class="[--banner-top-height:44%]">
+    <div class="[--hero-banner-top-height:44%]">
       <Hero
         variant="screen"
         max-width="site"

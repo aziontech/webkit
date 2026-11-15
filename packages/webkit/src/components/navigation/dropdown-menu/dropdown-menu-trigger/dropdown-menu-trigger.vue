@@ -2,7 +2,7 @@
   import { computed, onBeforeUnmount, useAttrs } from 'vue'
 
   import { TriggerHost } from '../../../overlay/parts/trigger-host'
-  import { useDropdownContext } from '../injection-key'
+  import { useDropdownContext } from '../composables/use-dropdown-context'
 
   defineOptions({
     name: 'DropdownMenuTrigger',

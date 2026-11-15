@@ -9,7 +9,7 @@ import { REPO_ROOT, listAtBase, resolveBase, showAtBase } from './lib/base-ref.m
 const PKG = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const COMPONENT_KINDS = new Set(['component', 'root', 'subcomponent'])
 const MODEL_DOC = /^Two-way value \(`v-model/
-const MIGRATION_DOC = /^MIGRATION-v\d+\.md$/
+const MIGRATION_DOC = /^MIGRATION_V\d+\.md$/
 
 const norm = (value) =>
   String(value ?? '')
@@ -261,7 +261,7 @@ export function evaluate(changes, ctx) {
       subjects.some((s) => mentionsComponent(ctx.migrationLines, s))
     if (!covered) {
       failures.push(
-        `${c.subpath}: ${c.area} ${c.name} ${c.kind} has no migration (add a codemod entry to src/cli/migrations/ or a line naming ${pascal(c.subpath)} to a MIGRATION-v<N>.md).`
+        `${c.subpath}: ${c.area} ${c.name} ${c.kind} has no migration (add a codemod entry to src/cli/migrations/ or a line naming ${pascal(c.subpath)} to a MIGRATION_V<N>.md).`
       )
     }
   }

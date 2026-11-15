@@ -8,8 +8,8 @@
   import Accordion from '../../accordion/index'
   import Tag from '../../tag/tag.vue'
   import { type MockupCursorTarget, useMockupCursor } from '../composables/use-mockup-cursor'
-  import ConsoleMockupShell from '../console-mockup-shell/console-mockup-shell.vue'
-  import ConsoleMockupShellItem from '../console-mockup-shell/console-mockup-shell-item/console-mockup-shell-item.vue'
+  import ConsoleMockupShell from '../parts/console-mockup-shell.vue'
+  import ConsoleMockupShellItem from '../parts/console-mockup-shell-item.vue'
   import MockupCursor from '../parts/mockup-cursor.vue'
 
   defineOptions({ name: 'ApplicationsRulePhasesFragment' })
@@ -115,7 +115,7 @@
   <ConsoleMockupShell
     variant="bare"
     fade="bottom"
-    class="[--mockup-fade-start:76%]"
+    class="[--console-mockup-fade-start:76%]"
     :chrome="false"
     :active="active"
     :width="420"

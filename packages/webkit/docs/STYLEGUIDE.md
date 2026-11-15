@@ -155,7 +155,7 @@ defineProps({ variant: { type: String }, isDisabled: Boolean })   // runtime for
   compiler in builds that run the Vue plugin twice).
 - A two-way value is **not** a prop — it is `defineModel` (§6).
 
-**Enforced by:** `webkit/authoring-standards` (runtime `defineProps({})` → error, commit +
+**Enforced by:** `webkit/require-authoring-standards` (runtime `defineProps({})` → error, commit +
 CI) · `validate-tokens` (`any`, `class` in props) · `validate-spec-compliance` (names,
 defaults) · type-coverage ≥ 95%.
 
@@ -216,7 +216,7 @@ const emit = defineEmits<{ 'update:modelValue': [v: string] }>()
 - Renaming a model, adding a required second model, or changing its type is a **breaking
   change** (major).
 
-**Enforced by:** `webkit/authoring-standards` + `webkit/prefer-define-model` (error,
+**Enforced by:** `webkit/require-authoring-standards` + `webkit/prefer-define-model` (error,
 commit + CI) · `validate-authoring` (write-time) · the DS CI ratchet.
 
 ---
@@ -245,7 +245,7 @@ const emit = defineEmits<{
 - No camelCase names, no `on`-prefixed props to fake events, no runtime array form
   (`defineEmits(['click'])`).
 
-**Enforced by:** `webkit/authoring-standards` (runtime form) · `validate-spec-compliance`
+**Enforced by:** `webkit/require-authoring-standards` (runtime form) · `validate-spec-compliance`
 (camelCase, echo events) — payload order is convention + review in consumer projects.
 
 ---
@@ -277,7 +277,7 @@ defineSlots<{
 - Do not add a prop as a **substitute** for a slot's content (config-array / text-prop
   anti-pattern). A prop whose only role is slot-fallback display text is named `label`.
 
-**Enforced by:** `webkit/authoring-standards` (`<slot>` with no `defineSlots` → error) ·
+**Enforced by:** `webkit/require-authoring-standards` (`<slot>` with no `defineSlots` → error) ·
 `validate-spec-compliance` — per-slot listing is convention + review.
 
 ---
@@ -328,9 +328,9 @@ export function useCounter() { return reactive({ n: 0 }) }   // reactive return
 Out of scope: data-fetching composables (`useQuery` wrappers, HTTP) are a consuming-app
 concern — the design system ships none and its composables never do I/O.
 
-**Enforced by:** `webkit/composable-readonly-return` (`reactive()` or raw `ref()` return, no
-return type → error) · `webkit/composable-scope-cleanup` (listener/timer/frame/observer with no
-`onScopeDispose` → error) · `webkit/authoring-standards` (`.js` composable → error) ·
+**Enforced by:** `webkit/require-readonly-composable-return` (`reactive()` or raw `ref()` return, no
+return type → error) · `webkit/require-composable-scope-cleanup` (listener/timer/frame/observer with no
+`onScopeDispose` → error) · `webkit/require-authoring-standards` (`.js` composable → error) ·
 `validate-authoring` + the DS ratchet — `toValue` arguments are convention + review.
 
 ---
@@ -484,7 +484,7 @@ Interactive sub-elements a test must reach get their own derived testid
 `@deprecated` **naming the replacement and the removal version**, ships at least one
 major in that state, and is removed in a subsequent major (`BREAKING CHANGE:`). This cycle
 applies from 6.0 on: 6.0 itself was the clean break that removed every older name outright
-(`MIGRATION-v6.md` + `webkit migrate v6`).
+(`MIGRATION_V6.md` + `webkit migrate v6`).
 
 <!-- prettier-ignore -->
 ```ts
@@ -496,7 +496,7 @@ variant?: string
 - The deprecated part keeps working during its cycle — annotate, don't mutate.
 - `catalog.json` carries the deprecation so the MCP steers AI code off it before removal.
 
-**Enforced by:** `webkit/authoring-standards` (bare `@deprecated`) ·
+**Enforced by:** `webkit/require-authoring-standards` (bare `@deprecated`) ·
 `webkit/no-deprecated-component` (imports of deprecated components, with the suggested
 replacement) · release-please maps removal (`!` / `BREAKING CHANGE:`) to a major.
 
@@ -654,12 +654,12 @@ One definition, three surfaces — the same engine
 write-time hook, its CI ratchet, and the consumer's lint; an invariant test fails CI if a
 standard loses its gate.
 
-| Gate                                              | Where it runs                                                     | Blocks                                                                                                                                                                                         |
-| ------------------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Write-time hooks                                  | the DS authoring pipeline (`exit 2` on save)                      | off-spec code, raw values, phantom imports, off-vocabulary props, authoring anti-patterns                                                                                                      |
-| `webkit/authoring-standards` + the 10 usage lints | the consumer's pre-commit (husky) + their CI — every rule `error` | manual v-model, runtime props/emits, undeclared slots, composable anti-patterns, bare `@deprecated`, wrong imports, style overrides, raw colors                                                |
-| DS CI (`governance.yml`)                          | every PR                                                          | the authoring ratchet (no new violations), lint zero-warnings, `vue-tsc` + 95% type coverage, toolkit tests + catalog drift, security, docs and demos build, styled visual tests, summary gate |
-| Mandatory review                                  | every PR (2 approvals: technical + design)                        | everything a regex cannot verify — script order, `defineExpose` minimality, state-matrix completeness, behavioural a11y                                                                        |
+| Gate                                                      | Where it runs                                                     | Blocks                                                                                                                                                                                         |
+| --------------------------------------------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Write-time hooks                                          | the DS authoring pipeline (`exit 2` on save)                      | off-spec code, raw values, phantom imports, off-vocabulary props, authoring anti-patterns                                                                                                      |
+| `webkit/require-authoring-standards` + the 10 usage lints | the consumer's pre-commit (husky) + their CI — every rule `error` | manual v-model, runtime props/emits, undeclared slots, composable anti-patterns, bare `@deprecated`, wrong imports, style overrides, raw colors                                                |
+| DS CI (`governance.yml`)                                  | every PR                                                          | the authoring ratchet (no new violations), lint zero-warnings, `vue-tsc` + 95% type coverage, toolkit tests + catalog drift, security, docs and demos build, styled visual tests, summary gate |
+| Mandatory review                                          | every PR (2 approvals: technical + design)                        | everything a regex cannot verify — script order, `defineExpose` minimality, state-matrix completeness, behavioural a11y                                                                        |
 
 Nothing is advisory: every standard on this page blocks a merge through at least one of
 these gates.
