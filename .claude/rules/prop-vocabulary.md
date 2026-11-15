@@ -1,113 +1,220 @@
-# Rule: prop vocabulary — one name, one type, one default per concept
+# Rule: prop vocabulary — one name, one type, one value set per concept
 
-The same concept must ship under the **same prop name, type, and default** on every component. When one component calls it `variant` and another `kind`, or one spells it `closeable` and another `closable`, the consumer relearns the API per component and the AI guesses wrong. This rule fixes the canonical name for each recurring concept and makes it machine-enforced — on component **creation and on every edit**.
+The same concept ships under the **same prop name, type, value set and default** on every
+component. When one component calls it `variant` and another `kind`, or one says `state` and
+another `status`, the consumer relearns the API per component and the AI guesses wrong. This
+rule fixes the canonical word for each recurring concept, and it is machine-enforced on
+component **creation and on every edit**. It is the prop part of the naming standard
+([`naming.md`](./naming.md), decisions N1–N7 and finding api-76).
 
-The single source of truth is [`.claude/hooks/_lib/prop-vocabulary.mjs`](../hooks/_lib/prop-vocabulary.mjs). This document is its human-readable form; the two must agree. `build-catalog.mjs` also stamps the vocabulary into `catalog.json` so the MCP steers AI-generated consumer code toward the canonical names.
+The single source of truth is [`.claude/hooks/_lib/prop-vocabulary.mjs`](../hooks/_lib/prop-vocabulary.mjs).
+This document is its human-readable form; the two must agree. `build-catalog.mjs` stamps the
+vocabulary into `catalog.json` so the MCP steers AI-written consumer code toward the canonical
+names.
+
+## Two stages
+
+Every banned name or value is in one of two stages:
+
+- **Enforced** (`aliases`, `VALUES`) — blocked today by `validate-spec-compliance` (write time)
+  and the `check-authoring` ratchet (CI).
+- **Staged** (`staged`, `STAGED_VALUES`, `VALUE_PATTERNS`, `PATTERNS`, `GROUP_LABEL`, `SLOTS`,
+  `EVENT_WORDS`, `DATA_ATTRIBUTES`) — the 6.0 standard. The naming check
+  (`check:naming`, rules `prop-name`, `prop-value`, `event-name`, `slot-name`,
+  `data-attribute`) reports them now, while the rename lanes still carry the old names, and
+  blocks them once the lead sets `NAMING_STAGED_BLOCKS` to `true` in
+  `packages/webkit/scripts/lib/naming-rules.mjs`.
+
+In the tables below, staged entries are marked _(staged)_.
 
 ## The dictionary
 
-| Concept                                                                                | Canonical prop                                | Type                                                            | Default                                                                                           | Banned aliases (blocked)                                                                                                                                                         |
-| -------------------------------------------------------------------------------------- | --------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Visual/structural variant                                                              | `kind`                                        | component-specific string union                                 | component-specific                                                                                | `variant`, `appearance`, `intent`, `headerVariant`, `mediaKind`, `cardStyle`                                                                                                     |
-| Severity / status color                                                                | `severity`                                    | one shared union                                                | per family                                                                                        | `status`                                                                                                                                                                         |
-| Size                                                                                   | `size`                                        | `'small' \| 'medium' \| 'large'` (this order; a subset is fine) | `large` for actions/links, else `medium`                                                          | any of `xs`/`sm`/`md`/`lg`/`xl`, or a reordered union                                                                                                                            |
-| Light-dismiss (closes on outside-click / Esc)                                          | `dismissible`                                 | `boolean`                                                       | overlay-specific                                                                                  | `dismissable`, `closeable`                                                                                                                                                       |
-| Explicit close affordance (X button)                                                   | `closable`                                    | `boolean`                                                       | `true` on modal overlays (`dialog`, `drawer`); `false` everywhere else (alert, toast, tabs-item…) | — (distinct concept; not an alias of `dismissible`)                                                                                                                              |
-| Primary heading text                                                                   | `title`                                       | `string`                                                        | `''`                                                                                              | `heading`, `header` (as a **prop**)                                                                                                                                              |
-| Primary two-way value                                                                  | `modelValue` (default `v-model`)              | component-specific                                              | per component                                                                                     | `isToggled`; `v-model:value` for the primary value†                                                                                                                              |
-| Overlay open state                                                                     | `open` (+ `v-model:open`), seed `defaultOpen` | `boolean`                                                       | `undefined` (controlled)                                                                          | `visible`, `show`, `opened`                                                                                                                                                      |
-| Disabled                                                                               | `disabled`                                    | `boolean`                                                       | `false`                                                                                           | `isDisabled`, `enabled`                                                                                                                                                          |
-| Loading                                                                                | `loading`                                     | `boolean`                                                       | `false`                                                                                           | `isLoading`                                                                                                                                                                      |
-| Leading/trailing glyph                                                                 | `icon`                                        | `string` (icon name)                                            | `''`                                                                                              | `iconName`, `leadingIcon`, `trailingIcon`                                                                                                                                        |
-| Validation state†                                                                      | `invalid`                                     | `boolean`                                                       | `false`                                                                                           | `error` / `hasError` as a validation flag (an `error` _message_ string, or a send-failed state on a form band, is a different concept)                                           |
-| Read-only†                                                                             | `readonly`                                    | `boolean`                                                       | `false`                                                                                           | `readOnly`, `isReadonly`                                                                                                                                                         |
-| Outline around the box†                                                                | `bordered`                                    | `boolean`                                                       | per component                                                                                     | `border` (boolean), `hasBorder`                                                                                                                                                  |
-| Copy affordance†                                                                       | `copyable`                                    | `boolean`                                                       | per component                                                                                     | `showCopy`                                                                                                                                                                       |
-| Self-advancing media†                                                                  | `autoplay` (+ `autoplayInterval`, ms)         | `boolean`                                                       | per component                                                                                     | `autoPlay`, `autoPlayInterval`                                                                                                                                                   |
-| Motion on / off†                                                                       | `animated`                                    | `boolean`                                                       | per component                                                                                     | `still` (negative polarity)                                                                                                                                                      |
-| Short label above a heading†                                                           | `eyebrow`                                     | `string`                                                        | `''`                                                                                              | `overline` (as a prop)                                                                                                                                                           |
-| Text of a link or call-to-action†                                                      | `linkLabel` (`actionLabel` for a button)      | `string`                                                        | `''`                                                                                              | `link` / `cta` as the text                                                                                                                                                       |
-| Column count below `md`†                                                               | `mobileColumns`                               | number union                                                    | `1`                                                                                               | `mobileCols`                                                                                                                                                                     |
-| Accessible name                                                                        | `ariaLabel` (+ prefixed `xAriaLabel`)         | `string`                                                        | per component                                                                                     | `aria-label` as a prop                                                                                                                                                           |
-| In-page anchor (the `id` a `#hash` link targets, set by the component on its landmark) | `anchor`                                      | `string`                                                        | `''`                                                                                              | `anchorId`, `sectionId`, `hash`                                                                                                                                                  |
-| Boolean (any)                                                                          | no `is`/`has` prefix; **positive polarity**   | `boolean`                                                       | `false`                                                                                           | `isX`, `hasX`; negatives `hidden`→`visible`, `closed`→`open`, `inactive`→`active`, `invisible`→`visible`, `collapsed`→`expanded` (`disabled`/`readonly` are accepted exceptions) |
-| Value change signal                                                                    | `v-model` / `update:<x>` (no separate echo)   | —                                                               | —                                                                                                 | **`<x>-change` when `update:<x>` exists** (redundant echo — blocked). A genuinely distinct commit event (e.g. commit-on-blur) is a bare `change`, never `<x>-change`.            |
+| Concept                                      | Canonical                                                              | Type                                                       | Banned aliases                                                                                               |
+| -------------------------------------------- | ---------------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Visual variant (the look)                    | `variant`                                                              | component union                                            | `appearance`, `intent`, `headerVariant`, `mediaKind`, `cardStyle`; _(staged)_ `kind`, `look`, `styleVariant` |
+| Sort of part (cell, page button, axis)       | `type`                                                                 | component union                                            | `kind` _(staged, via the look entry)_                                                                        |
+| Severity (colour meaning)                    | `severity`                                                             | `neutral · info · success · warning · danger`              | _(staged)_ `tone`                                                                                            |
+| Job or step status                           | `status`                                                               | `pending · running · success · error · canceled · skipped` | _(staged)_ `state`, `phase`, `outcome`                                                                       |
+| Light-dismiss (outside-click / Esc)          | `dismissible`                                                          | `boolean`                                                  | `dismissable`, `closeable`                                                                                   |
+| Explicit close affordance (X)                | `closable`                                                             | `boolean`                                                  | — (a different concept from `dismissible`)                                                                   |
+| Primary heading text                         | `title`                                                                | `string`                                                   | `heading`, `header`; _(staged)_ `headline`                                                                   |
+| Primary two-way value                        | `modelValue` (`v-model`)                                               | per component                                              | `isToggled`; `v-model:value` for the primary value (review)                                                  |
+| Anything that opens                          | `open` (`v-model:open`, seed `defaultOpen`)                            | `boolean`                                                  | _(staged)_ `expanded`, `visible`, `show`, `opened`, `shown`                                                  |
+| The page or item you are on (`aria-current`) | `active`                                                               | `boolean`                                                  | _(staged)_ `current`, `activated`, `isCurrent`                                                               |
+| Picked single key                            | `selected` (`v-model:selected`)                                        | key                                                        | — (review)                                                                                                   |
+| Picked keys of a multi-selection             | `selectedKeys` (`v-model:selectedKeys`)                                | `string[]`                                                 | _(staged)_ `selectedIds`, `selectedValues`, `checkedKeys`, `selectedItems`                                   |
+| Disabled                                     | `disabled`                                                             | `boolean`                                                  | `isDisabled` (prefix rule); _(staged)_ `enabled`                                                             |
+| Loading                                      | `loading`                                                              | `boolean`                                                  | `isLoading` (prefix rule)                                                                                    |
+| Leading or trailing glyph                    | `icon`                                                                 | `string` (icon name)                                       | _(staged)_ `iconName`, `leadingIcon`, `trailingIcon`                                                         |
+| In-page anchor id                            | `anchor`                                                               | `string`                                                   | `anchorId`, `sectionId`, `hash`                                                                              |
+| Validation state                             | `invalid`                                                              | `boolean`                                                  | `hasError`, `isInvalid`                                                                                      |
+| Read-only                                    | `readonly`                                                             | `boolean`                                                  | `readOnly`, `isReadonly`                                                                                     |
+| Outline around the box                       | `bordered`                                                             | `boolean`                                                  | `border`, `hasBorder`                                                                                        |
+| Copy affordance                              | `copyable`                                                             | `boolean`                                                  | `showCopy`                                                                                                   |
+| Self-advancing media                         | `autoplay`                                                             | `boolean`                                                  | `autoPlay`                                                                                                   |
+| Self-advancing interval (ms)                 | `autoplayInterval`                                                     | `number`                                                   | `autoPlayInterval`; _(staged)_ `interval`                                                                    |
+| Motion on / off                              | `animated`                                                             | `boolean`                                                  | `still`                                                                                                      |
+| Short label above a heading                  | `eyebrow`                                                              | `string`                                                   | `overline`; _(staged)_ `kicker`, `tagline`                                                                   |
+| Text of a link or call-to-action             | `linkLabel` (`actionLabel` for a button)                               | `string`                                                   | `link`, `cta`                                                                                                |
+| Column count below `md`                      | `mobileColumns`                                                        | number union                                               | `mobileCols`                                                                                                 |
+| Number of grid columns                       | `columns`                                                              | number union                                               | _(staged)_ `cols`                                                                                            |
+| Choices the user picks from                  | `options` (`items` for displayed lists, `data` + `columns` for tables) | array                                                      | _(staged)_ `model`, `choices`                                                                                |
+| Identity key                                 | `itemKey` (lists), `rowKey` (tables)                                   | `string`                                                   | _(staged)_ `trackBy`, `dataKey`, `keyField`, `idKey`                                                         |
+| Empty-state text                             | `emptyTitle` (+ `emptyDescription`, `emptyActionLabel`)                | `string`                                                   | _(staged)_ `emptyText`, `emptyMessage`, `emptyLabel`, `noResultsText`, `noDataText`, `empty`                 |
+| Main call-to-action object                   | `primaryAction`                                                        | one shared action type                                     | _(staged)_ `mainAction`, `primaryCta`, `primaryButton`                                                       |
+| Second call-to-action object                 | `secondaryAction`                                                      | the same type                                              | _(staged)_ `secondaryCta`, `secondaryButton`                                                                 |
+| Heading level of a rendered title            | `headingLevel`                                                         | `1 … 6`                                                    | _(staged)_ `titleLevel`, `headingTag`, `headerLevel`                                                         |
+| Where a link opens                           | `target`                                                               | `string`                                                   | _(staged)_ `external`, `newTab`, `openInNewTab`, `blank`                                                     |
+| More than one may be picked                  | `multiple`                                                             | `boolean`                                                  | _(staged)_ `multi`                                                                                           |
+| Accessible name                              | `ariaLabel` (+ `xAriaLabel`)                                           | `string`, `''` default                                     | `aria-label` as a prop (see [`accessibility.md`](./accessibility.md))                                        |
 
-**Accessible name — the attribute the consumer writes.** The prop is `ariaLabel`, but templates pass it as the kebab attribute `aria-label="…"` (`:aria-label` when bound). vue-tsc does not camelize `aria-*` attributes onto props, so an `ariaLabel` prop is always **optional with a `''` default**: a required one makes `aria-label="…"` fail to type-check in a fresh create-vue app. Where a name is mandatory, `webkit/accessible-name` (lint) enforces it. See [`accessibility.md`](./accessibility.md).
+**Group header text.** On a part whose name ends in `-group`, the header text is `label`
+(like `DropdownMenu.Group`, `Select.Group`) — _(staged)_ `title`, `heading`, `header`,
+`groupLabel` are banned there (`GROUP_LABEL`).
+
+**Accessible name — the attribute the consumer writes.** The prop is `ariaLabel`, but
+templates pass `aria-label="…"`. vue-tsc does not camelize `aria-*` attributes onto props, so
+an `ariaLabel` prop is always optional with a `''` default; `webkit/accessible-name` enforces a
+mandatory name.
+
+## Booleans
+
+- No `is` / `has` prefix (enforced).
+- Positive polarity (enforced): `hidden` → `show<Part>`, `invisible` → `show<Part>`,
+  `closed` → `open`, `inactive` → `active`, `collapsed` → `open`. `disabled` and `readonly`
+  are the accepted exceptions.
+- Shapes that read backwards _(staged, `PATTERNS`)_: `hide<X>` → `show<X>`; `enable<X>` → the
+  `-able` adjective (`enableSorting` → `sortable`); `disable<X>` → the positive form.
+- A toggle that renders an optional part is `show<Part>` (`showHeader`, `showLineNumbers`); a
+  toggle that turns on a capability is an `-able` adjective (`copyable`, `closable`,
+  `sortable`).
 
 ## Shared values
 
-Value names are shared too. The same look gets the same token on every component:
+The same look gets the same token on every component. A prop's string-literal union is checked
+against its value map.
 
-| Idea                      | Value                      | Prop               | Banned values                |
-| ------------------------- | -------------------------- | ------------------ | ---------------------------- |
-| Bordered surface, no fill | `outlined`                 | `kind`             | `outline`                    |
-| No surface until hover    | `transparent`              | `kind`             | `text`, `ghost`              |
-| Error / destructive color | `danger`                   | `severity`, `kind` | `error`, `destructive`       |
-| Size tokens               | `small`, `medium`, `large` | `size`             | `xs`, `sm`, `md`, `lg`, `xl` |
+| Prop                           | Canonical values                                                           | Banned values                                                                                                                                                                                                                     |
+| ------------------------------ | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `variant`                      | `primary · secondary · outline · ghost · danger · link`                    | _(staged)_ `outlined`→`outline`, `transparent`→`ghost`, `text`→`ghost`, `destructive`→`danger`, `error`→`danger`                                                                                                                  |
+| `severity`                     | `neutral · info · success · warning · danger`                              | `error`→`danger`, `destructive`→`danger`; _(staged)_ `default`, `secondary`, `alt` → `neutral`                                                                                                                                    |
+| `status`                       | `pending · running · success · error · canceled · skipped` (+ `streaming`) | _(staged)_ `done`, `ok`, `complete`, `completed`, `succeeded`, `finished` → `success`; `failed`, `failure`, `errored` → `error`; `cancelled` → `canceled`; `queued`, `waiting` → `pending`; `in-progress`, `progress` → `running` |
+| any `*Position`                | `leading · trailing`                                                       | _(staged)_ `left`, `start`, `before`, `prefix` → `leading`; `right`, `end`, `after`, `suffix` → `trailing`                                                                                                                        |
+| `align`, `alignment`, `*Align` | `start · center · end`                                                     | _(staged)_ `left`, `top` → `start`; `right`, `bottom` → `end`; `centered` → `center`                                                                                                                                              |
+| `side`, `*Side`                | `start · end` (+ `top · bottom` for block sides)                           | _(staged)_ `left` → `start`, `right` → `end`                                                                                                                                                                                      |
+| `selectionMode`, `*Mode`       | `none · single · multiple`                                                 | _(staged)_ `multi` → `multiple`                                                                                                                                                                                                   |
+| `treatment`, `*Treatment`      | `color · monochrome · knockout`                                            | _(staged)_ `as-is`, `original` → `color`; `invert-light` → `knockout`                                                                                                                                                             |
 
-`kind` and `small | medium | large` stay as they are in v6. shadcn and Radix call these `variant` and
-`sm | md | lg`; webkit already ships `kind` and the long tokens on every component, so a rename
-would break every consumer for no gain. Code ported from shadcn maps `variant` → `kind`,
-`ghost` → `transparent`, `destructive` → `danger`, `outline` → `outlined`.
+> `outline`, `ghost` and `link` are the shadcn and Supabase words. `danger` stays over
+> shadcn's `destructive` because it matches our colour names. Code ported from shadcn maps
+> `destructive` → `danger`; from Material, `outlined` → `outline`, `text` → `ghost`.
 
-## v6 renames (M1.2 item 2.6)
+## Size
 
-Every prop that drifted from this table is renamed in v6. The full map, with value renames,
-is `packages/webkit/src/cli/migrations/v6-props.json` (`{ "<subpath>": { "<old>": "<new>" } }`).
-The `field-*` wrappers are not in it: v6 replaces them with a single `Field`.
+`size` takes **`'small' | 'medium' | 'large'`**, in that order; a subset is fine
+(`'small' | 'medium'`), a reorder is not. **`tiny`** and **`xlarge`** exist only for a
+component that truly needs a 4th step (whether it does is review). Banned tokens: `xs`, `sm`,
+`md`, `lg`, `xl`, `2xs`, `2xl`, `xxs`, `xxl` (the scale steps belong to tokens and utilities,
+not to props).
 
-| Component                                                              | Before                         | After                          |
-| ---------------------------------------------------------------------- | ------------------------------ | ------------------------------ |
-| `accordion`, `tabs`, `navigation-menu`, `code-block`, `theme-switcher` | `v-model:value`                | `v-model` (`modelValue`)       |
-| `alert`                                                                | `severity="error"`             | `severity="danger"`            |
-| `button`                                                               | `kind="text"`                  | `kind="transparent"`           |
-| `item`                                                                 | `kind="outline"`               | `kind="outlined"`              |
-| `severity-tag`                                                         | `level`                        | `severity`                     |
-| `code-block`, `log-view`, `table`                                      | `border`                       | `bordered`                     |
-| `log-view`                                                             | `showCopy`                     | `copyable`                     |
-| `media-tabs`, `quote-tabs`                                             | `autoPlay`, `autoPlayInterval` | `autoplay`, `autoplayInterval` |
-| `shell-mockup`                                                         | `still`                        | `animated` (inverted)          |
-| `doc-card`                                                             | `overline`, `link`             | `eyebrow`, `linkLabel`         |
-| `doc-card-group`                                                       | `mobileCols`                   | `mobileColumns`                |
+House default: **actions and links** (button, icon-button, link, …) default to `large`;
+**everything else** to `medium`.
 
-† Added in v6. [`_lib/prop-vocabulary.mjs`](../hooks/_lib/prop-vocabulary.mjs) enforces them: the aliases are in `CONCEPTS` and the banned values of the shared-values table are in `VALUES` (checked against a `kind` / `severity` union). `error` stays allowed as a prop name (a message string or a send-failed state is a different concept), and `v-model:value` cannot be blocked by name because `value` is a legitimate prop, so those two are review-only.
+`closable` house default: `true` on `dialog` and `drawer` (modal overlays always show a way
+out), `false` everywhere else.
 
-**Not banned — legitimate competing uses:**
+## Slots _(staged)_
 
-- `type` — native `<input type>` and similar pass-throughs are fine. Only a _variant_ named `type` is wrong (rename to `kind`).
-- `value` — identity, the `v-model` payload, and clipboard/display text are all legitimate. Use `label` (not `value`) only for **slot-fallback display text**.
+Slots are kebab-case. Adornments before and after the content are `leading` / `trailing`;
+sides of a bar are `start` / `end`.
 
-## The `closable` house default
+| Banned          | Use               |
+| --------------- | ----------------- |
+| `prefix`        | `leading`         |
+| `suffix`        | `trailing`        |
+| `left`          | `leading`         |
+| `right`         | `trailing`        |
+| `prepend`       | `leading`         |
+| `append`        | `trailing`        |
+| `icon-left`     | `leading`         |
+| `icon-right`    | `trailing`        |
+| `header-start`  | `header-leading`  |
+| `header-end`    | `header-trailing` |
+| `action`        | `actions`         |
+| `header-action` | `header-actions`  |
+| `breadcrumb`    | `breadcrumbs`     |
 
-`closable` uses one name everywhere; the **default** follows what the component is:
+## Events
 
-- **modal overlays** (`dialog`, `drawer`) default to `true`. A modal must always show a way out, and the default dialog should be the correct one without extra wiring; `:closable="false"` removes the X (an alert dialog, a step that must be answered in the footer).
-- **everything else** (inline and transient surfaces: `alert`, `toast`, `tabs-item`) defaults to `false`. An X there is an opt-in affordance; most alerts and tabs must not be closable.
+- kebab-case (enforced); an `update:<prop>` model event is exempt.
+- **No redundant echo** (enforced): no `<x>-change` when `update:<x>` exists. A distinct commit
+  event (commit-on-blur) is a bare `change`.
+- **Event words** _(staged, `EVENT_WORDS`)_, matched per `-`-segment: `dblclick` →
+  `double-click`, `finish` / `finished` / `done` → `complete`, `failed` / `fail` → `error`,
+  `dismiss` → `close`, `delete` → `remove`.
 
-## The `size` house default
+## Data attributes _(staged)_
 
-`size` uses the same three tokens everywhere; the **default** follows one predictable rule instead of being decided per component:
+`data-*` names are kebab-case and mirror the prop.
 
-- **actions / links** (button, icon-button, link, …) default to `large`.
-- **everything else** defaults to `medium`.
+| Banned                                                                       | Use                                                |
+| ---------------------------------------------------------------------------- | -------------------------------------------------- |
+| `data-kind`                                                                  | `data-variant` (look) or `data-type` (sort)        |
+| `data-open`, `data-expanded`, `data-collapsed`, `data-shown`, `data-visible` | `data-state="open\|closed"`                        |
+| `data-current`                                                               | `data-active`                                      |
+| `data-border`                                                                | `data-bordered`                                    |
+| `data-tone`                                                                  | `data-status` or `data-severity`                   |
+| `data-has-icon-left` / `data-has-icon-right`                                 | `data-leading` / `data-trailing`                   |
+| `data-inactive`                                                              | `data-disabled` or `data-inert`                    |
+| `data-part`                                                                  | `data-slot`                                        |
+| `data-focus`, `data-hover`, `data-highlight`                                 | `data-focused`, `data-hovered`, `data-highlighted` |
 
-A component that supports only a subset declares the tokens in canonical order (`'small' | 'medium'`, never `'large' | 'medium'`) and notes the subset in its spec.
+## Not banned — legitimate uses
 
-## What is enforced, and where
-
-- **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** (PostToolUse on `Write|Edit|MultiEdit`) blocks a root `.vue` whose `defineProps` uses a banned alias, an `is`/`has` boolean prefix, a non-canonical/reordered `size` union, or a camelCase event; and flags **default drift** (spec Props "Default" column ≠ `withDefaults`). This runs on creation **and every edit**, so a component cannot drift off-vocabulary later.
-- **[`_schema.json`](../../.specs/_schema.json)** + the `spec-validate` skill reject the same aliases at spec-authoring time (belt-and-suspenders).
-- **`catalog.json` `vocabulary`** carries the dictionary to the MCP (`get_component` / usage guidance) so AI-written consumer code uses `kind`, not `variant`.
+- **`type`** — native pass-throughs (`<input type>`, `<button type>`) **and** the sort of part
+  (`<Table.Cell type="checkbox">`, `<Pagination.Button type="next">`). Only a _look_ named
+  `type` is wrong (that is `variant`).
+- **`value`** — identity, the `v-model` payload, clipboard or display text. `v-model:value` for
+  the primary value cannot be blocked by name, so it is review-only.
+- **`error`** — a message string, or a send-failed state on a form band, is a different concept
+  from the `invalid` flag.
+- **`level`** — on `doc-heading`, which _is_ a heading; everywhere else a heading level is
+  `headingLevel`.
+- **`label`** — the header text of a group part, and slot-fallback display text.
+- **`state`** — only as the `data-state` attribute for open/closed, checked/unchecked; as a
+  prop for a job it is `status`.
 
 ## Migration
 
-Per [`migration.md`](./migration.md), a name inherited from another design system (`variant`, `sm/md/lg`, `onValueChange`) is rewritten to ours — never carried over. Legacy components on the [`legacy-components.json`](../hooks/_lib/legacy-components.json) whitelist bypass the hook until they are migrated; migrating one includes bringing its props onto this vocabulary.
+Per [`migration.md`](./migration.md), a name inherited from another system (`kind`,
+`sm/md/lg`, `onValueChange`, `prefix`) is rewritten to ours, never carried over. The full
+old → new map, with value renames, is `packages/webkit/src/cli/migrations/v6-props.json`
+(`{ "<subpath>": { "<old>": "<new>" } }`); `webkit migrate` applies it to apps and
+`webkit/no-deprecated-name` flags what is left.
+
+## What is enforced, and where
+
+- **[`validate-spec-compliance.mjs`](../hooks/validate-spec-compliance.mjs)** (PostToolUse on
+  `Write|Edit|MultiEdit`) blocks a root `.vue` whose `defineProps` uses an enforced alias, an
+  `is`/`has` boolean, a negative boolean, an enforced banned value, a non-canonical or
+  reordered `size` union, a camelCase event or a redundant echo; and flags default drift (spec
+  Props "Default" column ≠ `withDefaults`). The `check-authoring` CI ratchet runs the same
+  engine repo-wide.
+- **The naming check** (`check:naming`, `.claude/hooks/validate-naming.mjs`) runs the vocabulary
+  with `{ stage: 'all' }` over every spec and `.vue`, reporting the staged entries (see
+  [`naming.md`](./naming.md)).
+- **[`_schema.json`](../../.specs/_schema.json)** + the `spec-validate` skill reject aliases at
+  spec-authoring time.
+- **`catalog.json` `vocabulary`** carries the full 6.0 dictionary to the MCP.
+- **`webkit/no-deprecated-name`** (consumer ESLint) flags a renamed prop on a WebKit tag from
+  `v6-props.json`.
 
 ## Hard prohibitions
 
 - Do not introduce a prop whose concept already has a canonical name under a different name.
 - Do not use `xs`/`sm`/`md`/`lg`/`xl` for `size`; do not reorder the `size` union.
-- Do not prefix a boolean with `is`/`has`.
+- Do not prefix a boolean with `is`/`has`, and do not name it negatively or as `hide*`.
+- Do not use `left`/`right` for a position, side or alignment value.
 - Do not let the spec's Default column disagree with `withDefaults`.
-- Do not edit `prop-vocabulary.md` without editing `_lib/prop-vocabulary.mjs` in the same PR (and vice-versa) — they are one source in two forms.
+- Do not edit `prop-vocabulary.md` without editing `_lib/prop-vocabulary.mjs` in the same PR
+  (and vice-versa) — they are one source in two forms.

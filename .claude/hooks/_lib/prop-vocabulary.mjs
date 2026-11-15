@@ -1,25 +1,34 @@
 // Canonical prop vocabulary (machine-readable side of .claude/rules/prop-vocabulary.md).
-// Consumed by validate-spec-compliance.mjs (write-time block) and build-catalog.mjs
-// (stamps `vocabulary` into catalog.json for the MCP).
+// Consumed by validate-spec-compliance.mjs (write-time block), check-authoring.mjs (CI
+// ratchet), the naming engine (packages/webkit/scripts/lib/naming-rules.mjs, which reports
+// every entry) and build-catalog.mjs (stamps `vocabulary` into catalog.json for the MCP).
+//
+// Two stages. `aliases` are blocked today by the spec-compliance hook and ratchet.
+// `staged` aliases belong to the 6.0 naming standard (decisions N1-N18): the naming check
+// reports them now and blocks them once the rename lanes have merged and the lead flips
+// NAMING_STAGED_BLOCKS in packages/webkit/scripts/lib/naming-rules.mjs. Pass
+// { stage: 'all' } to checkPropVocabulary to see both.
 
-// concept -> { canonical, aliases }; every alias is banned as a prop name. Only names with
-// no legitimate competing use are listed (`type`, `value` stay allowed; slots are not
-// checked) — rationale per name in the rule doc.
 export const CONCEPTS = [
   {
-    concept: 'visual/structural variant',
-    canonical: 'kind',
-    aliases: ['variant', 'appearance', 'intent', 'headerVariant', 'mediaKind', 'cardStyle']
+    concept: 'visual variant (the look); a sort of part is `type`',
+    canonical: 'variant',
+    aliases: ['appearance', 'intent', 'headerVariant', 'mediaKind', 'cardStyle'],
+    staged: ['kind', 'look', 'styleVariant']
   },
   {
-    concept: 'severity / status color token',
+    concept: 'severity (colour meaning: neutral | info | success | warning | danger)',
     canonical: 'severity',
-    aliases: ['status']
+    aliases: [],
+    staged: ['tone']
   },
   {
-    // Light-dismiss (overlay closes on outside-click / Esc) — Dialog/Drawer/Popover.
-    // Distinct from `closable` (an explicit close affordance / X button — Dialog/Drawer/
-    // Alert/Toast/TabsItem), which stays a valid, separate name and is NOT an alias here.
+    concept: 'job or step status (pending | running | success | error | canceled | skipped)',
+    canonical: 'status',
+    aliases: [],
+    staged: ['state', 'phase', 'outcome']
+  },
+  {
     concept: 'light-dismiss (closes on outside-click / Esc)',
     canonical: 'dismissible',
     aliases: ['dismissable', 'closeable']
@@ -27,7 +36,8 @@ export const CONCEPTS = [
   {
     concept: 'primary heading text',
     canonical: 'title',
-    aliases: ['heading', 'header']
+    aliases: ['heading', 'header'],
+    staged: ['headline']
   },
   {
     concept: 'primary two-way-bound value',
@@ -35,13 +45,41 @@ export const CONCEPTS = [
     aliases: ['isToggled']
   },
   {
+    concept: 'anything that opens (v-model:open, data-state="open|closed")',
+    canonical: 'open',
+    aliases: [],
+    staged: ['expanded', 'visible', 'show', 'opened', 'shown']
+  },
+  {
+    concept: 'page or item you are on (renders aria-current)',
+    canonical: 'active',
+    aliases: [],
+    staged: ['current', 'activated', 'isCurrent']
+  },
+  {
+    concept: 'picked keys of a multi-selection (v-model:selectedKeys)',
+    canonical: 'selectedKeys',
+    aliases: [],
+    staged: ['selectedIds', 'selectedValues', 'checkedKeys', 'selectedItems']
+  },
+  {
+    concept: 'disabled',
+    canonical: 'disabled',
+    aliases: [],
+    staged: ['enabled']
+  },
+  {
+    concept: 'leading or trailing glyph (icon name)',
+    canonical: 'icon',
+    aliases: [],
+    staged: ['iconName', 'leadingIcon', 'trailingIcon']
+  },
+  {
     concept: 'in-page anchor id',
     canonical: 'anchor',
     aliases: ['anchorId', 'sectionId', 'hash']
   },
   {
-    // `error` stays allowed: an error message string or a send-failed state is a different
-    // concept (rule doc), so only the unambiguous flag spellings are banned.
     concept: 'validation state',
     canonical: 'invalid',
     aliases: ['hasError', 'isInvalid']
@@ -69,7 +107,8 @@ export const CONCEPTS = [
   {
     concept: 'self-advancing media interval (ms)',
     canonical: 'autoplayInterval',
-    aliases: ['autoPlayInterval']
+    aliases: ['autoPlayInterval'],
+    staged: ['interval']
   },
   {
     concept: 'motion on / off (positive polarity)',
@@ -79,7 +118,8 @@ export const CONCEPTS = [
   {
     concept: 'short label above a heading',
     canonical: 'eyebrow',
-    aliases: ['overline']
+    aliases: ['overline'],
+    staged: ['kicker', 'tagline']
   },
   {
     concept: 'text of a link or call-to-action',
@@ -90,141 +130,364 @@ export const CONCEPTS = [
     concept: 'column count below md',
     canonical: 'mobileColumns',
     aliases: ['mobileCols']
+  },
+  {
+    concept: 'number of grid columns',
+    canonical: 'columns',
+    aliases: [],
+    staged: ['cols']
+  },
+  {
+    concept:
+      'choices the user picks a value from (items for displayed lists, data + columns for tables)',
+    canonical: 'options',
+    aliases: [],
+    staged: ['model', 'choices']
+  },
+  {
+    concept: 'identity key of a row (rowKey) or list item (itemKey)',
+    canonical: 'itemKey',
+    aliases: [],
+    staged: ['trackBy', 'dataKey', 'keyField', 'idKey']
+  },
+  {
+    concept: 'empty-state title (with emptyDescription, emptyActionLabel)',
+    canonical: 'emptyTitle',
+    aliases: [],
+    staged: ['emptyText', 'emptyMessage', 'emptyLabel', 'noResultsText', 'noDataText', 'empty']
+  },
+  {
+    concept: 'main call-to-action object (with secondaryAction, one shared type)',
+    canonical: 'primaryAction',
+    aliases: [],
+    staged: ['mainAction', 'primaryCta', 'primaryButton']
+  },
+  {
+    concept: 'second call-to-action object',
+    canonical: 'secondaryAction',
+    aliases: [],
+    staged: ['secondaryCta', 'secondaryButton']
+  },
+  {
+    concept: 'heading level of a title the component renders',
+    canonical: 'headingLevel',
+    aliases: [],
+    staged: ['titleLevel', 'headingTag', 'headerLevel']
+  },
+  {
+    concept: 'where a link opens (target, as on button and link)',
+    canonical: 'target',
+    aliases: [],
+    staged: ['external', 'newTab', 'openInNewTab', 'blank']
+  },
+  {
+    concept: 'more than one may be picked',
+    canonical: 'multiple',
+    aliases: [],
+    staged: ['multi']
   }
 ]
 
-// Shared value tokens: prop -> { banned value: canonical value }. The same look gets the
-// same token on every component; checked against the prop's string-literal union.
+// Group parts name their header text `label` (like DropdownMenu.Group, Select.Group).
+export const GROUP_LABEL = {
+  canonical: 'label',
+  staged: ['title', 'heading', 'header', 'groupLabel'],
+  appliesTo: (component) => /-group$/.test(component || '')
+}
+
+// Prop-name shapes that read backwards or borrow another library's words.
+export const PATTERNS = [
+  {
+    test: /^hide[A-Z]/,
+    fix: (n) => `show${n.slice(4)}`,
+    concept: 'part visibility toggle (show<Part>, positive)'
+  },
+  {
+    test: /^enable[A-Z]/,
+    fix: (n) => `${n.slice(6, 7).toLowerCase()}${n.slice(7)} as an -able adjective`,
+    concept: 'capability (sortable, selectable, copyable)'
+  },
+  {
+    test: /^disable[A-Z]/,
+    fix: (n) => `the positive form of ${n.slice(7)}`,
+    concept: 'positive boolean'
+  }
+]
+
+// Shared value tokens: prop -> { banned value: canonical value }. `VALUES` blocks today;
+// `STAGED_VALUES` is the 6.0 standard. A prop matched by VALUE_PATTERNS uses that map.
 export const VALUES = {
-  kind: { outline: 'outlined', text: 'transparent', ghost: 'transparent', destructive: 'danger' },
   severity: { error: 'danger', destructive: 'danger' }
 }
 
-// The `size` scale is canonical everywhere it appears. A component may support a SUBSET
-// (e.g. only small|medium) but must (a) use these exact tokens — never xs/sm/md/lg/xl —
-// and (b) declare them in this order.
-export const SIZE = {
-  prop: 'size',
-  canonical: ['small', 'medium', 'large'],
-  bannedTokens: ['xs', 'sm', 'md', 'lg', 'xl']
+export const STAGED_VALUES = {
+  variant: {
+    outlined: 'outline',
+    transparent: 'ghost',
+    text: 'ghost',
+    destructive: 'danger',
+    error: 'danger'
+  },
+  severity: { default: 'neutral', secondary: 'neutral', alt: 'neutral' },
+  status: {
+    done: 'success',
+    ok: 'success',
+    complete: 'success',
+    completed: 'success',
+    succeeded: 'success',
+    finished: 'success',
+    failed: 'error',
+    failure: 'error',
+    errored: 'error',
+    cancelled: 'canceled',
+    queued: 'pending',
+    waiting: 'pending',
+    'in-progress': 'running',
+    progress: 'running'
+  }
 }
 
-// The `closable` house default: modal overlays always show a way out, so the X renders by
-// default there; on every other component it is an opt-in affordance.
+const POSITION = {
+  left: 'leading',
+  right: 'trailing',
+  start: 'leading',
+  end: 'trailing',
+  before: 'leading',
+  after: 'trailing',
+  prefix: 'leading',
+  suffix: 'trailing'
+}
+const ALIGN = { left: 'start', right: 'end', top: 'start', bottom: 'end', centered: 'center' }
+const SIDE = { left: 'start', right: 'end' }
+
+export const VALUE_PATTERNS = [
+  { test: /Position$/, map: POSITION, concept: 'position inside the component' },
+  { test: /^align$|Align$|^alignment$/, map: ALIGN, concept: 'alignment' },
+  { test: /^side$|Side$/, map: SIDE, concept: 'side' },
+  { test: /^selectionMode$|Mode$/, map: { multi: 'multiple' }, concept: 'selection mode' },
+  {
+    test: /^treatment$|Treatment$/,
+    map: { 'as-is': 'color', original: 'color', 'invert-light': 'knockout' },
+    concept: 'logo treatment'
+  }
+]
+
+// Size scale: tiny and xlarge exist only for a component that truly needs a 4th step.
+export const SIZE = {
+  prop: 'size',
+  canonical: ['tiny', 'small', 'medium', 'large', 'xlarge'],
+  bannedTokens: ['xs', 'sm', 'md', 'lg', 'xl', '2xs', '2xl', 'xxs', 'xxl']
+}
+
 export const CLOSABLE = {
   prop: 'closable',
   defaultTrue: ['dialog', 'drawer'],
   default: false
 }
 
-// Positive-boolean rule: a negated boolean reads backwards (`:hidden="false"` to show).
-// These specific negatives must be inverted to their positive form (flip the default too).
-// `disabled` / `readonly` are the accepted, universal exceptions and are NOT listed here.
+// Negated booleans that must be inverted (flip the default too). `disabled` / `readonly`
+// are the accepted exceptions.
 export const NEGATIVE_BOOLEANS = {
-  hidden: 'visible',
+  hidden: 'show<Part>',
   closed: 'open',
   inactive: 'active',
-  invisible: 'visible',
-  collapsed: 'expanded'
+  invisible: 'show<Part>',
+  collapsed: 'open'
+}
+
+// Slot names (6.0 standard, staged): leading/trailing for adornments, start/end for sides.
+export const SLOTS = {
+  prefix: 'leading',
+  suffix: 'trailing',
+  left: 'leading',
+  right: 'trailing',
+  prepend: 'leading',
+  append: 'trailing',
+  'icon-left': 'leading',
+  'icon-right': 'trailing',
+  'header-start': 'header-leading',
+  'header-end': 'header-trailing',
+  action: 'actions',
+  'header-action': 'header-actions',
+  breadcrumb: 'breadcrumbs'
+}
+
+// Words inside an event name (6.0 standard, staged).
+export const EVENT_WORDS = {
+  dblclick: 'double-click',
+  finish: 'complete',
+  finished: 'complete',
+  done: 'complete',
+  failed: 'error',
+  fail: 'error',
+  dismiss: 'close',
+  delete: 'remove'
+}
+
+// data-* attribute names (6.0 standard, staged).
+export const DATA_ATTRIBUTES = {
+  'data-kind': 'data-variant (look) or data-type (sort of part)',
+  'data-open': 'data-state="open|closed"',
+  'data-expanded': 'data-state="open|closed"',
+  'data-collapsed': 'data-state="open|closed"',
+  'data-shown': 'data-state="open|closed"',
+  'data-visible': 'data-state="open|closed"',
+  'data-current': 'data-active',
+  'data-border': 'data-bordered',
+  'data-tone': 'data-status or data-severity',
+  'data-has-icon-left': 'data-leading',
+  'data-has-icon-right': 'data-trailing',
+  'data-inactive': 'data-disabled or data-inert',
+  'data-part': 'data-slot',
+  'data-focus': 'data-focused',
+  'data-hover': 'data-hovered',
+  'data-highlight': 'data-highlighted'
 }
 
 const RULE_DOC = '.claude/rules/prop-vocabulary.md'
 
-/** alias prop name -> { canonical, concept }, built once from CONCEPTS. */
-function aliasMap() {
+function aliasMap(stage) {
   const map = {}
   for (const c of CONCEPTS) {
-    for (const a of c.aliases) map[a] = { canonical: c.canonical, concept: c.concept }
+    for (const a of c.aliases)
+      map[a] = { canonical: c.canonical, concept: c.concept, staged: false }
+    if (stage === 'all') {
+      for (const a of c.staged || [])
+        map[a] = { canonical: c.canonical, concept: c.concept, staged: true }
+    }
   }
   return map
 }
 
+function unionOf(p, opts) {
+  let union = p.type || ''
+  if (!/'/.test(union) && typeof opts.resolveTypeUnion === 'function') {
+    union = opts.resolveTypeUnion(union.trim()) || union
+  }
+  return union
+}
+
+function membersOf(unionText) {
+  return [...String(unionText).matchAll(/'([a-zA-Z0-9-]+)'/g)].map((m) => m[1])
+}
+
+export function valueMapFor(prop, stage = 'enforced') {
+  const out = { ...(VALUES[prop] || {}) }
+  if (stage !== 'all') return Object.keys(out).length ? out : null
+  Object.assign(out, STAGED_VALUES[prop] || {})
+  for (const p of VALUE_PATTERNS) if (p.test.test(prop)) Object.assign(out, p.map)
+  return Object.keys(out).length ? out : null
+}
+
 /**
- * Check a component's parsed props against the vocabulary. Returns [{ prop, message }].
- * `opts.resolveTypeUnion(typeText)` (optional) lets the caller resolve a `size?: SizeAlias`
- * reference to its underlying union string so the size-token/order check can run; when it
- * can't be resolved the size check is skipped (never a false positive).
+ * Check a component's parsed props against the vocabulary. Returns
+ * [{ prop, message, rule, staged }]. `opts.stage` is 'enforced' (default: what blocks
+ * today) or 'all' (the 6.0 standard). `opts.component` (kebab name) enables the
+ * group-label rule. `opts.resolveTypeUnion(typeText)` resolves a named union.
  */
 export function checkPropVocabulary(props, opts = {}) {
+  const stage = opts.stage || 'enforced'
   const violations = []
-  const map = aliasMap()
+  const map = aliasMap(stage)
+  const push = (prop, message, rule, staged) => violations.push({ prop, message, rule, staged })
   for (const p of props) {
+    if (
+      stage === 'all' &&
+      GROUP_LABEL.appliesTo(opts.component) &&
+      GROUP_LABEL.staged.includes(p.name)
+    ) {
+      push(
+        p.name,
+        `Prop "${p.name}" on a group part is its header text — use "${GROUP_LABEL.canonical}" (${RULE_DOC}).`,
+        'prop-name',
+        true
+      )
+      continue
+    }
     const hit = map[p.name]
     if (hit) {
-      violations.push({
-        prop: p.name,
-        message: `Prop "${p.name}" is not allowed — use the canonical "${hit.canonical}" for the ${hit.concept} concept (${RULE_DOC}).`
-      })
-      continue // one violation per prop; the alias message is the most specific
+      push(
+        p.name,
+        `Prop "${p.name}" is not allowed — use the canonical "${hit.canonical}" for the ${hit.concept} concept (${RULE_DOC}).`,
+        'prop-name',
+        hit.staged
+      )
+      continue
     }
     if (/^(is|has)[A-Z]/.test(p.name)) {
       const suggested = p.name.replace(/^(is|has)/, '').replace(/^./, (ch) => ch.toLowerCase())
-      violations.push({
-        prop: p.name,
-        message: `Boolean prop "${p.name}" must drop the is/has prefix — use "${suggested}" (${RULE_DOC}).`
-      })
+      push(
+        p.name,
+        `Boolean prop "${p.name}" must drop the is/has prefix — use "${suggested}" (${RULE_DOC}).`,
+        'prop-name',
+        false
+      )
       continue
     }
     if (NEGATIVE_BOOLEANS[p.name]) {
-      violations.push({
-        prop: p.name,
-        message: `Boolean prop "${p.name}" is negative — use the positive "${NEGATIVE_BOOLEANS[p.name]}" and flip the default (${RULE_DOC}).`
-      })
+      push(
+        p.name,
+        `Boolean prop "${p.name}" is negative — use the positive "${NEGATIVE_BOOLEANS[p.name]}" and flip the default (${RULE_DOC}).`,
+        'prop-name',
+        false
+      )
       continue
     }
-    if (VALUES[p.name]) {
-      let union = p.type || ''
-      if (!/'/.test(union) && typeof opts.resolveTypeUnion === 'function') {
-        union = opts.resolveTypeUnion(union.trim()) || union
+    if (stage === 'all') {
+      const pattern = PATTERNS.find((x) => x.test.test(p.name) && p.name !== 'disabled')
+      if (pattern) {
+        push(
+          p.name,
+          `Prop "${p.name}" reads backwards — use ${pattern.fix(p.name)} (${pattern.concept}) (${RULE_DOC}).`,
+          'prop-name',
+          true
+        )
+        continue
       }
-      const msg = checkValueUnion(p.name, union)
+    }
+    const valueMap = valueMapFor(p.name, stage)
+    if (valueMap) {
+      const msg = checkValueUnion(p.name, unionOf(p, opts), stage)
       if (msg) {
-        violations.push({ prop: p.name, message: msg })
+        const enforcedMsg = stage === 'all' ? checkValueUnion(p.name, unionOf(p, opts)) : msg
+        push(p.name, msg, 'prop-value', !enforcedMsg)
         continue
       }
     }
     if (p.name === SIZE.prop) {
-      let union = p.type || ''
-      if (!/'/.test(union) && typeof opts.resolveTypeUnion === 'function') {
-        union = opts.resolveTypeUnion(union.trim()) || union
-      }
-      const msg = checkSizeUnion(union)
-      if (msg) violations.push({ prop: p.name, message: msg })
+      const msg = checkSizeUnion(unionOf(p, opts))
+      if (msg) push(p.name, msg, 'prop-value', false)
     }
   }
   return violations
 }
 
 /**
- * Validate a `kind` / `severity` union STRING against VALUES. Returns an error message or
- * null (also null when the text is not a string-literal union).
+ * Validate a prop's union STRING against its value map. Returns an error message or null
+ * (also null when the text is not a string-literal union).
  */
-export function checkValueUnion(prop, unionText) {
-  const banned = VALUES[prop]
+export function checkValueUnion(prop, unionText, stage = 'enforced') {
+  const banned = valueMapFor(prop, stage)
   if (!banned) return null
-  const members = [...String(unionText).matchAll(/'([a-zA-Z-]+)'/g)].map((m) => m[1])
-  const bad = members.filter((m) => Object.hasOwn(banned, m))
+  const bad = membersOf(unionText).filter((m) => Object.hasOwn(banned, m))
   if (!bad.length) return null
   const fixes = bad.map((b) => `'${b}' → '${banned[b]}'`).join(', ')
   return `${prop} values ${bad.map((b) => `'${b}'`).join(', ')} are not allowed — use the shared token (${fixes}) (${RULE_DOC}).`
 }
 
 /**
- * Validate a `size` union STRING. Returns an error message or null.
- *   - flags xs/sm/md/lg/xl and any non-canonical token;
- *   - requires canonical order (small before medium before large);
- *   - a subset (e.g. 'small' | 'medium') is allowed.
- * Returns null when the text is not a string-literal union (can't be checked here).
+ * Validate a `size` union STRING: only the canonical tokens, in canonical order (a subset
+ * is fine). Returns an error message or null.
  */
 export function checkSizeUnion(unionText) {
-  const members = [...String(unionText).matchAll(/'([a-zA-Z]+)'/g)].map((m) => m[1])
+  const members = membersOf(unionText)
   if (!members.length) return null
   const canon = SIZE.canonical
   const bad = members.filter((m) => !canon.includes(m))
   if (bad.length) {
     return (
       `size values ${bad.map((b) => `'${b}'`).join(', ')} are not allowed — ` +
-      `use ${canon.map((c) => `'${c}'`).join(' | ')} (a subset is fine, in that order) (${RULE_DOC}).`
+      `use 'small' | 'medium' | 'large' (tiny / xlarge only for a 4th step; a subset is fine, in that order) (${RULE_DOC}).`
     )
   }
   const idx = members.map((m) => canon.indexOf(m))
@@ -240,15 +503,12 @@ export function checkSizeUnion(unionText) {
 }
 
 /**
- * Check event names. Returns [{ event, message }]. Two rules:
- *   1. Emits are kebab-case (a `update:<prop>` v-model event is exempt — its payload
- *      segment may be camelCase).
- *   2. NO REDUNDANT ECHO: an event named `<x>-change` is banned when the component also
- *      emits `update:<x>` — it is a pure echo of the v-model update. Consumers use
- *      `@update:<x>` / `v-model`. A genuinely distinct commit event (e.g. commit-on-blur)
- *      must be a bare `change`, never `<x>-change`, so this never false-positives on it.
+ * Check event names. Returns [{ event, message, rule, staged }]: kebab-case (an
+ * update:<prop> event is exempt), no `<x>-change` echo of `update:<x>`, and with
+ * { stage: 'all' } the 6.0 event words.
  */
-export function checkEventVocabulary(emits) {
+export function checkEventVocabulary(emits, opts = {}) {
+  const stage = opts.stage || 'enforced'
   const violations = []
   const names = new Set(emits.map((e) => e.name))
   for (const e of emits) {
@@ -256,6 +516,8 @@ export function checkEventVocabulary(emits) {
       const suggested = e.name.replace(/([A-Z])/g, '-$1').toLowerCase()
       violations.push({
         event: e.name,
+        rule: 'event-name',
+        staged: false,
         message: `Event "${e.name}" must be kebab-case — use "${suggested}" (${RULE_DOC}).`
       })
       continue
@@ -264,30 +526,103 @@ export function checkEventVocabulary(emits) {
     if (m && names.has(`update:${m[1]}`)) {
       violations.push({
         event: e.name,
+        rule: 'event-name',
+        staged: false,
         message: `Event "${e.name}" is redundant — it echoes "update:${m[1]}". Remove it; consumers use "@update:${m[1]}" / v-model. (A distinct commit event should be a bare "change", not "<x>-change".) (${RULE_DOC}).`
       })
+      continue
+    }
+    if (stage === 'all' && !e.name.startsWith('update:')) {
+      const word = e.name.split('-').find((w) => Object.hasOwn(EVENT_WORDS, w))
+      if (word) {
+        violations.push({
+          event: e.name,
+          rule: 'event-name',
+          staged: true,
+          message: `Event "${e.name}" uses "${word}" — say "${EVENT_WORDS[word]}" (${RULE_DOC}).`
+        })
+      }
     }
   }
   return violations
 }
 
-/** JSON-serializable snapshot for catalog.json (so the MCP can surface the vocabulary). */
+/** Check slot names (6.0 standard). Returns [{ slot, message, rule, staged }]. */
+export function checkSlotVocabulary(slots) {
+  const out = []
+  for (const s of slots) {
+    const name = s.name ?? s
+    if (/[A-Z_]/.test(name)) {
+      out.push({
+        slot: name,
+        rule: 'slot-name',
+        staged: true,
+        message: `Slot "${name}" must be kebab-case (.claude/rules/slots.md).`
+      })
+      continue
+    }
+    if (Object.hasOwn(SLOTS, name)) {
+      out.push({
+        slot: name,
+        rule: 'slot-name',
+        staged: true,
+        message: `Slot "${name}" is not allowed — use "${SLOTS[name]}" (leading/trailing for adornments, start/end for sides) (${RULE_DOC}).`
+      })
+    }
+  }
+  return out
+}
+
+/** Check data-* attribute names (6.0 standard). Returns [{ attribute, message, rule, staged }]. */
+export function checkDataAttributes(names) {
+  const out = []
+  for (const name of names) {
+    if (Object.hasOwn(DATA_ATTRIBUTES, name)) {
+      out.push({
+        attribute: name,
+        rule: 'data-attribute',
+        staged: true,
+        message: `Attribute "${name}" is not allowed — use ${DATA_ATTRIBUTES[name]} (${RULE_DOC}).`
+      })
+    } else if (!/^data-[a-z0-9]+(-[a-z0-9]+)*$/.test(name)) {
+      out.push({
+        attribute: name,
+        rule: 'data-attribute',
+        staged: true,
+        message: `Attribute "${name}" must be kebab-case (${RULE_DOC}).`
+      })
+    }
+  }
+  return out
+}
+
+/** JSON-serializable snapshot for catalog.json (the 6.0 standard the MCP steers toward). */
 export function vocabularySnapshot() {
   return {
     props: CONCEPTS.map((c) => ({
       concept: c.concept,
       canonical: c.canonical,
-      aliases: c.aliases
+      aliases: [...c.aliases, ...(c.staged || [])]
     })),
+    groupLabel: { canonical: GROUP_LABEL.canonical, aliases: GROUP_LABEL.staged },
     size: { canonical: SIZE.canonical, bannedTokens: SIZE.bannedTokens },
     closable: { defaultTrue: CLOSABLE.defaultTrue, default: CLOSABLE.default },
-    booleanPrefixes: { banned: ['is', 'has'] },
+    booleanPrefixes: { banned: ['is', 'has', 'hide', 'enable', 'disable'] },
     negativeBooleans: NEGATIVE_BOOLEANS,
-    values: VALUES,
+    values: Object.fromEntries(
+      [...new Set([...Object.keys(VALUES), ...Object.keys(STAGED_VALUES)])].map((k) => [
+        k,
+        { ...(VALUES[k] || {}), ...(STAGED_VALUES[k] || {}) }
+      ])
+    ),
+    positions: { leadingTrailing: POSITION, align: ALIGN, side: SIDE },
+    slots: SLOTS,
+    dataAttributes: DATA_ATTRIBUTES,
     events: {
       convention: 'kebab-case, or update:<prop> for v-model',
       noEchoRule:
-        'Do not emit "<x>-change" when "update:<x>" exists — it is redundant; use v-model / @update:<x>.'
+        'Do not emit "<x>-change" when "update:<x>" exists — it is redundant; use v-model / @update:<x>.',
+      words: EVENT_WORDS
     }
   }
 }
