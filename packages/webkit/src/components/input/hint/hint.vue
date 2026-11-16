@@ -3,7 +3,8 @@
 
   import Tooltip from '../../overlay/tooltip/tooltip.vue'
 
-  export type HintPlacement = 'top' | 'right' | 'bottom' | 'left' | 'auto'
+  /** Side of the glyph the tooltip opens on; `start` and `end` follow the text direction. */
+  export type HintSide = 'top' | 'bottom' | 'start' | 'end'
 
   defineOptions({
     name: 'Hint',
@@ -13,11 +14,11 @@
   export interface HintProps {
     /** Guidance text revealed on hover or focus; also the trigger's accessible name. */
     content: string
-    /** Anchor side of the tooltip relative to the glyph. */
-    placement?: HintPlacement
+    /** Side of the glyph the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room. */
+    side?: HintSide | 'auto'
   }
   withDefaults(defineProps<HintProps>(), {
-    placement: 'top'
+    side: 'top'
   })
 
   const attrs = useAttrs()
@@ -30,7 +31,7 @@
     v-bind="$attrs"
     :data-testid="testId"
     :content="content"
-    :placement="placement"
+    :side="side"
   >
     <button
       type="button"
