@@ -26,12 +26,6 @@
     }
   ]
 
-  const outline = [
-    { id: 'before-you-start', text: 'Before you start', depth: 2 },
-    { id: 'deploy-with-cli', text: 'Deploy with Azion CLI', depth: 2 },
-    { id: 'next-steps', text: 'Next steps', depth: 2 }
-  ]
-
   const theme = ref<ThemeSwitcherValue>('system')
 </script>
 
@@ -42,7 +36,6 @@
       { label: 'Guides', href: '/docs' },
       { label: 'Reference', href: '/docs/reference' }
     ]"
-    :outline="outline"
     active-id="first-deploy"
   >
     <template #actions>

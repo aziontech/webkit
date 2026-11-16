@@ -5,26 +5,18 @@
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
-  import Button from '@aziontech/webkit/button'
   import DataTable from '@aziontech/webkit/data-table'
-  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import DocHeading from '@aziontech/webkit/doc-heading'
-  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocProse from '@aziontech/webkit/doc-prose'
   import DocTab from '@aziontech/webkit/doc-tab'
   import DocTabs from '@aziontech/webkit/doc-tabs'
-  import Footer from '@aziontech/webkit/footer'
-  import IconButton from '@aziontech/webkit/icon-button'
   import Logo from '@aziontech/webkit/logo'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
-  import { useColorMode } from '@aziontech/webkit/use-color-mode'
 
   type Workflow = 'Terminal' | 'IDE' | 'Extension'
 
@@ -42,12 +34,6 @@
     openSource: boolean
     description: string
   }
-
-  const sections = [
-    { label: 'Reference', href: '/docs/reference' },
-    { label: 'Guides', href: '/docs/guides' },
-    { label: 'Dev tools', href: '/docs/dev-tools' }
-  ]
 
   const agents: Agent[] = [
     {
@@ -159,61 +145,11 @@
 
   const agentHref = (agent: Agent) => `/docs/agent-setup/${agent.slug}`
 
-  const navigation: DocLayoutNavGroup[] = [
-    {
-      label: 'Dev tools',
-      items: [
-        { id: 'dev-tools-overview', label: 'Overview', href: '/docs/dev-tools' },
-        { id: 'azion-cli', label: 'Azion CLI', href: '/docs/dev-tools/cli' },
-        { id: 'mcp-server', label: 'MCP server', href: '/docs/dev-tools/mcp' },
-        {
-          id: 'agent-setup-group',
-          label: 'Agent setup',
-          type: 'inline',
-          defaultOpen: true,
-          children: [
-            { id: 'agent-setup', label: 'Overview', href: '/docs/agent-setup' },
-            ...agents.map((agent) => ({
-              id: agent.slug,
-              label: agent.name,
-              href: agentHref(agent)
-            }))
-          ]
-        }
-      ]
-    }
-  ]
-
-  const { mode: theme } = useColorMode()
-
   const crumbs = [{ label: 'Dev tools', href: '/docs/dev-tools' }, { label: 'Agent setup' }]
 
   const metaActions = [
     { value: 'copy', label: 'Copy as Markdown', icon: 'ai ai-copy' },
     { value: 'markdown', label: 'View as Markdown', icon: 'ai ai-eye' }
-  ]
-
-  const outline = [
-    { id: 'pick-your-agent', text: 'Pick your agent', depth: 2 },
-    { id: 'compare-agents', text: 'Compare agents', depth: 2 },
-    { id: 'understanding-agents', text: 'Understanding agents', depth: 2 },
-    { id: 'workflow', text: 'Workflow', depth: 3 },
-    { id: 'key-concepts', text: 'Key concepts', depth: 3 },
-    { id: 'common-tradeoffs', text: 'Common tradeoffs', depth: 3 }
-  ]
-
-  const outlineGroups = [
-    {
-      label: 'GitHub',
-      links: [
-        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'ai ai-github' },
-        {
-          label: 'Contribute to this page',
-          href: 'https://github.com/aziontech/azion',
-          icon: 'ai ai-pencil'
-        }
-      ]
-    }
   ]
 
   const filters: Array<'All' | Workflow> = ['All', 'Terminal', 'IDE', 'Extension']
@@ -348,263 +284,183 @@
         'An index answers questions about code nobody opened, at the cost of a copy of the repository. A session only knows what it was shown.'
     }
   ]
-
-  const footerColumns = [
-    { title: 'Company', links: ['About us', 'Careers', 'Compliance', 'Privacy Policy'] },
-    { title: 'Resources', links: ['Blog', 'Learning', 'Marketplace', 'Success cases'] },
-    { title: 'Getting started', links: ['Start for free', 'Pricing', 'Contact'] },
-    { title: 'Developer', links: ['Documentation', 'API', 'Release notes'] }
-  ]
 </script>
 
 <template>
-  <DocLayout
-    :navigation="navigation"
-    active-id="agent-setup"
-    :sections="sections"
-    home="/docs"
-    :outline="outline"
-    :outline-groups="outlineGroups"
+  <article
+    class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-2xl)"
   >
-    <article
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-2xl)"
-    >
-      <DocPageHeader
-        title="Agent setup"
-        description="Azion ships an MCP server, agent-ready documentation and a CLI, so your coding agent can build on the platform from your editor or terminal."
-        :breadcrumbs="crumbs"
-        last-updated="2026-08-26"
-        :meta-actions="metaActions"
-      />
-      <DocProse>
-        <DocHeading
-          anchor="pick-your-agent"
-          :level="2"
-          >Pick your agent</DocHeading
+    <DocPageHeader
+      title="Agent setup"
+      description="Azion ships an MCP server, agent-ready documentation and a CLI, so your coding agent can build on the platform from your editor or terminal."
+      :breadcrumbs="crumbs"
+      last-updated="2026-08-26"
+      :meta-actions="metaActions"
+    />
+    <DocProse>
+      <DocHeading
+        anchor="pick-your-agent"
+        :level="2"
+        >Pick your agent</DocHeading
+      >
+      <p>Select an agent to get step-by-step setup instructions.</p>
+      <DocTabs>
+        <DocTab
+          v-for="grid in grids"
+          :key="grid.filter"
+          :title="grid.filter"
         >
-        <p>Select an agent to get step-by-step setup instructions.</p>
-        <DocTabs>
-          <DocTab
-            v-for="grid in grids"
-            :key="grid.filter"
-            :title="grid.filter"
-          >
-            <DocCardGroup :columns="3">
-              <DocCard
-                v-for="agent in grid.agents"
-                :key="agent.slug"
-                :title="agent.name"
-                :eyebrow="agent.vendor"
-                :icon="agent.icon"
-                :href="agentHref(agent)"
+          <DocCardGroup :columns="3">
+            <DocCard
+              v-for="agent in grid.agents"
+              :key="agent.slug"
+              :title="agent.name"
+              :eyebrow="agent.vendor"
+              :icon="agent.icon"
+              :href="agentHref(agent)"
+            >
+              <template
+                v-if="agent.logo"
+                #icon
               >
-                <template
-                  v-if="agent.logo"
-                  #icon
-                >
-                  <span class="flex text-(--text-default)">
-                    <Logo
-                      :name="agent.name"
-                      :src="agent.logo"
-                      :variant="agent.mono ? 'current' : 'color'"
-                      decorative
-                    />
-                  </span>
-                </template>
-                {{ agent.description }}
-              </DocCard>
-            </DocCardGroup>
-          </DocTab>
-        </DocTabs>
-        <p>
-          Using another client that speaks MCP? The server is one HTTP endpoint: point your client
-          at <code>mcp.azion.com</code> with a Personal Token and the nine tools show up.
-        </p>
+                <span class="flex text-(--text-default)">
+                  <Logo
+                    :name="agent.name"
+                    :src="agent.logo"
+                    :variant="agent.mono ? 'current' : 'color'"
+                    decorative
+                  />
+                </span>
+              </template>
+              {{ agent.description }}
+            </DocCard>
+          </DocCardGroup>
+        </DocTab>
+      </DocTabs>
+      <p>
+        Using another client that speaks MCP? The server is one HTTP endpoint: point your client at
+        <code>mcp.azion.com</code> with a Personal Token and the nine tools show up.
+      </p>
 
-        <DocHeading
-          anchor="compare-agents"
-          :level="2"
-          >Compare agents</DocHeading
+      <DocHeading
+        anchor="compare-agents"
+        :level="2"
+        >Compare agents</DocHeading
+      >
+      <div
+        data-doc-block
+        data-doc-chrome
+      >
+        <DataTable
+          :data="compareRows"
+          :columns="compareColumns"
+          row-key="id"
+          bordered
         >
-        <div
-          data-doc-block
-          data-doc-chrome
-        >
-          <DataTable
-            :data="compareRows"
-            :columns="compareColumns"
-            row-key="id"
-            bordered
-          >
-            <template #cell-agent="{ row }">
-              <a
-                :href="row.href"
-                class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-flat) text-label-md text-(--text-default) no-underline hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
-              >
-                <Logo
-                  v-if="row.logo"
-                  :name="row.agent"
-                  :src="row.logo"
-                  :variant="row.mono ? 'current' : 'color'"
-                  decorative
-                  size="small"
-                />
-                <i
-                  v-else
-                  :class="row.icon"
-                  class="shrink-0 text-label-md"
-                  aria-hidden="true"
-                />
-                <span class="truncate">{{ row.agent }}</span>
-              </a>
-            </template>
-            <template
-              v-for="column in flagColumns"
-              :key="column"
-              #[`cell-${column}`]="{ value }"
+          <template #cell-agent="{ row }">
+            <a
+              :href="row.href"
+              class="flex min-w-0 items-center gap-(--spacing-sm) rounded-(--shape-flat) text-label-md text-(--text-default) no-underline hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
             >
-              <i
-                :class="value ? 'ai-check text-(--primary)' : 'ai-minus text-(--text-muted)'"
-                class="ai text-label-md"
-                aria-hidden="true"
-              />
-              <span class="sr-only">{{ value ? 'Yes' : 'No' }}</span>
-            </template>
-            <template
-              v-for="column in tagColumns"
-              :key="column"
-              #[`cell-${column}`]="{ value }"
-            >
-              <Tag
-                :label="String(value)"
-                severity="neutral"
+              <Logo
+                v-if="row.logo"
+                :name="row.agent"
+                :src="row.logo"
+                :variant="row.mono ? 'current' : 'color'"
+                decorative
                 size="small"
               />
-            </template>
-          </DataTable>
-        </div>
-        <DocCallout variant="note">
-          Every agent listed connects to the Azion MCP server. The workflow columns say where the
-          tool runs, not what it can do.
-        </DocCallout>
-
-        <DocHeading
-          anchor="understanding-agents"
-          :level="2"
-          >Understanding agents</DocHeading
-        >
-        <p>Common types, concepts and tradeoffs.</p>
-        <DocHeading
-          anchor="workflow"
-          :level="3"
-          >Workflow</DocHeading
-        >
-        <DocCardGroup :columns="2">
-          <DocCard
-            v-for="type in workflowTypes"
-            :key="type.title"
-            :title="type.title"
-            :icon="type.icon"
-            :label="type.description"
-          />
-        </DocCardGroup>
-        <DocHeading
-          anchor="key-concepts"
-          :level="3"
-          >Key concepts</DocHeading
-        >
-        <DocCardGroup :columns="2">
-          <DocCard
-            v-for="concept in keyConcepts"
-            :key="concept.title"
-            :title="concept.title"
-            :icon="concept.icon"
-            :label="concept.description"
-          />
-        </DocCardGroup>
-        <DocHeading
-          anchor="common-tradeoffs"
-          :level="3"
-          >Common tradeoffs</DocHeading
-        >
-        <DocCardGroup :columns="2">
-          <DocCard
-            v-for="tradeoff in tradeoffs"
-            :key="tradeoff.title"
-            :title="tradeoff.title"
-            :icon="tradeoff.icon"
-            :label="tradeoff.description"
-          />
-        </DocCardGroup>
-      </DocProse>
-      <DocPreviousNext
-        :previous="{ label: 'MCP server', href: '/docs/dev-tools/mcp' }"
-        :next="{ label: 'Claude Code', href: '/docs/agent-setup/claude-code' }"
-      />
-    </article>
-
-    <template #actions>
-      <IconButton
-        icon="ai ai-github"
-        variant="outline"
-        size="medium"
-        aria-label="Azion on GitHub"
-        href="https://github.com/aziontech"
-        target="_blank"
-        class="shrink-0"
-      />
-      <Button
-        label="Console"
-        variant="secondary"
-        size="medium"
-        class="shrink-0"
-        href="https://console.azion.com"
-      />
-    </template>
-
-    <template #navigation-footer>
-      <ThemeSwitcher
-        v-model="theme"
-        aria-label="Theme"
-      />
-    </template>
-
-    <template #aside>
-      <DocCallToAction
-        title="Ready to build?"
-        :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
-        :secondary-action="{ label: 'See our plans', href: 'https://www.azion.com/en/pricing/' }"
-      >
-        Deploy your first application in minutes.
-      </DocCallToAction>
-    </template>
-
-    <template #footer>
-      <div class="w-full border-t border-(--border-default)">
-        <Footer
-          variant="content"
-          aria-label="Footer"
-        >
-          <Footer.Column
-            v-for="column in footerColumns"
-            :key="column.title"
-            :title="column.title"
+              <i
+                v-else
+                :class="row.icon"
+                class="shrink-0 text-label-md"
+                aria-hidden="true"
+              />
+              <span class="truncate">{{ row.agent }}</span>
+            </a>
+          </template>
+          <template
+            v-for="column in flagColumns"
+            :key="column"
+            #[`cell-${column}`]="{ value }"
           >
-            <Footer.Link
-              v-for="link in column.links"
-              :key="link"
-              href="#"
-              >{{ link }}</Footer.Link
-            >
-          </Footer.Column>
-          <template #status>
-            <StatusIndicator
-              severity="success"
-              label="All systems operational"
+            <i
+              :class="value ? 'ai-check text-(--primary)' : 'ai-minus text-(--text-muted)'"
+              class="ai text-label-md"
+              aria-hidden="true"
+            />
+            <span class="sr-only">{{ value ? 'Yes' : 'No' }}</span>
+          </template>
+          <template
+            v-for="column in tagColumns"
+            :key="column"
+            #[`cell-${column}`]="{ value }"
+          >
+            <Tag
+              :label="String(value)"
+              severity="neutral"
+              size="small"
             />
           </template>
-        </Footer>
+        </DataTable>
       </div>
-    </template>
-  </DocLayout>
+      <DocCallout variant="note">
+        Every agent listed connects to the Azion MCP server. The workflow columns say where the tool
+        runs, not what it can do.
+      </DocCallout>
+
+      <DocHeading
+        anchor="understanding-agents"
+        :level="2"
+        >Understanding agents</DocHeading
+      >
+      <p>Common types, concepts and tradeoffs.</p>
+      <DocHeading
+        anchor="workflow"
+        :level="3"
+        >Workflow</DocHeading
+      >
+      <DocCardGroup :columns="2">
+        <DocCard
+          v-for="type in workflowTypes"
+          :key="type.title"
+          :title="type.title"
+          :icon="type.icon"
+          :label="type.description"
+        />
+      </DocCardGroup>
+      <DocHeading
+        anchor="key-concepts"
+        :level="3"
+        >Key concepts</DocHeading
+      >
+      <DocCardGroup :columns="2">
+        <DocCard
+          v-for="concept in keyConcepts"
+          :key="concept.title"
+          :title="concept.title"
+          :icon="concept.icon"
+          :label="concept.description"
+        />
+      </DocCardGroup>
+      <DocHeading
+        anchor="common-tradeoffs"
+        :level="3"
+        >Common tradeoffs</DocHeading
+      >
+      <DocCardGroup :columns="2">
+        <DocCard
+          v-for="tradeoff in tradeoffs"
+          :key="tradeoff.title"
+          :title="tradeoff.title"
+          :icon="tradeoff.icon"
+          :label="tradeoff.description"
+        />
+      </DocCardGroup>
+    </DocProse>
+    <DocPreviousNext
+      :previous="{ label: 'MCP server', href: '/docs/dev-tools/mcp' }"
+      :next="{ label: 'Claude Code', href: '/docs/agent-setup/claude-code' }"
+    />
+  </article>
 </template>

@@ -23,7 +23,7 @@
   {
     "name": "doc-layout",
     "path": "src/components/docs/doc-layout/doc-layout.vue",
-    "limit": "68.3 KB"
+    "limit": "68.4 KB"
   },
   {
     "name": "doc-markdown",
@@ -239,7 +239,7 @@
   {
     "name": "doc-heading",
     "path": "src/components/docs/doc-heading/doc-heading.vue",
-    "limit": "1.1 KB"
+    "limit": "1.2 KB"
   },
   {
     "name": "doc-tab",

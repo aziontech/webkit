@@ -1,69 +1,18 @@
 <script setup lang="ts">
-  import Button from '@aziontech/webkit/button'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocItem from '@aziontech/webkit/doc-item'
-  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
   import DocPrompt from '@aziontech/webkit/doc-prompt'
   import DocProse from '@aziontech/webkit/doc-prose'
   import DocStep from '@aziontech/webkit/doc-step'
   import DocSteps from '@aziontech/webkit/doc-steps'
-  import Footer from '@aziontech/webkit/footer'
-  import IconButton from '@aziontech/webkit/icon-button'
   import ItemList from '@aziontech/webkit/item-list'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
-  import { useColorMode } from '@aziontech/webkit/use-color-mode'
-
-  const sections = [
-    { label: 'Reference', href: '/docs/reference' },
-    { label: 'Guides', href: '/docs/guides' },
-    { label: 'Dev tools', href: '/docs/dev-tools' }
-  ]
-
-  const navigation: DocLayoutNavGroup[] = [
-    {
-      label: 'Fundamentals',
-      items: [
-        { id: 'overview', label: 'Overview', href: '/docs/fundamentals' },
-        {
-          id: 'how-azion-works',
-          label: 'How Azion works',
-          href: '/docs/fundamentals/how-azion-works'
-        },
-        {
-          id: 'get-started',
-          label: 'Get started',
-          type: 'inline',
-          defaultOpen: true,
-          children: [
-            {
-              id: 'create-an-account',
-              label: 'Create an account',
-              href: '/docs/get-started/create-an-account'
-            },
-            { id: 'first-deploy', label: 'First deploy', href: '/docs/get-started/first-deploy' },
-            {
-              id: 'migrate-to-azion',
-              label: 'Migrate to Azion',
-              href: '/docs/get-started/migrate-to-azion'
-            }
-          ]
-        },
-        { id: 'billing', label: 'Billing', href: '/docs/fundamentals/billing' },
-        { id: 'security', label: 'Security', href: '/docs/fundamentals/security' }
-      ]
-    }
-  ]
-
-  const { mode: theme } = useColorMode()
 
   const crumbs = [
     { label: 'Fundamentals', href: '/docs/fundamentals' },
@@ -79,36 +28,6 @@
       label: 'Agent setup',
       icon: 'ai ai-microchip-ai',
       href: '/docs/agent-setup'
-    }
-  ]
-
-  const outline = [
-    { id: 'before-you-start', text: 'Before you start', depth: 2 },
-    { id: 'deploy-a-template', text: 'Deploy a template via Console', depth: 2 },
-    { id: 'test-the-template', text: 'Test it', depth: 3 },
-    { id: 'deploy-with-cli', text: 'Deploy with Azion CLI', depth: 2 },
-    { id: 'next-steps', text: 'Next steps', depth: 2 },
-    { id: 'related-resources', text: 'Related resources', depth: 2 }
-  ]
-
-  const outlineGroups = [
-    {
-      label: 'GitHub',
-      links: [
-        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'ai ai-github' },
-        {
-          label: 'Contribute to this page',
-          href: 'https://github.com/aziontech/azion',
-          icon: 'ai ai-pencil'
-        }
-      ]
-    },
-    {
-      label: 'Community',
-      links: [
-        { label: 'Discord', href: 'https://discord.gg/azion', icon: 'ai ai-discord' },
-        { label: 'X', href: 'https://x.com/aziontech', icon: 'ai ai-x-brand' }
-      ]
     }
   ]
 
@@ -153,235 +72,155 @@
       text: 'Build and deploy from your terminal.'
     }
   ]
-
-  const footerColumns = [
-    { title: 'Company', links: ['About us', 'Careers', 'Compliance', 'Privacy Policy'] },
-    { title: 'Resources', links: ['Blog', 'Learning', 'Marketplace', 'Success cases'] },
-    { title: 'Getting started', links: ['Start for free', 'Pricing', 'Contact'] },
-    { title: 'Developer', links: ['Documentation', 'API', 'Release notes'] }
-  ]
 </script>
 
 <template>
-  <DocLayout
-    :navigation="navigation"
-    active-id="first-deploy"
-    :sections="sections"
-    home="/docs"
-    :outline="outline"
-    :outline-groups="outlineGroups"
+  <article
+    class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-2xl)"
   >
-    <article
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-2xl)"
-    >
-      <DocPageHeader
-        title="First deploy in a few minutes"
-        description="By the end of this tutorial, an application will be live on the Azion Web Platform, answering HTTP 200 on its own Azion domain."
-        :breadcrumbs="crumbs"
-        last-updated="2026-11-11"
-        :meta-actions="metaActions"
-      />
-      <DocProse>
-        <p>
-          Three complete paths get you there. Pick one; each ends with the same application live on
-          its domain.
-        </p>
-        <DocCardGroup :columns="3">
-          <DocCard
-            title="Deploy a template"
-            icon="ai ai-layout-grid"
-            href="#deploy-a-template"
-            >A ready-made project, live in a few clicks.</DocCard
-          >
-          <DocCard
-            title="Import from GitHub"
-            icon="ai ai-github"
-            href="/docs/get-started/import-from-github"
-            >Connect a repository; every push deploys.</DocCard
-          >
-          <DocCard
-            title="Deploy with CLI"
-            icon="ai ai-desktop"
-            href="#deploy-with-cli"
-            >Build and deploy from your terminal.</DocCard
-          >
-        </DocCardGroup>
-        <DocCallout variant="tip">
-          New to Azion? Start with the template: it needs no local tooling.
-        </DocCallout>
-
-        <DocHeading
-          anchor="before-you-start"
-          :level="2"
-          >Before you start</DocHeading
+    <DocPageHeader
+      title="First deploy in a few minutes"
+      description="By the end of this tutorial, an application will be live on the Azion Web Platform, answering HTTP 200 on its own Azion domain."
+      :breadcrumbs="crumbs"
+      last-updated="2026-11-11"
+      :meta-actions="metaActions"
+    />
+    <DocProse>
+      <p>
+        Three complete paths get you there. Pick one; each ends with the same application live on
+        its domain.
+      </p>
+      <DocCardGroup :columns="3">
+        <DocCard
+          title="Deploy a template"
+          icon="ai ai-layout-grid"
+          href="#deploy-a-template"
+          >A ready-made project, live in a few clicks.</DocCard
         >
-        <p>
-          You need an Azion account. The CLI path also needs a terminal with
-          <code>curl</code> and a project folder.
-        </p>
-
-        <DocHeading
-          anchor="deploy-a-template"
-          :level="2"
-          >Deploy a template via Console</DocHeading
+        <DocCard
+          title="Import from GitHub"
+          icon="ai ai-github"
+          href="/docs/get-started/import-from-github"
+          >Connect a repository; every push deploys.</DocCard
         >
-        <DocCallout variant="info">
-          Templates create the workload, the application and the domain for you.
-        </DocCallout>
-        <DocSteps>
-          <DocStep title="Open Azion Console." />
-          <DocStep title="Select + Create on the home page." />
-          <DocStep title="Pick a template and fill in the fields it asks for." />
-          <DocStep title="Select Deploy and wait for the status to read Live." />
-        </DocSteps>
-        <DocHeading
-          anchor="test-the-template"
-          :level="3"
-          >Test it</DocHeading
+        <DocCard
+          title="Deploy with CLI"
+          icon="ai ai-desktop"
+          href="#deploy-with-cli"
+          >Build and deploy from your terminal.</DocCard
         >
-        <CodeBlock
-          :tabs="testTabs"
-          default-value="shell"
-        />
+      </DocCardGroup>
+      <DocCallout variant="tip">
+        New to Azion? Start with the template: it needs no local tooling.
+      </DocCallout>
 
-        <DocHeading
-          anchor="deploy-with-cli"
-          :level="2"
-          >Deploy with Azion CLI</DocHeading
-        >
-        <DocPrompt title="AI Assistant">
-          Install the Azion CLI, link this folder as an Azion project and deploy it. Show me the
-          domain when it is live.
-        </DocPrompt>
-        <DocSteps>
-          <DocStep title="Set up the Azion CLI">
-            <CodeBlock
-              :tabs="installTabs"
-              default-value="shell"
-              :show-line-numbers="false"
-            />
-          </DocStep>
-          <DocStep title="Log in and deploy">
-            <CodeBlock
-              :tabs="deployTabs"
-              default-value="shell"
-              :show-line-numbers="false"
-            />
-          </DocStep>
-        </DocSteps>
-
-        <DocHeading
-          anchor="next-steps"
-          :level="2"
-          >Next steps</DocHeading
-        >
-        <DocCardGroup :columns="3">
-          <DocCard
-            title="Go live"
-            icon="ai ai-globe"
-            href="/docs/get-started/go-live"
-            >Point your own domain at the workload.</DocCard
-          >
-          <DocCard
-            title="Secure your application"
-            icon="ai ai-shield"
-            href="/docs/secure"
-            >Add a firewall and WAF rules.</DocCard
-          >
-          <DocCard
-            title="Observe your application"
-            icon="ai ai-chart-line"
-            href="/docs/observe"
-            >Read metrics and events in real time.</DocCard
-          >
-        </DocCardGroup>
-
-        <DocHeading
-          anchor="related-resources"
-          :level="2"
-          >Related resources</DocHeading
-        >
-        <RegistrationFrame class="w-full bg-(--bg-surface)">
-          <ItemList>
-            <DocItem
-              v-for="item in related"
-              :key="item.title"
-              :title="item.title"
-              :icon="item.icon"
-              :href="item.href"
-              >{{ item.text }}</DocItem
-            >
-          </ItemList>
-        </RegistrationFrame>
-      </DocProse>
-      <DocPreviousNext
-        :previous="{ label: 'Create an account', href: '/docs/get-started/create-an-account' }"
-        :next="{ label: 'Migrate to Azion', href: '/docs/get-started/migrate-to-azion' }"
-      />
-    </article>
-
-    <template #actions>
-      <IconButton
-        icon="ai ai-github"
-        variant="outline"
-        size="medium"
-        aria-label="Azion on GitHub"
-        href="https://github.com/aziontech"
-        target="_blank"
-        class="shrink-0"
-      />
-      <Button
-        label="Console"
-        variant="secondary"
-        size="medium"
-        class="shrink-0"
-        href="https://console.azion.com"
-      />
-    </template>
-
-    <template #navigation-footer>
-      <ThemeSwitcher
-        v-model="theme"
-        aria-label="Theme"
-      />
-    </template>
-
-    <template #aside>
-      <DocCallToAction
-        title="Ready to build?"
-        :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
-        :secondary-action="{ label: 'See our plans', href: 'https://www.azion.com/en/pricing/' }"
+      <DocHeading
+        anchor="before-you-start"
+        :level="2"
+        >Before you start</DocHeading
       >
-        Deploy your first application in minutes.
-      </DocCallToAction>
-    </template>
+      <p>
+        You need an Azion account. The CLI path also needs a terminal with
+        <code>curl</code> and a project folder.
+      </p>
 
-    <template #footer>
-      <div class="w-full border-t border-(--border-default)">
-        <Footer
-          variant="content"
-          aria-label="Footer"
+      <DocHeading
+        anchor="deploy-a-template"
+        :level="2"
+        >Deploy a template via Console</DocHeading
+      >
+      <DocCallout variant="info">
+        Templates create the workload, the application and the domain for you.
+      </DocCallout>
+      <DocSteps>
+        <DocStep title="Open Azion Console." />
+        <DocStep title="Select + Create on the home page." />
+        <DocStep title="Pick a template and fill in the fields it asks for." />
+        <DocStep title="Select Deploy and wait for the status to read Live." />
+      </DocSteps>
+      <DocHeading
+        anchor="test-the-template"
+        :level="3"
+        >Test it</DocHeading
+      >
+      <CodeBlock
+        :tabs="testTabs"
+        default-value="shell"
+      />
+
+      <DocHeading
+        anchor="deploy-with-cli"
+        :level="2"
+        >Deploy with Azion CLI</DocHeading
+      >
+      <DocPrompt title="AI Assistant">
+        Install the Azion CLI, link this folder as an Azion project and deploy it. Show me the
+        domain when it is live.
+      </DocPrompt>
+      <DocSteps>
+        <DocStep title="Set up the Azion CLI">
+          <CodeBlock
+            :tabs="installTabs"
+            default-value="shell"
+            :show-line-numbers="false"
+          />
+        </DocStep>
+        <DocStep title="Log in and deploy">
+          <CodeBlock
+            :tabs="deployTabs"
+            default-value="shell"
+            :show-line-numbers="false"
+          />
+        </DocStep>
+      </DocSteps>
+
+      <DocHeading
+        anchor="next-steps"
+        :level="2"
+        >Next steps</DocHeading
+      >
+      <DocCardGroup :columns="3">
+        <DocCard
+          title="Go live"
+          icon="ai ai-globe"
+          href="/docs/get-started/go-live"
+          >Point your own domain at the workload.</DocCard
         >
-          <Footer.Column
-            v-for="column in footerColumns"
-            :key="column.title"
-            :title="column.title"
+        <DocCard
+          title="Secure your application"
+          icon="ai ai-shield"
+          href="/docs/secure"
+          >Add a firewall and WAF rules.</DocCard
+        >
+        <DocCard
+          title="Observe your application"
+          icon="ai ai-chart-line"
+          href="/docs/observe"
+          >Read metrics and events in real time.</DocCard
+        >
+      </DocCardGroup>
+
+      <DocHeading
+        anchor="related-resources"
+        :level="2"
+        >Related resources</DocHeading
+      >
+      <RegistrationFrame class="w-full bg-(--bg-surface)">
+        <ItemList>
+          <DocItem
+            v-for="item in related"
+            :key="item.title"
+            :title="item.title"
+            :icon="item.icon"
+            :href="item.href"
+            >{{ item.text }}</DocItem
           >
-            <Footer.Link
-              v-for="link in column.links"
-              :key="link"
-              href="#"
-              >{{ link }}</Footer.Link
-            >
-          </Footer.Column>
-          <template #status>
-            <StatusIndicator
-              severity="success"
-              label="All systems operational"
-            />
-          </template>
-        </Footer>
-      </div>
-    </template>
-  </DocLayout>
+        </ItemList>
+      </RegistrationFrame>
+    </DocProse>
+    <DocPreviousNext
+      :previous="{ label: 'Create an account', href: '/docs/get-started/create-an-account' }"
+      :next="{ label: 'Migrate to Azion', href: '/docs/get-started/migrate-to-azion' }"
+    />
+  </article>
 </template>

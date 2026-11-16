@@ -1,9 +1,10 @@
 import userEvent from '@testing-library/user-event'
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it, vi } from 'vitest'
-import { defineComponent, h, ref } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 
 import { expectNoA11yViolations } from '../../../test/axe'
+import DocChangelogEntry from '../doc-changelog-entry/doc-changelog-entry.vue'
 import DocHeading from '../doc-heading/doc-heading.vue'
 import DocLayout, { type DocLayoutNavGroup } from './doc-layout.vue'
 
@@ -22,11 +23,6 @@ const navigation: DocLayoutNavGroup[] = [
       }
     ]
   }
-]
-
-const outline = [
-  { id: 'before-you-start', text: 'Before you start', depth: 2 },
-  { id: 'deploy-with-cli', text: 'Deploy with Azion CLI', depth: 2 }
 ]
 
 const fakeRouter = (path: string) => ({
@@ -57,7 +53,6 @@ const mount = (
             DocLayout,
             {
               navigation,
-              outline,
               sections: [{ label: 'Guides', href: '/docs/guides' }],
               ...props
             },
@@ -69,15 +64,17 @@ const mount = (
   )
 
 describe('DocLayout', () => {
-  it('renders the header, the rail, one main landmark with the article and the outline', () => {
-    const { getByTestId, getAllByRole, getByRole } = mount()
+  it('renders the header, the rail, one main landmark with the article and the outline', async () => {
+    const { findByTestId, getByTestId, getAllByRole, getByRole } = mount()
     expect(getByTestId('doc-layout')).toBeTruthy()
     expect(getByRole('banner')).toBeTruthy()
     const mains = getAllByRole('main')
     expect(mains).toHaveLength(1)
     expect(within(mains[0]!).getByRole('heading', { name: /First deploy/ })).toBeTruthy()
     expect(getByRole('complementary', { name: 'Documentation' })).toBeTruthy()
-    expect(within(getByTestId('doc-layout__aside')).getByText('Deploy with Azion CLI')).toBeTruthy()
+    expect(
+      within(await findByTestId('doc-layout__aside')).getByText('Deploy with Azion CLI')
+    ).toBeTruthy()
   })
 
   it('lets a consumer override data-testid', () => {
@@ -85,9 +82,68 @@ describe('DocLayout', () => {
     expect(getByTestId('docs')).toBeTruthy()
   })
 
-  it('has no end rail without an outline or aside content', () => {
-    const { queryByTestId } = mount({ outline: [] })
+  it('has no end rail when the page registers no heading, even with aside content', async () => {
+    const { queryByTestId, getByText } = mount(
+      {},
+      {
+        default: () => h('article', [h(DocHeading, { level: 2 }, () => 'Start by interface')]),
+        aside: () => h('p', 'Ready to build?')
+      }
+    )
+    await nextTick()
+    await nextTick()
+    expect(getByText('Start by interface')).toBeTruthy()
     expect(queryByTestId('doc-layout__aside')).toBeNull()
+  })
+
+  it('builds the outline from the headings a page body registers, in document order', async () => {
+    const Page = defineComponent({
+      setup: () => () =>
+        h('article', [
+          h(DocHeading, { level: 1, anchor: 'title' }, () => 'Release notes'),
+          h(DocHeading, { level: 2, anchor: 'overview' }, () => 'Overview'),
+          h(DocHeading, { level: 3, anchor: 'scope' }, () => 'Scope'),
+          h(DocHeading, { level: 4, anchor: 'detail' }, () => 'Detail'),
+          h(DocHeading, { level: 2 }, () => 'Unanchored'),
+          h(DocChangelogEntry, { label: 'June 2026', title: 'Faster deploys', anchor: 'june' }),
+          h(DocHeading, { level: 2, anchor: 'next-steps' }, () => 'Next steps')
+        ])
+    })
+    const { findByTestId } = mount({}, { default: () => h(Page) })
+    const rail = await findByTestId('doc-layout__aside')
+    await waitFor(() =>
+      expect(
+        within(rail)
+          .getAllByRole('link')
+          .map((link) => link.textContent?.trim())
+      ).toEqual(['Overview', 'Scope', 'Faster deploys', 'Next steps'])
+    )
+    expect(within(rail).getByRole('link', { name: 'Overview' }).getAttribute('href')).toBe(
+      '#overview'
+    )
+  })
+
+  it('swaps the outline when the page body changes', async () => {
+    const page = ref<'first' | 'second'>('first')
+    const first = () =>
+      h('article', { key: 'first' }, [h(DocHeading, { anchor: 'alpha' }, () => 'Alpha')])
+    const second = () =>
+      h('article', { key: 'second' }, [h(DocHeading, { anchor: 'beta' }, () => 'Beta')])
+    const { findByTestId } = mount(
+      {},
+      { default: () => (page.value === 'first' ? first() : second()) }
+    )
+    const rail = await findByTestId('doc-layout__aside')
+    await waitFor(() => expect(within(rail).getByRole('link', { name: 'Alpha' })).toBeTruthy())
+    page.value = 'second'
+    await waitFor(async () =>
+      expect(
+        within(await findByTestId('doc-layout__aside')).queryByRole('link', { name: 'Alpha' })
+      ).toBeNull()
+    )
+    expect(
+      within(await findByTestId('doc-layout__aside')).getByRole('link', { name: 'Beta' })
+    ).toBeTruthy()
   })
 
   it('expands the row that holds the current page and marks it', () => {
@@ -118,8 +174,8 @@ describe('DocLayout', () => {
 
   it('jumps to a heading from the outline and marks it as the current location', async () => {
     const replace = vi.spyOn(globalThis.history, 'replaceState')
-    const { getByTestId } = mount()
-    const rail = within(getByTestId('doc-layout__aside'))
+    const { findByTestId } = mount()
+    const rail = within(await findByTestId('doc-layout__aside'))
     await userEvent.click(rail.getByRole('link', { name: 'Deploy with Azion CLI' }))
     await waitFor(() =>
       expect(
@@ -163,8 +219,8 @@ describe('DocLayout', () => {
     expect(onSearchSelect).not.toHaveBeenCalled()
   })
 
-  it('renders the actions, navigation-footer, aside and footer slots', () => {
-    const { getByRole, getByTestId, getByText } = mount(
+  it('renders the actions, navigation-footer, aside and footer slots', async () => {
+    const { getByRole, findByTestId, getByText } = mount(
       {},
       {
         actions: () => h('a', { href: 'https://github.com/aziontech' }, 'GitHub'),
@@ -175,7 +231,9 @@ describe('DocLayout', () => {
     )
     expect(within(getByRole('banner')).getByRole('link', { name: 'GitHub' })).toBeTruthy()
     expect(getByText('Theme')).toBeTruthy()
-    expect(within(getByTestId('doc-layout__aside')).getByText('Ready to build?')).toBeTruthy()
+    expect(
+      within(await findByTestId('doc-layout__aside')).getByText('Ready to build?')
+    ).toBeTruthy()
     expect(getByRole('contentinfo').textContent).toContain('Footer links')
   })
 

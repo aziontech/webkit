@@ -1,7 +1,10 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, ref, useAttrs } from 'vue'
 
-  import { useHeadingNavigation } from '../../../composables/use-heading-navigation/index'
+  import {
+    useHeadingNavigation,
+    useHeadingOutline
+  } from '../../../composables/use-heading-navigation/index'
   import Tag from '../../content/tag/tag.vue'
   import { slugify } from './slugify'
 
@@ -46,10 +49,17 @@
   const anchorId = computed(
     () => props.anchor || slugify(props.title ? `${props.label} ${props.title}` : props.label)
   )
+
+  const rootEl = ref<globalThis.HTMLElement | null>(null)
+
+  useHeadingOutline(rootEl, () =>
+    anchorId.value ? { id: anchorId.value, text: props.title || props.label, depth: 2 } : null
+  )
 </script>
 
 <template>
   <section
+    ref="rootEl"
     v-bind="$attrs"
     :id="anchorId"
     data-doc-block

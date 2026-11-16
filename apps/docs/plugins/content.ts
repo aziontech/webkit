@@ -187,6 +187,7 @@ export function buildIndex(catalog: Catalog = readCatalog(), foundationSlugs: st
         []) as string[]
     ).map((path) => path.replace('@aziontech/webkit/', '')),
     layout: block.preview?.layout ?? 'padded',
+    shell: block.preview?.frame === 'primary' ? block.primary.file : null,
     llms: llmsFile(llms, 'blocks', block.id)
   }))
   return {

@@ -32,7 +32,7 @@ export type BlockManifest = {
   intents?: string[]
   primary: { name: string; file: string }
   variants?: { name: string; file: string }[]
-  preview?: { layout?: string; background?: string }
+  preview?: { layout?: string; background?: string; frame?: string }
 }
 
 export function slugify(value: string): string {

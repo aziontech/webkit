@@ -4,18 +4,15 @@
   import cursorMark from '@aziontech/webkit/assets/cursor-symbol-mono.svg'
   import geminiMark from '@aziontech/webkit/assets/gemini-symbol-color.svg'
   import opencodeMark from '@aziontech/webkit/assets/opencode-symbol-mono.svg'
-  import Button from '@aziontech/webkit/button'
   import DataTable from '@aziontech/webkit/data-table'
   import DocAccordion from '@aziontech/webkit/doc-accordion'
   import DocAccordionGroup from '@aziontech/webkit/doc-accordion-group'
-  import DocCallToAction from '@aziontech/webkit/doc-call-to-action'
   import DocCallout from '@aziontech/webkit/doc-callout'
   import DocCard from '@aziontech/webkit/doc-card'
   import DocCardGroup from '@aziontech/webkit/doc-card-group'
   import DocCodeGroup, { type DocCodeGroupSample } from '@aziontech/webkit/doc-code-group'
   import DocHeading from '@aziontech/webkit/doc-heading'
   import DocItem from '@aziontech/webkit/doc-item'
-  import DocLayout, { type DocLayoutNavGroup } from '@aziontech/webkit/doc-layout'
   import DocMarkdown from '@aziontech/webkit/doc-markdown'
   import DocPageHeader from '@aziontech/webkit/doc-page-header'
   import DocPreviousNext from '@aziontech/webkit/doc-previous-next'
@@ -23,15 +20,10 @@
   import DocProse from '@aziontech/webkit/doc-prose'
   import DocStep from '@aziontech/webkit/doc-step'
   import DocSteps from '@aziontech/webkit/doc-steps'
-  import Footer from '@aziontech/webkit/footer'
-  import IconButton from '@aziontech/webkit/icon-button'
   import ItemList from '@aziontech/webkit/item-list'
   import Logo from '@aziontech/webkit/logo'
   import RegistrationFrame from '@aziontech/webkit/registration-frame'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
   import Tag from '@aziontech/webkit/tag'
-  import ThemeSwitcher from '@aziontech/webkit/theme-switcher'
-  import { useColorMode } from '@aziontech/webkit/use-color-mode'
 
   type Step = {
     title: string
@@ -42,12 +34,6 @@
   }
 
   const MCP_SERVER_URL = 'https://mcp.azion.com'
-
-  const sections = [
-    { label: 'Reference', href: '/docs/reference' },
-    { label: 'Guides', href: '/docs/guides' },
-    { label: 'Dev tools', href: '/docs/dev-tools' }
-  ]
 
   const others = [
     {
@@ -108,34 +94,6 @@
     }
   ]
 
-  const navigation: DocLayoutNavGroup[] = [
-    {
-      label: 'Dev tools',
-      items: [
-        { id: 'dev-tools-overview', label: 'Overview', href: '/docs/dev-tools' },
-        { id: 'azion-cli', label: 'Azion CLI', href: '/docs/dev-tools/cli' },
-        { id: 'mcp-server', label: 'MCP server', href: '/docs/dev-tools/mcp' },
-        {
-          id: 'agent-setup-group',
-          label: 'Agent setup',
-          type: 'inline',
-          defaultOpen: true,
-          children: [
-            { id: 'agent-setup', label: 'Overview', href: '/docs/agent-setup' },
-            { id: 'claude-code', label: 'Claude Code', href: '/docs/agent-setup/claude-code' },
-            ...others.map((agent) => ({
-              id: agent.slug,
-              label: agent.name,
-              href: `/docs/agent-setup/${agent.slug}`
-            }))
-          ]
-        }
-      ]
-    }
-  ]
-
-  const { mode: theme } = useColorMode()
-
   const crumbs = [
     { label: 'Dev tools', href: '/docs/dev-tools' },
     { label: 'Agent setup', href: '/docs/agent-setup' },
@@ -156,34 +114,6 @@
       href: 'https://www.azion.com/en/documentation/devtools/mcp/configuration/'
     },
     { label: 'Azion CLI', href: 'https://www.azion.com/en/documentation/devtools/cli/' }
-  ]
-
-  const outline = [
-    { id: 'quick-start', text: 'Quick start', depth: 2 },
-    { id: 'platform-access', text: 'Azion platform access', depth: 2 },
-    { id: 'mcp-tools', text: 'MCP server', depth: 3 },
-    { id: 'cli', text: 'Azion CLI', depth: 3 },
-    { id: 'agent-context', text: 'Agent context', depth: 3 },
-    { id: 'agent-friendly-docs', text: 'Agent-friendly docs', depth: 2 },
-    { id: 'example-prompts', text: 'Example prompts', depth: 2 },
-    { id: 'tips', text: 'Tips', depth: 2 },
-    { id: 'faq', text: 'FAQ', depth: 2 },
-    { id: 'troubleshooting', text: 'Troubleshooting', depth: 2 },
-    { id: 'other-agents', text: 'Other agents', depth: 2 }
-  ]
-
-  const outlineGroups = [
-    {
-      label: 'GitHub',
-      links: [
-        { label: 'Azion Docs', href: 'https://github.com/aziontech', icon: 'ai ai-github' },
-        {
-          label: 'Contribute to this page',
-          href: 'https://github.com/aziontech/azion',
-          icon: 'ai ai-pencil'
-        }
-      ]
-    }
   ]
 
   const steps: Step[] = [
@@ -341,369 +271,289 @@
         'Check the header: Claude Code sends `Authorization: Bearer` followed by the token, with no quotes around the token.'
     }
   ]
-
-  const footerColumns = [
-    { title: 'Company', links: ['About us', 'Careers', 'Compliance', 'Privacy Policy'] },
-    { title: 'Resources', links: ['Blog', 'Learning', 'Marketplace', 'Success cases'] },
-    { title: 'Getting started', links: ['Start for free', 'Pricing', 'Contact'] },
-    { title: 'Developer', links: ['Documentation', 'API', 'Release notes'] }
-  ]
 </script>
 
 <template>
-  <DocLayout
-    :navigation="navigation"
-    active-id="claude-code"
-    :sections="sections"
-    home="/docs"
-    :outline="outline"
-    :outline-groups="outlineGroups"
+  <article
+    class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-2xl)"
   >
-    <article
-      class="layout-column-content layout-boundary-inline flex flex-col gap-(--spacing-lg) pt-(--spacing-md) pb-(--spacing-2xl)"
+    <DocPageHeader
+      description="Terminal agent that reads your codebase, runs commands and edits files. Made by Anthropic."
+      :breadcrumbs="crumbs"
+      last-updated="2026-08-26"
+      :meta-actions="metaActions"
     >
-      <DocPageHeader
-        description="Terminal agent that reads your codebase, runs commands and edits files. Made by Anthropic."
-        :breadcrumbs="crumbs"
-        last-updated="2026-08-26"
-        :meta-actions="metaActions"
-      >
-        <template #title>
-          <div
-            class="flex min-w-0 flex-col items-start gap-(--spacing-sm) sm:flex-1 sm:flex-row sm:items-center sm:gap-(--spacing-md)"
+      <template #title>
+        <div
+          class="flex min-w-0 flex-col items-start gap-(--spacing-sm) sm:flex-1 sm:flex-row sm:items-center sm:gap-(--spacing-md)"
+        >
+          <span
+            class="flex size-14 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised) sm:size-16"
           >
-            <span
-              class="flex size-14 shrink-0 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised) sm:size-16"
+            <i
+              class="ai ai-claude text-heading-md text-(--text-default)"
+              aria-hidden="true"
+            />
+          </span>
+          <div class="min-w-0 flex-1">
+            <span class="block text-overline-sm text-(--text-muted)">Anthropic</span>
+            <h1 class="m-0 text-heading-xl text-(--text-default)">Claude Code + Azion</h1>
+          </div>
+        </div>
+      </template>
+      <template #details>
+        <div class="flex flex-col gap-(--spacing-md)">
+          <div class="flex flex-wrap items-center gap-(--spacing-xs)">
+            <Tag
+              v-for="fact in facts"
+              :key="fact"
+              :label="fact"
+              severity="neutral"
+              size="medium"
+              rounded
+            />
+          </div>
+          <div class="flex flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)">
+            <template
+              v-for="(link, index) in headerLinks"
+              :key="link.href"
             >
-              <i
-                class="ai ai-claude text-heading-md text-(--text-default)"
+              <span
+                v-if="index > 0"
+                class="text-label-md text-(--text-muted)"
                 aria-hidden="true"
+                >·</span
+              >
+              <a
+                :href="link.href"
+                target="_blank"
+                rel="noreferrer"
+                class="inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-flat) text-label-md text-(--text-muted) no-underline hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
+              >
+                {{ link.label }}
+                <i
+                  class="ai ai-arrow-up-right text-body-xs"
+                  aria-hidden="true"
+                />
+              </a>
+            </template>
+          </div>
+        </div>
+      </template>
+    </DocPageHeader>
+
+    <DocProse>
+      <DocHeading
+        anchor="quick-start"
+        :level="2"
+        >Quick start</DocHeading
+      >
+      <DocSteps>
+        <DocStep
+          v-for="step in steps"
+          :key="step.title"
+          :title="step.title"
+        >
+          <div class="[&>*>*:first-child]:pt-0!">
+            <DocMarkdown :source="step.body" />
+          </div>
+          <DocCodeGroup
+            v-if="step.samples"
+            :samples="step.samples"
+          />
+          <DocCallout
+            v-if="step.note"
+            variant="warning"
+            :label="step.note"
+          />
+          <DocPrompt
+            v-if="step.prompt"
+            title="Try it"
+            >{{ step.prompt }}</DocPrompt
+          >
+        </DocStep>
+      </DocSteps>
+
+      <DocHeading
+        anchor="platform-access"
+        :level="2"
+        >Azion platform access</DocHeading
+      >
+      <p>
+        Three layers, and a connected agent uses all three: the MCP server to look things up and
+        create configuration, the CLI to build and deploy from your working copy, and a context file
+        so it starts each session knowing your account.
+      </p>
+      <DocHeading
+        anchor="mcp-tools"
+        :level="3"
+        >MCP server</DocHeading
+      >
+      <p>
+        One HTTP endpoint at <code>{{ MCP_SERVER_URL }}</code
+        >, authenticated with your Personal Token. It exposes these tools:
+      </p>
+      <div
+        data-doc-block
+        data-doc-chrome
+      >
+        <DataTable
+          :data="mcpTools"
+          :columns="mcpColumns"
+          row-key="id"
+          bordered
+        >
+          <template #cell-title="{ row }">
+            <code
+              class="rounded-(--shape-control) border border-(--border-default) bg-(--bg-hover) px-(--spacing-xs) py-0.5 text-label-code-sm text-(--text-default)"
+              >{{ row.title }}</code
+            >
+          </template>
+        </DataTable>
+      </div>
+      <DocHeading
+        anchor="cli"
+        :level="3"
+        >Azion CLI</DocHeading
+      >
+      <p>
+        Local builds, deploys and the product commands the API does not cover. Install it once and
+        Claude Code runs it for you; the first <code>azion login</code> is interactive, so run that
+        one yourself.
+      </p>
+      <DocCodeGroup :samples="cliSamples" />
+      <DocHeading
+        anchor="agent-context"
+        :level="3"
+        >Agent context</DocHeading
+      >
+      <p>
+        Claude Code reads <code>CLAUDE.md</code> at the repository root before it answers: a few
+        committed lines that every session starts with.
+      </p>
+      <DocCodeGroup :samples="contextSample" />
+
+      <DocHeading
+        anchor="agent-friendly-docs"
+        :level="2"
+        >Agent-friendly docs</DocHeading
+      >
+      <p>Token-efficient references an agent can fetch on its own, with no tool call.</p>
+      <RegistrationFrame
+        data-doc-block
+        data-doc-chrome
+        class="w-full bg-(--bg-surface)"
+      >
+        <ItemList>
+          <DocItem
+            v-for="link in docLinks"
+            :key="link.title"
+            :title="link.title"
+            :icon="link.icon"
+            :href="link.href"
+            >{{ link.description }}</DocItem
+          >
+        </ItemList>
+      </RegistrationFrame>
+      <p>No MCP support in the tool you are using? Prime it by hand, once per session:</p>
+      <DocPrompt
+        title="Any assistant"
+        icon="ai ai-comment"
+        >{{ browserPrimer }}</DocPrompt
+      >
+
+      <DocHeading
+        anchor="example-prompts"
+        :level="2"
+        >Example prompts</DocHeading
+      >
+      <p>Each one exercises a different part of the connection.</p>
+      <DocPrompt
+        v-for="prompt in prompts"
+        :key="prompt"
+        >{{ prompt }}</DocPrompt
+      >
+
+      <DocHeading
+        anchor="tips"
+        :level="2"
+        >Tips</DocHeading
+      >
+      <DocCallout
+        v-for="tip in tips"
+        :key="tip"
+        variant="tip"
+        :label="tip"
+      />
+
+      <DocHeading
+        anchor="faq"
+        :level="2"
+        >FAQ</DocHeading
+      >
+      <DocAccordionGroup>
+        <DocAccordion
+          v-for="entry in faq"
+          :key="entry.question"
+          :title="entry.question"
+        >
+          <div class="[&>*>*:first-child]:pt-0!">
+            <DocMarkdown :source="entry.answer" />
+          </div>
+        </DocAccordion>
+      </DocAccordionGroup>
+
+      <DocHeading
+        anchor="troubleshooting"
+        :level="2"
+        >Troubleshooting</DocHeading
+      >
+      <DocAccordionGroup>
+        <DocAccordion
+          v-for="entry in troubleshooting"
+          :key="entry.question"
+          :title="entry.question"
+        >
+          <div class="[&>*>*:first-child]:pt-0!">
+            <DocMarkdown :source="entry.answer" />
+          </div>
+        </DocAccordion>
+      </DocAccordionGroup>
+
+      <DocHeading
+        anchor="other-agents"
+        :level="2"
+        >Other agents</DocHeading
+      >
+      <DocCardGroup :columns="3">
+        <DocCard
+          v-for="other in others"
+          :key="other.slug"
+          :title="other.name"
+          :eyebrow="other.vendor"
+          :icon="other.icon"
+          :href="`/docs/agent-setup/${other.slug}`"
+        >
+          <template
+            v-if="other.logo"
+            #icon
+          >
+            <span class="flex text-(--text-default)">
+              <Logo
+                :name="other.name"
+                :src="other.logo"
+                :variant="other.mono ? 'current' : 'color'"
+                decorative
               />
             </span>
-            <div class="min-w-0 flex-1">
-              <span class="block text-overline-sm text-(--text-muted)">Anthropic</span>
-              <h1 class="m-0 text-heading-xl text-(--text-default)">Claude Code + Azion</h1>
-            </div>
-          </div>
-        </template>
-        <template #details>
-          <div class="flex flex-col gap-(--spacing-md)">
-            <div class="flex flex-wrap items-center gap-(--spacing-xs)">
-              <Tag
-                v-for="fact in facts"
-                :key="fact"
-                :label="fact"
-                severity="neutral"
-                size="medium"
-                rounded
-              />
-            </div>
-            <div class="flex flex-wrap items-center gap-x-(--spacing-xs) gap-y-(--spacing-2xs)">
-              <template
-                v-for="(link, index) in headerLinks"
-                :key="link.href"
-              >
-                <span
-                  v-if="index > 0"
-                  class="text-label-md text-(--text-muted)"
-                  aria-hidden="true"
-                  >·</span
-                >
-                <a
-                  :href="link.href"
-                  target="_blank"
-                  rel="noreferrer"
-                  class="inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-flat) text-label-md text-(--text-muted) no-underline hover:text-(--text-default) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--ring-color)"
-                >
-                  {{ link.label }}
-                  <i
-                    class="ai ai-arrow-up-right text-body-xs"
-                    aria-hidden="true"
-                  />
-                </a>
-              </template>
-            </div>
-          </div>
-        </template>
-      </DocPageHeader>
-
-      <DocProse>
-        <DocHeading
-          anchor="quick-start"
-          :level="2"
-          >Quick start</DocHeading
-        >
-        <DocSteps>
-          <DocStep
-            v-for="step in steps"
-            :key="step.title"
-            :title="step.title"
-          >
-            <div class="[&>*>*:first-child]:pt-0!">
-              <DocMarkdown :source="step.body" />
-            </div>
-            <DocCodeGroup
-              v-if="step.samples"
-              :samples="step.samples"
-            />
-            <DocCallout
-              v-if="step.note"
-              variant="warning"
-              :label="step.note"
-            />
-            <DocPrompt
-              v-if="step.prompt"
-              title="Try it"
-              >{{ step.prompt }}</DocPrompt
-            >
-          </DocStep>
-        </DocSteps>
-
-        <DocHeading
-          anchor="platform-access"
-          :level="2"
-          >Azion platform access</DocHeading
-        >
-        <p>
-          Three layers, and a connected agent uses all three: the MCP server to look things up and
-          create configuration, the CLI to build and deploy from your working copy, and a context
-          file so it starts each session knowing your account.
-        </p>
-        <DocHeading
-          anchor="mcp-tools"
-          :level="3"
-          >MCP server</DocHeading
-        >
-        <p>
-          One HTTP endpoint at <code>{{ MCP_SERVER_URL }}</code
-          >, authenticated with your Personal Token. It exposes these tools:
-        </p>
-        <div
-          data-doc-block
-          data-doc-chrome
-        >
-          <DataTable
-            :data="mcpTools"
-            :columns="mcpColumns"
-            row-key="id"
-            bordered
-          >
-            <template #cell-title="{ row }">
-              <code
-                class="rounded-(--shape-control) border border-(--border-default) bg-(--bg-hover) px-(--spacing-xs) py-0.5 text-label-code-sm text-(--text-default)"
-                >{{ row.title }}</code
-              >
-            </template>
-          </DataTable>
-        </div>
-        <DocHeading
-          anchor="cli"
-          :level="3"
-          >Azion CLI</DocHeading
-        >
-        <p>
-          Local builds, deploys and the product commands the API does not cover. Install it once and
-          Claude Code runs it for you; the first <code>azion login</code> is interactive, so run
-          that one yourself.
-        </p>
-        <DocCodeGroup :samples="cliSamples" />
-        <DocHeading
-          anchor="agent-context"
-          :level="3"
-          >Agent context</DocHeading
-        >
-        <p>
-          Claude Code reads <code>CLAUDE.md</code> at the repository root before it answers: a few
-          committed lines that every session starts with.
-        </p>
-        <DocCodeGroup :samples="contextSample" />
-
-        <DocHeading
-          anchor="agent-friendly-docs"
-          :level="2"
-          >Agent-friendly docs</DocHeading
-        >
-        <p>Token-efficient references an agent can fetch on its own, with no tool call.</p>
-        <RegistrationFrame
-          data-doc-block
-          data-doc-chrome
-          class="w-full bg-(--bg-surface)"
-        >
-          <ItemList>
-            <DocItem
-              v-for="link in docLinks"
-              :key="link.title"
-              :title="link.title"
-              :icon="link.icon"
-              :href="link.href"
-              >{{ link.description }}</DocItem
-            >
-          </ItemList>
-        </RegistrationFrame>
-        <p>No MCP support in the tool you are using? Prime it by hand, once per session:</p>
-        <DocPrompt
-          title="Any assistant"
-          icon="ai ai-comment"
-          >{{ browserPrimer }}</DocPrompt
-        >
-
-        <DocHeading
-          anchor="example-prompts"
-          :level="2"
-          >Example prompts</DocHeading
-        >
-        <p>Each one exercises a different part of the connection.</p>
-        <DocPrompt
-          v-for="prompt in prompts"
-          :key="prompt"
-          >{{ prompt }}</DocPrompt
-        >
-
-        <DocHeading
-          anchor="tips"
-          :level="2"
-          >Tips</DocHeading
-        >
-        <DocCallout
-          v-for="tip in tips"
-          :key="tip"
-          variant="tip"
-          :label="tip"
-        />
-
-        <DocHeading
-          anchor="faq"
-          :level="2"
-          >FAQ</DocHeading
-        >
-        <DocAccordionGroup>
-          <DocAccordion
-            v-for="entry in faq"
-            :key="entry.question"
-            :title="entry.question"
-          >
-            <div class="[&>*>*:first-child]:pt-0!">
-              <DocMarkdown :source="entry.answer" />
-            </div>
-          </DocAccordion>
-        </DocAccordionGroup>
-
-        <DocHeading
-          anchor="troubleshooting"
-          :level="2"
-          >Troubleshooting</DocHeading
-        >
-        <DocAccordionGroup>
-          <DocAccordion
-            v-for="entry in troubleshooting"
-            :key="entry.question"
-            :title="entry.question"
-          >
-            <div class="[&>*>*:first-child]:pt-0!">
-              <DocMarkdown :source="entry.answer" />
-            </div>
-          </DocAccordion>
-        </DocAccordionGroup>
-
-        <DocHeading
-          anchor="other-agents"
-          :level="2"
-          >Other agents</DocHeading
-        >
-        <DocCardGroup :columns="3">
-          <DocCard
-            v-for="other in others"
-            :key="other.slug"
-            :title="other.name"
-            :eyebrow="other.vendor"
-            :icon="other.icon"
-            :href="`/docs/agent-setup/${other.slug}`"
-          >
-            <template
-              v-if="other.logo"
-              #icon
-            >
-              <span class="flex text-(--text-default)">
-                <Logo
-                  :name="other.name"
-                  :src="other.logo"
-                  :variant="other.mono ? 'current' : 'color'"
-                  decorative
-                />
-              </span>
-            </template>
-            {{ other.description }}
-          </DocCard>
-        </DocCardGroup>
-      </DocProse>
-      <DocPreviousNext
-        :previous="{ label: 'Agent setup', href: '/docs/agent-setup' }"
-        :next="{ label: 'Cursor', href: '/docs/agent-setup/cursor' }"
-      />
-    </article>
-
-    <template #actions>
-      <IconButton
-        icon="ai ai-github"
-        variant="outline"
-        size="medium"
-        aria-label="Azion on GitHub"
-        href="https://github.com/aziontech"
-        target="_blank"
-        class="shrink-0"
-      />
-      <Button
-        label="Console"
-        variant="secondary"
-        size="medium"
-        class="shrink-0"
-        href="https://console.azion.com"
-      />
-    </template>
-
-    <template #navigation-footer>
-      <ThemeSwitcher
-        v-model="theme"
-        aria-label="Theme"
-      />
-    </template>
-
-    <template #aside>
-      <DocCallToAction
-        title="Ready to build?"
-        :primary-action="{ label: 'Start for free', href: 'https://console.azion.com/signup' }"
-        :secondary-action="{ label: 'See our plans', href: 'https://www.azion.com/en/pricing/' }"
-      >
-        Deploy your first application in minutes.
-      </DocCallToAction>
-    </template>
-
-    <template #footer>
-      <div class="w-full border-t border-(--border-default)">
-        <Footer
-          variant="content"
-          aria-label="Footer"
-        >
-          <Footer.Column
-            v-for="column in footerColumns"
-            :key="column.title"
-            :title="column.title"
-          >
-            <Footer.Link
-              v-for="link in column.links"
-              :key="link"
-              href="#"
-              >{{ link }}</Footer.Link
-            >
-          </Footer.Column>
-          <template #status>
-            <StatusIndicator
-              severity="success"
-              label="All systems operational"
-            />
           </template>
-        </Footer>
-      </div>
-    </template>
-  </DocLayout>
+          {{ other.description }}
+        </DocCard>
+      </DocCardGroup>
+    </DocProse>
+    <DocPreviousNext
+      :previous="{ label: 'Agent setup', href: '/docs/agent-setup' }"
+      :next="{ label: 'Cursor', href: '/docs/agent-setup/cursor' }"
+    />
+  </article>
 </template>
