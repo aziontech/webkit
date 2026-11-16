@@ -65,4 +65,84 @@ describe('account/onboarding-form', () => {
     await fireEvent.click(create)
     expect(view.getAllByText('Select one to continue.')).toHaveLength(2)
   })
+
+  it('emits submit with every answer instead of faking the create request', async () => {
+    const view = render(OnboardingForm, {
+      props: {
+        step: 2,
+        defaultValues: {
+          fullName: 'Jane Doe',
+          organizationName: 'Acme Inc.',
+          plan: 'free',
+          usage: 'work',
+          role: 'team_lead'
+        }
+      }
+    })
+    await fireEvent.click(await view.findByRole('button', { name: 'Create Organization' }))
+    const [event, values] = view.emitted('submit')![0] as [MouseEvent, Record<string, unknown>]
+    expect(event).toBeInstanceOf(MouseEvent)
+    expect(values).toMatchObject({
+      fullName: 'Jane Doe',
+      organizationName: 'Acme Inc.',
+      plan: 'free',
+      usage: 'work',
+      role: 'team_lead',
+      session: false,
+      billingPeriod: 'yearly'
+    })
+    expect(view.queryByText('Organization created.')).toBeNull()
+    await view.rerender({ loading: true })
+    await view.rerender({ loading: false })
+    expect(await view.findByText('Organization created.')).toBeTruthy()
+  })
+
+  it('shows the error it is given with Retry, and Cancel emits cancel', async () => {
+    const view = render(OnboardingForm, {
+      props: {
+        step: 2,
+        error: 'The API answered 503.',
+        defaultValues: { plan: 'free', usage: 'work', role: 'other' }
+      }
+    })
+    expect(await view.findByText('The API answered 503.')).toBeTruthy()
+    await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
+    expect(view.emitted('submit')).toHaveLength(1)
+    await fireEvent.click(view.getByRole('button', { name: 'Cancel' }))
+    expect(view.emitted('cancel')).toHaveLength(1)
+  })
+
+  it('renders the plans and the account it is given instead of the sample', async () => {
+    const view = render(OnboardingForm, {
+      props: {
+        step: 1,
+        account: {
+          email: 'jane.doe@example.com',
+          address: {
+            country: 'United States',
+            postalCode: '94105',
+            state: 'California',
+            city: 'San Francisco',
+            line1: '100 Market Street',
+            line2: ''
+          },
+          cardLast4: '4242'
+        },
+        plans: [
+          {
+            value: 'starter',
+            label: 'Starter for small teams',
+            description: 'A plan given by the page',
+            ariaLabel: 'Starter plan, $5/mo.',
+            name: 'Starter',
+            price: '$5/mo'
+          }
+        ]
+      }
+    })
+    expect(await view.findByRole('radio', { name: /Starter plan/ })).toBeTruthy()
+    expect(view.queryByRole('radio', { name: /Pro plan/ })).toBeNull()
+    expect(view.container.textContent).toContain('jane.doe@example.com')
+    expect(view.container.textContent).not.toContain('myemail@example.com')
+  })
 })

@@ -30,23 +30,122 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, onBeforeUnmount, reactive, ref, watch } from 'vue'
 
+  import { sampleDatabase, sampleTables } from './sample'
+
   interface ColumnType {
     value: string
     description: string
     glyph: string
   }
-  interface SchemaColumn {
+
+  /** One column of an existing table. */
+  export interface SchemaEditorColumn {
+    /** Column name. */
     name: string
+    /** Data type, one of the types the Type select lists. */
     type: string
+    /** Part of the primary key. */
     primaryKey: boolean
+    /** Rejects NULL. */
     notNull: boolean
+    /** Default expression, empty for none. */
     defaultValue: string
   }
-  interface SchemaTable {
+
+  /** One table of the database. */
+  export interface SchemaEditorTable {
+    /** Table name. */
     name: string
-    columns: SchemaColumn[]
+    /** Its columns, in table order. */
+    columns: SchemaEditorColumn[]
+    /** How many rows it holds. */
     rowCount: number
   }
+
+  /** One foreign key row of the Create Table drawer. */
+  export interface SchemaEditorRelation {
+    /** Stable key of the row. */
+    key: string
+    /** The new table's column. */
+    column: string
+    /** The table it references. */
+    table: string
+    /** The referenced column. */
+    references: string
+    /** What happens to the rows when the referenced row is deleted. */
+    onDelete: string
+  }
+
+  /** A CSV file the Create Table drawer reads. */
+  export interface SchemaEditorCsvFile {
+    /** File name. */
+    name: string
+    /** Size in bytes. */
+    size: number
+    /** MIME type. */
+    type: string
+  }
+
+  /** A CSV file and its text. */
+  export interface SchemaEditorCsv {
+    /** The file. */
+    file: SchemaEditorCsvFile
+    /** Its contents. */
+    text: string
+  }
+
+  /** The table Create Table sends. */
+  export interface SchemaEditorNewTable {
+    /** Table name. */
+    name: string
+    /** Its named columns. */
+    columns: SchemaEditorColumn[]
+    /** Its foreign keys. */
+    relations: SchemaEditorRelation[]
+    /** Rows read from the CSV file, keyed by column name. */
+    rows: Record<string, string>[]
+  }
+
+  /** The values of the Add column drawer. */
+  export interface SchemaEditorColumnForm {
+    /** Column name. */
+    name: string
+    /** Data type. */
+    type: string
+    /** Default expression, empty for NULL. */
+    defaultValue: string
+    /** Part of the primary key. */
+    primaryKey: boolean
+    /** Rejects NULL. */
+    notNull: boolean
+  }
+
+  /** The drawer or dialog that is open, or none. */
+  export type SchemaEditorDialog = 'create' | 'column' | 'row' | 'alter' | 'truncate' | 'none'
+
+  export interface SchemaEditorProps {
+    /** The database's tables. Left out, the sample renders. */
+    tables?: SchemaEditorTable[]
+    /** The database name the drawers and messages name. Left out, the sample name. */
+    database?: string
+    /** A change is in flight: the open drawer or dialog locks and its submit spins. When it turns off with no error, the change is applied and the success toast shows. */
+    loading?: boolean
+    /** Why the change failed. Create Table shows it on the Name field and in an Alert; the other changes show a danger toast with Retry. */
+    error?: string
+    /** The Create Table name and foreign keys the drawer opens with. */
+    defaultDraft?: { name?: string; relations?: SchemaEditorRelation[] }
+    /** A CSV file the Create Table drawer opens with, already read. */
+    defaultCsv?: SchemaEditorCsv
+    /** The Add column values the drawer opens with. */
+    defaultColumn?: Partial<SchemaEditorColumnForm>
+    /** The Insert row values the drawer opens with, keyed by column name. */
+    defaultRow?: Record<string, string>
+    /** The column the Change type dialog opens on. */
+    defaultAlterColumn?: string
+    /** The open drawer starts as if submitted, so its validation messages show. */
+    defaultSubmitted?: boolean
+  }
+
   interface DraftColumn {
     key: string
     name: string
@@ -54,26 +153,61 @@
     primaryKey: boolean
     defaultValue: string
   }
-  interface DraftRelation {
-    key: string
-    column: string
-    table: string
-    references: string
-    onDelete: string
-  }
   interface DraftTable {
     name: string
     columns: DraftColumn[]
-    relations: DraftRelation[]
-  }
-  interface CsvFile {
-    name: string
-    size: number
-    type: string
+    relations: SchemaEditorRelation[]
   }
   type CsvRow = Record<string, string>
+  type PendingChange = {
+    kind: SchemaEditorDialog
+    apply: () => void
+    retry: (event: Event) => void
+  }
 
-  const DATABASE = 'acme-store'
+  const props = withDefaults(defineProps<SchemaEditorProps>(), {
+    tables: undefined,
+    database: '',
+    loading: false,
+    error: '',
+    defaultDraft: () => ({}),
+    defaultCsv: undefined,
+    defaultColumn: () => ({}),
+    defaultRow: undefined,
+    defaultAlterColumn: '',
+    defaultSubmitted: false
+  })
+
+  const emit = defineEmits<{
+    'create-table': [event: Event, table: SchemaEditorNewTable]
+    'add-column': [event: Event, payload: { table: SchemaEditorTable; column: SchemaEditorColumn }]
+    'insert-row': [
+      event: Event,
+      payload: { table: SchemaEditorTable; values: Record<string, string> }
+    ]
+    'change-type': [
+      event: Event,
+      payload: { table: SchemaEditorTable; column: SchemaEditorColumn; type: string }
+    ]
+    truncate: [event: Event, table: SchemaEditorTable]
+  }>()
+
+  const dialog = defineModel<SchemaEditorDialog>('dialog', { default: 'create' })
+  const tableName = defineModel<string>('table', { default: '' })
+
+  const database = computed(() => props.database || sampleDatabase)
+  const source = computed<SchemaEditorTable[]>(() => props.tables ?? sampleTables)
+  const items = ref<SchemaEditorTable[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = next.map((item) => ({ ...item, columns: item.columns.map((c) => ({ ...c })) }))
+    },
+    { immediate: true }
+  )
+  const table = computed(
+    () => items.value.find((item) => item.name === tableName.value) ?? items.value[0]
+  )
 
   const TYPES: ColumnType[] = [
     { value: 'int2', description: 'Signed two-byte integer', glyph: '#' },
@@ -102,36 +236,6 @@
     )
   }
 
-  const tables = ref<SchemaTable[]>([
-    {
-      name: 'customers',
-      columns: [
-        { name: 'id', type: 'int8', primaryKey: true, notNull: true, defaultValue: '' },
-        { name: 'name', type: 'text', primaryKey: false, notNull: true, defaultValue: '' },
-        { name: 'email', type: 'varchar', primaryKey: false, notNull: true, defaultValue: '' },
-        {
-          name: 'created_at',
-          type: 'timestamptz',
-          primaryKey: false,
-          notNull: false,
-          defaultValue: 'now()'
-        }
-      ],
-      rowCount: 3
-    },
-    {
-      name: 'orders',
-      columns: [
-        { name: 'id', type: 'int8', primaryKey: true, notNull: true, defaultValue: '' },
-        { name: 'customer_id', type: 'int8', primaryKey: false, notNull: true, defaultValue: '' },
-        { name: 'total', type: 'numeric', primaryKey: false, notNull: true, defaultValue: '' }
-      ],
-      rowCount: 2
-    }
-  ])
-  const tableName = ref('customers')
-  const table = computed(() => tables.value.find((item) => item.name === tableName.value))
-
   const definitionColumns: TableColumn[] = [
     { accessorKey: 'name', header: 'Column', principal: true, hideable: false },
     { accessorKey: 'type', header: 'Type', minWidth: 120 },
@@ -140,8 +244,8 @@
   ]
   const definitionRows = computed(() =>
     (table.value?.columns ?? []).map((column) => ({
-      id: column.name,
       name: column.name,
+      id: column.name,
       type: column.type,
       constraints: [
         column.primaryKey ? 'PRIMARY KEY' : '',
@@ -154,18 +258,24 @@
   )
 
   const SCHEMA_TOAST = 'schema-editor'
-  const timers = new Set<ReturnType<typeof setTimeout>>()
-  const later = (fn: () => void, ms: number) => {
-    const id = setTimeout(() => {
-      timers.delete(id)
-      fn()
-    }, ms)
-    timers.add(id)
-  }
-  onBeforeUnmount(() => {
-    for (const id of timers) clearTimeout(id)
-    toast.dismiss(SCHEMA_TOAST)
-  })
+  const TOAST = { id: SCHEMA_TOAST }
+  onBeforeUnmount(() => toast.dismiss(SCHEMA_TOAST))
+
+  const submitting = computed(() => props.loading)
+  const pending = ref<PendingChange | null>(null)
+  const dialogOpen = (kind: SchemaEditorDialog) =>
+    computed({
+      get: () => dialog.value === kind,
+      set: (open: boolean) => {
+        if (open) dialog.value = kind
+        else if (dialog.value === kind) dialog.value = 'none'
+      }
+    })
+  const createOpen = dialogOpen('create')
+  const columnOpen = dialogOpen('column')
+  const rowOpen = dialogOpen('row')
+  const alterOpen = dialogOpen('alter')
+  const truncateOpen = dialogOpen('truncate')
 
   let uid = 0
   const newColumn = (
@@ -189,12 +299,13 @@
     relations: []
   })
 
-  const CSV_ON_START = null as { file: CsvFile; text: string } | null
-  const createOpen = ref(true)
   const createForm = reactive(blankTable())
-  const createSubmitted = ref(false)
-  const createSubmitting = ref(false)
-  const createServerError = ref('')
+  if (props.defaultDraft.name !== undefined) createForm.name = props.defaultDraft.name
+  if (props.defaultDraft.relations)
+    createForm.relations = props.defaultDraft.relations.map((relation) => ({ ...relation }))
+  const createSubmitted = ref(props.defaultSubmitted && dialog.value === 'create')
+  const createSubmitting = submitting
+  const createServerError = ref(dialog.value === 'create' ? props.error : '')
   const typeQuery = ref('')
   const filteredTypes = computed(() => filterTypes(typeQuery.value))
 
@@ -246,7 +357,7 @@
   )
 
   const csvInputEl = ref<HTMLInputElement | null>(null)
-  const csvFile = ref<CsvFile | null>(null)
+  const csvFile = ref<SchemaEditorCsvFile | null>(null)
   const csvHeaders = ref<string[]>([])
   const csvRows = ref<CsvRow[]>([])
   const csvError = ref('')
@@ -284,7 +395,7 @@
     csvRows.value = []
     csvError.value = ''
   }
-  const applyCsv = (file: CsvFile, text: string) => {
+  const applyCsv = (file: SchemaEditorCsvFile, text: string) => {
     clearCsv()
     const lines = text.split(/\r?\n/).filter((line) => line.trim())
     const headers = lines.length ? splitCsvLine(lines[0]) : []
@@ -342,22 +453,21 @@
   const csvPreview = computed(() =>
     csvRows.value.slice(0, 5).map((row, index) => ({ __row: `r${index}`, ...row }))
   )
-  if (CSV_ON_START) applyCsv(CSV_ON_START.file, CSV_ON_START.text)
 
   const ON_DELETE = [
     { value: 'NO ACTION', label: 'No action' },
     { value: 'CASCADE', label: 'Cascade' },
     { value: 'SET NULL', label: 'Set null' }
   ]
-  const newRelation = (): DraftRelation => ({
+  const newRelation = (): SchemaEditorRelation => ({
     key: `fk-${(uid += 1)}`,
     column: '',
     table: '',
     references: '',
     onDelete: 'NO ACTION'
   })
-  const referenceColumns = (relation: DraftRelation) =>
-    tables.value.find((item) => item.name === relation.table)?.columns ?? []
+  const referenceColumns = (relation: SchemaEditorRelation) =>
+    items.value.find((item) => item.name === relation.table)?.columns ?? []
   const relationDefinition = [
     { key: 'column', label: 'Column', required: true },
     { key: 'table', label: 'References table', required: true },
@@ -379,7 +489,9 @@
     )
   )
 
-  const submitCreate = () => {
+  if (props.defaultCsv) applyCsv(props.defaultCsv.file, props.defaultCsv.text)
+
+  const submitCreate = (event: Event) => {
     createSubmitted.value = true
     createServerError.value = ''
     if (createSubmitting.value) return
@@ -392,67 +504,59 @@
     )
       return
     const name = createForm.name.trim()
-    createSubmitting.value = true
-    toast.dismiss(SCHEMA_TOAST)
-    later(() => {
-      createSubmitting.value = false
-      if (tables.value.some((item) => item.name === name.toLowerCase())) {
-        createServerError.value = `A table named ${name} already exists in ${DATABASE}.`
-        return
-      }
-      if (name.toLowerCase().startsWith('offline')) {
-        toast.error("The table wasn't created.", {
-          id: SCHEMA_TOAST,
-          description: "The request didn't reach the database. Your columns are kept.",
-          action: { label: 'Retry', onClick: () => submitCreate() }
-        })
-        return
-      }
-      tables.value = [
-        ...tables.value,
-        {
-          name,
-          rowCount: csvRows.value.length,
-          columns: namedColumns.value.map((column) => ({
-            name: column.name.trim(),
-            type: column.type,
-            primaryKey: column.primaryKey,
-            notNull: column.primaryKey,
-            defaultValue: column.defaultValue.trim()
-          }))
-        }
-      ]
-      const imported = csvRows.value.length
-      const relations = createForm.relations.length
-      tableName.value = name
-      createOpen.value = false
-      toast.success(`Table ${name} created.`, {
-        id: SCHEMA_TOAST,
-        description:
-          [
-            imported ? `${imported} ${imported === 1 ? 'row' : 'rows'} imported from CSV.` : '',
-            relations ? `${relations} foreign ${relations === 1 ? 'key' : 'keys'} added.` : ''
-          ]
-            .filter(Boolean)
-            .join(' ') || undefined,
-        actions: [
-          { label: 'Insert row', onClick: () => openRow() },
-          { label: 'Add column', onClick: () => openColumn() }
+    const columns = namedColumns.value.map((column): SchemaEditorColumn => ({
+      name: column.name.trim(),
+      type: column.type,
+      primaryKey: column.primaryKey,
+      notNull: column.primaryKey,
+      defaultValue: column.defaultValue.trim()
+    }))
+    const rows = csvRows.value.map((row) => ({ ...row }))
+    const relations = createForm.relations.map((relation) => ({ ...relation }))
+    pending.value = {
+      kind: 'create',
+      retry: submitCreate,
+      apply: () => {
+        items.value = [
+          ...items.value,
+          { name, rowCount: rows.length, columns: columns.map((column) => ({ ...column })) }
         ]
-      })
-    }, 900)
+        tableName.value = name
+        createOpen.value = false
+        toast.success(`Table ${name} created.`, {
+          ...TOAST,
+          description:
+            [
+              rows.length
+                ? `${rows.length} ${rows.length === 1 ? 'row' : 'rows'} imported from CSV.`
+                : '',
+              relations.length
+                ? `${relations.length} foreign ${relations.length === 1 ? 'key' : 'keys'} added.`
+                : ''
+            ]
+              .filter(Boolean)
+              .join(' ') || undefined,
+          actions: [
+            { label: 'Insert row', onClick: () => openRow() },
+            { label: 'Add column', onClick: () => openColumn() }
+          ]
+        })
+      }
+    }
+    toast.dismiss(SCHEMA_TOAST)
+    emit('create-table', event, { name, columns, relations, rows })
   }
 
-  const columnOpen = ref(false)
-  const columnForm = reactive({
+  const blankColumn = (): SchemaEditorColumnForm => ({
     name: '',
     type: 'text',
     defaultValue: '',
     primaryKey: false,
     notNull: false
   })
-  const columnSubmitted = ref(false)
-  const columnSubmitting = ref(false)
+  const columnForm = reactive<SchemaEditorColumnForm>({ ...blankColumn(), ...props.defaultColumn })
+  const columnSubmitted = ref(props.defaultSubmitted && dialog.value === 'column')
+  const columnSubmitting = submitting
   const columnNameError = computed(() => {
     if (!columnSubmitted.value) return ''
     const name = columnForm.name.trim()
@@ -463,49 +567,41 @@
     return ''
   })
   const openColumn = () => {
-    Object.assign(columnForm, {
-      name: '',
-      type: 'text',
-      defaultValue: '',
-      primaryKey: false,
-      notNull: false
-    })
-    columnSubmitted.value = false
-    typeQuery.value = ''
     columnOpen.value = true
   }
-  const submitColumn = () => {
+  const submitColumn = (event: Event) => {
     columnSubmitted.value = true
     if (columnSubmitting.value || columnNameError.value || !table.value) return
-    const name = columnForm.name.trim()
     const target = table.value
-    columnSubmitting.value = true
-    later(() => {
-      columnSubmitting.value = false
-      target.columns = [
-        ...target.columns,
-        {
-          name,
-          type: columnForm.type,
-          primaryKey: columnForm.primaryKey,
-          notNull: columnForm.notNull || columnForm.primaryKey,
-          defaultValue: columnForm.defaultValue.trim()
-        }
-      ]
-      columnOpen.value = false
-      toast.success(`Column ${name} added to ${target.name}.`, {
-        id: SCHEMA_TOAST,
-        actions: [{ label: 'Change type', onClick: () => openAlter(name) }]
-      })
-    }, 700)
+    const column: SchemaEditorColumn = {
+      name: columnForm.name.trim(),
+      type: columnForm.type,
+      primaryKey: columnForm.primaryKey,
+      notNull: columnForm.notNull || columnForm.primaryKey,
+      defaultValue: columnForm.defaultValue.trim()
+    }
+    pending.value = {
+      kind: 'column',
+      retry: submitColumn,
+      apply: () => {
+        target.columns = [...target.columns, column]
+        columnOpen.value = false
+        toast.success(`Column ${column.name} added to ${target.name}.`, {
+          ...TOAST,
+          actions: [{ label: 'Change type', onClick: () => openAlter(column.name) }]
+        })
+      }
+    }
+    toast.dismiss(SCHEMA_TOAST)
+    emit('add-column', event, { table: target, column: { ...column } })
   }
 
-  const rowOpen = ref(false)
-  const rowForm = reactive<Record<string, string>>({})
-  const rowSubmitted = ref(false)
-  const rowSubmitting = ref(false)
-  const isAuto = (column: SchemaColumn) => column.primaryKey && INTEGER_TYPES.includes(column.type)
-  const rowError = (column: SchemaColumn) =>
+  const rowForm = reactive<Record<string, string>>({ ...props.defaultRow })
+  const rowSubmitted = ref(props.defaultSubmitted && dialog.value === 'row')
+  const rowSubmitting = submitting
+  const isAuto = (column: SchemaEditorColumn) =>
+    column.primaryKey && INTEGER_TYPES.includes(column.type)
+  const rowError = (column: SchemaEditorColumn) =>
     rowSubmitted.value &&
     column.notNull &&
     !isAuto(column) &&
@@ -513,38 +609,38 @@
     !String(rowForm[column.name] ?? '').trim()
       ? `${column.name} cannot be NULL. Enter a value.`
       : ''
-  const rowHint = (column: SchemaColumn) => {
+  const rowHint = (column: SchemaEditorColumn) => {
     if (isAuto(column)) return 'Generated by the database.'
     if (column.defaultValue) return `Empty uses the default, ${column.defaultValue}.`
     return column.notNull ? 'Required.' : 'Empty stores NULL.'
   }
   const openRow = () => {
-    for (const key of Object.keys(rowForm)) delete rowForm[key]
-    for (const column of table.value?.columns ?? []) rowForm[column.name] = ''
-    rowSubmitted.value = false
     rowOpen.value = true
   }
-  const submitRow = () => {
+  const submitRow = (event: Event) => {
     rowSubmitted.value = true
     if (rowSubmitting.value || !table.value) return
     if (table.value.columns.some((column) => rowError(column))) return
     const target = table.value
-    rowSubmitting.value = true
-    later(() => {
-      rowSubmitting.value = false
-      target.rowCount += 1
-      rowOpen.value = false
-      toast.success(`Row inserted into ${target.name}.`, {
-        id: SCHEMA_TOAST,
-        actions: [{ label: 'Insert another', onClick: () => openRow() }]
-      })
-    }, 600)
+    pending.value = {
+      kind: 'row',
+      retry: submitRow,
+      apply: () => {
+        target.rowCount += 1
+        rowOpen.value = false
+        toast.success(`Row inserted into ${target.name}.`, {
+          ...TOAST,
+          actions: [{ label: 'Insert another', onClick: () => openRow() }]
+        })
+      }
+    }
+    toast.dismiss(SCHEMA_TOAST)
+    emit('insert-row', event, { table: target, values: { ...rowForm } })
   }
 
-  const alterOpen = ref(false)
-  const alterColumn = ref('')
+  const alterColumn = ref(dialog.value === 'alter' ? props.defaultAlterColumn : '')
   const alterType = ref('text')
-  const alterSubmitting = ref(false)
+  const alterSubmitting = submitting
   const alterCurrent = computed(() =>
     table.value?.columns.find((column) => column.name === alterColumn.value)
   )
@@ -571,48 +667,108 @@
     typeQuery.value = ''
     alterOpen.value = true
   }
-  const confirmAlter = () => {
-    if (alterSubmitting.value || !alterCurrent.value) return
+  const confirmAlter = (event: Event) => {
+    if (alterSubmitting.value || !alterCurrent.value || !table.value) return
+    const target = table.value
     const column = alterCurrent.value
     const type = alterType.value
-    alterSubmitting.value = true
-    later(() => {
-      alterSubmitting.value = false
-      column.type = type
-      alterOpen.value = false
-      toast.success(`${column.name} is now ${type}.`, {
-        id: SCHEMA_TOAST,
-        actions: [{ label: 'Change again', onClick: () => openAlter(column.name) }]
-      })
-    }, 900)
+    pending.value = {
+      kind: 'alter',
+      retry: confirmAlter,
+      apply: () => {
+        column.type = type
+        alterOpen.value = false
+        toast.success(`${column.name} is now ${type}.`, {
+          ...TOAST,
+          actions: [{ label: 'Change again', onClick: () => openAlter(column.name) }]
+        })
+      }
+    }
+    toast.dismiss(SCHEMA_TOAST)
+    emit('change-type', event, { table: target, column: { ...column }, type })
   }
 
-  const truncateOpen = ref(false)
   const truncateConfirm = ref('')
-  const truncateSubmitting = ref(false)
+  const truncateSubmitting = submitting
   const canTruncate = computed(() => truncateConfirm.value.trim() === table.value?.name)
   const openTruncate = () => {
-    truncateConfirm.value = ''
     truncateOpen.value = true
   }
-  const confirmTruncate = () => {
+  const confirmTruncate = (event: Event) => {
     if (!canTruncate.value || truncateSubmitting.value || !table.value) return
     const target = table.value
     const removed = target.rowCount
-    truncateSubmitting.value = true
-    later(() => {
-      truncateSubmitting.value = false
-      target.rowCount = 0
-      truncateOpen.value = false
-      toast.success(
-        `${target.name} truncated. ${removed} ${removed === 1 ? 'row' : 'rows'} removed.`,
-        {
-          id: SCHEMA_TOAST,
-          actions: [{ label: 'Insert row', onClick: () => openRow() }]
-        }
-      )
-    }, 700)
+    pending.value = {
+      kind: 'truncate',
+      retry: confirmTruncate,
+      apply: () => {
+        target.rowCount = 0
+        truncateOpen.value = false
+        toast.success(
+          `${target.name} truncated. ${removed} ${removed === 1 ? 'row' : 'rows'} removed.`,
+          {
+            ...TOAST,
+            actions: [{ label: 'Insert row', onClick: () => openRow() }]
+          }
+        )
+      }
+    }
+    toast.dismiss(SCHEMA_TOAST)
+    emit('truncate', event, target)
   }
+
+  watch(dialog, (next) => {
+    if (next === 'column') {
+      Object.assign(columnForm, blankColumn())
+      columnSubmitted.value = false
+      typeQuery.value = ''
+    }
+    if (next === 'row') {
+      for (const key of Object.keys(rowForm)) delete rowForm[key]
+      for (const column of table.value?.columns ?? []) rowForm[column.name] = ''
+      rowSubmitted.value = false
+    }
+    if (next === 'truncate') truncateConfirm.value = ''
+  })
+
+  const FAILURES: Partial<Record<SchemaEditorDialog, string>> = {
+    column: "The column wasn't added.",
+    row: "The row wasn't inserted.",
+    alter: "The type wasn't changed.",
+    truncate: "The table wasn't truncated."
+  }
+  const showFailure = () => {
+    const change = pending.value
+    if (!change || !props.error) return
+    if (change.kind === 'create') {
+      createServerError.value = props.error
+      return
+    }
+    toast.error(FAILURES[change.kind] ?? '', {
+      ...TOAST,
+      description: props.error,
+      action: { label: 'Retry', onClick: (event: MouseEvent) => change.retry(event) }
+    })
+  }
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (!before || now) return
+      if (props.error) {
+        showFailure()
+        return
+      }
+      const change = pending.value
+      pending.value = null
+      change?.apply()
+    }
+  )
+  watch(
+    () => props.error,
+    (next) => {
+      if (next && !props.loading) showFailure()
+    }
+  )
 
   const onTableAction = (_event: MouseEvent | KeyboardEvent, value: DropdownMenuItemValue) => {
     if (value === 'truncate') openTruncate()
@@ -760,7 +916,7 @@
             <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
               <DrawerTitle>Create Table</DrawerTitle>
               <p class="text-body-sm text-(--text-muted)">
-                Define the table name and its columns in {{ DATABASE }}, or start from a CSV file.
+                Define the table name and its columns in {{ database }}, or start from a CSV file.
                 Drag a column's grip, or focus it and use the arrow keys, to reorder.
               </p>
             </div>
@@ -996,7 +1152,7 @@
                         <Select.Trigger />
                         <Select.Content>
                           <Select.Item
-                            v-for="item in tables"
+                            v-for="item in items"
                             :key="item.name"
                             :value="item.name"
                             >{{ item.name }}</Select.Item

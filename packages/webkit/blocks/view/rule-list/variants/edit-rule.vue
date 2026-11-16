@@ -34,6 +34,8 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, nextTick, reactive, ref, watch } from 'vue'
 
+  import { sampleApplicationRules } from '../sample'
+
   const SUBJECT: string = 'application'
   const PAGE_DESCRIPTION =
     'Rules run top to bottom within each phase, so their order is their behavior. Turn a rule off to skip it without losing its place.'
@@ -195,77 +197,12 @@
   })
 
   const seed = (): Record<Phase, Rule[]> => ({
-    request: [
-      rule(
-        're-default',
-        'Default rule',
-        'Sends every request to the origin when no other rule matches first.',
-        'request',
-        'Maya Chen',
-        '3 months ago',
-        { locked: true }
-      ),
-      rule(
-        're-maintenance',
-        'Maintenance page',
-        'Serves the maintenance page while the maintenance header is set.',
-        'request',
-        'Leo Park',
-        '1 month ago',
-        { active: false }
-      ),
-      rule(
-        're-www',
-        'Redirect www',
-        'Sends the www host to the apex domain.',
-        'request',
-        'Emily Clark',
-        '12 days ago'
-      ),
-      rule(
-        're-gateway',
-        'API gateway',
-        'Sends API traffic to the gateway service, through the auth check.',
-        'request',
-        'Maya Chen',
-        '2 days ago'
-      ),
-      rule(
-        're-docs',
-        'Docs rewrite',
-        'Rewrites the docs path and caches it as a static asset.',
-        'request',
-        'Sam Okafor',
-        '3 weeks ago'
-      )
-    ],
-    response: [
-      rule(
-        're-cache-bypass',
-        'Cache bypass',
-        'Keeps API responses out of the cache.',
-        'response',
-        'Leo Park',
-        '5 days ago'
-      ),
-      rule(
-        're-security-headers',
-        'Security headers',
-        'Adds the security header set to successful responses.',
-        'response',
-        'Emily Clark',
-        '9 days ago'
-      ),
-      rule(
-        're-compress',
-        'Compress assets',
-        'Compresses script bundles on the way out.',
-        'response',
-        'Sam Okafor',
-        '7 weeks ago',
-        { active: false }
-      )
-    ]
+    request: sampleApplicationRules
+      .filter((item) => item.phase === 'request')
+      .map((item) => ({ ...item })),
+    response: sampleApplicationRules
+      .filter((item) => item.phase === 'response')
+      .map((item) => ({ ...item }))
   })
 
   const INITIAL_EDITS: RuleEdit[] = []

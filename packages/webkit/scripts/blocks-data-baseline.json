@@ -1,0 +1,7 @@
+[
+  "shell/console:inline-records",
+  "shell/console:no-props",
+  "shell/docs:inline-records",
+  "shell/docs:no-props",
+  "shell/site:no-props"
+]

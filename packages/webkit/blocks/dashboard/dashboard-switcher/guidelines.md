@@ -55,7 +55,7 @@ When the chosen dashboard owns its period (Executive summary, Spend, Project sta
 
 ### E. Refresh — `IconButton`, `Tooltip` (required)
 
-An outlined medium `IconButton` at the end of the row, named Refresh by its `Tooltip` and `aria-label`; it shows `loading` while the body refetches.
+An outlined medium `IconButton` at the end of the row, named Refresh by its `Tooltip` and `aria-label`; it emits `refresh` and shows `loading` while the parent refetches (`loading` with `data` already shown).
 
 ### F. Applied period — `FilterMenu.ChipGroup` (required)
 
@@ -64,6 +64,58 @@ The applied period as a chip under the controls (`Period: Last 24 hours`), bound
 ### G. Dashboard body — `StatTile`, `Hint`, `ChartCard`, `Chart`, `BarList`, `Alert` (required)
 
 The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s with a `Hint` each, the delta read against the comparison period (`vs previous 24 hours`, or `vs previous quarter`), then a `ChartCard` spanning 8 of 12 columns with the dashboard's `Chart` (stacked bars, areas or lines, a `Chart.Tooltip total` when it has more than one series, and a legend with totals) and a `ChartCard` spanning 4 with a ranked `BarList`. When the body fails to load, each card keeps its header and shows a danger `Alert` with Retry. Each body here is a placeholder with sample figures: in an app, render the matching dashboard block in its place (the bodies of `analytics-dashboard`, `security-dashboard`, `scan-results-dashboard`, `breakdown-dashboard` and the rest), and render `configurable-dashboard` for the Custom entry under Yours. Don't ship the placeholder bodies as the real dashboards.
+
+## Data
+
+The block takes its views and the selected view's data through props and emits every action; it fetches nothing. `DashboardSwitcherView`, `DashboardSwitcherFigure`, `DashboardSwitcherData`, `DashboardSwitcherFigureValue`, `DashboardSwitcherPeriod`, `DashboardSwitcherQuarter`, `DashboardSwitcherFormat`, `DashboardSwitcherMarkForm` and `DashboardSwitcherProps` are exported from `dashboard-switcher.vue`, and `sample.ts` holds the sample views and a generator of their figures that the block renders when `views` or `data` is left out (and never while `loading` or `error` is set).
+
+| Prop / model      | Type                       | What it does                                                                                                     |
+| ----------------- | -------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `views`           | `DashboardSwitcherView[]`  | The dashboards in the picker, grouped by `group`, each with its figures, chart and breakdown titles and formats. |
+| `data`            | `DashboardSwitcherData`    | The selected view's figure values by id, chart labels and series, and breakdown bars for the period.             |
+| `loading`         | `boolean`                  | A request is in flight. With no `data` it is the first load (Skeletons); with `data` it is a refetch.            |
+| `error`           | `string`                   | Why the view failed to load, shown after `Couldn't load requests over time.` in each card's danger `Alert`.      |
+| `v-model:view`    | `string`                   | The selected view's `value`. Defaults to `traffic`.                                                              |
+| `v-model:period`  | `DashboardSwitcherPeriod`  | The shared period, bound to the FilterMenu and its chip. Defaults to `24h`.                                      |
+| `v-model:quarter` | `DashboardSwitcherQuarter` | The quarter of a view that owns its period. Defaults to `q4`.                                                    |
+
+| Event     | Payload   | When                                |
+| --------- | --------- | ----------------------------------- |
+| `refresh` | `(event)` | Refresh at the end of the controls. |
+| `retry`   | `(event)` | Retry in either card's error alert. |
+
+To go live, render the block from a page that owns the request and refetch when the view, the period or the quarter changes:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import DashboardSwitcher, {
+    type DashboardSwitcherPeriod,
+    type DashboardSwitcherQuarter
+  } from './dashboard-switcher.vue'
+
+  const view = ref('traffic')
+  const period = ref<DashboardSwitcherPeriod>('24h')
+  const quarter = ref<DashboardSwitcherQuarter>('q4')
+  const { data, pending, error, refresh } = useDashboard(view, period, quarter)
+</script>
+
+<template>
+  <DashboardSwitcher
+    v-model:view="view"
+    v-model:period="period"
+    v-model:quarter="quarter"
+    :views="dashboards"
+    :data="data"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -95,11 +147,11 @@ The chosen dashboard, keyed by its id so switching remounts it: four `StatTile`s
 ## States
 
 - Default: Traffic over the last 24 hours.
-- OwnPeriod: Executive summary chosen; the shared filter and chip are hidden and the quarter `ToggleGroup` shows.
-- Loading: the body loads after a switch; tiles, chart and list render their Skeletons.
-- Error: the body could not load; the tiles show dashes and each card keeps its header with a danger `Alert` and Retry, which refetches.
-- Empty: the period has no data; the tiles show dashes, the chart and the ranked list show their empty state (`No data in this period`).
-- Refetching: after a period change or Refresh, the chart holds the previous render at reduced opacity and Refresh shows its spinner.
+- OwnPeriod: `v-model:view` set to Executive summary; the shared filter and chip are hidden and the quarter `ToggleGroup` shows.
+- Loading: `loading` with no `data`; tiles, chart and list render their Skeletons.
+- Error: `error`; the tiles show dashes and each card keeps its header with a danger `Alert` and Retry, which emits `retry`.
+- Empty: `data` with no series and no bars; the tiles show dashes, the chart and the ranked list show their empty state (`No data in this period`).
+- Refetching: `loading` while `data` is shown, after a period change or Refresh; the chart holds the previous render at reduced opacity and Refresh shows its spinner.
 
 ## Related
 

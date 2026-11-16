@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import DocProse from '@aziontech/webkit/doc-prose'
@@ -12,16 +13,72 @@
   import PanelFooter from '@aziontech/webkit/panel-footer'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import PropertyFilter from '@aziontech/webkit/property-filter'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import { useCollection } from '@aziontech/webkit/use-collection'
   import { computed, ref } from 'vue'
 
-  const CATEGORIES = [
-    { id: 'frameworks', label: 'Frameworks' },
-    { id: 'starters', label: 'Starters' },
-    { id: 'functions', label: 'Functions' }
+  import { sampleTemplates } from './sample'
+
+  /** Where a template is grouped in the catalog. */
+  export type TemplateBrowserCategory = 'frameworks' | 'starters' | 'functions'
+
+  /** The framework a template is built on, shown as its badge and in the preview. */
+  export type TemplateBrowserFramework =
+    'next' | 'astro' | 'nuxt' | 'angular' | 'hugo' | 'vite' | 'hono' | 'javascript'
+
+  /** One template of the catalog. */
+  export interface TemplateBrowserTemplate {
+    /** Stable slug, passed to the deploy flow. */
+    id: string
+    /** The name on the tile and the drawer title. */
+    title: string
+    /** The section the tile is listed in. */
+    category: TemplateBrowserCategory
+    /** The framework badge and fact. */
+    framework: TemplateBrowserFramework
+    /** Icon classes of the framework mark. */
+    icon: string
+    /** One sentence on the tile and in the preview. */
+    description: string
+    /** When the template changed last, as display text. */
+    updated: string
+    /** Repository path, linked from View repository. */
+    repository: string
+  }
+
+  export interface TemplateBrowserProps {
+    /** The catalog; filtered in the browser. Left out, the sample renders. */
+    templates?: TemplateBrowserTemplate[]
+    /** The catalog is loading: the filter disables and skeleton tiles hold the layout. */
+    loading?: boolean
+    /** Why the catalog could not load, shown in the danger alert with Retry. */
+    error?: string
+    /** Search text the filter starts with. */
+    defaultText?: string
+    /** Id of the template whose preview starts open. */
+    defaultPreview?: string
+  }
+
+  const props = withDefaults(defineProps<TemplateBrowserProps>(), {
+    templates: undefined,
+    loading: false,
+    error: '',
+    defaultText: '',
+    defaultPreview: ''
+  })
+
+  const emit = defineEmits<{
+    select: [event: MouseEvent, template: TemplateBrowserTemplate]
+    retry: [event: MouseEvent]
+  }>()
+
+  const CATEGORIES: { id: TemplateBrowserCategory; label: string }[] = [
+    { label: 'Frameworks', id: 'frameworks' },
+    { label: 'Starters', id: 'starters' },
+    { label: 'Functions', id: 'functions' }
   ]
 
-  const FRAMEWORKS = {
+  const FRAMEWORKS: Record<TemplateBrowserFramework, string> = {
     next: 'Next.js',
     astro: 'Astro',
     nuxt: 'Nuxt',
@@ -32,143 +89,14 @@
     javascript: 'JavaScript'
   }
 
-  type Framework = keyof typeof FRAMEWORKS
-
-  const MARKS: Partial<Record<Framework, string>> = {
+  const MARKS: Partial<Record<TemplateBrowserFramework, string>> = {
     next: '[[data-theme=dark]_&]:invert'
   }
 
-  interface Template {
-    id: string
-    title: string
-    category: string
-    framework: Framework
-    icon: string
-    description: string
-    updated: string
-    repository: string
-  }
-
-  const template = (
-    slug: string,
-    title: string,
-    category: string,
-    framework: Framework,
-    icon: string,
-    description: string,
-    updated: string
-  ): Template => ({
-    id: slug,
-    title,
-    category,
-    framework,
-    icon,
-    description,
-    updated,
-    repository: `example-org/templates/${slug}`
-  })
-
-  const templates = [
-    template(
-      'next-starter',
-      'Next.js Starter',
-      'frameworks',
-      'next',
-      'ai-color ai-nextjs',
-      'A Next.js app with server rendering and static pages, ready to deploy.',
-      'Oct 28, 2026'
-    ),
-    template(
-      'astro-blog',
-      'Astro Blog',
-      'frameworks',
-      'astro',
-      'ai-color ai-astro',
-      'A content-first blog with Markdown posts, an RSS feed and a sitemap.',
-      'Oct 21, 2026'
-    ),
-    template(
-      'nuxt-store',
-      'Nuxt Storefront',
-      'frameworks',
-      'nuxt',
-      'ai-color ai-nuxt',
-      'A product catalog with a cart, rendered on the server and cached close to buyers.',
-      'Oct 14, 2026'
-    ),
-    template(
-      'angular-dashboard',
-      'Angular Dashboard',
-      'frameworks',
-      'angular',
-      'ai-color ai-angular',
-      'A single-page admin dashboard with routing and lazy-loaded modules.',
-      'Sep 30, 2026'
-    ),
-    template(
-      'hugo-docs',
-      'Hugo Docs',
-      'frameworks',
-      'hugo',
-      'ai ai-hugo',
-      'A documentation site with search, versioned sections and dark mode.',
-      'Sep 22, 2026'
-    ),
-    template(
-      'static-site',
-      'Static Site',
-      'starters',
-      'vite',
-      'ai ai-edge-storage',
-      'Publish a folder of built files and serve it from the closest location.',
-      'Nov 2, 2026'
-    ),
-    template(
-      'reverse-proxy',
-      'Reverse Proxy',
-      'starters',
-      'javascript',
-      'ai ai-edge-connectors',
-      'Front an origin you already run and pass every request on to it.',
-      'Oct 30, 2026'
-    ),
-    template(
-      'rest-api',
-      'REST API',
-      'starters',
-      'hono',
-      'ai ai-hono',
-      'A small JSON API with routing, validation and a key-value store.',
-      'Oct 18, 2026'
-    ),
-    template(
-      'hello-function',
-      'Hello Function',
-      'functions',
-      'javascript',
-      'ai ai-edge-functions',
-      'The smallest function that answers a request, to see how a deploy works.',
-      'Nov 4, 2026'
-    ),
-    template(
-      'ab-test',
-      'A/B Test',
-      'functions',
-      'javascript',
-      'ai ai-edge-functions',
-      'Split traffic between two versions of a page with a sticky cookie.',
-      'Oct 9, 2026'
-    ),
-    template(
-      'geo-redirect',
-      'Geo Redirect',
-      'functions',
-      'javascript',
-      'ai ai-edge-functions',
-      'Send visitors to the regional version of a site from their location.',
-      'Sep 27, 2026'
-    )
-  ]
+  const templates = computed<TemplateBrowserTemplate[]>(
+    () => props.templates ?? (props.loading || props.error ? [] : sampleTemplates)
+  )
+  const blocked = computed(() => props.loading || props.error !== '')
 
   const properties = [
     { key: 'title', label: 'Name' },
@@ -186,7 +114,7 @@
 
   const { items, propertyFilterProps, status, clearFilters } = useCollection({
     items: templates,
-    filtering: { fields: ['title', 'description'] },
+    filtering: { fields: ['title', 'description'], defaultText: props.defaultText },
     propertyFiltering: { properties },
     url: true
   })
@@ -198,11 +126,18 @@
     })).filter((section) => section.items.length)
   )
 
-  const selected = ref(templates[0])
-  const previewOpen = ref(false)
-  const openPreview = (item: Template) => {
+  const loadingSections = [
+    { tiles: 6, id: 'frameworks' },
+    { tiles: 3, id: 'starters' }
+  ]
+
+  const initial = templates.value.find((item) => item.id === props.defaultPreview)
+  const selected = ref<TemplateBrowserTemplate | undefined>(initial ?? templates.value[0])
+  const previewOpen = ref(initial !== undefined)
+  const openPreview = (event: MouseEvent, item: TemplateBrowserTemplate) => {
     selected.value = item
     previewOpen.value = true
+    emit('select', event, item)
   }
   const categoryLabel = (id: string) =>
     CATEGORIES.find((category) => category.id === id)?.label ?? id
@@ -229,15 +164,91 @@
 
       <section
         class="@container/templates layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)"
+        :aria-busy="loading || undefined"
+        :aria-label="loading ? 'Loading templates' : undefined"
       >
         <PropertyFilter
           v-bind="propertyFilterProps"
           placeholder="Search templates"
           aria-label="Search templates"
+          :disabled="blocked"
         />
 
+        <template v-if="loading">
+          <div
+            v-for="section in loadingSections"
+            :key="section.id"
+            class="flex min-w-0 flex-col gap-(--layout-group-gap)"
+          >
+            <Skeleton
+              width="6rem"
+              height="1rem"
+            />
+            <ul
+              class="m-0 grid list-none grid-cols-1 gap-(--spacing-md) p-0 @xl/templates:grid-cols-2 @4xl/templates:grid-cols-3 @7xl/templates:grid-cols-4"
+            >
+              <li
+                v-for="tile in section.tiles"
+                :key="tile"
+                class="flex min-w-0"
+              >
+                <Card class="w-full">
+                  <template #default>
+                    <div class="flex flex-col items-start gap-(--spacing-md)">
+                      <Skeleton
+                        width="2.5rem"
+                        height="2.5rem"
+                      />
+                      <div class="flex w-full flex-col gap-(--spacing-xs)">
+                        <Skeleton
+                          width="60%"
+                          height="1rem"
+                        />
+                        <Skeleton height="0.875rem" />
+                        <Skeleton
+                          width="80%"
+                          height="0.875rem"
+                        />
+                      </div>
+                      <Skeleton
+                        width="4rem"
+                        height="1.25rem"
+                      />
+                    </div>
+                  </template>
+                </Card>
+              </li>
+            </ul>
+          </div>
+        </template>
+
+        <template v-else-if="error">
+          <Alert
+            severity="danger"
+            :label="error"
+            action-label="Retry"
+            @action="(event: MouseEvent) => emit('retry', event)"
+          />
+          <EmptyState
+            size="medium"
+            icon="ai ai-layout-grid"
+            title="Templates are unavailable"
+            description="The catalog shows here once it loads. You can still deploy from your own repository."
+          >
+            <template #actions>
+              <Button
+                label="Import from Git"
+                icon="ai ai-github"
+                variant="secondary"
+                size="small"
+                href="/create/import"
+              />
+            </template>
+          </EmptyState>
+        </template>
+
         <EmptyState
-          v-if="status === 'no-match'"
+          v-else-if="status === 'no-match'"
           size="medium"
           icon="ai ai-filter-off"
           title="No matching templates"
@@ -281,7 +292,7 @@
                   :logo="[item.icon, MARKS[item.framework]].filter(Boolean).join(' ')"
                   :description="item.description"
                   :badges="[{ label: FRAMEWORKS[item.framework], severity: 'neutral' }]"
-                  @select="openPreview(item)"
+                  @select="(event: MouseEvent) => openPreview(event, item)"
                 />
               </li>
             </ul>
@@ -291,6 +302,7 @@
     </div>
 
     <Drawer
+      v-if="selected"
       v-model:open="previewOpen"
       size="large"
       side="end"

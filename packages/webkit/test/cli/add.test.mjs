@@ -8,6 +8,12 @@ import { cleanup, cli, cliJson, makeProject, PKG_ROOT } from './lib/cli-project.
 
 const BLOCK = 'create/create-hub'
 const canonical = (file) => readFileSync(join(PKG_ROOT, 'blocks', BLOCK, file), 'utf8')
+const copiedPrimary = () =>
+  canonical('create-hub.vue').replace("'./sample'", "'./create-hub.sample'")
+const copiedVariant = (file) =>
+  canonical(file)
+    .replace("'../create-hub.vue'", "'./create-hub.vue'")
+    .replace("'../sample'", "'./create-hub.sample'")
 
 test('add copies the primary SFC into src/views and records it in the manifest', () => {
   const dir = makeProject()
@@ -15,15 +21,24 @@ test('add copies the primary SFC into src/views and records it in the manifest',
     const r = cli(dir, 'add', BLOCK)
     assert.equal(r.code, 0, r.stderr)
     const copied = readFileSync(join(dir, 'src/views/create-hub.vue'), 'utf8')
-    assert.equal(copied, canonical('create-hub.vue'))
+    assert.equal(copied, copiedPrimary())
+    const sample = readFileSync(join(dir, 'src/views/create-hub.sample.ts'), 'utf8')
+    assert.equal(sample, canonical('sample.ts'))
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
     const entry = manifest.blocks[BLOCK]
     assert.equal(entry.version, JSON.parse(readFileSync(join(PKG_ROOT, 'package.json'))).version)
     assert.deepEqual(entry.files, [
       {
+        path: 'src/views/create-hub.sample.ts',
+        source: `blocks/${BLOCK}/sample.ts`,
+        variant: 'Data',
+        checksum: checksum(sample)
+      },
+      {
         path: 'src/views/create-hub.vue',
         source: `blocks/${BLOCK}/create-hub.vue`,
         variant: 'Default',
+        imports: { './sample': './create-hub.sample' },
         checksum: checksum(copied)
       }
     ])
@@ -41,7 +56,7 @@ test('add resolves a short name, copies the chosen variant and the guidelines si
     assert.equal(r.code, 0, r.stderr)
     assert.equal(
       readFileSync(join(dir, 'src/views/create-hub-connected.vue'), 'utf8'),
-      canonical('variants/connected.vue')
+      copiedVariant('variants/connected.vue')
     )
     const guide = readFileSync(join(dir, 'src/views/create-hub.guidelines.md'), 'utf8')
     assert.ok(!guide.startsWith('#'), 'the H1 heading is stripped')
@@ -49,6 +64,7 @@ test('add resolves a short name, copies the chosen variant and the guidelines si
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
     assert.deepEqual(manifest.blocks[BLOCK].files.map((f) => f.variant).sort(), [
       'Connected',
+      'Data',
       'Default'
     ])
   } finally {
@@ -68,11 +84,12 @@ test('add --variant after the primary was added keeps the primary copy and adds 
     assert.equal(readFileSync(join(dir, 'src/views/create-hub.vue'), 'utf8'), edited)
     assert.equal(
       readFileSync(join(dir, 'src/views/create-hub-connected.vue'), 'utf8'),
-      canonical('variants/connected.vue')
+      copiedVariant('variants/connected.vue')
     )
     const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
     assert.deepEqual(manifest.blocks[BLOCK].files.map((f) => f.variant).sort(), [
       'Connected',
+      'Data',
       'Default'
     ])
   } finally {
@@ -90,10 +107,7 @@ test('add never overwrites without --force', () => {
     assert.ok(!existsSync(join(dir, 'webkit.blocks.json')))
     const forced = cli(dir, 'add', BLOCK, '--force')
     assert.equal(forced.code, 0, forced.stderr)
-    assert.equal(
-      readFileSync(join(dir, 'src/views/create-hub.vue'), 'utf8'),
-      canonical('create-hub.vue')
-    )
+    assert.equal(readFileSync(join(dir, 'src/views/create-hub.vue'), 'utf8'), copiedPrimary())
   } finally {
     cleanup(dir)
   }
@@ -169,6 +183,62 @@ test('add rejects an unknown block or variant with suggestions', () => {
     const variant = cli(dir, 'add', BLOCK, '--variant', 'Nope')
     assert.equal(variant.code, 1)
     assert.match(variant.stderr, /no variant "Nope"\. Variants: Default, Connected/)
+  } finally {
+    cleanup(dir)
+  }
+})
+
+test('add copies the block data files beside the SFC and points every local import at the copies', () => {
+  const dir = makeProject()
+  const shipped = (file) => readFileSync(join(PKG_ROOT, 'blocks/view/table-view', file), 'utf8')
+  try {
+    const r = cli(dir, 'add', 'view/table-view', '--variant', 'Empty')
+    assert.equal(r.code, 0, r.stderr)
+    const primary = readFileSync(join(dir, 'src/views/table-view.vue'), 'utf8')
+    assert.match(primary, /from '\.\/table-view\.sample'/)
+    assert.equal(primary, shipped('table-view.vue').replace("'./sample'", "'./table-view.sample'"))
+    assert.equal(
+      readFileSync(join(dir, 'src/views/table-view.sample.ts'), 'utf8'),
+      shipped('sample.ts')
+    )
+    const variant = readFileSync(join(dir, 'src/views/table-view-empty.vue'), 'utf8')
+    assert.match(variant, /import TableView from '\.\/table-view\.vue'/)
+    const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
+    const files = manifest.blocks['view/table-view'].files
+    assert.deepEqual(
+      files.map((f) => [f.path, f.variant, f.imports]),
+      [
+        ['src/views/table-view-empty.vue', 'Empty', { '../table-view.vue': './table-view.vue' }],
+        ['src/views/table-view.sample.ts', 'Data', undefined],
+        ['src/views/table-view.vue', 'Default', { './sample': './table-view.sample' }]
+      ]
+    )
+    const diff = cliJson(dir, 'diff', 'view/table-view')
+    assert.equal(diff.code, 0, diff.stderr)
+    assert.ok(diff.json.files.every((f) => f.status === 'identical'))
+  } finally {
+    cleanup(dir)
+  }
+})
+
+test('add renames the data files after a --dest name', () => {
+  const dir = makeProject()
+  try {
+    const r = cliJson(
+      dir,
+      'add',
+      'view/table-view',
+      '--dest',
+      'src/screens/Resources.vue',
+      '--dry-run'
+    )
+    assert.equal(r.code, 0)
+    assert.deepEqual(
+      r.json.files.map((f) => f.path),
+      ['src/screens/Resources.vue', 'src/screens/Resources.sample.ts']
+    )
+    assert.deepEqual(r.json.files[0].imports, { './sample': './Resources.sample' })
+    assert.deepEqual(r.json.files[1].imports, { './table-view.vue': './Resources.vue' })
   } finally {
     cleanup(dir)
   }

@@ -67,9 +67,76 @@ The drawer's content as a page, for the integration's own URL (the variant adds 
 
 The settings of one installed integration on one application (the variant adds `SettingsSection`, `Item`, `SettingsRow`, `Switch`, `Input` and `SaveBar`). `SettingsSection`s group them; an on/off setting is a compact `SettingsRow` in an `Item.List`, the rest are `Field`s. Errors follow `state/form-validation` (SectionRejected): nothing is red before Save; after it a danger `Alert` above and a `Field.Error` per field, focus on the first. Changes raise a `SaveBar` with Discard and Save. Saving settings is not a deploy, so the toast has no Edit or Redeploy.
 
+### M. Loading catalog — `Card`, `Skeleton` (required)
+
+While `loading` is set, the Featured row and the heading of All integrations give way to one band that is `aria-busy` and named Loading integrations: the disabled `PropertyFilter` over six `Card`s holding `Skeleton` shapes (mark, name, two lines, the badge and the action), in the grid of the tiles.
+
 ### Install toast — through `toast`
 
 Raised through `toast` with one id for the install, so progress turns into the outcome in place. Progress is `toast.loading` ("Installing Rate Guard on storefront…", "It keeps running if you close this panel."). Success is `toast.success`, closable, with Configure and Open application. Failure is `toast.error` with `duration: 0`, closable, with Edit (reopens the drawer with the same choice) and Reinstall. Leaving the page dismisses it. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing and runs no install itself. `MarketplaceIntegration`, `MarketplaceInstall` and `MarketplaceProps` are exported from `marketplace.vue`, and `sample.ts` holds the sample catalog and applications the block renders when `integrations` and `applications` are left out (the catalog never while `loading` is set).
+
+| Prop                   | Type                       | What it does                                                                                                 |
+| ---------------------- | -------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `integrations`         | `MarketplaceIntegration[]` | The catalog; the search, the properties, Featured and the tiles run on it in the browser.                    |
+| `applications`         | `string[]`                 | The applications an integration can be installed on; the drawer's `Select` lists the ones it is not on yet.  |
+| `loading`              | `boolean`                  | The catalog is loading: the search disables and six skeleton tiles hold the grid.                            |
+| `installing`           | `boolean`                  | The install request is in flight: Install spins, the field locks and the progress toast shows.               |
+| `error`                | `string`                   | Why the last install failed: the danger `Alert` with Reinstall and the permanent failure toast.              |
+| `installedApplication` | `string`                   | The application the last install succeeded on: the success `Alert`, the Installed tag and the success toast. |
+| `defaultText`          | `string`                   | Search text the filter starts with.                                                                          |
+| `defaultIntegration`   | `string`                   | Id of the integration whose drawer starts open.                                                              |
+| `defaultApplication`   | `string`                   | Application the install field starts with.                                                                   |
+
+| Event     | Payload                                 | When                                                          |
+| --------- | --------------------------------------- | ------------------------------------------------------------- |
+| `select`  | `(event, integration)`                  | A tile, or its Install or Configure button, opens the drawer. |
+| `install` | `(event, { integration, application })` | Install (or Reinstall) with an application chosen.            |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import Marketplace, { type MarketplaceInstall } from './marketplace.vue'
+
+  const { data, pending } = useIntegrations()
+  const { data: applications } = useApplications()
+  const installing = ref(false)
+  const installError = ref('')
+  const installedOn = ref('')
+
+  const install = async (event: Event, { integration, application }: MarketplaceInstall) => {
+    installing.value = true
+    installError.value = ''
+    installedOn.value = ''
+    try {
+      await installIntegration(integration.id, application)
+      installedOn.value = application
+    } catch (failure) {
+      installError.value = reasonOf(failure)
+    } finally {
+      installing.value = false
+    }
+  }
+</script>
+
+<template>
+  <Marketplace
+    :integrations="data ?? []"
+    :applications="applications ?? []"
+    :loading="pending"
+    :installing="installing"
+    :error="installError"
+    :installed-application="installedOn"
+    @install="install"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -117,13 +184,13 @@ Raised through `toast` with one id for the install, so progress turns into the o
 
 ## States
 
-- Default: Featured, All integrations, the filter and the tiles; a tile opens the drawer and Install runs and lands as a success toast and Alert.
-- Detail: the drawer is open on Request Signer with its details, overview, permissions and the install form.
-- Installing: Install is running on storefront; the button is `loading`, the field disabled and the progress toast says it keeps running.
-- Installed: Request Signer is installed on storefront; the success Alert, the Installed tag, Configure in the footer and the success toast with Configure and Open application.
-- InstallError: the install on checkout failed; the danger Alert with the reason and Reinstall, and the permanent toast with Edit and Reinstall.
-- NoMatch: the integration search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
-- Loading: the search is disabled and six `Skeleton` integration tiles hold the grid in a band that is `aria-busy`.
+- Default: `integrations`, or the sample; Featured, All integrations, the filter and the tiles; a tile opens the drawer and Install emits `install`; `installing`, `error` and `installedApplication` show its outcome.
+- Detail: `defaultIntegration="request-signer"`; the drawer is open on Request Signer with its details, overview, permissions and the install form.
+- Installing: `installing`, with `defaultApplication="storefront"`; Install is running on storefront; the button is `loading`, the field disabled and the progress toast says it keeps running.
+- Installed: `installedApplication="storefront"`; Request Signer is installed on storefront; the success Alert, the Installed tag, Configure in the footer and the success toast with Configure and Open application.
+- InstallError: `error`, with `defaultApplication="checkout"`; the install on checkout failed; the danger Alert with the reason and Reinstall, and the permanent toast with Edit and Reinstall.
+- NoMatch: `defaultText="kubernetes"`; the integration search "kubernetes" matches nothing; the Featured row hides and the empty state offers Clear filters.
+- Loading: `loading`; the search is disabled and six `Skeleton` integration tiles hold the grid in a band that is `aria-busy`.
 - SolutionPage: Waiting Room as a page, storefront on 1.3.0 (Update available) and checkout on 1.4.0.
 - Configure: Waiting Room settings on storefront, with the SaveBar after a change.
 

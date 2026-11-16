@@ -38,6 +38,45 @@ Above the step, a preview `Card` names the template, its one-sentence descriptio
 
 An outlined medium `Button` under the step that returns to the template list. It is the way back to choose another template; the header's back control leaves the flow.
 
+## Data
+
+The block takes the template and the account through props and emits every action; it fetches nothing. `DeployTemplateProps` and `DeployTemplateTemplate` are exported from `deploy-template.vue`, and `sample.ts` holds the sample template and account the block renders when a prop is left out. The variants are their own screens (the later steps of the flow) and keep their own records.
+
+| Prop            | Type                     | What it does                                                                       |
+| --------------- | ------------------------ | ---------------------------------------------------------------------------------- |
+| `template`      | `DeployTemplateTemplate` | The template: its name in the crumb, the preview card and the connect description. |
+| `account`       | `string`                 | The signed-in account, the avatar label.                                           |
+| `providersHref` | `string`                 | Where Manage connected providers leads.                                            |
+
+| Event      | Payload   | When                     |
+| ---------- | --------- | ------------------------ |
+| `back`     | `(event)` | Back to Creation Center. |
+| `account`  | `(event)` | The account button.      |
+| `connect`  | `(event)` | Continue with GitHub.    |
+| `skip-git` | `(event)` | Continue without Git.    |
+| `browse`   | `(event)` | Browse templates.        |
+
+To go live, render the block from the page that loads the template and pass it:
+
+```vue
+<script setup lang="ts">
+  import DeployTemplate from './deploy-template.vue'
+
+  const { template, account } = useTemplatePage()
+</script>
+
+<template>
+  <DeployTemplate
+    :template="template"
+    :account="account.email"
+    providers-href="/account/git-providers"
+    @connect="connectGitHub"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep the template preview card at the top of the column through every phase, so the user always sees what is being deployed.
@@ -83,7 +122,7 @@ An outlined medium `Button` under the step that returns to the template list. It
 
 ## States
 
-- ConnectGit: no Git provider yet; the template preview over the Connect a Git provider card and Browse templates.
+- ConnectGit: no Git provider yet; the `template` preview over the Connect a Git provider card and Browse templates.
 - Form: GitHub connected; scope and repository name side by side, public by default, over the store domain setting and the Build and output settings and Environment variables groups; Deploy shows the missing access token under its field.
 - BuildSettings: after a failed Deploy; both groups open, a Build preset on the detected Nuxt preset, and the required access token in error.
 - SettingsLoading: the template settings loading as Skeleton bands, Deploy disabled.

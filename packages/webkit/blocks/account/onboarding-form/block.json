@@ -30,6 +30,7 @@
     "name": "Organization",
     "file": "onboarding-form.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Plan",

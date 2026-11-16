@@ -43,6 +43,49 @@ Filters that hide every event fill the table's `#empty` slot with `No matching e
 
 A danger `Alert` with Retry takes the table's place; the controls stay so the reader can change the period.
 
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `ActivityHistoryEvent` and `ActivityHistoryProps` are exported from `activity-history.vue`, and `sample.ts` holds the sample events and the fixed clock the block renders when `events` and `now` are left out (the events never show while `loading` or `error` is set).
+
+| Prop      | Type                     | What it does                                                                                                   |
+| --------- | ------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `events`  | `ActivityHistoryEvent[]` | The log; the period, the filter, the sort and the pages run on it in the browser. Pass `[]` for none.          |
+| `now`     | `Date`                   | The moment relative periods count back from; pass the request time.                                            |
+| `range`   | `DateRangeValue`         | The selected period, two-way with `v-model:range` (the last 30 days by default); fetch the period it names.    |
+| `loading` | `boolean`                | A request is in flight. With no events it is the first load (the table's loading rows); with events a refresh. |
+| `error`   | `string`                 | Why the load failed, shown in the danger `Alert` with Retry that replaces the table.                           |
+
+| Event          | Payload   | When                                                  |
+| -------------- | --------- | ----------------------------------------------------- |
+| `refresh`      | `(event)` | Refresh.                                              |
+| `retry`        | `(event)` | Retry in the error alert.                             |
+| `update:range` | `(range)` | The period changed in the picker or the widen button. |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import ActivityHistory from './activity-history.vue'
+
+  const { data, range, requestedAt, pending, error, refresh } = useActivity()
+  const loadError = 'The activity could not be loaded. Nothing was changed; try again.'
+</script>
+
+<template>
+  <ActivityHistory
+    v-model:range="range"
+    :events="data ?? []"
+    :now="requestedAt"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Write each event as a past-tense sentence with the object's name: `Revoked personal token “Nightly export”`.
@@ -74,9 +117,9 @@ A danger `Alert` with Retry takes the table's place; the controls stay so the re
 ## States
 
 - Default: ten events over three weeks, the last 30 days selected, with filter, period, refresh, export, preferences, sorting and paging wired.
-- Empty: the last 15 minutes hold no event; a flush empty state offers the next longer period, the last hour.
-- Loading: the first load; the controls and the table's loading rows.
-- Error: the log did not load; a danger Alert with Retry.
+- Empty: the period (`range`, the last 15 minutes) holds no event; a flush empty state offers the next longer period, the last hour.
+- Loading: the first load (`loading` with no `events`); the controls and the table's loading rows.
+- Error: the log did not load (`error` is set); a danger Alert with the message and Retry.
 
 ## Related
 

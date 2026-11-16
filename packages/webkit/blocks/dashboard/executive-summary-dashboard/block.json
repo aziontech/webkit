@@ -26,6 +26,7 @@
     "name": "Default",
     "file": "executive-summary-dashboard.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Loading",

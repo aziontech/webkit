@@ -199,17 +199,68 @@ describe('auth#MfaSetup', () => {
 })
 
 describe('auth/sign-in', () => {
-  it('locks the step and shows the primary loading while Sign in is in flight', async () => {
+  it('emits submit with the credentials and follows the request state it is given', async () => {
     const view = render(Login)
     await fireEvent.update(view.getByLabelText('Email'), 'jane.doe@example.com')
     await fireEvent.click(view.getByRole('button', { name: 'Continue with email' }))
     await waitFor(() => expect(view.getByLabelText('Password')).toBeTruthy())
+    expect(view.emitted('continue')?.[0]?.[1]).toBe('jane.doe@example.com')
     await fireEvent.update(view.getByLabelText('Password'), 'correct-horse-battery')
     await fireEvent.click(view.getByRole('button', { name: 'Sign in' }))
+    const [event, values] = view.emitted('submit')?.[0] ?? []
+    expect(event).toBeInstanceOf(Event)
+    expect(values).toEqual({ email: 'jane.doe@example.com', password: 'correct-horse-battery' })
+    await view.rerender({ loading: true })
     expect(view.container.querySelector('form')?.getAttribute('aria-busy')).toBe('true')
     expect((view.container.querySelector('fieldset') as HTMLFieldSetElement).disabled).toBe(true)
+    await view.rerender({ loading: false, notice: 'signed-in' })
     await waitFor(() => expect(view.getByText('Signed in.')).toBeTruthy())
     expect((view.container.querySelector('fieldset') as HTMLFieldSetElement).disabled).toBe(false)
+  })
+
+  it('clears the password and shows the 401 notice when the request is rejected', async () => {
+    const view = render(Login, {
+      props: {
+        step: 'password',
+        defaultValues: { email: 'jane.doe@example.com', password: 'wrong-password' }
+      }
+    })
+    await view.rerender({ error: 'bad-credentials' })
+    await waitFor(() =>
+      expect(view.getByText('Incorrect email or password. Check both and try again.')).toBeTruthy()
+    )
+    expect((view.getByLabelText('Password') as HTMLInputElement).value).toBe('')
+    await waitFor(() => expect(document.activeElement).toBe(view.getByLabelText('Password')))
+  })
+
+  it('shows a free error message with Retry and emits the provider and the links it is given', async () => {
+    const view = render(Login, {
+      props: {
+        error: 'Azion did not accept this token.',
+        signUpHref: 'https://example.com/join',
+        homeHref: '/'
+      }
+    })
+    expect(view.getByText('Azion did not accept this token.')).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Retry' })).toBeTruthy()
+    expect(view.getByRole('link', { name: 'Sign up' }).getAttribute('href')).toBe(
+      'https://example.com/join'
+    )
+    expect(view.getByRole('link', { name: 'Azion home' }).getAttribute('href')).toBe('/')
+    await fireEvent.click(view.getByRole('button', { name: 'Continue with GitHub' }))
+    const [event, provider] = view.emitted('provider-click')?.[0] ?? []
+    expect(event).toBeInstanceOf(MouseEvent)
+    expect(provider).toBe('github')
+  })
+
+  it('emits reset-request with the email and moves to Check your inbox', async () => {
+    const view = render(Login, {
+      props: { step: 'password', defaultValues: { email: 'jane.doe@example.com' } }
+    })
+    await fireEvent.click(view.getByRole('button', { name: 'Forgot your password?' }))
+    await fireEvent.click(view.getByRole('button', { name: 'Send reset link' }))
+    expect(view.emitted('reset-request')?.[0]?.[1]).toBe('jane.doe@example.com')
+    expect(view.getByRole('heading', { level: 1, name: 'Check your inbox' })).toBeTruthy()
   })
 
   it('Forgot your password? is a button, not an anchor to #', async () => {
@@ -233,15 +284,33 @@ describe('auth/sign-in', () => {
     expect(view.queryByRole('button', { name: 'Retry' })).toBeNull()
   })
 
-  it('ServerError: Retry re-sends the request with the loading state', async () => {
-    const view = render(ServerError)
-    const retry = view.getByRole('button', { name: 'Retry' })
-    await fireEvent.click(retry)
+  it('ServerError: Retry re-sends the same credentials', async () => {
+    const view = render(Login, {
+      props: {
+        step: 'password',
+        defaultValues: { email: 'jane.doe@example.com', password: 'correct-horse-battery' },
+        error: 'server-error'
+      }
+    })
+    expect(view.getByText(/Sign-in failed on our side/)).toBeTruthy()
+    await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
+    expect(view.emitted('submit')?.[0]?.[1]).toEqual({
+      email: 'jane.doe@example.com',
+      password: 'correct-horse-battery'
+    })
+    await view.rerender({ loading: true })
     expect(view.container.querySelector('form')?.getAttribute('aria-busy')).toBe('true')
+    await view.rerender({ loading: false })
     await waitFor(() =>
       expect(view.container.querySelector('form')?.getAttribute('aria-busy')).toBeNull()
     )
     expect(view.getByText(/Sign-in failed on our side/)).toBeTruthy()
+  })
+
+  it('ServerError: the variant opens on the 500 notice with Retry', () => {
+    const view = render(ServerError)
+    expect(view.getByText(/Sign-in failed on our side/)).toBeTruthy()
+    expect(view.getByRole('button', { name: 'Retry' })).toBeTruthy()
   })
 
   it('EmailAlreadyRegistered: the exits are real links', () => {

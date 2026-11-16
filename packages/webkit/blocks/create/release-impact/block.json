@@ -24,6 +24,7 @@
     "name": "Ready",
     "file": "release-impact.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "ChooseSettings",
@@ -37,7 +38,7 @@
     },
     {
       "name": "Unavailable",
-      "summary": "The projects behind the Deployment Settings could not be read: a warning `Alert` says the impact is unknown and that the release can still deploy, the count of settings selected and Retry. Retry computes again and lands on a truncated list, shown with its own warning above the tree.",
+      "summary": "The projects behind the Deployment Settings could not be read: a warning `Alert` says the impact is unknown and that the release can still deploy, the count of settings selected and Retry. Retry emits `retry`; a list that comes back truncated (`truncated`) shows its own warning above the tree.",
       "file": "variants/unavailable.vue"
     },
     {
@@ -47,7 +48,7 @@
     },
     {
       "name": "Error",
-      "summary": "The last run failed: an error toast announces it and the danger `Alert` at the top says edge-policy was refused and nothing changed in traffic, with Edit (back to the resources) and Redeploy. Redeploy runs again through the same toast and succeeds.",
+      "summary": "The last run failed: an error toast announces it and the danger `Alert` at the top says edge-policy was refused and nothing changed in traffic, with Edit (back to the resources) and Redeploy. Redeploy emits `deploy` again; the parent sets `deploying` and the toast follows the run.",
       "file": "variants/error.vue"
     }
   ]

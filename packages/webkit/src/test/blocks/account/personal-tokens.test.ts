@@ -45,16 +45,29 @@ describe('account/tokens', () => {
     await userEvent.clear(name)
     await userEvent.type(name, 'Release bot')
     await fireEvent.click(buttonByText('Create Personal Token', drawer))
-    const reveal = await waitFor(
-      () => {
-        const node = Array.from(
-          document.querySelectorAll('[role="dialog"], [role="alertdialog"]')
-        ).find((item) => item.textContent?.includes('Copy your new token')) as HTMLElement
-        expect(node).toBeTruthy()
-        return node
-      },
-      { timeout: 2000 }
-    )
+    await waitFor(() => expect(view.emitted('create')).toHaveLength(1))
+    expect(view.emitted('create')![0][1]).toEqual({
+      name: 'Release bot',
+      description: '',
+      expiresInDays: 30
+    })
+    await view.rerender({ creating: true })
+    await waitFor(() => expect(name).toBeDisabled())
+    await view.rerender({
+      creating: false,
+      secret: {
+        name: 'Release bot',
+        secret: 'pat_0123456789abcdef0123456789abcdef0123456789abcdef'
+      }
+    })
+    const reveal = await waitFor(() => {
+      const node = Array.from(
+        document.querySelectorAll('[role="dialog"], [role="alertdialog"]')
+      ).find((item) => item.textContent?.includes('Copy your new token')) as HTMLElement
+      expect(node).toBeTruthy()
+      return node
+    })
+    expect(reveal.textContent).toContain('“Release bot” is ready.')
     const secret = reveal.querySelector('#token-secret') as HTMLInputElement
     expect(secret.value).toMatch(/^pat_[0-9a-f]{48}$/)
     expect(secret).toHaveAttribute('type', 'password')
@@ -64,8 +77,45 @@ describe('account/tokens', () => {
     expect(statuses[0]).toHaveAttribute('data-testid', 'copy-button__status')
     await expectNoA11yViolations(reveal)
     await fireEvent.click(buttonByText('I copied the token', reveal))
-    await waitFor(() => expect(document.body.textContent).not.toContain('Copy your new token'))
-    expect(view.getByText('Release bot')).toBeTruthy()
+    expect(view.emitted('update:secret')).toEqual([[null]])
+  })
+
+  it('renders the tokens it is given instead of the sample, and the empty card for none', async () => {
+    const view = render(Tokens, {
+      props: {
+        now: new Date(Date.UTC(2026, 10, 10, 12)),
+        tokens: [
+          {
+            id: 'tok-1',
+            name: 'Acme deploy',
+            description: 'Release job',
+            createdAt: new Date(Date.UTC(2026, 9, 1)),
+            createdBy: 'jane.doe@example.com',
+            expiresAt: new Date(Date.UTC(2026, 10, 12, 12)),
+            lastUsedAt: null,
+            revoked: false
+          }
+        ]
+      }
+    })
+    await waitFor(() => expect(view.container.textContent).toContain('Acme deploy'))
+    expect(view.container.textContent).not.toContain('Local CLI')
+    expect(view.container.textContent).toContain('Expires in 2 days')
+    view.unmount()
+    const empty = render(Tokens, { props: { tokens: [] } })
+    expect(empty.container.textContent).toContain('No personal tokens yet')
+  })
+
+  it('shows the error message with Retry and emits retry and refresh', async () => {
+    const failed = render(Tokens, { props: { error: 'The API answered 503.' } })
+    expect(failed.container.textContent).toContain('The API answered 503.')
+    expect(failed.container.textContent).not.toContain('Local CLI')
+    await fireEvent.click(failed.getByRole('button', { name: 'Retry' }))
+    expect(failed.emitted('retry')).toHaveLength(1)
+    failed.unmount()
+    const view = render(Tokens)
+    await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
+    expect(view.emitted('refresh')).toHaveLength(1)
   })
 
   it('revokes a token only after confirmation', async () => {
@@ -79,6 +129,7 @@ describe('account/tokens', () => {
     })
     expect(confirm.textContent).toContain('stop working right away')
     await fireEvent.click(buttonByText('Revoke token', confirm))
-    await waitFor(() => expect(view.getAllByText('Revoked').length).toBe(2), { timeout: 2000 })
+    await waitFor(() => expect(view.getAllByText('Revoked').length).toBe(2))
+    expect(view.emitted('revoke')![0][1]).toMatchObject({ id: 'tok-7c1e', name: 'Local CLI' })
   })
 })

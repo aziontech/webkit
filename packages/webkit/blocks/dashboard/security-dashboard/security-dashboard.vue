@@ -1,6 +1,8 @@
 <script setup lang="ts">
-  import BarList from '@aziontech/webkit/bar-list'
-  import Chart, { type ChartSeries } from '@aziontech/webkit/chart'
+  import Alert from '@aziontech/webkit/alert'
+  import BarList, { type BarListItem } from '@aziontech/webkit/bar-list'
+  import Button from '@aziontech/webkit/button'
+  import Chart, { type ChartLabel, type ChartSeries } from '@aziontech/webkit/chart'
   import ChartCard from '@aziontech/webkit/chart-card'
   import DataTable, { type TableColumn } from '@aziontech/webkit/data-table'
   import DialogContent from '@aziontech/webkit/dialog-content'
@@ -18,6 +20,7 @@
   import PanelBody from '@aziontech/webkit/panel-body'
   import PanelHeader from '@aziontech/webkit/panel-header'
   import Select from '@aziontech/webkit/select'
+  import Skeleton from '@aziontech/webkit/skeleton'
   import StatTile from '@aziontech/webkit/stat-tile'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
   import { toast } from '@aziontech/webkit/toast'
@@ -26,6 +29,177 @@
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
   import { computed, ref } from 'vue'
+
+  import {
+    sampleAttention,
+    sampleCardChanges,
+    sampleCategories,
+    sampleCountries,
+    sampleMatchedRequests,
+    samplePeriodRange,
+    sampleSourceIps,
+    sampleSummary
+  } from './sample'
+
+  /** The period every region reads. */
+  export type SecurityPeriod = '1h' | '24h' | '7d' | '30d'
+  /** The cards with a menu and an expanded view. */
+  export type SecurityCardId = 'matched' | 'categories' | 'countries' | 'ips'
+
+  /** One summary figure with its comparison. */
+  export interface SecurityMetric {
+    /** The figure; null shows a dash. */
+    value: number | null
+    /** Change against the previous period, in percent; null hides it. */
+    delta: number | null
+    /** The figure over the period, for the sparkline. */
+    trend: number[]
+  }
+
+  /** The three summary tiles. */
+  export interface SecuritySummary {
+    /** Requests blocked as attacks. */
+    blocked: SecurityMetric
+    /** Requests checked against the rules. */
+    inspected: SecurityMetric
+    /** Share of inspected requests blocked, in percent. */
+    blockRate: SecurityMetric
+  }
+
+  /** The Matched requests chart over the period. */
+  export interface SecurityMatchedRequests {
+    /** One label per point of the x axis. */
+    labels: ChartLabel[]
+    /** The Blocked and Logged series. */
+    series: ChartSeries[]
+  }
+
+  /** One row of the Top source IPs table. */
+  export interface SecuritySourceIp {
+    /** Stable key. */
+    id: string
+    /** The address. */
+    remoteAddress: string
+    /** Its network, with the AS number. */
+    asn: string
+    /** The country it came from. */
+    country: string
+    /** The attack category it matched most. */
+    category: string
+    /** Blocked requests from it in the period. */
+    requests: number
+  }
+
+  /** One entry of the Needs attention list. */
+  export interface SecurityAttentionEntry {
+    /** Stable key. */
+    id: string
+    /** Icon class. */
+    icon: string
+    /** What needs a decision. */
+    title: string
+    /** The detail. */
+    description: string
+    /** Color of the tag. */
+    severity: TagSeverity
+    /** Short tag text. */
+    tag: string
+    /** The link that resolves it. */
+    action: { label: string; href: string }
+  }
+
+  /** Change of each card's sum against the previous period, in percent. */
+  export type SecurityCardChanges = Record<SecurityCardId, number>
+
+  /** The start and end of the period, as ISO dates, used in the copied query. */
+  export interface SecurityPeriodRange {
+    /** Start of the period. */
+    begin: string
+    /** End of the period. */
+    end: string
+  }
+
+  export interface SecurityDashboardProps {
+    /** The three summary tiles. Left out, the sample renders. */
+    summary?: SecuritySummary
+    /** The Matched requests chart. Left out, the sample renders. */
+    matchedRequests?: SecurityMatchedRequests
+    /** Blocked requests by attack category. Left out, the sample renders. */
+    categories?: BarListItem[]
+    /** Blocked requests by country. Left out, the sample renders. */
+    countries?: BarListItem[]
+    /** The Top source IPs rows. Left out, the sample renders. */
+    sourceIps?: SecuritySourceIp[]
+    /** The Needs attention list. Left out, the sample renders. */
+    attention?: SecurityAttentionEntry[]
+    /** Change of each card's sum against the previous period. Left out, the sample renders. */
+    changes?: SecurityCardChanges
+    /** The start and end of the period. Left out, the sample renders. */
+    range?: SecurityPeriodRange
+    /** The period is loading. */
+    loading?: boolean
+    /** Why the period could not load, shown after what did not load in each danger alert. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<SecurityDashboardProps>(), {
+    summary: undefined,
+    matchedRequests: undefined,
+    categories: undefined,
+    countries: undefined,
+    sourceIps: undefined,
+    attention: undefined,
+    changes: undefined,
+    range: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent]
+  }>()
+
+  const period = defineModel<SecurityPeriod>('period', { default: '24h' })
+
+  const noMetric: SecurityMetric = { value: null, delta: null, trend: [] }
+  const blocked = computed(() => props.loading || props.error !== '')
+  const summary = computed<SecuritySummary>(
+    () =>
+      props.summary ??
+      (blocked.value
+        ? { blocked: noMetric, inspected: noMetric, blockRate: noMetric }
+        : sampleSummary)
+  )
+  const matched = computed<SecurityMatchedRequests>(
+    () =>
+      props.matchedRequests ?? (blocked.value ? { labels: [], series: [] } : sampleMatchedRequests)
+  )
+  const categories = computed(() => props.categories ?? (blocked.value ? [] : sampleCategories))
+  const countries = computed(() => props.countries ?? (blocked.value ? [] : sampleCountries))
+  const sourceIps = computed(() => props.sourceIps ?? (blocked.value ? [] : sampleSourceIps))
+  const attention = computed(() => props.attention ?? (blocked.value ? [] : sampleAttention))
+  const changes = computed(() => props.changes ?? (blocked.value ? null : sampleCardChanges))
+  const range = computed(() => props.range ?? samplePeriodRange)
+  const empty = computed(
+    () =>
+      !blocked.value &&
+      matched.value.series.length === 0 &&
+      categories.value.length === 0 &&
+      countries.value.length === 0 &&
+      sourceIps.value.length === 0 &&
+      attention.value.length === 0
+  )
+
+  const changeTag = (id: SecurityCardId) => {
+    const change = changes.value?.[id]
+    if (change === undefined) return null
+    const rising = change > 0
+    return {
+      label: `${rising ? '+' : ''}${change.toFixed(2)}%`,
+      severity: (rising ? 'danger' : 'success') as TagSeverity,
+      icon: rising ? 'ai ai-arrow-up-right' : 'ai ai-arrow-down-left'
+    }
+  }
 
   const fallbackPeriod = {
     value: '24h',
@@ -38,23 +212,12 @@
     { value: '7d', label: 'Last 7 days', comparison: 'vs previous 7 days' },
     { value: '30d', label: 'Last 30 days', comparison: 'vs previous 30 days' }
   ]
-  const period = ref(fallbackPeriod.value)
   const periodLabel = (value: string) => periods.find((entry) => entry.value === value)?.label ?? ''
   const currentPeriod = computed(
     () => periods.find((entry) => entry.value === period.value) ?? fallbackPeriod
   )
   const periodComparison = computed(() => currentPeriod.value.comparison)
   const periodSlug = computed(() => currentPeriod.value.label.toLowerCase().replaceAll(' ', '-'))
-
-  interface AttentionEntry {
-    id: string
-    icon: string
-    title: string
-    description: string
-    severity: TagSeverity
-    tag: string
-    action: { label: string; href: string }
-  }
 
   const { formatNumber } = useLocale()
 
@@ -63,198 +226,46 @@
   const formatCount = (value: number) => compact(value)
   const formatPercent = (value: number) => `${value.toFixed(value >= 10 ? 0 : 1)}%`
 
-  const requestsBlocked = 49277
-  const requestsBlockedDelta = 6.76
-  const requestsBlockedTrend = [
-    2547, 2598, 2722, 2380, 2434, 2481, 2396, 2333, 2051, 1803, 1877, 1809, 1903, 1705, 1524, 1496,
-    1576, 1830, 1771, 1883, 1818, 1941, 2304, 2095
-  ]
-  const requestsInspected = 2273686
-  const requestsInspectedDelta = 0.93
-  const requestsInspectedTrend = [
-    71719, 69758, 73190, 78995, 79204, 76566, 88893, 95004, 94033, 105848, 109796, 104325, 101445,
-    117083, 110447, 117449, 113337, 110448, 101923, 98948, 89588, 93348, 85977, 86362
-  ]
-  const blockRate = 2.19
-  const blockRateDelta = 17.07
-  const blockRateTrend = [
-    2.46, 2.27, 2.33, 2.15, 2.2, 1.92, 2.06, 1.82, 1.76, 1.71, 1.83, 1.83, 1.89, 1.95, 2.16, 2.25,
-    2.32, 2.31, 2.44, 2.54, 2.62, 2.63, 2.53, 2.62
-  ]
-
-  const labels = Array.from({ length: 24 }, (_, index) => new Date(Date.UTC(2026, 10, 9, index)))
-  const matchedRequests: ChartSeries[] = [
-    {
-      id: 'blocked',
-      name: 'Blocked',
-      color: 'danger',
-      values: [
-        1756, 2105, 1796, 2353, 2384, 2162, 2364, 2363, 2505, 2459, 2556, 2308, 2369, 2045, 1937,
-        1999, 1679, 1838, 1773, 1812, 1698, 1314, 1494, 1839
-      ]
-    },
-    {
-      id: 'logged',
-      name: 'Logged',
-      color: 'warning',
-      values: [
-        485, 472, 605, 637, 609, 606, 778, 776, 705, 723, 754, 636, 571, 692, 619, 453, 487, 407,
-        450, 378, 405, 416, 375, 369
-      ]
-    }
-  ]
-  const categories = [
-    { id: 'SQL injection', name: 'SQL injection', value: 18420 },
-    { id: 'Cross-site scripting', name: 'Cross-site scripting', value: 12960 },
-    { id: 'Path traversal', name: 'Path traversal', value: 7310 },
-    { id: 'Remote file inclusion', name: 'Remote file inclusion', value: 4180 },
-    { id: 'Command injection', name: 'Command injection', value: 3240 },
-    { id: 'Scanner probes', name: 'Scanner probes', value: 1870 }
-  ]
-  const countries = [
-    { id: 'United States', name: 'United States', value: 14820 },
-    { id: 'Brazil', name: 'Brazil', value: 10640 },
-    { id: 'Germany', name: 'Germany', value: 6130 },
-    { id: 'Netherlands', name: 'Netherlands', value: 4270 },
-    { id: 'India', name: 'India', value: 3480 },
-    { id: 'Singapore', name: 'Singapore', value: 2190 },
-    { id: 'France', name: 'France', value: 1460 }
-  ]
   const ipColumns: TableColumn[] = [
     {
-      id: 'remoteAddress',
       accessorKey: 'remoteAddress',
+      id: 'remoteAddress',
       header: 'IP address',
       align: 'start',
       sortable: true,
       principal: true
     },
     {
-      id: 'asn',
       accessorKey: 'asn',
+      id: 'asn',
       header: 'Network',
       align: 'start',
       sortable: true,
       principal: false
     },
     {
-      id: 'country',
       accessorKey: 'country',
+      id: 'country',
       header: 'Country',
       align: 'start',
       sortable: true,
       principal: false
     },
     {
-      id: 'category',
       accessorKey: 'category',
+      id: 'category',
       header: 'Main attack',
       align: 'start',
       sortable: true,
       principal: false
     },
     {
-      id: 'requests',
       accessorKey: 'requests',
+      id: 'requests',
       header: 'Blocked requests',
       align: 'end',
       sortable: true,
       principal: false
-    }
-  ]
-  const ipRows = [
-    {
-      id: '203.0.113.42',
-      remoteAddress: '203.0.113.42',
-      asn: 'AS64496 Hosting provider',
-      country: 'Netherlands',
-      category: 'SQL injection',
-      requests: 4120
-    },
-    {
-      id: '198.51.100.17',
-      remoteAddress: '198.51.100.17',
-      asn: 'AS64497 Anonymizing proxy',
-      country: 'Germany',
-      category: 'Cross-site scripting',
-      requests: 3640
-    },
-    {
-      id: '192.0.2.159',
-      remoteAddress: '192.0.2.159',
-      asn: 'AS64498 Unmanaged network',
-      country: 'Romania',
-      category: 'Path traversal',
-      requests: 2910
-    },
-    {
-      id: '203.0.113.172',
-      remoteAddress: '203.0.113.172',
-      asn: 'AS64496 Hosting provider',
-      country: 'Netherlands',
-      category: 'SQL injection',
-      requests: 2480
-    },
-    {
-      id: '198.51.100.139',
-      remoteAddress: '198.51.100.139',
-      asn: 'AS64499 VPN service',
-      country: 'Seychelles',
-      category: 'Command injection',
-      requests: 1960
-    },
-    {
-      id: '192.0.2.221',
-      remoteAddress: '192.0.2.221',
-      asn: 'AS64500 Research scanner',
-      country: 'United States',
-      category: 'Scanner probes',
-      requests: 1390
-    },
-    {
-      id: '198.51.100.130',
-      remoteAddress: '198.51.100.130',
-      asn: 'AS64501 Cloud provider',
-      country: 'United States',
-      category: 'Remote file inclusion',
-      requests: 1120
-    },
-    {
-      id: '192.0.2.23',
-      remoteAddress: '192.0.2.23',
-      asn: 'AS64502 Residential ISP',
-      country: 'United States',
-      category: 'Cross-site scripting',
-      requests: 860
-    }
-  ]
-  const attention: AttentionEntry[] = [
-    {
-      id: 'log-only',
-      icon: 'ai ai-eye',
-      title: 'A rule set logs requests it does not block',
-      description: 'The shop service runs its rule set in log-only mode: 1.2K requests passed.',
-      severity: 'warning',
-      tag: 'Log only',
-      action: { label: 'Review rules', href: '/security/rules' }
-    },
-    {
-      id: 'spike',
-      icon: 'ai ai-chart-line',
-      title: 'Attack spike on api.example.com',
-      description: 'SQL injection against the API rose 64% in the last hour.',
-      severity: 'danger',
-      tag: 'Spike',
-      action: { label: 'Open security metrics', href: '/metrics/security' }
-    },
-    {
-      id: 'no-rules',
-      icon: 'ai ai-shield',
-      title: 'Service without a rule set',
-      description: 'The docs service has no security rule set attached.',
-      severity: 'warning',
-      tag: 'No rules',
-      action: { label: 'Attach a rule set', href: '/security/rules' }
     }
   ]
   const forms = [
@@ -272,16 +283,13 @@
     orderBy: string
   }
 
-  const periodStart = '2026-11-09T00:00:00Z'
-  const periodEnd = '2026-11-09T23:59:59Z'
-
   const cardQuery = (report: CardQuery) =>
     [
       'query {',
       `  ${report.dataset}(`,
       '    limit: 5000',
       '    aggregate: { sum: requests }',
-      `    filter: { tsRange: { begin: "${periodStart}", end: "${periodEnd}" } }`,
+      `    filter: { tsRange: { begin: "${range.value.begin}", end: "${range.value.end}" } }`,
       `    orderBy: [${report.orderBy}]`,
       '  ) {',
       ...report.fields.map((field) => `    ${field}`),
@@ -300,9 +308,7 @@
     }
   }
 
-  type CardId = 'matched' | 'categories' | 'countries' | 'ips'
-
-  const queries: Record<CardId, CardQuery> = {
+  const queries: Record<SecurityCardId, CardQuery> = {
     matched: {
       dataset: 'securityMetrics',
       fields: ['ts', 'action', 'requests'],
@@ -332,22 +338,22 @@
     rows: () => object[]
   }
 
-  const seriesRows = (series: readonly ChartSeries[], axis: readonly (string | Date)[]) =>
+  const seriesRows = (series: readonly ChartSeries[], axis: readonly ChartLabel[]) =>
     axis.map((label, index) => ({
-      ts: label instanceof Date ? label.toISOString() : label,
+      ts: label instanceof Date ? label.toISOString() : String(label),
       ...Object.fromEntries(series.map((entry) => [entry.id, entry.values[index] ?? '']))
     }))
 
   const expanded = ref(false)
-  const expandedId = ref<CardId>('matched')
+  const expandedId = ref<SecurityCardId>('matched')
   const expandedReport = computed(() => reports[expandedId.value])
 
-  const openExpanded = (id: CardId) => {
+  const openExpanded = (id: SecurityCardId) => {
     expandedId.value = id
     expanded.value = true
   }
 
-  const onCardOption = (id: CardId, value: string | number) => {
+  const onCardOption = (id: SecurityCardId, value: string | number) => {
     const report = reports[id]
     if (value === 'query') {
       copyQuery(report)
@@ -358,50 +364,50 @@
     toast.success('CSV exported.', { description: filename })
   }
 
-  const reports: Record<CardId, CardReport> = {
+  const reports: Record<SecurityCardId, CardReport> = {
     matched: {
       ...queries.matched,
       label: 'Matched requests over time',
       description: 'Requests that matched a rule: blocked, or logged and allowed through.',
       columns: [
-        { id: 'ts', header: 'Time' },
-        { id: 'blocked', header: 'Blocked' },
-        { id: 'logged', header: 'Logged' }
+        { header: 'Time', id: 'ts' },
+        { header: 'Blocked', id: 'blocked' },
+        { header: 'Logged', id: 'logged' }
       ],
-      rows: () => seriesRows(matchedRequests, labels)
+      rows: () => seriesRows(matched.value.series, matched.value.labels)
     },
     categories: {
       ...queries.categories,
       label: 'Blocked requests by attack category',
       description: 'Blocked requests, broken down by the attack category of the rule they matched.',
       columns: [
-        { id: 'name', header: 'Attack category' },
-        { id: 'value', header: 'Blocked requests' }
+        { header: 'Attack category', id: 'name' },
+        { header: 'Blocked requests', id: 'value' }
       ],
-      rows: () => categories
+      rows: () => categories.value
     },
     countries: {
       ...queries.countries,
       label: 'Blocked requests by country',
       description: 'Blocked requests, broken down by the country they came from.',
       columns: [
-        { id: 'name', header: 'Country' },
-        { id: 'value', header: 'Blocked requests' }
+        { header: 'Country', id: 'name' },
+        { header: 'Blocked requests', id: 'value' }
       ],
-      rows: () => countries
+      rows: () => countries.value
     },
     ips: {
       ...queries.ips,
       label: 'Top source IPs by blocked requests',
       description: 'The addresses blocked most often, with their network and main attack.',
       columns: [
-        { id: 'remoteAddress', header: 'IP address' },
-        { id: 'asn', header: 'Network' },
-        { id: 'country', header: 'Country' },
-        { id: 'category', header: 'Main attack' },
-        { id: 'requests', header: 'Blocked requests' }
+        { header: 'IP address', id: 'remoteAddress' },
+        { header: 'Network', id: 'asn' },
+        { header: 'Country', id: 'country' },
+        { header: 'Main attack', id: 'category' },
+        { header: 'Blocked requests', id: 'requests' }
       ],
-      rows: () => ipRows
+      rows: () => sourceIps.value
     }
   }
 </script>
@@ -436,12 +442,13 @@
         <li class="flex min-w-0 flex-col">
           <StatTile
             label="Requests blocked"
-            :value="requestsBlocked"
+            :value="summary.blocked.value"
             :format-value="formatCount"
-            :delta="requestsBlockedDelta"
+            :delta="summary.blocked.delta"
             :delta-label="periodComparison"
             inverse
-            :trend="requestsBlockedTrend"
+            :trend="summary.blocked.trend"
+            :loading="loading"
           >
             <template #aside>
               <Hint
@@ -453,11 +460,12 @@
         <li class="flex min-w-0 flex-col">
           <StatTile
             label="Requests inspected"
-            :value="requestsInspected"
+            :value="summary.inspected.value"
             :format-value="formatCount"
-            :delta="requestsInspectedDelta"
+            :delta="summary.inspected.delta"
             :delta-label="periodComparison"
-            :trend="requestsInspectedTrend"
+            :trend="summary.inspected.trend"
+            :loading="loading"
           >
             <template #aside>
               <Hint content="Requests checked against security rules across every service." />
@@ -467,12 +475,13 @@
         <li class="flex min-w-0 flex-col">
           <StatTile
             label="Block rate"
-            :value="blockRate"
+            :value="summary.blockRate.value"
             :format-value="formatPercent"
-            :delta="blockRateDelta"
+            :delta="summary.blockRate.delta"
             :delta-label="periodComparison"
             inverse
-            :trend="blockRateTrend"
+            :trend="summary.blockRate.trend"
+            :loading="loading"
           >
             <template #aside>
               <Hint content="Share of inspected requests blocked as attacks." />
@@ -480,7 +489,25 @@
           </StatTile>
         </li>
       </ul>
+      <EmptyState
+        v-if="empty"
+        title="No security rules protect your services"
+        description="Security metrics and the Needs attention list appear once a rule set protects a service."
+        icon="ai ai-shield"
+        bordered
+      >
+        <template #actions>
+          <Button
+            label="Add rule set"
+            variant="primary"
+            size="medium"
+            icon="ai ai-plus"
+            href="/security/rules"
+          />
+        </template>
+      </EmptyState>
       <div
+        v-else
         class="grid grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] lg:grid-cols-12 lg:[--chart-grid-columns:12]"
       >
         <ChartCard :span="8">
@@ -502,9 +529,10 @@
                   icon="ai ai-calculator"
                 />
                 <Tag
-                  label="+19.01%"
-                  severity="danger"
-                  icon="ai ai-arrow-up-right"
+                  v-if="changeTag('matched')"
+                  :label="changeTag('matched')?.label"
+                  :severity="changeTag('matched')?.severity"
+                  :icon="changeTag('matched')?.icon"
                   size="small"
                 />
                 <ToggleGroup
@@ -520,6 +548,7 @@
                   variant="ghost"
                   size="small"
                   aria-label="Expand Matched requests over time"
+                  :disabled="blocked"
                   @click="openExpanded('matched')"
                 />
               </Tooltip>
@@ -534,6 +563,7 @@
                     variant="ghost"
                     size="small"
                     aria-label="More options for Matched requests over time"
+                    :disabled="blocked"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -550,13 +580,22 @@
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load matched requests over time. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <Chart
+              v-else
               v-model:active-index="activeIndex"
-              :series="matchedRequests"
-              :labels="labels"
+              :series="matched.series"
+              :labels="matched.labels"
               :format-value="formatCount"
               empty-title="No matched requests in this period"
               empty-description="Nothing was recorded in this period."
+              :loading="loading"
             >
               <Chart.Grid />
               <Chart.Axis type="y" />
@@ -578,7 +617,7 @@
               <ChartCard.Title>Needs attention</ChartCard.Title>
               <Hint content="Settings and traffic on your services that ask for a decision." />
             </span>
-            <ChartCard.Action>
+            <ChartCard.Action v-if="!blocked">
               <Tag
                 :label="`${attention.length} open`"
                 severity="neutral"
@@ -587,7 +626,33 @@
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
-            <Item.List>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load the attention list. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
+            <div
+              v-else-if="loading"
+              class="flex flex-col gap-(--spacing-md)"
+            >
+              <div
+                v-for="row in 3"
+                :key="row"
+                class="flex flex-col gap-(--spacing-xs)"
+              >
+                <Skeleton
+                  width="60%"
+                  height="0.875rem"
+                />
+                <Skeleton
+                  width="90%"
+                  height="0.75rem"
+                />
+              </div>
+            </div>
+            <Item.List v-else>
               <Item
                 v-for="entry in attention"
                 :key="entry.id"
@@ -641,9 +706,10 @@
                   icon="ai ai-calculator"
                 />
                 <Tag
-                  label="-0.03%"
-                  severity="success"
-                  icon="ai ai-arrow-down-left"
+                  v-if="changeTag('categories')"
+                  :label="changeTag('categories')?.label"
+                  :severity="changeTag('categories')?.severity"
+                  :icon="changeTag('categories')?.icon"
                   size="small"
                 />
               </span>
@@ -653,6 +719,7 @@
                   variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by attack category"
+                  :disabled="blocked"
                   @click="openExpanded('categories')"
                 />
               </Tooltip>
@@ -667,6 +734,7 @@
                     variant="ghost"
                     size="small"
                     aria-label="More options for Blocked requests by attack category"
+                    :disabled="blocked"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -683,10 +751,19 @@
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load blocked requests by attack category. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <BarList
+              v-else
               :items="categories"
               :format-value="formatCount"
               empty-title="No blocked requests in this period"
+              :loading="loading"
               aria-label="Blocked requests by attack category"
             />
           </ChartCard.Content>
@@ -708,9 +785,10 @@
                   icon="ai ai-calculator"
                 />
                 <Tag
-                  label="+9.33%"
-                  severity="danger"
-                  icon="ai ai-arrow-up-right"
+                  v-if="changeTag('countries')"
+                  :label="changeTag('countries')?.label"
+                  :severity="changeTag('countries')?.severity"
+                  :icon="changeTag('countries')?.icon"
                   size="small"
                 />
               </span>
@@ -720,6 +798,7 @@
                   variant="ghost"
                   size="small"
                   aria-label="Expand Blocked requests by country"
+                  :disabled="blocked"
                   @click="openExpanded('countries')"
                 />
               </Tooltip>
@@ -734,6 +813,7 @@
                     variant="ghost"
                     size="small"
                     aria-label="More options for Blocked requests by country"
+                    :disabled="blocked"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -750,10 +830,19 @@
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load blocked requests by country. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
             <BarList
+              v-else
               :items="countries"
               :format-value="formatCount"
               empty-title="No blocked requests in this period"
+              :loading="loading"
               aria-label="Blocked requests by country"
             />
           </ChartCard.Content>
@@ -778,9 +867,10 @@
                   icon="ai ai-calculator"
                 />
                 <Tag
-                  label="-6.79%"
-                  severity="success"
-                  icon="ai ai-arrow-down-left"
+                  v-if="changeTag('ips')"
+                  :label="changeTag('ips')?.label"
+                  :severity="changeTag('ips')?.severity"
+                  :icon="changeTag('ips')?.icon"
                   size="small"
                 />
               </span>
@@ -790,6 +880,7 @@
                   variant="ghost"
                   size="small"
                   aria-label="Expand Top source IPs by blocked requests"
+                  :disabled="blocked"
                   @click="openExpanded('ips')"
                 />
               </Tooltip>
@@ -804,6 +895,7 @@
                     variant="ghost"
                     size="small"
                     aria-label="More options for Top source IPs by blocked requests"
+                    :disabled="blocked"
                   />
                 </DropdownMenu.Trigger>
                 <DropdownMenu.Group>
@@ -820,7 +912,17 @@
             </ChartCard.Action>
           </ChartCard.Header>
           <ChartCard.Content>
-            <div class="flex min-w-0 flex-col gap-(--spacing-sm)">
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="`Couldn't load top source IPs by blocked requests. ${error}`"
+              action-label="Retry"
+              @action="(event) => emit('retry', event)"
+            />
+            <div
+              v-else
+              class="flex min-w-0 flex-col gap-(--spacing-sm)"
+            >
               <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
                 <div class="min-w-36 grow basis-(--container-3xs)">
                   <Input
@@ -840,7 +942,7 @@
               </div>
               <DataTable
                 v-model:global-filter="search"
-                :data="ipRows"
+                :data="sourceIps"
                 :columns="ipColumns"
                 row-key="id"
                 sortable
@@ -849,6 +951,7 @@
                 :page-size-options="[5, 10, 25]"
                 density="compact"
                 bordered
+                :loading="loading"
               >
                 <template #empty>
                   <EmptyState
@@ -890,8 +993,8 @@
                 />
               </div>
               <Chart
-                :series="matchedRequests"
-                :labels="labels"
+                :series="matched.series"
+                :labels="matched.labels"
                 :format-value="formatCount"
                 :height="420"
                 empty-title="No matched requests in this period"
@@ -920,7 +1023,7 @@
             />
             <DataTable
               v-else
-              :data="ipRows"
+              :data="sourceIps"
               :columns="ipColumns"
               row-key="id"
               sortable

@@ -44,6 +44,61 @@ A flush `Card` with an `Item` list, one small row per repository: glyph, name, i
 
 Beside the Start from template heading, a medium search `Input` that filters the templates by name and description, then a faded `ScrollArea` with an `aria-label`. A search with no match shows a small `EmptyState` with Clear search. For the full gallery with property filters, preview and loading or failed states, link to `view/template-browser`. Inside, sections in fixed order: Recommended framework cards in three columns from the large breakpoint, the starter templates one per kind of resource, then every other framework in two columns with the vendor beside the title. The starter and framework tiles are `Card variant="integration"` with `href`: the title is a link stretched over the tile, with the glyph, the vendor and one sentence. A Recommended card keeps its own glow markup, and its title is a link stretched over the card in the same way; no tile carries `role="button"`. A Recommended card shows its framework mark in grey until it is hovered or focused, then in colour, and lights a soft glow from its top start corner drawn from the mark: an `aria-hidden` span under the content (the `Card` carries `isolate`) holds a scaled, blurred, faded copy of the mark, so a colour mark glows in its own colours and a one-colour mark in `text-(--primary)`.
 
+## Data
+
+The block takes its accounts, repositories and templates through props and emits every action; it fetches nothing. `CreateHubAccount`, `CreateHubRepository`, `CreateHubTemplateSection` and `CreateHubProps` are exported from `create-hub.vue`, and `sample.ts` holds the sample repositories and templates the block renders when `repositories` or `templates` is left out (the repositories never while `loading` or `error` is set). `sampleAccounts` is what the variants pass to show a connected account.
+
+| Prop            | Type                         | What it does                                                                       |
+| --------------- | ---------------------------- | ---------------------------------------------------------------------------------- |
+| `accounts`      | `CreateHubAccount[]`         | The connected GitHub accounts. `[]` (the default) shows the connect state.         |
+| `repositories`  | `CreateHubRepository[]`      | The repositories of the selected scope, most recently pushed first.                |
+| `templates`     | `CreateHubTemplateSection[]` | The template sections, Recommended first.                                          |
+| `connecting`    | `boolean`                    | The GitHub authorization is in flight; Continue with GitHub spins.                 |
+| `connectError`  | `string`                     | Why the connection failed, shown in the danger `Alert` under Continue with GitHub. |
+| `loading`       | `boolean`                    | The repositories of the selected scope are loading; skeleton rows show.            |
+| `error`         | `string`                     | Why the repositories failed to load, shown in the danger `Alert` with Retry.       |
+| `v-model:scope` | `string`                     | The selected account; empty, the first account is selected.                        |
+
+| Event          | Payload               | When                                                                       |
+| -------------- | --------------------- | -------------------------------------------------------------------------- |
+| `connect`      | `(event)`             | Continue with GitHub, the first time and on a retry after an error.        |
+| `update:scope` | `(value)`             | Another account was selected in the scope `Select`; load its repositories. |
+| `retry`        | `(event)`             | Retry in the repositories error alert.                                     |
+| `import`       | `(event, repository)` | Import on a repository row.                                                |
+| `upload`       | `(event, files)`      | A file or a folder was picked through the system picker.                   |
+
+To go live, render the block from a page that owns the GitHub requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import CreateHub from './create-hub.vue'
+
+  const { accounts, connect, connecting, connectFailed } = useGitAccounts()
+  const scope = ref('')
+  const { data, pending, error, refresh } = useRepositories(scope)
+  const connectError =
+    "GitHub didn't connect. The authorization window closed before GitHub answered."
+  const loadError = "The repositories in this scope didn't load. GitHub didn't answer in time."
+</script>
+
+<template>
+  <CreateHub
+    v-model:scope="scope"
+    :accounts="accounts"
+    :connecting="connecting"
+    :connect-error="connectFailed ? connectError : ''"
+    :repositories="data ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @connect="connect"
+    @retry="refresh"
+    @import="(event, repository) => openImport(repository)"
+  />
+</template>
+```
+
+Then delete the sample imports. Pass `templates` from the template catalog, or keep the sample sections as the shipped list.
+
 ## Do
 
 - Keep both sources visible at once from the large breakpoint, the Git column first.
@@ -83,11 +138,11 @@ Beside the Start from template heading, a medium search `Input` that filters the
 
 ## States
 
-- Default: no Git account connected; the connect state beside the template gallery.
-- Connected: jane-doe is the selected scope and its ten most recently pushed repositories are listed, with Load more for the rest.
-- RepositoriesLoading: a scope was just picked; six skeleton rows stand in for the repositories.
-- ConnectError: the GitHub connection failed; a danger Alert under Continue with GitHub.
-- LoadError: the repositories failed to load; a danger Alert with Retry in place of the list.
+- Default: no Git account connected (`accounts` is `[]`); the connect state beside the template gallery.
+- Connected: `accounts` is passed and jane-doe, the first, is the selected scope; its ten most recently pushed repositories are listed, with Load more for the rest.
+- RepositoriesLoading: a scope was just picked (`loading`); six skeleton rows stand in for the repositories.
+- ConnectError: the GitHub connection failed (`connectError` is set); a danger Alert under Continue with GitHub.
+- LoadError: the repositories failed to load (`error` is set); a danger Alert with Retry in place of the list.
 
 ## Related
 

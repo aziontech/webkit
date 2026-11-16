@@ -18,7 +18,7 @@ DropZone is a page-body overlay inside the default slot of `ConsoleLayout` (`she
 
 ## Building blocks
 
-The primary SFC is the drop target. The variants are the overlay that follows. **Upload list (Initializing, UploadError):** `UploadProgress` with `:floating="false"`, centred under the heading: one row per received file with its name, size and status in words (Done, the percentage and a progress bar while uploading, Waiting), Cancel on moving files and Retry on a failed one. It announces the summary through its own status region; the page adds no second live region. A drop of more than 50 files lists only the files still moving, so a repository with `node_modules` never renders thousands of rows; the heading keeps the full count. **Failure summary (UploadError):** A danger `Alert` above the list says how many files failed and what to do, with Retry, which retries every failed file.
+The primary SFC is the drop target and, once `uploads` is set, the overlay that follows.
 
 ### A. Drop target — `FileDropzone` (required)
 
@@ -27,6 +27,51 @@ The inline `FileDropzone` with `directories`, filling the page body: its title s
 ### B. Keyboard way in — `Button` (required)
 
 An outlined Choose a folder `Button` in the dropzone's default slot opens a hidden folder picker (`webkitdirectory`). Drag and drop is a shortcut, never the only way; keyboard and screen reader users take this button.
+
+### C. Upload list — `UploadProgress` (Initializing, UploadError)
+
+`UploadProgress` with `:floating="false"`, centred under the heading: one row per received file with its name, size and status in words (Done, the percentage and a progress bar while uploading, Waiting), Cancel on moving files and Retry on a failed one. It announces the summary through its own status region; the page adds no second live region. A drop of more than 50 files lists only the files still moving, so a repository with `node_modules` never renders thousands of rows; the heading keeps the full count.
+
+### D. Failure summary — `Alert` (UploadError)
+
+A danger `Alert` above the list says how many files failed and what to do, with Retry, which retries every failed file.
+
+## Data
+
+The block fetches and uploads nothing: it hands the chosen files to the page and renders the upload the page reports back. `ProjectIntakeUpload` and `ProjectIntakeProps` are exported from `project-intake.vue`, and `sample.ts` holds the two sample uploads the Initializing and UploadError variants pass.
+
+| Prop          | Type                    | What it does                                                                                                  |
+| ------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------- |
+| `uploads`     | `ProjectIntakeUpload[]` | The files of the upload, in order, with their status and progress. Set, the overlay replaces the drop target. |
+| `title`       | `string`                | The drop target's heading (`Drop your project to deploy it`).                                                 |
+| `description` | `string`                | What the drop target accepts.                                                                                 |
+
+| Event    | Payload          | When                                                                                                                                  |
+| -------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `select` | `(event, files)` | Files were dropped, or a folder was chosen with Choose a folder.                                                                      |
+| `retry`  | `(event, id)`    | Retry on one failed file (its `id`), or Retry in the `Alert` (`undefined`, every failed file). The row shows uploading again at once. |
+| `cancel` | `(event, id)`    | Cancel on one moving file, or Cancel all (`undefined`). The row shows canceled at once.                                               |
+
+To go live, start the upload on `select` and pass its progress back:
+
+```vue
+<script setup lang="ts">
+  import ProjectIntake from './project-intake.vue'
+
+  const { uploads, start, retry, cancel } = useProjectUpload()
+</script>
+
+<template>
+  <ProjectIntake
+    :uploads="uploads"
+    @select="(event, files) => start(files)"
+    @retry="(event, id) => retry(id)"
+    @cancel="(event, id) => cancel(id)"
+  />
+</template>
+```
+
+Keep `uploads` `undefined` until the first file arrives, so the drop target shows. Then delete `sample.ts` with the variants.
 
 ## Do
 
@@ -61,9 +106,9 @@ An outlined Choose a folder `Button` in the dropzone's default slot opens a hidd
 
 ## States
 
-- DropZone: the drop target fills the page body with the drop message and Choose a folder.
-- Initializing: the overlay mid-upload, two files uploaded, the third uploading, two queued, each row with its status in words, path and size.
-- UploadError: one file failed; its row shows the reason and Retry, and a danger `Alert` above the list sums it up with Retry.
+- DropZone: `uploads` left out; the drop target fills the page body with the drop message and Choose a folder.
+- Initializing: `uploads` set; the overlay mid-upload, two files uploaded, the third uploading, two queued, each row with its status in words, path and size.
+- UploadError: `uploads` holds a file with `status: 'error'`; one file failed, its row shows the reason and Retry, and a danger `Alert` above the list sums it up with Retry.
 
 ## Related
 

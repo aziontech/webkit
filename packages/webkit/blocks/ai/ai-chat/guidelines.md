@@ -60,6 +60,51 @@ Variant Artifact only; it adds `ArtifactPreview`, `ArtifactCanvas`, `Resizable`,
 
 When an answer produces something longer than a message (a query, a configuration, a table), the message carries an `ArtifactPreview` with Open and the whole artifact opens in an `ArtifactCanvas` beside the conversation: a `Resizable.Pane` (`min` 320, `max` 880) after a `Resizable.Handle` named `Resize the artifact`, so the reader widens or narrows it with the pointer or the arrow keys. Under the md breakpoint the pane and handle are hidden and Open shows the same canvas in a full-height `Drawer`. Every follow-up that changes the artifact adds a version: the canvas moves to it, `streaming` locks the pager and marks the body busy while it is written, and each message's preview names its version (`Version 3`) and opens that one. Open moves focus to the canvas title; Close (or Escape inside the canvas) hides it and returns focus to the Open that showed it; `Show artifact` in the header brings a closed canvas back.
 
+## Data
+
+The block takes the conversation through props and emits every action; it calls no model. `AiChatMessage`, `AiChatProps` and `AiChatFeedback` are exported from `ai-chat.vue`, and `sample.ts` holds the starter prompts the empty state renders when `suggestions` is left out, plus the sample threads the variants pass. The draft in the composer stays local.
+
+| Prop          | Type                    | What it does                                                                                                                                |
+| ------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`    | `AiChatMessage[]`       | The conversation, oldest first: the reader's text, the assistant's Markdown with its reasoning and sources. Empty, the empty state renders. |
+| `suggestions` | `SuggestionGroupItem[]` | The starter prompts under the empty state.                                                                                                  |
+| `followUps`   | `SuggestionGroupItem[]` | Follow-up questions under the last finished answer.                                                                                         |
+| `loading`     | `boolean`               | The assistant is answering: the last assistant message thinks while its `content` is empty, then streams; the composer shows Stop.          |
+| `error`       | `string`                | Why the last answer failed, shown on it with Try again; its partial text stays.                                                             |
+
+| Event      | Payload                | When                                                                                      |
+| ---------- | ---------------------- | ----------------------------------------------------------------------------------------- |
+| `send`     | `(event, text)`        | The composer, a starter prompt or a follow-up; append the reader's message and the reply. |
+| `stop`     | `(event)`              | Stop while the answer streams; keep the text and set `stopped` on it.                     |
+| `retry`    | `(event, message)`     | Try again on a failed answer or Regenerate response.                                      |
+| `new-chat` | `(event)`              | New chat; clear `messages`.                                                               |
+| `feedback` | `({ message, value })` | The reader rated an answer.                                                               |
+
+To go live, render the block from a page that owns the conversation and the model call:
+
+```vue
+<script setup lang="ts">
+  import AiChat from './ai-chat.vue'
+
+  const { messages, streaming, error, send, stop, retry, reset } = useAssistant()
+  const failed = 'The connection was interrupted before the response finished.'
+</script>
+
+<template>
+  <AiChat
+    :messages="messages"
+    :loading="streaming"
+    :error="error ? failed : ''"
+    @send="(_event, text) => send(text)"
+    @stop="stop"
+    @retry="(_event, message) => retry(message)"
+    @new-chat="reset"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Show the loading text only after a second; a response that arrives faster streams directly.
@@ -103,11 +148,11 @@ When an answer produces something longer than a message (a query, a configuratio
 
 ## States
 
-- Empty: the assistant before the first message, with the empty state and four support prompts; selecting one runs a full response.
-- Streaming: a response arriving with its caret and Stop in the composer, then sources, actions and follow-ups.
-- Error: a failed response with its partial text, the error line and Try again.
-- Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up streams version 3 into it.
-- LongThread: six earlier turns that overflow the log, opened on the newest response.
+- Empty: `messages` left out or `[]`, with the empty state and four support prompts; selecting one emits `send`.
+- Streaming: `loading` with the last assistant message part-way written: its caret, the busy region and Stop in the composer.
+- Error: `error` set: the last answer keeps its partial text, with the error line and Try again.
+- Artifact: two turns that wrote top-orders.sql in two versions, the canvas open beside them on version 2; a follow-up fills the composer.
+- LongThread: six earlier turns as `messages` that overflow the log, opened on the newest response, with `followUps`.
 
 ## Related
 

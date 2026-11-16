@@ -67,6 +67,66 @@ The plans are full-width `RadioGroup` cards, each with its name `Tag` and price.
 
 The usage and role questions as `RadioGroup` cards, a `Field.Label` choice card around a `Switch` for the onboarding session, and one `Alert` in the card for the create outcome.
 
+## Data
+
+The block takes the signed-in account, the plans and the create request's state through props and emits the answers; it fetches nothing and fakes no request. `OnboardingFormValues`, `OnboardingFormPlan`, `OnboardingFormAccount` and `OnboardingFormProps` are exported from `onboarding-form.vue`, and `sample.ts` holds the sample account and plans the block renders when `account` or `plans` is left out. The form keeps its own draft across the three steps.
+
+| Prop            | Type                    | What it does                                                                                                                                          |
+| --------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `account`       | `OnboardingFormAccount` | The signed-in account: its email in the wireframe, the address the upgrade drawer reuses and the card on file.                                        |
+| `plans`         | `OnboardingFormPlan[]`  | The plan rows. A plan with `charge` opens the upgrade drawer (its `features` and charge per period); one without selects directly.                    |
+| `defaultValues` | `OnboardingFormDraft`   | Answers the form opens with (a draft restored from storage).                                                                                          |
+| `step`          | `number`                | The open step, `0` to `2` (`v-model:step` to own it, for a route per step).                                                                           |
+| `loading`       | `boolean`               | The create request is in flight: the last step locks and Create Organization spins. When it turns off with no `error`, `Organization created.` shows. |
+| `error`         | `string`                | Why the organization was not created, shown in the danger `Alert` with Retry; the answers are kept.                                                   |
+
+| Event         | Payload           | When                                                                                           |
+| ------------- | ----------------- | ---------------------------------------------------------------------------------------------- |
+| `submit`      | `(event, values)` | Create Organization (or Retry in the alert) with both answers given; `values` is every answer. |
+| `cancel`      | `(event)`         | Cancel; the answers are already cleared and the form is back on the first step.                |
+| `update:step` | `(step)`          | The open step changed.                                                                         |
+
+To go live, render the block from a route that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import OnboardingForm, { type OnboardingFormValues } from './onboarding-form.vue'
+
+  const { data: account } = useAccount()
+  const { data: plans } = usePlans()
+  const creating = ref(false)
+  const createError = ref('')
+
+  const create = async (_event: MouseEvent, values: OnboardingFormValues) => {
+    creating.value = true
+    createError.value = ''
+    try {
+      await createOrganization(values)
+    } catch {
+      createError.value =
+        "The organization wasn't created. Check your connection, then retry. Your answers are kept."
+    } finally {
+      creating.value = false
+    }
+  }
+</script>
+
+<template>
+  <OnboardingForm
+    v-if="account && plans"
+    :account="account"
+    :plans="plans"
+    :loading="creating"
+    :error="createError"
+    @submit="create"
+    @cancel="router.push('/login')"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Validate on Next, not on every keystroke; required fields show the amber prompt, not the red error.
@@ -95,9 +155,9 @@ The usage and role questions as `RadioGroup` cards, a `Field.Label` choice card 
 
 ## States
 
-- Organization: step 1 of 3, name fields and the organization mark.
-- Plan: step 2 of 3, the plans as rows; Free selects directly, Pro or Enterprise opens the upgrade drawer and selects only once Upgrade is pressed. The drawer is the Checkout of `account/change-plan-drawer` (What's included as a `PlanFeatureList`, the charge, the payment method and the billing address); keep its fields and copy identical to that block rather than diverging.
-- Profile: step 3 of 3, the usage and role questions, the onboarding-session switch and Create Organization, which locks the step while the request runs and answers in one `Alert` in the card: `Organization created.`, or, when the request fails (offline), `The organization wasn't created. Check your connection, then retry. Your answers are kept.` with Retry.
+- Organization: step 1 of 3 (`step` is `0`, the default), name fields and the organization mark.
+- Plan: step 2 of 3 (`step` is `1`), the plans as rows; Free selects directly, Pro or Enterprise opens the upgrade drawer and selects only once Upgrade is pressed. The drawer is the Checkout of `account/change-plan-drawer` (What's included as a `PlanFeatureList`, the charge, the payment method and the billing address); keep its fields and copy identical to that block rather than diverging.
+- Profile: step 3 of 3 (`step` is `2`), the usage and role questions, the onboarding-session switch and Create Organization, which emits `submit` and locks the step while `loading` is set, then answers in one `Alert` in the card: `Organization created.` when `loading` turns off with no `error`, or the `error` message (`The organization wasn't created. Check your connection, then retry. Your answers are kept.`) with Retry.
 
 ## Related
 

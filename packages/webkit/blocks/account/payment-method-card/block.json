@@ -28,6 +28,7 @@
     "name": "Default",
     "file": "payment-method-card.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Editing",

@@ -62,4 +62,50 @@ describe('account/users', () => {
     await waitFor(() => expect(dialog()?.textContent).toContain('avery.stone@example.com'))
     expect(button(dialog()!, 'Edit role')).toBeUndefined()
   })
+
+  it('renders the users it is given and emits invite with the values instead of faking a send', async () => {
+    const view = render(Users, {
+      props: {
+        defaultInviteOpen: true,
+        teams: [{ value: 'ops', label: 'Operations' }],
+        users: [
+          {
+            id: 'u-9',
+            name: 'Jane Doe',
+            email: 'jane.doe@example.com',
+            owner: true,
+            role: 'Owner',
+            teams: ['ops'],
+            status: 'Active',
+            lastActive: null
+          }
+        ]
+      }
+    })
+    expect(view.container.textContent).toContain('Jane Doe')
+    expect(view.container.textContent).not.toContain('Avery Stone')
+    expect(view.container.textContent).toContain('You are the only user')
+    await waitFor(() => expect(dialog()).not.toBeNull())
+    await fireEvent.update(
+      dialog()!.querySelector<HTMLInputElement>('#invite-email')!,
+      'John.Smith@example.com'
+    )
+    await fireEvent.click(button(dialog()!, 'Send invitation'))
+    await waitFor(() => expect(view.emitted('invite')).toHaveLength(1))
+    const [event, values] = view.emitted('invite')![0] as [Event, unknown]
+    expect(event).toBeInstanceOf(Event)
+    expect(values).toEqual({ email: 'john.smith@example.com', teams: ['developers'] })
+  })
+
+  it('emits refresh and retry, and shows the error message in place of the table', async () => {
+    const view = render(Users, { props: { error: 'The API answered 503.' } })
+    expect(view.container.textContent).toContain('The API answered 503.')
+    expect(view.queryByRole('table')).toBeNull()
+    await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
+    expect(view.emitted('retry')).toHaveLength(1)
+    view.unmount()
+    const list = render(Users)
+    await fireEvent.click(list.getByRole('button', { name: 'Refresh' }))
+    expect(list.emitted('refresh')).toHaveLength(1)
+  })
 })

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -16,368 +17,263 @@
   import { toast } from '@aziontech/webkit/toast'
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { type CsvColumn, downloadCsv, toCsv } from '@aziontech/webkit/utils/csv'
-  import { ref } from 'vue'
+  import { computed, ref } from 'vue'
 
-  type MetricFormat = 'currency' | 'count' | 'percentage' | 'uptime' | 'score' | 'cost'
+  import { sampleGoals, sampleKpis, sampleLabels, sampleNotes, sampleTrends } from './sample'
 
-  interface Figure {
-    id: string
-    label: string
-    description: string
+  /** A scorecard tile and its twelve-month trend. */
+  export type ExecutiveSummaryDashboardMetric =
+    'revenue' | 'active-users' | 'retention' | 'nps' | 'uptime' | 'cost-per-request'
+
+  /** How a figure is written. */
+  export type ExecutiveSummaryDashboardFormat =
+    'currency' | 'count' | 'percentage' | 'uptime' | 'score' | 'cost'
+
+  /** The figure a scorecard tile shows. */
+  export interface ExecutiveSummaryDashboardKpi {
+    /** The figure for the quarter; null reads as a dash. */
     value: number | null
-    format: MetricFormat
+    /** Percent change against last quarter; null hides the delta. */
     delta: number | null
-    inverse: boolean
   }
 
-  interface StatusTag {
+  /** The scorecard figures, by metric; a metric left out reads as a dash. */
+  export type ExecutiveSummaryDashboardKpis = Partial<
+    Record<ExecutiveSummaryDashboardMetric, ExecutiveSummaryDashboardKpi>
+  >
+
+  /** A labelled status tag. */
+  export interface ExecutiveSummaryDashboardStatus {
+    /** The tag text. */
     label: string
+    /** The tag color. */
     severity: TagSeverity
   }
 
-  interface Goal {
+  /** One row of the quarter goals. */
+  export interface ExecutiveSummaryDashboardGoal {
+    /** Stable key. */
     id: string
+    /** What the goal measures. */
     label: string
+    /** Where it stands now. */
     current: number
+    /** Where it should end the quarter. */
     target: number
-    format: MetricFormat
-    status: StatusTag
+    /** How the current and target figures are written. */
+    format: ExecutiveSummaryDashboardFormat
+    /** On track, at risk or off track. */
+    status: ExecutiveSummaryDashboardStatus
   }
 
-  interface TrendChange extends StatusTag {
+  /** The change tag in a trend card header. */
+  export interface ExecutiveSummaryDashboardChange extends ExecutiveSummaryDashboardStatus {
+    /** Icon class of the direction arrow. */
     icon: string
   }
 
-  interface Trend {
-    id: string
-    title: string
-    description: string
-    mark: 'area' | 'line'
-    format: MetricFormat
-    min: number
-    change: TrendChange | null
-    series: ChartSeries[]
+  /** The data of one trend card. */
+  export interface ExecutiveSummaryDashboardTrend {
+    /** One value per month label. */
+    values: (number | null)[]
+    /** The change over the twelve months; null hides the tag. */
+    change: ExecutiveSummaryDashboardChange | null
   }
 
-  interface Note {
+  /** The trend cards' data, by metric; a metric left out shows its empty state. */
+  export type ExecutiveSummaryDashboardTrends = Partial<
+    Record<ExecutiveSummaryDashboardMetric, ExecutiveSummaryDashboardTrend>
+  >
+
+  /** One note in Commentary. */
+  export interface ExecutiveSummaryDashboardNote {
+    /** Stable key. */
     id: string
+    /** Who wrote it. */
     author: string
+    /** The avatar initials. */
     initials: string
+    /** The author's role. */
     role: string
+    /** When it was written, as an ISO date. */
     date: string
+    /** The same date, formatted for reading. */
     dateLabel: string
+    /** The note itself. */
     body: string
   }
 
-  const loading = false
+  export interface ExecutiveSummaryDashboardProps {
+    /** The scorecard figures. Left out, the sample renders. */
+    kpis?: ExecutiveSummaryDashboardKpis
+    /** The quarter goals. Left out, the sample renders. */
+    goals?: ExecutiveSummaryDashboardGoal[]
+    /** The month labels of the trend charts. Left out, the sample renders. */
+    labels?: string[]
+    /** The trend cards' values and change tags. Left out, the sample renders. */
+    trends?: ExecutiveSummaryDashboardTrends
+    /** The notes from the leads, newest first. Left out, the sample renders. */
+    notes?: ExecutiveSummaryDashboardNote[]
+    /** The quarter is loading: every region shows its skeleton. */
+    loading?: boolean
+    /** Why the quarter could not load, after the name of each card in its danger alert. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<ExecutiveSummaryDashboardProps>(), {
+    kpis: undefined,
+    goals: undefined,
+    labels: undefined,
+    trends: undefined,
+    notes: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    retry: [event: MouseEvent]
+    export: [event: MouseEvent]
+  }>()
+
+  const quarter = defineModel<string>('quarter', { default: 'Q3 2026' })
+
   const comparison = 'vs last quarter'
-  const quarter = ref('Q3 2026')
   const activeIndex = ref<number | null>(null)
 
   const quarters = ['Q3 2026', 'Q2 2026', 'Q1 2026', 'Q4 2025', 'Q3 2025']
 
-  const figures: Figure[] = [
+  const tiles: {
+    metric: ExecutiveSummaryDashboardMetric
+    label: string
+    description: string
+    format: ExecutiveSummaryDashboardFormat
+    inverse: boolean
+  }[] = [
     {
-      id: 'revenue',
+      metric: 'revenue',
       label: 'Revenue',
       description: 'Recognized revenue for the quarter.',
-      value: 4820000,
       format: 'currency',
-      delta: 5.7,
       inverse: false
     },
     {
-      id: 'active-users',
+      metric: 'active-users',
       label: 'Monthly active users',
       description: 'People who signed in at least once in the last month of the quarter.',
-      value: 128400,
       format: 'count',
-      delta: 5.1,
       inverse: false
     },
     {
-      id: 'retention',
+      metric: 'retention',
       label: 'Net revenue retention',
       description: 'Revenue kept from existing customers, expansion included, over twelve months.',
-      value: 112,
       format: 'percentage',
-      delta: 1.8,
       inverse: false
     },
     {
-      id: 'nps',
+      metric: 'nps',
       label: 'NPS',
       description: 'Net promoter score from the quarterly customer survey.',
-      value: 47,
       format: 'score',
-      delta: 6.8,
       inverse: false
     },
     {
-      id: 'uptime',
+      metric: 'uptime',
       label: 'Uptime',
       description: 'Share of minutes every public service answered, averaged over the quarter.',
-      value: 99.97,
       format: 'uptime',
-      delta: 0.02,
       inverse: false
     },
     {
-      id: 'cost-per-request',
+      metric: 'cost-per-request',
       label: 'Cost per request',
       description: 'Infrastructure spend divided by requests served. A rise is a regression.',
-      value: 0.00217,
       format: 'cost',
-      delta: -7.1,
       inverse: true
     }
   ]
 
-  const goals: Goal[] = [
+  const charts: {
+    metric: ExecutiveSummaryDashboardMetric
+    title: string
+    description: string
+    mark: 'area' | 'line'
+    format: ExecutiveSummaryDashboardFormat
+    min: number
+  }[] = [
     {
-      id: 'revenue',
-      label: 'Quarterly revenue',
-      current: 4820000,
-      target: 5000000,
-      format: 'currency',
-      status: {
-        label: 'On track',
-        severity: 'success'
-      }
-    },
-    {
-      id: 'active-users',
-      label: 'Monthly active users',
-      current: 128400,
-      target: 140000,
-      format: 'count',
-      status: {
-        label: 'At risk',
-        severity: 'warning'
-      }
-    },
-    {
-      id: 'retention',
-      label: 'Net revenue retention',
-      current: 112,
-      target: 110,
-      format: 'percentage',
-      status: {
-        label: 'On track',
-        severity: 'success'
-      }
-    },
-    {
-      id: 'nps',
-      label: 'NPS',
-      current: 47,
-      target: 50,
-      format: 'score',
-      status: {
-        label: 'On track',
-        severity: 'success'
-      }
-    },
-    {
-      id: 'enterprise-deals',
-      label: 'Enterprise deals closed',
-      current: 18,
-      target: 30,
-      format: 'score',
-      status: {
-        label: 'Off track',
-        severity: 'danger'
-      }
-    }
-  ]
-
-  const months = [
-    'Oct 2025',
-    'Nov 2025',
-    'Dec 2025',
-    'Jan 2026',
-    'Feb 2026',
-    'Mar 2026',
-    'Apr 2026',
-    'May 2026',
-    'Jun 2026',
-    'Jul 2026',
-    'Aug 2026',
-    'Sep 2026'
-  ]
-
-  const trends: Trend[] = [
-    {
-      id: 'revenue',
+      metric: 'revenue',
       title: 'Revenue',
       description: 'Recognized revenue per month.',
       mark: 'area',
       format: 'currency',
-      min: 0,
-      change: {
-        label: '+25.2%',
-        severity: 'success',
-        icon: 'ai ai-arrow-up-right'
-      },
-      series: [
-        {
-          id: 'revenue',
-          name: 'Revenue',
-          values: [
-            1310000, 1340000, 1420000, 1380000, 1410000, 1470000, 1490000, 1520000, 1550000,
-            1570000, 1610000, 1640000
-          ]
-        }
-      ]
+      min: 0
     },
     {
-      id: 'active-users',
+      metric: 'active-users',
       title: 'Monthly active users',
       description: 'People who signed in at least once in the month.',
       mark: 'area',
       format: 'count',
-      min: 0,
-      change: {
-        label: '+30.8%',
-        severity: 'success',
-        icon: 'ai ai-arrow-up-right'
-      },
-      series: [
-        {
-          id: 'active-users',
-          name: 'Monthly active users',
-          values: [
-            98200, 101400, 104000, 103100, 107900, 111500, 114600, 117300, 122200, 124000, 126100,
-            128400
-          ]
-        }
-      ]
+      min: 0
     },
     {
-      id: 'retention',
+      metric: 'retention',
       title: 'Net revenue retention',
       description: 'Trailing twelve months, measured at month end.',
       mark: 'line',
       format: 'percentage',
-      min: 100,
-      change: {
-        label: '+5.7%',
-        severity: 'success',
-        icon: 'ai ai-arrow-up-right'
-      },
-      series: [
-        {
-          id: 'retention',
-          name: 'Net revenue retention',
-          values: [106, 106, 107, 107, 108, 109, 109, 110, 110, 111, 111, 112]
-        }
-      ]
+      min: 100
     },
     {
-      id: 'nps',
+      metric: 'nps',
       title: 'NPS',
       description: 'Net promoter score from the monthly pulse survey.',
       mark: 'line',
       format: 'score',
-      min: 0,
-      change: {
-        label: '+23.7%',
-        severity: 'success',
-        icon: 'ai ai-arrow-up-right'
-      },
-      series: [
-        {
-          id: 'nps',
-          name: 'NPS',
-          values: [38, 39, 41, 40, 42, 43, 42, 44, 44, 45, 46, 47]
-        }
-      ]
+      min: 0
     },
     {
-      id: 'uptime',
+      metric: 'uptime',
       title: 'Uptime',
       description: 'Share of minutes every public service answered.',
       mark: 'line',
       format: 'uptime',
-      min: 99.8,
-      change: {
-        label: '+0.05%',
-        severity: 'success',
-        icon: 'ai ai-arrow-up-right'
-      },
-      series: [
-        {
-          id: 'uptime',
-          name: 'Uptime',
-          values: [
-            99.94, 99.96, 99.91, 99.97, 99.98, 99.95, 99.99, 99.95, 99.91, 99.98, 99.94, 99.99
-          ]
-        }
-      ]
+      min: 99.8
     },
     {
-      id: 'cost-per-request',
+      metric: 'cost-per-request',
       title: 'Cost per request',
       description: 'Infrastructure spend divided by requests served.',
       mark: 'line',
       format: 'cost',
-      min: 0,
-      change: {
-        label: '−25.0%',
-        severity: 'success',
-        icon: 'ai ai-arrow-down-right'
-      },
-      series: [
-        {
-          id: 'cost-per-request',
-          name: 'Cost per request',
-          values: [
-            0.0028, 0.0028, 0.0027, 0.0027, 0.0026, 0.0025, 0.0024, 0.0023, 0.0023, 0.0022, 0.0022,
-            0.0021
-          ]
-        }
-      ]
+      min: 0
     }
   ]
 
-  const notes: Note[] = [
-    {
-      id: 'note-04',
-      author: 'Emma Wilson',
-      initials: 'MS',
-      role: 'Head of Finance',
-      date: '2026-09-30',
-      dateLabel: 'Sep 30, 2026',
-      body: 'Revenue closed at 96% of the goal. Two enterprise renewals slipped into October; both are signed and land in Q4.'
-    },
-    {
-      id: 'note-03',
-      author: 'David Kim',
-      initials: 'DK',
-      role: 'VP of Product',
-      date: '2026-09-26',
-      dateLabel: 'Sep 26, 2026',
-      body: 'Monthly active users grew 5.1% after the new onboarding shipped in August. First-week activation rose from 41% to 48%.'
-    },
-    {
-      id: 'note-02',
-      author: 'Priya Nair',
-      initials: 'PN',
-      role: 'Head of Customer Success',
-      date: '2026-09-19',
-      dateLabel: 'Sep 19, 2026',
-      body: 'NPS reached 47, the highest in a year. Detractors still cite slow replies on weekends, so a weekend support rotation starts in October.'
-    },
-    {
-      id: 'note-01',
-      author: 'Daniel Moore',
-      initials: 'LM',
-      role: 'VP of Engineering',
-      date: '2026-09-12',
-      dateLabel: 'Sep 12, 2026',
-      body: 'Cost per request fell 7.1% after batch jobs moved to off-peak capacity. Uptime held at 99.97%, with one 14-minute incident on Aug 21.'
-    }
-  ]
+  const blocked = computed(() => props.loading || props.error !== '')
+  const kpis = computed(() => props.kpis ?? (blocked.value ? {} : sampleKpis))
+  const goals = computed(() => props.goals ?? (blocked.value ? [] : sampleGoals))
+  const months = computed(() => props.labels ?? (blocked.value ? [] : sampleLabels))
+  const trendData = computed(() => props.trends ?? (blocked.value ? {} : sampleTrends))
+  const notes = computed(() => props.notes ?? (blocked.value ? [] : sampleNotes))
+
+  const trendCards = computed(() =>
+    charts.map((chart) => {
+      const data = trendData.value[chart.metric]
+      const series: ChartSeries[] = data
+        ? [{ id: chart.metric, name: chart.title, values: data.values }]
+        : []
+      return { ...chart, change: data?.change ?? null, series }
+    })
+  )
+
+  const exportable = computed(
+    () =>
+      !blocked.value &&
+      (goals.value.length > 0 || Object.values(kpis.value).some((kpi) => kpi?.value != null))
+  )
+  const failed = (card: string) => `Couldn't load ${card}. ${props.error}`
 
   const { formatNumber } = useLocale()
 
@@ -392,7 +288,7 @@
       maximumFractionDigits: 2
     })
 
-  const formatters: Record<MetricFormat, (value: number) => string> = {
+  const formatters: Record<ExecutiveSummaryDashboardFormat, (value: number) => string> = {
     currency: (value) => money(value),
     count: (value) => compact(value),
     percentage: (value) => `${value.toFixed(0)}%`,
@@ -400,43 +296,37 @@
     score: (value) => value.toFixed(0),
     cost: (value) => `${value.toFixed(4)}`
   }
-  type CardId = 'executive-summary'
 
-  interface CsvReport {
-    columns: CsvColumn[]
-    rows: () => object[]
-  }
+  const reportColumns: CsvColumn[] = Object.entries({
+    section: 'Section',
+    metric: 'Metric',
+    value: 'Value',
+    detail: 'Change or target'
+  }).map(([id, header]) => ({ id, header }))
 
-  const reports: Record<CardId, CsvReport> = {
-    'executive-summary': {
-      columns: [
-        { id: 'section', header: 'Section' },
-        { id: 'metric', header: 'Metric' },
-        { id: 'value', header: 'Value' },
-        { id: 'detail', header: 'Change or target' }
-      ],
-      rows: () => [
-        ...figures.map((figure) => ({
-          section: 'Scorecard',
-          metric: figure.label,
-          value: figure.value === null ? '' : formatters[figure.format](figure.value),
-          detail: figure.delta === null ? '' : `${figure.delta}% ${comparison}`
-        })),
-        ...goals.map((goal) => ({
-          section: 'Goals',
-          metric: goal.label,
-          value: formatters[goal.format](goal.current),
-          detail: `Target ${formatters[goal.format](goal.target)}, ${goal.status.label}`
-        }))
-      ]
-    }
-  }
+  const reportRows = () => [
+    ...tiles.map((tile) => {
+      const kpi = kpis.value[tile.metric]
+      return {
+        section: 'Scorecard',
+        metric: tile.label,
+        value: kpi?.value == null ? '' : formatters[tile.format](kpi.value),
+        detail: kpi?.delta == null ? '' : `${kpi.delta}% ${comparison}`
+      }
+    }),
+    ...goals.value.map((goal) => ({
+      section: 'Goals',
+      metric: goal.label,
+      value: formatters[goal.format](goal.current),
+      detail: `Target ${formatters[goal.format](goal.target)}, ${goal.status.label}`
+    }))
+  ]
 
-  const exportCsv = (id: CardId) => {
-    const filename = `${id}-${quarter.value.toLowerCase().replaceAll(' ', '-')}.csv`
+  const exportCsv = (event: MouseEvent) => {
+    emit('export', event)
+    const filename = `executive-summary-${quarter.value.toLowerCase().replaceAll(' ', '-')}.csv`
     try {
-      const report = reports[id]
-      downloadCsv(filename, toCsv({ columns: report.columns, rows: report.rows() }))
+      downloadCsv(filename, toCsv({ columns: reportColumns, rows: reportRows() }))
       toast.success('CSV exported.', { description: filename })
     } catch {
       toast.error('The CSV could not be exported.', { description: 'Try again in a moment.' })
@@ -474,8 +364,8 @@
             variant="outline"
             size="medium"
             icon="ai ai-download"
-            :disabled="loading"
-            @click="exportCsv('executive-summary')"
+            :disabled="!exportable"
+            @click="exportCsv"
           />
         </template>
       </PageHeader>
@@ -485,21 +375,21 @@
           class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6"
         >
           <li
-            v-for="figure in figures"
-            :key="figure.id"
+            v-for="tile in tiles"
+            :key="tile.metric"
             class="flex min-w-0 flex-col"
           >
             <StatTile
-              :label="figure.label"
-              :value="figure.value"
-              :format-value="formatters[figure.format]"
-              :delta="figure.delta"
+              :label="tile.label"
+              :value="kpis[tile.metric]?.value ?? null"
+              :format-value="formatters[tile.format]"
+              :delta="kpis[tile.metric]?.delta ?? null"
               :delta-label="comparison"
-              :inverse="figure.inverse"
+              :inverse="tile.inverse"
               :loading="loading"
             >
               <template #aside>
-                <Hint :content="figure.description" />
+                <Hint :content="tile.description" />
               </template>
             </StatTile>
           </li>
@@ -512,8 +402,8 @@
           class="grid min-w-0 grid-cols-1 gap-(--spacing-md) [--chart-grid-columns:1] md:grid-cols-2 md:[--chart-grid-columns:2] xl:col-span-8"
         >
           <ChartCard
-            v-for="trend in trends"
-            :key="trend.id"
+            v-for="trend in trendCards"
+            :key="trend.metric"
             :span="1"
           >
             <ChartCard.Header>
@@ -532,7 +422,15 @@
               </ChartCard.Action>
             </ChartCard.Header>
             <ChartCard.Content>
+              <Alert
+                v-if="error"
+                severity="danger"
+                :label="failed(trend.title.toLowerCase())"
+                action-label="Retry"
+                @action="(event) => emit('retry', event)"
+              />
               <Chart
+                v-else
                 v-model:active-index="activeIndex"
                 :series="trend.series"
                 :labels="months"
@@ -561,8 +459,15 @@
         <div class="flex min-w-0 flex-col gap-(--spacing-md) xl:col-span-4">
           <Card :title="quarter + ' goals'">
             <template #default>
+              <Alert
+                v-if="error"
+                severity="danger"
+                :label="failed(quarter + ' goals')"
+                action-label="Retry"
+                @action="(event) => emit('retry', event)"
+              />
               <ul
-                v-if="loading"
+                v-else-if="loading"
                 aria-busy="true"
                 class="flex flex-col gap-(--spacing-md)"
               >
@@ -637,12 +542,19 @@
 
           <Card
             title="Commentary"
-            :padded="false"
+            :padded="error !== ''"
           >
             <template #default>
+              <Alert
+                v-if="error"
+                severity="danger"
+                :label="failed('commentary')"
+                action-label="Retry"
+                @action="(event) => emit('retry', event)"
+              />
               <Item.List
+                v-else-if="loading"
                 key="item.list-1"
-                v-if="loading"
                 aria-busy="true"
               >
                 <Item

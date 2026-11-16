@@ -28,6 +28,58 @@ describe('team-permissions', () => {
     expect(view.getByRole('button', { name: 'Refresh' })).toBeTruthy()
     expect(view.getByText('Administrators')).toBeTruthy()
   })
+
+  it('renders the teams it is given instead of the sample, and the empty card for none', async () => {
+    const view = render(TeamPermissions, {
+      props: {
+        teams: [
+          {
+            id: 't-1',
+            name: 'Acme support',
+            description: 'Answers tickets',
+            permissions: ['logs.view'],
+            members: 2,
+            status: 'Active'
+          }
+        ]
+      }
+    })
+    await waitFor(() => expect(view.container.textContent).toContain('Acme support'))
+    expect(view.container.textContent).not.toContain('Administrators')
+    view.unmount()
+    const empty = render(TeamPermissions, { props: { teams: [] } })
+    expect(empty.container.textContent).toContain('No teams yet')
+  })
+
+  it('emits the row actions and the confirmed delete instead of faking them', async () => {
+    const view = render(TeamPermissions)
+    await fireEvent.click(view.getByRole('button', { name: /Actions for Developers/ }))
+    await fireEvent.click(await waitFor(() => view.getByRole('menuitem', { name: 'Duplicate' })))
+    expect(view.emitted('row-action')![0][1]).toMatchObject({
+      value: 'duplicate',
+      team: { id: 'team-2' }
+    })
+    await fireEvent.click(view.getByRole('button', { name: /Actions for Contractors/ }))
+    await fireEvent.click(await waitFor(() => view.getByRole('menuitem', { name: 'Delete' })))
+    const confirm = await waitFor(() => {
+      const node = document.querySelector('[role="alertdialog"], [role="dialog"]') as HTMLElement
+      expect(node).not.toBeNull()
+      return node
+    })
+    await fireEvent.click(buttonByText('Delete team', confirm))
+    expect(view.emitted('delete')![0][1]).toMatchObject({ id: 'team-5' })
+    await waitFor(() => expect(view.container.textContent).not.toContain('Contractors'))
+    await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
+    expect(view.emitted('refresh')).toHaveLength(1)
+  })
+
+  it('shows the error message with Retry in place of the table', async () => {
+    const view = render(TeamPermissions, { props: { error: 'The API answered 503.' } })
+    expect(view.container.textContent).toContain('The API answered 503.')
+    expect(view.queryByRole('button', { name: 'Refresh' })).toBeNull()
+    await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
+    expect(view.emitted('retry')).toHaveLength(1)
+  })
 })
 
 describe('team-permissions#CreateTeam', () => {

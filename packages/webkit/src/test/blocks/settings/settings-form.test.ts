@@ -71,7 +71,7 @@ describe('settings/settings-form', () => {
       expect(view.getByRole('heading', { level: 2, name })).toBeTruthy()
   })
 
-  it('keeps Save and Discard disabled until the form changes, then saves', async () => {
+  it('keeps Save and Discard disabled until the form changes, then emits and saves', async () => {
     const view = render(SettingsForm)
     const save = view.getByRole('button', { name: 'Save' }) as HTMLButtonElement
     const discard = view.getByRole('button', { name: 'Discard' }) as HTMLButtonElement
@@ -80,6 +80,49 @@ describe('settings/settings-form', () => {
     await fireEvent.update(view.getByLabelText('Email'), 'alex.morgan@example.com')
     await waitFor(() => expect(save.disabled).toBe(false))
     await fireEvent.click(save)
-    await waitFor(() => expect(save.disabled).toBe(true), { timeout: 2000 })
+    const [event, values] = view.emitted('submit')?.[0] ?? []
+    expect(event).toBeInstanceOf(MouseEvent)
+    expect(values).toMatchObject({ fullName: 'Alex Morgan', email: 'alex.morgan@example.com' })
+    await view.rerender({ loading: true })
+    expect(discard.disabled).toBe(true)
+    await view.rerender({ loading: false })
+    await waitFor(() => expect(save.disabled).toBe(true))
+    await waitFor(() => expect(document.body.textContent).toContain('Profile saved.'))
+  })
+
+  it('opens on the profile it is given instead of the sample', () => {
+    const view = render(SettingsForm, {
+      props: {
+        profile: {
+          fullName: 'Jane Doe',
+          email: 'jane.doe@example.com',
+          timezone: 'utc',
+          language: 'en',
+          productUpdates: false
+        }
+      }
+    })
+    expect((view.getByLabelText('Full name') as HTMLInputElement).value).toBe('Jane Doe')
+    expect((view.getByLabelText('Email') as HTMLInputElement).value).toBe('jane.doe@example.com')
+    expect(view.getByRole('switch', { name: 'Product updates' }).getAttribute('aria-checked')).toBe(
+      'false'
+    )
+  })
+
+  it('shows the save error in a toast whose Retry emits submit again', async () => {
+    const view = render(SettingsForm, {
+      props: {
+        defaultDraft: { email: 'alex.morgan@example.com' },
+        error: "The request didn't reach the server. Your changes are kept."
+      }
+    })
+    await waitFor(() =>
+      expect(document.body.textContent).toContain("The request didn't reach the server.")
+    )
+    const retry = Array.from(document.body.querySelectorAll('button')).find(
+      (button) => button.textContent?.trim() === 'Retry'
+    ) as HTMLButtonElement
+    await fireEvent.click(retry)
+    expect(view.emitted('submit')?.[0]?.[1]).toMatchObject({ email: 'alex.morgan@example.com' })
   })
 })

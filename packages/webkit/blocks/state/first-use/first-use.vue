@@ -12,6 +12,7 @@
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import Logo from '@aziontech/webkit/logo'
+  import Skeleton from '@aziontech/webkit/skeleton'
 
   const agentMarks = [
     { name: 'Claude', src: claudeMark, mono: false },
@@ -19,10 +20,132 @@
     { name: 'Gemini', src: geminiMark, mono: false },
     { name: 'Cursor', src: cursorMark, mono: true }
   ]
+
+  export interface FirstUseProps {
+    /** The account is still loading; skeletons draw the block's footprint. */
+    loading?: boolean
+    /** The empty state's title, naming the resource. */
+    title?: string
+    /** The sentence under the title. */
+    description?: string
+    /** Where Documentation goes; it opens in a new tab. */
+    docsHref?: string
+    /** The command the Via CLI row shows and copies. */
+    command?: string
+    /** Where Set up your coding agent goes. */
+    agentSetupHref?: string
+  }
+
+  withDefaults(defineProps<FirstUseProps>(), {
+    loading: false,
+    title: 'Create your first resource',
+    description: 'Start from scratch, from a template or by importing your code.',
+    docsHref: 'https://example.com/docs/resources',
+    command: 'azion deploy',
+    agentSetupHref: '/agent-setup'
+  })
+
+  const emit = defineEmits<{
+    import: [event: MouseEvent]
+    create: [event: MouseEvent]
+  }>()
+
+  const methods = ['github', 'cli', 'scratch']
+  const promos = ['catalog', 'agent']
 </script>
 
 <template>
-  <div class="flex flex-col items-start gap-(--spacing-lg)">
+  <div
+    v-if="loading"
+    class="flex flex-col items-start gap-(--spacing-lg)"
+    role="status"
+    aria-label="Loading resources"
+    aria-busy="true"
+  >
+    <Card
+      :padded="false"
+      class="w-full"
+    >
+      <template #default>
+        <div
+          class="flex flex-col items-center gap-(--spacing-sm) px-(--spacing-md) py-(--spacing-xl)"
+        >
+          <Skeleton
+            width="2.5rem"
+            height="2.5rem"
+          />
+          <Skeleton
+            width="14rem"
+            height="1.25rem"
+          />
+          <Skeleton
+            width="20rem"
+            height="0.875rem"
+          />
+        </div>
+
+        <div class="border-t border-(--border-muted)">
+          <Item.List>
+            <Item
+              v-for="method in methods"
+              :key="method"
+            >
+              <Item.Media>
+                <Skeleton
+                  width="2rem"
+                  height="2rem"
+                />
+              </Item.Media>
+              <Item.Content>
+                <Skeleton
+                  width="8rem"
+                  height="0.875rem"
+                />
+                <Skeleton
+                  width="16rem"
+                  height="0.75rem"
+                />
+              </Item.Content>
+              <Item.Actions>
+                <Skeleton
+                  width="5rem"
+                  height="2rem"
+                />
+              </Item.Actions>
+            </Item>
+          </Item.List>
+        </div>
+      </template>
+    </Card>
+
+    <div class="grid w-full gap-(--spacing-lg) md:grid-cols-2">
+      <Card
+        v-for="promo in promos"
+        :key="promo"
+        class="w-full"
+      >
+        <template #default>
+          <div class="flex flex-col gap-(--spacing-md)">
+            <Skeleton
+              width="7rem"
+              height="2rem"
+            />
+            <div class="flex flex-col gap-(--spacing-2xs)">
+              <Skeleton
+                width="12rem"
+                height="1rem"
+              />
+              <Skeleton height="0.875rem" />
+            </div>
+          </div>
+        </template>
+      </Card>
+    </div>
+  </div>
+  <div
+    v-else
+    class="flex flex-col items-start gap-(--spacing-lg)"
+  >
     <Card
       :padded="false"
       class="w-full"
@@ -30,13 +153,13 @@
       <template #default>
         <EmptyState
           icon="ai ai-box"
-          title="Create your first resource"
-          description="Start from scratch, from a template or by importing your code."
+          :title="title"
+          :description="description"
         >
           <template #actions>
             <Link
               label="Documentation"
-              href="https://example.com/docs/resources"
+              :href="docsHref"
               target="_blank"
             />
           </template>
@@ -62,6 +185,7 @@
                   label="Import"
                   variant="primary"
                   size="medium"
+                  @click="(event: MouseEvent) => emit('import', event)"
                 />
               </Item.Actions>
             </Item>
@@ -85,7 +209,7 @@
                   <InputGroupRoot class="w-full">
                     <div class="flex min-w-0 flex-1">
                       <Input
-                        model-value="azion deploy"
+                        :model-value="command"
                         size="large"
                         class="w-full"
                         aria-label="Via CLI command"
@@ -95,7 +219,7 @@
                       />
                     </div>
                     <CopyButton
-                      value="azion deploy"
+                      :value="command"
                       aria-label="Copy the Via CLI command"
                       copied-label="Command copied"
                       size="small"
@@ -120,6 +244,7 @@
                   label="Create"
                   variant="outline"
                   size="medium"
+                  @click="(event: MouseEvent) => emit('create', event)"
                 />
               </Item.Actions>
             </Item>
@@ -202,7 +327,7 @@
       >
         <template #default>
           <a
-            href="/agent-setup"
+            :href="agentSetupHref"
             class="group relative flex h-full w-full flex-col items-start gap-(--spacing-md) rounded-(--shape-card) p-(--spacing-md) text-start no-underline transition-colors duration-moderate-01 ease-productive-entrance motion-reduce:transition-none hover:bg-(--bg-surface-raised) focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-inset"
           >
             <span

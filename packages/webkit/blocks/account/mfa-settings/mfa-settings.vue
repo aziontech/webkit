@@ -18,75 +18,69 @@
   import TableCellActions from '@aziontech/webkit/table-cell-actions'
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import TableCellTime from '@aziontech/webkit/table-cell-time'
-  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
-  const DAY = 86_400_000
-  const REFERENCE = Date.UTC(2026, 10, 10, 12)
+  import { sampleMembers } from './sample'
 
-  interface Member {
+  /** One person of the account and their second factor. */
+  export interface MfaSettingsMember {
+    /** Stable key. */
     id: string
+    /** Display name. */
     name: string
+    /** Sign-in email, shown under the name. */
     email: string
+    /** The second factor in use, such as Authenticator app; empty when none. */
     method: string
+    /** Whether the person signs in with a second factor. */
     enabled: boolean
+    /** When the second factor was set up, or null when it is not. */
     since: Date | null
   }
 
-  type MemberRow = Member & { status: string }
+  export interface MfaSettingsProps {
+    /** The people to list; filtered, sorted and paged in the browser. Left out, the sample renders. */
+    members?: MfaSettingsMember[]
+    /** A request is in flight: with no people it is the first load, with people a refresh. */
+    loading?: boolean
+    /** Why the MFA status could not load; a danger alert with Retry replaces the table. */
+    error?: string
+  }
 
-  const seedMembers: Member[] = [
-    {
-      id: 'm-1',
-      name: 'Avery Stone',
-      email: 'avery.stone@example.com',
-      method: 'Authenticator app',
-      enabled: true,
-      since: new Date(REFERENCE - 210 * DAY)
-    },
-    {
-      id: 'm-2',
-      name: 'Jordan Reyes',
-      email: 'jordan.reyes@example.com',
-      method: 'Authenticator app',
-      enabled: true,
-      since: new Date(REFERENCE - 40 * DAY)
-    },
-    {
-      id: 'm-3',
-      name: 'Priya Nair',
-      email: 'priya.nair@example.com',
-      method: '',
-      enabled: false,
-      since: null
-    },
-    {
-      id: 'm-4',
-      name: 'Lena Fischer',
-      email: 'lena.fischer@example.com',
-      method: 'Authenticator app',
-      enabled: true,
-      since: new Date(REFERENCE - 6 * DAY)
-    },
-    {
-      id: 'm-5',
-      name: 'Marco Bianchi',
-      email: 'marco.bianchi@example.com',
-      method: '',
-      enabled: false,
-      since: null
-    }
-  ]
+  const props = withDefaults(defineProps<MfaSettingsProps>(), {
+    members: undefined,
+    loading: false,
+    error: ''
+  })
 
-  const REQUIRED_ON_START = false
-  const members = ref(seedMembers)
-  const required = ref(REQUIRED_ON_START)
-  const loading = ref(false)
-  const loadFailed = ref(false)
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    remind: [event: Event, member: MfaSettingsMember]
+    reset: [event: MouseEvent, member: MfaSettingsMember]
+  }>()
 
-  const withoutMfa = computed(() => members.value.filter((member) => !member.enabled))
+  const required = defineModel<boolean>('required', { default: false })
+
+  type MemberRow = MfaSettingsMember & { status: string }
+
+  const source = computed<MfaSettingsMember[]>(
+    () => props.members ?? (props.loading || props.error ? [] : sampleMembers)
+  )
+  const items = ref<MfaSettingsMember[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
+    },
+    { immediate: true }
+  )
+
+  const loadFailed = computed(() => props.error !== '')
+
+  const withoutMfa = computed(() => items.value.filter((member) => !member.enabled))
 
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
@@ -96,7 +90,7 @@
     { id: 'actions', type: 'action', hideable: false }
   ]
   const rows = computed(() =>
-    members.value.map((member) => ({
+    items.value.map((member) => ({
       ...member,
       status: member.enabled ? 'Enabled' : 'Not set up'
     }))
@@ -125,22 +119,7 @@
   const membersTableEl = ref<TableExposed<MemberRow> | null>(null)
   const exportCsv = () => membersTableEl.value?.exportCsv({ filename: 'mfa-status.csv' })
 
-  const refreshing = ref(false)
-  const refresh = () => {
-    refreshing.value = true
-    setTimeout(() => {
-      refreshing.value = false
-    }, 700)
-  }
-
-  const retryLoad = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      members.value = seedMembers
-      loading.value = false
-    }, 700)
-  }
+  const refreshing = computed(() => props.loading && items.value.length > 0)
 
   const requireOpen = ref(false)
   const onRequire = (value: boolean) => {
@@ -149,50 +128,32 @@
       return
     }
     required.value = false
-    toast.success('MFA is optional again.', {
-      description: 'People who set it up keep using it.'
-    })
   }
   const confirmRequire = () => {
     required.value = true
     requireOpen.value = false
-    const count = withoutMfa.value.length
-    toast.success('MFA is now required.', {
-      description: count
-        ? `${count} ${count === 1 ? 'person sets' : 'people set'} it up at their next sign-in.`
-        : 'Everyone in the account already uses it.'
-    })
   }
 
-  const pending = ref<MemberRow | null>(null)
+  const pending = ref<MfaSettingsMember | null>(null)
   const resetOpen = ref(false)
-  const onAction = (value: DropdownMenuItemValue, row: MemberRow) => {
+  const onAction = (event: Event, value: DropdownMenuItemValue, row: MemberRow) => {
+    const member = items.value.find((item) => item.id === row.id)
+    if (!member) return
     if (value === 'reset') {
-      pending.value = row
+      pending.value = member
       resetOpen.value = true
       return
     }
-    if (value === 'remind') {
-      toast.success(`Reminder sent to ${row.email}.`, {
-        description: 'The email links to the MFA setup page.'
-      })
-    }
+    if (value === 'remind') emit('remind', event, member)
   }
-  const reset = () => {
-    const row = pending.value
-    if (!row) return
-    const member = members.value.find((item) => item.id === row.id)
-    if (member) {
-      member.enabled = false
-      member.method = ''
-      member.since = null
-    }
+  const reset = (event: MouseEvent) => {
+    const member = pending.value
+    if (!member) return
+    items.value = items.value.map((item) =>
+      item.id === member.id ? { ...item, enabled: false, method: '', since: null } : item
+    )
     resetOpen.value = false
-    toast.success(`MFA reset for ${row.name}.`, {
-      description: required.value
-        ? 'They set it up again at their next sign-in.'
-        : 'They can sign in with their password until they set it up again.'
-    })
+    emit('reset', event, member)
   }
 </script>
 
@@ -239,8 +200,8 @@
           v-if="!required && !loading && !loadFailed && withoutMfa.length"
           severity="warning"
         >
-          {{ withoutMfa.length }} of {{ members.length }} people sign in with a password only.
-          Require MFA, or remind them to set it up.
+          {{ withoutMfa.length }} of {{ items.length }} people sign in with a password only. Require
+          MFA, or remind them to set it up.
         </Alert>
 
         <div class="flex min-w-0 flex-col gap-(--layout-group-gap)">
@@ -266,7 +227,7 @@
                   size="medium"
                   :loading="refreshing"
                   aria-label="Refresh"
-                  @click="refresh"
+                  @click="emit('refresh', $event)"
                 />
               </Tooltip>
               <Tooltip
@@ -293,13 +254,13 @@
             v-if="loadFailed"
             severity="danger"
           >
-            The MFA status could not be loaded. Nothing was changed; try again.
+            {{ error }}
             <template #actions>
               <Button
                 label="Retry"
                 variant="secondary"
                 size="small"
-                @click="retryLoad"
+                @click="emit('retry', $event)"
               />
             </template>
           </Alert>
@@ -358,7 +319,7 @@
                 <template #cell-actions="{ row }">
                   <TableCellActions
                     :name="row.name"
-                    @select="(_event, value) => onAction(value, row)"
+                    @select="(event, value) => onAction(event, value, row)"
                   >
                     <DropdownMenu.Group>
                       <DropdownMenu.Item

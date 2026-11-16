@@ -25,6 +25,7 @@
     "name": "Cli",
     "file": "get-started.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Ci",

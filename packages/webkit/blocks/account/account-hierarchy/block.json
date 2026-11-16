@@ -28,6 +28,7 @@
     "name": "Default",
     "file": "account-hierarchy.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Selected",

@@ -124,6 +124,75 @@ by actor, by category and by destination, largest first. The request log `DataTa
 actor, outcome (a `TableCellStatus` in the same hue as its series), category, a `SeverityTag`,
 destination, method and the rule that decided it; outcome and severity are two different facts.
 
+### R. Load failure — `Alert` (required)
+
+With `error` set, a danger `Alert` with Retry takes the place of each card's content, naming what
+did not load (`Couldn't load matched requests over time.`); the card actions disable and the tiles
+read as a dash.
+
+### S. Loading placeholders — `Skeleton` (required)
+
+Holds the Needs attention rows during the first load.
+
+### T. Add rule set — `Button` (required)
+
+The primary action of the empty state, linking to the rules page.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `SecuritySummary`, `SecurityMetric`, `SecurityMatchedRequests`, `SecuritySourceIp`, `SecurityAttentionEntry`, `SecurityCardChanges`, `SecurityPeriodRange`, `SecurityPeriod`, `SecurityCardId` and `SecurityDashboardProps` are exported from `security-dashboard.vue`, and `sample.ts` holds the sample figures, series, breakdowns, IPs and attention entries the block renders when a data prop is left out (and never while `loading` or `error` is set). Export CSV and Copy query run in the browser on the data the block holds. The ByActor variant is a separate page and keeps its own sample log.
+
+| Prop / model      | Type                       | What it does                                                                                                |
+| ----------------- | -------------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `summary`         | `SecuritySummary`          | The three tiles: value, change and sparkline. A `null` value shows a dash.                                  |
+| `matchedRequests` | `SecurityMatchedRequests`  | The Blocked and Logged series with their labels.                                                            |
+| `categories`      | `BarListItem[]`            | Blocked requests by attack category.                                                                        |
+| `countries`       | `BarListItem[]`            | Blocked requests by country.                                                                                |
+| `sourceIps`       | `SecuritySourceIp[]`       | The Top source IPs rows; the search runs on them in the browser.                                            |
+| `attention`       | `SecurityAttentionEntry[]` | The Needs attention list, each with the link that resolves it.                                              |
+| `changes`         | `SecurityCardChanges`      | Each card's change against the previous period, in percent; a rise is danger, a fall success.               |
+| `range`           | `SecurityPeriodRange`      | The start and end of the period, written into the copied query.                                             |
+| `loading`         | `boolean`                  | The period is loading: tiles, charts and the table show Skeletons, the card actions disable.                |
+| `error`           | `string`                   | Why the request failed, shown after `Couldn't load matched requests over time.` (…) in each danger `Alert`. |
+| `v-model:period`  | `SecurityPeriod`           | The period the tiles compare against; refetch when it changes. Defaults to `24h`.                           |
+
+Every region empty (`[]` lists and no series) is the no-rule-set state: one `EmptyState` with `Add rule set` replaces the grid.
+
+| Event   | Payload   | When                              |
+| ------- | --------- | --------------------------------- |
+| `retry` | `(event)` | Retry in any of the error alerts. |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import SecurityDashboard, { type SecurityPeriod } from './security-dashboard.vue'
+
+  const period = ref<SecurityPeriod>('24h')
+  const { data, pending, error, refresh } = useSecurityMetrics(period)
+</script>
+
+<template>
+  <SecurityDashboard
+    v-model:period="period"
+    :summary="data?.summary"
+    :matched-requests="data?.matched"
+    :categories="data?.categories ?? []"
+    :countries="data?.countries ?? []"
+    :source-ips="data?.sourceIps ?? []"
+    :attention="data?.attention ?? []"
+    :changes="data?.changes"
+    :range="data?.range"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - End every Needs attention entry with exactly one action.
@@ -158,10 +227,10 @@ destination, method and the rule that decided it; outcome and severity are two d
 ## States
 
 - Default: rules in place, populated tiles, charts, attention list and table.
-- Loading: every tile, chart and the table hold a `Skeleton`; Needs attention shows three placeholder rows.
-- Empty: no rule set yet; tiles read as dashes and one bordered `EmptyState` offers `Add rule set` instead of a grid of empty charts.
+- Loading: `loading`; every tile, chart and the table hold a `Skeleton`; Needs attention shows three placeholder rows.
+- Empty: no rule set yet (every list `[]`, tiles with `null` values); tiles read as dashes and one bordered `EmptyState` offers `Add rule set` instead of a grid of empty charts.
 - ByActor: request activity per actor with the rule that decided each request; NoMatch is a state of it.
-- Error: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Error: `error`; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
 
 ## Related
 

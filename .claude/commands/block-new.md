@@ -27,13 +27,40 @@ The group is the job, never the surface: `block.json#surface` says where the scr
 <folder>/
 ├── block.json          id (= folder path under blocks/), name, title, surface, summary, preview,
 │                       intents (en + pt-BR), skills, primary { name, file }, variants[], steps?
-├── <name>.vue          the primary state, a copyable SFC
+├── <name>.vue          the primary state, a copyable SFC that takes its data through typed props
+├── sample.ts           the sample records the primary renders when its data props are left out
+│                       (listed in block.json "files", with any adapter next to it)
 ├── guidelines.md       when to use / not, building blocks A, B, C… (each naming the components
-│                       the primary SFC imports), do / don't, copy, accessibility, one States line
-│                       per variant, related blocks
+│                       the primary SFC imports), data (props, events, going live), do / don't,
+│                       copy, accessibility, one States line per variant, related blocks
 └── variants/
-    └── <state>.vue     one copyable SFC per state (empty, loading, error, ...)
+    └── <state>.vue     one state each (empty, loading, error, ...): the primary with other props
 ```
+
+### The data contract
+
+A block is a screen an app feeds, not a demo. The primary SFC:
+
+- declares `withDefaults(defineProps<<Name>Props>(), …)` with exported record types
+  (`export interface <Name><Thing>`), each member with a one-line JSDoc;
+- takes its records, `loading?: boolean` and `error?: string` (the message the error state shows)
+  as props; empty is the data prop set to `[]`;
+- reads each data prop as `props.x ?? (props.loading || props.error ? [] : sampleX)`, so a
+  left-out prop renders `sample.ts` and the sample never shows while loading or failed;
+- emits every action with the typed tuple form (`create`, `refresh`, `retry`, `delete`,
+  `row-action`, `submit`…; activation events put the DOM event first) and owns two-way state
+  the parent must control through `defineModel` (time range, open folder, active tab);
+- fakes no backend: no `setTimeout` refresh, save or upload; the parent sets `loading`.
+
+`sample.ts` holds every record, series and fixed clock (`Date.UTC`), typed with
+`import type { … } from './<name>.vue'`; UI config (columns, filter properties, menus) stays in
+the SFC. A variant imports the primary (`import X from '../<name>.vue'`) and passes it other props
+or slots; only a genuinely different screen may stay a full SFC. `npx @aziontech/webkit add`
+copies the `files` beside the SFC as `<stem>.<file>` and rewrites the local imports, and
+`get_block` returns them under `files`. `check:blocks` fails on a primary without props, a
+primary that holds records, and a variant that repeats 90 % or more of the primary
+(`scripts/blocks-data-baseline.json` freezes the legacy findings and only shrinks). The exemplar is
+`view/table-view`.
 
 The catalog (`build:catalog`), the MCP (`get_block` returns `guidelines.md` with the SFC),
 `check:blocks` (consumer lint on every SFC, and `guidelines.md` against the SFC), the
@@ -64,7 +91,7 @@ region naming the components that render it, the variant list from the issue's s
 content, and the draft `guidelines.md` in the shared format (see any
 `packages/webkit/blocks/view/table-view/guidelines.md`: `# <Block name>`, the purpose
 paragraph, `## When to use`, `## When not to use`, `## Building blocks` with
-``### A. <Element> — `Component` ``, `## Do`, `## Don't`, `## Copy`, `## Accessibility`,
+``### A. <Element> — `Component` ``, `## Data`, `## Do`, `## Don't`, `## Copy`, `## Accessibility`,
 `## States`, `## Related`), written against the consumer skills the block lists. Every component named exists in `packages/webkit/package.json#exports` (check it
 with the MCP `get_component`, never from memory).
 
@@ -80,7 +107,8 @@ fresh reviewer, three returns stop the run. Exit condition: `approve`.
    above; update `guidelines.md` to the built SFC (letters follow the SFC order, every imported
    component appears in one building block, one States line per variant). Each SFC
    imports only `@aziontech/webkit/*` subpaths and `@aziontech/icons`, follows
-   `.claude/skills/ui-craft` "Start here", and stands alone (copy one file and it runs).
+   `.claude/skills/ui-craft` "Start here", and follows the data contract above (the primary
+   plus its `files` run on their own; a variant needs only them).
 2. `pnpm --filter @aziontech/webkit build:catalog` and
    commit `catalog.json` and `catalog/`. The docs page and the visual test follow from the files;
    baselines for a new block come from the `Visual baselines` workflow (`/baselines-regenerate`).

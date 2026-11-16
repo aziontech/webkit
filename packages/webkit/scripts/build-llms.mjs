@@ -642,6 +642,9 @@ function blockPage(catalog, id, { full = true } = {}) {
       code(p.sfc),
       ''
     )
+    for (const [file, text] of Object.entries(p.files || {})) {
+      out.push(`## \`${file}\``, '', code(text, 'ts'), '')
+    }
   }
   return (
     out

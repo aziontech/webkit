@@ -8,42 +8,91 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
-  type FieldName = 'key' | 'value' | 'environment' | 'description'
-  type FormStatus = 'idle' | 'loading' | 'submitting'
-  type VariableForm = Record<FieldName, string>
-  interface SavedVariable {
+  /** A field of the Create Variable form. */
+  export type FormValidationField = 'key' | 'value' | 'environment' | 'description'
+
+  /** The entries of the form, and the values a submit sends. */
+  export interface FormValidationValues {
+    /** The variable name, uppercase letters, digits and underscores. */
     key: string
+    /** The value services read at runtime. */
+    value: string
+    /** Environment option value. */
+    environment: string
+    /** Optional note, up to 200 characters. */
+    description: string
+  }
+
+  /** The variable a request created, named in the success toast. */
+  export interface FormValidationSaved {
+    /** The key of the new variable. */
+    key: string
+    /** Where it is available. */
     environment: string
   }
 
+  export interface FormValidationProps {
+    /** The form's data is still arriving: Skeleton rows stand in for the fields and Create is disabled. */
+    loading?: boolean
+    /** The create request is in flight: Create spins and the fields and Cancel are disabled. */
+    submitting?: boolean
+    /** Why the request failed when no field owns it, shown in the error toast with Retry; the entries are kept. */
+    error?: string
+    /** A key the server reported as already in use: Key turns invalid and the danger Alert opens above the fields. */
+    takenKey?: string
+    /** The variable the request created: the success toast names it and the form is cleared. */
+    saved?: FormValidationSaved
+    /** Entries the form opens with, such as a kept draft. */
+    defaultValues?: Partial<FormValidationValues>
+    /** Opens with the validation messages shown, as after a press on Create. */
+    defaultSubmitted?: boolean
+  }
+
+  const props = withDefaults(defineProps<FormValidationProps>(), {
+    loading: false,
+    submitting: false,
+    error: '',
+    takenKey: '',
+    saved: undefined,
+    defaultValues: () => ({}),
+    defaultSubmitted: false
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: FormValidationValues]
+  }>()
+
   const KEY_PATTERN = /^[A-Z][A-Z0-9_]*$/
   const DESCRIPTION_LIMIT = 200
-  const existingKeys = ['API_TOKEN']
+  const RESULT_TOAST = 'create-variable-result'
   const environments = [
     { value: 'Production', label: 'Production' },
     { value: 'Preview', label: 'Preview' }
   ]
-  const fieldIds: Record<FieldName, string> = {
+  const fieldIds: Record<FormValidationField, string> = {
     key: 'variable-key',
     value: 'variable-value',
     environment: 'variable-environment',
     description: 'variable-description'
   }
-  const empty = (): VariableForm => ({ key: '', value: '', environment: '', description: '' })
+  const empty = (): FormValidationValues => ({
+    key: '',
+    value: '',
+    environment: '',
+    description: ''
+  })
 
-  const form = reactive<VariableForm>(empty())
-  const submitted = ref(false)
-  const status = ref<FormStatus>('idle')
-  const takenKey = ref('')
+  const form = reactive<FormValidationValues>({ ...empty(), ...props.defaultValues })
+  const submitted = ref(props.defaultSubmitted)
 
-  const errors = computed<Record<FieldName, string>>(() => ({
+  const errors = computed<Record<FormValidationField, string>>(() => ({
     key: !form.key
       ? 'This field is required.'
       : !KEY_PATTERN.test(form.key)
         ? 'Use uppercase letters, digits and underscores, starting with a letter.'
-        : form.key === takenKey.value
+        : form.key === props.takenKey
           ? `A variable named ${form.key} already exists.`
           : '',
     value: form.value ? '' : 'This field is required.',
@@ -55,56 +104,75 @@
   }))
 
   const conflict = computed(
-    () => submitted.value && Boolean(form.key) && form.key === takenKey.value
+    () => submitted.value && Boolean(form.key) && form.key === props.takenKey
   )
-  const busy = computed(() => status.value === 'loading' || status.value === 'submitting')
-  const missing = (field: FieldName) => submitted.value && !form[field]
-  const invalid = (field: FieldName) =>
+  const busy = computed(() => props.loading || props.submitting)
+  const missing = (field: FormValidationField) => submitted.value && !form[field]
+  const invalid = (field: FormValidationField) =>
     submitted.value && Boolean(form[field]) && Boolean(errors.value[field])
-  const helper = (field: FieldName, guidance: string) =>
+  const helper = (field: FormValidationField, guidance: string) =>
     submitted.value && errors.value[field] ? errors.value[field] : guidance
 
-  const focusField = async (field: FieldName) => {
+  const focusField = async (field: FormValidationField) => {
     await nextTick()
     document.getElementById(fieldIds[field])?.focus()
   }
 
-  const reportSaved = (variable: SavedVariable) =>
-    toast.success(`${variable.key} was created.`, {
-      id: 'create-variable-result',
-      description: `It is available in ${variable.environment}.`
-    })
-
-  const reset = () => {
-    Object.assign(form, empty())
-    submitted.value = false
-    takenKey.value = ''
-    status.value = 'idle'
-  }
-
-  const submit = () => {
+  const submit = (event: Event) => {
     if (busy.value) return
     submitted.value = true
-    const firstError = (Object.keys(fieldIds) as FieldName[]).find((field) => errors.value[field])
+    const firstError = (Object.keys(fieldIds) as FormValidationField[]).find(
+      (field) => errors.value[field]
+    )
     if (firstError) {
-      status.value = 'idle'
       focusField(firstError)
       return
     }
-    status.value = 'submitting'
-    toast.dismiss('create-variable-result')
-    setTimeout(() => {
-      status.value = 'idle'
-      if (existingKeys.includes(form.key)) {
-        takenKey.value = form.key
-        focusField('key')
-        return
-      }
-      const variable = { key: form.key, environment: form.environment }
-      reset()
-      reportSaved(variable)
-    }, 900)
+    toast.dismiss(RESULT_TOAST)
+    emit('submit', event, { ...form })
   }
+
+  const reportFailure = () =>
+    toast.error("The variable wasn't created.", {
+      id: RESULT_TOAST,
+      description: props.error,
+      action: { label: 'Retry', onClick: (event: MouseEvent) => submit(event) }
+    })
+
+  const reportSaved = (variable: FormValidationSaved) => {
+    Object.assign(form, empty())
+    submitted.value = false
+    toast.success(`${variable.key} was created.`, {
+      id: RESULT_TOAST,
+      description: `It is available in ${variable.environment}.`
+    })
+  }
+
+  onMounted(() => {
+    if (props.error) reportFailure()
+    if (props.saved) reportSaved(props.saved)
+  })
+
+  watch(
+    () => props.error,
+    (next) => {
+      if (next) reportFailure()
+    }
+  )
+
+  watch(
+    () => props.saved,
+    (next) => {
+      if (next) reportSaved(next)
+    }
+  )
+
+  watch(
+    () => props.takenKey,
+    (next) => {
+      if (next && !props.submitting) focusField('key')
+    }
+  )
 </script>
 
 <template>
@@ -125,7 +193,7 @@
 
       <div class="layout-section-start flex flex-col gap-(--spacing-md)">
         <div
-          v-if="status === 'loading'"
+          v-if="loading"
           class="flex flex-col gap-(--spacing-md)"
           role="status"
           aria-label="Loading the form"
@@ -244,8 +312,8 @@
             label="Create"
             variant="primary"
             size="medium"
-            :disabled="status === 'loading'"
-            :loading="status === 'submitting'"
+            :disabled="loading"
+            :loading="submitting"
           />
         </div>
       </div>

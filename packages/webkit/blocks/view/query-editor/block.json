@@ -44,6 +44,7 @@
     "name": "Tables",
     "file": "query-editor.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Schema",
@@ -77,7 +78,7 @@
     },
     {
       "name": "TableData",
-      "summary": "The events table in the Data view: 137 rows in a compact `DataTable` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows joins the toolbar; it ends in a toast with Undo.",
+      "summary": "The events table in the Data view: 137 rows in a compact `DataTable` paged 25 at a time, each column header naming its type with a key on the primary key, `NULL` in muted italics, sortable headers and row selection. Two rows are selected, so Delete 2 rows takes the place of Sort in the toolbar; it removes them and emits `delete-rows`.",
       "file": "variants/table-data.vue"
     },
     {

@@ -65,6 +65,47 @@ When `status` is `error`, a danger `Alert` ("Couldn't load the resources. Check 
 
 When `status` is `empty`, the table and its header and footer give way to a flush `Card :padded="false"` holding only a medium `EmptyState`: the resource glyph, one sentence, then a small secondary `Create <Object>` with the heading's label and a small outlined Documentation on one row.
 
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `TableViewResource` and `TableViewProps` are exported from `table-view.vue`, and `sample.ts` holds the sample rows the block renders when `resources` is left out (and never while `loading` or `error` is set).
+
+| Prop        | Type                  | What it does                                                                                                                                |
+| ----------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `resources` | `TableViewResource[]` | The rows; the filter, the sort and the pages run on them in the browser. Pass `[]` for an account with none.                                |
+| `loading`   | `boolean`             | A request is in flight. With no rows it is the first load (the controls disable, the table shows skeleton rows); with rows it is a refresh. |
+| `error`     | `string`              | Why the load failed, shown in the danger `Alert` with Retry that replaces the table.                                                        |
+
+| Event        | Payload                        | When                                                                     |
+| ------------ | ------------------------------ | ------------------------------------------------------------------------ |
+| `create`     | `(event)`                      | Create Resource, in the heading or the empty card.                       |
+| `refresh`    | `(event)`                      | Refresh.                                                                 |
+| `retry`      | `(event)`                      | Retry in the error alert.                                                |
+| `row-action` | `(event, { value, resource })` | Deploy, View details or Clone in the row menu.                           |
+| `delete`     | `(event, resource)`            | The delete dialog was confirmed; the row is already gone from the table. |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import TableView from './table-view.vue'
+
+  const { data, pending, error, refresh } = useResources()
+  const loadError = "Couldn't load the resources. Check your connection and retry."
+</script>
+
+<template>
+  <TableView
+    :resources="data ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import. A list too large for the browser moves to `useCollection` server mode (`fetch`), which pages and filters on the server.
+
 ## Do
 
 - Run the whole list on one `useCollection` call and bind its props with `v-bind`; let it own the filter, sort, page and preferences.
@@ -113,9 +154,9 @@ When `status` is `empty`, the table and its header and footer give way to a flus
 ## States
 
 - Default: resources exist; the table shows them with the property filter, refresh, export, preferences, sorting and pagination wired, and filtering to nothing shows No matching resources with Clear filters.
-- Empty: every resource was deleted on an account that is not new; `useCollection` reports `empty`, the heading and controls stay, and a flush card with Create Resource and Documentation replaces the table.
-- Loading: the first load; the heading stays, the filter, Download CSV and preferences are disabled, Refresh spins and the table shows its skeleton rows.
-- Error: the resources could not load; the heading and the disabled controls stay, and a danger `Alert` with Retry takes the table's place (`status` is `error` when a server-mode `fetch` rejects).
+- Empty: every resource was deleted on an account that is not new (`resources` is `[]`); `useCollection` reports `empty`, the heading and controls stay, and a flush card with Create Resource and Documentation replaces the table.
+- Loading: the first load (`loading` with no `resources`); the heading stays, the filter, Download CSV and preferences are disabled, Refresh spins and the table shows its skeleton rows.
+- Error: the resources could not load (`error` is set); the heading and the disabled controls stay, and a danger `Alert` with the message and Retry takes the table's place.
 - Deployments: the deployments list with Version (Current tag), Status with a spinner while Building and the run's duration, the project link, the environment tag and the author with the time; a row click opens the deployment, the row menu holds View details, Redeploy and Promote to production, and Refresh, no match and empty behave as in Default and Empty.
 
 ## Related

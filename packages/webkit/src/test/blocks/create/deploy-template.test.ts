@@ -29,6 +29,34 @@ describe('deploy-template#ConnectGit', () => {
     expect(screen.getByText('Connect a Git provider')).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Continue with GitHub' })).toBeTruthy()
   })
+
+  it('renders the template it is given and emits the connect actions', async () => {
+    const view = render(DeployTemplate, {
+      props: {
+        template: {
+          name: 'Acme Docs',
+          description: 'Launch a docs site.',
+          icon: 'ai ai-book',
+          provider: 'GitHub',
+          providerIcon: 'ai ai-github',
+          scope: 'acme',
+          path: 'templates/docs-site'
+        }
+      }
+    })
+    expect(screen.getAllByText('Acme Docs').length).toBeGreaterThan(0)
+    expect(screen.getByText('templates/docs-site')).toBeTruthy()
+    expect(screen.queryByText('Nuxt E-commerce')).toBeNull()
+    await fireEvent.click(screen.getByRole('button', { name: 'Continue with GitHub' }))
+    await fireEvent.click(screen.getByRole('button', { name: 'Continue without Git' }))
+    await fireEvent.click(screen.getByRole('button', { name: 'Browse templates' }))
+    await fireEvent.click(screen.getByRole('button', { name: 'Back to Creation Center' }))
+    const emitted = view.emitted()
+    expect(emitted.connect).toHaveLength(1)
+    expect(emitted['skip-git']).toHaveLength(1)
+    expect(emitted.browse).toHaveLength(1)
+    expect(emitted.back).toHaveLength(1)
+  })
 })
 
 describe('deploy-template#WhereItRuns', () => {

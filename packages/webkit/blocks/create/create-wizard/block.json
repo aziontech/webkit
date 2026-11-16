@@ -44,6 +44,7 @@
     "name": "WhereItRuns",
     "file": "create-wizard.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "ModuleOff",

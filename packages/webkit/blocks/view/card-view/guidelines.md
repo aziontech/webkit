@@ -56,7 +56,45 @@ When `status` is `no-match`, the `CardList` `#empty` slot holds a medium `EmptyS
 
 ### I. Empty listing and load failure — `Card`, `EmptyState`, `Alert`, `Button` (required)
 
-When `status` is `error`, a danger `Alert` with Retry (bound to the collection's `refresh`) takes the cards' place. When `status` is `empty`, the cards and the pagination give way to a flush `Card :padded="false"` holding a medium `EmptyState`, as table-view does, with the module glyph, one sentence, and a small secondary `Create <Object>` with the heading's label. The heading and the controls row stay.
+When `error` is set, a danger `Alert` with that message and Retry (which emits `retry`) takes the cards' place. When `status` is `empty`, the cards and the pagination give way to a flush `Card :padded="false"` holding a medium `EmptyState`, as table-view does, with the module glyph, one sentence, and a small secondary `Create <Object>` with the heading's label. The heading and the controls row stay.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `CardViewApplication` and `CardViewProps` are exported from `card-view.vue`, and `sample.ts` holds the sample cards the block renders when `applications` is left out (and never while `loading` or `error` is set).
+
+| Prop           | Type                    | What it does                                                                                                                                 |
+| -------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `applications` | `CardViewApplication[]` | The cards; the filter, the selection and the pages run on them in the browser. Pass `[]` for an account with none.                           |
+| `loading`      | `boolean`               | A request is in flight. With no cards it is the first load (the controls disable, `CardList` shows placeholder cards); with cards a refresh. |
+| `error`        | `string`                | Why the load failed, shown in the danger `Alert` with Retry that replaces the cards.                                                         |
+
+| Event    | Payload                 | When                                                                            |
+| -------- | ----------------------- | ------------------------------------------------------------------------------- |
+| `create` | `(event)`               | Create Application, in the heading or the empty card.                           |
+| `retry`  | `(event)`               | Retry in the error alert.                                                       |
+| `delete` | `(event, applications)` | The delete dialog was confirmed; the selected cards are already gone from view. |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import CardView from './card-view.vue'
+
+  const { data, pending, error, refresh } = useApplications()
+  const loadError = "Couldn't load the applications. Check your connection and retry."
+</script>
+
+<template>
+  <CardView
+    :applications="data ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -106,9 +144,9 @@ When `status` is `error`, a danger `Alert` with Retry (bound to the collection's
 ## States
 
 - Default: applications exist; the cards show them with the property filter, multi-select with Delete (n) behind its confirmation dialog, preferences and pagination wired, and filtering to nothing shows No matching applications with Clear filters.
-- Loading: the first load; the heading stays, the filter, Delete and preferences are disabled, and `CardList` shows its placeholder cards (`loading`, `aria-busy`).
-- Error: the applications could not load; the heading and the disabled controls stay and a danger `Alert` with Retry takes the cards' place.
-- Empty: the account has no applications; `useCollection` reports `empty`, the heading and controls stay, and a flush card holding a medium empty state with Create Application replaces the cards.
+- Loading: the first load (`loading` with no `applications`); the heading stays, the filter, Delete and preferences are disabled, and `CardList` shows its placeholder cards (`loading`, `aria-busy`).
+- Error: the applications could not load (`error` is set); the heading and the disabled controls stay and a danger `Alert` with Retry takes the cards' place.
+- Empty: the account has no applications (`applications` is `[]`); `useCollection` reports `empty`, the heading and controls stay, and a flush card holding a medium empty state with Create Application replaces the cards.
 
 ## Related
 

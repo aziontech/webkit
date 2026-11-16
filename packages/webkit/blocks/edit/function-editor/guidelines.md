@@ -65,7 +65,51 @@ The form column with four `SettingsSection`s: General (Name, required on Save), 
 
 ### J. Save bar — `SaveBar`, `Button`, `Alert` (required)
 
-A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; a saved change raises a success toast ("image-optimizer saved.") and the bar leaves. A failed save keeps the bar and every change, and puts a small danger `Alert` in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries and Discard clears it.
+A `SaveBar` slides up on the first change to code, arguments or settings, with an outlined Discard and a primary Save, both medium. If Save finds Name empty, it switches to the Settings tab and moves focus to Name; an empty Code document takes focus on the Code tab. Save emits `submit` with the values and the page sets `loading`. While the save runs, Save shows its loading state, Discard, the field list and the Settings fields are disabled, and both editors turn read-only; when `loading` ends with no `error`, a success toast says "image-optimizer saved." and the bar leaves. A failed save (`error` set) keeps the bar and every change, and puts a small danger `Alert` with the message in its leading region ("Not saved. You are offline; check your connection and save again."); Save retries, and Discard emits `discard` so the page clears the error.
+
+## Data
+
+The block takes the saved service and the request state through props and emits the save; it fetches nothing. `FunctionEditorService`, `FunctionEditorField`, `FunctionEditorValues` and `FunctionEditorProps` are exported from `function-editor.vue`, and `sample.ts` holds the sample service and fields the block renders when `service` or `fields` is left out. The editor keeps its own draft; Discard returns to the props.
+
+| Prop              | Type                             | What it does                                                                                        |
+| ----------------- | -------------------------------- | --------------------------------------------------------------------------------------------------- |
+| `service`         | `FunctionEditorService`          | The saved name, execution environment, status, code and argument schema (JSON text).                |
+| `fields`          | `FunctionEditorField[]`          | The saved argument fields, in order. Pass `[]` for a service with no form.                          |
+| `defaultDraft`    | `Partial<FunctionEditorService>` | Unsaved edits the editor opens with, so the save bar is up.                                         |
+| `defaultTab`      | `'code' \| 'settings'`           | The tab the page opens on.                                                                          |
+| `defaultDocument` | `'code' \| 'arguments'`          | The document of the Code tab the page opens on.                                                     |
+| `defaultExpanded` | `string[]`                       | Ids of the fields that open expanded.                                                               |
+| `loading`         | `boolean`                        | The save is in flight; when it ends with no `error` the editor takes the draft as saved and toasts. |
+| `error`           | `string`                         | Why the save failed, shown in the danger `Alert` of the save bar.                                   |
+
+| Event     | Payload           | When                                                                |
+| --------- | ----------------- | ------------------------------------------------------------------- |
+| `submit`  | `(event, values)` | Save, once Name and Code are filled; `values` holds the fields too. |
+| `discard` | `(event)`         | Discard; the draft is already back to the saved props.              |
+
+To go live, render the block from a page that owns the request:
+
+```vue
+<script setup lang="ts">
+  import FunctionEditor from './function-editor.vue'
+
+  const { service, fields } = useFunction()
+  const { run, pending, error, reset } = useSaveFunction()
+</script>
+
+<template>
+  <FunctionEditor
+    :service="service"
+    :fields="fields"
+    :loading="pending"
+    :error="error ? 'Not saved. Check your connection and save again.' : ''"
+    @submit="(event, values) => run(values)"
+    @discard="reset"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -114,12 +158,12 @@ A `SaveBar` slides up on the first change to code, arguments or settings, with a
 
 ## States
 
-- Code: the Code tab with the Code document filling the editor pane.
-- Arguments: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
-- NoArguments: the Arguments document of a service with no form, the empty schema and the no fields empty state.
+- Code: the default, `defaultTab` `code`: the Code tab with the Code document filling the editor pane.
+- Arguments: `defaultDocument` `arguments` with `defaultExpanded`: the Arguments document of image-optimizer, the schema on the left and two fields on the right, one expanded.
+- NoArguments: a `service` with an empty schema and `fields` `[]`: the Arguments document of a service with no form, the empty schema and the no fields empty state.
 - TestRun: the Code document with a finished test run of image-optimizer under it, the origin fetch selected in the trace; Run test shows the running state.
-- Settings: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
-- Saving: a change to the Code document is being saved; Save shows its loading state, Discard and the fields are disabled and the editors are read-only.
+- Settings: `defaultTab` `settings`: the Settings tab with General, Runtime, Execution environment and Status; editing raises the save bar.
+- Saving: `loading` with a `defaultDraft`: a change to the Code document is being saved; Save shows its loading state, Discard and the fields are disabled and the editors are read-only.
 
 ## Related
 

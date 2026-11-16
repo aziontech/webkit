@@ -42,6 +42,49 @@ After approval, the call appears as a running `ToolCall` under the card and comp
 
 A new response that says what changed (or that nothing ran), with Copy in its actions. When the approved action fails or is stopped, the response says what failed and that the previous version still serves, and an outlined Retry `Button` beside Copy runs the action again; an action never ends in silence.
 
+## Data
+
+The block takes the proposed action and its outcome through props and emits every decision; it runs nothing. `AiActionApprovalAction`, `AiActionApprovalOutcome` and `AiActionApprovalProps` are exported from `ai-action-approval.vue`, and `sample.ts` holds the sample deployment the block renders when `action` is left out.
+
+| Prop               | Type                      | What it does                                                                                                                                                                                     |
+| ------------------ | ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `action`           | `AiActionApprovalAction`  | The request, the read-only call, the explanation, the card (title, description, verb, command) and the call to run. Set `variant: 'danger'` and `confirmationPhrase` for an irreversible action. |
+| `v-model:decision` | `ToolApprovalStatus`      | `pending`, `approved`, `denied` or `expired`. Deny and the approve button set it; pass `expired` when the request times out.                                                                     |
+| `run`              | `ToolCallStatus \| ''`    | Where the approved call stands: `running` (the composer shows Stop), `success`, `error` (Retry shows). Empty before it starts; a denial records the call as denied.                              |
+| `outcome`          | `AiActionApprovalOutcome` | The assistant's report after the decision, with its time.                                                                                                                                        |
+
+| Event     | Payload           | When                                                         |
+| --------- | ----------------- | ------------------------------------------------------------ |
+| `approve` | `(event, action)` | The approve button; the card reads Approved. Start the call. |
+| `deny`    | `(event, action)` | Deny; the card reads Denied.                                 |
+| `stop`    | `(event, action)` | Stop in the composer while the call runs.                    |
+| `retry`   | `(event, action)` | Retry beside Copy after a failed or stopped run.             |
+| `send`    | `(event, text)`   | The reader sent a message from the composer.                 |
+
+To go live, let the page own the decision and the call:
+
+```vue
+<script setup lang="ts">
+  import AiActionApproval from './ai-action-approval.vue'
+
+  const { action, decision, run, outcome, start, cancel } = useAgentAction()
+</script>
+
+<template>
+  <AiActionApproval
+    v-model:decision="decision"
+    :action="action"
+    :run="run"
+    :outcome="outcome"
+    @approve="start"
+    @retry="start"
+    @stop="cancel"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Show exactly what will run, with the real identifiers.
@@ -79,12 +122,12 @@ A new response that says what changed (or that nothing ran), with Copy in its ac
 
 ## States
 
-- Pending: the deployment waiting for Deny or Deploy; approving runs the deployment to completion.
-- Irreversible: a domain deletion that needs the domain name typed before Delete enables.
-- Approved: the card approved, the deployment completed and the assistant's report.
-- Denied: the card denied, the call recorded as denied and the assistant's acknowledgement.
-- Expired: the request expired and the assistant says nothing ran.
-- Error: the approved deployment failed; the call reads failed and the assistant says what failed and that `b-4790` still serves, with Retry.
+- Pending: the deployment waiting for Deny or Deploy (`decision` left at `pending`); Deploy emits `approve` and the page runs the call.
+- Irreversible: a domain deletion (an `action` with `variant: 'danger'` and `confirmationPhrase`) that needs the domain name typed before Delete enables.
+- Approved: `decision="approved"`, `run="success"` and the assistant's report as `outcome`.
+- Denied: `decision="denied"`, `run="denied"` and the assistant's acknowledgement as `outcome`.
+- Expired: `decision="expired"` and an `outcome` that says nothing ran.
+- Error: `decision="approved"`, `run="error"` and an `outcome` that says what failed and that `b-4790` still serves, with Retry.
 
 ## Related
 

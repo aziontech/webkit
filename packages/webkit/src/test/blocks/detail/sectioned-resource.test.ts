@@ -40,4 +40,40 @@ describe('detail/sectioned-resource', () => {
     await fireEvent.click(view.getByRole('tab', { name: 'Private access' }))
     await waitFor(() => expect(view.getByRole('table')).toBeTruthy())
   })
+
+  it('renders the entries it is given and emits refresh, add and the page', async () => {
+    const sections = [
+      {
+        label: 'Rules',
+        items: [
+          { id: 'allow-lists', label: 'Allow lists', noun: 'List' },
+          { id: 'deny-lists', label: 'Deny lists', noun: 'Deny List' }
+        ]
+      }
+    ]
+    const entries = [
+      {
+        id: '501',
+        name: 'acme-office',
+        status: 'Active' as const,
+        owner: 'Jane Doe',
+        modifiedAt: new Date(Date.UTC(2026, 10, 1))
+      }
+    ]
+    const view = render(SectionedResource, { props: { sections, entries } })
+    const root = view.container as HTMLElement
+    await waitFor(() => expect(root.textContent).toContain('acme-office'))
+    expect(root.textContent).not.toContain('rule-01')
+    await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
+    expect(view.emitted('refresh')).toHaveLength(1)
+    await fireEvent.click(buttonByText('Add List', root))
+    expect((view.emitted('add')[0] as unknown[])[1]).toEqual(sections[0].items[0])
+    await fireEvent.click(view.getByRole('radio', { name: 'Deny lists' }))
+    expect(view.emitted('update:page')?.[0]).toEqual(['deny-lists'])
+  })
+
+  it('shows the empty page for an empty entries list', async () => {
+    const view = render(SectionedResource, { props: { entries: [] } })
+    await waitFor(() => expect(view.container.textContent).toContain('No access rules yet'))
+  })
 })

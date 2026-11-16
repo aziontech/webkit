@@ -52,6 +52,57 @@ With only the owner, a small `EmptyState` under the table invites the first team
 
 Invitations, team changes, resends and removals end in a success toast. They are not deploys, so no toast carries Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
 
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `UsersUser`, `UsersTeam`, `UsersInvitation` and `UsersProps` are exported from `users.vue`, and `sample.ts` holds the people and teams the block renders when `users` or `teams` is left out (and never while `loading` or `error` is set).
+
+| Prop                | Type          | What it does                                                                                                        |
+| ------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------- |
+| `users`             | `UsersUser[]` | The people of the account; filtered, sorted and paged in the browser. The owner alone shows the invite empty state. |
+| `teams`             | `UsersTeam[]` | Every team, the options of the Teams pickers.                                                                       |
+| `loading`           | `boolean`     | A request is in flight. With no rows it is the first load; with rows it is a refresh.                               |
+| `error`             | `string`      | Why the load failed, shown in the danger `Alert` with Retry that replaces the controls and the table.               |
+| `defaultInviteOpen` | `boolean`     | Opens the invite drawer on mount.                                                                                   |
+| `defaultEditRoleId` | `string`      | Opens the Edit role dialog for the user with this id on mount.                                                      |
+
+| Event               | Payload                     | When                                                                                    |
+| ------------------- | --------------------------- | --------------------------------------------------------------------------------------- |
+| `invite`            | `(event, { email, teams })` | Send invitation passed validation; the person is already in the list as Invited.        |
+| `refresh`           | `(event)`                   | Refresh.                                                                                |
+| `retry`             | `(event)`                   | Retry in the error alert.                                                               |
+| `role-change`       | `(event, { user, role })`   | Save role, or Undo in its toast; the row already shows the new role.                    |
+| `teams-change`      | `({ user, teams })`         | A row's Teams picker changed, or Undo in its toast.                                     |
+| `resend-invitation` | `(event, user)`             | Resend invitation in the row menu.                                                      |
+| `remove`            | `(event, user)`             | Remove user or Cancel invitation was confirmed; the row is already gone from the table. |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import Users from './users.vue'
+
+  const { data, teams, pending, error, refresh, invite, setRole, setTeams, remove } = useUsers()
+  const loadError = 'The users could not be loaded. Nothing was changed; try again.'
+</script>
+
+<template>
+  <Users
+    :users="data ?? []"
+    :teams="teams"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+    @invite="(event, values) => invite(values)"
+    @role-change="(event, { user, role }) => setRole(user.id, role)"
+    @teams-change="({ user, teams }) => setTeams(user.id, teams)"
+    @remove="(event, user) => remove(user.id)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Show pending invitations in the same list, marked Invited, with Resend and Cancel.
@@ -88,11 +139,11 @@ Invitations, team changes, resends and removals end in a success toast. They are
 ## States
 
 - Default: six people (the owner, four active or inactive, one invited) with the property filter, Refresh, Download CSV, preferences, inline team changes, View profile, Edit role, resend, cancel and remove wired.
-- Invite: the invite drawer open.
-- EditRole: the Edit role dialog open for Jordan Reyes.
-- OnlyOwner: the owner alone and the invite empty state.
-- Loading: the first load.
-- Error: the list did not load; a danger Alert with Retry.
+- Invite: the invite drawer open (`defaultInviteOpen`).
+- EditRole: the Edit role dialog open for Jordan Reyes (`defaultEditRoleId`).
+- OnlyOwner: the owner alone (`users` holds only the owner) and the invite empty state.
+- Loading: the first load (`loading` with no `users`).
+- Error: the list did not load (`error` is set); a danger Alert with the message and Retry.
 
 ## Related
 

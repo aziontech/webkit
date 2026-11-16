@@ -57,6 +57,7 @@
     "name": "Default",
     "file": "analytics-dashboard.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Loading",

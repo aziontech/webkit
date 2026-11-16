@@ -35,6 +35,7 @@
     "name": "Default",
     "file": "template-browser.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Preview",

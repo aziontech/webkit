@@ -36,6 +36,7 @@
     "name": "Default",
     "file": "security-dashboard.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Loading",

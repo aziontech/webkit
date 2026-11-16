@@ -17,23 +17,57 @@
   import TableCellStatus from '@aziontech/webkit/table-cell-status'
   import TableCellTags from '@aziontech/webkit/table-cell-tags'
   import type { TagSeverity } from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
-  type TeamStatus = 'Active' | 'Inactive'
+  import { sampleTeams } from './sample'
 
-  interface Team {
+  /** Whether a team grants its permissions. */
+  export type TeamPermissionsStatus = 'Active' | 'Inactive'
+
+  /** One team of the account. */
+  export interface TeamPermissionsTeam {
+    /** Stable key, used in the team's page link. */
     id: string
+    /** Display name. */
     name: string
+    /** One line under the name. */
     description: string
+    /** Permission keys the team grants, such as applications.view. */
     permissions: string[]
+    /** How many people belong to the team. */
     members: number
-    status: TeamStatus
+    /** Whether the team grants its permissions. */
+    status: TeamPermissionsStatus
   }
 
-  type TeamRow = Team & { permissionNames: string[] }
+  export interface TeamPermissionsProps {
+    /** The teams to list; filtered, sorted and paged in the browser. Left out, the sample renders. */
+    teams?: TeamPermissionsTeam[]
+    /** A request is in flight: with no teams it is the first load, with teams a refresh. */
+    loading?: boolean
+    /** Why the teams could not load; a danger alert with Retry replaces the table. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<TeamPermissionsProps>(), {
+    teams: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    'row-action': [
+      event: Event,
+      payload: { value: DropdownMenuItemValue; team: TeamPermissionsTeam }
+    ]
+    delete: [event: MouseEvent, team: TeamPermissionsTeam]
+  }>()
+
+  type TeamRow = TeamPermissionsTeam & { permissionNames: string[] }
 
   const permissionLabels: Record<string, string> = {
     'applications.view': 'View Applications',
@@ -56,67 +90,20 @@
   }
   const allPermissions = Object.keys(permissionLabels)
 
-  const seedTeams: Team[] = [
-    {
-      id: 'team-1',
-      name: 'Administrators',
-      description: 'Full access to the account',
-      permissions: allPermissions,
-      members: 3,
-      status: 'Active'
+  const source = computed<TeamPermissionsTeam[]>(
+    () => props.teams ?? (props.loading || props.error ? [] : sampleTeams)
+  )
+  const items = ref<TeamPermissionsTeam[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
     },
-    {
-      id: 'team-2',
-      name: 'Developers',
-      description: 'Build and deploy applications',
-      permissions: [
-        'applications.view',
-        'applications.edit',
-        'domains.view',
-        'storage.view',
-        'storage.edit',
-        'metrics.view',
-        'logs.view'
-      ],
-      members: 12,
-      status: 'Active'
-    },
-    {
-      id: 'team-3',
-      name: 'Security',
-      description: 'Firewall rules and certificates',
-      permissions: [
-        'firewall.view',
-        'firewall.edit',
-        'certificates.view',
-        'certificates.edit',
-        'logs.view'
-      ],
-      members: 4,
-      status: 'Active'
-    },
-    {
-      id: 'team-4',
-      name: 'Finance',
-      description: 'Invoices and payment methods',
-      permissions: ['billing.view', 'billing.edit'],
-      members: 2,
-      status: 'Active'
-    },
-    {
-      id: 'team-5',
-      name: 'Contractors',
-      description: 'Read-only access for audits',
-      permissions: ['applications.view', 'domains.view', 'metrics.view'],
-      members: 0,
-      status: 'Inactive'
-    }
-  ]
-
-  const teams = ref<Team[]>(seedTeams)
+    { immediate: true }
+  )
 
   const rows = computed<TeamRow[]>(() =>
-    teams.value.map((team) => ({
+    items.value.map((team) => ({
       ...team,
       permissionNames: team.permissions.map((id) => permissionLabels[id] ?? id)
     }))
@@ -130,15 +117,15 @@
     { id: 'actions', type: 'action', hideable: false }
   ]
 
-  const statusOptions = [...new Set(rows.value.map((row) => row.status))]
-    .sort()
-    .map((value) => ({ value }))
-
-  const properties: FilteringProperty[] = [
+  const properties = computed<FilteringProperty[]>(() => [
     { key: 'name', label: 'Name' },
     { key: 'description', label: 'Description' },
-    { key: 'status', label: 'Status', options: statusOptions }
-  ]
+    {
+      key: 'status',
+      label: 'Status',
+      options: [...new Set(rows.value.map((row) => row.status))].sort().map((value) => ({ value }))
+    }
+  ])
 
   const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
     useCollection({
@@ -153,57 +140,32 @@
   const teamsTableEl = ref<TableExposed<TeamRow> | null>(null)
   const exportCsv = () => teamsTableEl.value?.exportCsv({ filename: 'teams.csv' })
 
-  const statusSeverity = (value: TeamStatus): TagSeverity =>
+  const statusSeverity = (value: TeamPermissionsStatus): TagSeverity =>
     value === 'Active' ? 'success' : 'neutral'
 
-  const loading = ref(false)
-  const loadFailed = ref(false)
-  const retryLoad = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
+  const loadFailed = computed(() => props.error !== '')
+  const refreshing = computed(() => props.loading && items.value.length > 0)
 
-  const refreshing = ref(false)
-  const refresh = () => {
-    if (refreshing.value) return
-    refreshing.value = true
-    setTimeout(() => {
-      refreshing.value = false
-    }, 700)
-  }
-
-  const pending = ref<TeamRow | null>(null)
+  const pending = ref<TeamPermissionsTeam | null>(null)
   const deleteOpen = ref(false)
 
-  const onAction = (value: DropdownMenuItemValue, row: TeamRow) => {
-    if (value === 'duplicate') {
-      const source = teams.value.find((team) => team.id === row.id)
-      if (!source) return
-      const copy: Team = {
-        ...source,
-        id: `team-${teams.value.length + 1}-copy`,
-        name: `${row.name} copy`,
-        members: 0
-      }
-      teams.value = [...teams.value, copy]
-      toast.success(`Team "${copy.name}" created with the same permissions and no members.`)
+  const onAction = (event: Event, value: DropdownMenuItemValue, row: TeamRow) => {
+    const team = items.value.find((item) => item.id === row.id)
+    if (!team) return
+    if (value === 'delete') {
+      pending.value = team
+      deleteOpen.value = true
       return
     }
-    if (value === 'delete') {
-      pending.value = row
-      deleteOpen.value = true
-    }
+    emit('row-action', event, { value, team })
   }
 
-  const remove = () => {
-    const row = pending.value
-    if (!row) return
-    teams.value = teams.value.filter((team) => team.id !== row.id)
+  const remove = (event: MouseEvent) => {
+    const team = pending.value
+    if (!team) return
+    items.value = items.value.filter((item) => item.id !== team.id)
     deleteOpen.value = false
-    toast.success(`Team "${row.name}" deleted.`)
+    emit('delete', event, team)
   }
 </script>
 
@@ -256,7 +218,7 @@
                 size="medium"
                 :loading="refreshing"
                 aria-label="Refresh"
-                @click="refresh"
+                @click="emit('refresh', $event)"
               />
             </Tooltip>
             <Tooltip
@@ -283,13 +245,13 @@
           v-if="loadFailed"
           severity="danger"
         >
-          The teams could not be loaded. Nothing was changed; try again.
+          {{ error }}
           <template #actions>
             <Button
               label="Retry"
               variant="secondary"
               size="small"
-              @click="retryLoad"
+              @click="emit('retry', $event)"
             />
           </template>
         </Alert>
@@ -328,7 +290,7 @@
             <DataTable
               ref="teamsTableEl"
               v-bind="tableProps"
-              :loading="loading || refreshing"
+              :loading="loading"
               sortable
               :bordered="false"
               aria-label="Teams"
@@ -378,7 +340,7 @@
               <template #cell-actions="{ row }">
                 <TableCellActions
                   :name="row.name"
-                  @select="(_event, value) => onAction(value, row)"
+                  @select="(event, value) => onAction(event, value, row)"
                 >
                   <DropdownMenu.Group>
                     <DropdownMenu.Item

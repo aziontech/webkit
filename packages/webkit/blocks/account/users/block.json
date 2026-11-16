@@ -41,6 +41,7 @@
     "name": "Default",
     "file": "users.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Invite",

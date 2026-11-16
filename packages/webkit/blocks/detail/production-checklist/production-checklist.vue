@@ -13,42 +13,61 @@
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, ref } from 'vue'
 
-  const open = ref(false)
+  import { sampleSteps } from './sample'
 
-  const steps = [
-    {
-      id: 'domain',
-      icon: 'ai ai-globe',
-      title: 'Add a custom domain',
-      description:
-        'Serve this service on a domain of your own, with a free HTTPS certificate, instead of the generated hostname.',
-      actionLabel: 'Add Domain',
-      done: true,
-      doneNote: 'Serving shop.example.com.'
-    },
-    {
-      id: 'policy',
-      icon: 'ai ai-shield',
-      title: 'Enable a security policy',
-      description:
-        'Attach a policy so requests are inspected before they reach the service. Rate limiting, access rules, and IP allowlists.',
-      actionLabel: 'Attach Policy',
-      done: false,
-      doneNote: ''
-    },
-    {
-      id: 'customPage',
-      icon: 'ai ai-file',
-      title: 'Set custom error pages',
-      description: 'Answer 4xx and 5xx with your own page instead of the default response.',
-      actionLabel: 'Add Error Page',
-      done: false,
-      doneNote: ''
-    }
-  ]
+  /** One gate between the generated hostname and production. */
+  export interface ProductionChecklistStep {
+    /** Stable id of the gate. */
+    id: string
+    /** Icon class of the gate. */
+    icon: string
+    /** Verb-first gate title. */
+    title: string
+    /** What the gate gives the service, shown in the drawer. */
+    description: string
+    /** Label of the drawer action; empty uses the title. */
+    actionLabel: string
+    /** Whether the gate is done. */
+    done: boolean
+    /** What the gate now serves, shown beside the Done tag. */
+    doneNote: string
+  }
 
-  const doneCount = computed(() => steps.filter((step) => step.done).length)
-  const complete = computed(() => steps.length > 0 && doneCount.value === steps.length)
+  export interface ProductionChecklistProps {
+    /** The gates, in order. Left out, the sample renders. */
+    steps?: ProductionChecklistStep[]
+    /** Opens the drawer on mount. */
+    defaultOpen?: boolean
+  }
+
+  const props = withDefaults(defineProps<ProductionChecklistProps>(), {
+    steps: undefined,
+    defaultOpen: false
+  })
+
+  const emit = defineEmits<{
+    /** A gate action in the drawer was pressed. */
+    'step-action': [event: MouseEvent, step: ProductionChecklistStep]
+    /** The drawer Done button was pressed. */
+    done: [event: MouseEvent]
+  }>()
+
+  const open = ref(props.defaultOpen)
+
+  const steps = computed(() => props.steps ?? sampleSteps)
+
+  const onStepAction = (event: MouseEvent, step: ProductionChecklistStep) => {
+    open.value = false
+    emit('step-action', event, step)
+  }
+
+  const onDone = (event: MouseEvent) => {
+    open.value = false
+    emit('done', event)
+  }
+
+  const doneCount = computed(() => steps.value.filter((step) => step.done).length)
+  const complete = computed(() => steps.value.length > 0 && doneCount.value === steps.value.length)
 </script>
 
 <template>
@@ -200,7 +219,7 @@
                 :label="step.actionLabel || step.title"
                 variant="outline"
                 size="small"
-                @click="open = false"
+                @click="onStepAction($event, step)"
               />
             </Item.Footer>
           </Item>
@@ -213,7 +232,7 @@
             label="Done"
             variant="primary"
             size="medium"
-            @click="open = false"
+            @click="onDone"
           />
         </div>
       </PanelFooter>

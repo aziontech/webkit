@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import Accordion from '@aziontech/webkit/accordion'
+  import Alert from '@aziontech/webkit/alert'
   import Avatar from '@aziontech/webkit/avatar'
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
@@ -18,487 +19,244 @@
   import RadioGroup from '@aziontech/webkit/radio-group'
   import Separator from '@aziontech/webkit/separator'
   import SettingsSection from '@aziontech/webkit/settings-section'
+  import Skeleton from '@aziontech/webkit/skeleton'
+  import Spinner from '@aziontech/webkit/spinner'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { computed, reactive, ref, watch } from 'vue'
 
-  interface Version {
+  import {
+    sampleDefaultValues,
+    sampleEnvironments,
+    sampleImpacted,
+    sampleNewProject,
+    sampleProjectGroups,
+    sampleResources
+  } from './sample'
+
+  /** One Ready version of a resource. */
+  export interface DeployDrawerVersion {
+    /** Stable key, the version id. */
     id: string
+    /** The version name. */
     name: string
+    /** Who built it. */
     author: string
+    /** When it was built, already phrased (1 day ago). */
     createdAgo: string
+    /** Whether it is the version live now. */
     active?: boolean
   }
-  interface Dependency {
+
+  /** A resource the deployment sends live, or one it references. */
+  export interface DeployDrawerDependency {
+    /** Stable key; picked versions are keyed by it. */
     key: string
+    /** The kind of resource (Service, Module, Integration). */
     label: string
+    /** The resource name. */
     name: string
+    /** The kind glyph, an icon class. */
     icon: string
+    /** A note shown instead of the version picker; empty for a pickable resource. */
     note: string
+    /** How many Ready versions exist; the list may hold only the most recent. */
     total: number
-    versions: Version[]
-  }
-  interface Resource extends Dependency {
-    owner: boolean
-    dependencies: Dependency[]
-  }
-  interface DomainGroup {
-    environment: string
-    total: number
-    summary: string
-    domains: string[]
-  }
-  interface ExistingProject {
-    id: string
-    name: string
-    detail: string
-    domains: DomainGroup[]
-  }
-  interface ProjectGroup {
-    key: string
-    label: string
-    projects: ExistingProject[]
-  }
-  interface ProjectView {
-    id?: string
-    name: string
-    domain?: string
-    detail?: string
-    domains?: DomainGroup[]
+    /** The most recent Ready versions, newest first. */
+    versions: DeployDrawerVersion[]
   }
 
-  const resources: Resource[] = [
-    {
-      key: 'service',
-      label: 'Service',
-      name: 'web-app',
-      icon: 'ai ai-server',
-      note: '',
-      total: 6,
-      versions: [
-        {
-          id: 'AEO25I38',
-          name: 'AEO25I38',
-          author: 'Sam Lee',
-          createdAgo: '1 day ago',
-          active: true
-        },
-        {
-          id: 'AG1VVDJP',
-          name: 'AG1VVDJP',
-          author: 'Priya Patel',
-          createdAgo: '3 days ago'
-        },
-        {
-          id: 'AHFPL906',
-          name: 'AHFPL906',
-          author: 'Chris Taylor',
-          createdAgo: '3 days ago'
-        },
-        { id: 'AITJB4GN', name: 'AITJB4GN', author: 'Riley Carter', createdAgo: '4 days ago' },
-        {
-          id: 'AK7D0ZX4',
-          name: 'AK7D0ZX4',
-          author: 'Ethan Brooks',
-          createdAgo: '6 days ago'
-        }
-      ],
-      owner: true,
-      dependencies: [
-        {
-          key: 'service@AG1VVDJP:module-auth-gateway',
-          label: 'Module',
-          name: 'auth-gateway',
-          icon: 'ai ai-code',
-          note: '',
-          total: 8,
-          versions: [
-            {
-              id: 'APICRFV0',
-              name: 'APICRFV0',
-              author: 'Sam Lee',
-              createdAgo: '2 days ago'
-            },
-            {
-              id: 'AQW6HBBH',
-              name: 'AQW6HBBH',
-              author: 'Priya Patel',
-              createdAgo: '3 days ago'
-            },
-            {
-              id: 'ASA076RY',
-              name: 'ASA076RY',
-              author: 'Chris Taylor',
-              createdAgo: '5 days ago'
-            },
-            {
-              id: 'ATNTX28F',
-              name: 'ATNTX28F',
-              author: 'Riley Carter',
-              createdAgo: '5 days ago'
-            },
-            {
-              id: 'AV1NMXOW',
-              name: 'AV1NMXOW',
-              author: 'Ethan Brooks',
-              createdAgo: '6 days ago'
-            }
-          ]
-        },
-        {
-          key: 'service@AG1VVDJP:module-geo-redirect',
-          label: 'Module',
-          name: 'geo-redirect',
-          icon: 'ai ai-code',
-          note: '',
-          total: 11,
-          versions: [
-            {
-              id: 'AK16MQ4R',
-              name: 'AK16MQ4R',
-              author: 'John Smith',
-              createdAgo: '2 days ago'
-            },
-            {
-              id: 'ALF0CLL8',
-              name: 'ALF0CLL8',
-              author: 'Sam Lee',
-              createdAgo: '4 days ago'
-            },
-            {
-              id: 'AMSU2H1P',
-              name: 'AMSU2H1P',
-              author: 'Priya Patel',
-              createdAgo: '4 days ago'
-            },
-            {
-              id: 'AO6NSCI6',
-              name: 'AO6NSCI6',
-              author: 'Chris Taylor',
-              createdAgo: '6 days ago'
-            },
-            {
-              id: 'APKHI7YN',
-              name: 'APKHI7YN',
-              author: 'Riley Carter',
-              createdAgo: '6 days ago'
-            }
-          ]
-        },
-        {
-          key: 'service@AG1VVDJP:integration-payments-api',
-          label: 'Integration',
-          name: 'payments-api',
-          icon: 'ai ai-link',
-          note: '',
-          total: 11,
-          versions: [
-            {
-              id: 'ASEKWJQF',
-              name: 'ASEKWJQF',
-              author: 'Riley Carter',
-              createdAgo: '21 hours ago'
-            },
-            {
-              id: 'ATSEMF6W',
-              name: 'ATSEMF6W',
-              author: 'Ethan Brooks',
-              createdAgo: '2 days ago'
-            },
-            {
-              id: 'AV68CAND',
-              name: 'AV68CAND',
-              author: 'Jordan Kim',
-              createdAgo: '2 days ago'
-            },
-            {
-              id: 'AWK2263U',
-              name: 'AWK2263U',
-              author: 'Taylor Reed',
-              createdAgo: '3 days ago'
-            },
-            {
-              id: 'AXXVS1KB',
-              name: 'AXXVS1KB',
-              author: 'John Smith',
-              createdAgo: '5 days ago'
-            }
-          ]
-        }
-      ]
-    }
-  ]
+  /** A top-level resource with the resources it references. */
+  export interface DeployDrawerResource extends DeployDrawerDependency {
+    /** Whether the project owns it. */
+    owner: boolean
+    /** The modules and integrations it references. */
+    dependencies: DeployDrawerDependency[]
+  }
+
+  /** The domains of a project in one environment. */
+  export interface DeployDrawerDomainGroup {
+    /** The environment they answer in. */
+    environment: string
+    /** How many domains there are. */
+    total: number
+    /** The count, already phrased (10 of 22 domains). */
+    summary: string
+    /** The first domains. */
+    domains: string[]
+  }
+
+  /** A project the deployment can go live on. */
+  export interface DeployDrawerProject {
+    /** Stable key; absent for the project Create new makes. */
+    id?: string
+    /** The project name. */
+    name: string
+    /** The domain a new project answers on. */
+    domain?: string
+    /** One line on what the project serves. */
+    detail?: string
+    /** Its domains per environment. */
+    domains?: DeployDrawerDomainGroup[]
+  }
+
+  /** A project that already exists. */
+  export interface DeployDrawerExistingProject extends DeployDrawerProject {
+    /** Stable key. */
+    id: string
+  }
+
+  /** A group of projects in the project picker. */
+  export interface DeployDrawerProjectGroup {
+    /** Stable key. */
+    key: string
+    /** The group heading. */
+    label: string
+    /** The projects in it. */
+    projects: DeployDrawerExistingProject[]
+  }
+
+  /** An environment the deployment can go live in. */
+  export interface DeployDrawerEnvironment {
+    /** The environment name, also its value. */
+    name: string
+    /** One sentence on what deploying there does. */
+    description: string
+    /** A short tag beside the name (Last used); empty for none. */
+    tag: string
+  }
+
+  /** A project the deployment reaches through shared Deployment Settings. */
+  export interface DeployDrawerImpactedProject {
+    /** Stable key. */
+    id: string
+    /** The project name. */
+    name: string
+    /** Whether it is the project picked above. */
+    selected?: boolean
+    /** Its domains per environment. */
+    domains: DeployDrawerDomainGroup[]
+  }
+
+  /** The projects reached in one environment. */
+  export interface DeployDrawerImpact {
+    /** The environment name. */
+    environment: string
+    /** The projects reached there. */
+    projects: DeployDrawerImpactedProject[]
+  }
+
+  /** A build in progress before the deployment can go live. */
+  export interface DeployDrawerBuild {
+    /** The resource being built. */
+    name: string
+    /** The version being built. */
+    version: string
+    /** Seconds since the build started. */
+    elapsed: number
+  }
+
+  /** Whether the deployment uses an existing project or creates one. */
+  export type DeployDrawerProjectMode = 'existing' | 'new'
+
+  /** What the form holds, and what submit sends. */
+  export interface DeployDrawerValues {
+    /** The picked version id per resource key. */
+    versions: Record<string, string>
+    /** Use an existing project or create one. */
+    projectMode: DeployDrawerProjectMode
+    /** The existing project picked. */
+    projectId: string
+    /** The environment it goes live in. */
+    environment: string
+  }
+
+  export interface DeployDrawerProps {
+    /** The resources and their dependencies. Left out, the sample renders. */
+    resources?: DeployDrawerResource[]
+    /** The projects to pick from, in groups. Left out, the sample renders. */
+    projectGroups?: DeployDrawerProjectGroup[]
+    /** The project Create new makes. Left out, the sample renders. */
+    newProject?: DeployDrawerProject
+    /** The environments to go live in. Left out, the sample renders. */
+    environments?: DeployDrawerEnvironment[]
+    /** The projects reached through shared Deployment Settings. Left out, the sample renders. */
+    impacted?: DeployDrawerImpact[]
+    /** The values the form opens with; every open resets to them. */
+    defaultValues?: Partial<DeployDrawerValues>
+    /** A build in progress: it replaces the resources and the rest waits, inert. */
+    build?: DeployDrawerBuild
+    /** The deploy targets are loading; skeletons stand in for the sections. */
+    loading?: boolean
+    /** Why the deploy targets could not load; a danger alert with Retry replaces the sections. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<DeployDrawerProps>(), {
+    resources: undefined,
+    projectGroups: undefined,
+    newProject: undefined,
+    environments: undefined,
+    impacted: undefined,
+    defaultValues: undefined,
+    build: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: DeployDrawerValues]
+    retry: [event: MouseEvent]
+  }>()
+
+  const open = defineModel<boolean>('open', { default: false })
+
+  const pending = computed(() => props.loading || props.error !== '')
+  const resources = computed<DeployDrawerResource[]>(
+    () => props.resources ?? (pending.value ? [] : sampleResources)
+  )
+  const projectGroups = computed<DeployDrawerProjectGroup[]>(
+    () => props.projectGroups ?? (pending.value ? [] : sampleProjectGroups)
+  )
+  const newProject = computed<DeployDrawerProject>(
+    () => props.newProject ?? (pending.value ? { name: '' } : sampleNewProject)
+  )
+  const environmentChoices = computed<DeployDrawerEnvironment[]>(
+    () => props.environments ?? (pending.value ? [] : sampleEnvironments)
+  )
+  const impacted = computed<DeployDrawerImpact[]>(
+    () => props.impacted ?? (pending.value ? [] : sampleImpacted)
+  )
+  const initial = computed<DeployDrawerValues>(() => ({
+    versions: {},
+    projectMode: 'existing',
+    projectId: '',
+    environment: environmentChoices.value[0]?.name ?? '',
+    ...(props.defaultValues ?? (props.resources ? {} : sampleDefaultValues))
+  }))
 
   const projectModes = [
     { value: 'existing', label: 'Use existing' },
     { value: 'new', label: 'Create new' }
   ]
 
-  const newProject: ProjectView = { name: 'web-app', domain: 'web-app.example.com' }
+  type Dependency = DeployDrawerDependency
+  type ProjectView = DeployDrawerProject
 
-  const projectGroups: ProjectGroup[] = [
-    {
-      key: 'serving',
-      label: 'Serving web-app',
-      projects: [
-        {
-          id: '1020655',
-          name: 'project-01',
-          detail: '2 environments',
-          domains: [
-            {
-              environment: 'Production',
-              total: 8,
-              summary: '8 domains',
-              domains: [
-                'project-1.example.com',
-                'project-1-alias-1.example.com',
-                'project-1-alias-2.example.com',
-                'project-1-alias-3.example.com',
-                'project-1-alias-4.example.com',
-                'project-1-alias-5.example.com',
-                'project-1-alias-6.example.com',
-                'project-1-alias-7.example.com'
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      key: 'flexible',
-      label: 'Flexible',
-      projects: [
-        {
-          id: '1031410004',
-          name: 'campaign-landing',
-          detail: 'Serves black-friday-2025',
-          domains: [
-            {
-              environment: 'Production',
-              total: 1,
-              summary: '1 domains',
-              domains: ['campaign.example.com']
-            }
-          ]
-        },
-        {
-          id: '1031410005',
-          name: 'docs-site',
-          detail: 'Serves docs-web · Preview only',
-          domains: [
-            {
-              environment: 'Preview',
-              total: 1,
-              summary: '1 domains',
-              domains: ['*-preview.docs.example.com']
-            }
-          ]
-        },
-        {
-          id: '1021001',
-          name: 'project-03',
-          detail: 'Serves analytics-pro',
-          domains: [
-            {
-              environment: 'Production',
-              total: 22,
-              summary: '10 of 22 domains',
-              domains: [
-                'project-3.example.com',
-                'project-3-alias-1.example.com',
-                'project-3-alias-2.example.com',
-                'project-3-alias-3.example.com',
-                'project-3-alias-4.example.com',
-                'project-3-alias-5.example.com',
-                'project-3-alias-6.example.com',
-                'project-3-alias-7.example.com',
-                'project-3-alias-8.example.com',
-                'project-3-alias-9.example.com'
-              ]
-            }
-          ]
-        },
-        {
-          id: '1021866',
-          name: 'project-08',
-          detail: 'Serves ecommerce-v2',
-          domains: [
-            {
-              environment: 'Production',
-              total: 57,
-              summary: '10 of 57 domains',
-              domains: [
-                'project-8.example.com',
-                'project-8-alias-1.example.com',
-                'project-8-alias-2.example.com',
-                'project-8-alias-3.example.com',
-                'project-8-alias-4.example.com',
-                'project-8-alias-5.example.com',
-                'project-8-alias-6.example.com',
-                'project-8-alias-7.example.com',
-                'project-8-alias-8.example.com',
-                'project-8-alias-9.example.com'
-              ]
-            }
-          ]
-        },
-        {
-          id: '1022731',
-          name: 'project-13',
-          detail: 'Serves mobile-app',
-          domains: [
-            {
-              environment: 'Production',
-              total: 92,
-              summary: '10 of 92 domains',
-              domains: [
-                'project-13.example.com',
-                'project-13-alias-1.example.com',
-                'project-13-alias-2.example.com',
-                'project-13-alias-3.example.com',
-                'project-13-alias-4.example.com',
-                'project-13-alias-5.example.com',
-                'project-13-alias-6.example.com',
-                'project-13-alias-7.example.com',
-                'project-13-alias-8.example.com',
-                'project-13-alias-9.example.com'
-              ]
-            }
-          ]
-        },
-        {
-          id: '1023596',
-          name: 'project-18',
-          detail: 'Serves react-dashboard',
-          domains: [
-            {
-              environment: 'Production',
-              total: 28,
-              summary: '10 of 28 domains',
-              domains: [
-                'project-18.example.com',
-                'project-18-alias-1.example.com',
-                'project-18-alias-2.example.com',
-                'project-18-alias-3.example.com',
-                'project-18-alias-4.example.com',
-                'project-18-alias-5.example.com',
-                'project-18-alias-6.example.com',
-                'project-18-alias-7.example.com',
-                'project-18-alias-8.example.com',
-                'project-18-alias-9.example.com'
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  const environmentChoices = [
-    {
-      name: 'Production',
-      description: 'Live traffic. One version serves the domain, and deploying replaces it.',
-      tag: 'Last used'
-    },
-    {
-      name: 'Preview',
-      description:
-        'Every other branch. Each version keeps its own URL, so a build can be read before it is live.',
-      tag: ''
-    }
-  ]
-
-  const impacted = [
-    {
-      environment: 'Production',
-      projects: [
-        {
-          id: '1020655',
-          name: 'project-01',
-          selected: true,
-          domains: [
-            {
-              environment: 'Production',
-              total: 8,
-              summary: '8 domains',
-              domains: [
-                'project-1.example.com',
-                'project-1-alias-1.example.com',
-                'project-1-alias-2.example.com',
-                'project-1-alias-3.example.com',
-                'project-1-alias-4.example.com',
-                'project-1-alias-5.example.com',
-                'project-1-alias-6.example.com',
-                'project-1-alias-7.example.com'
-              ]
-            }
-          ]
-        },
-        {
-          id: '1021347',
-          name: 'project-05',
-          domains: [
-            {
-              environment: 'Production',
-              total: 36,
-              summary: '10 of 36 domains',
-              domains: [
-                'project-5.example.com',
-                'project-5-alias-1.example.com',
-                'project-5-alias-2.example.com',
-                'project-5-alias-3.example.com',
-                'project-5-alias-4.example.com',
-                'project-5-alias-5.example.com',
-                'project-5-alias-6.example.com',
-                'project-5-alias-7.example.com',
-                'project-5-alias-8.example.com',
-                'project-5-alias-9.example.com'
-              ]
-            }
-          ]
-        },
-        {
-          id: '1022039',
-          name: 'project-09',
-          domains: [
-            {
-              environment: 'Production',
-              total: 64,
-              summary: '10 of 64 domains',
-              domains: [
-                'project-9.example.com',
-                'project-9-alias-1.example.com',
-                'project-9-alias-2.example.com',
-                'project-9-alias-3.example.com',
-                'project-9-alias-4.example.com',
-                'project-9-alias-5.example.com',
-                'project-9-alias-6.example.com',
-                'project-9-alias-7.example.com',
-                'project-9-alias-8.example.com',
-                'project-9-alias-9.example.com'
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ]
-
-  const open = ref(false)
-  const picks = reactive<Record<string, string>>({ service: 'AG1VVDJP' })
+  const picks = reactive<Record<string, string>>({ ...initial.value.versions })
   const versionOpen = reactive<Record<string, boolean>>({})
-  const projectMode = ref('existing')
-  const projectId = ref('1020655')
-  const environment = ref('Production')
+  const projectMode = ref<DeployDrawerProjectMode>(initial.value.projectMode)
+  const projectId = ref(initial.value.projectId)
+  const environment = ref(initial.value.environment)
 
   const project = computed<ProjectView>(() =>
     projectMode.value === 'new'
-      ? newProject
-      : (projectGroups
+      ? newProject.value
+      : (projectGroups.value
           .flatMap((group) => group.projects)
-          .find((entry) => entry.id === projectId.value) ?? projectGroups[0].projects[0])
+          .find((entry) => entry.id === projectId.value) ??
+        projectGroups.value[0]?.projects[0] ?? { name: '' })
   )
 
   const versionOf = (row: Dependency) =>
@@ -514,7 +272,7 @@
 
   const changeCount = computed(
     () =>
-      resources
+      resources.value
         .flatMap((row) => [row, ...row.dependencies])
         .filter((row) => row.versions.length && versionOf(row).id !== liveVersionId(row)).length
   )
@@ -529,15 +287,39 @@
     versionOpen[row.key] = false
   }
 
-  watch(open, (isOpen) => {
-    if (!isOpen) return
+  const reset = () => {
+    const values = initial.value
     Object.keys(picks).forEach((key) => delete picks[key])
-    picks.service = 'AG1VVDJP'
+    Object.assign(picks, values.versions)
     Object.keys(versionOpen).forEach((key) => delete versionOpen[key])
-    projectMode.value = 'existing'
-    projectId.value = '1020655'
-    environment.value = 'Production'
+    projectMode.value = values.projectMode
+    projectId.value = values.projectId
+    environment.value = values.environment
+  }
+
+  watch(open, (isOpen) => {
+    if (isOpen) reset()
   })
+
+  const blocked = computed(() => pending.value || !!props.build)
+
+  const title = computed(() => (props.build ? 'Build and deployment' : 'Deploy'))
+
+  const submit = (event: Event) => {
+    if (blocked.value) return
+    emit('submit', event, {
+      versions: Object.fromEntries(
+        resources.value
+          .flatMap((row) => [row, ...row.dependencies])
+          .filter((row) => row.versions.length)
+          .map((row) => [row.key, versionOf(row).id])
+      ),
+      projectMode: projectMode.value,
+      projectId: project.value.id ?? '',
+      environment: environment.value
+    })
+    open.value = false
+  }
 </script>
 
 <template>
@@ -558,24 +340,126 @@
     <DrawerContent>
       <form
         class="flex min-h-0 flex-1 flex-col"
-        aria-label="Deploy"
+        :aria-label="title"
         novalidate
-        @submit.prevent="open = false"
+        @submit.prevent="submit"
       >
         <PanelHeader class="w-full">
           <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
-            <DrawerTitle>Deploy</DrawerTitle>
+            <DrawerTitle>{{ title }}</DrawerTitle>
           </div>
         </PanelHeader>
 
         <PanelBody>
-          <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
-            <legend class="sr-only">Deploy</legend>
+          <div
+            v-if="loading"
+            class="flex min-w-0 flex-col"
+            aria-busy="true"
+          >
             <SettingsSection
               title="Resources"
               hint="The service version this deployment sends live, and the version of every module and integration it references."
             >
-              <Card :padded="false">
+              <div aria-hidden="true">
+                <Skeleton height="var(--size-40)" />
+              </div>
+            </SettingsSection>
+
+            <SettingsSection
+              title="Environment"
+              hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
+            >
+              <div
+                class="flex min-w-0 flex-col gap-(--spacing-xs)"
+                aria-hidden="true"
+              >
+                <Skeleton
+                  v-for="row in 2"
+                  :key="row"
+                  height="var(--size-16)"
+                />
+              </div>
+            </SettingsSection>
+
+            <span
+              class="sr-only"
+              role="status"
+            >
+              Loading the resources and environments for this deployment.
+            </span>
+          </div>
+
+          <SettingsSection
+            v-else-if="error"
+            title="Deploy targets"
+          >
+            <div class="flex min-w-0 flex-col items-start gap-(--spacing-sm)">
+              <Alert
+                severity="danger"
+                :label="error"
+              />
+              <Button
+                label="Retry"
+                variant="outline"
+                size="small"
+                icon="ai ai-refresh"
+                @click="(event: MouseEvent) => emit('retry', event)"
+              />
+            </div>
+          </SettingsSection>
+
+          <fieldset
+            v-else
+            class="m-0 flex min-w-0 flex-col border-0 p-0"
+          >
+            <legend class="sr-only">{{ title }}</legend>
+            <SettingsSection
+              title="Resources"
+              hint="The service version this deployment sends live, and the version of every module and integration it references."
+            >
+              <Item
+                v-if="build"
+                variant="outline"
+                size="small"
+                aria-live="polite"
+              >
+                <Item.Media>
+                  <span
+                    class="flex size-7 items-center justify-center rounded-(--shape-control) border border-(--border-muted) bg-(--bg-surface-raised)"
+                  >
+                    <i
+                      class="ai ai-server text-body-xs text-(--text-default)"
+                      aria-hidden="true"
+                    />
+                  </span>
+                </Item.Media>
+                <Item.Content>
+                  <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                    <Item.Title>{{ build.name }}</Item.Title>
+                    <Tag
+                      :label="build.version"
+                      severity="neutral"
+                      size="small"
+                      class="shrink-0"
+                    />
+                  </span>
+                  <Item.Description>Building…</Item.Description>
+                </Item.Content>
+                <Item.Actions>
+                  <span
+                    class="font-(family-name:--font-code) text-label-sm tabular-nums text-(--text-muted)"
+                  >
+                    {{ build.elapsed }} s
+                  </span>
+                  <div class="contents text-(--text-default)">
+                    <Spinner class="shrink-0" />
+                  </div>
+                </Item.Actions>
+              </Item>
+              <Card
+                v-else
+                :padded="false"
+              >
                 <template #default>
                   <template
                     v-for="(row, index) in resources"
@@ -874,6 +758,8 @@
             </SettingsSection>
 
             <SettingsSection
+              :inert="!!build || undefined"
+              :data-pending="build ? 'true' : undefined"
               title="Project"
               hint="The project whose domains serve the service. Create one to deploy it on a new domain."
             >
@@ -1068,6 +954,8 @@
             </SettingsSection>
 
             <SettingsSection
+              :inert="!!build || undefined"
+              :data-pending="build ? 'true' : undefined"
               title="Environment"
               hint="Where the deployment goes live, from the environments this project serves. Each one goes live with the Deployment Settings set on the project."
             >
@@ -1099,6 +987,8 @@
             </SettingsSection>
 
             <SettingsSection
+              :inert="!!build || undefined"
+              :data-pending="build ? 'true' : undefined"
               title="Projects impacted"
               hint="This environment deploys with shared Deployment Settings, so the deployment reaches every project below, in every environment they are linked to, and the domains they serve."
             >
@@ -1263,7 +1153,7 @@
         <PanelFooter>
           <div class="flex w-full flex-wrap items-center justify-between gap-(--spacing-sm)">
             <p
-              v-if="changeCount"
+              v-if="changeCount && !build"
               class="flex min-w-0 items-center gap-(--spacing-2xs) text-body-xs text-(--text-muted)"
             >
               <i
@@ -1277,6 +1167,7 @@
               label="Deploy"
               variant="primary"
               size="medium"
+              :disabled="blocked"
               type="submit"
             />
           </div>

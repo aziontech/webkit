@@ -21,73 +21,77 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, nextTick, ref } from 'vue'
+  import { computed, nextTick, ref, watch } from 'vue'
 
-  interface Match {
+  import { sampleMatches } from './sample'
+
+  /** A time range the matches are counted over. */
+  export type WafTuningRange = '1h' | '24h' | '7d'
+
+  /** One rule of the rule set and the requests it matched. */
+  export interface WafTuningMatch {
+    /** The rule id, the row key. */
     ruleId: string
+    /** The threat the rule detects. */
     threat: string
+    /** How many requests it matched in the range. */
     hits: number
+    /** The addresses it matched most. */
     ips: string[]
+    /** The countries it matched most. */
     countries: string[]
+    /** The paths it matched on; one allowed rule is created per path. */
     paths: string[]
   }
 
-  const RANGES = [
-    { value: '1h', label: 'Last hour', factor: 0.04 },
-    { value: '24h', label: 'Last 24 hours', factor: 1 },
-    { value: '7d', label: 'Last 7 days', factor: 6.2 }
-  ]
+  /** What Allow rules sends. */
+  export interface WafTuningAllowPayload {
+    /** The checked rules. */
+    matches: WafTuningMatch[]
+    /** Why their requests are legitimate. */
+    reason: string
+  }
 
-  const MATCHES: Match[] = [
-    {
-      ruleId: '1005',
-      threat: 'SQL injection',
-      hits: 18432,
-      ips: ['203.0.113.41', '198.51.100.7', '203.0.113.90', '192.0.2.15'],
-      countries: ['United States', 'Brazil', 'Germany'],
-      paths: ['/api/v1/search', '/api/v1/login', '/checkout']
-    },
-    {
-      ruleId: '1015',
-      threat: 'Unwanted access',
-      hits: 6210,
-      ips: ['198.51.100.22', '203.0.113.8'],
-      countries: ['United States', 'Netherlands'],
-      paths: ['/admin', '/wp-login.php']
-    },
-    {
-      ruleId: '1201',
-      threat: 'Cross-site scripting',
-      hits: 2288,
-      ips: ['192.0.2.31', '198.51.100.12', '203.0.113.77'],
-      countries: ['Singapore', 'India'],
-      paths: ['/v2/comments', '/v2/profile', '/search']
-    },
-    {
-      ruleId: '1302',
-      threat: 'File upload',
-      hits: 934,
-      ips: ['192.0.2.77'],
-      countries: ['Ireland'],
-      paths: ['/api/v1/upload']
-    },
-    {
-      ruleId: '1402',
-      threat: 'Evading tricks',
-      hits: 120,
-      ips: ['203.0.113.5', '198.51.100.61'],
-      countries: ['Chile'],
-      paths: ['/v2/graphql']
-    }
-  ]
+  export interface WafTuningProps {
+    /** The matched rules for the range. Pass an empty list for a rule set with no match yet. Left out, the sample renders. */
+    matches?: WafTuningMatch[]
+    /** The matches are loading: the settings and actions disable and the table shows skeleton rows. */
+    loading?: boolean
+    /** Why the matches could not load; a danger alert with Retry takes the table's place. */
+    error?: string
+    /** Rule ids checked when the block opens. */
+    defaultSelectedKeys?: string[]
+    /** Opens the allow dialog on the checked rules when the block opens. */
+    defaultOpen?: boolean
+    /** The allow request is in flight: the dialog locks and Allow rules spins. */
+    allowing?: boolean
+    /** Why the allowed rules were not created, shown at the top of the dialog. */
+    allowError?: string
+  }
 
-  const INITIAL_ROWS = MATCHES
-  const INITIAL_LOADING = false
-  const INITIAL_SELECTION: string[] = []
-  const ALLOW_ON_START = false
-  const FAILED_ON_START = false
-  const ALLOW_FAILURES = 0
-  const LOAD_FAILED_ON_START = false
+  const props = withDefaults(defineProps<WafTuningProps>(), {
+    matches: undefined,
+    loading: false,
+    error: '',
+    defaultSelectedKeys: () => [],
+    defaultOpen: false,
+    allowing: false,
+    allowError: ''
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    allow: [event: Event, payload: WafTuningAllowPayload]
+  }>()
+
+  const range = defineModel<WafTuningRange>('range', { default: '24h' })
+
+  const RANGES: { value: WafTuningRange; label: string }[] = [
+    { value: '1h', label: 'Last hour' },
+    { value: '24h', label: 'Last 24 hours' },
+    { value: '7d', label: 'Last 7 days' }
+  ]
 
   const columns: TableColumn[] = [
     {
@@ -104,12 +108,16 @@
     { accessorKey: 'paths', header: 'Top paths', grow: 3 }
   ]
 
-  const range = ref('24h')
+  const source = computed<WafTuningMatch[]>(
+    () => props.matches ?? (props.loading || props.error ? [] : sampleMatches)
+  )
+  const loading = computed(() => props.loading)
+  const loadFailed = computed(() => props.error !== '')
+  const noMatches = computed(() => !props.loading && !loadFailed.value && !source.value.length)
+
   const threshold = ref('100')
   const search = ref('')
-  const loading = ref(INITIAL_LOADING)
-  const loadFailed = ref(LOAD_FAILED_ON_START)
-  const selection = ref([...INITIAL_SELECTION])
+  const selectedKeys = ref<string[]>([...props.defaultSelectedKeys])
   const sorting = ref([{ id: 'hits', desc: true }])
 
   const rangeLabel = (value: string) => RANGES.find((item) => item.value === value)?.label ?? ''
@@ -121,43 +129,26 @@
     () => threshold.value.trim() !== '' && !/^\d+$/.test(threshold.value.trim())
   )
 
-  const rows = computed(() => {
-    const factor = RANGES.find((item) => item.value === range.value)?.factor ?? 1
-    return INITIAL_ROWS.map((row) => ({ ...row, hits: Math.round(row.hits * factor) })).filter(
-      (row) => row.hits >= minimumHits.value
-    )
-  })
-  const selected = computed(() => rows.value.filter((row) => selection.value.includes(row.ruleId)))
+  const rows = computed(() => source.value.filter((row) => row.hits >= minimumHits.value))
+  const selected = computed(() =>
+    rows.value.filter((row) => selectedKeys.value.includes(row.ruleId))
+  )
   const pathCount = computed(() => selected.value.reduce((sum, row) => sum + row.paths.length, 0))
   const { formatNumber } = useLocale()
 
   const formatHits = (value: number) => formatNumber(value)
 
-  const tuningTableEl = ref<TableExposed<Match> | null>(null)
+  const tuningTableEl = ref<TableExposed<WafTuningMatch> | null>(null)
   const resultsEl = ref<HTMLElement | null>(null)
   const exportCsv = () => tuningTableEl.value?.exportCsv({ filename: 'waf-tuning.csv' })
 
-  const refresh = () => {
-    if (loading.value) return
-    loading.value = true
-    setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
-
-  const retry = () => {
-    loadFailed.value = false
-    refresh()
-  }
-
-  const allowOpen = ref(ALLOW_ON_START)
-  const allowFailed = ref(FAILED_ON_START)
+  const allowOpen = ref(props.defaultOpen)
+  const allowFailed = ref(props.allowError !== '')
   const reason = ref('')
   const submitted = ref(false)
-  const allowing = ref(false)
+  const allowing = computed(() => props.allowing)
   const reasonMissing = computed(() => submitted.value && !reason.value.trim())
   const reasonFieldEl = ref<HTMLElement | null>(null)
-  let failuresLeft = ALLOW_FAILURES
 
   const openAllow = () => {
     reason.value = ''
@@ -166,31 +157,41 @@
     allowOpen.value = true
   }
 
-  const allow = () => {
+  const allow = (event: Event) => {
     submitted.value = true
     if (allowing.value) return
     if (!reason.value.trim()) {
       nextTick(() => reasonFieldEl.value?.querySelector('textarea')?.focus())
       return
     }
-    allowing.value = true
     allowFailed.value = false
-    setTimeout(() => {
-      allowing.value = false
-      if (failuresLeft > 0) {
-        failuresLeft -= 1
+    emit('allow', event, { matches: [...selected.value], reason: reason.value.trim() })
+  }
+
+  watch(
+    () => props.allowError,
+    (next) => {
+      allowFailed.value = next !== ''
+    }
+  )
+
+  watch(
+    () => props.allowing,
+    (now, before) => {
+      if (!before || now) return
+      if (props.allowError) {
         allowFailed.value = true
         return
       }
       const created = pathCount.value
       allowOpen.value = false
-      selection.value = []
+      selectedKeys.value = []
       setTimeout(() => resultsEl.value?.focus(), 0)
       toast.success(`${created} allowed ${created === 1 ? 'rule' : 'rules'} created.`, {
         description: 'Requests that match them are no longer blocked by this rule set.'
       })
-    }, 900)
-  }
+    }
+  )
 </script>
 
 <template>
@@ -228,7 +229,7 @@
         aria-label="Matched requests"
       >
         <div
-          v-if="INITIAL_ROWS.length"
+          v-if="!noMatches"
           class="flex min-w-0 flex-wrap items-end gap-(--spacing-sm)"
         >
           <div class="w-full sm:w-48">
@@ -290,7 +291,7 @@
               size="medium"
               aria-label="Refresh matched requests"
               :disabled="loading"
-              @click="refresh"
+              @click="(event: MouseEvent) => emit('refresh', event)"
             />
           </Tooltip>
         </div>
@@ -298,9 +299,9 @@
         <Alert
           v-if="loadFailed"
           severity="danger"
-          label="Couldn't load the matched requests. Check your connection and retry."
+          :label="error"
           action-label="Retry"
-          @action="retry"
+          @action="(event: MouseEvent) => emit('retry', event)"
         />
         <Card
           v-else
@@ -308,7 +309,7 @@
         >
           <template #default>
             <EmptyState
-              v-if="!INITIAL_ROWS.length"
+              v-if="noMatches"
               icon="ai ai-shield"
               title="No matches yet"
               description="This rule set has not matched any request. Matches appear here as traffic arrives."
@@ -317,7 +318,7 @@
               v-else
               ref="tuningTableEl"
               v-model:global-filter="search"
-              v-model:selected-keys="selection"
+              v-model:selected-keys="selectedKeys"
               v-model:sorting="sorting"
               :data="rows"
               :columns="columns"
@@ -407,7 +408,7 @@
               <Alert
                 v-if="allowFailed"
                 severity="danger"
-                label="The allowed rules weren't created. Nothing changed in the rule set; try again."
+                :label="allowError"
               />
               <DialogDescription>
                 Requests these rules matched on their paths will no longer be blocked. One allowed

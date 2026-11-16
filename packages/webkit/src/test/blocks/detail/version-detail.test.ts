@@ -5,6 +5,9 @@ import { type Component, defineComponent, h } from 'vue'
 import DeviceGroups from '../../../../blocks/detail/version-detail/variants/device-groups.vue'
 import EnvironmentCrumb from '../../../../blocks/detail/version-detail/variants/environment-crumb.vue'
 import Revert from '../../../../blocks/detail/version-detail/variants/revert.vue'
+import VersionDetail, {
+  type VersionDetailVersion
+} from '../../../../blocks/detail/version-detail/version-detail.vue'
 import ConsoleLayout from '../../../components/layout/console-layout/console-layout.vue'
 import { useToastRegion } from '../../toast-region'
 
@@ -81,5 +84,81 @@ describe('version-detail#EnvironmentCrumb', () => {
     expect(environments).toHaveLength(2)
     for (const trigger of environments) expect(trigger.textContent).toContain('Production')
     expect(screen.getAllByRole('combobox', { name: 'Switch version' })).toHaveLength(2)
+  })
+})
+
+describe('version-detail#CacheSettings', () => {
+  it('renders the cache settings panel inside the version page and opens a row in the drawer', async () => {
+    const { default: CacheSettings } =
+      await import('../../../../blocks/detail/version-detail/variants/cache-settings.vue')
+    render(CacheSettings)
+    expect(screen.getByTestId('version-detail-bar')).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Add Cache Settings' })).toBeTruthy()
+    await fireEvent.click(screen.getByRole('button', { name: 'static-assets' }))
+    expect(await screen.findByRole('dialog', { name: 'Edit Cache Settings' })).toBeTruthy()
+  })
+})
+
+describe('version-detail data', () => {
+  const versions: VersionDetailVersion[] = [
+    {
+      id: 'B2DRAFT1',
+      name: 'B2DRAFT1',
+      state: 'draft',
+      comment: 'Tune the cache',
+      author: 'Jane Doe',
+      createdAgo: '2 hours ago'
+    },
+    {
+      id: 'B1LIVE01',
+      name: 'B1LIVE01',
+      state: 'deployed',
+      comment: 'Initial release',
+      author: 'Alex Morgan',
+      createdAgo: '2 days ago',
+      createdOn: 'Nov 14, 2026'
+    },
+    {
+      id: 'B0OLD001',
+      name: 'B0OLD001',
+      state: 'ready',
+      comment: 'First import',
+      author: 'Sam Lee',
+      createdAgo: '1 week ago'
+    }
+  ]
+  const settings = { name: 'acme-store', active: true, modules: { cache: true } }
+
+  it('renders the versions it is given and emits save with the draft settings', async () => {
+    const view = render(VersionDetail, { props: { versions, settings, historyOpen: true } })
+    const history = view.getByTestId('version-detail-history')
+    expect(history.textContent).toContain('B1LIVE01')
+    expect(history.textContent).toContain('Initial release')
+    expect(document.body.textContent).not.toContain('ADA8FMMR')
+    expect((view.getByRole('textbox', { name: 'Name' }) as HTMLInputElement).value).toBe(
+      'acme-store'
+    )
+    await fireEvent.click(view.getByRole('button', { name: 'Save and deploy' }))
+    const [[event, payload]] = view.emitted('save') as [
+      [MouseEvent, { action: string; settings: typeof settings }]
+    ]
+    expect(event).toBeInstanceOf(MouseEvent)
+    expect(payload.action).toBe('deploy')
+    expect(payload.settings.name).toBe('acme-store')
+  })
+
+  it('emits redeploy on a deployed version and revert after the confirmation', async () => {
+    const deployed = render(VersionDetail, { props: { versions, versionId: 'B1LIVE01' } })
+    await fireEvent.click(deployed.getByRole('button', { name: 'Redeploy' }))
+    expect(deployed.emitted('redeploy')).toHaveLength(1)
+    deployed.unmount()
+
+    const earlier = render(VersionDetail, { props: { versions, versionId: 'B0OLD001' } })
+    await fireEvent.click(earlier.getByRole('button', { name: 'Revert to B0OLD001' }))
+    const dialog = await screen.findByRole('alertdialog', { name: 'Revert to B0OLD001?' })
+    expect(dialog.textContent).toContain('What changes against B1LIVE01')
+    await fireEvent.click(within(dialog).getByRole('button', { name: 'Revert to B0OLD001' }))
+    const [[, version]] = earlier.emitted('revert') as [[MouseEvent, VersionDetailVersion]]
+    expect(version.id).toBe('B0OLD001')
   })
 })

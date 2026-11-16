@@ -56,27 +56,110 @@ The root's `select` event hands the option and the row to the page: Open enters 
 
 When the search is set, the table's `#empty` slot holds a medium `EmptyState`, No matching files, with an outlined Clear search; otherwise it holds a medium `EmptyState` with one sentence and a secondary Add to files `SplitButton` with the same options as the toolbar's. Inside a folder the `..` row always remains, so the user can still go back up.
 
-### J. Upload — `SplitButton` (optional)
+### J. Upload — `Dialog`, `DialogContent`, `DialogTitle`, `DialogDescription`, `PanelHeader`, `PanelBody`, `PanelFooter`, `FileDropzone`, `FileTokenGroup` (required)
 
-Variant Uploading only; it adds `Dialog` and its parts, `PanelHeader`, `PanelBody`, `PanelFooter`, `FileDropzone` and `FileTokenGroup` to the page.
+Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` wired to a hidden `<input type="file" multiple>`, then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload emits `upload` with the files and the folder path and closes the dialog; the dialog does not wait for the transfer. Upload folder opens the same dialog titled Upload folder, a `FileDropzone` with `directories` (a dropped folder is walked) and a Browse folder `Button` wired to a hidden `<input type="file" webkitdirectory>`; each file keeps its path inside the folder in `webkitRelativePath` (`site/css/main.css`). Add folder emits `add-folder`; the page asks for the name.
 
-Add to files and its Upload file option open a medium `Dialog` titled Upload files whose description names the destination folder and that a file with the same name is replaced. Inside: an inline `FileDropzone` (`Up to 300 MB per file.`) with a secondary Browse files `Button` wired to a hidden `<input type="file" multiple>`, then a `FileTokenGroup` (`limit` 5) of the picked files. A file over the limit stays in the group with its reason (`Larger than 300 MB, the limit per file`), an empty file with a warning, and both are left out of the count: the primary button reads `Upload 3 files` and is disabled while nothing can be sent. Upload closes the dialog and starts the transfer; the dialog does not wait for it. In the Uploading variant Add to files also offers Upload folder: the same dialog titled Upload folder, a `FileDropzone` with `directories` (a dropped folder is walked) and a Browse folder `Button` wired to a hidden `<input type="file" webkitdirectory>`; the tokens and the transfer rows name each file by its path inside the folder (`site/css/main.css`), and as files finish their folders appear in the table under the folder in view.
+A second `FileDropzone variant="overlay"` sits inside the `section` that holds the card (made `relative`), so dragging files anywhere over the page shows `Drop files to upload them to <folder>` over the listing; a drop emits `upload` for the folder in view and refuses files over the limit with a danger toast.
 
-A second `FileDropzone variant="overlay"` sits inside the `section` that holds the card (made `relative`), so dragging files anywhere over the page shows `Drop files to upload them to <folder>` over the listing; a drop uploads straight into the folder in view and refuses files over the limit with a danger toast.
+### K. Transfer card — `UploadProgress`, `Button` (optional)
 
-### K. Transfer card and outcome toast — `Button` (optional)
+Shown while `transfers` holds files; `transferOperation` says whether they upload or move.
 
-Variants Uploading and MoveObject only; they add `UploadProgress` and raise their toasts with `toast`.
+Every transfer (upload, move) runs in one floating `UploadProgress` at the inline-end bottom corner, so the person can keep browsing, change folder or open another resource while it runs. The header counts finished files over one overall bar (`Uploading 2 of 5 files`), each row carries its bar, Cancel while it runs or waits (uploads only), Retry when it failed with the reason under the name; Cancel, Retry and Close emit `cancel-transfer`, `retry-transfer` and `close-transfer`, and the page updates `transfers`. Files land in the table as the page adds them to `entries`, not at the end. Close appears when everything finished and returns focus to Add to files (or to the toolbar, after a move). After an upload the card offers Open folder, which opens the `target` of the finished files.
 
-Every transfer (upload, move) runs in one floating `UploadProgress` at the inline-end bottom corner, so the person can keep browsing, change folder or open another resource while it runs. The header counts finished files over one overall bar (`Uploading 2 of 5 files`), each row carries its bar, Cancel while it runs or waits, Retry when it failed with the reason under the name. Files land in the table as each finishes, not at the end. Close appears when everything finished and returns focus to Add to files (or to the toolbar, after a move). At most two files upload at a time; the rest wait.
+When a transfer finishes the page reports it with a toast as well as the card, because the card may be collapsed or the person may be elsewhere. Its actions fit the files, never a deploy action: after a clean upload or move, `Open folder` (sets `path` to the destination); after a partial upload, a danger toast `1 of 5 files weren't uploaded.` that says where the rest went and offers `Retry failed`. Storage objects are not deployed, so the async-submit Edit and Redeploy pair does not apply. Each of these toasts passes `position: 'top-right'` so it never covers the transfer card, whatever corner the app's region defaults to.
 
-When a transfer finishes the page reports it with a toast as well as the card, because the card may be collapsed or the person may be elsewhere. Its actions fit the files, never a deploy action: after a clean upload or move, `Open folder` (goes to the destination); after a partial upload, a danger toast `1 of 5 files weren't uploaded.` that says where the rest went and offers `Retry failed`. Storage objects are not deployed, so the async-submit Edit and Redeploy pair does not apply. Each of these toasts passes `position: 'top-right'` so it never covers the transfer card, whatever corner the app's region defaults to.
+### L. Selection and Move — `DataTable`, `DropdownMenuItem`, `Field`, `Combobox` (optional)
 
-### L. Selection and Move — `DataTable`, `DropdownMenuItem` (optional)
+With `movable`, `selectable` with `v-model:selected-keys` adds the checkbox column, and `:row-selectable="(row) => row.kind === 'file'"` keeps it to files: folders and the `..` row draw no checkbox and Select all skips them; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move), and the selected names are the `selection` model. Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of the `destinations` (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves. A valid path emits `move` with the files and the destination.
 
-Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
+## Data
 
-`selectable` with `v-model:selected-keys` adds the checkbox column, and `:row-selectable="(row) => row.kind === 'file'"` keeps it to files: folders and the `..` row draw no checkbox and Select all skips them; the toolbar slot's `selectedCount`, `selectedRows` and `clearSelection` drive a selection bar (`2 selected`, Clear selection, Move). Every file's row menu gains Move between Download and Delete. Move opens a medium `Dialog` titled `Move index.html` or `Move 2 files`; its description gives the count, the total size and the folder they leave, the files are listed by name and size, and one `Field` holds a large clearable `Combobox` of every folder in the storage (the root first, as `/`) that also accepts a new path (`A folder that does not exist yet is created with the move.`). On Move the path is normalised (one slash between segments, no leading slash, a trailing slash) and validated: printable ASCII only, no `..`, not the folder the files are in; each failure is a `Field.Error` under the field and nothing moves.
+The block takes the open folder through props and emits every action; it fetches nothing. `FileBrowserEntry`, `FileBrowserTransfer` and `FileBrowserProps` are exported from `file-browser.vue`, and `sample.ts` holds a sample storage the block browses when `entries` is left out (and never while `loading` or `error` is set). `azion-storage.ts` maps an Azion Object Storage listing to entries.
+
+| Prop / model            | Type                    | What it does                                                                                                            |
+| ----------------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| `storageName`           | `string`                | The storage name: the page heading, the first crumb and the default destination in the dialogs.                         |
+| `v-model:path`          | `string`                | The open folder as a key prefix (`site/css/`, empty for the root). The block sets it; the page loads that folder.       |
+| `entries`               | `FileBrowserEntry[]`    | The open folder's folders (name ending in `/`) and files (`bytes`, `modifiedAt`, `editor`). Pass `[]` for an empty one. |
+| `loading`               | `boolean`               | The listing is loading: the table shows its loading rows and Refresh spins.                                             |
+| `error`                 | `string`                | Why the folder could not load, shown in the danger `Alert` with Retry that replaces the table.                          |
+| `destinations`          | `string[]`              | Every folder path the Move dialog offers; left out, the folders among `entries`.                                        |
+| `movable`               | `boolean`               | Files can be selected and moved.                                                                                        |
+| `v-model:selected-keys` | `string[]`              | The selected file names.                                                                                                |
+| `defaultMoveOpen`       | `boolean`               | Opens the Move dialog on mount for the selected files.                                                                  |
+| `transfers`             | `FileBrowserTransfer[]` | The files in the transfer card (`UploadProgressItem` plus the `target` folder); empty hides it.                         |
+| `transferOperation`     | `'upload' \| 'move'`    | What the transfer card is running.                                                                                      |
+
+| Event             | Payload                             | When                                                                     |
+| ----------------- | ----------------------------------- | ------------------------------------------------------------------------ |
+| `open`            | `(event, entry)`                    | A folder is opened (after `path` changes) or a file row is clicked.      |
+| `download`        | `(event, entry)`                    | Download in a file's row menu.                                           |
+| `delete`          | `(event, entry)`                    | The delete dialog was confirmed; the row is already gone from the table. |
+| `upload`          | `(event, { files, path })`          | Upload in the upload dialog, or files dropped on the page.               |
+| `add-folder`      | `(event)`                           | Add folder in Add to files.                                              |
+| `move`            | `(event, { entries, destination })` | Move in the Move dialog, with a valid destination.                       |
+| `refresh`         | `(event)`                           | Refresh.                                                                 |
+| `retry`           | `(event)`                           | Retry in the error alert.                                                |
+| `cancel-transfer` | `(event, id?)`                      | Cancel on one file, or on the whole card without an id.                  |
+| `retry-transfer`  | `(event, id?)`                      | Retry on one file, or on the whole card without an id.                   |
+| `close-transfer`  | `(event)`                           | Close on the finished card; clear `transfers`.                           |
+
+A file's object key is `path + entry.name`. To go live on Azion Object Storage, the page fetches `GET /v4/storage/buckets/{bucket}/objects` with its own client and passes the entries:
+
+```vue
+<script setup lang="ts">
+  import { ref, watch } from 'vue'
+
+  import { type AzionStorageObject, toFileBrowserEntries } from './azion-storage'
+  import FileBrowser, { type FileBrowserEntry } from './file-browser.vue'
+
+  const bucket = 'acme-assets'
+  const path = ref('')
+  const entries = ref<FileBrowserEntry[]>([])
+  const loading = ref(false)
+  const error = ref('')
+
+  const load = async () => {
+    loading.value = true
+    error.value = ''
+    try {
+      const objects: AzionStorageObject[] = []
+      let token: string | null = null
+      do {
+        const query = new URLSearchParams({ prefix: path.value, max_object_count: '1000' })
+        if (token) query.set('continuation_token', token)
+        const body = await api.listObjects(bucket, query)
+        objects.push(...body.results)
+        token = body.continuation_token
+      } while (token)
+      entries.value = toFileBrowserEntries(objects, path.value)
+    } catch {
+      entries.value = []
+      error.value = "Couldn't load the files in this folder. Check your connection and retry."
+    } finally {
+      loading.value = false
+    }
+  }
+
+  watch(path, load, { immediate: true })
+</script>
+
+<template>
+  <FileBrowser
+    v-model:path="path"
+    :storage-name="bucket"
+    :entries="entries"
+    :loading="loading"
+    :error="error"
+    @refresh="load"
+    @retry="load"
+  />
+</template>
+```
+
+`api.listObjects` stands for the app's own authenticated client (it returns the response body, `AzionStorageObjectsResponse`). Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -132,12 +215,12 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 
 ## States
 
-- Default: the storage root with folders first, then files, and the full toolbar.
-- InsideAFolder: inside a build folder the crumb gains the folder, a `..` row leads back up and files show glyph, size, editor and age.
-- Uploading: a transfer is running in the floating card; one file fails once and can be retried; the upload dialog and the page drop overlay add more.
-- Empty: an empty folder (`assets/` of a build); the `..` row stays and the empty state offers Add to files.
-- Error: the folder could not load; the storage name, the path and Refresh stay, Add to files is disabled and a danger `Alert` with Retry takes the table's place.
-- MoveObject: two files selected inside a build folder with the Move dialog open; moving runs in the card and ends in a toast.
+- Default: the storage root (`path` is empty) with folders first, then files, and the full toolbar.
+- InsideAFolder: `path` is a build folder; the crumb gains the folder, a `..` row leads back up and files show glyph, size, editor and age.
+- Uploading: `transfers` holds a running upload in the floating card; Add to files opens the upload dialog and the page drop overlay adds more.
+- Empty: `entries` is `[]` inside `assets/` of a build; the `..` row stays and the empty state offers Add to files.
+- Error: `error` is set; the storage name, the path and Refresh stay, Add to files is disabled and a danger `Alert` with the message and Retry takes the table's place.
+- MoveObject: `movable` with two files in `selectedKeys` and `defaultMoveOpen`; the Move dialog is open and Move emits `move`.
 
 ## Related
 
@@ -146,7 +229,5 @@ Variant MoveObject only; it adds `Dialog` and its parts, `Field` and `Combobox`.
 - `detail/resource-detail` — the storage resource's own details and settings.
 - `detail/dns-zone-detail` — records of a resource, not files.
 - `FileTokenGroup`, `FileDropzone` and `UploadProgress` — the upload pieces; see their component docs.
-- `FilePreview` — the preview of one file (image, text, JSON or a no-preview fallback, with Download) for the detail pane or drawer a file row opens; the app passes the object URL or the text it fetched.
-- `skills/webkit-azion-api` — calling the Storage API from the browser through a proxy, with the person's token.
 - `state/async-submit` — the rule for long actions; storage transfers follow it with item actions instead of Edit and Redeploy.
 - `DataTable` — the data-driven table this page wraps; see `skills/webkit-tables` and `skills/webkit-lists`.

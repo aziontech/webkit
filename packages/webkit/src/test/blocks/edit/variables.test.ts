@@ -2,7 +2,9 @@ import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
-import VariablesList from '../../../../blocks/edit/variables/variables.vue'
+import VariablesList, {
+  type VariablesSavePayload
+} from '../../../../blocks/edit/variables/variables.vue'
 import NetworkList from '../../../../blocks/edit/variables/variants/network-list.vue'
 import { expectNoA11yViolations } from '../../axe'
 import { useToastRegion } from '../../toast-region'
@@ -27,11 +29,7 @@ const buttonIn = (root: Document | HTMLElement, text: string) =>
 
 const wait = { timeout: 4000 }
 
-const restoreOnline = () =>
-  Object.defineProperty(globalThis.navigator, 'onLine', { configurable: true, value: true })
-
 afterEach(() => {
-  restoreOnline()
   document.documentElement.style.overflow = ''
   document.body.style.overflow = ''
 })
@@ -88,8 +86,7 @@ describe('variables#List', () => {
   })
 
   it('keeps the drawer open with a danger alert when the save fails', async () => {
-    Object.defineProperty(globalThis.navigator, 'onLine', { configurable: true, value: false })
-    render(VariablesList)
+    render(VariablesList, { props: { saveError: 'Variables not saved. You are offline.' } })
     const { panel, key, value } = await openCreate()
     await userEvent.type(key, 'NEW_KEY')
     await userEvent.type(value, 'on')
@@ -103,5 +100,70 @@ describe('variables#List', () => {
     )
     expect(dialog()).not.toBeNull()
     expect(key.value).toBe('NEW_KEY')
+  })
+})
+
+describe('variables data contract', () => {
+  const given = [
+    {
+      id: 'v-100',
+      key: 'ACME_REGION',
+      value: 'us-east',
+      secret: false,
+      scope: [{ type: 'global', id: '', name: '' }],
+      lastEditor: 'Priya Patel',
+      lastEditorAvatar: '',
+      lastModified: '5 minutes ago'
+    }
+  ]
+
+  it('renders the variables it is given instead of the sample', async () => {
+    render(VariablesList, { props: { variables: given } })
+    await waitFor(() => expect(document.body.textContent).toContain('ACME_REGION'))
+    expect(document.body.textContent).not.toContain('API_BASE_URL')
+  })
+
+  it('shows the first-use empty state for an empty list', async () => {
+    render(VariablesList, { props: { variables: [] } })
+    await waitFor(() => expect(document.body.textContent).toContain('No variables yet'))
+  })
+
+  it('emits refresh instead of faking a reload', async () => {
+    const { emitted } = render(VariablesList, { props: { variables: given } })
+    await userEvent.click(document.querySelector('[aria-label="Refresh"]') as HTMLElement)
+    expect(emitted().refresh).toHaveLength(1)
+  })
+
+  it('emits save with the pairs and waits for saving to end before closing', async () => {
+    const saves: VariablesSavePayload[] = []
+    const { emitted, rerender } = render(VariablesList, {
+      props: {
+        variables: given,
+        onSave: (_event: Event, payload: VariablesSavePayload) => {
+          saves.push(payload)
+          void rerender({ variables: given, saving: true })
+        }
+      }
+    })
+    const { panel, key, value } = await openCreate()
+    await userEvent.type(key, 'NEW_KEY')
+    await userEvent.type(value, 'on')
+    await fireEvent.click(buttonIn(panel, 'Save'))
+    await waitFor(() => expect(saves).toHaveLength(1))
+    const [[event, payload]] = emitted().save as [[Event, VariablesSavePayload]]
+    expect(event).toBeInstanceOf(Event)
+    expect(payload.variable).toBeNull()
+    expect(payload.values).toEqual([
+      { key: 'NEW_KEY', value: 'on', secret: false, scope: [{ type: 'global', id: '', name: '' }] }
+    ])
+    expect(dialog()).not.toBeNull()
+    await rerender({ variables: given, saving: false })
+    await waitFor(() => expect(document.body.textContent).toContain('NEW_KEY created.'), wait)
+    await waitFor(() => expect(dialog()).toBeNull(), wait)
+  })
+
+  it('opens on the create drawer with defaultOpen', async () => {
+    render(VariablesList, { props: { variables: given, defaultOpen: true } })
+    await waitFor(() => expect(dialog()?.textContent).toContain('Create Variable'))
   })
 })

@@ -2,6 +2,9 @@ import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 import { userEvent } from 'vitest/browser'
 
+import FunctionEditor, {
+  type FunctionEditorValues
+} from '../../../../blocks/edit/function-editor/function-editor.vue'
 import FunctionEditorArguments from '../../../../blocks/edit/function-editor/variants/arguments.vue'
 import FunctionEditorSaving from '../../../../blocks/edit/function-editor/variants/saving.vue'
 import { useToastRegion } from '../../toast-region'
@@ -15,11 +18,7 @@ const buttonIn = (root: Document | HTMLElement, text: string) =>
     (button) => button.textContent?.trim() === text
   ) as HTMLButtonElement
 
-const restoreOnline = () =>
-  Object.defineProperty(globalThis.navigator, 'onLine', { configurable: true, value: true })
-
 afterEach(() => {
-  restoreOnline()
   document.documentElement.style.overflow = ''
   document.body.style.overflow = ''
 })
@@ -41,20 +40,32 @@ describe('function-editor#Arguments', () => {
     )
   })
 
-  it('shows Save loading, then a success toast', async () => {
-    const view = render(FunctionEditorArguments)
+  const argumentsProps = { defaultDocument: 'arguments', defaultExpanded: ['field-1'] } as const
+
+  it('emits submit with the values, then toasts when loading ends', async () => {
+    const view = render(FunctionEditor, { props: argumentsProps })
     await userEvent.click(view.getByRole('button', { name: 'Move quality up' }))
-    const save = await waitFor(() => buttonIn(document, 'Save'))
-    await fireEvent.click(save)
+    await fireEvent.click(await waitFor(() => buttonIn(document, 'Save')))
+    const emitted = view.emitted('submit') as [Event, FunctionEditorValues][]
+    expect(emitted).toHaveLength(1)
+    expect(emitted[0][0]).toBeInstanceOf(Event)
+    expect(emitted[0][1].name).toBe('image-optimizer')
+    expect(emitted[0][1].fields.map((field) => field.key)).toEqual(['quality', 'defaultFormat'])
+    await view.rerender({ loading: true })
     await waitFor(() => expect(buttonIn(document, 'Discard').disabled).toBe(true))
+    await view.rerender({ loading: false })
     await waitFor(() => expect(document.body.textContent).toContain('image-optimizer saved.'), wait)
   })
 
   it('keeps the bar with a danger alert when the save fails', async () => {
-    Object.defineProperty(globalThis.navigator, 'onLine', { configurable: true, value: false })
-    const view = render(FunctionEditorArguments)
+    const view = render(FunctionEditor, { props: argumentsProps })
     await userEvent.click(view.getByRole('button', { name: 'Move quality up' }))
     await fireEvent.click(await waitFor(() => buttonIn(document, 'Save')))
+    await view.rerender({ loading: true })
+    await view.rerender({
+      loading: false,
+      error: 'Not saved. You are offline; check your connection and save again.'
+    })
     await waitFor(
       () =>
         expect(
@@ -63,6 +74,51 @@ describe('function-editor#Arguments', () => {
       wait
     )
     expect(buttonIn(document, 'Discard').disabled).toBe(false)
+    await fireEvent.click(buttonIn(document, 'Discard'))
+    expect(view.emitted('discard')).toHaveLength(1)
+  })
+})
+
+describe('function-editor data contract', () => {
+  it('renders the service and fields it is given instead of the sample', async () => {
+    const view = render(FunctionEditor, {
+      props: {
+        defaultDocument: 'arguments',
+        service: {
+          name: 'acme-router',
+          executionEnvironment: 'gateway',
+          active: false,
+          code: 'export default () => fetch(request)',
+          schema: '{}'
+        },
+        fields: [
+          {
+            id: 'region',
+            key: 'region',
+            type: 'string',
+            title: 'Region',
+            description: '',
+            required: false,
+            default: '',
+            minLength: '',
+            maxLength: '',
+            pattern: '',
+            minimum: '',
+            maximum: '',
+            options: [],
+            itemType: 'string'
+          }
+        ]
+      }
+    })
+    await waitFor(() => expect(view.getByRole('button', { name: 'Move region up' })).toBeTruthy())
+    expect(view.queryByRole('button', { name: 'Move quality up' })).toBeNull()
+    expect(view.container.textContent).toContain('1 field')
+  })
+
+  it('shows the empty form state for fields []', async () => {
+    const view = render(FunctionEditor, { props: { defaultDocument: 'arguments', fields: [] } })
+    await waitFor(() => expect(view.container.textContent).toContain('This form has no fields'))
   })
 })
 

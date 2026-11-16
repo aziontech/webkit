@@ -42,6 +42,7 @@
     "name": "Draft",
     "file": "version-detail.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Deployed",
@@ -55,7 +56,7 @@
     },
     {
       "name": "Revert",
-      "summary": "An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm runs the revert as an async action: one toast turns from Reverting to AK7D0ZX4… into the outcome with Edit and Redeploy, and the version's Tag becomes Deployed.",
+      "summary": "An earlier Ready version opened from Version history, read-only, the history pane open with the entry marked Viewing. The version bar reads Viewing an earlier version and offers Add Version and a primary Revert to AK7D0ZX4, which opens a `ConfirmDialog` with the diff against the deployed version: each changed setting from its old value to the new one, the rules added and removed, and that the deployed version stays in history. Confirm emits `revert` with the version; while the parent runs it, `reverting` puts Revert in its loading state and the bar reads Reverting to AK7D0ZX4…, and the parent reports the outcome with one toast that carries Edit and Redeploy.",
       "file": "variants/revert.vue"
     },
     {

@@ -1,76 +1,236 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
   import Card, { type CardBadge } from '@aziontech/webkit/card'
+  import CodeBlock from '@aziontech/webkit/code-block'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
+  import SectionHeader from '@aziontech/webkit/section-header'
   import Tag from '@aziontech/webkit/tag'
+  import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { computed, ref } from 'vue'
 
-  interface NextStep {
+  import { sampleDeployment, sampleNextSteps, sampleResources } from './sample'
+
+  /** Whether the flow made the resource or attached one that already existed. */
+  export type DeploySuccessResourceState = 'created' | 'bound'
+
+  /** The Git source the service deploys from. */
+  export interface DeploySuccessSource {
+    /** The account or organization, shown as the scope tag in the lead. */
+    scope: string
+    /** Provider glyph class. */
     icon: string
+    /** The repository as owner and name. */
+    repository: string
+    /** Where the repository opens, in a new tab. */
+    href: string
+    /** The production branch. */
+    branch: string
+  }
+
+  /** The live service the deployment card shows. */
+  export interface DeploySuccessDeployment {
+    /** Service name, the card heading. */
+    name: string
+    /** When it was created, already formatted, such as Created just now. */
+    created: string
+    /** The domain it answers on, without the scheme. */
+    domain: string
+    /** The full address Visit site and the domain link open. */
+    url: string
+    /** Where Add custom domain leads. */
+    addDomainHref: string
+    /** The Git source; left out, the lead drops the scope tag and the repository row. */
+    source?: DeploySuccessSource
+  }
+
+  /** One resource the flow created or bound. */
+  export interface DeploySuccessResource {
+    /** Stable key. */
+    key: string
+    /** Kind, such as Service or Storage. */
+    kind: string
+    /** Kind glyph class. */
+    icon: string
+    /** Display name. */
+    name: string
+    /** Created or bound. */
+    state: DeploySuccessResourceState
+    /** Its ID or its contents, shown after the kind. */
+    reference: string
+  }
+
+  /** One next-step tile. */
+  export interface DeploySuccessNextStep {
+    /** Glyph class. */
+    icon: string
+    /** Title, verb first. */
     title: string
+    /** One sentence. */
     description: string
+    /** Where the tile leads; left out, the tile is a button that emits next-step. */
     href?: string
-    action?: boolean
+    /** Shows the Recommended badge. */
     recommended?: boolean
   }
 
+  export interface DeploySuccessProps {
+    /** The outcome heading. */
+    title?: string
+    /** The lead sentence; the scope tag follows it when the deployment has a Git source. */
+    description?: string
+    /** The live service; null leaves the card out when nothing serves the resource. Left out, the sample renders. */
+    deployment?: DeploySuccessDeployment | null
+    /** What the flow created or bound. Left out, the sample renders. */
+    resources?: DeploySuccessResource[]
+    /** The next-step tiles. Left out, the sample renders. */
+    nextSteps?: DeploySuccessNextStep[]
+    /** Resource name the Get started commands link; empty leaves the Get started section out. */
+    getStarted?: string
+  }
+
+  const props = withDefaults(defineProps<DeploySuccessProps>(), {
+    title: 'Resource deployed',
+    description: 'You deployed a new resource.',
+    deployment: undefined,
+    resources: undefined,
+    nextSteps: undefined,
+    getStarted: ''
+  })
+
+  const emit = defineEmits<{
+    /** A next-step tile without href was activated. */
+    'next-step': [event: MouseEvent, step: DeploySuccessNextStep]
+    /** Manage service was pressed. */
+    manage: [event: MouseEvent]
+  }>()
+
   const recommendedBadge: CardBadge[] = [{ label: 'Recommended', variant: 'primary' }]
 
-  const resources = [
+  const currentDeployment = computed(() =>
+    props.deployment === undefined ? sampleDeployment : props.deployment
+  )
+  const source = computed(() => currentDeployment.value?.source)
+  const lead = computed(() => (source.value ? `${props.description} Source:` : props.description))
+  const currentResources = computed(() => props.resources ?? sampleResources)
+  const currentNextSteps = computed(() => props.nextSteps ?? sampleNextSteps)
+
+  const PATHS = [
+    { label: 'CLI', value: 'cli' },
+    { label: 'GitHub Actions', value: 'actions' }
+  ]
+
+  const cliSteps = (name: string) => [
     {
-      key: 'service',
-      kind: 'Service',
-      icon: 'ai ai-server',
-      name: 'web-app',
-      reference: '1482736015'
+      title: 'Install the CLI',
+      description:
+        'Install it globally. It builds with your framework preset and ships the build in one step.',
+      tabs: [
+        {
+          label: 'npm',
+          value: 'npm',
+          language: 'bash',
+          code: 'npm install -g platform-cli'
+        },
+        {
+          label: 'yarn',
+          value: 'yarn',
+          language: 'bash',
+          code: 'yarn global add platform-cli'
+        },
+        { label: 'pnpm', value: 'pnpm', language: 'bash', code: 'pnpm add -g platform-cli' },
+        {
+          label: 'brew',
+          value: 'brew',
+          language: 'bash',
+          code: 'brew install platform-cli'
+        }
+      ]
     },
     {
-      key: 'resource',
-      kind: 'Resource',
-      icon: 'ai ai-box',
-      name: 'web-app',
-      state: 'created',
-      reference: '1739204418'
+      title: 'Link your project',
+      description:
+        'Authenticate, then link the local project to this resource so every deploy lands on it.',
+      tabs: [
+        {
+          label: 'Link',
+          value: 'link',
+          language: 'bash',
+          code: `platform login
+platform link \\
+  --name ${name}`
+        }
+      ]
     },
     {
-      key: 'integration',
-      kind: 'Integration',
-      icon: 'ai ai-link',
-      name: 'web-app-storage',
-      reference: '1215583907'
-    },
-    {
-      key: 'storage',
-      kind: 'Storage',
-      icon: 'ai ai-inbox',
-      name: 'web-app-assets',
-      reference: '24 files · 1.2 MB'
+      title: 'Deploy and visit your site',
+      description:
+        'Build and ship. The CLI prints the domain when it finishes, and sync reconciles platform.json with what the console shows.',
+      tabs: [
+        {
+          label: 'Deploy',
+          value: 'deploy',
+          language: 'bash',
+          code: `platform deploy --auto --local
+platform sync`
+        }
+      ]
     }
   ]
 
-  const nextSteps: NextStep[] = [
+  const ACTIONS_STEPS = [
     {
-      icon: 'ai ai-globe',
-      title: 'Customize domain',
+      title: 'Store your personal token',
       description:
-        'Associate a custom domain and subdomains with this service to handle user access.',
-      href: 'https://example.com/docs'
+        'Create a personal token in Account settings and keep it as the repository secret the workflow authenticates with.',
+      tabs: [
+        {
+          label: 'Secret',
+          value: 'secret',
+          language: 'bash',
+          code: `gh secret set \\
+  PLATFORM_TOKEN`
+        }
+      ]
     },
     {
-      icon: 'ai ai-sitemap',
-      title: 'Point traffic',
+      title: 'Add the deploy workflow',
       description:
-        'Redirect the traffic of a domain to the platform and take advantage of the distributed network.',
-      href: 'https://example.com/docs'
+        'One job that installs the CLI and deploys the build. Every push to the production branch runs it.',
+      tabs: [
+        {
+          label: 'deploy.yml',
+          value: 'workflow',
+          fileName: '.github/workflows/deploy.yml',
+          language: 'yaml',
+          code: `on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm install -g platform-cli
+      - run: platform login --token \${{ secrets.PLATFORM_TOKEN }}
+      - run: platform deploy --auto --local`
+        }
+      ]
     },
     {
-      icon: 'ai ai-chart-line',
-      title: 'View analytics',
-      description: 'Gain powerful insights into your performance, availability, and security.',
-      href: 'https://example.com/docs'
+      title: 'Push to deploy',
+      description:
+        'Every push to the production branch builds and ships. The deployment lands on the Overview tab as it runs.',
+      tabs: [{ label: 'Push', value: 'push', language: 'bash', code: 'git push origin main' }]
     }
   ]
+
+  const path = ref('cli')
+  const steps = computed(() =>
+    path.value === 'actions' ? ACTIONS_STEPS : cliSteps(props.getStarted)
+  )
 </script>
 
 <template>
@@ -83,15 +243,16 @@
           <header
             class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-2xs)"
           >
-            <h1 class="text-balance text-heading-lg text-(--text-default)">Resource deployed</h1>
+            <h1 class="text-balance text-heading-lg text-(--text-default)">{{ title }}</h1>
             <p
               class="flex flex-wrap items-center gap-(--spacing-xs) text-body-sm text-(--text-muted)"
             >
-              You deployed a new resource. Source:
+              {{ lead }}
               <Tag
-                label="acme"
+                v-if="source"
+                :label="source.scope"
                 severity="neutral"
-                icon="ai ai-github"
+                :icon="source.icon"
               />
             </p>
           </header>
@@ -99,7 +260,7 @@
           <div
             class="animate-content-enter motion-reduce:animate-none flex w-full flex-col gap-(--spacing-lg) [--content-enter-delay:var(--transition-duration-fast-01)]"
           >
-            <Card>
+            <Card v-if="currentDeployment">
               <template #default>
                 <div class="flex flex-col gap-(--spacing-md) sm:flex-row">
                   <div
@@ -121,7 +282,7 @@
                       <div class="flex min-w-0 flex-col gap-(--spacing-2xs)">
                         <div class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
                           <h2 class="min-w-0 truncate text-heading-xs text-(--text-default)">
-                            web-app
+                            {{ currentDeployment.name }}
                           </h2>
                           <Tag
                             label="Live"
@@ -129,7 +290,9 @@
                             size="small"
                           />
                         </div>
-                        <span class="text-body-sm text-(--text-muted)">Created just now</span>
+                        <span class="text-body-sm text-(--text-muted)">{{
+                          currentDeployment.created
+                        }}</span>
                       </div>
 
                       <Button
@@ -138,7 +301,7 @@
                         size="medium"
                         icon="ai ai-external-link"
                         icon-position="trailing"
-                        href="https://web-app-k3x9q2.example.com"
+                        :href="currentDeployment.url"
                         target="_blank"
                       />
                     </div>
@@ -152,12 +315,12 @@
                           />
                           <div class="min-w-0">
                             <Tooltip
-                              content="Open web-app-k3x9q2.example.com in a new tab"
+                              :content="`Open ${currentDeployment.domain} in a new tab`"
                               class="w-full"
                             >
                               <Link
-                                label="web-app-k3x9q2.example.com"
-                                href="https://web-app-k3x9q2.example.com"
+                                :label="currentDeployment.domain"
+                                :href="currentDeployment.url"
                                 target="_blank"
                                 size="small"
                               />
@@ -169,23 +332,27 @@
                           variant="link"
                           size="small"
                           icon="ai ai-circle-plus"
-                          href="/services/1482736015?name=web-app&tab=settings"
+                          :href="currentDeployment.addDomainHref"
                         />
                       </li>
-                      <li class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)">
+                      <li
+                        v-if="source"
+                        class="flex min-h-7 min-w-0 flex-wrap items-center gap-x-(--spacing-md)"
+                      >
                         <span class="flex min-w-0 items-center gap-(--spacing-xs)">
                           <i
-                            class="ai ai-github shrink-0 text-(--text-muted)"
+                            :class="source.icon"
+                            class="shrink-0 text-(--text-muted)"
                             aria-hidden="true"
                           />
                           <div class="min-w-0">
                             <Tooltip
-                              content="Open acme/web-app in a new tab"
+                              :content="`Open ${source.repository} in a new tab`"
                               class="w-full"
                             >
                               <Link
-                                label="acme/web-app"
-                                href="https://github.com/acme/web-app"
+                                :label="source.repository"
+                                :href="source.href"
                                 target="_blank"
                                 size="small"
                               />
@@ -197,7 +364,9 @@
                             class="ai ai-git-branch shrink-0 text-(--text-muted)"
                             aria-hidden="true"
                           />
-                          <span class="truncate text-body-sm text-(--text-default)">main</span>
+                          <span class="truncate text-body-sm text-(--text-default)">{{
+                            source.branch
+                          }}</span>
                         </span>
                       </li>
                     </ul>
@@ -212,7 +381,7 @@
                 <template #default>
                   <Item.List>
                     <Item
-                      v-for="resource in resources"
+                      v-for="resource in currentResources"
                       :key="resource.key"
                       size="small"
                     >
@@ -250,7 +419,7 @@
               <h2 class="text-label-md text-(--text-default)">Next steps</h2>
               <div class="grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-3">
                 <Card
-                  v-for="step in nextSteps"
+                  v-for="step in currentNextSteps"
                   :key="step.title"
                   variant="integration"
                   :title="step.title"
@@ -258,15 +427,90 @@
                   :description="step.description"
                   :href="step.href ?? ''"
                   :badges="step.recommended ? recommendedBadge : []"
+                  @select="(event: MouseEvent) => emit('next-step', event, step)"
                 />
               </div>
             </section>
+
+            <div
+              v-if="getStarted"
+              class="@container flex min-w-0 flex-col gap-(--spacing-md)"
+            >
+              <SectionHeader title="Get started">
+                <template #description>
+                  Two ways to build and deploy this resource. Select one and follow the steps, or
+                  read the
+                  <a
+                    href="https://example.com/docs/cli"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
+                    >CLI docs</a
+                  >.
+                </template>
+                <template #actions>
+                  <ToggleGroup
+                    v-model="path"
+                    :options="PATHS"
+                    size="large"
+                    aria-label="Deploy with"
+                  />
+                </template>
+              </SectionHeader>
+
+              <div class="grid min-w-0 gap-(--spacing-lg) @4xl:grid-cols-3">
+                <div
+                  v-for="(step, index) in steps"
+                  :key="step.title"
+                  class="relative flex min-w-0"
+                >
+                  <span
+                    v-if="index > 0"
+                    aria-hidden="true"
+                    class="absolute end-full top-9 hidden w-(--spacing-lg) border-t border-dashed border-(--border-default) @4xl:block"
+                  />
+                  <div class="flex min-w-0 flex-1">
+                    <Card
+                      :padded="false"
+                      class="w-full"
+                    >
+                      <template #default>
+                        <div class="flex min-w-0 flex-col gap-(--spacing-sm) p-(--spacing-lg)">
+                          <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                            <span
+                              class="flex size-6 shrink-0 items-center justify-center rounded-full bg-(--bg-surface-overlay) text-label-sm text-(--text-default)"
+                            >
+                              {{ index + 1 }}
+                            </span>
+                            <h3 class="min-w-0 text-heading-xs text-(--text-default)">
+                              {{ step.title }}
+                            </h3>
+                          </div>
+                          <p class="text-pretty text-body-sm text-(--text-muted)">
+                            {{ step.description }}
+                          </p>
+                          <div class="mt-(--spacing-2xs) min-w-0">
+                            <CodeBlock
+                              :tabs="step.tabs"
+                              :show-line-numbers="false"
+                              :copy-aria-label="`Copy the commands for ${step.title}`"
+                              class="w-full"
+                            />
+                          </div>
+                        </div>
+                      </template>
+                    </Card>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             <Button
               class="w-full"
               label="Manage service"
               variant="secondary"
               size="large"
+              @click="(event: MouseEvent) => emit('manage', event)"
             />
           </div>
         </div>

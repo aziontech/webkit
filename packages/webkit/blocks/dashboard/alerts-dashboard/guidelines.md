@@ -92,6 +92,61 @@ Figures use tabular numbers.
 The status of an alert in the Open alerts table (`Open`, `Investigating`). It is a state,
 so it is a `TableCellStatus` (one semantic `Tag`), separate from severity. The alert type beside it stays a plain neutral `Tag`: it is a category, not a state.
 
+### N. Load failure — `Alert` (required)
+
+When `error` is set, every region keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <region>.` followed by the message, with Retry, which emits `retry`.
+
+## Data
+
+The block takes its figures and records through props and emits every action; it fetches nothing. `AlertsDashboardProps` and the record types (`AlertsDashboardKpis`, `AlertsDashboardLevelCount`, `AlertsDashboardEntity`, `AlertsDashboardAlert`) are exported from `alerts-dashboard.vue`, and `sample.ts` holds the sample period the block renders when a data prop is left out (and never while `loading` or `error` is set).
+
+| Prop             | Type                          | What it does                                                                                                                                   |
+| ---------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `kpis`           | `AlertsDashboardKpis`         | The value and delta of each summary tile, by metric (`open`, `critical-high`, `raised`, `false-positives`). A metric left out reads as a dash. |
+| `labels`         | `string[]`                    | The day labels of Alerts per day.                                                                                                              |
+| `series`         | `ChartSeries[]`               | Alerts per day, one series per severity level, colored from the severity ramp. `[]` shows the chart's empty state.                             |
+| `openByLevel`    | `AlertsDashboardLevelCount[]` | Open alerts per severity level; the shares are computed from their sum. `[]` shows No open alerts.                                             |
+| `types`          | `BarListItem[]`               | Alerts raised in the period, by type.                                                                                                          |
+| `entities`       | `AlertsDashboardEntity[]`     | The Highest risk rows. `[]` shows No entities at risk yet.                                                                                     |
+| `alerts`         | `AlertsDashboardAlert[]`      | The Open alerts rows. `[]` shows No open alerts.                                                                                               |
+| `loading`        | `boolean`                     | The period is loading; every region shows its skeleton.                                                                                        |
+| `error`          | `string`                      | Why the period could not load; each region shows `Couldn't load <region>.` and this message in a danger `Alert` with Retry.                    |
+| `v-model:period` | `string`                      | The selected period (`7d`, `30d`, `90d`); default `30d`. Refetch when it changes.                                                              |
+
+| Event           | Payload   | When                               |
+| --------------- | --------- | ---------------------------------- |
+| `retry`         | `(event)` | Retry in any region's error alert. |
+| `update:period` | `(value)` | The reader picked another period.  |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import AlertsDashboard from './alerts-dashboard.vue'
+
+  const period = ref('30d')
+  const { data, pending, error, refresh } = useAlertsSummary(period)
+</script>
+
+<template>
+  <AlertsDashboard
+    v-model:period="period"
+    :kpis="data?.kpis ?? {}"
+    :labels="data?.labels ?? []"
+    :series="data?.series ?? []"
+    :open-by-level="data?.openByLevel ?? []"
+    :types="data?.types ?? []"
+    :entities="data?.entities ?? []"
+    :alerts="data?.alerts ?? []"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Use one severity ramp for every severity on the page, in the same order.
@@ -124,10 +179,10 @@ so it is a `TableCellStatus` (one semantic `Tag`), separate from severity. The a
 
 ## States
 
-- Default: the populated page for the selected period.
-- Loading: tiles, chart, bar list and both tables render their own `Skeleton`; Open by severity holds Skeleton rows.
-- Empty: a period with no alerts; tiles show a dash with no delta, and every region keeps its box with an `EmptyState` that says why and what to do next.
-- Error: the request for the period failed; tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load and offers Retry.
+- Default: the populated page for the selected period (`v-model:period`).
+- Loading: `loading` is set; tiles, chart, bar list and both tables render their own `Skeleton`; Open by severity holds Skeleton rows.
+- Empty: a period with no alerts (`kpis` is `{}` and every list is `[]`); tiles show a dash with no delta, and every region keeps its box with an `EmptyState` that says why and what to do next.
+- Error: the request for the period failed (`error` is set); tiles show a dash, and every card keeps its header with a danger `Alert` that names what did not load, carries the message and offers Retry.
 
 ## Related
 

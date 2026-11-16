@@ -31,6 +31,7 @@
     "name": "Application",
     "file": "rule-list.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Firewall",
@@ -44,7 +45,7 @@
     },
     {
       "name": "SaveError",
-      "summary": "The same changes after a failed save: the dialog stays open with a danger Alert saying the rules still run in the saved order, and Save reads Save again; the next attempt saves and closes the dialog with the success toast.",
+      "summary": "The same changes after a failed save: the dialog stays open with a danger Alert saying the rules still run in the saved order, and Save reads Save again; pressing it emits `save` once more, and when `saving` turns off with no `saveError` the dialog closes with the success toast.",
       "file": "variants/save-error.vue"
     },
     {

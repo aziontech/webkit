@@ -29,17 +29,69 @@ From `@3xl` of the tab body, a `SidebarMenuRoot` with `groups` in a fixed `w-(--
 
 Below `@3xl` of the tab body the menu is hidden and a medium `Select` takes its place, labelled with the tab name through `Field` and `Field.Label`, its options grouped like the menu with `Select.Group`. The value is the current route; picking an option navigates. The container query sits on the tab body wrapper (`@container/tab`) and the `@3xl/tab:` variants on its children, because a container query never matches its own container.
 
-### D. Page heading — `PageHeader`, `Button` (required)
+### D. Few siblings — `ToggleGroup` (optional)
+
+When `sections` hold 7 or fewer pages there is no menu and no folded `Select`: a medium `ToggleGroup` labelled with the tab name sits above the list and switches between them, at every width.
+
+### E. Page heading — `PageHeader`, `Button` (required)
 
 The current sibling opens with a small `PageHeader`: its name as the title, one sentence of description, then an outlined medium Documentation and an outlined medium `Add <Noun>`. Inside a resource no action is primary and the create verb is Add.
 
-### E. Controls row — `PropertyFilter`, `Tooltip`, `IconButton` (required)
+### F. Controls row — `PropertyFilter`, `Tooltip`, `IconButton` (required)
 
 The TableView controls row: a `PropertyFilter` that grows to fill the row, bound to `useCollection`, then an outlined Refresh `IconButton` named by a `Tooltip`. Moving to another sibling clears the filters.
 
-### F. List — `Card`, `DataTable`, `TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTime`, `EmptyState` (required)
+### G. List — `Card`, `DataTable`, `TableCellLink`, `TableCellId`, `TableCellStatus`, `TableCellTime`, `EmptyState` (required)
 
 `Card :padded="false"` around `DataTable :bordered="false"` with the `useCollection` table props and sorting. Name is a `TableCellLink` to the entry, ID a `TableCellId`, Status a `TableCellStatus` and Last Modified a `TableCellTime` with its author. The table's `#empty` slot branches on `useCollection`'s `status`: a filter that matches nothing shows a No matching `EmptyState` with Clear filters; a sibling page with no entries yet (Posture checks, Webhooks, Exceptions here) shows `No <page> yet` with `Add <Noun>`.
+
+## Data
+
+The block takes its sibling pages and entries through props and emits every action; it fetches nothing. `SectionedResourceEntry`, `SectionedResourceSection`, `SectionedResourceSibling` and `SectionedResourceProps` are exported from `sectioned-resource.vue`, and `sample.ts` holds the sample pages and entries the block renders when `sections` or `entries` is left out (and never while `loading` is set).
+
+| Prop            | Type                         | What it does                                                                                                                 |
+| --------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `sections`      | `SectionedResourceSection[]` | The sibling pages of the open tab, in groups. More than 7 render the menu and the folded Select; 7 or fewer a `ToggleGroup`. |
+| `entries`       | `SectionedResourceEntry[]`   | The rows of the current page; the filter, the sort and the pages run on them. Pass `[]` for a page with none.                |
+| `loading`       | `boolean`                    | The entries are loading: Refresh spins and the table shows its loading state.                                                |
+| `v-model:page`  | `string`                     | The id of the current sibling page; picking a row, an option or a toggle sets it.                                            |
+| `currentTab`    | `string`                     | The tab whose page the block renders; every other tab links to its own route.                                                |
+| `basePath`      | `string`                     | The resource route; tabs are `basePath/tab` and pages `basePath/currentTab/page`.                                            |
+| `resourceLabel` | `string`                     | How the headings name the resource, e.g. "the acme-default policy".                                                          |
+
+| Event         | Payload            | When                                                |
+| ------------- | ------------------ | --------------------------------------------------- |
+| `update:page` | `(page)`           | Another sibling page was picked; the filters clear. |
+| `refresh`     | `(event)`          | Refresh.                                            |
+| `add`         | `(event, sibling)` | `Add <Noun>` in the heading or on an empty page.    |
+
+To go live, render the block from the tab route and pass the current page's entries:
+
+```vue
+<script setup lang="ts">
+  import SectionedResource from './sectioned-resource.vue'
+
+  const route = useRoute()
+  const router = useRouter()
+  const page = computed({
+    get: () => String(route.params.page),
+    set: (next) => router.push(`/policies/acme-default/private-access/${next}`)
+  })
+  const { data, pending, refresh } = usePolicyEntries(page)
+</script>
+
+<template>
+  <SectionedResource
+    v-model:page="page"
+    :sections="privateAccessSections"
+    :entries="data ?? []"
+    :loading="pending"
+    @refresh="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -78,9 +130,9 @@ The TableView controls row: a `PropertyFilter` that grows to fill the row, bound
 
 ## States
 
-- Default: the Private access tab of the acme-default policy, 16 sibling pages in 4 groups in the menu column, Access rules current and listed beside it.
-- Narrow: the same tab below `@3xl` of the tab body: the menu folds into a Select labelled Private access, Server groups current, the list under it at full width. The page keeps the primary's root, so `layout-column` alone sets the measure.
-- FewSiblings: the Network security tab with 6 siblings and no local navigation; a ToggleGroup labelled Network security switches between them above the list.
+- Default: `sections` with more than 7 pages; the Private access tab of the acme-default policy, 16 sibling pages in 4 groups in the menu column, Access rules current and listed beside it.
+- Narrow: `page` set to Server groups; the same tab below `@3xl` of the tab body: the menu folds into a Select labelled Private access, Server groups current, the list under it at full width. The page keeps the primary's root, so `layout-column` alone sets the measure.
+- FewSiblings: `sections` with 6 pages and `currentTab` set to Network security; the Network security tab with 6 siblings and no local navigation; a ToggleGroup labelled Network security switches between them above the list.
 
 ## Related
 

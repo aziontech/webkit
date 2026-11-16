@@ -20,17 +20,64 @@
   import Textarea from '@aziontech/webkit/textarea'
   import { toast } from '@aziontech/webkit/toast'
   import Wizard from '@aziontech/webkit/wizard'
-  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+  import { computed, reactive, ref, watch } from 'vue'
 
-  type ListType = 'asn' | 'ip_cidr' | 'countries'
-  type FieldName = 'name' | 'type' | 'items'
+  import { samplePolicies } from './sample'
 
-  interface PolicyOption {
+  /** The kind of entry an access list holds. */
+  export type CreateWizardListType = 'asn' | 'ip_cidr' | 'countries'
+
+  /** A policy the list can run on. */
+  export interface CreateWizardPolicy {
+    /** The policy key. */
     value: string
+    /** The policy name. */
     label: string
+    /** The application it protects. */
     description: string
+    /** Whether IP filtering is already on in it. */
     ready: boolean
   }
+
+  /** The values of the Create Access List form. */
+  export interface CreateWizardValues {
+    /** The list name. */
+    name: string
+    /** The kind of entry the list holds. */
+    type: CreateWizardListType
+    /** The entries, one per line. */
+    items: string
+  }
+
+  /** What submit sends: the form values and where the list runs. */
+  export interface CreateWizardSubmission extends CreateWizardValues {
+    /** The policy it runs on; empty when skipped. */
+    policy: string
+    /** Whether IP filtering is turned on in that policy as part of the create. */
+    enableModule: boolean
+  }
+
+  /** A step of the wizard. */
+  export type CreateWizardStep = 'where-it-runs' | 'module' | 'general' | 'settings' | 'review'
+
+  export interface CreateWizardProps {
+    /** The policies to pick from. Left out, the sample renders. */
+    policies?: CreateWizardPolicy[]
+    /** The step the wizard opens on. */
+    defaultStep?: CreateWizardStep
+    /** The policy already picked; empty, Where it runs waits for an answer. */
+    defaultPolicy?: string
+    /** The values the form starts from. */
+    defaultValues?: Partial<CreateWizardValues>
+    /** The create request is in flight; the submit spins and the wizard locks. */
+    loading?: boolean
+    /** Why the create request failed, shown in an error toast with Retry. */
+    error?: string
+  }
+
+  type ListType = CreateWizardListType
+  type FieldName = 'name' | 'type' | 'items'
+  type PolicyOption = CreateWizardPolicy
 
   interface ListField {
     label: string
@@ -50,50 +97,23 @@
     fields: FieldName[]
   }
 
+  const props = withDefaults(defineProps<CreateWizardProps>(), {
+    policies: undefined,
+    defaultStep: 'where-it-runs',
+    defaultPolicy: '',
+    defaultValues: () => ({}),
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: MouseEvent, values: CreateWizardSubmission]
+    cancel: [event: MouseEvent]
+  }>()
+
   const breadcrumb = [
     { label: 'Access Lists', href: '/access-lists' },
     { label: 'Create Access List' }
-  ]
-  const policies: PolicyOption[] = [
-    { value: 'acme-production', label: 'acme-production', description: 'acme-site', ready: true },
-    { value: 'acme-staging', label: 'acme-staging', description: 'acme-site', ready: false },
-    { value: 'api-hardening', label: 'api-hardening', description: 'legacy-api', ready: false },
-    {
-      value: 'checkout-shield',
-      label: 'checkout-shield',
-      description: 'ecommerce-v2',
-      ready: false
-    },
-    { value: 'dev-sandbox', label: 'dev-sandbox', description: 'internal', ready: false },
-    {
-      value: 'marketing-site',
-      label: 'marketing-site',
-      description: 'marketing-site',
-      ready: false
-    },
-    { value: 'payments-api', label: 'payments-api', description: 'ecommerce-v2', ready: false },
-    { value: 'partner-gateway', label: 'partner-gateway', description: 'legacy-api', ready: true },
-    { value: 'admin-allowlist', label: 'admin-allowlist', description: 'status-page', ready: true },
-    {
-      value: 'media-delivery',
-      label: 'media-delivery',
-      description: 'blog-platform',
-      ready: false
-    },
-    { value: 'acme-canary', label: 'acme-canary', description: 'acme-docs', ready: false },
-    {
-      value: 'search-api-shield',
-      label: 'search-api-shield',
-      description: 'ecommerce-storefront',
-      ready: false
-    },
-    {
-      value: 'legacy-storefront',
-      label: 'legacy-storefront',
-      description: 'ecommerce-storefront',
-      ready: false
-    },
-    { value: 'qa-sandbox', label: 'qa-sandbox', description: 'internal', ready: false }
   ]
   const types = [
     {
@@ -135,21 +155,24 @@
 
   const VISIBLE = 6
 
-  const current = ref('where-it-runs')
-  const choice = ref('')
+  const policies = computed<CreateWizardPolicy[]>(() => props.policies ?? samplePolicies)
+
+  const current = ref<string>(props.defaultStep)
+  const choice = ref(props.defaultPolicy)
   const enableModule = ref(false)
   const query = ref('')
-  const form = reactive<{ name: string; type: ListType; items: string }>({
+  const form = reactive<CreateWizardValues>({
     name: '',
     type: 'asn',
-    items: ''
+    items: '',
+    ...props.defaultValues
   })
   const errors = reactive<Partial<Record<FieldName, FieldProblem>>>({})
   const answered = ref(choice.value !== '')
   const whereMissing = ref(false)
 
   const moduleMissing = computed(
-    () => !!choice.value && !policies.find((option) => option.value === choice.value)?.ready
+    () => !!choice.value && !policies.value.find((option) => option.value === choice.value)?.ready
   )
 
   const definitions = computed((): StepDefinition[] => [
@@ -212,8 +235,8 @@
 
   const matches = computed(() => {
     const term = query.value.trim().toLowerCase()
-    if (!term) return policies
-    return policies.filter((option) =>
+    if (!term) return policies.value
+    return policies.value.filter((option) =>
       [option.label, option.description].some((field) => field.toLowerCase().includes(term))
     )
   })
@@ -291,29 +314,33 @@
     if (entry && !validate(entry.fields)) event.preventDefault()
   }
 
-  const creating = ref(false)
-  let timer: ReturnType<typeof setTimeout> | undefined
-
-  const commit = () => {
-    if (creating.value) return
+  const commit = (event: MouseEvent) => {
+    if (props.loading) return
     if (!validate(['name', 'type', 'items'])) {
       const failed = definitions.value.find((entry) => entry.fields.some((field) => errors[field]))
       if (failed) editStep(failed.value)
       return
     }
-    creating.value = true
-    clearTimeout(timer)
-    timer = setTimeout(() => {
-      creating.value = false
-      toast.success(`${form.name} created.`, {
-        description: choice.value
-          ? `Rules of ${choice.value} can match on it now.`
-          : 'Bind it to a policy to use it in rules.'
-      })
-    }, 900)
+    emit('submit', event, {
+      name: form.name.trim(),
+      type: form.type,
+      items: entries.value.join('\n'),
+      policy: choice.value,
+      enableModule: moduleMissing.value && enableModule.value
+    })
   }
 
-  onBeforeUnmount(() => clearTimeout(timer))
+  watch(
+    () => props.error,
+    (message) => {
+      if (!message) return
+      toast.error(`Could not create ${form.name.trim() || 'the access list'}.`, {
+        description: message,
+        action: { label: 'Retry', onClick: (event: MouseEvent) => commit(event) }
+      })
+    },
+    { immediate: true }
+  )
 </script>
 
 <template>
@@ -370,9 +397,10 @@
           v-model="stepIndex"
           aria-label="Create Access List"
           submit-label="Create Access List"
-          :loading="creating"
+          :loading="loading"
           @next="onNext"
           @submit="commit"
+          @cancel="(event: MouseEvent) => emit('cancel', event)"
         >
           <Wizard.Step
             title="Where it runs"

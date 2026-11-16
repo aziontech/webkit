@@ -33,9 +33,52 @@ A small heading, "Resources", over `Card :padded="false"` holding an `Item` list
 
 `Card variant="integration"` tiles in a row from the small breakpoint, each with a glyph (`logo`), a title and one sentence. A step with `href` is a link stretched over the tile; a step that acts in place (Deploy this resource) has no `href`, and its title is a button that emits `select`. Mark at most one with a primary Recommended badge (`badges`). Docs steps open in the same tab, so no new-tab notice is needed.
 
-### E. Manage — `Button` (required)
+### E. Get started — `SectionHeader`, `ToggleGroup`, `CodeBlock`, `Card` (optional)
+
+Only for a resource nothing serves yet (`getStarted` set to its name): a `SectionHeader` with a link to the CLI docs and a large `ToggleGroup` between the CLI and GitHub Actions paths, then three numbered step `Card`s, each with its commands in a `CodeBlock` without line numbers. The Link your project command names the resource.
+
+### F. Manage — `Button` (required)
 
 One full-width secondary large `Button`, "Manage service", at the end of the column that opens the resource. It is the only exit; do not add a second.
+
+## Data
+
+The block takes what the flow made through props and emits its actions; it fetches nothing. `DeploySuccessProps`, `DeploySuccessDeployment`, `DeploySuccessResource` and `DeploySuccessNextStep` are exported from `deploy-success.vue`, and `sample.ts` holds the sample deployment, resources and next steps the block renders when a data prop is left out.
+
+| Prop          | Type                              | What it does                                                                                      |
+| ------------- | --------------------------------- | ------------------------------------------------------------------------------------------------- |
+| `title`       | `string`                          | The outcome heading, "Resource deployed" by default.                                              |
+| `description` | `string`                          | The lead sentence; "Source:" and the scope tag follow it when the deployment has a Git `source`.  |
+| `deployment`  | `DeploySuccessDeployment \| null` | The live service of the deployment card. `null` leaves the card out when nothing serves it.       |
+| `resources`   | `DeploySuccessResource[]`         | One row per resource the flow created or bound.                                                   |
+| `nextSteps`   | `DeploySuccessNextStep[]`         | The next-step tiles; a step without `href` is a button that emits `next-step`.                    |
+| `getStarted`  | `string`                          | The resource name the Get started commands link; set it to show the CLI and GitHub Actions paths. |
+
+| Event       | Payload         | When                                           |
+| ----------- | --------------- | ---------------------------------------------- |
+| `next-step` | `(event, step)` | A next-step tile without `href` was activated. |
+| `manage`    | `(event)`       | Manage service.                                |
+
+To go live, render the block from the page the create flow ends on and pass what the flow returned:
+
+```vue
+<script setup lang="ts">
+  import DeploySuccess from './deploy-success.vue'
+
+  const { deployment, resources, nextSteps } = useCreateFlowResult()
+</script>
+
+<template>
+  <DeploySuccess
+    :deployment="deployment"
+    :resources="resources"
+    :next-steps="nextSteps"
+    @manage="openService"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -74,8 +117,8 @@ One full-width secondary large `Button`, "Manage service", at the end of the col
 
 ## States
 
-- Default: a deployed service from a Git source, with the scope, the deployment card, four resources and three next steps.
-- CliCreated: a resource made from the CLI that nothing serves yet; no deployment card, one resource row, next steps to deploy it here or on a new service, and the Get started paths.
+- Default: a deployed service from a Git source (`deployment` with a `source`), with the scope, the deployment card, four `resources` and three `nextSteps`.
+- CliCreated: a resource made from the CLI that nothing serves yet; `:deployment="null"` leaves out the deployment card, one resource row, next steps to deploy it here or on a new service, and `get-started` shows the Get started paths.
 
 ## Related
 

@@ -21,4 +21,35 @@ describe('account/activity-history', () => {
       expect(view.queryByRole('button', { name: 'Show the last hour' })).toBeNull()
     )
   })
+
+  it('renders the events it is given instead of the sample', () => {
+    const now = new Date(Date.UTC(2026, 10, 1, 9))
+    const view = render(ActivityHistory, {
+      props: {
+        now,
+        events: [
+          {
+            id: 'evt-1',
+            event: 'Created the domain store.example.com',
+            category: 'Deploy',
+            user: 'jane.doe@example.com',
+            ip: '192.0.2.10',
+            at: new Date(now.getTime() - 60_000)
+          }
+        ]
+      }
+    })
+    expect(view.container.textContent).toContain('Created the domain store.example.com')
+    expect(view.container.textContent).not.toContain('grace.hall@example.com')
+  })
+
+  it('shows the error message and emits retry and refresh instead of faking them', async () => {
+    const view = render(ActivityHistory, { props: { error: 'The API answered 503.' } })
+    expect(view.container.textContent).toContain('The API answered 503.')
+    expect(view.container.textContent).not.toContain('grace.hall@example.com')
+    await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
+    await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
+    expect(view.emitted('retry')).toHaveLength(1)
+    expect(view.emitted('refresh')).toHaveLength(1)
+  })
 })

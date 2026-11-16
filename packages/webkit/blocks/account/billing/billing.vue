@@ -30,40 +30,128 @@
     useCollection
   } from '@aziontech/webkit/use-collection'
   import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
-  type BillingTab = 'bills' | 'payment-methods'
-  type InvoiceStatus = 'Paid' | 'Refunded' | 'Overdue'
+  import {
+    sampleInvoices,
+    samplePaymentInformation,
+    samplePaymentMethods,
+    sampleSubscription,
+    sampleUpdatedAt
+  } from './sample'
 
-  interface Invoice {
+  /** The page's tabs. */
+  export type BillingTab = 'bills' | 'payment-methods'
+
+  /** How an invoice was settled. */
+  export type BillingInvoiceStatus = 'Paid' | 'Refunded' | 'Overdue'
+
+  /** How often the plan bills. */
+  export type BillingCycle = 'Monthly' | 'Yearly'
+
+  /** One row of the invoices table. */
+  export interface BillingInvoice {
+    /** Invoice ID, the row key and the PDF name. */
     id: string
+    /** Sequential invoice number. */
     number: number
+    /** Plan billed. */
     plan: string
-    cycle: 'Monthly' | 'Yearly'
+    /** Billing cycle. */
+    cycle: BillingCycle
+    /** Seats billed. */
     seats: number
+    /** When the invoice was issued. */
     billedAt: Date
+    /** Amount charged, in the account currency. */
     amount: number
+    /** Brand of the card charged, for its plate. */
     brand: string
+    /** The card charged, as brand and last four. */
     paymentMethod: string
-    status: InvoiceStatus
+    /** How it was settled. */
+    status: BillingInvoiceStatus
   }
 
-  interface PaymentMethod {
+  /** One card on file. */
+  export interface BillingPaymentMethod {
+    /** Stable key. */
     id: string
+    /** Name on the card. */
     holder: string
+    /** Card brand. */
     brand: string
+    /** Last four digits. */
     last4: string
+    /** Expiration, as month and year. */
     expires: string
+    /** Whether invoices are charged to it. */
     default: boolean
   }
 
-  const INITIAL_TAB: BillingTab = 'bills'
-  const INITIAL_QUERY: PropertyFilterQuery = { tokens: [], operation: 'and' }
-  const START_LOADING = false
-  const START_FAILED = false
-  const WITH_INVOICES = true
+  /** The current plan and its next charge. */
+  export interface BillingSubscription {
+    /** Plan name. */
+    plan: string
+    /** When the plan started. */
+    startedAt: Date
+    /** When the next charge runs. */
+    nextChargeAt: Date
+    /** What the next charge bills. */
+    nextChargeAmount: number
+  }
 
-  const UPDATED_AT = new Date(Date.UTC(2026, 10, 10, 12))
+  /** Where invoices go and whether the plan renews. */
+  export interface BillingPaymentInformation {
+    /** Email invoices are sent to. */
+    email: string
+    /** Whether the plan renews on its own. */
+    autoRenewal: boolean
+    /** Billing address, on one line. */
+    address: string
+    /** Tax ID; empty shows the empty-value marker. */
+    taxId: string
+  }
+
+  export interface BillingProps {
+    /** The invoices; filtered, sorted and paged in the browser. Left out, the sample renders. */
+    invoices?: BillingInvoice[]
+    /** The cards on file. Left out, the sample renders. */
+    paymentMethods?: BillingPaymentMethod[]
+    /** The current plan. Left out, the sample renders. */
+    subscription?: BillingSubscription
+    /** Where invoices go. Left out, the sample renders. */
+    paymentInformation?: BillingPaymentInformation
+    /** When the data was fetched. Left out, the sample time renders. */
+    updatedAt?: Date
+    /** The filter the invoices open with. */
+    defaultQuery?: PropertyFilterQuery
+    /** A request is in flight: skeletons and loading rows. */
+    loading?: boolean
+    /** Why the billing data could not load; a danger alert with Retry replaces the tab. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<BillingProps>(), {
+    invoices: undefined,
+    paymentMethods: undefined,
+    subscription: undefined,
+    paymentInformation: undefined,
+    updatedAt: undefined,
+    defaultQuery: () => ({ tokens: [], operation: 'and' }),
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    'set-default': [event: Event, method: BillingPaymentMethod]
+    remove: [event: Event, method: BillingPaymentMethod]
+  }>()
+
+  const activeTab = defineModel<BillingTab>('tab', { default: 'bills' })
+
   const { formatDate: formatLocaleDate } = useLocale()
 
   const dateFormat = (value: Date | number | string) =>
@@ -86,73 +174,46 @@
   const formatDate = (value: Date): string => dateFormat(value)
   const formatAmount = (value: number): string => value.toFixed(2)
 
-  const seedMethods: PaymentMethod[] = [
-    {
-      id: 'pm-1',
-      holder: 'Jane Doe',
-      brand: 'Mastercard',
-      last4: '1702',
-      expires: '02 / 2027',
-      default: true
-    },
-    {
-      id: 'pm-2',
-      holder: 'Acme Inc.',
-      brand: 'Visa',
-      last4: '4431',
-      expires: '11 / 2026',
-      default: false
-    },
-    {
-      id: 'pm-3',
-      holder: 'John Smith',
-      brand: 'American Express',
-      last4: '9008',
-      expires: '05 / 2028',
-      default: false
-    }
-  ]
+  const blocked = computed(() => props.loading || props.error !== '')
+  const updatedAt = computed(() => props.updatedAt ?? sampleUpdatedAt)
+  const subscription = computed(
+    () => props.subscription ?? (blocked.value ? undefined : sampleSubscription)
+  )
+  const paymentInformation = computed(
+    () => props.paymentInformation ?? (blocked.value ? undefined : samplePaymentInformation)
+  )
+  const invoiceSource = computed<BillingInvoice[]>(
+    () => props.invoices ?? (blocked.value ? [] : sampleInvoices)
+  )
+  const methodSource = computed<BillingPaymentMethod[]>(
+    () => props.paymentMethods ?? (blocked.value ? [] : samplePaymentMethods)
+  )
 
-  const usage = [
-    184.2, 171.95, 168.4, 159.1, 162.75, 148.3, 139.9, 131.25, 126.6, 118.4, 104.15, 96.8
-  ]
-  const seatsByMonth = [8, 8, 7, 7, 7, 6, 6, 6, 5, 5, 4, 4]
-  const seedInvoices: Invoice[] = usage.map((amount, index) => ({
-    id: `INV-A${12401 - index}`,
-    number: 132 - index,
-    plan: 'Pro',
-    cycle: 'Monthly',
-    seats: seatsByMonth[index],
-    billedAt: new Date(Date.UTC(2026, 10 - index, 1)),
-    amount,
-    brand: 'Mastercard',
-    paymentMethod: 'Mastercard •••• 1702',
-    status: index === 3 ? 'Refunded' : 'Paid'
-  }))
-
-  const activeTab = ref<string>(INITIAL_TAB)
   const tabs: { value: BillingTab; label: string }[] = [
     { value: 'bills', label: 'Bills' },
     { value: 'payment-methods', label: 'Payment methods' }
   ]
 
-  const loading = ref(START_LOADING)
-  const loadFailed = ref(START_FAILED)
-  const invoices = ref<Invoice[]>(WITH_INVOICES ? seedInvoices : [])
-  const paymentMethods = ref<PaymentMethod[]>(seedMethods)
+  const invoiceRows = ref<BillingInvoice[]>([])
+  watch(
+    invoiceSource,
+    (next) => {
+      invoiceRows.value = [...next]
+    },
+    { immediate: true }
+  )
+  const methodRows = ref<BillingPaymentMethod[]>([])
+  watch(
+    methodSource,
+    (next) => {
+      methodRows.value = [...next]
+    },
+    { immediate: true }
+  )
 
-  const load = () => {
-    if (loading.value) return
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      invoices.value = WITH_INVOICES ? seedInvoices : []
-      loading.value = false
-    }, 700)
-  }
-
-  const defaultMethod = computed(() => paymentMethods.value.find((method) => method.default))
-  const methodLabel = (method: PaymentMethod): string => `${method.brand} •••• ${method.last4}`
+  const defaultMethod = computed(() => methodRows.value.find((method) => method.default))
+  const methodLabel = (method: BillingPaymentMethod): string =>
+    `${method.brand} •••• ${method.last4}`
 
   const enterprisePerks = [
     { icon: 'ai ai-chart-line', label: 'On-demand pricing' },
@@ -161,7 +222,7 @@
     { icon: 'ai ai-headphones', label: 'Advanced support available' }
   ]
 
-  const statusSeverity = (status: InvoiceStatus): TagSeverity =>
+  const statusSeverity = (status: BillingInvoiceStatus): TagSeverity =>
     (({ Paid: 'success', Refunded: 'neutral', Overdue: 'danger' }) as const)[status] ?? 'neutral'
 
   const properties: FilteringProperty[] = [
@@ -174,6 +235,8 @@
       options: [{ value: 'Paid' }, { value: 'Refunded' }, { value: 'Overdue' }]
     }
   ]
+
+  const actionColumn: TableColumn = { id: 'actions', type: 'action', hideable: false }
 
   const columns: TableColumn[] = [
     { accessorKey: 'number', header: 'No.', label: 'Number', sortable: true, minWidth: 72 },
@@ -192,21 +255,21 @@
     { accessorKey: 'amount', header: 'Amount', sortable: true, minWidth: 110 },
     { accessorKey: 'paymentMethod', header: 'Payment method', grow: 2, minWidth: 200 },
     { accessorKey: 'status', header: 'Status', sortable: true, minWidth: 110 },
-    { id: 'actions', type: 'action', hideable: false }
+    actionColumn
   ]
 
   const { tableProps, propertyFilterProps, preferencesProps, status, matchingItems, clearFilters } =
     useCollection({
-      items: invoices,
+      items: invoiceRows,
       columns,
       filtering: { fields: ['id', 'plan', 'cycle', 'status'] },
-      propertyFiltering: { properties, defaultQuery: INITIAL_QUERY },
+      propertyFiltering: { properties, defaultQuery: props.defaultQuery },
       sorting: { defaultState: [{ id: 'billedAt', desc: true }] },
       pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
       preferences: { storageKey: 'billing-invoices' }
     })
 
-  const invoicesTableEl = ref<TableExposed<Invoice> | null>(null)
+  const invoicesTableEl = ref<TableExposed<BillingInvoice> | null>(null)
   const exportCsv = () => invoicesTableEl.value?.exportCsv({ filename: 'invoices.csv' })
 
   const methodColumns: TableColumn[] = [
@@ -220,21 +283,26 @@
     },
     { accessorKey: 'last4', header: 'Card', grow: 2, minWidth: 200 },
     { accessorKey: 'expires', header: 'Expiration date', minWidth: 140 },
-    { id: 'actions', type: 'action', hideable: false }
+    actionColumn
   ]
 
-  const pendingRemoval = ref<PaymentMethod | null>(null)
+  const pendingRemoval = ref<BillingPaymentMethod | null>(null)
   const removeOpen = ref(false)
 
-  const onMethodAction = (value: DropdownMenuItemValue, method: PaymentMethod) => {
+  const onMethodAction = (
+    event: Event,
+    value: DropdownMenuItemValue,
+    method: BillingPaymentMethod
+  ) => {
     if (value === 'default') {
-      paymentMethods.value = paymentMethods.value.map((item) => ({
+      methodRows.value = methodRows.value.map((item) => ({
         ...item,
         default: item.id === method.id
       }))
       toast.success(`${methodLabel(method)} is now the default.`, {
         description: 'The next invoice is charged to this card.'
       })
+      emit('set-default', event, method)
       return
     }
     if (value === 'remove') {
@@ -243,12 +311,13 @@
     }
   }
 
-  const removeMethod = () => {
+  const removeMethod = (event: Event) => {
     const method = pendingRemoval.value
     if (!method) return
-    paymentMethods.value = paymentMethods.value.filter((item) => item.id !== method.id)
+    methodRows.value = methodRows.value.filter((item) => item.id !== method.id)
     removeOpen.value = false
     toast.success(`${methodLabel(method)} removed.`)
+    emit('remove', event, method)
   }
 </script>
 
@@ -261,7 +330,7 @@
       >
         <template #actions>
           <span class="text-body-sm text-(--text-muted)"
-            >Updated {{ updatedFormat(UPDATED_AT) }}</span
+            >Updated {{ updatedFormat(updatedAt) }}</span
           >
           <Tooltip
             content="Refresh"
@@ -273,7 +342,7 @@
               size="medium"
               :loading="loading"
               aria-label="Refresh billing data"
-              @click="load"
+              @click="emit('refresh', $event)"
             />
           </Tooltip>
           <Button
@@ -300,16 +369,16 @@
         class="@container/bands flex min-w-0 flex-col gap-(--layout-section-gap) pb-(--layout-boundary-end)"
       >
         <Alert
-          v-if="loadFailed"
+          v-if="error"
           severity="danger"
         >
-          Your billing data could not be loaded. Nothing was charged or changed; try again.
+          {{ error }}
           <template #actions>
             <Button
               label="Retry"
               variant="secondary"
               size="small"
-              @click="load"
+              @click="emit('retry', $event)"
             />
           </template>
         </Alert>
@@ -341,7 +410,9 @@
                         height="1.25rem"
                       />
                       <template v-else>
-                        <span class="truncate text-label-lg text-(--text-default)">Pro</span>
+                        <span class="truncate text-label-lg text-(--text-default)">{{
+                          subscription?.plan
+                        }}</span>
                         <Tag
                           label="Current plan"
                           severity="neutral"
@@ -354,11 +425,20 @@
                       :loading="loading"
                       aria-label="Subscription details"
                     >
-                      <KeyValueList.Item label="Plan start date">Jan 25, 2023</KeyValueList.Item>
-                      <KeyValueList.Item label="Next charge date">Dec 1, 2026</KeyValueList.Item>
+                      <KeyValueList.Item label="Plan start date">
+                        <template v-if="subscription">{{
+                          formatDate(subscription.startedAt)
+                        }}</template>
+                      </KeyValueList.Item>
+                      <KeyValueList.Item label="Next charge date">
+                        <template v-if="subscription">{{
+                          formatDate(subscription.nextChargeAt)
+                        }}</template>
+                      </KeyValueList.Item>
                       <KeyValueList.Item label="Next charge value">
                         <CurrencyAmount
-                          value="184.20"
+                          v-if="subscription"
+                          :value="formatAmount(subscription.nextChargeAmount)"
                           size="small"
                         />
                       </KeyValueList.Item>
@@ -462,7 +542,7 @@
                     size="medium"
                     :loading="loading"
                     aria-label="Refresh invoices"
-                    @click="load"
+                    @click="emit('refresh', $event)"
                   />
                 </Tooltip>
                 <Tooltip
@@ -626,18 +706,29 @@
                   aria-label="Payment information"
                 >
                   <KeyValueList.Item label="Billing email">
-                    <span dir="ltr">billing@example.com</span>
+                    <span
+                      v-if="paymentInformation?.email"
+                      dir="ltr"
+                      >{{ paymentInformation.email }}</span
+                    >
                   </KeyValueList.Item>
                   <KeyValueList.Item label="Auto-renewal">
                     <StatusIndicator
-                      severity="success"
-                      label="On"
+                      v-if="paymentInformation"
+                      :severity="paymentInformation.autoRenewal ? 'success' : 'neutral'"
+                      :label="paymentInformation.autoRenewal ? 'On' : 'Off'"
                     />
                   </KeyValueList.Item>
-                  <KeyValueList.Item label="Billing address"
-                    >100 Market Street, Suite 400, San Francisco, CA 94105</KeyValueList.Item
-                  >
-                  <KeyValueList.Item label="Tax ID" />
+                  <KeyValueList.Item label="Billing address">
+                    <template v-if="paymentInformation?.address">{{
+                      paymentInformation.address
+                    }}</template>
+                  </KeyValueList.Item>
+                  <KeyValueList.Item label="Tax ID">
+                    <template v-if="paymentInformation?.taxId">{{
+                      paymentInformation.taxId
+                    }}</template>
+                  </KeyValueList.Item>
                 </KeyValueList>
               </template>
             </Card>
@@ -663,7 +754,7 @@
             <Card :padded="false">
               <template #default>
                 <DataTable
-                  :data="paymentMethods"
+                  :data="methodRows"
                   :columns="methodColumns"
                   row-key="id"
                   :loading="loading"
@@ -709,7 +800,7 @@
                   <template #cell-actions="{ row }">
                     <TableCellActions
                       :name="methodLabel(row)"
-                      @select="(_event, value) => onMethodAction(value, row)"
+                      @select="(event, value) => onMethodAction(event, value, row)"
                     >
                       <DropdownMenu.Group>
                         <DropdownMenu.Item

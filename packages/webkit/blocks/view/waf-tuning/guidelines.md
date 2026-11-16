@@ -36,7 +36,62 @@ A medium `Dialog` holding a `form` titled "Allow 2 rules": the description says 
 
 ### E. Outcome — `Alert` (required)
 
-Success closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `state/form-validation` (SectionRejected)). This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+Allow rules emits `allow`; the page sets `allowing` while the request runs. Success (`allowing` turns off with no `allowError`) closes the dialog, clears the selection, moves focus to the matched-requests region and raises a success toast: "6 allowed rules created." with "Requests that match them are no longer blocked by this rule set." Failure (`allowError` set) keeps the dialog and its input, puts a danger `Alert` at the top ("The allowed rules weren't created. Nothing changed in the rule set; try again.") and renames the submit button Try again (see `state/form-validation` (SectionRejected)). This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its matches through props and emits every action; it fetches nothing. `WafTuningMatch`, `WafTuningAllowPayload` and `WafTuningProps` are exported from `waf-tuning.vue`, and `sample.ts` holds the sample matches the block renders when `matches` is left out (and never while `loading` or `error` is set).
+
+| Prop                  | Type                    | What it does                                                                                                                                                   |
+| --------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `matches`             | `WafTuningMatch[]`      | The matched rules for the range; the minimum hits and the search filter them in the browser. Pass `[]` for a rule set with no match yet.                       |
+| `v-model:range`       | `'1h' \| '24h' \| '7d'` | The time range; refetch the matches when it changes. Defaults to `24h`.                                                                                        |
+| `loading`             | `boolean`               | The matches are loading: the settings and actions disable and the table shows skeleton rows.                                                                   |
+| `error`               | `string`                | Why the matches failed to load, shown in the danger `Alert` with Retry that replaces the table.                                                                |
+| `defaultSelectedKeys` | `string[]`              | Rule ids checked when the block opens.                                                                                                                         |
+| `defaultOpen`         | `boolean`               | Opens the allow dialog on the checked rules.                                                                                                                   |
+| `allowing`            | `boolean`               | The allow request is in flight: the dialog locks and Allow rules spins. When it turns off with no `allowError`, the dialog closes and the success toast shows. |
+| `allowError`          | `string`                | Why the allowed rules were not created, shown at the top of the dialog; the submit reads Try again.                                                            |
+
+| Event          | Payload                        | When                               |
+| -------------- | ------------------------------ | ---------------------------------- |
+| `refresh`      | `(event)`                      | Refresh.                           |
+| `retry`        | `(event)`                      | Retry in the load error alert.     |
+| `allow`        | `(event, { matches, reason })` | Allow rules with a reason entered. |
+| `update:range` | `(range)`                      | A new time range was picked.       |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import WafTuning, { type WafTuningAllowPayload } from './waf-tuning.vue'
+
+  const range = ref<'1h' | '24h' | '7d'>('24h')
+  const { data, pending, error, refresh } = useWafMatches(range)
+  const { run: createAllowed, pending: allowing, error: allowFailed } = useCreateAllowedRules()
+  const allow = (_event: Event, payload: WafTuningAllowPayload) => createAllowed(payload)
+</script>
+
+<template>
+  <WafTuning
+    v-model:range="range"
+    :matches="data ?? []"
+    :loading="pending"
+    :error="error ? 'Couldn\'t load the matched requests. Check your connection and retry.' : ''"
+    :allowing="allowing"
+    :allow-error="
+      allowFailed
+        ? 'The allowed rules weren\'t created. Nothing changed in the rule set; try again.'
+        : ''
+    "
+    @refresh="refresh"
+    @retry="refresh"
+    @allow="allow"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -74,12 +129,12 @@ Success closes the dialog, clears the selection, moves focus to the matched-requ
 
 ## States
 
-- Default: five rules matched in the last 24 hours, minimum 100 hits.
-- Allow: two rules checked and the dialog open.
-- AllowError: the dialog with the failure `Alert` and Try again.
-- Empty: no match yet, no settings.
-- Loading: settings disabled, skeleton rows.
-- LoadError: the matched requests did not load; a danger `Alert` with Retry takes the table's place and Export to CSV is disabled.
+- Default: the matches passed in `matches` (the sample when it is left out), minimum 100 hits.
+- Allow: `defaultSelectedKeys` checks two rules and `defaultOpen` opens the dialog.
+- AllowError: the same dialog with `allowError` set: the failure `Alert` and Try again.
+- Empty: `matches` is `[]`: no match yet, no settings.
+- Loading: `loading`: settings disabled, skeleton rows.
+- LoadError: `error` set: a danger `Alert` with Retry takes the table's place and Export to CSV is disabled.
 
 ## Related
 

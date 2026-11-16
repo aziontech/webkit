@@ -6,52 +6,108 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import PromptInput from '@aziontech/webkit/prompt-input'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import ToolApproval, { type ToolApprovalStatus } from '@aziontech/webkit/tool-approval'
+  import ToolApproval, {
+    type ToolApprovalStatus,
+    type ToolApprovalVariant
+  } from '@aziontech/webkit/tool-approval'
   import ToolCall, { type ToolCallStatus } from '@aziontech/webkit/tool-call'
-  import { computed, onBeforeUnmount, ref } from 'vue'
+  import { computed, ref } from 'vue'
 
-  const command = 'azion deploy --workload storefront --build b-4821 --env production'
-  const decision = ref<ToolApprovalStatus>('pending')
-  const run = ref<ToolCallStatus | ''>('')
-  const stopped = ref(false)
-  const prompt = ref('')
-  let timer: ReturnType<typeof setTimeout> | undefined
+  import { sampleAction } from './sample'
 
-  const followUp = computed(() => {
-    if (decision.value === 'denied')
-      return 'Got it, nothing was deployed. Build `b-4821` stays ready if you change your mind.'
-    if (decision.value === 'expired') return 'This request expired. Nothing was deployed.'
-    if (run.value === 'error' && stopped.value)
-      return 'You stopped the deployment before it finished. Production still serves the previous version `b-4790`.'
-    if (run.value === 'error')
-      return 'The deployment of build `b-4821` failed while uploading the build to the edge. Nothing changed: production still serves the previous version `b-4790`.'
-    if (run.value === 'success')
-      return 'storefront is live on production with build `b-4821`. The previous version `b-4790` stays available for rollback.'
-    return ''
+  /** A tool call the assistant makes, as the conversation records it. */
+  export interface AiActionApprovalCall {
+    /** The tool name, shown in code. */
+    name: string
+    /** What the call does, in plain words. */
+    title: string
+  }
+
+  /** The action the assistant proposes and the conversation that led to it. */
+  export interface AiActionApprovalAction {
+    /** The reader's request, in their words. */
+    request: string
+    /** When the reader asked and the assistant answered, already formatted. */
+    time: string
+    /** The read-only call the assistant made before asking. */
+    check: AiActionApprovalCall
+    /** What the assistant found and why it needs approval, in Markdown. */
+    explanation: string
+    /** The question on the card, naming the action with the command in code. */
+    title: string
+    /** What changes and what stays. */
+    description: string
+    /** The approve button label, the verb of the title. */
+    approveLabel: string
+    /** The exact command that runs once approved. */
+    command: string
+    /** Danger for an irreversible action. */
+    variant?: ToolApprovalVariant
+    /** The phrase the reader types before an irreversible action enables. */
+    confirmationPhrase?: string
+    /** The call that runs once approved. */
+    run: AiActionApprovalCall
+  }
+
+  /** The assistant's report once the action was decided or ran. */
+  export interface AiActionApprovalOutcome {
+    /** What changed, or that nothing ran, in Markdown. */
+    content: string
+    /** When the assistant reported, already formatted. */
+    time: string
+  }
+
+  export interface AiActionApprovalProps {
+    /** The proposed action. Left out, the sample deployment renders. */
+    action?: AiActionApprovalAction
+    /** Where the approved call stands (running, success, error); empty before it starts. */
+    run?: ToolCallStatus | ''
+    /** The assistant's report after the decision; a failed run shows Retry beside Copy. */
+    outcome?: AiActionApprovalOutcome
+  }
+
+  const props = withDefaults(defineProps<AiActionApprovalProps>(), {
+    action: undefined,
+    run: '',
+    outcome: undefined
   })
+
+  const emit = defineEmits<{
+    approve: [event: MouseEvent, action: AiActionApprovalAction]
+    deny: [event: MouseEvent, action: AiActionApprovalAction]
+    stop: [event: MouseEvent, action: AiActionApprovalAction]
+    retry: [event: MouseEvent, action: AiActionApprovalAction]
+    send: [event: MouseEvent | KeyboardEvent, text: string]
+  }>()
+
+  /** The decision on the card; Deny or the approve button sets it and emits. */
+  const decision = defineModel<ToolApprovalStatus>('decision', { default: 'pending' })
+
+  const prompt = ref('')
+
+  const current = computed(() => props.action ?? sampleAction)
+  const runStatus = computed<ToolCallStatus | ''>(
+    () => props.run || (decision.value === 'denied' ? 'denied' : '')
+  )
+  const followUp = computed(() => props.outcome?.content ?? '')
   const composerState = computed(() =>
-    decision.value === 'approved' && run.value === 'running' ? 'streaming' : 'ready'
+    decision.value === 'approved' && runStatus.value === 'running' ? 'streaming' : 'ready'
   )
 
-  function approve() {
+  function approve(event: MouseEvent) {
     decision.value = 'approved'
-    stopped.value = false
-    run.value = 'running'
-    timer = setTimeout(() => (run.value = 'success'), 2500)
+    emit('approve', event, current.value)
   }
 
-  function deny() {
+  function deny(event: MouseEvent) {
     decision.value = 'denied'
-    run.value = 'denied'
+    emit('deny', event, current.value)
   }
 
-  function stop() {
-    clearTimeout(timer)
-    stopped.value = true
-    run.value = 'error'
+  function send(event: MouseEvent | KeyboardEvent, value: string) {
+    prompt.value = ''
+    emit('send', event, value)
   }
-
-  onBeforeUnmount(() => clearTimeout(timer))
 </script>
 
 <template>
@@ -70,42 +126,42 @@
     <Conversation aria-label="Conversation with the AI assistant">
       <ChatMessage
         from="user"
-        timestamp="15:02"
+        :timestamp="current.time"
       >
-        Deploy the current build of storefront to production
+        {{ current.request }}
       </ChatMessage>
-      <ChatMessage timestamp="15:02">
+      <ChatMessage :timestamp="current.time">
         <ToolCall
-          name="get_build"
-          title="Reading the latest build of storefront"
+          :name="current.check.name"
+          :title="current.check.title"
           status="success"
         />
-        <StreamingResponse
-          content="Build `b-4821` passed its checks 6 minutes ago. Deploying it needs your approval."
-        />
+        <StreamingResponse :content="current.explanation" />
         <ToolApproval
-          title="Allow `azion deploy --env production`?"
-          description="Deploys build `b-4821` of storefront to production. The current version stays available for rollback."
-          approve-label="Deploy"
+          :title="current.title"
+          :description="current.description"
+          :approve-label="current.approveLabel"
+          :variant="current.variant"
+          :confirmation-phrase="current.confirmationPhrase"
           :status="decision"
           @approve="approve"
           @deny="deny"
         >
           <CodeBlock
-            :tabs="[{ label: 'Shell', value: 'command', code: command, language: 'bash' }]"
+            :tabs="[{ label: 'Shell', value: 'command', code: current.command, language: 'bash' }]"
             :show-line-numbers="false"
           />
         </ToolApproval>
         <ToolCall
-          v-if="run"
-          name="deploy_workload"
-          title="Deploying storefront to production"
-          :status="run"
+          v-if="runStatus"
+          :name="current.run.name"
+          :title="current.run.title"
+          :status="runStatus"
         />
       </ChatMessage>
       <ChatMessage
         v-if="followUp"
-        timestamp="15:04"
+        :timestamp="outcome?.time"
       >
         <StreamingResponse :content="followUp" />
         <template #actions>
@@ -115,12 +171,12 @@
               :value="followUp"
             />
             <Button
-              v-if="run === 'error'"
+              v-if="runStatus === 'error'"
               label="Retry"
               variant="outline"
               size="small"
               icon="ai ai-refresh"
-              @click="approve"
+              @click="emit('retry', $event, current)"
             />
           </ChatMessage.Actions>
         </template>
@@ -130,7 +186,8 @@
       <PromptInput
         v-model="prompt"
         :status="composerState"
-        @stop="stop"
+        @submit="(event, { value }) => send(event, value)"
+        @stop="emit('stop', $event, current)"
       >
         <template #hint>
           The assistant runs nothing in your account without your approval.

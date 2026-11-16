@@ -40,6 +40,7 @@
     "name": "ConnectGit",
     "file": "deploy-template.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "WhereItRuns",

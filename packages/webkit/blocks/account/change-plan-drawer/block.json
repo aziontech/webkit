@@ -46,6 +46,7 @@
     "name": "Default",
     "file": "change-plan-drawer.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Checkout",

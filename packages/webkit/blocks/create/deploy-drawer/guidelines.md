@@ -27,9 +27,9 @@ An outlined medium `Button` reading Deploy inside `DrawerTrigger`, on the servic
 
 `DrawerTitle` reads Deploy, or Build and deployment while a version is being built first. The drawer's own close button sits on the right; no Cancel anywhere.
 
-### C. Sections — `PanelBody`, `SettingsSection` (required)
+### C. Sections — `PanelBody`, `SettingsSection`, `Skeleton`, `Alert`, `Spinner` (required)
 
-`PanelBody` holds one `fieldset` of `SettingsSection` bands, each with a title and a `hint`: Resources, Project, Environment, Projects impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches.
+`PanelBody` holds one `fieldset` of `SettingsSection` bands, each with a title and a `hint`: Resources, Project, Environment, Projects impacted on a service; Resources and Environment on a project. The order is the order of the decision: what, where, then what else it reaches. While the deploy targets load, `Skeleton` blocks stand in for Resources and Environment; a failed load is a danger `Alert` with Retry; a build in progress is one row with its version `Tag` and a `Spinner` in place of Resources.
 
 ### D. Resources card — `Card`, `Separator`, `Item`, `Tag`, `DropdownMenu`, `Input`, `Avatar`, `Button` (required)
 
@@ -50,6 +50,57 @@ Choice cards, a `RadioGroup` with `variant="card"` and one item per environment 
 ### H. Projects impacted and commit — `Item`, `Tag`, `Link`, `Tooltip`, `Popover`, `PanelFooter`, `Button` (required on a service)
 
 Every project the chosen environment's shared Deployment Settings deploy to, grouped by environment, the current one tagged Selected, with its domains shown like the Project card. `PanelFooter` holds one primary medium `Button` reading Deploy on the right, of `type="submit"`. On its left, once a version differs from the live one, one muted line counts the changes and names the environment they go live in.
+
+## Data
+
+The block takes the deploy targets through props and emits every action; it fetches and deploys nothing. The record types (`DeployDrawerResource`, `DeployDrawerProjectGroup`, `DeployDrawerEnvironment`, `DeployDrawerImpact`, `DeployDrawerBuild`, `DeployDrawerValues`) and `DeployDrawerProps` are exported from `deploy-drawer.vue`, and `sample.ts` holds the sample records the Service drawer renders when they are left out (never while `loading` or `error` is set).
+
+| Prop            | Type                          | What it does                                                                           |
+| --------------- | ----------------------------- | -------------------------------------------------------------------------------------- |
+| `resources`     | `DeployDrawerResource[]`      | The resources with their Ready versions and the dependencies they reference.           |
+| `projectGroups` | `DeployDrawerProjectGroup[]`  | The projects Use existing offers, in groups.                                           |
+| `newProject`    | `DeployDrawerProject`         | The project Create new makes.                                                          |
+| `environments`  | `DeployDrawerEnvironment[]`   | The environments to go live in, the first selected by default.                         |
+| `impacted`      | `DeployDrawerImpact[]`        | The projects the shared Deployment Settings reach, per environment.                    |
+| `defaultValues` | `Partial<DeployDrawerValues>` | The versions, project and environment every open resets to.                            |
+| `build`         | `DeployDrawerBuild`           | A build in progress: a Building row replaces Resources, the rest is inert, Deploy off. |
+| `loading`       | `boolean`                     | The deploy targets are loading; `Skeleton` blocks, Deploy disabled.                    |
+| `error`         | `string`                      | Why they failed to load, in a danger `Alert` with Retry; Deploy disabled.              |
+| `v-model:open`  | `boolean`                     | Whether the drawer shows; the trigger opens it and Deploy closes it.                   |
+
+| Event    | Payload           | When                                                                                     |
+| -------- | ----------------- | ---------------------------------------------------------------------------------------- |
+| `submit` | `(event, values)` | Deploy; `values` carry the picked version per resource, the project and the environment. |
+| `retry`  | `(event)`         | Retry in the load error.                                                                 |
+
+To go live, render the block from a page that owns the request and the deploy:
+
+```vue
+<script setup lang="ts">
+  import DeployDrawer, { type DeployDrawerValues } from './deploy-drawer.vue'
+
+  const { data, pending, error, refresh } = useDeployTargets(serviceId)
+  const { deploy } = useDeploy()
+  const loadError = "The deploy targets couldn't be loaded. Check your connection and try again."
+</script>
+
+<template>
+  <DeployDrawer
+    :resources="data?.resources ?? []"
+    :project-groups="data?.projectGroups ?? []"
+    :new-project="data?.newProject"
+    :environments="data?.environments ?? []"
+    :impacted="data?.impacted ?? []"
+    :default-values="data?.defaults ?? {}"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @retry="refresh"
+    @submit="(_event, values: DeployDrawerValues) => deploy(values)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import. The page reports the run through the toast (`state/async-submit`).
 
 ## Do
 
@@ -112,13 +163,13 @@ Every project the chosen environment's shared Deployment Settings deploy to, gro
 
 ## States
 
-- Service: a service deploying environment first; Resources, Project with the last used project, Environment and Projects impacted, and the footer counting the one version change that goes live in Production.
-- Building: no pinned version; titled Build and deployment with a Building row in place of Resources, the other sections faded and inert, Deploy disabled.
-- ServiceProjectFirst: the project-first flow; Resources, the Project card with the last used project and a Change popover, then every environment.
+- Service: a service deploying environment first (the records passed in, or the sample); Resources, Project with the last used project, Environment and Projects impacted, and the footer counting the one version change that goes live in Production.
+- Building: no pinned version (`build` is set); titled Build and deployment with a Building row in place of Resources, the other sections faded and inert, Deploy disabled.
+- ServiceProjectFirst: the project-first flow, its own SFC on the sample resources; Resources, the Project card with the last used project and a Change popover, then every environment.
 - Project: deploying a project; its service and storage in Resources, Production and Preview, and a warning about other projects that share its storefront settings.
 - Environment: a locked Strict environment, an Also deploys tag, the replace and multi-environment `Alert`s, Projects impacted grouped per environment and reloaded on switch; the run ends in a success toast with Edit and Redeploy.
-- Loading: the resources and environments resolving; `Skeleton` blocks under the Resources and Environment titles, an `aria-busy` region with a status line, Deploy disabled.
-- LoadError: the deploy targets failed to load; a danger `Alert` with Retry, which reloads them as Skeletons, and Deploy disabled.
+- Loading: the resources and environments resolving (`loading` on the Service drawer; this variant shows the project drawer); `Skeleton` blocks under the Resources and Environment titles, an `aria-busy` region with a status line, Deploy disabled.
+- LoadError: the deploy targets failed to load (`error` on the Service drawer, with `retry`; this variant shows the project drawer); a danger `Alert` with Retry, which reloads them as Skeletons, and Deploy disabled.
 - NoEnvironment: nothing bound and no environment; a one-line empty Resources card, an `EmptyState` with Add environment, and Deploy disabled with the reason in the footer.
 - Dependencies: the open Dependencies disclosure with a Shared dependency, a not-versioned integration and a dependency with no ready version that blocks Deploy; changing the service version reloads the list. The first run fails and its toast offers Edit and Redeploy; Redeploy succeeds.
 

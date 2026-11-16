@@ -43,7 +43,9 @@ scratch. Find its block with `npx @aziontech/webkit search <the screen in plain 
 `webkit` MCP: `search_blocks`), read it with `npx @aziontech/webkit view <block-id>` (or
 `get_block`), then copy it with `npx @aziontech/webkit add <block-id>`: it writes the SFC into the
 views directory, checks its imports, records it in `webkit.blocks.json` and prints the route to add.
-Change only the content (copy, data, handlers); keep the components, their order, the props and the
+A block takes its records, `loading` and `error` as props and emits its actions: feed it from the
+routed page that owns the request instead of rewriting it, and delete its `.sample.ts` once real
+data flows. Change only the content (copy, handlers); keep the components, their order, the props and the
 classes. Block ids are grouped by job (`create/…`, `view/…`,
 `detail/…`, `edit/…`, `edit/…`, `settings/…`,
 `state/…`, `dashboard/…`, `account/…`, `auth/sign-in`); each is one job

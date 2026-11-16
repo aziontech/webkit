@@ -4,6 +4,7 @@ import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join, resolve } from 'node:path'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
+import { checkDataContract } from './lib/block-data.mjs'
 import { readBlocks } from './lib/blocks.mjs'
 import { checkGuidelines, checkToastRegion, primaryComponents } from './lib/guidelines.mjs'
 
@@ -12,6 +13,7 @@ const REPO_ROOT = resolve(SCRIPT_DIR, '../../..')
 const CATALOG_PATH = resolve(SCRIPT_DIR, '../catalog.json')
 const BASELINE_PATH = resolve(SCRIPT_DIR, 'blocks-baseline.json')
 const PENDING_PATH = resolve(SCRIPT_DIR, 'guidelines-baseline.json')
+const DATA_BASELINE_PATH = resolve(SCRIPT_DIR, 'blocks-data-baseline.json')
 const SKILL_DIRS = [resolve(REPO_ROOT, 'skills')]
 
 export function skillExists(name, dirs = SKILL_DIRS) {
@@ -166,6 +168,30 @@ async function main() {
     for (const w of metadata.warnings) process.stdout.write(`⚠ ${w}\n`)
   }
 
+  const dataBaseline = existsSync(DATA_BASELINE_PATH)
+    ? JSON.parse(readFileSync(DATA_BASELINE_PATH, 'utf-8'))
+    : []
+  const data = checkDataContract(blocks, update ? [] : dataBaseline)
+  if (update) {
+    writeFileSync(DATA_BASELINE_PATH, JSON.stringify(data.keys.sort(), null, 2) + '\n', 'utf-8')
+    process.stdout.write(`blocks-data-baseline.json updated (${data.keys.length} keys)\n`)
+  } else {
+    for (const key of data.introduced) {
+      const [id, kind, variant] = key.split(':')
+      errors.push(
+        kind === 'variant-copy'
+          ? `blocks/${id}: the ${variant} variant repeats 90 % or more of the primary SFC. Import the primary and pass it other props or slots.`
+          : kind === 'no-props'
+            ? `blocks/${id}: the primary SFC declares no props. Take the records, loading and error through typed props and emit the actions.`
+            : `blocks/${id}: the primary SFC holds sample records. Move them to a sample file listed in block.json "files" and pass them in as props.`
+      )
+    }
+    if (data.fixed.length)
+      process.stdout.write(
+        `ℹ ${data.fixed.length} data-contract findings fixed — run \`pnpm --filter @aziontech/webkit run check:blocks --update\` to lock in: ${data.fixed.join(', ')}\n`
+      )
+  }
+
   const { counts, samples } = await lintBlocks(blocks)
   if (update) {
     const sorted = Object.fromEntries(Object.entries(counts).sort(([a], [b]) => a.localeCompare(b)))
@@ -193,7 +219,7 @@ async function main() {
   }
   if (errors.length || regressions.length) {
     process.stderr.write(
-      '\nEvery block in packages/webkit/blocks is a screen the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, SFCs that pass the consumer lint, and no Toaster outside an app root (blocks/shell).\n'
+      '\nEvery block in packages/webkit/blocks is a screen the AI copies: it needs intents in block.json, real skills, a guidelines.md whose building blocks and states match the SFC and block.json, SFCs that pass the consumer lint, no Toaster outside an app root (blocks/shell), and a data contract: typed props in, events out, sample records in a separate file, variants that import the primary instead of copying it.\n'
     )
     process.exit(1)
   }

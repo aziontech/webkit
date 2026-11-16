@@ -25,6 +25,7 @@
     "name": "Default",
     "file": "alerts-dashboard.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Loading",

@@ -26,6 +26,7 @@
     "name": "Default",
     "file": "scan-results-dashboard.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Loading",

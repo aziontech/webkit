@@ -26,6 +26,7 @@
     "name": "Default",
     "file": "mfa-settings.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Required",

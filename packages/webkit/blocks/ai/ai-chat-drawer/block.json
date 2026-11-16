@@ -29,6 +29,7 @@
     "name": "Empty",
     "file": "ai-chat-drawer.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Streaming",

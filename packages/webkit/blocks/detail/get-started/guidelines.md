@@ -34,6 +34,38 @@ Three `Card`s with `:padded="false"`, one per step, each led by a round step num
 
 One `CodeBlock` per step with `:line-numbers="false"` and a `copy-aria-label` that names the step. A step with alternatives (npm, yarn, pnpm, brew) carries them as tabs of the same block; a workflow file shows its `fileName`.
 
+## Data
+
+The block fetches nothing; the steps are its copy. `GetStartedProps` and `GetStartedPath` are exported from `get-started.vue`, and `sample.ts` holds the sample resource name the link command fills in when `resourceName` is left out.
+
+| Prop           | Type                 | What it does                                              |
+| -------------- | -------------------- | --------------------------------------------------------- |
+| `resourceName` | `string`             | The resource slug in the Link your project command.       |
+| `v-model`      | `'cli' \| 'actions'` | The open path; left unbound, the toggle keeps it locally. |
+
+| Event               | Payload  | When                       |
+| ------------------- | -------- | -------------------------- |
+| `update:modelValue` | `(path)` | The toggle switches paths. |
+
+To go live, pass the resource the page shows:
+
+```vue
+<script setup lang="ts">
+  import GetStarted from './get-started.vue'
+
+  const { data: resource } = useResource()
+</script>
+
+<template>
+  <GetStarted
+    v-if="resource"
+    :resource-name="resource.name"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep exactly three steps per path, in the order the user runs them: install or authenticate, connect, deploy.
@@ -68,8 +100,8 @@ One `CodeBlock` per step with `:line-numbers="false"` and a `copy-aria-label` th
 
 ## States
 
-- Cli: the CLI path, install the CLI, link the project, then deploy and sync.
-- Ci: the GitHub Actions path, store a personal token as a repository secret, add the deploy workflow, then push to the production branch.
+- Cli: the default `v-model` (`cli`), install the CLI, link the project named by `resourceName`, then deploy and sync.
+- Ci: `model-value="actions"`, the GitHub Actions path: store a personal token as a repository secret, add the deploy workflow, then push to the production branch.
 
 ## Related
 

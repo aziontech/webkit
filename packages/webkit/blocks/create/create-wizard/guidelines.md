@@ -64,6 +64,51 @@ Two steps, Project then Domain and deployment, with the last action reading "Cre
 - **Domain and deployment.** A read-back `Item` of the bound project with a transparent Change `Button` back to step one (the answer is kept); a Domain `Card` with a `ToggleGroup` of Free platform domain and Your own domain and a preview line of the address traffic arrives on; Environment as a `RadioGroup variant="card"` and Certificate as a `Select`; a Deployment `Card` with Create one or Use existing (the paged picker again); and a collapsed `SettingsSection` titled Advanced holding only fields that have defaults.
 - **After submit.** Create and deploy shows its loading state; the consumer then hands the column to `detail/deployment-logs` (InCreateFlow) and ends on `create/deploy-success`.
 
+## Data
+
+The block keeps the form as a local draft, validates each step and emits `submit` with the values; it sends no request. `CreateWizardPolicy`, `CreateWizardValues`, `CreateWizardSubmission` and `CreateWizardProps` are exported from `create-wizard.vue`, and `sample.ts` holds the sample policies the chooser lists when `policies` is left out. The page owns the request: it sets `loading` while it runs, and on failure sets `error`, which the block shows in an error toast with Retry; on success the page shows the toast and opens the list.
+
+| Prop            | Type                          | What it does                                                                        |
+| --------------- | ----------------------------- | ----------------------------------------------------------------------------------- |
+| `policies`      | `CreateWizardPolicy[]`        | The policies Where it runs offers; `ready` says whether IP filtering is on in each. |
+| `defaultStep`   | `CreateWizardStep`            | The step the wizard opens on; `where-it-runs` by default.                           |
+| `defaultPolicy` | `string`                      | The policy already picked; empty, Where it runs waits for an answer.                |
+| `defaultValues` | `Partial<CreateWizardValues>` | The Name, Type and List the form starts from.                                       |
+| `loading`       | `boolean`                     | The create request is in flight; Create Access List spins and the wizard locks.     |
+| `error`         | `string`                      | Why the request failed, the description of the error toast with Retry.              |
+
+| Event    | Payload           | When                                                                                                             |
+| -------- | ----------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `submit` | `(event, values)` | Create Access List on a valid form, and Retry in the error toast; `values` adds the `policy` and `enableModule`. |
+| `cancel` | `(event)`         | Cancel in the footer.                                                                                            |
+
+To go live, render the block from a page that owns the policies and the request:
+
+```vue
+<script setup lang="ts">
+  import { toast } from '@aziontech/webkit/toast'
+  import CreateWizard, { type CreateWizardSubmission } from './create-wizard.vue'
+
+  const { data: policies } = usePolicies()
+  const { mutate, pending, error } = useCreateAccessList()
+  const create = async (_event: MouseEvent, values: CreateWizardSubmission) => {
+    await mutate(values)
+    toast.success(`${values.name} created.`)
+  }
+</script>
+
+<template>
+  <CreateWizard
+    :policies="policies ?? []"
+    :loading="pending"
+    :error="error ? 'The service did not answer. Check your connection and try again.' : ''"
+    @submit="create"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Ask where the resource runs first, and insert the module step only when the chosen host needs it.
@@ -106,10 +151,10 @@ Two steps, Project then Domain and deployment, with the last action reading "Cre
 
 ## States
 
-- WhereItRuns: the first step; the chooser of policies with search, module tags and the two escape routes.
-- ModuleOff: acme-staging was chosen with IP filtering off, so the IP filtering step shows the warning, the switch card and the note.
-- ListSettings: the settings step; Type as radio choice cards and the List textarea, with Previous and Next (Review follows). Next with an empty list stays and shows the message.
-- Review: the last step, read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created pairs each value with the property it is sent as and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error.
+- WhereItRuns: the first step (the default `defaultStep`); the chooser of policies with search, module tags and the two escape routes.
+- ModuleOff: acme-staging was chosen with IP filtering off (`defaultStep="module"`, `defaultPolicy="acme-staging"`), so the IP filtering step shows the warning, the switch card and the note.
+- ListSettings: the settings step (`defaultStep="settings"`, a `defaultPolicy` and a Name in `defaultValues`); Type as radio choice cards and the List textarea, with Previous and Next (Review follows). Next with an empty list stays and shows the message.
+- Review: the last step (`defaultStep="review"` with a `defaultPolicy` and `defaultValues`), read-only, with the create action in the footer. Where it runs is one `Alert` whose severity says whether anything will read the resource; What gets created pairs each value with the property it is sent as and shows long lists as their first five `Tag`s and a count; What can reference it names the consumers. Each band that maps to a step has an outlined Edit (`aria-label` names the band) that jumps back to that step. Create re-validates every step and, on a failure, opens the first step with an error; on success it emits `submit`, `loading` spins it and `error` raises the error toast with Retry.
 - CreateAndDeploy: Create Service on its Project step with the paged project list; Next is gated on the project, and step two ends on Create and deploy with its loading state.
 
 ## Review step

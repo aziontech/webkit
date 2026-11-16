@@ -71,6 +71,49 @@ The Section variants add `AppHeader`, `IconButton`, `Tooltip`, `Brand`, `Breadcr
 
 A toast shows the result of a save that no field owns: `toast.error` with **Retry** when the request failed and no field is to blame (row 3 of `skills/webkit-errors`), `toast.success` naming the new object when the save went through. Both use one `id`, and the previous result is dismissed when a new submit starts, so attempts never stack. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
 
+## Data
+
+The block fetches nothing and fakes no request: Create validates the draft, then emits `submit` with the values, and the page that owns the request passes back what happened. `FormValidationValues`, `FormValidationSaved` and `FormValidationProps` are exported from `form-validation.vue`; the Section variants export `FormValidationOrigin`, `FormValidationService` and `FormValidationSectionProps` from `variants/section-rejected.vue`. `sample.ts` holds the filled entries, the origins and the rejection message the variants pass.
+
+| Prop               | Type                            | What it does                                                                                          |
+| ------------------ | ------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `loading`          | `boolean`                       | The form's data is still arriving: `Skeleton` rows stand in for the fields and Create is disabled.    |
+| `submitting`       | `boolean`                       | The create request is in flight: Create spins, the fields and Cancel are disabled.                    |
+| `error`            | `string`                        | A failure no field owns, the description of the error toast with Retry; the entries are kept.         |
+| `takenKey`         | `string`                        | A key the server reported as in use: Key turns `invalid`, the danger `Alert` opens, Key takes focus.  |
+| `saved`            | `FormValidationSaved`           | The variable the request created (`key`, `environment`): the success toast names it, the form clears. |
+| `defaultValues`    | `Partial<FormValidationValues>` | Entries the form opens with, such as a kept draft.                                                    |
+| `defaultSubmitted` | `boolean`                       | Opens with the validation messages shown, as after a press on Create.                                 |
+
+| Event    | Payload           | When                                                         |
+| -------- | ----------------- | ------------------------------------------------------------ |
+| `submit` | `(event, values)` | Create, or Retry in the error toast, with every field valid. |
+
+The Section form takes `origins`, `originError`, `reloading` and `submitting`, and emits `submit` `(event, values)`, `cancel` `(event)` and `reload-origins` `(event)`. A chosen origin missing from a new `origins` list is cleared and flagged required.
+
+To go live, render the block from a page that owns the request:
+
+```vue
+<script setup lang="ts">
+  import FormValidation, { type FormValidationValues } from './form-validation.vue'
+
+  const { create, pending, error, conflictKey, created } = useCreateVariable()
+  const onSubmit = (_event: Event, values: FormValidationValues) => create(values)
+</script>
+
+<template>
+  <FormValidation
+    :submitting="pending"
+    :error="error ? 'The request didn\'t reach the server. Your entries are kept.' : ''"
+    :taken-key="conflictKey ?? ''"
+    :saved="created"
+    @submit="onSubmit"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its imports in the variants.
+
 ## Do
 
 - Validate on submit, not on every keystroke; after the first submit, a field's message updates as the user fixes it.
@@ -115,16 +158,16 @@ A toast shows the result of a save that no field owns: `toast.error` with **Retr
 
 ## States
 
-- Default: the empty Create Variable form, idle.
-- ValidationErrors: Create pressed with gaps; empty Value and Environment take `required`, the malformed Key takes `invalid`, each with its own message, and focus moves to Key.
-- Submitting: the request is in flight; Create shows `loading`, the fields and Cancel are disabled.
-- ServerError: the request failed and no field owns it; an error toast with Retry, the lock released, every entry kept.
-- Conflict: the key is already in use; the danger `Alert` opens above the fields, Key takes `invalid` with its reason and focus, and nothing toasts.
-- Saved: the save went through; a success toast names the variable and where it is available, and the form is cleared.
-- Loading: the form data is still arriving; `Skeleton` rows hold the layout and Create is disabled.
-- SectionRejected: on the long Create Service form, another user deleted the origin and Save was pressed; the page scrolls to Origin, the danger `Alert` opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
-- SectionReloading: Reload origins in flight; its button loads, the select gives way to a `Skeleton`, Save is disabled.
-- SectionReloaded: the list is back without the deleted origin; the `Alert` closes, the select is cleared and flagged required with Select an origin to continue.
+- Default: no prop set; the empty Create Variable form, idle.
+- ValidationErrors: `defaultValues` with a malformed key and `defaultSubmitted`, as after Create pressed with gaps; empty Value and Environment take `required`, the malformed Key takes `invalid`, each with its own message, and focus moves to Key.
+- Submitting: `submitting`, the request is in flight; Create shows `loading`, the fields and Cancel are disabled.
+- ServerError: `error`, the request failed and no field owns it; an error toast with Retry, the lock released, every entry kept.
+- Conflict: `takenKey`, the key is already in use; the danger `Alert` opens above the fields, Key takes `invalid` with its reason and focus, and nothing toasts.
+- Saved: `saved`, the save went through; a success toast names the variable and where it is available, and the form is cleared.
+- Loading: `loading`, the form data is still arriving; `Skeleton` rows hold the layout and Create is disabled.
+- SectionRejected: `originError` on the long Create Service form, another user deleted the origin and Save was pressed; the page scrolls to Origin, the danger `Alert` opens under its heading with Reload origins, and focus lands on the Origin select, which reads This origin no longer exists.
+- SectionReloading: `reloading`, Reload origins in flight; its button loads, the select gives way to a `Skeleton`, Save is disabled.
+- SectionReloaded: `origins` without the deleted origin and an empty `originError`; the `Alert` closes, the select is cleared and flagged required with Select an origin to continue.
 
 ## Related
 

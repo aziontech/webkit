@@ -26,7 +26,128 @@
   import Tag, { type TagSeverity, type TagVariant } from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Wizard from '@aziontech/webkit/wizard'
-  import { computed, reactive, ref, watch } from 'vue'
+  import { computed, onMounted, reactive, ref, watch } from 'vue'
+
+  import { sampleAccount, samplePlans } from './sample'
+
+  /** How often a paid plan is billed. */
+  export type OnboardingFormBillingPeriod = 'monthly' | 'yearly'
+
+  /** What a paid plan charges for one billing period. */
+  export interface OnboardingFormCharge {
+    /** The lines above the total: next charge, subtotal, discount. */
+    rows: { label: string; value: string; suffix?: string }[]
+    /** The total and what it covers. */
+    total: { value: string; suffix: string }
+  }
+
+  /** One plan row of the plan step. */
+  export interface OnboardingFormPlan {
+    /** Stable key, sent as the chosen plan. */
+    value: string
+    /** What the person is working on, the row's first line. */
+    label: string
+    /** The row's second line. */
+    description: string
+    /** The row's accessible name, with the plan and its price. */
+    ariaLabel: string
+    /** Plan name, shown in the tag and the upgrade drawer title. */
+    name: string
+    /** Tag severity. */
+    severity?: TagSeverity
+    /** Tag variant. */
+    variant?: TagVariant
+    /** Price line under the tag. */
+    price: string
+    /** What the upgrade includes; a plan with no charge selects without the drawer. */
+    features?: PlanFeatureListItem[]
+    /** The charge per billing period; set it for a paid plan, which opens the upgrade drawer. */
+    charge?: Record<OnboardingFormBillingPeriod, OnboardingFormCharge>
+  }
+
+  /** A billing address. */
+  export interface OnboardingFormAddress {
+    /** Country option value. */
+    country: string | undefined
+    /** Postal code. */
+    postalCode: string
+    /** State option value. */
+    state: string | undefined
+    /** City option value. */
+    city: string | undefined
+    /** Street line. */
+    line1: string
+    /** Apartment or suite line. */
+    line2: string
+  }
+
+  /** The signed-in account the organization is created for. */
+  export interface OnboardingFormAccount {
+    /** Sign-in address, shown in the wireframe and used when no full name is typed. */
+    email: string
+    /** The account address the upgrade drawer reuses by default. */
+    address: OnboardingFormAddress
+    /** Last four digits of the card on file. */
+    cardLast4: string
+  }
+
+  /** The answers Create Organization sends. */
+  export interface OnboardingFormValues {
+    /** The person's full name. */
+    fullName: string
+    /** The organization name. */
+    organizationName: string
+    /** The organization mark color. */
+    accent: string
+    /** The chosen plan value. */
+    plan: string
+    /** Billing period chosen in the upgrade drawer. */
+    billingPeriod: OnboardingFormBillingPeriod
+    /** Billing address chosen in the upgrade drawer. */
+    billingAddress: OnboardingFormAddress
+    /** How the platform will be used. */
+    usage: string
+    /** The person's role. */
+    role: string
+    /** Whether to schedule an onboarding session. */
+    session: boolean
+  }
+
+  /** Answers the form opens with. */
+  export type OnboardingFormDraft = Partial<
+    Pick<
+      OnboardingFormValues,
+      'fullName' | 'organizationName' | 'accent' | 'plan' | 'usage' | 'role' | 'session'
+    >
+  >
+
+  export interface OnboardingFormProps {
+    /** The signed-in account. Left out, the sample renders. */
+    account?: OnboardingFormAccount
+    /** The plans of the plan step. Left out, the sample renders. */
+    plans?: OnboardingFormPlan[]
+    /** Answers the form opens with, such as a draft restored from storage. */
+    defaultValues?: OnboardingFormDraft
+    /** The create request is in flight: the last step locks and Create Organization spins. */
+    loading?: boolean
+    /** Why the organization was not created, shown in the danger alert with Retry; the answers are kept. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<OnboardingFormProps>(), {
+    account: undefined,
+    plans: undefined,
+    defaultValues: () => ({}),
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: MouseEvent, values: OnboardingFormValues]
+    cancel: [event: MouseEvent]
+  }>()
+
+  const step = defineModel<number>('step', { default: 0 })
 
   interface Accent {
     value: string
@@ -79,11 +200,14 @@
       colors: ['var(--color-gray-200)', 'var(--color-gray-700)', 'var(--color-slate-500)']
     }
   ]
-  const email = 'myemail@example.com'
 
-  const fullName = ref('')
-  const organizationName = ref('')
-  const accent = ref('orange')
+  const account = computed(() => props.account ?? sampleAccount)
+  const plans = computed(() => props.plans ?? samplePlans)
+  const email = computed(() => account.value.email)
+
+  const fullName = ref(props.defaultValues.fullName ?? '')
+  const organizationName = ref(props.defaultValues.organizationName ?? '')
+  const accent = ref(props.defaultValues.accent ?? 'orange')
   const organizationSubmitted = ref(false)
 
   const accountInitials = (name: string) => {
@@ -96,155 +220,11 @@
   }
 
   const previewName = computed(() => organizationName.value.trim() || 'Your organization')
-  const ownerName = computed(() => fullName.value.trim() || email.split('@')[0])
+  const ownerName = computed(() => fullName.value.trim() || email.value.split('@')[0])
   const accentColors = computed(
     () => (accents.find((item) => item.value === accent.value) ?? accents[0]).colors
   )
 
-  type BillingPeriod = 'monthly' | 'yearly'
-
-  interface PlanItem {
-    value: string
-    label: string
-    description: string
-    ariaLabel: string
-    name: string
-    severity?: TagSeverity
-    variant?: TagVariant
-    price: string
-  }
-
-  interface PlanCharge {
-    rows: { label: string; value: string; suffix?: string }[]
-    total: { value: string; suffix: string }
-  }
-
-  interface PlanUpgrade {
-    name: string
-    features: { title: string; detail?: string }[]
-    charge: Record<BillingPeriod, PlanCharge>
-  }
-
-  interface BillingAddress {
-    country: string | undefined
-    postalCode: string
-    state: string | undefined
-    city: string | undefined
-    line1: string
-    line2: string
-  }
-
-  const plans: PlanItem[] = [
-    {
-      value: 'free',
-      label: "I'm working on personal projects",
-      description: 'Start free for personal projects and experimentation',
-      ariaLabel: "I'm working on personal projects. Free plan, Free.",
-      name: 'Free',
-      variant: 'contrast',
-      price: 'Free'
-    },
-    {
-      value: 'pro',
-      label: "I'm working on commercial projects",
-      description: 'For growing projects with higher usage demand',
-      ariaLabel: "I'm working on commercial projects. Pro plan, From $20/mo.",
-      name: 'Pro',
-      severity: 'info',
-      price: 'From $20/mo'
-    },
-    {
-      value: 'enterprise',
-      label: "I'm running production at scale",
-      description: 'Optimize costs with usage or spend commitments',
-      ariaLabel: "I'm running production at scale. Enterprise plan, From $2,000/mo.",
-      name: 'Enterprise',
-      variant: 'primary',
-      price: 'From $2,000/mo'
-    }
-  ]
-  const upgrades: Partial<Record<string, PlanUpgrade>> = {
-    pro: {
-      name: 'Pro',
-      features: [
-        { title: '100 resources', detail: 'then $0.10 per resource per month' },
-        { title: '10M requests', detail: 'then as low as $0.90 per 1M' },
-        { title: '50 hours of compute time', detail: 'then $0.18 per hour' },
-        { title: '10 GB of event log storage', detail: 'then $0.10 per GB-month' },
-        {
-          title: '100 GB of file storage',
-          detail: 'then as low as $0.021 per GB-month'
-        },
-        { title: '1 GB of database storage', detail: 'then $0.75 per GB-month' },
-        {
-          title: '100M security rule evaluations',
-          detail: 'then as low as $0.30 per 1M'
-        },
-        { title: 'DDoS protection included' },
-        { title: 'PCI DSS 4.0.1 Level 1' },
-        { title: 'SOC 2 Type 2 / SOC 3' },
-        { title: 'Data migration assistance' }
-      ],
-      charge: {
-        monthly: {
-          rows: [
-            { label: 'Next charge', value: '$200' },
-            { label: 'Subtotal', value: '$3,000', suffix: 'per month' }
-          ],
-          total: { value: '$3,000', suffix: 'per year' }
-        },
-        yearly: {
-          rows: [
-            { label: 'Next charge', value: '$200' },
-            { label: 'Subtotal', value: '$3,000', suffix: 'per month' },
-            { label: 'Yearly discount', value: '$2,200', suffix: 'per month' }
-          ],
-          total: { value: '$2,200', suffix: 'per year' }
-        }
-      }
-    },
-    enterprise: {
-      name: 'Enterprise',
-      features: [
-        { title: 'Unlimited resources' },
-        { title: '1B requests', detail: 'then as low as $0.60 per 1M' },
-        { title: '500 hours of compute time', detail: 'then $0.12 per hour' },
-        { title: '1 TB of event log storage', detail: 'then $0.08 per GB-month' },
-        {
-          title: '10 TB of file storage',
-          detail: 'then as low as $0.015 per GB-month'
-        },
-        { title: '100 GB of database storage', detail: 'then $0.50 per GB-month' },
-        {
-          title: '1B security rule evaluations',
-          detail: 'then as low as $0.20 per 1M'
-        },
-        { title: 'DDoS protection included' },
-        { title: 'PCI DSS 4.0.1 Level 1' },
-        { title: 'SOC 2 Type 2 / SOC 3' },
-        { title: 'Data migration assistance' },
-        { title: '99.99% uptime SLA' },
-        { title: 'Named account team' }
-      ],
-      charge: {
-        monthly: {
-          rows: [
-            { label: 'Next charge', value: '$2,000' },
-            { label: 'Subtotal', value: '$24,000', suffix: 'per month' }
-          ],
-          total: { value: '$24,000', suffix: 'per year' }
-        },
-        yearly: {
-          rows: [
-            { label: 'Next charge', value: '$2,000' },
-            { label: 'Subtotal', value: '$24,000', suffix: 'per month' },
-            { label: 'Yearly discount', value: '$4,800', suffix: 'per month' }
-          ],
-          total: { value: '$19,200', suffix: 'per year' }
-        }
-      }
-    }
-  }
   const pricingLinks = [
     {
       label: 'Learn more about pricing',
@@ -255,7 +235,7 @@
       href: 'https://example.com/pricing#comparison'
     }
   ]
-  const periods: { value: BillingPeriod; label: string }[] = [
+  const periods: { value: OnboardingFormBillingPeriod; label: string }[] = [
     { value: 'monthly', label: 'Monthly' },
     { value: 'yearly', label: 'Yearly' }
   ]
@@ -278,15 +258,7 @@
     { value: 'San Diego', label: 'San Diego' },
     { value: 'San Francisco', label: 'San Francisco' }
   ]
-  const accountAddress: BillingAddress = {
-    country: 'United States',
-    postalCode: '94105',
-    state: 'California',
-    city: 'San Francisco',
-    line1: '100 Market Street',
-    line2: 'Suite 400'
-  }
-  const blankAddress: BillingAddress = {
+  const blankAddress: OnboardingFormAddress = {
     country: undefined,
     postalCode: '',
     state: undefined,
@@ -302,40 +274,37 @@
     code: ''
   }
 
-  const plan = ref<string>()
+  const plan = ref<string | undefined>(props.defaultValues.plan)
   const pendingPlanId = ref('')
   const upgradeOpen = ref(false)
   const planSubmitted = ref(false)
-  const period = ref<BillingPeriod>('yearly')
+  const period = ref<OnboardingFormBillingPeriod>('yearly')
   const editing = ref(false)
-  const card = reactive({ last4: '8888', ...blankCard })
-  const address = reactive({ useAccountInformation: true, ...accountAddress })
+  const card = reactive({ last4: account.value.cardLast4, ...blankCard })
+  const address = reactive({ useAccountInformation: true, ...account.value.address })
 
-  const upgrade = computed(() => upgrades[pendingPlanId.value])
-  const upgradeFeatures = computed<PlanFeatureListItem[]>(() =>
-    (upgrade.value?.features ?? []).map((feature) => ({
-      label: feature.title,
-      description: feature.detail
-    }))
+  const upgrade = computed(() =>
+    pendingPlanId.value ? plans.value.find((item) => item.value === pendingPlanId.value) : undefined
   )
-  const charge = computed(() => upgrade.value?.charge[period.value] ?? null)
+  const upgradeFeatures = computed<PlanFeatureListItem[]>(() => upgrade.value?.features ?? [])
+  const charge = computed(() => upgrade.value?.charge?.[period.value] ?? null)
 
   watch(
     () => address.useAccountInformation,
-    (useAccount) => Object.assign(address, useAccount ? accountAddress : blankAddress)
+    (useAccount) => Object.assign(address, useAccount ? account.value.address : blankAddress)
   )
 
   const selectPlan = (value: string | undefined) => {
     if (!value) return
     planSubmitted.value = false
-    if (value === 'free') {
+    if (!plans.value.find((item) => item.value === value)?.charge) {
       plan.value = value
       return
     }
     pendingPlanId.value = value
     period.value = 'yearly'
     editing.value = false
-    Object.assign(address, { useAccountInformation: true, ...accountAddress })
+    Object.assign(address, { useAccountInformation: true, ...account.value.address })
     upgradeOpen.value = true
   }
 
@@ -378,26 +347,50 @@
     { value: 'other', label: 'Other' }
   ]
 
-  const usage = ref<string>()
-  const role = ref<string>()
-  const session = ref(false)
+  const usage = ref<string | undefined>(props.defaultValues.usage)
+  const role = ref<string | undefined>(props.defaultValues.role)
+  const session = ref(props.defaultValues.session ?? false)
   const profileSubmitted = ref(false)
-  const creating = ref(false)
+  const creating = computed(() => props.loading)
   const outcome = ref('')
 
-  const createOrganization = () => {
+  const createOrganization = (event: MouseEvent) => {
     if (creating.value) return
     profileSubmitted.value = true
     outcome.value = ''
-    if (!usage.value || !role.value) return
-    creating.value = true
-    setTimeout(() => {
-      creating.value = false
-      outcome.value = navigator.onLine ? 'created' : 'failed'
-    }, 900)
+    if (!usage.value || !role.value || !plan.value) return
+    const { useAccountInformation: _reuse, ...billingAddress } = address
+    emit('submit', event, {
+      fullName: fullName.value.trim(),
+      organizationName: organizationName.value.trim(),
+      accent: accent.value,
+      plan: plan.value,
+      billingPeriod: period.value,
+      billingAddress,
+      usage: usage.value,
+      role: role.value,
+      session: session.value
+    })
   }
 
-  const step = ref(0)
+  onMounted(() => {
+    if (props.error) outcome.value = 'failed'
+  })
+
+  watch(
+    () => props.error,
+    (next) => {
+      if (next && !props.loading) outcome.value = 'failed'
+    }
+  )
+
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (!before || now) return
+      outcome.value = props.error ? 'failed' : 'created'
+    }
+  )
 
   const onNext = (event: MouseEvent, position: number) => {
     if (position === 0) {
@@ -410,7 +403,7 @@
     }
   }
 
-  const startOver = () => {
+  const startOver = (event: MouseEvent) => {
     fullName.value = ''
     organizationName.value = ''
     accent.value = 'orange'
@@ -423,6 +416,7 @@
     profileSubmitted.value = false
     outcome.value = ''
     step.value = 0
+    emit('cancel', event)
   }
 </script>
 
@@ -1037,7 +1031,7 @@
                       key="failed"
                       severity="danger"
                       size="small"
-                      label="The organization wasn't created. Check your connection, then retry. Your answers are kept."
+                      :label="error"
                     >
                       <template #actions>
                         <Button
@@ -1250,9 +1244,7 @@
                       <span class="truncate text-label-sm text-(--text-default)">{{
                         ownerName
                       }}</span>
-                      <span class="truncate text-body-xs text-(--text-muted)"
-                        >myemail@example.com</span
-                      >
+                      <span class="truncate text-body-xs text-(--text-muted)">{{ email }}</span>
                     </span>
                   </div>
                 </div>

@@ -21,7 +21,7 @@ Title `Multi-factor authentication` and one sentence on what the page holds. Act
 
 ### B. Require MFA — `Card`, `Item`, `SettingsRow`, `Switch`, `ConfirmDialog` (required)
 
-One compact `SettingsRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`variant="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once with a toast. While data loads or failed, the switch is disabled.
+One compact `SettingsRow` in an `Item.List` in a flush `Card`. Turning the `Switch` on opens a `ConfirmDialog` (`variant="primary"`) that names the people without a factor and says they cannot use the account until they set one up; turning it off applies at once. Either way the block updates `v-model:required` and the page saves it. While data loads or failed, the switch is disabled.
 
 ### C. Password-only warning — `Alert` (conditional)
 
@@ -37,11 +37,57 @@ A `DataTable` with `v-bind="tableProps"` in a flush `Card`, paginated by `useCol
 
 ### F. Row actions — `DropdownMenu`, `ConfirmDialog` (required)
 
-`TableCellActions` named after the person: Reset MFA for an enabled factor, behind a `ConfirmDialog` that says what the person loses and when to use it; Send setup reminder for a person without one.
+`TableCellActions` named after the person: Reset MFA for an enabled factor, behind a `ConfirmDialog` that says what the person loses and when to use it; Send setup reminder for a person without one. Reset marks the row Not set up and emits `reset`; the reminder emits `remind`.
 
 ### G. Load failure and outcomes — `Alert` (required)
 
-When the list fails to load, a danger `Alert` with Retry takes the table's place. Require, optional, reset and reminder end in a success toast; they are not deploys, so no toast carries Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+When the list fails to load, a danger `Alert` with Retry takes the table's place. The page that runs the request ends require, optional, reset and reminder in a success toast; they are not deploys, so no toast carries Edit or Redeploy. The page calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+
+## Data
+
+The block takes its people through props and emits every action; it fetches nothing. `MfaSettingsMember` and `MfaSettingsProps` are exported from `mfa-settings.vue`, and `sample.ts` holds the sample people the block renders when `members` is left out (and never while `loading` or `error` is set).
+
+| Prop       | Type                  | What it does                                                                                                                                |
+| ---------- | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `members`  | `MfaSettingsMember[]` | The rows; the filter, the sort and the pages run on them in the browser.                                                                    |
+| `loading`  | `boolean`             | A request is in flight. With no people it is the first load (the Switch disables, the table shows loading rows); with people Refresh spins. |
+| `error`    | `string`              | Why the load failed, shown in the danger `Alert` with Retry that replaces the controls and the table; the Switch disables.                  |
+| `required` | `boolean`             | `v-model:required`: whether the account requires MFA; on hides the password-only warning.                                                   |
+
+| Event             | Payload           | When                                                                 |
+| ----------------- | ----------------- | -------------------------------------------------------------------- |
+| `update:required` | `boolean`         | The require dialog was confirmed (`true`), or the Switch turned off. |
+| `refresh`         | `(event)`         | Refresh.                                                             |
+| `retry`           | `(event)`         | Retry in the error alert.                                            |
+| `remind`          | `(event, member)` | Send setup reminder in the row menu.                                 |
+| `reset`           | `(event, member)` | The reset dialog was confirmed; the row already reads Not set up.    |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import MfaSettings from './mfa-settings.vue'
+
+  const { data, pending, error, refresh } = useMfaStatus()
+  const loadError = 'The MFA status could not be loaded. Nothing was changed; try again.'
+</script>
+
+<template>
+  <MfaSettings
+    :members="data?.members ?? []"
+    :required="data?.required ?? false"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @update:required="saveRequired"
+    @refresh="refresh"
+    @retry="refresh"
+    @remind="(_event, member) => sendReminder(member.id)"
+    @reset="(_event, member) => resetMfa(member.id)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -71,10 +117,10 @@ When the list fails to load, a danger `Alert` with Retry takes the table's place
 
 ## States
 
-- Default: five people, three with a factor, MFA optional, the warning shown.
-- Required: MFA required for the account.
-- Loading: the first load.
-- Error: the list did not load; a danger Alert with Retry.
+- Default: `members` holds five people, three with a factor, MFA optional, the warning shown.
+- Required: MFA required for the account (`required` is `true`); the Switch is on and the warning is gone.
+- Loading: the first load (`loading` with no `members`); the Switch is disabled and the table shows its loading rows.
+- Error: the list did not load (`error` is set); a danger Alert with the message and Retry, the Switch disabled.
 
 ## Related
 

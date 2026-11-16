@@ -37,45 +37,140 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
 
-  type BindingPolicy = 'STRICT' | 'FLEXIBLE'
-  type DeploymentPolicy = 'single_version' | 'versioned_urls'
-  type SettingStatus = 'Active' | 'Inactive'
-  type Reach = 'Shared' | 'Dedicated' | 'Unused'
+  import { sampleCurrentUser, sampleDefaults, sampleServices, sampleSettings } from './sample'
 
-  interface DeploymentSetting {
+  /** Whether a version locks the resource IDs it shipped with. */
+  export type DeploymentSettingsBindingPolicy = 'STRICT' | 'FLEXIBLE'
+  /** One live version, or a URL per version. */
+  export type DeploymentSettingsDeploymentPolicy = 'single_version' | 'versioned_urls'
+  /** Whether environments can choose the setting. */
+  export type DeploymentSettingsStatus = 'Active' | 'Inactive'
+
+  /** One Deployment Setting, a row of the table. */
+  export interface DeploymentSettingsSetting {
+    /** Stable key; environments point at it. */
     id: string
+    /** Display name, unique in the account. */
     name: string
+    /** Optional internal note. */
     description: string
+    /** The account's Default setting: no row actions, every environment falls back to it. */
     system: boolean
-    bindingPolicy: BindingPolicy
-    deploymentPolicy: DeploymentPolicy
-    status: SettingStatus
+    /** How versions bind to their resources. */
+    bindingPolicy: DeploymentSettingsBindingPolicy
+    /** How traffic reaches the versions. */
+    deploymentPolicy: DeploymentSettingsDeploymentPolicy
+    /** Inactive settings stay listed but cannot be chosen. */
+    status: DeploymentSettingsStatus
+    /** When it changed last. */
     updatedAt: Date
+    /** Who changed it last. */
     updatedBy: string
   }
 
-  interface Environment {
+  /** One environment of a service and the setting it publishes with. */
+  export interface DeploymentSettingsEnvironment {
+    /** Environment name, unique in its service. */
     name: string
-    deploymentPolicy: DeploymentPolicy
+    /** The environment's own policy; only matching settings can be chosen. */
+    deploymentPolicy: DeploymentSettingsDeploymentPolicy
+    /** The id of the setting it publishes with. */
     settingId: string
+    /** The link was made automatically and never changed. */
     auto: boolean
   }
 
-  interface Service {
+  /** One service and its environments. */
+  export interface DeploymentSettingsService {
+    /** Stable key, used in the service link. */
     id: string
+    /** Display name. */
     name: string
-    environments: Environment[]
+    /** Its environments. */
+    environments: DeploymentSettingsEnvironment[]
   }
 
-  type SettingsRowData = DeploymentSetting & {
+  /** The defaults the next service starts with. */
+  export interface DeploymentSettingsDefaults {
+    /** Binding policy of the next setting. */
+    bindingPolicy: DeploymentSettingsBindingPolicy
+    /** Deployment policy of the next setting. */
+    deploymentPolicy: DeploymentSettingsDeploymentPolicy
+  }
+
+  /** What Save sends: the defaults and whether to apply the binding policy to existing settings. */
+  export interface DeploymentSettingsDefaultsValues extends DeploymentSettingsDefaults {
+    /** Give every custom setting the binding policy above. */
+    applyToExisting: boolean
+  }
+
+  /** The new binding of one environment. */
+  export interface DeploymentSettingsBinding {
+    /** The service id. */
+    serviceId: string
+    /** The environment name. */
+    environment: string
+    /** The id of the setting it now publishes with. */
+    settingId: string
+  }
+
+  export interface DeploymentSettingsProps {
+    /** Every Deployment Setting of the account. Left out, the sample renders. */
+    settings?: DeploymentSettingsSetting[]
+    /** Every service and its environments. Left out, the sample renders. */
+    services?: DeploymentSettingsService[]
+    /** The saved new service defaults; Discard returns to them. Left out, the sample renders. */
+    defaults?: DeploymentSettingsDefaults
+    /** Unsaved edits the defaults open with, so the SaveBar shows at once. */
+    defaultDraft?: Partial<DeploymentSettingsDefaultsValues>
+    /** Who local edits are stamped with in Last modified. Left out, the sample renders. */
+    currentUser?: string
+    /** The page data is loading: with no settings it is the first load, with settings a refresh. */
+    loading?: boolean
+    /** The defaults save is in flight: Save spins and Discard locks. */
+    saving?: boolean
+    /** Why the defaults save failed, shown in a danger toast; the edits are kept. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<DeploymentSettingsProps>(), {
+    settings: undefined,
+    services: undefined,
+    defaults: undefined,
+    defaultDraft: () => ({}),
+    currentUser: undefined,
+    loading: false,
+    saving: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    save: [event: MouseEvent, values: DeploymentSettingsDefaultsValues]
+    discard: [event: MouseEvent]
+    refresh: [event: MouseEvent]
+    bind: [binding: DeploymentSettingsBinding]
+    create: [event: Event, setting: DeploymentSettingsSetting]
+    update: [event: Event, setting: DeploymentSettingsSetting]
+    clone: [
+      event: Event,
+      payload: { source: DeploymentSettingsSetting; copy: DeploymentSettingsSetting }
+    ]
+    delete: [event: Event, setting: DeploymentSettingsSetting]
+  }>()
+
+  type SettingsRowData = DeploymentSettingsSetting & {
     type: string
-    reach: Reach
+    reach: 'Shared' | 'Dedicated' | 'Unused'
     services: string[]
   }
 
-  const BINDING_POLICIES: { value: BindingPolicy; label: string; description: string }[] = [
+  const BINDING_POLICIES: {
+    value: DeploymentSettingsBindingPolicy
+    label: string
+    description: string
+  }[] = [
     {
       value: 'STRICT',
       label: 'Strict',
@@ -87,7 +182,11 @@
       description: 'Allow resource IDs to change across versions.'
     }
   ]
-  const DEPLOYMENT_POLICIES: { value: DeploymentPolicy; label: string; description: string }[] = [
+  const DEPLOYMENT_POLICIES: {
+    value: DeploymentSettingsDeploymentPolicy
+    label: string
+    description: string
+  }[] = [
     {
       value: 'single_version',
       label: 'Single',
@@ -104,193 +203,123 @@
   const deploymentLabel = (value: unknown): string =>
     DEPLOYMENT_POLICIES.find((policy) => policy.value === value)?.label ?? String(value ?? '')
 
-  const DAY = 86_400_000
-  const REFERENCE = Date.UTC(2026, 10, 10, 12)
-  const ago = (days: number) => new Date(REFERENCE - days * DAY)
-  const DEFAULT_ID = 'ds-default'
-
-  const seedSettings: DeploymentSetting[] = [
-    {
-      id: DEFAULT_ID,
-      name: 'Default',
-      description: 'Used by every environment that has no setting of its own.',
-      system: true,
-      bindingPolicy: 'STRICT',
-      deploymentPolicy: 'single_version',
-      status: 'Active',
-      updatedAt: ago(180),
-      updatedBy: 'system'
-    },
-    {
-      id: 'ds-storefront',
-      name: 'storefront-production',
-      description: 'Storefront and checkout publish together.',
-      system: false,
-      bindingPolicy: 'STRICT',
-      deploymentPolicy: 'single_version',
-      status: 'Active',
-      updatedAt: ago(2),
-      updatedBy: 'jane.doe@example.com'
-    },
-    {
-      id: 'ds-preview',
-      name: 'preview-versioned',
-      description: 'Every staging version keeps its own URL.',
-      system: false,
-      bindingPolicy: 'FLEXIBLE',
-      deploymentPolicy: 'versioned_urls',
-      status: 'Active',
-      updatedAt: ago(9),
-      updatedBy: 'alex.morgan@example.com'
-    },
-    {
-      id: 'ds-docs',
-      name: 'docs-site',
-      description: '',
-      system: false,
-      bindingPolicy: 'FLEXIBLE',
-      deploymentPolicy: 'single_version',
-      status: 'Active',
-      updatedAt: ago(21),
-      updatedBy: 'sam.lee@example.com'
-    },
-    {
-      id: 'ds-legacy',
-      name: 'legacy-rollout',
-      description: 'Kept for the old release pipeline.',
-      system: false,
-      bindingPolicy: 'FLEXIBLE',
-      deploymentPolicy: 'single_version',
-      status: 'Inactive',
-      updatedAt: ago(64),
-      updatedBy: 'jane.doe@example.com'
-    }
-  ]
-
-  const seedServices: Service[] = [
-    {
-      id: 'svc-storefront',
-      name: 'storefront',
-      environments: [
-        {
-          name: 'Production',
-          deploymentPolicy: 'single_version',
-          settingId: 'ds-storefront',
-          auto: false
-        },
-        {
-          name: 'Staging',
-          deploymentPolicy: 'versioned_urls',
-          settingId: 'ds-preview',
-          auto: true
-        }
-      ]
-    },
-    {
-      id: 'svc-checkout',
-      name: 'checkout-api',
-      environments: [
-        {
-          name: 'Production',
-          deploymentPolicy: 'single_version',
-          settingId: 'ds-storefront',
-          auto: false
-        }
-      ]
-    },
-    {
-      id: 'svc-docs',
-      name: 'docs-site',
-      environments: [
-        {
-          name: 'Production',
-          deploymentPolicy: 'single_version',
-          settingId: 'ds-docs',
-          auto: true
-        },
-        {
-          name: 'Staging',
-          deploymentPolicy: 'single_version',
-          settingId: DEFAULT_ID,
-          auto: true
-        }
-      ]
-    },
-    {
-      id: 'svc-status',
-      name: 'status-page',
-      environments: [
-        {
-          name: 'Production',
-          deploymentPolicy: 'single_version',
-          settingId: DEFAULT_ID,
-          auto: true
-        }
-      ]
-    }
-  ]
-
-  const savedDefaults = {
-    bindingPolicy: 'STRICT' as BindingPolicy,
-    deploymentPolicy: 'single_version' as DeploymentPolicy,
-    applyToExisting: false
-  }
-
   const SERVICES_PAGE_SIZE = 10
-  const settings = ref<DeploymentSetting[]>(seedSettings)
-  const services = ref<Service[]>(seedServices)
-  const loading = ref(false)
+  const SAVE_TOAST = 'deployment-defaults-save'
+
+  const settingsSource = computed<DeploymentSettingsSetting[]>(
+    () => props.settings ?? (props.loading ? [] : sampleSettings)
+  )
+  const servicesSource = computed<DeploymentSettingsService[]>(
+    () => props.services ?? (props.loading ? [] : sampleServices)
+  )
+  const settingList = ref<DeploymentSettingsSetting[]>([])
+  const serviceList = ref<DeploymentSettingsService[]>([])
+  watch(
+    settingsSource,
+    (next) => {
+      settingList.value = [...next]
+    },
+    { immediate: true }
+  )
+  watch(
+    servicesSource,
+    (next) => {
+      serviceList.value = [...next]
+    },
+    { immediate: true }
+  )
+  const author = computed(() => props.currentUser ?? sampleCurrentUser)
+  const firstLoad = computed(() => props.loading && settingList.value.length === 0)
   const infoOpen = ref(true)
 
-  const saved = reactive({ ...savedDefaults })
-  const form = reactive({ ...savedDefaults })
-  const saving = ref(false)
+  const savedSource = computed<DeploymentSettingsDefaults>(() => props.defaults ?? sampleDefaults)
+  const saved = reactive<DeploymentSettingsDefaultsValues>({
+    ...savedSource.value,
+    applyToExisting: false
+  })
+  const form = reactive<DeploymentSettingsDefaultsValues>({ ...saved, ...props.defaultDraft })
+  watch(
+    () => JSON.stringify(savedSource.value),
+    () => {
+      Object.assign(saved, savedSource.value, { applyToExisting: false })
+      Object.assign(form, saved)
+    }
+  )
   const dirty = computed(
     () =>
       form.bindingPolicy !== saved.bindingPolicy ||
       form.deploymentPolicy !== saved.deploymentPolicy ||
       form.applyToExisting !== saved.applyToExisting
   )
-  const discard = () => Object.assign(form, saved)
-  const save = () => {
-    if (saving.value) return
-    saving.value = true
-    setTimeout(() => {
+  const discard = (event: MouseEvent) => {
+    Object.assign(form, saved)
+    emit('discard', event)
+  }
+  const save = (event: MouseEvent) => {
+    if (props.saving) return
+    toast.dismiss(SAVE_TOAST)
+    emit('save', event, { ...form })
+  }
+  const showFailure = () => {
+    toast.error("The deployment defaults weren't saved.", {
+      description: props.error,
+      action: { label: 'Retry', onClick: (event: MouseEvent) => save(event) },
+      id: SAVE_TOAST
+    })
+  }
+  onMounted(() => {
+    if (props.error) showFailure()
+  })
+  watch(
+    () => props.error,
+    (next) => {
+      if (next && !props.saving) showFailure()
+    }
+  )
+  watch(
+    () => props.saving,
+    (now, before) => {
+      if (!before || now) return
+      if (props.error) {
+        showFailure()
+        return
+      }
       const apply = form.applyToExisting
       if (apply) {
-        settings.value = settings.value.map((setting) =>
+        settingList.value = settingList.value.map((setting) =>
           setting.system
             ? setting
             : {
                 ...setting,
                 bindingPolicy: form.bindingPolicy,
-                updatedAt: new Date(REFERENCE),
-                updatedBy: 'jane.doe@example.com'
+                updatedAt: new Date(),
+                updatedBy: author.value
               }
         )
       }
       Object.assign(saved, { ...form, applyToExisting: false })
       form.applyToExisting = false
-      saving.value = false
       toast.success('Deployment defaults saved.', {
         description: apply
-          ? `${settings.value.filter((setting) => !setting.system).length} settings now use the ${bindingLabel(form.bindingPolicy)} binding policy. Default is never changed.`
-          : 'The next service is created with them. Existing settings keep theirs.'
+          ? `${settingList.value.filter((setting) => !setting.system).length} settings now use the ${bindingLabel(form.bindingPolicy)} binding policy. Default is never changed.`
+          : 'The next service is created with them. Existing settings keep theirs.',
+        id: SAVE_TOAST
       })
-    }, 800)
-  }
+    }
+  )
 
-  const settingById = (id: string) => settings.value.find((setting) => setting.id === id)
+  const systemId = computed(() => settingList.value.find((setting) => setting.system)?.id ?? '')
+  const settingById = (id: string) => settingList.value.find((setting) => setting.id === id)
   const settingName = (id: unknown): string => settingById(String(id))?.name ?? ''
   const boundTo = (id: string) =>
-    services.value.filter((service) =>
+    serviceList.value.filter((service) =>
       service.environments.some((environment) => environment.settingId === id)
     )
   const reachLabel = (count: number) =>
     count === 0 ? 'No services' : count === 1 ? '1 service' : `${count} services`
 
   const serviceRows = computed(() =>
-    services.value.map((service) => ({
+    serviceList.value.map((service) => ({
       ...service,
       settings: service.environments
         .map((environment) => settingName(environment.settingId))
@@ -311,21 +340,25 @@
   })
   const sharedCount = computed(
     () =>
-      services.value.filter((service) =>
+      serviceList.value.filter((service) =>
         service.environments.some((environment) => boundTo(environment.settingId).length > 1)
       ).length
   )
-  const optionsFor = (environment: Environment) =>
-    settings.value.filter(
+  const optionsFor = (environment: DeploymentSettingsEnvironment) =>
+    settingList.value.filter(
       (setting) =>
         setting.deploymentPolicy === environment.deploymentPolicy ||
         setting.id === environment.settingId
     )
 
-  const rebind = (service: Service, environment: Environment, value: unknown) => {
+  const rebind = (
+    service: DeploymentSettingsService,
+    environment: DeploymentSettingsEnvironment,
+    value: unknown
+  ) => {
     const id = String(value)
     if (!id || id === environment.settingId) return
-    services.value = services.value.map((item) =>
+    serviceList.value = serviceList.value.map((item) =>
       item.id !== service.id
         ? item
         : {
@@ -335,6 +368,7 @@
             )
           }
     )
+    emit('bind', { serviceId: service.id, environment: environment.name, settingId: id })
     const reach = boundTo(id).length
     const title = `${service.name} · ${environment.name} now publishes with ${settingName(id)}.`
     if (reach > 1) {
@@ -347,7 +381,7 @@
   }
 
   const rows = computed<SettingsRowData[]>(() =>
-    settings.value.map((setting) => {
+    settingList.value.map((setting) => {
       const bound = boundTo(setting.id).map((service) => service.name)
       return {
         ...setting,
@@ -395,7 +429,7 @@
       columns,
       filtering: { fields: ['name', 'description', 'reach', 'status'] },
       propertyFiltering: { properties },
-      sorting: { defaultState: [{ id: 'updatedAt', desc: true }] },
+      sorting: { defaultState: [{ desc: true, id: 'updatedAt' }] },
       pagination: { pageSize: 10, pageSizeOptions: [10, 25, 50] },
       preferences: {
         storageKey: 'deployment-settings',
@@ -405,15 +439,6 @@
 
   const settingsTableEl = ref<TableExposed<SettingsRowData> | null>(null)
   const exportCsv = () => settingsTableEl.value?.exportCsv({ filename: 'deployment-settings.csv' })
-
-  const refreshing = ref(false)
-  const refresh = () => {
-    if (refreshing.value) return
-    refreshing.value = true
-    setTimeout(() => {
-      refreshing.value = false
-    }, 700)
-  }
 
   const blankDraft = () => ({
     name: '',
@@ -426,7 +451,6 @@
   const editingId = ref('')
   const draft = reactive(blankDraft())
   const nameError = ref('')
-  const submitting = ref(false)
   const formEl = ref<HTMLFormElement | null>(null)
   const drawerTitle = computed(() =>
     editingId.value ? 'Edit Deployment Setting' : 'Create Deployment Setting'
@@ -438,7 +462,7 @@
     nameError.value = ''
     drawerOpen.value = true
   }
-  const openEdit = (setting: DeploymentSetting) => {
+  const openEdit = (setting: DeploymentSettingsSetting) => {
     editingId.value = setting.id
     Object.assign(draft, {
       name: setting.name,
@@ -451,48 +475,49 @@
     drawerOpen.value = true
   }
 
-  const submit = () => {
-    if (submitting.value) return
+  const submit = (event: Event) => {
     const name = draft.name.trim()
     nameError.value = !name
       ? 'This field is required.'
-      : settings.value.some((setting) => setting.name === name && setting.id !== editingId.value)
+      : settingList.value.some((setting) => setting.name === name && setting.id !== editingId.value)
         ? 'A Deployment Setting with this name already exists.'
         : ''
     if (nameError.value) {
       nextTick(() => formEl.value?.querySelector<HTMLElement>('#deployment-settings-name')?.focus())
       return
     }
-    submitting.value = true
-    setTimeout(() => {
-      const values = {
-        name,
-        description: draft.description.trim(),
-        bindingPolicy: draft.bindingPolicy,
-        deploymentPolicy: draft.deploymentPolicy,
-        status: (draft.active ? 'Active' : 'Inactive') as SettingStatus,
-        updatedAt: new Date(REFERENCE),
-        updatedBy: 'jane.doe@example.com'
+    const values = {
+      name,
+      description: draft.description.trim(),
+      bindingPolicy: draft.bindingPolicy,
+      deploymentPolicy: draft.deploymentPolicy,
+      status: (draft.active ? 'Active' : 'Inactive') as DeploymentSettingsStatus,
+      updatedAt: new Date(),
+      updatedBy: author.value
+    }
+    const current = settingById(editingId.value)
+    if (current) {
+      const next = { ...current, ...values }
+      settingList.value = settingList.value.map((setting) =>
+        setting.id === current.id ? next : setting
+      )
+      emit('update', event, next)
+      toast.success(`${name} saved.`, {
+        description: 'Environments that publish with it use the change on their next deploy.'
+      })
+    } else {
+      const created: DeploymentSettingsSetting = {
+        ...values,
+        id: `ds-${settingList.value.length + 1}-${name}`,
+        system: false
       }
-      if (editingId.value) {
-        settings.value = settings.value.map((setting) =>
-          setting.id === editingId.value ? { ...setting, ...values } : setting
-        )
-        toast.success(`${name} saved.`, {
-          description: 'Environments that publish with it use the change on their next deploy.'
-        })
-      } else {
-        settings.value = [
-          ...settings.value,
-          { id: `ds-${settings.value.length + 1}-${name}`, system: false, ...values }
-        ]
-        toast.success(`${name} created.`, {
-          description: 'Point an environment at it under All services to start publishing with it.'
-        })
-      }
-      submitting.value = false
-      drawerOpen.value = false
-    }, 600)
+      settingList.value = [...settingList.value, created]
+      emit('create', event, created)
+      toast.success(`${name} created.`, {
+        description: 'Point an environment at it under All services to start publishing with it.'
+      })
+    }
+    drawerOpen.value = false
   }
 
   const pending = ref<SettingsRowData | null>(null)
@@ -504,40 +529,43 @@
       ? `${name} is deleted. No environment publishes with it.`
       : `${name} is deleted, and ${reachLabel(count)} fall back to Default on their next deploy.`
   })
-  const remove = () => {
+  const remove = (event: Event) => {
     const row = pending.value
     if (!row) return
-    services.value = services.value.map((service) => ({
+    const fallback = systemId.value
+    serviceList.value = serviceList.value.map((service) => ({
       ...service,
       environments: service.environments.map((environment) =>
         environment.settingId === row.id
-          ? { ...environment, settingId: DEFAULT_ID, auto: true }
+          ? { ...environment, settingId: fallback, auto: true }
           : environment
       )
     }))
-    settings.value = settings.value.filter((setting) => setting.id !== row.id)
+    const setting = settingById(row.id)
+    settingList.value = settingList.value.filter((item) => item.id !== row.id)
     deleteOpen.value = false
+    if (setting) emit('delete', event, setting)
     toast.success(`${row.name} deleted.`)
   }
 
-  const onAction = (value: DropdownMenuItemValue, row: SettingsRowData) => {
+  const onAction = (event: Event, value: DropdownMenuItemValue, row: SettingsRowData) => {
+    const source = settingById(row.id)
+    if (!source) return
     if (value === 'edit') {
-      openEdit(row)
+      openEdit(source)
       return
     }
     if (value === 'clone') {
-      const copy: DeploymentSetting = {
-        id: `ds-${settings.value.length + 1}-${row.id}-copy`,
+      const copy: DeploymentSettingsSetting = {
+        ...source,
+        id: `ds-${settingList.value.length + 1}-${row.id}-copy`,
         name: `${row.name}-copy`,
-        description: row.description,
         system: false,
-        bindingPolicy: row.bindingPolicy,
-        deploymentPolicy: row.deploymentPolicy,
-        status: row.status,
-        updatedAt: new Date(REFERENCE),
-        updatedBy: 'jane.doe@example.com'
+        updatedAt: new Date(),
+        updatedBy: author.value
       }
-      settings.value = [...settings.value, copy]
+      settingList.value = [...settingList.value, copy]
+      emit('clone', event, { source, copy })
       toast.success(`${copy.name} created from ${row.name}.`, {
         description: 'The copy has the same policies and no environment yet.'
       })
@@ -600,7 +628,7 @@
                     description="Whether a version locks the resource IDs it shipped with. Changing it does not touch the settings that already exist."
                   >
                     <Skeleton
-                      v-if="loading"
+                      v-if="firstLoad"
                       height="2.5rem"
                     />
                     <Select
@@ -628,7 +656,7 @@
                     description="Single serves one version and a deploy replaces it; Versioned gives each version its own URL. An environment can only use a setting that matches its own."
                   >
                     <Skeleton
-                      v-if="loading"
+                      v-if="firstLoad"
                       height="2.5rem"
                     />
                     <Select
@@ -658,7 +686,7 @@
                   >
                     <Switch
                       v-model="form.applyToExisting"
-                      :disabled="saving || loading"
+                      :disabled="saving || firstLoad"
                       aria-label="Apply to existing Deployment Settings"
                     />
                   </SettingsRow>
@@ -675,7 +703,7 @@
             <Card :padded="false">
               <template #default>
                 <div
-                  v-if="loading"
+                  v-if="firstLoad"
                   class="flex flex-col gap-(--spacing-sm) p-(--spacing-md)"
                 >
                   <Skeleton
@@ -685,7 +713,7 @@
                   <Skeleton height="2.5rem" />
                 </div>
                 <EmptyState
-                  v-else-if="!services.length"
+                  v-else-if="!serviceList.length"
                   size="small"
                   icon="ai ai-server"
                   title="No services yet"
@@ -702,7 +730,7 @@
                       <span class="flex flex-1 flex-wrap items-center gap-(--spacing-sm)">
                         <span class="text-label-md text-(--text-default)">All services</span>
                         <span class="text-body-sm text-(--text-muted)">{{
-                          reachLabel(services.length)
+                          reachLabel(serviceList.length)
                         }}</span>
                         <Tag
                           v-if="sharedCount"
@@ -852,9 +880,9 @@
                       icon="ai ai-refresh"
                       variant="outline"
                       size="medium"
-                      :loading="refreshing"
+                      :loading="loading && !firstLoad"
                       aria-label="Refresh"
-                      @click="refresh"
+                      @click="emit('refresh', $event)"
                     />
                   </Tooltip>
                   <Tooltip
@@ -882,7 +910,7 @@
                   <DataTable
                     ref="settingsTableEl"
                     v-bind="tableProps"
-                    :loading="loading || refreshing"
+                    :loading="loading"
                     sortable
                     :bordered="false"
                     aria-label="Deployment Settings"
@@ -958,7 +986,7 @@
                       <TableCellActions
                         v-if="!row.system"
                         :name="row.name"
-                        @select="(_event, value) => onAction(value, row)"
+                        @select="(event, value) => onAction(event, value, row)"
                       >
                         <DropdownMenu.Group>
                           <DropdownMenu.Item
@@ -1036,8 +1064,8 @@
       v-model:open="drawerOpen"
       size="large"
       side="end"
-      :dismissible="!submitting"
-      :closable="!submitting"
+      dismissible
+      closable
     >
       <DrawerContent>
         <form
@@ -1059,10 +1087,7 @@
           </PanelHeader>
 
           <PanelBody>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col border-0 p-0"
-              :disabled="submitting"
-            >
+            <fieldset class="m-0 flex min-w-0 flex-col border-0 p-0">
               <legend class="sr-only">{{ drawerTitle }}</legend>
               <SettingsSection
                 title="General"
@@ -1170,7 +1195,6 @@
                 label="Cancel"
                 variant="outline"
                 size="medium"
-                :disabled="submitting"
                 @click="drawerOpen = false"
               />
               <Button
@@ -1178,7 +1202,6 @@
                 :label="editingId ? 'Save changes' : 'Create Deployment Setting'"
                 variant="primary"
                 size="medium"
-                :loading="submitting"
               />
             </div>
           </PanelFooter>

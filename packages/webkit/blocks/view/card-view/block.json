@@ -31,6 +31,7 @@
     "name": "Default",
     "file": "card-view.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Loading",

@@ -56,6 +56,58 @@ No resource: a flush `EmptyState` with Create Workspace replaces the table. Load
 
 Every action ends in a success toast. Move and Delete carry Undo. Hierarchy changes are not deploys, so no toast offers Edit or Redeploy. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
 
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `AccountHierarchyResource`, `AccountHierarchyRoleBinding` and `AccountHierarchyProps` are exported from `account-hierarchy.vue`, and `sample.ts` holds the sample hierarchy the block renders when `resources` is left out (and never while `loading` or `error` is set).
+
+| Prop           | Type                                 | What it does                                                                                                          |
+| -------------- | ------------------------------------ | --------------------------------------------------------------------------------------------------------------------- |
+| `resources`    | `AccountHierarchyResource[]`         | Every organization, group and workspace, flat; the tree is built from `parentId`. Pass `[]` for an account with none. |
+| `currentId`    | `string`                             | The workspace the person is in, marked with a check.                                                                  |
+| `roleBindings` | `AccountHierarchyRoleBinding[]`      | The role bindings of the one selected resource, in the Permissions tab.                                               |
+| `selectedKeys` | `string[]` (`v-model:selected-keys`) | The ids of the selected rows; load the role bindings when it holds one id.                                            |
+| `loading`      | `boolean`                            | A request is in flight. With no resources it is the first load (loading rows); with resources a refresh.              |
+| `error`        | `string`                             | Why the load failed, shown in the danger `Alert` with Retry.                                                          |
+
+| Event     | Payload                               | When                                                                                  |
+| --------- | ------------------------------------- | ------------------------------------------------------------------------------------- |
+| `refresh` | `(event)`                             | Refresh.                                                                              |
+| `retry`   | `(event)`                             | Retry in the error alert.                                                             |
+| `move`    | `(event, { resources, destination })` | Move was confirmed; the rows already sit under the new parent.                        |
+| `labels`  | `(event, { resources, add, remove })` | Save labels was confirmed; the rows already show the new labels.                      |
+| `delete`  | `(event, resources)`                  | Delete was confirmed; `resources` holds everything removed, what was inside included. |
+| `undo`    | `(event, { action, resources })`      | Undo in the toast after a move or a delete; the rows are already back.                |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import AccountHierarchy from './account-hierarchy.vue'
+
+  const { data, pending, error, refresh } = useResources()
+  const selectedKeys = ref<string[]>([])
+  const { data: bindings } = useRoleBindings(selectedKeys)
+  const loadError = 'The resources could not be loaded. Nothing was changed; try again.'
+</script>
+
+<template>
+  <AccountHierarchy
+    v-model:selected-keys="selectedKeys"
+    :resources="data ?? []"
+    :current-id="currentWorkspaceId"
+    :role-bindings="bindings ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @refresh="refresh"
+    @retry="refresh"
+    @move="(event, { resources, destination }) => moveResources(resources, destination)"
+    @delete="(event, resources) => deleteResources(resources)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep selection per row: selecting a group does not select its workspaces; Delete then says how many are inside.
@@ -90,11 +142,11 @@ Every action ends in a success toast. Move and Delete carry Undo. Hierarchy chan
 
 ## States
 
-- Default: two organizations, three groups and six workspaces; the first organization and its first group open, nothing selected, and every action wired.
-- Selected: one workspace selected; bulk actions enabled and the details panel filled.
-- Empty: no resource; an empty state with Create Workspace.
-- Loading: the first load; the table's loading rows.
-- Error: the hierarchy did not load; a danger Alert with Retry.
+- Default: two organizations, three groups and six workspaces (`resources`); the first organization and its first group open, nothing selected, and every action wired.
+- Selected: one workspace selected (`selectedKeys`); bulk actions enabled and the details panel filled.
+- Empty: no resource (`resources` is `[]`); an empty state with Create Workspace.
+- Loading: the first load (`loading` with no `resources`); the table's loading rows.
+- Error: the hierarchy did not load (`error` is set); a danger Alert with the message and Retry.
 
 ## Related
 

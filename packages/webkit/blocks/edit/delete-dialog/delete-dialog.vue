@@ -5,45 +5,64 @@
   import CopyButton from '@aziontech/webkit/copy-button'
   import Input from '@aziontech/webkit/input'
   import { toast } from '@aziontech/webkit/toast'
-  import { computed, onScopeDispose, ref, useId, watch } from 'vue'
+  import { computed, ref, useId, watch } from 'vue'
 
-  const name = 'resource-01'
-  const inUseError = `${name} is still used by 2 workloads. Remove it from them and try again.`
-  const failing = false
+  import { sampleResourceName } from './sample'
 
-  const open = ref(false)
-  const confirmation = ref('')
-  const deleting = ref(false)
-  const deleteError = ref('')
+  export interface DeleteDialogProps {
+    /** The name of the resource to delete; the user types it to confirm. Left out, the sample renders. */
+    name?: string
+    /** The delete request is in flight: the dialog locks and Delete spins; when it ends with no error the dialog closes. */
+    loading?: boolean
+    /** Why the delete was refused, shown in a danger alert in place of the warning; the dialog stays open. */
+    error?: string
+    /** The text the confirmation input opens with. */
+    defaultConfirmation?: string
+    /** Whether the dialog starts open when open is not bound. */
+    defaultOpen?: boolean
+  }
+
+  const props = withDefaults(defineProps<DeleteDialogProps>(), {
+    name: '',
+    loading: false,
+    error: '',
+    defaultConfirmation: '',
+    defaultOpen: false
+  })
+
+  const emit = defineEmits<{
+    delete: [event: Event, name: string]
+  }>()
+
+  const open = defineModel<boolean>('open', { default: false })
+  if (props.defaultOpen) open.value = true
+
+  const name = computed(() => props.name || sampleResourceName)
+  const confirmation = ref(props.defaultConfirmation)
+  const deleting = computed(() => props.loading)
+  const deleteError = computed(() => props.error)
   const confirmLabelId = useId()
-  let deleteTimer: ReturnType<typeof setTimeout> | undefined
-
-  onScopeDispose(() => clearTimeout(deleteTimer))
 
   const canDelete = computed(
-    () => confirmation.value.trim().length > 0 && confirmation.value.trim() === name
+    () => confirmation.value.trim().length > 0 && confirmation.value.trim() === name.value
   )
 
   watch(open, (isOpen) => {
-    if (!isOpen) return
-    confirmation.value = ''
-    deleteError.value = ''
+    if (isOpen) confirmation.value = ''
   })
 
-  const confirm = () => {
-    if (!canDelete.value || deleting.value) return
-    deleting.value = true
-    deleteError.value = ''
-    clearTimeout(deleteTimer)
-    deleteTimer = setTimeout(() => {
-      deleting.value = false
-      if (failing) {
-        deleteError.value = inUseError
-        return
-      }
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (!before || now || props.error || !open.value) return
       open.value = false
-      toast.success(`${name} was deleted.`, { id: 'delete-resource-result' })
-    }, 600)
+      toast.success(`${name.value} was deleted.`, { id: 'delete-resource-result' })
+    }
+  )
+
+  const confirm = (event: Event) => {
+    if (!canDelete.value || deleting.value) return
+    emit('delete', event, name.value)
   }
 </script>
 

@@ -74,15 +74,41 @@ describe('create-drawer', () => {
     expect(domain.getAttribute('aria-invalid')).toBe('true')
   })
 
-  it('closes on a valid save and names the domain in a toast', async () => {
-    render(CreateInDrawer)
-    await fireEvent.click(screen.getByRole('button', { name: 'Add Domain' }))
+  it('emits the values on a valid save and closes when the page sets open', async () => {
+    const view = render(CreateInDrawer, {
+      props: { open: true, 'onUpdate:open': () => undefined }
+    })
     const dialog = await screen.findByRole('dialog')
     await fireEvent.update(within(dialog).getByRole('textbox', { name: /Domain/ }), 'acme-store')
     await fireEvent.click(within(dialog).getByRole('combobox', { name: /Environment/ }))
     await fireEvent.click(await screen.findByRole('option', { name: 'Production' }))
     await fireEvent.click(within(dialog).getByRole('button', { name: 'Add Domain' }))
-    await waitFor(() => expect(screen.getByText('acme-store.azion.app added.')).toBeTruthy(), wait)
+    const submits = view.emitted('submit') as [Event, Record<string, string>][]
+    expect(submits).toHaveLength(1)
+    expect(submits[0][0]).toBeInstanceOf(Event)
+    expect(submits[0][1]).toEqual({
+      kind: 'free',
+      domain: 'acme-store',
+      environment: 'Production',
+      certificate: '',
+      host: 'acme-store.azion.app'
+    })
+    expect(dialog.isConnected).toBe(true)
+    await view.rerender({ open: false })
+    await waitFor(() => expect(document.querySelector('[role="dialog"]')).toBeNull(), wait)
+  })
+
+  it('lists the environments it is given instead of the sample', async () => {
+    render(CreateInDrawer, {
+      props: {
+        defaultOpen: true,
+        environments: [{ value: 'Canary', label: 'Canary', deploymentPolicy: 'versioned_urls' }]
+      }
+    })
+    const dialog = await screen.findByRole('dialog')
+    await fireEvent.click(within(dialog).getByRole('combobox', { name: /Environment/ }))
+    expect(await screen.findByRole('option', { name: 'Canary' })).toBeTruthy()
+    expect(screen.queryByRole('option', { name: 'Production' })).toBeNull()
   })
 
   it('keeps the values after a failed save and retries from the alert', async () => {
@@ -93,8 +119,35 @@ describe('create-drawer', () => {
       (within(dialog).getByRole('textbox', { name: /Domain/ }) as HTMLInputElement).value
     ).toBe('acme-store')
     await expectNoA11yViolations(view.baseElement as HTMLElement)
+  })
+
+  it('emits submit again from Retry in the error alert', async () => {
+    const view = render(CreateInDrawer, {
+      props: {
+        defaultOpen: true,
+        defaultValues: { domain: 'acme-store', environment: 'Production' },
+        error: "acme-store.azion.app wasn't added."
+      }
+    })
+    const dialog = await screen.findByRole('dialog')
     await fireEvent.click(within(dialog).getByRole('button', { name: 'Retry' }))
-    await waitFor(() => expect(screen.getByText('acme-store.azion.app added.')).toBeTruthy(), wait)
+    const submits = view.emitted('submit') as [Event, { host: string }][]
+    expect(submits).toHaveLength(1)
+    expect(submits[0][1].host).toBe('acme-store.azion.app')
+  })
+
+  it('locks the form while loading and does not emit', async () => {
+    const view = render(CreateInDrawer, {
+      props: {
+        defaultOpen: true,
+        loading: true,
+        defaultValues: { domain: 'acme-store', environment: 'Production' }
+      }
+    })
+    const dialog = await screen.findByRole('dialog')
+    expect(dialog.querySelector('fieldset')?.disabled).toBe(true)
+    dialog.querySelector('form')?.dispatchEvent(new Event('submit', { cancelable: true }))
+    expect(view.emitted('submit')).toBeUndefined()
   })
 })
 

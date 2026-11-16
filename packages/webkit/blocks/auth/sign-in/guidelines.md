@@ -98,11 +98,71 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 
 `size="small"`, the step's title and its lead (`Welcome back` / `Sign in to your account.`). The same part on every screen of the block, primary and variants, so the card always opens on one `h1`.
 
-### Q. Personal token — `PasswordInput` (PersonalToken and RejectedToken)
+### Q. Provider placeholder — `Skeleton` (while `providersLoading`)
+
+Two bars of the provider buttons' height (`height="2.5rem"`) in a `role="status"` region named `Preparing sign-in providers`, in place of Google and GitHub over the `or` divider. The email field stays usable.
+
+### R. Personal token — `PasswordInput` (PersonalToken and RejectedToken)
 
 For an app that signs in with an Azion personal token instead of an account. One `Field` labelled `Personal token` over a `PasswordInput` with `monospace`, `autocomplete="off"`, `spellcheck="false"` and the show and hide toggle it ships, a `Field.Description` that links to how a token is created (a real Azion documentation link, `target="_blank"`), and a `Field.Error` for the client checks: empty (`Paste your personal token.`) and inner spaces (`A token has no spaces. Copy it again from Personal tokens.`). The card has no Google or GitHub buttons and no steps.
 
 The block checks the token once against the API (the demo's `checkToken` stub: a token under 32 characters is rejected, `9…9` does not answer) and then emits `sign-in` with `(event, token)`, the token trimmed. It stores nothing: keeping the token for the session (memory or `sessionStorage`, never `localStorage` or a cookie the app's server can read) and attaching it to requests is the app's job; see `skills/webkit-azion-api`. A 401 or 403 is a danger notice with no action, the field cleared and focused (RejectedToken); no answer is a warning notice with Retry and the entry kept.
+
+## Data
+
+The block takes its starting values and the request state through props and emits every action; it fetches nothing and fakes no answer. `SignInProps`, `SignInValues`, `SignInStep`, `SignInFailure` and `SignInNoticeKind` are exported from `sign-in.vue`. The card keeps its own draft (the email, the password, the reset fields) and sends it with `submit`; the outcome comes back as `loading`, then `error` or `notice`. It has no sample records: the variants pass the props of each state. PersonalToken and RejectedToken are their own card, not the primary with props: they take no account fields and emit `sign-in` with `(event, token)`.
+
+| Prop                                                             | Type                    | What it does                                                                                                                                                                                                   |
+| ---------------------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `step` (`v-model:step`)                                          | `SignInStep`            | The step the card shows, `email` by default. The card moves itself between email, password, reset, sent and new-password; bind it to move it from the page (after `password-reset`, set it to `password`).     |
+| `defaultValues`                                                  | `Partial<SignInValues>` | The email (and, to repeat a request, the password) the fields open on, such as the address of an expired session.                                                                                              |
+| `loading`                                                        | `boolean`               | A request is in flight: the step's fieldset disables, the form is `aria-busy` and the primary `Button` (and Retry) spin.                                                                                       |
+| `error`                                                          | `string`                | Why the request failed. `bad-credentials` (401), `service-unavailable` (503), `server-error` (500) and `timeout` carry their own copy, severity and Retry; any other text shows as a danger notice with Retry. |
+| `notice`                                                         | `string`                | A non-error outcome: `session-expired`, `signed-in` or `password-updated`, or any text as an info notice.                                                                                                      |
+| `providersLoading`                                               | `boolean`               | The identity providers are still loading; two `Skeleton` bars hold the place of Google and GitHub.                                                                                                             |
+| `homeHref`, `docsHref`, `signUpHref`, `termsHref`, `privacyHref` | `string`                | Where the product mark, Documentation, Sign up and the two terms links lead.                                                                                                                                   |
+
+| Event            | Payload                         | When                                                                                                         |
+| ---------------- | ------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `provider-click` | `(event, 'google' \| 'github')` | Continue with Google or Continue with GitHub.                                                                |
+| `continue`       | `(event, email)`                | Continue with email passed validation; the card moves to the password step.                                  |
+| `submit`         | `(event, { email, password })`  | Sign in passed validation, or Retry in the notice re-sends the same credentials.                             |
+| `reset-request`  | `(event, email)`                | Send reset link passed validation; the card moves to Check your inbox.                                       |
+| `resend`         | `(event, email)`                | Resend email on the sent step; the card confirms the new link.                                               |
+| `password-reset` | `(event, password)`             | Reset password passed validation; set `step` to `password` and `notice` to `password-updated` when it lands. |
+
+To go live, render the block from the route that owns the session and pass what the request returns. Clear `error` when a new request starts, so the same failure shows again:
+
+```vue
+<script setup lang="ts">
+  import { ref } from 'vue'
+  import SignIn, { type SignInValues } from './sign-in.vue'
+
+  const loading = ref(false)
+  const error = ref('')
+
+  const signIn = async (_event: Event, values: SignInValues) => {
+    loading.value = true
+    error.value = ''
+    try {
+      await session.signIn(values)
+      router.push('/')
+    } catch (failure) {
+      error.value = failure.status === 401 ? 'bad-credentials' : 'server-error'
+    } finally {
+      loading.value = false
+    }
+  }
+</script>
+
+<template>
+  <SignIn
+    :loading="loading"
+    :error="error"
+    @submit="signIn"
+  />
+</template>
+```
 
 ## Do
 
@@ -182,16 +242,16 @@ The block checks the token once against the API (the demo's `checkToken` stub: a
 
 ## States
 
-- Login: the sign-in flow on the email step, with Google and GitHub over the `or` divider; the same file walks through password, reset, sent and new-password.
+- Login: the default props, the sign-in flow on the email step, with Google and GitHub over the `or` divider; the same file walks through password, reset, sent and new-password.
 - SignUp: create an account with a work email (and a password checked by `PasswordRequirements`), Google or GitHub.
-- SessionExpired: opens on the password step for the same email, with an info notice that clears on the next action.
-- Submitting: Sign in in flight on the password step: the primary `Button` loading, the fieldset disabled, the form `aria-busy`.
-- ProvidersLoading: the Login card while the identity providers load; two `Skeleton` bars in a `role="status"` region (`Preparing sign-in providers`) replace Google and GitHub over the `or` divider, and the email step works meanwhile.
+- SessionExpired: `step="password"`, the email in `defaultValues` and `notice="session-expired"`; opens on the password step for the same email, with an info notice that clears on the next action.
+- Submitting: `loading` on the password step; Sign in in flight: the primary `Button` loading, the fieldset disabled, the form `aria-busy`.
+- ProvidersLoading: `providersLoading`; the Login card while the identity providers load; two `Skeleton` bars in a `role="status"` region (`Preparing sign-in providers`) replace Google and GitHub over the `or` divider, and the email step works meanwhile.
 - CheckInbox: the `/signup/verify` card: where the link went, the resend prompt and a secondary Return to sign in.
-- IncorrectCredentials: 401 on Sign in, on the password step of the same two-step card; a danger notice under the heading, no action, the password cleared.
-- ServiceUnavailable: 503 on Sign in; a warning notice with Retry, credentials kept.
-- ServerError: 500 on the request; a danger notice with Retry in the card instead of a toast.
-- Timeout: no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
+- IncorrectCredentials: `error="bad-credentials"`; 401 on Sign in, on the password step of the same two-step card; a danger notice under the heading, no action, the password cleared.
+- ServiceUnavailable: `error="service-unavailable"`; 503 on Sign in; a warning notice with Retry, credentials kept.
+- ServerError: `error="server-error"`; 500 on the request; a danger notice with Retry in the card instead of a toast.
+- Timeout: `error="timeout"`; no response; the same notice as the 500 in warning, with Retry, because the request may have gone through.
 - EmailAlreadyRegistered: 409 on Sign up; a danger notice with Sign in and reset your password as links, the address left in the field.
 - MfaSetup: turning on multi-factor authentication: three numbered steps, a `QrCode` of the `otpauth://` URI the API returns (issuer, account and secret) with the setup key and its `CopyButton` for people who cannot scan, then an `OtpInput` in a `Field`. The code submits on `complete` or Verify code; a wrong code (`000000` in the demo) clears it, marks the field invalid with the reason and keeps focus; no answer (`999999`) is a warning notice with Retry; success is a success notice and Continue to Console.
 - MfaCode: the sign-in challenge after the password: a 6-digit `OtpInput`, focused when the challenge opens (not with `autofocus`), that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.

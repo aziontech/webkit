@@ -1,6 +1,7 @@
 import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
+import type { SchemaEditorTable } from '../../../../blocks/edit/schema-editor/schema-editor.vue'
 import SchemaEditor from '../../../../blocks/edit/schema-editor/schema-editor.vue'
 import ImportCsv from '../../../../blocks/edit/schema-editor/variants/import-csv.vue'
 import { useToastRegion } from '../../toast-region'
@@ -8,6 +9,11 @@ import { useToastRegion } from '../../toast-region'
 useToastRegion()
 
 const drawer = () => document.querySelector('[role="dialog"]') as HTMLElement
+
+const submitButton = (label: string) =>
+  Array.from(drawer().querySelectorAll('button')).find(
+    (button) => button.textContent?.trim() === label
+  )!
 
 const columnNames = () =>
   Array.from(drawer().querySelectorAll<HTMLInputElement>('input[placeholder="column_name"]'))
@@ -63,5 +69,88 @@ describe('edit/schema-editor Create Table', () => {
         'Choose the column, the table and the column it references.'
       )
     )
+  })
+})
+
+const invoices: SchemaEditorTable = {
+  name: 'invoices',
+  columns: [
+    { name: 'id', type: 'int8', primaryKey: true, notNull: true, defaultValue: '' },
+    { name: 'amount', type: 'numeric', primaryKey: false, notNull: true, defaultValue: '' }
+  ],
+  rowCount: 7
+}
+
+describe('edit/schema-editor data contract', () => {
+  it('renders the tables it is given instead of the sample', async () => {
+    const { container } = render(SchemaEditor, { props: { tables: [invoices], dialog: 'none' } })
+    await waitFor(() => expect(container.textContent).toContain('invoices'))
+    expect(container.textContent).toContain('7 rows')
+    expect(container.textContent).toContain('amount')
+    expect(container.textContent).not.toContain('customers')
+  })
+
+  it('emits create-table with the values and closes once the request ends', async () => {
+    const { emitted, rerender } = render(SchemaEditor, { props: { tables: [invoices] } })
+    await waitFor(() => expect(drawer()).not.toBeNull())
+    const name = drawer().querySelector<HTMLInputElement>('input[placeholder="users"]')!
+    await fireEvent.update(name, 'events')
+    await fireEvent.click(submitButton('Create Table'))
+    const [[event, table]] = emitted('create-table') as [
+      [Event, { name: string; columns: { name: string }[] }]
+    ]
+    expect(event).toBeInstanceOf(Event)
+    expect(table.name).toBe('events')
+    expect(table.columns.map((column) => column.name)).toEqual(['id', 'created_at'])
+    await rerender({ loading: true })
+    await rerender({ loading: false })
+    await waitFor(() => expect(document.body.textContent).toContain('Table events created.'))
+  })
+
+  it('shows a refused Create Table on the Name field and keeps the drawer', async () => {
+    render(SchemaEditor, {
+      props: { defaultDraft: { name: 'invoices' }, error: 'A table named invoices already exists.' }
+    })
+    await waitFor(() => expect(drawer()).not.toBeNull())
+    expect(drawer().textContent).toContain('A table named invoices already exists.')
+    expect(drawer().textContent).toContain("The table wasn't created.")
+  })
+
+  it('emits add-column and adds the column only after the request succeeds', async () => {
+    const { emitted, rerender, container } = render(SchemaEditor, {
+      props: { tables: [invoices], dialog: 'column', defaultColumn: { name: 'phone' } }
+    })
+    await waitFor(() => expect(drawer()).not.toBeNull())
+    await fireEvent.click(submitButton('Add column'))
+    const [[event, payload]] = emitted('add-column') as [
+      [Event, { table: SchemaEditorTable; column: { name: string; type: string } }]
+    ]
+    expect(event).toBeInstanceOf(Event)
+    expect(payload.table.name).toBe('invoices')
+    expect(payload.column).toMatchObject({ name: 'phone', type: 'text' })
+    expect(container.textContent).not.toContain('phone')
+    await rerender({ loading: true })
+    await rerender({ loading: false })
+    await waitFor(() =>
+      expect(document.body.textContent).toContain('Column phone added to invoices.')
+    )
+    expect(container.textContent).toContain('phone')
+  })
+
+  it('keeps the drawer and raises Retry when the change fails', async () => {
+    const { emitted, rerender } = render(SchemaEditor, {
+      props: { tables: [invoices], dialog: 'column', defaultColumn: { name: 'phone' } }
+    })
+    await waitFor(() => expect(drawer()).not.toBeNull())
+    await fireEvent.click(submitButton('Add column'))
+    await rerender({ loading: true })
+    await rerender({ loading: false, error: 'The database did not answer.' })
+    await waitFor(() => expect(document.body.textContent).toContain("The column wasn't added."))
+    expect(drawer()).not.toBeNull()
+    const retry = Array.from(document.querySelectorAll('button')).find(
+      (button) => button.textContent?.trim() === 'Retry'
+    )!
+    await fireEvent.click(retry)
+    expect(emitted('add-column')).toHaveLength(2)
   })
 })

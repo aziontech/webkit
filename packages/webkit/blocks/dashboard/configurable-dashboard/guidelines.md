@@ -76,6 +76,55 @@ A ranked list sorted descending (top sources). Renders its own loading and empty
 Bars, area or line over time. All time series share one `active-index`, so hovering a moment moves the
 crosshair on every card. A legend with totals appears only when a card has more than one series.
 
+### J. Load failure — `Alert` (required)
+
+When `error` is set, every card keeps its header and shows a danger `Alert` in place of its content: `Couldn't load <card>.` followed by the message, with Retry, which emits `retry`.
+
+## Data
+
+The block takes its series through props and emits every change; it fetches nothing. `ConfigurableDashboardProps` and `ConfigurableDashboardSeries` are exported from `configurable-dashboard.vue`, and `sample.ts` holds the sample period the block renders when a data prop is left out (and never while `loading` or `error` is set). The layout is a model, so the page can save it per user.
+
+| Prop              | Type                          | What it does                                                                                                                            |
+| ----------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| `labels`          | `string[]`                    | The interval labels of the time charts.                                                                                                 |
+| `series`          | `ConfigurableDashboardSeries` | The series of each chart card, by card (`requests`, `regions`, `transfer`, `errors`, `latency`). A card left out shows its empty state. |
+| `sources`         | `BarListItem[]`               | The services ranked in Top sources. `[]` shows its empty state.                                                                         |
+| `loading`         | `boolean`                     | The period is loading; every card shows its skeleton.                                                                                   |
+| `error`           | `string`                      | Why the period could not load; each card shows `Couldn't load <card>.` and this message in a danger `Alert` with Retry.                 |
+| `v-model:layout`  | `DashboardGridLayoutItem[]`   | The order, span and height of the cards; defaults to the built-in layout, which Reset layout restores.                                  |
+| `v-model:editing` | `boolean`                     | Edit mode (handles, resize corners, span tags and the help line); default `false`.                                                      |
+
+| Event            | Payload   | When                                                               |
+| ---------------- | --------- | ------------------------------------------------------------------ |
+| `retry`          | `(event)` | Retry in any card's error alert.                                   |
+| `update:layout`  | `(value)` | A card was moved or resized, or Reset layout restored the default. |
+| `update:editing` | `(value)` | Edit layout or Done.                                               |
+
+To go live, render the block from a page that owns the request and the saved layout:
+
+```vue
+<script setup lang="ts">
+  import ConfigurableDashboard from './configurable-dashboard.vue'
+
+  const { data, pending, error, refresh } = useTrafficOverview()
+  const layout = useSavedLayout('traffic-overview')
+</script>
+
+<template>
+  <ConfigurableDashboard
+    v-model:layout="layout"
+    :labels="data?.labels ?? []"
+    :series="data?.series ?? {}"
+    :sources="data?.sources ?? []"
+    :loading="pending"
+    :error="error ? 'Check your connection and retry.' : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep the layout as data (id, span, height, order) owned by the page, bind it to `DashboardGrid`, and persist
@@ -114,11 +163,11 @@ crosshair on every card. A legend with totals appears only when a card has more 
 
 ## States
 
-- Default: the arranged dashboard, read-only.
-- Editing: handles and resize corners on every card, span tags in the headers, help line visible.
-- Loading: every chart renders its own `Skeleton` inside its card; the layout holds its shape.
-- Empty: nothing recorded yet; each card keeps its place and size and shows its empty state.
-- Error: the request failed; every card keeps its place, size and header with a danger `Alert` that names what did not load and offers Retry.
+- Default: the arranged dashboard, read-only (`v-model:layout`).
+- Editing: `v-model:editing` is `true`; handles and resize corners on every card, span tags in the headers, help line visible.
+- Loading: `loading` is set; every chart renders its own `Skeleton` inside its card; the layout holds its shape.
+- Empty: nothing recorded yet (`series` is `{}`, `sources` is `[]`); each card keeps its place and size and shows its empty state.
+- Error: the request failed (`error` is set); every card keeps its place, size and header with a danger `Alert` that names what did not load, carries the message and offers Retry.
 
 ## Related
 

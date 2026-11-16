@@ -60,7 +60,7 @@ A `SettingsSection` titled Scope with one large `InputGroupRoot` per scope type:
 
 ### K. Drawer footer — `PanelFooter`, `Button` (required)
 
-`PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving. When the save fails, the drawer stays open with every row kept and a danger `Alert` at the top of `PanelBody` says why ("Variables not saved. You are offline; check your connection and save again."); pressing Save again retries.
+`PanelFooter` holds one primary medium Save `Button` at the end, which submits the form and shows its loading state while saving. Save emits `save` with the pairs. When the save fails (`saveError` set), the drawer stays open with every row kept and a danger `Alert` at the top of `PanelBody` says why ("Variables not saved. You are offline; check your connection and save again."); pressing Save again retries.
 
 ### L. List states — `EmptyState`, `Button` (required)
 
@@ -75,6 +75,50 @@ Every change confirms itself with a success toast: "API_KEY created." or "3 vari
 ### N. Network list drawer — `Drawer`, `SettingsSection`, `ToggleGroup`, `Button`, `Textarea`, `FieldDescription`, `AttributeEditor`, `MultiSelect` (optional)
 
 In the NetworkList state the same drawer recipe creates a network list for firewall rules: a General section with a required Name, then an Entries section whose `ToggleGroup` picks the type (IP/CIDR, ASN, Countries). IP/CIDR and ASN entries are an `AttributeEditor` in list mode, large, with an Address (or ASN) column in the code font through `cell-value` and an optional Comment, at most 200 rows; a paste that would pass 200 says how many lines will be skipped and adds only what fits. Paste list opens the panel of H for a whole list, one entry per line with `#` comments: its report counts the entries found, names the lines that are not valid ("Line 4 is not an IPv4 or IPv6 address, or a CIDR range") and the lines already in the list that will be skipped. Add N entries appends every new line as a row, valid or not, and each invalid row shows its own error under the field right away, so the user fixes the list line by line instead of retyping it; typed rows are checked only after Save, and empty rows are ignored once one row is filled. Countries is a required `MultiSelect`. Save validates, moves focus to the first field in error, then closes the drawer and raises a success toast with the entry count.
+
+## Data
+
+The block takes its variables through props and emits every action; it fetches nothing and saves nothing. `VariablesVariable`, `VariablesScope`, `VariablesDraft`, `VariablesSavePayload` and `VariablesProps` are exported from `variables.vue`, and `sample.ts` holds the sample variables the block renders when `variables` is left out (and never while `loading` is set).
+
+| Prop          | Type                  | What it does                                                                                                      |
+| ------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `variables`   | `VariablesVariable[]` | The rows; the filter, the sort and the pages run on them in the browser. Pass `[]` for an account with none.      |
+| `loading`     | `boolean`             | The list is loading or refreshing: Refresh spins and the table shows its loading state.                           |
+| `saving`      | `boolean`             | The save is in flight: the drawer locks and Save spins. When it turns off with no `saveError`, the drawer closes. |
+| `saveError`   | `string`              | Why the save failed, in the danger `Alert` at the top of the drawer; every pair is kept so Save retries.          |
+| `defaultOpen` | `boolean`             | The create drawer starts open.                                                                                    |
+
+| Event     | Payload                         | When                                                                                          |
+| --------- | ------------------------------- | --------------------------------------------------------------------------------------------- |
+| `refresh` | `(event)`                       | Refresh.                                                                                      |
+| `save`    | `(event, { variable, values })` | Save passed validation; `variable` is the row being edited, or `null` when creating `values`. |
+| `clone`   | `(event, variable)`             | Clone in the row menu; the copy is already in the table below it.                             |
+| `delete`  | `(event, variable)`             | The delete dialog was confirmed; the row is already gone from the table.                      |
+
+To go live, render the block from a page that owns the requests and pass what they return:
+
+```vue
+<script setup lang="ts">
+  import Variables, { type VariablesSavePayload } from './variables.vue'
+
+  const { data, pending, refresh } = useVariables()
+  const { saving, error, run } = useSaveVariables()
+  const save = (_event: Event, payload: VariablesSavePayload) => run(payload).then(refresh)
+</script>
+
+<template>
+  <Variables
+    :variables="data ?? []"
+    :loading="pending"
+    :saving="saving"
+    :save-error="error ? 'Variables not saved. Check your connection and save again.' : ''"
+    @refresh="refresh"
+    @save="save"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import. With no `saving` set during the `save` handler the block treats the save as done at once, which is how it runs on its sample.
 
 ## Do
 
@@ -123,13 +167,13 @@ In the NetworkList state the same drawer recipe creates a network list for firew
 
 ## States
 
-- List: the variables list page with the controls row and table; the drawer is closed.
-- First use: no variables yet; the card holds the first-use `EmptyState` with Create Variable.
+- List: the variables list page with the controls row and table, from `variables` (the sample when left out); the drawer is closed. `loading` spins Refresh and puts the table in its loading state.
+- First use: `variables` is `[]`; the card holds the first-use `EmptyState` with Create Variable.
 - No match: the filter matches nothing; the table shows the no-match `EmptyState` with Clear filters.
-- Edit: a row's Edit opens the drawer on that variable; Save replaces it in the list and raises "<KEY> updated.".
-- Save failed: the save request fails; the drawer stays open with its rows and a danger `Alert` above the sections.
-- Delete: a row's Delete opens the typed confirmation; confirming removes the row and raises "<KEY> deleted.".
-- Create: the drawer open with one empty pair, the Form view and Global on; errors appear only after Save.
+- Edit: a row's Edit opens the drawer on that variable; Save emits `save` with the variable and replaces it in the list and raises "<KEY> updated.".
+- Save failed: `saveError` is set when the save ends; the drawer stays open with its rows and a danger `Alert` above the sections.
+- Delete: a row's Delete opens the typed confirmation; confirming emits `delete`, removes the row and raises "<KEY> deleted.".
+- Create: `defaultOpen`; the drawer open with one empty pair, the Form view and Global on; errors appear only after Save.
 - PasteEnv: Create Variable opens the drawer with one pair and the Paste .env panel holding a pasted file with a comment, an `export`, a skipped lowercase line and a repeated key that is already in the list; Add 3 variables merges them.
 - NetworkList: Create Network List opens the drawer named Office and partners, type IP/CIDR, with the Paste list panel holding nine lines: a comment line, two lines that are not valid addresses and one already pasted above; Add 7 entries appends them as rows, the two invalid ones showing their errors.
 

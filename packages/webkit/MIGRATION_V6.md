@@ -1016,6 +1016,16 @@ The screens (blocks) that were only these fragments are gone from the catalog:
 `platform/page/page-header`, `platform/page/section-header`, `platform/page/page-tabs`,
 `platform/page/settings-section`, `platform/forms/settings-row` and `platform/overlays/confirm-dialog`.
 
+### Blocks take their data through props
+
+Every console block now takes its records, `loading` and `error` as typed props and emits its
+actions; it fetches nothing and fakes no request. Its sample records live in a `sample.ts` beside
+it, and each state variant imports the primary instead of copying it. Blocks copied from v5 keep
+working as they are. To move one to live data, copy it again (`npx @aziontech/webkit add <block-id> --force`,
+which also copies `<name>.sample.ts` and any API adapter), render it from the routed page that owns
+the request, pass the data as props (the block's `## Data` guidelines list them) and delete the
+`.sample.ts` once real data flows.
+
 ### Data-driven tables are `DataTable`
 
 `Table` is now the markup-only root of the table parts, so a hand-composed table no longer bundles

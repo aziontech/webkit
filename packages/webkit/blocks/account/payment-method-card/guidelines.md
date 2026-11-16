@@ -37,11 +37,56 @@ Country or region. It starts empty on a blank card (selects start empty); the pe
 
 ### F. Notices — `Alert` (required)
 
-The PCI notice, `severity="info"`, `size="small"`, under the fields. A declined card adds a `danger` `Alert` at the top of the form, and the number field takes the invalid state with `The issuer declined this card.`
+The PCI notice, `severity="info"`, `size="small"`, under the fields. A declined card (the `error` prop) adds a `danger` `Alert` at the top of the form with the message.
 
 ### G. Card brand — `PaymentBrand` (required)
 
 The plate before `Ending in 8888`, `brand` as the payment API returns it. It is named after the brand (`Visa`) because the row text says only the last four digits.
+
+## Data
+
+The block takes the card on file through props and emits the new card; it fetches nothing and never sends card data itself. `PaymentMethodCardCard`, `PaymentMethodCardValues` and `PaymentMethodCardProps` are exported from `payment-method-card.vue`, and `sample.ts` holds the sample card the block renders when `card` is left out.
+
+| Prop       | Type                          | What it does                                                                                  |
+| ---------- | ----------------------------- | --------------------------------------------------------------------------------------------- |
+| `card`     | `PaymentMethodCardCard`       | The card on file: `brand` for `PaymentBrand` and the `last4` digits.                          |
+| `editing`  | `boolean` (`v-model:editing`) | The form is open. Change sets it; Cancel clears it; set it to `false` once the card is saved. |
+| `disabled` | `boolean`                     | Disables Change and the form, for example while the hosting drawer submits.                   |
+| `loading`  | `boolean`                     | The new card is being saved: Update spins and the form is locked.                             |
+| `error`    | `string`                      | Why the card was not changed (a decline), in a danger `Alert` at the top of the form.         |
+
+| Event    | Payload                                              | When                                        |
+| -------- | ---------------------------------------------------- | ------------------------------------------- |
+| `submit` | `(event, { holder, country, number, expiry, code })` | Update, once every field passes validation. |
+
+To go live, hand the values to the payment partner's SDK and pass the result back:
+
+```vue
+<script setup lang="ts">
+  import PaymentMethodCard, { type PaymentMethodCardValues } from './payment-method-card.vue'
+
+  const editing = ref(false)
+  const { card, saving, error, save } = usePaymentMethod()
+  const declined =
+    'The card was declined, so the payment method was not changed. Check the number or use another card.'
+
+  const onSubmit = async (event: Event, values: PaymentMethodCardValues) => {
+    if (await save(values)) editing.value = false
+  }
+</script>
+
+<template>
+  <PaymentMethodCard
+    v-model:editing="editing"
+    :card="card"
+    :loading="saving"
+    :error="error ? declined : ''"
+    @submit="onSubmit"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -70,9 +115,9 @@ The plate before `Ending in 8888`, `brand` as the payment API returns it. It is 
 
 ## States
 
-- Default: the card on file as one row with Change.
-- Editing: after Change, the card form over the PCI notice, with Cancel and Update. Update validates every field, focuses the first one in error, and a number ending in 0002 shows the decline.
-- Disabled: while the upgrade submits, the Change action is disabled.
+- Default: the card on file (`card`) as one row with Change.
+- Editing: after Change (`editing`), the card form over the PCI notice, with Cancel and Update. Update validates every field, focuses the first one in error and emits `submit`; `error` shows the decline.
+- Disabled: while the upgrade submits (`disabled`), the Change action is disabled.
 
 ## Related
 

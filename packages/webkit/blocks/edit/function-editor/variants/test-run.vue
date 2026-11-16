@@ -33,6 +33,8 @@
   import Trace, { type TraceSpan } from '@aziontech/webkit/trace'
   import { computed, nextTick, onBeforeUnmount, reactive, ref, useId } from 'vue'
 
+  import { sampleFields, sampleService } from '../sample'
+
   type FieldBase = {
     id: string
     key: string
@@ -94,41 +96,6 @@
   ]
 
   const runtimeLabel = 'JavaScript'
-  const code = `const ALLOWED = ['webp', 'avif']
-
-export async function handleRequest(request, args = {}) {
-  const url = new URL(request.url)
-  const format = url.searchParams.get('format') ?? args.defaultFormat
-
-  if (!ALLOWED.includes(format)) return fetch(request)
-
-  url.searchParams.set('format', format)
-  url.searchParams.set('quality', String(args.quality))
-  return fetch(url.toString())
-}
-`
-  const formSchema = {
-    type: 'object',
-    properties: {
-      defaultFormat: {
-        type: 'string',
-        title: 'Default format',
-        description:
-          'Used when the request does not ask for a format. Only these are rewritten. Anything else passes through untouched.',
-        enum: ['webp', 'avif'],
-        default: 'webp'
-      },
-      quality: {
-        type: 'integer',
-        title: 'Quality',
-        description: 'Compression quality applied to every rewritten image.',
-        minimum: 1,
-        maximum: 100,
-        default: 80
-      }
-    },
-    required: ['defaultFormat']
-  }
   const cleanSchema = JSON.stringify({ type: 'object', properties: {} }, null, 2)
 
   const activeTab = ref('code')
@@ -250,48 +217,8 @@ export async function handleRequest(request, args = {}) {
   }
 
   onBeforeUnmount(() => clearTimeout(runTimer))
-  const form = reactive({
-    name: 'image-optimizer',
-    executionEnvironment: 'request',
-    active: true,
-    code,
-    schema: JSON.stringify(formSchema, null, 2)
-  })
-  const fields = ref<SchemaField[]>([
-    {
-      id: 'field-1',
-      key: 'defaultFormat',
-      type: 'select',
-      title: 'Default format',
-      description:
-        'Used when the request does not ask for a format. Only these are rewritten. Anything else passes through untouched.',
-      required: true,
-      default: 'webp',
-      minLength: '',
-      maxLength: '',
-      pattern: '',
-      minimum: '',
-      maximum: '',
-      options: ['webp', 'avif'],
-      itemType: 'string'
-    },
-    {
-      id: 'field-2',
-      key: 'quality',
-      type: 'integer',
-      title: 'Quality',
-      description: 'Compression quality applied to every rewritten image.',
-      required: false,
-      default: '80',
-      minLength: '',
-      maxLength: '',
-      pattern: '',
-      minimum: '1',
-      maximum: '100',
-      options: [],
-      itemType: 'string'
-    }
-  ])
+  const form = reactive({ ...sampleService })
+  const fields = ref<SchemaField[]>(structuredClone(sampleFields))
   const expanded = ref(new Set<string>())
   const touched = ref(new Set<string>())
   const schemaWidth = ref(420)

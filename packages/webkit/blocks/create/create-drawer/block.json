@@ -83,6 +83,7 @@
     "name": "Default",
     "file": "create-drawer.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "AddEnvironment",

@@ -57,6 +57,49 @@ code face, with an `aria-label` that names it.
 
 Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `copied-label` (`Command copied`) that confirms it.
 
+### J. Placeholder — `Skeleton` (Loading)
+
+While `loading` is set, `Skeleton`s draw the block's footprint in a busy status region: the empty-state band, one row per method and the two promo cards.
+
+## Data
+
+The block shows no records and fetches nothing: a real app sets the copy and the links for its resource and listens for the two create methods. `FirstUseProps` is exported from `first-use.vue`; every prop defaults to the copy above.
+
+| Prop             | Type      | What it does                                                          |
+| ---------------- | --------- | --------------------------------------------------------------------- |
+| `loading`        | `boolean` | The account is still loading; `Skeleton`s draw the block's footprint. |
+| `title`          | `string`  | The `EmptyState` title (`Create your first resource`).                |
+| `description`    | `string`  | The sentence under it.                                                |
+| `docsHref`       | `string`  | Where Documentation goes, in a new tab.                               |
+| `command`        | `string`  | The command the Via CLI row shows and copies (`azion deploy`).        |
+| `agentSetupHref` | `string`  | Where Set up your coding agent goes (`/agent-setup`).                 |
+
+| Event    | Payload   | When                     |
+| -------- | --------- | ------------------------ |
+| `import` | `(event)` | Import, on From GitHub.  |
+| `create` | `(event)` | Create, on From scratch. |
+
+To go live, render the block while the list request is pending or returns nothing:
+
+```vue
+<script setup lang="ts">
+  import FirstUse from './first-use.vue'
+
+  const { data, pending } = useDomains()
+</script>
+
+<template>
+  <FirstUse
+    v-if="pending || data?.length === 0"
+    :loading="pending"
+    title="Create your first domain"
+    docs-href="https://example.com/docs/domains"
+    @import="openImport"
+    @create="openCreate"
+  />
+</template>
+```
+
 ## Do
 
 - Rewrite the headline, lead, methods and promos for each resource kind; the structure stays, the nouns change.
@@ -94,8 +137,8 @@ Copies the command, with an `aria-label` (`Copy the Via CLI command`) and a `cop
 
 ## States
 
-- Default: the explanation, three create methods and the two promos.
-- Loading: while the account reloads, `Skeleton`s draw the block's footprint (empty-state band, three method rows, two promo cards) in a busy status region.
+- Default: `title` and `description`, three create methods and the two promos.
+- Loading: `loading`; while the account reloads, `Skeleton`s draw the block's footprint (empty-state band, three method rows, two promo cards) in a busy status region.
 
 ## Related
 

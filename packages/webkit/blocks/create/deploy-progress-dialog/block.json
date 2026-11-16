@@ -23,6 +23,7 @@
     "name": "Running",
     "file": "deploy-progress-dialog.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Drop",

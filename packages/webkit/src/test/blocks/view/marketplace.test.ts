@@ -2,7 +2,7 @@ import { fireEvent, render, waitFor, within } from '@testing-library/vue'
 import { afterEach, describe, expect, it } from 'vitest'
 
 import Marketplace from '../../../../blocks/view/marketplace/marketplace.vue'
-import InstallError from '../../../../blocks/view/marketplace/variants/install-error.vue'
+import { type MarketplaceIntegration } from '../../../../blocks/view/marketplace/marketplace.vue'
 import Installed from '../../../../blocks/view/marketplace/variants/installed.vue'
 import NoMatch from '../../../../blocks/view/marketplace/variants/no-match.vue'
 import { useToastRegion } from '../../toast-region'
@@ -64,7 +64,13 @@ describe('view/marketplace block', () => {
   })
 
   it('reports a failed install inline and in a permanent toast with Edit and Reinstall', async () => {
-    const view = render(InstallError)
+    const view = render(Marketplace, {
+      props: {
+        defaultIntegration: 'request-signer',
+        defaultApplication: 'checkout',
+        error: 'The application already runs 10 functions, the most it can hold.'
+      }
+    })
     const drawer = await waitFor(() => view.getByRole('dialog'))
     await waitFor(() =>
       expect(within(drawer).getByText(/wasn't installed on checkout/)).toBeTruthy()
@@ -85,5 +91,49 @@ describe('view/marketplace block', () => {
     expect(view.queryByRole('heading', { name: 'Featured' })).toBeNull()
     await fireEvent.click(view.getByRole('button', { name: 'Clear filters' }))
     await waitFor(() => expect(view.getByRole('heading', { name: 'Featured' })).toBeTruthy())
+  })
+
+  it('renders the integrations it is given instead of the sample', () => {
+    const integrations: MarketplaceIntegration[] = [
+      {
+        id: 'log-shipper',
+        name: 'Log Shipper',
+        vendor: 'Acme',
+        logo: 'ai ai-inbox',
+        category: 'Observability',
+        context: 'application',
+        description: 'Send request logs to a collector you run.',
+        version: '2.0.0',
+        updated: 'Nov 1, 2026',
+        featured: false,
+        installedOn: []
+      }
+    ]
+    const view = render(Marketplace, { props: { integrations, applications: ['storefront'] } })
+    expect(view.getByRole('button', { name: 'Install Log Shipper' })).toBeTruthy()
+    expect(view.queryByRole('button', { name: 'Install Rate Guard' })).toBeNull()
+  })
+
+  it('emits install with the integration and the chosen application, and fakes no result', async () => {
+    const view = render(Marketplace, {
+      props: { defaultIntegration: 'rate-guard', defaultApplication: 'checkout' }
+    })
+    const drawer = await waitFor(() => view.getByRole('dialog'))
+    await fireEvent.click(within(drawer).getByRole('button', { name: 'Install' }))
+    const emitted = view.emitted('install') as [
+      Event,
+      { integration: { id: string }; application: string }
+    ][]
+    expect(emitted).toHaveLength(1)
+    expect(emitted[0][0]).toBeInstanceOf(Event)
+    expect(emitted[0][1].integration.id).toBe('rate-guard')
+    expect(emitted[0][1].application).toBe('checkout')
+    expect(drawer.textContent).not.toContain('is installed on checkout')
+  })
+
+  it('shows skeleton tiles and no sample while loading', () => {
+    const view = render(Marketplace, { props: { loading: true } })
+    expect(view.getByLabelText('Loading integrations').getAttribute('aria-busy')).toBe('true')
+    expect(view.queryByRole('button', { name: 'Install Rate Guard' })).toBeNull()
   })
 })

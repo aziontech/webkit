@@ -35,120 +35,117 @@
   import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, nextTick, reactive, ref } from 'vue'
+  import { computed, nextTick, reactive, ref, watch } from 'vue'
 
-  type UserStatus = 'Active' | 'Invited' | 'Inactive'
-  type UserRole = 'Owner' | 'Admin' | 'Developer' | 'Viewer'
+  import { sampleTeams, sampleUsers } from './sample'
 
-  interface User {
+  /** Whether a person can sign in yet. */
+  export type UsersStatus = 'Active' | 'Invited' | 'Inactive'
+  /** What a person can do on the account. */
+  export type UsersRole = 'Owner' | 'Admin' | 'Developer' | 'Viewer'
+
+  /** One person of the account. */
+  export interface UsersUser {
+    /** Stable key. */
     id: string
+    /** Display name; empty until an invited person accepts. */
     name: string
+    /** Sign-in email. */
     email: string
+    /** The account owner, who cannot be edited or removed. */
     owner: boolean
-    role: UserRole
+    /** What they can do on the account. */
+    role: UsersRole
+    /** Values of the teams they belong to. */
     teams: string[]
-    status: UserStatus
+    /** Whether they can sign in yet. */
+    status: UsersStatus
+    /** When they were last active; null when never signed in. */
     lastActive: Date | null
   }
 
-  const TEAMS = [
-    { value: 'administrators', label: 'Administrators' },
-    { value: 'developers', label: 'Developers' },
-    { value: 'security', label: 'Security' },
-    { value: 'finance', label: 'Finance' },
-    { value: 'support', label: 'Support' }
-  ]
+  /** A team people can join. */
+  export interface UsersTeam {
+    /** Stable key stored in a user's teams. */
+    value: string
+    /** Display name. */
+    label: string
+  }
+
+  /** What the invite form sends. */
+  export interface UsersInvitation {
+    /** The address to invite, trimmed and lowercased. */
+    email: string
+    /** Values of the teams they join. */
+    teams: string[]
+  }
+
+  export interface UsersProps {
+    /** The people of the account. Left out, the sample renders. */
+    users?: UsersUser[]
+    /** Every team of the account. Left out, the sample renders. */
+    teams?: UsersTeam[]
+    /** A request is in flight: with no rows it is the first load, with rows a refresh. */
+    loading?: boolean
+    /** Why the users could not load; a danger alert with Retry replaces the table. */
+    error?: string
+    /** Opens the invite drawer on mount. */
+    defaultInviteOpen?: boolean
+    /** Opens the Edit role dialog for the user with this id on mount. */
+    defaultEditRoleId?: string
+  }
+
+  const props = withDefaults(defineProps<UsersProps>(), {
+    users: undefined,
+    teams: undefined,
+    loading: false,
+    error: '',
+    defaultInviteOpen: false,
+    defaultEditRoleId: ''
+  })
+
+  const emit = defineEmits<{
+    invite: [event: Event, values: UsersInvitation]
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    'role-change': [event: Event, payload: { user: UsersUser; role: UsersRole }]
+    'teams-change': [payload: { user: UsersUser; teams: string[] }]
+    'resend-invitation': [event: Event, user: UsersUser]
+    remove: [event: Event, user: UsersUser]
+  }>()
+
+  const source = computed<UsersUser[]>(
+    () => props.users ?? (props.loading || props.error ? [] : sampleUsers)
+  )
+  const items = ref<UsersUser[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
+    },
+    { immediate: true }
+  )
+  const teamOptions = computed<UsersTeam[]>(() => props.teams ?? sampleTeams)
+
   const teamLabel = (value: string): string =>
-    TEAMS.find((team) => team.value === value)?.label ?? value
+    teamOptions.value.find((team) => team.value === value)?.label ?? value
   const teamsLabel = (values: string[]): string =>
     values.length ? values.map(teamLabel).join(', ') : 'No team (no access)'
 
-  const ROLES: { value: Exclude<UserRole, 'Owner'>; hint: string }[] = [
+  const ROLES: { value: Exclude<UsersRole, 'Owner'>; hint: string }[] = [
     { value: 'Admin', hint: 'Manages people, teams, billing and every account setting.' },
     { value: 'Developer', hint: 'Works on the resources their teams reach; no account settings.' },
     { value: 'Viewer', hint: 'Reads the resources their teams reach; changes nothing.' }
   ]
-  const roleSeverity = (value: UserRole): TagSeverity | undefined =>
+  const roleSeverity = (value: UsersRole): TagSeverity | undefined =>
     value === 'Owner'
       ? undefined
       : (({ Admin: 'info', Developer: 'neutral', Viewer: 'neutral' } as const)[value] ?? 'neutral')
-  const roleVariant = (value: UserRole): TagVariant | undefined =>
+  const roleVariant = (value: UsersRole): TagVariant | undefined =>
     value === 'Owner' ? 'highlight' : undefined
 
-  const DAY = 86_400_000
-  const REFERENCE = Date.UTC(2026, 10, 10, 12)
-
-  const seedUsers: User[] = [
-    {
-      id: 'u-1',
-      name: 'Avery Stone',
-      email: 'avery.stone@example.com',
-      owner: true,
-      role: 'Owner',
-      teams: ['administrators'],
-      status: 'Active',
-      lastActive: new Date(REFERENCE - 0.02 * DAY)
-    },
-    {
-      id: 'u-2',
-      name: 'Jordan Reyes',
-      email: 'jordan.reyes@example.com',
-      owner: false,
-      role: 'Admin',
-      teams: ['administrators', 'security'],
-      status: 'Active',
-      lastActive: new Date(REFERENCE - 0.1 * DAY)
-    },
-    {
-      id: 'u-3',
-      name: 'Priya Nair',
-      email: 'priya.nair@example.com',
-      owner: false,
-      role: 'Developer',
-      teams: ['developers'],
-      status: 'Active',
-      lastActive: new Date(REFERENCE - 1 * DAY)
-    },
-    {
-      id: 'u-4',
-      name: '',
-      email: 'sam.okafor@example.com',
-      owner: false,
-      role: 'Developer',
-      teams: ['developers', 'support'],
-      status: 'Invited',
-      lastActive: null
-    },
-    {
-      id: 'u-5',
-      name: 'Lena Fischer',
-      email: 'lena.fischer@example.com',
-      owner: false,
-      role: 'Viewer',
-      teams: ['finance'],
-      status: 'Active',
-      lastActive: new Date(REFERENCE - 3 * DAY)
-    },
-    {
-      id: 'u-6',
-      name: 'Marco Bianchi',
-      email: 'marco.bianchi@example.com',
-      owner: false,
-      role: 'Viewer',
-      teams: [],
-      status: 'Inactive',
-      lastActive: new Date(REFERENCE - 64 * DAY)
-    }
-  ]
-
-  const INVITE_ON_START = false
-  const EDIT_ROLE_ON_START = ''
-  const users = ref<User[]>(seedUsers)
-  const loading = ref(false)
-  const loadFailed = ref(false)
-
-  const displayName = (user: User): string => user.name || user.email
-  const statusSeverity = (value: UserStatus): TagSeverity =>
+  const displayName = (user: UsersUser): string => user.name || user.email
+  const statusSeverity = (value: UsersStatus): TagSeverity =>
     (({ Active: 'success', Invited: 'warning', Inactive: 'neutral' }) as const)[value] ?? 'neutral'
 
   const columns: TableColumn[] = [
@@ -162,18 +159,18 @@
   ]
 
   const optionsOf = (key: 'role' | 'status') =>
-    [...new Set(seedUsers.map((user) => user[key]))].sort().map((value) => ({ value }))
+    [...new Set(source.value.map((user) => user[key]))].sort().map((value) => ({ value }))
 
-  const properties: FilteringProperty[] = [
+  const properties = computed<FilteringProperty[]>(() => [
     { key: 'name', label: 'Name' },
     { key: 'email', label: 'Email' },
     { key: 'role', label: 'Role', options: optionsOf('role') },
     { key: 'status', label: 'Status', options: optionsOf('status') }
-  ]
+  ])
 
   const { tableProps, propertyFilterProps, preferencesProps, matchingItems, clearFilters } =
     useCollection({
-      items: users,
+      items,
       columns,
       filtering: { fields: ['name', 'email', 'role', 'status'] },
       propertyFiltering: { properties },
@@ -181,32 +178,30 @@
       preferences: { storageKey: 'account-users' }
     })
 
-  const usersTableEl = ref<TableExposed<User> | null>(null)
+  const usersTableEl = ref<TableExposed<UsersUser> | null>(null)
   const exportCsv = () => usersTableEl.value?.exportCsv({ filename: 'users.csv' })
 
-  const alone = computed(() => !loading.value && users.value.length === 1 && users.value[0].owner)
+  const alone = computed(() => !props.loading && items.value.length === 1 && items.value[0].owner)
 
-  const retryLoad = () => {
-    loadFailed.value = false
-    loading.value = true
-    setTimeout(() => {
-      users.value = seedUsers
-      loading.value = false
-    }, 700)
+  const replaceUser = (id: string, patch: Partial<UsersUser>): UsersUser | undefined => {
+    let updated: UsersUser | undefined
+    items.value = items.value.map((user) => {
+      if (user.id !== id) return user
+      updated = { ...user, ...patch }
+      return updated
+    })
+    return updated
   }
 
-  const refreshing = ref(false)
-  const refresh = () => {
-    refreshing.value = true
-    setTimeout(() => {
-      refreshing.value = false
-    }, 700)
+  const changeTeams = (id: string, teams: string[]) => {
+    const user = replaceUser(id, { teams })
+    if (user) emit('teams-change', { user, teams })
   }
 
-  const setTeams = (user: User, selected: unknown[]) => {
+  const setTeams = (user: UsersUser, selected: unknown[]) => {
     const next = selected.map(String)
     const before = [...user.teams]
-    user.teams = next
+    changeTeams(user.id, next)
     toast.success(`Teams updated for ${displayName(user)}.`, {
       description: next.length
         ? `${teamsLabel(next)}. Access changes on their next request.`
@@ -214,47 +209,48 @@
       actions: [
         {
           label: 'Undo',
-          onClick: () => {
-            user.teams = before
-          }
+          onClick: () => changeTeams(user.id, before)
         }
       ]
     })
   }
 
-  const pending = ref<User | null>(null)
+  const pending = ref<UsersUser | null>(null)
   const removeOpen = ref(false)
   const profileOpen = ref(false)
   const roleOpen = ref(false)
-  const nextRole = ref<UserRole>('Developer')
+  const nextRole = ref<UsersRole>('Developer')
   const roleHint = computed(() => ROLES.find((role) => role.value === nextRole.value)?.hint ?? '')
-  const openRole = (user: User) => {
+  const openRole = (user: UsersUser) => {
     pending.value = user
     nextRole.value = user.role
     profileOpen.value = false
     roleOpen.value = true
   }
-  const setRole = (id: string, role: UserRole) => {
-    users.value = users.value.map((user) => (user.id === id ? { ...user, role } : user))
+  const setRole = (event: Event, id: string, role: UsersRole) => {
+    const user = replaceUser(id, { role })
+    if (user) emit('role-change', event, { user, role })
   }
-  const saveRole = () => {
+  const saveRole = (event: Event) => {
     const user = pending.value
     if (!user) return
     const before = user.role
     const after = nextRole.value
     roleOpen.value = false
     if (before === after) return
-    setRole(user.id, after)
+    setRole(event, user.id, after)
     toast.success(`${displayName(user)} is now ${after}.`, {
       description: 'The new role applies on their next request.',
-      actions: [{ label: 'Undo', onClick: () => setRole(user.id, before) }]
+      actions: [{ label: 'Undo', onClick: (undo: MouseEvent) => setRole(undo, user.id, before) }]
     })
   }
 
-  const editOnStart = users.value.find((user) => user.id === EDIT_ROLE_ON_START)
+  const editOnStart = props.defaultEditRoleId
+    ? items.value.find((user) => user.id === props.defaultEditRoleId)
+    : undefined
   if (editOnStart) openRole(editOnStart)
 
-  const onAction = (value: DropdownMenuItemValue, user: User) => {
+  const onAction = (event: Event, value: DropdownMenuItemValue, user: UsersUser) => {
     if (value === 'view') {
       pending.value = user
       profileOpen.value = true
@@ -265,6 +261,7 @@
       return
     }
     if (value === 'resend') {
+      emit('resend-invitation', event, user)
       toast.success(`Invitation sent again to ${user.email}.`, {
         description: 'The earlier link stops working.'
       })
@@ -275,11 +272,12 @@
       removeOpen.value = true
     }
   }
-  const remove = () => {
+  const remove = (event: Event) => {
     const user = pending.value
     if (!user) return
-    users.value = users.value.filter((item) => item.id !== user.id)
+    items.value = items.value.filter((item) => item.id !== user.id)
     removeOpen.value = false
+    emit('remove', event, user)
     toast.success(
       user.status === 'Invited'
         ? `Invitation to ${user.email} cancelled.`
@@ -287,10 +285,9 @@
     )
   }
 
-  const inviteOpen = ref(INVITE_ON_START)
+  const inviteOpen = ref(props.defaultInviteOpen)
   const invite = reactive({ email: '', teams: ['developers'] })
   const submitted = ref(false)
-  const sending = ref(false)
   const formEl = ref<HTMLFormElement | null>(null)
   const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   const errors = computed<{ email?: string; teams?: string }>(() => {
@@ -299,7 +296,7 @@
     const out: { email?: string; teams?: string } = {}
     if (!email) out.email = 'Enter the email address to invite.'
     else if (!EMAIL.test(email)) out.email = 'Enter an email address like name@example.com.'
-    else if (users.value.some((user) => user.email === email))
+    else if (items.value.some((user) => user.email === email))
       out.email = 'This person is already in the account.'
     if (!invite.teams.length) out.teams = 'Choose at least one team, or they get no access.'
     return out
@@ -310,35 +307,32 @@
     submitted.value = false
     inviteOpen.value = true
   }
-  const sendInvite = () => {
+  const sendInvite = (event: Event) => {
     submitted.value = true
-    if (sending.value) return
     if (Object.keys(errors.value).length) {
       nextTick(() => formEl.value?.querySelector<HTMLElement>('[aria-invalid="true"]')?.focus())
       return
     }
-    sending.value = true
-    setTimeout(() => {
-      const email = invite.email.trim().toLowerCase()
-      users.value = [
-        ...users.value,
-        {
-          id: `u-${users.value.length + 1}-${email}`,
-          name: '',
-          email,
-          owner: false,
-          role: 'Developer',
-          teams: [...invite.teams],
-          status: 'Invited',
-          lastActive: null
-        }
-      ]
-      sending.value = false
-      inviteOpen.value = false
-      toast.success(`Invitation sent to ${email}.`, {
-        description: `They join ${teamsLabel(invite.teams)} when they accept. The link expires in 7 days.`
-      })
-    }, 800)
+    const email = invite.email.trim().toLowerCase()
+    const teams = [...invite.teams]
+    items.value = [
+      ...items.value,
+      {
+        id: `u-${items.value.length + 1}-${email}`,
+        name: '',
+        email,
+        owner: false,
+        role: 'Developer',
+        teams,
+        status: 'Invited',
+        lastActive: null
+      }
+    ]
+    inviteOpen.value = false
+    emit('invite', event, { email, teams })
+    toast.success(`Invitation sent to ${email}.`, {
+      description: `They join ${teamsLabel(teams)} when they accept. The link expires in 7 days.`
+    })
   }
 </script>
 
@@ -370,7 +364,7 @@
 
       <section class="layout-section-start flex min-w-0 flex-col gap-(--layout-group-gap)">
         <header
-          v-if="!loadFailed"
+          v-if="!error"
           class="flex flex-wrap items-start gap-(--layout-group-gap)"
         >
           <div class="flex min-w-0 grow basis-(--container-2xs)">
@@ -389,9 +383,9 @@
                 icon="ai ai-refresh"
                 variant="outline"
                 size="medium"
-                :loading="refreshing"
+                :loading="loading"
                 aria-label="Refresh"
-                @click="refresh"
+                @click="emit('refresh', $event)"
               />
             </Tooltip>
             <Tooltip
@@ -415,16 +409,16 @@
         </header>
 
         <Alert
-          v-if="loadFailed"
+          v-if="error"
           severity="danger"
         >
-          The users could not be loaded. Nothing was changed; try again.
+          {{ error }}
           <template #actions>
             <Button
               label="Retry"
               variant="secondary"
               size="small"
-              @click="retryLoad"
+              @click="emit('retry', $event)"
             />
           </template>
         </Alert>
@@ -437,7 +431,7 @@
             <DataTable
               ref="usersTableEl"
               v-bind="tableProps"
-              :loading="loading || refreshing"
+              :loading="loading"
               sortable
               :bordered="false"
               aria-label="Users"
@@ -489,7 +483,7 @@
                     <MultiSelect.Trigger :aria-label="`Teams of ${displayName(row)}`" />
                     <MultiSelect.Content>
                       <MultiSelect.Item
-                        v-for="team in TEAMS"
+                        v-for="team in teamOptions"
                         :key="team.value"
                         :value="team.value"
                       >
@@ -522,7 +516,7 @@
               <template #cell-actions="{ row }">
                 <TableCellActions
                   :name="displayName(row)"
-                  @select="(_event, value) => onAction(value, row)"
+                  @select="(event, value) => onAction(event, value, row)"
                 >
                   <DropdownMenu.Group key="profile">
                     <DropdownMenu.Item
@@ -579,7 +573,7 @@
         </Card>
 
         <EmptyState
-          v-if="alone && !loadFailed"
+          v-if="alone && !error"
           size="small"
           icon="ai ai-users"
           title="You are the only user"
@@ -602,8 +596,6 @@
       v-model:open="inviteOpen"
       side="end"
       size="large"
-      :dismissible="!sending"
-      :closable="!sending"
     >
       <DrawerContent>
         <form
@@ -617,10 +609,7 @@
             <DrawerTitle>Invite User</DrawerTitle>
           </PanelHeader>
           <PanelBody>
-            <fieldset
-              class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0"
-              :disabled="sending"
-            >
+            <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-lg) border-0 p-0">
               <legend class="sr-only">Invite User</legend>
               <DrawerDescription>
                 They get an email with a link to join this account. Their teams decide what they can
@@ -659,7 +648,7 @@
                   />
                   <MultiSelect.Content>
                     <MultiSelect.Item
-                      v-for="team in TEAMS"
+                      v-for="team in teamOptions"
                       :key="team.value"
                       :value="team.value"
                     >
@@ -681,7 +670,6 @@
                 type="button"
                 label="Cancel"
                 variant="outline"
-                :disabled="sending"
                 @click="inviteOpen = false"
               />
               <Button
@@ -689,7 +677,6 @@
                 label="Send invitation"
                 variant="primary"
                 icon="ai ai-send"
-                :loading="sending"
               />
             </div>
           </PanelFooter>

@@ -29,13 +29,13 @@ A horizontal `Resizable` named "Version workspace": the version settings pane, a
 
 ### C. Version tab bar — `PageTabs`, `Tabs`, `Tag`, `DropdownMenu`, `IconButton`, `EmptyState` (required)
 
-`PageTabs` with one `Tabs.Trigger` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: a variant renders the open tab's panel, and a tab whose panel lives on another route shows an `EmptyState` with an Open link to it.
+`PageTabs` with one `Tabs.Trigger` per area: Settings, Source, Device Groups, Cache Settings, Functions Instances, Rules Engine. The tab row ends on the version's state `Tag` and an outlined Version actions `IconButton` whose `DropdownMenu` holds Edit version info and the toggle for Version history. Each tab is its own route: the open tab's panel goes in the slot named after the tab (`#source`, `#device-groups`, `#cache-settings`, `#functions-instances`, `#rules-engine`), and a tab with no slot shows an `EmptyState` with an Open link to its own page.
 
-### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip` (required)
+### D. Settings panel — `ScrollArea`, `PageHeader`, `SettingsSection`, `Card`, `Item`, `SettingsRow`, `Input`, `Switch`, `Tooltip`, `Skeleton` (required)
 
-The open tab scrolls in a fading `ScrollArea`. A small `PageHeader` names the tab, then `SettingsSection`s (General, Modules, Subscription modules) each hold a `Card :padded="false"` with an `Item.List` of `SettingsRow`s: a title, a one-sentence description and its control, an `Input` or a `Switch`. A module that needs a sales contact keeps its `Switch` disabled, explained by a `Tooltip`. On a built version the whole fieldset is disabled.
+The open tab scrolls in a fading `ScrollArea`. A small `PageHeader` names the tab, then `SettingsSection`s (General, Modules, Subscription modules) each hold a `Card :padded="false"` with an `Item.List` of `SettingsRow`s: a title, a one-sentence description and its control, an `Input` or a `Switch`. A module that needs a sales contact keeps its `Switch` disabled, explained by a `Tooltip`. On a built version the whole fieldset is disabled. While `creating`, `Skeleton` wires take the sections' place.
 
-### E. Version bar — `Tag`, `SplitButton`, `Button` (required)
+### E. Version bar — `Tag`, `SplitButton`, `Button`, `Spinner` (required)
 
 A bar pinned to the bottom of the settings pane, aligned with the column above it. It names the state with a `Tag` and one sentence. On a draft it holds a primary medium `SplitButton` that saves and deploys, with Save and build and Save in its menu. On a built version it reads Viewing a deployed version with a Read-only tag and offers Add Version and Redeploy.
 
@@ -43,9 +43,9 @@ A bar pinned to the bottom of the settings pane, aligned with the column above i
 
 The side pane titled "Version history", closed with an `IconButton`. It starts on the current version with its `Tag`, its description, its author `Avatar` and a pencil that edits the description in place through a `Field` with a `Textarea` and Cancel and Save `Button`s. Then the changes entry, empty until something is saved, then the five newest earlier versions and Show older for the rest. Each earlier version is a link to that version's page, never a button; the one being viewed carries `aria-current="page"`.
 
-### G. Revert — `Button`, `Tag` (optional, on an earlier Ready version)
+### G. Revert — `ConfirmDialog`, `Button`, `Tag` (optional, on an earlier Ready version)
 
-An earlier version opened from Version history keeps the page read-only and says Viewing an earlier version, with the entry in history marked by a Viewing `Tag` and `aria-current="page"`. The version bar's primary action is Revert to <id>, the trigger of a `ConfirmDialog` with `variant="primary"` and `size="medium"`. Its body is the diff against the deployed version: a bordered list of the settings that change, each with its old and new value in words, a line with the rules added and removed, and a description saying that reverting deploys <id> to Production and that the deployed version stays in history. Confirm closes the dialog and starts the async-submit run: one toast id that turns from a loading toast ("Reverting to <id>…", "It keeps running if you leave.") into the outcome, which stays until closed and carries **Edit** and **Redeploy**, never View deployments. On success the version's `Tag` reads Deployed in the breadcrumb, the tab row and the history, and the bar offers Redeploy.
+An earlier version opened from Version history keeps the page read-only and says Viewing an earlier version, with the entry in history marked by a Viewing `Tag` and `aria-current="page"`. The version bar's primary action is Revert to <id>, the trigger of a `ConfirmDialog` with `variant="primary"` and `size="medium"`. Its body is the diff against the deployed version: a bordered list of the settings that change, each with its old and new value in words, a line with the rules added and removed, and a description saying that reverting deploys <id> to Production and that the deployed version stays in history. Confirm closes the dialog and emits `revert`. The page then runs the async-submit pattern: it sets `reverting` (Revert loads, the bar reads "Reverting to <id>…") and raises one toast id that turns from a loading toast ("Reverting to <id>…", "It keeps running if you leave.") into the outcome, which stays until closed and carries **Edit** and **Redeploy**, never View deployments. On success it passes the version back with `state: 'deployed'`, so its `Tag` reads Deployed in the breadcrumb, the tab row and the history, and the bar offers Redeploy.
 
 ## List tabs
 
@@ -53,7 +53,57 @@ Source, Device Groups, Cache Settings and Functions Instances are lists inside t
 
 ## Creating and not found
 
-While Add Version copies a built version into a new draft, the workspace is drawn as `Skeleton` wires in a busy status region named "Creating a new version from <id>." and the version bar shows a `Spinner`, "Creating new version…", the copy line, Add Version loading and Redeploy disabled. A version link that points nowhere keeps the trail and renders a bordered `EmptyState` with View Versions.
+While Add Version copies a built version into a new draft (`creating`), the workspace is drawn as `Skeleton` wires in a busy status region named "Creating a new version from <id>." and the version bar shows a `Spinner`, "Creating new version…", the copy line, Add Version loading and Redeploy disabled. A version link that points nowhere keeps the trail and renders a bordered `EmptyState` with View Versions.
+
+## Data
+
+The block takes its versions and settings through props and emits every action; it fetches nothing. `VersionDetailVersion`, `VersionDetailSettings`, `VersionDetailProps` and the other record types are exported from `version-detail.vue`, and `sample.ts` holds the sample resource, versions, settings and revert diff the block renders when those props are left out. The viewed version's `state` decides the page: `draft` is editable, `deployed` is read-only with Redeploy, `ready` is an earlier version with Revert.
+
+| Prop / model           | Type                         | What it does                                                                                                 |
+| ---------------------- | ---------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `resource`             | `VersionDetailResource`      | The resource name and link, used in the trail, the Back link and the page links.                             |
+| `versions`             | `VersionDetailVersion[]`     | Every version, newest first; the trail lists them and the history shows the ones older than the current one. |
+| `settings`             | `VersionDetailSettings`      | The Settings tab values of the viewed version; the form keeps a local draft of them.                         |
+| `revertDiff`           | `VersionDetailRevertDiff`    | What the revert dialog lists against the deployed version.                                                   |
+| `environments`         | `VersionDetailEnvironment[]` | When set, the trail starts with an environment crumb and each version option says where it is live.          |
+| `creating`             | `boolean`                    | A new version is being copied from the viewed one: wires in the workspace, the version bar busy.             |
+| `reverting`            | `boolean`                    | The revert is running: Revert loads and the bar reads Reverting to the version.                              |
+| `v-model:version-id`   | `string`                     | The viewed version; picking one in the trail updates it. Empty shows the first version.                      |
+| `v-model:tab`          | `VersionDetailTab`           | The open tab, `main-settings` by default.                                                                    |
+| `v-model:history-open` | `boolean`                    | Whether the Version history pane is open.                                                                    |
+| `v-model:environment`  | `string`                     | The environment crumb; picking one moves the version crumb to the version live there.                        |
+
+| Event              | Payload                         | When                                                                       |
+| ------------------ | ------------------------------- | -------------------------------------------------------------------------- |
+| `save`             | `(event, { action, settings })` | The Save split button on a draft; `action` is `deploy`, `build` or `save`. |
+| `save-description` | `(event, description)`          | Save under the description editor in the history.                          |
+| `add-version`      | `(event)`                       | Add Version in the bar or the version picker footer.                       |
+| `add-environment`  | `(event)`                       | Add Environment in the environment picker footer.                          |
+| `redeploy`         | `(event)`                       | Redeploy on a deployed version.                                            |
+| `revert`           | `(event, version)`              | The revert dialog was confirmed.                                           |
+
+To go live, render the block from the version route and pass what the API returns:
+
+```vue
+<script setup lang="ts">
+  import VersionDetail from './version-detail.vue'
+
+  const { versionId, versions, settings, saveVersion, revertTo, reverting } = useVersion()
+</script>
+
+<template>
+  <VersionDetail
+    v-model:version-id="versionId"
+    :versions="versions"
+    :settings="settings"
+    :reverting="reverting"
+    @save="(event, { action, settings }) => saveVersion(action, settings)"
+    @revert="(event, version) => revertTo(version.id)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -64,7 +114,7 @@ While Add Version copies a built version into a new draft, the workspace is draw
 - Show the state in three places that agree: the breadcrumb option, the tab row tag and the version bar.
 - Keep the history pane collapsible and resizable so the settings keep their width when it is closed.
 - Show what a revert changes before it runs: the settings with old and new values, and the rules added and removed.
-- Report a revert like any deploy: one toast that turns into the outcome, with Edit and Redeploy.
+- Report a revert like any deploy: on `revert`, one toast that turns into the outcome, with Edit and Redeploy.
 - Raise toasts with `toast` only; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so this page body never renders a `Toaster`.
 
 ## Don't
@@ -107,17 +157,17 @@ While Add Version copies a built version into a new draft, the workspace is draw
 
 ## States
 
-- Draft: the editable draft on its Settings tab, with the Editable tag and the Save and deploy split button in the version bar.
-- Deployed: the deployed version, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
-- Revert: an earlier Ready version, read-only, with history open, Revert to <id> in the bar, a confirmation with the diff, and the revert reported by a toast with Edit and Redeploy.
-- VersionHistory: the draft with Version history open beside it, the current version, the empty changes entry and the five newest earlier versions.
-- EnvironmentCrumb: a resource that is deployed to several environments. The page's `ConsoleLayout.Breadcrumb` ends on two control crumbs, environment then version, each a small transparent `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
-- Creating: Add Version copying AEO25I38 into a new draft, the workspace as `Skeleton` wires and the version bar busy.
+- Draft: the default render, a version with `state: 'draft'` on its Settings tab, with the Editable tag and the Save and deploy split button in the version bar.
+- Deployed: `version-id` on the version with `state: 'deployed'`, read-only, the fieldset disabled and the version bar offering Add Version and Redeploy.
+- Revert: `version-id` on an earlier version with `state: 'ready'` and `history-open`, read-only, Revert to <id> in the bar and a confirmation with the `revertDiff`; `reverting` shows the run.
+- VersionHistory: `history-open` on the draft, the current version, the empty changes entry and the five newest earlier versions.
+- EnvironmentCrumb: `environments` set, for a resource that is deployed to several environments. The page's `ConsoleLayout.Breadcrumb` ends on two control crumbs, environment then version, each a small transparent `Select` with a search field (`Switch environment`, `Switch version`). Environments carry their deployment policy as a `Tag` and Add Environment in the footer; picking an environment moves the version crumb to the version live there, and each version option says where it is live (Live in Production). The environment always comes before the version, because a version is chosen within an environment.
+- Creating: `creating` on the deployed AEO25I38, the workspace as `Skeleton` wires and the version bar busy.
 - NotFound: a version that does not exist, a bordered `EmptyState` with View Versions.
-- Source: the draft on its Source tab, the file list of the version bucket with its folder path and Open in Object Storage.
-- DeviceGroups: the draft on its Device Groups tab, the groups table and the add or edit drawer with the User-Agent expression.
-- CacheSettings: the draft on its Cache Settings tab, the cache settings table and the add or edit drawer with Adaptive delivery and Device groups.
-- FunctionsInstances: the draft on its Functions Instances tab, the instances table and the add or edit drawer with the function `Select` and its arguments.
+- Source: `tab="source"` with its panel in the `#source` slot, the file list of the version bucket with its folder path and Open in Object Storage.
+- DeviceGroups: `tab="device-groups"` with its panel in the `#device-groups` slot, the groups table and the add or edit drawer with the User-Agent expression.
+- CacheSettings: `tab="cache-settings"` with its panel in the `#cache-settings` slot, the cache settings table and the add or edit drawer with Adaptive delivery and Device groups.
+- FunctionsInstances: `tab="functions-instances"` with its panel in the `#functions-instances` slot, the instances table and the add or edit drawer with the function `Select` and its arguments.
 
 ## Related
 

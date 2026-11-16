@@ -39,6 +39,7 @@
     "name": "Default",
     "file": "home-dashboard.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Empty",

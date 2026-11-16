@@ -51,11 +51,63 @@ The `Card` footer sums the reach in one sentence: projects, environments and Dep
 
 ### G. Footer and commit — `SaveBar`, `Button`, `ConfirmDialog` (required)
 
-`SaveBar variant="docked"` at the bottom of the page: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`variant="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and starts the run as an async action (`state/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
+`SaveBar variant="docked"` at the bottom of the page: the hint on the start side; on the end side the blocker (if any) with a warning icon, Cancel (outlined, back to the service) and Deploy release (primary, cloud icon). Deploy release opens a `ConfirmDialog` (`variant="primary"`) titled "Deploy this release?" that lists every resource and version and the reach. Confirm closes it and emits `deploy`; the parent sets `deploying`, then `deployed` or `deployError`, and the block shows the run as an async action (`state/async-submit`): one toast id turns from `toast.loading` ("Deploying release…", with "It keeps running if you leave.") into `toast.success` or `toast.error`, `duration: 0`, `closable`, with **Edit** and **Redeploy**. Never View deployments. This page body only calls `toast` from `@aziontech/webkit/toast`; the app mounts the one toast region (`ToastPlugin`, or one `Toaster` at its root, as `shell/console` does), so the page never renders a `Toaster`.
 
 ### Before the review: choosing the Deployment Settings
 
 When the release starts from the settings rather than from a service, a ChooseSettings step comes first, with the same page frame and footer. One sentence says what a Deployment Setting binds and that picking one deploys into everything that uses it. Below it, a large search `Input` counting the settings, and on the end side the number selected with transparent Select all and Clear. The settings are horizontal `Field` choice cards with a `Checkbox`, grouped under a small heading (Your Deployment Settings, Managed): the name with a Shared (warning) or Managed `Tag`, the policy line, up to three environment `Tag`s and an `OverflowCount` chip (+N) that names the rest from the keyboard and to screen readers, and the workloads it affects, a `Skeleton` while that count loads. An inactive setting cannot be picked: it sits in its own group as a dashed note with an Inactive `Tag`, one sentence and a link to activate it. A search with no match shows a small `EmptyState` with Clear search. Continue (primary) stays disabled, with the reason in the footer hint, until one setting is selected.
+
+## Data
+
+The block takes the release and its impact through props and emits every action; it fetches nothing and runs no deploy of its own. `ReleaseImpactResource`, `ReleaseImpactSettings` and `ReleaseImpactProps` (with the version, dependency, environment and project types) are exported from `release-impact.vue`, and `sample.ts` holds the sample resources and Deployment Settings the block renders when `resources` or `impact` is left out (the impact sample never renders while `loading` or `error` is set). The switches and version selects edit a local copy of `resources`; `deploy` carries the included resources at the versions picked.
+
+| Prop          | Type                      | What it does                                                                                            |
+| ------------- | ------------------------- | ------------------------------------------------------------------------------------------------------- |
+| `resources`   | `ReleaseImpactResource[]` | The resource cards; a resource with no `versions` blocks the deploy.                                    |
+| `impact`      | `ReleaseImpactSettings[]` | The Deployment Settings the release reaches, with their environments and projects (Tree and Flow).      |
+| `loading`     | `boolean`                 | The impact is being computed: the Impact card shows its skeleton and the footer says Computing impact…. |
+| `error`       | `string`                  | Why the impact could not be read, shown in the warning alert with Retry. The release can still deploy.  |
+| `truncated`   | `boolean`                 | The projects list came back truncated; a warning sits above the tree.                                   |
+| `deploying`   | `boolean`                 | The run is in flight: Deploy release spins, the switches lock and the loading toast shows.              |
+| `deployed`    | `boolean`                 | The last run deployed: the success toast and `Alert` with Edit and Redeploy.                            |
+| `deployError` | `string`                  | Why the last run failed, shown in the danger `Alert` and the error toast.                               |
+
+| Event    | Payload              | When                                                                          |
+| -------- | -------------------- | ----------------------------------------------------------------------------- |
+| `deploy` | `(event, resources)` | The confirm dialog was accepted, or Redeploy pressed; the included resources. |
+| `retry`  | `(event)`            | Retry in the unavailable impact alert.                                        |
+| `edit`   | `(event)`            | Edit in the outcome alert; the alert closes and focus moves to Resources.     |
+
+To go live, render the block from a page that owns the release, the impact request and the run:
+
+```vue
+<script setup lang="ts">
+  import ReleaseImpact from './release-impact.vue'
+
+  const { release } = useRelease()
+  const { data: impact, pending, error, refresh } = useReleaseImpact(release)
+  const { run, running, done, failure } = useDeployRelease()
+  const impactError =
+    'The projects that deploy with these settings could not be read, so the impact is unknown. Retry, or deploy without the preview.'
+</script>
+
+<template>
+  <ReleaseImpact
+    :resources="release"
+    :impact="impact ?? []"
+    :loading="pending"
+    :error="error ? impactError : ''"
+    :truncated="impact?.truncated"
+    :deploying="running"
+    :deployed="done"
+    :deploy-error="failure ?? ''"
+    @retry="refresh"
+    @deploy="(event, resources) => run(resources)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
 
 ## Do
 
@@ -95,11 +147,11 @@ When the release starts from the settings rather than from a service, a ChooseSe
 ## States
 
 - ChooseSettings: the step before the review; grouped checkbox choice cards with search, Select all and Clear, a loading workloads count, an inactive setting with its activate link, and Continue disabled until one is selected.
-- Ready: every resource with a version, the impact computed, Tree view.
-- Loading: the impact being computed.
-- Unavailable: the impact could not be read; Retry lands on a truncated list.
-- MissingVersion: a resource without a Ready version blocks the deploy.
-- Error: the last run was refused; an error toast announces it, and Edit and Redeploy sit on the page `Alert`.
+- Ready: `resources` all have a version and `impact` is computed; Tree view.
+- Loading: `loading` is set while the impact is computed.
+- Unavailable: `error` says the impact could not be read; Retry emits `retry`, and a truncated answer sets `truncated`.
+- MissingVersion: a resource in `resources` has no `versions`, which blocks the deploy.
+- Error: `deployError` says the last run was refused; an error toast announces it, and Edit and Redeploy sit on the page `Alert`.
 
 ## Related
 

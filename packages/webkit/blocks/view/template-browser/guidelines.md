@@ -50,6 +50,53 @@ Under the description, a two-column `KeyValueList` named "Template details": Fra
 
 A `section` labelled by its "README" heading, with the template's README in a `Card` through `DocProse`, so markdown rendered to plain HTML gets the documentation type scale. Headings inside start at `h4`, under the drawer's own headings.
 
+### H. Loading catalog — `Card`, `Skeleton` (required)
+
+While `loading` is set, the band is `aria-busy` and named Loading templates: the filter is disabled and two sections of `Card`s holding `Skeleton` shapes (mark, name, two lines, the tag) hold the layout, under a `Skeleton` in place of each category heading.
+
+### I. Failed catalog — `Alert`, `EmptyState`, `Button` (required)
+
+When `error` is set, the sections give way to a danger `Alert` with the message and Retry, and a medium `EmptyState`, "Templates are unavailable", whose secondary small Import from Git `Button` still starts a project.
+
+## Data
+
+The block takes its records through props and emits every action; it fetches nothing. `TemplateBrowserTemplate` and `TemplateBrowserProps` are exported from `template-browser.vue`, and `sample.ts` holds the sample catalog the block renders when `templates` is left out (and never while `loading` or `error` is set).
+
+| Prop             | Type                        | What it does                                                                                           |
+| ---------------- | --------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `templates`      | `TemplateBrowserTemplate[]` | The catalog; the search, the properties and the category sections run on it in the browser.            |
+| `loading`        | `boolean`                   | The catalog is loading: the filter disables and two sections of skeleton tiles hold the layout.        |
+| `error`          | `string`                    | Why the catalog failed to load, shown in the danger `Alert` with Retry over the Import from Git state. |
+| `defaultText`    | `string`                    | Search text the filter starts with.                                                                    |
+| `defaultPreview` | `string`                    | Id of the template whose preview drawer starts open.                                                   |
+
+| Event    | Payload             | When                                     |
+| -------- | ------------------- | ---------------------------------------- |
+| `select` | `(event, template)` | A tile was activated; its preview opens. |
+| `retry`  | `(event)`           | Retry in the error alert.                |
+
+To go live, render the block from a page that owns the request and pass what it returns:
+
+```vue
+<script setup lang="ts">
+  import TemplateBrowser from './template-browser.vue'
+
+  const { data, pending, error, refresh } = useTemplates()
+  const loadError = "Couldn't load templates. Check your connection and retry."
+</script>
+
+<template>
+  <TemplateBrowser
+    :templates="data ?? []"
+    :loading="pending"
+    :error="error ? loadError : ''"
+    @retry="refresh"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Run the catalog on one `useCollection` call with `filtering`, `propertyFiltering` and `url: true`, and bind `propertyFilterProps`.
@@ -92,11 +139,11 @@ A `section` labelled by its "README" heading, with the template's README in a `C
 
 ## States
 
-- Default: the catalog is loaded; the filter, the three category sections of tiles and the preview drawer are wired, and filtering to nothing shows No matching templates with Clear filters.
-- Preview: the drawer is open on Next.js Starter with its details, the README, View repository and Deploy.
-- NoMatch: the search "kubernetes" matches nothing; the token stays and the empty state offers Clear filters.
-- Loading: the filter is disabled and two sections of `Skeleton` tiles (mark, name, two lines, tag) hold the layout in a band that is `aria-busy` and named Loading templates.
-- Error: the catalog could not load; a danger `Alert` reads Couldn't load templates with Retry, and a medium empty state offers Import from Git so a project can still start.
+- Default: `templates`, or the sample; the catalog is loaded; the filter, the three category sections of tiles and the preview drawer are wired, and filtering to nothing shows No matching templates with Clear filters.
+- Preview: `defaultPreview="next-starter"`; the drawer is open on Next.js Starter with its details, the README, View repository and Deploy.
+- NoMatch: `defaultText="kubernetes"`; the search "kubernetes" matches nothing; the token stays and the empty state offers Clear filters.
+- Loading: `loading`; the filter is disabled and two sections of `Skeleton` tiles (mark, name, two lines, tag) hold the layout in a band that is `aria-busy` and named Loading templates.
+- Error: `error`; the catalog could not load; a danger `Alert` shows the message, e.g. Couldn't load templates with Retry, and a medium empty state offers Import from Git so a project can still start.
 
 ## Related
 

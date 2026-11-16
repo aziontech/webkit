@@ -15,7 +15,28 @@
   import SettingsSection from '@aziontech/webkit/settings-section'
   import Switch from '@aziontech/webkit/switch'
   import { toast } from '@aziontech/webkit/toast'
-  import { reactive, ref } from 'vue'
+  import { reactive, ref, watch } from 'vue'
+
+  /** The values of the Create Domain form. */
+  export interface CreatePageValues {
+    /** What the domain is called in the list. */
+    name: string
+    /** The root hostname it answers for. */
+    domain: string
+    /** Whether DNSSEC signs its answers. */
+    dnssec: boolean
+    /** Whether it answers authoritative DNS queries. */
+    active: boolean
+  }
+
+  export interface CreatePageProps {
+    /** The values the form starts from; each field falls back to empty, DNSSEC off and Active on. */
+    defaultValues?: Partial<CreatePageValues>
+    /** The create request is in flight; the form locks and Save spins. */
+    loading?: boolean
+    /** Why the create request failed, shown in an error toast with Retry. */
+    error?: string
+  }
 
   interface FormErrors {
     name: string
@@ -24,9 +45,26 @@
     domainKind: 'helper' | 'invalid' | 'required'
   }
 
+  const props = withDefaults(defineProps<CreatePageProps>(), {
+    defaultValues: () => ({}),
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: CreatePageValues]
+    cancel: [event: MouseEvent]
+  }>()
+
   const breadcrumb = [{ label: 'Domains', href: '/domains' }, { label: 'Create Domain' }]
 
-  const form = reactive({ name: '', domain: '', dnssec: false, active: true })
+  const form = reactive<CreatePageValues>({
+    name: '',
+    domain: '',
+    dnssec: false,
+    active: true,
+    ...props.defaultValues
+  })
   const errors = reactive<FormErrors>({
     name: '',
     nameKind: 'required',
@@ -64,37 +102,28 @@
     return !errors.name && !errors.domain
   }
 
-  const submitting = ref(false)
-  const SAVE_FAILURES = 0
-  let failuresLeft = SAVE_FAILURES
+  const values = (): CreatePageValues => ({
+    ...form,
+    name: form.name.trim(),
+    domain: form.domain.trim()
+  })
 
-  const sendRequest = () =>
-    new Promise<void>((resolve, reject) => {
-      setTimeout(() => {
-        if (failuresLeft > 0) {
-          failuresLeft -= 1
-          reject(new Error('The service did not answer. Check your connection and try again.'))
-          return
-        }
-        resolve()
-      }, 900)
-    })
-
-  const submit = async () => {
-    if (submitting.value || !validate()) return
-    submitting.value = true
-    try {
-      await sendRequest()
-      toast.success(`${form.domain.trim()} created.`)
-    } catch (error) {
-      toast.error('Could not create the domain.', {
-        description: error instanceof Error ? error.message : 'Try again.',
-        action: { label: 'Retry', onClick: () => submit() }
-      })
-    } finally {
-      submitting.value = false
-    }
+  const submit = (event: Event) => {
+    if (props.loading || !validate()) return
+    emit('submit', event, values())
   }
+
+  watch(
+    () => props.error,
+    (message) => {
+      if (!message) return
+      toast.error('Could not create the domain.', {
+        description: message,
+        action: { label: 'Retry', onClick: (event: MouseEvent) => submit(event) }
+      })
+    },
+    { immediate: true }
+  )
 </script>
 
 <template>
@@ -156,7 +185,7 @@
             />
 
             <fieldset
-              :disabled="submitting"
+              :disabled="loading"
               class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
             >
               <legend class="sr-only">Create Domain</legend>
@@ -261,13 +290,14 @@
                 label="Cancel"
                 variant="outline"
                 size="medium"
+                @click="(event: MouseEvent) => emit('cancel', event)"
               />
               <Button
                 label="Save"
                 variant="primary"
                 size="medium"
                 type="submit"
-                :loading="submitting"
+                :loading="loading"
               />
             </template>
           </SaveBar>

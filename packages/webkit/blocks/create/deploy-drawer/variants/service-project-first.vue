@@ -21,200 +21,24 @@
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import { computed, reactive, ref, watch } from 'vue'
 
-  interface Version {
-    id: string
-    name: string
-    author: string
-    createdAgo: string
-    active?: boolean
-  }
-  interface Dependency {
-    key: string
-    label: string
-    name: string
-    icon: string
-    note: string
-    total: number
-    versions: Version[]
-  }
-  interface Resource extends Dependency {
-    owner: boolean
-    dependencies: Dependency[]
-  }
-  interface ProjectView {
-    id?: string
-    name: string
-    domain: string
-  }
+  import {
+    type DeployDrawerDependency,
+    type DeployDrawerEnvironment,
+    type DeployDrawerProject
+  } from '../deploy-drawer.vue'
+  import { sampleEnvironments, sampleNewProject, sampleResources } from '../sample'
 
-  const resources: Resource[] = [
-    {
-      key: 'service',
-      label: 'Service',
-      name: 'web-app',
-      icon: 'ai ai-server',
-      note: '',
-      total: 6,
-      versions: [
-        {
-          id: 'AEO25I38',
-          name: 'AEO25I38',
-          author: 'Sam Lee',
-          createdAgo: '1 day ago',
-          active: true
-        },
-        {
-          id: 'AG1VVDJP',
-          name: 'AG1VVDJP',
-          author: 'Priya Patel',
-          createdAgo: '3 days ago'
-        },
-        {
-          id: 'AHFPL906',
-          name: 'AHFPL906',
-          author: 'Chris Taylor',
-          createdAgo: '3 days ago'
-        },
-        { id: 'AITJB4GN', name: 'AITJB4GN', author: 'Riley Carter', createdAgo: '4 days ago' },
-        {
-          id: 'AK7D0ZX4',
-          name: 'AK7D0ZX4',
-          author: 'Ethan Brooks',
-          createdAgo: '6 days ago'
-        }
-      ],
-      owner: true,
-      dependencies: [
-        {
-          key: 'service@AG1VVDJP:module-auth-gateway',
-          label: 'Module',
-          name: 'auth-gateway',
-          icon: 'ai ai-code',
-          note: '',
-          total: 8,
-          versions: [
-            {
-              id: 'APICRFV0',
-              name: 'APICRFV0',
-              author: 'Sam Lee',
-              createdAgo: '2 days ago'
-            },
-            {
-              id: 'AQW6HBBH',
-              name: 'AQW6HBBH',
-              author: 'Priya Patel',
-              createdAgo: '3 days ago'
-            },
-            {
-              id: 'ASA076RY',
-              name: 'ASA076RY',
-              author: 'Chris Taylor',
-              createdAgo: '5 days ago'
-            },
-            {
-              id: 'ATNTX28F',
-              name: 'ATNTX28F',
-              author: 'Riley Carter',
-              createdAgo: '5 days ago'
-            },
-            {
-              id: 'AV1NMXOW',
-              name: 'AV1NMXOW',
-              author: 'Ethan Brooks',
-              createdAgo: '6 days ago'
-            }
-          ]
-        },
-        {
-          key: 'service@AG1VVDJP:module-geo-redirect',
-          label: 'Module',
-          name: 'geo-redirect',
-          icon: 'ai ai-code',
-          note: '',
-          total: 11,
-          versions: [
-            {
-              id: 'AK16MQ4R',
-              name: 'AK16MQ4R',
-              author: 'John Smith',
-              createdAgo: '2 days ago'
-            },
-            {
-              id: 'ALF0CLL8',
-              name: 'ALF0CLL8',
-              author: 'Sam Lee',
-              createdAgo: '4 days ago'
-            },
-            {
-              id: 'AMSU2H1P',
-              name: 'AMSU2H1P',
-              author: 'Priya Patel',
-              createdAgo: '4 days ago'
-            },
-            {
-              id: 'AO6NSCI6',
-              name: 'AO6NSCI6',
-              author: 'Chris Taylor',
-              createdAgo: '6 days ago'
-            },
-            {
-              id: 'APKHI7YN',
-              name: 'APKHI7YN',
-              author: 'Riley Carter',
-              createdAgo: '6 days ago'
-            }
-          ]
-        },
-        {
-          key: 'service@AG1VVDJP:integration-payments-api',
-          label: 'Integration',
-          name: 'payments-api',
-          icon: 'ai ai-link',
-          note: '',
-          total: 11,
-          versions: [
-            {
-              id: 'ASEKWJQF',
-              name: 'ASEKWJQF',
-              author: 'Riley Carter',
-              createdAgo: '21 hours ago'
-            },
-            {
-              id: 'ATSEMF6W',
-              name: 'ATSEMF6W',
-              author: 'Ethan Brooks',
-              createdAgo: '2 days ago'
-            },
-            {
-              id: 'AV68CAND',
-              name: 'AV68CAND',
-              author: 'Jordan Kim',
-              createdAgo: '2 days ago'
-            },
-            {
-              id: 'AWK2263U',
-              name: 'AWK2263U',
-              author: 'Taylor Reed',
-              createdAgo: '3 days ago'
-            },
-            {
-              id: 'AXXVS1KB',
-              name: 'AXXVS1KB',
-              author: 'John Smith',
-              createdAgo: '5 days ago'
-            }
-          ]
-        }
-      ]
-    }
-  ]
+  type Dependency = DeployDrawerDependency
+  type ProjectView = DeployDrawerProject
+
+  const resources = sampleResources
 
   const projectModes = [
     { value: 'existing', label: 'Use existing' },
     { value: 'new', label: 'Create new' }
   ]
 
-  const newProject: ProjectView = { name: 'web-app', domain: 'web-app.example.com' }
+  const newProject = sampleNewProject
 
   const boundProjects = [
     {
@@ -225,18 +49,8 @@
     }
   ]
 
-  const environmentChoices = [
-    {
-      name: 'Production',
-      description: 'Live traffic. One version serves the domain, and deploying replaces it.',
-      tag: 'Last used'
-    },
-    {
-      name: 'Preview',
-      description:
-        'Every other branch. Each version keeps its own URL, so a build can be read before it is live.',
-      tag: ''
-    },
+  const environmentChoices: DeployDrawerEnvironment[] = [
+    ...sampleEnvironments,
     {
       name: 'Stage',
       description: 'A rehearsal before Production. Each version keeps its own URL.',
