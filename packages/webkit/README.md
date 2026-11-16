@@ -208,6 +208,7 @@ npx @aziontech/webkit search delete confirmation   # blocks, components and exam
 npx @aziontech/webkit view button                   # a component's API, or a block's guidelines + SFC
 npx @aziontech/webkit add edit/delete-dialog   # copy a block into src/views
 npx @aziontech/webkit diff delete-dialog # your copy vs the canonical block
+npx @aziontech/webkit remove delete-dialog # delete the copy and its webkit.blocks.json entry
 npx @aziontech/webkit check    # CI gate: doctor + v5 names + imports + lint + block drift
 npx @aziontech/webkit doctor   # verify the wiring is healthy (lint, MCP, theme)
 npx -y @aziontech/webkit-mcp   # the MCP server your AI tools connect to (its own package)

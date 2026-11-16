@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { applyPlan } from './apply.js'
-import { applyAdd, MANIFEST, planAdd, planDiff } from './blocks.js'
+import { applyAdd, applyRemove, MANIFEST, planAdd, planDiff, planRemove } from './blocks.js'
 import { runCanary } from './canary.js'
 import { exitCodeFor, formatCheck, runCheck, withNavigation } from './check.js'
 import { planSources, SOURCES_FILE, writeSources } from './css-sources.js'
@@ -20,6 +20,7 @@ const HELP = `@aziontech/webkit — adopt the design system in one command
 Usage:
   npx @aziontech/webkit init [options]
   npx @aziontech/webkit add <block-id> [--variant <name>] [--dest <dir|file.vue>] [options]
+  npx @aziontech/webkit remove <block-id|path> [--dry-run] [--json]
   npx @aziontech/webkit diff <block-id|path> [--json]
   npx @aziontech/webkit search <query> [--json]
   npx @aziontech/webkit view <id> [--variant <name>] [--example <name>] [--json]
@@ -36,6 +37,10 @@ Commands:
   add             Start a screen: copy a block (the reviewed SFC) into the project, check
                    its imports against the installed webkit, record it in webkit.blocks.json
                    and print the route entry to add.
+  remove          Delete a copied block: its files (the primary, variants, data files and
+                   guidelines; a path removes that one file) and its webkit.blocks.json
+                   entry. Lists the app files that still import it and the route to drop.
+                   --dry-run prints what would be deleted.
   diff            Compare a copied block with the canonical one of the installed version.
   search          Find blocks, components and examples by plain words.
   view            Show a block (guidelines, variants, SFC) or a component (API, examples).
@@ -104,6 +109,7 @@ icons, entry wiring — before writing anything.
 const COMMANDS = new Set([
   'init',
   'add',
+  'remove',
   'diff',
   'search',
   'view',
@@ -516,6 +522,42 @@ function runAdd(projectDir, id, parsed) {
   return 0
 }
 
+function runRemove(projectDir, target, parsed) {
+  if (!target) {
+    process.stderr.write('Usage: npx @aziontech/webkit remove <block-id|path> [--dry-run]\n')
+    return 2
+  }
+  const plan = planRemove(projectDir, target)
+  if (!plan.ok) {
+    if (parsed.json) json(plan)
+    else process.stderr.write(`${plan.error}\n`)
+    return 1
+  }
+  const removed = parsed.dryRun ? [] : applyRemove(projectDir, plan)
+  if (removed.length && !parsed.json) refreshSourcesAfterAdd(projectDir)
+  if (parsed.json) {
+    json({ ...plan, dryRun: parsed.dryRun, removed })
+    return 0
+  }
+  const verb = parsed.dryRun ? 'would delete' : 'deleted'
+  for (const file of plan.files) {
+    process.stdout.write(
+      file.exists
+        ? `${verb} ${file.path}\n`
+        : `${file.path}: already gone, dropped from ${MANIFEST}\n`
+    )
+  }
+  process.stdout.write(
+    `${parsed.dryRun ? 'would drop' : 'dropped'} ${plan.whole ? plan.id : `${plan.files.length} file(s) of ${plan.id}`} from ${MANIFEST}\n`
+  )
+  if (plan.importers.length) {
+    process.stdout.write('\nStill imported by (remove these imports and the route):\n')
+    for (const hit of plan.importers) process.stdout.write(`  ${hit.file}: ${hit.imports}\n`)
+  }
+  if (parsed.dryRun) process.stdout.write('\nDry run — no files were deleted.\n')
+  return 0
+}
+
 function runDiff(projectDir, target, parsed) {
   if (!target) {
     process.stderr.write('Usage: npx @aziontech/webkit diff <block-id|path>\n')
@@ -632,6 +674,7 @@ async function run(argv) {
 
   if (command === 'css') return runCss(projectDir, parsed)
   if (command === 'add') return runAdd(projectDir, parsed.args[0], parsed)
+  if (command === 'remove') return runRemove(projectDir, parsed.args[0], parsed)
   if (command === 'diff') return runDiff(projectDir, parsed.args[0], parsed)
   if (command === 'search' || command === 'view') return runQuery(projectDir, command, parsed)
   if (command === 'check') return runCheckCommand(projectDir, parsed)

@@ -47,13 +47,14 @@ Feature-scoped setup is deliberately **not** part of `init`. A component that ne
 
 Unknown flags are rejected (so a typo'd `--dryrun` never becomes a real write run).
 
-## `add`, `diff`, `search`, `view` — start a screen from a block
+## `add`, `diff`, `remove`, `search`, `view` — start a screen from a block
 
 ```bash
 npx @aziontech/webkit search delete confirmation          # blocks, components, examples
 npx @aziontech/webkit view edit/delete-dialog   # guidelines, variants, SFC
 npx @aziontech/webkit add edit/delete-dialog [--variant SettingsRow]
 npx @aziontech/webkit diff delete-dialog       # your copy vs the canonical block
+npx @aziontech/webkit remove delete-dialog [--dry-run]   # delete the copy and its record
 ```
 
 - **`search <query>`** runs the MCP queries (`search_blocks`, `search_components`, plus the
@@ -78,6 +79,13 @@ npx @aziontech/webkit diff delete-dialog       # your copy vs the canonical bloc
   from the canonical block of the installed version to your file (coloured on a TTY, `NO_COLOR`
   respected; `--json` for tools). It also says when the canonical block changed since the copy was
   made. Exit 0 when identical, 1 when different, 2 when the target is not recorded.
+- **`remove <block-id|path>`** finds the copy through `webkit.blocks.json` and deletes its files
+  (the primary, every copied variant, the data files such as `<block>.sample.ts` and the
+  `<block>.guidelines.md` sidecar) and its entry, edited or not; a path removes that one file and
+  keeps the rest of the block recorded. It then refreshes `src/webkit.sources.css` and lists the app
+  files that still import a deleted file (the route entry, a parent view): remove those imports by
+  hand. `--dry-run` deletes nothing and prints what it would; `--json` for tools. Exit 1 when the
+  target is not recorded.
 
 The blocks, `catalog.json` and `catalog/` ship in the npm package, so these commands work offline
 from the installed version. Without webkit installed (a bare `npx`), they read the package `npx`

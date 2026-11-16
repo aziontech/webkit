@@ -86,7 +86,8 @@ confirmation"), or the `webkit` MCP `search_blocks`. Read the best one with
 `npx @aziontech/webkit add <block-id>` (`--variant <state>` for another state): it copies the SFC
 into the views directory, checks its imports, records it in `webkit.blocks.json` and prints the
 route entry. `npx @aziontech/webkit diff <block-id>` later shows what you changed against the
-canonical block. Before adapting it, read the guidelines (`view`, or the `guidelines` field
+canonical block, and `npx @aziontech/webkit remove <block-id>` (`--dry-run` first) deletes a copy you
+no longer need with its `webkit.blocks.json` entry, then lists the imports left to remove. Before adapting it, read the guidelines (`view`, or the `guidelines` field
 `get_block` returns): when to use the screen and when another block fits better, what each building block (A,
 B, C…) is for, do and don't, the copy rules and the accessibility rules. If "When not to use"
 matches your case, switch to the block it names. Then change only the content of the copy,
