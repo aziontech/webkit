@@ -241,7 +241,7 @@ describe('Avatar', () => {
       Array.from(
         (
           await within(
-            render(Avatar, { props: { label, pattern: 'marble', colors } }).container
+            render(Avatar, { props: { label, pattern: 'marble', colors } }).container as HTMLElement
           ).findByTestId('avatar__pattern')
         ).querySelectorAll<SVGElement>('rect, path')
       ).map((node) => [node.style.fill, node.getAttribute('transform')])

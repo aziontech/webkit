@@ -37,11 +37,8 @@ describe('PricingCard', () => {
     // above it duplicated the job, so it is gone: passing the old prop renders nothing
     // and adds no element, in either composition.
     const { queryByTestId } = render(PricingCard, {
-      props: {
-        description: 'Best for growing teams.',
-        equalHeight: true,
-        actionsPosition: 'middle'
-      }
+      props: { equalHeight: true, actionsPosition: 'middle' },
+      attrs: { description: 'Best for growing teams.' }
     })
     expect(queryByTestId(`${ROOT}__description`)).toBeNull()
     expect(queryByTestId(`${ROOT}__pricing-details`)).not.toBeNull()
@@ -180,7 +177,6 @@ describe('PricingCard', () => {
     const { container } = render(PricingCard, {
       props: {
         title: 'Pro',
-        description: 'A plan description.',
         pricingDetails: 'Billed annually.'
       }
     })
@@ -192,8 +188,7 @@ describe('PricingCard', () => {
       props: {
         title: 'Pro',
         actionsPosition: 'middle',
-        showTag: true,
-        description: 'Middle layout.'
+        showTag: true
       },
       slots: { default: '<ul><li>Feature one</li><li>Feature two</li></ul>' }
     })

@@ -20,7 +20,7 @@ import { loadIllustrationScene } from '../../../assets/illustrations/scene'
 import { expectNoA11yViolations } from '../../../test/axe'
 import Illustration from './illustration.vue'
 
-const at = (view: ReturnType<typeof render>) => within(view.container)
+const at = (view: ReturnType<typeof render>) => within(view.container as HTMLElement)
 
 const root = (view: ReturnType<typeof render>, testId = 'illustration') =>
   at(view).findByTestId(testId, {}, { timeout: 3000 })

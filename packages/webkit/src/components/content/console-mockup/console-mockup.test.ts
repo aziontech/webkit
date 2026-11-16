@@ -38,10 +38,10 @@ const host = (props: Record<string, unknown>) =>
   })
 
 const frameOf = (view: ReturnType<typeof render>) =>
-  within(view.container).findByTestId(FRAME_TESTID, {}, { timeout: 5000 })
+  within(view.container as HTMLElement).findByTestId(FRAME_TESTID, {}, { timeout: 5000 })
 
 const windowOf = (view: ReturnType<typeof render>) =>
-  within(view.container).findByTestId(WINDOW_TESTID, {}, { timeout: 5000 })
+  within(view.container as HTMLElement).findByTestId(WINDOW_TESTID, {}, { timeout: 5000 })
 
 const barText = (plated: HTMLElement) =>
   (plated.textContent ?? '').replace(within(plated).getByTestId(BODY_TESTID).textContent ?? '', '')
