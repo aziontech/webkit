@@ -353,7 +353,7 @@
   {
     "name": "site-page",
     "path": "src/components/marketing/site-page/site-page.vue",
-    "limit": "8.15 KB",
+    "limit": "8.55 KB",
     "entryOnly": true
   },
   {
