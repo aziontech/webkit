@@ -231,7 +231,8 @@ const CI_ENFORCERS = new Set([
   'check-size-ratchet',
   'check-spec-integrity',
   'check-api-diff',
-  'check-naming'
+  'check-naming',
+  'package-size'
 ])
 
 test("every 'ci' enforcer is a known gate (no free-form/fictional names)", () => {

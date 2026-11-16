@@ -134,6 +134,7 @@
     "!src/**/*.test.{ts,js}",
     "!src/test/**",
     "!src/**/__snapshots__/**",
+    "!src/**/*.figma.ts",
     "skills",
     "rules",
     "adapters",

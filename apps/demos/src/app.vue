@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import HighlightButton from '@aziontech/webkit/highlight-button'
   import Command from '@aziontech/webkit/command'
   import ConsoleLayout, { type BreadcrumbItemData } from '@aziontech/webkit/console-layout-root'
   import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import HighlightButton from '@aziontech/webkit/highlight-button'
   import IconButton from '@aziontech/webkit/icon-button'
   import { ptBR } from '@aziontech/webkit/locales/pt-BR'
   import StatusIndicator from '@aziontech/webkit/status-indicator'
@@ -79,7 +79,7 @@
               icon="ai ai-circle-plus"
               variant="primary"
               size="medium"
-              ariaLabel="Create"
+              aria-label="Create"
               @click="router.push('/resources/new')"
             />
           </Tooltip>
@@ -91,7 +91,7 @@
               icon="ai ai-ask-azion"
               variant="outline"
               size="medium"
-              ariaLabel="Agent"
+              aria-label="Agent"
               @click="router.push('/assistant')"
             />
           </Tooltip>

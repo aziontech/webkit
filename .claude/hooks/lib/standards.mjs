@@ -284,9 +284,10 @@ export const STANDARDS = [
       { surface: 'ci', by: 'size-limit' },
       { surface: 'ci', by: 'check-complete' },
       { surface: 'ci', by: 'check-size-ratchet' },
+      { surface: 'ci', by: 'package-size' },
       { surface: 'review', by: 'required-approval' }
     ],
-    note: 'Budget of record lives in packages/webkit/.size-limit.json. scripts/check-size.mjs is the vue-aware gate: it compiles each budgeted entry with Vite + @vitejs/plugin-vue (vue externalized, minified) and fails the governance build job when the gzipped output exceeds its budget. scripts/check-complete.mjs fails a root component with no budget entry (current debt in complete-baseline.json, which only shrinks); scripts/check-size-ratchet.mjs fails a PR that raises a limit against its merge base unless the PR body has a Budget-raise: line. scripts/check-css-size.mjs (same size gate) builds fixture apps wired the way webkit init wires them (the @aziontech/webkit/vite-plugin scan) and fails when their gzipped CSS exceeds packages/webkit/.size-limit-css.json.'
+    note: 'Budget of record lives in packages/webkit/.size-limit.json. scripts/check-size.mjs is the vue-aware gate: it compiles each budgeted entry with Vite + @vitejs/plugin-vue (vue externalized, minified) and fails the governance build job when the gzipped output exceeds its budget. scripts/check-complete.mjs fails a root component with no budget entry (current debt in complete-baseline.json, which only shrinks); scripts/check-size-ratchet.mjs fails a PR that raises a limit against its merge base unless the PR body has a Budget-raise: line. scripts/check-css-size.mjs (same size gate) builds fixture apps wired the way webkit init wires them (the @aziontech/webkit/vite-plugin scan) and fails when their gzipped CSS exceeds packages/webkit/.size-limit-css.json. test/standards/package-size.test.mjs (toolkit tests) fails when the npm package itself (npm pack --dry-run, generated folders excluded) or an asset folder outgrows packages/webkit/scripts/package-size-budget.json, or when it ships a dev-only file.'
   },
   {
     id: 'testing',

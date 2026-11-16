@@ -1,324 +1,53 @@
-<script setup>
-  import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
+<script setup lang="ts">
   import ConsoleLayout from '@aziontech/webkit/console-layout'
-  import FieldError from '@aziontech/webkit/field-error'
-  import Input from '@aziontech/webkit/input'
-  import Item from '@aziontech/webkit/item'
-  import PageHeader from '@aziontech/webkit/page-header'
-  import PageTabs from '@aziontech/webkit/page-tabs'
-  import SaveBar from '@aziontech/webkit/save-bar'
-  import SettingsRow from '@aziontech/webkit/settings-row'
-  import SettingsSection from '@aziontech/webkit/settings-section'
-  import Switch from '@aziontech/webkit/switch'
-  import Tabs from '@aziontech/webkit/tabs'
   import { toast } from '@aziontech/webkit/toast'
-  import Tooltip from '@aziontech/webkit/tooltip'
-  import { computed, nextTick, reactive, ref, watch } from 'vue'
+  import { computed, ref } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
 
+  import { sampleProject } from '../blocks/edit-resource.sample'
+  import EditResource, { type EditResourceProject } from '../blocks/edit-resource.vue'
   import { findResource, updateResource } from '../lib/store'
 
   const route = useRoute()
   const router = useRouter()
-  const resource = findResource(route.params.id)
-  const breadcrumb = [
+  const record = findResource(route.params.id)
+  const saving = ref(false)
+
+  const project = ref<EditResourceProject>({
+    ...sampleProject,
+    name: record?.name ?? sampleProject.name,
+    active: record ? record.status === 'Live' : sampleProject.active
+  })
+
+  const breadcrumb = computed(() => [
     { label: 'Resources', href: '/resources' },
     {
-      label: resource?.name ?? 'web-app',
-      href: resource ? `/resources/${resource.id}` : undefined
+      label: record?.name ?? project.value.name,
+      href: record ? `/resources/${record.id}` : undefined
     }
-  ]
+  ])
 
-  const tabs = [
-    { value: 'overview', label: 'Overview' },
-    { value: 'build', label: 'Build' },
-    { value: 'deployments', label: 'Deployments' },
-    { value: 'variables', label: 'Variables' },
-    { value: 'caching', label: 'Caching' },
-    { value: 'integrations', label: 'Integrations' },
-    { value: 'rules', label: 'Rules' },
-    { value: 'main-settings', label: 'Settings' }
-  ]
-
-  const activeTab = ref('main-settings')
-
-  const defaultModules = [
-    {
-      key: 'compression',
-      title: 'Compression',
-      description: 'Compress responses with gzip and Brotli before they are sent.'
-    },
-    { key: 'caching', title: 'Caching', description: 'Customize advanced cache settings.' },
-    {
-      key: 'device_detection',
-      title: 'Device Detection',
-      description: 'Expose device variables to build responsive rules.'
-    },
-    {
-      key: 'custom_code',
-      title: 'Custom Code',
-      description: 'Run your own code on each request, close to the user.'
-    },
-    {
-      key: 'image_optimization',
-      title: 'Image Optimization',
-      description: 'Resize and convert images on the fly.'
-    },
-    {
-      key: 'load_balancing',
-      title: 'Load Balancing',
-      description:
-        'Balance traffic across your upstreams for reliability and network congestion control.'
-    }
-  ]
-
-  const subscriptionModules = [
-    {
-      key: 'web_socket_proxy',
-      title: 'WebSocket Proxy',
-      description:
-        'Enhance real-time data exchange between your project and its backends using the WebSocket protocol.'
-    }
-  ]
-
-  const record = {
-    name: resource?.name ?? 'web-app',
-    active: resource ? resource.status === 'Live' : true,
-    modules: {
-      compression: true,
-      caching: true,
-      device_detection: false,
-      custom_code: true,
-      image_optimization: false,
-      load_balancing: false,
-      web_socket_proxy: false
-    }
-  }
-
-  const form = reactive(structuredClone(record))
-  const saving = ref(false)
-  const baseline = ref(JSON.stringify(record))
-  const dirty = computed(() => JSON.stringify(form) !== baseline.value)
-
-  const nameError = ref(false)
-  watch(
-    () => form.name,
-    () => {
-      nameError.value = false
-    }
-  )
-
-  const save = () => {
-    if (!form.name.trim()) {
-      nameError.value = true
-      nextTick(() => document.getElementById('resource-name')?.focus())
-      return
-    }
+  const onSubmit = (_event: Event, values: EditResourceProject) => {
     saving.value = true
     setTimeout(() => {
-      baseline.value = JSON.stringify(form)
+      project.value = values
       saving.value = false
-      if (!resource) return
-      updateResource(resource.id, {
-        name: form.name.trim(),
-        status: form.active ? 'Live' : 'Inactive'
+      if (!record) return
+      updateResource(record.id, {
+        name: values.name.trim(),
+        status: values.active ? 'Live' : 'Inactive'
       })
-      toast.success(`${form.name.trim()} was saved.`, { closable: true })
-      router.push(`/resources/${resource.id}`)
+      toast.success(`${values.name.trim()} was saved.`, { closable: true })
+      router.push(`/resources/${record.id}`)
     }, 900)
   }
-
-  const discard = () => Object.assign(form, JSON.parse(baseline.value))
 </script>
 
 <template>
-  <div class="flex min-h-0 flex-1 flex-col">
-    <ConsoleLayout.Breadcrumb :items="breadcrumb" />
-    <div class="sticky top-0 z-1 bg-(--bg-canvas)">
-      <PageTabs v-model="activeTab">
-        <Tabs.Trigger
-          v-for="tab in tabs"
-          :key="tab.value"
-          :value="tab.value"
-          :label="tab.label"
-        />
-      </PageTabs>
-    </div>
-
-    <div class="relative flex min-h-0 flex-1 flex-col">
-      <section class="min-h-0 flex-1">
-        <div class="flex min-h-full flex-col">
-          <form
-            class="flex min-h-full flex-col"
-            aria-label="Main settings"
-            novalidate
-            @submit.prevent="save"
-          >
-            <div
-              class="layout-column-form layout-boundary-inline flex min-w-0 flex-col pb-(--layout-section-gap) pt-(--layout-section-gap)"
-            >
-              <PageHeader
-                title="Settings"
-                description="Core configuration for this project."
-                size="small"
-              />
-
-              <fieldset
-                class="mx-0 mt-(--layout-section-gap) flex min-w-0 flex-col border-0 p-0"
-                :disabled="saving"
-              >
-                <legend class="sr-only">Main settings</legend>
-
-                <SettingsSection
-                  title="General"
-                  hint="How this project is identified across the platform, and whether it is serving traffic."
-                  anchor="general"
-                >
-                  <Card :padded="false">
-                    <template #default>
-                      <Item.List>
-                        <SettingsRow
-                          title="Name"
-                          description="A unique and descriptive name to identify the project."
-                        >
-                          <div class="flex w-full flex-col gap-(--spacing-xs)">
-                            <Input
-                              id="resource-name"
-                              v-model="form.name"
-                              size="large"
-                              :disabled="saving"
-                              class="w-full"
-                              aria-label="Name"
-                              :required="nameError"
-                              :aria-describedby="nameError ? 'resource-name-message' : undefined"
-                            />
-                            <FieldError
-                              v-if="nameError"
-                              id="resource-name-message"
-                              >This field is required.</FieldError
-                            >
-                          </div>
-                        </SettingsRow>
-                        <SettingsRow
-                          title="Active"
-                          description="When disabled, the project stops serving traffic."
-                          variant="compact"
-                        >
-                          <Switch
-                            v-model="form.active"
-                            aria-label="Active"
-                            :disabled="saving"
-                          />
-                        </SettingsRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </SettingsSection>
-
-                <SettingsSection
-                  title="Modules"
-                  hint="The capabilities this project runs with, each of which can be toggled here."
-                  anchor="modules"
-                >
-                  <Card :padded="false">
-                    <template #default>
-                      <Item.List>
-                        <SettingsRow
-                          v-for="mod in defaultModules"
-                          :key="mod.key"
-                          :title="mod.title"
-                          :description="mod.description"
-                          variant="compact"
-                        >
-                          <Switch
-                            v-model="form.modules[mod.key]"
-                            :aria-label="mod.title"
-                            :disabled="saving"
-                          />
-                        </SettingsRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </SettingsSection>
-
-                <SettingsSection
-                  title="Subscription modules"
-                  hint="Paid add-ons that are activated with sales, not from this page."
-                  anchor="subscription-modules"
-                >
-                  <Card :padded="false">
-                    <template #default>
-                      <Item.List>
-                        <SettingsRow
-                          v-for="mod in subscriptionModules"
-                          :key="mod.key"
-                          :title="mod.title"
-                          variant="compact"
-                        >
-                          <template #description>
-                            {{ mod.description }}
-                            <a
-                              href="https://example.com/contact-sales"
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              class="inline-flex items-center gap-(--spacing-2xs) rounded-(--shape-button) text-(--text-link) underline-offset-2 transition-colors duration-fast-02 ease-productive-entrance hover:text-(--text-link-hover) underline hover:decoration-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-2 focus-visible:ring-offset-(--bg-canvas) motion-reduce:transition-none"
-                            >
-                              Contact sales
-                              <i
-                                class="ai ai-external-link shrink-0 text-body-sm leading-none"
-                                aria-hidden="true"
-                              />
-                            </a>
-                          </template>
-                          <Tooltip content="Contact sales to activate this module.">
-                            <Switch
-                              v-model="form.modules[mod.key]"
-                              disabled
-                              :aria-label="mod.title"
-                            />
-                          </Tooltip>
-                        </SettingsRow>
-                      </Item.List>
-                    </template>
-                  </Card>
-                </SettingsSection>
-              </fieldset>
-            </div>
-
-            <Transition
-              enter-active-class="transition-[translate,opacity] duration-moderate-02 ease-productive-entrance motion-reduce:transition-none"
-              enter-from-class="translate-y-2 opacity-0"
-              leave-active-class="transition-[translate,opacity] duration-fast-02 ease-productive-exit motion-reduce:transition-none"
-              leave-to-class="translate-y-2 opacity-0"
-            >
-              <SaveBar v-if="dirty || saving">
-                Project settings changed.
-                <span class="text-(--text-muted)"
-                  >Saving publishes them on the next deployment.</span
-                >
-                <template #actions>
-                  <Button
-                    type="button"
-                    label="Discard"
-                    variant="outline"
-                    size="medium"
-                    :disabled="saving"
-                    @click="discard"
-                  />
-                  <Button
-                    label="Save"
-                    variant="primary"
-                    size="medium"
-                    :loading="saving"
-                    @click="save"
-                  />
-                </template>
-              </SaveBar>
-            </Transition>
-          </form>
-        </div>
-      </section>
-    </div>
-  </div>
+  <ConsoleLayout.Breadcrumb :items="breadcrumb" />
+  <EditResource
+    :resource="project"
+    :loading="saving"
+    @submit="onSubmit"
+  />
 </template>
