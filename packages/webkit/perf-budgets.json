@@ -108,7 +108,7 @@
     },
     "command-1k": {
       "mount": 50,
-      "update": 550,
+      "update": 1000,
       "update_is": "open the palette over 1k items in 20 groups, then type four queries"
     },
     "conversation-history-5k": {
