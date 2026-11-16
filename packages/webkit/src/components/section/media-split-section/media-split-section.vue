@@ -20,7 +20,7 @@
   /** Axis the band splits on. */
   export type MediaSplitSectionOrientation = 'horizontal' | 'vertical'
 
-  /** Name of a webkit scene asset a media band may draw: any but the request-flow diagram. */
+  /** Name of a webkit scene asset a media band may draw, every one except the request-flow diagram. */
   export type MediaSplitSectionSceneName = Exclude<SceneName, 'Diagram'>
 
   /** A scene drawn in the media cell. */

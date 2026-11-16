@@ -18,7 +18,7 @@
 
   export type { SectionTitleAction }
 
-  /** A live scene drawn in a band's media cell: any webkit scene asset but the request-flow diagram. */
+  /** A live scene drawn in a band's media cell, every webkit scene asset except the request-flow diagram. */
   export type MediaSplitStackSectionScene = {
     /** Registry name of the scene. */
     component: Exclude<SceneName, 'Diagram'>
