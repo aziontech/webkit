@@ -576,71 +576,74 @@ describe('Chart', () => {
       }
     })
   })
-})
 
-describe('default Date label format', () => {
-  const HOUR = 3_600_000
-  const start = Date.UTC(2026, 10, 9)
-  const hourly = (hours: number) =>
-    Array.from({ length: hours }, (_, index) => new Date(start + index * HOUR))
-  const format = (label: Date, labels: Date[], locale = 'en-US') =>
-    formatLabel(label, locale, 'UTC', dateSpan(labels))
+  describe('default Date label format', () => {
+    const HOUR = 3_600_000
+    const start = Date.UTC(2026, 10, 9)
+    const hourly = (hours: number) =>
+      Array.from({ length: hours }, (_, index) => new Date(start + index * HOUR))
+    const format = (label: Date, labels: Date[], locale = 'en-US') =>
+      formatLabel(label, locale, 'UTC', dateSpan(labels))
 
-  it('prints the time within one day and the day at midnight', () => {
-    const day = hourly(24)
-    expect(format(day[0], day)).toBe('Nov 9')
-    expect(format(day[14], day)).toBe('14:00')
-  })
-
-  it('names the day on every label of a sub-day series that spans several days', () => {
-    const week = hourly(24 * 7)
-    expect(format(week[0], week)).toBe('Nov 9')
-    expect(format(week[28], week)).toBe('Nov 10, 04:00')
-    expect(format(week[48], week)).toBe('Nov 11')
-  })
-
-  it('prints the day for daily buckets and the month for monthly buckets', () => {
-    const daily = Array.from({ length: 14 }, (_, index) => new Date(start + index * 24 * HOUR))
-    expect(format(daily[3], daily)).toBe('Nov 12')
-    const monthly = Array.from({ length: 6 }, (_, index) => new Date(Date.UTC(2026, index, 1)))
-    expect(format(monthly[2], monthly)).toBe('Mar')
-  })
-
-  it('adds the year when the labels cross a calendar year', () => {
-    const monthly = Array.from({ length: 4 }, (_, index) => new Date(Date.UTC(2026, 10 + index, 1)))
-    expect(format(monthly[0], monthly)).toBe('Nov 2026')
-    expect(format(monthly[3], monthly)).toBe('Feb 2027')
-  })
-
-  it('follows the locale', () => {
-    const week = hourly(24 * 7)
-    expect(format(week[48], week, 'pt-BR')).toBe('11 de nov.')
-  })
-
-  it('draws day-naming ticks for a week of hourly labels', async () => {
-    const week = hourly(24 * 7)
-    const view = render({
-      render: () =>
-        h('div', { style: 'width: 640px' }, [
-          h(
-            Chart,
-            {
-              series: [{ id: 'requests', name: 'Requests', values: week.map((_, i) => i % 50) }],
-              labels: week,
-              timeZone: 'UTC',
-              ariaLabel: 'Requests'
-            },
-            { default: () => [h(ChartAxis, { type: 'x' }), h(ChartLine)] }
-          )
-        ])
+    it('prints the time within one day and the day at midnight', () => {
+      const day = hourly(24)
+      expect(format(day[0], day)).toBe('Nov 9')
+      expect(format(day[14], day)).toBe('14:00')
     })
-    await measured(view)
-    await vi.waitFor(() => {
-      const texts = [...view.getByTestId('chart-axis').querySelectorAll('text')].map(
-        (node) => node.textContent?.trim() ?? ''
+
+    it('names the day on every label of a sub-day series that spans several days', () => {
+      const week = hourly(24 * 7)
+      expect(format(week[0], week)).toBe('Nov 9')
+      expect(format(week[28], week)).toBe('Nov 10, 04:00')
+      expect(format(week[48], week)).toBe('Nov 11')
+    })
+
+    it('prints the day for daily buckets and the month for monthly buckets', () => {
+      const daily = Array.from({ length: 14 }, (_, index) => new Date(start + index * 24 * HOUR))
+      expect(format(daily[3], daily)).toBe('Nov 12')
+      const monthly = Array.from({ length: 6 }, (_, index) => new Date(Date.UTC(2026, index, 1)))
+      expect(format(monthly[2], monthly)).toBe('Mar')
+    })
+
+    it('adds the year when the labels cross a calendar year', () => {
+      const monthly = Array.from(
+        { length: 4 },
+        (_, index) => new Date(Date.UTC(2026, 10 + index, 1))
       )
-      expect(texts.length).toBeGreaterThan(1)
-      for (const text of texts) expect(text).toMatch(/^Nov \d+/)
+      expect(format(monthly[0], monthly)).toBe('Nov 2026')
+      expect(format(monthly[3], monthly)).toBe('Feb 2027')
+    })
+
+    it('follows the locale', () => {
+      const week = hourly(24 * 7)
+      expect(format(week[48], week, 'pt-BR')).toBe('11 de nov.')
+    })
+
+    it('draws day-naming ticks for a week of hourly labels', async () => {
+      const week = hourly(24 * 7)
+      const view = render({
+        render: () =>
+          h('div', { style: 'width: 640px' }, [
+            h(
+              Chart,
+              {
+                series: [{ id: 'requests', name: 'Requests', values: week.map((_, i) => i % 50) }],
+                labels: week,
+                timeZone: 'UTC',
+                ariaLabel: 'Requests'
+              },
+              { default: () => [h(ChartAxis, { type: 'x' }), h(ChartLine)] }
+            )
+          ])
+      })
+      await measured(view)
+      await vi.waitFor(() => {
+        const texts = [...view.getByTestId('chart-axis').querySelectorAll('text')].map(
+          (node) => node.textContent?.trim() ?? ''
+        )
+        expect(texts.length).toBeGreaterThan(1)
+        for (const text of texts) expect(text).toMatch(/^Nov \d+/)
+      })
     })
   })
 })
