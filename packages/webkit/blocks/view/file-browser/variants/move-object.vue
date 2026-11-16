@@ -215,7 +215,7 @@
   })
 
   const isFile = (row: FileRow) => row.kind === 'file'
-  const rowSelection = ref<Record<string, boolean>>({ 'index.html': true, '404.html': true })
+  const selectedKeys = ref<string[]>(['index.html', '404.html'])
   const sorting = ref<{ id: string; desc: boolean }[]>([])
   const compareFiles = (id: string) => (a: FileRow, b: FileRow) => {
     if (id === 'bytes') return a.bytes - b.bytes
@@ -241,11 +241,11 @@
 
   const enterFolder = (name: string) => {
     folderPath.value = [...folderPath.value, name]
-    rowSelection.value = {}
+    selectedKeys.value = []
   }
   const goUp = () => {
     folderPath.value = folderPath.value.slice(0, -1)
-    rowSelection.value = {}
+    selectedKeys.value = []
   }
   const onRowClick = (_event: MouseEvent, row: FileRow) => {
     if (row.kind === 'parent') goUp()
@@ -260,7 +260,7 @@
     event.preventDefault()
     const depth = Number(href)
     if (Number.isFinite(depth)) folderPath.value = folderPath.value.slice(0, depth)
-    rowSelection.value = {}
+    selectedKeys.value = []
   }
 
   const loading = ref(false)
@@ -396,13 +396,13 @@
     if (target === null) return
     const items = moving.value
     runMove(target, folderKey.value, items)
-    rowSelection.value = {}
+    selectedKeys.value = []
     moveOpen.value = false
   }
 
   const openFolder = (target: string) => {
     folderPath.value = target ? (target.match(/[^/]+\//g) ?? []) : []
-    rowSelection.value = {}
+    selectedKeys.value = []
   }
 
   const closeTransfer = async () => {
@@ -427,7 +427,7 @@
               ref="tableEl"
               v-model:sorting="sorting"
               v-model:global-filter="search"
-              v-model:row-selection="rowSelection"
+              v-model:selected-keys="selectedKeys"
               selectable
               :row-selectable="isFile"
               :data="sortedRows"

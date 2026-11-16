@@ -102,7 +102,7 @@
     'point-click': [event: MouseEvent | globalThis.KeyboardEvent, point: MapChartPoint]
   }>()
 
-  const activeId = defineModel<string | null>('activeId', { default: null })
+  const activeKey = defineModel<string | null>('activeKey', { default: null })
 
   defineSlots<{
     /** Replaces the default EmptyState. */
@@ -271,7 +271,7 @@
     return [...regionItems, ...pointItems]
   })
 
-  const active = computed(() => items.value.find((item) => item.id === activeId.value) ?? null)
+  const active = computed(() => items.value.find((item) => item.id === activeKey.value) ?? null)
   const total = computed(() => items.value.reduce((sum, item) => sum + item.value, 0))
 
   const hasError = computed(() => props.error.length > 0)
@@ -377,7 +377,7 @@
   onScopeDispose(cancelEnter)
 
   function setActive(id: string | null) {
-    if (activeId.value !== id) activeId.value = id
+    if (activeKey.value !== id) activeKey.value = id
   }
 
   function activate(event: MouseEvent | globalThis.KeyboardEvent, item: MapItem | null) {
@@ -389,7 +389,7 @@
   function onKeydown(event: globalThis.KeyboardEvent) {
     const last = items.value.length - 1
     if (last < 0) return
-    const at = items.value.findIndex((item) => item.id === activeId.value)
+    const at = items.value.findIndex((item) => item.id === activeKey.value)
     const key = logicalArrowKey(event.key, direction.value)
     const pick = (index: number) => setActive(items.value[index]?.id ?? null)
     if (key === 'ArrowRight' || key === 'ArrowDown') pick(at === -1 ? 0 : Math.min(last, at + 1))
@@ -412,7 +412,7 @@
     activate(event, item)
   }
 
-  const dimmed = (id: string) => activeId.value !== null && activeId.value !== id
+  const dimmed = (id: string) => activeKey.value !== null && activeKey.value !== id
 </script>
 
 <template>
@@ -425,7 +425,7 @@
     :data-empty="(!loading && !hasError && isEmpty) || null"
     :data-refetching="refetching || null"
     :data-table-view="tableView || null"
-    :data-active="activeId !== null || null"
+    :data-active="activeKey !== null || null"
     :data-geometry="regions.length ? (geometry ? 'ready' : 'loading') : null"
     :aria-busy="loading || refetching || undefined"
     class="m-0 flex min-w-0 flex-col gap-(--spacing-sm) transition-opacity duration-moderate-01 motion-reduce:transition-none data-[refetching]:opacity-60"
@@ -600,8 +600,8 @@
             :r="bubble.r"
             :fill="bubble.color"
             fill-opacity="0.75"
-            :stroke="activeId === bubble.id ? 'var(--text-default)' : 'var(--bg-surface)'"
-            :stroke-width="activeId === bubble.id ? 2 : 1"
+            :stroke="activeKey === bubble.id ? 'var(--text-default)' : 'var(--bg-surface)'"
+            :stroke-width="activeKey === bubble.id ? 2 : 1"
             vector-effect="non-scaling-stroke"
             :data-point="bubble.id"
             :data-dimmed="dimmed(bubble.id) || null"

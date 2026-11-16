@@ -40,7 +40,7 @@ In TestRun the Code document becomes a vertical `ResizableRoot`: the editor is t
 1. The heading Test run, a `StatusIndicator` (Completed, or Running with its loading dot), the run ID in code type with a `CopyButton`.
 2. The request that triggered the run and one line on its outcome (the status code and what happened).
 3. A four-column `KeyValueList` of Started, Duration, Edge location and Memory, in skeletons while the run is in flight.
-4. Trace: one sentence on how to read it, then the `Trace` waterfall bound with `v-model:selected`, so the selected span's details (service, start, duration, share, attributes) open under it. While running, a status line says the trace appears when the run finishes.
+4. Trace: one sentence on how to read it, then the `Trace` waterfall bound with `v-model:selected-key`, so the selected span's details (service, start, duration, share, attributes) open under it. While running, a status line says the trace appears when the run finishes.
 5. Logs: a `LogViewer` with `LogViewerContent` on the same clock as the trace, `copyable`, and its loading state while running.
 
 ### E. Arguments split — `ResizableRoot`, `ResizablePane`, `ResizableHandle`, `CodeEditor`, `Button` (required)

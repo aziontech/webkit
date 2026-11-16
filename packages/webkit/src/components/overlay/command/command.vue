@@ -54,8 +54,8 @@
   /** Controlled open state. Use with v-model:open; while unbound the palette starts at defaultOpen. */
   const openModel = defineModel<boolean>('open', { default: undefined as never })
 
-  /** Current page name; `''` is the first page. Use with v-model:page. */
-  const pageModel = defineModel<string>('page', { default: '' })
+  /** Current page name; `''` is the first page. Use with v-model:page-key. */
+  const pageModel = defineModel<string>('pageKey', { default: '' })
 
   defineSlots<{
     default(): unknown

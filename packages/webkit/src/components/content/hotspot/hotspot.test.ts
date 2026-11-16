@@ -36,7 +36,7 @@ const Host = defineComponent({
     return { tutorials, current, at }
   },
   template: `
-    <TutorialPanelProvider v-model:active="current" v-model:step="at" :tutorials="tutorials">
+    <TutorialPanelProvider v-model:active-key="current" v-model:step="at" :tutorials="tutorials">
       <Hotspot hotspot-id="a"><button type="button">Alpha</button></Hotspot>
       <Hotspot hotspot-id="b"><button type="button">Beta</button></Hotspot>
       <Hotspot hotspot-id="z"><button type="button">Other</button></Hotspot>
@@ -94,7 +94,7 @@ describe('Hotspot', () => {
       components: { TutorialPanelProvider, Hotspot },
       setup: () => ({ tutorials }),
       template: `
-        <TutorialPanelProvider :tutorials="tutorials" active="guide" :step="0">
+        <TutorialPanelProvider :tutorials="tutorials" active-key="guide" :step="0">
           <Hotspot hotspot-id="a" side="start"><button type="button">Alpha</button></Hotspot>
         </TutorialPanelProvider>
       `
@@ -118,7 +118,7 @@ describe('Hotspot', () => {
       components: { TutorialPanelProvider, Hotspot },
       setup: () => ({ tutorials }),
       template: `
-        <TutorialPanelProvider :tutorials="tutorials" active="guide" :step="0">
+        <TutorialPanelProvider :tutorials="tutorials" active-key="guide" :step="0">
           <Hotspot hotspot-id="a"><button type="button">Alpha</button></Hotspot>
           <Hotspot hotspot-id="b" data-testid="beta-spot"><button type="button">Beta</button></Hotspot>
         </TutorialPanelProvider>

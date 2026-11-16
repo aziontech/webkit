@@ -559,7 +559,7 @@
     level: ['Error']
   })
   const search = ref('')
-  const pagination = ref({ pageIndex: 0, pageSize: 25 })
+  const page = ref(1)
 
   const activeFieldIds = computed(() =>
     Object.keys(filters.value).filter(
@@ -606,7 +606,7 @@
   )
 
   watch(filters, () => {
-    pagination.value = { ...pagination.value, pageIndex: 0 }
+    page.value = 1
   })
 
   const loading = ref(false)
@@ -626,7 +626,7 @@
   const matchedEvents = computed(() => searchEvents(filteredEvents.value, search.value))
 
   watch(search, () => {
-    pagination.value = { ...pagination.value, pageIndex: 0 }
+    page.value = 1
   })
 
   const appliedPeriod = computed(() => filters.value.period?.[0] ?? '')
@@ -1375,7 +1375,7 @@
                 <div class="flex min-h-0 flex-1">
                   <DataTable
                     ref="tableEl"
-                    v-model:pagination="pagination"
+                    v-model:page="page"
                     :data="matchedEvents"
                     :columns="columns"
                     row-key="id"

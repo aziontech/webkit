@@ -17,13 +17,13 @@
 
   const tableEl = ref(null)
   const saved = ref(null)
-  const state = ref(null)
+  const snapshot = ref(null)
 
   const save = () => {
-    saved.value = tableEl.value?.getState() ?? null
+    saved.value = tableEl.value?.getSnapshot() ?? null
   }
   const restore = () => {
-    if (saved.value) tableEl.value?.setState(saved.value)
+    if (saved.value) tableEl.value?.setSnapshot(saved.value)
   }
 </script>
 
@@ -46,7 +46,7 @@
     </div>
     <DataTable
       ref="tableEl"
-      v-model:state="state"
+      v-model:snapshot="snapshot"
       :data="rows"
       :columns="columns"
       row-key="id"

@@ -620,7 +620,7 @@ export async function handleRequest(request, args = {}) {
                             </p>
                             <Trace
                               v-if="!running"
-                              v-model:selected="selectedSpan"
+                              v-model:selected-key="selectedSpan"
                               :spans="runSpans"
                               aria-label="Trace of the test run"
                             />

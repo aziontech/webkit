@@ -50,10 +50,8 @@
 
   /** The rows, the value the grid edits; a committed edit writes a new array with a copy of the edited row. */
   const rows = defineModel<TRow[]>({ default: () => [] })
-  /** Selected row ids, keyed by `rowKey`. */
-  const rowSelection = defineModel<Record<string, boolean>>('rowSelection', {
-    default: () => ({})
-  })
+  /** Keys of the selected rows, read from `rowKey` (v-model:selectedKeys). */
+  const selectedKeys = defineModel<string[]>('selectedKeys', { default: () => [] })
 
   defineSlots<{
     /** Action band above the grid; `add` and `remove` emit the row hooks. */
@@ -113,8 +111,9 @@
   }
   const widthsKey = computed<string>(() => JSON.stringify(widths.value))
 
+  const selectedSet = computed<Set<string>>(() => new Set(selectedKeys.value))
   const selectedRows = computed<TRow[]>(() =>
-    rows.value.filter((row) => rowSelection.value[idOf(row)])
+    rows.value.filter((row) => selectedSet.value.has(idOf(row)))
   )
   const allSelected = computed<boolean>(
     () => rows.value.length > 0 && selectedRows.value.length === rows.value.length
@@ -197,15 +196,12 @@
     const row = rows.value[index]
     if (!row) return
     const id = idOf(row)
-    const next = { ...rowSelection.value }
-    if (next[id]) delete next[id]
-    else next[id] = true
-    rowSelection.value = next
+    selectedKeys.value = selectedSet.value.has(id)
+      ? selectedKeys.value.filter((key) => key !== id)
+      : [...selectedKeys.value, id]
   }
   const toggleAll = (): void => {
-    rowSelection.value = allSelected.value
-      ? {}
-      : Object.fromEntries(rows.value.map((row) => [idOf(row), true]))
+    selectedKeys.value = allSelected.value ? [] : rows.value.map((row) => idOf(row))
   }
 
   const write = (event: Event, index: number, column: DataGridColumn, value: unknown): void => {
@@ -588,7 +584,7 @@
           :key="keyOf(row, r)"
           v-memo="[
             row,
-            rowSelection[idOf(row)],
+            selectedSet.has(idOf(row)),
             rowState(r),
             widthsKey,
             colCount,
@@ -599,8 +595,8 @@
           ]"
           role="row"
           :aria-rowindex="r + 2"
-          :aria-selected="selectable ? Boolean(rowSelection[idOf(row)]) : undefined"
-          :data-state="rowSelection[idOf(row)] ? 'selected' : null"
+          :aria-selected="selectable ? selectedSet.has(idOf(row)) : undefined"
+          :data-state="selectedSet.has(idOf(row)) ? 'selected' : null"
           :data-testid="`${testId}__row`"
           class="group/row flex border-b-(length:--border-width-default) border-solid border-(--border-default) [content-visibility:auto] [contain-intrinsic-size:auto_2.5rem] last:border-b-0"
         >
@@ -631,7 +627,7 @@
           >
             <Checkbox
               v-if="col - 1 < offset"
-              :model-value="Boolean(rowSelection[idOf(row)])"
+              :model-value="selectedSet.has(idOf(row))"
               :tabindex="-1"
               :aria-label="t('dataGrid.selectRow', { row: rowName(row, r) })"
               class="mx-auto"

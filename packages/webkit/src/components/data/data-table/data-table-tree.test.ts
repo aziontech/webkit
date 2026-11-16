@@ -33,8 +33,8 @@ const press = async (key: string): Promise<void> => {
 }
 
 const mountTree = (extra: Record<string, unknown> = {}, dir?: 'rtl') => {
-  const expanded = ref<Record<string, boolean> | true>({})
-  const selection = ref<Record<string, boolean>>({})
+  const openKeys = ref<string[]>([])
+  const selection = ref<string[]>([])
   const selectedCounts: number[] = []
   const Host = defineComponent({
     setup: () => () => {
@@ -45,10 +45,10 @@ const mountTree = (extra: Record<string, unknown> = {}, dir?: 'rtl') => {
           columns: [{ accessorKey: 'name', header: 'Name', sortable: true }],
           rowKey: 'id',
           getSubRows: (row: Record<string, unknown>) => row['children'] as Node[] | undefined,
-          expanded: expanded.value,
-          'onUpdate:expanded': (next: Record<string, boolean> | true) => (expanded.value = next),
-          rowSelection: selection.value,
-          'onUpdate:rowSelection': (next: Record<string, boolean>) => (selection.value = next),
+          openKeys: openKeys.value,
+          'onUpdate:openKeys': (next: string[]) => (openKeys.value = next),
+          selectedKeys: selection.value,
+          'onUpdate:selectedKeys': (next: string[]) => (selection.value = next),
           stackable: false,
           'aria-label': 'Accounts',
           ...extra
@@ -64,7 +64,7 @@ const mountTree = (extra: Record<string, unknown> = {}, dir?: 'rtl') => {
     }
   })
   const view = render(Host)
-  return { view, expanded, selection, selectedCounts }
+  return { view, openKeys, selection, selectedCounts }
 }
 
 afterEach(() => cleanup())
@@ -103,8 +103,8 @@ describe('DataTable', () => {
       expect(row.hasAttribute('aria-level')).toBe(false)
     })
 
-    it('expands and collapses with the pointer toggle and emits update:expanded', async () => {
-      const { view, expanded } = mountTree()
+    it('expands and collapses with the pointer toggle and emits update:openKeys', async () => {
+      const { view, openKeys } = mountTree()
       const toggles = view.getAllByTestId('data-table__expand-toggle')
       expect(toggles).toHaveLength(1)
       expect(toggles[0].closest('[data-slot="tree-gutter"]')?.getAttribute('aria-hidden')).toBe(
@@ -116,7 +116,7 @@ describe('DataTable', () => {
       expect(gutters).toHaveLength(2)
       expect(gutters[1].children).toHaveLength(0)
       await fireEvent.click(toggles[0])
-      expect(expanded.value).toEqual({ a: true })
+      expect(openKeys.value).toEqual(['a'])
       await waitFor(() => expect(ids()).toEqual(['a', 'a1', 'a2', 'b']))
       const zulu = rowOf('a1')
       expect(zulu.getAttribute('aria-level')).toBe('2')
@@ -150,7 +150,7 @@ describe('DataTable', () => {
       await press('ArrowUp')
       await waitFor(() => expect(focusedId()).toBe('a2'))
       await press(' ')
-      expect(selection.value).toEqual({ a2: true })
+      expect(selection.value).toEqual(['a2'])
       await press('Home')
       await waitFor(() => expect(focusedId()).toBe('a'))
       expect(rowOf('a').getAttribute('tabindex')).toBe('0')
@@ -170,20 +170,20 @@ describe('DataTable', () => {
     it('selects one row at a time and reports every selected row, nested ones included', async () => {
       const { view, selection, selectedCounts } = mountTree({
         selectable: true,
-        expanded: { a: true }
+        openKeys: ['a']
       })
       await waitFor(() => expect(ids()).toEqual(['a', 'a1', 'a2', 'b']))
       const boxes = view.getAllByRole('checkbox', { name: 'Select row' })
       await fireEvent.click(boxes[0])
-      expect(selection.value).toEqual({ a: true })
+      expect(selection.value).toEqual(['a'])
       await fireEvent.click(view.getAllByRole('checkbox', { name: 'Select row' })[2])
-      expect(selection.value).toEqual({ a: true, a2: true })
+      expect(selection.value).toEqual(['a', 'a2'])
       await waitFor(() => expect(view.getByTestId('count').textContent).toBe('2'))
       expect(selectedCounts.at(-1)).toBe(2)
     })
 
     it('sorts siblings and keeps children under their parent', async () => {
-      const { view } = mountTree({ expanded: { a: true }, sorting: [{ id: 'name', desc: false }] })
+      const { view } = mountTree({ openKeys: ['a'], sorting: [{ id: 'name', desc: false }] })
       await waitFor(() => expect(ids()).toEqual(['a', 'a2', 'a1', 'b']))
       expect(view.getByRole('treegrid')).toBeTruthy()
     })

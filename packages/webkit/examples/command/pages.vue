@@ -36,7 +36,7 @@
 
   <CommandRoot
     v-model:open="open"
-    v-model:page="page"
+    v-model:page-key="page"
     shortcut=""
     @select="(event, value) => (project = String(value))"
   >

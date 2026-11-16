@@ -3,14 +3,14 @@ name: split-button
 category: action
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=477-957&m=dev
   node_id: 477:957
-checksum: ff1e36db48497e4f0a7b8cdedffae01bfdc787348d8bf5a54ec5ee101d089349
+checksum: d776610579e97febb49ed605517b6ae339a448845849aed603d99c11cf2ceff7
 created: 2026-06-30
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Split Button — Component Spec
@@ -85,9 +85,9 @@ A primary command button visually joined to a chevron toggle that opens an overl
 
 ## v-model
 
-| Model              | Type             | Default | Emits             | Notes                                                                                                                                                                                                                                                                    |
-| ------------------ | ---------------- | ------- | ----------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `v-model:selected` | `string \| null` | `null`  | `update:selected` | Value (`value`, else `label`) of the action the primary button mirrors when `updateLabelOnSelect` is on, via `defineModel('selected')`. Bind it to read or restore the mirrored action; unbound, the control keeps its own. `null` shows the default `label` and `icon`. |
+| Model                 | Type             | Default | Emits                | Notes                                                                                                                                                                                                                                                                       |
+| --------------------- | ---------------- | ------- | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:selectedKey` | `string \| null` | `null`  | `update:selectedKey` | Value (`value`, else `label`) of the action the primary button mirrors when `updateLabelOnSelect` is on, via `defineModel('selectedKey')`. Bind it to read or restore the mirrored action; unbound, the control keeps its own. `null` shows the default `label` and `icon`. |
 
 ## Events
 

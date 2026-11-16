@@ -523,7 +523,7 @@
   const appliedQuery = ref<PropertyFilterQuery>(initialQuery)
   const appliedText = ref(queryText.value)
   const queryNotice = ref('')
-  const pagination = ref({ pageIndex: 0, pageSize: 25 })
+  const page = ref(1)
 
   const recentLimit = 8
 
@@ -553,7 +553,7 @@
     queryNotice.value = ''
     appliedQuery.value = query
     appliedText.value = text.trim()
-    pagination.value = { ...pagination.value, pageIndex: 0 }
+    page.value = 1
     if (!appliedText.value) return
     recentQueries.value = [
       { text: appliedText.value, query },
@@ -701,7 +701,7 @@
   )
 
   watch(range, () => {
-    pagination.value = { ...pagination.value, pageIndex: 0 }
+    page.value = 1
   })
 
   const loading = ref(false)
@@ -1641,7 +1641,7 @@
                 <div class="flex min-h-0 flex-1">
                   <DataTable
                     ref="tableEl"
-                    v-model:pagination="pagination"
+                    v-model:page="page"
                     :data="matchedEvents"
                     :columns="columns"
                     row-key="id"

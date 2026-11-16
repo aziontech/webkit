@@ -58,7 +58,7 @@ const Page = defineComponent({
   },
   template: `
     <TutorialPanelProvider
-      v-model:active="active"
+      v-model:active-key="active"
       v-model:step="step"
       :tutorials="list"
       @start="(event, id) => log('start', event, id)"

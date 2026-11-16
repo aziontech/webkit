@@ -172,7 +172,7 @@
   const latestId = 'ANWDC7RA'
 
   const search = ref('')
-  const pagination = ref({ pageIndex: 0, pageSize: 10 })
+  const page = ref(1)
   const tableEl = ref<TableExposed | null>(null)
   const columnVisibility = ref({})
 
@@ -296,7 +296,7 @@
                 <template #default>
                   <DataTable
                     ref="tableEl"
-                    v-model:pagination="pagination"
+                    v-model:page="page"
                     v-model:globalFilter="search"
                     v-model:columnVisibility="columnVisibility"
                     :data="versions"

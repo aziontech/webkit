@@ -62,8 +62,8 @@ const Harness = defineComponent({
         selectable: true,
         openKeys: expanded.value,
         'onUpdate:openKeys': (value: string[]) => (expanded.value = value),
-        selected: selected.value,
-        'onUpdate:selected': (value: string) => (selected.value = value)
+        selectedKey: selected.value,
+        'onUpdate:selectedKey': (value: string) => (selected.value = value)
       }),
       h('output', { 'data-testid': 'state' }, `${expanded.value.join(',')}|${selected.value}`),
       h('button', { type: 'button', onClick: () => (expanded.value = []) }, 'Collapse all')
@@ -218,7 +218,7 @@ describe('Tree', () => {
     await userEvent.keyboard('{Enter}')
     await userEvent.keyboard(' ')
     expect(view.emitted()['item-click']).toBeUndefined()
-    expect(view.emitted()['update:selected']).toBeUndefined()
+    expect(view.emitted()['update:selectedKey']).toBeUndefined()
     expect(node(view.container, LOCKED.id).getAttribute('aria-selected')).toBe('false')
   })
 
@@ -243,23 +243,23 @@ describe('Tree', () => {
     const view = mount({ selectable: true })
     expect(node(view.container, 'src').getAttribute('aria-selected')).toBe('false')
     await userEvent.click(view.getByText('src'))
-    expect(view.emitted()['update:selected']).toEqual([['src']])
+    expect(view.emitted()['update:selectedKey']).toEqual([['src']])
     expect(node(view.container, 'src').getAttribute('aria-selected')).toBe('true')
     expect(rowOf(view.container, 'src').hasAttribute('data-selected')).toBe(true)
     expect(view.emitted()['item-click']).toHaveLength(1)
     await userEvent.click(view.getByText('src'))
-    expect(view.emitted()['update:selected']).toHaveLength(1)
+    expect(view.emitted()['update:selectedKey']).toHaveLength(1)
     expect(view.emitted()['item-click']).toHaveLength(2)
   })
 
   it('does not read or write the selection while not selectable', async () => {
-    const view = mount({ selected: 'src' })
+    const view = mount({ selectedKey: 'src' })
     expect(node(view.container, 'src').hasAttribute('aria-selected')).toBe(false)
     await userEvent.click(view.getByText(CONFIG.label))
-    expect(view.emitted()['update:selected']).toBeUndefined()
+    expect(view.emitted()['update:selectedKey']).toBeUndefined()
   })
 
-  it('round-trips v-model:openKeys and v-model:selected', async () => {
+  it('round-trips v-model:openKeys and v-model:selectedKey', async () => {
     const view = render(Harness)
     const state = view.getByTestId('state')
     node(view.container, 'assets').focus()
@@ -411,7 +411,7 @@ describe('Tree', () => {
     it('activates a row by click and Enter, and a button click does not', async () => {
       const view = withActions({ selectable: true })
       await userEvent.click(rowOf(view.container, CONFIG.id))
-      expect(view.emitted()['update:selected']?.at(-1)).toEqual([CONFIG.id])
+      expect(view.emitted()['update:selectedKey']?.at(-1)).toEqual([CONFIG.id])
       await userEvent.click(view.getByRole('button', { name: 'Delete src' }))
       expect(view.emitted()['item-click']).toHaveLength(1)
     })
@@ -479,7 +479,7 @@ describe('Tree', () => {
     const plain = mount()
     await expectNoA11yViolations(plain.container)
     plain.unmount()
-    const nested = mount({ selectable: true, selected: LOGO.id, openKeys: ['assets', IMG.id] })
+    const nested = mount({ selectable: true, selectedKey: LOGO.id, openKeys: ['assets', IMG.id] })
     await expectNoA11yViolations(nested.container)
     nested.unmount()
     const loading = mount({ loading: true })

@@ -231,14 +231,14 @@ describe('SplitButton', () => {
       expect(options()).toHaveLength(0)
     })
 
-    it('emits update:selected and restores the mirrored action from v-model:selected', async () => {
+    it('emits update:selectedKey and restores the mirrored action from v-model:selectedKey', async () => {
       const view = render(SplitButton, {
-        props: { label: 'Deploy', items: model, updateLabelOnSelect: true, selected: 'staging' }
+        props: { label: 'Deploy', items: model, updateLabelOnSelect: true, selectedKey: 'staging' }
       })
       expect(view.getByTestId('split-button__primary').textContent).toContain('Deploy to staging')
       await openMenu(view)
       await fireEvent.click(options()[1])
-      expect(view.emitted('update:selected')?.[0]).toEqual(['Deploy preview'])
+      expect(view.emitted('update:selectedKey')?.[0]).toEqual(['Deploy preview'])
     })
 
     // ---- Suppression: disabled / loading ---------------------------------------------

@@ -674,7 +674,7 @@
           />
           <Trace
             :key="run.id"
-            v-model:selected="selectedSpan"
+            v-model:selected-key="selectedSpan"
             :spans="run.spans"
             :aria-label="`Trace of ${run.id}`"
           />

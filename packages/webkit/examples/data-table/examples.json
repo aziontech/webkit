@@ -9,7 +9,7 @@
     },
     {
       "name": "WithCheckboxes",
-      "summary": "A leading selection column (`selectable`): each row gets a checkbox and the header gets a select-all box that reflects the all/none/indeterminate state. Selection is exposed via `v-model:row-selection`; changes log to the Actions panel.",
+      "summary": "A leading selection column (`selectable`): each row gets a checkbox and the header gets a select-all box that reflects the all/none/indeterminate state. Selection is exposed via `v-model:selected-keys`; changes log to the Actions panel.",
       "file": "with-checkboxes.vue"
     },
     {
@@ -19,7 +19,7 @@
     },
     {
       "name": "SelectedRow",
-      "summary": "A row in the selected state: the second row is pre-selected via `v-model:row-selection`, rendering the `var(--bg-selected)` surface and `aria-selected`. With `select-on-row-click`, clicking anywhere on an inert part of a row toggles its selection.",
+      "summary": "A row in the selected state: the second row is pre-selected via `v-model:selected-keys`, rendering the `var(--bg-selected)` surface and `aria-selected`. With `select-on-row-click`, clicking anywhere on an inert part of a row toggles its selection.",
       "file": "selected-row.vue"
     },
     {
@@ -79,7 +79,7 @@
     },
     {
       "name": "TreeRows",
-      "summary": "Hierarchical rows: `get-sub-rows` returns each row's children, which open under a chevron in the principal column, indented one step per level. The grid becomes a `treegrid` (`aria-level`, `aria-expanded`, `aria-setsize`, `aria-posinset`) with one row in the tab order: Arrow Up and Arrow Down move between rows, Arrow Right opens a row or enters it, Arrow Left closes it or goes to the parent, Enter toggles it and Space selects it. `v-model:expanded` holds the open rows; selection stays per row.",
+      "summary": "Hierarchical rows: `get-sub-rows` returns each row's children, which open under a chevron in the principal column, indented one step per level. The grid becomes a `treegrid` (`aria-level`, `aria-expanded`, `aria-setsize`, `aria-posinset`) with one row in the tab order: Arrow Up and Arrow Down move between rows, Arrow Right opens a row or enters it, Arrow Left closes it or goes to the parent, Enter toggles it and Space selects it. `v-model:open-keys` holds the open rows; selection stays per row.",
       "file": "tree-rows.vue"
     },
     {
@@ -114,7 +114,7 @@
     },
     {
       "name": "SerializableState",
-      "summary": "`getState()` saves the sort, page, visible columns and filters as a plain object and `setState()` restores it, while `v-model:state` mirrors every change; the app keeps the snapshot in the URL or storage.",
+      "summary": "`getSnapshot()` saves the sort, page, visible columns and filters as a plain object and `setSnapshot()` restores it, while `v-model:snapshot` mirrors every change; the app keeps the snapshot in the URL or storage.",
       "file": "serializable-state.vue"
     },
     {

@@ -26,7 +26,7 @@
     loading?: boolean
   }
 
-  /** Selection model: single writes v-model:selected, multiple writes v-model:selected-keys. */
+  /** Selection model: single writes v-model:selected-key, multiple writes v-model:selected-keys. */
   export type TreeSelectable = 'single' | 'multiple'
 
   /** Payload of the rename event: the node and its new, trimmed label. */
@@ -35,7 +35,7 @@
   export interface TreeProps {
     /** Nodes to render; a node with a non-empty children array is a parent. */
     items?: TreeItem[]
-    /** Enables selection: true or single writes one id to v-model:selected; multiple writes ids to v-model:selected-keys. */
+    /** Enables selection: true or single writes one id to v-model:selected-key; multiple writes ids to v-model:selected-keys. */
     selectable?: boolean | TreeSelectable
     /** Lets the user rename a node in place with F2, or through the exposed startRename. */
     editable?: boolean
@@ -72,7 +72,7 @@
   const openKeys = defineModel<string[]>('openKeys', { default: () => [] })
 
   /** Id of the selected node; empty when nothing is selected. */
-  const selected = defineModel<string>('selected', { default: '' })
+  const selectedKey = defineModel<string>('selectedKey', { default: '' })
 
   /** Ids of the selected nodes while selectable is multiple. */
   const selectedKeys = defineModel<string[]>('selectedKeys', { default: () => [] })
@@ -103,7 +103,7 @@
   const selectedSet = computed(() => new Set(mode.value === 'multiple' ? selectedKeys.value : []))
 
   const activeSelection = computed(() => {
-    if (mode.value === 'single') return selected.value
+    if (mode.value === 'single') return selectedKey.value
     if (mode.value === 'multiple') return selectedKeys.value[0] ?? ''
     return ''
   })
@@ -145,7 +145,7 @@
 
   function isSelected(id: string) {
     if (mode.value === 'multiple') return selectedSet.value.has(id)
-    return mode.value === 'single' && selected.value !== '' && selected.value === id
+    return mode.value === 'single' && selectedKey.value !== '' && selectedKey.value === id
   }
 
   function isEnabled(id: string) {
@@ -214,7 +214,7 @@
   function activate(event: MouseEvent | KeyboardEvent, id: string) {
     const entry = navigation.entry(id)
     if (!entry || entry.item.disabled) return
-    if (mode.value === 'single' && selected.value !== id) selected.value = id
+    if (mode.value === 'single' && selectedKey.value !== id) selectedKey.value = id
     if (mode.value === 'multiple') selectMultiple(event, id)
     emit('item-click', event, entry.item)
   }

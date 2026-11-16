@@ -3,11 +3,11 @@ name: command
 category: overlay
 structure: composition
 status: implemented
-spec_version: 11
+spec_version: 12
 template: 2
-checksum: 81ab2a70fbaee017d22d742ef650ea6e0b3fb3e62b749f3b089454bc3e9fceeb
+checksum: 0de13708f630c19aef7a772807e74adaa58bb99384ccc19a0edbc598a837796b
 created: 2026-07-23
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Command Menu — Component Spec
@@ -167,7 +167,7 @@ packages/webkit/src/components/overlay/command/
   - Props: _none_.
   - Events: _none_.
   - Slots: _none_.
-- `command-page/command-page.vue` — a nested list the palette swaps in when an item with a matching `page` is activated (or when `v-model:page` is set to its `name`). Renders its content only while it is the current page, inside a `display: contents` wrapper so its groups and items rank like top-level ones; every item, group and separator outside any page belongs to the first page and hides while a nested page is open. Pages are siblings inside the list; opening one pushes onto a single stack, and going back pops it. Registers its `heading` with the root so the input's back control can name it.
+- `command-page/command-page.vue` — a nested list the palette swaps in when an item with a matching `page` is activated (or when `v-model:pageKey` is set to its `name`). Renders its content only while it is the current page, inside a `display: contents` wrapper so its groups and items rank like top-level ones; every item, group and separator outside any page belongs to the first page and hides while a nested page is open. Pages are siblings inside the list; opening one pushes onto a single stack, and going back pops it. Registers its `heading` with the root so the input's back control can name it.
   - Props: `name: string` (required) — the identifier items open with `page="…"`. `title: string` default `''` — the page title shown in the back control; empty falls back to `name`.
   - Events: _none_.
   - Slots: `default` — the page's `<Command.Group>` / `<Command.Item>` / `<Command.Separator>`.
@@ -182,10 +182,10 @@ packages/webkit/src/components/overlay/command/
 
 ## v-model
 
-| Model          | Type      | Default     | Emits         | Notes                                                                                                                                                                                                                                                                                                                      |
-| -------------- | --------- | ----------- | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `v-model:open` | `boolean` | `undefined` | `update:open` | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (trigger, the `shortcut`, item activation, `Esc`, backdrop click). While unbound the palette is uncontrolled and starts at `defaultOpen`.            |
-| `v-model:page` | `string`  | `''`        | `update:page` | The current page via `defineModel('page')`; `''` is the first page. Item activation with `page`, the back control, `Backspace` in an empty field and `Esc` on a nested page update it. Set it before opening to open straight on a page; otherwise each opening starts on the first page. Changing pages clears the query. |
+| Model             | Type      | Default     | Emits            | Notes                                                                                                                                                                                                                                                                                                                         |
+| ----------------- | --------- | ----------- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `v-model:open`    | `boolean` | `undefined` | `update:open`    | Open state via `defineModel('open')`, the only declaration of `open`, so `@update:open` is typed `(value: boolean) => void` and fires once per open/closed transition (trigger, the `shortcut`, item activation, `Esc`, backdrop click). While unbound the palette is uncontrolled and starts at `defaultOpen`.               |
+| `v-model:pageKey` | `string`  | `''`        | `update:pageKey` | The current page via `defineModel('pageKey')`; `''` is the first page. Item activation with `page`, the back control, `Backspace` in an empty field and `Esc` on a nested page update it. Set it before opening to open straight on a page; otherwise each opening starts on the first page. Changing pages clears the query. |
 
 ## Events
 
@@ -304,7 +304,7 @@ Composition component with no `variant`/`size` axis. Every story starts **closed
 - Empty — the palette with no matching items, showing the `<Command.Empty>` state. Required because the empty state is a distinct visual state (the `empty` state in the States table) with no other coverage.
 - Disabled — a group containing a disabled item alongside enabled ones. Required because `disabled` is public Item API and the disabled row is a distinct state.
 - Ranking — items with `keywords` and labels that match the same query at different strengths, so typing (`set`, `dpl`, `team`) shows the ranked order, the regrouped sections and the highlighted characters. Required because ranking, `keywords` and the highlight are public behavior with no other coverage.
-- Pages — an item with `page` opening a "Switch project" `<Command.Page>`, with the back control in the search bar. Required because `Page`, the item `page` prop and `v-model:page` have no other coverage.
+- Pages — an item with `page` opening a "Switch project" `<Command.Page>`, with the back control in the search bar. Required because `Page`, the item `page` prop and `v-model:pageKey` have no other coverage.
 
 ## Constraints — DO NOT
 

@@ -3,11 +3,11 @@ name: map-chart
 category: chart
 structure: monolithic
 status: implemented
-spec_version: 2
+spec_version: 3
 template: 2
-checksum: d954abdc0da04be359310c40406ad8e8e009bb327847a49684eca6b45ee8b436
+checksum: 7f244da8a80f2ef3f2a281338f8ffdcbb43658683d59a55f0f87a93dcdd9727b
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # MapChart — Component Spec
@@ -38,7 +38,7 @@ Values by place on the dotted world map of `NetworkMap`: countries shaded on a f
 
 - Pair the map with a ranked list or a table: the map shows where, the list shows how much.
 - Pass ISO 3166-1 alpha-2 codes as region ids; names come from the locale (`Intl.DisplayNames`) unless you pass `name`.
-- Keep region and point ids distinct: `v-model:activeId` holds one of them.
+- Keep region and point ids distinct: `v-model:activeKey` holds one of them.
 - Give points a status color only when the color means a state; otherwise leave the series slot.
 
 ## Usage
@@ -84,9 +84,9 @@ Values by place on the dotted world map of `NetworkMap`: countries shaded on a f
 
 ## v-model
 
-| Model              | Type             | Default | Emits             | Notes                                                    |
-| ------------------ | ---------------- | ------- | ----------------- | -------------------------------------------------------- |
-| `v-model:activeId` | `string \| null` | `null`  | `update:activeId` | The region or point under the pointer or keyboard focus. |
+| Model               | Type             | Default | Emits              | Notes                                                    |
+| ------------------- | ---------------- | ------- | ------------------ | -------------------------------------------------------- |
+| `v-model:activeKey` | `string \| null` | `null`  | `update:activeKey` | The region or point under the pointer or keyboard focus. |
 
 ## Events
 

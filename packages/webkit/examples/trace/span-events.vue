@@ -49,7 +49,7 @@
 
 <template>
   <Trace
-    v-model:selected="selected"
+    v-model:selected-key="selected"
     :spans="spans"
     highlight-slowest
     aria-label="Trace of the test run"

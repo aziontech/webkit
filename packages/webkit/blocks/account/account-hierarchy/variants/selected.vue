@@ -191,7 +191,7 @@
   const selectedCount = computed(() => selected.value.length)
   const focused = computed(() => (selectedCount.value === 1 ? selected.value[0] : null))
   const clearSelection = () => {
-    selection.value = {}
+    selection.value = []
   }
 
   const descendantsOf = (id: string): Resource[] => {
@@ -319,7 +319,7 @@
     )
     const before = resources.value
     resources.value = resources.value.filter((item) => !ids.has(item.id))
-    selection.value = {}
+    selection.value = []
     deleteOpen.value = false
     toast.success(`${plural(ids.size, 'resource', 'resources')} scheduled for deletion.`, {
       description: 'They stay in Resources pending deletion for 30 days.',
@@ -360,7 +360,7 @@
     const item = resources.value.find((entry) => entry.id === row.id)
     if (!item) return
     if (value === 'details') {
-      selection.value = { [item.id]: true }
+      selection.value = [item.id]
       detailsOpen.value = true
     }
     if (value === 'move') openMove([item])
@@ -557,8 +557,8 @@
             >
               <template #default>
                 <DataTable
-                  v-model:expanded="tableExpanded"
-                  v-model:row-selection="selection"
+                  v-model:open-keys="tableExpanded"
+                  v-model:selected-keys="selection"
                   :data="visibleTree"
                   paginated
                   :page-size="25"

@@ -15,8 +15,8 @@
     void table.value?.exportCsv({ filename: 'domains.csv', rows: domains })
   }
   const resetSearch = (): void => {
-    const state = table.value?.getState()
-    table.value?.setState({ ...state, globalFilter: '' })
+    const state = table.value?.getSnapshot()
+    table.value?.setSnapshot({ ...state, globalFilter: '' })
     table.value?.clearFilters()
     table.value?.reload()
     // @ts-expect-error the raw TanStack instance is not on the ref
