@@ -649,7 +649,7 @@
     >
       <div
         v-if="copyable"
-        class="absolute right-(--spacing-sm) top-(--spacing-sm) z-2 data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2"
+        class="absolute right-0 top-0 z-2 bg-(--bg-surface) pt-(--spacing-sm) pr-(--spacing-sm) pl-(--spacing-xs) data-[single-line]:top-1/2 data-[single-line]:-translate-y-1/2 data-[single-line]:pt-0"
         :data-single-line="isSingleLine || null"
         :data-testid="`${testId}__copy-anchor`"
       >
