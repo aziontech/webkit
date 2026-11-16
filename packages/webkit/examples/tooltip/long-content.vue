@@ -6,7 +6,7 @@
 <template>
   <Tooltip
     content="This tooltip contains a longer message that wraps across multiple lines when it exceeds the maximum width of the panel."
-    placement="top"
+    side="top"
   >
     <IconButton
       icon="ai ai-circle-info"

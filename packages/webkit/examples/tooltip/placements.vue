@@ -6,45 +6,45 @@
 <template>
   <div class="flex flex-wrap items-center justify-center gap-(--spacing-8) p-(--spacing-8)">
     <Tooltip
-      content="top placement"
-      placement="top"
+      content="top side"
+      side="top"
     >
       <IconButton
         icon="ai ai-arrow-up"
-        aria-label="top placement"
+        aria-label="top side"
         variant="outline"
         size="medium"
       />
     </Tooltip>
     <Tooltip
-      content="right placement"
-      placement="right"
+      content="end side"
+      side="end"
     >
       <IconButton
         icon="ai ai-arrow-right"
-        aria-label="right placement"
+        aria-label="end side"
         variant="outline"
         size="medium"
       />
     </Tooltip>
     <Tooltip
-      content="bottom placement"
-      placement="bottom"
+      content="bottom side"
+      side="bottom"
     >
       <IconButton
         icon="ai ai-arrow-down"
-        aria-label="bottom placement"
+        aria-label="bottom side"
         variant="outline"
         size="medium"
       />
     </Tooltip>
     <Tooltip
-      content="left placement"
-      placement="left"
+      content="start side"
+      side="start"
     >
       <IconButton
         icon="ai ai-arrow-left"
-        aria-label="left placement"
+        aria-label="start side"
         variant="outline"
         size="medium"
       />

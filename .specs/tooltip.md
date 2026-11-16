@@ -3,13 +3,13 @@ name: tooltip
 category: overlay
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4281-4543
   node_id: 4281:4543
-checksum: 702d670cfa1622ede1bb091bd52660497d86294c76f5b8e344145200fb67baf0
+checksum: 8e20ae00709bcfbde87bbbd5ca29f5067e05cbb62c91d75a3c9bfbf96c895659
 created: 2026-06-02
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Tooltip — Component Spec
@@ -59,7 +59,7 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 <template>
   <Tooltip
     content="Delete"
-    placement="top"
+    side="top"
   >
     <IconButton
       icon="ai ai-trash"
@@ -71,13 +71,15 @@ Surfaces a short hint anchored to a trigger element when the user hovers, focuse
 
 ## Props
 
-| Prop          | Type                                               | Default | Required | JSDoc                                                                 |
-| ------------- | -------------------------------------------------- | ------- | -------- | --------------------------------------------------------------------- |
-| `content`     | `string`                                           | —       | true     | Plain text shown inside the tooltip.                                  |
-| `placement`   | `'top' \| 'right' \| 'bottom' \| 'left' \| 'auto'` | `'top'` | false    | Anchor side relative to the trigger; `auto` picks the side with room. |
-| `delay`       | `number`                                           | `200`   | false    | Hover-open delay in milliseconds.                                     |
-| `disabled`    | `boolean`                                          | `false` | false    | Disables tooltip activation.                                          |
-| `defaultOpen` | `boolean`                                          | `false` | false    | Initial open state when uncontrolled.                                 |
+| Prop          | Type                                              | Default    | Required | JSDoc                                                                                                                            |
+| ------------- | ------------------------------------------------- | ---------- | -------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `content`     | `string`                                          | —          | true     | Plain text shown inside the tooltip.                                                                                             |
+| `side`        | `'top' \| 'bottom' \| 'start' \| 'end' \| 'auto'` | `'top'`    | false    | Side of the trigger the tooltip opens on, flipped when it does not fit; `'auto'` picks the side with the most room at open time. |
+| `align`       | `'start' \| 'center' \| 'end'`                    | `'center'` | false    | Alignment along the trigger edge.                                                                                                |
+| `sideOffset`  | `number`                                          | `8`        | false    | Pixel gap between the trigger and the tooltip.                                                                                   |
+| `delay`       | `number`                                          | `200`      | false    | Hover-open delay in milliseconds.                                                                                                |
+| `disabled`    | `boolean`                                         | `false`    | false    | Disables tooltip activation.                                                                                                     |
+| `defaultOpen` | `boolean`                                         | `false`    | false    | Initial open state when uncontrolled.                                                                                            |
 
 ## v-model
 
@@ -100,7 +102,9 @@ _No events of its own: `v-model:open` emits `update:open` (6.0 removed the `show
 - Visual states: `default`, `hover`, `focus-visible`, `disabled`
 - `data-state` values: `open` | `closed`
 - `data-disabled` mirrors the `disabled` prop
-- `data-placement`: `top` | `right` | `bottom` | `left`
+- `data-side`: `top` | `bottom` | `start` | `end` — the side the panel landed on after flipping, on the trigger wrapper and the panel
+- `data-align`: `start` | `center` | `end` — the alignment the panel landed on
+- `start` and `end` follow the text direction: under `dir="rtl"`, `side="start"` opens on the right and `align="start"` lines the panel up with the trigger's right edge
 - `data-anchored` on the panel once its opening position has landed — the flag that lets a re-anchor animate while the entrance stays the open animation
 
 ## Motion & Animations
@@ -111,7 +115,7 @@ _No events of its own: `v-model:open` emits `update:open` (6.0 removed the `show
 | close                                        | `animate-popup-scale-out`                                                                    | semantic (110ms · cubic-bezier)                 | `motion-reduce:animate-none` (instant) |
 | re-anchor while open (the text changed size) | `transition-[translate] duration-fast-02 ease-productive-entrance`, gated on `data-anchored` | `duration-fast-02` · `ease-productive-entrance` | `motion-reduce:transition-none`        |
 
-`--popup-origin` is set per instance based on `placement` (e.g. `top` → `bottom center`).
+`--popup-origin` is set per instance from the resolved side and alignment (e.g. `top` → `bottom center`).
 
 The panel is positioned with the standalone **`translate`** property, never `top`/`left` — that is what lets a re-anchor be a compositor transition, and it keeps the position independent of the `transform: scale()` the open and close animations use. A tooltip whose text changes while it is up (the copy control swapping `Copy` for `Copied` under the pointer) therefore glides back onto its trigger's centre instead of jumping: measured 21px of width lost, 10.4px off-centre, snapped in one frame before this. The entrance is deliberately excluded — `data-anchored` is only set one frame after the opening placement, so the panel scales in where it belongs rather than travelling in from the off-screen seed.
 
@@ -151,7 +155,7 @@ The panel is positioned with the standalone **`translate`** property, never `top
 ## Examples
 
 - Default — tooltip rendered **closed**; viewer hovers/focuses the trigger to see it open.
-- Placements — composite story with all four placements (top/right/bottom/left) side-by-side; each instance defaults to **closed**.
+- Sides — composite story with all four sides (top/end/bottom/start) side-by-side; each instance defaults to **closed**.
 - Disabled — trigger present, tooltip activation no-op.
 
 ## Constraints — DO NOT
