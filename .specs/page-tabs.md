@@ -3,11 +3,11 @@ name: page-tabs
 category: navigation
 structure: monolithic
 status: implemented
-checksum: 5fada3de2e92c62ba9de425f7b4d54a5c2d3f24a8b9be9a877ca457bfef7fa81
-spec_version: 7
+checksum: 82837f1e85e6b769a2dc28fa160a25c18e626009ed3202f7ea31b51cce68f925
+spec_version: 8
 template: 2
 created: 2026-11-10
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # PageTabs — Component Spec
@@ -80,6 +80,7 @@ The second-level navigation strip of a resource detail page: a full-bleed bar ru
 | Prop     | Type                                      | Default  | Required | JSDoc                                                                                                    |
 | -------- | ----------------------------------------- | -------- | -------- | -------------------------------------------------------------------------------------------------------- |
 | `column` | `'full' \| 'data' \| 'form' \| 'focused'` | `'full'` | false    | The page column the tab row lines up with: the full width, or the data, form or focused column below it. |
+| `align`  | `'start' \| 'center'`                     | `'start'` | false    | Where the tab triggers sit in the row: at the start edge, or centred. Passed to `Tabs.List`. |
 
 ## v-model
 
