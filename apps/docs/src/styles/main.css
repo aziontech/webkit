@@ -77,5 +77,5 @@ body {
   resize: horizontal;
   overflow: hidden;
   max-width: 100%;
-  min-width: 320px;
+  min-width: min(320px, 100%);
 }
