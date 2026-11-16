@@ -164,16 +164,17 @@
 
   const bandHref = computed(() => (props.linked && lone.value ? lone.value.href : ''))
 
-  watch(
-    () => Boolean(props.title) && !hasMedia.value,
-    (bare) => {
-      if (dev && bare)
-        console.warn(
-          `[webkit] <MediaSplitSection>: the band "${props.title}" has no media. Give it an illustration, an image or a scene; code goes in FeatureScrollSection and a request-flow diagram in ConsoleShowcaseSection.`
-        )
-    },
-    { immediate: true }
-  )
+  if (dev)
+    watch(
+      () => Boolean(props.title) && !hasMedia.value,
+      (bare) => {
+        if (bare)
+          console.warn(
+            `[webkit] <MediaSplitSection>: the band "${props.title}" has no media. Give it an illustration, an image or a scene; code goes in FeatureScrollSection and a request-flow diagram in ConsoleShowcaseSection.`
+          )
+      },
+      { immediate: true }
+    )
 
   const actionIcon = (action: MediaSplitSectionAction): string =>
     action.trailing ? 'ai ai-chevron-right' : (action.icon ?? '')

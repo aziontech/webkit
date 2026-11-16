@@ -146,16 +146,17 @@
       .map((band) => band.title)
   )
 
-  watch(
-    bare,
-    (titles) => {
-      if (dev && titles.length)
-        console.warn(
-          `[webkit] <MediaSplitStackSection>: ${titles.map((title) => `"${title}"`).join(', ')} has no picture. Give every band an illustration, an image or a scene; a request-flow diagram goes in ConsoleShowcaseSection.`
-        )
-    },
-    { immediate: true }
-  )
+  if (dev)
+    watch(
+      bare,
+      (titles) => {
+        if (titles.length)
+          console.warn(
+            `[webkit] <MediaSplitStackSection>: ${titles.map((title) => `"${title}"`).join(', ')} has no picture. Give every band an illustration, an image or a scene; a request-flow diagram goes in ConsoleShowcaseSection.`
+          )
+      },
+      { immediate: true }
+    )
 
   const bandHref = (band: MediaSplitStackSectionBandFields) => band.href || band.action?.href || ''
 
