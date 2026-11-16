@@ -723,6 +723,8 @@
   --accent-mask: #0072F51A;
   --accent-selected: #005FCC;
   --accent-foreground: #FFFFFF;
+  --brand-blue: #0072F5;
+  --brand-blue-foreground: #FFFFFF;
   --bg-canvas: #F5F5F5;
   --bg-surface: #FFFFFF;
   --bg-surface-raised: #FFFFFF;
@@ -840,6 +842,8 @@
   --accent-mask: #0072F51A;
   --accent-selected: #99C9FF;
   --accent-foreground: #000000;
+  --brand-blue: #0072F5;
+  --brand-blue-foreground: #FFFFFF;
   --bg-canvas: #000000;
   --bg-surface: #0A0A0A;
   --bg-surface-raised: #141414;
@@ -965,6 +969,8 @@
     --accent-mask: #0072F51A;
     --accent-selected: #99C9FF;
     --accent-foreground: #000000;
+    --brand-blue: #0072F5;
+    --brand-blue-foreground: #FFFFFF;
     --bg-canvas: #000000;
     --bg-surface: #0A0A0A;
     --bg-surface-raised: #141414;
@@ -1577,6 +1583,12 @@
 @utility bg-accent-foreground { background-color: var(--accent-foreground); }
 @utility text-accent-foreground { color: var(--accent-foreground); }
 @utility border-accent-foreground { border-color: var(--accent-foreground); }
+@utility bg-brand-blue { background-color: var(--brand-blue); }
+@utility text-brand-blue { color: var(--brand-blue); }
+@utility border-brand-blue { border-color: var(--brand-blue); }
+@utility bg-brand-blue-foreground { background-color: var(--brand-blue-foreground); }
+@utility text-brand-blue-foreground { color: var(--brand-blue-foreground); }
+@utility border-brand-blue-foreground { border-color: var(--brand-blue-foreground); }
 @utility bg-canvas { background-color: var(--bg-canvas); }
 @utility bg-surface { background-color: var(--bg-surface); }
 @utility bg-surface-raised { background-color: var(--bg-surface-raised); }
