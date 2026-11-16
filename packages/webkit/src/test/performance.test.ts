@@ -225,6 +225,35 @@ function treeCase(expandAll = false): Case {
   }
 }
 
+function treeExpandedCase(): Case {
+  const items = Array.from({ length: 20 }, (_, f) => ({
+    id: `f${f}`,
+    label: `folder-${f}`,
+    icon: 'ai ai-folder',
+    children: Array.from({ length: 49 }, (_, c) => ({
+      id: `f${f}/c${c}`,
+      label: `file-${c}.txt`,
+      icon: 'ai ai-file',
+      description: `${c} KB`
+    }))
+  }))
+  const expanded = ref<string[]>(items.map((item) => item.id))
+  return {
+    mount: () => ({
+      render: () =>
+        h(Tree, {
+          items,
+          openKeys: expanded.value,
+          'onUpdate:openKeys': (v: string[]) => (expanded.value = v),
+          ariaLabel: 'Objects'
+        })
+    }),
+    update: () => {
+      expanded.value = []
+    }
+  }
+}
+
 function treeMultiSelectCase(): Case {
   const items = Array.from({ length: 50 }, (_, f) => ({
     id: `f${f}`,
@@ -1352,6 +1381,9 @@ describe('runtime budgets (perf-budgets.json)', () => {
   })
   it('Tree with 5k nodes all expanded: collapse one folder', async () => {
     check('tree-5k-expanded', await measure(() => treeCase(true)))
+  })
+  it('Tree with 1k nodes all expanded: mount and collapse all', async () => {
+    check('tree-1k-expanded', await measure(treeExpandedCase))
   })
   it('Tree with 5k nodes, 1k visible: select all in multi-select', async () => {
     check('tree-5k-multi-select', await measure(treeMultiSelectCase))

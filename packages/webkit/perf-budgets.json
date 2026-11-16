@@ -17,13 +17,18 @@
       "update_is": "expand two folders of 99 nodes (50 folders rendered collapsed at mount, about 250 rows after)"
     },
     "tree-5k-expanded": {
-      "mount": 1200,
+      "mount": 90,
       "update": 50,
       "update_is": "collapse one of 50 expanded folders of 99 nodes"
     },
+    "tree-1k-expanded": {
+      "mount": 55,
+      "update": 25,
+      "update_is": "collapse all 20 folders of 49 nodes"
+    },
     "tree-5k-multi-select": {
-      "mount": 320,
-      "update": 160,
+      "mount": 70,
+      "update": 35,
       "update_is": "select all 5k ids with 1k visible rows"
     },
     "select-1k": {
