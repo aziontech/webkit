@@ -87,7 +87,10 @@ export const GATES = [
   {
     id: 'size',
     label: 'Bundle budget',
-    steps: [['node', 'scripts/check-size.mjs']]
+    steps: [
+      ['node', 'scripts/check-size.mjs'],
+      ['node', 'scripts/check-css-size.mjs']
+    ]
   },
   {
     id: 'complete',

@@ -19,7 +19,7 @@ How to style components under `packages/webkit/src/components/` using tokens fro
 @import '@aziontech/theme/globals.css';
 ```
 
-That file already contains `@import "tailwindcss"` plus `@theme { --color-*, --breakpoint-*, --animate-* }`; there is **no** `tailwind-preset`, `tailwind.config.js`, or `content: []` array anywhere in the pipeline. Utility detection is done by the `@source "../../../webkit/src"` directive inside the emitted globals — that is what makes arbitrary utilities like `bg-(--primary)` or `p-(--spacing-md)` work in webkit components without any extra config on the consumer side.
+That file already contains `@import "tailwindcss"` plus `@theme { --color-*, --breakpoint-*, --animate-* }`; there is **no** `tailwind-preset`, `tailwind.config.js`, or `content: []` array anywhere in the pipeline. The theme scans no component package. Utility detection for webkit components comes from the consumer's `src/webkit.sources.css` (one `@source` per WebKit file the app imports, written by `@aziontech/webkit/vite-plugin` or `npx @aziontech/webkit css`), or from `@aziontech/webkit/styles/all` in an app that renders every component; that is what makes arbitrary utilities like `bg-(--primary)` or `p-(--spacing-md)` compile for the components the app uses, and only those.
 
 Integration points:
 

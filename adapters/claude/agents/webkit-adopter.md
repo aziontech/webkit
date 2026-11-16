@@ -30,7 +30,7 @@ Options:
 5. In a git repository, adds a `prepare` script (`husky`) to `package.json` and writes `.husky/pre-commit` to lint on commit. Running the package-manager install runs `prepare`, which activates the hooks. Outside a git repository it adds no hook and says to re-run `init` after `git init`.
 6. Copies the Claude Code bundle (rules, the `webkit-usage` skill, agents) into `.claude/` — only files that are missing, never overwriting local edits.
 7. Appends a `@aziontech/webkit` fragment to `CLAUDE.md`, guarded by a marker so it is added once.
-8. Adds `import './webkit.css'` and `import '@aziontech/icons'` to `src/main.ts` / `src/main.js`. An untouched create-vite (`src/style.css`) or create-vue (`src/assets/main.css`) starter stylesheet is deleted and its import replaced by `import './webkit.css'`; an edited one is kept with a note.
+8. Writes `src/webkit.css` (theme, fonts, `@aziontech/webkit/styles` and `./webkit.sources.css`) and `src/webkit.sources.css` (the WebKit files the app imports), adds `webkit()` from `@aziontech/webkit/vite-plugin` to an existing `vite.config`, and prepends `import './webkit.css'` and `import '@aziontech/icons'` to `src/main.*`. An untouched create-vite (`src/style.css`) or create-vue (`src/assets/main.css`) starter stylesheet is deleted and its import replaced by `import './webkit.css'`; an edited one is kept with a note.
 
 ## Idempotency
 

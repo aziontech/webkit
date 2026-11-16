@@ -82,9 +82,11 @@ product components in one file (`llms-full-site.txt` for the site and docs compo
   slots or use its props. The only exception is a static `class` of layout utilities:
   `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `self-*`, `shrink-0`.
 - **Styles + theme.** Load `src/webkit.css` once at the app entry — it `@import`s the theme's
-  Tailwind v4 stylesheet (tokens + `@import "tailwindcss"` + fonts) and `@source`s webkit so its
-  component classes compile. Import `webkit.css`, not `@aziontech/theme` bare (the `@source` is what
-  compiles webkit's classes). Light is the default; for dark set `<html data-theme="dark">`.
+  Tailwind v4 stylesheet (tokens + `@import "tailwindcss"`), the fonts, and `./webkit.sources.css`,
+  the list of WebKit files this app imports, so Tailwind compiles only their classes. Import
+  `webkit.css`, not `@aziontech/theme` bare (without the list no component class compiles). Keep
+  `webkit()` from `@aziontech/webkit/vite-plugin` in `vite.config` (it rewrites the list when imports
+  change); without Vite run `npx @aziontech/webkit css` after adding a WebKit import. Light is the default; for dark set `<html data-theme="dark">`.
 - **Accessible & keyboard-operable.** Label every field, keep a visible focus ring, mirror state in
   ARIA, no click handler without a key handler.
 - **Right-to-left ready.** Logical utilities only (`ms-`/`me-`, `ps-`/`pe-`, `start-`/`end-`,

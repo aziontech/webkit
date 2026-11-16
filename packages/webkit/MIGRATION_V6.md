@@ -800,6 +800,26 @@ The theme that ships with WebKit 6 changes three things your app can see:
 Two additions need nothing from you: `--border-input` is the outline token of every form field (same
 value as `--border-default`), and dark mode has its own, visible elevation shadows (`--shadow-*`).
 
+### CSS: the app compiles only the WebKit files it imports
+
+In v5, `@aziontech/theme` and `@aziontech/webkit/styles` both pointed Tailwind at the whole WebKit
+source, so every app shipped the classes of every component (77 KB gzipped of CSS for a Button-only
+app). In v6 neither scans WebKit: `src/webkit.css` imports `./webkit.sources.css`, a generated list
+with one `@source` per WebKit file the app imports, and the Button-only app ships about 10 KB.
+
+- Run `npx @aziontech/webkit init` again (it rewrites nothing you edited), or by hand add
+  `@import './webkit.sources.css';` to `src/webkit.css` after `@import '@aziontech/webkit/styles';`,
+  and `webkit()` from `@aziontech/webkit/vite-plugin` to the `plugins` of `vite.config`. The plugin
+  writes the list on every dev start and build. Without Vite, run `npx @aziontech/webkit css` after
+  adding or removing a WebKit import. `webkit doctor` fails while the list is stale.
+- `@aziontech/webkit/styles` now holds only the base rules (right-to-left icon mirroring). An app
+  that imported just `@aziontech/theme` (no `webkit.css`) renders every component unstyled until it
+  imports the list.
+- An app that really renders every component (a catalogue, a playground) imports
+  `@aziontech/webkit/styles/all` instead of the list.
+- Tailwind 4.1 or later: the stylesheet `init` writes keeps the AI guidance files out of the scan
+  with `@source not '../.claude'` (and `CLAUDE.md`, `AGENTS.md`).
+
 ### TypeScript reads declarations
 
 Every `@aziontech/webkit/<name>` export now has a `types` condition that points at a declaration

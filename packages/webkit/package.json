@@ -29,7 +29,8 @@
     "check:catalog": "node scripts/build-catalog.mjs --check && node scripts/build-llms.mjs --check",
     "build:llms": "node scripts/build-llms.mjs",
     "check:llms": "node scripts/build-llms.mjs --check",
-    "check:size": "node scripts/check-size.mjs",
+    "check:size": "node scripts/check-size.mjs && node scripts/check-css-size.mjs",
+    "check:css-size": "node scripts/check-css-size.mjs",
     "check:size-ratchet": "node scripts/check-size-ratchet.mjs",
     "check:complete": "node scripts/check-complete.mjs",
     "test:toolkit": "node --test \"test/**/*.test.mjs\"",
@@ -167,6 +168,14 @@
     "./styles": {
       "types": "./types/css.d.ts",
       "default": "./src/styles.css"
+    },
+    "./styles/all": {
+      "types": "./types/css.d.ts",
+      "default": "./src/styles/all.css"
+    },
+    "./vite-plugin": {
+      "types": "./types/vite-plugin.d.ts",
+      "default": "./src/vite-plugin.js"
     },
     "./eyebrow": {
       "types": "./types/components/content/eyebrow/eyebrow.vue.d.ts",
@@ -2544,6 +2553,12 @@
       ],
       "styles": [
         "./types/css.d.ts"
+      ],
+      "styles/all": [
+        "./types/css.d.ts"
+      ],
+      "vite-plugin": [
+        "./types/vite-plugin.d.ts"
       ],
       "eyebrow": [
         "./types/components/content/eyebrow/eyebrow.vue.d.ts"

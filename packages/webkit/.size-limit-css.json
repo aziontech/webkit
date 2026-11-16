@@ -1,0 +1,27 @@
+[
+  {
+    "name": "css-button",
+    "imports": ["button"],
+    "limit": "10.5 KB"
+  },
+  {
+    "name": "css-console",
+    "imports": [
+      "button",
+      "icon-button",
+      "input",
+      "field",
+      "select",
+      "dialog",
+      "data-table",
+      "tabs",
+      "tag",
+      "toast",
+      "dropdown-menu",
+      "page-header",
+      "empty-state",
+      "chart"
+    ],
+    "limit": "24 KB"
+  }
+]

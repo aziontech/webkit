@@ -87,14 +87,19 @@ to preview the plan. See [`docs/toolkit/CLI.md`](./docs/toolkit/CLI.md).
 
 ### 2 · Add the theme CSS
 
-`init` does this step for you. By hand: create `src/webkit.css` with the theme and the webkit
-source registration, and import it once at your app entry (e.g. `src/main.ts`) with the icon font:
+`init` does this step for you. By hand: create `src/webkit.css` with the theme, the WebKit base
+rules and the list of WebKit files your app imports, and import it once at your app entry (e.g.
+`src/main.ts`) with the icon font:
 
 ```css
 /* src/webkit.css */
 @import '@aziontech/theme';
 @import '@aziontech/theme/fonts.css'; /* skip it if your app hosts its own font files */
 @import '@aziontech/webkit/styles';
+@import './webkit.sources.css';
+@source not '../.claude';
+@source not '../CLAUDE.md';
+@source not '../AGENTS.md';
 ```
 
 ```js
@@ -102,12 +107,29 @@ import './webkit.css'
 import '@aziontech/icons'
 ```
 
-`@aziontech/theme` brings the design tokens, Tailwind v4 and the fonts; `@aziontech/webkit/styles`
-registers WebKit's source with Tailwind so the component classes compile. Tailwind has to run in
-your build: `@tailwindcss/postcss` in `postcss.config.mjs` (what `init` writes) or `@tailwindcss/vite`.
+```ts
+// vite.config.ts
+import webkit from '@aziontech/webkit/vite-plugin'
 
-WebKit does not depend on `vee-validate` and ships no Vite config helper. An app that uses
-`vee-validate` puts `optimizeDeps: { include: ['vee-validate'] }` in its own Vite config.
+export default defineConfig({ plugins: [webkit(), vue()] })
+```
+
+`@aziontech/theme` brings the design tokens and Tailwind v4 (4.1 or later); the fonts are
+`@aziontech/theme/fonts.css`. WebKit ships its components as source, and Tailwind only compiles the
+classes of the files it scans, so `src/webkit.sources.css` lists the WebKit files your app imports
+(each component plus what it imports itself), one `@source` per file. The Vite plugin
+`@aziontech/webkit/vite-plugin` writes it on every dev start and build and rewrites it when you
+add or remove a WebKit import; without Vite, run `npx @aziontech/webkit css` after the change
+(`webkit doctor` and `webkit check` fail while the list is stale). Your stylesheet then holds only
+the classes of what you use: about 10 KB gzipped for a Button-only app, about 23 KB for a console
+screen with a table, dialog, select, tabs and chart, instead of 77 KB for the whole library. An app
+that renders every component (a catalogue, a playground) imports `@aziontech/webkit/styles/all`
+instead of `./webkit.sources.css`. The `@source not` lines keep the AI guidance files `init` copies
+out of the scan: their examples are not your UI. Tailwind has to run in your build:
+`@tailwindcss/postcss` in `postcss.config.mjs` (what `init` writes) or `@tailwindcss/vite`.
+
+WebKit does not depend on `vee-validate`. An app that uses `vee-validate` puts
+`optimizeDeps: { include: ['vee-validate'] }` in its own Vite config.
 
 **Dark mode.** The theme is **light by default**. For an app that is always dark, set the attribute
 in `index.html`, so the first paint is already dark:

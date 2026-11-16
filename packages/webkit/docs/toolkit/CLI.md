@@ -29,7 +29,8 @@ On a TTY (and without `--yes`), `init` first asks about the optional pieces — 
 
 7. **`.claude/` bundle** — every `rules/*.md`, `skills/*/SKILL.md` and `agents/*.md` template, derived from the templates directory itself (so a new template ships automatically instead of needing a hand-maintained list; anything outside that shape, such as a skill's `references/`, is not shipped, and a test fails if one appears so shipping it is a deliberate decision), copied via the same policy as `sync` (see below): on a fresh project every file is missing, so `init` copies all of them — each stamped with a provenance marker so a later `sync` can tell a pristine copy from one you have edited.
 8. **`CLAUDE.md` fragment** — kept in a fenced block (`<!-- @aziontech/webkit:start -->` … `<!-- @aziontech/webkit:end -->`) that is replaced in place on every `init` run, so template updates reach a project that already ran `init` once. A pre-fence legacy marker (`<!-- @aziontech/webkit -->`) from an older `init` is migrated into the fence automatically; a fragment duplicated at more than one position (however it got that way) is repaired down to a single fenced block.
-9. **Entry wiring** — `import './webkit.css'` and `import '@aziontech/icons'` prepended once to `src/main.*`; skipped when already imported, `--no-entry` prints the imports instead of editing the file. The starter stylesheet of a `create-vite` app (`src/style.css`, `import './style.css'`) or a `create-vue` app (`src/assets/main.css` + `base.css`, `import './assets/main.css'`) is removed when it is byte-for-byte the template's, and its import line becomes `import './webkit.css'`: its global rules (body margin and colours, `#app` width) fight the theme. A starter you edited, or one another file imports (a Cypress support file), is left in place with a note.
+9. **CSS scan list** — `src/webkit.sources.css`, one `@source` per WebKit file the app imports (the components plus what they import), so the app's stylesheet holds only their classes; `src/webkit.css` imports it. An existing `vite.config` gets `webkit()` from `@aziontech/webkit/vite-plugin`, which rewrites the list on every dev start, build and import change; with no Vite config, `init` says to run `npx @aziontech/webkit css` after changing imports.
+10. **Entry wiring** — `import './webkit.css'` and `import '@aziontech/icons'` prepended once to `src/main.*`; skipped when already imported, `--no-entry` prints the imports instead of editing the file. The starter stylesheet of a `create-vite` app (`src/style.css`, `import './style.css'`) or a `create-vue` app (`src/assets/main.css` + `base.css`, `import './assets/main.css'`) is removed when it is byte-for-byte the template's, and its import line becomes `import './webkit.css'`: its global rules (body margin and colours, `#app` width) fight the theme. A starter you edited, or one another file imports (a Cypress support file), is left in place with a note.
 
 Feature-scoped setup is deliberately **not** part of `init`. A component that needs one-time app wiring (e.g. toast: `.use(ToastPlugin)` on `createApp()` — the plugin mounts the region automatically) declares it in its catalog entry's `setup` field, surfaced by the MCP's `get_component` / `get_best_practices` — so it is wired **just-in-time at first use**, by you or your AI, instead of preloading unused code for everyone. `doctor` backstops it mechanically (see below).
 
@@ -137,6 +138,28 @@ npx @aziontech/webkit canary   # proves the design-system rules still reach this
 
 Full documentation: [`docs/toolkit/REPORT.md`](./REPORT.md).
 
+## `css` — compile only the WebKit files the app imports
+
+```bash
+npx @aziontech/webkit css          # rewrite src/webkit.sources.css
+npx @aziontech/webkit css --check  # write nothing; exit 1 when it is stale
+```
+
+WebKit is consumed as source and Tailwind compiles the classes of the files it scans, so the app's
+`src/webkit.css` imports `src/webkit.sources.css`: one `@source` per WebKit file the app's
+`@aziontech/webkit/<name>` imports reach (each component and what it imports, inside
+`src/components`, `src/composables` and `src/utils`). The Vite plugin does the same on every dev
+start and build, and again when a file adds or drops a WebKit import:
+
+```ts
+import webkit from '@aziontech/webkit/vite-plugin'
+export default defineConfig({ plugins: [webkit(), vue()] })
+```
+
+`webkit({ file })` moves the list (default `src/webkit.sources.css`, relative to the Vite root). `add`
+rewrites the list after it copies a block. An app that renders every component imports
+`@aziontech/webkit/styles/all` instead.
+
 ## `doctor` — check the wiring is healthy
 
 ```bash
@@ -145,13 +168,15 @@ npx @aziontech/webkit doctor
 
 The toolkit is fail-open by design (a missing catalog disables the lint rules rather than crashing), so a half-broken install is otherwise silent. `doctor` reads the project and reports each check as `OK` / `WARN` / `FAIL`:
 
-- **vue / tailwind version** — vue ^3.5 and Tailwind v4 installed (`WARN` when not installed, `FAIL` on another major);
+- **vue / tailwind version** — vue ^3.5 and Tailwind 4.1 or later installed (`WARN` when not installed, `FAIL` on another major);
 - **theme import** — `src/webkit.css` imports `@aziontech/theme` (`FAIL` = no tokens);
 - **lint plugin** — the ESLint config loads `@aziontech/webkit/eslint-plugin`;
 - **webkit provider** — a `WebkitProvider` is mounted somewhere in `src/` (`WARN`: locale and direction fall back to English, left to right);
 - **webkit catalog** resolvable (`FAIL` = lint rules are disabled — install webkit or set `WEBKIT_CATALOG_PATH`);
 - **eslint / stylelint config** present;
-- **webkit.css** registers webkit with Tailwind (`@import '@aziontech/webkit/styles'`, or a legacy inline `@source`) — `FAIL` = unstyled components;
+- **webkit.css** registers webkit with Tailwind: `@import './webkit.sources.css'` (or `@aziontech/webkit/styles/all`, or an inline `@source`) — `FAIL` = unstyled components (since 6.0 `@aziontech/webkit/styles` alone scans nothing);
+- **webkit css sources** — `src/webkit.sources.css` lists every WebKit file the app's imports reach (`FAIL` when stale: the components it misses render unstyled; `npx @aziontech/webkit css` rewrites it);
+- **webkit vite plugin** — the Vite config runs `@aziontech/webkit/vite-plugin`, which keeps that list current (`WARN` when missing);
 - **mcp server** registered in `.mcp.json` (`FAIL` when it still runs the v5 `webkit-mcp` bin of `@aziontech/webkit`);
 - **husky** `prepare` script + `.husky/pre-commit` lint block present (`WARN` when the hook still lints the whole tree, build output included — re-run `init`);
 - **git hooks** — the folder is a git repository and `core.hooksPath` points at `.husky/` (`WARN` when the install ran before `git init`: run `npx husky`). Outside a git repository with no hook wired, it is `OK` (init skipped the hooks on purpose) and the two husky checks are not shown;

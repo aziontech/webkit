@@ -133,7 +133,7 @@ test('the generated .stylelintignore keeps stylelint off the compiled CSS', asyn
 
     const { results } = await stylelint.lint({ files: '**/*.css', cwd: dir })
     const linted = results.map((r) => r.source.slice(dir.length + 1)).sort()
-    assert.deepEqual(linted, ['src/style.css', 'src/webkit.css'])
+    assert.deepEqual(linted, ['src/style.css', 'src/webkit.css', 'src/webkit.sources.css'])
     assert.ok(results.every((r) => !r.errored))
   } finally {
     rmSync(dir, { recursive: true, force: true })

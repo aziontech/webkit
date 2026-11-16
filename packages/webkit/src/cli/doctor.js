@@ -3,6 +3,7 @@ import { createRequire } from 'node:module'
 import { dirname, join, relative } from 'node:path'
 
 import { readJsonStrict } from './apply.js'
+import { planSources, SOURCES_FILE } from './css-sources.js'
 import {
   ALL_DEPS,
   ENTRY_CANDIDATES,
@@ -17,6 +18,8 @@ import {
   read,
   STYLELINT_CONFIG_CANDIDATES,
   usesTailwindVitePlugin,
+  VITE_CONFIG_CANDIDATES,
+  VITE_PLUGIN_SPECIFIER,
   wantsGitHooks
 } from './plan.js'
 import { planSync, resolveBundleRoot } from './sync.js'
@@ -156,18 +159,55 @@ export function planDoctor(projectDir) {
   )
 
   const cssEntry = read(join(projectDir, 'src/webkit.css'))
-  const hasSource = Boolean(
-    cssEntry &&
-    (/@import\b[^\n]*@aziontech\/webkit\/styles/.test(cssEntry) ||
-      /@source\b[^\n]*@aziontech\/webkit/.test(cssEntry))
+  const importsSources = Boolean(
+    cssEntry && /@import\b[^\n]*['"]\.\/webkit\.sources\.css['"]/.test(cssEntry)
   )
+  const importsAll = Boolean(
+    cssEntry && /@import\b[^\n]*@aziontech\/webkit\/styles\/all/.test(cssEntry)
+  )
+  const explicitSource = Boolean(cssEntry && /@source\b[^\n]*@aziontech\/webkit/.test(cssEntry))
+  const registered = importsSources || importsAll || explicitSource
   add(
     'webkit.css @source',
-    hasSource ? 'ok' : 'fail',
-    hasSource
-      ? 'src/webkit.css registers webkit with Tailwind'
-      : "src/webkit.css does not register webkit with Tailwind (`@import '@aziontech/webkit/styles'`) — component classes will not compile (unstyled UI). Run `npx @aziontech/webkit init`."
+    registered ? 'ok' : 'fail',
+    importsSources
+      ? `src/webkit.css registers the WebKit files this app imports (${SOURCES_FILE})`
+      : importsAll
+        ? 'src/webkit.css registers every WebKit component (@aziontech/webkit/styles/all) — the app ships the CSS of all of them; import ./webkit.sources.css instead to compile only what it uses'
+        : explicitSource
+          ? 'src/webkit.css registers webkit with an explicit @source'
+          : `src/webkit.css does not register webkit with Tailwind — component classes will not compile (unstyled UI). Add \`@import './webkit.sources.css';\` (6.0: \`@aziontech/webkit/styles\` no longer scans WebKit) and run \`npx @aziontech/webkit css\`.`
   )
+
+  if (importsSources) {
+    const sources = planSources(projectDir)
+    const listed = new Set((sources.current ?? '').split('\n'))
+    const missing = sources.content
+      .split('\n')
+      .filter((l) => l.startsWith('@source') && !listed.has(l))
+    add(
+      'webkit css sources',
+      sources.stale ? 'fail' : sources.resolved || !sources.subpaths.length ? 'ok' : 'warn',
+      sources.stale
+        ? `${SOURCES_FILE} is out of date${missing.length ? ` — ${missing.length} imported WebKit file(s) are missing, so their components render unstyled` : ''}. Run \`npx @aziontech/webkit css\` (the Vite plugin, ${VITE_PLUGIN_SPECIFIER}, keeps it current on every dev and build).`
+        : sources.resolved
+          ? `${SOURCES_FILE} lists ${sources.files.length} WebKit file(s) for ${sources.subpaths.length} import(s)`
+          : sources.subpaths.length
+            ? `@aziontech/webkit is not installed, so ${SOURCES_FILE} cannot list the files of ${sources.subpaths.length} import(s). Install, then run \`npx @aziontech/webkit css\`.`
+            : `${SOURCES_FILE} is current (no WebKit imports yet)`
+    )
+    const viteCfg = firstExisting(projectDir, VITE_CONFIG_CANDIDATES)
+    if (viteCfg) {
+      const hasPlugin = Boolean(read(join(projectDir, viteCfg))?.includes(VITE_PLUGIN_SPECIFIER))
+      add(
+        'webkit vite plugin',
+        hasPlugin ? 'ok' : 'warn',
+        hasPlugin
+          ? `${viteCfg} runs ${VITE_PLUGIN_SPECIFIER}, so ${SOURCES_FILE} follows your imports`
+          : `${viteCfg} does not run ${VITE_PLUGIN_SPECIFIER} — ${SOURCES_FILE} goes stale when you import a new component. Add \`import webkit from '${VITE_PLUGIN_SPECIFIER}'\` and \`webkit()\` to plugins.`
+      )
+    }
+  }
 
   const postcssCfg = firstExisting(projectDir, POSTCSS_CONFIG_CANDIDATES)
   const postcssRunsTailwind = Boolean(
@@ -305,15 +345,16 @@ export function planDoctor(projectDir) {
   )
 
   const tailwind = installedVersion(projectDir, 'tailwindcss')
-  const tailwindMajor = tailwind ? Number(tailwind.split('.')[0]) : null
+  const [tailwindMajor, tailwindMinor] = tailwind ? tailwind.split('.').map(Number) : [null, null]
+  const tailwindOk = tailwindMajor === 4 && tailwindMinor >= 1
   add(
     'tailwind version',
-    !tailwind ? 'warn' : tailwindMajor === 4 ? 'ok' : 'fail',
+    !tailwind ? 'warn' : tailwindOk ? 'ok' : 'fail',
     !tailwind
-      ? 'tailwindcss is not installed — webkit components are styled with Tailwind v4 (it comes with @aziontech/theme).'
-      : tailwindMajor === 4
+      ? 'tailwindcss is not installed — webkit components are styled with Tailwind v4.1 or later (it comes with @aziontech/theme).'
+      : tailwindOk
         ? `tailwindcss ${tailwind}`
-        : `tailwindcss ${tailwind} is installed — webkit needs Tailwind v4.`
+        : `tailwindcss ${tailwind} is installed — webkit needs Tailwind 4.1 or later (src/webkit.css uses \`@source not\`).`
   )
 
   const themed = Boolean(cssEntry && /@import\b[^\n]*@aziontech\/theme/.test(cssEntry))
