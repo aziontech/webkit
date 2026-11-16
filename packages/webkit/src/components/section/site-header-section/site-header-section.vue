@@ -205,7 +205,7 @@
       ref="barEl"
       variant="site"
       aria-label="Azion"
-      class="sticky top-0 z-40"
+      class="@container/site-header sticky top-0 z-40"
     >
       <AppHeaderStart class="justify-start!">
         <IconButton
@@ -226,6 +226,12 @@
             <Brand
               variant="default"
               size="small"
+              class="@max-xs/site-header:hidden"
+            />
+            <Brand
+              variant="reduced"
+              size="small"
+              class="@min-xs/site-header:hidden"
             />
           </a>
         </AppHeaderBrand>

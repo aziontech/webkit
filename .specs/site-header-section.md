@@ -6,7 +6,7 @@ status: implemented
 spec_version: 6
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: ee88638dfa97a4b89d7c68687ebc4abea6a19f45a36165f25a57f949e64e2ad4
+checksum: 49fb261058ced8b406ffe24081a0d86da8f478848b89e1ecc2e201d2626db165
 template: 2
 ---
 
@@ -168,7 +168,7 @@ The marketing site's own navigation: a sticky bar with the Azion mark, the mega-
 ## Responsive
 
 - Container queries: none; the bar switches at viewport breakpoints.
-- Narrow (below `xl`, 80rem): the menus, links and contact leave the bar for the sheet behind the menu button; below `sm` the secondary action steps out unless `secondaryActionOnPhones`. Reaching `xl` while the sheet is open closes it.
+- Narrow (below `xl`, 80rem): the menus, links and contact leave the bar for the sheet behind the menu button; below `sm` the secondary action steps out unless `secondaryActionOnPhones`. When the bar's content box is under 20rem (a 320 px phone) the AZION wordmark gives way to the reduced "A" mark, so the sign-up button never covers it. Reaching `xl` while the sheet is open closes it.
 - Touch: medium buttons and icon buttons meet 40 px; the mega-menu opens on click as well as hover.
 - Reflow: no horizontal scroll at 320 px and 200 % zoom; the sheet scrolls inside `scroll-area`.
 
