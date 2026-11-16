@@ -37,7 +37,7 @@ describe('IconButton', () => {
     await fireEvent.click(getByTestId('icon-button'))
 
     expect(emitted().click).toHaveLength(1)
-    expect(emitted().click[0][0]).toBeInstanceOf(MouseEvent)
+    expect(emitted<unknown[]>().click[0][0]).toBeInstanceOf(MouseEvent)
   })
 
   it('does NOT emit click when disabled', async () => {
