@@ -162,12 +162,13 @@
             variant="none"
             :padded="false"
             :data-cell="cell.text ? 'story' : 'logo'"
-            class="min-h-[clamp(180px,18vw,240px)]"
+            class="min-h-[clamp(180px,18vw,240px)] max-md:data-[span=2]:col-span-full max-sm:data-[cell=story]:col-span-full"
           >
             <div
               v-if="cell.text"
               :data-fill="cell.fill ?? 'canvas'"
-              class="relative flex h-full min-w-0 flex-col justify-between gap-(--spacing-xl) overflow-hidden p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none data-[fill=canvas]:bg-(--bg-canvas) data-[fill=canvas]:hover:bg-(--bg-surface-raised) data-[fill=primary]:bg-(--primary) data-[fill=primary]:hover:brightness-90 data-[fill=surface]:bg-(--bg-surface) data-[fill=white]:bg-(--color-base-white)"
+              :data-theme="cell.fill === 'white' ? 'light' : undefined"
+              class="relative flex h-full min-w-0 flex-col justify-between gap-(--spacing-xl) overflow-hidden p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none data-[fill=canvas]:bg-(--bg-canvas) data-[fill=canvas]:hover:bg-(--bg-surface-raised) data-[fill=primary]:bg-(--primary) data-[fill=primary]:hover:brightness-90 data-[fill=surface]:bg-(--bg-surface) data-[fill=white]:bg-(--bg-surface)"
             >
               <template v-if="cell.photo">
                 <img
@@ -209,7 +210,8 @@
               v-else
               :href="cell.href"
               :data-fill="cell.fill ?? 'canvas'"
-              class="relative flex h-full min-w-0 flex-col items-center justify-center overflow-hidden p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none data-[fill=canvas]:bg-(--bg-canvas) data-[fill=canvas]:hover:bg-(--bg-surface-raised) data-[fill=primary]:bg-(--primary) data-[fill=primary]:hover:brightness-90 data-[fill=surface]:bg-(--bg-surface) data-[fill=white]:bg-(--color-base-white)"
+              :data-theme="cell.fill === 'white' ? 'light' : undefined"
+              class="relative flex h-full min-w-0 flex-col items-center justify-center overflow-hidden p-(--spacing-xl) transition-colors duration-fast-02 ease-productive-entrance focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-(--ring-color) motion-reduce:transition-none data-[fill=canvas]:bg-(--bg-canvas) data-[fill=canvas]:hover:bg-(--bg-surface-raised) data-[fill=primary]:bg-(--primary) data-[fill=primary]:hover:brightness-90 data-[fill=surface]:bg-(--bg-surface) data-[fill=white]:bg-(--bg-surface)"
             >
               <Logo
                 :name="cell.logoAlt"

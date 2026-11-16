@@ -29,7 +29,7 @@
       {
         logo: madeiramadeiraExtendedReversed,
         logoAlt: 'MadeiraMadeira',
-        logoTreatment: 'color',
+        logoTreatment: 'monochrome',
         text: '90% lower cloud costs and faster applications at scale.',
         highlights: ['90% lower cloud costs']
       },

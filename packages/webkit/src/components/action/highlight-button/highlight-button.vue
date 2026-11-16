@@ -69,7 +69,7 @@
   const GLOW_CLASS =
     'absolute inset-0 pointer-events-none ' +
     'animate-spin [animation-duration:8s] [animation-timing-function:linear] ' +
-    '[background:linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-brand-primary-500))] ' +
+    '[background:linear-gradient(90deg,var(--text-default),var(--brand-blue),var(--primary))] ' +
     '[filter:blur(12px)] ' +
     'motion-reduce:animate-none ' +
     'group-data-[inert]/highlight:hidden'
@@ -92,7 +92,7 @@
 
   const CONTENT_CLASS =
     'relative z-1 inline-flex items-center justify-center gap-(--spacing-xs) w-full h-full ' +
-    'text-(--color-base-white) ' +
+    'text-(--text-default) ' +
     'data-[size=large]:px-(--spacing-md) data-[size=large]:text-button-lg ' +
     'data-[size=medium]:px-(--spacing-sm) data-[size=medium]:text-button-md ' +
     'data-[size=small]:px-(--spacing-xs) data-[size=small]:text-button-md ' +
@@ -128,6 +128,7 @@
   >
     <span
       aria-hidden="true"
+      data-theme="dark"
       :class="GLOW_CLASS"
     />
     <span
@@ -139,6 +140,7 @@
       :class="SCRIM_CLASS"
     />
     <span
+      data-theme="dark"
       :class="CONTENT_CLASS"
       :data-size="size"
     >
@@ -174,6 +176,7 @@
   >
     <span
       aria-hidden="true"
+      data-theme="dark"
       :class="GLOW_CLASS"
     />
     <span
@@ -185,6 +188,7 @@
       :class="SCRIM_CLASS"
     />
     <span
+      data-theme="dark"
       :class="CONTENT_CLASS"
       :data-size="size"
     >
