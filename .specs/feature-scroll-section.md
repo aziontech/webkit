@@ -3,10 +3,10 @@ name: feature-scroll-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: 3acb61f6b09d3fccf3f09be55adb0c22d05390f60dfde13773b46a472702828d
+checksum: c4cddc639bd030bf85d4f284be8d41f2b8e7a4bc3954ffbeae806d419240c1cf
 ---
 
 # FeatureScrollSection — Component Spec
@@ -19,12 +19,12 @@ The walkthrough band of a product page: a large section title over one screen pe
 
 - Use FeatureScrollSection for the product-page walkthrough, one pinned screen (scene or code) per feature.
 - To walk through four to six capabilities of one product, each with a picture of its own.
-- To walk through capabilities each shown by the file you would write: give each item a `code` sample.
+- To walk through capabilities each shown by the file you would write: give each item a `code` sample. It is the only code slot of a product page.
 
 ## When NOT to use
 
 - For three reasons with no scroll story → use `feature-tiles-section`.
-- For one claim beside one code sample → use `media-split-section` with `codeTabs`.
+- For one claim beside one code sample → use `media-split-section` with `codeTabs`, but not on product pages, where code goes here.
 - In a hand-built SFC that needs its own media slot → use `sticky-stack` directly.
 
 ## Related

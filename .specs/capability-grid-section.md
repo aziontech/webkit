@@ -3,9 +3,9 @@ name: capability-grid-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 9
+spec_version: 10
 template: 2
-checksum: a19957e9de590c65e50d203cfd9daf9de38d509bb84d0efb98b7bbbf1fd01965
+checksum: 6a7837085efd8b3960d4602e640621ac126c50cdf95adbaa7f20418b45088105
 created: 2026-11-11
 last_updated: 2026-11-16
 ---
@@ -21,13 +21,14 @@ Use CapabilityGridSection for any grid of claims or links on a marketing page; i
 ## When to use
 
 - A product page listing what the product does, three or six at a time.
-- Use cases or resources that each link to their own page: give each item an `href` (and no `icon` for a resource list).
+- Use cases or resources that each link to their own page, on a hub or landing page: give each item an `href` (and no `icon` for a resource list).
 - A bare grid (no title) under a band that already has its heading.
 
 ## When NOT to use
 
 - For capabilities with art — use `FeatureTilesSection` or `BentoGrid`.
 - For use cases whose band title sits in the first grid cell with one action — use `CustomerUseCasesSection`.
+- For the use cases of a product page — not on product pages; use `CustomerUseCasesSection` with exactly four items. The linked use-case grid belongs on hub and landing pages.
 - For cells that each carry their own action or copy button — use `FeatureWidgetsSection`.
 
 ## Related

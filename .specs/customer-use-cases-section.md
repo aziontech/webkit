@@ -4,10 +4,10 @@ category: section
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 6
+spec_version: 7
 created: 2026-11-04
 last_updated: 2026-11-16
-checksum: fe7fcf87a56bcf3dabb5685090bb149ecf2ce5133488ba2ecf22219064c7effa
+checksum: b1b4656301483e2436e35683078aa2996ce9aeac0875dec603a910c5a1c7bbb1
 ---
 
 # CustomerUseCasesSection — Component Spec
@@ -19,7 +19,7 @@ The "what teams use it for" band of a product page: a three-column frame whose f
 ## When to use
 
 - Use CustomerUseCasesSection when the band's title sits in the first grid cell with one action.
-- On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for.
+- On a product or solution page, right after the opening band, to name the concrete jobs the product is bought for. It is the one use-case band of a product page.
 - Whenever a page needs three to six short, icon-led use cases with one link out to the documentation.
 
 ## When NOT to use
@@ -35,7 +35,7 @@ The "what teams use it for" band of a product page: a three-column frame whose f
 
 ## Best practices
 
-- Keep `items` to four or so; the first cell spans two rows at `lg`, so four cases fill the grid exactly.
+- On a product page give exactly four `items`; the first cell spans two rows at `lg`, so four cases fill the grid exactly. Elsewhere keep to four or so.
 - Write `title` as the heading the page's outline needs; it is the band's `h2`.
 - Give `primaryAction` an `href` to the documentation and set `trailing` so the chevron reads as "go".
 - Leave `eyebrow` as the product name; it is the overline the reader scans first.

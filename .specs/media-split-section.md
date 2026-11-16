@@ -3,11 +3,11 @@ name: media-split-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 8e0cc6cb3d1fb7933f793001073fb38822bb3eef1f1b6d0e7a64410e35b7cbfc
+checksum: 260cbab2f903fa07a9f87ccbe034b345cc0b29b5295d86927e767fc03e393f26
 ---
 
 # MediaSplitSection — Component Spec
@@ -21,11 +21,12 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 - Rendering page JSON, or you need a whole band with no custom content → the section (`media-split-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`media-split`).
 - Use MediaSplitSection for one marketing claim beside its picture, scene or code.
 - To make one point beside one picture and move on (a values statement, a single product claim).
-- To set a claim beside the code that delivers it (`codeTabs`), with the files in a tab strip.
+- To set a claim beside the code that delivers it (`codeTabs`), with the files in a tab strip, on any page but a product page.
 
 ## When NOT to use
 
 - For several claims stacked one after the other → use `media-split-stack-section`.
+- For code on a product page → not on product pages; `feature-scroll-section` is the only code slot of a product page.
 - For a full-width terminal session with no copy column → use `cli-terminal-section`.
 - For copy beside one piece of media in a hand-built SFC that needs the `media` slot → use `media-split`.
 

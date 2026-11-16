@@ -3,13 +3,13 @@ name: section-gap
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 6
-checksum: 613766d0ab39a0fab55189ef4dcc8d04c81f8bd66888c9e255ac8ef4d3cbd7f1
+spec_version: 7
+checksum: 5e0c20829d49cb8c7bf14eff7a9666e85aa0af94a5828c8dc08fae85b1799321
 figma:
   url: https://www.figma.com/design/QEbHSTFDWfh4VHkBp6NWN3/Azion.com?node-id=8869-10008
   node_id: 8869:10008
 created: 2026-08-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Section Gap — Component Spec
@@ -41,6 +41,7 @@ The empty registration frame that divides two page sections. On a page with no m
 ## Best practices
 
 - Pick the step by what the break means, not by how the page happens to look: `medium` is the ordinary break between sections, `large` opens a new part of the page, `small` keeps two related bands close.
+- On the Blog, the gap right after the `title-band` hero (`size="medium"`) is `small`, so the article highlight reads as part of the opening.
 - Do not override the height from the call site. The steps are multiples of `--spacing-2xl`, so they already scale with the viewport; a hand-set height freezes one break out of the page rhythm.
 - Keep one step per break — stacking two gaps to reach a bigger one draws an extra pair of rules.
 - Let it carry the shared rule: it renders `flush`, so its top rule is subtracted and the section above supplies it instead of doubling it. It still ticks every corner (`marks="all"`): the shared rule is given away, the registration mark is not.
