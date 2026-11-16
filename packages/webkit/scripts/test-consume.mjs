@@ -85,7 +85,7 @@ const cssFiles = readdirSync(assetsDir).filter((f) => f.endsWith('.css'))
 if (!cssFiles.length) fail('no CSS emitted — the style pipeline did not run.')
 const css = cssFiles.map((f) => readFileSync(join(assetsDir, f), 'utf8')).join('\n')
 
-if (!/data-kind=primary/.test(css) && !/\[data-kind/.test(css)) {
+if (!/data-variant=primary/.test(css) && !/\[data-variant/.test(css)) {
   fail('component classes absent from CSS — Tailwind did not scan webkit source (unstyled UI).')
 }
 
