@@ -482,7 +482,7 @@
                         </span>
                       </Item.Media>
                       <Item.Content>
-                        <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                        <span class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)">
                           <span class="shrink-0 text-body-sm text-(--text-muted)">
                             {{ row.label }}
                           </span>
@@ -499,7 +499,10 @@
                           {{ row.note || versionOf(row).name }}
                         </Item.Description>
                       </Item.Content>
-                      <Item.Actions v-if="!row.note">
+                      <Item.Actions
+                        v-if="!row.note"
+                        class="max-sm:basis-full"
+                      >
                         <DropdownMenu
                           v-model:open="versionOpen[row.key]"
                           side="bottom"
@@ -627,7 +630,9 @@
                                     </span>
                                   </Item.Media>
                                   <Item.Content>
-                                    <span class="flex min-w-0 items-center gap-(--spacing-xs)">
+                                    <span
+                                      class="flex min-w-0 flex-wrap items-center gap-(--spacing-xs)"
+                                    >
                                       <span class="shrink-0 text-body-sm text-(--text-muted)">
                                         {{ dependency.label }}
                                       </span>
@@ -826,6 +831,7 @@
                               >
                                 <Link
                                   :label="domainGroup.domains[0]"
+                                  class="max-w-full *:min-w-0 [&>*>*:first-child]:truncate"
                                   :href="`https://${domainGroup.domains[0]}`"
                                   target="_blank"
                                   size="small"
@@ -911,7 +917,10 @@
                           </li>
                         </ul>
                       </Item.Content>
-                      <Item.Actions v-if="projectMode === 'existing'">
+                      <Item.Actions
+                        v-if="projectMode === 'existing'"
+                        class="max-sm:basis-full"
+                      >
                         <DropdownMenu
                           side="bottom"
                           align="end"
@@ -1051,6 +1060,7 @@
                                 >
                                   <Link
                                     :label="domainGroup.domains[0]"
+                                    class="max-w-full *:min-w-0 [&>*>*:first-child]:truncate"
                                     :href="`https://${domainGroup.domains[0]}`"
                                     target="_blank"
                                     size="small"
