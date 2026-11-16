@@ -45,7 +45,10 @@ It rewrites, in every `.vue`, `.ts` and `.js` file outside `node_modules` and `d
   map is `src/cli/migrations/v6-lint.json`).
 
 It prints `MANUAL` for anything it cannot rewrite safely (section 4), and for any import that v6
-does not export.
+does not export. A renamed value is rewritten in a static attribute (`severity="error"`) and in a
+bound single literal (`:severity="'error'"`); any other bound expression
+(`:severity="ok ? 'info' : 'error'"`, `:severity="level"`) is left as it is and listed as `MANUAL`,
+because its strings may be your own values.
 
 The codemod rewrites v5 code. It reads the version your `package.json` declares (or, once you have
 bumped it, recognizes a v3 project by its v3-only imports such as `inputtext` or `plugin`); pass
@@ -222,8 +225,9 @@ MultiSelect, the date pickers, PropertyFilter, ContextMenu and DropdownMenu sub-
 through the same engine (`usePlacement`). The codemod splits the old value:
 `placement="bottom-end"` becomes `side="bottom" align="end"`, `placement="right-start"` becomes
 `side="end" align="start"`, `placement="left"` becomes `side="start"`, and `offset` becomes
-`sideOffset`. A bound `:placement` is renamed to `:side` with `left`/`right` mapped; a compound
-value inside an expression (`:placement="open ? 'top-end' : 'bottom'"`) is left for you to split.
+`sideOffset`. A bound `:placement` is renamed to `:side`, and a bound single literal (`:placement="'left'"`) is
+mapped; any other expression (`:placement="open ? 'top-end' : 'bottom'"`) is listed as `MANUAL` for
+you to split.
 
 `start` and `end` follow the text direction. Under `dir="rtl"` `side="end"` opens on the left and
 `align="start"` lines the panel up with the trigger's right edge, so a panel that was
@@ -258,8 +262,8 @@ and Supabase words, and each component keeps only the ones it draws:
 follow suit: `titleKind` → `titleAlign` (`capability-grid`, `console-showcase`, `process-scroll`,
 `feature-widgets`; it only ever aligned the title, so it is not a look), `kind` → `align` on
 `section-title`, `section-module` and `article-cards`, `quoteKind` → `quoteVariant` (`logo-wall-section`), `rowKind` → `rowVariant`
-(`article-index`). The codemod rewrites the attributes, their static values and the string
-literals inside a bound `:kind="…"`, and every `*Kind` type you import (`ButtonKind` →
+(`article-index`). The codemod rewrites the attributes, their static values and a bound single literal
+(`:kind="'text'"`; other bound expressions are listed as `MANUAL`), and every `*Kind` type you import (`ButtonKind` →
 `ButtonVariant`, `TableCellKind` → `TableCellType`).
 
 The codemod cannot see data objects, so rename the field by hand where you build one:
@@ -1526,6 +1530,11 @@ copy them again to get the mirrored version.
   (`@aziontech/webkit/styles` and the `icon` props of Button, IconButton, Link, Breadcrumb and
   MenuItem); external-link arrows, media controls and logos do not. Add `rtl:-scale-x-100` to a
   directional glyph you draw yourself.
+- **Toast.** `Toaster` `position` and the per-toast `position` option take
+  `top-start | top-center | top-end | bottom-start | bottom-center | bottom-end` (`bottom-right` →
+  `bottom-end`, `top-left` → `top-start`, …; the default is `bottom-end`). Under `rtl` `bottom-end`
+  sits at the bottom left. The codemod rewrites the attribute; a `position` in a `toast()` call or in
+  `app.use(ToastPlugin, { … })` options needs a hand edit.
 - **Overlays.** `side` and `align` take `start` / `end` and follow the direction (see "Overlays:
   `side` and `align` replace `placement`"): menus, popovers, list boxes and date panels anchored at
   the start edge open from the trigger's right edge under `rtl`.

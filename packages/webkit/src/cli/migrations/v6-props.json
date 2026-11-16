@@ -584,6 +584,28 @@
       }
     }
   },
+  "toast": {
+    "position": {
+      "to": "position",
+      "values": {
+        "top-left": "top-start",
+        "top-right": "top-end",
+        "bottom-left": "bottom-start",
+        "bottom-right": "bottom-end"
+      }
+    }
+  },
+  "toast-root": {
+    "position": {
+      "to": "position",
+      "values": {
+        "top-left": "top-start",
+        "top-right": "top-end",
+        "bottom-left": "bottom-start",
+        "bottom-right": "bottom-end"
+      }
+    }
+  },
   "toast-item": {
     "type": {
       "to": "severity",
@@ -881,6 +903,12 @@
   "tool-approval": {
     "state": "status",
     "kind": {
+      "to": "variant",
+      "values": {
+        "default": "primary"
+      }
+    },
+    "variant": {
       "to": "variant",
       "values": {
         "default": "primary"
