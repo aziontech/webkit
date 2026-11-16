@@ -147,7 +147,7 @@
       >
         <span
           aria-hidden="true"
-          class="pointer-events-none absolute inset-0 animate-spin [animation-duration:8s] [animation-timing-function:linear] [background:linear-gradient(90deg,var(--color-base-white),var(--color-blue-500),var(--color-brand-primary-500))] [filter:blur(12px)] motion-reduce:animate-none group-disabled/copy-prompt:hidden"
+          class="pointer-events-none absolute inset-0 animate-spin [animation-duration:8s] [animation-timing-function:linear] [background:linear-gradient(90deg,var(--text-default),var(--brand-blue),var(--primary))] [filter:blur(12px)] motion-reduce:animate-none group-disabled/copy-prompt:hidden"
         />
         <span
           aria-hidden="true"
@@ -158,7 +158,7 @@
           class="pointer-events-none absolute inset-px rounded-[inherit] bg-(--bg-backdrop) transition-opacity duration-300 ease-out motion-reduce:transition-none group-enabled/copy-prompt:group-hover/copy-prompt:opacity-25 group-disabled/copy-prompt:hidden"
         />
         <span
-          class="relative z-1 inline-flex h-full w-full min-w-0 items-center gap-(--spacing-xs) ps-(--spacing-md) pe-(--spacing-sm) text-(--color-base-white) sm:gap-(--spacing-sm) group-disabled/copy-prompt:text-(--text-disabled)"
+          class="relative z-1 inline-flex h-full w-full min-w-0 items-center gap-(--spacing-xs) ps-(--spacing-md) pe-(--spacing-sm) text-(--text-default) sm:gap-(--spacing-sm) group-disabled/copy-prompt:text-(--text-disabled)"
         >
           <span class="grid min-w-0">
             <span
