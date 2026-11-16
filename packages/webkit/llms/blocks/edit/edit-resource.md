@@ -43,7 +43,7 @@ A small `PageHeader` titled Settings with one sentence about what these settings
 
 One `form` with a disabled-while-saving `fieldset` and a visually hidden legend. Each `SettingsSection` has a title, a `hint` and an `anchor` for deep links, over a flush `Card :padded="false"` with an `Item.List` of `SettingsRow`s. Text values are large `Input`s; an empty Name flags on Save with a required `FieldError` and takes focus; on and off values are `Switch`es in compact rows. Sections run in a fixed order: General first, optional groups in the middle, Status or Danger zone last. See `skills/webkit-form`.
 
-### D. Locked settings — `Tooltip`, `Switch` (optional)
+### D. Locked settings — `Tooltip`, `Switch`, `Link` (optional)
 
 A setting the user cannot change here (a paid module, a module that is always on) keeps its row with a disabled `Switch` inside a `Tooltip` that says why, and a small `Link` beside the switch, in the control cell, to where it can be changed, e.g. Contact sales, opening in a new tab and named for the module ("Contact sales about WebSocket Proxy"). Keep the way out out of the description: `SettingsRow` clamps its description to two lines, so on a phone a link at the end of the sentence is cut off and the disabled switch is left with no way to turn it on.
 

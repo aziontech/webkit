@@ -314,21 +314,35 @@
   })
   onScopeDispose(() => narrowQuery?.removeEventListener('change', onNarrowChange))
 
+  const nameColumn: TableColumn = {
+    accessorKey: 'name',
+    header: 'Name',
+    principal: true,
+    hideable: false
+  }
+  const descriptionColumn: TableColumn = {
+    accessorKey: 'description',
+    header: 'Description',
+    grow: 3
+  }
+  const modifiedColumn: TableColumn = { accessorKey: 'modified', header: 'Last modified', grow: 2 }
+  const statusColumn: TableColumn = { id: 'status', header: 'Status' }
+  const moveColumn: TableColumn = { id: 'move', header: 'Position', hideable: false }
   const columns = computed<TableColumn[]>(() =>
     narrow.value
       ? [
-          { accessorKey: 'name', header: 'Name', principal: true, hideable: false },
-          { id: 'status', header: 'Status', width: 64 },
-          { id: 'move', header: 'Position', width: 56, align: 'center', hideable: false },
-          { accessorKey: 'description', header: 'Description', grow: 3 },
-          { accessorKey: 'modified', header: 'Last modified', grow: 2 }
+          nameColumn,
+          { ...statusColumn, width: 64 },
+          { ...moveColumn, width: 56, align: 'center' },
+          descriptionColumn,
+          modifiedColumn
         ]
       : [
-          { id: 'move', header: 'Position', width: 168, hideable: false },
-          { accessorKey: 'name', header: 'Name', principal: true, hideable: false },
-          { accessorKey: 'description', header: 'Description', grow: 3 },
-          { id: 'status', header: 'Status', width: 152 },
-          { accessorKey: 'modified', header: 'Last modified', grow: 2 }
+          { ...moveColumn, width: 168 },
+          nameColumn,
+          descriptionColumn,
+          { ...statusColumn, width: 152 },
+          modifiedColumn
         ]
   )
 

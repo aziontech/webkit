@@ -635,7 +635,7 @@
                         </Item.Content>
                         <Item.Actions
                           v-if="!row.note"
-                          class="max-sm:basis-full"
+                          class="basis-full sm:basis-auto"
                         >
                           <DropdownMenu
                             v-model:open="versionOpen[row.key]"
@@ -1035,12 +1035,15 @@
                                   class="w-full"
                                 >
                                   <Link
-                                    :label="domainGroup.domains[0]"
-                                    class="max-w-full *:min-w-0 [&>*>*:first-child]:truncate"
+                                    class="max-w-full"
                                     :href="`https://${domainGroup.domains[0]}`"
                                     target="_blank"
                                     size="small"
-                                  />
+                                  >
+                                    <span class="grid grid-cols-1">
+                                      <span class="truncate">{{ domainGroup.domains[0] }}</span>
+                                    </span>
+                                  </Link>
                                 </Tooltip>
                               </div>
                               <Popover
@@ -1124,7 +1127,7 @@
                         </Item.Content>
                         <Item.Actions
                           v-if="projectMode === 'existing'"
-                          class="max-sm:basis-full"
+                          class="basis-full sm:basis-auto"
                         >
                           <DropdownMenu
                             side="bottom"
@@ -1260,12 +1263,15 @@
                                     class="w-full"
                                   >
                                     <Link
-                                      :label="domainGroup.domains[0]"
-                                      class="max-w-full *:min-w-0 [&>*>*:first-child]:truncate"
+                                      class="max-w-full"
                                       :href="`https://${domainGroup.domains[0]}`"
                                       target="_blank"
                                       size="small"
-                                    />
+                                    >
+                                      <span class="grid grid-cols-1">
+                                        <span class="truncate">{{ domainGroup.domains[0] }}</span>
+                                      </span>
+                                    </Link>
                                   </Tooltip>
                                 </div>
                                 <Popover

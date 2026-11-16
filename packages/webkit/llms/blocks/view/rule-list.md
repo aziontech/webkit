@@ -46,7 +46,7 @@ A flush `Card` holding an `Accordion` with `type="multiple"`, `size="large"`, th
 
 A data-driven `DataTable` per phase (`row-key="id"`, no sorting: order is the data's, `reorderable` with `:row-reorderable` and `@update:data`; no `stackable`, so on a phone the grid keeps its columns and scrolls sideways inside the panel, after the narrow reorder below): the table's own grip column (Order), Position (168 px), Name (principal, a link that opens the rule in the rule builder, with a secondary "Default" `Tag` on a locked rule), Description (muted, truncated), Status (a `Switch` named "Run <rule>" beside a visible Active or Inactive, inside a 40 px label) and Last modified ("2 days ago by Maya Chen"). The table draws the drag: the grip, the dragged row's dashed outline, the 2 px drop line and its own polite announcement ("Moved Docs rewrite to position 4 of 5."); the block only writes the new order back to its phase on `update:data`.
 
-### E. Order controls — `Input`, `IconButton`, `Tooltip` (required)
+### E. Order controls — `Input`, `IconButton`, `Tooltip`, `DropdownMenu` (required)
 
 The grip comes from `Table` `reorderable`: drag it, or focus it and press Arrow Up, Arrow Down, Home or End. `row-reorderable` returns false for a locked rule, while a search narrows the list and while saving, so those grips are disabled and no row can be dropped on or moved past a pinned rule. The Position cell starts with a small numeric `Input` showing the rule's position: type a number and press Enter (or leave the field) to move the rule there, clamped below the pinned rules and to the end of the phase; Escape or a value that is not a number keeps the rule in place, and after Enter focus stays in the field on the moved rule. On a locked rule, while searching and while saving the field is disabled and its name and `Tooltip` carry the reason ("Position 1 of Default rule in the Request phase. The default rule runs first and stays first."). Then the cell holds Move up and Move down `IconButton`s, the single-pointer way to reorder (WCAG 2.5.7); each is named after its rule and, when disabled, carries the reason ("Move Default rule down. The default rule runs first and stays first."), which its `Tooltip` repeats. After a move with them, focus returns to the same button on the moved rule (the other one, or the grip, when that one is now disabled) and the block's polite status region says "Docs rewrite moved to position 3 of 5 in the Request phase."
 
@@ -508,21 +508,35 @@ Each variant is the same screen in another state: `get_block("view/rule-list", {
   })
   onScopeDispose(() => narrowQuery?.removeEventListener('change', onNarrowChange))
 
+  const nameColumn: TableColumn = {
+    accessorKey: 'name',
+    header: 'Name',
+    principal: true,
+    hideable: false
+  }
+  const descriptionColumn: TableColumn = {
+    accessorKey: 'description',
+    header: 'Description',
+    grow: 3
+  }
+  const modifiedColumn: TableColumn = { accessorKey: 'modified', header: 'Last modified', grow: 2 }
+  const statusColumn: TableColumn = { id: 'status', header: 'Status' }
+  const moveColumn: TableColumn = { id: 'move', header: 'Position', hideable: false }
   const columns = computed<TableColumn[]>(() =>
     narrow.value
       ? [
-          { accessorKey: 'name', header: 'Name', principal: true, hideable: false },
-          { id: 'status', header: 'Status', width: 64 },
-          { id: 'move', header: 'Position', width: 56, align: 'center', hideable: false },
-          { accessorKey: 'description', header: 'Description', grow: 3 },
-          { accessorKey: 'modified', header: 'Last modified', grow: 2 }
+          nameColumn,
+          { ...statusColumn, width: 64 },
+          { ...moveColumn, width: 56, align: 'center' },
+          descriptionColumn,
+          modifiedColumn
         ]
       : [
-          { id: 'move', header: 'Position', width: 168, hideable: false },
-          { accessorKey: 'name', header: 'Name', principal: true, hideable: false },
-          { accessorKey: 'description', header: 'Description', grow: 3 },
-          { id: 'status', header: 'Status', width: 152 },
-          { accessorKey: 'modified', header: 'Last modified', grow: 2 }
+          { ...moveColumn, width: 168 },
+          nameColumn,
+          descriptionColumn,
+          { ...statusColumn, width: 152 },
+          modifiedColumn
         ]
   )
 

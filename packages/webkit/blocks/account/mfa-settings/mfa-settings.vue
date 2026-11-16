@@ -290,12 +290,15 @@
                         row.name
                       }}</span>
                       <span class="truncate text-body-xs text-(--text-muted)">{{ row.email }}</span>
-                      <TableCellStatus
-                        :label="row.status"
-                        :severity="row.enabled ? 'success' : 'warning'"
+                      <div
                         aria-hidden="true"
                         class="mt-(--spacing-2xs) w-fit sm:hidden"
-                      />
+                      >
+                        <TableCellStatus
+                          :label="row.status"
+                          :severity="row.enabled ? 'success' : 'warning'"
+                        />
+                      </div>
                     </div>
                   </div>
                 </template>

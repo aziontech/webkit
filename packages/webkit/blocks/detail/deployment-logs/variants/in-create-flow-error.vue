@@ -70,11 +70,12 @@
         <template #header>
           <p class="shrink-0 text-heading-2xs text-(--text-default)">Logs</p>
           <div class="ms-auto flex items-center gap-(--spacing-sm)">
-            <Tag
-              class="shrink-0 whitespace-nowrap"
-              label="Failed on routing rules"
-              severity="danger"
-            />
+            <span class="flex shrink-0 whitespace-nowrap">
+              <Tag
+                label="Failed on routing rules"
+                severity="danger"
+              />
+            </span>
           </div>
         </template>
         <template #step-meta="{ step }">

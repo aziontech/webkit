@@ -808,10 +808,13 @@ Each variant is the same screen in another state: `get_block("edit/function-edit
                                                     {{ field.key || 'Unnamed field' }}
                                                   </span>
                                                 </Item.Title>
-                                                <Item.Description
-                                                  class="min-w-0 truncate max-sm:hidden"
-                                                  >{{ summary(field) }}</Item.Description
-                                                >
+                                                <div class="hidden min-w-0 sm:block">
+                                                  <Item.Description>
+                                                    <span class="block truncate">{{
+                                                      summary(field)
+                                                    }}</span>
+                                                  </Item.Description>
+                                                </div>
                                               </div>
                                             </Item.Content>
                                             <Item.Actions class="shrink-0">

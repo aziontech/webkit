@@ -896,15 +896,18 @@ LIMIT 3;`
             class="flex items-center justify-between gap-(--spacing-sm) border-b border-(--border-default) px-(--spacing-sm) py-(--spacing-xs)"
           >
             <div class="flex min-w-0 items-center gap-(--spacing-xs)">
-              <Button
+              <div
                 v-if="!leftOpen"
-                label="Tables"
-                icon="ai ai-table"
-                variant="outline"
-                size="small"
-                class="shrink-0 md:hidden"
-                @click="leftOpen = true"
-              />
+                class="flex shrink-0 md:hidden"
+              >
+                <Button
+                  label="Tables"
+                  icon="ai ai-table"
+                  variant="outline"
+                  size="small"
+                  @click="leftOpen = true"
+                />
+              </div>
               <i
                 class="ai ai-table shrink-0 text-(--text-muted) max-md:hidden"
                 aria-hidden="true"
@@ -1252,15 +1255,18 @@ LIMIT 3;`
         <div
           class="flex items-center gap-(--spacing-xs) border-b border-(--border-default) p-(--spacing-xs)"
         >
-          <Button
+          <div
             v-if="!leftOpen"
-            label="History"
-            icon="ai ai-history"
-            variant="outline"
-            size="medium"
-            class="shrink-0 md:hidden"
-            @click="leftOpen = true"
-          />
+            class="flex shrink-0 md:hidden"
+          >
+            <Button
+              label="History"
+              icon="ai ai-history"
+              variant="outline"
+              size="medium"
+              @click="leftOpen = true"
+            />
+          </div>
           <Button
             label="Run query"
             variant="primary"

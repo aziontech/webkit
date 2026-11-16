@@ -299,7 +299,7 @@
                       </Item.Content>
                       <Item.Actions
                         v-if="!row.note"
-                        class="max-sm:basis-full"
+                        class="basis-full sm:basis-auto"
                       >
                         <DropdownMenu
                           v-model:open="versionOpen[row.key]"
