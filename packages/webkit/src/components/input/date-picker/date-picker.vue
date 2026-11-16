@@ -385,9 +385,8 @@
           @keydown="onPanelKeydown"
         >
           <div
-            class="flex items-stretch"
+            class="flex flex-col items-stretch data-[horizontal]:sm:flex-row"
             :data-horizontal="isHorizontal || null"
-            :class="isHorizontal ? 'flex-row' : 'flex-col'"
           >
             <div class="p-(--spacing-sm)">
               <DatePickerGrid />
@@ -395,12 +394,8 @@
 
             <div
               :data-size="size"
-              class="flex flex-col gap-(--spacing-sm) p-(--spacing-sm)"
-              :class="
-                isHorizontal
-                  ? 'min-w-(--container-3xs) border-s border-(--border-default)'
-                  : 'border-t border-(--border-default) data-[size=small]:max-w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:max-w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:max-w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))]'
-              "
+              :data-horizontal="isHorizontal || null"
+              class="flex flex-col gap-(--spacing-sm) border-t border-(--border-default) p-(--spacing-sm) data-[size=small]:max-w-[calc(7*var(--size-8)_+_2*var(--spacing-sm))] data-[size=medium]:max-w-[calc(7*var(--size-9)_+_2*var(--spacing-sm))] data-[size=large]:max-w-[calc(7*var(--size-10)_+_2*var(--spacing-sm))] data-[horizontal]:sm:min-w-(--container-3xs) data-[horizontal]:sm:max-w-none data-[horizontal]:sm:border-t-0 data-[horizontal]:sm:border-s"
             >
               <DatePickerFields v-if="showFields" />
 

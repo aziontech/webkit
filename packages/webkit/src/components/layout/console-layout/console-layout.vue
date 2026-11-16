@@ -528,10 +528,8 @@
                 size="small"
                 variant="square"
               />
-              <span
-                dir="auto"
-                class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
-                >{{ account.name }}</span
+              <span class="min-w-0 flex-1 truncate text-label-sm text-(--text-default)"
+                ><bdi>{{ account.name }}</bdi></span
               >
               <DropdownMenu
                 v-if="$slots['account-menu']"

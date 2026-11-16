@@ -231,7 +231,7 @@
         </AppHeaderBrand>
       </AppHeaderStart>
 
-      <AppHeaderCenter class="justify-start!">
+      <AppHeaderCenter class="justify-start! max-xl:hidden">
         <NavigationMenu
           aria-label="Azion"
           class="min-w-0"
@@ -302,7 +302,7 @@
         </NavigationMenu>
       </AppHeaderCenter>
 
-      <AppHeaderEnd>
+      <AppHeaderEnd class="ms-auto">
         <div
           v-if="contact"
           class="hidden xl:flex"
@@ -351,7 +351,7 @@
       size="small"
     >
       <DrawerContent>
-        <PanelHeader class="hidden w-full md:flex">
+        <PanelHeader class="w-full">
           <DrawerTitle>{{ t('siteHeaderSection.menu') }}</DrawerTitle>
         </PanelHeader>
 
@@ -369,7 +369,7 @@
 
         <PanelFooter
           v-if="primaryAction || secondaryAction"
-          class="w-full flex-col items-stretch px-(--spacing-md)"
+          class="w-full flex-col items-stretch px-(--spacing-md) max-sm:*:flex-none"
         >
           <Button
             v-if="secondaryAction"

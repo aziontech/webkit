@@ -82,6 +82,7 @@
       :aria-label="ariaLabel || placeholderText"
       size="large"
       class="min-w-0 flex-1"
+      data-autofocus
       role="combobox"
       autocomplete="off"
       :aria-expanded="ctx.isOpen.value"

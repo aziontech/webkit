@@ -20,6 +20,7 @@
   import Dialog from '../dialog/dialog.vue'
   import DialogContent from '../dialog/dialog-content.vue'
   import DialogTitle from '../dialog/dialog-title.vue'
+  import PanelHeader from '../panel/panel-header.vue'
   import {
     CommandInjectionKey,
     type CommandItemValue,
@@ -411,7 +412,9 @@
     @update:open="(value) => setOpen(value)"
   >
     <DialogContent>
-      <DialogTitle class="sr-only">{{ t('command.title') }}</DialogTitle>
+      <PanelHeader class="min-h-(--spacing-2xl) py-(--spacing-xs) sm:hidden">
+        <DialogTitle class="sr-only">{{ t('command.title') }}</DialogTitle>
+      </PanelHeader>
       <div
         class="flex flex-col"
         role="presentation"

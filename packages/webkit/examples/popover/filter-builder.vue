@@ -65,7 +65,7 @@
 
       <fieldset class="m-0 flex min-w-0 flex-col gap-(--spacing-xs) border-0 p-(--spacing-md)">
         <FieldLegend type="label">New Filter</FieldLegend>
-        <div class="flex items-start gap-(--spacing-sm)">
+        <div class="flex flex-col gap-(--spacing-sm) sm:flex-row sm:items-start">
           <div class="min-w-0 flex-1">
             <SelectRoot
               v-model="field"
