@@ -151,6 +151,7 @@ describe('screen-reader smoke · overlays', () => {
     expect(snapshot).toMatchInlineSnapshot(`
       "- dialog "Command menu":
         - heading "Command menu" [level=2]
+        - button "Close"
         - combobox "Search commands…" [expanded]
         - listbox:
           - group "Suggestions":
@@ -169,21 +170,19 @@ describe('screen-reader smoke · overlays', () => {
   it('NavigationMenu', async () => {
     const snapshot = await openAndRead(
       NavigationMenuDefault,
-      () => button('Soluções'),
-      'nav[aria-label="Azion"]'
+      () => button('Solutions'),
+      'nav[aria-label="Acme"]'
     )
     expect(snapshot).toMatchInlineSnapshot(`
-      "- navigation "Azion":
+      "- navigation "Acme":
         - list:
           - listitem:
-            - button "Soluções" [expanded]
+            - button "Solutions" [expanded]
           - listitem:
-            - button "Produtos"
+            - button "Products"
           - listitem:
-            - link "Preços":
-              - /url: https://www.azion.com/pt-br/precos/
-        - link "Contato":
-          - /url: https://www.azion.com/pt-br/contato-vendas/"
+            - link "Pricing":
+              - /url: https://example.com/pricing/"
     `)
   })
 })
