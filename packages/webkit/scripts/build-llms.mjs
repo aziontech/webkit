@@ -873,8 +873,13 @@ function foundations(catalog) {
       slug: 'site-pages',
       title: 'Site pages (Web Design Guide)',
       summary:
-        'SD-01 to SD-25: the sections, heroes, action labels, line budgets and assets of every Azion web page.',
-      body: [rule('webkit-site-pages')]
+        'The Web Design Guide, SD-01 to SD-25 (SD-07 headline lines, SD-04 action labels): sections, heroes, line budgets and assets of every Azion web page.',
+      body: [rule('webkit-site-pages')],
+      compact: [
+        section(readRepo('rules/webkit-site-pages.md'), /^## Index/),
+        section(readRepo('rules/webkit-site-pages.md'), /^## Where the content comes from/),
+        'Each rule in full, with Incorrect, Correct, Why and Exceptions: `foundations/site-pages.md`.'
+      ]
     },
     {
       slug: 'usage',
