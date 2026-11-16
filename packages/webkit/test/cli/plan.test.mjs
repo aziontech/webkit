@@ -72,6 +72,49 @@ test(
   }
 )
 
+test("planInit writes a .prettierrc.json in the copied blocks' style when the app has none", () => {
+  const dir = makeProject()
+  try {
+    const write = planInit(dir, {}).find((a) => a.type === 'write' && a.path === '.prettierrc.json')
+    assert.ok(write, 'expected .prettierrc.json write action')
+    assert.equal(write.skipIfExists, true)
+    const repo = JSON.parse(
+      readFileSync(fileURLToPath(new URL('../../../../.prettierrc.json', import.meta.url)), 'utf8')
+    )
+    delete repo.$schema
+    assert.deepEqual(JSON.parse(write.content), repo)
+  } finally {
+    rmSync(dir, { recursive: true, force: true })
+  }
+})
+
+test("planInit keeps an existing Prettier config and prints the blocks' options instead", () => {
+  for (const setup of [
+    (dir) => writeFileSync(join(dir, '.prettierrc'), '{ "semi": true }\n'),
+    (dir) => writeFileSync(join(dir, 'prettier.config.mjs'), 'export default {}\n'),
+    (dir) =>
+      writeFileSync(
+        join(dir, 'package.json'),
+        JSON.stringify({ name: 'demo', version: '1.0.0', prettier: { semi: true } })
+      )
+  ]) {
+    const dir = makeProject()
+    try {
+      setup(dir)
+      const plan = planInit(dir, {})
+      assert.equal(
+        plan.find((a) => a.type === 'write' && a.path === '.prettierrc.json'),
+        undefined
+      )
+      const advice = plan.find((a) => a.type === 'advise' && /Prettier config/.test(a.message))
+      assert.ok(advice, 'expected the Prettier advice')
+      assert.match(advice.message, /"singleAttributePerLine": true/)
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  }
+})
+
 test('planInit writes eslint.config.mjs and .stylelintrc.json when absent', () => {
   const dir = makeProject()
   try {
