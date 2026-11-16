@@ -100,7 +100,8 @@ async function main() {
       description:
         'The POSITIVE token inventory (what to USE instead of hardcoding): without a category, ' +
         'returns the token group index + typography classes + the canonical prop/event vocabulary ' +
-        '(kind over variant, severity over status, …); with a category ("primary", "bg", ' +
+        '(variant over kind or appearance, severity over tone for colour meaning, status for job ' +
+        'state, …); with a category ("primary", "bg", ' +
         '"text", "spacing", "radius", "shadow", …) returns that group\'s CSS custom properties.',
       inputSchema: {
         category: z
@@ -175,9 +176,9 @@ async function main() {
     {
       title: 'Get the correct + performant import',
       description:
-        'The correct, tree-shakeable import line for a component (for a compound root this is the ' +
-        '"<name>-root" import), plus the PascalCase binding and, when relevant, the compound ' +
-        'dot-notation alternative.',
+        'The import line for a component and its PascalCase binding. For a compound root it is the ' +
+        '"<name>-root" import bound as <Name>Root (the root alone, no dot-notation parts), plus the ' +
+        'compound import that dot-notation (<Name>.<Part>) needs.',
       inputSchema: {
         name: z.string().describe('Component name (kebab-case), e.g. "button" or "table".')
       }

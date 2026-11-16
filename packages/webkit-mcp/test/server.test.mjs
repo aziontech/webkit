@@ -89,6 +89,21 @@ test('the server answers over stdio from the installed @aziontech/webkit catalog
   }
   assert.ok(!names.some((name) => /pattern/.test(name)), 'no tool keeps the old pattern name')
 
+  const vocabulary = JSON.parse(
+    readFileSync(new URL('../../webkit/catalog.json', import.meta.url), 'utf8')
+  ).vocabulary.props
+  const preferred = []
+  for (const tool of list.result.tools) {
+    for (const { aliases } of vocabulary) {
+      for (const alias of aliases) {
+        if (new RegExp(`\\b${alias} over\\b`).test(tool.description)) {
+          preferred.push(`${tool.name}: prefers the banned alias "${alias}"`)
+        }
+      }
+    }
+  }
+  assert.deepEqual(preferred, [], 'a tool description teaches a banned alias')
+
   const validate = list.result.tools.find((tool) => tool.name === 'validate_usage')
   const componentDoc = validate.inputSchema.properties.component.description
   assert.match(componentDoc, /layout utilities \(w-full, [^)]+\)/)
