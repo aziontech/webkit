@@ -29,12 +29,12 @@
 - 15:03 Final: `npm run build` passes (vue-tsc -b + vite build), `webkit check` 0 errors (1 warning: devDeps pinned as "latest" — written by `webkit init` itself, **low**), eslint + stylelint clean, all 4 pages + / shot with no page errors. `vite preview` serves /, /site-solution-*, and unknown paths with 200 (SPA fallback). Dev server stopped.
 - 15:03 **low (process)** — Careful: a shared machine; another job's server was on port 5132, so I tested the build on 5191 and stopped only my own processes by PID.
 
-
 ---
 
 # DONE — job S1b
 
 ## Pages
+
 - `site-solution-performance`: built — all 11 template bands (hero, 3×2 capability grid, 4 media-split bands, client quotes + logo tabs, platform directory, network map + 4 client outcomes, recognition marquee, FAQ, split closing CTA) plus SiteNav/SiteFooter. Gaps: band media are WebKit illustrations, not the reference's request-flow diagrams; blue (not orange) eyebrow cursor; Rubik instead of the site's heading face; FAQ answers written by me (reference only gives questions).
 - `site-solution-ai`: built — same, plus TemplateGallery (6 templates, stack ticker) and the benefit-style network floor. Same gaps.
 - `site-solution-security`: built — same template, 4 bands, benefit network floor. Same gaps.
@@ -42,9 +42,11 @@
 - `/` lists links to all four pages.
 
 ## WebKit pieces used most
+
 SectionContainer (site) + SectionGap (hatch), HeroBand (title-band, large), CapabilityGrid, MediaSplitStack, TemplateGallery, ClientQuotes, PlatformDirectory, NetworkSection (outcomes), RecognitionMarquee, FaqSection, ClosingCallToAction (split), SiteNav, SiteFooter, WebkitProvider, Link/SectionTitle (index page), `@aziontech/webkit/assets/*` logos, brand-mark and illustration registries, `ai`/`pi` icon fonts.
 
 ## Top 5 problems with WebKit (by impact)
+
 1. **TypeScript doesn't work out of the box (high):** every `@aziontech/webkit/<name>` import fails `vue-tsc -b` (TS2307) because the exports map points at raw `.vue` files; TS 6 also rejects the `@aziontech/icons` side-effect import. Needed TS 5.9 and a hand-generated per-module `declare module` shim, so components lose their prop types. And `webkit check` flags a wildcard shim as an unknown import.
 2. **Media splits can't show diagrams (medium):** MediaSplitStack takes only `image`/`illustration`. The reference bands show the product request-flow diagrams that WebKit ships as `Diagram` specs, so every page shows the wrong kind of picture.
 3. **Theme mismatches the site (medium):** `--font-sans` is Rubik, not the site's heading face, so headings wrap differently. The Overline cursor uses `--accent`, which is blue (#0072F5), not the orange the site uses. Neither can change without overriding tokens.
@@ -52,4 +54,5 @@ SectionContainer (site) + SectionGap (hatch), HeroBand (title-band, large), Capa
 5. **Doc examples use asset URLs that don't exist (medium):** examples use `/marketing-components/...` paths a consumer app doesn't have. The mapping to the exported `@aziontech/webkit/assets/*.svg` files is only in an undocumented `site-assets.json`. Smaller gaps: ClientQuotes autoplays with no prop to control it; SiteNav shows Login on mobile; SiteFooter has no external-link flag; NetworkSection's benefits floor had to be faked with logo-less outcomes. Also, the package ships review/eval material (`docs/reviews/m2.7/battery-2-kit`).
 
 ## Build
+
 `npm run build` (vue-tsc -b && vite build) **passes**. `webkit check`: 0 errors, 1 warning. eslint and stylelint are clean. `dist/` works as a static SPA (tested with `vite preview`: unknown paths return index.html). Git history: setup commit, then one commit per page.

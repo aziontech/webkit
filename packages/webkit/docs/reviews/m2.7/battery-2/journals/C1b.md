@@ -27,20 +27,22 @@
 - 15:04 **low** — `webkit doctor` warns "no WebkitProvider in src/", but no block or the README Quick start wraps the app in it; added `<WebkitProvider locale="en">` in App.vue.
 - 15:04 final: all three pages shot (desktop heights 1614/1136/900 vs ref 1636/1136/900), `npm run build` passes, `vite preview` serves every route and unknown paths with 200 (SPA fallback). Dev server stopped. Total ~75 min.
 
-
 ---
 
 # DONE — job C1b (console)
 
 ## Pages
+
 - `console-real-time-events`: built — from block `platform/view/split-view` (Azion nav, sources, hosts, 14 event templates, live timestamps; summary 1,500 / 325 / 490 ms). Gap: histogram bars render with segment gaps and headroom (Chart.Bar 5.12), not solid columns like the reference.
 - `console-applications-list`: built — `shells/console` (as a slot layout `ConsoleShell`) + `platform/view/table-view` body with the shell's Filter + search toolbar. Gaps: Last Editor shows initials avatars, not photos (no external images); "Create Application" follows the reference (outlined), not the block (primary large).
 - `console-application-create`: built — `platform/create/source-wizard` variant WhereItRuns (creation header, Stepper rail, workload chooser, "Step 1 of 4" on phone). Gap: picker rows ~45 px / small text vs reference 38 px / larger text (no Item size for it).
 
 ## WebKit pieces used most
+
 Blocks `platform/view/split-view`, `platform/view/table-view`, `platform/create/source-wizard`, `shells/console`; components `AppLayout`, `Sidebar`, `Menu`, `GlobalHeader`, `SearchTrigger`, `Command`, `Brand`, `Avatar`, `Button`, `ButtonHighlight`, `IconButton`, `Tooltip`, `Input`, `PageHeader`, `Card`, `TableRoot` + `Table.CellLink` / `CellTime` / `CellActions`, `StatusIndicator`, `Chart`, `Accordion`, `Checkbox`, `Chip`, `Badge`, `Stepper`, `Item`, `Breadcrumb`, `Link`, `WebkitProvider`; composable `useCollection`; theme layout classes and tokens; `@aziontech/icons` (`ai-*` product glyphs, `ai-cor` brand logos).
 
 ## Top 5 problems with WebKit (by impact)
+
 1. `npm run build` (vue-tsc) fails out of the box: `@aziontech/webkit/<name>` exports point to `.vue` sources with no types, so every import is TS2307. The README's `vueCompilerOptions` fix does not help. Needed hand-written `declare module` shims, which lose prop typing.
 2. The tooling `init` installs blocks itself. The husky pre-commit lint fails on the canonical `split-view` block (`label-has-for`), on create-vite's `vite.config.ts` comment, and on `dist/` (ESLint and stylelint have no ignores, so they lint WebKit's own bundled hex colours and timings).
 3. No way to compose a shell with a page block. `table-view` has no shell, `split-view` carries its own copy of the shell inline (2,844 lines, nav duplicated), and `shells/console` has a stand-in body. I had to turn a block into a slot layout by hand. The nav sample data is generic, not the Azion console nav.
@@ -48,4 +50,5 @@ Blocks `platform/view/split-view`, `platform/view/table-view`, `platform/create/
 5. Some cell and chart features are missing: `Table.CellLink` has no leading-icon slot, `Button` has no link kind, `Chart.Bar stacked` cannot draw solid columns, and `Item` cannot give the 38 px picker row. Smaller doc errors: the icons colour CSS comment names the wrong class (`ai-google-cor` instead of `ai-cor ai-google`), and `webkit check` flags a wildcard `.d.ts` module as an unknown import.
 
 ## Build
+
 `npm run build` passes (vue-tsc + vite build → `app/dist/`). `npx @aziontech/webkit check`: 0 errors, 1 warning (versions pinned to "latest" by `init`). ESLint and stylelint are clean. `vite preview` returned 200 for `/`, all three routes and an unknown path (SPA fallback). Router is in history mode with `/:pathMatch(.*)*` → `/`, so a static host also needs a rewrite to `index.html` for unknown paths.

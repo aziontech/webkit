@@ -5,7 +5,11 @@ import { fileURLToPath } from 'node:url'
 import { dirname, join, relative, resolve } from 'node:path'
 
 import { CONTENT_CHECKS, scanFile, MESSAGES } from '../src/eslint-plugin/lib/authoring-checks.js'
-import { scanTokens, tokenChecksApply, TOKEN_MESSAGES } from '../src/eslint-plugin/lib/token-checks.js'
+import {
+  scanTokens,
+  tokenChecksApply,
+  TOKEN_MESSAGES
+} from '../src/eslint-plugin/lib/token-checks.js'
 import { scanSignatures } from '../src/eslint-plugin/lib/signature-checks.js'
 import {
   EXAMPLE_DATA_DIRS,

@@ -150,7 +150,10 @@ test('the sample reader finds the code and tells wrong examples apart', () => {
 test('a synthesized import makes a fragment lintable, so a style override on a webkit tag fails', () => {
   const [hit] = lintSample({ lang: 'vue', code: '<Tag label="x" class="p-4" />' })
   assert.equal(hit?.ruleId, 'webkit/no-style-override')
-  assert.deepEqual(lintSample({ lang: 'vue', code: '<DataTable :data="rows" class="h-full" />' }), [])
+  assert.deepEqual(
+    lintSample({ lang: 'vue', code: '<DataTable :data="rows" class="h-full" />' }),
+    []
+  )
 })
 
 test('every code sample in skills/ and rules/ passes the consumer lint preset', () => {

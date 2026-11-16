@@ -41,23 +41,25 @@
   - **low** — ClientQuotes doesn't expose QuoteTabs' `autoplay`, so the band moves on to the 2nd client (Axur) during a 2.5 s screenshot, while the reference shows Contabilizei. Can't pin it without going below the section.
   - **low** — CompareSupportTiers requires `description` per tier ("who it is for"), but the reference header shows only name + button; passed empty strings (nothing rendered, good).
 - 15:03 Final pass: `npm run build` passes (vue-tsc app + node, vite build, dist/404.html copy); `npx @aziontech/webkit check` → 0 errors, 1 warning (the init-made "latest" pins); `vite preview` serves /, all 4 routes and an unknown deep path with index.html. Shot all 4 pages at the end (no page errors). Dev server stopped.
-- Summary of what worked well: llms.txt as a map; the marketing *sections* (one prop object per band, almost no composition needed); HeroForm/CompareSupportTiers/StoryLibrary as data-driven bands with real behaviour (validation, filters, tier picker); SectionContainer/SectionGap keep the side rules continuous for free; SiteNav/SiteFooter reproduce the chrome incl. mobile drawer. Total ≈ 2 h 45 min, of which ~45 min was friction (typecheck, lint hook, asset URLs, picking hero kinds).
-
+- Summary of what worked well: llms.txt as a map; the marketing _sections_ (one prop object per band, almost no composition needed); HeroForm/CompareSupportTiers/StoryLibrary as data-driven bands with real behaviour (validation, filters, tier picker); SectionContainer/SectionGap keep the side rules continuous for free; SiteNav/SiteFooter reproduce the chrome incl. mobile drawer. Total ≈ 2 h 45 min, of which ~45 min was friction (typecheck, lint hook, asset URLs, picking hero kinds).
 
 ---
 
 # DONE — job S4a (site)
 
 ## Pages
+
 - `site-success-cases`: **built** — hero, 3 coloured featured tiles, filterable story library (search + 3 facets + Load more), analyst marquee, closing CTA. Gaps: brand faces use theme primitives (no client-colour tokens); story text smaller/muted than the reference; theme font differs (Rubik vs reference face).
 - `site-partners`: **built** — form hero (all 9 fields, Required tags, +1 phone, selects, mock submit), stats band, "Why…" grid. Gap: grid item headings are h2 (reference h3) because the left-aligned title had to come from SectionModule.
 - `site-marketplace`: **built** — dot-field hero with client ticker, 3 value cells (one linked), "What is the Azion Marketplace?" + 3 checks, client quotes wall. Gap: quotes for clients other than Contabilizei are mock/WebKit-example text (not in pages.json).
 - `site-support`: **built** — hero with ticker, 3 pillars, full tier comparison table (2 bands, 4 tiers, Enterprise highlighted, mobile tier picker), client quotes, FAQ (11 questions), split closing CTA. Gap: FAQ answers are mock (only questions given); quotes band autoplays past Contabilizei.
 
 ## WebKit pieces used most
+
 SectionContainer + SectionGap (every page), SiteNav, SiteFooter, HeroBand (centered-band / centered), CapabilityGrid, SectionModule, ClientQuotes, HeroForm, StatsBand, StoryLibrary, ClientMosaicColumns, RecognitionMarquee, CompareSupportTiers, FaqSection, ClosingCallToAction, CardGrid + CardGridCell + Topic, WebkitProvider, `@aziontech/webkit/assets/*` logos, `carouselMarks` registry names.
 
 ## Top 5 problems with WebKit (by impact)
+
 1. **Build breaks on WebKit's own code / typing** — the Vite template's `vue-tsc -b` can't resolve `@aziontech/webkit/<name>` subpaths, `import '@aziontech/icons'` (written by init) has no types, and `compare-support-tiers.vue` itself fails vue-tsc (TS2304 `section`). Needed a custom build script, an env.d.ts declaration and a `paths` shim. (high)
 2. **Examples use asset URLs that don't exist in a consumer app** (`/marketing-components/logos/…`); the working `@aziontech/webkit/assets/<file>` import form is only discoverable from package.json exports. (high)
 3. **init's pre-commit hook blocks every commit after the first build** — eslint/stylelint configs don't ignore `dist/`, so WebKit's own compiled CSS/JS fails the lint. (medium)
@@ -65,4 +67,5 @@ SectionContainer + SectionGap (every page), SiteNav, SiteFooter, HeroBand (cente
 5. **Docs ambiguity that costs trial and error** — HeroBand `centered` vs `centered-band` vs `title-band` only distinguishable by trying; exported prop types (`HeroFormField`) undocumented; card-grid example imports contradict the lint (`prefer-tree-shakeable-root`); hex colours in ClientMosaicColumns examples vs the "tokens only" rule; dark-only site setup only mentioned in an init NOTE. (medium)
 
 ## Build
+
 `npm run build` **passes** (vue-tsc app + node, `vite build`, `dist/404.html` fallback copy). `dist/` serves as a static SPA (verified with `vite preview`: `/`, all four routes and an unknown deep path return index.html). `npx @aziontech/webkit check`: 0 errors, 1 warning. Git: 4 commits in `app/` (setup+page 1, then one per page).
