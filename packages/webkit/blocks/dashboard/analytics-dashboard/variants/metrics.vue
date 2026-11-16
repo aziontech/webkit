@@ -883,15 +883,35 @@
   const apiFields: Record<string, string> = {
     asn: 'geolocAsn',
     country: 'geolocCountryName',
-    region: 'geolocRegionName'
+    region: 'geolocRegionName',
+    threat: 'wafAttackFamily'
   }
+
+  const breakdownOnlyFields = ['remoteAddress', 'geolocAsn']
+  const breakdownDatasetFields = [
+    'host',
+    'geolocCountryName',
+    'geolocRegionName',
+    'geolocAsn',
+    'remoteAddress',
+    'httpUserAgent',
+    'requestPath',
+    'httpReferer',
+    'sentHttpContentType',
+    'upstreamAddr'
+  ]
 
   const apiTime = (iso: string) => iso.replace(/(\.\d+)?Z$/, '')
 
-  const cardQuery = (groupBy: string[], orderBy: string, limit: number) =>
+  const cardQuery = (
+    groupBy: string[],
+    orderBy: string,
+    limit: number,
+    dataset = product.value.dataset
+  ) =>
     [
       'query {',
-      `  ${product.value.dataset}(`,
+      `  ${dataset}(`,
       `    limit: ${limit}`,
       `    filter: { tsRange: { begin: "${apiTime(currentPeriod.value.begin)}", end: "${apiTime(currentPeriod.value.end)}" } }`,
       `    aggregate: { sum: ${product.value.measure} }`,
@@ -940,15 +960,22 @@
 
   const onBreakdownOption = (breakdown: Breakdown, value: string | number) => {
     if (value === 'query') {
+      const fields = breakdown.columns
+        .map((column) => column.id ?? '')
+        .filter((id) => id !== 'requests')
+        .map((id) => apiFields[id] ?? id)
+      const needsBreakdown =
+        product.value.dataset === 'workloadMetrics' &&
+        fields.some((field) => breakdownOnlyFields.includes(field))
       copyQuery(
-        cardQuery(
-          breakdown.columns
-            .map((column) => column.id ?? '')
-            .filter((id) => id !== 'requests')
-            .map((id) => apiFields[id] ?? id),
-          'sum_DESC',
-          1000
-        )
+        needsBreakdown
+          ? cardQuery(
+              fields.filter((field) => breakdownDatasetFields.includes(field)),
+              'sum_DESC',
+              1000,
+              'workloadBreakdownMetrics'
+            )
+          : cardQuery(fields, 'sum_DESC', 1000)
       )
       return
     }
