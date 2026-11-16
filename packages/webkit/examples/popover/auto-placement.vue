@@ -13,14 +13,14 @@
     <p
       class="absolute top-(--spacing-md) left-1/2 -translate-x-1/2 text-body-sm text-(--text-muted) text-center max-w-md"
     >
-      All triggers use placement="auto". Each panel resolves to the best-fitting corner based on its
+      All triggers use side="auto". Each panel resolves to the best-fitting corner based on its
       position in the viewport.
     </p>
 
     <div class="absolute top-(--spacing-md) start-(--spacing-md)">
       <PopoverRoot
         :open="true"
-        placement="auto"
+        side="auto"
       >
         <PopoverTrigger>
           <Button
@@ -41,7 +41,7 @@
     <div class="absolute top-(--spacing-md) end-(--spacing-md)">
       <PopoverRoot
         :open="true"
-        placement="auto"
+        side="auto"
       >
         <PopoverTrigger>
           <Button
@@ -62,7 +62,7 @@
     <div class="absolute bottom-(--spacing-md) start-(--spacing-md)">
       <PopoverRoot
         :open="true"
-        placement="auto"
+        side="auto"
       >
         <PopoverTrigger>
           <Button
@@ -83,7 +83,7 @@
     <div class="absolute bottom-(--spacing-md) end-(--spacing-md)">
       <PopoverRoot
         :open="true"
-        placement="auto"
+        side="auto"
       >
         <PopoverTrigger>
           <Button

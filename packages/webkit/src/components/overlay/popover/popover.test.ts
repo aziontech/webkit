@@ -111,12 +111,13 @@ describe('Popover', () => {
     })
 
     // ---- Closed state ----------------------------------------------------------
-    it('renders the root closed with default testid, placement and no panel', () => {
+    it('renders the root closed with default testid, side, align and no panel', () => {
       const { getByTestId } = render(host())
 
       const root = getByTestId('popover')
       expect(root.getAttribute('data-state')).toBe('closed')
-      expect(root.getAttribute('data-placement')).toBe('bottom-start')
+      expect(root.getAttribute('data-side')).toBe('bottom')
+      expect(root.getAttribute('data-align')).toBe('start')
       expect(root.hasAttribute('data-disabled')).toBe(false)
       expect(panel()).toBeNull()
     })
@@ -463,13 +464,19 @@ describe('Popover', () => {
      * when it does not, always preserving the alignment. A spacer positions the
      * trigger so each case is deterministic in the real viewport.
      */
-    const placedHost = (placement: string, spacerHeight = 0, rows = 1, wrapperStyle = '') =>
+    const placedHost = (
+      [side, align]: readonly [string, string],
+      spacerHeight = 0,
+      rows = 1,
+      wrapperStyle = '',
+      dir = 'ltr'
+    ) =>
       defineComponent({
         components: { Popover, PopoverTrigger, PopoverContent },
         template: `
-        <div style="${wrapperStyle}">
+        <div dir="${dir}" style="${wrapperStyle}">
           <div style="height: ${spacerHeight}px"></div>
-          <Popover placement="${placement}">
+          <Popover side="${side}" align="${align}">
             <PopoverTrigger><button type="button">Open</button></PopoverTrigger>
             <PopoverContent>
               <p v-for="i in ${rows}" :key="i" style="height: 24px; margin: 0">Anchored content {{ i }}</p>
@@ -479,59 +486,85 @@ describe('Popover', () => {
       `
       })
 
-    it.each(['bottom-start', 'bottom-end'] as const)(
-      'honors placement=%s verbatim when the panel fits below the trigger',
-      async (placement) => {
-        const { getByTestId } = render(placedHost(placement))
-        expect(getByTestId('popover').getAttribute('data-placement')).toBe(placement)
+    const landed = () => {
+      const p = panel() as HTMLElement
+      return [p.getAttribute('data-side'), p.getAttribute('data-align')]
+    }
+
+    it.each([
+      ['bottom', 'start'],
+      ['bottom', 'end']
+    ] as const)(
+      'honors side=%s align=%s verbatim when the panel fits below the trigger',
+      async (side, align) => {
+        const { getByTestId } = render(placedHost([side, align]))
+        expect(getByTestId('popover').getAttribute('data-side')).toBe(side)
+        expect(getByTestId('popover').getAttribute('data-align')).toBe(align)
 
         await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
         await waitFor(() => expect(panel()).not.toBeNull())
-        expect((panel() as HTMLElement).getAttribute('data-placement')).toBe(placement)
-      }
-    )
-
-    it.each(['top-start', 'top-end'] as const)(
-      'honors placement=%s verbatim when the panel fits above the trigger',
-      async (placement) => {
-        // Spacer pushes the trigger down so room exists above.
-        render(placedHost(placement, 400))
-
-        await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
-        await waitFor(() => expect(panel()).not.toBeNull())
-        expect((panel() as HTMLElement).getAttribute('data-placement')).toBe(placement)
+        expect(landed()).toEqual([side, align])
       }
     )
 
     it.each([
-      ['right-start', ''],
-      ['right', 'padding-top: 200px'],
-      ['left-start', 'padding-inline-start: 320px'],
-      ['left-end', 'padding-inline-start: 320px; padding-top: 200px']
+      ['top', 'start'],
+      ['top', 'end']
     ] as const)(
-      'honors the side placement=%s verbatim when the panel fits beside the trigger',
+      'honors side=%s align=%s verbatim when the panel fits above the trigger',
+      async (side, align) => {
+        render(placedHost([side, align], 400))
+
+        await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
+        await waitFor(() => expect(panel()).not.toBeNull())
+        expect(landed()).toEqual([side, align])
+      }
+    )
+
+    it.each([
+      [['end', 'start'], ''],
+      [['end', 'center'], 'padding-top: 200px'],
+      [['start', 'start'], 'padding-inline-start: 320px'],
+      [['start', 'end'], 'padding-inline-start: 320px; padding-top: 200px']
+    ] as const)(
+      'honors the inline side %j verbatim when the panel fits beside the trigger',
       async (placement, wrapperStyle) => {
         render(placedHost(placement, 0, 1, wrapperStyle))
 
         await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
         await waitFor(() => expect(panel()).not.toBeNull())
-        expect((panel() as HTMLElement).getAttribute('data-placement')).toBe(placement)
+        expect(landed()).toEqual([...placement])
       }
     )
 
-    it('flips a top placement to bottom (alignment preserved) when no room exists above', async () => {
-      // Trigger at the very top of the viewport: top-start cannot fit.
-      render(placedHost('top-start', 0))
+    it('flips side=top to bottom (alignment preserved) when no room exists above', async () => {
+      render(placedHost(['top', 'start'], 0))
 
       await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
-      expect((panel() as HTMLElement).getAttribute('data-placement')).toBe('bottom-start')
+      expect(landed()).toEqual(['bottom', 'start'])
+    })
+
+    it('resolves side=start to the right under rtl, so a trigger on the right edge flips to end', async () => {
+      render(placedHost(['start', 'start'], 0, 1, 'position:fixed;top:200px;right:0', 'rtl'))
+
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
+      await waitFor(() => expect(panel()).not.toBeNull())
+      expect(landed()).toEqual(['end', 'start'])
+    })
+
+    it('keeps side=start under rtl when the trigger sits on the left edge', async () => {
+      render(placedHost(['start', 'start'], 0, 1, 'position:fixed;top:200px;left:0', 'rtl'))
+
+      await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
+      await waitFor(() => expect(panel()).not.toBeNull())
+      expect(landed()).toEqual(['start', 'start'])
     })
 
     // ---- Size-aware placement (ENG-47063) --------------------------------------------
     it('caps a panel taller than the viewport to the free space and scrolls it internally', async () => {
       // Trigger near the top; 60 x 24px rows cannot fit on either side.
-      render(placedHost('bottom-start', 0, 60, 'position:fixed;top:8px;left:8px'))
+      render(placedHost(['bottom', 'start'], 0, 60, 'position:fixed;top:8px;left:8px'))
 
       await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
@@ -541,7 +574,10 @@ describe('Popover', () => {
       const p = panel() as HTMLElement
       const pr = p.getBoundingClientRect()
       const tr = (byTestId('popover-trigger') as HTMLElement).getBoundingClientRect()
-      expect(p.getAttribute('data-placement')).toBe('bottom-start')
+      expect([p.getAttribute('data-side'), p.getAttribute('data-align')]).toEqual([
+        'bottom',
+        'start'
+      ])
       expect(pr.top).toBeGreaterThanOrEqual(tr.bottom)
       expect(pr.bottom).toBeLessThanOrEqual(window.innerHeight)
       expect(p.style.maxHeight).not.toBe('')
@@ -552,7 +588,7 @@ describe('Popover', () => {
       // The trigger sits in a short scroll container; the panel must not extend past it.
       render(
         placedHost(
-          'bottom-start',
+          ['bottom', 'start'],
           0,
           30,
           'position:fixed;top:40px;left:8px;width:400px;height:240px;overflow:auto'
@@ -575,15 +611,13 @@ describe('Popover', () => {
       expect((panel() as HTMLElement).style.maxHeight).not.toBe('')
     })
 
-    it('placement=auto resolves to one of the four corners at open time', async () => {
-      const { getByTestId } = render(host({ placement: 'auto' }))
-      expect(getByTestId('popover').getAttribute('data-placement')).toBe('auto')
+    it('side=auto resolves to bottom or top at open time', async () => {
+      const { getByTestId } = render(host({ side: 'auto' }))
+      expect(getByTestId('popover').getAttribute('data-side')).toBe('auto')
 
       await fireEvent.click(byTestId('popover-trigger') as HTMLElement)
       await waitFor(() => expect(panel()).not.toBeNull())
-      expect(['bottom-start', 'bottom-end', 'top-start', 'top-end']).toContain(
-        (panel() as HTMLElement).getAttribute('data-placement')
-      )
+      expect(['bottom', 'top']).toContain((panel() as HTMLElement).getAttribute('data-side'))
     })
 
     // ---- Scrolling a long panel ------------------------------------------------------
