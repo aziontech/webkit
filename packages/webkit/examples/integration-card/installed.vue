@@ -1,12 +1,11 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
+  import IntegrationCard from '@aziontech/webkit/integration-card'
 </script>
 
 <template>
-  <Card
+  <IntegrationCard
     class="w-full max-w-[400px]"
-    variant="integration"
     title="Waiting Room"
     vendor="Tidewater"
     logo="ai ai-hourglass"
@@ -23,5 +22,5 @@
         icon="ai ai-settings"
       />
     </template>
-  </Card>
+  </IntegrationCard>
 </template>

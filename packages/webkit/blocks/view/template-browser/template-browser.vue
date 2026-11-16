@@ -7,6 +7,7 @@
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
   import EmptyState from '@aziontech/webkit/empty-state'
+  import IntegrationCard from '@aziontech/webkit/integration-card'
   import KeyValueList from '@aziontech/webkit/key-value-list'
   import PageHeader from '@aziontech/webkit/page-header'
   import PanelBody from '@aziontech/webkit/panel-body'
@@ -285,8 +286,7 @@
                 :key="item.id"
                 class="flex min-w-0"
               >
-                <Card
-                  variant="integration"
+                <IntegrationCard
                   class="w-full"
                   :title="item.title"
                   :logo="[item.icon, MARKS[item.framework]].filter(Boolean).join(' ')"

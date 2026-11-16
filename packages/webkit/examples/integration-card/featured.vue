@@ -1,5 +1,5 @@
 <script setup>
-  import Card from '@aziontech/webkit/card'
+  import IntegrationCard from '@aziontech/webkit/integration-card'
   import { ref } from 'vue'
 
   const opened = ref('')
@@ -51,9 +51,8 @@
         :key="item.id"
         class="flex min-w-0"
       >
-        <Card
+        <IntegrationCard
           class="w-full"
-          variant="integration"
           featured
           :title="item.name"
           :vendor="item.vendor"

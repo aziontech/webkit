@@ -1,7 +1,8 @@
 <script setup lang="ts">
   import Button from '@aziontech/webkit/button'
-  import Card, { type CardBadge } from '@aziontech/webkit/card'
+  import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
+  import IntegrationCard, { type IntegrationCardBadge } from '@aziontech/webkit/integration-card'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import SectionHeader from '@aziontech/webkit/section-header'
@@ -106,7 +107,7 @@
     manage: [event: MouseEvent]
   }>()
 
-  const recommendedBadge: CardBadge[] = [{ label: 'Recommended', variant: 'primary' }]
+  const recommendedBadge: IntegrationCardBadge[] = [{ label: 'Recommended', variant: 'primary' }]
 
   const currentDeployment = computed(() =>
     props.deployment === undefined ? sampleDeployment : props.deployment
@@ -418,10 +419,9 @@ jobs:
             <section class="flex flex-col gap-(--spacing-sm)">
               <h2 class="text-label-md text-(--text-default)">Next steps</h2>
               <div class="grid grid-cols-1 gap-(--spacing-sm) sm:grid-cols-3">
-                <Card
+                <IntegrationCard
                   v-for="step in currentNextSteps"
                   :key="step.title"
-                  variant="integration"
                   :title="step.title"
                   :logo="step.icon"
                   :description="step.description"

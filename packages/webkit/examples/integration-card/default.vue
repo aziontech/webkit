@@ -1,6 +1,6 @@
 <script setup>
   import Button from '@aziontech/webkit/button'
-  import Card from '@aziontech/webkit/card'
+  import IntegrationCard from '@aziontech/webkit/integration-card'
   import { ref } from 'vue'
 
   const opened = ref('')
@@ -8,8 +8,7 @@
 
 <template>
   <div class="flex w-full max-w-[400px] flex-col gap-(--spacing-sm)">
-    <Card
-      variant="integration"
+    <IntegrationCard
       title="Request Signer"
       vendor="Acme Inc."
       logo="ai ai-key"
@@ -24,7 +23,7 @@
           size="small"
         />
       </template>
-    </Card>
+    </IntegrationCard>
     <p
       class="m-0 text-body-xs text-(--text-muted)"
       role="status"

@@ -9,6 +9,7 @@
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Input from '@aziontech/webkit/input'
+  import IntegrationCard from '@aziontech/webkit/integration-card'
   import Item from '@aziontech/webkit/item'
   import Link from '@aziontech/webkit/link'
   import PageHeader from '@aziontech/webkit/page-header'
@@ -62,7 +63,7 @@
     id: string
     /** The section heading. */
     label: string
-    /** Recommended cards in three columns, or two-column integration cards. */
+    /** Recommended cards in three columns, or two-column integration tiles. */
     kind: CreateHubTemplateSectionKind
     /** The templates in the section. */
     items: CreateHubTemplate[]
@@ -606,10 +607,9 @@
                             v-if="section.kind === 'list'"
                             class="grid grid-cols-1 gap-(--spacing-md) sm:grid-cols-2"
                           >
-                            <Card
+                            <IntegrationCard
                               v-for="item in section.items"
                               :key="item.slug"
-                              variant="integration"
                               :title="item.title"
                               :logo="`${item.icon} ${item.markClass}`.trim()"
                               :vendor="item.vendor ?? ''"

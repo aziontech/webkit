@@ -1,0 +1,21 @@
+{
+  "component": "integration-card",
+  "title": "Components/Content/IntegrationCard",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "A catalog tile from the logo, the name, the vendor, a short description and a badge; the whole tile opens the detail through `select`, and the Install action in the `actions` slot stays its own target.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Installed",
+      "summary": "An installed tile shows the Installed tag and swaps Install for Configure; with `href` the tile is a link to the integration's page.",
+      "file": "installed.vue"
+    },
+    {
+      "name": "Featured",
+      "summary": "`featured` turns the tile into a highlight for a short row above the catalog: the mark, the name, the vendor and the description centred on a raised surface with a primary glow at the top, and the context badge in the corner.",
+      "file": "featured.vue"
+    }
+  ]
+}
