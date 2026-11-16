@@ -219,6 +219,8 @@
 
   const formatEventClock = (date: unknown) => (isDate(date) ? axisFormat(date) : '')
 
+  const formatEventClockSeconds = (date: unknown) => (isDate(date) ? clockFormat(date) : '')
+
   const eventSources: Record<string, string> = {
     http: 'HTTP Requests',
     security: 'Security',
@@ -642,7 +644,9 @@
 
   const columns = computed<TableColumn[]>(() => [
     { id: 'detail', header: '', width: 44, align: 'center', hideable: false },
-    ...coreFields.value.map(toColumn),
+    ...(compactLog.value
+      ? coreFields.value.filter((field) => field.id === 'message').map(toColumn)
+      : coreFields.value.map(toColumn)),
     ...optionalFields.value.filter((field) => shownColumns.value.includes(field.id)).map(toColumn)
   ])
 
@@ -688,6 +692,8 @@
       explorerWidth.value === 0 ||
       explorerWidth.value >= fieldsPanelWidth + logMinWidth + documentMinWidth
   )
+
+  const compactLog = computed(() => !isWide.value)
 
   const documentDrawerOpen = ref(false)
 
@@ -1359,8 +1365,35 @@
                       />
                     </template>
 
-                    <template #cell-message="{ value }">
-                      <span class="min-w-0 truncate text-(--text-default)">{{ value }}</span>
+                    <template #cell-message="{ value, row }">
+                      <div
+                        v-if="compactLog"
+                        class="flex min-w-0 flex-col gap-(--spacing-2xs) py-(--spacing-2xs)"
+                      >
+                        <div class="flex min-w-0 items-center gap-(--spacing-xs)">
+                          <Tag
+                            :label="String(row.level)"
+                            :severity="eventLevelSeverity(row.level)"
+                            size="small"
+                            class="shrink-0"
+                          />
+                          <span
+                            class="shrink-0 text-label-code-sm tabular-nums text-(--text-muted)"
+                            >{{ formatEventClockSeconds(row.at) }}</span
+                          >
+                          <span class="min-w-0 truncate text-body-xs text-(--text-muted)">{{
+                            row.sourceLabel
+                          }}</span>
+                        </div>
+                        <span class="whitespace-normal break-words text-(--text-default)">{{
+                          value
+                        }}</span>
+                      </div>
+                      <span
+                        v-else
+                        class="min-w-0 truncate text-(--text-default)"
+                        >{{ value }}</span
+                      >
                     </template>
 
                     <template #cell-status="{ value }">
