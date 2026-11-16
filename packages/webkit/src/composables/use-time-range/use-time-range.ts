@@ -27,7 +27,6 @@ const PRESETS: Record<TimeRangePresetKey, RelativeOption> = {
   'last-30-days': { key: 'last-30-days', amount: 30, unit: 'day' }
 }
 
-/** The four ranges a console screen offers first; pass them to `DateRangePicker` as `relative-options`. */
 export const TIME_RANGE_PRESETS: RelativeOption[] = Object.values(PRESETS)
 
 export function timeRangePreset(key: TimeRangePresetKey): DateRangeValue {
