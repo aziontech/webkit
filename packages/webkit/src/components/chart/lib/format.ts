@@ -43,18 +43,62 @@ export function formatSignedPercent(value: number, digits = 2, locale = DEFAULT_
   return format.format((fixed === 0 ? 0 : value) / 100)
 }
 
-export function formatLabel(label: ChartLabel, locale = DEFAULT_LOCALE, timeZone?: string): string {
-  if (label instanceof Date) {
-    const clock: Intl.DateTimeFormatOptions = {
-      hour: '2-digit',
-      minute: '2-digit',
-      hourCycle: 'h23',
-      timeZone
-    }
-    return dateFormat('en-GB', clock).format(label) === '00:00'
-      ? dateFormat(locale, { month: 'short', day: 'numeric', timeZone }).format(label)
-      : dateFormat(locale, clock).format(label)
+/** Extent and finest spacing of a chart's Date labels, in milliseconds since the epoch. */
+export interface ChartDateSpan {
+  /** Earliest Date label. */
+  from: number
+  /** Latest Date label. */
+  to: number
+  /** Smallest gap between two consecutive distinct Date labels; 0 when there is one label. */
+  step: number
+}
+
+const DAY = 86_400_000
+
+export function dateSpan(labels: readonly ChartLabel[]): ChartDateSpan | undefined {
+  const times = labels
+    .flatMap((label) =>
+      label instanceof Date && label.getTime() === label.getTime() ? [+label] : []
+    )
+    .sort((a, b) => a - b)
+  if (!times.length) return undefined
+  const step = times.reduce(
+    (min, time, index) =>
+      index && time > times[index - 1] ? Math.min(min, time - times[index - 1]) : min,
+    Infinity
+  )
+  return { from: times[0], to: times[times.length - 1], step: step === Infinity ? 0 : step }
+}
+
+function formatDate(label: Date, locale: string, timeZone?: string, span?: ChartDateSpan): string {
+  const clock: Intl.DateTimeFormatOptions = {
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+    timeZone
   }
+  const midnight = dateFormat('en-GB', clock).format(label) === '00:00'
+  const day: Intl.DateTimeFormatOptions = { month: 'short', day: 'numeric', timeZone }
+  if (!span || span.to - span.from <= DAY)
+    return dateFormat(locale, midnight ? day : clock).format(label)
+  const years = dateFormat('en-GB', { year: 'numeric', timeZone })
+  const year = years.format(span.from) === years.format(span.to) ? undefined : 'numeric'
+  const options: Intl.DateTimeFormatOptions =
+    span.step >= 28 * DAY
+      ? { month: 'short', year, timeZone }
+      : span.step >= DAY || midnight
+        ? { ...day, year }
+        : { ...day, ...clock }
+  return dateFormat(locale, options).format(label)
+}
+
+export function formatLabel(
+  label: ChartLabel,
+  locale = DEFAULT_LOCALE,
+  timeZone?: string,
+  span?: ChartDateSpan
+): string {
+  if (label instanceof Date) return formatDate(label, locale, timeZone, span)
   if (typeof label === 'number') return formatCompact(label, locale)
   return label
 }
