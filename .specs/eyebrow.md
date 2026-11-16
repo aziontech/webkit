@@ -3,11 +3,11 @@ name: eyebrow
 category: content
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=6482-17218
   node_id: 6482:17218
-checksum: c6a2acda5bbbc037e3c03b334ec748a50fdb45faa6e16696345a284da9e43881
+checksum: e4396b22b6e527cbbf894bd061f621dfc117ed854a0bf80e88742f1dbc223627
 created: 2026-11-10
 last_updated: 2026-11-16
 ---
@@ -16,7 +16,7 @@ last_updated: 2026-11-16
 
 ## Purpose
 
-Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the logo orange (`--primary`), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
+Overline is the short uppercase label set above a headline to name the section, panel or group it opens (the "eyebrow"). It renders its default slot in `.text-overline-md` in the brand orange (`--text-brand`: the logo orange in dark, a darker step in light so the small label keeps 4.5:1), optionally behind a preset code-style prefix (`//`, `<>`, `</>`) and followed by a blinking terminal-style cursor. It is purely presentational text with no interaction; the marketing headers (`section-title`, `hero-title`, `call-to-action`, `media-split`, `marquee`) and several page sections render their eyebrow (the `eyebrow` prop, or `label` on `marquee`) through it.
 
 ## When to use
 
@@ -103,7 +103,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 | --------------------------- | --------------------------------------------------------------------- |
 | typography (prefix, label)  | `.text-overline-md` with `font-medium`                                |
 | text (prefix)               | `var(--text-default)` (`text-(--text-default)`)                       |
-| text (label)                | `var(--primary)` (`text-(--primary)`), the logo orange in both themes |
+| text (label)                | `var(--text-brand)` (`text-(--text-brand)`): the logo orange `primary-500` in dark, `primary-700` in light |
 | cursor surface              | `var(--brand-blue)`, the brand blue in both themes                    |
 | cursor size                 | `w-1` · `h-5`                                                         |
 | gap (prefix, label, cursor) | `var(--spacing-2xs)`                                                  |
@@ -120,7 +120,7 @@ Overline is the short uppercase label set above a headline to name the section, 
 - Visible focus: not applicable — the component renders no focusable element.
 - Keyboard map: none; the component is not interactive.
 - ARIA: no role; the root is a plain `div` and the label is read as text. The prefix `span` is decorative and carries `aria-hidden="true"`, so only the label is announced; the cursor `span` is empty and contributes no text.
-- Contrast ≥4.5:1 (text): the label uses `var(--text-primary)` (`primary-700` in light, 4.77:1 or more on every light surface; `primary-500` in dark) and the prefix `var(--text-default)` on the surface the consumer places it on.
+- Contrast ≥4.5:1 (text): the label uses `var(--text-brand)` (`primary-700` in light, 4.77:1 or more on every light surface, because the logo orange is about 3.1:1 on white; the logo orange `primary-500` in dark, 5.5:1 or more on every dark surface) and the prefix `var(--text-default)` on the surface the consumer places it on.
 - `motion-reduce:animate-none` on the cursor's `animate-blink`.
 - Touch target: not applicable (non-interactive).
 
