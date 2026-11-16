@@ -118,3 +118,4 @@ apps/visual/baseline-review/
 packages/webkit/skills/
 packages/webkit/rules/
 packages/webkit/adapters/
+packages/webkit/test/docs/.snippets-*/
