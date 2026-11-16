@@ -1,5 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
+import { spawnSync } from 'node:child_process'
 import { existsSync, mkdtempSync, rmSync, writeFileSync, mkdirSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
@@ -50,20 +51,41 @@ test('doctor fails a v5 .mcp.json that still runs the webkit-mcp bin of @azionte
   }
 })
 
-test('doctor after init passes the config/mcp/husky/style checks', () => {
+const hasGit = !spawnSync('git', ['--version']).error
+
+test(
+  'doctor after init passes the config/mcp/husky/style checks',
+  { skip: !hasGit && 'git is not installed' },
+  () => {
+    const dir = makeProject()
+    try {
+      spawnSync('git', ['init', '-q'], { cwd: dir })
+      applyPlan(dir, planInit(dir, {}))
+      const report = planDoctor(dir)
+      assert.equal(statusOf(report, 'eslint config'), 'ok')
+      assert.equal(statusOf(report, 'stylelint config'), 'ok')
+      assert.equal(statusOf(report, 'webkit.css @source'), 'ok')
+      assert.equal(statusOf(report, 'tailwind build'), 'ok')
+      assert.equal(statusOf(report, 'mcp server'), 'ok')
+      assert.equal(statusOf(report, 'husky prepare script'), 'ok')
+      assert.equal(statusOf(report, 'pre-commit hook'), 'ok')
+      // webkit is not actually installed in the scratch project → catalog still fails.
+      assert.equal(statusOf(report, 'webkit catalog'), 'fail')
+    } finally {
+      rmSync(dir, { recursive: true, force: true })
+    }
+  }
+)
+
+test('doctor does not warn about the git hooks init skipped outside a git repository', () => {
   const dir = makeProject()
   try {
     applyPlan(dir, planInit(dir, {}))
     const report = planDoctor(dir)
-    assert.equal(statusOf(report, 'eslint config'), 'ok')
-    assert.equal(statusOf(report, 'stylelint config'), 'ok')
-    assert.equal(statusOf(report, 'webkit.css @source'), 'ok')
-    assert.equal(statusOf(report, 'tailwind build'), 'ok')
-    assert.equal(statusOf(report, 'mcp server'), 'ok')
-    assert.equal(statusOf(report, 'husky prepare script'), 'ok')
-    assert.equal(statusOf(report, 'pre-commit hook'), 'ok')
-    // webkit is not actually installed in the scratch project → catalog still fails.
-    assert.equal(statusOf(report, 'webkit catalog'), 'fail')
+    assert.equal(statusOf(report, 'git hooks'), 'ok')
+    assert.match(detailOf(report, 'git hooks').detail, /git init/)
+    assert.equal(statusOf(report, 'husky prepare script'), undefined)
+    assert.equal(statusOf(report, 'pre-commit hook'), undefined)
   } finally {
     rmSync(dir, { recursive: true, force: true })
   }
