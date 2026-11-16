@@ -7,21 +7,27 @@ makes upgrades unpredictable. The `webkit/no-style-override` ESLint rule blocks 
 
 ## The one exception: layout utilities
 
-A **static** `class` made only of layout utilities is allowed, because they set how the
-component's box sits in its parent (outer size and flex participation) and never change how it
-looks. The full list: `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `self-*`, `shrink-0`.
+A **static** `class` made only of layout utilities is allowed, because they set where the
+component's box sits in its parent (outer size, flex and grid placement, the space around it) and
+never change how it looks. The full list: `w-full`, `h-full`, `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*`, `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `shrink-0`, `self-*`, `justify-self-*`, `place-self-*`, `order-*`, `col-span-*`, `col-start-*`, `col-end-*`, `row-span-*`, `row-start-*`, `row-end-*`, `m-*`, `mx-*`, `my-*`, `mt-*`, `mb-*`, `ms-*`, `me-*`.
 
-| Purpose             | Families                                                                                    |
-| ------------------- | ------------------------------------------------------------------------------------------- |
-| Fill the parent     | `w-full`, `h-full`                                                                          |
-| Cap or floor a size | `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*` (`max-w-(--container-sm)`)                       |
-| Take part in a flex | `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `shrink-0` |
-| Align itself        | `self-*` (`self-start`, `self-center`)                                                      |
+| Purpose              | Families                                                                                    |
+| -------------------- | ------------------------------------------------------------------------------------------- |
+| Fill the parent      | `w-full`, `h-full`                                                                          |
+| Cap or floor a size  | `max-w-*`, `min-w-*`, `max-h-*`, `min-h-*` (`max-w-(--container-sm)`)                       |
+| Take part in a flex  | `flex-1`, `flex-auto`, `flex-initial`, `flex-none`, `grow`, `grow-*`, `basis-*`, `shrink-0` |
+| Align itself         | `self-*`, `justify-self-*`, `place-self-*` (`self-start`, `justify-self-end`)               |
+| Sit in a grid        | `col-span-*`, `col-start-*`, `col-end-*`, `row-span-*`, `row-start-*`, `row-end-*`          |
+| Change its order     | `order-*`                                                                                   |
+| Space around the box | `m-*`, `mx-*`, `my-*`, `mt-*`, `mb-*`, `ms-*`, `me-*` (`mt-(--spacing-md)`)                 |
 
-Any other class on the same tag still fails, and so does a bound `:class` or a variant prefix
-(`lg:w-full`). The list is the `LAYOUT_CLASS_FAMILIES` export of
-`@aziontech/webkit/eslint-plugin`; the MCP's `get_component` (`allowedClasses`) and
-`validate_usage` (with `component`) read the same list.
+Each may carry a breakpoint prefix (`sm:`, `md:`, `lg:`, `xl:`, `2xl:`), because placement in a
+grid changes with the width: `<Field class="col-span-2 lg:col-span-1" />`. Margins are the logical
+ones only (`ms-*`/`me-*`, never `ml-*`/`mr-*`; see `webkit-direction.md`), and a negative margin
+is not placement. Any other class on the same tag still fails, and so does a bound `:class`, a state
+prefix (`hover:mt-2`, `dark:w-full`) or a non-layout utility behind a breakpoint (`lg:p-4`). The list
+is the `LAYOUT_CLASS_FAMILIES` export of `@aziontech/webkit/eslint-plugin`; the MCP's
+`get_component` (`allowedClasses`) and `validate_usage` (with `component`) read the same list.
 
 ## The second exception: the chart palette variables
 
@@ -49,8 +55,9 @@ is in `webkit-tokens.md` § "Chart palettes".
   the component's own surface stays untouched.
 - Use a component that is **built to be personalized** (`styleSeam` in the catalog, e.g.
   `RegistrationFrame`, `SectionContainer`) when a container must accept your classes.
-- Size or align the component in its parent with the layout utilities above
-  (`<Button class="w-full" />`, `<Card class="w-full max-w-(--container-sm)" />`).
+- Size, align or place the component in its parent with the layout utilities above
+  (`<Button class="w-full" />`, `<Card class="w-full max-w-(--container-sm)" />`,
+  `<Field class="mt-(--spacing-md) col-span-2" />`).
 - Change behavior/appearance through the component's **props** (`variant`, `size`, `severity`).
 - If no prop or slot covers a legitimate need, request the variant in the design system —
   do not patch it locally.
@@ -58,8 +65,8 @@ is in `webkit-tokens.md` § "Chart palettes".
 ## Do not
 
 - Never `<Button class="p-8" />` or `<Button :class="cls" />` — blocked by lint.
-- Never mix a layout utility with anything else (`<Button class="w-full mt-4" />`): put the
-  spacing on a wrapper element.
+- Never mix a layout utility with anything else (`<Button class="w-full p-4" />`): padding,
+  gap, colour and type change the component itself; put them on a wrapper element.
 - Never `<Dialog style="width: 800px" />` — same.
 - Never set a `--chart-*` variable outside the palette list on a webkit tag (`--chart-status-danger`,
   `--chart-axis`): status and chrome colours are fixed.

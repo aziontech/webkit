@@ -960,6 +960,15 @@ test('no-style-override', () => {
         code: `${imp('Button', 'button')}<template><Button class="min-w-36 grow basis-1/3" /></template>`,
         filename: 'l6.vue'
       },
+      // placement in the parent: margins, grid cells, order, self-alignment, behind a breakpoint
+      {
+        code: `${imp('Button', 'button')}<template><Button class="mt-(--spacing-md) col-span-2 lg:col-span-4" /></template>`,
+        filename: 'l9.vue'
+      },
+      {
+        code: `${imp('Button', 'button')}<template><Button class="ms-auto me-2 mx-auto my-4 mb-0 m-0 order-last justify-self-end place-self-center row-span-2 col-start-1 row-start-2 md:order-first xl:mt-0 2xl:w-full lg:w-full" /></template>`,
+        filename: 'l10.vue'
+      },
       // the console API's chart palette contract: only the --chart-* palette variables
       {
         code: `${imp('Table', 'table')}<template><Table style="--chart-series-1: var(--palette-1); --chart-sequential-7: var(--palette-ramp-7); --chart-diverging-neutral: var(--palette-mid)" /></template>`,
@@ -1053,12 +1062,23 @@ test('no-style-override', () => {
       },
       // one non-layout class next to allowed ones still fails
       {
-        code: `${imp('Button', 'button')}<template><Button class="w-full mt-4" /></template>`,
+        code: `${imp('Button', 'button')}<template><Button class="w-full mt-4 p-4" /></template>`,
         filename: 'l5.vue',
         errors: [
           {
             messageId: 'overrideClasses',
-            data: { classes: 'mt-4', tag: 'Button', allowed: ALLOWED_LAYOUT.join(', ') }
+            data: { classes: 'p-4', tag: 'Button', allowed: ALLOWED_LAYOUT.join(', ') }
+          }
+        ]
+      },
+      // physical margins stay out (logical ms-/me- only), and so does a negative margin
+      {
+        code: `${imp('Button', 'button')}<template><Button class="ml-4 mr-2 -mt-2" /></template>`,
+        filename: 'l11.vue',
+        errors: [
+          {
+            messageId: 'overrideClasses',
+            data: { classes: 'ml-4 mr-2 -mt-2', tag: 'Button', allowed: ALLOWED_LAYOUT.join(', ') }
           }
         ]
       },
@@ -1068,11 +1088,20 @@ test('no-style-override', () => {
         filename: 'l6.vue',
         errors: [{ messageId: 'overrideClasses' }]
       },
-      // a variant prefix is not in the list
+      // a state or a non-layout utility behind a breakpoint is not in the list
       {
-        code: `${imp('Button', 'button')}<template><Button class="lg:w-full" /></template>`,
+        code: `${imp('Button', 'button')}<template><Button class="hover:w-full lg:p-4 dark:mt-2" /></template>`,
         filename: 'l7.vue',
-        errors: [{ messageId: 'overrideClasses' }]
+        errors: [
+          {
+            messageId: 'overrideClasses',
+            data: {
+              classes: 'hover:w-full lg:p-4 dark:mt-2',
+              tag: 'Button',
+              allowed: ALLOWED_LAYOUT.join(', ')
+            }
+          }
+        ]
       },
       // a bound :class stays barred even when it holds layout utilities
       {
@@ -1333,8 +1362,24 @@ test('layout class families: shared constant used by the rule and the MCP', asyn
       'grow',
       'grow-*',
       'basis-*',
+      'shrink-0',
       'self-*',
-      'shrink-0'
+      'justify-self-*',
+      'place-self-*',
+      'order-*',
+      'col-span-*',
+      'col-start-*',
+      'col-end-*',
+      'row-span-*',
+      'row-start-*',
+      'row-end-*',
+      'm-*',
+      'mx-*',
+      'my-*',
+      'mt-*',
+      'mb-*',
+      'ms-*',
+      'me-*'
     ]
   )
   for (const ok of [
@@ -1353,7 +1398,15 @@ test('layout class families: shared constant used by the rule and the MCP', asyn
     'grow-0',
     'basis-1/3',
     'self-end',
-    'shrink-0'
+    'shrink-0',
+    'mt-(--spacing-md)',
+    'ms-auto',
+    'col-span-2',
+    'lg:col-span-4',
+    'row-span-full',
+    'order-last',
+    'justify-self-end',
+    '2xl:w-full'
   ]) {
     assert.equal(isLayoutClass(ok), true, ok)
   }
@@ -1363,6 +1416,12 @@ test('layout class families: shared constant used by the rule and the MCP', asyn
     'max-w-',
     'min-h-',
     'self-',
+    'ml-4',
+    'mr-4',
+    '-mt-2',
+    'hover:mt-2',
+    'lg:p-4',
+    'col-span-',
     'shrink',
     'shrink-1',
     'flex',
@@ -1375,12 +1434,12 @@ test('layout class families: shared constant used by the rule and the MCP', asyn
     'cursor-pointer',
     'text-body-md',
     'bg-(--bg-surface)',
-    'lg:w-full',
+    'hover:w-full',
     ''
   ]) {
     assert.equal(isLayoutClass(bad), false, bad)
   }
-  assert.deepEqual(nonLayoutClasses('w-full  mt-2 self-start text-red'), ['mt-2', 'text-red'])
+  assert.deepEqual(nonLayoutClasses('w-full  mt-2 p-2 self-start text-red'), ['p-2', 'text-red'])
 })
 
 test('no-output-in-command', () => {
