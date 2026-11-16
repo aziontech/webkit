@@ -337,7 +337,9 @@ describe('Toast', () => {
         slotBtn.click()
         await vi.waitFor(() => {
           const r = document.body.querySelector('[data-testid="toast__bottom-right"]')
-          expect(r === null || within(r).queryByText(/^slot:via imperative fn/) === null).toBe(true)
+          expect(
+            r === null || within(r as HTMLElement).queryByText(/^slot:via imperative fn/) === null
+          ).toBe(true)
         })
       })
     })
@@ -381,7 +383,7 @@ describe('Toast', () => {
         await nextTick()
 
         // The Default story renders a "Show toast" Button trigger in the canvas.
-        expect(within(container).getByText('Show toast')).toBeTruthy()
+        expect(within(container as HTMLElement).getByText('Show toast')).toBeTruthy()
       })
     })
 

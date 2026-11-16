@@ -10,7 +10,7 @@ import EmptyState from './empty-state.vue'
 describe('EmptyState', () => {
   it('renders the title and defaults the testid to feedback-empty-state', () => {
     const { getByTestId } = within(
-      render(EmptyState, { props: { title: 'No resource yet' } }).container
+      render(EmptyState, { props: { title: 'No resource yet' } }).container as HTMLElement
     )
 
     const root = getByTestId('empty-state')
@@ -19,7 +19,9 @@ describe('EmptyState', () => {
   })
 
   it('exposes role=status on the root for assistive announcement', () => {
-    const { getByTestId } = within(render(EmptyState, { props: { title: 'Empty' } }).container)
+    const { getByTestId } = within(
+      render(EmptyState, { props: { title: 'Empty' } }).container as HTMLElement
+    )
 
     expect(getByTestId('empty-state').getAttribute('role')).toBe('status')
   })
@@ -29,7 +31,7 @@ describe('EmptyState', () => {
       render(EmptyState, {
         props: { title: 'Empty', icon: 'ai ai-inbox' },
         attrs: { 'data-testid': 'custom-empty' }
-      }).container
+      }).container as HTMLElement
     )
 
     expect(getByTestId('custom-empty').getAttribute('role')).toBe('status')
@@ -40,25 +42,30 @@ describe('EmptyState', () => {
   it('renders the description only when provided', () => {
     const withDesc = within(
       render(EmptyState, { props: { title: 'Empty', description: 'Add your first item.' } })
-        .container
+        .container as HTMLElement
     )
     expect(withDesc.getByTestId('empty-state__description').textContent).toBe(
       'Add your first item.'
     )
 
-    const withoutDesc = within(render(EmptyState, { props: { title: 'Empty' } }).container)
+    const withoutDesc = within(
+      render(EmptyState, { props: { title: 'Empty' } }).container as HTMLElement
+    )
     expect(withoutDesc.queryByTestId('empty-state__description')).toBeNull()
   })
 
   it('renders no adornment when neither the icon prop nor the icon slot is provided', () => {
-    const { queryByTestId } = within(render(EmptyState, { props: { title: 'Empty' } }).container)
+    const { queryByTestId } = within(
+      render(EmptyState, { props: { title: 'Empty' } }).container as HTMLElement
+    )
 
     expect(queryByTestId('empty-state__icon')).toBeNull()
   })
 
   it('renders the standardized featured-icon tile when the icon prop is set', () => {
     const { getByTestId } = within(
-      render(EmptyState, { props: { title: 'Empty', icon: 'ai ai-inbox' } }).container
+      render(EmptyState, { props: { title: 'Empty', icon: 'ai ai-inbox' } })
+        .container as HTMLElement
     )
 
     const icon = getByTestId('empty-state__icon')
@@ -72,7 +79,7 @@ describe('EmptyState', () => {
       render(EmptyState, {
         props: { title: 'Empty', icon: 'ai ai-inbox' },
         slots: { icon: '<span data-testid="my-icon">glyph</span>' }
-      }).container
+      }).container as HTMLElement
     )
 
     const icon = getByTestId('empty-state__icon')
@@ -87,30 +94,34 @@ describe('EmptyState', () => {
       render(EmptyState, {
         props: { title: 'Empty' },
         slots: { actions: '<button data-testid="cta">Create</button>' }
-      }).container
+      }).container as HTMLElement
     )
     expect(withActions.getByTestId('empty-state__actions')).toBeTruthy()
     expect(withActions.getByTestId('cta').textContent).toBe('Create')
 
-    const withoutActions = within(render(EmptyState, { props: { title: 'Empty' } }).container)
+    const withoutActions = within(
+      render(EmptyState, { props: { title: 'Empty' } }).container as HTMLElement
+    )
     expect(withoutActions.queryByTestId('empty-state__actions')).toBeNull()
   })
 
   it('does not set data-bordered by default and sets it when bordered', () => {
-    const plain = within(render(EmptyState, { props: { title: 'Empty' } }).container)
+    const plain = within(render(EmptyState, { props: { title: 'Empty' } }).container as HTMLElement)
     expect(plain.getByTestId('empty-state').hasAttribute('data-bordered')).toBe(false)
 
     const bordered = within(
-      render(EmptyState, { props: { title: 'Empty', bordered: true } }).container
+      render(EmptyState, { props: { title: 'Empty', bordered: true } }).container as HTMLElement
     )
     expect(bordered.getByTestId('empty-state').getAttribute('data-bordered')).toBe('true')
   })
 
   it('defaults data-size to medium and reflects the size prop', () => {
-    const def = within(render(EmptyState, { props: { title: 'Empty' } }).container)
+    const def = within(render(EmptyState, { props: { title: 'Empty' } }).container as HTMLElement)
     expect(def.getByTestId('empty-state').getAttribute('data-size')).toBe('medium')
 
-    const small = within(render(EmptyState, { props: { title: 'Empty', size: 'small' } }).container)
+    const small = within(
+      render(EmptyState, { props: { title: 'Empty', size: 'small' } }).container as HTMLElement
+    )
     expect(small.getByTestId('empty-state').getAttribute('data-size')).toBe('small')
   })
 
@@ -118,7 +129,8 @@ describe('EmptyState', () => {
     'mirrors size=%s onto data-size of the root and the icon tile',
     (size) => {
       const { getByTestId } = within(
-        render(EmptyState, { props: { title: 'Empty', size, icon: 'ai ai-inbox' } }).container
+        render(EmptyState, { props: { title: 'Empty', size, icon: 'ai ai-inbox' } })
+          .container as HTMLElement
       )
       expect(getByTestId('empty-state').getAttribute('data-size')).toBe(size)
       expect(getByTestId('empty-state__icon').getAttribute('data-size')).toBe(size)
@@ -149,18 +161,18 @@ describe('EmptyState', () => {
 
   describe('composed stories', () => {
     it('renders the Default story fixture', () => {
-      const { getByTestId } = within(render(Default).container)
+      const { getByTestId } = within(render(Default).container as HTMLElement)
       expect(getByTestId('empty-state__title').textContent).toBe('No resource yet')
       expect(getByTestId('empty-state__actions')).toBeTruthy()
     })
 
     it('renders the Bordered story with data-bordered set', () => {
-      const { getByTestId } = within(render(Bordered).container)
+      const { getByTestId } = within(render(Bordered).container as HTMLElement)
       expect(getByTestId('empty-state').getAttribute('data-bordered')).toBe('true')
     })
 
     it('renders the Sizes story with all size variants', () => {
-      const { getAllByTestId } = within(render(Sizes).container)
+      const { getAllByTestId } = within(render(Sizes).container as HTMLElement)
       const roots = getAllByTestId('empty-state')
       expect(roots.map((el) => el.getAttribute('data-size'))).toEqual(['small', 'medium'])
     })
