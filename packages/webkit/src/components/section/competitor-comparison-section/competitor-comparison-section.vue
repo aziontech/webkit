@@ -183,7 +183,7 @@
             }}
           </caption>
           <colgroup>
-            <col class="w-[50%] md:w-[44%] lg:w-[40%]" />
+            <col class="w-[52%] sm:w-[50%] md:w-[44%] lg:w-[40%]" />
             <col />
             <col />
           </colgroup>
@@ -191,14 +191,14 @@
             <tr>
               <th
                 scope="col"
-                class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-xl) py-0 align-middle font-normal h-(--competitor-comparison-section-head)"
+                class="sticky top-14 z-20 border-b border-(--border-default) bg-(--bg-canvas) px-(--spacing-md) py-0 sm:px-(--spacing-xl) align-middle font-normal h-(--competitor-comparison-section-head)"
               >
                 <span class="text-overline-md text-(--text-muted)">{{ columnLabel }}</span>
               </th>
               <th
                 scope="col"
                 aria-label="Azion"
-                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
+                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
               >
                 <Brand
                   variant="default"
@@ -210,7 +210,7 @@
               <th
                 scope="col"
                 :aria-label="competitor.name"
-                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
+                class="sticky top-14 z-20 border-b border-s border-(--border-default) bg-(--bg-canvas) px-(--spacing-2xs) py-0 text-center align-middle font-normal h-(--competitor-comparison-section-head) sm:px-(--spacing-lg)"
               >
                 <Logo
                   :name="competitorMark.name"
@@ -231,7 +231,7 @@
               <th
                 scope="colgroup"
                 colspan="3"
-                class="sticky top-[calc(3.5rem+var(--competitor-comparison-section-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-xl) py-(--spacing-sm) text-start font-normal"
+                class="sticky top-[calc(3.5rem+var(--competitor-comparison-section-head))] z-10 border-b border-(--border-default) bg-(--bg-surface) px-(--spacing-md) py-(--spacing-sm) sm:px-(--spacing-xl) text-start font-normal"
               >
                 <span class="text-overline-md text-(--text-primary)">{{ group.title }}</span>
               </th>
@@ -244,10 +244,10 @@
             >
               <th
                 scope="row"
-                class="border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-md) text-start align-middle text-label-md font-normal text-(--text-default) group-data-[last]/row:border-b-0"
+                class="border-b border-(--border-default) px-(--spacing-md) py-(--spacing-md) text-start align-middle text-label-md font-normal text-(--text-default) group-data-[last]/row:border-b-0 sm:px-(--spacing-xl)"
               >
                 <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <span class="min-w-0 text-pretty">{{ item.capability }}</span>
+                  <span class="min-w-0 text-pretty wrap-break-word">{{ item.capability }}</span>
                   <span
                     v-if="item.definition"
                     class="-my-(--spacing-2xs) inline-flex shrink-0"
