@@ -45,21 +45,25 @@
 
   const benefits = [
     {
+      icon: 'ai ai-globe',
       title: 'Global resilience beyond anycast',
       description:
         'Traffic is steered around failures and network degradation faster than BGP can reconverge.'
     },
     {
+      icon: 'ai ai-stopwatch',
       title: 'Low latency everywhere',
       description:
         'Compute, AI, databases, and security run in every data center, close to your users.'
     },
     {
+      icon: 'ai ai-move-vertical',
       title: 'Zero-ops autoscaling and failover',
       description:
         'Absorbs any traffic spike with no cold starts, no capacity planning and no provisioning.'
     },
     {
+      icon: 'ai ai-shield',
       title: 'Always-on protection',
       description:
         'DDoS mitigation and a programmable security layer run in front of every application.'

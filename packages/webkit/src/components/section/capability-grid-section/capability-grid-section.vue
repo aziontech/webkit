@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, useAttrs } from 'vue'
+  import { computed, useAttrs, watch } from 'vue'
 
   import Button from '../../action/button/button.vue'
   import RegistrationFrame from '../../layout/registration-frame/registration-frame.vue'
@@ -81,6 +81,8 @@
 
   const attrs = useAttrs()
 
+  const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
+
   const testId = computed(
     () => (attrs['data-testid'] as string | undefined) ?? 'capability-grid-section'
   )
@@ -97,6 +99,23 @@
     if (shown(props.secondaryAction)) named.push({ ...props.secondaryAction, variant: 'outline' })
     return named
   })
+
+  const missingIcons = computed(() => {
+    const bare = props.items.filter((item) => !item.icon).length
+    return bare < props.items.length ? bare : 0
+  })
+
+  if (dev)
+    watch(
+      missingIcons,
+      (bare) => {
+        if (bare > 0)
+          console.warn(
+            `[webkit] <CapabilityGridSection>: ${bare} of ${props.items.length} items have no icon. A benefits grid gives every item an icon; a resource list or text columns give none.`
+          )
+      },
+      { immediate: true }
+    )
 </script>
 
 <template>

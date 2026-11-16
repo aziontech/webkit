@@ -43,8 +43,8 @@
     title: string
     /** One or two sentences that explain the benefit. */
     description: string
-    /** Icon class of a glyph that leads the topic. */
-    icon?: string
+    /** Icon class of the glyph that leads the topic. */
+    icon: string
   }
 
   /** One claim chip that can sit out the narrow band. */
@@ -82,7 +82,7 @@
     claims?: (string | NetworkSectionClaim)[]
     /** Client results for the `outcomes` floor, in order, one column each up to four; each is `{ logo?, logoAlt?, logoTreatment?, text, highlights? }` where `logo` is the mark URL (the cell renders no mark without it), `logoAlt` names the client, `logoTreatment` is `'monochrome'` or `'color'`, and `highlights` are the phrases of `text` set in the accent. */
     outcomes?: NetworkSectionOutcome[]
-    /** Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon? }`, rendered as a topic whose title is an `h3`. */
+    /** Topics for the `benefits` floor, in order, on up to three columns balanced so every row is full; each is `{ title, description, icon }`, rendered as a topic led by its glyph whose title is an `h3`. */
     benefits?: NetworkSectionBenefit[]
     /** Figures for the `stats` floor, in order, rendered by `stats`; each is `{ value, label, prefix?, suffix? }`. */
     stats?: NetworkSectionStat[]
@@ -251,7 +251,7 @@
             >
               <FeatureItem
                 :heading-level="3"
-                :icon="benefit.icon ?? ''"
+                :icon="benefit.icon"
                 :title="benefit.title"
                 :description="benefit.description"
               />

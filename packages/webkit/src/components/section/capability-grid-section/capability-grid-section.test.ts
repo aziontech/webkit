@@ -1,5 +1,5 @@
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { h } from 'vue'
 
 import Default from '../../../../examples/capability-grid-section/default.vue'
@@ -15,6 +15,28 @@ const items = [
 ]
 
 describe('CapabilityGridSection', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it('warns in development when only some items carry an icon', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    render(CapabilityGridSection, {
+      props: { items: [{ ...items[0], icon: 'ai ai-bolt' }, items[1], items[1]] }
+    })
+    expect(warn).toHaveBeenCalledOnce()
+    expect(warn.mock.calls[0]?.[0]).toContain('2 of 3 items have no icon')
+  })
+
+  it.each([
+    ['every item', items.map((item) => ({ ...item, icon: 'ai ai-bolt' }))],
+    ['no item', items]
+  ])('does not warn when %s carries an icon', (_label, list) => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    render(CapabilityGridSection, { props: { items: list } })
+    expect(warn).not.toHaveBeenCalled()
+  })
+
   it('links the primary and secondary actions, secondary then outlined', () => {
     const { getByRole } = render(CapabilityGridSection, {
       props: {
