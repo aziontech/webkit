@@ -9,6 +9,7 @@
   import Drawer from '../../overlay/drawer/drawer.vue'
   import DrawerContent from '../../overlay/drawer/drawer-content.vue'
   import DrawerTitle from '../../overlay/drawer/drawer-title.vue'
+  import PanelHeader from '../../overlay/panel/panel-header.vue'
 
   defineOptions({
     name: 'AppLayout',
@@ -520,9 +521,11 @@
       :data-testid="`${testId}__navigation-drawer`"
     >
       <DrawerContent>
-        <DrawerTitle class="sr-only">
-          {{ navigationAriaLabel || t('appLayout.navigation') }}
-        </DrawerTitle>
+        <PanelHeader class="min-h-(--spacing-2xl) py-(--spacing-xs)">
+          <DrawerTitle class="sr-only">
+            {{ navigationAriaLabel || t('appLayout.navigation') }}
+          </DrawerTitle>
+        </PanelHeader>
         <slot
           name="navigation"
           :drawer="true"
@@ -540,10 +543,14 @@
       :data-testid="`${testId}__tools-drawer`"
     >
       <DrawerContent>
-        <DrawerTitle>
-          {{ toolsLabel || t('appLayout.tools') }}
-        </DrawerTitle>
-        <slot name="tools" />
+        <PanelHeader>
+          <DrawerTitle class="min-w-0 truncate">
+            {{ toolsLabel || t('appLayout.tools') }}
+          </DrawerTitle>
+        </PanelHeader>
+        <div class="min-h-0 flex-1 overflow-auto">
+          <slot name="tools" />
+        </div>
       </DrawerContent>
     </Drawer>
   </div>
