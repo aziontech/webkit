@@ -6,7 +6,7 @@ import Default from '../../../../examples/doc-page-header/default.vue'
 import Regions from '../../../../examples/doc-page-header/regions.vue'
 import Slots from '../../../../examples/doc-page-header/slots.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
-import DocPageHeader from './doc-page-header.vue'
+import DocPageHeader, { type DocPageHeaderAction } from './doc-page-header.vue'
 
 // .claude/rules/testing.md: Vitest browser mode (real Chromium) loads NO Tailwind, so the
 // closing rule, the column layout and the meta line's left compensation emit nothing here —
@@ -16,7 +16,7 @@ import DocPageHeader from './doc-page-header.vue'
 
 const CRUMBS = [{ label: 'Docs', href: '/docs' }, { label: 'Deploy an application' }]
 
-const META_ACTIONS = [
+const META_ACTIONS: DocPageHeaderAction[] = [
   { value: 'copy', label: 'Copy as Markdown', icon: 'ai ai-copy', tip: 'Copy the page.' },
   { value: 'agent', label: 'Agent setup', icon: 'ai ai-microchip-ai', href: '/docs/agent-setup' },
   { value: 'source', label: 'Edit this page', href: 'https://example.test/edit', target: '_blank' }

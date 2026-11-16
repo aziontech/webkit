@@ -224,8 +224,8 @@ describe('DocMarkdown', () => {
 
   it('renders the examples without axe violations', async () => {
     const first = render(Default)
-    expect(within(first.container).getAllByRole('heading').length).toBeGreaterThan(1)
-    expect((await within(first.container).findAllByRole('tab')).length).toBe(2)
+    expect(within(first.container as HTMLElement).getAllByRole('heading').length).toBeGreaterThan(1)
+    expect((await within(first.container as HTMLElement).findAllByRole('tab')).length).toBe(2)
     await expectNoA11yViolations(first.container)
     const second = render(Components)
     await expectNoA11yViolations(second.container)
