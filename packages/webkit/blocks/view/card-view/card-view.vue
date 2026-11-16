@@ -16,65 +16,66 @@
   import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref, useId, watch } from 'vue'
 
-  type ApplicationStatus = 'Active' | 'Degraded' | 'Inactive'
+  import { sampleApplications } from './sample'
 
-  type Application = {
+  /** How an application is serving. */
+  export type CardViewApplicationStatus = 'Active' | 'Degraded' | 'Inactive'
+
+  /** One card of the list. */
+  export interface CardViewApplication {
+    /** Stable key, used in the link and the selection. */
     id: string
+    /** Display name, linked to the application page. */
     name: string
-    status: ApplicationStatus
+    /** How the application is serving, shown as a tag. */
+    status: CardViewApplicationStatus
+    /** The domain it answers on. */
     domain: string
+    /** The region it runs in. */
     region: string
+    /** Requests in the last 24 hours, shown in compact notation. */
     requests: number
+    /** Who owns it. */
     owner: string
   }
 
+  export interface CardViewProps {
+    /** The applications to list; filtered and paged in the browser. Left out, the sample renders. */
+    applications?: CardViewApplication[]
+    /** A request is in flight: with no cards it is the first load, with cards a refresh. */
+    loading?: boolean
+    /** Why the applications could not load; a danger alert with Retry replaces the cards. */
+    error?: string
+  }
+
+  const props = withDefaults(defineProps<CardViewProps>(), {
+    applications: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    create: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    delete: [event: Event, applications: CardViewApplication[]]
+  }>()
+
   interface Field {
-    id: Exclude<keyof Application, 'id' | 'name'>
+    id: Exclude<keyof CardViewApplication, 'id' | 'name'>
     header: string
   }
 
-  const app = (
-    n: number,
-    name: string,
-    status: ApplicationStatus,
-    domain: string,
-    region: string,
-    requests: number,
-    owner: string
-  ): Application => ({
-    id: `app-${String(n).padStart(2, '0')}`,
-    name,
-    status,
-    domain,
-    region,
-    requests,
-    owner
-  })
-
-  const applications: Application[] = [
-    app(1, 'storefront', 'Active', 'shop.example.com', 'sa-east', 1240000, 'Ethan Brooks'),
-    app(2, 'checkout', 'Active', 'pay.example.com', 'us-east', 310000, 'Jordan Kim'),
-    app(3, 'blog', 'Inactive', 'blog.example.com', 'eu-west', 0, 'Riley Carter'),
-    app(4, 'docs', 'Active', 'docs.example.com', 'sa-east', 88000, 'Priya Patel'),
-    app(5, 'status-page', 'Active', 'status.example.com', 'us-east', 42000, 'Chris Taylor'),
-    app(6, 'image-resizer', 'Active', 'img.example.com', 'eu-west', 2900000, 'John Smith'),
-    app(7, 'auth-gateway', 'Degraded', 'auth.example.com', 'sa-east', 520000, 'Sam Lee'),
-    app(8, 'landing', 'Inactive', 'www.example.com', 'us-east', 0, 'Taylor Reed'),
-    app(9, 'api', 'Active', 'api.example.com', 'eu-west', 4100000, 'Ethan Brooks'),
-    app(10, 'search', 'Active', 'search.example.com', 'sa-east', 760000, 'Jordan Kim'),
-    app(11, 'webhooks', 'Degraded', 'hooks.example.com', 'us-east', 12000, 'Riley Carter'),
-    app(12, 'reports', 'Active', 'reports.example.com', 'eu-west', 9000, 'Priya Patel'),
-    app(13, 'media', 'Active', 'media.example.com', 'sa-east', 1800000, 'Chris Taylor'),
-    app(14, 'admin', 'Inactive', 'admin.example.com', 'us-east', 300, 'John Smith')
-  ]
-
-  const fields: Field[] = [
-    { id: 'status', header: 'Status' },
-    { id: 'domain', header: 'Domain' },
-    { id: 'region', header: 'Region' },
-    { id: 'requests', header: 'Requests in 24h' },
-    { id: 'owner', header: 'Owner' }
-  ]
+  const FIELD_HEADERS: Record<Field['id'], string> = {
+    status: 'Status',
+    domain: 'Domain',
+    region: 'Region',
+    requests: 'Requests in 24h',
+    owner: 'Owner'
+  }
+  const fields = (Object.keys(FIELD_HEADERS) as Field['id'][]).map((id): Field => ({
+    id,
+    header: FIELD_HEADERS[id]
+  }))
 
   const properties: FilteringProperty[] = [
     { key: 'name', label: 'Name' },
@@ -91,7 +92,19 @@
     { key: 'requests', label: 'Requests in 24h', type: 'number' }
   ]
 
-  const items = ref<Application[]>([...applications])
+  const source = computed<CardViewApplication[]>(
+    () => props.applications ?? (props.loading || props.error ? [] : sampleApplications)
+  )
+  const items = ref<CardViewApplication[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
+    },
+    { immediate: true }
+  )
+
+  const blocked = computed(() => (props.loading && items.value.length === 0) || props.error !== '')
 
   const {
     cardListProps,
@@ -100,7 +113,6 @@
     preferencesProps,
     preferences,
     status,
-    refresh: retry,
     totalCount,
     selectedCount,
     selectedItems,
@@ -130,7 +142,7 @@
   const { formatNumber } = useLocale()
 
   const requestsFormat = (value: number) => formatNumber(value, { notation: 'compact' })
-  const severityOf = (value: ApplicationStatus): TagSeverity =>
+  const severityOf = (value: CardViewApplicationStatus): TagSeverity =>
     value === 'Active' ? 'success' : value === 'Degraded' ? 'warning' : 'neutral'
 
   const CONFIRM_WORD = 'delete'
@@ -151,12 +163,14 @@
     if (isOpen) confirmation.value = ''
   })
 
-  const confirmDelete = () => {
+  const confirmDelete = (event: Event) => {
     if (!canDelete.value) return
-    const doomed = new Set(selectedItems.value.map((item) => item.id))
+    const deleted = [...selectedItems.value]
+    const doomed = new Set(deleted.map((item) => item.id))
     items.value = items.value.filter((item) => !doomed.has(item.id))
     clearSelection()
     deleteOpen.value = false
+    emit('delete', event, deleted)
   }
 </script>
 
@@ -181,6 +195,7 @@
             icon="ai ai-plus"
             variant="primary"
             size="large"
+            @click="(event: MouseEvent) => emit('create', event)"
           />
         </template>
       </PageHeader>
@@ -192,6 +207,7 @@
                 v-bind="propertyFilterProps"
                 placeholder="Filter applications"
                 aria-label="Filter applications"
+                :disabled="blocked"
               />
             </div>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
@@ -206,7 +222,7 @@
                     icon="ai ai-trash"
                     variant="outline"
                     size="medium"
-                    :disabled="!selectedCount"
+                    :disabled="blocked || !selectedCount"
                   />
                 </template>
                 <div class="flex flex-col gap-(--spacing-md)">
@@ -255,12 +271,20 @@
                 v-bind="preferencesProps"
                 title="Card preferences"
                 :sections="['page-size', 'columns']"
+                :disabled="blocked"
               />
             </div>
           </header>
 
+          <Alert
+            v-if="error"
+            severity="danger"
+            :label="error"
+            action-label="Retry"
+            @action="(event: MouseEvent) => emit('retry', event)"
+          />
           <Card
-            v-if="status === 'empty'"
+            v-else-if="status === 'empty' && !loading"
             :padded="false"
           >
             <template #default>
@@ -276,22 +300,17 @@
                     icon="ai ai-plus"
                     variant="secondary"
                     size="small"
+                    @click="(event: MouseEvent) => emit('create', event)"
                   />
                 </template>
               </EmptyState>
             </template>
           </Card>
-          <Alert
-            v-else-if="status === 'error'"
-            severity="danger"
-            label="Couldn't load the applications. Check your connection and retry."
-            action-label="Retry"
-            @action="retry"
-          />
 
           <template v-else>
             <CardList
               v-bind="cardListProps"
+              :loading="loading"
               aria-label="Applications"
             >
               <template #header="{ item }">

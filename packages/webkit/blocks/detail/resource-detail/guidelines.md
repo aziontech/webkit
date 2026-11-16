@@ -54,6 +54,47 @@ For a resource made from the CLI, the `detail/get-started` section follows the s
 - Report the deploy through the async-submit toast (Edit and Redeploy) and clear the staged marks once it succeeds.
 - A node that collects many resources adds to itself through the diagram's `actions` slot: the Domains node of ServiceOverview carries an outlined small `IconButton` (`ai ai-plus`) named Add domain inside a `Tooltip`, picked by `node.key === 'domains'`. Never hand-draw a node card to get the `+`.
 
+## Data
+
+The primary (ResourceOverview) takes the resource through a prop, owns the open tab as a model and emits its actions; it fetches nothing. `ResourceDetailResource`, `ResourceDetailTab` and `ResourceDetailProps` are exported from `resource-detail.vue`, and `sample.ts` holds the sample resource the block renders when `resource` is left out. The other variants are whole screens of their own (a service, a policy, an application with working tabs) and keep their own records.
+
+| Prop / model  | Type                     | What it does                                                                                                     |
+| ------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `resource`    | `ResourceDetailResource` | The summary: address, deployment and environment, status, creation, framework; its `name` builds the tab routes. |
+| `v-model:tab` | `ResourceDetailTab`      | The open tab (`overview` by default); a route-driven page binds it to the route.                                 |
+
+| Event                | Payload          | When                                                        |
+| -------------------- | ---------------- | ----------------------------------------------------------- |
+| `resource-action`    | `(event, value)` | Copy URL (`copy-url`) or Settings (`settings`) in the menu. |
+| `connect-repository` | `(event)`        | Connect Git repository under Source.                        |
+
+To go live, render the block from a page that owns the request and the route:
+
+```vue
+<script setup lang="ts">
+  import ResourceDetail, { type ResourceDetailTab } from './resource-detail.vue'
+
+  const route = useRoute()
+  const router = useRouter()
+  const { data } = useResource(route.params.id)
+  const tab = computed({
+    get: () => (route.params.tab ?? 'overview') as ResourceDetailTab,
+    set: (next) => router.push(`/resources/${route.params.id}/${next}`)
+  })
+</script>
+
+<template>
+  <ResourceDetail
+    v-if="data"
+    v-model:tab="tab"
+    :resource="data"
+    @connect-repository="router.push(`/resources/${route.params.id}/build`)"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Keep the content in `layout-column` with its boundary inset, and let the tab bar run full-bleed above it.
@@ -98,7 +139,7 @@ Grouped by the resource type the page shows. A deployment's own page is `detail/
 
 ### Resource
 
-- ResourceOverview: the Overview tab of a resource made from the CLI, the summary card followed by Get started.
+- ResourceOverview: the Overview tab of a resource made from the CLI (`resource`, `tab` is `overview`), the summary card followed by Get started; any other `tab` shows the Open link to its own route.
 - Resource: the summary card alone, in its resource shape.
 - FirstDeploy: the summary cards before and during the first deploy. A resource never deployed shows Not deployed yet in place of the address, None, Not deployed and Not yet as muted values, Connect Git repository and Project upload under Source, and no Visit; a service on its first deploy reads Deploying · Build with a loading `StatusIndicator`, and one that serves nothing reads Inactive.
 - ResourceVersions: the Versions tab, a small Versions heading with Add Version over the controls row and the versions table.

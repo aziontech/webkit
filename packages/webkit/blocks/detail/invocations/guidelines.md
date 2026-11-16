@@ -38,13 +38,61 @@ A small `SectionHeader` over the `Trace` waterfall of the run, its spans nested 
 
 A small `SectionHeader` over a copyable `LogViewer` whose lines are timed from the run's zero (+16 ms), the same clock as the trace. Warnings and errors use the warning line type and keep the level word in the message; the last line of a completed run is a success line. While the run is going the lines printed so far stay on screen and a loading `StatusIndicator` reading Streaming sits in the section header; the view shows its own loading state only while no line has arrived yet, and `LogViewerContent` holds the empty text.
 
+## Data
+
+The block takes the function and its recent invocations through props, owns the open invocation and the selected span as models, and emits its actions; it fetches nothing. `InvocationsFunction`, `InvocationsInvocation`, `InvocationsLog` and `InvocationsProps` are exported from `invocations.vue`, and `sample.ts` holds the sample function and runs the block renders when they are left out.
+
+| Prop / model         | Type                      | What it does                                                                                       |
+| -------------------- | ------------------------- | -------------------------------------------------------------------------------------------------- |
+| `edgeFunction`       | `InvocationsFunction`     | The function (name, ID, runtime) and the path its requests take (service, resource, rule, origin). |
+| `invocations`        | `InvocationsInvocation[]` | Recent runs, newest first: their status, times, request, outcome, logs and trace spans.            |
+| `v-model:invocation` | `string`                  | The ID of the open run; empty opens the first. Picking one in Recent updates it.                   |
+| `v-model:span`       | `string`                  | The selected trace span; empty selects none. A request path node's jump sets it.                   |
+
+| Event               | Payload               | When                                                                   |
+| ------------------- | --------------------- | ---------------------------------------------------------------------- |
+| `replay`            | `(event, invocation)` | Replay; the page starts the run and reports it through `toast`.        |
+| `invocation-action` | `(event, value)`      | Open in Real-Time Events (`events`) or Function settings (`settings`). |
+
+To go live, render the block from a page that owns the request and the route:
+
+```vue
+<script setup lang="ts">
+  import { toast } from '@aziontech/webkit/toast'
+  import { ref } from 'vue'
+
+  import Invocations, { type InvocationsInvocation } from './invocations.vue'
+
+  const route = useRoute()
+  const { fn, invocations } = useInvocations(route.params.functionId)
+  const open = ref(String(route.params.invocationId ?? ''))
+  const replay = async (_event: MouseEvent, invocation: InvocationsInvocation) => {
+    const next = await replayInvocation(invocation.id)
+    toast.info(`Replaying ${invocation.id}`)
+    open.value = next.id
+  }
+</script>
+
+<template>
+  <Invocations
+    v-if="fn && invocations"
+    v-model:invocation="open"
+    :edge-function="fn"
+    :invocations="invocations"
+    @replay="replay"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Lead with the outcome: the status and the outcome line come before any chart.
 - Keep one clock for the trace and the logs, so a line and a span can be read against each other.
 - Let a request path node jump to its span; never make the user search the waterfall for it.
 - Keep the run switcher in the summary, so the user moves between invocations without leaving the page.
-- Disable Replay while a run is still going, and report Replay through `toast`.
+- Disable Replay while a run is still going; Replay emits `replay` and the page reports it through `toast`.
 
 ## Don't
 
@@ -73,9 +121,9 @@ A small `SectionHeader` over a copyable `LogViewer` whose lines are timed from t
 
 ## States
 
-- Completed: a run that served its response, every node tagged Active or Answered, the trace with no error and the logs ending on a success line.
-- Error: a run the origin timed out, the danger status and outcome, the function and origin nodes failed, the origin-response span selected with its message, and warning lines in the logs.
-- Running: a run in progress, the loading status, Replay disabled, Completed reading Not yet, running spans, and the lines printed so far with a Streaming indicator in the Logs header.
+- Completed: the open invocation (`invocation`, the first by default) is a run that served its response, every node tagged Active or Answered, the trace with no error and the logs ending on a success line.
+- Error: the open invocation (`invocation="inv_7d41be02"`, `span="response"`) is a run the origin timed out, the danger status and outcome, the function and origin nodes failed, the origin-response span selected with its message, and warning lines in the logs.
+- Running: the open invocation (`invocation="inv_6a90c3f7"`) is a run in progress, the loading status, Replay disabled, Completed reading Not yet, running spans, and the lines printed so far with a Streaming indicator in the Logs header.
 
 ## Related
 

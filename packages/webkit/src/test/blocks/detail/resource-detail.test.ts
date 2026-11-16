@@ -59,6 +59,44 @@ describe('detail/resource-detail', () => {
     expect(open.getAttribute('href')).toBe('/resources/analytics-app/versions')
   })
 
+  it('renders the resource it is given, follows the tab model and emits its actions', async () => {
+    const view = render(DetailsPage, {
+      props: {
+        tab: 'overview',
+        resource: {
+          name: 'acme-store',
+          domain: 'store.example.com',
+          deploymentId: '4410022',
+          environment: 'Staging',
+          status: 'Building',
+          statusSeverity: 'info',
+          createdAt: new Date(Date.UTC(2026, 10, 1)),
+          createdBy: 'Jane Doe',
+          framework: 'Astro',
+          frameworkIcon: 'ai-color ai-astro'
+        }
+      }
+    })
+    expect(view.getByRole('link', { name: /Visit/ }).getAttribute('href')).toBe(
+      'https://store.example.com'
+    )
+    expect(view.getByRole('link', { name: '4410022' }).getAttribute('href')).toBe(
+      '/deployments/4410022'
+    )
+    expect(view.container.textContent).toContain('Astro')
+    expect(view.container.textContent).toContain('by Jane Doe')
+    expect(view.container.textContent).not.toContain('analytics-app')
+    await fireEvent.click(view.getByRole('button', { name: 'Connect Git repository' }))
+    const connect = view.emitted('connect-repository') as [MouseEvent][]
+    expect(connect).toHaveLength(1)
+    expect(connect[0][0]).toBeInstanceOf(MouseEvent)
+    await fireEvent.click(view.getByRole('tab', { name: 'Build' }))
+    expect(view.emitted('update:tab')).toEqual([['build']])
+    await view.rerender({ tab: 'build' })
+    const open = await waitFor(() => view.getByRole('link', { name: 'Open Build' }))
+    expect(open.getAttribute('href')).toBe('/resources/acme-store/build')
+  })
+
   it('adds a custom domain from an IconButton', () => {
     const view = render(Service)
     expect(view.getByRole('button', { name: 'Add a custom domain' })).toBeTruthy()

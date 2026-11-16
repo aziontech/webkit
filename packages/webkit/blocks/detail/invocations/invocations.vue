@@ -2,7 +2,7 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CopyButton from '@aziontech/webkit/copy-button'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import FlowDiagram from '@aziontech/webkit/flow-diagram'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
@@ -12,26 +12,78 @@
   import SectionHeader from '@aziontech/webkit/section-header'
   import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Tag, { type TagSeverity } from '@aziontech/webkit/tag'
-  import { toast } from '@aziontech/webkit/toast'
   import Tooltip from '@aziontech/webkit/tooltip'
   import Trace, { type TraceSpan } from '@aziontech/webkit/trace'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, nextTick, ref } from 'vue'
 
-  type RunStatus = 'Completed' | 'Failed' | 'Running'
-  type LogLevel = 'debug' | 'info' | 'warn' | 'error'
-  type Run = {
+  import { sampleFunction, sampleInvocations } from './sample'
+
+  /** How an invocation ended, or that it is still running. */
+  export type InvocationsStatus = 'Completed' | 'Failed' | 'Running'
+
+  /** The level of a log line. */
+  export type InvocationsLogLevel = 'debug' | 'info' | 'warn' | 'error'
+
+  /** One line the function printed. */
+  export interface InvocationsLog {
+    /** Milliseconds since the invocation started. */
+    at: number
+    /** The log level, printed before the message. */
+    level: InvocationsLogLevel
+    /** What was printed. */
+    message: string
+  }
+
+  /** One run of the function. */
+  export interface InvocationsInvocation {
+    /** The invocation ID, shown in the subject band and the Recent menu. */
     id: string
-    status: RunStatus
-    started: string
-    completed: string
+    /** How it ended, or Running. */
+    status: InvocationsStatus
+    /** When it started. */
+    startedAt: Date
+    /** When it ended; null while it runs. */
+    completedAt: Date | null
+    /** Milliseconds it took, or has taken so far. */
     duration: number
+    /** Where it ran, e.g. a city and country. */
     location: string
+    /** The request that triggered it, method and URL. */
     trigger: string
+    /** One sentence on what it answered. */
     outcome: string
-    logs: { at: number; level: LogLevel; message: string }[]
+    /** What the function printed, in order. */
+    logs: InvocationsLog[]
+    /** The trace spans; the root span is the function, origin the origin fetch. */
     spans: TraceSpan[]
   }
-  type PathNode = {
+
+  /** The function and the path its requests take. */
+  export interface InvocationsFunction {
+    /** The function ID, used in its link. */
+    id: string
+    /** The function name. */
+    name: string
+    /** Its runtime, e.g. JavaScript. */
+    runtime: string
+    /** The service that received the request. */
+    service: string
+    /** The address the service answers on. */
+    serviceAddress: string
+    /** The resource whose rule ran the function. */
+    resource: string
+    /** The rule that matched. */
+    rule: string
+    /** The phase the rule runs in. */
+    phase: string
+    /** The origin the function fetches from. */
+    origin: string
+    /** The origin host. */
+    originHost: string
+  }
+
+  interface PathNode {
     key: string
     eyebrow: string
     icon: string
@@ -42,300 +94,115 @@
     fields: { label: string; value: string }[]
   }
 
-  const FUNCTION = { id: '40122', name: 'image-resizer', runtime: 'JavaScript' }
+  export interface InvocationsProps {
+    /** The function and its request path. Left out, the sample renders. */
+    edgeFunction?: InvocationsFunction
+    /** Recent invocations, newest first; the Recent menu lists them. Left out, the sample renders. */
+    invocations?: InvocationsInvocation[]
+  }
 
-  const runs: Run[] = [
-    {
-      id: 'inv_8f2c1a9d',
-      status: 'Completed',
-      started: 'Nov 12, 14:02:11 UTC',
-      completed: 'Nov 12, 14:02:11 UTC',
-      duration: 412,
-      location: 'San Francisco, US',
-      trigger: 'GET https://images.example.com/hero-4k.jpg?format=avif',
-      outcome: '200 OK, served from the transform, then written to cache.',
-      logs: [
-        { at: 0, level: 'info', message: 'Invocation started: GET /hero-4k.jpg?format=avif' },
-        { at: 4, level: 'debug', message: 'args { defaultFormat: "avif", quality: 80 }' },
-        { at: 16, level: 'info', message: 'Cache miss, fetching assets.example.com' },
-        { at: 61, level: 'debug', message: 'TLS 1.3 established, cipher TLS_AES_128_GCM_SHA256' },
-        { at: 202, level: 'info', message: 'Origin answered 200, image/jpeg, 2.4 MB' },
-        { at: 256, level: 'debug', message: 'Decoded 3840x2160, re-encoding to avif q80' },
-        { at: 348, level: 'info', message: 'Encoded 412 KB, 83% smaller' },
-        { at: 386, level: 'info', message: 'Cached for 86400 s' },
-        { at: 412, level: 'info', message: 'Invocation completed with 200' }
-      ],
-      spans: [
-        {
-          id: 'root',
-          name: 'image-resizer',
-          service: 'Function',
-          icon: 'ai ai-edge-functions',
-          start: 0,
-          duration: 412
-        },
-        {
-          id: 'parse',
-          parentId: 'root',
-          name: 'parse-request',
-          service: 'Compute',
-          icon: 'ai ai-code',
-          start: 4,
-          duration: 12
-        },
-        {
-          id: 'origin',
-          parentId: 'root',
-          name: 'fetch-origin',
-          service: 'Network',
-          icon: 'ai ai-send',
-          start: 16,
-          duration: 186
-        },
-        {
-          id: 'dns',
-          parentId: 'origin',
-          name: 'dns-lookup',
-          service: 'Network',
-          icon: 'ai ai-send',
-          start: 16,
-          duration: 14
-        },
-        {
-          id: 'tls',
-          parentId: 'origin',
-          name: 'tls-handshake',
-          service: 'Security',
-          icon: 'ai ai-lock',
-          start: 30,
-          duration: 31
-        },
-        {
-          id: 'response',
-          parentId: 'origin',
-          name: 'origin-response',
-          service: 'Network',
-          icon: 'ai ai-send',
-          start: 61,
-          duration: 141
-        },
-        {
-          id: 'decode',
-          parentId: 'root',
-          name: 'decode',
-          service: 'Compute',
-          icon: 'ai ai-code',
-          start: 202,
-          duration: 54
-        },
-        {
-          id: 'transform',
-          parentId: 'root',
-          name: 'transform',
-          service: 'Compute',
-          icon: 'ai ai-code',
-          start: 256,
-          duration: 92
-        },
-        {
-          id: 'cache',
-          parentId: 'root',
-          name: 'put-cache',
-          service: 'Storage',
-          icon: 'ai ai-edge-storage',
-          start: 348,
-          duration: 38
-        }
-      ]
-    },
-    {
-      id: 'inv_7d41be02',
-      status: 'Failed',
-      started: 'Nov 12, 13:50:27 UTC',
-      completed: 'Nov 12, 13:50:28 UTC',
-      duration: 1240,
-      location: 'Chicago, US',
-      trigger: 'GET https://images.example.com/gallery-12.jpg?format=webp',
-      outcome: '502, the origin did not answer within the 1 s budget.',
-      logs: [
-        { at: 0, level: 'info', message: 'Invocation started: GET /gallery-12.jpg?format=webp' },
-        { at: 4, level: 'debug', message: 'args { defaultFormat: "webp", quality: 80 }' },
-        { at: 15, level: 'info', message: 'Cache miss, fetching assets.example.com' },
-        { at: 61, level: 'debug', message: 'TLS 1.3 established, waiting on response headers' },
-        { at: 1061, level: 'warn', message: 'Origin silent for 1000 ms, read budget exhausted' },
-        { at: 1216, level: 'error', message: 'ConnectionTimeout: read timed out after 1000 ms' },
-        { at: 1240, level: 'error', message: 'Invocation failed with 502' }
-      ],
-      spans: [
-        {
-          id: 'root',
-          name: 'image-resizer',
-          service: 'Function',
-          icon: 'ai ai-edge-functions',
-          start: 0,
-          duration: 1240,
-          status: 'error'
-        },
-        {
-          id: 'parse',
-          parentId: 'root',
-          name: 'parse-request',
-          service: 'Compute',
-          icon: 'ai ai-code',
-          start: 4,
-          duration: 11
-        },
-        {
-          id: 'origin',
-          parentId: 'root',
-          name: 'fetch-origin',
-          service: 'Network',
-          icon: 'ai ai-send',
-          start: 15,
-          duration: 1201,
-          status: 'error'
-        },
-        {
-          id: 'dns',
-          parentId: 'origin',
-          name: 'dns-lookup',
-          service: 'Network',
-          icon: 'ai ai-send',
-          start: 15,
-          duration: 12
-        },
-        {
-          id: 'tls',
-          parentId: 'origin',
-          name: 'tls-handshake',
-          service: 'Security',
-          icon: 'ai ai-lock',
-          start: 27,
-          duration: 34
-        },
-        {
-          id: 'response',
-          parentId: 'origin',
-          name: 'origin-response',
-          service: 'Network',
-          icon: 'ai ai-send',
-          start: 61,
-          duration: 1155,
-          status: 'error',
-          message: 'Read timed out after 1000 ms.'
-        }
-      ]
-    },
-    {
-      id: 'inv_6a90c3f7',
-      status: 'Running',
-      started: 'Nov 12, 14:02:40 UTC',
-      completed: '',
-      duration: 168,
-      location: 'San Francisco, US',
-      trigger: 'GET https://images.example.com/product-88.jpg?format=avif',
-      outcome: 'Still running, the origin has not answered yet.',
-      logs: [
-        { at: 0, level: 'info', message: 'Invocation started: GET /product-88.jpg?format=avif' },
-        { at: 3, level: 'debug', message: 'args { defaultFormat: "avif", quality: 80 }' },
-        { at: 13, level: 'info', message: 'Cache miss, fetching assets.example.com' }
-      ],
-      spans: [
-        {
-          id: 'root',
-          name: 'image-resizer',
-          service: 'Function',
-          icon: 'ai ai-edge-functions',
-          start: 0,
-          duration: 168,
-          status: 'running'
-        },
-        {
-          id: 'parse',
-          parentId: 'root',
-          name: 'parse-request',
-          service: 'Compute',
-          icon: 'ai ai-code',
-          start: 3,
-          duration: 10
-        },
-        {
-          id: 'origin',
-          parentId: 'root',
-          name: 'fetch-origin',
-          service: 'Network',
-          icon: 'ai ai-send',
-          start: 13,
-          duration: 155,
-          status: 'running'
-        }
-      ]
-    }
-  ]
+  const props = withDefaults(defineProps<InvocationsProps>(), {
+    edgeFunction: undefined,
+    invocations: undefined
+  })
 
-  const severities: Record<RunStatus, StatusIndicatorSeverity> = {
+  const emit = defineEmits<{
+    replay: [event: MouseEvent, invocation: InvocationsInvocation]
+    'invocation-action': [
+      event: globalThis.MouseEvent | globalThis.KeyboardEvent,
+      value: DropdownMenuItemValue
+    ]
+  }>()
+
+  const invocationId = defineModel<string>('invocation', { default: '' })
+  const selectedSpan = defineModel<string>('span', { default: '' })
+
+  const fn = computed<InvocationsFunction>(() => props.edgeFunction ?? sampleFunction)
+  const runs = computed<InvocationsInvocation[]>(() => props.invocations ?? sampleInvocations)
+
+  const severities: Record<InvocationsStatus, StatusIndicatorSeverity> = {
     Completed: 'success',
     Failed: 'danger',
     Running: 'warning'
   }
 
+  const { formatDate } = useLocale()
+  const formatTime = (value: Date) =>
+    `${formatDate(value, {
+      month: 'short',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hourCycle: 'h23',
+      timeZone: 'UTC'
+    })} UTC`
+
   const formatDuration = (ms: number) =>
     ms >= 1000 ? `${(ms / 1000).toFixed(2)} s` : `${Math.round(ms)} ms`
 
-  const runId = ref('inv_8f2c1a9d')
-  const run = computed(() => runs.find((entry) => entry.id === runId.value) ?? runs[0])
-  const severity = computed(() => severities[run.value.status])
-  const running = computed(() => run.value.status === 'Running')
-  const facts = computed(() => [
-    { label: 'Started', value: run.value.started },
-    { label: 'Completed', value: run.value.completed || 'Not yet' },
-    { label: 'Duration', value: formatDuration(run.value.duration) },
-    { label: 'Location', value: run.value.location }
-  ])
+  const run = computed<InvocationsInvocation | undefined>(
+    () => runs.value.find((entry) => entry.id === invocationId.value) ?? runs.value[0]
+  )
+  const severity = computed(() => severities[run.value?.status ?? 'Running'])
+  const running = computed(() => run.value?.status === 'Running')
+  const facts = computed(() =>
+    run.value
+      ? [
+          { label: 'Started', value: formatTime(run.value.startedAt) },
+          {
+            label: 'Completed',
+            value: run.value.completedAt ? formatTime(run.value.completedAt) : 'Not yet'
+          },
+          { label: 'Duration', value: formatDuration(run.value.duration) },
+          { label: 'Location', value: run.value.location }
+        ]
+      : []
+  )
 
   const spanTime = (id: string) => {
-    const span = run.value.spans.find((entry) => entry.id === id)
+    const span = run.value?.spans.find((entry) => entry.id === id)
     return span ? formatDuration(span.duration) : 'Not reached'
   }
   const path = computed<PathNode[]>(() => {
-    const failed = run.value.status === 'Failed'
+    const failed = run.value?.status === 'Failed'
     return [
       {
         key: 'service',
         eyebrow: 'Service',
         icon: 'ai ai-globe',
-        title: 'storefront-prod',
+        title: fn.value.service,
         label: 'Live',
         severity: 'success',
         spanId: '',
         fields: [
-          { label: 'Address', value: 'storefront.example.com' },
-          { label: 'Location', value: run.value.location }
+          { label: 'Address', value: fn.value.serviceAddress },
+          { label: 'Location', value: run.value?.location ?? '' }
         ]
       },
       {
         key: 'resource',
         eyebrow: 'Resource',
         icon: 'ai ai-box',
-        title: 'storefront',
+        title: fn.value.resource,
         label: 'Active',
         severity: 'success',
         spanId: '',
         fields: [
-          { label: 'Matched rule', value: 'Optimize images' },
-          { label: 'Phase', value: 'Request' }
+          { label: 'Matched rule', value: fn.value.rule },
+          { label: 'Phase', value: fn.value.phase }
         ]
       },
       {
         key: 'function',
         eyebrow: 'Function',
         icon: 'ai ai-edge-functions',
-        title: FUNCTION.name,
+        title: fn.value.name,
         label: failed ? 'Failed' : running.value ? 'Running' : 'Active',
         severity: failed ? 'danger' : running.value ? 'warning' : 'success',
         spanId: 'root',
         fields: [
-          { label: 'Runtime', value: FUNCTION.runtime },
+          { label: 'Runtime', value: fn.value.runtime },
           { label: 'Time in function', value: spanTime('root') }
         ]
       },
@@ -343,32 +210,31 @@
         key: 'origin',
         eyebrow: 'Origin',
         icon: 'ai ai-server',
-        title: 'origin-assets',
+        title: fn.value.origin,
         label: failed ? 'Timed out' : running.value ? 'Waiting' : 'Answered',
         severity: failed ? 'danger' : running.value ? 'warning' : 'success',
         spanId: 'origin',
         fields: [
-          { label: 'Host', value: 'assets.example.com' },
+          { label: 'Host', value: fn.value.originHost },
           { label: 'Time at origin', value: spanTime('origin') }
         ]
       }
     ]
   })
 
-  const lines = computed<LogViewerLine[]>(() =>
-    run.value.logs.map((entry, index) => ({
-      id: `${run.value.id}-${index}`,
+  const lines = computed<LogViewerLine[]>(() => {
+    const current = run.value
+    if (!current) return []
+    return current.logs.map((entry, index) => ({
+      id: `${current.id}-${index}`,
       time: `+${formatDuration(entry.at)}`,
       type:
-        index === run.value.logs.length - 1 && run.value.status === 'Completed'
-          ? 'success'
-          : 'text',
+        index === current.logs.length - 1 && current.status === 'Completed' ? 'success' : 'text',
       level: entry.level,
       message: `${entry.level.toUpperCase()} ${entry.message}`
     }))
-  )
+  })
 
-  const selectedSpan = ref('')
   const traceEl = ref<HTMLElement | null>(null)
   const showSpan = async (spanId: string) => {
     selectedSpan.value = spanId
@@ -378,14 +244,13 @@
   }
 
   const pickRun = (id: string) => {
-    runId.value = id
+    invocationId.value = id
     selectedSpan.value = ''
   }
 
-  const replay = () =>
-    toast.info(`Replaying ${run.value.id}`, {
-      description: 'The same request runs again, and the new invocation opens here.'
-    })
+  const replay = (event: MouseEvent) => {
+    if (run.value) emit('replay', event, run.value)
+  }
 </script>
 
 <template>
@@ -398,7 +263,10 @@
       />
 
       <div class="layout-section-start flex min-w-0 flex-col gap-(--layout-section-gap)">
-        <Card :padded="false">
+        <Card
+          v-if="run"
+          :padded="false"
+        >
           <template #default>
             <div
               class="@container/band flex min-h-(--size-14) flex-wrap items-center gap-x-(--spacing-md) gap-y-(--spacing-xs) px-(--spacing-md) py-(--spacing-xs)"
@@ -412,12 +280,12 @@
                 />
                 <div class="flex min-w-0">
                   <Tooltip
-                    :content="`Open ${FUNCTION.name} in Functions`"
+                    :content="`Open ${fn.name} in Functions`"
                     class="w-full"
                   >
                     <Link
-                      :label="FUNCTION.name"
-                      :href="`/functions/${FUNCTION.id}`"
+                      :label="fn.name"
+                      :href="`/functions/${fn.id}`"
                       size="small"
                     />
                   </Tooltip>
@@ -478,14 +346,17 @@
                     >
                       <template #trailing>
                         <span class="text-label-sm text-(--text-muted)">
-                          {{ option.status }} · {{ option.started }}
+                          {{ option.status }} · {{ formatTime(option.startedAt) }}
                         </span>
                       </template>
                     </DropdownMenu.Item>
                   </DropdownMenu.Group>
                 </DropdownMenu>
 
-                <DropdownMenu placement="bottom-end">
+                <DropdownMenu
+                  placement="bottom-end"
+                  @select="(event, value) => emit('invocation-action', event, value)"
+                >
                   <DropdownMenu.Trigger>
                     <Tooltip content="Invocation actions">
                       <IconButton
@@ -575,6 +446,7 @@
         </Card>
 
         <section
+          v-if="run"
           aria-label="Request path"
           class="flex min-w-0 flex-col gap-(--layout-group-gap)"
         >
@@ -663,6 +535,7 @@
         </section>
 
         <section
+          v-if="run"
           ref="traceEl"
           aria-label="Trace"
           class="flex min-w-0 scroll-mt-(--spacing-lg) flex-col gap-(--layout-group-gap)"
@@ -681,6 +554,7 @@
         </section>
 
         <section
+          v-if="run"
           aria-label="Logs"
           class="flex min-w-0 flex-col gap-(--layout-group-gap)"
         >

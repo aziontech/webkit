@@ -51,6 +51,7 @@
     "name": "ResourceOverview",
     "file": "resource-detail.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Resource",

@@ -3,27 +3,83 @@
   import Button from '@aziontech/webkit/button'
   import Card from '@aziontech/webkit/card'
   import CodeBlock from '@aziontech/webkit/code-block'
-  import DropdownMenu from '@aziontech/webkit/dropdown-menu'
+  import DropdownMenu, { type DropdownMenuItemValue } from '@aziontech/webkit/dropdown-menu'
   import EmptyState from '@aziontech/webkit/empty-state'
   import IconButton from '@aziontech/webkit/icon-button'
   import Link from '@aziontech/webkit/link'
   import PageTabs from '@aziontech/webkit/page-tabs'
   import SectionHeader from '@aziontech/webkit/section-header'
-  import StatusIndicator from '@aziontech/webkit/status-indicator'
+  import StatusIndicator, { type StatusIndicatorSeverity } from '@aziontech/webkit/status-indicator'
   import Tabs from '@aziontech/webkit/tabs'
   import Tag from '@aziontech/webkit/tag'
   import ToggleGroup from '@aziontech/webkit/toggle-group'
   import Tooltip from '@aziontech/webkit/tooltip'
+  import { useLocale } from '@aziontech/webkit/use-locale'
   import { computed, ref } from 'vue'
 
-  const tabs = [
+  import { sampleResource } from './sample'
+
+  /** A tab of the resource page. */
+  export type ResourceDetailTab = 'overview' | 'versions' | 'build' | 'deployments'
+
+  /** The resource the page shows. */
+  export interface ResourceDetailResource {
+    /** Slug name, used in the tab routes and the CLI link command. */
+    name: string
+    /** The live address, without the scheme; Visit and both address links open it. */
+    domain: string
+    /** The deployment that serves the address, linked to its page. */
+    deploymentId: string
+    /** The environment of that deployment, shown as a tag. */
+    environment: string
+    /** The status label. */
+    status: string
+    /** The status color. */
+    statusSeverity: StatusIndicatorSeverity
+    /** When the resource was created, shown as a relative time. */
+    createdAt: Date
+    /** Who created it, shown with an avatar. */
+    createdBy: string
+    /** The framework preset label. */
+    framework: string
+    /** The framework icon class, a colored icon such as ai-color ai-nextjs. */
+    frameworkIcon: string
+  }
+
+  export interface ResourceDetailProps {
+    /** The resource the page shows. Left out, the sample renders. */
+    resource?: ResourceDetailResource
+  }
+
+  const props = withDefaults(defineProps<ResourceDetailProps>(), {
+    resource: undefined
+  })
+
+  const emit = defineEmits<{
+    'resource-action': [
+      event: globalThis.MouseEvent | globalThis.KeyboardEvent,
+      value: DropdownMenuItemValue
+    ]
+    'connect-repository': [event: MouseEvent]
+  }>()
+
+  const activeTab = defineModel<ResourceDetailTab>('tab', { default: 'overview' })
+
+  const resource = computed<ResourceDetailResource>(() => props.resource ?? sampleResource)
+  const address = computed(() => `https://${resource.value.domain}`)
+
+  const { formatRelativeTime } = useLocale()
+  const created = computed(
+    () => `${formatRelativeTime(resource.value.createdAt)} by ${resource.value.createdBy}`
+  )
+
+  const tabs: { value: ResourceDetailTab; label: string }[] = [
     { value: 'overview', label: 'Overview' },
     { value: 'versions', label: 'Versions' },
     { value: 'build', label: 'Build' },
     { value: 'deployments', label: 'Deployments' }
   ]
 
-  const activeTab = ref('overview')
   const tabLabel = computed(() => tabs.find((tab) => tab.value === activeTab.value)?.label ?? '')
 
   const PATHS = [
@@ -31,7 +87,7 @@
     { label: 'GitHub Actions', value: 'actions' }
   ]
 
-  const CLI_STEPS = [
+  const cliSteps = computed(() => [
     {
       title: 'Install the CLI',
       description:
@@ -69,7 +125,7 @@
           language: 'bash',
           code: `platform login
 platform link \\
-  --name analytics-app`
+  --name ${resource.value.name}`
         }
       ]
     },
@@ -87,7 +143,7 @@ platform sync`
         }
       ]
     }
-  ]
+  ])
 
   const ACTIONS_STEPS = [
     {
@@ -138,7 +194,7 @@ jobs:
   ]
 
   const path = ref('cli')
-  const steps = computed(() => (path.value === 'actions' ? ACTIONS_STEPS : CLI_STEPS))
+  const steps = computed(() => (path.value === 'actions' ? ACTIONS_STEPS : cliSteps.value))
 </script>
 
 <template>
@@ -178,19 +234,19 @@ jobs:
                       />
                       <div class="flex min-w-0">
                         <Tooltip
-                          content="Open analytics-app-z1x2c3.example.com in a new tab"
+                          :content="`Open ${resource.domain} in a new tab`"
                           class="w-full"
                         >
                           <a
-                            href="https://analytics-app-z1x2c3.example.com"
+                            :href="address"
                             target="_blank"
                             rel="noopener noreferrer"
                             data-link
                             class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                           >
-                            <span class="truncate underline-offset-2 group-hover/link:underline"
-                              >analytics-app-z1x2c3.example.com</span
-                            >
+                            <span class="truncate underline-offset-2 group-hover/link:underline">{{
+                              resource.domain
+                            }}</span>
                             <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                             <i
                               class="ai ai-external-link shrink-0 text-body-xs leading-none"
@@ -204,14 +260,17 @@ jobs:
                     <div class="ms-auto flex shrink-0 items-center gap-(--spacing-xs)">
                       <Button
                         label="Visit"
-                        href="https://analytics-app-z1x2c3.example.com"
+                        :href="address"
                         target="_blank"
                         variant="secondary"
                         size="medium"
                         icon="ai ai-external-link"
                       />
 
-                      <DropdownMenu placement="bottom-end">
+                      <DropdownMenu
+                        placement="bottom-end"
+                        @select="(event, value) => emit('resource-action', event, value)"
+                      >
                         <DropdownMenu.Trigger>
                           <Tooltip content="Resource actions">
                             <IconButton
@@ -262,18 +321,18 @@ jobs:
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
                           <Tooltip
-                            content="Open 1213275262 in Deployments"
+                            :content="`Open ${resource.deploymentId} in Deployments`"
                             class="w-full"
                           >
                             <Link
-                              label="1213275262"
-                              href="/deployments/1213275262"
+                              :label="resource.deploymentId"
+                              :href="`/deployments/${resource.deploymentId}`"
                               size="small"
                             />
                           </Tooltip>
                         </div>
                         <Tag
-                          label="Production"
+                          :label="resource.environment"
                           severity="neutral"
                           size="small"
                           class="shrink-0"
@@ -286,18 +345,19 @@ jobs:
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <div class="flex min-w-0">
                           <Tooltip
-                            content="Open analytics-app-z1x2c3.example.com in a new tab"
+                            :content="`Open ${resource.domain} in a new tab`"
                             class="w-full"
                           >
                             <a
-                              href="https://analytics-app-z1x2c3.example.com"
+                              :href="address"
                               target="_blank"
                               rel="noopener noreferrer"
                               data-link
                               class="group/link data-link:cursor-pointer inline-flex min-w-0 items-center gap-(--spacing-2xs) rounded-(--shape-button) text-body-sm text-(--text-default) no-underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-(--ring-color) focus-visible:ring-offset-1 focus-visible:ring-offset-(--bg-canvas)"
                             >
-                              <span class="truncate underline-offset-2 group-hover/link:underline"
-                                >analytics-app-z1x2c3.example.com</span
+                              <span
+                                class="truncate underline-offset-2 group-hover/link:underline"
+                                >{{ resource.domain }}</span
                               >
                               <span class="sr-only">{{ ' (opens in a new tab)' }}</span>
                               <i
@@ -314,8 +374,8 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Status</span>
                       <div class="flex min-h-7 min-w-0 items-center">
                         <StatusIndicator
-                          severity="success"
-                          label="Ready"
+                          :severity="resource.statusSeverity"
+                          :label="resource.status"
                         />
                       </div>
                     </div>
@@ -324,11 +384,11 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Created</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <span class="truncate text-body-sm text-(--text-default)">
-                          2 weeks ago by John Smith
+                          {{ created }}
                         </span>
                         <Avatar
-                          alt="John Smith"
-                          label="John Smith"
+                          :alt="resource.createdBy"
+                          :label="resource.createdBy"
                           size="small"
                           variant="square"
                           class="shrink-0"
@@ -342,6 +402,7 @@ jobs:
                         <Button
                           variant="link"
                           label="Connect Git repository"
+                          @click="(event: MouseEvent) => emit('connect-repository', event)"
                         />
                       </div>
                     </div>
@@ -350,10 +411,13 @@ jobs:
                       <span class="text-label-sm text-(--text-muted)">Framework</span>
                       <div class="flex min-h-7 min-w-0 items-center gap-(--spacing-xs)">
                         <i
-                          class="ai-color ai-nextjs shrink-0 text-body-lg"
+                          :class="resource.frameworkIcon"
+                          class="shrink-0 text-body-lg"
                           aria-hidden="true"
                         />
-                        <span class="truncate text-body-sm text-(--text-default)"> Next.js </span>
+                        <span class="truncate text-body-sm text-(--text-default)">
+                          {{ resource.framework }}
+                        </span>
                       </div>
                     </div>
                   </div>
@@ -479,7 +543,7 @@ jobs:
                 :label="`Open ${tabLabel}`"
                 variant="outline"
                 size="small"
-                :href="`/resources/analytics-app/${activeTab}`"
+                :href="`/resources/${resource.name}/${activeTab}`"
               />
             </template>
           </EmptyState>
