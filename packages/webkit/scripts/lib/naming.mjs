@@ -4,7 +4,7 @@ import { join, relative } from 'node:path'
 export const MARKET_ALIASES = {
   'alert-dialog': 'confirm-dialog',
   banner: 'alert',
-  'blog-index': 'article-index',
+  'blog-index': 'article-index-section',
   'bordered-box': 'registration-frame',
   breadcrumbs: 'breadcrumb',
   callout: 'alert',
@@ -12,7 +12,7 @@ export const MARKET_ALIASES = {
   'config-provider': 'webkit-provider',
   cta: 'call-to-action',
   datatable: 'data-table',
-  'feature-grid': 'capability-grid',
+  'feature-grid': 'capability-grid-section',
   'file-viewer': 'file-preview',
   'image-viewer': 'file-preview',
   'input-otp': 'otp-input',
@@ -29,8 +29,8 @@ export const MARKET_ALIASES = {
   sheet: 'drawer',
   snackbar: 'toast',
   steps: 'stepper',
-  testimonial: 'client-quotes',
-  testimonials: 'client-quotes',
+  testimonial: 'client-quotes-section',
+  testimonials: 'client-quotes-section',
   'text-field': 'input',
   transfer: 'transfer-list'
 }

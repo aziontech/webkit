@@ -210,7 +210,7 @@ for (const theme of THEMES) {
     const mode: Mode = { theme, width }
     test(`geometry site footer ends on its bottom bar ${label(mode)}`, async ({ page }) => {
       await prepare(page, mode)
-      const preview = await openExample(page, 'site-footer/default', mode)
+      const preview = await openExample(page, 'site-footer-section/default', mode)
       const footer = preview.locator('footer[data-testid="footer"]')
       const signature = footer.locator('[data-testid="footer__signature"]')
       const social = footer.locator('[data-testid="footer__social"]')

@@ -4,12 +4,12 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 6
-checksum: e8a1a9aa4d7a1bb46b89ecaef73cc522a7d7411febfadc6c18a1f38b153824d1
+checksum: cfc8d927a5d2c9c7348d8ec90e8cec2d31ecbd6cddd19a8a8ee26c23ba15bf3f
 figma:
   url: https://www.figma.com/design/aerxJReCkLz3x3z29IERE9/Assets?node-id=2240-47648
   node_id: 2240:47648
 created: 2026-09-30
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Quote Tabs — Component Spec
@@ -22,7 +22,7 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
 
 ## When to use
 
-- Rendering page JSON, or you need a whole band with no custom content → the section (`client-quotes`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`quote-tabs`).
+- Rendering page JSON, or you need a whole band with no custom content → the section (`client-quotes-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`quote-tabs`).
 - Use QuoteTabs in a hand-built SFC that needs the `#actions` slot.
 - To feature one client quotation at a time out of three to twelve peers, with every other client one click away on the wall below.
 - As a success-story band where the wall of customers and the quotation are the same content, not two lists.
@@ -30,7 +30,7 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
 ## When NOT to use
 
 - For one quotation on its own → use `quote` with `variant="highlight"`.
-- For a band of customer quotes the reader browses by client → use `client-quotes`.
+- For a band of customer quotes the reader browses by client → use `client-quotes-section`.
 - For a wall whose cards link to each customer's story → use `logo-wall`.
 - For a moving strip of marks with no links → use `marquee`.
 - For switching a page's content between views → use `tabs`.
@@ -41,7 +41,7 @@ The band owns the selection and nothing else. The featured quotation is `quote` 
 - `logo-wall` — the same framed client cells, as links out rather than as a selector.
 - `card-grid` — the framed grid the cards are laid out on.
 - `registration-frame` — the registration frame the quotation panel is drawn in, with the same corner marks as the cards below it; also what a page wraps the band in to close its outer edges.
-- `client-quotes` — the page-section band of customer quotes browsed by client.
+- `client-quotes-section` — the page-section band of customer quotes browsed by client.
 - `media-tabs` — the same timer and progress hairline, for claims paired with a medium.
 
 ## Best practices

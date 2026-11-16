@@ -36,20 +36,22 @@ The kebab name is the single source. Six surfaces must agree:
   not `btn`. A container of many is a different component (`chip-group`), never a plural.
 - **Modifier first, noun last.** `pricing-card`, `highlight-button`, `icon-button` — every card
   ends in `card`, every button in `button`.
-- **A marketing page section that wraps a primitive ends in `-section`** (`hero-section`,
-  `stats-section`, `media-split-section`); the primitive keeps the bare name (`hero`, `stats`).
+- **Every marketing page section ends in `-section`.** Each component in
+  `src/components/section/` is named `<what>-section` (`hero-section`, `client-quotes-section`,
+  `site-footer-section`), and that name is the `_id` the site writes in a page's `sections[]`;
+  the building pieces in `src/components/marketing/` keep the bare name (`hero`, `stats`).
   `-band`, `-stack` and the other wrapper words are not used.
 - **No synonym of an existing export.** One overlay is `dialog` (never `modal`), the side panel
   is `drawer` (never `sheet`), the moving strip is `marquee` (never `ticker`).
 
-| ✅               | ❌                                       |
-| ---------------- | ---------------------------------------- |
-| `pricing-card`   | `card-pricing` (noun first)              |
-| `site-header`    | `site-nav` (abbreviation)                |
-| `eyebrow`        | `overline` (banned word)                 |
-| `marquee`        | `ticker` (synonym of an existing family) |
-| `key-value-list` | `key-value-pairs` (plural root)          |
-| `hero-section`   | `hero-band` (sections end in `-section`) |
+| ✅                    | ❌                                       |
+| --------------------- | ---------------------------------------- |
+| `pricing-card`        | `card-pricing` (noun first)              |
+| `site-header-section` | `site-nav-section` (abbreviation)        |
+| `eyebrow`             | `overline` (banned word)                 |
+| `marquee`             | `ticker` (synonym of an existing family) |
+| `key-value-list`      | `key-value-pairs` (plural root)          |
+| `hero-section`        | `hero-band` (sections end in `-section`) |
 
 Near-duplicate words the check knows (`ABBREVIATIONS` and `SYNONYMS` in the engine):
 abbreviations `btn`→`button`, `img`/`pic`→`image`, `nav`→`navigation`, `cols`/`col`→`columns`,
@@ -502,7 +504,7 @@ One engine checks every rule that a machine can decide, and every rule blocks: t
 | `block-state`      | block variant names use the state words                                                | N10            |
 | `part-word`        | part suffix in the closed list or a declared domain part; `Body` placement             | N8             |
 | `part-export`      | every part folder has its `<root>-<part>` export                                       | N8             |
-| `section-suffix`   | a page section that wraps a primitive (or says band/stack) ends in `-section`          | N12            |
+| `section-suffix`   | every component in `src/components/section/` ends in `-section`                        | N12            |
 | `example-file`     | first example is `default.vue`; no banned example file names                           | N13            |
 | `prop-name`        | prop names against the vocabulary (specs and `.vue`)                                   | N1, N5, N6     |
 | `prop-value`       | union members against the shared and closed value sets, `Severity`-derived types       | N2, N3, N5, N7 |

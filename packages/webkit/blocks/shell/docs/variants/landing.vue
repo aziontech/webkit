@@ -248,7 +248,7 @@
               <DocCard
                 title="Explore use cases"
                 icon="ai ai-sitemap"
-                href="/docs/customer-use-cases"
+                href="/docs/customer-use-cases-section"
                 >Validated designs that show how Azion products combine to solve each use case,
                 grouped by solution.</DocCard
               >

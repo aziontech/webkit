@@ -67,7 +67,7 @@ test('every component carries a surface, and listComponents filters by it', () =
   assert.ok(product.components.some((c) => c.name === 'button'))
   assert.ok(product.components.every((c) => c.surface === 'app'))
   const marketing = listComponents(catalog, { surface: 'site' })
-  assert.ok(marketing.components.some((c) => c.name === 'architecture-tabs'))
+  assert.ok(marketing.components.some((c) => c.name === 'architecture-tabs-section'))
   assert.equal(getComponent(catalog, 'doc-callout').surface, 'docs')
 })
 
@@ -250,9 +250,9 @@ test('validateUsage does NOT flag a sibling package as an invalid webkit import'
 })
 
 test('getUsageExample binds an empty literal for a required array prop (never prop="text")', () => {
-  const res = getUsageExample(catalog, 'site-header', { fromStory: false })
+  const res = getUsageExample(catalog, 'site-header-section', { fromStory: false })
   assert.equal(res.found, true)
-  // menus: SiteHeaderMenu[] is required and non-scalar → :menus="[]", not menus="text"
+  // menus: SiteHeaderSectionMenu[] is required and non-scalar → :menus="[]", not menus="text"
   assert.match(res.sfc, /:menus="\[\]"/)
   assert.doesNotMatch(res.sfc, /menus="text"/)
 })
@@ -421,7 +421,7 @@ test('suggestComponent returns the block first for a screen and the section for 
   assert.equal(screen.block.id, 'auth/sign-in')
   const band = suggestComponent(catalog, 'pricing page')
   assert.equal(band.recommendation, 'section')
-  assert.equal(band.best.name, 'pricing-plans')
+  assert.equal(band.best.name, 'pricing-plans-section')
   assert.equal(suggestComponent(catalog, 'button').recommendation, 'component')
 })
 
@@ -517,7 +517,7 @@ test('list_assets indexes every kind with its count and the components that use 
   assert.ok(kinds.illustrations.usedBy.includes('illustration'))
   assert.ok(kinds.illustrations.usedBy.includes('media-split-stack-section'))
   assert.ok(kinds.brandMarks.usedBy.includes('marquee'))
-  assert.ok(kinds.brandMarks.usedBy.includes('client-quotes'))
+  assert.ok(kinds.brandMarks.usedBy.includes('client-quotes-section'))
   assert.ok(kinds.diagrams.usedBy.includes('diagram'))
   assert.ok(kinds.lineFigures.usedBy.includes('line-figure'))
   assert.ok(kinds.icons.usedBy.includes('button'))
@@ -540,7 +540,7 @@ test('list_assets lists every registered illustration, the shipped tiles include
   assert.equal(res.items.find((i) => i.name === 'runtime').canvas, '592x300')
 })
 
-test('list_assets marks a renamed illustration deprecated and names its replacement', () => {
+test('list_assets lists only the renamed illustration scenes, never the old names', () => {
   const items = listAssets(catalog, { kind: 'illustrations' }).items
   const byName = new Map(items.map((i) => [i.name, i]))
   for (const [retired, current] of [
@@ -553,12 +553,13 @@ test('list_assets marks a renamed illustration deprecated and names its replacem
     ['white-gloves-when-it-matters', 'chat-and-headset-tiles'],
     ['stay-in-control', 'traffic-and-cost-bar-chart']
   ]) {
-    const old = byName.get(retired)
-    assert.equal(old?.deprecated, true, retired)
-    assert.equal(old.replacedBy, current, retired)
-    assert.equal(old.canvas, byName.get(current)?.canvas, retired)
-    assert.equal(byName.get(current).deprecated, undefined, current)
+    assert.equal(byName.has(retired), false, retired)
+    assert.equal(byName.get(current)?.deprecated, undefined, current)
   }
+  assert.deepEqual(
+    items.filter((i) => i.deprecated),
+    []
+  )
 })
 
 test('list_assets filters by name, label and keyword', () => {

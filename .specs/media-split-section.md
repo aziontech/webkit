@@ -6,8 +6,8 @@ status: implemented
 spec_version: 8
 template: 2
 created: 2026-11-05
-last_updated: 2026-11-15
-checksum: 13dddea44c7e51c1d77cff47ffee2a623866476263cfbe47aad145cc8e828214
+last_updated: 2026-11-16
+checksum: 8e0cc6cb3d1fb7933f793001073fb38822bb3eef1f1b6d0e7a64410e35b7cbfc
 ---
 
 # MediaSplitSection — Component Spec
@@ -26,7 +26,7 @@ One claim beside its picture, on its own frame: the copy cell with its overline,
 ## When NOT to use
 
 - For several claims stacked one after the other → use `media-split-stack-section`.
-- For a full-width terminal session with no copy column → use `cli-terminal`.
+- For a full-width terminal session with no copy column → use `cli-terminal-section`.
 - For copy beside one piece of media in a hand-built SFC that needs the `media` slot → use `media-split`.
 
 ## Related

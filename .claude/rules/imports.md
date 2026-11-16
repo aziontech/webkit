@@ -49,7 +49,7 @@ The two marketing categories follow the flat rule like every other category; onl
 | `section` (page sections)     | `src/components/section/<name>/`   | `"./<name>"` · `@aziontech/webkit/<name>` | `Components/Marketing/Sections/<Pascal>`   |
 
 - A page section's `<name>` is the `_id` the marketing site writes in a page's `sections[]` JSON, so the `_id` and the import subpath are the same string (see [`SECTIONS.md`](../docs/SECTIONS.md)).
-- The `<name>` is unique across every category (`.specs/<name>.md` is a flat folder): `sections/customer-use-cases` and a future `content/customer-use-cases` cannot coexist.
+- The `<name>` is unique across every category (`.specs/<name>.md` is a flat folder): `sections/customer-use-cases-section` and a future `content/customer-use-cases-section` cannot coexist.
 
 ## Migration note
 
@@ -59,4 +59,4 @@ Components authored before this convention (or branched from an older layout) ma
 
 - `validate-references.mjs` already rejects imports of any `@aziontech/webkit/*` path absent from `packages/webkit/package.json#exports` — a category-prefixed import therefore fails once the export key is flat.
 - `catalog.json` is built from the exports and the examples (`node scripts/build-catalog.mjs`); the catalog drift gate fails when they disagree.
-- Keep the export list and the examples consistent with this rule; a prefixed export key (`"./feedback/skeleton"`, `"./sections/customer-use-cases"`) is a review-blocking deviation.
+- Keep the export list and the examples consistent with this rule; a prefixed export key (`"./feedback/skeleton"`, `"./sections/customer-use-cases-section"`) is a review-blocking deviation.

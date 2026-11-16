@@ -261,7 +261,7 @@ describe('Footer', () => {
 
     it('overriding the root data-testid renames only the root', () => {
       const overriddenTemplate = `
-        <Footer data-testid="site-footer">
+        <Footer data-testid="site-footer-section">
           <FooterColumn title="Products">
             <FooterLink href="/products">Products</FooterLink>
           </FooterColumn>
@@ -272,7 +272,7 @@ describe('Footer', () => {
         template: overriddenTemplate
       })
 
-      expect(getByTestId('site-footer').tagName).toBe('FOOTER')
+      expect(getByTestId('site-footer-section').tagName).toBe('FOOTER')
       expect(queryByTestId('footer')).toBeNull()
       expect(getByTestId('footer-column')).toBeTruthy()
       expect(getByTestId('footer-link')).toBeTruthy()

@@ -7,7 +7,7 @@ Every component — marketing page sections included — has one flat, single-se
 - Import from the flat path: `import Button from '@aziontech/webkit/button'`.
 - Name the binding in PascalCase matching the last path segment: `@aziontech/webkit/empty-state` -> `EmptyState`, `@aziontech/webkit/icon-button` -> `IconButton`.
 - Import each component you use on its own line, from its own subpath.
-- Import a marketing page section the same way: `import PricingPlans from '@aziontech/webkit/pricing-plans'` — the subpath equals the section's `_id` in the site JSON; see `webkit-sections`.
+- Import a marketing page section the same way: `import PricingPlansSection from '@aziontech/webkit/pricing-plans-section'` — the subpath equals the section's `_id` in the site JSON; see `webkit-sections`.
 
 ## Do not
 

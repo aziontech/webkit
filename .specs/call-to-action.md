@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 5
-checksum: 0fb6197a0d00e471aa7eef9be7c04290acdce74cf090a764c7a823709366f7a6
+checksum: 650afcbdd8dc82b9159ad91aa34e6711f952d766174b56ce69e57e65a0c0e575
 created: 2026-09-22
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Call To Action — Component Spec
@@ -26,7 +26,7 @@ Four registers. `panel` sets the copy and its controls on one surface, as a row 
 ## When to use
 
 - Use CallToAction (primitive) for an ask panel inside a hand-built SFC, mid-page or closing; set `variant="announcement"` for a loud mid-page announcement.
-- Rendering page JSON, or you need a whole band with no custom content → the section (`closing-call-to-action`). Building an SFC by hand, needing slots, or nesting inside another band → this primitive.
+- Rendering page JSON, or you need a whole band with no custom content → the section (`closing-call-to-action-section`). Building an SFC by hand, needing slots, or nesting inside another band → this primitive.
 - At the end of a marketing page or section, to carry the reader into signup, docs or sales.
 - Whenever a page needs one visually separated block whose whole job is the action.
 - Between two sections, as a mid-page ask that should not read as a new section header.

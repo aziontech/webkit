@@ -478,14 +478,20 @@ export const COMPONENT_TERMS = {
     'target line'
   ],
   'data-grid': ['data grid', 'editable grid', 'spreadsheet', 'edit cells', 'inline edit table'],
-  'client-quotes': ['testimonial', 'testimonials', 'customer quotes', 'depoimentos', 'testimonios'],
+  'client-quotes-section': [
+    'testimonial',
+    'testimonials',
+    'customer quotes',
+    'depoimentos',
+    'testimonios'
+  ],
   'stats-section': ['stats', 'stats band', 'proof figures'],
-  'closing-call-to-action': ['cta', 'closing cta', 'call to action band'],
+  'closing-call-to-action-section': ['cta', 'closing cta', 'call to action band'],
   marquee: ['marquee', 'logo marquee', 'logo marquee'],
   'logo-wall': ['logo cloud', 'logo wall', 'customer logos'],
-  'capability-grid': ['feature grid', 'features grid', 'capabilities grid'],
-  'plan-comparison': ['comparison', 'plan comparison', 'feature matrix', 'compare plans'],
-  'article-index': ['blog index', 'article index', 'resource hub', 'blog list'],
+  'capability-grid-section': ['feature grid', 'features grid', 'capabilities grid'],
+  'plan-comparison-section': ['comparison', 'plan comparison', 'feature matrix', 'compare plans'],
+  'article-index-section': ['blog index', 'article index', 'resource hub', 'blog list'],
   'newsletter-section': ['newsletter', 'newsletter signup', 'subscribe to newsletter']
 }
 
@@ -676,7 +682,7 @@ export const MARKETING_PAGE_GENERIC = [
 
 export const MARKETING_PAGE_FRAME = {
   'hero-section': 25,
-  'closing-call-to-action': 6,
-  'site-header': 4,
-  'site-footer': 4
+  'closing-call-to-action-section': 6,
+  'site-header-section': 4,
+  'site-footer-section': 4
 }

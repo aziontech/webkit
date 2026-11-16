@@ -19,8 +19,8 @@ const read = (path) => JSON.parse(readFileSync(resolve(ROOT, path), 'utf8'))
 
 test('typesFor maps each source kind into types/', () => {
   assert.equal(
-    typesFor('./src/components/section/site-header/site-header.vue'),
-    './types/components/section/site-header/site-header.vue.d.ts'
+    typesFor('./src/components/section/site-header-section/site-header-section.vue'),
+    './types/components/section/site-header-section/site-header-section.vue.d.ts'
   )
   assert.equal(
     typesFor('./src/components/data/table/index.ts'),

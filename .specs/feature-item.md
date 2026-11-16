@@ -4,9 +4,9 @@ category: marketing
 structure: monolithic
 status: implemented
 spec_version: 3
-checksum: b9addda38b0ce9c3da83083b27a79559eb1ad71783a64f5d828cd8a7ec5d2789
+checksum: 55e09887ad915db9cc35864bf73b1ad345d38aeb63b99126323442ff6fbf46a4
 created: 2026-09-24
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # FeatureItem — Component Spec
@@ -27,7 +27,7 @@ One claim stated in three parts: a glyph, a short headline it shares a line with
 - For a tile with its own border and surface → keep the topic and put it in a `CardGrid.Cell`, which draws the frame and the fill.
 - For a claim that carries an eyebrow, a media region or a button → use `media-split`.
 - For the headline that opens the whole section → use `section-title`.
-- For a whole band of claims or links placed from page JSON → use `capability-grid`, which lays topics out for you.
+- For a whole band of claims or links placed from page JSON → use `capability-grid-section`, which lays topics out for you.
 - For a measured figure with a unit → use `stats`.
 - For a console list row with media and actions → use `item`.
 

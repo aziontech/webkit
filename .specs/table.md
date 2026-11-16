@@ -7,7 +7,7 @@ spec_version: 21
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 96d74aeaede88987b70ab6459c8c71931992ea4758ef4aebe364cc1a1bb7dfba
+checksum: d3fc3d66b67855016eb68249eafce1e726d6850ff49a79ff05f03e896767414f
 created: 2026-06-16
 last_updated: 2026-11-16
 ---
@@ -36,8 +36,8 @@ The table's parts and its markup-only root. Compose the anatomy by hand (`Table.
 - Repeated records with sorting, selection, paging, filtering, virtual rows or tree rows → use `data-table` (`data` + `columns`).
 - People edit many cells of many records in place, spreadsheet-style → use `data-grid`.
 - A short list of same-field rows added and removed inside a form (environment variables, headers) → use `attribute-editor`.
-- A short titled preview of a longer listing on a marketing page → use `listing-table`.
-- A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison`.
+- A short titled preview of a longer listing on a marketing page → use `listing-table-section`.
+- A feature-by-feature comparison of Azion with a competitor → use `competitor-comparison-section`.
 - Rows of mixed content (media, title, description, actions) that do not share columns → use `item`.
 - A grid of selectable cards or options → use `radio-group` with `type="card"`.
 - The same records as a grid of cards → use `card-list` (same collection, card layout).
@@ -49,7 +49,7 @@ The table's parts and its markup-only root. Compose the anatomy by hand (`Table.
 - `pagination` — the page strip; put it in a `Table.Footer` in the `footer` slot.
 - `empty-state` — compose it in a full-width row when a hand-composed table has no rows.
 - `item` — list rows without a column structure.
-- `listing-table` — marketing section that composes a DataTable for a linked preview of a list.
+- `listing-table-section` — marketing section that composes a DataTable for a linked preview of a list.
 
 ## Best practices
 
@@ -217,10 +217,10 @@ _none_ — sort comes from `Table.HeadCell` (`sort`) and row clicks fall through
 
 ## Motion & Animations
 
-| Trigger                             | Animation / Transition                     | Token  | Reduced-motion fallback         |
-| ----------------------------------- | ------------------------------------------ | ------ | ------------------------------- |
-| row hover / selected                | `transition-colors duration-150 ease-out`  | inline | `motion-reduce:transition-none` |
-| sort glyph reveal on header hover   | `transition-opacity duration-150 ease-out` | inline | `motion-reduce:transition-none` |
+| Trigger                            | Animation / Transition                     | Token  | Reduced-motion fallback         |
+| ---------------------------------- | ------------------------------------------ | ------ | ------------------------------- |
+| row hover / selected               | `transition-colors duration-150 ease-out`  | inline | `motion-reduce:transition-none` |
+| sort glyph reveal on header hover  | `transition-opacity duration-150 ease-out` | inline | `motion-reduce:transition-none` |
 | live dot (`TableLiveButton`, live) | `animate-pulse`                            | inline | `motion-reduce:animate-none`    |
 
 The root itself is static. `TableFilter` animates through the `FilterMenu` or `PropertyFilter` it hosts (owned by those specs); DataTable's own motion (body enter, row drag) is in [`data-table`](./data-table.md).

@@ -13,30 +13,30 @@ A page is a list of sections:
       "_id": "hero-section",
       "props": { "variant": "title-band", "title": "Deliver content fast, worldwide", "…": "…" }
     },
-    { "_id": "customer-use-cases", "props": { "eyebrow": "SQL Database", "items": ["…"] } }
+    { "_id": "customer-use-cases-section", "props": { "eyebrow": "SQL Database", "items": ["…"] } }
   ]
 }
 ```
 
 Two names are the **same string**, on purpose:
 
-| Surface                                                                                    | Value                                     |
-| ------------------------------------------------------------------------------------------ | ----------------------------------------- |
-| `_id` in the site JSON                                                                     | `customer-use-cases`                      |
-| component name, folder, spec (`.specs/customer-use-cases.md`), testid `customer-use-cases` | `customer-use-cases`                      |
-| public path `@aziontech/webkit/customer-use-cases`, import binding                         | `customer-use-cases` → `CustomerUseCases` |
+| Surface                                                                                                    | Value                                                    |
+| ---------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `_id` in the site JSON                                                                                     | `customer-use-cases-section`                             |
+| component name, folder, spec (`.specs/customer-use-cases-section.md`), testid `customer-use-cases-section` | `customer-use-cases-section`                             |
+| public path `@aziontech/webkit/customer-use-cases-section`, import binding                                 | `customer-use-cases-section` → `CustomerUseCasesSection` |
 
-A whole page renders through `SitePage` (`@aziontech/webkit/site-page`), the package's page renderer: it takes the page JSON `{ hero, sections }`, resolves each `_id` to the section of the same name (loaded on demand), binds `props` onto it, lays `sections` in the site column with a hatched `SectionGap` before each band and one after the last (a page that ends on a closing band — `closing-call-to-action`, `newsletter-section`, or a `template-gallery` with `closing: true` — closes on that band's own frame instead, stacked closing bands share one frame, and a `closing-call-to-action` of `variant: 'frame'` takes no gap), and warns in development about an `_id` it does not know. The registry it resolves against is `src/components/marketing/site-page/site-page-sections.ts`: every folder in `src/components/section/` except `site-header` and `site-footer` (the frame, owned by `shell/site`). A new section is added there in the same change, or the `site-page` test fails.
+A whole page renders through `SitePage` (`@aziontech/webkit/site-page`), the package's page renderer: it takes the page JSON `{ hero, sections }`, resolves each `_id` to the section of the same name (loaded on demand), binds `props` onto it, lays `sections` in the site column with a hatched `SectionGap` before each band and one after the last (a page that ends on a closing band — `closing-call-to-action-section`, `newsletter-section`, or a `template-gallery-section` with `closing: true` — closes on that band's own frame instead, stacked closing bands share one frame, and a `closing-call-to-action-section` of `variant: 'frame'` takes no gap), and warns in development about an `_id` it does not know. The registry it resolves against is `src/components/marketing/site-page/site-page-sections.ts`: every folder in `src/components/section/` except `site-header-section` and `site-footer-section` (the frame, owned by `shell/site`). A new section is added there in the same change, or the `site-page` test fails.
 
 **Retired `_id`s keep rendering.** The site's page JSON lives outside this repo, so when a section is merged into another or renamed, its old `_id` gets an entry in `sitePageSectionAliases` (same file): the `target` section and a `props` transform from the old shape to the new one (`{ _id: 'hero-copy-on-top-art', props }` renders `hero-section` with `variant: 'copy-on-top-art'`). Add the alias and a `site-page` test row in the same change as the merge. It is the one alias the package keeps; the old export, its types and its props are removed, not re-exported.
 
 ## Section or primitive
 
-Most bands exist twice on purpose: a **section** (`faq-section`, `stats-section`, `client-quotes`, `hero-section`, `closing-call-to-action`, `media-split-section`, `site-footer`) and the **primitive** it composes (`faq`, `stats`, `quote-tabs`, `hero`, `call-to-action`, `media-split`, `footer`). The rule that picks one:
+Most bands exist twice on purpose: a **section** (`faq-section`, `stats-section`, `client-quotes-section`, `hero-section`, `closing-call-to-action-section`, `media-split-section`, `site-footer-section`) and the **primitive** it composes (`faq`, `stats`, `quote-tabs`, `hero`, `call-to-action`, `media-split`, `footer`). The rule that picks one:
 
 > Rendering page JSON, or you need a whole band with no custom content → the section. Building an SFC by hand, needing slots, or nesting inside another band → the primitive.
 
-Customer proof, for example: `Quote` for one testimonial; `ClientQuotes` for a band of quotes the reader browses by client; `LogoWallSection` for customer logos plus one featured quote; `RecognitionMarquee` only for a looping row of analyst or press quotes; `QuoteTabs` in a hand-built SFC that needs the `#actions` slot.
+Customer proof, for example: `Quote` for one testimonial; `ClientQuotesSection` for a band of quotes the reader browses by client; `LogoWallSection` for customer logos plus one featured quote; `RecognitionMarqueeSection` only for a looping row of analyst or press quotes; `QuoteTabs` in a hand-built SFC that needs the `#actions` slot.
 
 ```vue
 <script setup>
@@ -53,17 +53,17 @@ A page section stays importable on its own, for a page that composes one band by
 
 ```vue
 <script setup>
-  import CustomerUseCases from '@aziontech/webkit/customer-use-cases'
+  import CustomerUseCasesSection from '@aziontech/webkit/customer-use-cases-section'
 </script>
 
 <template>
-  <CustomerUseCases v-bind="section.props" />
+  <CustomerUseCasesSection v-bind="section.props" />
 </template>
 ```
 
 Next to `props`, an entry may carry:
 
-- `scenes` — a section slot name mapped to `{ component, props? }`, a scene drawn in that slot (`hero-section` `top` / `bottom`, `console-showcase` `scene`). `component` is a name in the scene registry, `src/assets/scene-registry.ts`, so the page stays plain JSON; a scene ported into the package becomes usable on every page by one entry there. The slot's own props (`console-showcase`'s `tab`) win over `props`.
+- `scenes` — a section slot name mapped to `{ component, props? }`, a scene drawn in that slot (`hero-section` `top` / `bottom`, `console-showcase-section` `scene`). `component` is a name in the scene registry, `src/assets/scene-registry.ts`, so the page stays plain JSON; a scene ported into the package becomes usable on every page by one entry there. The slot's own props (`console-showcase-section`'s `tab`) win over `props`.
 - `gap` — `none`, `small` or `medium` (default) for the break before a column section.
 - `submission` — transport details of a form, handed back on `SitePage`'s `submit` (see below).
 
@@ -73,7 +73,7 @@ Next to `props`, an entry may carry:
 - **Forms are the one exception: they emit `submit`, the site sends.** A section that collects data (a lead form, a newsletter sign-up) never posts, fetches or fakes a send. It renders the fields, validates them locally on submit only (the `webkit-form` pattern: a required field's label carries its Required tag from the first render, an empty required field takes the amber `required` state and a malformed value the red `invalid` state only after a failed submit, never both at once, and editing a field clears its message), and on a valid submit emits `submit: [event: SubmitEvent, values: Record<string, string>]` (event first — see [`event-payloads.md`](../rules/event-payloads.md)); the site posts to its endpoint. On a page rendered by `SitePage`, the renderer re-emits it as `submit: [event, { section, values }]`, `section` being the whole entry with its `submission`. The outcome comes back as consumer-owned state props the block renders (see [`component-states.md`](../rules/component-states.md)): `loading` while the site sends (submit suppressed), `submitted` to show the success message, `error` to show the failure message; the messages themselves are props from the JSON. Transport details (`endpoint`, `hiddenFields`, `pageName`) are not component props: they sit in a `submission` key next to `props` in the section entry (`{ _id, props, submission }`), so `v-bind="section.props"` stays the whole API.
 - **One landmark per band.** The root is a `<section>` named by the band's title (`aria-label`) only when no composed component already renders a named landmark for it; when `media-split`, `quote-tabs` or `stats` owns the named region, the root is a plain `div`, so axe never sees two landmarks with one name.
 - **Monolithic.** A section composes existing webkit components (`SectionModule`, `RegistrationFrame`, `CardGrid`, `FeatureItem`, `Hero`, …) inside its own root; it has no sub-components of its own. The page owns the column (`SectionContainer` / `SectionGap`), so a section's root is the band at `SectionModule` level.
-- **Bulk data is typed.** Every nested shape is a named, exported type beside the component (`CustomerUseCasesItem`), one JSDoc line per field; a call to action is the shared `SectionTitleAction` from `section-title`, and a client mark the shared `LogoMark` from `logo`. Arrays default to `() => []`; an optional affordance object (`primaryAction`, `search`) defaults to `undefined` and is rendered under `v-if`; a configuration object the block cannot render without (`form`, `competitor`, `menus`) is `Required: true`.
+- **Bulk data is typed.** Every nested shape is a named, exported type beside the component (`CustomerUseCasesSectionItem`), one JSDoc line per field; a call to action is the shared `SectionTitleAction` from `section-title`, and a client mark the shared `LogoMark` from `logo`. Arrays default to `() => []`; an optional affordance object (`primaryAction`, `search`) defaults to `undefined` and is rendered under `v-if`; a configuration object the block cannot render without (`form`, `competitor`, `menus`) is `Required: true`.
 - **`variant` changes layout, never the content shape.** Two variants share one component (+ `variant`) only when they take the same props (at most two optional keys of difference). A different data model or different behaviour is a different section, even when the site JSON reused the `_id`.
 - **Vocabulary.** `title` / `eyebrow` / `description` for copy; `primaryAction` / `secondaryAction` (`{ label, href, trailing?, target? }`) for the band's one or two calls to action — never `action`, `actions[]`, `cta`, `link`, `moreLink` at the root; inside a repeated item (a feature, a step, a cell) the single affordance is `action` and a clipboard affordance is `copy: { label, text }`; `anchor` for the in-page `id` a `#hash` link targets (set on the band's root `<section>` with `scroll-mt-(--spacing-2xl)`); `ariaLabel` / `xAriaLabel` for every accessible name the markup needs. Banned at the root: `status`, `heading`, `header`, `variant`, `is*`/`has*` (see [`prop-vocabulary.md`](../rules/prop-vocabulary.md)).
 
@@ -81,15 +81,15 @@ Next to `props`, an entry may carry:
 
 ```
 packages/webkit/src/components/section/
-  customer-use-cases/
-    customer-use-cases.vue
-    customer-use-cases.test.ts
+  customer-use-cases-section/
+    customer-use-cases-section.vue
+    customer-use-cases-section.test.ts
 ```
 
 One export per block in `packages/webkit/package.json`, and one `.size-limit.json` budget:
 
 ```jsonc
-"./customer-use-cases": "./src/components/section/customer-use-cases/customer-use-cases.vue"
+"./customer-use-cases-section": "./src/components/section/customer-use-cases-section/customer-use-cases-section.vue"
 ```
 
 ## Examples

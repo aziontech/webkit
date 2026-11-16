@@ -1,0 +1,140 @@
+import userEvent from '@testing-library/user-event'
+import { render } from '@testing-library/vue'
+import { describe, expect, it } from 'vitest'
+
+import { expectNoA11yViolations } from '../../../test/axe'
+import ClientQuotesSection from './client-quotes-section.vue'
+
+const TESTID = 'client-quotes-section'
+const QUOTE_TESTID = 'quote-tabs__quote'
+const primaryAction = { label: 'Read the stories', href: '/customers', trailing: true }
+
+const items = [
+  {
+    text: 'We moved our edge logic in a week.',
+    name: 'Ana Souza',
+    jobTitle: 'CTO, Acme',
+    clientName: 'Acme'
+  },
+  {
+    text: 'Latency dropped across every region.',
+    name: 'Bruno Lima',
+    jobTitle: 'Head of Infra, Globex',
+    clientName: 'Globex'
+  },
+  {
+    text: 'Our on-call pages fell by half.',
+    name: 'Carla Dias',
+    jobTitle: 'SRE Lead, Initech',
+    clientName: 'Initech'
+  }
+]
+
+const band = (props: Record<string, unknown> = {}) =>
+  render(ClientQuotesSection, {
+    props: {
+      primaryAction,
+      items,
+      ...props
+    }
+  })
+
+describe('ClientQuotesSection', () => {
+  it('renders the band under the default testid', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId(TESTID)).toBeInTheDocument()
+  })
+
+  it('sets the anchor as the band id', () => {
+    const { getByTestId } = render(ClientQuotesSection, { props: { items, anchor: 'clients' } })
+
+    expect(getByTestId(TESTID)).toHaveAttribute('id', 'clients')
+  })
+
+  it('lets a consumer data-testid win over the fallback', () => {
+    const { getByTestId, queryByTestId } = render(ClientQuotesSection, {
+      props: { items },
+      attrs: { 'data-testid': 'home-client-quotes' }
+    })
+
+    expect(getByTestId('home-client-quotes')).toBeInTheDocument()
+    expect(queryByTestId(TESTID)).toBeNull()
+  })
+
+  it('renders the first quote as the featured quotation', () => {
+    const { getByTestId } = band()
+
+    expect(getByTestId(QUOTE_TESTID).textContent).toContain(items[0].text)
+  })
+
+  it('runs the quote timer by default and stops it with autoplay off', async () => {
+    const { getByTestId, rerender } = band()
+
+    expect(getByTestId('quote-tabs')).toHaveAttribute('data-autoplay')
+
+    await rerender({ autoplay: false })
+
+    expect(getByTestId('quote-tabs')).not.toHaveAttribute('data-autoplay')
+  })
+
+  it('opens on the quote bound through v-model and writes a selection back', async () => {
+    const { getByTestId, getAllByRole, emitted } = band({ autoplay: false, modelValue: 1 })
+
+    expect(getByTestId(QUOTE_TESTID).textContent).toContain(items[1].text)
+    expect(getAllByRole('tab')[1]).toHaveAttribute('aria-selected', 'true')
+
+    await userEvent.click(getAllByRole('tab')[2])
+
+    expect(emitted<[number]>('update:modelValue').at(-1)).toEqual([2])
+  })
+
+  it('skips an item without a quotation', () => {
+    const { getAllByRole } = band({ items: [...items, { text: '', clientName: 'Hooli' }] })
+
+    expect(getAllByRole('tab')).toHaveLength(items.length)
+  })
+
+  it('renders one tab per item', () => {
+    const { getAllByRole } = band()
+
+    expect(getAllByRole('tab')).toHaveLength(items.length)
+  })
+
+  it('renders the primary action as a link to its href', () => {
+    const { getByRole } = band()
+
+    expect(getByRole('link', { name: primaryAction.label })).toHaveAttribute(
+      'href',
+      primaryAction.href
+    )
+  })
+
+  it('renders no link when the primary action is omitted', () => {
+    const { queryByRole } = render(ClientQuotesSection, { props: { items } })
+
+    expect(queryByRole('link')).toBeNull()
+  })
+
+  it('renders only the section when items is empty', () => {
+    const { getByTestId, queryAllByRole, queryByTestId } = render(ClientQuotesSection, {
+      props: { primaryAction, items: [] }
+    })
+
+    expect(getByTestId(TESTID)).toBeInTheDocument()
+    expect(queryAllByRole('tab')).toHaveLength(0)
+    expect(queryByTestId('registration-frame')).toBeNull()
+  })
+
+  it('has no a11y violations with a full band', async () => {
+    const { container } = band()
+
+    await expectNoA11yViolations(container)
+  })
+
+  it('has no a11y violations when empty', async () => {
+    const { container } = render(ClientQuotesSection, { props: { items: [] } })
+
+    await expectNoA11yViolations(container)
+  })
+})

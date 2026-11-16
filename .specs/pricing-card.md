@@ -4,9 +4,9 @@ category: content
 structure: monolithic
 status: implemented
 spec_version: 7
-checksum: 058ccdd90863a53ceba78d68924eaaed2bb4a14fb3953bb3d3cc33034711a132
+checksum: 10f4984659ce600499474b9f109f5ef7c393c88aca2f7de65acdaacaca48f231
 created: 2026-05-22
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Card Pricing — Component Spec
@@ -35,16 +35,16 @@ The plan title is an **overline** (`.text-overline-md` on an `<h3>`): the token 
 
 ## When NOT to use
 
-- You need the whole plans band of a pricing page, with the billing-period toggle and the framed row → use `pricing-plans`.
-- You need a feature-by-feature comparison across plans → use `plan-comparison`.
+- You need the whole plans band of a pricing page, with the billing-period toggle and the framed row → use `pricing-plans-section`.
+- You need a feature-by-feature comparison across plans → use `plan-comparison-section`.
 - You only need to show an amount, in a table cell or a summary → use `currency-amount`.
 - The card holds general content rather than a price → use `card`.
 
 ## Related
 
 - `currency-amount` — typesets the amount inside the card; use it directly for prices outside a tier card.
-- `pricing-plans` — the page section that lays out a row of plan cards with the billing toggle.
-- `plan-comparison` — the matrix that sits under the plan cards.
+- `pricing-plans-section` — the page section that lays out a row of plan cards with the billing toggle.
+- `plan-comparison-section` — the matrix that sits under the plan cards.
 - `card` — generic bordered card with header, content and footer regions.
 
 ## Best practices

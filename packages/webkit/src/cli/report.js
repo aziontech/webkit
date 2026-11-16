@@ -29,7 +29,8 @@ export const RULE_PURPOSE = {
   'require-authoring-standards': 'shared authoring standards (typed slots, comments, deprecation)',
   'require-container-width': 'Card, StatTile or ChartCard as a flex item with no width',
   'require-header-search': 'app header without SearchTrigger, or a hand-rolled ⌘K field',
-  'no-wrapped-page-chrome': 'SiteFooter or SiteHeader inside a bordered or padded wrapper',
+  'no-wrapped-page-chrome':
+    'SiteFooterSection or SiteHeaderSection inside a bordered or padded wrapper',
   'no-output-in-command': 'shell code sample that mixes the command with what it prints',
   'prefer-href-in-menu-node': 'navigation node naming its destination path/to/url instead of href',
   'no-gap-after-closing-section':

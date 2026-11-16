@@ -4,7 +4,7 @@
   "examples": [
     {
       "name": "Default",
-      "summary": "The site chrome around a page of sections: SiteHeader with a mega-menu and the account actions, the hero and a framed section in the slot, and SiteFooter closing the frame. The bar's search opens the ⌘K palette with every navigation destination.",
+      "summary": "The site chrome around a page of sections: SiteHeaderSection with a mega-menu and the account actions, the hero and a framed section in the slot, and SiteFooterSection closing the frame. The bar's search opens the ⌘K palette with every navigation destination.",
       "file": "default.vue"
     },
     {

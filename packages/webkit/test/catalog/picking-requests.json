@@ -690,7 +690,7 @@
     {
       "tool": "suggest",
       "query": "testimonials",
-      "top1": "client-quotes"
+      "top1": "client-quotes-section"
     },
     {
       "tool": "suggest",
@@ -702,7 +702,7 @@
       "tool": "suggest",
       "query": "cta",
       "top1": "call-to-action",
-      "accept": ["call-to-action", "closing-call-to-action"]
+      "accept": ["call-to-action", "closing-call-to-action-section"]
     },
     {
       "tool": "suggest",
@@ -717,19 +717,19 @@
     {
       "tool": "suggest",
       "query": "feature grid",
-      "top1": "capability-grid"
+      "top1": "capability-grid-section"
     },
     {
       "tool": "suggest",
       "query": "comparison",
-      "top1": "plan-comparison",
-      "accept": ["plan-comparison", "competitor-comparison"]
+      "top1": "plan-comparison-section",
+      "accept": ["plan-comparison-section", "competitor-comparison-section"]
     },
     {
       "tool": "suggest",
       "query": "blog index",
-      "top1": "article-index",
-      "pending": "article-index-blog and article-index-resource-hub merge into article-index (marketing lane); un-skip after the catalog is regenerated"
+      "top1": "article-index-section",
+      "pending": "article-index-blog and article-index-resource-hub merge into article-index-section (marketing lane); un-skip after the catalog is regenerated"
     },
     {
       "tool": "suggest",

@@ -121,7 +121,7 @@
     eyebrowPrefix?: HeroTitleEyebrowPrefix
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
-    /** Height of the site header above the band, taken out of a band that fills a screen; defaults to the SiteHeader bar's token, any CSS length, empty for a page with no header above it. */
+    /** Height of the site header above the band, taken out of a band that fills a screen; defaults to the SiteHeaderSection bar's token, any CSS length, empty for a page with no header above it. */
     headerOffset?: string
     /** Length of the headline: `short` sets it on the site's narrow headline measure in the centered layouts, so a four-to-seven-word headline breaks over two balanced lines while the sentence under it keeps the full column; `long` lets the headline take the whole column. */
     titleLength?: HeroSectionTitleLength

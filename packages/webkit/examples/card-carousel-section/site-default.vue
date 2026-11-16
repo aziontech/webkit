@@ -1,0 +1,53 @@
+<script setup>
+  import CardCarouselSection from '@aziontech/webkit/card-carousel-section'
+  import SectionContainer from '@aziontech/webkit/section-container'
+  import SectionGap from '@aziontech/webkit/section-gap'
+
+  const items = [
+    {
+      eyebrow: 'E-commerce',
+      title: 'E-commerce product image optimization',
+      description:
+        'Optimize product images for faster page loads and better conversion rates. Automatically deliver responsive images at the right size and format for each device.',
+      href: '/docs/products/build/applications/image-processor',
+      linkLabel: 'See example'
+    },
+    {
+      eyebrow: 'Media',
+      title: 'News and media site responsive images',
+      description:
+        'Deliver optimized images for news articles and media content that load instantly on any device. Automatic format conversion ensures the best experience.',
+      href: '/docs/products/build/applications/image-processor',
+      linkLabel: 'See example'
+    },
+    {
+      eyebrow: 'UGC',
+      title: 'User-generated content optimization',
+      description:
+        'Optimize user-uploaded images on-the-fly from your storage. Apply consistent sizing, quality, and format standards without preprocessing.',
+      href: '/docs/products/build/applications/image-processor',
+      linkLabel: 'See example'
+    },
+    {
+      eyebrow: 'Marketplace',
+      title: 'Marketplace listing thumbnails',
+      description:
+        'Crop and compress every seller photo to the same frame and quality, whatever size it was uploaded at.',
+      href: '/docs/products/build/applications/image-processor',
+      linkLabel: 'See example'
+    }
+  ]
+</script>
+
+<template>
+  <SectionContainer max-width="site">
+    <SectionGap hatch />
+
+    <CardCarouselSection
+      title="See how to use"
+      :items="items"
+    />
+
+    <SectionGap hatch />
+  </SectionContainer>
+</template>

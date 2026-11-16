@@ -49,7 +49,6 @@ const ctx = {
     }
   ],
   componentNames: new Set(['button', 'dialog', 'command-group', 'kbd']),
-  marketingPrimitives: new Set(['hero', 'media-split']),
   tokenKeys: ['primary', 'primary-foreground', 'danger']
 }
 
@@ -78,7 +77,13 @@ const FIXTURES = {
   'near-duplicate': [
     'packages/webkit/package.json',
     pkg({ exports: { './site-nav': './a.vue', './chips': './c.vue', './chip': './c.vue' } }),
-    pkg({ exports: { './site-header': './a.vue', './chip-group': './c.vue', './tabs': './t.vue' } })
+    pkg({
+      exports: {
+        './site-header-section': './a.vue',
+        './chip-group': './c.vue',
+        './tabs': './t.vue'
+      }
+    })
   ],
   'export-category': [
     'packages/webkit/package.json',
@@ -401,6 +406,16 @@ test('css-variable: a component may set a variable another component or the them
   assert.deepEqual([...new Set(found)], ['cols'])
 })
 
+test('section-suffix: every page section ends in -section, a bare name or a wrapper word fires', () => {
+  const at = (stem) => `${C}/section/${stem}/${stem}.vue`
+  const fired = (stem) => hits(at(stem), sfc(''), 'section-suffix').map((x) => x.message)
+  assert.match(fired('client-quotes')[0], /name it "client-quotes-section"/)
+  assert.match(fired('site-footer')[0], /name it "site-footer-section"/)
+  assert.match(fired('stats-band')[0], /name it "stats-section"/)
+  assert.deepEqual(fired('client-quotes-section'), [])
+  assert.deepEqual(hits(`${C}/marketing/hero/hero.vue`, sfc(''), 'section-suffix'), [])
+})
+
 test('every rule in the registry has a fixture, and no fixture names an unknown rule', () => {
   assert.deepEqual(Object.keys(FIXTURES).sort(), Object.keys(RULES).sort())
 })
@@ -583,7 +598,10 @@ test('prop-value: a variant union reads only shared values or documented extras'
 test('prop-value: a variant made only of alignment words must be align', () => {
   const msg = checkValueSet('variant', ['start', 'center', 'split'], 'section-title')
   assert.match(msg, /name the prop "align"/)
-  assert.match(checkValueSet('titleVariant', ['start', 'center'], 'process-scroll'), /align/)
+  assert.match(
+    checkValueSet('titleVariant', ['start', 'center'], 'process-scroll-section'),
+    /align/
+  )
   assert.equal(checkValueSet('variant', ['primary', 'outline'], 'button'), null)
 })
 

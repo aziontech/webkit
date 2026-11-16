@@ -7,7 +7,7 @@ spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3374-6191
   node_id: 3374:6191
-checksum: cbc9887027f765f39e11a76d194dc265f2c1253711141f91e7c3cb93c8d8e5eb
+checksum: 54571566146ee6916e84afd80d294691fac1d5de2f63b2a35e9ab3423e5ca005
 created: 2026-05-22
 last_updated: 2026-11-16
 ---
@@ -20,7 +20,7 @@ The top bar of a site: a row of links and triggers whose items open large panels
 
 ## When to use
 
-- Use NavigationMenu only to build a marketing top bar with hover panels; the site already gets one from SiteHeader, and app navigation uses SidebarMenu.
+- Use NavigationMenu only to build a marketing top bar with hover panels; the site already gets one from SiteHeaderSection, and app navigation uses SidebarMenu.
 - A horizontal top bar whose items open large panels of grouped links (product and solution mega-menus).
 - A mix of panel triggers and plain links in one bar that shares hover-intent timing, keyboard navigation and a single animated popup.
 - Panel entries need a title plus a muted description line, a leading icon, or a featured "see all" link.
@@ -30,11 +30,11 @@ The top bar of a site: a row of links and triggers whose items open large panels
 - It is the persistent vertical navigation of an app → use `sidebar` with `sidebar-menu`.
 - It is a list of actions or options opened from a button → use `dropdown-menu`.
 - It shows where the current page sits in a hierarchy → use `breadcrumb`.
-- It is the marketing site's whole navigation bar → use `site-header`, which already composes this menu.
+- It is the marketing site's whole navigation bar → use `site-header-section`, which already composes this menu.
 
 ## Related
 
-- `site-header` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
+- `site-header-section` — the marketing navigation band built on `app-header`, `brand` and `navigation-menu`.
 - `app-header` — the bar layout this menu usually sits in.
 - `dropdown-menu` — a single-trigger option menu, not a site-wide navigation bar.
 - `sidebar-menu` — vertical, hierarchical navigation rows for a sidebar.

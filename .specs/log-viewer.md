@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3950-34695
   node_id: 3950:34695
-checksum: 85b095286d4ecde07e5441622307b3deaa86508b4fecbc7bda06afaa230b6761
+checksum: 3f3b5770eb99698a9f88a0731abaa299b38205c205f51319339f540b6b8812fb
 created: 2026-05-26
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Log View — Component Spec
@@ -32,13 +32,13 @@ Use LogViewer for build, deploy or runtime log lines, and LogViewer.Steps when t
 ## When NOT to use
 
 - Static, read-only code or configuration snippets → use `code-block`.
-- An animated terminal session on a marketing page → use `cli-terminal`.
+- An animated terminal session on a marketing page → use `cli-terminal-section`.
 - Rows of structured records with columns, sorting or paging → use `table`.
 
 ## Related
 
 - `code-block` — highlighted source code with a copy action, not a stream of typed log lines.
-- `cli-terminal` — marketing band that plays a scripted terminal session.
+- `cli-terminal-section` — marketing band that plays a scripted terminal session.
 - `deploy-success` — the post-deploy screen that embeds `log-viewer` for the build log.
 
 ## Best practices

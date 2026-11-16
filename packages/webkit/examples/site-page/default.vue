@@ -19,7 +19,7 @@
 
   const sections: SitePageSection[] = [
     {
-      _id: 'customer-use-cases',
+      _id: 'customer-use-cases-section',
       props: {
         eyebrow: 'SQL Database',
         title: 'What teams use SQL Database for',
@@ -67,7 +67,7 @@
       }
     },
     {
-      _id: 'closing-call-to-action',
+      _id: 'closing-call-to-action-section',
       props: {
         variant: 'primary',
         anchor: 'contact',

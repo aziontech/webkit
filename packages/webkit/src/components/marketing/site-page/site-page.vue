@@ -86,8 +86,8 @@
     if (!entry) return false
     const { id, props: bound } = resolveSectionEntry(entry._id, entry.props)
     return (
-      id.startsWith('closing-call-to-action') ||
-      (id === 'template-gallery' && bound['closing'] === true)
+      id.startsWith('closing-call-to-action-section') ||
+      (id === 'template-gallery-section' && bound['closing'] === true)
     )
   }
 

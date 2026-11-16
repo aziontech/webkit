@@ -6,8 +6,8 @@ status: implemented
 spec_version: 6
 template: 2
 created: 2026-11-04
-last_updated: 2026-11-15
-checksum: 1fa99f7bbe621e09134bbbba4aba12f4c90317df288d30d6535dbe743bd04c7b
+last_updated: 2026-11-16
+checksum: 1d34d3e71b3212fcab93711ddd4e7ac73da879f7272660165ac6de7d3c9908ac
 ---
 
 # LogoWallSection — Component Spec
@@ -23,8 +23,8 @@ The customers band: a section title over a framed logo wall of linked client mar
 
 ## When NOT to use
 
-- For several quotes in turn → use `client-quotes`.
-- For marks with photos and stories in a mosaic → use `client-mosaic`.
+- For several quotes in turn → use `client-quotes-section`.
+- For marks with photos and stories in a mosaic → use `client-mosaic-section`.
 
 ## Related
 

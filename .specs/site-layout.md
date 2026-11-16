@@ -5,16 +5,16 @@ structure: monolithic
 status: implemented
 spec_version: 4
 template: 2
-checksum: 0f970db269349d61840fc0e6ec5d3f6f37b96e754a81802910d17b3fdedc1115
+checksum: 9de187993ed6708dbcb99f2b18c124a9e9fbda161effa9c9d5fa29223ed0fddf
 created: 2026-11-12
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # SiteLayout — Component Spec
 
 ## Purpose
 
-The marketing site's chrome, composed once in the app: `SiteHeader` on top, the page's sections in the layout's `<main>`, `SiteFooter` at the foot, and the `Command` search palette wired to the bar's search button and to ⌘K / Ctrl K. The navigation and the footer are data (the `SiteHeader` and `SiteFooter` props), the canvas is painted with the theme tokens so a dark site never shows an unpainted page below the fold, and the palette lists every destination of the navigation by default. Site pages are only their sections, rendered through the default slot; they never repeat the bar or the footer.
+The marketing site's chrome, composed once in the app: `SiteHeaderSection` on top, the page's sections in the layout's `<main>`, `SiteFooterSection` at the foot, and the `Command` search palette wired to the bar's search button and to ⌘K / Ctrl K. The navigation and the footer are data (the `SiteHeaderSection` and `SiteFooterSection` props), the canvas is painted with the theme tokens so a dark site never shows an unpainted page below the fold, and the palette lists every destination of the navigation by default. Site pages are only their sections, rendered through the default slot; they never repeat the bar or the footer.
 
 ## When to use
 
@@ -29,15 +29,15 @@ The marketing site's chrome, composed once in the app: `SiteHeader` on top, the 
 
 ## Related
 
-- `SiteHeader` — the bar and its mega-menus; `navigation` is bound onto it.
-- `SiteFooter` — the footer; `footer` is bound onto it (`variant="site"` closes a framed page).
+- `SiteHeaderSection` — the bar and its mega-menus; `navigation` is bound onto it.
+- `SiteFooterSection` — the footer; `footer` is bound onto it (`variant="site"` closes a framed page).
 - `SectionContainer`, `SectionGap` — the frame the page's sections stack in, inside the slot.
 - `Command` — the search palette the bar's search button opens.
 - `shell/site` — the block that shows this layout with the azion.com navigation and footer.
 
 ## Best practices
 
-- Compose the layout once, in the app's root; each route renders only its sections. Never add `SiteHeader`, `SiteFooter`, `AppHeader` or `Footer` to a page.
+- Compose the layout once, in the app's root; each route renders only its sections. Never add `SiteHeaderSection`, `SiteFooterSection`, `AppHeader` or `Footer` to a page.
 - The site is dark: set `data-theme="dark"` on `<html>` (in `index.html`), so the layout, the teleported menus and the palette all resolve the dark tokens.
 - Bind the real navigation and footer data once (`navigation`, `footer`); give every navigation item an `href` so it also appears in the search palette.
 - Add extra palette groups (articles, docs results) in the `search` slot; listen to `search-select` for them.
@@ -64,12 +64,12 @@ The marketing site's chrome, composed once in the app: `SiteHeader` on top, the 
 
 ## Props
 
-| Prop                | Type                   | Default     | Required | JSDoc                                                                                                                                                          |
-| ------------------- | ---------------------- | ----------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `navigation`        | `SiteLayoutNavigation` | `—`         | true     | The bar, bound onto `SiteHeader`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`.                            |
-| `footer`            | `SiteLayoutFooter`     | `undefined` | false    | The footer, bound onto `SiteFooter`: `{ variant?, home?, columns?, socials?, statusLabel?, languages? }`; `variant` defaults to `site`. No footer when absent. |
-| `searchPlaceholder` | `string`               | `''`        | false    | Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`).                                                                         |
-| `navOverlay`        | `boolean`              | `false`     | false    | Floats the bar over the page's first band instead of stacking it above; the bar stays sticky over the whole page.                                              |
+| Prop                | Type                   | Default     | Required | JSDoc                                                                                                                                                                 |
+| ------------------- | ---------------------- | ----------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `navigation`        | `SiteLayoutNavigation` | `—`         | true     | The bar, bound onto `SiteHeaderSection`: `{ menus, home?, links?, contact?, primaryAction?, secondaryAction?, secondaryActionOnPhones? }`.                            |
+| `footer`            | `SiteLayoutFooter`     | `undefined` | false    | The footer, bound onto `SiteFooterSection`: `{ variant?, home?, columns?, socials?, statusLabel?, languages? }`; `variant` defaults to `site`. No footer when absent. |
+| `searchPlaceholder` | `string`               | `''`        | false    | Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`).                                                                                |
+| `navOverlay`        | `boolean`              | `false`     | false    | Floats the bar over the page's first band instead of stacking it above; the bar stays sticky over the whole page.                                                     |
 
 ## v-model
 
@@ -93,15 +93,15 @@ The marketing site's chrome, composed once in the app: `SiteHeader` on top, the 
 
 ## States
 
-- Visual states: `default`; the palette `open` / `closed`; the bar's sheet and mega-menus own their states (`SiteHeader`).
+- Visual states: `default`; the palette `open` / `closed`; the bar's sheet and mega-menus own their states (`SiteHeaderSection`).
 - `navOverlay` (mirrored on `data-nav-overlay`): the root becomes a one-column grid where the bar and the main landmark share the first row, so the first band runs under the bar (a home page whose hero art fills the top); the bar stays sticky to the end of the page and the footer takes the second row.
 - Not applicable: `loading`, `empty`, `error`, `disabled`, `readonly`, `invalid` (the sections own their states).
 
 ## Motion & Animations
 
-| Trigger            | Animation / Transition  | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback     |
-| ------------------ | ----------------------- | ------------------------------------------------- | --------------------------- |
-| palette, mega-menu | `Command`, `SiteHeader` | component                                         | handled by those components |
+| Trigger            | Animation / Transition         | Token (see `.claude/docs/DESIGN.md` § Animations) | Reduced-motion fallback     |
+| ------------------ | ------------------------------ | ------------------------------------------------- | --------------------------- |
+| palette, mega-menu | `Command`, `SiteHeaderSection` | component                                         | handled by those components |
 
 ## Tokens
 
@@ -117,7 +117,7 @@ The marketing site's chrome, composed once in the app: `SiteHeader` on top, the 
 
 ## Accessibility (WCAG 2.1 AA)
 
-- Landmarks: the bar is the `SiteHeader` banner named "Azion"; the sections are inside the layout's single `<main>`; the footer is the `SiteFooter` `contentinfo`. A page must not render a second `<main>`.
+- Landmarks: the bar is the `SiteHeaderSection` banner named "Azion"; the sections are inside the layout's single `<main>`; the footer is the `SiteFooterSection` `contentinfo`. A page must not render a second `<main>`.
 - Keyboard map: `Tab` runs bar → page → footer; `⌘K` / `Ctrl K` opens the palette (owned by `Command`); in the palette `ArrowUp` / `ArrowDown` move, `Enter` chooses, `Escape` closes and returns focus. The bar's menus and sheet own their keyboard models.
 - Visible focus and contrast: owned by the composed components; the canvas tokens keep text ≥ 4.5:1 in light and dark.
 
@@ -133,21 +133,21 @@ The marketing site's chrome, composed once in the app: `SiteHeader` on top, the 
 
 ## Right-to-left
 
-- Layout: logical utilities only; `SiteHeader` and `SiteFooter` mirror their own rows.
+- Layout: logical utilities only; `SiteHeaderSection` and `SiteFooterSection` mirror their own rows.
 - Icons: none of its own.
-- Keyboard: arrow handling is `Command`'s and `SiteHeader`'s, both direction-aware.
+- Keyboard: arrow handling is `Command`'s and `SiteHeaderSection`'s, both direction-aware.
 - User data: destination labels render inside `Command.Item` with `dir="auto"`.
 
 ## Responsive
 
-- Container queries: none of its own; `SiteHeader` switches to its sheet below `xl` and `SiteFooter` reflows its rows.
+- Container queries: none of its own; `SiteHeaderSection` switches to its sheet below `xl` and `SiteFooterSection` reflows its rows.
 - Narrow: the main column is full width; the sections own their measure (`SectionContainer`).
 - Touch: owned by the composed components.
 - Reflow: no horizontal scroll at 320 px; the page scrolls the document (no inner scroll area), so a full-page capture shows the whole page.
 
 ## Performance
 
-- Bundle budget: 71.1 KB gzip for `./site-layout` in `.size-limit.json` (71.08 KB measured; it pulls `SiteHeader`, `SiteFooter` and `Command`; raised from 71 KB for the `navOverlay` grid placement).
+- Bundle budget: 71.1 KB gzip for `./site-layout` in `.size-limit.json` (71.08 KB measured; it pulls `SiteHeaderSection`, `SiteFooterSection` and `Command`; raised from 71 KB for the `navOverlay` grid placement).
 - Runtime budget: the palette destinations are a computed list over the menus.
 - Heavy parts: none beyond the composed components; the palette content renders only while open.
 

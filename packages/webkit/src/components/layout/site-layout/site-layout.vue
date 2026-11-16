@@ -10,43 +10,43 @@
   import CommandInput from '../../overlay/command/command-input/command-input.vue'
   import CommandItem from '../../overlay/command/command-item/command-item.vue'
   import CommandList from '../../overlay/command/command-list/command-list.vue'
-  import SiteFooter, {
-    type SiteFooterColumn,
-    type SiteFooterSocial,
-    type SiteFooterVariant
-  } from '../../section/site-footer/site-footer.vue'
-  import SiteHeader, {
-    type SiteHeaderLink,
-    type SiteHeaderMenu
-  } from '../../section/site-header/site-header.vue'
+  import SiteFooterSection, {
+    type SiteFooterSectionColumn,
+    type SiteFooterSectionSocial,
+    type SiteFooterSectionVariant
+  } from '../../section/site-footer-section/site-footer-section.vue'
+  import SiteHeaderSection, {
+    type SiteHeaderSectionLink,
+    type SiteHeaderSectionMenu
+  } from '../../section/site-header-section/site-header-section.vue'
 
   defineOptions({
     name: 'SiteLayout',
     inheritAttrs: false
   })
 
-  /** The site bar, bound onto `SiteHeader`. */
+  /** The site bar, bound onto `SiteHeaderSection`. */
   export type SiteLayoutNavigation = {
     /** The mega-menus, in bar order. */
-    menus: SiteHeaderMenu[]
+    menus: SiteHeaderSectionMenu[]
     /** Where the Azion mark links. */
     home?: string
     /** Bar entries that open no panel. */
-    links?: SiteHeaderLink[]
+    links?: SiteHeaderSectionLink[]
     /** The contact link. */
-    contact?: SiteHeaderLink
+    contact?: SiteHeaderSectionLink
     /** The sign-up button. */
-    primaryAction?: SiteHeaderLink
+    primaryAction?: SiteHeaderSectionLink
     /** The login button. */
-    secondaryAction?: SiteHeaderLink
+    secondaryAction?: SiteHeaderSectionLink
     /** Keeps the login button in the bar on phones too. */
     secondaryActionOnPhones?: boolean
   }
 
-  /** The site footer, bound onto `SiteFooter`. */
+  /** The site footer, bound onto `SiteFooterSection`. */
   export type SiteLayoutFooter = {
     /** `site` closes a framed page and draws its frame; `content` runs full bleed. */
-    variant?: SiteFooterVariant
+    variant?: SiteFooterSectionVariant
     /** Accessible name of the footer landmark. */
     ariaLabel?: string
     /** Destination of the Azion mark. */
@@ -54,9 +54,9 @@
     /** Accessible name of the Azion mark link. */
     homeAriaLabel?: string
     /** The link columns, in order. */
-    columns?: SiteFooterColumn[]
+    columns?: SiteFooterSectionColumn[]
     /** The profile icon buttons, in order. */
-    socials?: SiteFooterSocial[]
+    socials?: SiteFooterSectionSocial[]
     /** Line of the system status indicator. */
     statusLabel?: string
     /** Options of the language select. */
@@ -74,9 +74,9 @@
   }
 
   export interface SiteLayoutProps {
-    /** The bar, bound onto `SiteHeader`. */
+    /** The bar, bound onto `SiteHeaderSection`. */
     navigation: SiteLayoutNavigation
-    /** The footer, bound onto `SiteFooter`; `variant` defaults to `site`. No footer when absent. */
+    /** The footer, bound onto `SiteFooterSection`; `variant` defaults to `site`. No footer when absent. */
     footer?: SiteLayoutFooter
     /** Placeholder of the palette's input. Empty uses the locale catalog (`Search the site`). */
     searchPlaceholder?: string
@@ -195,7 +195,7 @@
     :data-nav-overlay="navOverlay || null"
     class="flex min-h-dvh w-full min-w-0 flex-col bg-(--bg-canvas) text-(--text-default) data-[nav-overlay]:grid data-[nav-overlay]:grid-rows-[1fr_auto] data-[nav-overlay]:[&>div>header]:[grid-area:1/1/3/2] data-[nav-overlay]:[&>div>header]:self-start data-[nav-overlay]:[&>main]:[grid-area:1/1] data-[nav-overlay]:[&>main+div]:[grid-area:2/1]"
   >
-    <SiteHeader
+    <SiteHeaderSection
       v-bind="navigation"
       :data-testid="`${testId}__nav`"
       @search="openSearch"
@@ -206,7 +206,7 @@
     >
       <slot />
     </main>
-    <SiteFooter
+    <SiteFooterSection
       v-if="footer"
       variant="site"
       v-bind="footer"

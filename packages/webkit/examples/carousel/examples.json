@@ -14,7 +14,7 @@
     },
     {
       "name": "Titled cards",
-      "summary": "variant=\"cards\" separates the cards with a gutter and rounds each one, and the header slot puts the band's title on the row the step controls sit in, with the controls at its end. Every card keeps the default medium width; for the whole band of overline, title, text and link cards reach for the card-carousel section instead of composing one.",
+      "summary": "variant=\"cards\" separates the cards with a gutter and rounds each one, and the header slot puts the band's title on the row the step controls sit in, with the controls at its end. Every card keeps the default medium width; for the whole band of overline, title, text and link cards reach for the card-carousel-section section instead of composing one.",
       "file": "titled-cards.vue"
     }
   ]

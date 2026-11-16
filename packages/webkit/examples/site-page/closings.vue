@@ -16,7 +16,7 @@
       }
     },
     {
-      _id: 'closing-call-to-action',
+      _id: 'closing-call-to-action-section',
       props: {
         variant: 'panel',
         title: 'Ready to join us?',
@@ -25,7 +25,7 @@
       }
     },
     {
-      _id: 'closing-call-to-action',
+      _id: 'closing-call-to-action-section',
       props: {
         variant: 'primary',
         anchor: 'contact',
@@ -50,7 +50,7 @@
         ]
       }
     },
-    { _id: 'closing-call-to-action', props: { variant: 'frame' } }
+    { _id: 'closing-call-to-action-section', props: { variant: 'frame' } }
   ]
 </script>
 

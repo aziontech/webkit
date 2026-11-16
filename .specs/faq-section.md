@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 2
 created: 2026-11-05
-last_updated: 2026-11-15
-checksum: 142aaeffb9f7e8657cb524c2cbd486d997fc3e669d69f7a21af878192bbdb16c
+last_updated: 2026-11-16
+checksum: 2835b29f5b11c62d9f39c1fdf447e863684e99a398736f4d07555d6b48753687
 ---
 
 # FaqSection — Component Spec
@@ -29,7 +29,7 @@ The frequently asked questions band near the end of a landing page: the heading 
 ## Related
 
 - `faq` — the framed accordion band this section renders.
-- `closing-call-to-action` — the band that usually follows it.
+- `closing-call-to-action-section` — the band that usually follows it.
 
 ## Best practices
 

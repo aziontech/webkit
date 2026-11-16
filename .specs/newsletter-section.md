@@ -5,8 +5,8 @@ structure: monolithic
 status: implemented
 spec_version: 7
 created: 2026-11-05
-last_updated: 2026-11-15
-checksum: dd08a7bc9fd1d447e7316336fa5ccb5bdff8265c816ba0fa1e8b421d94ae118b
+last_updated: 2026-11-16
+checksum: ac8be55fd4cc5ab5320fa20af92b1a4a21ccf851d2c6baf404f8cda4b1285a5f
 template: 2
 ---
 
@@ -23,13 +23,13 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 
 ## When NOT to use
 
-- For a close on one or two link actions or a command → use `closing-call-to-action`.
-- For a close that lists deployable templates → use `template-gallery` with `closing`.
+- For a close on one or two link actions or a command → use `closing-call-to-action-section`.
+- For a close that lists deployable templates → use `template-gallery-section` with `closing`.
 - For a lead form with several fields → use `hero-form-section`.
 
 ## Related
 
-- `closing-call-to-action` — the closing band whose ask is a link action.
+- `closing-call-to-action-section` — the closing band whose ask is a link action.
 - `alert` — renders the success and failure messages.
 
 ## Best practices
@@ -37,7 +37,7 @@ The closing band whose ask is a newsletter sign-up: the overline and a large hea
 - Set `loading` while the address is sent, then `submitted` or `failed` with the outcome.
 - Keep `description` to one sentence; it is set as the large headline.
 - Write `form.invalidMessage` with an example address so the fix is obvious.
-- Place it last on the page, right above `site-footer`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
+- Place it last on the page, right above `site-footer-section`, after a hatched `section-gap`. It draws the hatched closing frame itself, so nothing follows it inside the page column: no trailing `SectionGap` and no closing `RegistrationFrame` + `Texture` (the `shell/site` close is for a page that ends on any other band). `webkit/no-gap-after-closing-section` flags the doubled close.
 
 ## Usage
 

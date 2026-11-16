@@ -2,9 +2,9 @@ import { templateBodyVisitorFactory } from '../lib/rule-utils.js'
 
 const WEBKIT_PREFIX = '@aziontech/webkit/'
 
-const CLOSING = new Set(['closing-call-to-action', 'newsletter-section'])
+const CLOSING = new Set(['closing-call-to-action-section', 'newsletter-section'])
 
-const CLOSING_WHEN_SET = new Set(['template-gallery'])
+const CLOSING_WHEN_SET = new Set(['template-gallery-section'])
 
 const CLOSE_PARTS = new Map([
   ['section-gap', 'gap'],
@@ -28,12 +28,12 @@ export default {
     type: 'problem',
     docs: {
       description:
-        'Disallow a SectionGap or a closing RegistrationFrame right after a closing section (ClosingCallToAction, its newsletter variant, or a TemplateGallery set as closing): the section draws the hatched closing frame itself, so a trailing one doubles it. A section bound with :hatch="false" draws no frame and is skipped.'
+        'Disallow a SectionGap or a closing RegistrationFrame right after a closing section (ClosingCallToActionSection, its newsletter variant, or a TemplateGallerySection set as closing): the section draws the hatched closing frame itself, so a trailing one doubles it. A section bound with :hatch="false" draws no frame and is skipped.'
     },
     schema: [],
     messages: {
       doubled:
-        "'<{{section}}>' already draws the hatched closing frame; the '<{{next}}>' after it doubles the close. Drop it and let the section sit right above SiteFooter."
+        "'<{{section}}>' already draws the hatched closing frame; the '<{{next}}>' after it doubles the close. Drop it and let the section sit right above SiteFooterSection."
     }
   },
   create(context) {

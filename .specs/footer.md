@@ -7,9 +7,9 @@ spec_version: 5
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=5467-1638
   node_id: 5467:1638
-checksum: 2a498b493e1c88145fe9fe6032b4fc4c2d33bc245271575a6c20733289a16f7d
+checksum: abad1e506641fc418d189cdac7ed3eafd8adaa79a28998d180fc54a228291cf2
 created: 2026-08-10
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Footer — Component Spec
@@ -38,7 +38,7 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
 ## When to use
 
 - Use Footer to compose a footer in product or docs.
-- Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).
+- Rendering page JSON, or you need a whole band with no custom content → the section (`site-footer-section`). Building an SFC by hand, needing slots, or nesting inside another band → the primitive (`footer`).
 - The page-level footer of a site or application, paired with `AppHeader`.
 - Grouped navigation links at the bottom of the page plus a brand/social/status bar.
 
@@ -51,7 +51,7 @@ Content (links, labels, languages, status, brand, tagline) always comes from the
 
 - `app-header` — the top-of-page chrome counterpart; same shell philosophy (regions composed by the consumer).
 - `brand`, `icon-button`, `status-indicator`, `select` — the components consumers compose inside the bands; the footer reimplements none of them.
-- `site-footer` — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer` for a site page fed from section JSON and `Footer` when composing the bands by hand; the two do not share code yet.
+- `site-footer-section` — the marketing site's data-driven footer section, the one `SiteLayout` renders. Use `site-footer-section` for a site page fed from section JSON and `Footer` when composing the bands by hand; the two do not share code yet.
 - `registration-frame` — the footer's own frame: the hatched gutters, the framed column and the signature box are `RegistrationFrame` instances (`borders` / `marks` / `hatch`).
 
 ## Best practices

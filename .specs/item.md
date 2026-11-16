@@ -5,8 +5,8 @@ structure: composition
 status: implemented
 spec_version: 6
 created: 2026-05-24
-last_updated: 2026-11-15
-checksum: 1b25c48072fd63a9244dbf6a410518c3fa69d96528e4240963b3a920d9642b7d
+last_updated: 2026-11-16
+checksum: cddc9e25c408ff6c57388abd2c07e626dfb276d277328540c28f3ddc1ae0b29a
 ---
 
 # Item — Component Spec
@@ -34,7 +34,7 @@ Versatile flex row for title, description, media, and actions. Mirrors the shadc
 ## Related
 
 - `card` — the surface an `Item.List` sits in (with `:padded="false"`).
-- `table` — columnar data; below `sm`, `listing-table` swaps its table rows for `item` rows.
+- `table` — columnar data; below `sm`, `listing-table-section` swaps its table rows for `item` rows.
 - `sidebar-menu` — navigation rows with nesting and drill levels.
 - `avatar` — the usual leading media for people rows inside `Item.Media`.
 

@@ -56,7 +56,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 - `description` is the sentence under the headline.
 - `primaryAction` and `secondaryAction` take a `label`, an `href`, an optional `target` and an optional `trailing`, which closes the label on a chevron. A button shows only when it has both a label and a link.
 - `marqueeLabel` is the overline above the client strip, and `marqueeMarks` lists the client marks in order. The strip shows only when it has marks.
-- `headerOffset` takes the site header out of the hero height, so header and hero fill exactly the first screen; it defaults to the `SiteHeader` bar's `--layout-header-height`, and an empty value is for a page with no header above the hero.
+- `headerOffset` takes the site header out of the hero height, so header and hero fill exactly the first screen; it defaults to the `SiteHeaderSection` bar's `--layout-header-height`, and an empty value is for a page with no header above the hero.
 
 Example:
 

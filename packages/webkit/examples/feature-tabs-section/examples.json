@@ -1,0 +1,35 @@
+{
+  "component": "feature-tabs-section",
+  "title": "Components/Marketing/Sections/FeatureTabsSection",
+  "examples": [
+    {
+      "name": "Default",
+      "summary": "The band as the Functions page places it: Trace, Logs and Request path, each shown by its illustration, with the button in the section title. Edit the props in the Controls panel — a band with no tabs renders nothing at all.",
+      "file": "default.vue"
+    },
+    {
+      "name": "Code",
+      "summary": "Each tab opens a code file as its media: line numbers, lines that rise in while the tab is open, and a named copy button. When any tab carries `code` the stage grows to 30rem and draws the pixelate texture.",
+      "file": "code.vue"
+    },
+    {
+      "name": "Live scene",
+      "summary": "One `ConsoleMockup` drawn for every tab through the band `scene`: each tab hands its `value` to the widget as `tab`, so the console plays the agents, console or CLI beat of the open tab. The `autoplayInterval` holds each tab for six seconds.",
+      "file": "live-scene.vue"
+    }
+  ],
+  "site": [
+    {
+      "name": "Default",
+      "summary": "The Observability band from Functions: three tabs, each shown by its illustration, with a button beside the section title.",
+      "file": "site-default.vue",
+      "json": "site-default.json"
+    }
+  ],
+  "siteTitle": "Templates/Marketing/Solutions/FeatureTabsSection",
+  "sitePreview": {
+    "layout": "fullscreen",
+    "background": "dark"
+  },
+  "siteStories": ["Default", "DefaultJson"]
+}

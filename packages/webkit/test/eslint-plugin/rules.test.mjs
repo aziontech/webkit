@@ -430,18 +430,21 @@ test('no-physical-direction (template + script + fix)', () => {
 
 test('no-gap-after-closing-section', () => {
   const imports = `<script setup>
-import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
+import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
 import NewsletterSection from '@aziontech/webkit/newsletter-section'
 import SectionGap from '@aziontech/webkit/section-gap'
 import RegistrationFrame from '@aziontech/webkit/registration-frame'
 import Texture from '@aziontech/webkit/texture'
 import FaqSection from '@aziontech/webkit/faq-section'
-import TemplateGallery from '@aziontech/webkit/template-gallery'
+import TemplateGallerySection from '@aziontech/webkit/template-gallery-section'
 </script>`
   const sfc = (template) => `${imports}<template>${template}</template>`
   vue.run('no-gap-after-closing-section', noGapAfterClosingSection, {
     valid: [
-      { code: sfc('<SectionGap hatch /><ClosingCallToAction title="Go" />'), filename: 'a.vue' },
+      {
+        code: sfc('<SectionGap hatch /><ClosingCallToActionSection title="Go" />'),
+        filename: 'a.vue'
+      },
       {
         code: sfc(
           '<FaqSection /><SectionGap hatch /><RegistrationFrame borders="none"><Texture kind="lines" /></RegistrationFrame>'
@@ -450,29 +453,29 @@ import TemplateGallery from '@aziontech/webkit/template-gallery'
       },
       {
         code: sfc(
-          '<ClosingCallToAction title="Go" /><RegistrationFrame borders="y"><FaqSection /></RegistrationFrame>'
+          '<ClosingCallToActionSection title="Go" /><RegistrationFrame borders="y"><FaqSection /></RegistrationFrame>'
         ),
         filename: 'c.vue'
       },
       {
-        code: '<template><ClosingCallToAction /><SectionGap hatch /></template>',
+        code: '<template><ClosingCallToActionSection /><SectionGap hatch /></template>',
         filename: 'd.vue'
       },
       {
         code: sfc(
-          '<ClosingCallToAction kind="panel" :hatch="false" /><SectionGap hatch /><ClosingCallToAction kind="primary" />'
+          '<ClosingCallToActionSection kind="panel" :hatch="false" /><SectionGap hatch /><ClosingCallToActionSection kind="primary" />'
         ),
         filename: 'h.vue'
       },
-      { code: sfc('<TemplateGallery title="Go" /><SectionGap hatch />'), filename: 'k.vue' },
+      { code: sfc('<TemplateGallerySection title="Go" /><SectionGap hatch />'), filename: 'k.vue' },
       {
-        code: sfc('<TemplateGallery :closing="false" title="Go" /><SectionGap hatch />'),
+        code: sfc('<TemplateGallerySection :closing="false" title="Go" /><SectionGap hatch />'),
         filename: 'l.vue'
       }
     ],
     invalid: [
       {
-        code: sfc('<ClosingCallToAction title="Go" />\n  <SectionGap hatch />'),
+        code: sfc('<ClosingCallToActionSection title="Go" />\n  <SectionGap hatch />'),
         filename: 'e.vue',
         errors: [{ messageId: 'doubled' }]
       },
@@ -483,28 +486,28 @@ import TemplateGallery from '@aziontech/webkit/template-gallery'
       },
       {
         code: sfc(
-          '<ClosingCallToAction title="Go" /><RegistrationFrame borders="none" marks="all"><Texture kind="lines" /></RegistrationFrame>'
+          '<ClosingCallToActionSection title="Go" /><RegistrationFrame borders="none" marks="all"><Texture kind="lines" /></RegistrationFrame>'
         ),
         filename: 'g.vue',
         errors: [{ messageId: 'doubled' }]
       },
       {
-        code: sfc('<ClosingCallToAction :hatch="true" title="Go" /><SectionGap hatch />'),
+        code: sfc('<ClosingCallToActionSection :hatch="true" title="Go" /><SectionGap hatch />'),
         filename: 'i.vue',
         errors: [{ messageId: 'doubled' }]
       },
       {
-        code: sfc('<ClosingCallToAction :hatch="stacked" title="Go" /><SectionGap hatch />'),
+        code: sfc('<ClosingCallToActionSection :hatch="stacked" title="Go" /><SectionGap hatch />'),
         filename: 'j.vue',
         errors: [{ messageId: 'doubled' }]
       },
       {
-        code: sfc('<TemplateGallery closing title="Go" /><SectionGap hatch />'),
+        code: sfc('<TemplateGallerySection closing title="Go" /><SectionGap hatch />'),
         filename: 'm.vue',
         errors: [{ messageId: 'doubled' }]
       },
       {
-        code: sfc('<template-gallery :closing="last" /><section-gap hatch />'),
+        code: sfc('<template-gallery-section :closing="last" /><section-gap hatch />'),
         filename: 'n.vue',
         errors: [{ messageId: 'doubled' }]
       }
@@ -513,41 +516,49 @@ import TemplateGallery from '@aziontech/webkit/template-gallery'
 })
 
 test('no-wrapped-page-chrome', () => {
-  const sfc = (template, from = '@aziontech/webkit/site-footer', name = 'SiteFooter') =>
-    `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
+  const sfc = (
+    template,
+    from = '@aziontech/webkit/site-footer-section',
+    name = 'SiteFooterSection'
+  ) => `<script setup>import ${name} from '${from}'</script><template>${template}</template>`
   vue.run('no-wrapped-page-chrome', noWrappedPageChrome, {
     valid: [
-      { code: sfc('<div class="flex flex-col"><main /><SiteFooter /></div>'), filename: 'a.vue' },
+      {
+        code: sfc('<div class="flex flex-col"><main /><SiteFooterSection /></div>'),
+        filename: 'a.vue'
+      },
       {
         code: sfc(
-          '<div class="sticky top-0 z-40"><SiteHeader /></div>',
-          '@aziontech/webkit/site-header',
-          'SiteHeader'
+          '<div class="sticky top-0 z-40"><SiteHeaderSection /></div>',
+          '@aziontech/webkit/site-header-section',
+          'SiteHeaderSection'
         ),
         filename: 'b.vue'
       },
       {
-        code: '<template><div class="border-t"><SiteFooter /></div></template>',
+        code: '<template><div class="border-t"><SiteFooterSection /></div></template>',
         filename: 'c.vue'
       },
       { code: sfc('<div class="border-t"><Footer /></div>'), filename: 'd.vue' }
     ],
     invalid: [
       {
-        code: sfc('<div class="w-full border-t border-(--border-default)"><SiteFooter /></div>'),
+        code: sfc(
+          '<div class="w-full border-t border-(--border-default)"><SiteFooterSection /></div>'
+        ),
         filename: 'e.vue',
         errors: [{ messageId: 'wrapped' }]
       },
       {
-        code: sfc('<div class="md:py-8"><site-footer /></div>'),
+        code: sfc('<div class="md:py-8"><site-footer-section /></div>'),
         filename: 'f.vue',
         errors: [{ messageId: 'wrapped' }]
       },
       {
         code: sfc(
-          '<header class="border-b"><SiteHeader /></header>',
-          '@aziontech/webkit/site-header',
-          'SiteHeader'
+          '<header class="border-b"><SiteHeaderSection /></header>',
+          '@aziontech/webkit/site-header-section',
+          'SiteHeaderSection'
         ),
         filename: 'g.vue',
         errors: [{ messageId: 'wrapped' }]
@@ -1430,18 +1441,18 @@ test('no-root-relative-asset', () => {
         code: `<script setup>
   import banner from '@aziontech/webkit/assets/placeholder-image.svg'
 </script>
-<template><ArticleBody :banner="banner" href="/media" /></template>`,
+<template><ArticleBodySection :banner="banner" href="/media" /></template>`,
         filename: 'a.vue'
       }
     ],
     invalid: [
       {
-        code: '<template><ArticleBody banner="/media/blog/banner.svg" /></template>',
+        code: '<template><ArticleBodySection banner="/media/blog/banner.svg" /></template>',
         filename: 'b.vue',
         errors: [{ messageId: 'unknown' }]
       },
       {
-        code: `<template><ClientQuotes :items="[{ logo: '/marketing-components/logos/zoop-extended-color.svg' }]" /></template>`,
+        code: `<template><ClientQuotesSection :items="[{ logo: '/marketing-components/logos/zoop-extended-color.svg' }]" /></template>`,
         filename: 'c.vue',
         errors: [{ messageId: 'known' }]
       },
@@ -1449,7 +1460,7 @@ test('no-root-relative-asset', () => {
         code: `<script setup>
   const photos = [{ src: '/media/careers/team-talk.jpg' }]
 </script>
-<template><PhotoMarquee :photos="photos" /></template>`,
+<template><PhotoMarqueeSection :photos="photos" /></template>`,
         filename: 'd.vue',
         errors: [{ messageId: 'unknown' }]
       }

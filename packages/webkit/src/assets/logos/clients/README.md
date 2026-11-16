@@ -59,7 +59,7 @@ HeroSpark, Magalu, MadeiraMadeira and Renner also carry `symbol` (centred on the
 
 `CLIENT_BRANDS` in `brands.ts` holds each story client's brand colours (`base`, `glow`, and `ink:
 'dark'` for a light face), keyed by the normalized client name; `clientBrand(name)` reads it and the
-registry re-exports both. `ClientStoryColumns` (in both `reveal` layouts) paints a face from it when a
+registry re-exports both. `ClientStoryColumnsSection` (in both `reveal` layouts) paints a face from it when a
 card or cell leaves `brand` out, so a page never carries a client's hex colours. Add a client's colours
 here, not in the page. `brands.ts` imports no artwork, so a component reading it does not pull the logos
 into its bundle. Three of those

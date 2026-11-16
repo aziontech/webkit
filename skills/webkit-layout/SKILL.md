@@ -52,11 +52,11 @@ component, composed once in `App.vue` around `RouterView`:
 - **Console:** `ConsoleLayout` — rail, header, breadcrumbs, ⌘K palette, account. It renders the
   `<main>` and pads nothing: the page body carries its own boundary and measure
   (`layout-boundary` + `layout-column` on a list or form; a detail page opens flush on `PageTabs`).
-- **Site:** `SiteLayout` — `SiteHeader`, the page's sections in its `<main>`, `SiteFooter` last.
+- **Site:** `SiteLayout` — `SiteHeaderSection`, the page's sections in its `<main>`, `SiteFooterSection` last.
 - **Docs:** `DocLayout` — sticky header and rails around the article; the document scrolls. The
   article's anchored `DocHeading`s fill the outline rail on their own; the page passes nothing up.
 
-A page never renders `AppLayout`, `Sidebar`, `AppHeader`, `SiteHeader`, `SiteFooter`, a `Command`
+A page never renders `AppLayout`, `Sidebar`, `AppHeader`, `SiteHeaderSection`, `SiteFooterSection`, a `Command`
 palette or a second `<main>`. A copied block that still inlines a shell gives you its `<main>`'s
 content and nothing else.
 
@@ -281,7 +281,7 @@ does (5 → 3 + 2, 7 → 3 + 3 + 1; under four, 7 → 4 + 3): a stretched last c
 wider card. `layout="fixed"` is for tiles whose width must not change (square logo walls, a cell
 spanning rows or columns, a floor that keeps its track count).
 
-**The footer closes the frame and nothing follows it.** `SiteLayout` places `SiteFooter` as its last
+**The footer closes the frame and nothing follows it.** `SiteLayout` places `SiteFooterSection` as its last
 child, unwrapped — a page never adds one. The page ends on its bottom bar at every width: the brand
 leads the social row from `md`; on phones there is no wordmark row and the status line stacks over
 the language select.
@@ -396,7 +396,7 @@ truncating text `min-w-0`.
 - **NEVER** hand-roll a fixed `grid-cols-3` / `grid-cols-4` of cards whose count varies, pad a list
   to fill the last row, or pick `columns` from the item count — compose `CardGrid` and let its
   default balanced layout fill the rows.
-- **NEVER** wrap `SiteFooter` or `SiteHeader` in a bordered or padded `div`; they draw their own rules.
+- **NEVER** wrap `SiteFooterSection` or `SiteHeaderSection` in a bordered or padded `div`; they draw their own rules.
 - **NEVER** compose the chrome in a page: one `ConsoleLayout` / `SiteLayout` / `DocLayout` in
   `App.vue`, and every page is only the body of its default slot.
 - **NEVER** cap the app layout — `ConsoleLayout`'s rail, its header and its content region stay

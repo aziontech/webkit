@@ -1,5 +1,5 @@
 <script setup>
-  import ClosingCallToAction from '@aziontech/webkit/closing-call-to-action'
+  import ClosingCallToActionSection from '@aziontech/webkit/closing-call-to-action-section'
   import NewsletterSection from '@aziontech/webkit/newsletter-section'
   import SectionContainer from '@aziontech/webkit/section-container'
   import SectionGap from '@aziontech/webkit/section-gap'
@@ -28,7 +28,7 @@
     />
     <SectionGap hatch />
 
-    <ClosingCallToAction
+    <ClosingCallToActionSection
       variant="panel"
       title="Ready to talk?"
       description="Tell us what you are building and a specialist will reach out."

@@ -8,9 +8,9 @@ template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 4fd76a371f530e60088ec3c634ca81556090e16d0a2f66c39c7c29efa01de14f
+checksum: 023fd32eddbecd926621ab87f76acf3d7f4bfd697880722598018b8d733980eb
 created: 2026-05-28
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # CodeBlock — Component Spec
@@ -51,8 +51,8 @@ The other regions render conditionally from tab data. Tab header appears when `t
 ## When NOT to use
 
 - The content is build or deploy output with timestamps and log levels → use `log-viewer`.
-- It is a marketing band that pairs a claim with its code → use `media-split-section` with `codeTabs`, or `feature-scroll` with code items for several claims.
-- It is a terminal session of CLI commands on a product page → use `cli-terminal`.
+- It is a marketing band that pairs a claim with its code → use `media-split-section` with `codeTabs`, or `feature-scroll-section` with code items for several claims.
+- It is a terminal session of CLI commands on a product page → use `cli-terminal-section`.
 - You only need to copy one short value (a token, an ID) without showing a block → use `copy-button`.
 - The reader edits the new version beside the old one → use `code-editor` in diff mode. A read-only diff is always this block with `original`, never a read-only code editor.
 
