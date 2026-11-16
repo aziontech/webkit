@@ -183,7 +183,7 @@
             }}
           </caption>
           <colgroup>
-            <col class="w-[56%] md:w-[44%] lg:w-[40%]" />
+            <col class="w-[50%] md:w-[44%] lg:w-[40%]" />
             <col />
             <col />
           </colgroup>
@@ -203,7 +203,7 @@
                 <Brand
                   variant="default"
                   size="small"
-                  class="[&>svg]:h-3! sm:[&>svg]:h-4! md:[&>svg]:h-6!"
+                  class="max-w-full [&>svg]:h-3! [&>svg]:max-w-full sm:[&>svg]:h-4! md:[&>svg]:h-6!"
                 />
                 <span class="sr-only">Azion</span>
               </th>
@@ -247,7 +247,7 @@
                 class="border-b border-(--border-default) px-(--spacing-xl) py-(--spacing-md) text-start align-middle text-label-md font-normal text-(--text-default) group-data-[last]/row:border-b-0"
               >
                 <span class="flex min-w-0 items-center gap-(--spacing-xs)">
-                  <span class="min-w-0 max-sm:truncate">{{ item.capability }}</span>
+                  <span class="min-w-0 text-pretty">{{ item.capability }}</span>
                   <span
                     v-if="item.definition"
                     class="-my-(--spacing-2xs) inline-flex shrink-0"
