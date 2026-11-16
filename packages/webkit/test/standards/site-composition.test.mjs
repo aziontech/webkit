@@ -32,6 +32,24 @@ function networkBenefitIconGaps(props) {
     .map((benefit) => `benefit "${benefit.title}" has no icon`)
 }
 
+const RETIRED_MEDIA = ['codeTabs', 'defaultFile', 'copyAriaLabel', 'diagram']
+
+const drawn = (media) =>
+  Boolean(
+    (media.scene && media.scene.component !== 'Diagram') ||
+    media.widget ||
+    media.illustration ||
+    (typeof media.image === 'string' ? media.image : media.image?.src)
+  )
+
+function mediaBandGaps(id, props) {
+  const bands = id === 'media-split-stack-section' ? (props.bands ?? []) : [props]
+  return bands.flatMap((band) => [
+    ...(drawn(band) ? [] : [`"${band.title}" has no illustration, image or scene`]),
+    ...RETIRED_MEDIA.filter((key) => key in band).map((key) => `"${band.title}" sets ${key}`)
+  ])
+}
+
 test('the site JSON holds site entries to check', () => {
   assert.ok(entries.length > 20)
 })
@@ -46,6 +64,15 @@ test('a capability grid gives every item an icon or none (benefits vs resources 
 test('every network-section benefit carries its icon', () => {
   const gaps = of('network-section').flatMap((entry) =>
     networkBenefitIconGaps(entry.props ?? {}).map((gap) => `${entry.file}: ${gap}`)
+  )
+  assert.deepEqual(gaps, [])
+})
+
+test('every media band has a drawn picture and no code or diagram', () => {
+  const gaps = ['media-split-section', 'media-split-stack-section'].flatMap((id) =>
+    of(id).flatMap((entry) =>
+      mediaBandGaps(id, entry.props ?? {}).map((gap) => `${entry.file}: ${gap}`)
+    )
   )
   assert.deepEqual(gaps, [])
 })

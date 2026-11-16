@@ -1,4 +1,5 @@
 <script setup>
+  import g2Symbol from '@aziontech/webkit/assets/g2-symbol-color.svg'
   import MediaSplitSection from '@aziontech/webkit/media-split-section'
 </script>
 
@@ -15,9 +16,9 @@
     }"
   />
   <MediaSplitSection
-    eyebrow="Cache"
-    title="Serve repeat requests from the nearest location"
-    description="Cached responses never travel back to your origin, so it handles a fraction of the traffic."
-    diagram="cache"
+    eyebrow="Recognition"
+    title="Recognized by the people who use it"
+    description="Rated a Leader in Edge Computing by G2 users, season after season."
+    :image="{ src: g2Symbol, alt: 'G2', framed: true }"
   />
 </template>

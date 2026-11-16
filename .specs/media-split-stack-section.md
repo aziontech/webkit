@@ -3,18 +3,18 @@ name: media-split-stack-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 8
+spec_version: 9
 template: 2
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 95bde5c7563c1cc95ef5eb5492165d47a1eb42c1ced3d9ff6efd3c04c2e6e6ac
+checksum: ac3e91cd0ee87ac53ab40668de4241fa15890ac310b931f6b0d154ef2ce3da62
 ---
 
 # MediaSplitStackSection — Component Spec
 
 ## Purpose
 
-A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional centered section title at the medium size opens the run, as the run headers of the live product pages do. It is a page section — the site places it from a `{ _id: 'media-split-stack-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `section-stack`, `media-split`, `illustration`, `console-mockup`, `diagram` and `button`. A band's picture is one of four things: a `ConsoleMockup` console mock (`widget`), a `Diagram` request-flow figure (`diagram`), a registry `illustration`, or an `image` URL, plain or `imageFramed` on its own plate. Every band sets its picture at the closing end, so the run reads down one edge.
+A run of large media-split bands that pile up under the site header as the page scrolls, each a centered claim with an outlined "learn more" button beside its picture, the whole band linking through. An optional centered section title at the medium size opens the run, as the run headers of the live product pages do. It is a page section — the site places it from a `{ _id: 'media-split-stack-section', props }` entry and binds `props` straight onto it — and it composes `section-module`, `section-title`, `section-stack`, `media-split`, `illustration`, `console-mockup` and `button`. Every band has a picture, and it is a drawn asset: a registered `scene`, a `ConsoleMockup` console mock (`widget`, itself a registered scene), a registry `illustration`, or an `image` URL, plain or `imageFramed` on its own plate. The band type is a union that requires one of them; request-flow diagrams and code do not go in a media band. Every band sets its picture at the closing end, so the run reads down one edge.
 
 ## When to use
 
@@ -23,7 +23,8 @@ A run of large media-split bands that pile up under the site header as the page 
 
 ## When NOT to use
 
-- For a single claim beside its picture, scene or code → use `media-split-section`.
+- For a single claim beside its picture or scene → use `media-split-section`.
+- For a request-flow diagram → use `console-showcase-section` with `variant: 'diagram'`; for code → use `feature-scroll-section`.
 - For small reasons in a grid → use `feature-tiles-section`.
 
 ## Related
@@ -33,8 +34,7 @@ A run of large media-split bands that pile up under the site header as the page 
 
 ## Best practices
 
-- Give a band one picture: `widget` (a `ConsoleMockup` name — the product's console screen), `diagram` (a `Diagram` name — its request flow), `illustration` (a registry name, with `illustrationLabel`) or `image` (a URL, with `imageAlt` when it says something). When several are set the first in that order wins; a band with none renders without its media cell.
-- Prefer `widget` or `diagram` on a product page: they show the product itself, where an illustration only evokes it. Do not drop to `media-split` and its `media` slot to place one.
+- Give every band one picture: `scene`, `widget` (a `ConsoleMockup` name — the product's console screen), `illustration` (a registry name, with `illustrationLabel`) or `image` (a URL, with `imageAlt` when it says something). The type requires one; when several are set the first in that order wins. Page JSON is untyped, so a band with none renders without its media cell, logs a development warning, and fails the site-composition check (`test/standards/site-composition.test.mjs`). A `Diagram` scene counts as none.
 - Set `imageFramed` for a picture that is an object rather than a scene — a badge, a logo, a screenshot: it sits whole on a rounded, bordered plate inset in the cell. A plain `image` is scaled to fit the cell and never overflows it.
 - Give every band an `action`; it is both the button and the link the whole band follows.
 
@@ -64,13 +64,13 @@ A run of large media-split bands that pile up under the site header as the page 
 
 ## Props
 
-| Prop          | Type                           | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| ------------- | ------------------------------ | ------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `anchor`      | `string`                       | `''`    | false    | In-page id set on the run so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
-| `eyebrow`     | `string`                       | `''`    | false    | Eyebrow above the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
-| `title`       | `string`                       | `''`    | false    | Headline of the run, rendered by the medium centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`.                                                                                                                                                                                                                                                                                                                                              |
-| `description` | `string`                       | `''`    | false    | Supporting sentence under the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| `bands`       | `MediaSplitStackSectionBand[]` | `[]`    | false    | The bands, in order; each is `{ title, description, eyebrow?, href?, scene?, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a `{ component, props? }` webkit scene asset, `widget` a `ConsoleMockup` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button. |
+| Prop          | Type                           | Default | Required | JSDoc                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ------------- | ------------------------------ | ------- | -------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `anchor`      | `string`                       | `''`    | false    | In-page id set on the run so a `#hash` link can scroll to it.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `eyebrow`     | `string`                       | `''`    | false    | Eyebrow above the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `title`       | `string`                       | `''`    | false    | Headline of the run, rendered by the medium centered section title as its `h2`; the run renders no header when empty, and with a header each band's headline drops to an `h3`.                                                                                                                                                                                                                                                                                                                                                               |
+| `description` | `string`                       | `''`    | false    | Supporting sentence under the section title.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `bands`       | `MediaSplitStackSectionBand[]` | `[]`    | false    | The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget`, `illustration` (with `illustrationLabel?`) or `image` (with `imageAlt?`, `imageFramed?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button. |
 
 ## Events
 
@@ -86,9 +86,9 @@ A run of large media-split bands that pile up under the site header as the page 
 - Empty: when `bands` is empty the run renders nothing — not the header, not the stack
 - The header renders only when `title` is set; a band renders its button only when it has an `action`, links as a whole to its `href` (or its action's when it has none), and renders its media cell only when it has a picture; a band's `eyebrow` sits above its headline
 - Band headlines are `h2` when the run has no header and `h3` under the section title, so the outline never repeats a level
-- Media precedence per band: `scene`, then `widget`, then `diagram`, then `illustration`, then `image`. A widget or a diagram is inset from the cell's edges (`media-split`'s `mediaPadded`), and so is a framed image; an illustration and a plain image run flush
+- Media precedence per band: `scene`, then `widget`, then `illustration`, then `image`. A widget is inset from the cell's edges (`media-split`'s `mediaPadded`), and so is a framed image; an illustration and a plain image run flush
 - A widget plays its beat while the pointer is over its band (`hover`), and shows its finished state on touch and under reduced motion (owned by `console-mockup`); it draws no collaborator cursor (`cursor` off), so the band reads as the product screen
-- Widget and diagram load on demand (`defineAsyncComponent`): a run that uses neither never downloads them
+- The widget loads on demand (`defineAsyncComponent`): a run that uses none never downloads it
 
 ## Motion & Animations
 
@@ -113,14 +113,14 @@ _none_
 
 - Visible focus: owned by `button` and `media-split`'s media link.
 - Keyboard map: `Tab` reaches each band's media link and button; `Enter` follows them.
-- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h3` under the run's `h2` (an `h2` when the run has no title); illustrations are named by `illustrationLabel` and images by `imageAlt`, or decorative when empty; a diagram is a `figure` named by the description its library entry carries; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
+- ARIA: the run is a `<section>` named by its title (`aria-label`) when one is set; each band is `media-split`'s own section named by the band's title, with its headline as an `h3` under the run's `h2` (an `h2` when the run has no title); illustrations are named by `illustrationLabel` and images by `imageAlt`, or decorative when empty; a widget is an inert, `aria-hidden` picture of the console, so the band's copy carries its meaning.
 - Contrast ≥4.5:1 (text) / ≥3:1 (large + icons): owned by `section-title`, `media-split` and `button`.
 - `motion-reduce:transition-none motion-reduce:transform-none` — the run adds no motion.
 - Touch target ≥40×40 px: the medium buttons and the band links.
 
 ## Internationalization
 
-- No built-in strings: every visible string arrives through props in the page's language. Widget and diagram text is product UI copy owned by `console-mockup` and `diagram`.
+- No built-in strings: every visible string arrives through props in the page's language. Widget text is product UI copy owned by `console-mockup`.
 - Formatting: none.
 
 ## Right-to-left
@@ -133,20 +133,20 @@ _none_
 ## Responsive
 
 - Container queries: none; `media-split` stacks the media under the copy below `lg`.
-- Narrow (≤ 640 px): one column per band; a widget, a diagram and a framed image scale down with the cell.
+- Narrow (≤ 640 px): one column per band; a widget and a framed image scale down with the cell.
 - Touch: a widget shows its finished state instead of the hover beat; the whole band stays one link.
 - Reflow: no horizontal scroll at 320 px.
 
 ## Performance
 
-- Bundle budget: 12 KB gzip for `./media-split-stack-section` (initial chunk only) in `.size-limit.json`; `console-mockup` and `diagram` are async chunks loaded only by a band that uses them.
+- Bundle budget: 12 KB gzip for `./media-split-stack-section` (initial chunk only) in `.size-limit.json`; `console-mockup` is an async chunk loaded only by a band that uses it.
 - Runtime budget: none: static apart from the widget beat, which runs only while its band is hovered.
-- Heavy parts: `console-mockup` (each widget is its own chunk) and `diagram`, both lazy.
+- Heavy parts: `console-mockup` (each widget is its own chunk), lazy.
 
 ## Examples
 
 - Default — carries a section `description`, a band `eyebrow`, a band `href` distinct from its button and a live `scene`.
-- Product media — bands whose pictures are a `ConsoleMockup`, a `Diagram` and a framed image (justified: `widget`, `diagram` and `imageFramed` are three render paths the default does not reach).
+- Product media — bands whose pictures are a `ConsoleMockup` and a framed image (justified: `widget` and `imageFramed` are render paths the default does not reach).
 
 ## Constraints — DO NOT
 

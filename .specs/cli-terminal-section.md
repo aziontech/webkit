@@ -3,10 +3,10 @@ name: cli-terminal-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 5
+spec_version: 6
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 5464c8255cdf98c024e2393649c06acbba145590a77b4f5da8a8b717e0e3cf09
+checksum: 9a7b02af217dd99fdf889f5bea8a90ca12ce6536d5aa7a8c6cc3768fca6ab22c
 ---
 
 # CliTerminalSection — Component Spec
@@ -22,13 +22,13 @@ The Azion CLI band of a product page: a horizontal section title with one outlin
 
 ## When NOT to use
 
-- For a config file or handler beside the claim → use `media-split-section` with `codeTabs`.
+- For a config file or handler beside the claim → use `feature-scroll-section` with a `code` step.
 - For several capabilities, each with its own file → use `feature-scroll-section` with code items.
 
 ## Related
 
 - `code-block` — the terminal session the band shows.
-- `media-split-section` — the sibling band with the sample (`codeTabs`) beside the copy.
+- `feature-scroll-section` — the walkthrough whose steps can each pin a code sample (`code`).
 
 ## Best practices
 

@@ -3,10 +3,10 @@ name: media-split
 category: marketing
 structure: monolithic
 status: implemented
-spec_version: 7
-checksum: 3f15b41c6ca215a9e2728adcceb1994d4e254f2026677026f57b33965683ef5e
+spec_version: 8
+checksum: 278a96d9c0d2daca31fe7caf8ac3f04189a715ec8a7dd8a74d89d906d3296368
 created: 2026-09-22
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Media Split — Component Spec
@@ -37,7 +37,7 @@ Whether the band ever splits is `orientation`'s call. `horizontal` is the band p
 ## When NOT to use
 
 - For copy with no media → use `section-title`, which is the header band.
-- For one claim beside its picture, scene or code placed from page JSON → use `media-split-section`.
+- For one claim beside its picture or scene placed from page JSON → use `media-split-section`.
 - For the closing ask → use `call-to-action`; for a mid-page announcement → use `call-to-action` with `variant="announcement"`.
 - For several short claims side by side → use `feature-item` in a `card-grid`.
 - For a picture with no explanation → use `illustration` directly.

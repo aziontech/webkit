@@ -1,11 +1,10 @@
 <script setup lang="ts">
-  import { computed, defineAsyncComponent, ref, useAttrs } from 'vue'
+  import { computed, defineAsyncComponent, ref, useAttrs, watch } from 'vue'
 
   import { resolveScene, type SceneName } from '../../../assets/scene-registry'
   import Button from '../../action/button/button.vue'
   import type { ConsoleMockupName } from '../../content/console-mockup/console-mockup.vue'
   import Illustration from '../../content/illustration/illustration.vue'
-  import type { DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import type { TextureVariant } from '../../marketing/texture/texture.vue'
@@ -21,8 +20,8 @@
   /** Axis the band splits on. */
   export type MediaSplitSectionOrientation = 'horizontal' | 'vertical'
 
-  /** Name of a webkit scene asset. */
-  export type MediaSplitSectionSceneName = SceneName
+  /** Name of a webkit scene asset a media band may draw: any but the request-flow diagram. */
+  export type MediaSplitSectionSceneName = Exclude<SceneName, 'Diagram'>
 
   /** A scene drawn in the media cell. */
   export type MediaSplitSectionScene = {
@@ -65,24 +64,6 @@
     variant?: MediaSplitSectionActionVariant
   }
 
-  /** One file of the code sample drawn in the media cell. */
-  export type MediaSplitSectionCodeTab = {
-    /** Label of the tab in the strip. */
-    label: string
-    /** Stable id of the tab. */
-    value: string
-    /** The code shown verbatim; a tab without it is skipped. */
-    code: string
-    /** Language the code is highlighted as. */
-    language?: string
-    /** File name shown in the filename bar. */
-    fileName?: string
-    /** Icon class shown beside the file name. */
-    fileIcon?: string
-    /** Icon class of the mark drawn beside the tab label. */
-    icon?: string
-  }
-
   export interface MediaSplitSectionProps {
     /** In-page id set on the band so a `#hash` link can scroll to it. */
     anchor?: string
@@ -100,25 +81,17 @@
     texture?: TextureVariant
     /** Links the whole band to a lone action; turn it off when the media holds controls of its own. */
     linked?: boolean
-    /** Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset and the props bound onto it; wins over every other media. */
+    /** Scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset other than `Diagram` and the props bound onto it; wins over every other media. */
     scene?: MediaSplitSectionScene
-    /** Files of the code sample drawn in the media cell when no scene is set, in order; each is `{ label, value, code, language?, fileName?, fileIcon?, icon? }` where `icon` is a mark beside the tab label. A tab without `code` is skipped. */
-    codeTabs?: MediaSplitSectionCodeTab[]
-    /** `value` of the code tab open first; empty, or a value no tab carries, opens the first tab. */
-    defaultFile?: string
-    /** Accessible name of the code sample's copy button; empty keeps the code block's own. */
-    copyAriaLabel?: string
-    /** Name of the product console widget drawn in the media cell when neither a scene nor code is set. */
+    /** Name of the product console widget drawn in the media cell when no scene is set. */
     widget?: ConsoleMockupName
-    /** Name of the request-flow diagram drawn in the media cell when neither a scene nor a widget is set. */
-    diagram?: DiagramName
-    /** Picture drawn in the media cell when no scene, widget or diagram is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell. */
+    /** Picture drawn in the media cell when neither a scene nor a widget is set; `{ src, alt?, width?, height?, framed? }`, where `framed` sets it whole on a rounded plate instead of covering the cell. */
     image?: MediaSplitSectionImage
     /** Registry name of the illustration drawn in the media cell when no other media is set. */
     illustration?: string
     /** Accessible name of the illustration; empty keeps it decorative. */
     illustrationAriaLabel?: string
-    /** First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it (not over code); `variant` overrides the drawn variant. */
+    /** First button under the copy; `{ label, href, trailing?, icon?, target?, variant? }`. When it is the only action it renders outlined with a trailing chevron, and the whole band links to it; `variant` overrides the drawn variant. */
     primaryAction?: MediaSplitSectionAction
     /** Second, outlined button beside the first; `{ label, href, trailing?, icon?, target?, variant? }`. With two actions the band stays unlinked. */
     secondaryAction?: MediaSplitSectionAction
@@ -134,11 +107,7 @@
     texture: 'pixelate',
     linked: true,
     scene: undefined,
-    codeTabs: () => [],
-    defaultFile: '',
-    copyAriaLabel: '',
     widget: undefined,
-    diagram: undefined,
     image: undefined,
     illustration: '',
     illustrationAriaLabel: '',
@@ -149,10 +118,10 @@
   const ConsoleMockup = defineAsyncComponent(
     () => import('../../content/console-mockup/console-mockup.vue')
   )
-  const Diagram = defineAsyncComponent(() => import('../../marketing/diagram/diagram.vue'))
-  const CodeBlock = defineAsyncComponent(() => import('../../code/code-block/code-block.vue'))
 
   const attrs = useAttrs()
+
+  const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
 
   const hovered = ref(false)
 
@@ -160,27 +129,17 @@
     () => (attrs['data-testid'] as string | undefined) ?? 'media-split-section'
   )
 
-  const sceneComponent = computed(() => (props.scene ? resolveScene(props.scene.component) : null))
-
-  const tabs = computed(() => props.codeTabs.filter((tab) => tab.code.length > 0))
-
-  const tabIcons = computed<Record<string, string>>(() =>
-    Object.fromEntries(tabs.value.map((tab) => [tab.value, tab.icon ?? '']))
-  )
-
-  const hasTabIcons = computed(() => tabs.value.some((tab) => Boolean(tab.icon)))
-
-  const openFile = computed(() =>
-    tabs.value.some((tab) => tab.value === props.defaultFile) ? props.defaultFile : undefined
+  const sceneComponent = computed(() =>
+    props.scene && props.scene.component !== ('Diagram' as SceneName)
+      ? resolveScene(props.scene.component)
+      : null
   )
 
   const hasImage = computed(() => Boolean(props.image?.src))
 
   const media = computed(() => {
     if (sceneComponent.value) return 'scene'
-    if (tabs.value.length > 0) return 'code'
     if (props.widget) return 'widget'
-    if (props.diagram) return 'diagram'
     if (hasImage.value) return props.image?.framed ? 'framed-image' : 'image'
     if (props.illustration.length > 0) return 'illustration'
     return null
@@ -188,13 +147,7 @@
 
   const hasMedia = computed(() => media.value !== null)
 
-  const mediaPadded = computed(
-    () =>
-      media.value === 'code' ||
-      media.value === 'widget' ||
-      media.value === 'diagram' ||
-      media.value === 'framed-image'
-  )
+  const mediaPadded = computed(() => media.value === 'widget' || media.value === 'framed-image')
 
   const primary = computed(() =>
     props.primaryAction?.label && props.primaryAction.href ? props.primaryAction : null
@@ -209,8 +162,17 @@
     return actions.length === 1 ? (actions[0] ?? null) : null
   })
 
-  const bandHref = computed(() =>
-    props.linked && lone.value && media.value !== 'code' ? lone.value.href : ''
+  const bandHref = computed(() => (props.linked && lone.value ? lone.value.href : ''))
+
+  watch(
+    () => Boolean(props.title) && !hasMedia.value,
+    (bare) => {
+      if (dev && bare)
+        console.warn(
+          `[webkit] <MediaSplitSection>: the band "${props.title}" has no media. Give it an illustration, an image or a scene; code goes in FeatureScrollSection and a request-flow diagram in ConsoleShowcaseSection.`
+        )
+    },
+    { immediate: true }
   )
 
   const actionIcon = (action: MediaSplitSectionAction): string =>
@@ -255,40 +217,11 @@
             v-if="media === 'scene'"
             v-bind="scene?.props ?? {}"
           />
-          <div
-            v-else-if="media === 'code'"
-            class="-mb-(--spacing-xl) h-[20rem] w-full min-w-0 overflow-hidden rounded-t-(--shape-control) border-x border-t border-(--border-default) bg-(--bg-surface) shadow-(--shadow-sm)"
-          >
-            <CodeBlock
-              :tabs="tabs"
-              :default-value="openFile"
-              show-line-numbers
-              :bordered="false"
-              v-bind="{ animateLines: true }"
-              :copy-aria-label="copyAriaLabel || undefined"
-            >
-              <template
-                v-if="hasTabIcons"
-                #tab-icon="{ tab }"
-              >
-                <i
-                  v-if="tabIcons[tab.value]"
-                  :class="tabIcons[tab.value]"
-                  class="size-3.5!"
-                  aria-hidden="true"
-                />
-              </template>
-            </CodeBlock>
-          </div>
           <ConsoleMockup
             v-else-if="media === 'widget' && widget"
             :name="widget"
             :hover="hovered"
             :cursor="false"
-          />
-          <Diagram
-            v-else-if="media === 'diagram' && diagram"
-            :name="diagram"
           />
           <div
             v-else-if="media === 'framed-image'"

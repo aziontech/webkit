@@ -1,11 +1,10 @@
 <script setup lang="ts">
-  import { type Component, computed, defineAsyncComponent, ref, useAttrs } from 'vue'
+  import { type Component, computed, defineAsyncComponent, ref, useAttrs, watch } from 'vue'
 
-  import { resolveScene, type SceneRef } from '../../../assets/scene-registry'
+  import { resolveScene, type SceneName } from '../../../assets/scene-registry'
   import Button from '../../action/button/button.vue'
   import type { ConsoleMockupName } from '../../content/console-mockup/console-mockup.vue'
   import Illustration from '../../content/illustration/illustration.vue'
-  import type { DiagramName } from '../../marketing/diagram/diagram.vue'
   import MediaSplit from '../../marketing/media-split/media-split.vue'
   import SectionModule from '../../marketing/section-module/section-module.vue'
   import SectionStack from '../../marketing/section-stack/section-stack.vue'
@@ -19,11 +18,16 @@
 
   export type { SectionTitleAction }
 
-  /** A live scene drawn in a band's media cell. */
-  export type MediaSplitStackSectionScene = SceneRef
+  /** A live scene drawn in a band's media cell: any webkit scene asset but the request-flow diagram. */
+  export type MediaSplitStackSectionScene = {
+    /** Registry name of the scene. */
+    component: Exclude<SceneName, 'Diagram'>
+    /** Props bound onto the scene, such as the `name` of a `ConsoleMockup`. */
+    props?: Record<string, unknown>
+  }
 
-  /** One band of the run: a claim beside its picture. */
-  export type MediaSplitStackSectionBand = {
+  /** The copy and the action of a band. */
+  export type MediaSplitStackSectionBandCopy = {
     /** Headline of the band, naming its region. */
     title: string
     /** Supporting sentence under the headline. */
@@ -32,25 +36,58 @@
     eyebrow?: string
     /** Destination the whole band links to; falls back to the action's. */
     href?: string
+    /** The outlined button, whose `href` the whole band follows when the band has none; `{ label, href }`. Omitted when absent. */
+    action?: SectionTitleAction
+  }
+
+  /** A band's picture drawn as a live scene. */
+  export type MediaSplitStackSectionSceneMedia = {
     /** Live scene drawn in the media cell, `{ component, props? }` naming a webkit scene asset; wins over every other picture. */
-    scene?: MediaSplitStackSectionScene
-    /** Name of the product console widget shown in the media cell when no scene is set. */
-    widget?: ConsoleMockupName
-    /** Name of the request-flow diagram shown in the media cell, when no widget is set. */
-    diagram?: DiagramName
+    scene: MediaSplitStackSectionScene
+  }
+
+  /** A band's picture drawn as a product console widget. */
+  export type MediaSplitStackSectionWidgetMedia = {
+    /** Name of the product console widget shown in the media cell. */
+    widget: ConsoleMockupName
+  }
+
+  /** A band's picture drawn as a registry illustration. */
+  export type MediaSplitStackSectionIllustrationMedia = {
+    /** Registry name of the illustration shown in the media cell. */
+    illustration: string
+    /** Accessible name of the illustration; empty keeps it decorative. */
+    illustrationLabel?: string
+  }
+
+  /** A band's picture drawn from an image URL. */
+  export type MediaSplitStackSectionImageMedia = {
     /** URL of the picture shown in the media cell. */
-    image?: string
+    image: string
     /** Alternative text of the picture; empty keeps it decorative. */
     imageAlt?: string
     /** Sets the picture whole on a rounded, bordered plate inset in the cell, for a badge, a logo or a screenshot. */
     imageFramed?: boolean
-    /** Registry name of the illustration shown in the media cell, instead of `image`. */
-    illustration?: string
-    /** Accessible name of the illustration; empty keeps it decorative. */
-    illustrationLabel?: string
-    /** The outlined button, whose `href` the whole band follows when the band has none; `{ label, href }`. Omitted when absent. */
-    action?: SectionTitleAction
   }
+
+  /** The required picture of a band: a scene, a console widget, an illustration or an image. */
+  export type MediaSplitStackSectionBandMedia =
+    | MediaSplitStackSectionSceneMedia
+    | MediaSplitStackSectionWidgetMedia
+    | MediaSplitStackSectionIllustrationMedia
+    | MediaSplitStackSectionImageMedia
+
+  /** One band of the run: a claim beside its required picture. */
+  export type MediaSplitStackSectionBand = MediaSplitStackSectionBandCopy &
+    MediaSplitStackSectionBandMedia
+
+  type MediaSplitStackSectionBandFields = MediaSplitStackSectionBandCopy &
+    Partial<
+      MediaSplitStackSectionSceneMedia &
+        MediaSplitStackSectionWidgetMedia &
+        MediaSplitStackSectionIllustrationMedia &
+        MediaSplitStackSectionImageMedia
+    >
 
   export interface MediaSplitStackSectionProps {
     /** In-page id set on the run so a `#hash` link can scroll to it. */
@@ -61,7 +98,7 @@
     title?: string
     /** Supporting sentence under the section title. */
     description?: string
-    /** The bands, in order; each is `{ title, description, eyebrow?, href?, scene?, widget?, diagram?, image?, imageAlt?, imageFramed?, illustration?, illustrationLabel?, action? }` where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset, `widget` a `ConsoleMockup` name, `diagram` a `Diagram` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button. */
+    /** The bands, in order; each is `{ title, description, eyebrow?, href?, action? }` plus its required picture, one of `scene`, `widget`, `illustration` (with `illustrationLabel?`) or `image` (with `imageAlt?`, `imageFramed?`), where `eyebrow` is the band's overline, `href` the link the whole band follows (falling back to the action's), `scene` a webkit scene asset other than `Diagram`, `widget` a `ConsoleMockup` name, `image` a picture URL, `illustration` a registry name, and `action` `{ label, href }` the outlined button. */
     bands?: MediaSplitStackSectionBand[]
   }
 
@@ -76,9 +113,10 @@
   const ConsoleMockup = defineAsyncComponent(
     () => import('../../content/console-mockup/console-mockup.vue')
   )
-  const Diagram = defineAsyncComponent(() => import('../../marketing/diagram/diagram.vue'))
 
   const attrs = useAttrs()
+
+  const dev = (import.meta as ImportMeta & { env?: { DEV?: boolean } }).env?.DEV === true
 
   const hovered = ref<number | null>(null)
 
@@ -90,15 +128,40 @@
 
   const hasHeader = computed(() => props.title.length > 0)
 
+  const views = computed<MediaSplitStackSectionBandFields[]>(() => props.bands)
+
   const scenes = computed<(Component | null)[]>(() =>
-    props.bands.map((band) => (band.scene ? resolveScene(band.scene.component) : null))
+    views.value.map((band) =>
+      band.scene && band.scene.component !== ('Diagram' as SceneName)
+        ? resolveScene(band.scene.component)
+        : null
+    )
   )
 
-  const bandHref = (band: MediaSplitStackSectionBand) => band.href || band.action?.href || ''
+  const bare = computed(() =>
+    views.value
+      .filter(
+        (band, index) => !scenes.value[index] && !band.widget && !band.illustration && !band.image
+      )
+      .map((band) => band.title)
+  )
 
-  const mediaPadded = (band: MediaSplitStackSectionBand, index: number) =>
+  watch(
+    bare,
+    (titles) => {
+      if (dev && titles.length)
+        console.warn(
+          `[webkit] <MediaSplitStackSection>: ${titles.map((title) => `"${title}"`).join(', ')} has no picture. Give every band an illustration, an image or a scene; a request-flow diagram goes in ConsoleShowcaseSection.`
+        )
+    },
+    { immediate: true }
+  )
+
+  const bandHref = (band: MediaSplitStackSectionBandFields) => band.href || band.action?.href || ''
+
+  const mediaPadded = (band: MediaSplitStackSectionBandFields, index: number) =>
     !scenes.value[index] &&
-    Boolean(band.widget || band.diagram || (band.imageFramed && band.image && !band.illustration))
+    Boolean(band.widget || (band.imageFramed && band.image && !band.illustration))
 </script>
 
 <template>
@@ -128,7 +191,7 @@
           flush
         >
           <MediaSplit
-            v-for="(band, index) in bands"
+            v-for="(band, index) in views"
             :key="band.title"
             variant="media-end"
             divided
@@ -165,12 +228,6 @@
                 :hover="hovered === index"
                 :cursor="false"
               />
-            </template>
-            <template
-              v-else-if="band.diagram"
-              #media
-            >
-              <Diagram :name="band.diagram" />
             </template>
             <template
               v-else-if="band.illustration"

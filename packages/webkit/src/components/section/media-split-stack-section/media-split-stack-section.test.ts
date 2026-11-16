@@ -1,5 +1,5 @@
 import { render } from '@testing-library/vue'
-import { describe, expect, it } from 'vitest'
+import { afterEach, describe, expect, it, vi } from 'vitest'
 
 import ProductMedia from '../../../../examples/media-split-stack-section/product-media.vue'
 import { expectNoA11yViolations } from '../../../test/axe'
@@ -41,6 +41,10 @@ const bandSides = (container: HTMLElement) =>
   )
 
 describe('MediaSplitStackSection', () => {
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
   it('renders the run under the default testid', () => {
     const { getByTestId } = run()
 
@@ -195,22 +199,38 @@ describe('MediaSplitStackSection', () => {
     await expectNoA11yViolations(container)
   })
 
-  it('draws a widget, a diagram and a framed image, each inset from the cell', async () => {
+  it('draws a widget and a framed image, each inset from the cell', async () => {
     const { container, findByTestId, getByRole } = render(ProductMedia)
 
     const widget = await findByTestId('console-mockup', {}, { timeout: 5000 })
     expect(widget.getAttribute('data-name')).toBe('data-stream-source')
-    const diagram = await findByTestId('diagram', {}, { timeout: 5000 })
-    expect(diagram.getAttribute('data-name')).toBe('load-balancer')
     expect(getByRole('img', { name: 'G2' })).toBeInTheDocument()
     await expect.poll(() => widget.textContent).toContain('Data Source')
     expect(widget.textContent).not.toContain('Priya')
     const splits = Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`))
-    expect(splits.map((split) => split.hasAttribute('data-media-padded'))).toEqual([
-      true,
-      true,
-      true
-    ])
+    expect(splits.map((split) => split.hasAttribute('data-media-padded'))).toEqual([true, true])
+  })
+
+  it('draws no diagram, and warns in development about a band left without a picture', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {})
+    const { container, queryByTestId } = run({
+      bands: [
+        bands[1],
+        { title: 'Failover', description: 'Route around an origin.', diagram: 'load-balancer' },
+        {
+          title: 'Cache',
+          description: 'Serve from the nearest location.',
+          scene: { component: 'Diagram', props: { name: 'cache' } }
+        }
+      ]
+    })
+
+    await new Promise((resolve) => setTimeout(resolve, 300))
+    expect(queryByTestId('diagram')).toBeNull()
+    const splits = Array.from(container.querySelectorAll(`[data-testid="${BAND_TESTID}"]`))
+    expect(splits.map((split) => split.hasAttribute('data-media'))).toEqual([true, false, false])
+    expect(warn).toHaveBeenCalledOnce()
+    expect(warn.mock.calls[0]?.[0]).toContain('"Failover", "Cache" has no picture')
   })
 
   it('runs an illustration and a plain image flush', () => {
@@ -238,7 +258,6 @@ describe('MediaSplitStackSection', () => {
     const { container, findByTestId } = render(ProductMedia)
 
     await findByTestId('console-mockup', {}, { timeout: 5000 })
-    await findByTestId('diagram', {}, { timeout: 5000 })
     await expectNoA11yViolations(container)
   })
 })

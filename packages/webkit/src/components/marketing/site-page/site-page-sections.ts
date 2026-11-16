@@ -364,7 +364,12 @@ const legacyShapes: Record<string, (props: SitePageSectionProps) => SitePageSect
     p['titleMuted'] === undefined
       ? p
       : { ...without(p, 'titleMuted'), title: joined(p['title'], p['titleMuted']) },
-  'media-split-stack-section': (p) => without(p, 'kind', 'variant')
+  'media-split-stack-section': (p) => ({
+    ...without(p, 'kind', 'variant'),
+    ...(Array.isArray(p['bands'])
+      ? { bands: records(p['bands']).map((band) => without(band, 'diagram')) }
+      : {})
+  })
 }
 
 const renameLegacyProps = (id: string, props: SitePageSectionProps): SitePageSectionProps => {
@@ -398,16 +403,91 @@ const translateLegacyProps = (id: string, props: SitePageSectionProps): SitePage
   return shape ? shape(renamed) : renamed
 }
 
+/** A page-JSON entry after its retired id, props and media are translated. */
+export type SitePageResolvedEntry = {
+  /** The section that renders the entry. */
+  id: string
+  /** The props bound onto that section. */
+  props: SitePageSectionProps
+  /** Scenes the translation moved into a slot of the section, by slot name; the entry's own scenes win. */
+  scenes?: Record<string, { component: string; props?: Record<string, unknown> }>
+}
+
+const pick = (props: SitePageSectionProps, ...keys: string[]): SitePageSectionProps =>
+  Object.fromEntries(Object.entries(props).filter(([key]) => keys.includes(key)))
+
+const RETIRED_MEDIA = ['codeTabs', 'defaultFile', 'copyAriaLabel', 'diagram']
+
+const hasPicture = (p: SitePageSectionProps): boolean => {
+  const image = p['image']
+  return Boolean(
+    p['scene'] ||
+    p['widget'] ||
+    p['illustration'] ||
+    (image && typeof image === 'object' && (image as { src?: unknown }).src)
+  )
+}
+
+const codeSteps = (p: SitePageSectionProps): SitePageSectionProps[] => {
+  const action = p['primaryAction'] ?? p['secondaryAction']
+  return records(p['codeTabs'])
+    .filter((tab) => typeof tab['code'] === 'string' && tab['code'].length > 0)
+    .map((tab, index) => ({
+      title: tab['label'] ?? '',
+      description: '',
+      code: {
+        fileName: tab['fileName'] ?? tab['label'] ?? '',
+        code: tab['code'],
+        ...pick(tab, 'language', 'fileIcon'),
+        ...pick(p, 'copyAriaLabel')
+      },
+      ...(index === 0 && action ? { action } : {})
+    }))
+}
+
+const routeMediaBand = (p: SitePageSectionProps): SitePageResolvedEntry => {
+  const band = { id: 'media-split-section', props: without(p, ...RETIRED_MEDIA) }
+  if (hasPicture(p)) return band
+  const steps = codeSteps(p)
+  if (steps.length)
+    return {
+      id: 'feature-scroll-section',
+      props: { ...pick(p, 'anchor', 'eyebrow', 'title', 'description'), items: steps }
+    }
+  const diagram = p['diagram']
+  if (typeof diagram === 'string' && diagram.length > 0)
+    return {
+      id: 'console-showcase-section',
+      props: {
+        ...pick(p, 'anchor', 'eyebrow', 'title', 'description', 'primaryAction', 'secondaryAction'),
+        variant: 'diagram'
+      },
+      scenes: { scene: { component: 'Diagram', props: { name: diagram } } }
+    }
+  return band
+}
+
+const legacyRoutes: Record<string, (props: SitePageSectionProps) => SitePageResolvedEntry> = {
+  'media-split-section': routeMediaBand
+}
+
+const route = (id: string, props: SitePageSectionProps): SitePageResolvedEntry => {
+  const handler = Object.prototype.hasOwnProperty.call(legacyRoutes, id)
+    ? legacyRoutes[id]
+    : undefined
+  return handler ? handler(props) : { id, props }
+}
+
 export function resolveSectionEntry(
   id: string,
   props: SitePageSectionProps = {}
-): { id: string; props: SitePageSectionProps } {
+): SitePageResolvedEntry {
   const alias = Object.prototype.hasOwnProperty.call(sitePageSectionAliases, id)
     ? sitePageSectionAliases[id]
     : undefined
-  if (!alias) return { id, props: translateLegacyProps(id, props) }
+  if (!alias) return route(id, translateLegacyProps(id, props))
   const translated = translateLegacyProps(alias.target, props)
-  return { id: alias.target, props: alias.props ? alias.props(translated) : translated }
+  return route(alias.target, alias.props ? alias.props(translated) : translated)
 }
 
 export function isSitePageSectionId(id: string): id is SitePageSectionId {

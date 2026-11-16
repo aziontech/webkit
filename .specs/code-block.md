@@ -3,12 +3,12 @@ name: code-block
 category: code
 structure: monolithic
 status: implemented
-spec_version: 12
+spec_version: 13
 template: 2
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=4567-33761
   node_id: 4567:33761
-checksum: 023fd32eddbecd926621ab87f76acf3d7f4bfd697880722598018b8d733980eb
+checksum: 32e1554b78eeaa2cc3f5bb46ee265aae51896125aeea7e2149e9f7f589a4fe7a
 created: 2026-05-28
 last_updated: 2026-11-16
 ---
@@ -51,7 +51,7 @@ The other regions render conditionally from tab data. Tab header appears when `t
 ## When NOT to use
 
 - The content is build or deploy output with timestamps and log levels → use `log-viewer`.
-- It is a marketing band that pairs a claim with its code → use `media-split-section` with `codeTabs`, or `feature-scroll-section` with code items for several claims.
+- It is a marketing band that pairs a claim with its code → use `feature-scroll-section` with code items.
 - It is a terminal session of CLI commands on a product page → use `cli-terminal-section`.
 - You only need to copy one short value (a token, an ID) without showing a block → use `copy-button`.
 - The reader edits the new version beside the old one → use `code-editor` in diff mode. A read-only diff is always this block with `original`, never a read-only code editor.
@@ -61,7 +61,7 @@ The other regions render conditionally from tab data. Tab header appears when `t
 - `copy-button` — the copy control CodeBlock embeds; use it alone for one-line values.
 - `code-editor` — the editable surface; its diff mode is for editing beside an original, while a read-only diff is this block.
 - `log-viewer` — terminal-style viewer for CI and deploy logs.
-- `media-split-section` — page section that sets one claim beside a code sample (`codeTabs`).
+- `feature-scroll-section` — page section whose steps can each pin a code sample (`code`).
 - `scroll-area` — the scroll container the code region runs in.
 
 ## Best practices
