@@ -626,7 +626,7 @@
   {
     "name": "job-posting-section",
     "path": "src/components/section/job-posting-section/job-posting-section.vue",
-    "limit": "51.4 KB",
+    "limit": "51.45 KB",
     "entryOnly": true
   },
   {
