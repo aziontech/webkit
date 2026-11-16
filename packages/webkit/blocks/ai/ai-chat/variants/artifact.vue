@@ -2,106 +2,36 @@
   import ArtifactCanvas from '@aziontech/webkit/artifact-canvas'
   import ArtifactPreview from '@aziontech/webkit/artifact-preview'
   import Button from '@aziontech/webkit/button'
-  import ChatMessage, {
-    type ChatMessageFeedbackValue,
-    type ChatMessageStatus
-  } from '@aziontech/webkit/chat-message'
+  import ChatMessage, { type ChatMessageFeedbackValue } from '@aziontech/webkit/chat-message'
   import CodeBlock from '@aziontech/webkit/code-block'
   import Conversation from '@aziontech/webkit/conversation'
   import CopyButton from '@aziontech/webkit/copy-button'
   import DrawerContent from '@aziontech/webkit/drawer-content'
   import Drawer from '@aziontech/webkit/drawer-root'
   import DrawerTitle from '@aziontech/webkit/drawer-title'
-  import PromptInput, { type PromptInputStatus } from '@aziontech/webkit/prompt-input'
+  import PromptInput from '@aziontech/webkit/prompt-input'
   import Resizable from '@aziontech/webkit/resizable'
   import StreamingResponse from '@aziontech/webkit/streaming-response'
-  import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
+  import SuggestionGroup from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
-  import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref } from 'vue'
+  import { computed, nextTick, onBeforeUnmount, onMounted, ref } from 'vue'
 
-  interface Draft {
-    ask?: string
-    reply: string
-    sql: string
-  }
-
-  interface UserTurn {
-    id: number
-    from: 'user'
-    text: string
-    time: string
-  }
-
-  interface AssistantTurn {
-    id: number
-    from: 'assistant'
-    status: ChatMessageStatus
-    content: string
-    version: number
-    feedback: ChatMessageFeedbackValue | null
-    time: string
-    stopped?: boolean
-  }
-
-  type Turn = UserTurn | AssistantTurn
+  import { sampleArtifactFollowUps, sampleArtifactThread, sampleArtifactVersions } from '../sample'
 
   const ARTIFACT = 'top-orders.sql'
-  const drafts: Draft[] = [
-    {
-      ask: 'Write a query for the ten biggest orders',
-      reply: 'Here is a query for the ten biggest orders, newest total first.',
-      sql: 'SELECT id, customer_id, total\nFROM orders\nORDER BY total DESC\nLIMIT 10;'
-    },
-    {
-      ask: 'Only this week',
-      reply: 'Done. Version 2 keeps the orders of the last seven days.',
-      sql: "SELECT id, customer_id, total\nFROM orders\nWHERE created_at > now() - interval '7 days'\nORDER BY total DESC\nLIMIT 10;"
-    },
-    {
-      reply: 'Version 3 joins customers to show the email beside each order.',
-      sql: "SELECT o.id, c.email, o.total\nFROM orders AS o\nJOIN customers AS c ON c.id = o.customer_id\nWHERE o.created_at > now() - interval '7 days'\nORDER BY o.total DESC\nLIMIT 10;"
-    },
-    {
-      reply: 'Version 4 adds the number of items in each order.',
-      sql: "SELECT o.id, c.email, o.total, count(i.id) AS items\nFROM orders AS o\nJOIN customers AS c ON c.id = o.customer_id\nJOIN order_items AS i ON i.order_id = o.id\nWHERE o.created_at > now() - interval '7 days'\nGROUP BY o.id, c.email, o.total\nORDER BY o.total DESC\nLIMIT 10;"
-    }
-  ]
+  const turns = sampleArtifactThread
+  const versions = sampleArtifactVersions
+  const followUps = sampleArtifactFollowUps
 
-  const versions = ref(drafts.slice(0, 2).map((draft) => draft.sql))
-  const version = ref(1)
-  const generating = ref(false)
+  const version = ref(versions.length - 1)
   const canvasOpen = ref(true)
   const drawerOpen = ref(false)
   const width = ref(440)
   const paneCanvasEl = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
   const drawerCanvasEl = ref<InstanceType<typeof ArtifactCanvas> | null>(null)
   const prompt = ref('')
-  const state = ref<PromptInputStatus>('ready')
-  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
-
-  const turns = ref<Turn[]>(
-    drafts.slice(0, 2).flatMap((draft, index): Turn[] => [
-      { id: index * 2 + 1, from: 'user', text: draft.ask ?? '', time: `10:0${index * 2}` },
-      reactive<AssistantTurn>({
-        id: index * 2 + 2,
-        from: 'assistant',
-        status: 'success',
-        content: draft.reply,
-        version: index,
-        feedback: null,
-        time: `10:0${index * 2 + 1}`
-      })
-    ])
-  )
-  const followUps = computed<SuggestionGroupItem[]>(() =>
-    versions.value.length < drafts.length && state.value === 'ready'
-      ? [
-          { id: 'email', label: 'Show the customer email too' },
-          { id: 'items', label: 'Count the items of each order' }
-        ]
-      : []
-  )
-  const lines = computed(() => versions.value[version.value].split('\n').length)
+  const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
+  const lines = computed(() => versions[version.value].split('\n').length)
 
   const narrow = ref(false)
   let narrowQuery: MediaQueryList | null = null
@@ -141,68 +71,6 @@
         : globalThis.document?.querySelector<HTMLElement>('[data-artifact-open] button')
     opener?.focus()
   }
-
-  let nextId = turns.value.length + 1
-  let timer: ReturnType<typeof setTimeout> | undefined
-  const stopTimers = () => {
-    clearTimeout(timer)
-    clearInterval(timer)
-  }
-
-  function send(text: string) {
-    if (!text.trim() || state.value !== 'ready' || versions.value.length >= drafts.length) return
-    prompt.value = ''
-    const draft = drafts[versions.value.length]
-    turns.value.push({ id: nextId++, from: 'user', text, time: '10:12' })
-    const turn = reactive<AssistantTurn>({
-      id: nextId++,
-      from: 'assistant',
-      status: 'pending',
-      content: '',
-      version: versions.value.length,
-      feedback: null,
-      time: '10:13'
-    })
-    turns.value.push(turn)
-    state.value = 'pending'
-    generating.value = true
-    versions.value = [...versions.value, '']
-    version.value = turn.version
-    if (!narrow.value) canvasOpen.value = true
-    timer = setTimeout(() => {
-      turn.status = 'streaming'
-      state.value = 'streaming'
-      let index = 0
-      timer = setInterval(() => {
-        index = Math.min(draft.sql.length, index + 8)
-        versions.value[turn.version] = draft.sql.slice(0, index)
-        turn.content = draft.reply.slice(
-          0,
-          Math.ceil((index / draft.sql.length) * draft.reply.length)
-        )
-        if (index >= draft.sql.length) {
-          stopTimers()
-          turn.status = 'success'
-          state.value = 'ready'
-          generating.value = false
-          composerEl.value?.focus()
-        }
-      }, 40)
-    }, 900)
-  }
-
-  function stop() {
-    stopTimers()
-    const turn = turns.value[turns.value.length - 1]
-    if (turn?.from === 'assistant') {
-      turn.status = 'success'
-      turn.stopped = true
-    }
-    state.value = 'ready'
-    generating.value = false
-  }
-
-  onBeforeUnmount(stopTimers)
 </script>
 
 <template>
@@ -247,29 +115,22 @@
                 v-for="turn in turns"
                 :key="turn.id"
                 :from="turn.from"
-                :status="turn.from === 'user' ? 'success' : turn.status"
                 :timestamp="turn.time"
               >
-                <template v-if="turn.from === 'user'">{{ turn.text }}</template>
+                <template v-if="turn.from === 'user'">{{ turn.content }}</template>
                 <template v-else>
-                  <StreamingResponse
-                    :content="turn.content"
-                    :streaming="turn.status === 'streaming'"
-                  />
-                  <p
-                    v-if="turn.stopped"
-                    class="text-body-sm text-(--text-muted)"
+                  <StreamingResponse :content="turn.content" />
+                  <div
+                    v-if="turn.version !== undefined"
+                    data-artifact-open
                   >
-                    You stopped this response. The version keeps what was written.
-                  </p>
-                  <div data-artifact-open>
                     <ArtifactPreview
                       :title="ARTIFACT"
-                      :description="`Version ${turn.version + 1}`"
+                      :description="`Version ${(turn.version ?? 0) + 1}`"
                       meta="SQL"
                       icon="ai ai-code"
                       openable
-                      @open="((version = turn.version), openCanvas($event))"
+                      @open="((version = turn.version ?? 0), openCanvas($event))"
                     />
                   </div>
                 </template>
@@ -282,31 +143,25 @@
                       size="small"
                       :value="turn.content"
                     />
-                    <ChatMessage.Feedback v-model="turn.feedback" />
+                    <ChatMessage.Feedback v-model="ratings[turn.id]" />
                   </ChatMessage.Actions>
                 </template>
               </ChatMessage>
-              <div
-                v-if="followUps.length"
-                class="ps-[calc(2rem+var(--spacing-sm))]"
-              >
+              <div class="ps-[calc(2rem+var(--spacing-sm))]">
                 <SuggestionGroup
                   :items="followUps"
                   aria-label="Follow-up questions"
-                  @select="(_event, item) => send(item.label)"
+                  @select="(_event, item) => (prompt = item.label)"
                 />
               </div>
             </Conversation>
           </div>
           <footer class="layout-boundary-inline pb-(--spacing-md)">
             <PromptInput
-              ref="composerEl"
               v-model="prompt"
-              :status="state"
               :max-length="4000"
               placeholder="Ask for a change to the query"
-              @submit="(_event, { value }) => send(value)"
-              @stop="stop"
+              @submit="prompt = ''"
             >
               <template #hint>
                 The AI assistant can make mistakes. Check a query before you run it.
@@ -332,7 +187,6 @@
             :meta="`SQL · ${lines} lines`"
             type="code"
             :versions="versions.length"
-            :streaming="generating"
             :copy-value="versions[version]"
             :download-href="`data:application/sql;charset=utf-8,${encodeURIComponent(versions[version])}`"
             @close="closeCanvas"
@@ -364,7 +218,6 @@
           :meta="`SQL · ${lines} lines`"
           type="code"
           :versions="versions.length"
-          :streaming="generating"
           :copy-value="versions[version]"
           @close="closeCanvas"
         >

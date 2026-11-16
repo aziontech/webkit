@@ -6,7 +6,7 @@ This block is a page body: render it in the default slot of `ConsoleLayout` (`sh
 
 The run toast rides the app's one toast region, never the page's: the app installs `ToastPlugin` (`app.use(ToastPlugin, { position: 'bottom-right' })`) or mounts one `Toaster` near its root, beside `ConsoleLayout`, and this page body only imports `toast` from `@aziontech/webkit/toast`. A `Toaster` inside a page body is a second region for the whole app: only the first `Toaster` to mount is active, and it gives that up when it unmounts, so a page's copy is either inert or, when it mounted first, stops every toast once the user leaves the page, the opposite of a run toast that follows the user. The docs preview mounts one region around the block the way an app root does, so its frames show the toasts; a copy of the page shows them wherever the app has mounted the region.
 
-The toasts are raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the app's `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Error the permanent failure toast and Success the success toast; leaving the page dismisses the story's toast so the next story starts clean.
+The toasts are raised through `toast` with one id per run so each state replaces the last. Every outcome toast passes `actions: [{ label: 'Edit', onClick }, { label: 'Redeploy', onClick }]` and `closable: true`, so the app's `Toaster` renders both as `Toast.Action`s beside `Toast.Close`; the progress toast carries no action. The Running frame raises the progress toast, Error the permanent failure toast and Success the success toast; leaving the page dismisses the toast so the next story starts clean.
 
 ## When to use
 
@@ -26,7 +26,7 @@ The toasts are raised through `toast` with one id per run so each state replaces
 
 ### A. Actions — `Button` (required)
 
-**Deploy**, the `EmptyState` action, starts the run and shows `loading` while it runs; the outcome `Alert`s carry Edit and Redeploy.
+**Deploy**, the `EmptyState` action, emits `deploy`; the outcome `Alert`s carry Edit and Redeploy, which emit `edit` and `redeploy`, and the success `Alert` adds Open service.
 
 ### B. Page heading — `PageHeader` (required)
 
@@ -40,9 +40,62 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 
 `bordered`, the deploy glyph, a title, one sentence and **Deploy** as its only action. It gives way to the logs card once a run starts.
 
+### E. Outcome — `Alert` (error and success only)
+
+Under the heading, with a scale-in entrance: `severity="danger"` with the `error` text and Edit and Redeploy when the run failed, `severity="success"` naming the address and the attempts with Edit, Redeploy and Open service when it is live.
+
+### F. Deployment logs — `Card`, `StatusIndicator`, `LogViewer`, `ToggleGroup` (running and error only)
+
+A flush `Card` titled Deployment holding `LogViewer.Steps` over the `steps` prop. While the run is in flight the header carries a loading `StatusIndicator` (Building), the logs header counts the finished steps and names the running one, and a progress bar runs along the bottom edge. After a failure the header carries a `ToggleGroup` for the Phased or Complete view, the logs header a danger `Tag` naming the failed step, the failed step opens, and the skipped steps say where the run stopped.
+
+## Data
+
+The block takes the run through props and emits every action; it fetches nothing and runs no timer. `AsyncSubmitStep`, `AsyncSubmitDeployment` and `AsyncSubmitProps` are exported from `async-submit.vue`, and `sample.ts` holds the running and failed steps, the failure reason and the deployment the variants pass.
+
+| Prop           | Type                    | What it does                                                                                                |
+| -------------- | ----------------------- | ----------------------------------------------------------------------------------------------------------- |
+| `loading`      | `boolean`               | A run is in flight: the heading reads Deploying, the logs card streams and the progress toast shows.        |
+| `error`        | `string`                | Why the run failed, in the danger `Alert`; the heading reads Failed and the permanent failure toast shows.  |
+| `errorSummary` | `string`                | One line for the failure toast; left empty, the toast names the failed step.                                |
+| `deployment`   | `AsyncSubmitDeployment` | The finished run (`domain`, `attempts`): the heading reads Deployed and the success `Alert` and toast show. |
+| `steps`        | `AsyncSubmitStep[]`     | The steps of the current or the failed run, with their log lines; `[]` by default.                          |
+
+With none of them set the block is Idle. `loading` wins over `error`, and `error` over `deployment`, so a redeploy after a failure reads Deploying.
+
+| Event          | Payload   | When                                                   |
+| -------------- | --------- | ------------------------------------------------------ |
+| `deploy`       | `(event)` | Deploy in the idle `EmptyState`.                       |
+| `redeploy`     | `(event)` | Redeploy in an outcome `Alert` or toast.               |
+| `edit`         | `(event)` | Edit in an outcome `Alert` or toast; the toast closes. |
+| `open-service` | `(event)` | Open service in the success `Alert`.                   |
+
+To go live, keep the run in a store that outlives the page and pass its state:
+
+```vue
+<script setup lang="ts">
+  import AsyncSubmit from './async-submit.vue'
+
+  const run = useDeployRun('web-app')
+</script>
+
+<template>
+  <AsyncSubmit
+    :loading="run.running"
+    :error="run.error ?? ''"
+    :deployment="run.deployment"
+    :steps="run.steps"
+    @deploy="run.start"
+    @redeploy="run.start"
+    @edit="openSettings"
+  />
+</template>
+```
+
+Then delete `sample.ts`; the variants are the only files that import it.
+
 ## Do
 
-- Keep the run, its timer and its outcome outside the page component (a small module-scope store), so leaving the page never cancels it or loses the result.
+- Keep the run and its outcome outside the page component (a small module-scope store) and pass its state in, so leaving the page never cancels it or loses the result.
 - Show progress as a `loading` toast (no duration, not closable) that follows the user through the app while the run lasts.
 - Report the end wherever the user is, on success and on failure. A failure toast is permanent (`duration: 0`) and `closable`; a success toast is `closable` with the default 6 second duration.
 - Raise the toasts through `toast` only; the app mounts the region once (`ToastPlugin` or one `Toaster` at its root), so the page body never renders a `Toaster`.
@@ -82,10 +135,10 @@ In the heading: `Idle` (`secondary`), `Deploying` (`info`), `Failed` (`danger`),
 
 ## States
 
-- Idle: nothing running; the heading reads Idle and the `EmptyState` offers Deploy.
-- Running: mid-run; the heading reads Deploying, the logs card streams under the Building status and the progress toast reads `Deploying web-app…`.
-- Error: the routing rules were refused; the heading reads Failed, the danger `Alert` carries the reason with Edit and Redeploy, the permanent failure toast carries the same two actions, and the logs stay open on the failed step.
-- Success: the run is live; the heading reads Deployed, the success `Alert` names the new address with Edit, Redeploy and Open service, the success toast carries Edit and Redeploy, and the logs card is gone.
+- Idle: no prop set, nothing running; the heading reads Idle and the `EmptyState` offers Deploy.
+- Running: `loading` with the running `steps`; the heading reads Deploying, the logs card streams under the Building status and the progress toast reads `Deploying web-app…`.
+- Error: `error` and the failed `steps`, the routing rules were refused; the heading reads Failed, the danger `Alert` carries the reason with Edit and Redeploy, the permanent failure toast carries the same two actions, and the logs stay open on the failed step.
+- Success: `deployment` is set, the run is live; the heading reads Deployed, the success `Alert` names the new address with Edit, Redeploy and Open service, the success toast carries Edit and Redeploy, and the logs card is gone.
 
 ## Related
 

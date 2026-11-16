@@ -14,214 +14,117 @@
   import StreamingResponse from '@aziontech/webkit/streaming-response'
   import SuggestionGroup, { type SuggestionGroupItem } from '@aziontech/webkit/suggestion-group'
   import Tag from '@aziontech/webkit/tag'
-  import { useLocale } from '@aziontech/webkit/use-locale'
-  import { computed, onBeforeUnmount, reactive, ref } from 'vue'
+  import { computed, ref, watch } from 'vue'
 
-  interface Answer {
-    reasoning: string
+  import { sampleSuggestions } from './sample'
+
+  /** Who wrote a message. */
+  export type AiChatAuthor = 'user' | 'assistant'
+
+  /** One message of the conversation. */
+  export interface AiChatMessage {
+    /** Stable key. */
+    id: string
+    /** The reader or the assistant. */
+    from: AiChatAuthor
+    /** Plain text for the reader; Markdown for the assistant, as much as has arrived. */
     content: string
-    sources: SourcesItem[]
-    followUps: SuggestionGroupItem[]
-  }
-
-  interface UserTurn {
-    id: number
-    from: 'user'
-    text: string
+    /** When it was written, already formatted. */
     time: string
-    error?: string
-  }
-
-  interface AssistantTurn {
-    id: number
-    from: 'assistant'
-    status: ChatMessageStatus
-    content: string
-    thinking: boolean
-    answer: Answer
-    feedback: ChatMessageFeedbackValue | null
-    time: string
-    error?: string
+    /** How the assistant reached the answer, in the collapsible Reasoning. */
+    reasoning?: string
+    /** How long the assistant thought, in seconds, shown once it answers. */
+    reasoningSeconds?: number
+    /** The documents the answer cites, numbered in order. */
+    sources?: SourcesItem[]
+    /** The reader stopped this response; what was written stays. */
     stopped?: boolean
   }
 
-  type Turn = UserTurn | AssistantTurn
-
-  const supportPrompts: SuggestionGroupItem[] = [
-    { id: 'purge', label: 'How do I purge the cache of one URL?', icon: 'ai ai-bolt' },
-    {
-      id: 'errors',
-      label: 'Why is storefront answering with 502 errors?',
-      icon: 'ai ai-triangle-alert'
-    },
-    { id: 'deploy', label: 'Deploy a Next.js app from GitHub', icon: 'ai ai-github' },
-    { id: 'waf', label: 'Protect my site with a WAF', icon: 'ai ai-shield' }
-  ]
-
-  const turns = ref<Turn[]>([])
-  const state = ref<PromptInputStatus>('ready')
-  const prompt = ref('')
-  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
-
-  const knowledge: Record<'cache' | 'errors', Answer> = {
-    cache: {
-      reasoning:
-        'The question is about one URL, so a full purge would be too broad. Real-Time Purge by URL is the narrowest option, and the CLI does the same from a terminal.',
-      content: [
-        'Use **Real-Time Purge** with the *URL* type. It removes one object from every edge location in a few seconds [1].',
-        '',
-        '1. Open Real-Time Purge from the products menu.',
-        '2. Choose **URL** and paste the address.',
-        '3. Select Purge.',
-        '',
-        'The same purge from the Azion CLI [2]:',
-        '',
-        '```bash',
-        'azion purge urls --urls https://www.example.com/styles.css',
-        '```'
-      ].join('\n'),
-      sources: [
-        {
-          title: 'Real-Time Purge',
-          href: 'https://www.azion.com/en/documentation/',
-          description: 'Azion documentation · Cache'
-        },
-        {
-          title: 'Azion CLI: purge',
-          href: 'https://www.azion.com/en/documentation/',
-          description: 'Azion documentation · CLI'
-        }
-      ],
-      followUps: [
-        { id: 'wildcard', label: 'How do I purge a whole folder?' },
-        { id: 'ttl', label: 'What TTL should my images use?' },
-        { id: 'origin', label: 'Why does my origin still get requests?' }
-      ]
-    },
-    errors: {
-      reasoning:
-        'The reader asks about errors on storefront. The error rate rose at 14:05; the certificate of the origin expired at the same minute.',
-      content: [
-        'The **502** responses on storefront started at 14:05, when the TLS certificate of the origin `api.example.com` expired [1].',
-        '',
-        '| Time | 5xx rate | Cause |',
-        '| --- | --- | --- |',
-        '| 14:00 | 0.1% | — |',
-        '| 14:05 | 38% | Origin certificate expired |',
-        '',
-        'Renew the certificate at the origin, or let the origin accept plain HTTP from the edge while you renew it.'
-      ].join('\n'),
-      sources: [
-        {
-          title: 'Troubleshooting 502 responses',
-          href: 'https://www.azion.com/en/documentation/',
-          description: 'Azion documentation · Observe'
-        }
-      ],
-      followUps: [
-        { id: 'renew', label: 'How do I renew the origin certificate?' },
-        { id: 'alert', label: 'Alert me when the error rate goes over 5%' }
-      ]
-    }
+  /** A rating the reader gave an answer. */
+  export interface AiChatFeedback {
+    /** The rated answer. */
+    message: AiChatMessage
+    /** Helpful, not helpful, or cleared. */
+    value: ChatMessageFeedbackValue | null
   }
 
-  function answerFor(text: string): Answer {
-    return /error|502|5xx|fail/i.test(text) ? knowledge.errors : knowledge.cache
+  export interface AiChatProps {
+    /** The conversation, oldest first. Left out or empty, the empty state with the suggestions renders. */
+    messages?: AiChatMessage[]
+    /** Starter prompts under the empty state. Left out, the sample prompts render. */
+    suggestions?: SuggestionGroupItem[]
+    /** Follow-up questions shown under the last finished answer. */
+    followUps?: SuggestionGroupItem[]
+    /** The assistant is answering: the last assistant message thinks while empty, then streams. */
+    loading?: boolean
+    /** Why the last answer failed, shown on it with Try again. */
+    error?: string
   }
 
-  const { formatDate } = useLocale()
-
-  function clock(): string {
-    return formatDate(new Date(), { hour: '2-digit', minute: '2-digit' })
-  }
-
-  let nextId = turns.value.length + 1
-  let timer: ReturnType<typeof setTimeout> | undefined
-
-  function stopTimers() {
-    clearTimeout(timer)
-    clearInterval(timer)
-  }
-
-  function stream(turn: AssistantTurn) {
-    const full = turn.answer.content
-    turn.status = 'streaming'
-    state.value = 'streaming'
-    let index = turn.content.length
-    timer = setInterval(() => {
-      index = Math.min(full.length, index + 6)
-      turn.content = full.slice(0, index)
-      if (index >= full.length) finish(turn)
-    }, 30)
-  }
-
-  function finish(turn: AssistantTurn) {
-    stopTimers()
-    turn.status = 'success'
-    turn.thinking = false
-    state.value = 'ready'
-    composerEl.value?.focus()
-  }
-
-  function respond(turn: AssistantTurn) {
-    turn.status = 'pending'
-    turn.thinking = true
-    turn.content = ''
-    state.value = 'pending'
-    timer = setTimeout(() => {
-      turn.thinking = false
-      stream(turn)
-    }, 1400)
-  }
-
-  function send(text: string) {
-    if (!text.trim() || state.value !== 'ready') return
-    prompt.value = ''
-    turns.value.push({ id: nextId++, from: 'user', text, time: clock() })
-    const turn = reactive<AssistantTurn>({
-      id: nextId++,
-      from: 'assistant',
-      status: 'pending',
-      content: '',
-      thinking: true,
-      answer: answerFor(text),
-      feedback: null,
-      time: clock()
-    })
-    turns.value.push(turn)
-    respond(turn)
-  }
-
-  function stop() {
-    stopTimers()
-    const turn = turns.value[turns.value.length - 1]
-    if (turn?.from === 'assistant') {
-      turn.status = 'success'
-      turn.thinking = false
-      turn.stopped = true
-    }
-    state.value = 'ready'
-  }
-
-  function retry(turn: Turn) {
-    if (turn.from !== 'assistant') return
-    turn.stopped = false
-    respond(turn)
-  }
-
-  function newChat() {
-    stopTimers()
-    turns.value = []
-    state.value = 'ready'
-    prompt.value = ''
-  }
-
-  const lastAnswer = computed(() => {
-    const turn = turns.value[turns.value.length - 1]
-    return turn?.from === 'assistant' && turn.status === 'success' && !turn.stopped ? turn : null
+  const props = withDefaults(defineProps<AiChatProps>(), {
+    messages: undefined,
+    suggestions: undefined,
+    followUps: undefined,
+    loading: false,
+    error: ''
   })
 
-  onBeforeUnmount(stopTimers)
+  const emit = defineEmits<{
+    send: [event: MouseEvent | KeyboardEvent, text: string]
+    stop: [event: MouseEvent]
+    retry: [event: MouseEvent, message: AiChatMessage]
+    'new-chat': [event: MouseEvent]
+    feedback: [feedback: AiChatFeedback]
+  }>()
+
+  const prompt = ref('')
+  const composerEl = ref<InstanceType<typeof PromptInput> | null>(null)
+  const ratings = ref<Record<string, ChatMessageFeedbackValue | null>>({})
+
+  const turns = computed(() => props.messages ?? [])
+  const starters = computed(() => props.suggestions ?? sampleSuggestions)
+  const last = computed(() => turns.value[turns.value.length - 1])
+
+  function statusOf(turn: AiChatMessage): ChatMessageStatus {
+    if (turn.from === 'user' || turn !== last.value) return 'success'
+    if (props.error) return 'error'
+    if (props.loading) return turn.content ? 'streaming' : 'pending'
+    return 'success'
+  }
+
+  const state = computed<PromptInputStatus>(() => {
+    if (!props.loading) return 'ready'
+    return last.value?.from === 'assistant' && !last.value.content ? 'pending' : 'streaming'
+  })
+
+  const lastAnswer = computed(() => {
+    const turn = last.value
+    return turn?.from === 'assistant' && statusOf(turn) === 'success' && !turn.stopped ? turn : null
+  })
+
+  watch(
+    () => props.loading,
+    (now, before) => {
+      if (before && !now) composerEl.value?.focus()
+    }
+  )
+
+  function send(event: MouseEvent | KeyboardEvent, text: string) {
+    if (!text.trim() || state.value !== 'ready') return
+    prompt.value = ''
+    emit('send', event, text)
+  }
+
+  function newChat(event: MouseEvent) {
+    prompt.value = ''
+    emit('new-chat', event)
+  }
+
+  function rate(message: AiChatMessage, value: ChatMessageFeedbackValue | null) {
+    ratings.value[message.id] = value
+    emit('feedback', { message, value })
+  }
 </script>
 
 <template>
@@ -265,9 +168,9 @@
           icon="ai ai-ask-azion"
         />
         <SuggestionGroup
-          :items="supportPrompts"
+          :items="starters"
           orientation="vertical"
-          @select="(_event, item) => send(item.label)"
+          @select="(event, item) => send(event, item.label)"
         />
       </div>
       <Conversation
@@ -278,23 +181,24 @@
           v-for="turn in turns"
           :key="turn.id"
           :from="turn.from"
-          :status="turn.from === 'user' ? 'success' : turn.status"
+          :status="statusOf(turn)"
           :timestamp="turn.time"
-          :error-message="turn.error"
-          @retry="retry(turn)"
+          :error-message="statusOf(turn) === 'error' ? error : undefined"
+          @retry="emit('retry', $event, turn)"
         >
-          <template v-if="turn.from === 'user'">{{ turn.text }}</template>
+          <template v-if="turn.from === 'user'">{{ turn.content }}</template>
           <template v-else>
             <Reasoning
-              :streaming="turn.thinking"
-              :duration="turn.thinking ? undefined : 2"
+              v-if="turn.reasoning"
+              :streaming="statusOf(turn) === 'pending'"
+              :duration="statusOf(turn) === 'pending' ? undefined : turn.reasoningSeconds"
             >
-              <p>{{ turn.answer.reasoning }}</p>
+              <p>{{ turn.reasoning }}</p>
             </Reasoning>
             <StreamingResponse
               :content="turn.content"
-              :streaming="turn.status === 'streaming'"
-              :sources="turn.answer.sources"
+              :streaming="statusOf(turn) === 'streaming'"
+              :sources="turn.sources ?? []"
               :anchor="`answer-${turn.id}`"
             />
             <p
@@ -304,8 +208,8 @@
               You stopped this response.
             </p>
             <Sources
-              v-if="turn.status === 'success' && !turn.stopped"
-              :items="turn.answer.sources"
+              v-if="statusOf(turn) === 'success' && !turn.stopped"
+              :items="turn.sources ?? []"
               :anchor="`answer-${turn.id}`"
             />
           </template>
@@ -324,20 +228,23 @@
                 variant="ghost"
                 size="small"
                 :disabled="state !== 'ready'"
-                @click="retry(turn)"
+                @click="emit('retry', $event, turn)"
               />
-              <ChatMessage.Feedback v-model="turn.feedback" />
+              <ChatMessage.Feedback
+                :model-value="ratings[turn.id] ?? null"
+                @update:model-value="(value) => rate(turn, value)"
+              />
             </ChatMessage.Actions>
           </template>
         </ChatMessage>
         <div
-          v-if="lastAnswer"
+          v-if="lastAnswer && followUps?.length"
           class="ps-[calc(2rem+var(--spacing-sm))]"
         >
           <SuggestionGroup
-            :items="lastAnswer.answer.followUps"
+            :items="followUps"
             aria-label="Follow-up questions"
-            @select="(_event, item) => send(item.label)"
+            @select="(event, item) => send(event, item.label)"
           />
         </div>
       </Conversation>
@@ -348,8 +255,8 @@
         v-model="prompt"
         :status="state"
         :max-length="4000"
-        @submit="(_event, { value }) => send(value)"
-        @stop="stop"
+        @submit="(event, { value }) => send(event, value)"
+        @stop="emit('stop', $event)"
       >
         <template #hint>
           The AI assistant can make mistakes. Check important information before you act on it.

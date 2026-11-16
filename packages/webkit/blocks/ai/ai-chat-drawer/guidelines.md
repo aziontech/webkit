@@ -54,6 +54,52 @@ After the last complete response, aligned with its text.
 
 At the foot of the drawer above a divider: four rows at most, a placeholder that names the resource, Stop while generating, and the short disclaimer as its hint.
 
+## Data
+
+The block takes the conversation through props and emits every action; it calls no model. `AiChatDrawerMessage`, `AiChatDrawerProps` and `AiChatDrawerFeedback` are exported from `ai-chat-drawer.vue`, and `sample.ts` holds the starter prompts the empty state renders when `suggestions` is left out, plus the sample threads the variants pass. The draft in the composer stays local.
+
+| Prop           | Type                    | What it does                                                                                                                                |
+| -------------- | ----------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `messages`     | `AiChatDrawerMessage[]` | The conversation, oldest first: the reader's text, the assistant's Markdown with its reasoning and sources. Empty, the empty state renders. |
+| `suggestions`  | `SuggestionGroupItem[]` | The starter prompts under the empty state.                                                                                                  |
+| `followUps`    | `SuggestionGroupItem[]` | Follow-up questions under the last finished answer.                                                                                         |
+| `loading`      | `boolean`               | The assistant is answering: the last assistant message thinks while its `content` is empty, then streams; the composer shows Stop.          |
+| `error`        | `string`                | Why the last answer failed, shown on it with Try again; its partial text stays.                                                             |
+| `v-model:open` | `boolean`               | Whether the drawer is open (open by default); Agent opens it and its close button closes it.                                                |
+
+| Event      | Payload                | When                                                                                      |
+| ---------- | ---------------------- | ----------------------------------------------------------------------------------------- |
+| `send`     | `(event, text)`        | The composer, a starter prompt or a follow-up; append the reader's message and the reply. |
+| `stop`     | `(event)`              | Stop while the answer streams; keep the text and set `stopped` on it.                     |
+| `retry`    | `(event, message)`     | Try again on a failed answer or Regenerate response.                                      |
+| `new-chat` | `(event)`              | New chat; clear `messages`.                                                               |
+| `feedback` | `({ message, value })` | The reader rated an answer.                                                               |
+
+To go live, render the block from a page that owns the conversation and the model call:
+
+```vue
+<script setup lang="ts">
+  import AiChatDrawer from './ai-chat-drawer.vue'
+
+  const { messages, streaming, error, send, stop, retry, reset } = useAssistant()
+  const failed = 'The connection was interrupted before the response finished.'
+</script>
+
+<template>
+  <AiChatDrawer
+    :messages="messages"
+    :loading="streaming"
+    :error="error ? failed : ''"
+    @send="(_event, text) => send(text)"
+    @stop="stop"
+    @retry="(_event, message) => retry(message)"
+    @new-chat="reset"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Write support prompts and the placeholder about the resource on screen.
@@ -87,10 +133,10 @@ At the foot of the drawer above a divider: four rows at most, a placeholder that
 
 ## States
 
-- Empty: the drawer open on the empty state with three support prompts about storefront.
-- Streaming: a response streaming in about the errors of the workload behind the drawer.
-- Error: a failed response with its partial text and Try again.
-- LongThread: six earlier turns that overflow the drawer's log.
+- Empty: the drawer open with `messages` left out, on the empty state with three support prompts about storefront.
+- Streaming: `loading` with a response part-way written about the errors of the workload behind the drawer.
+- Error: `error` set: a failed response with its partial text and Try again.
+- LongThread: six earlier turns as `messages` that overflow the drawer's log.
 
 ## Related
 

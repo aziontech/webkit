@@ -21,15 +21,74 @@
   import Skeleton from '@aziontech/webkit/skeleton'
   import Switch from '@aziontech/webkit/switch'
   import Tooltip from '@aziontech/webkit/tooltip'
-  import { nextTick, onMounted, reactive, ref } from 'vue'
+  import { computed, nextTick, onMounted, reactive, ref, watch } from 'vue'
+
+  import { sampleOriginError, sampleOrigins } from '../sample'
+
+  /** One origin the Origin select offers. */
+  export interface FormValidationOrigin {
+    /** Option value, the origin id. */
+    value: string
+    /** Display name. */
+    label: string
+    /** Origin type, such as HTTP or Storage. */
+    kind: string
+  }
+
+  /** The entries of the Create Service form, and the values a save sends. */
+  export interface FormValidationService {
+    /** Service name. */
+    name: string
+    /** Protocol usage option value. */
+    protocolUsage: string
+    /** HTTP port option values. */
+    httpPorts: string[]
+    /** Compress responses. */
+    compression: boolean
+    /** Limit requests per client. */
+    rateLimiting: boolean
+    /** Optimize images on the fly. */
+    imageOptimization: boolean
+    /** Add a second caching layer. */
+    secondaryCache: boolean
+    /** The linked origin id. */
+    originId: string
+    /** Host header sent to the origin. */
+    hostHeader: string
+    /** Browser maximum TTL, in seconds. */
+    browserMaxTtl: number
+    /** Cache maximum TTL, in seconds. */
+    cacheMaxTtl: number
+    /** List executed rules in the logs. */
+    debugRules: boolean
+  }
+
+  export interface FormValidationSectionProps {
+    /** The origins the select offers; a chosen origin missing from the list is cleared and flagged required. Left out, the sample renders. */
+    origins?: FormValidationOrigin[]
+    /** Why the server refused the save; the danger Alert under the Origin heading says it and the select turns invalid. Left out, the sample message renders; pass an empty string for none. */
+    originError?: string
+    /** Reload origins is in flight: its button spins, a Skeleton replaces the select and Save is disabled. */
+    reloading?: boolean
+    /** The save request is in flight: Save spins and the fields are disabled. */
+    submitting?: boolean
+  }
+
+  const props = withDefaults(defineProps<FormValidationSectionProps>(), {
+    origins: undefined,
+    originError: undefined,
+    reloading: false,
+    submitting: false
+  })
+
+  const emit = defineEmits<{
+    submit: [event: Event, values: FormValidationService]
+    cancel: [event: MouseEvent]
+    'reload-origins': [event: MouseEvent]
+  }>()
 
   const breadcrumb = [{ label: 'Services', href: '/services' }, { label: 'Create Service' }]
 
-  const catalog = [
-    { value: 'origin-web-prod', label: 'web-origin-prod', kind: 'HTTP' },
-    { value: 'origin-api-prod', label: 'api-origin-prod', kind: 'HTTP' },
-    { value: 'origin-assets', label: 'assets-storage', kind: 'Storage' }
-  ]
   const protocolUsageOptions = [
     {
       value: 'http',
@@ -55,13 +114,9 @@
     { label: '8008', value: '8008' }
   ]
 
-  const serverOrigins = ref(['origin-api-prod', 'origin-assets'])
-  const origins = ref([
-    { value: 'origin-web-prod', label: 'web-origin-prod', kind: 'HTTP' },
-    { value: 'origin-api-prod', label: 'api-origin-prod', kind: 'HTTP' },
-    { value: 'origin-assets', label: 'assets-storage', kind: 'Storage' }
-  ])
-  const form = reactive({
+  const origins = computed<FormValidationOrigin[]>(() => props.origins ?? sampleOrigins)
+  const rejection = computed(() => props.originError ?? sampleOriginError)
+  const form = reactive<FormValidationService>({
     name: 'checkout-web',
     protocolUsage: 'https',
     httpPorts: ['80'],
@@ -78,14 +133,10 @@
   const errors = reactive({
     name: '',
     httpPorts: '',
-    originId: 'This origin no longer exists.',
+    originId: '',
     hostHeader: ''
   })
-  const originError = ref(
-    'Origin "web-origin-prod" no longer exists. Another user deleted it while you were filling in this form, so the service wasn\'t created. Nothing else was lost: reload the origin list and select another one.'
-  )
-  const submitting = ref(false)
-  const reloadingOrigins = ref(false)
+  const alertMessage = ref('')
 
   const originLabel = (value: string) =>
     origins.value.find((origin) => origin.value === value)?.label ?? ''
@@ -94,44 +145,6 @@
     (values ?? [])
       .map((value) => httpPortOptions.find((option) => option.value === value)?.label ?? value)
       .join(', ')
-
-  const reloadOrigins = () => {
-    if (reloadingOrigins.value) return
-    reloadingOrigins.value = true
-    setTimeout(() => {
-      origins.value = catalog.filter((origin) => serverOrigins.value.includes(origin.value))
-      if (!serverOrigins.value.includes(form.originId)) {
-        form.originId = ''
-        errors.originId = 'Select an origin to continue.'
-      }
-      originError.value = ''
-      reloadingOrigins.value = false
-    }, 800)
-  }
-
-  const onOriginChange = () => {
-    errors.originId = ''
-    originError.value = ''
-  }
-
-  const validate = () => {
-    errors.name = form.name.trim() ? '' : 'Name is required.'
-    errors.httpPorts = form.httpPorts.length ? '' : 'Select at least one HTTP port.'
-    errors.originId = form.originId ? '' : 'Select an origin.'
-    errors.hostHeader = form.hostHeader.trim() ? '' : 'Host header is required.'
-    return !errors.name && !errors.httpPorts && !errors.originId && !errors.hostHeader
-  }
-
-  const submit = () => {
-    if (submitting.value || reloadingOrigins.value) return
-    originError.value = ''
-    if (!validate()) return
-    if (!serverOrigins.value.includes(form.originId)) {
-      originError.value = `Origin "${originLabel(form.originId)}" no longer exists. Another user deleted it while you were filling in this form, so the service wasn't created. Nothing else was lost: reload the origin list and select another one.`
-      errors.originId = 'This origin no longer exists.'
-      focusOrigin()
-    }
-  }
 
   const focusOrigin = async () => {
     await nextTick()
@@ -142,7 +155,58 @@
     document.getElementById('ev-origin')?.focus({ preventScroll: true })
   }
 
-  onMounted(focusOrigin)
+  watch(
+    rejection,
+    (next) => {
+      alertMessage.value = next
+      if (next) errors.originId = 'This origin no longer exists.'
+    },
+    { immediate: true }
+  )
+
+  watch(
+    origins,
+    (next) => {
+      if (form.originId && !next.some((origin) => origin.value === form.originId)) {
+        form.originId = ''
+        errors.originId = 'Select an origin to continue.'
+      }
+    },
+    { immediate: true }
+  )
+
+  watch(rejection, (next) => {
+    if (next && !props.reloading) focusOrigin()
+  })
+
+  onMounted(() => {
+    if (alertMessage.value && !props.reloading) focusOrigin()
+  })
+
+  const reloadOrigins = (event: MouseEvent) => {
+    if (props.reloading) return
+    emit('reload-origins', event)
+  }
+
+  const onOriginChange = () => {
+    errors.originId = ''
+    alertMessage.value = ''
+  }
+
+  const validate = () => {
+    errors.name = form.name.trim() ? '' : 'Name is required.'
+    errors.httpPorts = form.httpPorts.length ? '' : 'Select at least one HTTP port.'
+    errors.originId = form.originId ? '' : 'Select an origin.'
+    errors.hostHeader = form.hostHeader.trim() ? '' : 'Host header is required.'
+    return !errors.name && !errors.httpPorts && !errors.originId && !errors.hostHeader
+  }
+
+  const submit = (event: Event) => {
+    if (props.submitting || props.reloading) return
+    alertMessage.value = ''
+    if (!validate()) return
+    emit('submit', event, { ...form, httpPorts: [...form.httpPorts] })
+  }
 
   const account = { name: 'Amy Chen', email: 'amy.chen@example.com' }
 </script>
@@ -441,17 +505,17 @@
                         leave-from-class="translate-y-0 opacity-100"
                         leave-to-class="-translate-y-2 opacity-0"
                       >
-                        <div v-if="originError">
+                        <div v-if="alertMessage">
                           <Alert
                             severity="danger"
-                            :label="originError"
+                            :label="alertMessage"
                           >
                             <template #actions>
                               <Button
                                 label="Reload origins"
                                 variant="secondary"
                                 size="medium"
-                                :loading="reloadingOrigins"
+                                :loading="reloading"
                                 @click="reloadOrigins"
                               />
                             </template>
@@ -472,7 +536,7 @@
                       <div class="flex w-full items-center justify-end gap-(--spacing-xs)">
                         <div class="flex w-full flex-col gap-(--spacing-xs)">
                           <Skeleton
-                            v-if="reloadingOrigins"
+                            v-if="reloading"
                             variant="rectangle"
                             width="100%"
                             height="var(--size-10)"
@@ -616,13 +680,14 @@
               variant="outline"
               size="medium"
               :disabled="submitting"
+              @click="emit('cancel', $event)"
             />
             <Button
               label="Save"
               variant="primary"
               size="medium"
               :loading="submitting"
-              :disabled="reloadingOrigins"
+              :disabled="reloading"
               type="submit"
             />
           </template>

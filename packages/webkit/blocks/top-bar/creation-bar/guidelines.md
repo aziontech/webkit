@@ -40,6 +40,48 @@ The signed-in user, inside a button labelled `Account menu` that opens the accou
 
 Names the icon-only back link with the same text as its `aria-label` (`Back to Resources`).
 
+## Data
+
+The block fetches nothing; it takes the signed-in user and the way out through props and emits the menu choice. `CreationBarAccount`, `CreationBarCrumb` and `CreationBarProps` are exported from `creation-bar.vue`, and `sample.ts` holds the sample user the bar renders when `account` is left out.
+
+| Prop         | Type                 | What it does                                                                    |
+| ------------ | -------------------- | ------------------------------------------------------------------------------- |
+| `account`    | `CreationBarAccount` | The signed-in user: the avatar initials and the name and email in the menu.     |
+| `backHref`   | `string`             | Where the back control goes (`/resources`); empty hides it on terminal screens. |
+| `backLabel`  | `string`             | The back control's name and tooltip (`Back to Resources`).                      |
+| `homeHref`   | `string`             | Where the brand goes (`/home`).                                                 |
+| `breadcrumb` | `CreationBarCrumb[]` | The trail beside the brand (`Resources › Create Resource`); `[]` hides it.      |
+
+| Event            | Payload          | When                                                                |
+| ---------------- | ---------------- | ------------------------------------------------------------------- |
+| `account-select` | `(event, value)` | Account settings (`settings`), Docs (`docs`) or Log out (`logout`). |
+| `navigate`       | `(event, href)`  | A crumb link was activated; call `preventDefault` to route in-app.  |
+
+To go live, pass the session's user and the list the flow started from:
+
+```vue
+<script setup lang="ts">
+  import CreationBar from './creation-bar.vue'
+
+  const { user, signOut } = useSession()
+  const onAccount = (event: Event, value: unknown) => {
+    if (value === 'logout') signOut()
+  }
+</script>
+
+<template>
+  <CreationBar
+    :account="{ name: user.name, email: user.email }"
+    back-href="/domains"
+    back-label="Back to Domains"
+    :breadcrumb="[{ label: 'Domains', href: '/domains' }, { label: 'Create Domain' }]"
+    @account-select="onAccount"
+  />
+</template>
+```
+
+Then delete `sample.ts` and its import.
+
 ## Do
 
 - Wire the back button and the crumb links to the same place the user came from.
@@ -66,9 +108,9 @@ Names the icon-only back link with the same text as its `aria-label` (`Back to R
 
 ## States
 
-- Default: back button, brand, breadcrumb to the list, and the avatar.
-- CreateHub: the back control returns Home and the crumb is the single current page.
-- Terminal: provisioning and success screens keep only the brand and the avatar, with no back control and no crumb.
+- Default: back button, brand, breadcrumb to the list, and the avatar of `account`.
+- CreateHub: `back-href="/home"` and `back-label="Back to Home"` return Home, and `breadcrumb` is the single current page.
+- Terminal: `back-href=""` and `:breadcrumb="[]"` keep only the brand and the avatar on the provisioning and success screens, with no back control and no crumb.
 
 ## Related
 

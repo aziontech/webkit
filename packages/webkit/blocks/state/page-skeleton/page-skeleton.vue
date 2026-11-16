@@ -3,6 +3,15 @@
   import Item from '@aziontech/webkit/item'
   import Skeleton from '@aziontech/webkit/skeleton'
 
+  export interface PageSkeletonProps {
+    /** What is loading, read by screen readers from the status region. */
+    label?: string
+  }
+
+  withDefaults(defineProps<PageSkeletonProps>(), {
+    label: 'Loading the overview.'
+  })
+
   const panels = [1, 2, 3, 4]
 </script>
 
@@ -13,7 +22,7 @@
     aria-busy="true"
     class="layout-column layout-boundary relative flex min-h-full flex-col justify-center xl:h-full xl:min-h-0 xl:justify-start"
   >
-    <span class="sr-only">Loading the overview.</span>
+    <span class="sr-only">{{ label }}</span>
     <div
       class="flex flex-col gap-(--layout-boundary-start) xl:min-h-0 xl:flex-1"
       aria-hidden="true"

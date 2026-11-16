@@ -38,6 +38,7 @@
     "name": "Default",
     "file": "creation-bar.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "CreateHub",

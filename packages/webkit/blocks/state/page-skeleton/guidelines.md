@@ -33,6 +33,35 @@ The same `Card` frames, with the same `:padded="false"` and inner padding as the
 
 Panels of rows use `Item.List` with `Item size="small"` and `Item.Content`, the same row height the real list renders, with a band per row.
 
+## Data
+
+The wire shows no records and fetches nothing: the page renders it while its own request is pending and swaps in the real page when the data lands. `PageSkeletonProps` is exported from `page-skeleton.vue`.
+
+| Prop    | Type     | What it does                                                                                      |
+| ------- | -------- | ------------------------------------------------------------------------------------------------- |
+| `label` | `string` | What is loading, the screen-reader text of the status region; `Loading the overview.` by default. |
+
+The wire emits no events. To go live, render it in place of the page while the page's request is pending:
+
+```vue
+<script setup lang="ts">
+  import PageSkeleton from './page-skeleton.vue'
+
+  const { data, pending } = useOverview()
+</script>
+
+<template>
+  <PageSkeleton
+    v-if="pending && !data"
+    label="Loading the overview."
+  />
+  <HomeOverview
+    v-else
+    :overview="data"
+  />
+</template>
+```
+
 ## Do
 
 - Draw the exact grid of the page that is coming: same columns, gaps and breakpoints.
@@ -64,7 +93,7 @@ Panels of rows use `Item.List` with `Item size="small"` and `Item.Content`, the 
 
 ## States
 
-- Overview: the Home overview wire: heading, the four-metric strip, the side card, and the five-column row of list panels.
+- Overview: the primary, its `label` naming what loads; the Home overview wire: heading, the four-metric strip, the side card, and the five-column row of list panels.
 - Onboarding: the first-access Home wire: headline and prompt bands over three door cards, each with its illustration stage, three text lines and an action.
 - Session: the whole shell as a wire over a list page: header bar, navigation rail with grouped items, the list controls row and a table card with header, eight rows and pagination.
 - SessionDetail: the same over a detail page: tab bands under the header, a heading and two cards of field rows in the data column.

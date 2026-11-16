@@ -2,6 +2,29 @@
   import Button from '@aziontech/webkit/button'
   import EmptyState from '@aziontech/webkit/empty-state'
   import LineFigure from '@aziontech/webkit/line-figure'
+
+  export interface NotFoundProps {
+    /** What happened, in the user's words. */
+    title?: string
+    /** Why it may have happened and what to do next. */
+    description?: string
+    /** Where Go to home goes. */
+    homeHref?: string
+    /** Where Docs goes; it opens in a new tab. */
+    docsHref?: string
+  }
+
+  withDefaults(defineProps<NotFoundProps>(), {
+    title: 'Page not found',
+    description:
+      'There is nothing deployed at this address. Check the URL or head back to the start.',
+    homeHref: '/',
+    docsHref: 'https://example.com/docs'
+  })
+
+  const emit = defineEmits<{
+    home: [event: MouseEvent]
+  }>()
 </script>
 
 <template>
@@ -11,8 +34,8 @@
     <h1 class="sr-only">Error 404</h1>
     <div class="w-full max-w-(--container-md)">
       <EmptyState
-        title="Page not found"
-        description="There is nothing deployed at this address. Check the URL or head back to the start."
+        :title="title"
+        :description="description"
       >
         <template #icon>
           <div class="w-(--container-3xs) sm:w-(--container-2xs)">
@@ -28,14 +51,15 @@
               label="Go to home"
               variant="primary"
               size="medium"
-              href="/"
+              :href="homeHref"
+              @click="(event: MouseEvent) => emit('home', event)"
             />
             <Button
               label="Docs"
               variant="outline"
               icon="ai ai-book"
               size="medium"
-              href="https://example.com/docs"
+              :href="docsHref"
               target="_blank"
             />
           </div>

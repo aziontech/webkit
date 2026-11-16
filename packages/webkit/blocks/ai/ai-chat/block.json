@@ -40,6 +40,7 @@
     "name": "Empty",
     "file": "ai-chat.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Streaming",
@@ -58,7 +59,7 @@
     },
     {
       "name": "Artifact",
-      "summary": "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; asking for a change streams a new version into the canvas, which locks its pager while it is written and then shows it.",
+      "summary": "An answer that produced a file: the message carries an `ArtifactPreview` of top-orders.sql and the `ArtifactCanvas` sits beside the conversation in a `Resizable` pane (a `Drawer` under the md breakpoint) with its versions, Copy, Download and Close; a follow-up question fills the composer. While a new version is written the canvas takes `streaming`, which locks its pager.",
       "file": "variants/artifact.vue"
     }
   ]
