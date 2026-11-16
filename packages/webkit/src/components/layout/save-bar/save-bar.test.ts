@@ -14,7 +14,7 @@ import SaveBar from './save-bar.vue'
 
 describe('SaveBar', () => {
   it('renders a footer with the default testid and the floating variant', () => {
-    const { getByTestId } = within(render(SaveBar).container)
+    const { getByTestId } = within(render(SaveBar).container as HTMLElement)
 
     const root = getByTestId('save-bar')
     expect(root.tagName).toBe('FOOTER')
@@ -26,7 +26,7 @@ describe('SaveBar', () => {
       render(SaveBar, {
         attrs: { 'data-testid': 'profile-save' },
         slots: { default: 'You have unsaved changes.' }
-      }).container
+      }).container as HTMLElement
     )
 
     expect(getByTestId('profile-save__message').textContent?.trim()).toBe(
@@ -44,7 +44,7 @@ describe('SaveBar', () => {
             leading: '<span data-testid="status">Saving…</span>',
             default: 'You have unsaved changes.'
           }
-        }).container
+        }).container as HTMLElement
       )
 
       const message = getByTestId('save-bar__message')
@@ -61,7 +61,7 @@ describe('SaveBar', () => {
         render(SaveBar, {
           props: { variant: variant },
           slots: { actions: '<button type="button">Save</button>' }
-        }).container
+        }).container as HTMLElement
       )
 
       expect(getByTestId('save-bar').getAttribute('data-variant')).toBe(variant)
@@ -70,11 +70,11 @@ describe('SaveBar', () => {
   )
 
   it('renders the status message only when the default slot is given', () => {
-    const bare = within(render(SaveBar).container)
+    const bare = within(render(SaveBar).container as HTMLElement)
     expect(bare.queryByTestId('save-bar__message')).toBeNull()
 
     const withMessage = within(
-      render(SaveBar, { slots: { default: 'You have unsaved changes.' } }).container
+      render(SaveBar, { slots: { default: 'You have unsaved changes.' } }).container as HTMLElement
     )
     expect(withMessage.getByTestId('save-bar__message').textContent?.trim()).toBe(
       'You have unsaved changes.'
@@ -96,11 +96,17 @@ describe('SaveBar', () => {
   )
 
   it('renders the examples', () => {
-    expect(within(render(Default).container).getByRole('button', { name: 'Save' })).toBeTruthy()
     expect(
-      within(render(Docked).container).getByTestId('save-bar').getAttribute('data-variant')
+      within(render(Default).container as HTMLElement).getByRole('button', { name: 'Save' })
+    ).toBeTruthy()
+    expect(
+      within(render(Docked).container as HTMLElement)
+        .getByTestId('save-bar')
+        .getAttribute('data-variant')
     ).toBe('docked')
-    expect(within(render(Plain).container).getByRole('button', { name: 'Cancel' })).toBeTruthy()
+    expect(
+      within(render(Plain).container as HTMLElement).getByRole('button', { name: 'Cancel' })
+    ).toBeTruthy()
   })
 
   it('has no accessibility violations as a floating bar', async () => {
@@ -116,7 +122,7 @@ describe('SaveBar', () => {
   })
 
   it('puts Cancel and Create, in reading order, inside the centered card', () => {
-    const view = within(render(Centered).container)
+    const view = within(render(Centered).container as HTMLElement)
     const card = view.getByTestId('save-bar__card')
     const buttons = within(card).getAllByRole('button')
 
@@ -133,7 +139,7 @@ describe('SaveBar', () => {
           default: '3 permissions selected',
           actions: '<button type="button">Create</button>'
         }
-      }).container
+      }).container as HTMLElement
     )
 
     expect(view.getByTestId('save-bar__card').contains(view.getByTestId('save-bar__message'))).toBe(

@@ -308,12 +308,10 @@ describe('Sidebar', () => {
     })
 
     it('the trigger collapses the rail and takes it out of the tree and the tab order', async () => {
-      const onUpdate = []
       const { getByTestId, emitted } = render(Sidebar, {
         props: { collapsible: true },
         slots: { default: '<a href="/">Home</a>' }
       })
-      void onUpdate
 
       await fireEvent.click(getByTestId('sidebar__collapse'))
 

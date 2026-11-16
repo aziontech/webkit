@@ -13,7 +13,7 @@ describe('SettingsSection', () => {
       render(SettingsSection, {
         props: { title: 'General' },
         slots: { default: '<p>Body</p>' }
-      }).container
+      }).container as HTMLElement
     )
 
     expect(getByTestId('settings-section').tagName).toBe('SECTION')
@@ -26,29 +26,34 @@ describe('SettingsSection', () => {
       render(SettingsSection, {
         props: { title: 'General' },
         attrs: { 'data-testid': 'general-band' }
-      }).container
+      }).container as HTMLElement
     )
 
     expect(getByTestId('general-band__title')).toBeTruthy()
   })
 
   it('renders the Hint only when hint is set', () => {
-    const bare = within(render(SettingsSection, { props: { title: 'General' } }).container)
+    const bare = within(
+      render(SettingsSection, { props: { title: 'General' } }).container as HTMLElement
+    )
     expect(bare.queryByTestId('hint')).toBeNull()
 
     const hinted = within(
       render(SettingsSection, { props: { title: 'General', hint: 'What this band holds.' } })
-        .container
+        .container as HTMLElement
     )
     expect(hinted.getByTestId('hint')).toBeTruthy()
   })
 
   it('renders the gutter copy-link and the h2 id only with an anchor', () => {
-    const bare = within(render(SettingsSection, { props: { title: 'General' } }).container)
+    const bare = within(
+      render(SettingsSection, { props: { title: 'General' } }).container as HTMLElement
+    )
     expect(bare.queryByTestId('settings-section__copy-link')).toBeNull()
 
     const anchored = within(
-      render(SettingsSection, { props: { title: 'General', anchor: 'general' } }).container
+      render(SettingsSection, { props: { title: 'General', anchor: 'general' } })
+        .container as HTMLElement
     )
     expect(anchored.getByRole('heading', { level: 2 }).id).toBe('general')
     expect(anchored.getByRole('button', { name: 'Copy link to the General section' })).toBeTruthy()
@@ -57,7 +62,8 @@ describe('SettingsSection', () => {
   it('confirms a copied link on the button itself', async () => {
     const write = vi.spyOn(navigator.clipboard, 'writeText').mockResolvedValue()
     const view = within(
-      render(SettingsSection, { props: { title: 'General', anchor: 'general' } }).container
+      render(SettingsSection, { props: { title: 'General', anchor: 'general' } })
+        .container as HTMLElement
     )
     await fireEvent.click(view.getByRole('button', { name: 'Copy link to the General section' }))
     expect(write).toHaveBeenCalledWith(expect.stringMatching(/#general$/))
@@ -67,7 +73,7 @@ describe('SettingsSection', () => {
 
   it('keeps a non-collapsible body open and has no disclosure', () => {
     const { getByTestId, queryByTestId } = within(
-      render(SettingsSection, { props: { title: 'General' } }).container
+      render(SettingsSection, { props: { title: 'General' } }).container as HTMLElement
     )
 
     expect(queryByTestId('settings-section__trigger')).toBeNull()
@@ -80,7 +86,7 @@ describe('SettingsSection', () => {
     const { container, emitted } = render(SettingsSection, {
       props: { title: 'Advanced', collapsible: true, icon: 'ai ai-settings' }
     })
-    const scope = within(container)
+    const scope = within(container as HTMLElement)
     const trigger = scope.getByTestId('settings-section__trigger')
     const body = scope.getByTestId('settings-section__body')
 
@@ -99,10 +105,14 @@ describe('SettingsSection', () => {
   })
 
   it('renders the examples', async () => {
-    expect(within(render(Default).container).getAllByTestId('settings-row')).toHaveLength(2)
-    expect(within(render(Stacked).container).getAllByTestId('settings-section')).toHaveLength(2)
+    expect(
+      within(render(Default).container as HTMLElement).getAllByTestId('settings-row')
+    ).toHaveLength(2)
+    expect(
+      within(render(Stacked).container as HTMLElement).getAllByTestId('settings-section')
+    ).toHaveLength(2)
 
-    const collapsible = within(render(Collapsible).container)
+    const collapsible = within(render(Collapsible).container as HTMLElement)
     const trigger = collapsible.getByRole('button', { name: 'Advanced' })
     await fireEvent.click(trigger)
     expect(trigger.getAttribute('aria-expanded')).toBe('true')
