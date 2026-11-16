@@ -472,7 +472,7 @@
             href="https://console.azion.com/signup"
           />
           <Button
-            label="Talk to a specialist"
+            label="Talk to sales"
             variant="outline"
             size="large"
             href="/en/contact-sales/"

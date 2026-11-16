@@ -31,7 +31,7 @@
   "site": [
     {
       "name": "Split",
-      "summary": "The solution pages close: the headline and `Start for free` in the raised lead cell, the sentence and `Talk to a specialist` in the aside cell, then a tall closing frame.",
+      "summary": "The solution pages close: the headline and `Start for free` in the raised lead cell, the sentence and `Talk to sales` in the aside cell, then a tall closing frame.",
       "file": "site-split.vue",
       "json": "site-split.json"
     },

@@ -17,7 +17,7 @@
           trailing: true
         },
         {
-          label: 'Talk to a specialist',
+          label: 'Talk to sales',
           href: '/site/contact',
           variant: 'outline',
           trailing: true

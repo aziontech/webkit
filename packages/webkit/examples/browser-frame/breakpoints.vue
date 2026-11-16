@@ -108,7 +108,7 @@
                 <template #aside>
                   <Button
                     variant="outline"
-                    label="Talk to a specialist"
+                    label="Talk to sales"
                   />
                 </template>
               </CallToAction>
@@ -214,7 +214,7 @@
                 <template #aside>
                   <Button
                     variant="outline"
-                    label="Talk to a specialist"
+                    label="Talk to sales"
                   />
                 </template>
               </CallToAction>
@@ -320,7 +320,7 @@
             <template #aside>
               <Button
                 variant="outline"
-                label="Talk to a specialist"
+                label="Talk to sales"
               />
             </template>
           </CallToAction>

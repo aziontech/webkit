@@ -12,7 +12,7 @@
       <Button label="Start for free" />
       <Button
         variant="outline"
-        label="Talk to a specialist"
+        label="Talk to sales"
       />
     </template>
   </CallToAction>

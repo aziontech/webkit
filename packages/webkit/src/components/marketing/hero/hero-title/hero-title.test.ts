@@ -231,7 +231,7 @@ describe('HeroTitle', () => {
 
       expect(getAllByRole('button').map((el) => el.textContent?.trim())).toEqual([
         'Start for free',
-        'Talk to a specialist'
+        'Talk to sales'
       ])
     })
   })

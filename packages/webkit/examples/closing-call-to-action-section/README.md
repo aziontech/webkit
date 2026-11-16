@@ -10,7 +10,7 @@ The split, panel and primary forms are the `ClosingCallToActionSection` componen
 
 ### Split
 
-The solution pages close. `Start for free` sits under the headline and `Talk to a specialist` in the side cell, then a tall closing frame. The band carries the `contact` anchor, so the page contact links scroll to it.
+The solution pages close. `Start for free` sits under the headline and `Talk to sales` in the side cell, then a tall closing frame. The band carries the `contact` anchor, so the page contact links scroll to it.
 
 Example: [`site-split.vue`](./site-split.vue)
 

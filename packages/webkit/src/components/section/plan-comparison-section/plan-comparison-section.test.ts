@@ -17,7 +17,7 @@ const plans = [
   {
     id: 'enterprise',
     name: 'Enterprise',
-    action: { label: 'Talk to a specialist', href: '/contact' }
+    action: { label: 'Talk to sales', href: '/contact' }
   }
 ]
 

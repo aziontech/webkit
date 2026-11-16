@@ -10,7 +10,7 @@ const WALL_LABEL = 'Templates you can deploy'
 const DEPLOY = 'Deploy now'
 
 const primaryAction = { label: 'Start for free', href: '/signup' }
-const secondaryAction = { label: 'Talk to a specialist', href: '/contact', trailing: true }
+const secondaryAction = { label: 'Talk to sales', href: '/contact', trailing: true }
 
 const templates = [
   {

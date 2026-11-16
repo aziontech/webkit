@@ -4,10 +4,10 @@ category: section
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 7
+spec_version: 8
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 227e2d3ee00a2750c30bde982d4d9ff1e7f1749b6942b1bfdaafc98edfed187b
+checksum: 6e89542596e1f6236e21df8ad1adeac0cdb64ca2f885ed95cc34e40c9c962b8c
 ---
 
 # TemplateGallerySection — Component Spec
@@ -55,7 +55,7 @@ The templates band of a solution page: a framed media split whose copy side invi
     title="Quick Start with Templates"
     description="Deploy complete projects in seconds with popular frameworks."
     :primary-action="{ label: 'Start for free', href: '/signup' }"
-    :secondary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
+    :secondary-action="{ label: 'Talk to sales', href: '/contact', trailing: true }"
     :templates="[
       {
         title: 'Astro Odyssey',

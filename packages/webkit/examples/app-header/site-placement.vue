@@ -30,7 +30,7 @@
       </AppHeader.Center>
       <AppHeader.End>
         <Button
-          label="Start for Free"
+          label="Start for free"
           variant="primary"
           size="medium"
         />

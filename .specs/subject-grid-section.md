@@ -4,10 +4,10 @@ category: section
 structure: monolithic
 template: 2
 status: implemented
-spec_version: 4
+spec_version: 5
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: b90942cd510d86d45605cf447bef58285a83c90c64f725cc8135e9c3056917d8
+checksum: b569cfe9c9ac17fe8574590e4db61e350f24c6a902251ccc4c03dbb89547efc2
 ---
 
 # SubjectGridSection — Component Spec
@@ -62,7 +62,7 @@ A library of learning subjects in a divider grid: each subject is one framed car
       titleMuted: 'On Azion.',
       description: 'Deploy your first application in minutes.',
       primaryAction: { label: 'Start for free', href: '/signup' },
-      secondaryAction: { label: 'Talk to a specialist', href: '/contact', trailing: true }
+      secondaryAction: { label: 'Talk to sales', href: '/contact', trailing: true }
     }"
   />
 </template>

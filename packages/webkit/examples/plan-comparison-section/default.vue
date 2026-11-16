@@ -25,7 +25,7 @@
       name: 'Enterprise',
       highlighted: false,
       action: {
-        label: 'Talk to a specialist',
+        label: 'Talk to sales',
         href: '/en/contact/'
       }
     }

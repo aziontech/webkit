@@ -30,7 +30,7 @@ const closing = {
   titleMuted: 'On Azion.',
   description: 'Deploy your first application in minutes.',
   primaryAction: { label: 'Start for free', href: '/signup' },
-  secondaryAction: { label: 'Talk to a specialist', href: '/contact', trailing: true }
+  secondaryAction: { label: 'Talk to sales', href: '/contact', trailing: true }
 }
 
 const band = (props: Record<string, unknown> = {}) =>

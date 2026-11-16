@@ -9,7 +9,7 @@
   }
 
   const secondaryAction = {
-    label: 'Talk to a specialist',
+    label: 'Talk to sales',
     href: '/contact',
     trailing: true
   }

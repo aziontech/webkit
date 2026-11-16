@@ -69,7 +69,7 @@ A row of headline figures inside a `RegistrationFrame`.
 ## Copy
 
 - **Hero title:** the outcome in sentence case, under ten words. **Eyebrow:** the product name: `Functions`.
-- **Hero actions:** match the bar's wording and capitalization (`Start for free`, `Talk to a specialist`).
+- **Hero actions:** match the bar's wording and capitalization (`Start for free`, `Talk to sales`).
 - **Figures:** a number and a short noun phrase.
 - **Palette placeholder:** `Search azion.com`.
 

@@ -38,7 +38,7 @@ const plans = [
     name: 'Enterprise',
     prices: [{ value: 'Custom', details: 'Custom terms.' }],
     features: [{ icon: 'ai ai-calendar', label: 'Savings Plan available' }],
-    action: { label: 'Talk to a specialist', href: '' }
+    action: { label: 'Talk to sales', href: '' }
   }
 ]
 
@@ -111,7 +111,7 @@ describe('PricingPlansSection', () => {
       'href',
       '/signup?plan=pro'
     )
-    expect(queryByRole('link', { name: 'Talk to a specialist' })).toBeNull()
+    expect(queryByRole('link', { name: 'Talk to sales' })).toBeNull()
   })
 
   it('opens on the first period and switches every price on a pick', async () => {

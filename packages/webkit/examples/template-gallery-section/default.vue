@@ -9,7 +9,7 @@
     title="Quick Start with Templates"
     description="Launch storefronts faster with pre-built templates and starter kits. Deploy complete projects in seconds with popular frameworks."
     :primary-action="{ label: 'Start for free', href: '/signup' }"
-    :secondary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
+    :secondary-action="{ label: 'Talk to sales', href: '/contact', trailing: true }"
     :templates="[
       {
         title: 'AI Inference Starter Kit',

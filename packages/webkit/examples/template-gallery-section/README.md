@@ -20,7 +20,7 @@ Add this entry to the `sections` array of the page JSON. `_id` picks the block a
 
 - `anchor` is the band's id for in-page links.
 - `eyebrow`, `title` and `description` fill the copy.
-- `primaryAction` and `secondaryAction` are the two buttons under the copy (`Start for free` and `Talk to a specialist`), each a `label`, an `href` and `trailing` for the chevron.
+- `primaryAction` and `secondaryAction` are the two buttons under the copy (`Start for free` and `Talk to sales`), each a `label`, an `href` and `trailing` for the chevron.
 - `templates[]` fill the wall: `title`, `description`, `icon` and the `href` the whole card and its deploy button link to. Turn on `invertInDark` for a mark that ships in dark ink only. A template without a title is skipped.
 - `deployLabel` is the label of the button on each card; a card without an `href` shows no button.
 - `templatesAriaLabel` names the wall for screen readers.

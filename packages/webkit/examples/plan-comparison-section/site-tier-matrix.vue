@@ -20,7 +20,7 @@
       description: 'Ideal for teams that need support from specialists.',
       highlighted: false,
       action: {
-        label: 'Talk to a specialist',
+        label: 'Talk to sales',
         href: '/contact'
       }
     },
@@ -30,7 +30,7 @@
       description: 'Ideal for organizations that require advanced support and ongoing services.',
       highlighted: true,
       action: {
-        label: 'Talk to a specialist',
+        label: 'Talk to sales',
         href: '/contact'
       }
     },
@@ -41,7 +41,7 @@
         'Ideal for mission-critical operations that need priority and proactive support.',
       highlighted: false,
       action: {
-        label: 'Talk to a specialist',
+        label: 'Talk to sales',
         href: '/contact'
       }
     }

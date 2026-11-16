@@ -3,10 +3,10 @@ name: closing-call-to-action-section
 category: section
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 created: 2026-11-05
 last_updated: 2026-11-16
-checksum: 126881ce9fa5d28fbe48338f06abbb0530e82642b12cfa20f48dfbfea6e61f4b
+checksum: 1aba2206adb49d0f9d2777b59dd383792b00b413cb735997c6ec5c2dfc556c1f
 template: 2
 ---
 
@@ -62,7 +62,7 @@ The last ask at the end of a landing page, followed by a hatched closing frame w
     title-muted="Run everywhere."
     description="Get a faster path to launch, lower latency, and less infrastructure overhead."
     :primary-action="{ label: 'Start for free', href: '/signup' }"
-    :secondary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
+    :secondary-action="{ label: 'Talk to sales', href: '/contact', trailing: true }"
   />
 </template>
 ```

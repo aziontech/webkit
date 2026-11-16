@@ -290,7 +290,7 @@ describe('AppHeader', () => {
           <AppHeader variant="site" aria-label="Azion">
             <AppHeaderBrand><a href="/" aria-label="Azion home">Azion</a></AppHeaderBrand>
             <AppHeaderCenter><a href="/pricing">Pricing</a></AppHeaderCenter>
-            <AppHeaderEnd><button type="button">Start for Free</button></AppHeaderEnd>
+            <AppHeaderEnd><button type="button">Start for free</button></AppHeaderEnd>
           </AppHeader>
         `
       })

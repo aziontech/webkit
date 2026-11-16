@@ -15,7 +15,7 @@ const TITLE = 'Build once.'
 const TITLE_MUTED = 'Run everywhere.'
 const DESCRIPTION = 'Get a faster path to launch, lower latency, and less infrastructure overhead.'
 const primaryAction = { label: 'Start for free', href: '/signup' }
-const secondaryAction = { label: 'Talk to a specialist', href: '/contact', trailing: true }
+const secondaryAction = { label: 'Talk to sales', href: '/contact', trailing: true }
 
 const band = (props: Record<string, unknown> = {}) =>
   render(ClosingCallToActionSection, {
@@ -217,7 +217,7 @@ describe('ClosingCallToActionSection', () => {
       label: 'For humans',
       actions: [
         { label: 'Start for free', href: '/signup', variant: 'secondary', trailing: true },
-        { label: 'Talk to a specialist', href: '/site/contact', variant: 'outline', trailing: true }
+        { label: 'Talk to sales', href: '/site/contact', variant: 'outline', trailing: true }
       ]
     },
     {

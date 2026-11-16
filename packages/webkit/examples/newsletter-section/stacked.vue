@@ -32,7 +32,7 @@
       variant="panel"
       title="Ready to talk?"
       description="Tell us what you are building and a specialist will reach out."
-      :primary-action="{ label: 'Talk to a specialist', href: '/contact', trailing: true }"
+      :primary-action="{ label: 'Talk to sales', href: '/contact', trailing: true }"
     />
   </SectionContainer>
 </template>

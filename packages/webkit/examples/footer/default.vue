@@ -32,7 +32,7 @@
       <Footer.Link href="/legal">Legal</Footer.Link>
     </Footer.Column>
     <Footer.Column title="Support">
-      <Footer.Link href="/contact">Talk to a specialist</Footer.Link>
+      <Footer.Link href="/contact">Talk to sales</Footer.Link>
       <Footer.Link href="/support">Help center</Footer.Link>
       <Footer.Link href="https://status.azion.com/">System status</Footer.Link>
     </Footer.Column>
