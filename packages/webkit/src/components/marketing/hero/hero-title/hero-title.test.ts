@@ -189,7 +189,7 @@ describe('HeroTitle', () => {
       props: {
         ...props,
         eyebrow: 'Edge platform',
-        highlight: 'Build anything.',
+        titleHighlight: 'Build anything.',
         description: 'Ship from one platform.'
       }
     })

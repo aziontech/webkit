@@ -98,7 +98,7 @@ describe('StickyStack', () => {
 
   it('renders every claim as an ordered list entry with its own control', () => {
     const { container } = render(StickyStack, { props: { items: ITEMS } })
-    const rows = rowsOf(container)
+    const rows = rowsOf(container as HTMLElement)
     expect(rows).toHaveLength(ITEMS.length)
     expect(rows.map((row) => row.querySelector('button')?.textContent?.trim())).toEqual(
       ITEMS.map((item) => item.title)
@@ -115,8 +115,8 @@ describe('StickyStack', () => {
 
   it('opens the first claim at rest and marks it aria-current', () => {
     const { container } = render(StickyStack, { props: { items: ITEMS } })
-    expect(activeTitle(container)).toBe(ITEMS[0].title)
-    expect(completedTitles(container)).toEqual([])
+    expect(activeTitle(container as HTMLElement)).toBe(ITEMS[0].title)
+    expect(completedTitles(container as HTMLElement)).toEqual([])
 
     const current = [...container.querySelectorAll('button[aria-current="true"]')]
     expect(current).toHaveLength(1)
@@ -198,15 +198,15 @@ describe('StickyStack', () => {
     try {
       const { container, emitted } = render(StickyStack, { props: { items: ITEMS } })
       await scrollTo(0)
-      expect(activeTitle(container)).toBe(ITEMS[0].title)
+      expect(activeTitle(container as HTMLElement)).toBe(ITEMS[0].title)
 
       await scrollTo(slice() * 1.5)
-      expect(activeTitle(container)).toBe(ITEMS[1].title)
-      expect(completedTitles(container)).toEqual([ITEMS[0].title])
+      expect(activeTitle(container as HTMLElement)).toBe(ITEMS[1].title)
+      expect(completedTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
 
       await scrollTo(slice() * 2.5)
-      expect(activeTitle(container)).toBe(ITEMS[2].title)
-      expect(completedTitles(container)).toEqual([ITEMS[0].title, ITEMS[1].title])
+      expect(activeTitle(container as HTMLElement)).toBe(ITEMS[2].title)
+      expect(completedTitles(container as HTMLElement)).toEqual([ITEMS[0].title, ITEMS[1].title])
 
       expect(emitted('active-index-change')).toEqual([[1], [2]])
     } finally {
@@ -234,7 +234,7 @@ describe('StickyStack', () => {
     try {
       const { container } = render(StickyStack, { props: { items: ITEMS } })
       await scrollTo(slice() * SPAN * 2)
-      expect(activeTitle(container)).toBe(ITEMS[ITEMS.length - 1].title)
+      expect(activeTitle(container as HTMLElement)).toBe(ITEMS[ITEMS.length - 1].title)
     } finally {
       release()
     }

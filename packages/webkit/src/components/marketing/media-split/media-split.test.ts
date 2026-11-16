@@ -130,7 +130,7 @@ describe('MediaSplit', () => {
     })
 
     expect(container.querySelector('img')).toBeNull()
-    expect(columnsOf(container)).toHaveLength(1)
+    expect(columnsOf(container as HTMLElement)).toHaveLength(1)
   })
 
   it('renders a media column beside the copy when src is given', () => {
@@ -138,7 +138,7 @@ describe('MediaSplit', () => {
       props: { title: TITLE, src: SRC, alt: ALT }
     })
 
-    expect(columnsOf(container)).toHaveLength(2)
+    expect(columnsOf(container as HTMLElement)).toHaveLength(2)
   })
 
   it.each(['media-end', 'media-start'] as const)(
@@ -158,7 +158,7 @@ describe('MediaSplit', () => {
       })
       const heading = getByRole('heading', { level: 2 })
       const image = getByRole('img', { name: ALT })
-      const [copy, media] = columnsOf(container)
+      const [copy, media] = columnsOf(container as HTMLElement)
 
       expect(copy.contains(heading)).toBe(true)
       expect(media.contains(image)).toBe(true)
@@ -180,7 +180,7 @@ describe('MediaSplit', () => {
       props: { title: TITLE, src: SRC, alt: ALT, orientation: 'vertical' }
     })
 
-    expect(columnsOf(container)).toHaveLength(2)
+    expect(columnsOf(container as HTMLElement)).toHaveLength(2)
   })
 
   it('keeps the copy first in DOM for a vertical band that leads with its media', () => {
@@ -196,7 +196,7 @@ describe('MediaSplit', () => {
     })
     const heading = getByRole('heading', { level: 2 })
     const image = getByRole('img', { name: ALT })
-    const [copy, media] = columnsOf(container)
+    const [copy, media] = columnsOf(container as HTMLElement)
 
     expect(copy.contains(heading)).toBe(true)
     expect(media.contains(image)).toBe(true)
@@ -241,7 +241,7 @@ describe('MediaSplit', () => {
       props: { title: TITLE, src: SRC, alt: ALT }
     })
     const ground = getByTestId(GROUND)
-    const [, media] = columnsOf(container)
+    const [, media] = columnsOf(container as HTMLElement)
 
     expect(media.contains(ground)).toBe(true)
     expect(ground.getAttribute('data-variant')).toBe('grid')

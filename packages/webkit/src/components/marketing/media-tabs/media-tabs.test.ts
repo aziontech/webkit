@@ -91,7 +91,7 @@ describe('MediaTabs', () => {
       props: { items: ITEMS, autoplay: false }
     })
 
-    expect(activeTitles(container)).toEqual([ITEMS[0].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
     expect(getAllByRole('button')[0].getAttribute('aria-current')).toBe('true')
     expect(getAllByRole('button')[1].getAttribute('aria-current')).toBeNull()
   })
@@ -119,7 +119,7 @@ describe('MediaTabs', () => {
 
     await fireEvent.click(getAllByRole('button')[2])
 
-    expect(activeTitles(container)).toEqual([ITEMS[2].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[2].title])
     expect(getAllByRole('button')[2].getAttribute('aria-current')).toBe('true')
     expect(getAllByRole('button')[0].getAttribute('aria-current')).toBeNull()
   })
@@ -152,9 +152,9 @@ describe('MediaTabs', () => {
       props: { items: ITEMS, autoplay: false, selectOn: 'hover' }
     })
 
-    await fireEvent.pointerEnter(rowsOf(container)[2])
+    await fireEvent.pointerEnter(rowsOf(container as HTMLElement)[2])
 
-    expect(activeTitles(container)).toEqual([ITEMS[2].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[2].title])
     expect(emitted()['update:modelValue']).toHaveLength(1)
   })
 
@@ -163,9 +163,9 @@ describe('MediaTabs', () => {
       props: { items: ITEMS, autoplay: false, selectOn: 'click' }
     })
 
-    await fireEvent.pointerEnter(rowsOf(container)[2])
+    await fireEvent.pointerEnter(rowsOf(container as HTMLElement)[2])
 
-    expect(activeTitles(container)).toEqual([ITEMS[0].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
     expect(emitted()['update:modelValue']).toBeUndefined()
   })
 
@@ -176,7 +176,7 @@ describe('MediaTabs', () => {
 
     await fireEvent.click(getAllByRole('button')[1])
 
-    expect(activeTitles(container)).toEqual([ITEMS[1].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[1].title])
   })
 
   it('offers a pause control while autoplay runs that stops and resumes the rotation', async () => {
@@ -192,12 +192,12 @@ describe('MediaTabs', () => {
 
     vi.advanceTimersByTime(INTERVAL * 2)
     await nextTick()
-    expect(activeTitles(container)).toEqual([ITEMS[0].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
 
     await fireEvent.click(control)
     vi.advanceTimersByTime(INTERVAL)
     await nextTick()
-    expect(activeTitles(container)).toEqual([ITEMS[1].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[1].title])
   })
 
   it('renders no pause control when autoplay is off', () => {
@@ -223,7 +223,7 @@ describe('MediaTabs', () => {
     const { container } = render(MediaTabs, {
       props: { items: ITEMS, modelValue: 2, autoplay: false }
     })
-    expect(activeTitles(container)).toEqual([ITEMS[2].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[2].title])
   })
 
   it('marks a running band with data-autoplay', () => {
@@ -238,12 +238,12 @@ describe('MediaTabs', () => {
       props: { items: ITEMS, autoplayInterval: INTERVAL }
     })
 
-    expect(activeTitles(container)).toEqual([ITEMS[0].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
 
     vi.advanceTimersByTime(INTERVAL)
     await nextTick()
 
-    expect(activeTitles(container)).toEqual([ITEMS[1].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[1].title])
   })
 
   it('wraps from the last tab back to the first', async () => {
@@ -255,7 +255,7 @@ describe('MediaTabs', () => {
     vi.advanceTimersByTime(INTERVAL * ITEMS.length)
     await nextTick()
 
-    expect(activeTitles(container)).toEqual([ITEMS[0].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
   })
 
   it('never moves on its own when autoplay is off', async () => {
@@ -269,7 +269,7 @@ describe('MediaTabs', () => {
     vi.advanceTimersByTime(INTERVAL * 3)
     await nextTick()
 
-    expect(activeTitles(container)).toEqual([ITEMS[0].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[0].title])
   })
 
   it('keeps autoplay running after a click and restarts the count from the clicked tab', async () => {
@@ -285,7 +285,7 @@ describe('MediaTabs', () => {
     vi.advanceTimersByTime(INTERVAL)
     await nextTick()
 
-    expect(activeTitles(container)).toEqual([ITEMS[2].title])
+    expect(activeTitles(container as HTMLElement)).toEqual([ITEMS[2].title])
   })
 
   it('keeps the progress moving after a click while the pointer stays on the band', async () => {
@@ -389,7 +389,7 @@ describe('MediaTabs', () => {
   it('renders no more than three tabs', () => {
     const items = [...ITEMS, { ...ITEMS[0], title: 'A fourth claim' }]
     const { container } = render(MediaTabs, { props: { items, autoplay: false } })
-    expect(rowsOf(container)).toHaveLength(3)
+    expect(rowsOf(container as HTMLElement)).toHaveLength(3)
     expect(container.textContent).not.toContain('A fourth claim')
   })
 
@@ -426,7 +426,7 @@ describe('MediaTabs', () => {
     }))
     const { container } = render(MediaTabs, { props: { items, tabsSide, autoplay: false } })
 
-    expect(rowsOf(container)).toHaveLength(limit)
+    expect(rowsOf(container as HTMLElement)).toHaveLength(limit)
     expect(container.textContent).not.toContain(`Use case ${limit + 1}`)
   })
 
@@ -441,15 +441,17 @@ describe('MediaTabs', () => {
         props: { items, tabsSide, autoplay: false }
       })
 
-      await fireEvent.click(rowsOf(container)[4].querySelector('button') as HTMLElement)
+      await fireEvent.click(
+        rowsOf(container as HTMLElement)[4].querySelector('button') as HTMLElement
+      )
 
-      expect(activeTitles(container)).toEqual(['Use case 5'])
+      expect(activeTitles(container as HTMLElement)).toEqual(['Use case 5'])
       expect(emitted()['update:modelValue']).toHaveLength(1)
-      expect(emitted()['update:modelValue'][0][0]).toBe(4)
+      expect(emitted<unknown[]>()['update:modelValue'][0][0]).toBe(4)
     }
   )
 
-  it.each(['start', 'right', 'top', 'bottom'] as const)(
+  it.each(['start', 'end', 'top', 'bottom'] as const)(
     'has no a11y violations with the tabs on the %s',
     async (tabsSide) => {
       const { container } = render(MediaTabs, {
