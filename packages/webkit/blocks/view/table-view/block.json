@@ -64,6 +64,7 @@
     "name": "Default",
     "file": "table-view.vue"
   },
+  "files": ["sample.ts"],
   "variants": [
     {
       "name": "Empty",

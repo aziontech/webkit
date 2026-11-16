@@ -1086,13 +1086,14 @@ export function getBlock(catalog, id, { variant } = {}) {
     ...(moved ? { movedFrom: moved.from, note: movedNote(moved, p) } : {}),
     variant: chosen ? chosen.name : p.primary,
     sfc: chosen ? chosen.sfc : p.sfc,
+    ...(p.files ? { files: p.files } : {}),
     variants: [
       { name: p.primary, summary: 'primary' },
       ...(p.variants || []).map((v) => ({ name: v.name, summary: v.summary }))
     ],
     ...(p.guidelines ? { guidelines: p.guidelines } : {}),
     howToUse: p.guidelines
-      ? "Read `guidelines` first: when to use this screen and when not, what each building block is for, do and don't, the copy rules and the accessibility rules. Then copy this SFC as the starting point of the screen and change only the content (copy, data, handlers, routes), following the guidelines. Keep the components, their order, the props and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of the same screen. Follow the listed skills."
+      ? "Read `guidelines` first: when to use this screen and when not, what each building block is for, do and don't, the copy rules and the accessibility rules. Then copy this SFC as the starting point of the screen and change only the content (copy, data, handlers, routes), following the guidelines. A block with `files` takes its data through typed props and emits its actions: copy each file next to the SFC (`webkit add` does it and fixes the imports), pass your records, `loading` and `error` as props, and handle the events; a variant imports the primary SFC and only passes it other props. Keep the components, their order, the props and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of the same screen. Follow the listed skills."
       : 'Copy this SFC as the starting point of the screen and change only the content (copy, data, handlers, routes). Keep the components, their order, the props and the classes: they are the reviewed Azion layout. Pass `variant` to get another state of the same screen. Follow the listed skills.'
   }
 }

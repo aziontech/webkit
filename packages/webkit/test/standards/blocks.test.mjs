@@ -22,6 +22,11 @@ import {
   parseCheckArgs
 } from '../../scripts/check-blocks.mjs'
 import {
+  checkDataContract,
+  dataContractKeys,
+  sharedLineRatio
+} from '../../scripts/lib/block-data.mjs'
+import {
   blockIdFromTitle,
   importsOf,
   kebab,
@@ -595,4 +600,51 @@ test('checkGuidelines counts named component imports, ignores lowercase tokens a
     variants: []
   })
   assert.deepEqual(plain, [])
+})
+
+test('the data contract flags a primary with no props, inline records and copied variants', () => {
+  const body = Array.from({ length: 20 }, (_, i) => `<p>line ${i}</p>`).join('\n')
+  const primary = `<script setup lang="ts">\n  const rows = [{ id: 1 }, { id: 2 }, { id: 3 }]\n</script>\n<template>${body}</template>`
+  const keys = dataContractKeys('view/x', {
+    sfc: primary,
+    variants: [
+      { name: 'Copy', sfc: primary.replace('id: 3', 'id: 4') },
+      {
+        name: 'Diff',
+        sfc: '<script setup lang="ts">\n  import X from "../x.vue"\n</script>\n<template><X loading /></template>'
+      }
+    ]
+  })
+  assert.deepEqual(keys, ['view/x:no-props', 'view/x:inline-records', 'view/x:variant-copy:Copy'])
+  assert.ok(sharedLineRatio('a\nb\nc', 'a\nb\nc') === 1)
+  assert.ok(sharedLineRatio('a\nb\nc', 'x\ny') === 0)
+})
+
+test('a data-ready primary passes and the baseline only lets known findings through', () => {
+  const ready = {
+    sfc: '<script setup lang="ts">\n  import { sampleRows } from "./sample"\n  defineProps<{ rows?: unknown[] }>()\n</script>\n<template><div /></template>',
+    variants: []
+  }
+  assert.deepEqual(dataContractKeys('view/ready', ready), [])
+  const legacy = { sfc: '<template><div /></template>', variants: [] }
+  const result = checkDataContract({ 'view/ready': ready, 'view/legacy': legacy }, [
+    'view/legacy:no-props',
+    'view/gone:no-props'
+  ])
+  assert.deepEqual(result.introduced, [])
+  assert.deepEqual(result.fixed, ['view/gone:no-props'])
+  assert.deepEqual(checkDataContract({ 'view/legacy': legacy }).introduced, [
+    'view/legacy:no-props'
+  ])
+})
+
+test('every block with "files" ships them and reads them into the catalog entry', () => {
+  const blocks = readBlocks(fileURLToPath(new URL('../..', import.meta.url)))
+  for (const [id, block] of Object.entries(blocks)) {
+    for (const [file, text] of Object.entries(block.files || {})) {
+      assert.ok(text.length > 0, `${id}: ${file} is empty`)
+      assert.ok(!file.endsWith('.vue'), `${id}: ${file} is an SFC; list it as a variant instead`)
+    }
+  }
+  assert.ok(blocks['view/table-view'].files['sample.ts'].includes('sampleResources'))
 })

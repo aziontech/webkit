@@ -173,3 +173,59 @@ test('add rejects an unknown block or variant with suggestions', () => {
     cleanup(dir)
   }
 })
+
+test('add copies the block data files beside the SFC and points every local import at the copies', () => {
+  const dir = makeProject()
+  const shipped = (file) => readFileSync(join(PKG_ROOT, 'blocks/view/table-view', file), 'utf8')
+  try {
+    const r = cli(dir, 'add', 'view/table-view', '--variant', 'Empty')
+    assert.equal(r.code, 0, r.stderr)
+    const primary = readFileSync(join(dir, 'src/views/table-view.vue'), 'utf8')
+    assert.match(primary, /from '\.\/table-view\.sample'/)
+    assert.equal(primary, shipped('table-view.vue').replace("'./sample'", "'./table-view.sample'"))
+    assert.equal(
+      readFileSync(join(dir, 'src/views/table-view.sample.ts'), 'utf8'),
+      shipped('sample.ts')
+    )
+    const variant = readFileSync(join(dir, 'src/views/table-view-empty.vue'), 'utf8')
+    assert.match(variant, /import TableView from '\.\/table-view\.vue'/)
+    const manifest = JSON.parse(readFileSync(join(dir, 'webkit.blocks.json'), 'utf8'))
+    const files = manifest.blocks['view/table-view'].files
+    assert.deepEqual(
+      files.map((f) => [f.path, f.variant, f.imports]),
+      [
+        ['src/views/table-view-empty.vue', 'Empty', { '../table-view.vue': './table-view.vue' }],
+        ['src/views/table-view.sample.ts', 'Data', undefined],
+        ['src/views/table-view.vue', 'Default', { './sample': './table-view.sample' }]
+      ]
+    )
+    const diff = cliJson(dir, 'diff', 'view/table-view')
+    assert.equal(diff.code, 0, diff.stderr)
+    assert.ok(diff.json.files.every((f) => f.status === 'identical'))
+  } finally {
+    cleanup(dir)
+  }
+})
+
+test('add renames the data files after a --dest name', () => {
+  const dir = makeProject()
+  try {
+    const r = cliJson(
+      dir,
+      'add',
+      'view/table-view',
+      '--dest',
+      'src/screens/Resources.vue',
+      '--dry-run'
+    )
+    assert.equal(r.code, 0)
+    assert.deepEqual(
+      r.json.files.map((f) => f.path),
+      ['src/screens/Resources.vue', 'src/screens/Resources.sample.ts']
+    )
+    assert.deepEqual(r.json.files[0].imports, { './sample': './Resources.sample' })
+    assert.deepEqual(r.json.files[1].imports, { './table-view.vue': './Resources.vue' })
+  } finally {
+    cleanup(dir)
+  }
+})

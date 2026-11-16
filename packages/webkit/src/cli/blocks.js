@@ -1,6 +1,16 @@
 import { createHash } from 'node:crypto'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { basename, dirname, isAbsolute, join, relative, resolve, sep } from 'node:path'
+import {
+  basename,
+  dirname,
+  extname,
+  isAbsolute,
+  join,
+  posix,
+  relative,
+  resolve,
+  sep
+} from 'node:path'
 
 import { getBlock } from '../catalog/queries.js'
 import { PACKAGE_NAME } from './source.js'
@@ -224,6 +234,36 @@ function variantFile(stem, variant) {
   return `${stem}-${basename(variant.file, '.vue')}.vue`
 }
 
+const LOCAL_SPECIFIER = /(\bfrom\s+|\bimport\s*\(\s*)(['"])(\.{1,2}\/[^'"]+)\2/g
+const RESOLVE_SUFFIXES = ['', '.ts', '.vue', '.js', '/index.ts']
+
+export function rewriteImports(content, imports) {
+  if (!imports || !Object.keys(imports).length) return content
+  return String(content).replace(LOCAL_SPECIFIER, (match, lead, quote, spec) =>
+    Object.hasOwn(imports, spec) ? `${lead}${quote}${imports[spec]}${quote}` : match
+  )
+}
+
+export function localImports(content, fromFile, targets, toPath) {
+  const out = {}
+  for (const m of String(content).matchAll(LOCAL_SPECIFIER)) {
+    const spec = m[3]
+    const resolved = posix.normalize(posix.join(posix.dirname(fromFile), spec))
+    const suffix = RESOLVE_SUFFIXES.find((s) => targets[resolved + s])
+    if (suffix === undefined) continue
+    const target = targets[resolved + suffix]
+    let next = posix.relative(posix.dirname(toPath), target)
+    if (!extname(spec)) next = next.slice(0, next.length - extname(next).length)
+    if (!next.startsWith('.')) next = `./${next}`
+    if (next !== spec) out[spec] = next
+  }
+  return out
+}
+
+function extraFile(stem, file) {
+  return `${stem}.${basename(file)}`
+}
+
 function targetPaths(projectDir, block, dest) {
   const name = block.id.split('/').pop() || kebab(block.meta.name)
   let dir
@@ -247,6 +287,7 @@ function targetPaths(projectDir, block, dest) {
     viewsReason,
     primary: at(primaryName),
     variant: block.variant ? at(variantFile(stem, block.variant)) : null,
+    extras: (block.meta.files || []).map((file) => ({ file, path: at(extraFile(stem, file)) })),
     guidelines: at(`${stem}.guidelines.md`)
   }
 }
@@ -262,20 +303,33 @@ export function planAdd(projectDir, webkit, catalog, id, opts = {}) {
     !opts.force &&
     existsSync(join(projectDir, paths.primary)) &&
     recorded.some((f) => f.path === paths.primary)
+  const keepExtra = (path) =>
+    keepPrimary && existsSync(join(projectDir, path)) && recorded.some((f) => f.path === path)
   const pieces = [
     ...(keepPrimary
       ? []
       : [{ path: paths.primary, file: block.meta.primary.file, variant: block.meta.primary.name }]),
+    ...paths.extras
+      .filter((extra) => !keepExtra(extra.path))
+      .map((extra) => ({ path: extra.path, file: extra.file, variant: 'Data' })),
     ...(block.variant
       ? [{ path: paths.variant, file: block.variant.file, variant: block.variant.name }]
       : [])
   ]
+  const targets = Object.fromEntries([
+    [posix.normalize(block.meta.primary.file), paths.primary],
+    ...paths.extras.map((extra) => [posix.normalize(extra.file), extra.path]),
+    ...(block.variant ? [[posix.normalize(block.variant.file), paths.variant]] : [])
+  ])
   const files = pieces.map((piece) => {
-    const content = readFileSync(join(block.dir, piece.file), 'utf8')
+    const original = readFileSync(join(block.dir, piece.file), 'utf8')
+    const imports = localImports(original, posix.normalize(piece.file), targets, piece.path)
+    const content = rewriteImports(original, imports)
     return {
       path: piece.path,
       source: toPosix(relative(webkit.root, join(block.dir, piece.file))),
       variant: piece.variant,
+      ...(Object.keys(imports).length ? { imports } : {}),
       content,
       checksum: checksum(content),
       exists: existsSync(join(projectDir, piece.path))
@@ -360,10 +414,11 @@ export function applyAdd(projectDir, plan) {
   }
   const manifest = readManifest(projectDir)
   const previous = manifest.blocks[plan.id]?.files || []
-  const fresh = plan.files.map(({ path, source, variant, checksum: sum }) => ({
+  const fresh = plan.files.map(({ path, source, variant, imports, checksum: sum }) => ({
     path,
     source,
     variant,
+    ...(imports ? { imports } : {}),
     checksum: sum
   }))
   const kept = previous.filter((f) => !fresh.some((n) => n.path === f.path))
@@ -394,7 +449,8 @@ function findInManifest(projectDir, manifest, target) {
 
 export function inspectFile(projectDir, webkit, file) {
   const canonicalPath = join(webkit.root, file.source)
-  const canonical = read(canonicalPath)
+  const shipped = read(canonicalPath)
+  const canonical = shipped == null ? null : rewriteImports(shipped, file.imports)
   const local = read(join(projectDir, file.path))
   const base = { path: file.path, source: file.source, variant: file.variant }
   if (local == null) return { ...base, status: 'missing' }

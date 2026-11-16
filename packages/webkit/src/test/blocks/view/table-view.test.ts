@@ -2,6 +2,7 @@ import { fireEvent, render, waitFor } from '@testing-library/vue'
 import { describe, expect, it } from 'vitest'
 
 import TableView from '../../../../blocks/view/table-view/table-view.vue'
+import TableViewEmpty from '../../../../blocks/view/table-view/variants/empty.vue'
 import TableViewFailed from '../../../../blocks/view/table-view/variants/error.vue'
 import TableViewLoading from '../../../../blocks/view/table-view/variants/loading.vue'
 
@@ -36,10 +37,47 @@ describe('view/table-view block', () => {
   })
 
   it('replaces the table with a danger alert whose Retry emits retry', async () => {
-    const view = render(TableViewFailed)
-    expect(view.container.textContent).toContain("Couldn't load the resources.")
-    expect(view.container.querySelector('[role=table], [role=grid], table')).toBeNull()
+    const failed = render(TableViewFailed)
+    expect(failed.container.textContent).toContain("Couldn't load the resources.")
+    expect(failed.container.querySelector('[role=table], [role=grid], table')).toBeNull()
+    failed.unmount()
+    const view = render(TableView, { props: { error: 'The API answered 503.' } })
+    expect(view.container.textContent).toContain('The API answered 503.')
+    expect(view.container.textContent).not.toContain('resource-01')
     await fireEvent.click(view.getByRole('button', { name: 'Retry' }))
     expect(view.emitted('retry')).toHaveLength(1)
+  })
+
+  it('renders the rows it is given instead of the sample, and the empty card for none', async () => {
+    const view = render(TableView, {
+      props: {
+        resources: [
+          {
+            id: '7',
+            name: 'acme-store',
+            domain: 'store.example.com',
+            domains: ['store.example.com'],
+            status: 'Live',
+            owner: 'Jane Doe',
+            modifiedAt: new Date(Date.UTC(2026, 10, 1))
+          }
+        ]
+      }
+    })
+    await waitFor(() => expect(view.container.textContent).toContain('acme-store'))
+    expect(resourceNames(view.container)).toEqual([])
+    view.unmount()
+    const empty = render(TableViewEmpty)
+    expect(empty.container.textContent).toContain('No resources yet')
+    await fireEvent.click(empty.getAllByRole('button', { name: 'Create Resource' })[0])
+  })
+
+  it('emits create, refresh and the row actions instead of faking them', async () => {
+    const view = render(TableView)
+    await fireEvent.click(view.getByRole('button', { name: 'Create Resource' }))
+    await fireEvent.click(view.getByRole('button', { name: 'Refresh' }))
+    expect(view.emitted('create')).toHaveLength(1)
+    expect(view.emitted('refresh')).toHaveLength(1)
+    expect(view.container.querySelector('[aria-busy="true"]')).toBeNull()
   })
 })

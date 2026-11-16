@@ -92,6 +92,9 @@ export function readBlocks(pkgRoot) {
     entry.primary = block.primary.name
     entry.sfc = primarySfc
     entry.variants = variants
+    if (block.files?.length) {
+      entry.files = Object.fromEntries(block.files.map((file) => [file, readText(join(dir, file))]))
+    }
     const guidelinesPath = join(dir, GUIDELINE_FILE)
     if (existsSync(guidelinesPath)) {
       entry.guidelines = readText(guidelinesPath)

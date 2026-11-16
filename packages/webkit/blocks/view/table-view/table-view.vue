@@ -19,41 +19,82 @@
   import Table from '@aziontech/webkit/table'
   import Tooltip from '@aziontech/webkit/tooltip'
   import { type FilteringProperty, useCollection } from '@aziontech/webkit/use-collection'
-  import { computed, ref, useId } from 'vue'
+  import { computed, ref, useId, watch } from 'vue'
 
-  type ResourceStatus = 'Live' | 'Inactive'
+  import { sampleResources } from './sample'
 
-  type Resource = {
+  /** Whether a resource serves traffic. */
+  export type TableViewResourceStatus = 'Live' | 'Inactive'
+
+  /** One row of the table. */
+  export interface TableViewResource {
+    /** Stable key, shown in the hidden ID column. */
     id: string
+    /** Display name, linked to the resource page. */
     name: string
+    /** The first domain, shown in the row. */
     domain: string
+    /** Every domain, the first one included; the rest open from the row's more link. */
     domains: string[]
-    status: ResourceStatus
+    /** Whether the resource serves traffic. */
+    status: TableViewResourceStatus
+    /** Who changed it last. */
     owner: string
+    /** When it changed last. */
     modifiedAt: Date
   }
 
-  const owners = [
-    'Ethan Brooks',
-    'Jordan Kim',
-    'Taylor Reed',
-    'John Smith',
-    'Sam Lee',
-    'Priya Patel',
-    'Chris Taylor',
-    'Riley Carter'
-  ]
+  export interface TableViewProps {
+    /** The resources to list; filtered, sorted and paged in the browser. Left out, the sample renders. */
+    resources?: TableViewResource[]
+    /** A request is in flight: with no rows it is the first load, with rows a refresh. */
+    loading?: boolean
+    /** Why the resources could not load; a danger alert with Retry replaces the table. */
+    error?: string
+  }
 
-  const properties: FilteringProperty[] = [
+  const props = withDefaults(defineProps<TableViewProps>(), {
+    resources: undefined,
+    loading: false,
+    error: ''
+  })
+
+  const emit = defineEmits<{
+    create: [event: MouseEvent]
+    refresh: [event: MouseEvent]
+    retry: [event: MouseEvent]
+    'row-action': [
+      event: Event,
+      payload: { value: DropdownMenuItemValue; resource: TableViewResource }
+    ]
+    delete: [event: Event, resource: TableViewResource]
+  }>()
+
+  const source = computed<TableViewResource[]>(
+    () => props.resources ?? (props.loading || props.error ? [] : sampleResources)
+  )
+  const items = ref<TableViewResource[]>([])
+  watch(
+    source,
+    (next) => {
+      items.value = [...next]
+    },
+    { immediate: true }
+  )
+
+  const firstLoad = computed(() => props.loading && items.value.length === 0)
+  const blocked = computed(() => firstLoad.value || props.error !== '')
+
+  const properties = computed<FilteringProperty[]>(() => [
     { key: 'name', label: 'Name' },
     {
       key: 'owner',
       label: 'Author',
-      options: owners.map((owner) => ({ value: owner }))
+      options: [...new Set(items.value.map((item) => item.owner))].map((value) => ({ value }))
     },
     { key: 'status', label: 'Status', options: [{ value: 'Live' }, { value: 'Inactive' }] },
     { key: 'domain', label: 'Domain' }
-  ]
+  ])
 
   const columns: TableColumn[] = [
     { accessorKey: 'name', header: 'Name', sortable: true, principal: true, hideable: false },
@@ -64,46 +105,6 @@
     { id: 'actions', type: 'action', hideable: false }
   ]
 
-  const referenceTime = Date.UTC(2026, 10, 10, 12)
-  const daysAgo = (days: number) => new Date(referenceTime - days * 86_400_000)
-
-  const resource = (
-    n: number,
-    owner: string,
-    days: number,
-    status: ResourceStatus = 'Live'
-  ): Resource => {
-    const name = `resource-${String(n).padStart(2, '0')}`
-    const domain = `${name}.example.com`
-    return {
-      id: `10${20482 + n * 173}`,
-      name,
-      domain,
-      domains: [
-        domain,
-        ...Array.from({ length: n * 7 }, (_, j) => `${name}-alias-${j + 1}.example.com`)
-      ],
-      status,
-      owner,
-      modifiedAt: daysAgo(days)
-    }
-  }
-
-  const rows: Resource[] = [
-    resource(1, 'Ethan Brooks', 0),
-    resource(2, 'Jordan Kim', 18),
-    resource(3, 'Taylor Reed', 36),
-    resource(4, 'John Smith', 54),
-    resource(5, 'Sam Lee', 72),
-    resource(6, 'Priya Patel', 90),
-    resource(7, 'Chris Taylor', 108),
-    resource(8, 'Riley Carter', 126),
-    resource(9, 'Ethan Brooks', 144, 'Inactive'),
-    resource(10, 'Jordan Kim', 162)
-  ]
-
-  const items = ref<Resource[]>(rows)
-
   const {
     tableProps,
     propertyFilterProps,
@@ -111,7 +112,6 @@
     status,
     matchingItems,
     clearFilters,
-    refresh: retry,
     loading: fetching
   } = useCollection({
     items,
@@ -126,21 +126,10 @@
     url: true
   })
 
-  const loading = ref(false)
-  let refreshTimer: ReturnType<typeof setTimeout> | undefined
-  const refresh = () => {
-    if (loading.value) return
-    loading.value = true
-    clearTimeout(refreshTimer)
-    refreshTimer = setTimeout(() => {
-      loading.value = false
-    }, 700)
-  }
-
-  const resourcesTableEl = ref<TableExposed<Resource> | null>(null)
+  const resourcesTableEl = ref<TableExposed<TableViewResource> | null>(null)
   const exportCsv = () => resourcesTableEl.value?.exportCsv({ filename: 'resources.csv' })
 
-  const pending = ref<Resource | null>(null)
+  const pending = ref<TableViewResource | null>(null)
   const deleteOpen = ref(false)
   const confirmation = ref('')
   const confirmLabelId = useId()
@@ -148,17 +137,22 @@
     () => pending.value !== null && confirmation.value.trim() === pending.value.name
   )
 
-  const onRowAction = (value: DropdownMenuItemValue, row: Resource) => {
-    if (value !== 'delete') return
+  const onRowAction = (event: Event, value: DropdownMenuItemValue, row: TableViewResource) => {
+    if (value !== 'delete') {
+      emit('row-action', event, { value, resource: row })
+      return
+    }
     pending.value = row
     confirmation.value = ''
     deleteOpen.value = true
   }
 
-  const confirmDelete = () => {
-    if (!canDelete.value) return
-    items.value = items.value.filter((item) => item.id !== pending.value?.id)
+  const confirmDelete = (event: Event) => {
+    const resource = pending.value
+    if (!canDelete.value || !resource) return
+    items.value = items.value.filter((item) => item.id !== resource.id)
     deleteOpen.value = false
+    emit('delete', event, resource)
   }
 </script>
 
@@ -183,6 +177,7 @@
             icon="ai ai-plus"
             variant="primary"
             size="large"
+            @click="(event: MouseEvent) => emit('create', event)"
           />
         </template>
       </PageHeader>
@@ -194,6 +189,7 @@
                 v-bind="propertyFilterProps"
                 placeholder="Filter resources"
                 aria-label="Filter resources"
+                :disabled="blocked"
               />
             </div>
             <div class="flex shrink-0 items-center gap-(--spacing-xs)">
@@ -207,7 +203,7 @@
                   size="medium"
                   :loading="loading"
                   aria-label="Refresh"
-                  @click="refresh"
+                  @click="(event: MouseEvent) => emit('refresh', event)"
                 />
               </Tooltip>
               <Tooltip
@@ -218,7 +214,7 @@
                   icon="ai ai-download"
                   variant="outline"
                   size="medium"
-                  :disabled="!matchingItems.length"
+                  :disabled="blocked || !matchingItems.length"
                   aria-label="Download CSV"
                   @click="exportCsv"
                 />
@@ -226,13 +222,21 @@
               <CollectionPreferences
                 v-bind="preferencesProps"
                 title="Table preferences"
+                :disabled="blocked"
               />
             </div>
           </header>
           <section class="flex min-h-0 flex-col">
+            <Alert
+              v-if="error"
+              severity="danger"
+              :label="error"
+              action-label="Retry"
+              @action="(event: MouseEvent) => emit('retry', event)"
+            />
             <Card
               key="card-1"
-              v-if="status === 'empty'"
+              v-else-if="status === 'empty' && !loading"
               :padded="false"
             >
               <template #default>
@@ -249,6 +253,7 @@
                         icon="ai ai-plus"
                         variant="secondary"
                         size="small"
+                        @click="(event: MouseEvent) => emit('create', event)"
                       />
                       <Button
                         label="Documentation"
@@ -263,13 +268,6 @@
                 </EmptyState>
               </template>
             </Card>
-            <Alert
-              v-else-if="status === 'error'"
-              severity="danger"
-              label="Couldn't load the resources. Check your connection and retry."
-              action-label="Retry"
-              @action="retry"
-            />
             <Card
               key="card-2"
               v-else
@@ -322,7 +320,7 @@
                   <template #cell-actions="{ row }">
                     <Table.CellActions
                       :name="row.name"
-                      @select="(_event, value) => onRowAction(value, row)"
+                      @select="(event, value) => onRowAction(event, value, row)"
                     >
                       <DropdownMenuGroup>
                         <DropdownMenuItem
