@@ -71,8 +71,11 @@ export function readBlocks(pkgRoot) {
       file: `blocks/${block.id}/${v.file}`,
       sfc: readText(join(dir, v.file))
     }))
+    const sharedSfcs = (block.files || [])
+      .filter((file) => file.endsWith('.vue'))
+      .map((file) => readText(join(dir, file)))
     const imports = new Map()
-    for (const sfc of [primarySfc, ...variants.map((v) => v.sfc)]) {
+    for (const sfc of [primarySfc, ...variants.map((v) => v.sfc), ...sharedSfcs]) {
       for (const imp of importsOf(sfc))
         if (!imports.has(imp.subpath)) imports.set(imp.subpath, imp.binding)
     }
