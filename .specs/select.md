@@ -3,13 +3,13 @@ name: select
 category: input
 structure: composition
 status: implemented
-spec_version: 12
+spec_version: 13
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=3714-10801
   node_id: 3714:10801
-checksum: 2feea5cae45788789191790dbe5aa7530c27673bcffd5787e4778d574361ab30
+checksum: 3f614307fcf979808c2ac59f9f8ce2e06097234af4ea5684215053ea7cc77564
 created: 2026-06-15
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # Select — Component Spec
@@ -137,6 +137,7 @@ _none_
 - `data-disabled`, `data-invalid`, `data-required`, `data-readonly`, `data-filled` mirror the matching props (or the selection state for `data-filled`)
 - `data-selected` on `<SelectItem>` when the option's value is part of the current selection
 - Long lists: above 300 options the list mounts in chunks of 100 as they scroll near view (unmounted chunks keep their height, 32 px per option), so opening a 1,000-option list stays within its runtime budget. The first arrow, `Home` or `End` key in the list mounts every option before moving focus, so keyboard navigation always reaches every option.
+- `data-side` (`bottom` | `top`) and `data-align` (`start`) on the listbox panel mirror where it landed after flipping; `start` follows the text direction, so under `rtl` the panel lines up with the field's right edge
 
 ## Motion & Animations
 
