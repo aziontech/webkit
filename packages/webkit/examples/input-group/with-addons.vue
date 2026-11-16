@@ -5,9 +5,9 @@
 <template>
   <InputGroup>
     <InputGroup.Addon>https://</InputGroup.Addon>
-    <input
+    <InputGroup.Input
+      aria-label="Domain"
       placeholder="domain"
-      class="flex-1 min-w-0 h-full bg-(--bg-surface) border-0 outline-none focus:ring-0 px-(--spacing-md) text-label-sm text-(--text-default) placeholder:text-(--text-muted)"
     />
     <InputGroup.Addon>.com</InputGroup.Addon>
   </InputGroup>
