@@ -3,11 +3,11 @@ name: table
 category: data
 structure: composition
 status: implemented
-spec_version: 21
+spec_version: 22
 figma:
   url: https://www.figma.com/design/t97pXRs7xME3SJDs5iZ5RF/Webkit?node-id=2053-7649
   node_id: 2053:7649
-checksum: 96d74aeaede88987b70ab6459c8c71931992ea4758ef4aebe364cc1a1bb7dfba
+checksum: 609f6519ffd58d4cd5087180f67debb035b32575a704e89d75b80281c80b10fa
 created: 2026-06-16
 last_updated: 2026-11-16
 ---
@@ -213,7 +213,7 @@ _none_ — sort comes from `Table.HeadCell` (`sort`) and row clicks fall through
 - `data-clickable` on TableCell mirrors the `clickable` prop.
 - Density and wrapping: `data-density="compact"` on the root shrinks the body cells (`min-h-9`, `--spacing-2xs` block padding); `data-wrap` lets cell text (and any `.truncate` inside a cell) wrap. A compact header is `Table.Header density="compact"`.
 - Responsive toolbar: the root is the `@container/table`; the toolbar wraps, and below `@md` of the table the `toolbar` slot moves under the title and starts at the start edge. `Table.Toolbar` wraps its controls.
-- Hover-free devices: a sortable header shows its sort affordance where the pointer cannot hover (`@media (hover: none)`).
+- Hover-free devices: a touch screen shows the sort glyph only on the sorted column, as on a pointer screen with no hover; tapping a sortable header sorts it, and keyboard focus reveals the sort button.
 
 ## Motion & Animations
 
