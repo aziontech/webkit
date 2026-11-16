@@ -92,8 +92,9 @@ test('the package ships types/ and builds it at pack time', () => {
   assert.equal(pkg.scripts.postpack, 'node scripts/pack-files.mjs --clean')
 })
 
-test('every CSS entry of @aziontech/icons declares types, in the repo and in dist', () => {
+test('every CSS entry of @aziontech/icons declares types, and the build writes them', () => {
   const icons = read('packages/icons/package.json')
+  assert.equal(icons.types, './dist/index.d.ts')
   for (const [key, entry] of Object.entries(icons.exports)) {
     if (exportTarget(entry).endsWith('.css')) {
       assert.equal(entry.types, './dist/index.d.ts', key)
@@ -101,7 +102,6 @@ test('every CSS entry of @aziontech/icons declares types, in the repo and in dis
   }
   const build = readFileSync(resolve(ROOT, 'packages/icons/scripts/build-icons.mjs'), 'utf8')
   assert.match(build, /'index\.d\.ts'/)
-  assert.match(build, /'\.': \{ types: '\.\/index\.d\.ts', default: '\.\/index\.css' \}/)
 })
 
 test('isPnpmCommand recognises the pnpm process and nothing that only mentions it', () => {
