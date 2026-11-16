@@ -295,9 +295,9 @@
       "binding": "HighlightButton"
     },
     "site-nav": {
-      "to": "site-header",
+      "to": "site-header-section",
       "from": "SiteNav",
-      "binding": "SiteHeader"
+      "binding": "SiteHeaderSection"
     },
     "setting-row": {
       "to": "settings-row",
@@ -385,49 +385,49 @@
       "binding": "DocAccordion"
     },
     "console-panel": {
-      "to": "console-showcase",
+      "to": "console-showcase-section",
       "from": "ConsolePanel",
-      "binding": "ConsoleShowcase"
+      "binding": "ConsoleShowcaseSection"
     },
     "compare-plans": {
-      "to": "plan-comparison",
+      "to": "plan-comparison-section",
       "from": "ComparePlans",
-      "binding": "PlanComparison"
+      "binding": "PlanComparisonSection"
     },
     "comparison-table": {
-      "to": "competitor-comparison",
+      "to": "competitor-comparison-section",
       "from": "ComparisonTable",
-      "binding": "CompetitorComparison"
+      "binding": "CompetitorComparisonSection"
     },
     "compliance-badges": {
-      "to": "compliance-logos",
+      "to": "compliance-logos-section",
       "from": "ComplianceBadges",
-      "binding": "ComplianceLogos"
+      "binding": "ComplianceLogosSection"
     },
     "section-command": {
-      "to": "copy-command",
+      "to": "copy-command-section",
       "from": "SectionCommand",
-      "binding": "CopyCommand"
+      "binding": "CopyCommandSection"
     },
     "client-mosaic-columns": {
-      "to": "client-story-columns",
+      "to": "client-story-columns-section",
       "from": "ClientMosaicColumns",
-      "binding": "ClientStoryColumns"
+      "binding": "ClientStoryColumnsSection"
     },
     "story-library": {
-      "to": "story-index",
+      "to": "story-index-section",
       "from": "StoryLibrary",
-      "binding": "StoryIndex"
+      "binding": "StoryIndexSection"
     },
     "listing-browser": {
-      "to": "listing-index",
+      "to": "listing-index-section",
       "from": "ListingBrowser",
-      "binding": "ListingIndex"
+      "binding": "ListingIndexSection"
     },
     "subject-library": {
-      "to": "subject-grid",
+      "to": "subject-grid-section",
       "from": "SubjectLibrary",
-      "binding": "SubjectGrid"
+      "binding": "SubjectGridSection"
     },
     "feature-list": {
       "to": "plan-feature-list",
@@ -465,7 +465,7 @@
       "binding": "OutcomeIcon"
     },
     "use-cases": {
-      "to": "customer-use-cases"
+      "to": "customer-use-cases-section"
     },
     "hero-form": {
       "to": "hero-form-section",
@@ -484,6 +484,191 @@
     },
     "use-heading-nav": {
       "to": "use-heading-navigation"
+    },
+    "architecture-tabs": {
+      "to": "architecture-tabs-section",
+      "from": "ArchitectureTabs",
+      "binding": "ArchitectureTabsSection"
+    },
+    "article-body": {
+      "to": "article-body-section",
+      "from": "ArticleBody",
+      "binding": "ArticleBodySection"
+    },
+    "article-cards": {
+      "to": "article-cards-section",
+      "from": "ArticleCards",
+      "binding": "ArticleCardsSection"
+    },
+    "article-highlight": {
+      "to": "article-highlight-section",
+      "from": "ArticleHighlight",
+      "binding": "ArticleHighlightSection"
+    },
+    "article-index": {
+      "to": "article-index-section",
+      "from": "ArticleIndex",
+      "binding": "ArticleIndexSection"
+    },
+    "capability-grid": {
+      "to": "capability-grid-section",
+      "from": "CapabilityGrid",
+      "binding": "CapabilityGridSection"
+    },
+    "card-carousel": {
+      "to": "card-carousel-section",
+      "from": "CardCarousel",
+      "binding": "CardCarouselSection"
+    },
+    "client-mosaic": {
+      "to": "client-mosaic-section",
+      "from": "ClientMosaic",
+      "binding": "ClientMosaicSection"
+    },
+    "client-quotes": {
+      "to": "client-quotes-section",
+      "from": "ClientQuotes",
+      "binding": "ClientQuotesSection"
+    },
+    "client-story-columns": {
+      "to": "client-story-columns-section",
+      "from": "ClientStoryColumns",
+      "binding": "ClientStoryColumnsSection"
+    },
+    "cli-terminal": {
+      "to": "cli-terminal-section",
+      "from": "CliTerminal",
+      "binding": "CliTerminalSection"
+    },
+    "closing-call-to-action": {
+      "to": "closing-call-to-action-section",
+      "from": "ClosingCallToAction",
+      "binding": "ClosingCallToActionSection"
+    },
+    "competitor-comparison": {
+      "to": "competitor-comparison-section",
+      "from": "CompetitorComparison",
+      "binding": "CompetitorComparisonSection"
+    },
+    "compliance-logos": {
+      "to": "compliance-logos-section",
+      "from": "ComplianceLogos",
+      "binding": "ComplianceLogosSection"
+    },
+    "console-showcase": {
+      "to": "console-showcase-section",
+      "from": "ConsoleShowcase",
+      "binding": "ConsoleShowcaseSection"
+    },
+    "contact-hub": {
+      "to": "contact-hub-section",
+      "from": "ContactHub",
+      "binding": "ContactHubSection"
+    },
+    "copy-command": {
+      "to": "copy-command-section",
+      "from": "CopyCommand",
+      "binding": "CopyCommandSection"
+    },
+    "customer-use-cases": {
+      "to": "customer-use-cases-section",
+      "from": "CustomerUseCases",
+      "binding": "CustomerUseCasesSection"
+    },
+    "feature-scroll": {
+      "to": "feature-scroll-section",
+      "from": "FeatureScroll",
+      "binding": "FeatureScrollSection"
+    },
+    "feature-tabs": {
+      "to": "feature-tabs-section",
+      "from": "FeatureTabs",
+      "binding": "FeatureTabsSection"
+    },
+    "feature-tiles": {
+      "to": "feature-tiles-section",
+      "from": "FeatureTiles",
+      "binding": "FeatureTilesSection"
+    },
+    "feature-widgets": {
+      "to": "feature-widgets-section",
+      "from": "FeatureWidgets",
+      "binding": "FeatureWidgetsSection"
+    },
+    "investor-marks": {
+      "to": "investor-marks-section",
+      "from": "InvestorMarks",
+      "binding": "InvestorMarksSection"
+    },
+    "job-posting": {
+      "to": "job-posting-section",
+      "from": "JobPosting",
+      "binding": "JobPostingSection"
+    },
+    "listing-index": {
+      "to": "listing-index-section",
+      "from": "ListingIndex",
+      "binding": "ListingIndexSection"
+    },
+    "listing-table": {
+      "to": "listing-table-section",
+      "from": "ListingTable",
+      "binding": "ListingTableSection"
+    },
+    "photo-marquee": {
+      "to": "photo-marquee-section",
+      "from": "PhotoMarquee",
+      "binding": "PhotoMarqueeSection"
+    },
+    "plan-comparison": {
+      "to": "plan-comparison-section",
+      "from": "PlanComparison",
+      "binding": "PlanComparisonSection"
+    },
+    "platform-directory": {
+      "to": "platform-directory-section",
+      "from": "PlatformDirectory",
+      "binding": "PlatformDirectorySection"
+    },
+    "pricing-plans": {
+      "to": "pricing-plans-section",
+      "from": "PricingPlans",
+      "binding": "PricingPlansSection"
+    },
+    "process-scroll": {
+      "to": "process-scroll-section",
+      "from": "ProcessScroll",
+      "binding": "ProcessScrollSection"
+    },
+    "recognition-marquee": {
+      "to": "recognition-marquee-section",
+      "from": "RecognitionMarquee",
+      "binding": "RecognitionMarqueeSection"
+    },
+    "site-footer": {
+      "to": "site-footer-section",
+      "from": "SiteFooter",
+      "binding": "SiteFooterSection"
+    },
+    "site-header": {
+      "to": "site-header-section",
+      "from": "SiteHeader",
+      "binding": "SiteHeaderSection"
+    },
+    "story-index": {
+      "to": "story-index-section",
+      "from": "StoryIndex",
+      "binding": "StoryIndexSection"
+    },
+    "subject-grid": {
+      "to": "subject-grid-section",
+      "from": "SubjectGrid",
+      "binding": "SubjectGridSection"
+    },
+    "template-gallery": {
+      "to": "template-gallery-section",
+      "from": "TemplateGallery",
+      "binding": "TemplateGallerySection"
     }
   },
   "removed": {
@@ -520,25 +705,26 @@
     "hero-copy-on-top-art": "HeroSection from @aziontech/webkit/hero-section with variant=\"copy-on-top-art\" and the same levels",
     "hero-with-opening": "HeroSection from @aziontech/webkit/hero-section with size=\"large\" and the same items (titleLength=\"long\" for a long headline)",
     "banner": "CallToAction from @aziontech/webkit/call-to-action with variant=\"announcement\"; the aside slot becomes the default slot",
-    "closing-call-to-action-agents": "ClosingCallToAction from @aziontech/webkit/closing-call-to-action with variant=\"primary\" and the same audiences, typedLead, typedWords and description",
-    "closing-call-to-action-templates": "TemplateGallery from @aziontech/webkit/template-gallery with closing; the same title, actions, templates and deployLabel",
-    "customer-spotlight": "ClientStoryColumns from @aziontech/webkit/client-story-columns with reveal=\"hover\"; items become cells and each card's description becomes story",
-    "sticky-carousel": "ProcessScroll from @aziontech/webkit/process-scroll with pinned and title-variant=\"centered\"; items become steps",
-    "quote-carousel": "ClientQuotes from @aziontech/webkit/client-quotes, or Quote cards in a CardCarousel",
-    "compare-support-tiers": "PlanComparison from @aziontech/webkit/plan-comparison; pass the tiers as plans",
-    "article-index-blog": "ArticleIndex from @aziontech/webkit/article-index (filters defaults to category-search)",
-    "article-index-resource-hub": "ArticleIndex from @aziontech/webkit/article-index with filters=\"facets\"",
-    "use-case-links": "CapabilityGrid from @aziontech/webkit/capability-grid with title-variant=\"left\"; items keep icon, title, description and href",
-    "resource-grid": "CapabilityGrid from @aziontech/webkit/capability-grid with title-variant=\"horizontal\"; items keep title, description and href",
-    "content-columns": "CapabilityGrid from @aziontech/webkit/capability-grid; items keep title and description, columns is 3 or 4",
+    "closing-call-to-action-agents": "ClosingCallToActionSection from @aziontech/webkit/closing-call-to-action-section with variant=\"primary\" and the same audiences, typedLead, typedWords and description",
+    "closing-call-to-action-templates": "TemplateGallerySection from @aziontech/webkit/template-gallery-section with closing; the same title, actions, templates and deployLabel",
+    "customer-spotlight": "ClientStoryColumnsSection from @aziontech/webkit/client-story-columns-section with reveal=\"hover\"; items become cells and each card's description becomes story",
+    "sticky-carousel": "ProcessScrollSection from @aziontech/webkit/process-scroll-section with pinned and title-variant=\"centered\"; items become steps",
+    "quote-carousel": "ClientQuotesSection from @aziontech/webkit/client-quotes-section, or Quote cards in a CardCarouselSection",
+    "compare-support-tiers": "PlanComparisonSection from @aziontech/webkit/plan-comparison-section; pass the tiers as plans",
+    "article-index-blog": "ArticleIndexSection from @aziontech/webkit/article-index-section (filters defaults to category-search)",
+    "article-index-resource-hub": "ArticleIndexSection from @aziontech/webkit/article-index-section with filters=\"facets\"",
+    "use-case-links": "CapabilityGridSection from @aziontech/webkit/capability-grid-section with title-variant=\"left\"; items keep icon, title, description and href",
+    "resource-grid": "CapabilityGridSection from @aziontech/webkit/capability-grid-section with title-variant=\"horizontal\"; items keep title, description and href",
+    "content-columns": "CapabilityGridSection from @aziontech/webkit/capability-grid-section; items keep title and description, columns is 3 or 4",
     "code-split": "MediaSplitSection from @aziontech/webkit/media-split-section with the same codeTabs, defaultFile and actions",
-    "sticky-scroll-code": "FeatureScroll from @aziontech/webkit/feature-scroll; items keep title, description, code and action",
+    "sticky-scroll-code": "FeatureScrollSection from @aziontech/webkit/feature-scroll-section; items keep title, description, code and action",
     "shell-mockup": "ConsoleMockup from @aziontech/webkit/console-mockup with the registry name of the console screen; the frame is internal",
     "shell-mockup-root": "ConsoleMockup from @aziontech/webkit/console-mockup with the registry name of the console screen; the frame is internal",
     "shell-mockup-part": "ConsoleMockup from @aziontech/webkit/console-mockup; the frame and its parts are internal",
     "vite": "delete the webkitViteConfig import and its mergeConfig call; an app that uses vee-validate sets optimizeDeps: { include: ['vee-validate'] } in its own Vite config",
     "doc-cta": "use DocCallToAction from '@aziontech/webkit/doc-call-to-action': primary-label and primary-href become :primary-action=\"{ label, href }\", secondary-label and secondary-href become :secondary-action=\"{ label, href }\"",
-    "helper-text": "use FieldDescription for guidance or FieldError for a validation message (Field.Description / Field.Error); both work outside a Field"
+    "helper-text": "use FieldDescription for guidance or FieldError for a validation message (Field.Description / Field.Error); both work outside a Field",
+    "doc-step": "import DocSteps from @aziontech/webkit/doc-steps and write each step as <DocSteps.Step title>: a step only renders inside DocSteps, so it ships attached to the compound"
   },
   "types": {
     "BoxGridSelectionItem": "RadioGroupOption",
@@ -595,43 +781,43 @@
     "HeroWithOpeningAction": "SectionTitleAction",
     "HeroWithOpeningItem": "HeroSectionItem",
     "HeroWithOpeningTitleLength": "HeroSectionTitleLength",
-    "ClosingCallToActionAgentsAudience": "ClosingCallToActionAudience",
-    "ClosingCallToActionAgentsAction": "ClosingCallToActionAudienceAction",
-    "ClosingCallToActionAgentsActionKind": "ClosingCallToActionAudienceActionVariant",
-    "ClosingCallToActionAgentsCopy": "ClosingCallToActionAudienceCopy",
+    "ClosingCallToActionAgentsAudience": "ClosingCallToActionSectionAudience",
+    "ClosingCallToActionAgentsAction": "ClosingCallToActionSectionAudienceAction",
+    "ClosingCallToActionAgentsActionKind": "ClosingCallToActionSectionAudienceActionVariant",
+    "ClosingCallToActionAgentsCopy": "ClosingCallToActionSectionAudienceCopy",
     "ClosingCallToActionTemplatesAction": "SectionTitleAction",
-    "ClosingCallToActionTemplatesTemplate": "TemplateGalleryTemplate",
+    "ClosingCallToActionTemplatesTemplate": "TemplateGallerySectionTemplate",
     "CompareSupportTiersAction": "SectionTitleAction",
-    "CompareSupportTiersTier": "PlanComparisonPlan",
-    "CompareSupportTiersValue": "PlanComparisonValue",
-    "CompareSupportTiersRow": "PlanComparisonRow",
-    "CompareSupportTiersSection": "PlanComparisonSection",
-    "ArticleIndexBlogAuthor": "ArticleIndexAuthor",
+    "CompareSupportTiersTier": "PlanComparisonSectionPlan",
+    "CompareSupportTiersValue": "PlanComparisonSectionValue",
+    "CompareSupportTiersRow": "PlanComparisonSectionRow",
+    "CompareSupportTiersSection": "PlanComparisonSectionSection",
+    "ArticleIndexBlogAuthor": "ArticleIndexSectionAuthor",
     "ArticleIndexBlogMark": "LogoMark",
-    "ArticleIndexBlogItem": "ArticleIndexItem",
-    "ArticleIndexBlogRowKind": "ArticleIndexRowVariant",
+    "ArticleIndexBlogItem": "ArticleIndexSectionItem",
+    "ArticleIndexBlogRowKind": "ArticleIndexSectionRowVariant",
     "ArticleIndexResourceHubMark": "LogoMark",
-    "ArticleIndexResourceHubItem": "ArticleIndexItem",
-    "ArticleIndexResourceHubFacet": "ArticleIndexFacet",
-    "ArticleIndexResourceHubRowKind": "ArticleIndexRowVariant",
-    "UseCaseLinksItem": "CapabilityGridItem",
-    "ResourceGridItem": "CapabilityGridItem",
-    "ContentColumnsItem": "CapabilityGridItem",
-    "ResourceGridAction": "CapabilityGridAction",
+    "ArticleIndexResourceHubItem": "ArticleIndexSectionItem",
+    "ArticleIndexResourceHubFacet": "ArticleIndexSectionFacet",
+    "ArticleIndexResourceHubRowKind": "ArticleIndexSectionRowVariant",
+    "UseCaseLinksItem": "CapabilityGridSectionItem",
+    "ResourceGridItem": "CapabilityGridSectionItem",
+    "ContentColumnsItem": "CapabilityGridSectionItem",
+    "ResourceGridAction": "CapabilityGridSectionAction",
     "CodeSplitTab": "MediaSplitSectionCodeTab",
     "CodeSplitAction": "MediaSplitSectionAction",
     "CodeSplitActionKind": "MediaSplitSectionActionVariant",
-    "StickyScrollCodeItem": "FeatureScrollItem",
-    "StickyScrollCodeSample": "FeatureScrollCode",
-    "StickyScrollCodeAction": "FeatureScrollAction",
-    "StickyScrollCodeActionKind": "FeatureScrollActionVariant",
+    "StickyScrollCodeItem": "FeatureScrollSectionItem",
+    "StickyScrollCodeSample": "FeatureScrollSectionCode",
+    "StickyScrollCodeAction": "FeatureScrollSectionAction",
+    "StickyScrollCodeActionKind": "FeatureScrollSectionActionVariant",
     "LogoItem": "LogoWallItem",
     "LogoShape": "LogoWallShape",
     "BigNumberItem": "StatsItem",
     "AccordionArrowPosition": "AccordionIconPosition",
     "CardPricingSlotPosition": "PricingCardActionsPosition",
     "MediaTabsPosition": "MediaTabsSide",
-    "ArchitectureTabsPosition": "ArchitectureTabsSide",
+    "ArchitectureTabsPosition": "ArchitectureTabsSectionSide",
     "ButtonKind": "ButtonVariant",
     "IconButtonKind": "IconButtonVariant",
     "SplitButtonKind": "SplitButtonVariant",
@@ -641,7 +827,6 @@
     "ItemKind": "ItemVariant",
     "SelectKind": "SelectVariant",
     "MultiSelectKind": "MultiSelectVariant",
-    "CardKind": "CardVariant",
     "AvatarKind": "AvatarVariant",
     "BrandKind": "BrandVariant",
     "LogoKind": "LogoVariant",
@@ -679,15 +864,15 @@
     "StatTileKind": "StatTileVariant",
     "ToolApprovalKind": "ToolApprovalVariant",
     "AiLoadingKind": "ResponseLoadingVariant",
-    "ArticleCardsKind": "ArticleCardsAlign",
-    "ClosingCallToActionKind": "ClosingCallToActionVariant",
-    "ConsolePanelKind": "ConsoleShowcaseVariant",
-    "FeatureTilesKind": "FeatureTilesVariant",
+    "ArticleCardsKind": "ArticleCardsSectionAlign",
+    "ClosingCallToActionKind": "ClosingCallToActionSectionVariant",
+    "ConsolePanelKind": "ConsoleShowcaseSectionVariant",
+    "FeatureTilesKind": "FeatureTilesSectionVariant",
     "HeroBandKind": "HeroSectionVariant",
     "LogoWallQuoteKind": "LogoWallSectionVariant",
     "MediaSplitStackKind": "MediaSplitStackSectionVariant",
     "NetworkSectionKind": "NetworkSectionVariant",
-    "SiteFooterKind": "SiteFooterVariant",
+    "SiteFooterKind": "SiteFooterSectionVariant",
     "PaginationButtonKind": "PaginationButtonType",
     "TableCellKind": "TableCellType",
     "TableHeadCellKind": "TableHeadCellType",
@@ -701,20 +886,20 @@
     "CodeBlockKind": "CodeBlockType",
     "ArtifactCanvasKind": "ArtifactCanvasType",
     "ItemMediaKind": "ItemMediaType",
-    "FeatureScrollActionKind": "FeatureScrollActionVariant",
-    "ConsolePanelActionKind": "ConsoleShowcaseActionVariant",
-    "ClosingCallToActionAudienceActionKind": "ClosingCallToActionAudienceActionVariant",
-    "CapabilityGridActionKind": "CapabilityGridActionVariant",
+    "FeatureScrollActionKind": "FeatureScrollSectionActionVariant",
+    "ConsolePanelActionKind": "ConsoleShowcaseSectionActionVariant",
+    "ClosingCallToActionAudienceActionKind": "ClosingCallToActionSectionAudienceActionVariant",
+    "CapabilityGridActionKind": "CapabilityGridSectionActionVariant",
     "MediaSplitBandActionKind": "MediaSplitSectionActionVariant",
     "LogoWallQuoteQuoteKind": "LogoWallSectionQuoteVariant",
-    "ArticleIndexRowKind": "ArticleIndexRowVariant",
+    "ArticleIndexRowKind": "ArticleIndexSectionRowVariant",
     "DiagramGroupKind": "DiagramGroupVariant",
     "SidebarMenuSubKind": "SidebarMenuSubType",
     "ChartMarkKind": "ChartMarkType",
     "FieldPartKind": "FieldPartType",
     "FilterMenuFieldKind": "FilterMenuFieldType",
     "HeroFormFieldKind": "HeroFormSectionFieldType",
-    "JobPostingFieldKind": "JobPostingFieldType",
+    "JobPostingFieldKind": "JobPostingSectionFieldType",
     "DiagramNodeKind": "DiagramNodeType",
     "DropdownMenuOptionValue": "DropdownMenuItemValue",
     "SelectOptionProps": "SelectItemProps",
@@ -807,11 +992,11 @@
     "ButtonHighlightSize": "HighlightButtonSize",
     "ButtonHighlightTarget": "HighlightButtonTarget",
     "ButtonHighlightProps": "HighlightButtonProps",
-    "SiteNavLink": "SiteHeaderLink",
-    "SiteNavItem": "SiteHeaderItem",
-    "SiteNavGroup": "SiteHeaderGroup",
-    "SiteNavMenu": "SiteHeaderMenu",
-    "SiteNavProps": "SiteHeaderProps",
+    "SiteNavLink": "SiteHeaderSectionLink",
+    "SiteNavItem": "SiteHeaderSectionItem",
+    "SiteNavGroup": "SiteHeaderSectionGroup",
+    "SiteNavMenu": "SiteHeaderSectionMenu",
+    "SiteNavProps": "SiteHeaderSectionProps",
     "SettingRowVariant": "SettingsRowVariant",
     "SettingRowDepth": "SettingsRowDepth",
     "SettingRowProps": "SettingsRowProps",
@@ -882,44 +1067,44 @@
     "CurrencyProps": "CurrencyAmountProps",
     "DocUpdateProps": "DocChangelogEntryProps",
     "DocAccordionItemProps": "DocAccordionProps",
-    "ConsolePanelVariant": "ConsoleShowcaseVariant",
-    "ConsolePanelTab": "ConsoleShowcaseTab",
-    "ConsolePanelActionVariant": "ConsoleShowcaseActionVariant",
-    "ConsolePanelAction": "ConsoleShowcaseAction",
-    "ConsolePanelProps": "ConsoleShowcaseProps",
-    "ComparePlansPlan": "PlanComparisonPlan",
-    "ComparePlansValue": "PlanComparisonValue",
-    "ComparePlansRow": "PlanComparisonRow",
-    "ComparePlansSection": "PlanComparisonSection",
-    "ComparePlansProps": "PlanComparisonProps",
-    "ComparisonTableSupport": "CompetitorComparisonSupport",
-    "ComparisonTableCompetitor": "CompetitorComparisonCompetitor",
-    "ComparisonTableRow": "CompetitorComparisonRow",
-    "ComparisonTableGroup": "CompetitorComparisonGroup",
-    "ComparisonTableProps": "CompetitorComparisonProps",
-    "ComplianceBadgesCertification": "ComplianceLogosCertification",
-    "ComplianceBadgesProps": "ComplianceLogosProps",
-    "SectionCommandProps": "CopyCommandProps",
-    "ClientMosaicColumnsReveal": "ClientStoryColumnsReveal",
-    "ClientMosaicColumnsInk": "ClientStoryColumnsInk",
-    "ClientMosaicColumnsBrand": "ClientStoryColumnsBrand",
-    "ClientMosaicColumnsCell": "ClientStoryColumnsCell",
-    "ClientMosaicColumnsProps": "ClientStoryColumnsProps",
-    "StoryLibraryItem": "StoryIndexItem",
-    "StoryLibraryFacetOption": "StoryIndexFacetOption",
-    "StoryLibraryFacet": "StoryIndexFacet",
-    "StoryLibraryProps": "StoryIndexProps",
-    "ListingBrowserColumnAlign": "ListingIndexColumnAlign",
-    "ListingBrowserColumn": "ListingIndexColumn",
-    "ListingBrowserRow": "ListingIndexRow",
-    "ListingBrowserFacetOption": "ListingIndexFacetOption",
-    "ListingBrowserFacet": "ListingIndexFacet",
-    "ListingBrowserSort": "ListingIndexSort",
-    "ListingBrowserProps": "ListingIndexProps",
-    "SubjectLibraryArticle": "SubjectGridArticle",
-    "SubjectLibrarySubject": "SubjectGridSubject",
-    "SubjectLibraryClosing": "SubjectGridClosing",
-    "SubjectLibraryProps": "SubjectGridProps",
+    "ConsolePanelVariant": "ConsoleShowcaseSectionVariant",
+    "ConsolePanelTab": "ConsoleShowcaseSectionTab",
+    "ConsolePanelActionVariant": "ConsoleShowcaseSectionActionVariant",
+    "ConsolePanelAction": "ConsoleShowcaseSectionAction",
+    "ConsolePanelProps": "ConsoleShowcaseSectionProps",
+    "ComparePlansPlan": "PlanComparisonSectionPlan",
+    "ComparePlansValue": "PlanComparisonSectionValue",
+    "ComparePlansRow": "PlanComparisonSectionRow",
+    "ComparePlansSection": "PlanComparisonSectionSection",
+    "ComparePlansProps": "PlanComparisonSectionProps",
+    "ComparisonTableSupport": "CompetitorComparisonSectionSupport",
+    "ComparisonTableCompetitor": "CompetitorComparisonSectionCompetitor",
+    "ComparisonTableRow": "CompetitorComparisonSectionRow",
+    "ComparisonTableGroup": "CompetitorComparisonSectionGroup",
+    "ComparisonTableProps": "CompetitorComparisonSectionProps",
+    "ComplianceBadgesCertification": "ComplianceLogosSectionCertification",
+    "ComplianceBadgesProps": "ComplianceLogosSectionProps",
+    "SectionCommandProps": "CopyCommandSectionProps",
+    "ClientMosaicColumnsReveal": "ClientStoryColumnsSectionReveal",
+    "ClientMosaicColumnsInk": "ClientStoryColumnsSectionInk",
+    "ClientMosaicColumnsBrand": "ClientStoryColumnsSectionBrand",
+    "ClientMosaicColumnsCell": "ClientStoryColumnsSectionCell",
+    "ClientMosaicColumnsProps": "ClientStoryColumnsSectionProps",
+    "StoryLibraryItem": "StoryIndexSectionItem",
+    "StoryLibraryFacetOption": "StoryIndexSectionFacetOption",
+    "StoryLibraryFacet": "StoryIndexSectionFacet",
+    "StoryLibraryProps": "StoryIndexSectionProps",
+    "ListingBrowserColumnAlign": "ListingIndexSectionColumnAlign",
+    "ListingBrowserColumn": "ListingIndexSectionColumn",
+    "ListingBrowserRow": "ListingIndexSectionRow",
+    "ListingBrowserFacetOption": "ListingIndexSectionFacetOption",
+    "ListingBrowserFacet": "ListingIndexSectionFacet",
+    "ListingBrowserSort": "ListingIndexSectionSort",
+    "ListingBrowserProps": "ListingIndexSectionProps",
+    "SubjectLibraryArticle": "SubjectGridSectionArticle",
+    "SubjectLibrarySubject": "SubjectGridSectionSubject",
+    "SubjectLibraryClosing": "SubjectGridSectionClosing",
+    "SubjectLibraryProps": "SubjectGridSectionProps",
     "FeatureListItem": "PlanFeatureListItem",
     "FeatureListColumns": "PlanFeatureListColumns",
     "FeatureListProps": "PlanFeatureListProps",
@@ -960,8 +1145,8 @@
     "OutcomeMarkSeverity": "OutcomeIconSeverity",
     "OutcomeMarkSize": "OutcomeIconSize",
     "OutcomeMarkProps": "OutcomeIconProps",
-    "UseCasesItem": "CustomerUseCasesItem",
-    "UseCasesProps": "CustomerUseCasesProps",
+    "UseCasesItem": "CustomerUseCasesSectionItem",
+    "UseCasesProps": "CustomerUseCasesSectionProps",
     "HeroFormFieldType": "HeroFormSectionFieldType",
     "HeroFormField": "HeroFormSectionField",
     "HeroFormItem": "HeroFormSectionItem",

@@ -28,7 +28,7 @@
     },
     "#action": "actions"
   },
-  "architecture-tabs": {
+  "architecture-tabs-section": {
     "interval": "autoplayInterval",
     "position": {
       "to": "tabsSide",
@@ -86,7 +86,7 @@
     "mobileCols": "mobileColumns",
     "cols": "columns"
   },
-  "feature-tabs": {
+  "feature-tabs-section": {
     "interval": "autoplayInterval"
   },
   "hero": {
@@ -117,7 +117,20 @@
       }
     },
     "tickerLabel": "marqueeLabel",
-    "tickerMarks": "marqueeMarks"
+    "tickerMarks": "marqueeMarks",
+    "illustration": {
+      "to": "illustration",
+      "values": {
+        "build-databases-from-code": "sql-sdk-code-cards",
+        "distributed-sql-for-resilient-global-reads": "globe-with-sql-nodes",
+        "enable-owasp-protection-with-customizable-rules": "waf-threat-families-panel",
+        "reputation-intelligence-for-enhanced-protection": "reputation-rings-hub",
+        "saas-platforms": "azion-to-commerce-tiles",
+        "stay-in-control": "traffic-and-cost-bar-chart",
+        "stream-security-events-for-investigation-and-response": "data-stream-destinations-map",
+        "white-gloves-when-it-matters": "chat-and-headset-tiles"
+      }
+    }
   },
   "hero-form-section": {
     "carouselMarks": "marqueeMarks",
@@ -868,7 +881,7 @@
     },
     "expanded": "open"
   },
-  "capability-grid": {
+  "capability-grid-section": {
     "actions": {
       "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, variant? } shape); a third action has no slot, put it in the page instead"
     },
@@ -876,7 +889,7 @@
     "titleKind": "titleAlign",
     "titleVariant": "titleAlign"
   },
-  "console-showcase": {
+  "console-showcase-section": {
     "actions": {
       "removed": "pass the first action as primaryAction and the second as secondaryAction (same { label, href, trailing?, target?, variant? } shape); a third action has no slot, put it in the page instead"
     },
@@ -1209,9 +1222,37 @@
   },
   "card": {
     "#header-action": "header-actions",
-    "#action": "actions",
+    "#action": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
     "#content": "default",
-    "kind": "variant"
+    "kind": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "variant": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "logo": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "vendor": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "description": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "badges": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "installed": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "href": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    },
+    "featured": {
+      "removed": "Card has one layout in 6.0; a catalog tile is IntegrationCard from @aziontech/webkit/integration-card, with the same props, the select event and the logo and actions slots"
+    }
   },
   "code-editor": {
     "lineNumbers": "showLineNumbers",
@@ -1297,7 +1338,7 @@
     "lead": "claimsEyebrow",
     "kind": "variant"
   },
-  "article-index": {
+  "article-index-section": {
     "categoryLabel": "categoryAriaLabel",
     "rowKind": {
       "to": "rowVariant",
@@ -1313,7 +1354,7 @@
     },
     "kind": "variant"
   },
-  "listing-index": {
+  "listing-index-section": {
     "rows": "data",
     "search": {
       "removed": "split into searchPlaceholder, searchShortPlaceholder and searchAriaLabel"
@@ -1322,7 +1363,7 @@
       "removed": "split into emptyTitle, emptyDescription and emptyActionLabel (was clearLabel)"
     }
   },
-  "listing-table": {
+  "listing-table-section": {
     "rows": "data"
   },
   "section-title": {
@@ -1347,7 +1388,7 @@
     },
     "variant": "align"
   },
-  "article-cards": {
+  "article-cards-section": {
     "kind": {
       "to": "align",
       "values": {
@@ -1357,7 +1398,7 @@
     },
     "variant": "align"
   },
-  "feature-widgets": {
+  "feature-widgets-section": {
     "titleKind": {
       "to": "titleAlign",
       "values": {
@@ -1372,7 +1413,7 @@
   "sticky-stack": {
     "@index-change": "active-index-change"
   },
-  "story-index": {
+  "story-index-section": {
     "search": {
       "removed": "split into searchPlaceholder, searchShortPlaceholder and searchAriaLabel"
     },
@@ -1391,7 +1432,7 @@
   "conversation": {
     "alignment": "layout"
   },
-  "job-posting": {
+  "job-posting-section": {
     "error": "failed"
   },
   "icon-button": {
@@ -1529,10 +1570,10 @@
   "response-loading": {
     "kind": "variant"
   },
-  "closing-call-to-action": {
+  "closing-call-to-action-section": {
     "kind": "variant"
   },
-  "feature-tiles": {
+  "feature-tiles-section": {
     "kind": "variant"
   },
   "logo-wall-section": {
@@ -1542,10 +1583,10 @@
   "media-split-stack-section": {
     "kind": "variant"
   },
-  "site-footer": {
+  "site-footer-section": {
     "kind": "variant"
   },
-  "process-scroll": {
+  "process-scroll-section": {
     "kind": "variant",
     "titleKind": "titleAlign",
     "titleVariant": "titleAlign"
@@ -1601,7 +1642,7 @@
   "eyebrow": {
     "showCursor": "cursor"
   },
-  "template-gallery": {
+  "template-gallery-section": {
     "tickerLabel": "marqueeLabel",
     "tickerMarks": "marqueeMarks"
   },
@@ -1704,5 +1745,35 @@
       }
     },
     "offset": "sideOffset"
+  },
+  "illustration": {
+    "name": {
+      "to": "name",
+      "values": {
+        "build-databases-from-code": "sql-sdk-code-cards",
+        "distributed-sql-for-resilient-global-reads": "globe-with-sql-nodes",
+        "enable-owasp-protection-with-customizable-rules": "waf-threat-families-panel",
+        "reputation-intelligence-for-enhanced-protection": "reputation-rings-hub",
+        "saas-platforms": "azion-to-commerce-tiles",
+        "stay-in-control": "traffic-and-cost-bar-chart",
+        "stream-security-events-for-investigation-and-response": "data-stream-destinations-map",
+        "white-gloves-when-it-matters": "chat-and-headset-tiles"
+      }
+    }
+  },
+  "media-split-section": {
+    "illustration": {
+      "to": "illustration",
+      "values": {
+        "build-databases-from-code": "sql-sdk-code-cards",
+        "distributed-sql-for-resilient-global-reads": "globe-with-sql-nodes",
+        "enable-owasp-protection-with-customizable-rules": "waf-threat-families-panel",
+        "reputation-intelligence-for-enhanced-protection": "reputation-rings-hub",
+        "saas-platforms": "azion-to-commerce-tiles",
+        "stay-in-control": "traffic-and-cost-bar-chart",
+        "stream-security-events-for-investigation-and-response": "data-stream-destinations-map",
+        "white-gloves-when-it-matters": "chat-and-headset-tiles"
+      }
+    }
   }
 }
