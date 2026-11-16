@@ -107,7 +107,7 @@
     :data-testid="testId"
     @click="onClick"
   >
-    <span class="relative z-1 inline-flex min-w-0 max-w-full items-center gap-(--spacing-xs)">
+    <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
       <slot name="leading" />
       <Spinner
         v-if="loading"
@@ -148,7 +148,7 @@
     :data-testid="testId"
     @click="onClick"
   >
-    <span class="relative z-1 inline-flex min-w-0 max-w-full items-center gap-(--spacing-xs)">
+    <span class="relative z-1 inline-flex items-center gap-(--spacing-xs)">
       <slot name="leading" />
       <Spinner
         v-if="loading"
