@@ -3,11 +3,11 @@ name: date-range-picker
 category: input
 structure: monolithic
 status: implemented
-spec_version: 6
+spec_version: 7
 template: 2
-checksum: 4c501532870b7ee42dfbe4dabaf4cf22025de424af3e42ecb64ffe8280541b8c
+checksum: eac16bc6704f08ed66e8f625d16070989dcfdbe9e99eebdd2bb75298aee0f13b
 created: 2026-11-11
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 ---
 
 # DateRangePicker — Component Spec
@@ -40,7 +40,7 @@ A time range for queries over time: logs, events, traces and metrics. After the 
 
 ## Best practices
 
-- Keep relative values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`), never when the user picks them.
+- Keep relative values relative: resolve them to instants when the query runs (`now - amount × unit` to `now`), never when the user picks them. `useTimeRange(value)` from `@aziontech/webkit/use-time-range` returns `from` and `to` and holds the window until `refresh()`; its `TIME_RANGE_PRESETS` (last hour, 24 hours, 7 days, 30 days) go in `relative-options`.
 - Fix the reference clock in tests, demos and server-rendered pages so labels and step limits are deterministic: `now` on the app's `WebkitProvider` covers every picker below it; the `now` prop overrides it for one picker.
 - Bind `v-model:time-zone` to the user's saved preference, and show times elsewhere on the page in the same zone.
 - Set `max` (usually now) and `min` (the retention limit) instead of validating after Apply.

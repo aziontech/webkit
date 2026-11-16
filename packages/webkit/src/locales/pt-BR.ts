@@ -507,6 +507,16 @@ export const ptBR: Messages = {
   fileDropzone: {
     title: 'Solte arquivos para enviar'
   },
+  filePreview: {
+    download: 'Baixar',
+    loading: 'Carregando pré-visualização',
+    contents: 'Conteúdo de {name}',
+    noPreview: 'Sem pré-visualização para este tipo de arquivo',
+    noPreviewDetail: 'Baixe o arquivo para abri-lo.',
+    error: 'Não foi possível carregar a pré-visualização',
+    empty: 'Este arquivo está vazio.',
+    truncated: 'Mostrando os primeiros {shown} caracteres. Baixe o arquivo para ver tudo.'
+  },
   fileTokenGroup: {
     label: 'Arquivos',
     remove: 'Remover {name}',

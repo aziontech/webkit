@@ -122,6 +122,8 @@ Structure and states first, polish last:
 - **Polish:** `/webkit-motion-polish` → `/webkit-final-polish`
 - **Verify:** `/webkit-ui-verify` (real browser, both themes, several widths, axe)
 - **Adopting WebKit in an existing app:** `/webkit-adoption`
+- **Azion API:** `/webkit-azion-api` (CORS, the dev and edge proxy, where the personal token
+  lives) · `/webkit-query-explorer` (a Metrics or Events GraphQL explorer from WebKit pieces)
 
 ## How to find a component
 

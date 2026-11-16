@@ -1277,6 +1277,16 @@
     "limit": "1 KB"
   },
   {
+    "name": "use-time-range",
+    "path": "src/composables/use-time-range/index.ts",
+    "limit": "0.9 KB"
+  },
+  {
+    "name": "file-preview",
+    "path": "src/components/content/file-preview/file-preview.vue",
+    "limit": "6.9 KB"
+  },
+  {
     "name": "overflow-count",
     "path": "src/components/content/overflow-count/overflow-count.vue",
     "limit": "13.95 KB"

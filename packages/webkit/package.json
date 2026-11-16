@@ -2507,6 +2507,14 @@
       "types": "./types/composables/use-pinned-row/index.d.ts",
       "default": "./src/composables/use-pinned-row/index.ts"
     },
+    "./use-time-range": {
+      "types": "./types/composables/use-time-range/index.d.ts",
+      "default": "./src/composables/use-time-range/index.ts"
+    },
+    "./file-preview": {
+      "types": "./types/components/content/file-preview/file-preview.vue.d.ts",
+      "default": "./src/components/content/file-preview/file-preview.vue"
+    },
     "./attribute-editor": {
       "types": "./types/components/input/attribute-editor/attribute-editor.vue.d.ts",
       "default": "./src/components/input/attribute-editor/attribute-editor.vue"
@@ -4038,6 +4046,12 @@
       ],
       "use-pinned-row": [
         "./types/composables/use-pinned-row/index.d.ts"
+      ],
+      "use-time-range": [
+        "./types/composables/use-time-range/index.d.ts"
+      ],
+      "file-preview": [
+        "./types/components/content/file-preview/file-preview.vue.d.ts"
       ],
       "attribute-editor": [
         "./types/components/input/attribute-editor/attribute-editor.vue.d.ts"

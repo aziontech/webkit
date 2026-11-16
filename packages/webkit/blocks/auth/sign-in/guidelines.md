@@ -9,6 +9,7 @@ The signed-out screens of a platform app: sign in, sign up, reset password and c
 - Any signed-out step that asks for credentials (sign in, MFA, set a new password).
 - The OAuth authorize screen (`OauthConsent`): a third-party app asks to act on the signed-in account, and the person allows or denies the scopes it lists.
 - Device and CLI sign-in (`DeviceAuthorization`): a terminal or a device without a browser printed a code, and the person confirms it here.
+- An app with no accounts of its own that calls the Azion API with the person's personal token (PersonalToken): an internal console, a dashboard, a storage browser.
 
 ## When not to use
 
@@ -97,6 +98,12 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 
 `size="small"`, the step's title and its lead (`Welcome back` / `Sign in to your account.`). The same part on every screen of the block, primary and variants, so the card always opens on one `h1`.
 
+### Q. Personal token — `PasswordInput` (PersonalToken and RejectedToken)
+
+For an app that signs in with an Azion personal token instead of an account. One `Field` labelled `Personal token` over a `PasswordInput` with `monospace`, `autocomplete="off"`, `spellcheck="false"` and the show and hide toggle it ships, a `Field.Description` that links to how a token is created (a real Azion documentation link, `target="_blank"`), and a `Field.Error` for the client checks: empty (`Paste your personal token.`) and inner spaces (`A token has no spaces. Copy it again from Personal tokens.`). The card has no Google or GitHub buttons and no steps.
+
+The block checks the token once against the API (the demo's `checkToken` stub: a token under 32 characters is rejected, `9…9` does not answer) and then emits `sign-in` with `(event, token)`, the token trimmed. It stores nothing: keeping the token for the session (memory or `sessionStorage`, never `localStorage` or a cookie the app's server can read) and attaching it to requests is the app's job; see `skills/webkit-azion-api`. A 401 or 403 is a danger notice with no action, the field cleared and focused (RejectedToken); no answer is a warning notice with Retry and the entry kept.
+
 ## Do
 
 - Keep one card and one notice slot for the whole flow; swap the step body, not the page.
@@ -125,6 +132,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - Don't put client-side validation in the `Alert`; it belongs on the field.
 - Don't call a timeout a failure (`danger`) or say the account was not created; the request may have landed.
 - Don't stack notices: a new outcome replaces the one in the slot.
+- Don't keep a personal token in `localStorage`, a URL or a log, and don't echo it back on the page after sign-in.
 - Don't hide or disable the email field while the providers load, and don't show a spinner in place of the provider buttons.
 
 - Don't split a one-time code into separate inputs or move focus between them by hand; `OtpInput` is one field.
@@ -153,6 +161,7 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - **Scope rows:** title starts with a verb (`Read your workloads`, `Deploy your applications`), the description says what is in and, when it matters, what is not: `Names, domains and status. Not their settings or secrets.`
 - **Consent actions:** `Deny` and `Allow`. Outcomes: `Access granted. Returning to Acme Deploy.` / `Access denied. Returning to Acme Deploy with no access to your account.`
 - **Device actions:** `Cancel` and `Confirm`. Outcomes: `Device connected. Go back to your terminal; you can close this tab.` / `Request cancelled. The device was not connected.`
+- **Personal token:** heading `Sign in with a personal token`; lead `Paste a personal token from your Azion account. It is sent only to the Azion API.`; rejected `Azion did not accept this token. Check that you copied all of it and that it has not expired or been revoked.`; unreachable `We could not reach Azion to check the token. Your entry is kept.`
 - **Device code errors:** `Enter the code your terminal shows.`, `Enter all 8 characters of the code.`, `That code is not valid or has expired. Check your terminal, or start the sign-in again there.`
 
 ## Accessibility
@@ -188,6 +197,9 @@ Live checklist bound to the new password (`:value`), driven by `DEFAULT_PASSWORD
 - MfaCode: the sign-in challenge after the password: a 6-digit `OtpInput`, focused when the challenge opens (not with `autofocus`), that submits on `complete`, Use a recovery code (an 8-character alphanumeric `OtpInput` grouped by 4) and Sign in with another account. Same outcomes as MfaSetup: field reason for a rejected code, warning notice with Retry when the check does not answer.
 - OauthConsent: the authorize screen. The app (square `Avatar` with its initials, name, publisher, site), the signed-in account in an outlined `Item` with Switch account, the scopes in an `Item.List`, the redirect URL and where to revoke, then Deny / Allow. The pressed answer shows its loading state and locks the other; the outcome lands in the notice slot (`success` for Allow, `info` for Deny) and both stay locked.
 - DeviceAuthorization: device or CLI sign-in. The code the terminal printed (`WDJB-MJHT`) in large mono text, the request details in a split `KeyValueList`, the account and the two scopes, Cancel / Confirm. `The code does not match? Enter the code from your terminal` swaps to an 8-character alphanumeric `OtpInput` grouped by 4: a rejected code (`00000000` in the demo) is the field's reason, cleared and focused; no answer (`99999999`) is a warning notice with Retry; an accepted code returns to the confirm step showing it. Confirm reports `success`, Cancel `info`.
+
+- PersonalToken: sign in with an Azion personal token. One masked, monospace field with show and hide, a link to how tokens are made, required and no-spaces checks, then a check against the API: rejected is a danger notice with the field cleared, no answer a warning with Retry, accepted emits `sign-in` `(event, token)`.
+- RejectedToken: the PersonalToken card after a 401, the danger notice under the heading and the empty field focused.
 
 ## Related
 

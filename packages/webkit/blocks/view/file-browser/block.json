@@ -24,7 +24,11 @@
     "move objects",
     "drag and drop upload",
     "enviar arquivos",
-    "mover arquivos"
+    "mover arquivos",
+    "file preview",
+    "preview a file",
+    "object preview",
+    "visualizar arquivo"
   ],
   "skills": ["webkit-tables", "webkit-lists", "webkit-ui-states"],
   "primary": {

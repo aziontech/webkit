@@ -35,7 +35,12 @@ const blockGuidelines = import.meta.glob<GuidelinesDoc>(
   { query: '?guidelines', import: 'default' }
 )
 const foundationDocs = import.meta.glob<MarkdownDoc>(
-  ['../../../../rules/*.md', '../../../../packages/webkit/README.md'],
+  [
+    '../../../../rules/*.md',
+    '../../../../packages/webkit/README.md',
+    '../../../../skills/webkit-azion-api/SKILL.md',
+    '../../../../skills/webkit-query-explorer/SKILL.md'
+  ],
   { query: '?markdown', import: 'default' }
 )
 
