@@ -17,6 +17,10 @@ code, URLs, domains, IDs, keyboard shortcuts — stays left-to-right inside it.
   sign-out. Webkit components already do it (`Button`/`IconButton`/`Link`/`Breadcrumb` `icon` props,
   and `@aziontech/webkit/styles` for any `ai ai-chevron-right`-style glyph); on your own glyph add
   `rtl:-scale-x-100`.
+- Place overlays with `side` and `align` (`Tooltip`, `Popover`, `HoverCard`, `DropdownMenu`,
+  `Hint`, `NavigationMenu.Viewport`): `side="end"` opens on the right in `ltr` and on the left in
+  `rtl`, and `align="start"` lines the panel up with the trigger's start edge in both. Select,
+  Combobox, the date pickers and menus anchor at `bottom` + `start` and mirror on their own.
 - Mirror horizontal motion with the `rtl:` variant: a panel that slides in with
   `-translate-x-full` also gets `rtl:translate-x-full`.
 - Read the direction in script with `useDirection` (`@aziontech/webkit/use-direction`) whenever an

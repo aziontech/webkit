@@ -2,7 +2,7 @@
 name: webkit-navigation
 description: Two navigation shells for UI on @aziontech/webkit — the persistent console shell is `ConsoleLayout` (@aziontech/webkit/console-layout), composed ONCE in App.vue around RouterView (navigation rail from `navigation` data with an href per row, header breadcrumbs, the ⌘K search palette, the account and its menu, the `actions` slot, `useConsoleLayout().openSearch()` from a page), and every browse page is only a body in its default slot with no `<main>` or chrome of its own; the focused creation shell (no rail, one AppHeader with back + brand + breadcrumb + avatar — the `top-bar/creation-bar` block every create block carries) heads create flows (`create/*`: a new resource, an import, deploying a template) routed outside the layout; editing a resource and a resource's deploy progress are page bodies inside it. A page picks exactly ONE shell, renders exactly ONE AppHeader, and the signed-in user stays visible in both. Also fixes the page body inside the console: `layout-boundary` + a column class, a first-level list opening on its PageHeader (the create action, large) over one band of controls and a flush borderless Card table, tabbed detail pages opening flush on PageTabs with the primary button on the TAB ROW (medium), and the breadcrumb levels — no trail at first level, `module › resource name` at second level, never a tab. Fixes the navigation levels too: one owner per level (rail, PageTabs, at most one local navigation — the `detail/sectioned-resource` block, only past 7 sibling pages), a destination offered once per screen (no in-page `SidebarMenu` repeating rail rows), no rail row that routes into a resource, and active rows that agree with the route. Fixes where drawers sit in that path: a drawer opens only over the screen that owns its item (a tab of a resource), never as the first surface of a product or resource — Configure, Settings and Edit navigate to the resource's page — and the stack is one `large` drawer plus at most one `medium` nested drawer, never a third.
 status: active
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 scope: general
 enforced_by: [webkit-navigation-levels, webkit-accessibility, webkit-prefer-over-custom, ui-verify]
 ---
@@ -114,7 +114,7 @@ avatar), the ⌘K `Command` palette and the single `<main>`. Compose it **once**
       <Tooltip
         v-if="compact"
         content="Create"
-        placement="bottom"
+        side="bottom"
       >
         <IconButton
           icon="ai ai-circle-plus"

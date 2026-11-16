@@ -198,6 +198,7 @@ The full dictionary (concept → canonical name, banned aliases, values) is
 | Status           | `pending · running · success · error · canceled · skipped` (+ `streaming` for AI text) |
 | Position         | `leading · trailing`                                                                   |
 | Side, align      | `start · center · end`                                                                 |
+| Overlay side     | `top · bottom · start · end` (+ `auto`); `start`/`end` follow the text direction       |
 | Selection mode   | `none · single · multiple`                                                             |
 | Logo treatment   | `color · monochrome · knockout`                                                        |
 | Scale steps      | `2xs · xs · sm · md · lg · xl · 2xl · 3xl` (tokens and utilities only)                 |
